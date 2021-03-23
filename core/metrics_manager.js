@@ -541,16 +541,19 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var absoluteMetrics = this.getAbsoluteMetrics();
-  var margin = this.flyout_.MARGIN;
+  var margin = this.flyout_.MARGIN * this.workspace_.scale;
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var leftPadding = contentMetrics.left - absoluteMetrics.left + margin;
+
+  // The left padding isn't just the margin. Some blocks are also offset by
+  // tabWidth so that value and statement blocks line up.
+  // The contentMetrics.left value is equivalent to the variable left padding.
+  var leftPadding = contentMetrics.left;
 
   return {
     height: (contentMetrics.height + 2 * margin) / scale,
     width: (contentMetrics.width + leftPadding + margin) / scale,
-    top: absoluteMetrics.top / scale,
-    left: absoluteMetrics.left / scale,
+    top: 0,
+    left: 0,
   };
 };
 
@@ -561,16 +564,9 @@ Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
     opt_getWorkspaceCoordinates) {
   var svgMetrics = this.getSvgMetrics();
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  if (this.flyout_.horizontalLayout) {
-    var viewWidth = svgMetrics.width - 2 * this.flyout_.SCROLLBAR_PADDING;
-    var viewHeight = svgMetrics.height - this.flyout_.SCROLLBAR_PADDING;
-  } else {
-    var viewWidth = svgMetrics.width - this.flyout_.SCROLLBAR_PADDING;
-    var viewHeight = svgMetrics.height - 2 * this.flyout_.SCROLLBAR_PADDING;
-  }
   return {
-    height: viewHeight / scale,
-    width: viewWidth / scale,
+    height: svgMetrics.height / scale,
+    width: svgMetrics.width / scale,
     top: -this.workspace_.scrollY / scale,
     left: -this.workspace_.scrollX / scale,
   };
@@ -580,15 +576,5 @@ Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
  * @override
  */
 Blockly.FlyoutMetricsManager.prototype.getAbsoluteMetrics = function() {
-  var scrollbarPadding = this.flyout_.SCROLLBAR_PADDING;
-
-  if (this.flyout_.horizontalLayout) {
-    // The viewWidth is svgWidth - 2 * scrollbarPadding. We want to put half
-    // of that padding to the left of the blocks.
-    return {top: 0, left: scrollbarPadding};
-  } else {
-    // The viewHeight is svgHeight - 2 * scrollbarPadding. We want to put half
-    // of that padding to the top of the blocks.
-    return {top: scrollbarPadding, left: 0};
-  }
+  return {top: 0, left: 0};
 };

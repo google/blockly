@@ -541,14 +541,19 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var margin = this.flyout_.MARGIN;
+  var margin = this.flyout_.MARGIN * this.workspace_.scale;
   var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+
+  // The left padding isn't just the margin. Some blocks are also offset by
+  // tabWidth so that value and statement blocks line up.
+  // The contentMetrics.left value is equivalent to the variable left padding.
+  var leftPadding = contentMetrics.left;
 
   return {
     height: (contentMetrics.height + 2 * margin) / scale,
-    width: (contentMetrics.width + 2 * margin) / scale,
-    top: contentMetrics.top - margin / scale,
-    left: contentMetrics.left - margin / scale,
+    width: (contentMetrics.width + leftPadding + margin) / scale,
+    top: 0,
+    left: 0,
   };
 };
 

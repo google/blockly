@@ -266,12 +266,13 @@ Blockly.Block.CommentModel;
  * The language-neutral id given to the collapsed input.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+Blockly.Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+
 /**
  * The language-neutral id given to the collapsed field.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
+Blockly.Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
 
 /**
  * Optional text data that round-trips between blocks and XML.
@@ -1389,7 +1390,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         break;
       case Blockly.ASTNode.types.FIELD:
         var field = /** @type {Blockly.Field} */ (node.getLocation());
-        if (field.name != Blockly.Block.COLLAPSED_FIELD_NAME) {
+        if (field.name != Blockly.constants.COLLAPSED_FIELD_NAME) {
           text.push(field.getText());
         }
         break;

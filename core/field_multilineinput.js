@@ -59,7 +59,7 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   this.maxLines_ = Infinity;
 
   /**
-   * Whether Y overflow is currently occuring.
+   * Whether Y overflow is currently occurring.
    * @type {boolean}
    * @protected
    */

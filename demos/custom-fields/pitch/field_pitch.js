@@ -31,14 +31,14 @@ CustomFields.FieldPitch = function(text) {
 
   /**
    * Click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
    * Move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.moveWrapper_ = null;
@@ -88,11 +88,9 @@ CustomFields.FieldPitch.prototype.showEditor_ = function() {
   // change this behaviour.  For now, using bindEvent_ instead of
   // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
-      Blockly.bindEvent_(this.imageElement_, 'click', this,
-          this.hide_);
-  this.moveWrapper_ =
-      Blockly.bindEvent_(this.imageElement_, 'mousemove', this,
-          this.onMouseMove);
+      Blockly.browserEvents.bind(this.imageElement_, 'click', this, this.hide_);
+  this.moveWrapper_ = Blockly.browserEvents.bind(
+      this.imageElement_, 'mousemove', this, this.onMouseMove);
 
   this.updateGraph_();
 };
@@ -115,11 +113,11 @@ CustomFields.FieldPitch.prototype.dropdownCreate_ = function() {
  */
 CustomFields.FieldPitch.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
-    Blockly.unbindEvent_(this.clickWrapper_);
+    Blockly.browserEvents.unbind(this.clickWrapper_);
     this.clickWrapper_ = null;
   }
   if (this.moveWrapper_) {
-    Blockly.unbindEvent_(this.moveWrapper_);
+    Blockly.browserEvents.unbind(this.moveWrapper_);
     this.moveWrapper_ = null;
   }
   this.imageElement_ = null;

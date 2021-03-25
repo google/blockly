@@ -22,8 +22,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
-// TODO: Fix recursive dependency.
-// goog.require('Blockly.Xml');
+goog.require('Blockly.Xml');
 
 
 /**
@@ -127,6 +126,7 @@ Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
  */
 Blockly.Events.CommentChange.prototype.toJson = function() {
   var json = Blockly.Events.CommentChange.superClass_.toJson.call(this);
+  json['oldContents'] = this.oldContents_;
   json['newContents'] = this.newContents_;
   return json;
 };
@@ -137,7 +137,8 @@ Blockly.Events.CommentChange.prototype.toJson = function() {
  */
 Blockly.Events.CommentChange.prototype.fromJson = function(json) {
   Blockly.Events.CommentChange.superClass_.fromJson.call(this, json);
-  this.newContents_ = json['newValue'];
+  this.oldContents_ = json['oldContents'];
+  this.newContents_ = json['newContents'];
 };
 
 /**
@@ -359,6 +360,10 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
 // TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentMove.prototype.toJson = function() {
   var json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
+  if (this.oldCoordinate_) {
+    json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
+        Math.round(this.oldCoordinate_.y);
+  }
   if (this.newCoordinate_) {
     json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
         Math.round(this.newCoordinate_.y);
@@ -373,6 +378,11 @@ Blockly.Events.CommentMove.prototype.toJson = function() {
 Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   Blockly.Events.CommentMove.superClass_.fromJson.call(this, json);
 
+  if (json['oldCoordinate']) {
+    var xy = json['oldCoordinate'].split(',');
+    this.oldCoordinate_ =
+        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+  }
   if (json['newCoordinate']) {
     var xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =

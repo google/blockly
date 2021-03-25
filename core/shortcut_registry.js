@@ -13,9 +13,10 @@
 
 goog.provide('Blockly.ShortcutRegistry');
 
-goog.require('Blockly.navigation');
-goog.require('Blockly.ShortcutItems');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -41,9 +42,6 @@ Blockly.ShortcutRegistry = function() {
    * @private
    */
   this.keyMap_ = Object.create(null);
-
-  Blockly.ShortcutItems.registerDefaultShortcuts();
-  Blockly.navigation.registerNavigationShortcuts();
 };
 
 /**
@@ -51,10 +49,10 @@ Blockly.ShortcutRegistry = function() {
  * @enum {!Blockly.utils.KeyCodes<number>}
  */
 Blockly.ShortcutRegistry.modifierKeys = {
-  Shift: Blockly.utils.KeyCodes.SHIFT,
-  Control: Blockly.utils.KeyCodes.CTRL,
-  Alt: Blockly.utils.KeyCodes.ALT,
-  Meta: Blockly.utils.KeyCodes.META
+  'Shift': Blockly.utils.KeyCodes.SHIFT,
+  'Control': Blockly.utils.KeyCodes.CTRL,
+  'Alt': Blockly.utils.KeyCodes.ALT,
+  'Meta': Blockly.utils.KeyCodes.META
 };
 
 /**
@@ -112,8 +110,8 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
 
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
- * @param {string} keyCode The key code for the keyboard shortcut. If
- *     registering a key code with a modifier (ex: ctrl+c) use
+ * @param {string|Blockly.utils.KeyCodes} keyCode The key code for the keyboard
+ *     shortcut. If registering a key code with a modifier (ex: ctrl+c) use
  *     Blockly.ShortcutRegistry.registry.createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
  *     given keycode is pressed.
@@ -124,6 +122,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
  */
 Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
     keyCode, shortcutName, opt_allowCollision) {
+  keyCode = String(keyCode);
   var shortcutNames = this.keyMap_[keyCode];
   if (shortcutNames && !opt_allowCollision) {
     throw new Error(

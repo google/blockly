@@ -17,6 +17,11 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.ASTNode');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
+
+
 /**
  * Class for a marker move event.
  * @param {?Blockly.Block=} opt_block The affected block. Null if current node

@@ -12,11 +12,15 @@
 
 goog.provide('Blockly.Menu');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.style');
+
+goog.requireType('Blockly.MenuItem');
+goog.requireType('Blockly.utils.Size');
 
 
 /**
@@ -52,35 +56,35 @@ Blockly.Menu = function() {
 
   /**
    * Mouse over event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseOverHandler_ = null;
 
   /**
    * Click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickHandler_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseEnterHandler_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseLeaveHandler_ = null;
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownHandler_ = null;
@@ -129,16 +133,16 @@ Blockly.Menu.prototype.render = function(container) {
   }
 
   // Add event handlers.
-  this.mouseOverHandler_ = Blockly.bindEventWithChecks_(element,
-      'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ = Blockly.bindEventWithChecks_(element,
-      'click', this, this.handleClick_, true);
-  this.mouseEnterHandler_ = Blockly.bindEventWithChecks_(element,
-      'mouseenter', this, this.handleMouseEnter_, true);
-  this.mouseLeaveHandler_ = Blockly.bindEventWithChecks_(element,
-      'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownHandler_ = Blockly.bindEventWithChecks_(element,
-      'keydown', this, this.handleKeyEvent_);
+  this.mouseOverHandler_ = Blockly.browserEvents.conditionalBind(
+      element, 'mouseover', this, this.handleMouseOver_, true);
+  this.clickHandler_ = Blockly.browserEvents.conditionalBind(
+      element, 'click', this, this.handleClick_, true);
+  this.mouseEnterHandler_ = Blockly.browserEvents.conditionalBind(
+      element, 'mouseenter', this, this.handleMouseEnter_, true);
+  this.mouseLeaveHandler_ = Blockly.browserEvents.conditionalBind(
+      element, 'mouseleave', this, this.handleMouseLeave_, true);
+  this.onKeyDownHandler_ = Blockly.browserEvents.conditionalBind(
+      element, 'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
 };
@@ -191,23 +195,23 @@ Blockly.Menu.prototype.setRole = function(roleName) {
 Blockly.Menu.prototype.dispose = function() {
   // Remove event handlers.
   if (this.mouseOverHandler_) {
-    Blockly.unbindEvent_(this.mouseOverHandler_);
+    Blockly.browserEvents.unbind(this.mouseOverHandler_);
     this.mouseOverHandler_ = null;
   }
   if (this.clickHandler_) {
-    Blockly.unbindEvent_(this.clickHandler_);
+    Blockly.browserEvents.unbind(this.clickHandler_);
     this.clickHandler_ = null;
   }
   if (this.mouseEnterHandler_) {
-    Blockly.unbindEvent_(this.mouseEnterHandler_);
+    Blockly.browserEvents.unbind(this.mouseEnterHandler_);
     this.mouseEnterHandler_ = null;
   }
   if (this.mouseLeaveHandler_) {
-    Blockly.unbindEvent_(this.mouseLeaveHandler_);
+    Blockly.browserEvents.unbind(this.mouseLeaveHandler_);
     this.mouseLeaveHandler_ = null;
   }
   if (this.onKeyDownHandler_) {
-    Blockly.unbindEvent_(this.onKeyDownHandler_);
+    Blockly.browserEvents.unbind(this.onKeyDownHandler_);
     this.onKeyDownHandler_ = null;
   }
 

@@ -13,8 +13,15 @@
 goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -268,7 +275,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
     // child blocks here.
     for (var i = 0; i < sourceBlock.inputList.length; i++) {
       var sourceInput = sourceBlock.inputList[i];
-      if (sourceInput.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+      if (sourceInput.name == Blockly.constants.COLLAPSED_INPUT_NAME) {
         continue;  // Ignore the collapsed input.
       }
       var resultInput = result.inputList[i];
@@ -612,7 +619,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   var isFirstInStatementStack =
       (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
 
-  var isFirstInOutputStack = imConn.type == Blockly.INPUT_VALUE &&
+  var isFirstInOutputStack =
+      imConn.type == Blockly.connectionTypes.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -620,7 +628,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
     imConn.targetBlock().unplug(false);
   }
   // Inside of a C-block, first statement connection.
-  else if (imConn.type == Blockly.NEXT_STATEMENT && imConn != markerNext) {
+  else if (imConn.type == Blockly.connectionTypes.NEXT_STATEMENT &&
+      imConn != markerNext) {
     var innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 

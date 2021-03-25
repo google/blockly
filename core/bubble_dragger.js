@@ -12,14 +12,19 @@
 
 goog.provide('Blockly.BubbleDragger');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -226,7 +231,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
-    var event = new Blockly.Events.CommentMove(
+    var event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(
         /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);
     event.recordNew();

@@ -13,7 +13,6 @@ goog.provide('Blockly.Theme');
 
 goog.require('Blockly.registry');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.object');
 
 

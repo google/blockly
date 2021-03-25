@@ -16,6 +16,9 @@ goog.provide('Blockly.ThemeManager');
 
 goog.require('Blockly.Theme');
 
+goog.requireType('Blockly.Workspace');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for storing and updating a workspace's theme and UI components.

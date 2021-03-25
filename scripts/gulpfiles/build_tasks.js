@@ -20,8 +20,8 @@ var through2 = require('through2');
 
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
-var packageJson = require('../../package.json');
 var argv = require('yargs').argv;
+var { getPackageJson } = require('./helper_tasks');
 
 
 ////////////////////////////////////////////////////////////
@@ -66,6 +66,7 @@ var JSCOMP_ERROR = [
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
+  'extraRequire',
   'functionParams',
   'globalThis',
   'invalidCasts',
@@ -74,7 +75,8 @@ var JSCOMP_ERROR = [
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  'missingRequire',
+  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
+  // Disabling this until we have fixed all the require issues. 
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -184,6 +186,7 @@ return ${namespace};
  *     blockly_compressed.js
  */
 function buildCompressed() {
+  var packageJson = getPackageJson();
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
     .pipe(stripApacheLicense())
@@ -444,6 +447,7 @@ function buildLangfiles(done) {
 function buildAdvancedCompilationTest() {
   const srcs = [
     'tests/compile/main.js',
+    'tests/compile/test_blocks.js',
     'core/**/**/*.js',
     'blocks/*.js',
     'generators/**/*.js'];

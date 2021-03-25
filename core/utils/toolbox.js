@@ -12,7 +12,9 @@
 
 goog.provide('Blockly.utils.toolbox');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.ToolboxCategory');
 goog.requireType('Blockly.ToolboxSeparator');
@@ -172,14 +174,14 @@ Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
 Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
- * Position of the the toolbox relative to the flyout.
+ * Position of the the toolbox and/or flyout relative to the workspace.
  * @enum {number}
  */
 Blockly.utils.toolbox.Position = {
-  TOP: Blockly.TOOLBOX_AT_TOP,
-  BOTTOM: Blockly.TOOLBOX_AT_BOTTOM,
-  LEFT: Blockly.TOOLBOX_AT_LEFT,
-  RIGHT: Blockly.TOOLBOX_AT_RIGHT
+  TOP: 0,
+  BOTTOM: 1,
+  LEFT: 2,
+  RIGHT: 3
 };
 
 /**

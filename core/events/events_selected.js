@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a selected event.
  * @param {?string=} opt_oldElementId The id of the previously selected

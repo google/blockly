@@ -13,8 +13,11 @@
 goog.provide('Blockly.VariableModel');
 
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
+
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -64,7 +67,8 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
    */
   this.id_ = opt_id || Blockly.utils.genUid();
 
-  Blockly.Events.fire(new Blockly.Events.VarCreate(this));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(
+      this));
 };
 
 /**

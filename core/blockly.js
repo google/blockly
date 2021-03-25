@@ -16,22 +16,46 @@
  */
 goog.provide('Blockly');
 
+goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.FinishedLoading');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Ui');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.UiBase');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.VarCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.inject');
+goog.require('Blockly.inputTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.toolbox');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.ICopyable');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -100,18 +124,19 @@ Blockly.cache3dSupported_ = null;
 Blockly.parentContainer = null;
 
 /**
- * Blockly opaque event data used to unbind events when using
- * `Blockly.bindEvent_` and `Blockly.bindEventWithChecks_`.
- * @typedef {!Array.<!Array>}
- */
-Blockly.EventData;
-
-/**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 Blockly.svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
+  Blockly.utils.deprecation.warn(
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
@@ -139,6 +164,7 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
   var svg = mainWorkspace.getParentSvg();
+  var cachedSize = mainWorkspace.getCachedParentSvgSize();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deleted, or something.
@@ -146,13 +172,13 @@ Blockly.svgResize = function(workspace) {
   }
   var width = div.offsetWidth;
   var height = div.offsetHeight;
-  if (svg.cachedWidth_ != width) {
+  if (cachedSize.width != width) {
     svg.setAttribute('width', width + 'px');
-    svg.cachedWidth_ = width;
+    mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (svg.cachedHeight_ != height) {
+  if (cachedSize.height != height) {
     svg.setAttribute('height', height + 'px');
-    svg.cachedHeight_ = height;
+    mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
 };
@@ -384,149 +410,6 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
 };
 
 /**
- * Bind an event to a function call.  When calling the function, verifies that
- * it belongs to the touch stream that is currently being processed, and splits
- * multitouch events into multiple events as needed.
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or
- *     other simultaneous touches.  False by default.
- * @param {boolean=} opt_noPreventDefault True if triggering on this event
- *     should prevent the default handler.  False by default.  If
- *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
- *     provided.
- * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
- */
-Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier, opt_noPreventDefault) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; (event = events[i]); i++) {
-      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Blockly.Touch.setClientFromTouch(event);
-      if (thisObject) {
-        func.call(thisObject, event);
-      } else {
-        func(event);
-      }
-      handled = true;
-    }
-  };
-
-  var bindData = [];
-  if (Blockly.utils.global['PointerEvent'] &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
-      node.addEventListener(type, wrapFunc, false);
-      bindData.push([node, type, wrapFunc]);
-    }
-  } else {
-    node.addEventListener(name, wrapFunc, false);
-    bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
-        wrapFunc(e);
-        // Calling preventDefault stops the browser from scrolling/zooming the
-        // page.
-        var preventDef = !opt_noPreventDefault;
-        if (handled && preventDef) {
-          e.preventDefault();
-        }
-      };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
-  }
-  return bindData;
-};
-
-
-/**
- * Bind an event to a function call.  Handles multitouch events by using the
- * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.  In most cases prefer is to use
- * `Blockly.bindEventWithChecks_`.
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @return {!Blockly.EventData} Opaque data that can be passed to unbindEvent_.
- */
-Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    if (thisObject) {
-      func.call(thisObject, e);
-    } else {
-      func(e);
-    }
-  };
-
-  var bindData = [];
-  if (Blockly.utils.global['PointerEvent'] &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
-      node.addEventListener(type, wrapFunc, false);
-      bindData.push([node, type, wrapFunc]);
-    }
-  } else {
-    node.addEventListener(name, wrapFunc, false);
-    bindData.push([node, name, wrapFunc]);
-
-    // Add equivalent touch event.
-    if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
-        // Punt on multitouch events.
-        if (e.changedTouches && e.changedTouches.length == 1) {
-          // Map the touch event's properties to the event.
-          var touchPoint = e.changedTouches[0];
-          e.clientX = touchPoint.clientX;
-          e.clientY = touchPoint.clientY;
-        }
-        wrapFunc(e);
-
-        // Stop the browser from scrolling/zooming the page.
-        e.preventDefault();
-      };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
-        node.addEventListener(type, touchWrapFunc, false);
-        bindData.push([node, type, touchWrapFunc]);
-      }
-    }
-  }
-  return bindData;
-};
-
-/**
- * Unbind one or more events event from a function call.
- * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.
- *     This list is emptied during the course of calling this function.
- * @return {!Function} The function call.
- */
-Blockly.unbindEvent_ = function(bindData) {
-  while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
-    node.removeEventListener(name, func, false);
-  }
-  return func;
-};
-
-/**
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
@@ -627,3 +510,89 @@ Blockly.checkBlockColourConstant_ = function(
 Blockly.setParentContainer = function(container) {
   Blockly.parentContainer = container;
 };
+
+/** Aliases. */
+
+/**
+ * @see Blockly.browserEvents.bind
+ */
+Blockly.bindEvent_ = Blockly.browserEvents.bind;
+
+/**
+ * @see Blockly.browserEvents.unbind
+ */
+Blockly.unbindEvent_ = Blockly.browserEvents.unbind;
+
+/**
+ * @see Blockly.browserEvents.conditionalBind
+ */
+Blockly.bindEventWithChecks_ = Blockly.browserEvents.conditionalBind;
+
+/**
+ * @see Blockly.constants.ALIGN.LEFT
+ */
+Blockly.ALIGN_LEFT = Blockly.constants.ALIGN.LEFT;
+
+/**
+ * @see Blockly.constants.ALIGN.CENTRE
+ */
+Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
+
+/**
+ * @see Blockly.constants.ALIGN.RIGHT
+ */
+Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+
+
+/**
+ * Aliases for constants used for connection and input types.
+ */
+
+/**
+ * @see Blockly.connectionTypes.INPUT_VALUE
+ */
+Blockly.INPUT_VALUE = Blockly.connectionTypes.INPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.OUTPUT_VALUE
+ */
+Blockly.OUTPUT_VALUE = Blockly.connectionTypes.OUTPUT_VALUE;
+
+/**
+ * @see Blockly.connectionTypes.NEXT_STATEMENT
+ */
+Blockly.NEXT_STATEMENT = Blockly.connectionTypes.NEXT_STATEMENT;
+
+/**
+ * @see Blockly.connectionTypes.PREVIOUS_STATEMENT
+ */
+Blockly.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
+
+/**
+ * @see Blockly.inputTypes.DUMMY_INPUT
+ */
+Blockly.DUMMY_INPUT = Blockly.inputTypes.DUMMY;
+
+/**
+ * Aliases for toolbox positions.
+ */
+
+/**
+ * @see Blockly.utils.toolbox.Position.TOP
+ */
+Blockly.TOOLBOX_AT_TOP = Blockly.utils.toolbox.Position.TOP;
+
+/**
+ * @see Blockly.utils.toolbox.Position.BOTTOM
+ */
+Blockly.TOOLBOX_AT_BOTTOM = Blockly.utils.toolbox.Position.BOTTOM;
+
+/**
+ * @see Blockly.utils.toolbox.Position.LEFT
+ */
+Blockly.TOOLBOX_AT_LEFT = Blockly.utils.toolbox.Position.LEFT;
+
+/**
+ * @see Blockly.utils.toolbox.Position.RIGHT
+ */
+Blockly.TOOLBOX_AT_RIGHT = Blockly.utils.toolbox.Position.RIGHT;

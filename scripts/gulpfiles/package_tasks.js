@@ -17,8 +17,7 @@ gulp.umd = require('gulp-umd');
 
 var path = require('path');
 var fs = require('fs');
-
-var packageJson = require('../../package.json');
+var { getPackageJson } = require('./helper_tasks');
 
 const blocklyRoot = '../../';
 
@@ -337,6 +336,7 @@ function packageMedia() {
  * This task copies the package.json file into the distribution directory.
  */
 function packageJSON(cb) {
+  const packageJson = getPackageJson();
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
   if (!fs.existsSync(packageDistribution)) {

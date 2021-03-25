@@ -118,7 +118,6 @@ goog.addDependency('../../core/mutator.js', ['Blockly.Mutator'], ['Blockly.Bubbl
 goog.addDependency('../../core/names.js', ['Blockly.Names'], ['Blockly.Msg', 'Blockly.constants'], {});
 goog.addDependency('../../core/options.js', ['Blockly.Options'], ['Blockly.Theme', 'Blockly.Themes.Classic', 'Blockly.registry', 'Blockly.utils.IdGenerator', 'Blockly.utils.Metrics', 'Blockly.utils.toolbox'], {});
 goog.addDependency('../../core/plugin_manager.js', ['Blockly.PluginManager'], [], {});
-goog.addDependency('../../core/positionable_test.js', ['Blockly.PositionableTest'], [], {'lang': 'es5'});
 goog.addDependency('../../core/procedures.js', ['Blockly.Procedures'], ['Blockly.Blocks', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Field', 'Blockly.Msg', 'Blockly.Names', 'Blockly.Workspace', 'Blockly.Xml', 'Blockly.constants', 'Blockly.utils.xml'], {});
 goog.addDependency('../../core/registry.js', ['Blockly.registry'], [], {});
 goog.addDependency('../../core/rendered_connection.js', ['Blockly.RenderedConnection'], ['Blockly.Connection', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Svg', 'Blockly.utils.deprecation', 'Blockly.utils.dom', 'Blockly.utils.object'], {});

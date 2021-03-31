@@ -92,6 +92,6 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "16.5.0"
+    "jsdom": "16.5.2"
   }
 }

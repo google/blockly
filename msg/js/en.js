@@ -102,6 +102,7 @@ Blockly.Msg["LEAPHY_ANALOG_READ"] = "Read anapin";
 Blockly.Msg["LEAPHY_BUZZ_BUZZ"] = "Buzz";
 Blockly.Msg["LEAPHY_BUZZ_HERTZ"] = "Hertz";
 Blockly.Msg["LEAPHY_BUZZ_MS"] = "ms";
+Blockly.Msg["LEAPHY_CLICK_CATEGORY"] = "Leaphy Click";
 Blockly.Msg["LEAPHY_DIGITAL_READ"] = "Read digipin";
 Blockly.Msg["LEAPHY_EXTRA_CATEGORY"] = "Leaphy Extra";
 Blockly.Msg["LEAPHY_FLITZ_CATEGORY"] = "Leaphy Flitz";

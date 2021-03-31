@@ -102,6 +102,7 @@ Blockly.Msg["LEAPHY_ANALOG_READ"] = "Read anapin";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_BUZZ"] = "Buzz";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_HERTZ"] = "Hertz";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_MS"] = "ms";  // untranslated
+Blockly.Msg["LEAPHY_CLICK_CATEGORY"] = "Leaphy Click";  // untranslated
 Blockly.Msg["LEAPHY_DIGITAL_READ"] = "Read digipin";  // untranslated
 Blockly.Msg["LEAPHY_EXTRA_CATEGORY"] = "Leaphy Extra";  // untranslated
 Blockly.Msg["LEAPHY_FLITZ_CATEGORY"] = "Leaphy Flitz";  // untranslated

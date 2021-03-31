@@ -1,6 +1,7 @@
 {
 	"LEAPHY_START": "leaphy start block title - The text that appears in the Leaphy start block.",
 	"LEAPHY_ORIGINAL_CATEGORY": "leaphy Original Category title - The text that appears in the Leaphy Original Category.",
+	"LEAPHY_CLICK_CATEGORY": "leaphy Click Category title - The text that appears in the Leaphy Click Category.",
 	"LEAPHY_FLITZ_CATEGORY": "leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.",
 	"LEAPHY_UNO_CATEGORY": "leaphy Arduino Uno Category title - The text that appears in the Leaphy Arduino Uno Category.",
 	"LEAPHY_EXTRA_CATEGORY": "leaphy Extra Category title - The text that appears in the Leaphy Extra Category.",

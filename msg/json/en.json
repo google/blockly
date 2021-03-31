@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-02-17 20:27:57.099266",
+		"lastupdated": "2021-03-31 20:06:29.960672",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
 	"LEAPHY_START": "Leaphy",
 	"LEAPHY_ORIGINAL_CATEGORY": "Leaphy Original",
+	"LEAPHY_CLICK_CATEGORY": "Leaphy Click",
 	"LEAPHY_FLITZ_CATEGORY": "Leaphy Flitz",
 	"LEAPHY_UNO_CATEGORY": "Arduino Uno",
 	"LEAPHY_EXTRA_CATEGORY": "Leaphy Extra",

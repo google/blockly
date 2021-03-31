@@ -37,6 +37,9 @@ Blockly.Msg.LEAPHY_START = 'Leaphy';
 /// leaphy Original Category title - The text that appears in the Leaphy Original Category.
 Blockly.Msg.LEAPHY_ORIGINAL_CATEGORY = 'Leaphy Original';
 /** @type {string} */
+/// leaphy Click Category title - The text that appears in the Leaphy Click Category.
+Blockly.Msg.LEAPHY_CLICK_CATEGORY = 'Leaphy Click';
+/** @type {string} */
 /// leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.
 Blockly.Msg.LEAPHY_FLITZ_CATEGORY = 'Leaphy Flitz';
 /** @type {string} */

@@ -217,6 +217,64 @@
       <block type="leaphy_original_digital_read"></block>
       <block type="leaphy_original_analog_read"></block>
     </category>
+    <category id="l_click" toolboxitemid="l_click" name="%{BKY_LEAPHY_CLICK_CATEGORY}" categorystyle="leaphy_category">
+  		<block type="leaphy_io_digitalwrite">
+		</block>
+ 		<sep gap="8"></sep>
+		<block type="leaphy_io_analogwrite">
+			<value name="NUM">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+ 		<sep gap="8"></sep>
+		<block type="leaphy_servo_write">
+			<value name="SERVO_ANGLE">
+				<shadow type="math_number">
+					<field name="NUM">
+						90
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_original_set_motor">
+			<value name="MOTOR_SPEED">
+				<shadow type="math_number">
+					<field name="NUM">
+						100
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_serial_print_line">
+			<value name="VALUE">
+				<shadow type="text">
+					<field name="TEXT">tekst</field>
+				</shadow>
+			</value>
+		</block>
+ 		<sep gap="8"></sep>
+		<block type="leaphy_serial_print_value">
+			<value name="NAME">
+				<shadow type="text">
+					<field name="TEXT">tekst</field>
+				</shadow>
+			</value>
+			<value name="VALUE">
+				<shadow type="math_number">
+					<field name="NUM">0</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_original_digital_read">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_original_analog_read">
+		</block>
+	</category>
     <category toolboxitemid="l_flitz" name="%{BKY_LEAPHY_FLITZ_CATEGORY}" categorystyle="leaphy_category">
       <block type="leaphy_flitz_read_stomach_sensor"></block>
       <block type="leaphy_flitz_read_hand_sensor"></block>

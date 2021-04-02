@@ -33,38 +33,22 @@ Blockly.Constants.Colour.HUE = 20;
 var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
 var ledstripDemoOptions = [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]];
 
- Blockly.Blocks["leaphy_rgb_read_sensor"] = {
-     init: function(){
-        this.appendDummyInput()
-             .appendField(Blockly.Msg.LEAPHY_RGB_READ_SENSOR);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);     
-        this.setStyle('leaphy_blocks');
-     }
- };
+ var colorTypes = [["%{BKY_LEAPHY_RGB_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_COLOR_BLUE}", "2"]];
+ var colorTypesRaw = [["%{BKY_LEAPHY_RGB_RAW_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}", "2"]];
 
- Blockly.Blocks["leaphy_rgb_color_red"] = {
-     init: function(){
-         this.appendDummyInput()
-             .appendField(Blockly.Msg.LEAPHY_RGB_COLOR_RED);
-        this.setOutput(true, 'Number');
-        this.setStyle('leaphy_blocks');
-     }
- };
-
- Blockly.Blocks["leaphy_rgb_color_green"] = {
+ Blockly.Blocks["leaphy_rgb_color"] = {
     init: function(){
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_RGB_COLOR_GREEN);
+        this.appendDummyInput()                
+            .appendField(new Blockly.FieldDropdown(colorTypes), "COLOR_TYPE");
        this.setOutput(true, 'Number');
        this.setStyle('leaphy_blocks');
     }
 };
 
-Blockly.Blocks["leaphy_rgb_color_blue"] = {
+Blockly.Blocks["leaphy_rgb_color_raw"] = {
     init: function(){
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_RGB_COLOR_BLUE);
+        this.appendDummyInput()                
+            .appendField(new Blockly.FieldDropdown(colorTypesRaw), "COLOR_TYPE_RAW");
        this.setOutput(true, 'Number');
        this.setStyle('leaphy_blocks');
     }

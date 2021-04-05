@@ -12,18 +12,29 @@
 
 goog.provide('Blockly.ZoomControls');
 
+goog.require('Blockly.browserEvents');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.Click');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.toolbox');
+goog.require('Blockly.IPositionable');
+
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class for a zoom controls.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IPositionable}
  */
 Blockly.ZoomControls = function(workspace) {
   /**
@@ -35,7 +46,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
    *    button. Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomResetWrapper_ = null;
@@ -43,7 +54,7 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom in button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomInWrapper_ = null;
@@ -51,13 +62,13 @@ Blockly.ZoomControls = function(workspace) {
   /**
    * A handle to use to unbind the mouse down event handler for zoom out button.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onZoomOutWrapper_ = null;
 
   /**
-   * The vertical distance between the workspace bottom edge and the control.
+   * The starting vertical distance between the workspace edge and the control.
    * The value is initialized during `init`.
    * @type {?number}
    * @private
@@ -179,53 +190,86 @@ Blockly.ZoomControls.prototype.dispose = function() {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }
   if (this.onZoomResetWrapper_) {
-    Blockly.unbindEvent_(this.onZoomResetWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomResetWrapper_);
   }
   if (this.onZoomInWrapper_) {
-    Blockly.unbindEvent_(this.onZoomInWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomInWrapper_);
   }
   if (this.onZoomOutWrapper_) {
-    Blockly.unbindEvent_(this.onZoomOutWrapper_);
+    Blockly.browserEvents.unbind(this.onZoomOutWrapper_);
   }
 };
 
 /**
- * Position the zoom controls.
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @return {!Blockly.utils.Rect} The plugin’s bounding box.
+ */
+Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
+  var bottom = this.top_ + this.HEIGHT_;
+  var right = this.left_ + this.WIDTH_;
+  return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
+};
+
+
+/**
+ * Positions the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.ZoomControls.prototype.position = function() {
+Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
   if (!this.verticalSpacing_) {
     return;
   }
-  var metrics = this.workspace_.getMetrics();
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
-    return;
-  }
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
       (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Toolbox starts in the left corner.
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft -
+    // Right corner placement.
+    this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   } else {
-    // Toolbox starts in the right corner.
+    // Left corner placement.
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   }
 
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-    this.top_ = this.verticalSpacing_;
+  // Upper corner placement
+  var minTop = this.top_ = metrics.absoluteMetrics.top + this.verticalSpacing_;
+  // Bottom corner placement
+  var maxTop = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
+      this.HEIGHT_ - this.verticalSpacing_;
+  var placeBottom =
+      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
+  this.top_ = placeBottom ? maxTop : minTop;
+  if (placeBottom) {
+    this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
+    this.zoomOutGroup_.setAttribute('transform', 'translate(0, 77)');
+  } else {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 34)');
     if (this.zoomResetGroup_) {
       this.zoomResetGroup_.setAttribute('transform', 'translate(0, 77)');
     }
-  } else {
-    this.top_ = metrics.viewHeight + metrics.absoluteTop -
-        this.HEIGHT_ - this.verticalSpacing_;
-    this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
-    this.zoomOutGroup_.setAttribute('transform', 'translate(0, 77)');
   }
+
+  // Check for collision and bump if needed.
+  var boundingRect = this.getBoundingRectangle();
+  for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
+    if (boundingRect.intersects(otherEl)) {
+      if (placeBottom) {
+        // Bump up
+        this.top_ = otherEl.top - this.HEIGHT_ - this.MARGIN_BOTTOM_;
+      } else {
+        this.top_ = otherEl.bottom + this.MARGIN_BOTTOM_;
+      }
+      // Recheck other savedPositions
+      boundingRect = this.getBoundingRectangle();
+      i = -1;
+    }
+  }
+  // Clamp top value within valid range.
+  this.top_ = Blockly.utils.math.clamp(minTop, this.top_, maxTop);
 
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
@@ -278,7 +322,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomOutWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomOutWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
 };
 
@@ -329,7 +373,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach listener.
-  this.onZoomInWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomInWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
 };
 
@@ -396,7 +440,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   // Attach event listeners.
-  this.onZoomResetWrapper_ = Blockly.bindEventWithChecks_(
+  this.onZoomResetWrapper_ = Blockly.browserEvents.conditionalBind(
       this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
 };
 
@@ -407,9 +451,21 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  */
 Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
-  this.workspace_.setScale(this.workspace_.options.zoomOptions.startScale);
+
+  // zoom is passed amount and computes the new scale using the formula:
+  // targetScale = currentScale * Math.pow(speed, amount)
+  var targetScale = this.workspace_.options.zoomOptions.startScale;
+  var currentScale = this.workspace_.scale;
+  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  // To compute amount:
+  // amount = log(speed, (targetScale / currentScale))
+  // Math.log computes natural logarithm (ln), to change the base, use formula:
+  // log(base, value) = ln(value) / ln(base)
+  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
   this.workspace_.beginCanvasTransition();
+  this.workspace_.zoomCenter(amount);
   this.workspace_.scrollCenter();
+
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();
   Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
@@ -422,7 +478,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {
-  var uiEvent = new Blockly.Events.Click(
+  var uiEvent = new (Blockly.Events.get(Blockly.Events.CLICK))(
       null, this.workspace_.id, 'zoom_controls');
   Blockly.Events.fire(uiEvent);
 };

@@ -11,6 +11,7 @@
 
 goog.provide('Blockly');
 goog.provide('Blockly.Generator');
+goog.provide('Blockly.inputTypes');
 goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.string');
 

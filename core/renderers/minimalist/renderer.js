@@ -13,10 +13,10 @@ goog.provide('Blockly.minimalist.Renderer');
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
-goog.require('Blockly.utils.object');
 goog.require('Blockly.minimalist.ConstantProvider');
 goog.require('Blockly.minimalist.Drawer');
 goog.require('Blockly.minimalist.RenderInfo');
+goog.require('Blockly.utils.object');
 
 
 /**

@@ -22,12 +22,14 @@ goog.provide('Blockly.Events.Move');  // Deprecated.
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
-// TODO: Fix recursive dependency.
-// goog.require('Blockly.Xml');
+goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.Block');
 
 
 /**
@@ -544,12 +546,13 @@ Blockly.Events.Move.prototype.run = function(forward) {
   } else {
     var blockConnection = block.outputConnection || block.previousConnection;
     var parentConnection;
+    var connectionType = blockConnection.type;
     if (inputName) {
       var input = parentBlock.getInput(inputName);
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (blockConnection.type == Blockly.PREVIOUS_STATEMENT) {
+    } else if (connectionType == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

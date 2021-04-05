@@ -12,15 +12,16 @@
 
 goog.provide('Blockly.blockRendering.Drawer');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.blockRendering.Field');
+goog.requireType('Blockly.blockRendering.Icon');
+goog.requireType('Blockly.blockRendering.InlineInput');
+goog.requireType('Blockly.BlockSvg');
 
 
 /**

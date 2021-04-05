@@ -109,16 +109,16 @@ Blockly.WorkspaceCommentSvg.prototype.render = function() {
   this.rendered_ = true;
 
   if (this.resizeGroup_) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
   }
 
   if (this.isDeletable()) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.deleteGroup_, 'mousedown', this, this.deleteMouseDown_);
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.deleteGroup_, 'mouseout', this, this.deleteMouseOut_);
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         this.deleteGroup_, 'mouseup', this, this.deleteMouseUp_);
   }
 };
@@ -157,14 +157,16 @@ Blockly.WorkspaceCommentSvg.prototype.createEditor_ = function() {
   this.textarea_ = textarea;
   this.foreignObject_.appendChild(body);
   // Don't zoom with mousewheel.
-  Blockly.bindEventWithChecks_(textarea, 'wheel', this, function(e) {
+  Blockly.browserEvents.conditionalBind(textarea, 'wheel', this, function(e) {
     e.stopPropagation();
   });
-  Blockly.bindEventWithChecks_(textarea, 'change', this, function(
-      /* eslint-disable no-unused-vars */ e
-      /* eslint-enable no-unused-vars */) {
-    this.setContent(textarea.value);
-  });
+  Blockly.browserEvents.conditionalBind(
+      textarea, 'change', this,
+      function(
+          /* eslint-disable no-unused-vars */ e
+          /* eslint-enable no-unused-vars */) {
+        this.setContent(textarea.value);
+      });
   return this.foreignObject_;
 };
 
@@ -257,9 +259,9 @@ Blockly.WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
   this.workspace.startDrag(e, new Blockly.utils.Coordinate(
     this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
-  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mouseup', this, this.resizeMouseUp_);
-  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+  this.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
@@ -310,11 +312,11 @@ Blockly.WorkspaceCommentSvg.prototype.deleteMouseUp_ = function(e) {
  */
 Blockly.WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
   if (this.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
   }
   if (this.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseMoveWrapper_);
     this.onMouseMoveWrapper_ = null;
   }
 };

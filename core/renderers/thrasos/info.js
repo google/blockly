@@ -14,21 +14,14 @@
 goog.provide('Blockly.thrasos');
 goog.provide('Blockly.thrasos.RenderInfo');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.InlineInput');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.StatementInput');
-goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.blockRendering.Field');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.thrasos.Renderer');
 
 
 /**

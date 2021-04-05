@@ -21,6 +21,8 @@ goog.provide('Blockly.Extensions');
 
 goog.require('Blockly.utils');
 
+goog.requireType('Blockly.Block');
+
 
 /**
  * The set of all registered extensions, keyed by extension name/id.

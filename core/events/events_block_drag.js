@@ -17,6 +17,9 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.Block');
+
+
 /**
  * Class for a block drag event.
  * @param {!Blockly.Block=} opt_block The top block in the stack that is being

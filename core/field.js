@@ -14,8 +14,11 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
@@ -26,12 +29,17 @@ goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IASTNodeLocationWithBlock');
-goog.requireType('Blockly.IBlocklyActionable');
+goog.requireType('Blockly.IKeyboardAccessible');
+goog.requireType('Blockly.Input');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -46,7 +54,7 @@ goog.requireType('Blockly.ShortcutRegistry');
  * @constructor
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
- * @implements {Blockly.IBlocklyActionable}
+ * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IRegistrable}
  */
 Blockly.Field = function(value, opt_validator, opt_config) {
@@ -126,7 +134,7 @@ Blockly.Field = function(value, opt_validator, opt_config) {
 
   /**
    * Mouse down event listener data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.mouseDownWrapper_ = null;
@@ -376,9 +384,8 @@ Blockly.Field.prototype.createTextElement_ = function() {
  */
 Blockly.Field.prototype.bindEvents_ = function() {
   Blockly.Tooltip.bindMouseEvents(this.getClickTarget_());
-  this.mouseDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
+  this.mouseDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
 };
 
 /**
@@ -414,7 +421,7 @@ Blockly.Field.prototype.dispose = function() {
   Blockly.Tooltip.unbindMouseEvents(this.getClickTarget_());
 
   if (this.mouseDownWrapper_) {
-    Blockly.unbindEvent_(this.mouseDownWrapper_);
+    Blockly.browserEvents.unbind(this.mouseDownWrapper_);
   }
 
   Blockly.utils.dom.removeNode(this.fieldGroup_);
@@ -826,7 +833,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
   }
 
   if (source && Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         source, 'field', this.name || null, oldValue, newValue));
   }
   this.doValueUpdate_(newValue);
@@ -1024,13 +1031,12 @@ Blockly.Field.prototype.isTabNavigable = function() {
 };
 
 /**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
+ * @public
  */
-Blockly.Field.prototype.onBlocklyAction = function(_action) {
+Blockly.Field.prototype.onShortcut = function(_shortcut) {
   return false;
 };
 
@@ -1077,6 +1083,7 @@ Blockly.Field.prototype.updateMarkers_ = function() {
     workspace.getCursor().draw();
   }
   if (workspace.keyboardAccessibilityMode && this.markerSvg_) {
-    workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    // TODO(#4592): Update all markers on the field.
+    workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };

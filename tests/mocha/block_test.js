@@ -1577,6 +1577,64 @@ suite('Blocks', function() {
         assertCollapsed(blockA, 'X');
       });
     });
+    suite('Disabled Blocks', function() {
+      test('Children of Collapsed Blocks Should Enable Properly', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+        // Disable the block and collapse it.
+        blockA.setEnabled(false);
+        blockA.setCollapsed(true);
+
+        // Enable the block before expanding it.
+        blockA.setEnabled(true);
+        blockA.setCollapsed(false);
+
+        // The child blocks should be enabled.
+        chai.assert.isFalse(blockB.disabled);
+        chai.assert.isFalse(blockB.getSvgRoot().classList.contains('blocklyDisabled'));
+      });
+      test('Children of Collapsed Block Should Not Update', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+
+        // Disable the block and collapse it.
+        blockA.setEnabled(false);
+        blockA.setCollapsed(true);
+
+        var blockUpdateDisabled = sinon.stub(blockB, 'updateDisabled');
+
+        // Enable the block before expanding it.
+        blockA.setEnabled(true);
+
+        // For performance reasons updateDisabled should not be called
+        // on children of collapsed blocks.
+        sinon.assert.notCalled(blockUpdateDisabled);
+      });
+      test('Disabled Children of Collapsed Blocks Should Stay Disabled', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+
+        // Disable the child block.
+        blockB.setEnabled(false);
+
+        // Collapse and disable the parent block.
+        blockA.setCollapsed(false);
+        blockA.setEnabled(false);
+
+        // Enable the parent block.
+        blockA.setEnabled(true);
+        blockA.setCollapsed(true);
+
+        // Child blocks should stay disabled if they have been set.
+        chai.assert.isTrue(blockB.disabled);
+      });
+    });
   });
   suite('Style', function() {
     suite('Headless', function() {

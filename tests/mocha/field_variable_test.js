@@ -75,14 +75,14 @@ suite('Variable Fields', function() {
   var defaultFieldName = FAKE_VARIABLE_NAME;
   /**
    * Asserts that the field property values are set to default.
-   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!Blockly.FieldVariable} field The field to check.
    */
   var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, FAKE_ID, defaultFieldName);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
-   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!Blockly.FieldVariable} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
   var validTestCaseAssertField = function(field, testCase) {

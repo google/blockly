@@ -181,7 +181,8 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldAngle.prototype.configure_ = function(config) {
   Blockly.FieldAngle.superClass_.configure_.call(this, config);
@@ -246,7 +247,7 @@ Blockly.FieldAngle.prototype.initView = function() {
 
 /**
  * Updates the graph when the field rerenders.
- * @private
+ * @protected
  * @override
  */
 Blockly.FieldAngle.prototype.render_ = function() {

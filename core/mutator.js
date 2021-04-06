@@ -127,7 +127,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
  * Clicking on the icon toggles if the mutator bubble is visible.
  * Disable if block is uneditable.
  * @param {!Event} e Mouse click event.
- * @private
+ * @protected
  * @override
  */
 Blockly.Mutator.prototype.iconClick_ = function(e) {

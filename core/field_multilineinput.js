@@ -132,7 +132,8 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * Get the text from this field as displayed on screen.  May differ from getText
  * due to ellipsis, and other formatting.
  * @return {string} Currently displayed text.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   var textLines = this.getText();

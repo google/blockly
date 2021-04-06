@@ -153,7 +153,8 @@ Blockly.FieldColour.prototype.columns_ = 0;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldColour.prototype.configure_ = function(config) {
   Blockly.FieldColour.superClass_.configure_.call(this, config);

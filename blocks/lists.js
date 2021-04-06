@@ -15,7 +15,6 @@
  */
 'use strict';
 
-//Removed block provide location
 goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly');

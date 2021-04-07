@@ -855,7 +855,6 @@ Blockly.Blocks['lists_split'] = {
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
-  
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('mode'));
   }

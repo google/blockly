@@ -571,4 +571,3 @@ Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
     Blockly.Events.BlockChange);
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
     Blockly.Events.Move);
-

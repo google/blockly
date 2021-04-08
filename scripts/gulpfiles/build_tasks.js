@@ -76,7 +76,7 @@ var JSCOMP_ERROR = [
   'missingProperties',
   'missingProvide',
   // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
-  // Disabling this until we have fixed all the require issues. 
+  // Disabling this until we have fixed all the require issues.
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -116,7 +116,8 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
   const options = {};
   options.compilation_level = 'SIMPLE_OPTIMIZATIONS';
   options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
-  options.language_in = 'ECMASCRIPT5_STRICT';
+  // Use stable, regardless of what was passed in.
+  options.language_in = 'STABLE';
   options.language_out = 'ECMASCRIPT5_STRICT';
   options.rewrite_polyfills = false;
   options.hide_warnings_for = 'node_modules';
@@ -189,38 +190,36 @@ function buildCompressed() {
   var packageJson = getPackageJson();
   const defines = 'Blockly.VERSION="' + packageJson.version + '"';
   return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']), {base: './'})
-    .pipe(stripApacheLicense())
-    .pipe(gulp.sourcemaps.init())
-    // Directories in Blockly are used to group similar files together
-    // but are not used to limit access with @package, instead the
-    // method means something is internal to Blockly and not a public
-    // API.
-    // Flatten all files so they're in the same directory, but ensure that
-    // files with the same name don't conflict.
-    .pipe(gulp.rename(function (p) {
-      var dirname = p.dirname.replace(
-        new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
-      p.dirname = "";
-      p.basename = dirname + "-" + p.basename;
-    }))
-    .pipe(compile({
-      dependency_mode: 'PRUNE',
-      entry_point: './core-requires.js',
-      js_output_file: 'blockly_compressed.js',
-      externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
-      define: defines,
-      language_in:
-        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT',
-      output_wrapper: outputWrapperUMD('Blockly', [])
-    }, argv.verbose, argv.debug, argv.strict))
-    .pipe(gulp.sourcemaps.mapSources(function (sourcePath, file) {
-      return sourcePath.replace(/-/g, '/');
-    }))
-    .pipe(gulp.sourcemaps.write('.', {
-      includeContent: false,
-      sourceRoot: './'
-    }))
-    .pipe(gulp.dest('./'));
+      .pipe(stripApacheLicense())
+      .pipe(gulp.sourcemaps.init())
+      // Directories in Blockly are used to group similar files together
+      // but are not used to limit access with @package, instead the
+      // method means something is internal to Blockly and not a public
+      // API.
+      // Flatten all files so they're in the same directory, but ensure that
+      // files with the same name don't conflict.
+      .pipe(gulp.rename(function(p) {
+        var dirname = p.dirname.replace(
+            new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
+        p.dirname = "";
+        p.basename = dirname + "-" + p.basename;
+      }))
+      .pipe(compile(
+          {
+            dependency_mode: 'PRUNE',
+            entry_point: './core-requires.js',
+            js_output_file: 'blockly_compressed.js',
+            externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
+            define: defines,
+            output_wrapper: outputWrapperUMD('Blockly', [])
+          },
+          argv.verbose, argv.debug, argv.strict))
+      .pipe(gulp.sourcemaps.mapSources(function(sourcePath, file) {
+        return sourcePath.replace(/-/g, '/');
+      }))
+      .pipe(
+          gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
+      .pipe(gulp.dest('./'));
 };
 
 /**
@@ -446,45 +445,41 @@ function buildLangfiles(done) {
  */
 function buildAdvancedCompilationTest() {
   const srcs = [
-    'tests/compile/main.js',
-    'tests/compile/test_blocks.js',
-    'core/**/**/*.js',
-    'blocks/*.js',
-    'generators/**/*.js'];
+    'tests/compile/main.js', 'tests/compile/test_blocks.js', 'core/**/**/*.js',
+    'blocks/*.js', 'generators/**/*.js'
+  ];
   return gulp.src(maybeAddClosureLibrary(srcs), {base: './'})
-    .pipe(stripApacheLicense())
-    .pipe(gulp.sourcemaps.init())
-    // Directories in Blockly are used to group similar files together
-    // but are not used to limit access with @package, instead the
-    // method means something is internal to Blockly and not a public
-    // API.
-    // Flatten all files so they're in the same directory, but ensure that
-    // files with the same name don't conflict.
-    .pipe(gulp.rename(function (p) {
-      if (p.dirname.indexOf('core') === 0) {
-        var dirname = p.dirname.replace(
-          new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
-        p.dirname = "";
-        p.basename = dirname + "-" + p.basename;
-      }
-    }))
-    .pipe(compile({
-      dependency_mode: 'PRUNE',
-      compilation_level: 'ADVANCED_OPTIMIZATIONS',
-      entry_point: './tests/compile/main.js',
-      js_output_file: 'main_compressed.js',
-      externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
-      language_in:
-        argv.closureLibrary ? 'ECMASCRIPT_2015' : 'ECMASCRIPT5_STRICT'
-    }, argv.verbose, argv.strict))
-    .pipe(gulp.sourcemaps.mapSources(function (sourcePath, file) {
-      return sourcePath.replace(/-/g, '/');
-    }))
-    .pipe(gulp.sourcemaps.write('.', {
-      includeContent: false,
-      sourceRoot: '../../'
-    }))
-    .pipe(gulp.dest('./tests/compile/'));
+      .pipe(stripApacheLicense())
+      .pipe(gulp.sourcemaps.init())
+      // Directories in Blockly are used to group similar files together
+      // but are not used to limit access with @package, instead the
+      // method means something is internal to Blockly and not a public
+      // API.
+      // Flatten all files so they're in the same directory, but ensure that
+      // files with the same name don't conflict.
+      .pipe(gulp.rename(function(p) {
+        if (p.dirname.indexOf('core') === 0) {
+          var dirname = p.dirname.replace(
+              new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
+          p.dirname = "";
+          p.basename = dirname + "-" + p.basename;
+        }
+      }))
+      .pipe(compile(
+          {
+            dependency_mode: 'PRUNE',
+            compilation_level: 'ADVANCED_OPTIMIZATIONS',
+            entry_point: './tests/compile/main.js',
+            js_output_file: 'main_compressed.js',
+            externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
+          },
+          argv.verbose, argv.strict))
+      .pipe(gulp.sourcemaps.mapSources(function(sourcePath, file) {
+        return sourcePath.replace(/-/g, '/');
+      }))
+      .pipe(gulp.sourcemaps.write(
+          '.', {includeContent: false, sourceRoot: '../../'}))
+      .pipe(gulp.dest('./tests/compile/'));
 }
 
 /**

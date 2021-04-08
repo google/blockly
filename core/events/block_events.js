@@ -88,7 +88,7 @@ Blockly.Events.BlockBase.prototype.fromJson = function(json) {
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
+Blockly.Events.Change = function(opt_block, opt_element, opt_name, opt_oldValue,
     opt_newValue) {
   Blockly.Events.Change.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
@@ -99,7 +99,7 @@ Blockly.Events.BlockChange = function(opt_block, opt_element, opt_name, opt_oldV
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockChange, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(Blockly.Events.Change, Blockly.Events.BlockBase);
 
 /**
  * Class for a block change event.
@@ -112,20 +112,20 @@ Blockly.utils.object.inherits(Blockly.Events.BlockChange, Blockly.Events.BlockBa
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.Change = Blockly.Events.BlockChange;
+Blockly.Events.BlockChange = Blockly.Events.Change;
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockChange.prototype.type = Blockly.Events.CHANGE;
+Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockChange.prototype.toJson = function() {
-  var json = Blockly.Events.BlockChange.superClass_.toJson.call(this);
+Blockly.Events.Change.prototype.toJson = function() {
+  var json = Blockly.Events.Change.superClass_.toJson.call(this);
   json['element'] = this.element;
   if (this.name) {
     json['name'] = this.name;
@@ -139,8 +139,8 @@ Blockly.Events.BlockChange.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockChange.prototype.fromJson = function(json) {
-  Blockly.Events.BlockChange.superClass_.fromJson.call(this, json);
+Blockly.Events.Change.prototype.fromJson = function(json) {
+  Blockly.Events.Change.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.name = json['name'];
   this.oldValue = json['oldValue'];
@@ -151,7 +151,7 @@ Blockly.Events.BlockChange.prototype.fromJson = function(json) {
  * Does this event record any change of state?
  * @return {boolean} False if something changed.
  */
-Blockly.Events.BlockChange.prototype.isNull = function() {
+Blockly.Events.Change.prototype.isNull = function() {
   return this.oldValue == this.newValue;
 };
 
@@ -159,7 +159,7 @@ Blockly.Events.BlockChange.prototype.isNull = function() {
  * Run a change event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.BlockChange.prototype.run = function(forward) {
+Blockly.Events.Change.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   var block = workspace.getBlockById(this.blockId);
   if (!block) {
@@ -202,7 +202,7 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
         var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
         block.domToMutation(dom);
       }
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.CHANGE))(
           block, 'mutation', null, oldMutation, value));
       break;
     default:
@@ -568,6 +568,6 @@ Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CREATE,
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.DELETE,
     Blockly.Events.Delete);
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
-    Blockly.Events.BlockChange);
+    Blockly.Events.Change);
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
     Blockly.Events.Move);

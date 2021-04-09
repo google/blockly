@@ -21,11 +21,10 @@ goog.require('Blockly.geras.PathObject');
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.blockRendering.RenderInfo');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.blockRendering.RenderInfo');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Theme');
-
 
 
 /**

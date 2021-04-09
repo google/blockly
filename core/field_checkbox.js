@@ -12,13 +12,12 @@
 
 goog.provide('Blockly.FieldCheckbox');
 
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 
 
 /**
@@ -89,7 +88,8 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldCheckbox.prototype.configure_ = function(config) {
   Blockly.FieldCheckbox.superClass_.configure_.call(this, config);

@@ -14,8 +14,6 @@
 
 goog.provide('Blockly.FieldDropdown');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');
@@ -25,12 +23,9 @@ goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
-
-goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**

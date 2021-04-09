@@ -16,14 +16,12 @@
  */
 goog.provide('Blockly.Xml');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockCreate');
-goog.require('Blockly.Events.FinishedLoading');
-goog.require('Blockly.Events.VarCreate');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.xml');
 
@@ -31,8 +29,8 @@ goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Comment');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.Workspace');
 goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -204,13 +202,13 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   for (var i = 0, input; (input = block.inputList[i]); i++) {
     var container;
     var empty = true;
-    if (input.type == Blockly.DUMMY_INPUT) {
+    if (input.type == Blockly.inputTypes.DUMMY) {
       continue;
     } else {
       var childBlock = input.connection.targetBlock();
-      if (input.type == Blockly.INPUT_VALUE) {
+      if (input.type == Blockly.inputTypes.VALUE) {
         container = Blockly.utils.xml.createElement('value');
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
+      } else if (input.type == Blockly.inputTypes.STATEMENT) {
         container = Blockly.utils.xml.createElement('statement');
       }
       var shadow = input.connection.getShadowDom();
@@ -481,7 +479,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
-  Blockly.Events.fire(new Blockly.Events.FinishedLoading(workspace));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.FINISHED_LOADING))(
+      workspace));
   return newBlockIds;
 };
 
@@ -593,11 +592,13 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     // Fire a VarCreate event for each (if any) new variable created.
     for (var i = 0; i < newVariables.length; i++) {
       var thisVariable = newVariables[i];
-      Blockly.Events.fire(new Blockly.Events.VarCreate(thisVariable));
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(
+          thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(topBlock));
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.CREATE))(
+        topBlock));
   }
   return topBlock;
 };

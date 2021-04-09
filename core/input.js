@@ -13,13 +13,16 @@
 goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.fieldRegistry');
+/** @suppress {extraRequire} */
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.inputTypes');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.FieldDropdown');
 goog.requireType('Blockly.RenderedConnection');
 
 
@@ -33,7 +36,7 @@ goog.requireType('Blockly.RenderedConnection');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
-  if (type != Blockly.DUMMY_INPUT && !name) {
+  if (type != Blockly.inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
@@ -55,7 +58,7 @@ Blockly.Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
+Blockly.Input.prototype.align = Blockly.constants.ALIGN.LEFT;
 
 /**
  * Is the input visible?
@@ -120,17 +123,16 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   field.name = opt_name;
   field.setVisible(this.isVisible());
 
-  var fieldDropdown = /** @type {Blockly.FieldDropdown} */ (field);
-  if (fieldDropdown.prefixField) {
+  if (field.prefixField) {
     // Add any prefix.
-    index = this.insertFieldAt(index, fieldDropdown.prefixField);
+    index = this.insertFieldAt(index, field.prefixField);
   }
   // Add the field to the field row.
   this.fieldRow.splice(index, 0, field);
   ++index;
-  if (fieldDropdown.suffixField) {
+  if (field.suffixField) {
     // Add any suffix.
-    index = this.insertFieldAt(index, fieldDropdown.suffixField);
+    index = this.insertFieldAt(index, field.suffixField);
   }
 
   if (this.sourceBlock_.rendered) {
@@ -242,8 +244,8 @@ Blockly.Input.prototype.setCheck = function(check) {
 
 /**
  * Change the alignment of the connection's field(s).
- * @param {number} align One of Blockly.ALIGN_LEFT, ALIGN_CENTRE, ALIGN_RIGHT.
- *   In RTL mode directions are reversed, and ALIGN_RIGHT aligns to the left.
+ * @param {number} align One of the values of Blockly.constants.ALIGN.
+ *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
 Blockly.Input.prototype.setAlign = function(align) {

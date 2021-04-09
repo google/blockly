@@ -12,9 +12,10 @@
 
 goog.provide('Blockly.FieldColour');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
@@ -26,7 +27,6 @@ goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
 
-goog.requireType('Blockly.ShortcutRegistry');
 
 /**
  * Class for a colour input field.
@@ -61,35 +61,35 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Mouse click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onClickWrapper_ = null;
 
   /**
    * Mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseEnterWrapper_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseLeaveWrapper_ = null;
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownWrapper_ = null;
@@ -153,7 +153,8 @@ Blockly.FieldColour.prototype.columns_ = 0;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldColour.prototype.configure_ = function(config) {
   Blockly.FieldColour.superClass_.configure_.call(this, config);
@@ -188,7 +189,7 @@ Blockly.FieldColour.prototype.initView = function() {
 Blockly.FieldColour.prototype.applyColour = function() {
   if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     if (this.borderRect_) {
-      this.borderRect_.style.fill = this.getValue();
+      this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
     }
   } else {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.getValue());
@@ -218,7 +219,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
 Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
-    this.borderRect_.style.fill = newValue;
+    this.borderRect_.style.fill = /** @type {string} */ (newValue);
   } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
     this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
@@ -556,16 +557,16 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   }
 
   // Configure event handler on the table to listen for any event in a cell.
-  this.onClickWrapper_ = Blockly.bindEventWithChecks_(table,
-      'click', this, this.onClick_, true);
-  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mousemove', this, this.onMouseMove_, true);
-  this.onMouseEnterWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mouseenter', this, this.onMouseEnter_, true);
-  this.onMouseLeaveWrapper_ = Blockly.bindEventWithChecks_(table,
-      'mouseleave', this, this.onMouseLeave_, true);
-  this.onKeyDownWrapper_ = Blockly.bindEventWithChecks_(table,
-      'keydown', this, this.onKeyDown_);
+  this.onClickWrapper_ = Blockly.browserEvents.conditionalBind(
+      table, 'click', this, this.onClick_, true);
+  this.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
+      table, 'mousemove', this, this.onMouseMove_, true);
+  this.onMouseEnterWrapper_ = Blockly.browserEvents.conditionalBind(
+      table, 'mouseenter', this, this.onMouseEnter_, true);
+  this.onMouseLeaveWrapper_ = Blockly.browserEvents.conditionalBind(
+      table, 'mouseleave', this, this.onMouseLeave_, true);
+  this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      table, 'keydown', this, this.onKeyDown_);
 
   return table;
 };
@@ -576,23 +577,23 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {
   if (this.onClickWrapper_) {
-    Blockly.unbindEvent_(this.onClickWrapper_);
+    Blockly.browserEvents.unbind(this.onClickWrapper_);
     this.onClickWrapper_ = null;
   }
   if (this.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseMoveWrapper_);
     this.onMouseMoveWrapper_ = null;
   }
   if (this.onMouseEnterWrapper_) {
-    Blockly.unbindEvent_(this.onMouseEnterWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseEnterWrapper_);
     this.onMouseEnterWrapper_ = null;
   }
   if (this.onMouseLeaveWrapper_) {
-    Blockly.unbindEvent_(this.onMouseLeaveWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseLeaveWrapper_);
     this.onMouseLeaveWrapper_ = null;
   }
   if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
   this.picker_ = null;

@@ -16,6 +16,7 @@ goog.provide('Blockly.fieldRegistry');
 
 goog.require('Blockly.registry');
 
+goog.requireType('Blockly.Field');
 goog.requireType('Blockly.IRegistrableField');
 
 

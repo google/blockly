@@ -18,6 +18,7 @@ var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
 var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 var releaseTasks = require('./scripts/gulpfiles/release_tasks');
+var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
   deployDemos: appengineTasks.deployDemos,
@@ -40,4 +41,5 @@ module.exports = {
   recompile: releaseTasks.recompile,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
+  sortRequires: cleanupTasks.sortRequires,
 };

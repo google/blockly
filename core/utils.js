@@ -18,8 +18,9 @@
  */
 goog.provide('Blockly.utils');
 
-goog.require('Blockly.Msg');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.Msg');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
@@ -27,6 +28,9 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

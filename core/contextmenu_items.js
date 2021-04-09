@@ -16,9 +16,14 @@
  */
 goog.provide('Blockly.ContextMenuItems');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.ContextMenuRegistry');
+goog.require('Blockly.Events');
+goog.require('Blockly.inputTypes');
 
 goog.requireType('Blockly.BlockSvg');
+
 
 /** Option to undo previous action. */
 Blockly.ContextMenuItems.registerUndo = function() {
@@ -63,7 +68,7 @@ Blockly.ContextMenuItems.registerRedo = function() {
   };
   Blockly.ContextMenuRegistry.registry.register(redoOption);
 };
-    
+
 /** Option to clean up blocks. */
 Blockly.ContextMenuItems.registerCleanup = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
@@ -89,7 +94,7 @@ Blockly.ContextMenuItems.registerCleanup = function() {
   };
   Blockly.ContextMenuRegistry.registry.register(cleanOption);
 };
-  
+
 /**
  * Creates a callback to collapse or expand top blocks.
  * @param {boolean} shouldCollapse Whether a block should collapse.
@@ -141,7 +146,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
   };
   Blockly.ContextMenuRegistry.registry.register(collapseOption);
 };
-  
+
 /** Option to expand all blocks. */
 Blockly.ContextMenuItems.registerExpand = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
@@ -174,7 +179,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
   };
   Blockly.ContextMenuRegistry.registry.register(expandOption);
 };
-  
+
 /**
  * Adds a block and its children to a list of deletable blocks.
  * @param {!Blockly.BlockSvg} block to delete.
@@ -192,7 +197,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
     }
   }
 };
-  
+
 /**
  * Constructs a list of blocks that can be deleted in the given workspace.
  * @param {!Blockly.WorkspaceSvg} workspace to delete all blocks from.
@@ -207,7 +212,7 @@ Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
   }
   return deleteList;
 };
-    
+
 /** Deletes the given blocks. Used to delete all blocks in the workspace.
  * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
  * @param {string} eventGroup event group id with which all delete events should be associated.
@@ -227,7 +232,7 @@ Blockly.ContextMenuItems.deleteNext_ = function(deleteList, eventGroup) {
   }
   Blockly.Events.setGroup(false);
 };
-  
+
 /** Option to delete all blocks. */
 Blockly.ContextMenuItems.registerDeleteAll = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
@@ -369,8 +374,8 @@ Blockly.ContextMenuItems.registerInline = function() {
       if (!block.isInFlyout && block.isMovable() && !block.isCollapsed()) {
         for (var i = 1; i < block.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs next to each other.
-          if (block.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-              block.inputList[i].type != Blockly.NEXT_STATEMENT) {
+          if (block.inputList[i - 1].type != Blockly.inputTypes.STATEMENT &&
+              block.inputList[i].type != Blockly.inputTypes.STATEMENT) {
             return 'enabled';
           }
         }
@@ -533,4 +538,5 @@ Blockly.ContextMenuItems.registerDefaultOptions = function() {
   Blockly.ContextMenuItems.registerWorkspaceOptions_();
   Blockly.ContextMenuItems.registerBlockOptions_();
 };
-  
+
+Blockly.ContextMenuItems.registerDefaultOptions();

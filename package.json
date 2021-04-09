@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "4.20201217.0",
+  "version": "5.20210325.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -31,6 +31,7 @@
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "deployDemos": "gulp deployDemos",
     "format": "git-clang-format",
+    "format:sortrequires": "gulp sortRequires",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
@@ -66,11 +67,11 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.5.0",
-    "concurrently": "^5.3.0",
+    "concurrently": "^6.0.0",
     "eslint": "^7.6.0",
     "eslint-plugin-es5": "^1.5.0",
-    "google-closure-compiler": "^20210106.0.0",
-    "google-closure-deps": "^20210106.0.0",
+    "google-closure-compiler": "^20210302.0.0",
+    "google-closure-deps": "^20210202.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
@@ -87,10 +88,10 @@
     "selenium-standalone": "^6.17.0",
     "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",
-    "webdriverio": "^6.5.2",
+    "webdriverio": "^7.0.3",
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "16.4.0"
+    "jsdom": "16.5.2"
   }
 }

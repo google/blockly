@@ -52,3 +52,15 @@ Blockly.utils.Rect = function(top, bottom, left, right) {
 Blockly.utils.Rect.prototype.contains = function(x, y) {
   return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
 };
+
+/**
+ * Tests whether this rectangle intersects the provided rectangle.
+ * Assumes that the coordinate system increases going down and left.
+ * @param {Blockly.utils.Rect} other The other rectangle to check for
+ *    intersection with.
+ * @return {boolean} Whether this rectangle intersects the provided rectangle.
+ */
+Blockly.utils.Rect.prototype.intersects = function(other) {
+  return !(this.left > other.right || this.right < other.left ||
+      this.top > other.bottom || this.bottom < other.top);
+};

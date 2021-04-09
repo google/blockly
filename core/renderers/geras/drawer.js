@@ -12,15 +12,14 @@
 
 goog.provide('Blockly.geras.Drawer');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
 goog.require('Blockly.geras.RenderInfo');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
 
-goog.requireType('Blockly.geras.PathObject');
 goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.geras.PathObject');
 
 
 /**
@@ -121,7 +120,8 @@ Blockly.geras.Drawer.prototype.drawBottom_ = function() {
 /**
  * Add steps for the left side of the block, which may include an output
  * connection
- * @private
+ * @protected
+ * @override
  */
 Blockly.geras.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();

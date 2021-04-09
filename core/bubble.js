@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Bubble');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -21,12 +22,13 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
-goog.requireType('Blockly.utils.Metrics');
+goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -65,14 +67,14 @@ Blockly.Bubble = function(
 
   /**
    * Mouse down on bubbleBack_ event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseDownBubbleWrapper_ = null;
 
   /**
    * Mouse down on resizeGroup_ event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onMouseDownResizeWrapper_ = null;
@@ -136,14 +138,14 @@ Blockly.Bubble.ANCHOR_RADIUS = 8;
 
 /**
  * Mouse up event data.
- * @type {?Blockly.EventData}
+ * @type {?Blockly.browserEvents.Data}
  * @private
  */
 Blockly.Bubble.onMouseUpWrapper_ = null;
 
 /**
  * Mouse move event data.
- * @type {?Blockly.EventData}
+ * @type {?Blockly.browserEvents.Data}
  * @private
  */
 Blockly.Bubble.onMouseMoveWrapper_ = null;
@@ -154,11 +156,11 @@ Blockly.Bubble.onMouseMoveWrapper_ = null;
  */
 Blockly.Bubble.unbindDragEvents_ = function() {
   if (Blockly.Bubble.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.Bubble.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Bubble.onMouseUpWrapper_);
     Blockly.Bubble.onMouseUpWrapper_ = null;
   }
   if (Blockly.Bubble.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.Bubble.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(Blockly.Bubble.onMouseMoveWrapper_);
     Blockly.Bubble.onMouseMoveWrapper_ = null;
   }
 };
@@ -298,10 +300,10 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   }
 
   if (!this.workspace_.options.readOnly) {
-    this.onMouseDownBubbleWrapper_ = Blockly.bindEventWithChecks_(
+    this.onMouseDownBubbleWrapper_ = Blockly.browserEvents.conditionalBind(
         this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
     if (this.resizeGroup_) {
-      this.onMouseDownResizeWrapper_ = Blockly.bindEventWithChecks_(
+      this.onMouseDownResizeWrapper_ = Blockly.browserEvents.conditionalBind(
           this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
     }
   }
@@ -386,9 +388,9 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
       new Blockly.utils.Coordinate(
           this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
-  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(
+  Blockly.Bubble.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
-  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.browserEvents.conditionalBind(
       document, 'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
@@ -555,8 +557,8 @@ Blockly.Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
  * Calculate what the optimal horizontal position of the top-left corner of the
  * bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal horizontal position of the top-left corner
  *     of the bubble.
  * @private
@@ -613,8 +615,8 @@ Blockly.Bubble.prototype.getOptimalRelativeLeft_ = function(viewMetrics) {
  * Calculate what the optimal vertical position of the top-left corner of
  * the bubble is (relative to the anchor point) so that the most area of the
  * bubble is shown.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics of the
- *     workspace the bubble will appear in.
+ * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view metrics
+ *     of the workspace the bubble will appear in.
  * @return {number} The optimal vertical position of the top-left corner
  *     of the bubble.
  * @private
@@ -820,10 +822,10 @@ Blockly.Bubble.prototype.setColour = function(hexColour) {
  */
 Blockly.Bubble.prototype.dispose = function() {
   if (this.onMouseDownBubbleWrapper_) {
-    Blockly.unbindEvent_(this.onMouseDownBubbleWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseDownBubbleWrapper_);
   }
   if (this.onMouseDownResizeWrapper_) {
-    Blockly.unbindEvent_(this.onMouseDownResizeWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseDownResizeWrapper_);
   }
   Blockly.Bubble.unbindDragEvents_();
   Blockly.utils.dom.removeNode(this.bubbleGroup_);

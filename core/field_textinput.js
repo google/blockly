@@ -12,7 +12,9 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
@@ -23,8 +25,10 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -59,14 +63,14 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownWrapper_ = null;
 
   /**
    * Key input event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyInputWrapper_ = null;
@@ -199,7 +203,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     // Revert value when the text becomes invalid.
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
           this.sourceBlock_, 'field', this.name || null, oldValue, this.value_));
     }
   }
@@ -418,13 +422,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
  */
 Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.
-  this.onKeyDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+  this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
   // Resize after every input change.
-  this.onKeyInputWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'input', this, this.onHtmlInputChange_);
+  this.onKeyInputWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'input', this, this.onHtmlInputChange_);
 };
 
 /**
@@ -433,11 +435,11 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
   if (this.onKeyInputWrapper_) {
-    Blockly.unbindEvent_(this.onKeyInputWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyInputWrapper_);
     this.onKeyInputWrapper_ = null;
   }
 };

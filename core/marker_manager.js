@@ -15,6 +15,8 @@ goog.provide('Blockly.MarkerManager');
 goog.require('Blockly.Cursor');
 goog.require('Blockly.Marker');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.

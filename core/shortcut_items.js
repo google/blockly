@@ -16,7 +16,12 @@
  */
 goog.provide('Blockly.ShortcutItems');
 
+goog.require('Blockly.Gesture');
+goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.utils.KeyCodes');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.ICopyable');
 
 
 /**
@@ -227,19 +232,21 @@ Blockly.ShortcutItems.registerRedo = function() {
   Blockly.ShortcutRegistry.registry.register(redoShortcut);
 
   var ctrlShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
-      Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.SHIFT,
-        Blockly.utils.KeyCodes.CTRL]);
-  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlShiftZ, redoShortcut.name);
+      Blockly.utils.KeyCodes.Z,
+      [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      ctrlShiftZ, redoShortcut.name);
 
   var altShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
-      Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.SHIFT,
-        Blockly.utils.KeyCodes.ALT]);
+      Blockly.utils.KeyCodes.Z,
+      [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altShiftZ, redoShortcut.name);
 
   var metaShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
-      Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.SHIFT,
-        Blockly.utils.KeyCodes.META]);
-  Blockly.ShortcutRegistry.registry.addKeyMapping(metaShiftZ, redoShortcut.name);
+      Blockly.utils.KeyCodes.Z,
+      [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.META]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+      metaShiftZ, redoShortcut.name);
 
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
   var ctrlY = Blockly.ShortcutRegistry.registry.createSerializedKey(
@@ -261,3 +268,5 @@ Blockly.ShortcutItems.registerDefaultShortcuts = function() {
   Blockly.ShortcutItems.registerUndo();
   Blockly.ShortcutItems.registerRedo();
 };
+
+Blockly.ShortcutItems.registerDefaultShortcuts();

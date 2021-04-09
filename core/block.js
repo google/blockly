@@ -15,22 +15,27 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDelete');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Input');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.string');
 goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.Comment');
@@ -226,7 +231,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
     // Fire a create event.
     if (Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockCreate(this));
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(
+          this));
     }
 
   } finally {
@@ -260,12 +266,13 @@ Blockly.Block.CommentModel;
  * The language-neutral id given to the collapsed input.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+Blockly.Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+
 /**
  * The language-neutral id given to the collapsed field.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
+Blockly.Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
 
 /**
  * Optional text data that round-trips between blocks and XML.
@@ -365,7 +372,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
 
   this.unplug(healStack);
   if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.BlockDelete(this));
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_DELETE))(
+        this));
   }
   Blockly.Events.disable();
 
@@ -497,7 +505,8 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   var connection = null;
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == Blockly.INPUT_VALUE &&
+    if (thisConnection &&
+        thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null; // More than one value input found.
@@ -658,7 +667,8 @@ Blockly.Block.prototype.getPreviousBlock = function() {
  */
 Blockly.Block.prototype.getFirstStatementConnection = function() {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.connection && input.connection.type == Blockly.NEXT_STATEMENT) {
+    if (input.connection &&
+        input.connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -1138,7 +1148,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(Blockly.PREVIOUS_STATEMENT);
+          this.makeConnection_(Blockly.connectionTypes.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1165,7 +1175,8 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection = this.makeConnection_(Blockly.NEXT_STATEMENT);
+      this.nextConnection =
+          this.makeConnection_(Blockly.connectionTypes.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1197,7 +1208,8 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
         throw Error('Remove previous connection prior to adding output ' +
             'connection.');
       }
-      this.outputConnection = this.makeConnection_(Blockly.OUTPUT_VALUE);
+      this.outputConnection =
+          this.makeConnection_(Blockly.connectionTypes.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1217,7 +1229,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
  */
 Blockly.Block.prototype.setInputsInline = function(newBoolean) {
   if (this.inputsInline != newBoolean) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
   }
@@ -1234,15 +1246,15 @@ Blockly.Block.prototype.getInputsInline = function() {
   }
   // Not defined explicitly.  Figure out what would look best.
   for (var i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == Blockly.DUMMY_INPUT &&
-        this.inputList[i].type == Blockly.DUMMY_INPUT) {
+    if (this.inputList[i - 1].type == Blockly.inputTypes.DUMMY &&
+        this.inputList[i].type == Blockly.inputTypes.DUMMY) {
       // Two dummy inputs in a row.  Don't inline them.
       return false;
     }
   }
   for (var i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == Blockly.INPUT_VALUE &&
-        this.inputList[i].type == Blockly.DUMMY_INPUT) {
+    if (this.inputList[i - 1].type == Blockly.inputTypes.VALUE &&
+        this.inputList[i].type == Blockly.inputTypes.DUMMY) {
       // Dummy input after a value input.  Inline them.
       return true;
     }
@@ -1280,7 +1292,7 @@ Blockly.Block.prototype.isEnabled = function() {
  */
 Blockly.Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'disabled', null, this.disabled, !enabled));
     this.disabled = !enabled;
   }
@@ -1317,7 +1329,7 @@ Blockly.Block.prototype.isCollapsed = function() {
  */
 Blockly.Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
-    Blockly.Events.fire(new Blockly.Events.BlockChange(
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
   }
@@ -1378,7 +1390,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         break;
       case Blockly.ASTNode.types.FIELD:
         var field = /** @type {Blockly.Field} */ (node.getLocation());
-        if (field.name != Blockly.Block.COLLAPSED_FIELD_NAME) {
+        if (field.name != Blockly.constants.COLLAPSED_FIELD_NAME) {
           text.push(field.getText());
         }
         break;
@@ -1439,7 +1451,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendValueInput = function(name) {
-  return this.appendInput_(Blockly.INPUT_VALUE, name);
+  return this.appendInput_(Blockly.inputTypes.VALUE, name);
 };
 
 /**
@@ -1449,7 +1461,7 @@ Blockly.Block.prototype.appendValueInput = function(name) {
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendStatementInput = function(name) {
-  return this.appendInput_(Blockly.NEXT_STATEMENT, name);
+  return this.appendInput_(Blockly.inputTypes.STATEMENT, name);
 };
 
 /**
@@ -1459,7 +1471,7 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendDummyInput = function(opt_name) {
-  return this.appendInput_(Blockly.DUMMY_INPUT, opt_name || '');
+  return this.appendInput_(Blockly.inputTypes.DUMMY, opt_name || '');
 };
 
 /**
@@ -1763,10 +1775,10 @@ Blockly.Block.prototype.fieldFromJson_ = function(element) {
  */
 Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   var alignmentLookup = {
-    'LEFT': Blockly.ALIGN_LEFT,
-    'RIGHT': Blockly.ALIGN_RIGHT,
-    'CENTRE': Blockly.ALIGN_CENTRE,
-    'CENTER': Blockly.ALIGN_CENTRE
+    'LEFT': Blockly.constants.ALIGN.LEFT,
+    'RIGHT': Blockly.constants.ALIGN.RIGHT,
+    'CENTRE': Blockly.constants.ALIGN.CENTRE,
+    'CENTER': Blockly.constants.ALIGN.CENTRE
   };
 
   var input = null;
@@ -1834,8 +1846,7 @@ Blockly.Block.prototype.stringToFieldJson_ = function(str) {
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ * @param {number} type One of Blockly.inputTypes.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
@@ -1843,10 +1854,11 @@ Blockly.Block.prototype.stringToFieldJson_ = function(str) {
  */
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
-  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
+  if (type == Blockly.inputTypes.VALUE ||
+      type == Blockly.inputTypes.STATEMENT) {
     connection = this.makeConnection_(type);
   }
-  if (type == Blockly.NEXT_STATEMENT) {
+  if (type == Blockly.inputTypes.STATEMENT) {
     this.statementInputCount++;
   }
   var input = new Blockly.Input(type, name, this, connection);
@@ -1927,7 +1939,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
-      if (input.type == Blockly.NEXT_STATEMENT) {
+      if (input.type == Blockly.inputTypes.STATEMENT) {
         this.statementInputCount--;
       }
       input.dispose();
@@ -1984,7 +1996,7 @@ Blockly.Block.prototype.setCommentText = function(text) {
   if (this.commentModel.text == text) {
     return;
   }
-  Blockly.Events.fire(new Blockly.Events.BlockChange(
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
       this, 'comment', null, this.commentModel.text, text));
   this.commentModel.text = text;
   this.comment = text;  // For backwards compatibility.
@@ -2027,7 +2039,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  var event = new Blockly.Events.BlockMove(this);
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);

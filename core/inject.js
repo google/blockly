@@ -64,7 +64,10 @@ Blockly.inject = function(container, opt_options) {
 
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
-  var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
+  var BlockDragSurfaceClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.BLOCK_DRAG_SURFACE_SVG, this.options, true);
+  var blockDragSurface = new BlockDragSurfaceClass(subContainer);
+
   var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,

@@ -27,6 +27,7 @@ goog.require('Blockly.utils.Svg');
  * SVG that contains only the currently moving block, or nothing.
  * @param {!Element} container Containing element.
  * @constructor
+ * @implements {Blockly.IBlockDragSurfaceSvg}
  */
 Blockly.BlockDragSurfaceSvg = function(container) {
   /**

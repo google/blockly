@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "5.20210325.0",
+  "version": "5.20210325.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -92,6 +92,6 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "16.5.0"
+    "jsdom": "15.2.1"
   }
 }

@@ -1773,30 +1773,35 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     return;
   }
 
-  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
-  // Scroll.
-  var x = this.scrollX - scrollDelta.x;
-  var y = this.scrollY - scrollDelta.y;
 
   // The amount the block dragger group was updated before we scroll the workspace.
-  // TODO: Complete hack here.
   var oldX = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.e;
   var oldY = this.blockDragSurface_.getGroup().transform.baseVal.consolidate().matrix.f;
 
-  // The amount the block dragger group was updated after we scroll the workspace.
+  // Figure out the desired location to scroll to.
+  var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
+  var x = this.scrollX - scrollDelta.x;
+  var y = this.scrollY - scrollDelta.y;
+
+  // The new location of the workspace.
   var newCoord = this.scroll(x,y);
 
+  // How much we actually ended up scrolling.
   var deltaX = newCoord.x.toFixed() - oldX;
   var deltaY = newCoord.y.toFixed() - oldY;
   if (this.currentGesture_ && this.currentGesture_.isDraggingBlock_) {
     // Negative because we are trying to offset the amount child block dragger
     // group is being dragged.
+    // Move the block drag surface.
     this.blockDragSurface_.translateBy(-deltaX, -deltaY);
+    // Move the connections on the block.
     this.currentGesture_.startBlock_.moveConnections(-deltaX, -deltaY);
-    // TODO: Complete hack here.
+    // Update the start location of the block, so that when we drag the block
+    // it starts in the correct location.
     this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
     var delta = new Blockly.utils.Coordinate(-deltaX, -deltaY);
     // TODO: Update from null.
+    // As we scroll, show the insertion markers.
     this.currentGesture_.blockDragger_.draggedConnectionManager_.update(delta, null);
 
     e.preventDefault();

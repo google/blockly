@@ -442,9 +442,9 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
   if (!this.stopCalculating || !this.contentMetrics) {
-    var contentMetrics = this.getContentMetrics(viewMetrics);
+    this.contentMetrics = this.getContentMetrics(viewMetrics);
   }
-  var scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  var scrollMetrics = this.getScrollMetrics(false, viewMetrics, this.contentMetrics);
 
   return {
     contentHeight: this.contentMetrics.height,

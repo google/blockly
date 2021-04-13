@@ -10,3 +10,9 @@ updates:
     target-branch: "develop"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "jsdom"
+        # For jsdom, ignore all updates for version 16.
+        # We should test that this does not cause issue 
+        # google/blockly-samples#665 when version 17 is released.
+        versions: "16.x"

@@ -354,7 +354,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyIconSymbol {',
-    'fill: #fff;',
+    'fill: #ddd;',
   '}',
 
   '.blocklyMinimalBody {',

@@ -1793,9 +1793,9 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     // Negative because we are trying to offset the amount child block dragger
     // group is being dragged.
     // Move the block drag surface.
-    this.blockDragSurface_.translateBy(-deltaX, -deltaY);
+    this.getBlockDragSurface().translateBy(-deltaX, -deltaY);
     // Move the connections on the block.
-    this.currentGesture_.startBlock_.moveConnections(-deltaX, -deltaY);
+    this.currentGesture_.blockDragger_.draggingBlock_.moveConnections(-deltaX, -deltaY);
     // Update the start location of the block, so that when we drag the block
     // it starts in the correct location.
     this.currentGesture_.blockDragger_.updateStartXY(-deltaX, -deltaY);
@@ -2263,7 +2263,7 @@ Blockly.WorkspaceSvg.prototype.getScale = function() {
  * @param {number} y Target Y to scroll to.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
+Blockly.WorkspaceSvg.prototype.scroll = function(x, y, opt_metrics) {
   Blockly.hideChaff(/* opt_allowToolbox */ true);
 
   // Keep scrolling within the bounds of the content.
@@ -2303,6 +2303,7 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.
+  // TODO: If we do this ourselves, then can we just use the scrollX and scrollY from above?
   x += metrics.absoluteLeft;
   y += metrics.absoluteTop;
   this.translate(x, y, true);

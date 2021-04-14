@@ -74,7 +74,7 @@ Blockly.IBlockDragSurfaceSvg.prototype.getGroup;
  * @return {Element} Drag surface block DOM element, or undefined if no blocks
  * exist.
  */
-Blockly.IBlockDragSurfaceSvg.prototype.getGroup;
+Blockly.IBlockDragSurfaceSvg.prototype.getCurrentBlock;
 
 /**
  * Clear the group and hide the surface; move the blocks off onto the provided

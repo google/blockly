@@ -12,7 +12,6 @@
 
 goog.provide('Blockly.inject');
 
-goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
@@ -30,6 +29,7 @@ goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
+goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.Workspace');
 
 
@@ -143,7 +143,7 @@ Blockly.createDom_ = function(container, options) {
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
  * @param {!Blockly.Options} options Dictionary of options.
- * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
+ * @param {!Blockly.IBlockDragSurfaceSvg} blockDragSurface Drag surface SVG
  *     for the blocks.
  * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
  *     SVG for the workspace.

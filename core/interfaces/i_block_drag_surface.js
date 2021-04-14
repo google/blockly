@@ -45,6 +45,13 @@ Blockly.IBlockDragSurfaceSvg.prototype.setBlocksAndShow;
 Blockly.IBlockDragSurfaceSvg.prototype.translateAndScaleGroup;
 
 /**
+ * Translates the entire surface by a relative offset.
+ * @param {number} deltaX Horizontal offset in pixel units.
+ * @param {number} deltaY Vertical offset in pixel units.
+ */
+Blockly.IBlockDragSurfaceSvg.prototype.translateBy;
+
+/**
  * Translate the entire drag surface during a drag.
  * We translate the drag surface instead of the blocks inside the surface
  * so that the browser avoids repainting the SVG.

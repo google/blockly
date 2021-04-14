@@ -25,7 +25,7 @@ goog.require('Blockly.utils.userAgent');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
 
-goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.MetricsManager');
@@ -835,7 +835,7 @@ Blockly.Bubble.prototype.dispose = function() {
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {Blockly.IBlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.

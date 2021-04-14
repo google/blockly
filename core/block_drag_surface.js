@@ -147,6 +147,17 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
 };
 
 /**
+ * Translates the entire surface by a relative offset.
+ * @param {number} deltaX Horizontal offset in pixel units.
+ * @param {number} deltaY Vertical offset in pixel units.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
+  var x = this.surfaceXY_.x + deltaX;
+  var y = this.surfaceXY_.y + deltaY;
+  this.translateSurface(x, y);
+};
+
+/**
  * Translate the entire drag surface during a drag.
  * We translate the drag surface instead of the blocks inside the surface
  * so that the browser avoids repainting the SVG.

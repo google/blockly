@@ -11,7 +11,8 @@
 'use strict';
 
 goog.provide('Blockly.inject');
-
+/** @suppress {extraRequire} */
+goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');

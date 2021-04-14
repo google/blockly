@@ -20,12 +20,12 @@ goog.requireType('Blockly.utils.Coordinate');
  * A block drag surface interface.
  * @interface
  */
-Blockly.BlockDragSurfaceSvg = function() {};
+Blockly.IBlockDragSurfaceSvg = function() {};
 
 /**
  * Create the drag surface and inject it into the container.
  */
-Blockly.BlockDragSurfaceSvg.prototype.createDom;
+Blockly.IBlockDragSurfaceSvg.prototype.createDom;
 
 /**
  * Set the SVG blocks on the drag surface's group and show the surface.
@@ -33,7 +33,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom;
  * @param {!SVGElement} blocks Block or group of blocks to place on the drag
  * surface.
  */
-Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow;
+Blockly.IBlockDragSurfaceSvg.prototype.setBlocksAndShow;
 
 /**
  * Translate and scale the entire drag surface group to the given position, to
@@ -42,7 +42,7 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow;
  * @param {number} y Y translation in workspace coordinates.
  * @param {number} scale Scale of the group.
  */
-Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup;
+Blockly.IBlockDragSurfaceSvg.prototype.translateAndScaleGroup;
 
 /**
  * Translate the entire drag surface during a drag.
@@ -52,21 +52,21 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup;
  * @param {number} x X translation for the entire surface.
  * @param {number} y Y translation for the entire surface.
  */
-Blockly.BlockDragSurfaceSvg.prototype.translateSurface;
+Blockly.IBlockDragSurfaceSvg.prototype.translateSurface;
 
 /**
  * Reports the surface translation in scaled workspace coordinates.
  * Use this when finishing a drag to return blocks to the correct position.
  * @return {!Blockly.utils.Coordinate} Current translation of the surface.
  */
-Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation;
+Blockly.IBlockDragSurfaceSvg.prototype.getSurfaceTranslation;
 
 /**
  * Provide a reference to the drag group (primarily for
  * BlockSvg.getRelativeToSurfaceXY).
  * @return {SVGElement} Drag surface group element.
  */
-Blockly.BlockDragSurfaceSvg.prototype.getGroup;
+Blockly.IBlockDragSurfaceSvg.prototype.getGroup;
 
 /**
  * Get the current blocks on the drag surface, if any (primarily
@@ -74,7 +74,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getGroup;
  * @return {Element} Drag surface block DOM element, or undefined if no blocks
  * exist.
  */
-Blockly.BlockDragSurfaceSvg.prototype.getGroup;
+Blockly.IBlockDragSurfaceSvg.prototype.getGroup;
 
 /**
  * Clear the group and hide the surface; move the blocks off onto the provided
@@ -85,4 +85,4 @@ Blockly.BlockDragSurfaceSvg.prototype.getGroup;
  *     to, or null if the blocks should be removed from this surface without
  *     being moved to a different surface.
  */
-Blockly.BlockDragSurfaceSvg.prototype.clearAndHide;
+Blockly.IBlockDragSurfaceSvg.prototype.clearAndHide;

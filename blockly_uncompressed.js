@@ -80,11 +80,12 @@ goog.addDependency('../../core/generator.js', ['Blockly.Generator'], ['Blockly.B
 goog.addDependency('../../core/gesture.js', ['Blockly.Gesture'], ['Blockly.BlockDragger', 'Blockly.BubbleDragger', 'Blockly.Events', 'Blockly.Events.Click', 'Blockly.Tooltip', 'Blockly.Touch', 'Blockly.WorkspaceDragger', 'Blockly.blockAnimations', 'Blockly.browserEvents', 'Blockly.constants', 'Blockly.utils', 'Blockly.utils.Coordinate'], {});
 goog.addDependency('../../core/grid.js', ['Blockly.Grid'], ['Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.userAgent'], {});
 goog.addDependency('../../core/icon.js', ['Blockly.Icon'], ['Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Size', 'Blockly.utils.Svg', 'Blockly.utils.dom'], {});
-goog.addDependency('../../core/inject.js', ['Blockly.inject'], ['Blockly.BlockDragSurfaceSvg', 'Blockly.Css', 'Blockly.DropDownDiv', 'Blockly.Events', 'Blockly.Grid', 'Blockly.Msg', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Tooltip', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.WorkspaceSvg', 'Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Svg', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.userAgent'], {});
+goog.addDependency('../../core/inject.js', ['Blockly.inject'], ['Blockly.Css', 'Blockly.DropDownDiv', 'Blockly.Events', 'Blockly.Grid', 'Blockly.Msg', 'Blockly.Options', 'Blockly.ScrollbarPair', 'Blockly.Tooltip', 'Blockly.WorkspaceDragSurfaceSvg', 'Blockly.WorkspaceSvg', 'Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Svg', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.userAgent'], {});
 goog.addDependency('../../core/input.js', ['Blockly.Input'], ['Blockly.Connection', 'Blockly.FieldLabel', 'Blockly.constants', 'Blockly.fieldRegistry', 'Blockly.inputTypes'], {'lang': 'es5'});
 goog.addDependency('../../core/input_types.js', ['Blockly.inputTypes'], ['Blockly.connectionTypes'], {});
 goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.InsertionMarkerManager'], ['Blockly.Events', 'Blockly.blockAnimations', 'Blockly.connectionTypes', 'Blockly.constants'], {'lang': 'es5'});
 goog.addDependency('../../core/interfaces/i_accessibility.js', ['Blockly.IASTNodeLocation', 'Blockly.IASTNodeLocationSvg', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.IKeyboardAccessible'], [], {});
+goog.addDependency('../../core/interfaces/i_block_drag_surface.js', ['Blockly.IBlockDragSurfaceSvg'], [], {});
 goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoundedElement'], [], {});
 goog.addDependency('../../core/interfaces/i_bubble.js', ['Blockly.IBubble'], [], {});
 goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IConnectionChecker'], [], {});

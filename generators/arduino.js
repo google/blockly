@@ -164,8 +164,8 @@ Blockly.Arduino.finish = function(code) {
 
   // userSetupCode added at the end of the setup function without leading spaces
   var setups = [''], userSetupCode= '';
-  if (Blockly.Arduino.setups_['userSetupCode'] !== undefined) {
-    userSetupCode = '\n' + Blockly.Arduino.setups_['userSetupCode'];
+  if (Blockly.Arduino.setups_['userSetupCode'] !== undefined) {    
+    userSetupCode = Blockly.Arduino.setups_['userSetupCode'];
     delete Blockly.Arduino.setups_['userSetupCode'];
   }
   for (var name in Blockly.Arduino.setups_) {

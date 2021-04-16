@@ -53,23 +53,20 @@ Blockly.utils.uiPosition.PositionType;
  * Enum for bump rules to use for dealing with collisions.
  * @enum {number}
  */
-Blockly.utils.uiPosition.bumpRule = {
-  BUMP_UP: 0,
-  BUMP_DOWN: 1,
-  BUMP_LEFT: 2,
-  BUMP_RIGHT: 3
+Blockly.utils.uiPosition.bumpDirection = {
+  UP: 0,
+  DOWN: 1,
+  LEFT: 2,
+  RIGHT: 3
 };
 
 /**
- * Returns a start position rectangle without taking account any already placed
- * UI elements.
- * @param {!Blockly.utils.uiPosition.horizontalPositionType} horizontalPosType
- *     The start horizontal position type.
- * @param {!Blockly.utils.uiPosition.verticalPositionType} verticalPosType The
- *    start vertical position type.
- * @param {number} width The width of the ui element to suggest a position for.
- * @param {number} height The height of the ui element to suggest a position
- *    for.
+ * Returns a start position rectangle without taking into account any already
+ * placed UI elements.
+ * @param {!Blockly.utils.uiPosition.PositionType} positionType The starting
+ *    horizontal and vertical position type.
+ * @param {Blockly.utils.Size} size the size of the ui element so get a start
+ *    position for.
  * @param {number} horizontalPadding The horizontal padding to use. This value
  *    is ignored for center horizontal positioning.
  * @param {number} verticalPadding The vertical padding to use. This value
@@ -79,57 +76,60 @@ Blockly.utils.uiPosition.bumpRule = {
  * @return {!Blockly.utils.Rect} The suggested start position.
  */
 Blockly.utils.uiPosition.getStartPositionRect = function(
-    horizontalPosType, verticalPosType, width, height, horizontalPadding,
+    positionType, size, horizontalPadding,
     verticalPadding, metrics, workspace) {
   // Horizontal positioning.
   var left = 0;
   var hasVerticalScrollbar =
       workspace.scrollbar && workspace.scrollbar.canScrollVertically();
-  if (horizontalPosType ===
+  if (positionType.horizontal ===
       Blockly.utils.uiPosition.horizontalPositionType.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Blockly.Scrollbar.scrollbarThickness;
     }
-  } else if (horizontalPosType ===
+  } else if (positionType.horizontal ===
       Blockly.utils.uiPosition.horizontalPositionType.CENTER) {
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width / 2 -
-        width / 2;
-  } else {  // horizontalPosType == horizontalPositionType.RIGHT
+        size.width / 2;
+  } else {  // positionType.horizontal == horizontalPositionType.RIGHT
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
-        width - horizontalPadding;
+        size.width - horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
       left -= Blockly.Scrollbar.scrollbarThickness;
     }
   }
   // Vertical positioning.
   var top = 0;
-  if (verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP) {
+  if (positionType.vertical ===
+      Blockly.utils.uiPosition.verticalPositionType.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
-  } else if (verticalPosType ===
+  } else if (positionType.vertical ===
       Blockly.utils.uiPosition.verticalPositionType.CENTER) {
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height / 2 -
-        height / 2;
-  } else {  // verticalPosType == verticalPositionType.BOTTOM
+        size.height / 2;
+  } else {  // positionType.vertical == verticalPositionType.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
-        height - verticalPadding;
+        size.height - verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
       // The scrollbars are always positioned on the bottom if they exist.
       top -= Blockly.Scrollbar.scrollbarThickness;
     }
   }
-  return new Blockly.utils.Rect(top, top + height, left, left + width);
+  return new Blockly.utils.Rect(
+      top, top + size.height, left, left + size.width);
 };
 
 // TODO give better name
 /**
- * Suggests a corner position type based on the toolbox position.
+ * Returns a corner position that is on the opposite side of the workspace from
+ * the toolbox.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
  * @return {!Blockly.utils.uiPosition.PositionType} The suggested corner
  *    position type.
  */
-Blockly.utils.uiPosition.suggestCornerPosition = function(workspace, metrics) {
+Blockly.utils.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
   var leftCorner =
       metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.LEFT &&
       (!workspace.horizontalLayout || workspace.RTL);
@@ -153,15 +153,14 @@ Blockly.utils.uiPosition.suggestCornerPosition = function(workspace, metrics) {
  * method does not check that the bumped position is still within bounds.
  * @param {!Blockly.utils.Rect} startRect The starting position to use.
  * @param {number} margin The marging to use between elements when bumping.
- * @param {Blockly.utils.uiPosition.bumpRule} bumpRule The rule to use when
- *    deciding which direction to bump if there is a collision with an existing
- *    ui element.
+ * @param {Blockly.utils.uiPosition.bumpDirection} bumpDirection The direction
+ *    to bump if there is a collision with an existing ui element.
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *    represent the positions of ui elements already placed.
  * @return {!Blockly.utils.Rect} The suggested position rectangle.
  */
 Blockly.utils.uiPosition.bumpPositionRect = function(
-    startRect, margin, bumpRule, savedPositions) {
+    startRect, margin, bumpDirection, savedPositions) {
   var top = startRect.top;
   var left = startRect.left;
   var width = startRect.right - startRect.left;
@@ -171,18 +170,18 @@ Blockly.utils.uiPosition.bumpPositionRect = function(
   var boundingRect = startRect;
   for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
     if (boundingRect.intersects(otherEl)) {
-      switch (bumpRule) {
-        case Blockly.utils.uiPosition.bumpRule.BUMP_UP:
-          top = otherEl.top - height - padding;
+      switch (bumpDirection) {
+        case Blockly.utils.uiPosition.bumpDirection.UP:
+          top = otherEl.top - height - margin;
           break;
-        case Blockly.utils.uiPosition.bumpRule.BUMP_DOWN:
-          top = otherEl.bottom + padding;
+        case Blockly.utils.uiPosition.bumpDirection.DOWN:
+          top = otherEl.bottom + margin;
           break;
-        case Blockly.utils.uiPosition.bumpRule.BUMP_LEFT:
-          left = otherEl.left - width - padding;
+        case Blockly.utils.uiPosition.bumpDirection.LEFT:
+          left = otherEl.left - width - margin;
           break;
-        case Blockly.utils.uiPosition.bumpRule.BUMP_RIGHT:
-          left = otherEl.right + padding;
+        case Blockly.utils.uiPosition.bumpDirection.RIGHT:
+          left = otherEl.right + margin;
           break;
       }
       // Recheck other savedPositions

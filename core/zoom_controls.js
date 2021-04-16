@@ -229,20 +229,20 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   }
 
   var cornerPosition =
-      Blockly.utils.uiPosition.suggestCornerPosition(this.workspace_, metrics);
-  var horizontalPosType = cornerPosition.horizontal;
-  var verticalPosType = cornerPosition.vertical;
+      Blockly.utils.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
   var startRect = Blockly.utils.uiPosition.getStartPositionRect(
-      horizontalPosType, verticalPosType, this.WIDTH_, this.HEIGHT_,
-      this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
+      cornerPosition, new Blockly.utils.Size(this.WIDTH_, this.HEIGHT_),
+      this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics,
+      this.workspace_);
 
-  var bumpRule =
+  var verticalPosType = cornerPosition.vertical;
+  var bumpDirection =
       verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP ?
-          Blockly.utils.uiPosition.bumpRule.BUMP_DOWN :
-          Blockly.utils.uiPosition.bumpRule.BUMP_UP;
+          Blockly.utils.uiPosition.bumpDirection.DOWN :
+          Blockly.utils.uiPosition.bumpDirection.UP;
   var positionRect = Blockly.utils.uiPosition.bumpPositionRect(
-      startRect, this.MARGIN_VERTICAL_, bumpRule, savedPositions);
+      startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
   if (verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP) {
     this.zoomInGroup_.setAttribute('transform', 'translate(0, 34)');

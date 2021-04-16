@@ -32,7 +32,7 @@ Blockly.Arduino['leaphy_start'] = function (block) {
     code = Blockly.Arduino.scrub_(block, code);
     // Add % so as not to collide with helper functions in definitions list.
     Blockly.Arduino.definitions_['%' + funcName] = code;
-    Blockly.Arduino.setups_['setup_leaphy_start'] = funcName + '();';
+    Blockly.Arduino.addSetup('setup_leaphy_start', funcName + '();', false);
     return null;
 };
 

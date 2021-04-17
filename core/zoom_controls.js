@@ -19,13 +19,11 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
-goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiPosition');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
@@ -67,14 +65,6 @@ Blockly.ZoomControls = function(workspace) {
    * @private
    */
   this.onZoomOutWrapper_ = null;
-
-  /**
-   * The starting vertical distance between the workspace edge and the control.
-   * The value is initialized during `init`.
-   * @type {?number}
-   * @private
-   */
-  this.verticalSpacing_ = null;
 
   /**
    * The zoom in svg <g> element.

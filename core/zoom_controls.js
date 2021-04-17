@@ -156,7 +156,7 @@ Blockly.ZoomControls.prototype.top_ = 0;
  * @type {boolean}
  * @private
  */
-Blockly.Trashcan.prototype.initialized_ = false;
+Blockly.ZoomControls.prototype.initialized_ = false;
 
 /**
  * Create the zoom controls.

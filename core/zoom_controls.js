@@ -258,15 +258,15 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics,
       this.workspace_);
 
-  var verticalPosType = cornerPosition.vertical;
+  var verticalPosition = cornerPosition.vertical;
   var bumpDirection =
-      verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP ?
+      verticalPosition === Blockly.utils.uiPosition.verticalPosition.TOP ?
           Blockly.utils.uiPosition.bumpDirection.DOWN :
           Blockly.utils.uiPosition.bumpDirection.UP;
   var positionRect = Blockly.utils.uiPosition.bumpPositionRect(
       startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
-  if (verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP) {
+  if (verticalPosition === Blockly.utils.uiPosition.verticalPosition.TOP) {
     var zoomInTranslateY = this.SMALL_SPACING_ + this.HEIGHT_;
     this.zoomInGroup_.setAttribute('transform',
         'translate(0, ' + zoomInTranslateY + ')');

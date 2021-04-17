@@ -457,9 +457,9 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
       cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
 
-  var verticalPosType = cornerPosition.vertical;
+  var verticalPosition = cornerPosition.vertical;
   var bumpDirection =
-      verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP ?
+      verticalPosition === Blockly.utils.uiPosition.verticalPosition.TOP ?
           Blockly.utils.uiPosition.bumpDirection.DOWN :
           Blockly.utils.uiPosition.bumpDirection.UP;
   var positionRect = Blockly.utils.uiPosition.bumpPositionRect(

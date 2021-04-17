@@ -24,7 +24,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Enum for vertical positioning.
  * @enum {number}
  */
-Blockly.utils.uiPosition.verticalPositionType = {
+Blockly.utils.uiPosition.verticalPosition = {
   TOP: 0,
   CENTER: 1,
   BOTTOM: 2
@@ -34,7 +34,7 @@ Blockly.utils.uiPosition.verticalPositionType = {
  * Enum for horizontal positioning.
  * @enum {number}
  */
-Blockly.utils.uiPosition.horizontalPositionType = {
+Blockly.utils.uiPosition.horizontalPosition = {
   LEFT: 0,
   CENTER: 1,
   RIGHT: 2
@@ -43,11 +43,11 @@ Blockly.utils.uiPosition.horizontalPositionType = {
 /**
  * An object defining a horizontal and vertical positioning.
  * @typedef {{
- *            horizontal: !Blockly.utils.uiPosition.horizontalPositionType,
- *            vertical: !Blockly.utils.uiPosition.verticalPositionType
+ *            horizontal: !Blockly.utils.uiPosition.horizontalPosition,
+ *            vertical: !Blockly.utils.uiPosition.verticalPosition
  *          }}
  */
-Blockly.utils.uiPosition.PositionType;
+Blockly.utils.uiPosition.Position;
 
 /**
  * Enum for bump rules to use for dealing with collisions.
@@ -63,8 +63,8 @@ Blockly.utils.uiPosition.bumpDirection = {
 /**
  * Returns a start position rectangle without taking into account any already
  * placed UI elements.
- * @param {!Blockly.utils.uiPosition.PositionType} positionType The starting
- *    horizontal and vertical position type.
+ * @param {!Blockly.utils.uiPosition.Position} position The starting
+ *    horizontal and vertical position.
  * @param {Blockly.utils.Size} size the size of the ui element so get a start
  *    position for.
  * @param {number} horizontalPadding The horizontal padding to use. This value
@@ -76,23 +76,23 @@ Blockly.utils.uiPosition.bumpDirection = {
  * @return {!Blockly.utils.Rect} The suggested start position.
  */
 Blockly.utils.uiPosition.getStartPositionRect = function(
-    positionType, size, horizontalPadding,
+    position, size, horizontalPadding,
     verticalPadding, metrics, workspace) {
   // Horizontal positioning.
   var left = 0;
   var hasVerticalScrollbar =
       workspace.scrollbar && workspace.scrollbar.canScrollVertically();
-  if (positionType.horizontal ===
-      Blockly.utils.uiPosition.horizontalPositionType.LEFT) {
+  if (position.horizontal ===
+      Blockly.utils.uiPosition.horizontalPosition.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Blockly.Scrollbar.scrollbarThickness;
     }
-  } else if (positionType.horizontal ===
-      Blockly.utils.uiPosition.horizontalPositionType.CENTER) {
+  } else if (position.horizontal ===
+      Blockly.utils.uiPosition.horizontalPosition.CENTER) {
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width / 2 -
         size.width / 2;
-  } else {  // positionType.horizontal == horizontalPositionType.RIGHT
+  } else {  // position.horizontal == horizontalPosition.RIGHT
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
         size.width - horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
@@ -101,14 +101,14 @@ Blockly.utils.uiPosition.getStartPositionRect = function(
   }
   // Vertical positioning.
   var top = 0;
-  if (positionType.vertical ===
-      Blockly.utils.uiPosition.verticalPositionType.TOP) {
+  if (position.vertical ===
+      Blockly.utils.uiPosition.verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
-  } else if (positionType.vertical ===
-      Blockly.utils.uiPosition.verticalPositionType.CENTER) {
+  } else if (position.vertical ===
+      Blockly.utils.uiPosition.verticalPosition.CENTER) {
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height / 2 -
         size.height / 2;
-  } else {  // positionType.vertical == verticalPositionType.BOTTOM
+  } else {  // position.vertical == verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
         size.height - verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
@@ -126,8 +126,7 @@ Blockly.utils.uiPosition.getStartPositionRect = function(
  * the toolbox.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @return {!Blockly.utils.uiPosition.PositionType} The suggested corner
- *    position type.
+ * @return {!Blockly.utils.uiPosition.Position} The suggested corner position.
  */
 Blockly.utils.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
   var leftCorner =
@@ -135,15 +134,15 @@ Blockly.utils.uiPosition.getCornerOppositeToolbox = function(workspace, metrics)
       (!workspace.horizontalLayout || workspace.RTL);
   var topCorner =
       metrics.toolboxMetrics.position === Blockly.utils.toolbox.Position.BOTTOM;
-  var horizontalPosType = leftCorner ?
-      Blockly.utils.uiPosition.horizontalPositionType.LEFT :
-      Blockly.utils.uiPosition.horizontalPositionType.RIGHT;
-  var verticalPosType = topCorner ?
-      Blockly.utils.uiPosition.verticalPositionType.TOP :
-      Blockly.utils.uiPosition.verticalPositionType.BOTTOM;
+  var horizontalPosition = leftCorner ?
+      Blockly.utils.uiPosition.horizontalPosition.LEFT :
+      Blockly.utils.uiPosition.horizontalPosition.RIGHT;
+  var verticalPosition = topCorner ?
+      Blockly.utils.uiPosition.verticalPosition.TOP :
+      Blockly.utils.uiPosition.verticalPosition.BOTTOM;
   return {
-    horizontal: horizontalPosType,
-    vertical: verticalPosType
+    horizontal: horizontalPosition,
+    vertical: verticalPosition
   };
 };
 

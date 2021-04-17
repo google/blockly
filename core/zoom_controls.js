@@ -99,18 +99,32 @@ Blockly.ZoomControls = function(workspace) {
 };
 
 /**
- * Width of the zoom controls.
+ * Width of an individual zoom control
  * @type {number}
  * @private
  */
 Blockly.ZoomControls.prototype.WIDTH_ = 32;
 
 /**
- * Height of the zoom controls.
+ * Height of an individual zoom control.
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.HEIGHT_ = 110;
+Blockly.ZoomControls.prototype.HEIGHT_ = 32;
+
+/**
+ * Small spacing used between the zoom in and out control, in pixels.
+ * @type {number}
+ * @private
+ */
+Blockly.ZoomControls.prototype.SMALL_SPACING_ = 2;
+
+/**
+ * Large spacing used between the zoom in and reset control, in pixels.
+ * @type {number}
+ * @private
+ */
+Blockly.ZoomControls.prototype.LARGE_SPACING_ = 11;
 
 /**
  * Distance between zoom controls and bottom or top edge of workspace.
@@ -208,7 +222,11 @@ Blockly.ZoomControls.prototype.dispose = function() {
  * @return {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
-  var bottom = this.top_ + this.HEIGHT_;
+  var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
+  if (this.zoomResetGroup_) {
+    height += this.LARGE_SPACING_ + this.HEIGHT_;
+  }
+  var bottom = this.top_ + height;
   var right = this.left_ + this.WIDTH_;
   return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
 };
@@ -231,8 +249,12 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
   var cornerPosition =
       Blockly.utils.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
+  var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
+  if (this.zoomResetGroup_) {
+    height += this.LARGE_SPACING_ + this.HEIGHT_;
+  }
   var startRect = Blockly.utils.uiPosition.getStartPositionRect(
-      cornerPosition, new Blockly.utils.Size(this.WIDTH_, this.HEIGHT_),
+      cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics,
       this.workspace_);
 
@@ -245,13 +267,23 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
       startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
   if (verticalPosType === Blockly.utils.uiPosition.verticalPositionType.TOP) {
-    this.zoomInGroup_.setAttribute('transform', 'translate(0, 34)');
+    var zoomInTranslateY = this.SMALL_SPACING_ + this.HEIGHT_;
+    this.zoomInGroup_.setAttribute('transform',
+        'translate(0, ' + zoomInTranslateY + ')');
     if (this.zoomResetGroup_) {
-      this.zoomResetGroup_.setAttribute('transform', 'translate(0, 77)');
+      var zoomResetTranslateY =
+          zoomInTranslateY + this.LARGE_SPACING_ + this.HEIGHT_;
+      this.zoomResetGroup_.setAttribute('transform',
+          'translate(0, ' + zoomResetTranslateY + ')');
     }
   } else {
-    this.zoomInGroup_.setAttribute('transform', 'translate(0, 43)');
-    this.zoomOutGroup_.setAttribute('transform', 'translate(0, 77)');
+    var zoomInTranslateY = this.LARGE_SPACING_ + this.HEIGHT_;
+    this.zoomInGroup_.setAttribute('transform',
+        'translate(0, ' + zoomInTranslateY + ')');
+    var zoomOutTranslateY =
+        zoomInTranslateY + this.SMALL_SPACING_ + this.HEIGHT_;
+    this.zoomOutGroup_.setAttribute('transform',
+        'translate(0, ' + zoomOutTranslateY + ')');
   }
 
   this.top_ = positionRect.top;

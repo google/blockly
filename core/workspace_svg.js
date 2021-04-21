@@ -29,6 +29,7 @@ goog.require('Blockly.Events.ThemeChange');
 goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
+goog.require('Blockly.IASTNodeLocationSvg');
 goog.require('Blockly.MarkerManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.MetricsManager');
@@ -59,7 +60,6 @@ goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.FlyoutButton');
-goog.requireType('Blockly.IASTNodeLocationSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');

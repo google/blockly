@@ -12,9 +12,10 @@
 
 goog.provide('Blockly.ToolboxItem');
 
+goog.require('Blockly.IToolboxItem');
+
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 

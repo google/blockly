@@ -13,12 +13,12 @@
 
 goog.provide('Blockly.ToolboxSeparator');
 
+goog.require('Blockly.IToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxItem');
 goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
 
 

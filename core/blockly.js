@@ -19,6 +19,7 @@ goog.provide('Blockly');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');

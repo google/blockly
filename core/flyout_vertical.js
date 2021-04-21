@@ -16,6 +16,7 @@ goog.provide('Blockly.VerticalFlyout');
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');

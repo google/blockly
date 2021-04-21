@@ -13,9 +13,10 @@
 
 goog.provide('Blockly.IBubble');
 
+goog.require('Blockly.IContextMenu');
+goog.require('Blockly.IDeletable');
+
 goog.requireType('Blockly.BlockDragSurfaceSvg');
-goog.requireType('Blockly.IContextMenu');
-goog.requireType('Blockly.IDeletable');
 goog.requireType('Blockly.utils.Coordinate');
 
 

@@ -17,6 +17,7 @@ goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IBlockDragger');
 goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');

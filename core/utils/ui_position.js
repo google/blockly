@@ -151,7 +151,7 @@ Blockly.utils.uiPosition.getCornerOppositeToolbox = function(workspace, metrics)
  * so that it doesn't intersect with any of the provided savedPositions. This
  * method does not check that the bumped position is still within bounds.
  * @param {!Blockly.utils.Rect} startRect The starting position to use.
- * @param {number} margin The marging to use between elements when bumping.
+ * @param {number} margin The margin to use between elements when bumping.
  * @param {Blockly.utils.uiPosition.bumpDirection} bumpDirection The direction
  *    to bump if there is a collision with an existing ui element.
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that

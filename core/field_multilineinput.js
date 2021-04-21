@@ -15,6 +15,8 @@
 goog.provide('Blockly.FieldMultilineInput');
 
 goog.require('Blockly.Css');
+goog.require('Blockly.Field');
+goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
@@ -23,6 +25,7 @@ goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 
 /**

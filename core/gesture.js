@@ -14,6 +14,7 @@
 goog.provide('Blockly.Gesture');
 
 goog.require('Blockly.blockAnimations');
+/** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.BubbleDragger');
@@ -30,6 +31,7 @@ goog.require('Blockly.WorkspaceDragger');
 
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IBlockDragger');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -180,7 +182,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * The object tracking a block drag, or null if none is in progress.
-   * @type {Blockly.BlockDragger}
+   * @type {Blockly.IBlockDragger}
    * @private
    */
   this.blockDragger_ = null;
@@ -436,7 +438,10 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
-  this.blockDragger_ = new Blockly.BlockDragger(
+  var BlockDraggerClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
+
+  this.blockDragger_ = new BlockDraggerClass(
       /** @type {!Blockly.BlockSvg} */ (this.targetBlock_),
       /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
   this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_, this.healStack_);

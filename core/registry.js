@@ -106,6 +106,10 @@ Blockly.registry.Type.METRICS_MANAGER =
 Blockly.registry.Type.BLOCK_DRAG_SURFACE_SVG =
     new Blockly.registry.Type('blockDragSurfaceSvg');
 
+/** @type {!Blockly.registry.Type<Blockly.IBlockDragger>} */
+Blockly.registry.Type.BLOCK_DRAGGER =
+    new Blockly.registry.Type('blockDragger');
+
 /**
  * Registers a class based on a type and name.
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.

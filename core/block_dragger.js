@@ -20,7 +20,9 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.IBlockDragger');
 goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
@@ -34,6 +36,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.BlockSvg} block The block to drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
+ * @implements {Blockly.IBlockDragger}
  */
 Blockly.BlockDragger = function(block, workspace) {
   /**
@@ -408,3 +411,6 @@ Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
   }
   return [];
 };
+
+Blockly.registry.register(Blockly.registry.Type.BLOCK_DRAGGER,
+    Blockly.registry.DEFAULT, Blockly.BlockDragger);

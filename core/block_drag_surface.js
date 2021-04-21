@@ -191,6 +191,15 @@ Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
 };
 
 /**
+ * Returns the SVG drag surface.
+ * TODO: Check on this name.
+ * @returns {SVGElement} The SVG drag surface.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.getSvgRoot = function() {
+  return this.SVG_;
+};
+
+/**
  * Get the current blocks on the drag surface, if any (primarily
  * for BlockSvg.getRelativeToSurfaceXY).
  * @return {Element} Drag surface block DOM element, or undefined if no blocks

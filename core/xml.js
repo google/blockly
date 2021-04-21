@@ -16,12 +16,12 @@
  */
 goog.provide('Blockly.Xml');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.xml');
 

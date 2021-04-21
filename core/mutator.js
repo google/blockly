@@ -15,13 +15,14 @@ goog.provide('Blockly.Mutator');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
 goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
@@ -34,7 +35,6 @@ goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.utils.Coordinate');
-goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.Workspace');
 
 
@@ -128,7 +128,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
  * Clicking on the icon toggles if the mutator bubble is visible.
  * Disable if block is uneditable.
  * @param {!Event} e Mouse click event.
- * @private
+ * @protected
  * @override
  */
 Blockly.Mutator.prototype.iconClick_ = function(e) {
@@ -183,7 +183,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   if (hasFlyout) {
     workspaceOptions.languageTree =
         Blockly.utils.toolbox.convertToolboxDefToJson(quarkXml);
-    workspaceOptions.getMetrics = this.getFlyoutMetrics_.bind(this);
   }
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
@@ -243,8 +242,9 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
   if (flyout) {
-    var flyoutMetrics = flyout.getMetrics_();
-    height = Math.max(height, flyoutMetrics.contentHeight + 20);
+    var flyoutScrollMetrics = flyout.getWorkspace().getMetricsManager()
+        .getScrollMetrics();
+    height = Math.max(height, flyoutScrollMetrics.height + 20);
     width += flyout.getWidth();
   }
   if (this.block_.RTL) {
@@ -254,7 +254,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   // Only resize if the size difference is significant.  Eliminates shuddering.
   if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
       Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
-    // Record some layout information for getFlyoutMetrics_.
+    // Record some layout information for workspace metrics.
     this.workspaceWidth_ = width;
     this.workspaceHeight_ = height;
     // Resize the bubble.
@@ -262,6 +262,8 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
         width + doubleBorderWidth, height + doubleBorderWidth);
     this.svgDialog_.setAttribute('width', this.workspaceWidth_);
     this.svgDialog_.setAttribute('height', this.workspaceHeight_);
+    this.workspace_.setCachedParentSvgSize(
+        this.workspaceWidth_, this.workspaceHeight_);
   }
 
   if (this.block_.RTL) {
@@ -445,44 +447,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     }
     Blockly.Events.setGroup(false);
   }
-};
-
-/**
- * Returns an object with all the metrics required to correctly position the
- * mutator's flyout. The following properties are computed:
- * .viewHeight: Height of the visible rectangle,
- * .viewWidth: Width of the visible rectangle,
- * .absoluteTop: Top-edge of view.
- * .absoluteLeft: Left-edge of view.
- * @return {!Blockly.utils.Metrics} Contains size and position metrics of
- *     mutator dialog's workspace.
- * @private
- */
-Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
-  // The mutator workspace only uses a subset of Blockly.utils.Metrics
-  // properties as features such as scroll and zoom are unsupported.
-  var unsupported = 0;
-  var flyout = this.workspace_.getFlyout();
-  var flyoutWidth = flyout ? flyout.getWidth() : 0;
-  return {
-    contentHeight: unsupported,
-    contentWidth: unsupported,
-    contentTop: unsupported,
-    contentLeft: unsupported,
-
-    scrollHeight: unsupported,
-    scrollWidth: unsupported,
-    scrollTop: unsupported,
-    scrollLeft: unsupported,
-
-    viewHeight: this.workspaceHeight_,
-    viewWidth: this.workspaceWidth_ - flyoutWidth,
-    viewTop: unsupported,
-    viewLeft: unsupported,
-
-    absoluteTop: unsupported,
-    absoluteLeft: this.workspace_.RTL ? 0 : flyoutWidth
-  };
 };
 
 /**

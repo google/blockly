@@ -26,7 +26,7 @@ Blockly.IPositionable = function() {};
 /**
  * Positions the element. Called when the window is resized.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Blockly.IPositionable.prototype.position;
@@ -34,6 +34,6 @@ Blockly.IPositionable.prototype.position;
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @returns {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The plugin’s bounding box.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;

@@ -18,8 +18,6 @@ goog.require('Blockly.Themes.Classic');
 goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.utils.userAgent');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -277,10 +275,10 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
   }
-
+  
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
-    // Defaults to false so that developers' settings don't appear to change.
-    moveOptions.wheel = false;
+    // Defaults to true if single-direction scroll is enabled.
+    moveOptions.wheel = typeof moveOptions.scrollbars == 'object';
   } else {
     moveOptions.wheel = !!move['wheel'];
   }

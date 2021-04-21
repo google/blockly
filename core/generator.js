@@ -14,6 +14,7 @@
 goog.provide('Blockly.Generator');
 
 goog.require('Blockly.Block');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 
 goog.requireType('Blockly.Names');

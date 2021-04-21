@@ -13,12 +13,9 @@
 
 goog.provide('Blockly.IMetricsManager');
 
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.utils.Size');
-goog.requireType('Blockly.utils.toolbox');
 
 
 /**

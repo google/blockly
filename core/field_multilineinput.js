@@ -15,11 +15,9 @@
 goog.provide('Blockly.FieldMultilineInput');
 
 goog.require('Blockly.Css');
-goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
@@ -61,7 +59,7 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   this.maxLines_ = Infinity;
 
   /**
-   * Whether Y overflow is currently occuring.
+   * Whether Y overflow is currently occurring.
    * @type {boolean}
    * @protected
    */
@@ -134,7 +132,8 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * Get the text from this field as displayed on screen.  May differ from getText
  * due to ellipsis, and other formatting.
  * @return {string} Currently displayed text.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
   var textLines = this.getText();

@@ -21,15 +21,17 @@ goog.provide('Blockly.PluginManager');
 Blockly.PluginManager = function() {
   /**
    * A map of the plugins registered with the workspace, mapped to id.
-   * @type {!Object<string, !Blockly.PluginManager.PluginData>}
+   * @type {!Object<string, !Blockly.PluginManager.PluginDatum>}
+   * @private
    */
   this.pluginData_ = {};
 
   /**
    * A map of types to plugin ids.
    * @type {!Object<string, Array<string>>}
+   * @private
    */
-  this.typeToPluginId_ = {};
+  this.typeToPluginIds_ = {};
 };
 
 /**
@@ -41,21 +43,21 @@ Blockly.PluginManager = function() {
  *    weight: number
  *  }}
  */
-Blockly.PluginManager.PluginData;
+Blockly.PluginManager.PluginDatum;
 
 /**
  * Adds a plugin.
- * @param {!Blockly.PluginManager.PluginData} pluginDataObject The plugin.
+ * @param {!Blockly.PluginManager.PluginDatum} pluginDataObject The plugin.
  * @template T
  */
 Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
   this.pluginData_[pluginDataObject.id] = pluginDataObject;
   for (var i = 0, type; (type = pluginDataObject.types[i]); i++) {
     var typeKey = String(type).toLowerCase();
-    if (this.typeToPluginId_[typeKey] === undefined) {
-      this.typeToPluginId_[typeKey] = [pluginDataObject.id];
+    if (this.typeToPluginIds_[typeKey] === undefined) {
+      this.typeToPluginIds_[typeKey] = [pluginDataObject.id];
     } else {
-      this.typeToPluginId_[typeKey].push(pluginDataObject.id);
+      this.typeToPluginIds_[typeKey].push(pluginDataObject.id);
     }
   }
 };
@@ -79,15 +81,28 @@ Blockly.PluginManager.prototype.getPlugin = function(id) {
  * @template T
  */
 Blockly.PluginManager.prototype.getPlugins = function(type, sorted) {
-  var plugins = [];
   var typeKey = String(type).toLowerCase();
-  var pluginIds = this.typeToPluginId_[typeKey];
-  for (var i = 0, id; pluginIds && (id = pluginIds[i]); i++) {
-    plugins.push(this.pluginData_[id].plugin);
+  var pluginIds = this.typeToPluginIds_[typeKey];
+  if (!pluginIds) {
+    return [];
   }
+  var plugins = [];
   if (sorted) {
-    plugins.sort(function(a, b) {
+    var pluginDataList = [];
+    var pluginData = this.pluginData_;
+    pluginIds.forEach(function(id) {
+      pluginDataList.push(pluginData[id]);
+    });
+    pluginDataList.sort(function(a, b) {
       return a.weight - b.weight;
+    });
+    pluginDataList.forEach(function(pluginDatum) {
+      plugins.push(pluginDatum.plugin);
+    });
+  } else {
+    var pluginData = this.pluginData_;
+    pluginIds.forEach(function(id) {
+      plugins.push(pluginData[id].plugin);
     });
   }
   return plugins;

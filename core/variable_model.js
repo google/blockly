@@ -13,6 +13,7 @@
 goog.provide('Blockly.VariableModel');
 
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.utils');
 

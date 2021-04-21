@@ -14,22 +14,12 @@
 goog.provide('Blockly.geras');
 goog.provide('Blockly.geras.RenderInfo');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.InRowSpacer');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Types');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.geras.InlineInput');
 goog.require('Blockly.geras.StatementInput');

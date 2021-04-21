@@ -20,6 +20,14 @@
 
 <!-- TODO: Describe what this Pull Request does.  Include screenshots if applicable. -->
 
+#### Behavior Before Change
+
+<!--TODO: Image, gif or explanation of behavior before this pull request. -->
+
+#### Behavior After Change
+
+<!--TODO: Image, gif or explanation of behavior after this pull request. -->
+
 ### Reason for Changes
 
 <!--TODO: Explain why these changes should be made.  Include screenshots if applicable. -->
@@ -31,7 +39,7 @@
   -        uncomment the systems in the list below.
   -->
 
-Tested on:
+<!-- Tested on: -->
 <!-- * Desktop Chrome -->
 <!-- * Desktop Firefox -->
 <!-- * Desktop Safari -->

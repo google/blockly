@@ -10,16 +10,17 @@
  */
 'use strict';
 
+goog.provide('Blockly.FlyoutMetricsManager');
 goog.provide('Blockly.MetricsManager');
 
 goog.require('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Size');
+goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -121,7 +122,8 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
  * @public
  */
 Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  var flyoutDimensions = this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
+  var flyoutDimensions =
+      this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
@@ -156,8 +158,7 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getSvgMetrics = function() {
-  var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
-  return new Blockly.utils.Size(svgSize.width, svgSize.height);
+  return this.workspace_.getCachedParentSvgSize();
 };
 
 /**
@@ -176,15 +177,17 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
   var toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  if (doesToolboxExist && toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+  var atLeft = toolboxPosition == Blockly.utils.toolbox.Position.LEFT;
+  var atTop = toolboxPosition == Blockly.utils.toolbox.Position.TOP;
+  if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
-  } else if (doesFlyoutExist && toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+  } else if (doesFlyoutExist && atLeft) {
     absoluteLeft = flyoutMetrics.width;
   }
   var absoluteTop = 0;
-  if (doesToolboxExist && toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+  if (doesToolboxExist && atTop) {
     absoluteTop = toolboxMetrics.height;
-  } else if (doesFlyoutExist && toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+  } else if (doesFlyoutExist && atTop) {
     absoluteTop = flyoutMetrics.height;
   }
 
@@ -215,19 +218,19 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
-        toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
+        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
-        toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
-        toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
+        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
-        toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
+        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }
@@ -280,7 +283,7 @@ Blockly.MetricsManager.prototype.hasFixedEdges = function() {
  * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @return {Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
+ * @return {!Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
  *     area.
  * @protected
  */
@@ -438,8 +441,7 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
   var absoluteMetrics = this.getAbsoluteMetrics();
   var viewMetrics = this.getViewMetrics();
   var contentMetrics = this.getContentMetrics();
-  var scrollMetrics =
-      this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  var scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
@@ -475,3 +477,82 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
 Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
     Blockly.MetricsManager);
+
+/**
+ * Calculates metrics for a flyout's workspace.
+ * The metrics are mainly used to size scrollbars for the flyout.
+ * @param {!Blockly.WorkspaceSvg} workspace The flyout's workspace.
+ * @param {!Blockly.IFlyout} flyout The flyout.
+ * @extends {Blockly.MetricsManager}
+ * @constructor
+ */
+Blockly.FlyoutMetricsManager = function(workspace, flyout) {
+  /**
+   * The flyout that owns the workspace to calculate metrics for.
+   * @type {!Blockly.IFlyout}
+   * @protected
+   */
+  this.flyout_ = flyout;
+
+  Blockly.FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
+};
+Blockly.utils.object.inherits(
+    Blockly.FlyoutMetricsManager, Blockly.MetricsManager);
+
+/**
+ * Gets the bounding box of the blocks on the flyout's workspace.
+ * This is in workspace coordinates.
+ * @returns {!SVGRect|{height: number, y: number, width: number, x: number}} The
+ *     bounding box of the blocks on the workspace.
+ * @private
+ */
+Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
+  try {
+    var blockBoundingBox = this.workspace_.getCanvas().getBBox();
+  } catch (e) {
+    // Firefox has trouble with hidden elements (Bug 528969).
+    // 2021 Update: It looks like this was fixed around Firefox 77 released in
+    // 2020.
+    var blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
+  }
+  return blockBoundingBox;
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
+    opt_getWorkspaceCoordinates) {
+  // The bounding box is in workspace coordinates.
+  var blockBoundingBox = this.getBoundingBox_();
+  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+
+  return {
+    height: blockBoundingBox.height * scale,
+    width: blockBoundingBox.width * scale,
+    top: blockBoundingBox.y * scale,
+    left: blockBoundingBox.x * scale,
+  };
+};
+
+/**
+ * @override
+ */
+Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
+    opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
+  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  var margin = this.flyout_.MARGIN * this.workspace_.scale;
+  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+
+  // The left padding isn't just the margin. Some blocks are also offset by
+  // tabWidth so that value and statement blocks line up.
+  // The contentMetrics.left value is equivalent to the variable left padding.
+  var leftPadding = contentMetrics.left;
+
+  return {
+    height: (contentMetrics.height + 2 * margin) / scale,
+    width: (contentMetrics.width + leftPadding + margin) / scale,
+    top: 0,
+    left: 0,
+  };
+};

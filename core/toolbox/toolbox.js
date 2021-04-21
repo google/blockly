@@ -14,9 +14,11 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
@@ -599,6 +601,7 @@ Blockly.Toolbox.prototype.isHorizontal = function() {
  * @public
  */
 Blockly.Toolbox.prototype.position = function() {
+  var workspaceMetrics = this.workspace_.getMetrics();
   var toolboxDiv = this.HtmlDiv;
   if (!toolboxDiv) {
     // Not initialized yet.
@@ -610,19 +613,21 @@ Blockly.Toolbox.prototype.position = function() {
     toolboxDiv.style.height = 'auto';
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
+    this.width_ = workspaceMetrics.viewWidth;
+    if (this.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
       toolboxDiv.style.bottom = '0';
     }
   } else {
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
+    if (this.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
       toolboxDiv.style.right = '0';
     } else {  // Left
       toolboxDiv.style.left = '0';
     }
     toolboxDiv.style.height = '100%';
     this.width_ = toolboxDiv.offsetWidth;
+    this.height_ = workspaceMetrics.viewHeight;
   }
   this.flyout_.position();
 };
@@ -635,10 +640,12 @@ Blockly.Toolbox.prototype.handleToolboxItemResize = function() {
   // to the new absolute edge (ie toolbox edge).
   var workspace = this.workspace_;
   var rect = this.HtmlDiv.getBoundingClientRect();
-  var newX = this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ?
-      workspace.scrollX + rect.width : workspace.scrollX;
-  var newY = this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ?
-      workspace.scrollY + rect.height : workspace.scrollY;
+  var newX = this.toolboxPosition == Blockly.utils.toolbox.Position.LEFT ?
+      workspace.scrollX + rect.width :
+      workspace.scrollX;
+  var newY = this.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
+      workspace.scrollY + rect.height :
+      workspace.scrollY;
   workspace.translate(newX, newY);
 
   // Even though the div hasn't changed size, the visible workspace

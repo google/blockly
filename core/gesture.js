@@ -13,13 +13,14 @@
 
 goog.provide('Blockly.Gesture');
 
-goog.require('Blockly.ASTNode');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.BlockDragger');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.BubbleDragger');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');

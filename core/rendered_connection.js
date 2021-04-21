@@ -14,8 +14,8 @@ goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.deprecation');
@@ -463,7 +463,8 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
  * Disconnect two blocks that are connected by this connection.
  * @param {!Blockly.Block} parentBlock The superior block.
  * @param {!Blockly.Block} childBlock The inferior block.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
@@ -484,7 +485,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
 /**
  * Respawn the shadow block if there was one connected to the this connection.
  * Render/rerender blocks as needed.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
   Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);

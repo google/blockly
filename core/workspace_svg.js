@@ -16,18 +16,23 @@ goog.require('Blockly.blockRendering');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ConnectionDB');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ThemeChange');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
-goog.require('Blockly.IPositionable');
 goog.require('Blockly.MarkerManager');
+/** @suppress {extraRequire} */
 goog.require('Blockly.MetricsManager');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
 goog.require('Blockly.PluginManager');
@@ -41,6 +46,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Workspace');
@@ -62,7 +68,6 @@ goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.ScrollbarPair');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Trashcan');
-goog.requireType('Blockly.utils.Size');
 goog.requireType('Blockly.VariableModel');
 goog.requireType('Blockly.ZoomControls');
 
@@ -226,6 +231,14 @@ Blockly.WorkspaceSvg = function(
    * @private
    */
   this.topBoundedElements_ = [];
+
+  /**
+   * The cached size of the parent svg element.
+   * Used to compute svg metrics.
+   * @type {!Blockly.utils.Size}
+   * @private
+   */
+  this.cachedParentSvgSize_ = new Blockly.utils.Size(0, 0);
 };
 Blockly.utils.object.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -519,6 +532,16 @@ Blockly.WorkspaceSvg.prototype.getMetricsManager = function() {
 };
 
 /**
+ * Sets the metrics manager for the workspace.
+ * @param {!Blockly.IMetricsManager} metricsManager The metrics manager.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {
+  this.metricsManager_ = metricsManager;
+  this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
+};
+
+/*
  * Gets the plugin manager for this workspace.
  * @return {!Blockly.PluginManager} The plugin manager.
  * @public
@@ -723,6 +746,17 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
     element = /** @type {!SVGElement} */ (element.parentNode);
   } while (element && element != this.getParentSvg());
   return new Blockly.utils.Coordinate(x, y);
+};
+
+/**
+ * Gets the size of the workspace's parent svg element.
+ * @return {!Blockly.utils.Size} The cached width and height of the workspace's
+ *     parent svg element.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
+  var size = this.cachedParentSvgSize_;
+  return new Blockly.utils.Size(size.width, size.height);
 };
 
 /**
@@ -972,7 +1006,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.pluginManager_.addPlugin({
     id: 'trashcan',
     plugin: this.trashcan,
-    weight: 0,
+    weight: 1,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
@@ -992,7 +1026,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.pluginManager_.addPlugin({
     id: 'zoomControls',
     plugin: this.zoomControls_,
-    weight: 0,
+    weight: 2,
     types: [Blockly.PluginManager.Type.POSITIONABLE]
   });
 };
@@ -1147,6 +1181,27 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
 };
 
 /**
+ * Caches the width and height of the workspace's parent svg element for use
+ * with getSvgMetrics.
+ * @param {?number} width The width of the parent svg element.
+ * @param {?number} height The height of the parent svg element
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.setCachedParentSvgSize = function(width, height) {
+  var svg = this.getParentSvg();
+  if (width) {
+    this.cachedParentSvgSize_.width = width;
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
+    svg.cachedWidth_ = width;
+  }
+  if (height) {
+    this.cachedParentSvgSize_.height = height;
+    // This is set to support the public (but deprecated) Blockly.svgSize method.
+    svg.cachedHeight_ = height;
+  }
+};
+
+/**
  * Get the SVG element that forms the bubble surface.
  * @return {!SVGGElement} SVG group element.
  */
@@ -1194,7 +1249,7 @@ Blockly.WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     return;
   }
   var event = new (Blockly.Events.get(Blockly.Events.VIEWPORT_CHANGE))(top,
-      left, scale, this.id);
+      left, scale, this.id, this.oldScale_);
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
@@ -2214,9 +2269,10 @@ Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
   // to workspace coordinates so we have to inverse them.
   x = Math.min(x, -metrics.scrollLeft);
   y = Math.min(y, -metrics.scrollTop);
-  var maxXScroll = metrics.scrollLeft + metrics.scrollWidth - metrics.viewWidth;
-  var maxYScroll =
-      metrics.scrollTop + metrics.scrollHeight - metrics.viewHeight;
+  var maxXDisplacement = Math.max(0, metrics.scrollWidth - metrics.viewWidth);
+  var maxXScroll = metrics.scrollLeft + maxXDisplacement;
+  var maxYDisplacement = Math.max(0, metrics.scrollHeight - metrics.viewHeight);
+  var maxYScroll = metrics.scrollTop + maxYDisplacement;
   x = Math.max(x, -maxXScroll);
   y = Math.max(y, -maxYScroll);
   this.scrollX = x;

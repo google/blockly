@@ -551,13 +551,13 @@ suite('Events', function() {
         getArgs: (thisObj) => [true, thisObj.workspace.id],
         getExpectedJson: () => ({type: 'trashcan_open', isOpen: true})},
       {title: 'Viewport change', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 2.666,
-          viewLeft: 1.333, scale: 1.2})},
+          viewLeft: 1.333, scale: 1.2, oldScale: 1})},
       {title: 'Viewport change (0,0)', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 0,
-          viewLeft: 0, scale: 1.2})},
+          viewLeft: 0, scale: 1.2, oldScale: 1})},
     ];
     var blockEventTestCases = [
       {title: 'Block change', class: Blockly.Events.BlockChange,
@@ -611,9 +611,10 @@ suite('Events', function() {
     ];
     var workspaceCommentEventTestCases = [
       {title: 'Comment change', class: Blockly.Events.CommentChange,
-        getArgs: (thisObj) => [thisObj.comment, '', 'words'],
+        getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
         getExpectedJson: (thisObj) => ({type: 'comment_change',
-          commentId: thisObj.comment.id, newContents: 'words'})},
+          commentId: thisObj.comment.id, oldContents: 'bar',
+          newContents: 'foo'})},
       {title: 'Comment create', class: Blockly.Events.CommentCreate,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_create',
@@ -627,7 +628,7 @@ suite('Events', function() {
       {title: 'Comment move', class: Blockly.Events.CommentMove,
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_move',
-          commentId: thisObj.comment.id})},
+          commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
     ];
     var testSuites = [
       {title: 'Variable events', testCases: variableEventTestCases,

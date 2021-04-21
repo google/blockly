@@ -20,6 +20,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
+goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -600,6 +601,7 @@ Blockly.Toolbox.prototype.isHorizontal = function() {
  * @public
  */
 Blockly.Toolbox.prototype.position = function() {
+  var workspaceMetrics = this.workspace_.getMetrics();
   var toolboxDiv = this.HtmlDiv;
   if (!toolboxDiv) {
     // Not initialized yet.
@@ -611,6 +613,7 @@ Blockly.Toolbox.prototype.position = function() {
     toolboxDiv.style.height = 'auto';
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
+    this.width_ = workspaceMetrics.viewWidth;
     if (this.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
@@ -624,6 +627,7 @@ Blockly.Toolbox.prototype.position = function() {
     }
     toolboxDiv.style.height = '100%';
     this.width_ = toolboxDiv.offsetWidth;
+    this.height_ = workspaceMetrics.viewHeight;
   }
   this.flyout_.position();
 };

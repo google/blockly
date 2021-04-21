@@ -19,13 +19,13 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -217,7 +217,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
@@ -462,9 +462,9 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
   // Math.log computes natural logarithm (ln), to change the base, use formula:
   // log(base, value) = ln(value) / ln(base)
   var amount = Math.log(targetScale / currentScale) / Math.log(speed);
-
   this.workspace_.beginCanvasTransition();
   this.workspace_.zoomCenter(amount);
+  this.workspace_.scrollCenter();
 
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();

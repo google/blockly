@@ -120,7 +120,8 @@ Blockly.geras.Drawer.prototype.drawBottom_ = function() {
 /**
  * Add steps for the left side of the block, which may include an output
  * connection
- * @private
+ * @protected
+ * @override
  */
 Blockly.geras.Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();

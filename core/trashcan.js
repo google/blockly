@@ -19,6 +19,8 @@ goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.IPositionable');
+goog.require('Blockly.Options');
+goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
@@ -84,18 +86,18 @@ Blockly.Trashcan = function(workspace) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
         Blockly.utils.toolbox.Position.BOTTOM : Blockly.utils.toolbox.Position.TOP;
-    if (!Blockly.HorizontalFlyout) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
-    this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+    var HorizontalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
+        this.workspace_.options, true);
+    this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ?
         Blockly.utils.toolbox.Position.LEFT : Blockly.utils.toolbox.Position.RIGHT;
-    if (!Blockly.VerticalFlyout) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
-    this.flyout = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+    var VerticalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+        this.workspace_.options, true);
+    this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
@@ -437,7 +439,7 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {

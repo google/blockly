@@ -662,8 +662,8 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
  */
 Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   var collapsed = this.isCollapsed();
-  var collapsedInputName = Blockly.Block.COLLAPSED_INPUT_NAME;
-  var collapsedFieldName = Blockly.Block.COLLAPSED_FIELD_NAME;
+  var collapsedInputName = Blockly.constants.COLLAPSED_INPUT_NAME;
+  var collapsedFieldName = Blockly.constants.COLLAPSED_FIELD_NAME;
 
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name != collapsedInputName) {
@@ -1380,7 +1380,8 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
- * @private
+ * @protected
+ * @override
  */
 Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
   var input = Blockly.BlockSvg.superClass_.appendInput_.call(this, type, name);

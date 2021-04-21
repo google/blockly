@@ -196,7 +196,7 @@ Blockly.Flyout.prototype.GAP_Y = Blockly.Flyout.prototype.MARGIN * 3;
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.SCROLLBAR_PADDING = 2;
+Blockly.Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
 
 /**
  * Width of flyout.
@@ -273,7 +273,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   this.workspace_.scrollbar = new Blockly.ScrollbarPair(
       this.workspace_, this.horizontalLayout, !this.horizontalLayout,
-      'blocklyFlyoutScrollbar');
+      'blocklyFlyoutScrollbar', this.SCROLLBAR_MARGIN);
 
   this.hide();
 

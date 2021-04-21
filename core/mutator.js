@@ -20,6 +20,7 @@ goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
+goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -127,7 +128,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
  * Clicking on the icon toggles if the mutator bubble is visible.
  * Disable if block is uneditable.
  * @param {!Event} e Mouse click event.
- * @private
+ * @protected
  * @override
  */
 Blockly.Mutator.prototype.iconClick_ = function(e) {
@@ -241,7 +242,8 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   var height = workspaceSize.height + doubleBorderWidth * 3;
   var flyout = this.workspace_.getFlyout();
   if (flyout) {
-    var flyoutScrollMetrics = this.workspace_.getMetricsManager().getScrollMetrics();
+    var flyoutScrollMetrics = flyout.getWorkspace().getMetricsManager()
+        .getScrollMetrics();
     height = Math.max(height, flyoutScrollMetrics.height + 20);
     width += flyout.getWidth();
   }

@@ -149,6 +149,17 @@ Blockly.InsertionMarkerManager.PREVIEW_TYPE = {
 };
 
 /**
+ * An error message to throw if the block created by createMarkerBlock_ is
+ * missing any components.
+ * @type {string}
+ * @const
+ */
+Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
+    'manager tried to create a marker but the result is missing %1. If ' +
+    'you are using a mutator, make sure your domToMutation method is ' +
+    'properly defined.';
+
+/**
  * Sever all links from this object.
  * @package
  */
@@ -279,9 +290,17 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
         continue;  // Ignore the collapsed input.
       }
       var resultInput = result.inputList[i];
+      if (!resultInput) {
+        throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+            .replace('%1', 'an input'));
+      }
       for (var j = 0; j < sourceInput.fieldRow.length; j++) {
         var sourceField = sourceInput.fieldRow[j];
         var resultField = resultInput.fieldRow[j];
+        if (!resultField) {
+          throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+              .replace('%1', 'a field'));
+        }
         resultField.setValue(sourceField.getValue());
       }
     }

@@ -61,11 +61,13 @@ Blockly.utils.uiPosition.bumpDirection = {
 };
 
 /**
- * Returns a start position rectangle without taking into account any already
- * placed UI elements.
+ * Returns a rectangle representing reasonable position for where to place a ui
+ * element of the specified size given the restraints and locations of the
+ * scrollbars. This method does not take into account any already placed ui
+ * elements.
  * @param {!Blockly.utils.uiPosition.Position} position The starting
  *    horizontal and vertical position.
- * @param {Blockly.utils.Size} size the size of the ui element so get a start
+ * @param {!Blockly.utils.Size} size the size of the ui element so get a start
  *    position for.
  * @param {number} horizontalPadding The horizontal padding to use. This value
  *    is ignored for center horizontal positioning.
@@ -120,10 +122,11 @@ Blockly.utils.uiPosition.getStartPositionRect = function(
       top, top + size.height, left, left + size.width);
 };
 
-// TODO give better name
 /**
  * Returns a corner position that is on the opposite side of the workspace from
  * the toolbox.
+ * If in horizontal orientation, defaults to the bottom corner. If in vertical
+ * orientation, defaults to the right corner.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
  * @return {!Blockly.utils.uiPosition.Position} The suggested corner position.
@@ -152,7 +155,7 @@ Blockly.utils.uiPosition.getCornerOppositeToolbox = function(workspace, metrics)
  * method does not check that the bumped position is still within bounds.
  * @param {!Blockly.utils.Rect} startRect The starting position to use.
  * @param {number} margin The margin to use between elements when bumping.
- * @param {Blockly.utils.uiPosition.bumpDirection} bumpDirection The direction
+ * @param {!Blockly.utils.uiPosition.bumpDirection} bumpDirection The direction
  *    to bump if there is a collision with an existing ui element.
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *    represent the positions of ui elements already placed.

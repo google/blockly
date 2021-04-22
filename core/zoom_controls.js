@@ -91,6 +91,7 @@ Blockly.ZoomControls = function(workspace) {
 /**
  * Width of an individual zoom control
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.WIDTH_ = 32;
@@ -98,6 +99,7 @@ Blockly.ZoomControls.prototype.WIDTH_ = 32;
 /**
  * Height of an individual zoom control.
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.HEIGHT_ = 32;
@@ -105,6 +107,7 @@ Blockly.ZoomControls.prototype.HEIGHT_ = 32;
 /**
  * Small spacing used between the zoom in and out control, in pixels.
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.SMALL_SPACING_ = 2;
@@ -112,6 +115,7 @@ Blockly.ZoomControls.prototype.SMALL_SPACING_ = 2;
 /**
  * Large spacing used between the zoom in and reset control, in pixels.
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.LARGE_SPACING_ = 11;
@@ -119,6 +123,7 @@ Blockly.ZoomControls.prototype.LARGE_SPACING_ = 11;
 /**
  * Distance between zoom controls and bottom or top edge of workspace.
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.MARGIN_VERTICAL_ = 20;
@@ -126,6 +131,7 @@ Blockly.ZoomControls.prototype.MARGIN_VERTICAL_ = 20;
 /**
  * Distance between zoom controls and right or left edge of workspace.
  * @type {number}
+ * @const
  * @private
  */
 Blockly.ZoomControls.prototype.MARGIN_HORIZONTAL_ = 20;

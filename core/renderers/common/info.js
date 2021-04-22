@@ -14,10 +14,12 @@ goog.provide('Blockly.blockRendering.RenderInfo');
 
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.ExternalValueInput');
+goog.require('Blockly.blockRendering.Field');
 goog.require('Blockly.blockRendering.Hat');
 goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.InRowSpacer');
+goog.require('Blockly.blockRendering.JaggedEdge');
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.NextConnection');
 goog.require('Blockly.blockRendering.OutputConnection');

@@ -19,12 +19,12 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.uiPosition');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
-goog.require('Blockly.IPositionable');
 
 goog.requireType('Blockly.WorkspaceSvg');
 

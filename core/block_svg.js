@@ -27,6 +27,9 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Selected');
+goog.require('Blockly.IASTNodeLocationSvg');
+goog.require('Blockly.IBoundedElement');
+goog.require('Blockly.ICopyable');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
@@ -39,6 +42,7 @@ goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Xml');
 
@@ -46,9 +50,6 @@ goog.requireType('Blockly.blockRendering.Debug');
 goog.requireType('Blockly.Comment');
 goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
-goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IBoundedElement');
-goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Input');
 goog.requireType('Blockly.Mutator');
 goog.requireType('Blockly.Theme');

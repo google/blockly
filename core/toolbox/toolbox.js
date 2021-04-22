@@ -20,6 +20,11 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
+goog.require('Blockly.IDeleteArea');
+goog.require('Blockly.IKeyboardAccessible');
+goog.require('Blockly.IStyleable');
+goog.require('Blockly.IToolbox');
+goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -29,12 +34,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ICollapsibleToolboxItem');
-goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ISelectableToolboxItem');
-goog.requireType('Blockly.IStyleable');
-goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.WorkspaceSvg');

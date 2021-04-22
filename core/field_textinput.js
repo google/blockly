@@ -13,6 +13,7 @@
 goog.provide('Blockly.FieldTextInput');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
@@ -26,6 +27,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.WorkspaceSvg');

@@ -19,6 +19,7 @@ goog.requireType('Blockly.utils.Coordinate');
 
 /**
  * A block dragger interface.
+ * @interface
  */
 Blockly.IBlockDragger = function() {};
 

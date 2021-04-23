@@ -20,7 +20,9 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.IBlockDragger');
 goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
@@ -34,6 +36,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.BlockSvg} block The block to drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
+ * @implements {Blockly.IBlockDragger}
  */
 Blockly.BlockDragger = function(block, workspace) {
   /**
@@ -217,30 +220,6 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 };
 
 /**
- * Updates the location of the block that is being moved by a certain amount.
- * TODO: Figure out if this is the correct place for this.
- * @param {number} deltaX Horizontal offset in pixel units.
- * @param {number} deltaY Vertical offset in pixel units.
- */
-Blockly.BlockDragger.prototype.moveBlockWhileDragging = function(deltaX, deltaY) {
-  // Negative because we are trying to offset the amount child block dragger
-  // group is being dragged.
-  // Move the block drag surface.
-  this.workspace_.getBlockDragSurface().translateBy(-deltaX, -deltaY);
-  // Move the connections on the block.
-  this.draggingBlock_.moveConnections(-deltaX, -deltaY);
-  // Update the start location of the block, so that when we drag the block
-  // it starts in the correct location.
-  this.startXY_.x += -deltaX;
-  this.startXY_.y += -deltaY;
-
-  var delta = new Blockly.utils.Coordinate(-deltaX, -deltaY);
-  // TODO: Update from null.
-  // As we scroll, show the insertion markers.
-  this.draggedConnectionManager_.update(delta, null);
-};
-
-/**
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
  * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
@@ -408,3 +387,6 @@ Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
   }
   return [];
 };
+
+Blockly.registry.register(Blockly.registry.Type.BLOCK_DRAGGER,
+    Blockly.registry.DEFAULT, Blockly.BlockDragger);

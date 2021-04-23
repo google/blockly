@@ -155,7 +155,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
 Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
   var x = this.surfaceXY_.x + deltaX;
   var y = this.surfaceXY_.y + deltaY;
-  this.translateSurface(x, y);
+  this.surfaceXY_ = new Blockly.utils.Coordinate(x, y);
+  this.translateSurfaceInternal_();
 };
 
 /**
@@ -188,6 +189,14 @@ Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  */
 Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
   return this.dragGroup_;
+};
+
+/**
+ * Returns the SVG drag surface.
+ * @returns {?SVGElement} The SVG drag surface.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.getSvgRoot = function() {
+  return this.SVG_;
 };
 
 /**

@@ -17,6 +17,7 @@ goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IBlockDragger');
 goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.IFlyout');
@@ -105,6 +106,10 @@ Blockly.registry.Type.METRICS_MANAGER =
 /** @type {!Blockly.registry.Type<Blockly.IBlockDragSurfaceSvg>} */
 Blockly.registry.Type.BLOCK_DRAG_SURFACE_SVG =
     new Blockly.registry.Type('blockDragSurfaceSvg');
+
+/** @type {!Blockly.registry.Type<Blockly.IBlockDragger>} */
+Blockly.registry.Type.BLOCK_DRAGGER =
+    new Blockly.registry.Type('blockDragger');
 
 /**
  * Registers a class based on a type and name.

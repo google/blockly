@@ -182,7 +182,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 
   /**
    * The object tracking a block drag, or null if none is in progress.
-   * @type {Blockly.IBlockDragger}
+   * @type {?Blockly.IBlockDragger}
    * @private
    */
   this.blockDragger_ = null;

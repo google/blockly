@@ -305,6 +305,12 @@ Blockly.Events.filter = function(queueIn, forward) {
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
+      } else if (event.type == Blockly.Events.VIEWPORT_CHANGE) {
+        // Merge viewport change events.
+        lastEvent.viewTop = event.viewTop;
+        lastEvent.viewLeft = event.viewLeft;
+        lastEvent.scale = event.scale;
+        lastEvent.oldScale = event.oldScale;
       } else if (event.type == Blockly.Events.CLICK &&
           lastEvent.type == Blockly.Events.BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.

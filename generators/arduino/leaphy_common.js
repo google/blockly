@@ -27,12 +27,11 @@ Blockly.Arduino['leaphy_start'] = function (block) {
             '\'' + block.id + '\'') + branch;
     }
     var returnType = 'void';
-    var code = returnType + ' ' + funcName + '() {\n' + branch + '}\n';
+    var code = returnType + ' ' + funcName + '() {\n' + branch + '}';
 
     code = Blockly.Arduino.scrub_(block, code);
-    // Add % so as not to collide with helper functions in definitions list.
-    Blockly.Arduino.definitions_['%' + funcName] = code;
-    Blockly.Arduino.setups_['setup_leaphy_start'] = funcName + '();';
+    Blockly.Arduino.userFunctions_[funcName] = code;
+    Blockly.Arduino.addSetup('userSetupCode', funcName + '();', false);
     return null;
 };
 

@@ -24,11 +24,6 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
- */
-Blockly.Constants.Colour.HUE = 20;
 var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
 var analogPinOptions = [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"]];
 var motorTypeOptions = [["%{BKY_LEAPHY_MOTOR_LEFT_DROPDOWN}", "9"], ["%{BKY_LEAPHY_MOTOR_RIGHT_DROPDOWN}", "10"]];

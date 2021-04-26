@@ -67,6 +67,12 @@ Blockly.Msg.LEAPHY_MOTOR_LEFT_DROPDOWN = 'Motor_L';
 /// leaphy Motor Right.
 Blockly.Msg.LEAPHY_MOTOR_RIGHT_DROPDOWN = 'Motor_R';
 /** @type {string} */
+/// leaphy Motor A.
+Blockly.Msg.LEAPHY_MOTOR_A_DROPDOWN = 'Motor_A';
+/** @type {string} */
+/// leaphy Motor B.
+Blockly.Msg.LEAPHY_MOTOR_B_DROPDOWN = 'Motor_B';
+/** @type {string} */
 /// leaphy LED.
 Blockly.Msg.LEAPHY_LED = 'Led';
 /** @type {string} */

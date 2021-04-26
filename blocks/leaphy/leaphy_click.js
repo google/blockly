@@ -40,6 +40,50 @@
          this.setStyle('leaphy_blocks');
      }
  };
+
+ var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
+
+ Blockly.Blocks['leaphy_click_rgb_digitalwrite'] = {
+    /**
+     * Block for creating setting multiple pins to a state in one go.
+     * @this Blockly.Block
+     */
+    init: function() {
+      this.setHelpUrl('http://arduino.cc/en/Reference/DigitalWrite');
+      this.setColour(Blockly.Blocks.io.HUE);
+      this.appendValueInput('STATE1')
+          .appendField(Blockly.Msg.ARD_DIGITALWRITE)
+          .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN1')
+          .appendField(Blockly.Msg.ARD_WRITE_TO)
+          .setCheck(Blockly.Types.BOOLEAN.checkList);
+      this.appendValueInput('STATE2')
+          .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN2')
+          .appendField(Blockly.Msg.ARD_WRITE_TO)
+          .setCheck(Blockly.Types.BOOLEAN.checkList);
+      this.appendValueInput('STATE3')
+          .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN3')
+          .appendField(Blockly.Msg.ARD_WRITE_TO)
+          .setCheck(Blockly.Types.BOOLEAN.checkList);
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setTooltip(Blockly.Msg.ARD_DIGITALWRITE_TIP);
+      this.setStyle('leaphy_blocks');
+    },
+    /**
+     * Updates the content of the the pin related fields.
+     * @this Blockly.Block
+     */
+    updateFields: function() {
+      Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+          this, 'PIN1', 'digitalPins');
+      Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+          this, 'PIN2', 'digitalPins');
+      Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+          this, 'PIN3', 'digitalPins');
+    }
+  };
+
  
  //Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
  

@@ -27,6 +27,7 @@
     "build:strict:log": "npm run build:strict > build-debug.log 2>&1 && tail -3 build-debug.log",
     "build:generators": "gulp buildGenerators",
     "build:langfiles": "gulp buildLangfiles",
+    "build:not:langfiles": "gulp buildCore && gulp buildGenerators",
     "build:uncompressed": "gulp buildUncompressed",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "license": "gulp checkLicenses",

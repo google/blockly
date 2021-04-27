@@ -24,12 +24,6 @@ goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['VARIABLES_HUE']. (2018 April 5)
- */
-Blockly.Constants.Variables.HUE = 330;
-
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for variable getter.
   {

@@ -121,13 +121,13 @@ Blockly.Arduino['math_single'] = function(block) {
       code = 'floor(' + arg + ')';
       break;
     case 'SIN':
-      code = 'sin(' + arg + ' / 180 * Math.PI)';
+      code = 'sin(' + arg + ' / 180 * M_PI)';
       break;
     case 'COS':
-      code = 'cos(' + arg + ' / 180 * Math.PI)';
+      code = 'cos(' + arg + ' / 180 * M_PI)';
       break;
     case 'TAN':
-      code = 'tan(' + arg + ' / 180 * Math.PI)';
+      code = 'tan(' + arg + ' / 180 * M_PI)';
       break;
   }
   if (code) {

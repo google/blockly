@@ -394,7 +394,7 @@ suite('Procedures', function() {
       delete Blockly.Blocks['nested_proc'];
     });
 
-    test('New definition', function() {
+    test('Custom procedure block', function() {
       // Do not require procedures to be the built-in procedures.
       var defBlock = new Blockly.Block(this.workspace, 'new_proc');
       var def = Blockly.Procedures.getDefinition('test', this.workspace);

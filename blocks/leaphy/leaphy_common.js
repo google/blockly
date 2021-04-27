@@ -24,12 +24,6 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
- */
-Blockly.Constants.Colour.HUE = 20;
-
 Blockly.Blocks['leaphy_start'] = {
     init: function () {
         this.appendDummyInput()

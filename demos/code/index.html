@@ -145,6 +145,8 @@
           </shadow>
         </value>
       </block>
+      <block type="math_trig"></block>
+      <block type="math_single"></block>
     </category>
     <category toolboxitemid="l_variables" name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category"
       custom="VARIABLE"></category>
@@ -220,6 +222,12 @@
     <category id="l_click" toolboxitemid="l_click" name="%{BKY_LEAPHY_CLICK_CATEGORY}" categorystyle="leaphy_category">
   		<block type="leaphy_io_digitalwrite">
 		</block>
+    <sep gap="8"></sep>
+    <block type="leaphy_click_rgb_digitalwrite">
+			<field name="PIN1">11</field>
+      <field name="PIN2">12</field>
+      <field name="PIN3">13</field>
+		</block>
  		<sep gap="8"></sep>
 		<block type="leaphy_io_analogwrite">
 			<value name="NUM">
@@ -240,7 +248,7 @@
 				</shadow>
 			</value>
 		</block>
-		<block type="leaphy_original_set_motor">
+		<block type="leaphy_click_set_motor">
 			<value name="MOTOR_SPEED">
 				<shadow type="math_number">
 					<field name="NUM">

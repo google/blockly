@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-03-31 20:06:29.960672",
+		"lastupdated": "2021-04-26 20:34:40.879197",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -17,6 +17,8 @@
 	"LEAPHY_MOTOR_RIGHT": "Right",
 	"LEAPHY_MOTOR_LEFT_DROPDOWN": "Motor_L",
 	"LEAPHY_MOTOR_RIGHT_DROPDOWN": "Motor_R",
+	"LEAPHY_MOTOR_A_DROPDOWN": "Motor_A",
+	"LEAPHY_MOTOR_B_DROPDOWN": "Motor_B",
 	"LEAPHY_LED": "Led",
 	"LEAPHY_LED_RED": "Red",
 	"LEAPHY_LED_BLUE": "Blue",

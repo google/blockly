@@ -11,6 +11,8 @@
 	"LEAPHY_MOTOR_RIGHT": "leaphy Motor Right.",
 	"LEAPHY_MOTOR_LEFT_DROPDOWN": "leaphy Motor Left.",
 	"LEAPHY_MOTOR_RIGHT_DROPDOWN": "leaphy Motor Right.",
+	"LEAPHY_MOTOR_A_DROPDOWN": "leaphy Motor A.",
+	"LEAPHY_MOTOR_B_DROPDOWN": "leaphy Motor B.",
 	"LEAPHY_LED": "leaphy LED.",
 	"LEAPHY_LED_RED": "leaphy LED Red.",
 	"LEAPHY_LED_BLUE": "leaphy LED Blue.",

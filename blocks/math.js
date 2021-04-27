@@ -26,12 +26,6 @@ goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['MATH_HUE']. (2018 April 5)
- */
-Blockly.Constants.Math.HUE = 230;
-
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Block for numeric value.
   {
@@ -108,7 +102,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "style": "math_blocks",
+    "style": "numbers_blocks",
     "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
@@ -137,7 +131,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       }
     ],
     "output": "Number",
-    "style": "math_blocks",
+    "style": "numbers_blocks",
     "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },

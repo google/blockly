@@ -110,8 +110,8 @@ function start() {
         readOnly: false,
         rtl: rtl,
         move: {
-          scrollbars: true,
-          drag: true,
+          scrollbars: false,
+          drag: false,
           wheel: false,
         },
         toolbox: toolbox,
@@ -120,7 +120,8 @@ function start() {
         zoom:
           {
             controls: true,
-            wheel: true,
+            wheel: false,
+            pinch: false,
             startScale: 1.0,
             maxScale: 4,
             minScale: 0.25,

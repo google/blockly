@@ -271,7 +271,8 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
           'translate(0, ' + zoomResetTranslateY + ')');
     }
   } else {
-    var zoomInTranslateY = this.LARGE_SPACING_ + this.HEIGHT_;
+    var zoomInTranslateY = this.zoomResetGroup_ ?
+        this.LARGE_SPACING_ + this.HEIGHT_ : 0;
     this.zoomInGroup_.setAttribute('transform',
         'translate(0, ' + zoomInTranslateY + ')');
     var zoomOutTranslateY =

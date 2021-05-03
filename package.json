@@ -89,7 +89,7 @@
     "through2": "^4.0.2",
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^7.0.3",
-    "yargs": "^16.0.3"
+    "yargs": "^17.0.0"
   },
   "dependencies": {
     "jsdom": "15.2.1"

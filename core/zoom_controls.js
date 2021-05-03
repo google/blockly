@@ -188,7 +188,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
 /**
  * Initializes the zoom controls.
  */
-Blockly.ZoomControls.prototype.init = function(verticalSpacing) {
+Blockly.ZoomControls.prototype.init = function() {
   this.initialized_ = true;
 };
 

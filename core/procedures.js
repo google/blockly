@@ -25,6 +25,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Names');
+goog.require('Blockly.Procedures.ProcedureBlock');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
@@ -46,16 +47,6 @@ Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
  * @type {string}
  */
 Blockly.Procedures.DEFAULT_ARG = 'x';
-
-/**
- * Procedure block type.
- * @typedef {{
- *    getProcedureCall: function():string,
- *    renameProcedure: function(string,string),
- *    getProcedureDef: function():!Array
- * }}
- */
-Blockly.Procedures.ProcedureBlock;
 
 /**
  * Find all user-created procedure definitions in a workspace.

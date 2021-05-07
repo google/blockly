@@ -67,12 +67,10 @@ Blockly.uiPosition.bumpDirection = {
  * elements.
  * @param {!Blockly.uiPosition.Position} position The starting
  *    horizontal and vertical position.
- * @param {!Blockly.utils.Size} size the size of the ui element so get a start
+ * @param {!Blockly.utils.Size} size the size of the ui element to get a start
  *    position for.
- * @param {number} horizontalPadding The horizontal padding to use. This value
- *    is ignored for center horizontal positioning.
- * @param {number} verticalPadding The vertical padding to use. This value
- *    is ignored for center vertical positioning.
+ * @param {number} horizontalPadding The horizontal padding to use.
+ * @param {number} verticalPadding The vertical padding to use.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace ui metrics.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @return {!Blockly.utils.Rect} The suggested start position.

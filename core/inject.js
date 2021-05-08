@@ -378,12 +378,11 @@ Blockly.init_ = function(mainWorkspace) {
     }
   }
 
-  var verticalSpacing = Blockly.Scrollbar.scrollbarThickness;
   if (options.hasTrashcan) {
-    verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);
+    mainWorkspace.trashcan.init();
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.zoomControls_.init(verticalSpacing);
+    mainWorkspace.zoomControls_.init();
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {

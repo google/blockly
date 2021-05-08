@@ -22,9 +22,8 @@ goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
-goog.require('Blockly.Scrollbar');
+goog.require('Blockly.uiPosition');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
@@ -124,18 +123,18 @@ Blockly.Trashcan.prototype.BODY_HEIGHT_ = 44;
 Blockly.Trashcan.prototype.LID_HEIGHT_ = 16;
 
 /**
- * Distance between trashcan and bottom edge of workspace.
+ * Distance between trashcan and bottom or top edge of workspace.
  * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 20;
+Blockly.Trashcan.prototype.MARGIN_VERTICAL_ = 20;
 
 /**
- * Distance between trashcan and right edge of workspace.
+ * Distance between trashcan and right or left edge of workspace.
  * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 20;
+Blockly.Trashcan.prototype.MARGIN_HORIZONTAL_ = 20;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -259,6 +258,13 @@ Blockly.Trashcan.prototype.left_ = 0;
 Blockly.Trashcan.prototype.top_ = 0;
 
 /**
+ * Whether this has been initialized.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Trashcan.prototype.initialized_ = false;
+
+/**
  * Create the trash can elements.
  * @return {!SVGElement} The trash can's SVG group.
  */
@@ -342,13 +348,9 @@ Blockly.Trashcan.prototype.createDom = function() {
 };
 
 /**
- * Initialize the trash can.
- * @param {number} verticalSpacing Vertical distance from workspace edge to the
- *    same edge of the trashcan.
- * @return {number} Vertical distance from workspace edge to the opposite
- *    edge of the trashcan.
+ * Initializes the trash can.
  */
-Blockly.Trashcan.prototype.init = function(verticalSpacing) {
+Blockly.Trashcan.prototype.init = function() {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     Blockly.utils.dom.insertAfter(
         this.flyout.createDom(Blockly.utils.Svg.SVG),
@@ -356,9 +358,8 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
     this.flyout.init(this.workspace_);
   }
 
-  this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
+  this.initialized_ = true;
   this.setLidOpen(false);
-  return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
 };
 
 /**
@@ -444,47 +445,28 @@ Blockly.Trashcan.prototype.emptyContents = function() {
  */
 Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
-  if (!this.verticalSpacing_) {
+  if (!this.initialized_) {
     return;
   }
-  if (metrics.toolboxMetrics.position == Blockly.utils.toolbox.Position.LEFT ||
-      (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Right corner placement.
-    this.left_ = metrics.viewMetrics.width + metrics.absoluteMetrics.left -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-  } else {
-    // Left corner placement.
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
-  }
+
+  var cornerPosition =
+      Blockly.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
   var height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
-  // Upper corner placement
-  var minTop = this.top_ = metrics.absoluteMetrics.top + this.verticalSpacing_;
-  // Bottom corner placement
-  var maxTop = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
-      height - this.verticalSpacing_;
-  var placeBottom =
-      metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.BOTTOM;
-  this.top_ = placeBottom ? maxTop : minTop;
+  var startRect = Blockly.uiPosition.getStartPositionRect(
+      cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
+      this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
 
-  // Check for collision and bump if needed.
-  var boundingRect = this.getBoundingRectangle();
-  for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
-    if (boundingRect.intersects(otherEl)) {
-      if (placeBottom) {
-        // Bump up
-        this.top_ = otherEl.top - height - this.MARGIN_BOTTOM_;
-      } else {
-        this.top_ = otherEl.bottom + this.MARGIN_BOTTOM_;
-      }
-      // Recheck other savedPositions
-      boundingRect = this.getBoundingRectangle();
-      i = -1;
-    }
-  }
-  // Clamp top value within valid range.
-  this.top_ = Blockly.utils.math.clamp(minTop, this.top_, maxTop);
+  var verticalPosition = cornerPosition.vertical;
+  var bumpDirection =
+      verticalPosition === Blockly.uiPosition.verticalPosition.TOP ?
+          Blockly.uiPosition.bumpDirection.DOWN :
+          Blockly.uiPosition.bumpDirection.UP;
+  var positionRect = Blockly.uiPosition.bumpPositionRect(
+      startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
+  this.top_ = positionRect.top;
+  this.left_ = positionRect.left;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };

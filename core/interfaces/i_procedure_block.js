@@ -10,19 +10,19 @@
 
 'use strict';
 
-goog.provide('Blockly.Procedures.ProcedureBlock');
+goog.provide('Blockly.IProcedureBlock');
 
 /**
  * A procedure block interface.
  * @interface
  */
-Blockly.Procedures.ProcedureBlock = function() {};
+Blockly.IProcedureBlock = function() {};
 
 /**
  * Returns the name of the procedure the procedure block calls.
  * @return {string}
  */
-Blockly.Procedures.ProcedureBlock.prototype.getProcedureCall;
+Blockly.IProcedureBlock.prototype.getProcedureCall;
 
 /**
  * Renames the procedure from the old name to the new name. If the procedure
@@ -31,7 +31,7 @@ Blockly.Procedures.ProcedureBlock.prototype.getProcedureCall;
  * @param {string} oldName The old name of the procedure.
  * @param {string} newName The new name of hte procedure.
  */
-Blockly.Procedures.ProcedureBlock.prototype.renameProcedure;
+Blockly.IProcedureBlock.prototype.renameProcedure;
 
 /**
  * Returns the signature of the procedure block's procedure definition.
@@ -40,4 +40,4 @@ Blockly.Procedures.ProcedureBlock.prototype.renameProcedure;
  *     - {!Array<string>} a list of all its arguments
  *     - {boolean} whether it has a return value or not
  */
-Blockly.Procedures.ProcedureBlock.prototype.getProcedureDef;
+Blockly.IProcedureBlock.prototype.getProcedureDef;

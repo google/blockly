@@ -25,13 +25,13 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Names');
+goog.require('Blockly.Procedures.ProcedureBlock');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.IProcedureBlock');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -49,16 +49,6 @@ Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
 Blockly.Procedures.DEFAULT_ARG = 'x';
 
 /**
- * A procedure block interface. Will be deprecated for Blockly.IProcedureBlock.
- * @typedef {{
- *    getProcedureCall: function():string,
- *    renameProcedure: function(string,string),
- *    getProcedureDef: function():!Array
- * }}
- */
-Blockly.Procedures.ProcedureBlock;
-
-/**
  * Find all user-created procedure definitions in a workspace.
  * @param {!Blockly.Workspace} root Root workspace.
  * @return {!Array.<!Array.<!Array>>} Pair of arrays, the
@@ -69,10 +59,10 @@ Blockly.Procedures.ProcedureBlock;
 Blockly.Procedures.allProcedures = function(root) {
   var proceduresNoReturn = root.getBlocksByType('procedures_defnoreturn', false)
       .map(function(block) {
-        return /** @type {!Blockly.IProcedureBlock} */ (block).getProcedureDef();
+        return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
       });
   var proceduresReturn = root.getBlocksByType('procedures_defreturn', false).map(function(block) {
-    return /** @type {!Blockly.IProcedureBlock} */ (block).getProcedureDef();
+    return /** @type {!Blockly.Procedures.ProcedureBlock} */ (block).getProcedureDef();
   });
   proceduresNoReturn.sort(Blockly.Procedures.procTupleComparator_);
   proceduresReturn.sort(Blockly.Procedures.procTupleComparator_);
@@ -147,7 +137,7 @@ Blockly.Procedures.isNameUsed = function(name, workspace, opt_exclude) {
       continue;
     }
     if (blocks[i].getProcedureDef) {
-      var procedureBlock = /** @type {!Blockly.IProcedureBlock} */ (
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
         blocks[i]);
       var procName = procedureBlock.getProcedureDef();
       if (Blockly.Names.equals(procName[0], name)) {
@@ -176,7 +166,7 @@ Blockly.Procedures.rename = function(name) {
     var blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (var i = 0; i < blocks.length; i++) {
       if (blocks[i].renameProcedure) {
-        var procedureBlock = /** @type {!Blockly.IProcedureBlock} */ (
+        var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
           blocks[i]);
         procedureBlock.renameProcedure(
             /** @type {string} */ (oldName), legalName);
@@ -346,7 +336,7 @@ Blockly.Procedures.getCallers = function(name, workspace) {
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureCall) {
-      var procedureBlock = /** @type {!Blockly.IProcedureBlock} */ (
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
         blocks[i]);
       var procName = procedureBlock.getProcedureCall();
       // Procedure name may be null if the block is only half-built.
@@ -365,7 +355,7 @@ Blockly.Procedures.getCallers = function(name, workspace) {
  */
 Blockly.Procedures.mutateCallers = function(defBlock) {
   var oldRecordUndo = Blockly.Events.recordUndo;
-  var procedureBlock = /** @type {!Blockly.IProcedureBlock} */ (
+  var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
     defBlock);
   var name = procedureBlock.getProcedureDef()[0];
   var xmlElement = defBlock.mutationToDom(true);
@@ -401,7 +391,7 @@ Blockly.Procedures.getDefinition = function(name, workspace) {
   var blocks = workspace.getAllBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
-      var procedureBlock = /** @type {!Blockly.IProcedureBlock} */ (
+      var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
         blocks[i]);
       var tuple = procedureBlock.getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {

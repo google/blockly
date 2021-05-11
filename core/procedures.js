@@ -394,8 +394,10 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
  * @return {Blockly.Block} The procedure definition block, or null not found.
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
-  // Assume that a procedure definition is a top block.
-  var blocks = workspace.getTopBlocks(false);
+  // Do not assume procedure is a top block. Some languages allow nested
+  // procedures. Also do not assume it is one of the built-in blocks. Only
+  // rely on getProcedureDef.
+  var blocks = workspace.getAllBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (

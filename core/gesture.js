@@ -233,6 +233,16 @@ Blockly.Gesture = function(e, creatorWorkspace) {
 };
 
 /**
+ * The different types of items that can be dragged.
+ * @enum {string}
+ */
+Blockly.Gesture.DraggingType = {
+  BLOCK: 'block',
+  WORKSPACE: 'workspace',
+  BUBBLE: 'bubble',
+};
+
+/**
  * Sever all links from this object.
  * @package
  */
@@ -439,7 +449,8 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
   var BlockDraggerClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
+      Blockly.registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options,
+      true);
 
   this.blockDragger_ = new BlockDraggerClass(
       /** @type {!Blockly.BlockSvg} */ (this.targetBlock_),
@@ -660,8 +671,8 @@ Blockly.Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Blockly.Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.CLICK))(
-      null, ws.id, 'workspace'));
+  Blockly.Events.fire(
+      new (Blockly.Events.get(Blockly.Events.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**
@@ -966,6 +977,39 @@ Blockly.Gesture.prototype.getInsertionMarkers = function() {
     return this.blockDragger_.getInsertionMarkers();
   }
   return [];
+};
+
+/**
+ * Gets the current dragger if an item is being dragged. Null, if nothing is
+ * being dragged.
+ * @returns {?(Blockly.WorkspaceDragger|Blockly.BubbleDragger|Blockly.BlockDragger)}
+ *    The dragger that is currently in use.
+ */
+Blockly.Gesture.prototype.getCurrentDragger = function() {
+  if (this.isDraggingBlock_) {
+    return this.blockDragger_;
+  } else if (this.isDraggingWorkspace_) {
+    return this.workspaceDragger_;
+  } else if (this.isDraggingBubble_) {
+    return this.bubbleDragger_;
+  }
+  return null;
+};
+
+/**
+ * Gets the current type of element that is being dragged. Returns null, if no
+ * item is being dragged.
+ * @returns {?Blockly.Gesture.DraggingType} The type of item being dragged.
+ */
+Blockly.Gesture.prototype.getCurrentDraggingType = function() {
+  if (this.isDraggingBlock_) {
+    return Blockly.Gesture.DraggingType.BLOCK;
+  } else if (this.isDraggingWorkspace_) {
+    return Blockly.Gesture.DraggingType.WORKSPACE;
+  } else if (this.isDraggingBubble_) {
+    return Blockly.Gesture.DraggingType.BUBBLE;
+  }
+  return null;
 };
 
 /**

@@ -784,4 +784,348 @@ suite('Connection', function() {
       });
     });
   });
+
+  suite('getPlaceForOrphanedOutput', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+
+      Blockly.defineBlocksWithJsonArray([
+        {
+          'type': 'input',
+          'message0': '%1',
+          'args0': [
+            {
+              'type': 'input_value',
+              'name': 'INPUT',
+              'check': 'check'
+            }
+          ],
+        },
+        {
+          'type': 'output',
+          'message0': '',
+          'output': 'check',
+        },
+      ]);
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+      delete Blockly.Blocks['input'];
+      delete Blockly.Blocks['output'];
+    });
+
+    suite('No available spots', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'output_and_statements',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_statement',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+              {
+                'type': 'input_statement',
+                'name': 'INPUT2',
+                'check': 'check'
+              }
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'output_and_inputs',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check2'
+              },
+              {
+                'type': 'input_value',
+                'name': 'INPUT2',
+                'check': 'check2'
+              }
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'check_to_check2',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check2'
+              },
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'check2_to_check',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'CHECK2TOCHECKINPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check2',
+          },
+        ]);
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['output_and_statements'];
+        delete Blockly.Blocks['output_and_inputs'];
+      });
+
+      test('No connection', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+      });
+
+      test('All statements', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output_and_statements');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+      });
+
+      test('Bad checks', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output_and_inputs');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+      });
+
+      test('Through different types', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('check_to_check2');
+        const otherChild = this.workspace.newBlock('check2_to_check');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection
+            .connect(oldChild.outputConnection);
+        oldChild.getInput('INPUT').connection
+            .connect(otherChild.outputConnection);
+
+        chai.assert.notExists(
+            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+      });
+    });
+
+    suite('Multiple available spots', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'multiple_inputs',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+              {
+                'type': 'input_value',
+                'name': 'INPUT2',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'single_input',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+        ]);
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['multiple_inputs'];
+        delete Blockly.Blocks['single_input'];
+      });
+
+      suite('No shadows', function() {
+        test('Top block', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Child blocks', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const childX = this.workspace.newBlock('single_input');
+          const childY = this.workspace.newBlock('single_input');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.connect(childX.outputConnection);
+          oldChild.getInput('INPUT2').connection.connect(childY.outputConnection);
+
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Spots filled', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const otherChild = this.workspace.newBlock('output');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection
+              .connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection
+              .connect(otherChild.outputConnection);
+
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+      });
+
+      suite('Shadows', function() {
+        test('Top block', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+          oldChild.getInput('INPUT2').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Child blocks', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const childX = this.workspace.newBlock('single_input');
+          const childY = this.workspace.newBlock('single_input');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.connect(childX.outputConnection);
+          oldChild.getInput('INPUT2').connection.connect(childY.outputConnection);
+          childX.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+          childY.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Spots filled', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const otherChild = this.workspace.newBlock('output');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection
+              .connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection
+              .connect(otherChild.outputConnection);
+          oldChild.getInput('INPUT2').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+
+          chai.assert.notExists(
+              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+        });
+      });
+    });
+
+    suite('Single available spot', function() {
+      setup(function() {
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'single_input',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+        ]);
+      });
+
+      teardown(function() {
+        delete Blockly.Blocks['multiple_inputs'];
+        delete Blockly.Blocks['single_input'];
+        delete Blockly.Blocks['check_to_check2'];
+        delete Blockly.Blocks['check2_to_check'];
+      });
+
+      test('No shadows', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('single_input');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+
+        const result = Blockly.Connection
+            .getPlaceForOrphanedOutput(oldChild, newChild);
+        chai.assert.exists(result);
+        chai.assert.equal(result.getParentInput().name, 'INPUT');
+      });
+
+      test('Shadows', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('single_input');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        oldChild.getInput('INPUT').connection.setShadowDom(
+            Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                .firstChild);
+
+        console.log(oldChild.getInput('INPUT').connection.isConnected());
+
+        const result = Blockly.Connection
+            .getPlaceForOrphanedOutput(oldChild, newChild);
+        chai.assert.exists(result);
+        chai.assert.equal(result.getParentInput().name, 'INPUT');
+      });
+    });
+  });
 });

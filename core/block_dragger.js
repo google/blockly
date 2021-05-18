@@ -58,8 +58,8 @@ Blockly.BlockDragger = function(block, workspace) {
    * @type {!Blockly.InsertionMarkerManager}
    * @protected
    */
-  this.draggedConnectionManager_ = new Blockly.InsertionMarkerManager(
-      this.draggingBlock_);
+  this.draggedConnectionManager_ =
+      new Blockly.InsertionMarkerManager(this.draggingBlock_);
 
   /**
    * Which delete area the mouse pointer is over, if any.
@@ -123,7 +123,8 @@ Blockly.BlockDragger.initIconData_ = function(block) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
       var data = {
-        // Blockly.utils.Coordinate with x and y properties (workspace coordinates).
+        // Blockly.utils.Coordinate with x and y properties (workspace
+        // coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
         icon: icons[j]
@@ -142,8 +143,8 @@ Blockly.BlockDragger.initIconData_ = function(block) {
  *     disconnecting.
  * @public
  */
-Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
-    healStack) {
+Blockly.BlockDragger.prototype.startBlockDrag = function(
+    currentDragDeltaXY, healStack) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
@@ -165,7 +166,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 
   if (this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
-      this.draggingBlock_.nextConnection.targetBlock())) {
+       this.draggingBlock_.nextConnection.targetBlock())) {
     this.draggingBlock_.unplug(healStack);
     var delta = this.getBlockDelta_(currentDragDeltaXY);
     var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
@@ -180,7 +181,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   // surface.
   this.draggingBlock_.moveToDragSurface();
 
-  this.updateToolboxStyle(false);
+  this.updateToolboxStyle_(false);
 };
 
 /**
@@ -251,7 +252,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
 
-  this.updateToolboxStyle(true);
+  this.updateToolboxStyle_(true);
 
   Blockly.Events.setGroup(false);
 };
@@ -269,12 +270,19 @@ Blockly.BlockDragger.prototype.getBlockDelta_ = function(currentDragDeltaXY) {
   return this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
 };
 
-Blockly.BlockDragger.prototype.updateToolboxStyle = function(isEnd) {
+/**
+ * Adds or removes the style of the cursor for the toolbox.
+ * This is what changes the cursor to display an x when a deletable block is
+ * held over the toolbox.
+ * @param {boolean} isEnd True if we are at the end of a drag, false otherwise.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
   var toolbox = this.workspace_.getToolbox();
 
   if (toolbox) {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-    'blocklyToolboxGrab';
+                                                    'blocklyToolboxGrab';
 
     if (isEnd && typeof toolbox.removeStyle == 'function') {
       toolbox.removeStyle(style);
@@ -299,8 +307,8 @@ Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
  * @protected
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(
-      this.draggingBlock_);
+  var event =
+      new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);
@@ -356,10 +364,10 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
- *     in CSS pixel units.
- * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
- *     scale.
+ * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y
+ *     values in CSS pixel units.
+ * @return {!Blockly.utils.Coordinate} The input coordinate divided by the
+ *     workspace scale.
  * @protected
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
@@ -407,5 +415,6 @@ Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
   return [];
 };
 
-Blockly.registry.register(Blockly.registry.Type.BLOCK_DRAGGER,
-    Blockly.registry.DEFAULT, Blockly.BlockDragger);
+Blockly.registry.register(
+    Blockly.registry.Type.BLOCK_DRAGGER, Blockly.registry.DEFAULT,
+    Blockly.BlockDragger);

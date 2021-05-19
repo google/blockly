@@ -148,27 +148,27 @@ Blockly.Python.init = function(workspace) {
   // to actual function names (to avoid collisions with user functions).
   Blockly.Python.functionNames_ = Object.create(null);
 
-  if (!Blockly.Python.variableDB_) {
-    Blockly.Python.variableDB_ =
+  if (!Blockly.Python.nameDB_) {
+    Blockly.Python.nameDB_ =
         new Blockly.Names(Blockly.Python.RESERVED_WORDS_);
   } else {
-    Blockly.Python.variableDB_.reset();
+    Blockly.Python.nameDB_.reset();
   }
 
-  Blockly.Python.variableDB_.setVariableMap(workspace.getVariableMap());
+  Blockly.Python.nameDB_.setVariableMap(workspace.getVariableMap());
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.Python.variableDB_.getName(devVarList[i],
+    defvars.push(Blockly.Python.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
   }
 
   // Add user variables, but only ones that are being used.
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
-    defvars.push(Blockly.Python.variableDB_.getName(variables[i].getId(),
+    defvars.push(Blockly.Python.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
   }
 
@@ -196,7 +196,7 @@ Blockly.Python.finish = function(code) {
   // Clean up temporary data.
   delete Blockly.Python.definitions_;
   delete Blockly.Python.functionNames_;
-  Blockly.Python.variableDB_.reset();
+  Blockly.Python.nameDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };

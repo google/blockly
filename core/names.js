@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Utility functions for handling variables and procedure names.
+ * @fileoverview Utility functions for handling variable and procedure names.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -20,11 +20,11 @@ goog.requireType('Blockly.VariableMap');
 
 
 /**
- * Class for a database of entity names (variables, functions, etc).
+ * Class for a database of entity names (variables, procedures, etc).
  * @param {string} reservedWords A comma-separated string of words that are
  *     illegal for use as names in a language (e.g. 'new,if,this,...').
  * @param {string=} opt_variablePrefix Some languages need a '$' or a namespace
- *     before all variable names.
+ *     before all variable names (but not procedure names).
  * @constructor
  */
 Blockly.Names = function(reservedWords, opt_variablePrefix) {
@@ -85,10 +85,10 @@ Blockly.Names.prototype.setVariableMap = function(map) {
  */
 Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
   if (!this.variableMap_) {
-    console.log('Deprecated call to Blockly.Names.prototype.getName without ' +
+    console.warn('Deprecated call to Blockly.Names.prototype.getName without ' +
         'defining a variable map. To fix, add the following code in your ' +
         'generator\'s init() function:\n' +
-        'Blockly.YourGeneratorName.variableDB_.setVariableMap(' +
+        'Blockly.YourGeneratorName.nameDB_.setVariableMap(' +
         'workspace.getVariableMap());');
     return null;
   }
@@ -157,7 +157,7 @@ Blockly.Names.prototype.getDistinctName = function(name, realm) {
 /**
  * Given a proposed entity name, generate a name that conforms to the
  * [_A-Za-z][_A-Za-z0-9]* format that most languages consider legal for
- * variables.
+ * variable and function names.
  * @param {string} name Potentially illegal entity name.
  * @return {string} Safe entity name.
  * @private

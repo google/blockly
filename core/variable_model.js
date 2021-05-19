@@ -87,13 +87,5 @@ Blockly.VariableModel.prototype.getId = function() {
  * @package
  */
 Blockly.VariableModel.compareByName = function(var1, var2) {
-  var name1 = var1.name.toLowerCase();
-  var name2 = var2.name.toLowerCase();
-  if (name1 < name2) {
-    return -1;
-  } else if (name1 == name2) {
-    return 0;
-  } else {
-    return 1;
-  }
+  return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
 };

@@ -69,17 +69,17 @@ Blockly.IMetricsManager.prototype.getFlyoutMetrics;
 Blockly.IMetricsManager.prototype.getToolboxMetrics;
 
 /**
- * Gets the width and height of the workspace's parent svg element in pixel
+ * Gets the width and height of the workspace's parent SVG element in pixel
  * coordinates. This area includes the toolbox and the visible workspace area.
  * @return {!Blockly.utils.Size} The width and height of the workspace's parent
- *     svg element.
+ *     SVG element.
  * @public
  */
 Blockly.IMetricsManager.prototype.getSvgMetrics;
 
 /**
  * Gets the absolute left and absolute top in pixel coordinates.
- * This is where the visible workspace starts in relation to the svg container.
+ * This is where the visible workspace starts in relation to the SVG container.
  * @return {!Blockly.MetricsManager.AbsoluteMetrics} The absolute metrics for
  *     the workspace.
  * @public

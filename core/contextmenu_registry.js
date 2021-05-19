@@ -93,7 +93,7 @@ Blockly.ContextMenuRegistry.registry = null;
 /**
  * Registers a RegistryItem.
  * @param {!Blockly.ContextMenuRegistry.RegistryItem} item Context menu item to register.
- * @throws {Error} if an item with the given id already exists.
+ * @throws {Error} if an item with the given ID already exists.
  */
 Blockly.ContextMenuRegistry.prototype.register = function(item) {
   if (this.registry_[item.id]) {
@@ -103,9 +103,9 @@ Blockly.ContextMenuRegistry.prototype.register = function(item) {
 };
 
 /**
- * Unregisters a RegistryItem with the given id.
- * @param {string} id The id of the RegistryItem to remove.
- * @throws {Error} if an item with the given id does not exist.
+ * Unregisters a RegistryItem with the given ID.
+ * @param {string} id The ID of the RegistryItem to remove.
+ * @throws {Error} if an item with the given ID does not exist.
  */
 Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
   if (this.registry_[id]) {
@@ -116,7 +116,7 @@ Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
 };
 
 /**
- * @param {string} id The id of the RegistryItem to get.
+ * @param {string} id The ID of the RegistryItem to get.
  * @returns {?Blockly.ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
  */
 Blockly.ContextMenuRegistry.prototype.getItem = function(id) {

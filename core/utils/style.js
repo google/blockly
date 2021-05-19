@@ -75,7 +75,7 @@ Blockly.utils.style.getSizeWithDisplay_ = function(element) {
  * Copied from Closure's goog.style.getStyle_
  *
  * @param {!Element} element Element to get style of.
- * @param {string} style Property to get (must be camelCase, not css-style.).
+ * @param {string} style Property to get (must be camelCase, not CSS-style).
  * @return {string} Style value.
  * @private
  */

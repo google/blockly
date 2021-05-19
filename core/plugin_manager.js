@@ -63,8 +63,8 @@ Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
 };
 
 /**
- * Gets the plugin with the given id and the given type.
- * @param {string} id The id of the plugin to get.
+ * Gets the plugin with the given ID and the given type.
+ * @param {string} id The ID of the plugin to get.
  * @return {!Blockly.IPlugin|undefined} The plugin with the given name
  *    or undefined if not found.
  */
@@ -134,4 +134,3 @@ Blockly.PluginManager.Type.prototype.toString = function() {
 /** @type {!Blockly.PluginManager.Type<!Blockly.IPositionable>} */
 Blockly.PluginManager.Type.POSITIONABLE =
     new Blockly.PluginManager.Type('positionable');
-

@@ -204,13 +204,13 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
 };
 
 /**
- * Given a category ID and color, use that color to color the left border of the
- * tab for that category.
- * @param {string} id The ID of the category to color.
+ * Given a category ID and colour, use that colour to colour the left border of
+ * the tab for that category.
+ * @param {string} id The ID of the category to colour.
  * @param {?string} colour The colour for to be used for the border of the tab,
  *   or null if none.  Must be a valid CSS string.
  */
-WorkspaceFactoryView.prototype.setBorderColor = function(id, colour) {
+WorkspaceFactoryView.prototype.setBorderColour = function(id, colour) {
   var style = this.tabMap[id].style;
   if (colour) {
     style.borderLeftWidth = '8px';

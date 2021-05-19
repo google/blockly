@@ -77,8 +77,8 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
         var nextElement = Blockly.utils.xml.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
-        if (element.color != null) {
-          nextElement.setAttribute('colour', element.color);
+        if (element.colour != null) {
+          nextElement.setAttribute('colour', element.colour);
         }
         // Add a custom attribute if one exists.
         if (element.custom != null) {

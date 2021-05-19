@@ -420,7 +420,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
 /**
  * Show a debug filter to highlight that a block has been rendered.
- * @param {!SVGElement} svgPath The block's svg path.
+ * @param {!SVGElement} svgPath The block's SVG path.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {

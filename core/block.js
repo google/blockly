@@ -263,13 +263,13 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 Blockly.Block.CommentModel;
 
 /**
- * The language-neutral id given to the collapsed input.
+ * The language-neutral ID given to the collapsed input.
  * @const {string}
  */
 Blockly.Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
 
 /**
- * The language-neutral id given to the collapsed field.
+ * The language-neutral ID given to the collapsed field.
  * @const {string}
  */
 Blockly.Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;

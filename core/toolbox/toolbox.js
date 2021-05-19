@@ -190,9 +190,9 @@ Blockly.Toolbox.prototype.init = function() {
 };
 
 /**
- * Creates the dom for the toolbox.
+ * Creates the DOM for the toolbox.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace this toolbox is on.
- * @return {!Element} The html container for the toolbox.
+ * @return {!Element} The HTML container for the toolbox.
  * @protected
  */
 Blockly.Toolbox.prototype.createDom_ = function(workspace) {
@@ -213,7 +213,7 @@ Blockly.Toolbox.prototype.createDom_ = function(workspace) {
 
 /**
  * Creates the container div for the toolbox.
- * @return {!Element} The html container for the toolbox.
+ * @return {!Element} The HTML container for the toolbox.
  * @protected
  */
 Blockly.Toolbox.prototype.createContainer_ = function() {
@@ -227,7 +227,7 @@ Blockly.Toolbox.prototype.createContainer_ = function() {
 
 /**
  * Creates the container for all the contents in the toolbox.
- * @return {!Element} The html container for the toolbox contents.
+ * @return {!Element} The HTML container for the toolbox contents.
  * @protected
  */
 Blockly.Toolbox.prototype.createContentsContainer_ = function() {
@@ -241,8 +241,8 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 
 /**
  * Adds event listeners to the toolbox container div.
- * @param {!Element} container The html container for the toolbox.
- * @param {!Element} contentsContainer The html container for the contents
+ * @param {!Element} container The HTML container for the toolbox.
+ * @param {!Element} contentsContainer The HTML container for the contents
  *     of the toolbox.
  * @protected
  */
@@ -519,10 +519,10 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 };
 
 /**
- * Gets the toolbox item with the given id.
- * @param {string} id The id of the toolbox item.
- * @return {?Blockly.IToolboxItem} The toolbox item with the given id, or null if
- *     no item exists.
+ * Gets the toolbox item with the given ID.
+ * @param {string} id The ID of the toolbox item.
+ * @return {?Blockly.IToolboxItem} The toolbox item with the given ID, or null
+ *     if no item exists.
  * @public
  */
 Blockly.Toolbox.prototype.getToolboxItemById = function(id) {

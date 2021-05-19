@@ -362,7 +362,7 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Disposes of events and dom-references belonging to the dropdown editor.
+ * Disposes of events and DOM-references belonging to the dropdown editor.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {

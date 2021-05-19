@@ -239,8 +239,8 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
           return;
         }
         document.getElementById('categoryName').value = selected.name;
-        document.getElementById('categoryColour').value = selected.color ?
-            selected.color.substring(1).toLowerCase() : '';
+        document.getElementById('categoryColour').value = selected.colour ?
+            selected.colour.substring(1).toLowerCase() : '';
         console.log(document.getElementById('categoryColour').value);
         // Link the colour picker to the field.
         cp_init('categoryColour');

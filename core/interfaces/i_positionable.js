@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview The interface for a positionable ui element.
+ * @fileoverview The interface for a positionable UI element.
  * @author kozbial@google.com (Monica Kozbial)
  */
 

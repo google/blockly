@@ -486,7 +486,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
 };
 
 /**
- * Fires a zoom control ui event.
+ * Fires a zoom control UI event.
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {

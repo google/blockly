@@ -707,7 +707,7 @@ BlockDefinitionExtractor.typeOther_ = function(type) {
 };
 
 /**
- * Creates a block Element for the color_hue block, with the given hue.
+ * Creates a block Element for the colour_hue block, with the given hue.
  * @param hue {number} The hue value, from 0 to 360.
  * @return {Element} The <block> Element representing a colour_hue block
  *     with the given hue.

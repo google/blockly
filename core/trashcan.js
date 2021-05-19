@@ -587,7 +587,7 @@ Blockly.Trashcan.prototype.click = function() {
 };
 
 /**
- * Fires a ui event for trashcan flyout open or close.
+ * Fires a UI event for trashcan flyout open or close.
  * @param {boolean} trashcanOpen Whether the flyout is opening.
  * @private
  */

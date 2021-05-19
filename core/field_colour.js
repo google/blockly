@@ -572,7 +572,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Disposes of events and dom-references belonging to the colour editor.
+ * Disposes of events and DOM-references belonging to the colour editor.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {

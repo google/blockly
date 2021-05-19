@@ -156,9 +156,6 @@ suite('Connection', function() {
 
         teardown(function() {
           workspaceTeardown.call(this, this.workspace);
-          delete Blockly.Blocks['stack_block'];
-          delete Blockly.Blocks['row_block'];
-          delete Blockly.Blocks['statement_block'];
         });
 
         suite('Add - No Block Connected', function() {
@@ -785,7 +782,7 @@ suite('Connection', function() {
     });
   });
 
-  suite('getPlaceForOrphanedOutput', function() {
+  suite('getConnectionForOrphanedOutput', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
 
@@ -811,8 +808,6 @@ suite('Connection', function() {
 
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);
-      delete Blockly.Blocks['input'];
-      delete Blockly.Blocks['output'];
     });
 
     suite('No available spots', function() {
@@ -879,11 +874,6 @@ suite('Connection', function() {
         ]);
       });
 
-      teardown(function() {
-        delete Blockly.Blocks['output_and_statements'];
-        delete Blockly.Blocks['output_and_inputs'];
-      });
-
       test('No connection', function() {
         const parent = this.workspace.newBlock('input');
         const oldChild = this.workspace.newBlock('output');
@@ -891,7 +881,7 @@ suite('Connection', function() {
 
         parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
         chai.assert.notExists(
-            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
 
       test('All statements', function() {
@@ -901,7 +891,7 @@ suite('Connection', function() {
 
         parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
         chai.assert.notExists(
-            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
 
       test('Bad checks', function() {
@@ -911,7 +901,7 @@ suite('Connection', function() {
 
         parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
         chai.assert.notExists(
-            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
 
       test('Through different types', function() {
@@ -926,7 +916,7 @@ suite('Connection', function() {
             .connect(otherChild.outputConnection);
 
         chai.assert.notExists(
-            Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
     });
 
@@ -965,11 +955,6 @@ suite('Connection', function() {
         ]);
       });
 
-      teardown(function() {
-        delete Blockly.Blocks['multiple_inputs'];
-        delete Blockly.Blocks['single_input'];
-      });
-
       suite('No shadows', function() {
         test('Top block', function() {
           const parent = this.workspace.newBlock('input');
@@ -978,7 +963,7 @@ suite('Connection', function() {
 
           parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
 
         test('Child blocks', function() {
@@ -993,7 +978,7 @@ suite('Connection', function() {
           oldChild.getInput('INPUT2').connection.connect(childY.outputConnection);
 
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
 
         test('Spots filled', function() {
@@ -1008,7 +993,7 @@ suite('Connection', function() {
               .connect(otherChild.outputConnection);
 
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
       });
 
@@ -1027,7 +1012,7 @@ suite('Connection', function() {
                   .firstChild);
 
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
 
         test('Child blocks', function() {
@@ -1048,7 +1033,7 @@ suite('Connection', function() {
                   .firstChild);
 
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
 
         test('Spots filled', function() {
@@ -1066,7 +1051,7 @@ suite('Connection', function() {
                   .firstChild);
 
           chai.assert.notExists(
-              Blockly.Connection.getPlaceForOrphanedOutput(oldChild, newChild));
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
         });
       });
     });
@@ -1089,13 +1074,6 @@ suite('Connection', function() {
         ]);
       });
 
-      teardown(function() {
-        delete Blockly.Blocks['multiple_inputs'];
-        delete Blockly.Blocks['single_input'];
-        delete Blockly.Blocks['check_to_check2'];
-        delete Blockly.Blocks['check2_to_check'];
-      });
-
       test('No shadows', function() {
         const parent = this.workspace.newBlock('input');
         const oldChild = this.workspace.newBlock('single_input');
@@ -1104,7 +1082,7 @@ suite('Connection', function() {
         parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
 
         const result = Blockly.Connection
-            .getPlaceForOrphanedOutput(oldChild, newChild);
+            .getConnectionForOrphanedOutput(oldChild, newChild);
         chai.assert.exists(result);
         chai.assert.equal(result.getParentInput().name, 'INPUT');
       });
@@ -1119,10 +1097,8 @@ suite('Connection', function() {
             Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
                 .firstChild);
 
-        console.log(oldChild.getInput('INPUT').connection.isConnected());
-
         const result = Blockly.Connection
-            .getPlaceForOrphanedOutput(oldChild, newChild);
+            .getConnectionForOrphanedOutput(oldChild, newChild);
         chai.assert.exists(result);
         chai.assert.equal(result.getParentInput().name, 'INPUT');
       });

@@ -87,7 +87,7 @@ Blockly.Procedures.allProcedures = function(root) {
  * @private
  */
 Blockly.Procedures.procTupleComparator_ = function(ta, tb) {
-  return ta[0].toLowerCase().localeCompare(tb[0].toLowerCase());
+  return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
 };
 
 /**

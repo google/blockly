@@ -251,7 +251,7 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       if (localType == Blockly.connectionTypes.OUTPUT_VALUE) {
         orphanConnection = orphanBlock.outputConnection;
         lastConnection =
-            Blockly.Connection.getPlaceForOrphanedOutput(
+            Blockly.Connection.getConnectionForOrphanedOutput(
                 /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
       } else {
         orphanConnection = orphanBlock.previousConnection;

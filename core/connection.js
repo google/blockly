@@ -134,7 +134,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // Attempt to reattach the orphan at the end of the newly inserted
       // block.  Since this block may be a row, walk down to the end
       // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.getPlaceForOrphanedOutput(
+      var connection = Blockly.Connection.getConnectionForOrphanedOutput(
           childBlock, orphanBlock);
       if (connection) {
         orphanBlock.outputConnection.connect(connection);
@@ -411,7 +411,7 @@ Blockly.Connection.getSingleConnection_ = function(block, orphanBlock) {
  *     of blocks, or null.
  * @package
  */
-Blockly.Connection.getPlaceForOrphanedOutput =
+Blockly.Connection.getConnectionForOrphanedOutput =
     function(startBlock, orphanBlock) {
       var newBlock = startBlock;
       var connection;

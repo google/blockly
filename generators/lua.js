@@ -97,13 +97,13 @@ Blockly.Lua.init = function(workspace) {
   // to actual function names (to avoid collisions with user functions).
   Blockly.Lua.functionNames_ = Object.create(null);
 
-  if (!Blockly.Lua.variableDB_) {
-    Blockly.Lua.variableDB_ =
+  if (!Blockly.Lua.nameDB_) {
+    Blockly.Lua.nameDB_ =
         new Blockly.Names(Blockly.Lua.RESERVED_WORDS_);
   } else {
-    Blockly.Lua.variableDB_.reset();
+    Blockly.Lua.nameDB_.reset();
   }
-  Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
+  Blockly.Lua.nameDB_.setVariableMap(workspace.getVariableMap());
   this.isInitialized = true;
 };
 
@@ -121,7 +121,7 @@ Blockly.Lua.finish = function(code) {
   // Clean up temporary data.
   delete Blockly.Lua.definitions_;
   delete Blockly.Lua.functionNames_;
-  Blockly.Lua.variableDB_.reset();
+  Blockly.Lua.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 

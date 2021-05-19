@@ -135,27 +135,27 @@ Blockly.PHP.init = function(workspace) {
   // to actual function names (to avoid collisions with user functions).
   Blockly.PHP.functionNames_ = Object.create(null);
 
-  if (!Blockly.PHP.variableDB_) {
-    Blockly.PHP.variableDB_ =
+  if (!Blockly.PHP.nameDB_) {
+    Blockly.PHP.nameDB_ =
         new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
   } else {
-    Blockly.PHP.variableDB_.reset();
+    Blockly.PHP.nameDB_.reset();
   }
 
-  Blockly.PHP.variableDB_.setVariableMap(workspace.getVariableMap());
+  Blockly.PHP.nameDB_.setVariableMap(workspace.getVariableMap());
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.PHP.variableDB_.getName(devVarList[i],
+    defvars.push(Blockly.PHP.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ';');
   }
 
   // Add user variables, but only ones that are being used.
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0, variable; variable = variables[i]; i++) {
-    defvars.push(Blockly.PHP.variableDB_.getName(variable.getId(),
+    defvars.push(Blockly.PHP.nameDB_.getName(variable.getId(),
         Blockly.VARIABLE_CATEGORY_NAME) + ';');
   }
 
@@ -178,7 +178,7 @@ Blockly.PHP.finish = function(code) {
   // Clean up temporary data.
   delete Blockly.PHP.definitions_;
   delete Blockly.PHP.functionNames_;
-  Blockly.PHP.variableDB_.reset();
+  Blockly.PHP.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 

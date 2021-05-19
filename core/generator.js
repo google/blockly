@@ -402,24 +402,42 @@ Blockly.Generator.prototype.definitions_;
 Blockly.Generator.prototype.functionNames_;
 
 /**
- * A database of variable names.
+ * A database of variable and procedure names.
  * @type {Blockly.Names}
  * @protected
  */
-Blockly.Generator.prototype.variableDB_;
+Blockly.Generator.prototype.nameDB_;
 
 /**
- * Define a function to be included in the generated code.
+ * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+ */
+Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
+  get: function() {
+    console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
+    return this.nameDB_;
+  },
+  set: function(x) {
+    console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
+    this.nameDB_ = x;
+  }
+});
+
+/**
+ * Define a developer-defined function (not a user-defined procedure) to be
+ * included in the generated code.  Used for creating private helper functions.
  * The first time this is called with a given desiredName, the code is
  * saved and an actual name is generated.  Subsequent calls with the
  * same desiredName have no effect but have the same return value.
  *
  * It is up to the caller to make sure the same desiredName is not
- * used for different code values.
+ * used for different helper functions (e.g. use "colourRandom" and
+ * "listRandom", not "random").  There is no danger of colliding with reserved
+ * words, or user-defined variable or procedure names.
  *
  * The code gets output when Blockly.Generator.finish() is called.
  *
- * @param {string} desiredName The desired name of the function (e.g., isPrime).
+ * @param {string} desiredName The desired name of the function
+ *     (e.g. mathIsPrime).
  * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
@@ -427,7 +445,7 @@ Blockly.Generator.prototype.variableDB_;
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName = this.variableDB_.getDistinctName(desiredName,
+    var functionName = this.nameDB_.getDistinctName(desiredName,
         Blockly.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(

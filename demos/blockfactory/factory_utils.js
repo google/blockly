@@ -97,7 +97,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
         // Subclass of Blockly.FieldDropdown, must test first.
         code.push(makeVar('variable', name) +
                   " = Blockly." + language +
-                  ".variableDB_.getName(block.getFieldValue('" + name +
+                  ".nameDB_.getName(block.getFieldValue('" + name +
                   "'), Blockly.Variables.NAME_TYPE);");
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.

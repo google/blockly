@@ -389,7 +389,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 
 /**
  * Closes the editor, saves the results, and disposes of any events or
- * dom-references belonging to the editor.
+ * DOM-references belonging to the editor.
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
@@ -490,8 +490,8 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 };
 
 /**
- * Set the html input value and the field's internal value. The difference
- * between this and ``setValue`` is that this also updates the html input
+ * Set the HTML input value and the field's internal value. The difference
+ * between this and ``setValue`` is that this also updates the HTML input
  * value whilst editing.
  * @param {*} newValue New value.
  * @protected
@@ -538,10 +538,10 @@ Blockly.FieldTextInput.prototype.isTabNavigable = function() {
 
 /**
  * Use the `getText_` developer hook to override the field's text representation.
- * When we're currently editing, return the current html value instead.
+ * When we're currently editing, return the current HTML value instead.
  * Otherwise, return null which tells the field to use the default behaviour
  * (which is a string cast of the field's value).
- * @return {?string} The html value if we're editing, otherwise null.
+ * @return {?string} The HTML value if we're editing, otherwise null.
  * @protected
  * @override
  */
@@ -554,12 +554,12 @@ Blockly.FieldTextInput.prototype.getText_ = function() {
 };
 
 /**
- * Transform the provided value into a text to show in the html input.
- * Override this method if the field's html input representation is different
+ * Transform the provided value into a text to show in the HTML input.
+ * Override this method if the field's HTML input representation is different
  * than the field's value. This should be coupled with an override of
  * `getValueFromEditorText_`.
  * @param {*} value The value stored in this field.
- * @return {string} The text to show on the html input.
+ * @return {string} The text to show on the HTML input.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
@@ -567,12 +567,12 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
 };
 
 /**
- * Transform the text received from the html input into a value to store
+ * Transform the text received from the HTML input into a value to store
  * in this field.
- * Override this method if the field's html input representation is different
+ * Override this method if the field's HTML input representation is different
  * than the field's value. This should be coupled with an override of
  * `getEditorText_`.
- * @param {string} text Text received from the html input.
+ * @param {string} text Text received from the HTML input.
  * @return {*} The value to store.
  * @protected
  */

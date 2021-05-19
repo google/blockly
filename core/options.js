@@ -275,7 +275,7 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
   }
-  
+
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
     // Defaults to true if single-direction scroll is enabled.
     moveOptions.wheel = typeof moveOptions.scrollbars == 'object';

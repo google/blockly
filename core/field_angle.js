@@ -347,7 +347,7 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Disposes of events and dom-references belonging to the angle editor.
+ * Disposes of events and DOM-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {

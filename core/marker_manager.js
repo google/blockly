@@ -78,7 +78,7 @@ Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
 
 /**
  * Unregister the marker by removing it from the map of markers.
- * @param {string} id The id of the marker to unregister.
+ * @param {string} id The ID of the marker to unregister.
  */
 Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
   var marker = this.markers_[id];
@@ -100,9 +100,9 @@ Blockly.MarkerManager.prototype.getCursor = function() {
 };
 
 /**
- * Get a single marker that corresponds to the given id.
+ * Get a single marker that corresponds to the given ID.
  * @param {string} id A unique identifier for the marker.
- * @return {Blockly.Marker} The marker that corresponds to the given id, or null
+ * @return {Blockly.Marker} The marker that corresponds to the given ID, or null
  *     if none exists.
  */
 Blockly.MarkerManager.prototype.getMarker = function(id) {
@@ -127,9 +127,9 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
 };
 
 /**
- * Add the cursor svg to this workspace svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     workspace svg group.
+ * Add the cursor SVG to this workspace SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     workspace SVG group.
  * @package
  */
 Blockly.MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
@@ -143,9 +143,9 @@ Blockly.MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this workspaces svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     workspace svg group.
+ * Add the marker SVG to this workspaces SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     workspace SVG group.
  * @package
  */
 Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
@@ -164,7 +164,7 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
 };
 
 /**
- * Redraw the attached cursor svg if needed.
+ * Redraw the attached cursor SVG if needed.
  * @package
  */
 Blockly.MarkerManager.prototype.updateMarkers = function() {

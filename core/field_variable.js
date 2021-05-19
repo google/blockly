@@ -251,9 +251,9 @@ Blockly.FieldVariable.prototype.getValidator = function() {
 };
 
 /**
- * Ensure that the id belongs to a valid variable of an allowed type.
- * @param {*=} opt_newValue The id of the new variable to set.
- * @return {?string} The validated id, or null if invalid.
+ * Ensure that the ID belongs to a valid variable of an allowed type.
+ * @param {*=} opt_newValue The ID of the new variable to set.
+ * @return {?string} The validated ID, or null if invalid.
  * @protected
  */
 Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {

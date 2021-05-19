@@ -109,8 +109,8 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
 };
 
 /**
- * Set the css class applied to the field's textElement_.
- * @param {?string} cssClass The new css class name, or null to remove.
+ * Set the CSS class applied to the field's textElement_.
+ * @param {?string} cssClass The new CSS class name, or null to remove.
  */
 Blockly.FieldLabel.prototype.setClass = function(cssClass) {
   if (this.textElement_) {

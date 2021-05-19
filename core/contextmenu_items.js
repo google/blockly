@@ -215,7 +215,7 @@ Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
 
 /** Deletes the given blocks. Used to delete all blocks in the workspace.
  * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
- * @param {string} eventGroup event group id with which all delete events should be associated.
+ * @param {string} eventGroup event group ID with which all delete events should be associated.
  * @private
  */
 Blockly.ContextMenuItems.deleteNext_ = function(deleteList, eventGroup) {

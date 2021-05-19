@@ -59,7 +59,7 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
   this.type = opt_type || '';
 
   /**
-   * A unique id for the variable. This should be defined at creation and
+   * A unique ID for the variable. This should be defined at creation and
    * not change, even if the name changes. In most cases this should be a
    * UUID.
    * @type {string}

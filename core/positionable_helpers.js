@@ -61,17 +61,17 @@ Blockly.uiPosition.bumpDirection = {
 };
 
 /**
- * Returns a rectangle representing reasonable position for where to place a ui
+ * Returns a rectangle representing reasonable position for where to place a UI
  * element of the specified size given the restraints and locations of the
- * scrollbars. This method does not take into account any already placed ui
+ * scrollbars. This method does not take into account any already placed UI
  * elements.
  * @param {!Blockly.uiPosition.Position} position The starting
  *    horizontal and vertical position.
- * @param {!Blockly.utils.Size} size the size of the ui element to get a start
+ * @param {!Blockly.utils.Size} size the size of the UI element to get a start
  *    position for.
  * @param {number} horizontalPadding The horizontal padding to use.
  * @param {number} verticalPadding The vertical padding to use.
- * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace ui metrics.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace UI metrics.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @return {!Blockly.utils.Rect} The suggested start position.
  * @package
@@ -148,9 +148,9 @@ Blockly.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
  * @param {!Blockly.utils.Rect} startRect The starting position to use.
  * @param {number} margin The margin to use between elements when bumping.
  * @param {!Blockly.uiPosition.bumpDirection} bumpDirection The direction
- *    to bump if there is a collision with an existing ui element.
+ *    to bump if there is a collision with an existing UI element.
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
- *    represent the positions of ui elements already placed.
+ *    represent the positions of UI elements already placed.
  * @return {!Blockly.utils.Rect} The suggested position rectangle.
  * @package
  */

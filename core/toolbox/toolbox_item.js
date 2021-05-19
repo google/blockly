@@ -77,7 +77,7 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
 /**
  * Initializes the toolbox item.
- * This includes creating the dom and updating the state of any items based
+ * This includes creating the DOM and updating the state of any items based
  * on the info object.
  * @public
  */
@@ -96,7 +96,7 @@ Blockly.ToolboxItem.prototype.getDiv = function() {
 
 /**
  * Gets a unique identifier for this toolbox item.
- * @return {string} The id for the toolbox item.
+ * @return {string} The ID for the toolbox item.
  * @public
  */
 Blockly.ToolboxItem.prototype.getId = function() {

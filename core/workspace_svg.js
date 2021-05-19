@@ -551,9 +551,9 @@ Blockly.WorkspaceSvg.prototype.getPluginManager = function() {
 };
 
 /**
- * Add the cursor svg to this workspaces svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     workspace svg group.
+ * Add the cursor SVG to this workspaces SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     workspace SVG group.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
@@ -561,9 +561,9 @@ Blockly.WorkspaceSvg.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this workspaces svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     workspace svg group.
+ * Add the marker SVG to this workspaces SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     workspace SVG group.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
@@ -571,9 +571,9 @@ Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
 };
 
 /**
- * Get the marker with the given id.
- * @param {string} id The id of the marker.
- * @return {Blockly.Marker} The marker with the given id or null if no marker
+ * Get the marker with the given ID.
+ * @param {string} id The ID of the marker.
+ * @return {Blockly.Marker} The marker with the given ID or null if no marker
  *     with the given id exists.
  * @package
  */
@@ -749,9 +749,9 @@ Blockly.WorkspaceSvg.prototype.getSvgXY = function(element) {
 };
 
 /**
- * Gets the size of the workspace's parent svg element.
+ * Gets the size of the workspace's parent SVG element.
  * @return {!Blockly.utils.Size} The cached width and height of the workspace's
- *     parent svg element.
+ *     parent SVG element.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
@@ -797,8 +797,8 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
 };
 
 /**
- * Get the svg block canvas for the workspace.
- * @return {SVGElement} The svg group for the workspace.
+ * Get the SVG block canvas for the workspace.
+ * @return {SVGElement} The SVG group for the workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getBlockCanvas = function() {
@@ -977,7 +977,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 /**
  * Obtain a newly created block.
  *
- * This block's svg must still be initialized
+ * This block's SVG must still be initialized
  * ([initSvg]{@link Blockly.BlockSvg#initSvg}) and it must be rendered
  * ([render]{@link Blockly.BlockSvg#render}) before the block will be visible.
  * @param {!string} prototypeName Name of the language object containing
@@ -1181,10 +1181,10 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
 };
 
 /**
- * Caches the width and height of the workspace's parent svg element for use
+ * Caches the width and height of the workspace's parent SVG element for use
  * with getSvgMetrics.
- * @param {?number} width The width of the parent svg element.
- * @param {?number} height The height of the parent svg element
+ * @param {?number} width The width of the parent SVG element.
+ * @param {?number} height The height of the parent SVG element
  * @package
  */
 Blockly.WorkspaceSvg.prototype.setCachedParentSvgSize = function(width, height) {

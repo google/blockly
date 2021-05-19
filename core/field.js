@@ -1044,8 +1044,8 @@ Blockly.Field.prototype.onShortcut = function(_shortcut) {
 };
 
 /**
- * Add the cursor svg to this fields svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ * Add the cursor SVG to this fields SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
  *     field group.
  * @package
  */
@@ -1060,8 +1060,8 @@ Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this fields svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ * Add the marker SVG to this fields SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
  *     field group.
  * @package
  */

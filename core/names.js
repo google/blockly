@@ -114,18 +114,33 @@ Blockly.Names.prototype.getName = function(name, realm) {
       name = varName;
     }
   }
-  var normalized = name.toLowerCase() + '_' + realm;
+  var normalizedName = name.toLowerCase();
 
   var isVar = realm == Blockly.VARIABLE_CATEGORY_NAME ||
       realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
 
   var prefix = isVar ? this.variablePrefix_ : '';
-  if (normalized in this.db_) {
-    return prefix + this.db_[normalized];
+  if (!(realm in this.db_)) {
+    this.db_[realm] = Object.create(null);
+  }
+  var realmDb = this.db_[realm];
+  if (normalizedName in realmDb) {
+    return prefix + realmDb[normalizedName];
   }
   var safeName = this.getDistinctName(name, realm);
-  this.db_[normalized] = safeName.substr(prefix.length);
+  realmDb[normalizedName] = safeName.substr(prefix.length);
   return safeName;
+};
+
+/**
+ * Return a list of all known user-created names in a specified realm.
+ * @param {string} realm The realm of entity in Blockly
+ *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
+ * @return {!Array.<string>} A list of Blockly entity names (no constraints).
+ */
+Blockly.Names.prototype.getUserNames = function(realm) {
+  var realmDb = this.db_[realm] || {};
+  return Object.keys(realmDb);
 };
 
 /**

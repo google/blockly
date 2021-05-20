@@ -229,7 +229,6 @@ Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
  * @return {!Blockly.utils.Coordinate} The amount the workspace has been moved.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getWSTranslation = function() {
-  // TODO: Update name of function.
   return this.childSurfaceXY_;
 };
 

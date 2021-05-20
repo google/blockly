@@ -408,17 +408,26 @@ Blockly.Generator.prototype.functionNames_;
  */
 Blockly.Generator.prototype.nameDB_;
 
-/**
- * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
- */
 Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
+  /**
+   * Getter.
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @this {Blockly.Generator}
+   * @return {Blockly.Names} Name database.
+   */
   get: function() {
     console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
     return this.nameDB_;
   },
-  set: function(x) {
+  /**
+   * Setter.
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @this {Blockly.Generator}
+   * @param {Blockly.Names} nameDb New name database.
+   */
+  set: function(nameDb) {
     console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
-    this.nameDB_ = x;
+    this.nameDB_ = nameDb;
   }
 });
 

@@ -949,7 +949,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 
 /**
  * Returns the tooltip text for this field.
- * @returns {string} The tooltip text for this field.
+ * @return {string} The tooltip text for this field.
  */
 Blockly.Field.prototype.getTooltip = function() {
   var clickTarget = this.getClickTarget_();

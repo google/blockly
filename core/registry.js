@@ -260,7 +260,7 @@ Blockly.registry.getClass = function(type, name, opt_throwIfMissing) {
  * @param {string} name The plugin's name. (Ex. logic_category)
  * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
  *     are unable to find the object.
- * @returns {T} The object with the given name and type or null if none exists.
+ * @return {T} The object with the given name and type or null if none exists.
  * @template T
  */
 Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {

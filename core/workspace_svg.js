@@ -1342,6 +1342,7 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 };
 
 /**
+ * Gets the drag surface blocks are moved to when a drag is started.
  * @return {Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
  *     if one is in use.
  * @package

@@ -184,9 +184,9 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(
  * @protected
  */
 Blockly.BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
-  return this.draggingBlock_.getParent() ||
+  return !!(this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
-       this.draggingBlock_.nextConnection.targetBlock());
+       this.draggingBlock_.nextConnection.targetBlock()));
 };
 
 /**

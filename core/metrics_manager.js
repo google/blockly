@@ -502,7 +502,7 @@ Blockly.utils.object.inherits(
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.
  * This is in workspace coordinates.
- * @returns {!SVGRect|{height: number, y: number, width: number, x: number}} The
+ * @return {!SVGRect|{height: number, y: number, width: number, x: number}} The
  *     bounding box of the blocks on the workspace.
  * @private
  */

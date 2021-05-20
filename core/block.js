@@ -943,7 +943,7 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
 
 /**
  * Returns the tooltip text for this block.
- * @returns {!string} The tooltip text for this block.
+ * @return {!string} The tooltip text for this block.
  */
 Blockly.Block.prototype.getTooltip = function() {
   return Blockly.Tooltip.getTooltipOfObject(this);

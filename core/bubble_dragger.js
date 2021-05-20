@@ -22,7 +22,7 @@ goog.require('Blockly.Events.CommentMove');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 
-goog.requireType('Blockly.IBlockDragSurfaceSvg');
+goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -77,7 +77,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   /**
    * The drag surface to move bubbles to during a drag, or null if none should
    * be used.  Block dragging and bubble dragging use the same surface.
-   * @type {Blockly.IBlockDragSurfaceSvg}
+   * @type {Blockly.BlockDragSurfaceSvg}
    * @private
    */
   this.dragSurface_ =

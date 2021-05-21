@@ -17,10 +17,10 @@ goog.require('Blockly.CollapsibleToolboxCategory');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
-goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IKeyboardAccessible');
 goog.require('Blockly.IStyleable');
 goog.require('Blockly.IToolbox');
@@ -48,11 +48,12 @@ goog.requireType('Blockly.WorkspaceSvg');
  *     blocks.
  * @constructor
  * @implements {Blockly.IKeyboardAccessible}
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Toolbox = function(workspace) {
+  Blockly.Toolbox.superClass_.constructor.call(this);
   /**
    * The workspace this toolbox is on.
    * @type {!Blockly.WorkspaceSvg}
@@ -157,6 +158,7 @@ Blockly.Toolbox = function(workspace) {
    */
   this.boundEvents_ = [];
 };
+Blockly.utils.object.inherits(Blockly.Toolbox, Blockly.DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.
@@ -187,6 +189,15 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
+  var rnd = String(Math.random()).substring(2);
+  this.workspace_.getPluginManager().addPlugin({
+    id: 'flyout' + rnd,
+    plugin: this,
+    weight: 1,
+    types: [
+      Blockly.PluginManager.Type.DRAG_TARGET
+    ]
+  });
 };
 
 /**
@@ -516,6 +527,19 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   } else {  // Right
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
+};
+
+/**
+ * Returns whether the provided block would be deleted if dropped on this area.
+ * @param {!Blockly.BlockSvg} block The block.
+ * @param {boolean} couldConnect Whether the block could could connect to
+ *     another.
+ * @return {boolean} Whether the block provided would be deleted if dropped on
+ *     this area.
+ */
+Blockly.Toolbox.prototype.wouldDelete = function(block, couldConnect) {
+  // Prefer dragging to the toolbox over connecting to other blocks.
+  return !block.getParent() && block.isDeletable();
 };
 
 /**

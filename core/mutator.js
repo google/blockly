@@ -280,7 +280,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
  */
 Blockly.Mutator.prototype.onBubbleMove_ = function() {
   if (this.workspace_) {
-    this.workspace_.recordDeleteAreas();
+    this.workspace_.recordDragTargets();
   }
 };
 

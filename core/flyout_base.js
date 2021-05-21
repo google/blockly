@@ -16,6 +16,7 @@ goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -24,7 +25,7 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutMetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
-goog.require('Blockly.IDeleteArea');
+goog.require('Blockly.IDragTarget');
 goog.require('Blockly.IFlyout');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Tooltip');
@@ -51,10 +52,11 @@ goog.requireType('Blockly.utils.Rect');
  *     workspace.
  * @constructor
  * @abstract
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IFlyout}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Flyout = function(workspaceOptions) {
+  Blockly.Flyout.superClass_.constructor.call(this);
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
@@ -140,6 +142,7 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 };
+Blockly.utils.object.inherits(Blockly.Flyout, Blockly.DeleteArea);
 
 /**
  * Does the flyout automatically close when a block is created?
@@ -300,6 +303,16 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.setVariableMap(this.targetWorkspace.getVariableMap());
 
   this.workspace_.createPotentialVariableMap();
+
+  var rnd = String(Math.random()).substring(2);
+  this.workspace_.getPluginManager().addPlugin({
+    id: 'flyout' + rnd,
+    plugin: this,
+    weight: 1,
+    types: [
+      Blockly.PluginManager.Type.DRAG_TARGET
+    ]
+  });
 };
 
 /**
@@ -1018,8 +1031,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 };
 
 /**
- * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * Return the drag target rectangle.
+ * @return {Blockly.utils.Rect} Rectangle in which to block can be dragged over.
  */
 Blockly.Flyout.prototype.getClientRect;
 

@@ -13,6 +13,9 @@
 
 goog.provide('Blockly.PluginManager');
 
+goog.requireType('Blockly.IDragTarget');
+goog.requireType('Blockly.IPlugin');
+goog.requireType('Blockly.IPositionable');
 
 /**
  * Manager for all items registered with the workspace.
@@ -70,6 +73,33 @@ Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
  */
 Blockly.PluginManager.prototype.getPlugin = function(id) {
   return this.pluginData_[id] && this.pluginData_[id].plugin;
+};
+
+/**
+ * Gets all the plugins of the specified type.
+ * @param {!Blockly.PluginManager.Type<T>} type The type of the plugin.
+ * @param {boolean} sorted Whether to return list ordered by weights.
+ * @return {!Array<PluginDatum>} The plugin datums that match the
+ *    specified type.
+ * @template T
+ */
+Blockly.PluginManager.prototype.getPluginDatums = function(type, sorted) {
+  var typeKey = String(type).toLowerCase();
+  var pluginIds = this.typeToPluginIds_[typeKey];
+  if (!pluginIds) {
+    return [];
+  }
+  var plugins = [];
+  var pluginData = this.pluginData_;
+  pluginIds.forEach(function(id) {
+    plugins.push(pluginData[id]);
+  });
+  if (sorted) {
+    plugins.sort(function(a, b) {
+      return a.weight - b.weight;
+    });
+  }
+  return plugins;
 };
 
 /**
@@ -134,3 +164,7 @@ Blockly.PluginManager.Type.prototype.toString = function() {
 /** @type {!Blockly.PluginManager.Type<!Blockly.IPositionable>} */
 Blockly.PluginManager.Type.POSITIONABLE =
     new Blockly.PluginManager.Type('positionable');
+
+/** @type {!Blockly.PluginManager.Type<!Blockly.IDragTarget>} */
+Blockly.PluginManager.Type.DRAG_TARGET =
+    new Blockly.PluginManager.Type('drag_target');

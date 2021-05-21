@@ -15,11 +15,12 @@ goog.provide('Blockly.Trashcan');
 goog.require('Blockly.browserEvents');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
-goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
+goog.require('Blockly.IDragTarget');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.uiPosition');
@@ -38,10 +39,11 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IPositionable}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
+  Blockly.Trashcan.superClass_.constructor.call(this);
   /**
    * The workspace the trashcan sits in.
    * @type {!Blockly.WorkspaceSvg}
@@ -100,6 +102,7 @@ Blockly.Trashcan = function(workspace) {
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
+Blockly.utils.object.inherits(Blockly.Trashcan, Blockly.DeleteArea);
 
 /**
  * Width of both the trash can and lid images.
@@ -357,7 +360,15 @@ Blockly.Trashcan.prototype.init = function() {
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-
+  this.workspace_.getPluginManager().addPlugin({
+    id: 'trashcan',
+    plugin: this,
+    weight: 1,
+    types: [
+      Blockly.PluginManager.Type.POSITIONABLE,
+      Blockly.PluginManager.Type.DRAG_TARGET
+    ]
+  });
   this.initialized_ = true;
   this.setLidOpen(false);
 };
@@ -498,6 +509,38 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   return new Blockly.utils.Rect(top, bottom, left, right);
+};
+
+/**
+ * Handles Drag enter.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragEnter = function() {
+  this.setLidOpen(true);
+};
+
+/**
+ * Handles a drag exit.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragExit = function() {
+  this.setLidOpen(false);
+};
+/**
+ * Handles a block drop on this component.
+ * @param {!Blockly.BlockSvg} block The block.
+ * @param {boolean} couldConnect Whether the block could could connect to
+ *     another.
+ * @override
+ */
+Blockly.Trashcan.prototype.onBlockDrop = function(block, couldConnect) {
+  Blockly.Trashcan.superClass_.onBlockDrop.call(this, block, couldConnect);
+  if (this.wouldDelete(block, couldConnect)) {
+    setTimeout(this.closeLid.bind(this), 100);
+  } else {
+    // Make sure the trash can lid is closed.
+    this.closeLid();
+  }
 };
 
 /**

@@ -240,14 +240,15 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
  * Update connections based on the most recent move location.
  * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
- * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
- *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
+ * @param {?Blockly.IDragTarget} dragTarget The drag target that the position is
+ *     currently over.
  * @package
  */
-Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
+Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
   var candidate = this.getCandidate_(dxy);
-
-  this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
+  this.wouldDeleteBlock_ =
+      dragTarget && dragTarget.wouldDelete(
+          this.topBlock_, candidate && !!candidate.closest);
   var shouldUpdate = this.wouldDeleteBlock_ ||
       this.shouldUpdatePreviews_(candidate, dxy);
 
@@ -440,28 +441,6 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
     return Blockly.CONNECTING_SNAP_RADIUS;
   }
   return Blockly.SNAP_RADIUS;
-};
-
-/**
- * Whether ending the drag would delete the block.
- * @param {!Object} candidate An object containing a local connection, a closest
- *     connection, and a radius.
- * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
- *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
- * @return {boolean} True if dropping the block immediately would replace
- *     delete the block.  False otherwise.
- * @private
- */
-Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
-    deleteArea) {
-  // Prefer connecting over dropping into the trash can, but prefer dragging to
-  // the toolbox over connecting to other blocks.
-  var wouldConnect = candidate && !!candidate.closest &&
-      deleteArea != Blockly.DELETE_AREA_TOOLBOX;
-  var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
-      this.topBlock_.isDeletable();
-
-  return wouldDelete && !wouldConnect;
 };
 
 /**

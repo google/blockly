@@ -33,11 +33,6 @@ Blockly.Generator = function(name) {
 };
 
 /**
- * Category to separate generated function names from variables and procedures.
- */
-Blockly.Generator.NAME_TYPE = 'generated_function';
-
-/**
  * Arbitrary code to inject into locations that risk causing infinite loops.
  * Any instances of '%1' will be replaced by the block ID that failed.
  * E.g. '  checkTimeout(%1);\n'

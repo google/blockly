@@ -19,9 +19,9 @@ goog.require('Blockly.utils.object');
 /**
  * Class for a theme.
  * @param {string} name Theme name.
- * @param {!Object.<string, Blockly.Theme.BlockStyle>=} opt_blockStyles A map
+ * @param {!Object<string, Blockly.Theme.BlockStyle>=} opt_blockStyles A map
  *     from style names (strings) to objects with style attributes for blocks.
- * @param {!Object.<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
+ * @param {!Object<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
  *     map from style names (strings) to objects with style attributes for
  *     categories.
  * @param {!Blockly.Theme.ComponentStyle=} opt_componentStyles A map of Blockly
@@ -39,14 +39,14 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
 
   /**
    * The block styles map.
-   * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
+   * @type {!Object<string, !Blockly.Theme.BlockStyle>}
    * @package
    */
   this.blockStyles = opt_blockStyles || Object.create(null);
 
   /**
    * The category styles map.
-   * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   * @type {!Object<string, Blockly.Theme.CategoryStyle>}
    * @package
    */
   this.categoryStyles = opt_categoryStyles || Object.create(null);

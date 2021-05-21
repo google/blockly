@@ -32,7 +32,7 @@ Blockly.utils.string.startsWith = function(str, prefix) {
 
 /**
  * Given an array of strings, return the length of the shortest one.
- * @param {!Array.<string>} array Array of strings.
+ * @param {!Array<string>} array Array of strings.
  * @return {number} Length of shortest string.
  */
 Blockly.utils.string.shortestStringLength = function(array) {
@@ -47,7 +47,7 @@ Blockly.utils.string.shortestStringLength = function(array) {
 /**
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
- * @param {!Array.<string>} array Array of strings.
+ * @param {!Array<string>} array Array of strings.
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
@@ -82,7 +82,7 @@ Blockly.utils.string.commonWordPrefix = function(array, opt_shortest) {
 /**
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
- * @param {!Array.<string>} array Array of strings.
+ * @param {!Array<string>} array Array of strings.
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
@@ -180,8 +180,8 @@ Blockly.utils.string.wrapLine_ = function(text, limit) {
 
 /**
  * Compute a score for how good the wrapping is.
- * @param {!Array.<string>} words Array of each word.
- * @param {!Array.<boolean>} wordBreaks Array of line breaks.
+ * @param {!Array<string>} words Array of each word.
+ * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @param {number} limit Width to wrap each line.
  * @return {number} Larger the better.
  * @private
@@ -232,10 +232,10 @@ Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
 /**
  * Mutate the array of line break locations until an optimal solution is found.
  * No line breaks are added or deleted, they are simply moved around.
- * @param {!Array.<string>} words Array of each word.
- * @param {!Array.<boolean>} wordBreaks Array of line breaks.
+ * @param {!Array<string>} words Array of each word.
+ * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @param {number} limit Width to wrap each line.
- * @return {!Array.<boolean>} New array of optimal line breaks.
+ * @return {!Array<boolean>} New array of optimal line breaks.
  * @private
  */
 Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
@@ -266,8 +266,8 @@ Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
 
 /**
  * Reassemble the array of words into text, with the specified line breaks.
- * @param {!Array.<string>} words Array of each word.
- * @param {!Array.<boolean>} wordBreaks Array of line breaks.
+ * @param {!Array<string>} words Array of each word.
+ * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @return {string} Plain text.
  * @private
  */

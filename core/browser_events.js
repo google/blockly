@@ -20,7 +20,7 @@ goog.require('Blockly.utils.global');
  * Blockly opaque event data used to unbind events when using
  * `Blockly.browserEvents.bind` and
  * `Blockly.browserEvents.conditionalBind`.
- * @typedef {!Array.<!Array>}
+ * @typedef {!Array<!Array>}
  */
 Blockly.browserEvents.Data;
 

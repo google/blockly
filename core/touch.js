@@ -175,7 +175,7 @@ Blockly.Touch.getTouchIdentifierFromEvent = function(e) {
 Blockly.Touch.checkTouchIdentifier = function(e) {
   var identifier = Blockly.Touch.getTouchIdentifierFromEvent(e);
 
-  // if (Blockly.touchIdentifier_ )is insufficient because Android touch
+  // if (Blockly.touchIdentifier_) is insufficient because Android touch
   // identifiers may be zero.
   if (Blockly.Touch.touchIdentifier_ !== undefined &&
       Blockly.Touch.touchIdentifier_ !== null) {
@@ -236,7 +236,7 @@ Blockly.Touch.isTouchEvent = function(e) {
  * point.
  * @param {!Event} e A mouse event or a touch event with one or more changed
  * touches.
- * @return {!Array.<!Event>} An array of mouse or touch events.  Each touch
+ * @return {!Array<!Event>} An array of mouse or touch events.  Each touch
  *     event will have exactly one changed touch.
  */
 Blockly.Touch.splitEventByTouches = function(e) {

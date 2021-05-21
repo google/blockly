@@ -266,9 +266,9 @@ Blockly.Events.fireNow_ = function() {
 
 /**
  * Filter the queued events and merge duplicates.
- * @param {!Array.<!Blockly.Events.Abstract>} queueIn Array of events.
+ * @param {!Array<!Blockly.Events.Abstract>} queueIn Array of events.
  * @param {boolean} forward True if forward (redo), false if backward (undo).
- * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
+ * @return {!Array<!Blockly.Events.Abstract>} Array of filtered events.
  */
 Blockly.Events.filter = function(queueIn, forward) {
   var queue = queueIn.slice();  // Shallow copy of queue.
@@ -396,7 +396,7 @@ Blockly.Events.setGroup = function(state) {
 /**
  * Compute a list of the IDs of the specified block and all its descendants.
  * @param {!Blockly.Block} block The root block.
- * @return {!Array.<string>} List of block IDs.
+ * @return {!Array<string>} List of block IDs.
  * @package
  */
 Blockly.Events.getDescendantIds = function(block) {

@@ -135,19 +135,19 @@ Blockly.blockRendering.RenderInfo = function(renderer, block) {
 
   /**
    * An array of Row objects containing sizing information.
-   * @type {!Array.<!Blockly.blockRendering.Row>}
+   * @type {!Array<!Blockly.blockRendering.Row>}
    */
   this.rows = [];
 
   /**
    * An array of input rows on the block.
-   * @type {!Array.<!Blockly.blockRendering.InputRow>}
+   * @type {!Array<!Blockly.blockRendering.InputRow>}
    */
   this.inputRows = [];
 
   /**
    * An array of measurable objects containing hidden icons.
-   * @type {!Array.<!Blockly.blockRendering.Icon>}
+   * @type {!Array<!Blockly.blockRendering.Icon>}
    */
   this.hiddenIcons = [];
 

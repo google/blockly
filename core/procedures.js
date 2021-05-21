@@ -60,7 +60,7 @@ Blockly.Procedures.ProcedureBlock;
 /**
  * Find all user-created procedure definitions in a workspace.
  * @param {!Blockly.Workspace} root Root workspace.
- * @return {!Array.<!Array.<!Array>>} Pair of arrays, the
+ * @return {!Array<!Array<!Array>>} Pair of arrays, the
  *     first contains procedures without return variables, the second with.
  *     Each procedure is defined by a three-element list of name, parameter
  *     list, and return value boolean.
@@ -188,7 +188,7 @@ Blockly.Procedures.rename = function(name) {
 /**
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!Blockly.Workspace} workspace The workspace containing procedures.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @return {!Array<!Element>} Array of XML block elements.
  */
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
@@ -337,7 +337,7 @@ Blockly.Procedures.mutatorChangeListener_ = function(e) {
  * Find all the callers of a named procedure.
  * @param {string} name Name of procedure.
  * @param {!Blockly.Workspace} workspace The workspace to find callers in.
- * @return {!Array.<!Blockly.Block>} Array of caller blocks.
+ * @return {!Array<!Blockly.Block>} Array of caller blocks.
  */
 Blockly.Procedures.getCallers = function(name, workspace) {
   var callers = [];

@@ -100,7 +100,7 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
 /**
  * Returns map of each block type to its corresponding XML stored in current
  * block library (this.blocks).
- * @param {!Array.<string>} blockTypes Types of blocks.
+ * @param {!Array<string>} blockTypes Types of blocks.
  * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
@@ -115,7 +115,7 @@ BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
 
 /**
  * Returns array of all block types stored in current block library.
- * @return {!Array.<string>} Array of block types stored in library.
+ * @return {!Array<string>} Array of block types stored in library.
  */
 BlockLibraryStorage.prototype.getBlockTypes = function() {
   return Object.keys(this.blocks);
@@ -134,7 +134,7 @@ BlockLibraryStorage.prototype.isEmpty = function() {
 
 /**
  * Returns array of all block types stored in current block library.
- * @return {!Array.<string>} Map of block type to corresponding XML text.
+ * @return {!Array<string>} Map of block type to corresponding XML text.
  */
 BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
   return this.blocks;

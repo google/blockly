@@ -213,7 +213,7 @@ Blockly.utils.getScrollDeltaPixels = function(e) {
  * (e.g., '%%').
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
- * @return {!Array.<string|number>} Array of strings and numbers.
+ * @return {!Array<string|number>} Array of strings and numbers.
  */
 Blockly.utils.tokenizeInterpolation = function(message) {
   return Blockly.utils.tokenizeInterpolation_(message, true);
@@ -270,7 +270,7 @@ Blockly.utils.checkMessageReferences = function(message) {
  *     interpolation tokens.
  * @param {boolean} parseInterpolationTokens Option to parse numeric
  *     interpolation tokens (%1, %2, ...) when true.
- * @return {!Array.<string|number>} Array of strings and numbers.
+ * @return {!Array<string|number>} Array of strings and numbers.
  * @private
  */
 Blockly.utils.tokenizeInterpolation_ = function(message,

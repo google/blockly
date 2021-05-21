@@ -183,7 +183,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
 /**
  * Adds a block and its children to a list of deletable blocks.
  * @param {!Blockly.BlockSvg} block to delete.
- * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
+ * @param {!Array<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
  *    modifed in place with the given block and its descendants.
  * @private
  */
@@ -191,7 +191,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    var children = /** @type !Array.<!Blockly.BlockSvg> */ (block.getChildren(false));
+    var children = /** @type !Array<!Blockly.BlockSvg> */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
       Blockly.ContextMenuItems.addDeletableBlocks_(children[i], deleteList);
     }
@@ -201,7 +201,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
 /**
  * Constructs a list of blocks that can be deleted in the given workspace.
  * @param {!Blockly.WorkspaceSvg} workspace to delete all blocks from.
- * @return {!Array.<!Blockly.BlockSvg>} list of blocks to delete.
+ * @return {!Array<!Blockly.BlockSvg>} list of blocks to delete.
  * @private
  */
 Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
@@ -214,7 +214,7 @@ Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
 };
 
 /** Deletes the given blocks. Used to delete all blocks in the workspace.
- * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
+ * @param {!Array<!Blockly.BlockSvg>} deleteList list of blocks to delete.
  * @param {string} eventGroup event group ID with which all delete events should be associated.
  * @private
  */

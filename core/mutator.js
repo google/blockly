@@ -40,7 +40,7 @@ goog.requireType('Blockly.Workspace');
 
 /**
  * Class for a mutator dialog.
- * @param {!Array.<string>} quarkNames List of names of sub-blocks for flyout.
+ * @param {!Array<string>} quarkNames List of names of sub-blocks for flyout.
  * @extends {Blockly.Icon}
  * @constructor
  */

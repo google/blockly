@@ -72,7 +72,7 @@ Blockly.Generator.prototype.COMMENT_WRAP = 60;
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.Generator.prototype.ORDER_OVERRIDES = [];
 
@@ -442,7 +442,7 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
  *
  * @param {string} desiredName The desired name of the function
  *     (e.g. mathIsPrime).
- * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
+ * @param {!Array<string>} code A list of statements.  Use '  ' for indents.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @protected

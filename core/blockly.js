@@ -83,7 +83,7 @@ Blockly.selected = null;
 
 /**
  * All of the connections on blocks that are currently being dragged.
- * @type {!Array.<!Blockly.Connection>}
+ * @type {!Array<!Blockly.Connection>}
  * @package
  */
 Blockly.draggingConnections = [];
@@ -373,7 +373,7 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array.<!Object>} jsonArray An array of JSON block definitions.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0; i < jsonArray.length; i++) {
@@ -468,7 +468,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array.<string>} blocklyNamePath The name parts of the tested
+ * @param {Array<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private

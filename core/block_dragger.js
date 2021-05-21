@@ -143,7 +143,7 @@ Blockly.BlockDragger.initIconData_ = function(block) {
  *     disconnecting.
  * @public
  */
-Blockly.BlockDragger.prototype.startBlockDrag = function(
+Blockly.BlockDragger.prototype.startDrag = function(
     currentDragDeltaXY, healStack) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
@@ -226,7 +226,7 @@ Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
  *     moved from the position at the start of the drag, in pixel units.
  * @public
  */
-Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
+Blockly.BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
@@ -246,9 +246,9 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  *     moved from the position at the start of the drag, in pixel units.
  * @public
  */
-Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
+Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
-  this.dragBlock(e, currentDragDeltaXY);
+  this.drag(e, currentDragDeltaXY);
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
 

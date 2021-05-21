@@ -30,7 +30,7 @@ Blockly.IBlockDragger = function() {};
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
  */
-Blockly.IBlockDragger.prototype.startBlockDrag;
+Blockly.IBlockDragger.prototype.startDrag;
 
 /**
  * Execute a step of block dragging, based on the given event.  Update the
@@ -39,7 +39,7 @@ Blockly.IBlockDragger.prototype.startBlockDrag;
  * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  */
-Blockly.IBlockDragger.prototype.dragBlock;
+Blockly.IBlockDragger.prototype.drag;
 
 /**
  * Finish a block drag and put the block back on the workspace.
@@ -47,7 +47,7 @@ Blockly.IBlockDragger.prototype.dragBlock;
  * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  */
-Blockly.IBlockDragger.prototype.endBlockDrag;
+Blockly.IBlockDragger.prototype.endDrag;
 
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,

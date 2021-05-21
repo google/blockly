@@ -444,8 +444,8 @@ Blockly.Gesture.prototype.startDraggingBlock_ = function() {
   this.blockDragger_ = new BlockDraggerClass(
       /** @type {!Blockly.BlockSvg} */ (this.targetBlock_),
       /** @type {!Blockly.WorkspaceSvg} */ (this.startWorkspace_));
-  this.blockDragger_.startBlockDrag(this.currentDragDeltaXY_, this.healStack_);
-  this.blockDragger_.dragBlock(this.mostRecentEvent_, this.currentDragDeltaXY_);
+  this.blockDragger_.startDrag(this.currentDragDeltaXY_, this.healStack_);
+  this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
 };
 
 /**
@@ -537,7 +537,7 @@ Blockly.Gesture.prototype.handleMove = function(e) {
   if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    this.blockDragger_.dragBlock(
+    this.blockDragger_.drag(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingBubble_) {
     this.bubbleDragger_.dragBubble(
@@ -569,7 +569,7 @@ Blockly.Gesture.prototype.handleUp = function(e) {
   if (this.isDraggingBubble_) {
     this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    this.blockDragger_.endBlockDrag(e, this.currentDragDeltaXY_);
+    this.blockDragger_.endDrag(e, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
   } else if (this.isBubbleClick_()) {
@@ -605,7 +605,7 @@ Blockly.Gesture.prototype.cancel = function() {
     this.bubbleDragger_.endBubbleDrag(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    this.blockDragger_.endBlockDrag(
+    this.blockDragger_.endDrag(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);

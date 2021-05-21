@@ -969,6 +969,23 @@ Blockly.Gesture.prototype.getInsertionMarkers = function() {
 };
 
 /**
+ * Gets the current dragger if an item is being dragged. Null if nothing is
+ * being dragged.
+ * @returns {?(Blockly.WorkspaceDragger|Blockly.BubbleDragger|Blockly.IBlockDragger)}
+ *    The dragger that is currently in use or null if no drag is in progress.
+ */
+Blockly.Gesture.prototype.getCurrentDragger = function() {
+  if (this.isDraggingBlock_) {
+    return this.blockDragger_;
+  } else if (this.isDraggingWorkspace_) {
+    return this.workspaceDragger_;
+  } else if (this.isDraggingBubble_) {
+    return this.bubbleDragger_;
+  }
+  return null;
+};
+
+/**
  * Is a drag or other gesture currently in progress on any workspace?
  * @return {boolean} True if gesture is occurring.
  */

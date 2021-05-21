@@ -93,6 +93,8 @@ Blockly.BlockDragger = function(block, workspace) {
    * @private
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
+
+  this.startScrollXY_ = this.getWsScroll();
 };
 
 /**
@@ -167,8 +169,8 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
       (healStack && this.draggingBlock_.nextConnection &&
       this.draggingBlock_.nextConnection.targetBlock())) {
     this.draggingBlock_.unplug(healStack);
-    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+    var totalDelta = this.getTotalDelta_(currentDragDeltaXY);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, totalDelta);
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
@@ -207,17 +209,29 @@ Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
  * @package
  */
 Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  var totalDelta = this.getTotalDelta_(currentDragDeltaXY);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, totalDelta);
 
   this.draggingBlock_.moveDuringDrag(newLoc);
-  this.dragIcons_(delta);
+  this.dragIcons_(totalDelta);
 
   this.deleteArea_ = this.workspace_.isDeleteArea(e);
-  this.draggedConnectionManager_.update(delta, this.deleteArea_);
+  this.draggedConnectionManager_.update(totalDelta, this.deleteArea_);
 
   this.updateCursorDuringBlockDrag_();
 };
+
+Blockly.BlockDragger.prototype.getWsScroll = function() {
+  return new Blockly.utils.Coordinate(
+      this.workspace_.scrollX + 107, this.workspace_.scrollY);
+};
+
+Blockly.BlockDragger.prototype.getTotalDelta_ = function(currentDragDeltaXY) {
+  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  var scrollDelta = Blockly.utils.Coordinate.difference(this.startScrollXY_, this.getWsScroll());
+  return Blockly.utils.Coordinate.sum(delta, scrollDelta);
+};
+
 
 /**
  * Finish a block drag and put the block back on the workspace.
@@ -236,14 +250,14 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  var totalDelta = this.getTotalDelta_(currentDragDeltaXY);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, totalDelta);
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
-    this.draggingBlock_.moveConnections(delta.x, delta.y);
+    this.draggingBlock_.moveConnections(totalDelta.x, totalDelta.y);
     this.draggingBlock_.setDragging(false);
     this.fireMoveEvent_();
     if (this.draggedConnectionManager_.wouldConnectBlock()) {

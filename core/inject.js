@@ -12,7 +12,6 @@
 
 goog.provide('Blockly.inject');
 
-/** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
@@ -31,7 +30,6 @@ goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 
-goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.Workspace');
 
 
@@ -66,9 +64,7 @@ Blockly.inject = function(container, opt_options) {
 
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
-  var BlockDragSurfaceClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.BLOCK_DRAG_SURFACE_SVG, options, true);
-  var blockDragSurface = new BlockDragSurfaceClass(subContainer);
+  var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
 
   var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
@@ -145,7 +141,7 @@ Blockly.createDom_ = function(container, options) {
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
  * @param {!Blockly.Options} options Dictionary of options.
- * @param {!Blockly.IBlockDragSurfaceSvg} blockDragSurface Drag surface SVG
+ * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
  *     for the blocks.
  * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
  *     SVG for the workspace.

@@ -55,11 +55,11 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IBlockDragSurfaceSvg');
 goog.requireType('Blockly.IBoundedElement');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');
@@ -76,7 +76,7 @@ goog.requireType('Blockly.ZoomControls');
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  * @param {!Blockly.Options} options Dictionary of options.
- * @param {Blockly.IBlockDragSurfaceSvg=} opt_blockDragSurface Drag surface for
+ * @param {Blockly.BlockDragSurfaceSvg=} opt_blockDragSurface Drag surface for
  *     blocks.
  * @param {Blockly.WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
  *     the workspace.
@@ -437,7 +437,7 @@ Blockly.WorkspaceSvg.prototype.currentGesture_ = null;
 
 /**
  * This workspace's surface for dragging blocks, if it exists.
- * @type {Blockly.IBlockDragSurfaceSvg}
+ * @type {Blockly.BlockDragSurfaceSvg}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.blockDragSurface_ = null;
@@ -1342,7 +1342,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 };
 
 /**
- * @return {Blockly.IBlockDragSurfaceSvg} This workspace's block drag surface,
+ * Gets the drag surface blocks are moved to when a drag is started.
+ * @return {Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
  *     if one is in use.
  * @package
  */

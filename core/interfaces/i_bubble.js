@@ -13,7 +13,7 @@
 
 goog.provide('Blockly.IBubble');
 
-goog.requireType('Blockly.IBlockDragSurfaceSvg');
+goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.IContextMenu');
 goog.requireType('Blockly.IDeletable');
 goog.requireType('Blockly.utils.Coordinate');
@@ -58,7 +58,7 @@ Blockly.IBubble.prototype.setDragging;
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {Blockly.IBlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.

@@ -177,7 +177,7 @@ Blockly.BlockDragger.prototype.startDrag = function(
 };
 
 /**
- * Whether or not we should unplug the block when a drag is started.
+ * Whether or not we should disconnect the block when a drag is started.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
  * @returns {boolean} True to disconnect the block, false otherwise.

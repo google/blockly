@@ -91,15 +91,11 @@ Blockly.Lua.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Lua.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Lua.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Lua.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
   if (!Blockly.Lua.nameDB_) {
-    Blockly.Lua.nameDB_ =
-        new Blockly.Names(Blockly.Lua.RESERVED_WORDS_);
+    Blockly.Lua.nameDB_ = new Blockly.Names(Blockly.Lua.RESERVED_WORDS_);
   } else {
     Blockly.Lua.nameDB_.reset();
   }
@@ -118,9 +114,10 @@ Blockly.Lua.finish = function(code) {
   for (var name in Blockly.Lua.definitions_) {
     definitions.push(Blockly.Lua.definitions_[name]);
   }
-  // Clean up temporary data.
-  delete Blockly.Lua.definitions_;
-  delete Blockly.Lua.functionNames_;
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
   Blockly.Lua.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };

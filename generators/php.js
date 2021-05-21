@@ -129,15 +129,11 @@ Blockly.PHP.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.PHP.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.PHP.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.PHP.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
   if (!Blockly.PHP.nameDB_) {
-    Blockly.PHP.nameDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
+    Blockly.PHP.nameDB_ = new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
   } else {
     Blockly.PHP.nameDB_.reset();
   }
@@ -175,9 +171,10 @@ Blockly.PHP.finish = function(code) {
   for (var name in Blockly.PHP.definitions_) {
     definitions.push(Blockly.PHP.definitions_[name]);
   }
-  // Clean up temporary data.
-  delete Blockly.PHP.definitions_;
-  delete Blockly.PHP.functionNames_;
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
   Blockly.PHP.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };

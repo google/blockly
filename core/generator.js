@@ -477,6 +477,12 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
  */
 Blockly.Generator.prototype.init = function(_workspace) {
   // Optionally override
+  // Create a dictionary of definitions to be printed before the code.
+  this.definitions_ = Object.create(null);
+  // Create a dictionary mapping desired developer-defined function names in
+  // definitions_ to actual function names (to avoid collisions with
+  // user-defined procedures).
+  this.functionNames_ = Object.create(null);
 };
 
 /**
@@ -506,6 +512,9 @@ Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
  */
 Blockly.Generator.prototype.finish = function(code) {
   // Optionally override
+  // Clean up temporary data.
+  delete Blockly.JavaScript.definitions_;
+  delete Blockly.JavaScript.functionNames_;
   return code;
 };
 

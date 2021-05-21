@@ -125,11 +125,8 @@ Blockly.JavaScript.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.JavaScript.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.JavaScript.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.JavaScript.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
   if (!Blockly.JavaScript.nameDB_) {
     Blockly.JavaScript.nameDB_ =
@@ -174,9 +171,10 @@ Blockly.JavaScript.finish = function(code) {
   for (var name in Blockly.JavaScript.definitions_) {
     definitions.push(Blockly.JavaScript.definitions_[name]);
   }
-  // Clean up temporary data.
-  delete Blockly.JavaScript.definitions_;
-  delete Blockly.JavaScript.functionNames_;
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
   Blockly.JavaScript.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };

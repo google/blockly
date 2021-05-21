@@ -83,15 +83,11 @@ Blockly.Dart.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Dart.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Dart.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Dart.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
   if (!Blockly.Dart.nameDB_) {
-    Blockly.Dart.nameDB_ =
-        new Blockly.Names(Blockly.Dart.RESERVED_WORDS_);
+    Blockly.Dart.nameDB_ = new Blockly.Names(Blockly.Dart.RESERVED_WORDS_);
   } else {
     Blockly.Dart.nameDB_.reset();
   }
@@ -144,9 +140,10 @@ Blockly.Dart.finish = function(code) {
       definitions.push(def);
     }
   }
-  // Clean up temporary data.
-  delete Blockly.Dart.definitions_;
-  delete Blockly.Dart.functionNames_;
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
   Blockly.Dart.nameDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;

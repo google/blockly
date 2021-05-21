@@ -505,8 +505,8 @@ Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
 
 /**
  * Hook for code to run at end of code generation.
- * Subclasses may override this, e.g. to prepend the generated code with the
- * variable definitions.
+ * Subclasses may override this, e.g. to prepend the generated code with import
+ * statements or variable definitions.
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */

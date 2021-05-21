@@ -51,7 +51,7 @@ Blockly.Trashcan = function(workspace) {
 
   /**
    * A list of XML (stored as strings) representing blocks in the trashcan.
-   * @type {!Array.<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.contents_ = [];

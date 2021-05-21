@@ -136,7 +136,7 @@ Blockly.Names.prototype.getName = function(name, realm) {
  * Return a list of all known user-created names in a specified realm.
  * @param {string} realm The realm of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
- * @return {!Array.<string>} A list of Blockly entity names (no constraints).
+ * @return {!Array<string>} A list of Blockly entity names (no constraints).
  */
 Blockly.Names.prototype.getUserNames = function(realm) {
   var realmDb = this.db_[realm] || {};

@@ -59,7 +59,7 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
 
 /**
  * Encode a list of variables as XML.
- * @param {!Array.<!Blockly.VariableModel>} variableList List of all variable
+ * @param {!Array<!Blockly.VariableModel>} variableList List of all variable
  *     models.
  * @return {!Element} Tree of XML elements.
  */
@@ -375,7 +375,7 @@ Blockly.Xml.textToDom = function(text) {
  * create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {Array.<string>} An array containing new block ids.
+ * @return {Array<string>} An array containing new block ids.
  */
 Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(false);
@@ -389,7 +389,7 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {!Array.<string>} An array containing new block IDs.
+ * @return {!Array<string>} An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  *     comments are not bundled in.
  */
@@ -489,7 +489,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
  * blocks immediately below prior blocks, aligned by their starting edge.
  * @param {!Element} xml The XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace to add to.
- * @return {Array.<string>} An array containing new block IDs.
+ * @return {Array<string>} An array containing new block IDs.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   var bbox;  // Bounding box of the current blocks.

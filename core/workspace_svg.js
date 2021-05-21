@@ -135,7 +135,7 @@ Blockly.WorkspaceSvg = function(
   /**
    * List of currently highlighted blocks.  Block highlighting is often used to
    * visually mark blocks currently being executed.
-   * @type {!Array.<!Blockly.BlockSvg>}
+   * @type {!Array<!Blockly.BlockSvg>}
    * @private
    */
   this.highlightedBlocks_ = [];
@@ -166,7 +166,7 @@ Blockly.WorkspaceSvg = function(
   /**
   * Map from function names to callbacks, for deciding what to do when a custom
   * toolbox category is opened.
-  * @type {!Object.<string, ?function(!Blockly.Workspace):!Array.<!Element>>}
+  * @type {!Object<string, ?function(!Blockly.Workspace):!Array<!Element>>}
   * @private
   */
   this.toolboxCategoryCallbacks_ = {};
@@ -174,7 +174,7 @@ Blockly.WorkspaceSvg = function(
   /**
   * Map from function names to callbacks, for deciding what to do when a button
   * is clicked.
-  * @type {!Object.<string, ?function(!Blockly.FlyoutButton)>}
+  * @type {!Object<string, ?function(!Blockly.FlyoutButton)>}
   * @private
   */
   this.flyoutButtonCallbacks_ = {};
@@ -227,7 +227,7 @@ Blockly.WorkspaceSvg = function(
 
   /**
    * The list of top-level bounded elements on the workspace.
-   * @type {!Array.<!Blockly.IBoundedElement>}
+   * @type {!Array<!Blockly.IBoundedElement>}
    * @private
    */
   this.topBoundedElements_ = [];
@@ -487,7 +487,7 @@ Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
 /**
  * Developers may define this function to add custom menu options to the
  * workspace's context menu or edit the workspace-created set of menu options.
- * @param {!Array.<!Object>} options List of menu options to add to.
+ * @param {!Array<!Object>} options List of menu options to add to.
  * @param {!Event} e The right-click event that triggered the context menu.
  */
 Blockly.WorkspaceSvg.prototype.configureContextMenu;
@@ -666,7 +666,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
 
 /**
  * Updates all the blocks with new style.
- * @param {!Array.<!Blockly.Block>} blocks List of blocks to update the style
+ * @param {!Array<!Blockly.Block>} blocks List of blocks to update the style
  *     on.
  * @private
  */
@@ -2338,7 +2338,7 @@ Blockly.WorkspaceSvg.prototype.getBlockById = function(id) {
  * Finds the top-level blocks and returns them.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.BlockSvg>} The top-level block objects.
+ * @return {!Array<!Blockly.BlockSvg>} The top-level block objects.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.getTopBlocks = function(ordered) {
@@ -2401,7 +2401,7 @@ Blockly.WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
 
 /**
  * Finds the top-level bounded elements and returns them.
- * @return {!Array.<!Blockly.IBoundedElement>} The top-level bounded elements.
+ * @return {!Array<!Blockly.IBoundedElement>} The top-level bounded elements.
  */
 Blockly.WorkspaceSvg.prototype.getTopBoundedElements = function() {
   return [].concat(this.topBoundedElements_);
@@ -2476,7 +2476,7 @@ Blockly.WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  * custom toolbox categories in this workspace.  See the variable and procedure
  * categories as an example.
  * @param {string} key The name to use to look up this function.
- * @param {function(!Blockly.Workspace):!Array.<!Element>} func The function to
+ * @param {function(!Blockly.Workspace):!Array<!Element>} func The function to
  *     call when the given toolbox category is opened.
  */
 Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
@@ -2491,7 +2491,7 @@ Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
  * Get the callback function associated with a given key, for populating
  * custom toolbox categories in this workspace.
  * @param {string} key The name to use to look up the function.
- * @return {?function(!Blockly.Workspace):!Array.<!Element>} The function
+ * @return {?function(!Blockly.Workspace):!Array<!Element>} The function
  *     corresponding to the given key for this workspace, or null if no function
  *     is registered.
  */

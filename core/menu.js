@@ -32,7 +32,7 @@ Blockly.Menu = function() {
    * Array of menu items.
    * (Nulls are never in the array, but typing the array as nullable prevents
    * the compiler from objecting to .indexOf(null))
-   * @type {!Array.<Blockly.MenuItem>}
+   * @type {!Array<Blockly.MenuItem>}
    * @private
    */
   this.menuItems_ = [];

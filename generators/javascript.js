@@ -85,7 +85,7 @@ Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.JavaScript.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar

@@ -31,7 +31,7 @@ goog.require('Blockly.utils.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array>|!Function)} menuGenerator A non-empty array of
+ * @param {(!Array<!Array>|!Function)} menuGenerator A non-empty array of
  *     options for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a language-neutral dropdown
@@ -52,15 +52,15 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {(!Array.<!Array>|
-   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
+   * @type {(!Array<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array<!Array>)}
    * @protected
    */
   this.menuGenerator_ = menuGenerator;
 
   /**
    * A cache of the most recently generated options.
-   * @type {Array.<!Array.<string>>}
+   * @type {Array<!Array<string>>}
    * @private
    */
   this.generatedOptions_ = null;
@@ -449,11 +449,11 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
 /**
  * Use the calculated prefix and suffix lengths to trim all of the options in
  * the given array.
- * @param {!Array.<!Array>} options Array of option tuples:
+ * @param {!Array<!Array>} options Array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @param {number} prefixLength The length of the common prefix.
  * @param {number} suffixLength The length of the common suffix
- * @return {!Array.<!Array>} A new array with all of the option text trimmed.
+ * @return {!Array<!Array>} A new array with all of the option text trimmed.
  */
 Blockly.FieldDropdown.applyTrim_ = function(options,
     prefixLength, suffixLength) {
@@ -480,7 +480,7 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
  * Return a list of the options for this dropdown.
  * @param {boolean=} opt_useCache For dynamic options, whether or not to use the
  *     cached options or to re-generate them.
- * @return {!Array.<!Array>} A non-empty array of option tuples:
+ * @return {!Array<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @throws {TypeError} If generated options are incorrectly structured.
  */
@@ -492,7 +492,7 @@ Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
     }
     return this.generatedOptions_;
   }
-  return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
+  return /** @type {!Array<!Array<string>>} */ (this.menuGenerator_);
 };
 
 /**

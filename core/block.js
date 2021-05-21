@@ -77,7 +77,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.nextConnection = null;
   /** @type {Blockly.Connection} */
   this.previousConnection = null;
-  /** @type {!Array.<!Blockly.Input>} */
+  /** @type {!Array<!Blockly.Input>} */
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
@@ -98,7 +98,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.parentBlock_ = null;
 
   /**
-   * @type {!Array.<!Blockly.Block>}
+   * @type {!Array<!Blockly.Block>}
    * @protected
    */
   this.childBlocks_ = [];
@@ -349,7 +349,7 @@ Blockly.Block.prototype.suppressPrefixSuffix;
  * An optional property for declaring developer variables.  Return a list of
  * variable names for use by generators.  Developer variables are never shown to
  * the user, but are declared as global variables in the generated code.
- * @type {?function():!Array.<string>}
+ * @type {?function():!Array<string>}
  */
 Blockly.Block.prototype.getDeveloperVariables;
 
@@ -549,7 +549,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
 /**
  * Returns all connections originating from this block.
  * @param {boolean} _all If true, return all connections even hidden ones.
- * @return {!Array.<!Blockly.Connection>} Array of connections.
+ * @return {!Array<!Blockly.Connection>} Array of connections.
  * @package
  */
 Blockly.Block.prototype.getConnections_ = function(_all) {
@@ -711,7 +711,7 @@ Blockly.Block.prototype.getTopStackBlock = function() {
  * Excludes any connection on an output tab or any preceding statement.
  * Blocks are optionally sorted by position; top to bottom.
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Block>} Array of blocks.
+ * @return {!Array<!Blockly.Block>} Array of blocks.
  */
 Blockly.Block.prototype.getChildren = function(ordered) {
   if (!ordered) {
@@ -776,7 +776,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
  * Excludes any connection on an output tab or any preceding statements.
  * Blocks are optionally sorted by position; top to bottom.
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Block>} Flattened array of blocks.
+ * @return {!Array<!Blockly.Block>} Flattened array of blocks.
  */
 Blockly.Block.prototype.getDescendants = function(ordered) {
   var blocks = [this];
@@ -1033,7 +1033,7 @@ Blockly.Block.prototype.getField = function(name) {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array.<string>} List of variable names.
+ * @return {!Array<string>} List of variable names.
  */
 Blockly.Block.prototype.getVars = function() {
   var vars = [];
@@ -1049,7 +1049,7 @@ Blockly.Block.prototype.getVars = function() {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ * @return {!Array<!Blockly.VariableModel>} List of variable models.
  * @package
  */
 Blockly.Block.prototype.getVarModels = function() {
@@ -1134,7 +1134,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
@@ -1166,7 +1166,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -1194,7 +1194,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {(string|Array.<string>|null)=} opt_check Returned type or list
+ * @param {(string|Array<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */

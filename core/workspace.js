@@ -60,12 +60,12 @@ Blockly.Workspace = function(opt_options) {
   this.connectionChecker = new connectionCheckerClass(this);
 
   /**
-   * @type {!Array.<!Blockly.Block>}
+   * @type {!Array<!Blockly.Block>}
    * @private
    */
   this.topBlocks_ = [];
   /**
-   * @type {!Array.<!Blockly.WorkspaceComment>}
+   * @type {!Array<!Blockly.WorkspaceComment>}
    * @private
    */
   this.topComments_ = [];
@@ -75,17 +75,17 @@ Blockly.Workspace = function(opt_options) {
    */
   this.commentDB_ = Object.create(null);
   /**
-   * @type {!Array.<!Function>}
+   * @type {!Array<!Function>}
    * @private
    */
   this.listeners_ = [];
   /**
-   * @type {!Array.<!Blockly.Events.Abstract>}
+   * @type {!Array<!Blockly.Events.Abstract>}
    * @protected
    */
   this.undoStack_ = [];
   /**
-   * @type {!Array.<!Blockly.Events.Abstract>}
+   * @type {!Array<!Blockly.Events.Abstract>}
    * @protected
    */
   this.redoStack_ = [];
@@ -144,7 +144,7 @@ Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
 /**
  * Set of databases for rapid lookup of connection locations.
- * @type {Array.<!Blockly.ConnectionDB>}
+ * @type {Array<!Blockly.ConnectionDB>}
  */
 Blockly.Workspace.prototype.connectionDBList = null;
 
@@ -208,7 +208,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  * Finds the top-level blocks and returns them.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Block>} The top-level block objects.
+ * @return {!Array<!Blockly.Block>} The top-level block objects.
  */
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
@@ -252,7 +252,7 @@ Blockly.Workspace.prototype.removeTypedBlock = function(block) {
  * optionally sorted by position; top to bottom (with slight LTR or RTL bias).
  * @param {string} type The type of block to search for.
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Block>} The blocks of the given type.
+ * @return {!Array<!Blockly.Block>} The blocks of the given type.
  */
 Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   if (!this.typedBlocksDB_[type]) {
@@ -306,7 +306,7 @@ Blockly.Workspace.prototype.removeTopComment = function(comment) {
  * Finds the top-level comments and returns them.  Comments are optionally
  * sorted by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.WorkspaceComment>} The top-level comment objects.
+ * @return {!Array<!Blockly.WorkspaceComment>} The top-level comment objects.
  * @package
  */
 Blockly.Workspace.prototype.getTopComments = function(ordered) {
@@ -327,7 +327,7 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
  * Find all blocks in workspace.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array.<!Blockly.Block>} Array of blocks.
+ * @return {!Array<!Blockly.Block>} Array of blocks.
  */
 Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
   if (ordered) {
@@ -411,7 +411,7 @@ Blockly.Workspace.prototype.createVariable = function(name, opt_type, opt_id) {
 /**
  * Find all the uses of the given variable, which is identified by ID.
  * @param {string} id ID of the variable to find.
- * @return {!Array.<!Blockly.Block>} Array of block usages.
+ * @return {!Array<!Blockly.Block>} Array of block usages.
  */
 Blockly.Workspace.prototype.getVariableUsesById = function(id) {
   return this.variableMap_.getVariableUsesById(id);
@@ -453,7 +453,7 @@ Blockly.Workspace.prototype.getVariableById = function(id) {
  * Find the variable with the specified type. If type is null, return list of
  *     variables with empty string type.
  * @param {?string} type Type of the variables to find.
- * @return {!Array.<!Blockly.VariableModel>} The sought after variables of the
+ * @return {!Array<!Blockly.VariableModel>} The sought after variables of the
  *     passed in type. An empty array if none are found.
  */
 Blockly.Workspace.prototype.getVariablesOfType = function(type) {
@@ -462,7 +462,7 @@ Blockly.Workspace.prototype.getVariablesOfType = function(type) {
 
 /**
  * Return all variable types.
- * @return {!Array.<string>} List of variable types.
+ * @return {!Array<string>} List of variable types.
  * @package
  */
 Blockly.Workspace.prototype.getVariableTypes = function() {
@@ -471,7 +471,7 @@ Blockly.Workspace.prototype.getVariableTypes = function() {
 
 /**
  * Return all variables of all types.
- * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ * @return {!Array<!Blockly.VariableModel>} List of variable models.
  */
 Blockly.Workspace.prototype.getAllVariables = function() {
   return this.variableMap_.getAllVariables();
@@ -479,7 +479,7 @@ Blockly.Workspace.prototype.getAllVariables = function() {
 
 /**
  * Returns all variable names of all types.
- * @return {!Array.<string>} List of all variable names of all types.
+ * @return {!Array<string>} List of all variable names of all types.
  */
 Blockly.Workspace.prototype.getAllVariableNames = function() {
   return this.variableMap_.getAllVariableNames();
@@ -577,7 +577,7 @@ Blockly.Workspace.prototype.hasBlockLimits = function() {
 
 /**
  * Gets the undo stack for workplace.
- * @return {!Array.<!Blockly.Events.Abstract>} undo stack
+ * @return {!Array<!Blockly.Events.Abstract>} undo stack
  * @package
  */
 Blockly.Workspace.prototype.getUndoStack = function() {
@@ -586,7 +586,7 @@ Blockly.Workspace.prototype.getUndoStack = function() {
 
 /**
  * Gets the redo stack for workplace.
- * @return {!Array.<!Blockly.Events.Abstract>} redo stack
+ * @return {!Array<!Blockly.Events.Abstract>} redo stack
  * @package
  */
 Blockly.Workspace.prototype.getRedoStack = function() {
@@ -782,7 +782,7 @@ Blockly.Workspace.getById = function(id) {
 
 /**
  * Find all workspaces.
- * @return {!Array.<!Blockly.Workspace>} Array of workspaces.
+ * @return {!Array<!Blockly.Workspace>} Array of workspaces.
  */
 Blockly.Workspace.getAll = function() {
   var workspaces = [];

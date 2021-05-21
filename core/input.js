@@ -50,7 +50,7 @@ Blockly.Input = function(type, name, block, connection) {
   this.sourceBlock_ = block;
   /** @type {Blockly.Connection} */
   this.connection = connection;
-  /** @type {!Array.<!Blockly.Field>} */
+  /** @type {!Array<!Blockly.Field>} */
   this.fieldRow = [];
 };
 
@@ -185,7 +185,7 @@ Blockly.Input.prototype.isVisible = function() {
  * Sets whether this input is visible or not.
  * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
- * @return {!Array.<!Blockly.BlockSvg>} List of blocks to render.
+ * @return {!Array<!Blockly.BlockSvg>} List of blocks to render.
  * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
@@ -230,7 +230,7 @@ Blockly.Input.prototype.markDirty = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {string|Array.<string>|null} check Compatible value type or
+ * @param {string|Array<string>|null} check Compatible value type or
  *     list of value types.  Null if all types are compatible.
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */

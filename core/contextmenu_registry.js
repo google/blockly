@@ -133,7 +133,7 @@ Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
  *     shown (e.g. on a block or on a workspace)
  * @param {!Blockly.ContextMenuRegistry.Scope} scope Current scope of context menu
  *     (i.e., the exact workspace or block being clicked on)
- * @return {!Array.<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
+ * @return {!Array<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
  */
 Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
   var menuOptions = [];

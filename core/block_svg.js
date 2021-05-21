@@ -157,7 +157,7 @@ Blockly.BlockSvg.prototype.width = 0;
 /**
  * Map from IDs for warnings text to PIDs of functions to apply them.
  * Used to be able to maintain multiple warnings.
- * @type {Object.<string, number>}
+ * @type {Object<string, number>}
  * @private
  */
 Blockly.BlockSvg.prototype.warningTextDb_ = null;
@@ -200,7 +200,7 @@ Blockly.BlockSvg.prototype.compose;
 
 /**
  * An optional method for defining custom block context menu items.
- * @type {?function(!Array.<!Object>)}
+ * @type {?function(!Array<!Object>)}
  */
 Blockly.BlockSvg.prototype.customContextMenu;
 
@@ -748,7 +748,7 @@ Blockly.BlockSvg.prototype.showHelp = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @return {Array.<!Object>} Context menu options
+ * @return {Array<!Object>} Context menu options
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
@@ -1279,7 +1279,7 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
@@ -1296,7 +1296,7 @@ Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -1312,7 +1312,7 @@ Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {(string|Array.<string>|null)=} opt_check Returned type or list
+ * @param {(string|Array<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
@@ -1445,7 +1445,7 @@ Blockly.BlockSvg.prototype.setConnectionTracking = function(track) {
  * @param {boolean} all If true, return all connections even hidden ones.
  *     Otherwise, for a non-rendered block return an empty list, and for a
  *     collapsed block don't return inputs connections.
- * @return {!Array.<!Blockly.RenderedConnection>} Array of connections.
+ * @return {!Array<!Blockly.RenderedConnection>} Array of connections.
  * @package
  */
 Blockly.BlockSvg.prototype.getConnections_ = function(all) {

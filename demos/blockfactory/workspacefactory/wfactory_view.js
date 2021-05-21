@@ -294,7 +294,7 @@ WorkspaceFactoryView.prototype.clearToolboxTabs = function() {
  * Given a set of blocks currently loaded user-generated shadow blocks, visually
  * marks them without making them actual shadow blocks (allowing them to still
  * be editable and movable).
- * @param {!Array.<!Blockly.Block>} blocks Array of user-generated shadow blocks
+ * @param {!Array<!Blockly.Block>} blocks Array of user-generated shadow blocks
  * currently loaded.
  */
 WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {

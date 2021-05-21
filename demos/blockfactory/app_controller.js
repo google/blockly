@@ -432,7 +432,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
 /**
  * If given checkbox is checked, enable the given elements.  Otherwise, disable.
  * @param {boolean} enabled True if enabled, false otherwise.
- * @param {!Array.<string>} idArray Array of element IDs to enable when
+ * @param {!Array<string>} idArray Array of element IDs to enable when
  *    checkbox is checked.
  */
 AppController.prototype.ifCheckedEnable = function(enabled, idArray) {

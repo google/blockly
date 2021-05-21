@@ -101,7 +101,7 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.Python.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar
@@ -138,19 +138,16 @@ Blockly.Python.isInitialized = false;
  * @this {Blockly.Generator}
  */
 Blockly.Python.init = function(workspace) {
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
+
   /**
    * Empty loops or conditionals are not allowed in Python.
    */
   Blockly.Python.PASS = this.INDENT + 'pass\n';
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Python.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Python.functionNames_ = Object.create(null);
 
   if (!Blockly.Python.nameDB_) {
-    Blockly.Python.nameDB_ =
-        new Blockly.Names(Blockly.Python.RESERVED_WORDS_);
+    Blockly.Python.nameDB_ = new Blockly.Names(Blockly.Python.RESERVED_WORDS_);
   } else {
     Blockly.Python.nameDB_.reset();
   }
@@ -193,9 +190,10 @@ Blockly.Python.finish = function(code) {
       definitions.push(def);
     }
   }
-  // Clean up temporary data.
-  delete Blockly.Python.definitions_;
-  delete Blockly.Python.functionNames_;
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
   Blockly.Python.nameDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;

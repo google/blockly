@@ -58,7 +58,7 @@ Blockly.ScrollbarPair = function(
     this.hScroll = new Blockly.Scrollbar(
         workspace, true, isPair, opt_class, opt_margin);
   }
-  if (addVertical ) {
+  if (addVertical) {
     this.vScroll = new Blockly.Scrollbar(
         workspace, false, isPair, opt_class, opt_margin);
   }

@@ -262,6 +262,7 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   var deleted = this.maybeDeleteBlock_();
   if (!deleted) {
+    // Moving the block is expensive, so only do it if the block is not deleted.
     this.updateBlockAfterMove_(delta);
   }
   this.workspace_.setResizesEnabled(true);
@@ -276,7 +277,6 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
  * @protected
  */
 Blockly.BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
-  // These are expensive and don't need to be done if we're deleting.
   this.draggingBlock_.moveConnections(delta.x, delta.y);
   this.draggingBlock_.setDragging(false);
   this.fireMoveEvent_();

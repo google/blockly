@@ -12,6 +12,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.aria
+ * @namespace
+ */
 goog.provide('Blockly.utils.aria');
 
 

@@ -12,6 +12,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.KeyCodes
+ * @namespace
+ */
 goog.provide('Blockly.utils.KeyCodes');
 
 

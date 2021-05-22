@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.toolbox
+ * @namespace
+ */
 goog.provide('Blockly.utils.toolbox');
 
 /** @suppress {extraRequire} */

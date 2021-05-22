@@ -7,11 +7,16 @@
 /**
  * @fileoverview Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.
- * @author fenichel@google.com (Rachel Fenichel);
+ * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.deprecation
+ * @namespace
+ */
 goog.provide('Blockly.utils.deprecation');
+
 
 /**
  * Warn developers that a function is deprecated.

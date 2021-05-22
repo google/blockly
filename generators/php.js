@@ -156,6 +156,14 @@ Blockly.PHP.init = function(workspace) {
         Blockly.VARIABLE_CATEGORY_NAME) + ';');
   }
 
+  // Add user procedures.
+  var procedures = Blockly.Procedures.allProcedures(workspace);
+  // Flatten the return vs no-return procedure lists.
+  procedures = procedures[0].concat(procedures[1]);
+  for (var i = 0; i < procedures.length; i++) {
+    this.nameDB_.getName(procedures[i][0], Blockly.PROCEDURE_CATEGORY_NAME);
+  }
+
   // Declare all of the variables.
   this.definitions_['variables'] = defvars.join('\n');
   this.isInitialized = true;

@@ -513,8 +513,8 @@ Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
 Blockly.Generator.prototype.finish = function(code) {
   // Optionally override
   // Clean up temporary data.
-  delete Blockly.JavaScript.definitions_;
-  delete Blockly.JavaScript.functionNames_;
+  delete this.definitions_;
+  delete this.functionNames_;
   return code;
 };
 

@@ -101,6 +101,15 @@ Blockly.Lua.init = function(workspace) {
     this.nameDB_.reset();
   }
   this.nameDB_.setVariableMap(workspace.getVariableMap());
+
+  // Add user procedures.
+  var procedures = Blockly.Procedures.allProcedures(workspace);
+  // Flatten the return vs no-return procedure lists.
+  procedures = procedures[0].concat(procedures[1]);
+  for (var i = 0; i < procedures.length; i++) {
+    this.nameDB_.getName(procedures[i][0], Blockly.PROCEDURE_CATEGORY_NAME);
+  }
+
   this.isInitialized = true;
 };
 

@@ -140,6 +140,8 @@ Blockly.PHP.init = function(workspace) {
   }
 
   this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
@@ -154,14 +156,6 @@ Blockly.PHP.init = function(workspace) {
   for (var i = 0, variable; (variable = variables[i]); i++) {
     defvars.push(this.nameDB_.getName(variable.getId(),
         Blockly.VARIABLE_CATEGORY_NAME) + ';');
-  }
-
-  // Add user procedures.
-  var procedures = Blockly.Procedures.allProcedures(workspace);
-  // Flatten the return vs no-return procedure lists.
-  procedures = procedures[0].concat(procedures[1]);
-  for (var i = 0; i < procedures.length; i++) {
-    this.nameDB_.getName(procedures[i][0], Blockly.PROCEDURE_CATEGORY_NAME);
   }
 
   // Declare all of the variables.

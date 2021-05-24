@@ -101,6 +101,30 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
 };
 
 /**
+ * Generate names for user variables, but only ones that are being used.
+ * @param {!Blockly.Workspace} workspace Workspace to generate variables from.
+ */
+Blockly.Names.prototype.populateVariables = function(workspace) {
+  var variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (var i = 0; i < variables.length; i++) {
+    this.getName(variables[i].getId(), Blockly.VARIABLE_CATEGORY_NAME);
+  }
+};
+
+/**
+ * Generate names for procedures.
+ * @param {!Blockly.Workspace} workspace Workspace to generate procedures from.
+ */
+Blockly.Names.prototype.populateProcedures = function(workspace) {
+  var procedures = Blockly.Procedures.allProcedures(workspace);
+  // Flatten the return vs no-return procedure lists.
+  procedures = procedures[0].concat(procedures[1]);
+  for (var i = 0; i < procedures.length; i++) {
+    this.getName(procedures[i][0], Blockly.PROCEDURE_CATEGORY_NAME);
+  }
+};
+
+/**
  * Convert a Blockly entity name to a legal exportable entity name.
  * @param {string} name The Blockly entity name (no constraints).
  * @param {string} realm The realm of entity in Blockly

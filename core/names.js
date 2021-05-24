@@ -126,15 +126,18 @@ Blockly.Names.prototype.populateProcedures = function(workspace) {
 
 /**
  * Convert a Blockly entity name to a legal exportable entity name.
- * @param {string} name The Blockly entity name (no constraints).
+ * @param {string} nameOrId The Blockly entity name (no constraints) or
+ *     variable ID.
  * @param {string} realm The realm of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {string} An entity name that is legal in the exported language.
  */
-Blockly.Names.prototype.getName = function(name, realm) {
+Blockly.Names.prototype.getName = function(nameOrId, realm) {
+  var name = nameOrId;
   if (realm == Blockly.VARIABLE_CATEGORY_NAME) {
-    var varName = this.getNameForUserVariable_(name);
+    var varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
+      // Successful ID lookup.
       name = varName;
     }
   }

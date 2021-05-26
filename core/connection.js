@@ -134,7 +134,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // Attempt to reattach the orphan at the end of the newly inserted
       // block.  Since this block may be a row, walk down to the end
       // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow(
+      var connection = Blockly.Connection.getConnectionForOrphanedOutput(
           childBlock, orphanBlock);
       if (connection) {
         orphanBlock.outputConnection.connect(connection);
@@ -372,30 +372,31 @@ Blockly.Connection.connectReciprocally_ = function(first, second) {
 };
 
 /**
- * Does the given block have one and only one connection point that will accept
- * an orphaned block?
+ * Returns the single connection on the block that will accept the orphaned
+ * block, if one can be found. If the block has multiple compatible connections
+ * (even if they are filled) this returns null. If the block has no compatible
+ * connections, this returns null.
  * @param {!Blockly.Block} block The superior block.
  * @param {!Blockly.Block} orphanBlock The inferior block.
  * @return {Blockly.Connection} The suitable connection point on 'block',
  *     or null.
  * @private
  */
-Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
-  var connection = null;
+Blockly.Connection.getSingleConnection_ = function(block, orphanBlock) {
+  var foundConnection = null;
   var output = orphanBlock.outputConnection;
-  for (var i = 0; i < block.inputList.length; i++) {
-    var thisConnection = block.inputList[i].connection;
-    var typeChecker = output.getConnectionChecker();
-    if (thisConnection &&
-        thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
-        typeChecker.canConnect(output, thisConnection, false)) {
-      if (connection) {
+  var typeChecker = output.getConnectionChecker();
+
+  for (var i = 0, input; (input = block.inputList[i]); i++) {
+    var connection = input.connection;
+    if (connection && typeChecker.canConnect(output, connection, false)) {
+      if (foundConnection) {
         return null;  // More than one connection.
       }
-      connection = thisConnection;
+      foundConnection = connection;
     }
   }
-  return connection;
+  return foundConnection;
 };
 
 /**
@@ -410,18 +411,19 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
  *     of blocks, or null.
  * @package
  */
-Blockly.Connection.lastConnectionInRow = function(startBlock, orphanBlock) {
-  var newBlock = startBlock;
-  var connection;
-  while ((connection = Blockly.Connection.singleConnection_(
-      /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
-    newBlock = connection.targetBlock();
-    if (!newBlock || newBlock.isShadow()) {
-      return connection;
-    }
-  }
-  return null;
-};
+Blockly.Connection.getConnectionForOrphanedOutput =
+    function(startBlock, orphanBlock) {
+      var newBlock = startBlock;
+      var connection;
+      while ((connection = Blockly.Connection.getSingleConnection_(
+          /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
+        newBlock = connection.targetBlock();
+        if (!newBlock || newBlock.isShadow()) {
+          return connection;
+        }
+      }
+      return null;
+    };
 
 /**
  * Disconnect this connection.

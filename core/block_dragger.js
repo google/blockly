@@ -219,7 +219,7 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
 
   this.wouldDeleteBlock_ =
       this.dragTarget_ && this.dragTarget_.wouldDelete(this.draggingBlock_,
-      this.draggedConnectionManager_.wouldConnectBlock());
+          this.draggedConnectionManager_.wouldConnectBlock());
 
   this.updateCursorDuringBlockDrag_();
 };

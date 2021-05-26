@@ -66,3 +66,9 @@ Blockly.IDragTarget.prototype.onBlockDrop;
  *     this area.
  */
 Blockly.IDragTarget.prototype.wouldDelete;
+
+/**
+ * Whether this is a delete area.
+ * @type {boolean}
+ */
+Blockly.IDragTarget.prototype.isDeleteArea;

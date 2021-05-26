@@ -81,3 +81,9 @@ Blockly.DeleteArea.prototype.wouldDelete = function(block, couldConnect) {
   var couldDelete = !block.getParent() && block.isDeletable();
   return couldDelete && !couldConnect;
 };
+
+/**
+ * Whether this is a delete area.
+ * @type {boolean}
+ */
+Blockly.DeleteArea.prototype.isDeleteArea = true;

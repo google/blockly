@@ -36,7 +36,7 @@ goog.require('Blockly.MetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
-goog.require('Blockly.PluginManager');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
@@ -115,10 +115,10 @@ Blockly.WorkspaceSvg = function(
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
   /**
-   * @type {!Blockly.PluginManager}
+   * @type {!Blockly.ComponentManager}
    * @private
    */
-  this.pluginManager_ = new Blockly.PluginManager();
+  this.componentManager_ = new Blockly.ComponentManager();
 
   this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
@@ -542,13 +542,13 @@ Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {
   this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
 };
 
-/*
- * Gets the plugin manager for this workspace.
- * @return {!Blockly.PluginManager} The plugin manager.
+/**
+ * Gets the component manager for this workspace.
+ * @return {!Blockly.ComponentManager} The component manager.
  * @public
  */
-Blockly.WorkspaceSvg.prototype.getPluginManager = function() {
-  return this.pluginManager_;
+Blockly.WorkspaceSvg.prototype.getComponentManager = function() {
+  return this.componentManager_;
 };
 
 /**
@@ -1018,11 +1018,11 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-  this.pluginManager_.addPlugin({
+  this.componentManager_.addComponent({
     id: 'zoomControls',
-    plugin: this.zoomControls_,
+    component: this.zoomControls_,
     weight: 2,
-    types: [Blockly.PluginManager.Type.POSITIONABLE]
+    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
   });
 };
 
@@ -1136,8 +1136,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
     this.flyout_.position();
   }
 
-  var positionables = this.pluginManager_.getPlugins(
-      Blockly.PluginManager.Type.POSITIONABLE, true);
+  var positionables = this.componentManager_.getComponents(
+      Blockly.ComponentManager.Capability.POSITIONABLE, true);
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {
@@ -1625,14 +1625,14 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name,
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
-  var dragTargets = this.pluginManager_.getPlugins(
-      Blockly.PluginManager.Type.DRAG_TARGET, false);
+  var dragTargets = this.componentManager_.getComponents(
+      Blockly.ComponentManager.Capability.DRAG_TARGET, false);
 
   /**
    * The recorded drag targets.
    * @type {!Array<
    * {
-   *   plugin: !Blockly.IDragTarget,
+   *   component: !Blockly.IDragTarget,
    *   rect: !Blockly.utils.Rect,
    * }>}
    * @private
@@ -1640,11 +1640,11 @@ Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
   this.dragTargets_ = [];
 
 
-  for (var i = 0, plugin; (plugin = dragTargets[i]); i++) {
-    var rect = plugin.getClientRect();
+  for (var i = 0, component; (component = dragTargets[i]); i++) {
+    var rect = component.getClientRect();
     if (rect) {
       this.dragTargets_.push({
-        plugin: plugin,
+        component: component,
         rect: rect,
       });
     }
@@ -1654,14 +1654,14 @@ Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
    * The recorded delete areas.
    * @type {!Array<
    * {
-   *   plugin: !Blockly.IDragTarget,
+   *   component: !Blockly.IDragTarget,
    *   rect: !Blockly.utils.Rect,
    * }>}
    * @private
    */
   this.deleteAreas_ = this.dragTargets_.filter(
       function(dragTarget) {
-        return dragTarget.plugin.isDeleteArea;
+        return dragTarget.component.isDeleteArea;
       });
 };
 
@@ -1674,7 +1674,7 @@ Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   for (var i = 0, deleteArea; (deleteArea = this.deleteAreas_[i]); i++) {
     if (deleteArea.rect.contains(e.clientX, e.clientY)) {
-      return deleteArea.plugin;
+      return deleteArea.component;
     }
   }
   return null;
@@ -1689,7 +1689,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
 Blockly.WorkspaceSvg.prototype.isDragTarget = function(e) {
   for (var i = 0, dragTarget; (dragTarget = this.dragTargets_[i]); i++) {
     if (dragTarget.rect.contains(e.clientX, e.clientY)) {
-      return dragTarget.plugin;
+      return dragTarget.component;
     }
   }
   return null;

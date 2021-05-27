@@ -304,12 +304,12 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.createPotentialVariableMap();
 
   var rnd = String(Math.random()).substring(2);
-  this.workspace_.getPluginManager().addPlugin({
+  this.workspace_.getComponentManager().addComponent({
     id: 'flyout' + rnd,
-    plugin: this,
+    component: this,
     weight: 1,
-    types: [
-      Blockly.PluginManager.Type.DRAG_TARGET
+    capabilities: [
+      Blockly.getComponentManager.Capability.DRAG_TARGET
     ]
   });
 };

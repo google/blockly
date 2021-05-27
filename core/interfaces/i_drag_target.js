@@ -14,13 +14,14 @@
 
 goog.provide('Blockly.IDragTarget');
 
-goog.require('Blockly.IPlugin');
+goog.require('Blockly.IComponent');
 
 goog.requireType('Blockly.utils.Rect');
 
 /**
- * Interface for a component that can delete a block that is dropped on top of it.
- * @extends {Blockly.IPlugin}
+ * Interface for a component that can delete a block that has a handler for when
+ * a block is dropped on top of it.
+ * @extends {Blockly.IComponent}
  * @interface
  */
 Blockly.IDragTarget = function() {};

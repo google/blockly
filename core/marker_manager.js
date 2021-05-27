@@ -27,14 +27,14 @@ goog.requireType('Blockly.WorkspaceSvg');
 Blockly.MarkerManager = function(workspace){
   /**
    * The cursor.
-   * @type {Blockly.Cursor}
+   * @type {?Blockly.Cursor}
    * @private
    */
   this.cursor_ = null;
 
   /**
-   * The cursor's svg element.
-   * @type {SVGElement}
+   * The cursor's SVG element.
+   * @type {?SVGElement}
    * @private
    */
   this.cursorSvg_ = null;
@@ -44,7 +44,7 @@ Blockly.MarkerManager = function(workspace){
    * @type {!Object<string, !Blockly.Marker>}
    * @private
    */
-  this.markers_ = {};
+  this.markers_ = Object.create(null);
 
   /**
    * The workspace this marker manager is associated with.
@@ -86,14 +86,14 @@ Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
     marker.dispose();
     delete this.markers_[id];
   } else {
-    throw Error('Marker with id ' + id + ' does not exist. Can only unregister' +
-        'markers that exist.');
+    throw Error('Marker with ID ' + id + ' does not exist. ' +
+        'Can only unregister markers that exist.');
   }
 };
 
 /**
  * Get the cursor for the workspace.
- * @return {Blockly.Cursor} The cursor for this workspace.
+ * @return {?Blockly.Cursor} The cursor for this workspace.
  */
 Blockly.MarkerManager.prototype.getCursor = function() {
   return this.cursor_;
@@ -102,11 +102,11 @@ Blockly.MarkerManager.prototype.getCursor = function() {
 /**
  * Get a single marker that corresponds to the given ID.
  * @param {string} id A unique identifier for the marker.
- * @return {Blockly.Marker} The marker that corresponds to the given ID, or null
- *     if none exists.
+ * @return {?Blockly.Marker} The marker that corresponds to the given ID,
+ *     or null if none exists.
  */
 Blockly.MarkerManager.prototype.getMarker = function(id) {
-  return this.markers_[id];
+  return this.markers_[id] || null;
 };
 
 /**
@@ -128,7 +128,7 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
 
 /**
  * Add the cursor SVG to this workspace SVG group.
- * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ * @param {?SVGElement} cursorSvg The SVG root of the cursor to be added to the
  *     workspace SVG group.
  * @package
  */
@@ -144,7 +144,7 @@ Blockly.MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
 
 /**
  * Add the marker SVG to this workspaces SVG group.
- * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ * @param {?SVGElement} markerSvg The SVG root of the marker to be added to the
  *     workspace SVG group.
  * @package
  */

@@ -391,7 +391,7 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
  * Find the definition block for the named procedure.
  * @param {string} name Name of procedure.
  * @param {!Blockly.Workspace} workspace The workspace to search.
- * @return {Blockly.Block} The procedure definition block, or null not found.
+ * @return {?Blockly.Block} The procedure definition block, or null not found.
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
   // Do not assume procedure is a top block. Some languages allow nested

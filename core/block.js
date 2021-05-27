@@ -305,10 +305,10 @@ Blockly.Block.prototype.colour_ = '#000000';
 
 /**
  * Name of the block style.
- * @type {?string}
+ * @type {string}
  * @protected
  */
-Blockly.Block.prototype.styleName_ = null;
+Blockly.Block.prototype.styleName_ = '';
 
 /**
  * An optional method called during initialization.
@@ -498,7 +498,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
  * Since only one block can be displaced and attached to the insertion marker
  * this should only ever return one connection.
  *
- * @return {Blockly.Connection} The connection on the value input, or null.
+ * @return {?Blockly.Connection} The connection on the value input, or null.
  * @private
  */
 Blockly.Block.prototype.getOnlyValueConnection_ = function() {
@@ -573,7 +573,7 @@ Blockly.Block.prototype.getConnections_ = function(_all) {
 
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
- * @return {Blockly.Connection} The last next connection on the stack, or null.
+ * @return {?Blockly.Connection} The last next connection on the stack, or null.
  * @package
  */
 Blockly.Block.prototype.lastConnectionInStack = function() {
@@ -602,7 +602,7 @@ Blockly.Block.prototype.bumpNeighbours = function() {
  * Return the parent block or null if this block is at the top level. The parent
  * block is either the block connected to the previous connection (for a statement
  * block) or the block connected to the output connection (for a value block).
- * @return {Blockly.Block} The block that holds the current block.
+ * @return {?Blockly.Block} The block (if any) that holds the current block.
  */
 Blockly.Block.prototype.getParent = function() {
   // Look at the DOM to see if we are nested in another block.
@@ -612,7 +612,8 @@ Blockly.Block.prototype.getParent = function() {
 /**
  * Return the input that connects to the specified block.
  * @param {!Blockly.Block} block A block connected to an input on this block.
- * @return {Blockly.Input} The input that connects to the specified block.
+ * @return {?Blockly.Input} The input (if any) that connects to the specified
+ *     block.
  */
 Blockly.Block.prototype.getInputWithBlock = function(block) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
@@ -627,7 +628,7 @@ Blockly.Block.prototype.getInputWithBlock = function(block) {
  * Return the parent block that surrounds the current block, or null if this
  * block has no surrounding block.  A parent block might just be the previous
  * statement, whereas the surrounding block is an if statement, while loop, etc.
- * @return {Blockly.Block} The block that surrounds the current block.
+ * @return {?Blockly.Block} The block (if any) that surrounds the current block.
  */
 Blockly.Block.prototype.getSurroundParent = function() {
   var block = this;
@@ -645,7 +646,7 @@ Blockly.Block.prototype.getSurroundParent = function() {
 
 /**
  * Return the next statement block directly connected to this block.
- * @return {Blockly.Block} The next statement block or null.
+ * @return {?Blockly.Block} The next statement block or null.
  */
 Blockly.Block.prototype.getNextBlock = function() {
   return this.nextConnection && this.nextConnection.targetBlock();
@@ -653,7 +654,7 @@ Blockly.Block.prototype.getNextBlock = function() {
 
 /**
  * Returns the block connected to the previous connection.
- * @return {Blockly.Block} The previous statement block or null.
+ * @return {?Blockly.Block} The previous statement block or null.
  */
 Blockly.Block.prototype.getPreviousBlock = function() {
   return this.previousConnection && this.previousConnection.targetBlock();
@@ -662,7 +663,7 @@ Blockly.Block.prototype.getPreviousBlock = function() {
 /**
  * Return the connection on the first statement input on this block, or null if
  * there are none.
- * @return {Blockly.Connection} The first statement connection or null.
+ * @return {?Blockly.Connection} The first statement connection or null.
  * @package
  */
 Blockly.Block.prototype.getFirstStatementConnection = function() {
@@ -905,7 +906,7 @@ Blockly.Block.prototype.isDisposed = function() {
  * Used to match connections between a block and its insertion marker.
  * @param {!Blockly.Block} otherBlock The other block to match against.
  * @param {!Blockly.Connection} conn The other connection to match.
- * @return {Blockly.Connection} The matching connection on this block, or null.
+ * @return {?Blockly.Connection} The matching connection on this block, or null.
  * @package
  */
 Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {
@@ -959,7 +960,7 @@ Blockly.Block.prototype.getColour = function() {
 
 /**
  * Get the name of the block style.
- * @return {?string} Name of the block style.
+ * @return {string} Name of the block style.
  */
 Blockly.Block.prototype.getStyleName = function() {
   return this.styleName_;
@@ -986,7 +987,7 @@ Blockly.Block.prototype.setColour = function(colour) {
 
 /**
  * Set the style and colour values of a block.
- * @param {string} blockStyleName Name of the block style
+ * @param {string} blockStyleName Name of the block style.
  */
 Blockly.Block.prototype.setStyle = function(blockStyleName) {
   this.styleName_ = blockStyleName;
@@ -1018,7 +1019,7 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
 /**
  * Returns the named field from a block.
  * @param {string} name The name of the field.
- * @return {Blockly.Field} Named field, or null if field does not exist.
+ * @return {?Blockly.Field} Named field, or null if field does not exist.
  */
 Blockly.Block.prototype.getField = function(name) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
@@ -1957,7 +1958,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
 /**
  * Fetches the named input object.
  * @param {string} name The name of the input.
- * @return {Blockly.Input} The input object, or null if input does not exist.
+ * @return {?Blockly.Input} The input object, or null if input does not exist.
  */
 Blockly.Block.prototype.getInput = function(name) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
@@ -1972,7 +1973,7 @@ Blockly.Block.prototype.getInput = function(name) {
 /**
  * Fetches the block attached to the named input.
  * @param {string} name The name of the input.
- * @return {Blockly.Block} The attached value block, or null if the input is
+ * @return {?Blockly.Block} The attached value block, or null if the input is
  *     either disconnected or if the input does not exist.
  */
 Blockly.Block.prototype.getInputTargetBlock = function(name) {

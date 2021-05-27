@@ -91,7 +91,7 @@ Blockly.MenuItem = function(content, opt_value) {
 
   /**
    * Bound function to call when this menu item is clicked.
-   * @type {Function}
+   * @type {?Function}
    * @private
    */
   this.actionHandler_ = null;
@@ -153,7 +153,7 @@ Blockly.MenuItem.prototype.dispose = function() {
 
 /**
  * Gets the menu item's element.
- * @return {Element} The DOM element.
+ * @return {?Element} The DOM element.
  * @package
  */
 Blockly.MenuItem.prototype.getElement = function() {

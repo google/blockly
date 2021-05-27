@@ -109,7 +109,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @return {Element} XML element, or null if the field did not need to be
+ * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -375,7 +375,7 @@ Blockly.Xml.textToDom = function(text) {
  * create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {Array<string>} An array containing new block ids.
+ * @return {!Array<string>} An array containing new block IDs.
  */
 Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(false);
@@ -489,7 +489,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
  * blocks immediately below prior blocks, aligned by their starting edge.
  * @param {!Element} xml The XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace to add to.
- * @return {Array<string>} An array containing new block IDs.
+ * @return {!Array<string>} An array containing new block IDs.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   var bbox;  // Bounding box of the current blocks.
@@ -640,7 +640,7 @@ Blockly.Xml.childNodeTagMap;
  * Creates a mapping of childNodes for each supported xml tag for the provided
  * xmlBlock. Logs a warning for any encountered unsupported tags.
  * @param {!Element} xmlBlock XML block element.
- * @return {Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
+ * @return {!Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
  *    node.
  */
 Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {

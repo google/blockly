@@ -88,7 +88,7 @@ Blockly.Generator.prototype.isInitialized = null;
 
 /**
  * Generate code for all blocks in the workspace to the specified language.
- * @param {Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {!Blockly.Workspace=} workspace Workspace to generate code from.
  * @return {string} Generated code.
  */
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
@@ -384,7 +384,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 
 /**
  * A dictionary of definitions to be printed before the code.
- * @type {Object}
+ * @type {!Object|undefined}
  * @protected
  */
 Blockly.Generator.prototype.definitions_;
@@ -392,14 +392,14 @@ Blockly.Generator.prototype.definitions_;
 /**
  * A dictionary mapping desired function names in definitions_ to actual
  * function names (to avoid collisions with user functions).
- * @type {Object}
+ * @type {!Object|undefined}
  * @protected
  */
 Blockly.Generator.prototype.functionNames_;
 
 /**
  * A database of variable and procedure names.
- * @type {Blockly.Names}
+ * @type {!Blockly.Names|undefined}
  * @protected
  */
 Blockly.Generator.prototype.nameDB_;

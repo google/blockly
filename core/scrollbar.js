@@ -496,32 +496,24 @@ Blockly.Scrollbar.DEFAULT_SCROLLBAR_MARGIN = 0.5;
 
 
 /**
- * @param {Blockly.utils.Metrics} first An object containing computed
+ * @param {!Blockly.utils.Metrics} first An object containing computed
  *     measurements of a workspace.
- * @param {?Blockly.utils.Metrics} second Another object containing computed
+ * @param {!Blockly.utils.Metrics} second Another object containing computed
  *     measurements of a workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private
  */
 Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
-  if (!(first && second)) {
-    return false;
-  }
-
-  if (first.viewWidth != second.viewWidth ||
-      first.viewHeight != second.viewHeight ||
-      first.viewLeft != second.viewLeft ||
-      first.viewTop != second.viewTop ||
-      first.absoluteTop != second.absoluteTop ||
-      first.absoluteLeft != second.absoluteLeft ||
-      first.scrollWidth != second.scrollWidth ||
-      first.scrollHeight != second.scrollHeight ||
-      first.scrollLeft != second.scrollLeft ||
-      first.scrollTop != second.scrollTop) {
-    return false;
-  }
-
-  return true;
+  return (first.viewWidth == second.viewWidth &&
+      first.viewHeight == second.viewHeight &&
+      first.viewLeft == second.viewLeft &&
+      first.viewTop == second.viewTop &&
+      first.absoluteTop == second.absoluteTop &&
+      first.absoluteLeft == second.absoluteLeft &&
+      first.scrollWidth == second.scrollWidth &&
+      first.scrollHeight == second.scrollHeight &&
+      first.scrollLeft == second.scrollLeft &&
+      first.scrollTop == second.scrollTop);
 };
 
 /**
@@ -649,8 +641,8 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     }
   }
 
-  if (Blockly.Scrollbar.metricsAreEquivalent_(hostMetrics,
-      this.oldHostMetrics_)) {
+  if (this.oldHostMetrics_ && Blockly.Scrollbar.metricsAreEquivalent_(
+      hostMetrics, this.oldHostMetrics_)) {
     return;
   }
 
@@ -671,7 +663,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  * hostMetrics with cached old host metrics.
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
- * @return {boolean} Whether a resizeView is necesssary.
+ * @return {boolean} Whether a resizeView is necessary.
  * @private
  */
 Blockly.Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
@@ -723,8 +715,8 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
       Blockly.Scrollbar.scrollbarThickness - this.margin_;
   this.setPosition(xCoordinate, yCoordinate);
 
-  // If the view has been resized, a content resize will also be necessary.  The
-  // reverse is not true.
+  // If the view has been resized, a content resize will also be necessary.
+  // The reverse is not true.
   this.resizeContentHorizontal(hostMetrics);
 };
 

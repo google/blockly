@@ -1019,7 +1019,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * @return {?Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Flyout.prototype.getClientRect;
 

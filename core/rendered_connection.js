@@ -119,7 +119,7 @@ Blockly.RenderedConnection.prototype.getSourceBlock = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.BlockSvg} The connected block or null if none is connected.
+ * @return {?Blockly.BlockSvg} The connected block or null if none is connected.
  * @override
  */
 Blockly.RenderedConnection.prototype.targetBlock = function() {

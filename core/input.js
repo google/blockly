@@ -69,7 +69,7 @@ Blockly.Input.prototype.visible_ = true;
 
 /**
  * Get the source block for this input.
- * @return {Blockly.Block} The source block, or null if there is none.
+ * @return {?Blockly.Block} The source block, or null if there is none.
  */
 Blockly.Input.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
@@ -259,8 +259,8 @@ Blockly.Input.prototype.setAlign = function(align) {
 
 /**
  * Changes the connection's shadow block.
- * @param {Element} shadow DOM representation of a block or null.
- * @return {Blockly.Input} The input being modified (to allow chaining).
+ * @param {?Element} shadow DOM representation of a block or null.
+ * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
 Blockly.Input.prototype.setShadowDom = function(shadow) {
   if (!this.connection) {
@@ -271,8 +271,8 @@ Blockly.Input.prototype.setShadowDom = function(shadow) {
 };
 
 /**
- * Returns the xml representation of the connection's shadow block.
- * @return {Element} Shadow DOM representation of a block or null.
+ * Returns the XML representation of the connection's shadow block.
+ * @return {?Element} Shadow DOM representation of a block or null.
  */
 Blockly.Input.prototype.getShadowDom = function() {
   if (!this.connection) {

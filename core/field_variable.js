@@ -225,7 +225,7 @@ Blockly.FieldVariable.prototype.getText = function() {
  * Get the variable model for the selected variable.
  * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
  * after the variable has been deleted).
- * @return {Blockly.VariableModel} The selected variable, or null if none was
+ * @return {?Blockly.VariableModel} The selected variable, or null if none was
  *     selected.
  * @package
  */
@@ -238,7 +238,7 @@ Blockly.FieldVariable.prototype.getVariable = function() {
  * Returns null if the variable is not set, because validators should not
  * run on the initial setValue call, because the field won't be attached to
  * a block and workspace at that point.
- * @return {Function} Validation function, or null.
+ * @return {?Function} Validation function, or null.
  */
 Blockly.FieldVariable.prototype.getValidator = function() {
   // Validators shouldn't operate on the initial setValue call.

@@ -116,7 +116,7 @@ Blockly.Workspace = function(opt_options) {
    * A FieldVariable must always refer to a Blockly.VariableModel.  We reconcile
    * these by tracking "potential" variables in the flyout.  These variables
    * become real when references to them are dragged into the main workspace.
-   * @type {Blockly.VariableMap}
+   * @type {?Blockly.VariableMap}
    * @private
    */
   this.potentialVariableMap_ = null;
@@ -427,12 +427,11 @@ Blockly.Workspace.prototype.deleteVariableById = function(id) {
 };
 
 /**
- * Find the variable by the given name and return it. Return null if it is not
- *     found.
+ * Find the variable by the given name and return it. Return null if not found.
  * @param {string} name The name to check for.
  * @param {string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
- * @return {Blockly.VariableModel} The variable with the given name.
+ * @return {?Blockly.VariableModel} The variable with the given name.
  */
 // TODO (#1559): Possibly delete this function after resolving #1559.
 Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
@@ -440,10 +439,9 @@ Blockly.Workspace.prototype.getVariable = function(name, opt_type) {
 };
 
 /**
- * Find the variable by the given ID and return it. Return null if it is not
- *     found.
+ * Find the variable by the given ID and return it. Return null if not found.
  * @param {string} id The ID to check for.
- * @return {Blockly.VariableModel} The variable with the given ID.
+ * @return {?Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.Workspace.prototype.getVariableById = function(id) {
   return this.variableMap_.getVariableById(id);
@@ -650,7 +648,7 @@ Blockly.Workspace.prototype.addChangeListener = function(func) {
 
 /**
  * Stop listening for this workspace's changes.
- * @param {Function} func Function to stop calling.
+ * @param {!Function} func Function to stop calling.
  */
 Blockly.Workspace.prototype.removeChangeListener = function(func) {
   Blockly.utils.arrayRemove(this.listeners_, func);
@@ -733,7 +731,7 @@ Blockly.Workspace.prototype.allInputsFilled = function(
 /**
  * Return the variable map that contains "potential" variables.
  * These exist in the flyout but not in the workspace.
- * @return {Blockly.VariableMap} The potential variable map.
+ * @return {?Blockly.VariableMap} The potential variable map.
  * @package
  */
 Blockly.Workspace.prototype.getPotentialVariableMap = function() {
@@ -765,6 +763,7 @@ Blockly.Workspace.prototype.setVariableMap = function(variableMap) {
   this.variableMap_ = variableMap;
 };
 
+
 /**
  * Database of all workspaces.
  * @private
@@ -774,7 +773,7 @@ Blockly.Workspace.WorkspaceDB_ = Object.create(null);
 /**
  * Find the workspace with the specified ID.
  * @param {string} id ID of workspace to find.
- * @return {Blockly.Workspace} The sought after workspace or null if not found.
+ * @return {?Blockly.Workspace} The sought after workspace or null if not found.
  */
 Blockly.Workspace.getById = function(id) {
   return Blockly.Workspace.WorkspaceDB_[id] || null;

@@ -48,9 +48,18 @@ Blockly.PluginManager.PluginDatum;
 /**
  * Adds a plugin.
  * @param {!Blockly.PluginManager.PluginDatum} pluginDataObject The plugin.
+ * @param {boolean=} opt_allowOverrides True to prevent an error when overriding
+ *     an already registered item.
  * @template T
  */
-Blockly.PluginManager.prototype.addPlugin = function(pluginDataObject) {
+Blockly.PluginManager.prototype.addPlugin = function(
+    pluginDataObject, opt_allowOverrides) {
+  // Don't throw an error if opt_allowOverrides is true.
+  if (!opt_allowOverrides && this.pluginData_[pluginDataObject.id]) {
+    throw Error(
+        'Plugin "' + pluginDataObject.id + '" with types "' +
+        this.pluginData_[pluginDataObject.id].types + '" already added.');
+  }
   this.pluginData_[pluginDataObject.id] = pluginDataObject;
   for (var i = 0, type; (type = pluginDataObject.types[i]); i++) {
     var typeKey = String(type).toLowerCase();

@@ -19,18 +19,19 @@ goog.provide('Blockly.utils.deprecation');
 
 
 /**
- * Warn developers that a function is deprecated.
- * @param {string} functionName The name of the function.
- * @param {string} deprecationDate The date when the function was deprecated.
+ * Warn developers that a function or property is deprecated.
+ * @param {string} name The name of the function or property.
+ * @param {string} deprecationDate The date of deprecation.
  *     Prefer 'month yyyy' or 'quarter yyyy' format.
- * @param {string} deletionDate The date when the function will be deleted, in
- *     the same format as the deprecation date.
- * @param {string=} opt_use The name of a function to use instead, if any.
+ * @param {string} deletionDate The date of deletion, in the same format as the
+ *     deprecation date.
+ * @param {string=} opt_use The name of a function or property to use instead,
+ *     if any.
  * @package
  */
 Blockly.utils.deprecation.warn = function(
-    functionName, deprecationDate, deletionDate, opt_use) {
-  var msg = functionName + ' was deprecated on ' + deprecationDate +
+    name, deprecationDate, deletionDate, opt_use) {
+  var msg = name + ' was deprecated on ' + deprecationDate +
         ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';

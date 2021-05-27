@@ -164,7 +164,7 @@ Blockly.utils.isRightButton = function(e) {
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.
  * @param {!Element} svg SVG element.
- * @param {SVGMatrix} matrix Inverted screen CTM to use.
+ * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
  */
 Blockly.utils.mouseToSvg = function(e, svg, matrix) {
@@ -583,10 +583,10 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
 
 /**
  * Converts screen coordinates to workspace coordinates.
- * @param {Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
- * @param {Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
+ * @param {!Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
+ * @param {!Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
- * @return {Blockly.utils.Coordinate} The workspace coordinates.
+ * @return {!Blockly.utils.Coordinate} The workspace coordinates.
  * @package
  */
 Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {

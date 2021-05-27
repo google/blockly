@@ -213,7 +213,7 @@ Blockly.utils.toolbox.convertToolboxDefToJson = function(toolboxDef) {
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
- * @param {Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
+ * @param {!Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @throws {Error} if the toolbox is not the correct format.
  * @private

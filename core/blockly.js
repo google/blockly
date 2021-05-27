@@ -300,20 +300,14 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
+
   if (!opt_allowToolbox) {
     var workspace = Blockly.getMainWorkspace();
-    // For now the trashcan flyout always autocloses because it overlays the
-    // trashcan UI (no trashcan to click to close it).
-    if (workspace.trashcan &&
-      workspace.trashcan.flyout) {
-      workspace.trashcan.closeFlyout();
-    }
-    var toolbox = workspace.getToolbox();
-    if (toolbox &&
-        toolbox.getFlyout() &&
-        toolbox.getFlyout().autoClose) {
-      toolbox.clearSelection();
-    }
+    var autoHideables = workspace.getPluginManager().getPlugins(
+        Blockly.PluginManager.Type.AUTOHIDEABLE, true);
+    autoHideables.forEach(function(autoHideable) {
+      autoHideable.autoHide();
+    });
   }
 };
 

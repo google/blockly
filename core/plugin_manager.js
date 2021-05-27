@@ -134,3 +134,7 @@ Blockly.PluginManager.Type.prototype.toString = function() {
 /** @type {!Blockly.PluginManager.Type<!Blockly.IPositionable>} */
 Blockly.PluginManager.Type.POSITIONABLE =
     new Blockly.PluginManager.Type('positionable');
+
+/** @type {!Blockly.PluginManager.Type<!Blockly.IAutoHideable>} */
+Blockly.PluginManager.Type.AUTOHIDEABLE =
+    new Blockly.PluginManager.Type('autohideable');

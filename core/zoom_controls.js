@@ -189,6 +189,12 @@ Blockly.ZoomControls.prototype.createDom = function() {
  * Initializes the zoom controls.
  */
 Blockly.ZoomControls.prototype.init = function() {
+  this.workspace_.getPluginManager().addPlugin({
+    id: 'zoomControls',
+    plugin: this,
+    weight: 2,
+    types: [Blockly.PluginManager.Type.POSITIONABLE]
+  });
   this.initialized_ = true;
 };
 

@@ -19,7 +19,8 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.ToolboxItemSelect');
+goog.require('Blockly.Events.ToolboxItemSelect')
+goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IKeyboardAccessible');
 goog.require('Blockly.IStyleable');
@@ -47,6 +48,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
+ * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
@@ -187,6 +189,15 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
+
+  this.workspace_.getPluginManager().addPlugin({
+    id: 'toolbox',
+    plugin: this,
+    weight: 1,
+    types: [
+      Blockly.PluginManager.Type.AUTOHIDEABLE
+    ]
+  });
 };
 
 /**
@@ -694,6 +705,15 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  */
 Blockly.Toolbox.prototype.setVisible = function(isVisible) {
   this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+};
+
+/**
+ * Hides the component. Called in Blockly.hideChaff.
+ */
+Blockly.Toolbox.prototype.autoHide = function() {
+  if (this.flyout_ && this.flyout_.autoClose) {
+    this.clearSelection();
+  }
 };
 
 /**

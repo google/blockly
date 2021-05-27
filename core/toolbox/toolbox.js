@@ -190,12 +190,12 @@ Blockly.Toolbox.prototype.init = function() {
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
 
-  this.workspace_.getPluginManager().addPlugin({
+  this.workspace_.getComponentManager().addComponent({
     id: 'toolbox',
-    plugin: this,
+    component: this,
     weight: 1,
-    types: [
-      Blockly.PluginManager.Type.AUTOHIDEABLE
+    capabilities: [
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE
     ]
   });
 };

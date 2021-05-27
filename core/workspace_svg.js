@@ -36,7 +36,7 @@ goog.require('Blockly.MetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
-goog.require('Blockly.PluginManager');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');
@@ -114,10 +114,10 @@ Blockly.WorkspaceSvg = function(
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
   /**
-   * @type {!Blockly.PluginManager}
+   * @type {!Blockly.ComponentManager}
    * @private
    */
-  this.pluginManager_ = new Blockly.PluginManager();
+  this.componentManager_ = new Blockly.ComponentManager();
 
   this.connectionDBList = Blockly.ConnectionDB.init(this.connectionChecker);
 
@@ -541,13 +541,13 @@ Blockly.WorkspaceSvg.prototype.setMetricsManager = function(metricsManager) {
   this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
 };
 
-/*
- * Gets the plugin manager for this workspace.
- * @return {!Blockly.PluginManager} The plugin manager.
+/**
+ * Gets the component manager for this workspace.
+ * @return {!Blockly.ComponentManager} The component manager.
  * @public
  */
-Blockly.WorkspaceSvg.prototype.getPluginManager = function() {
-  return this.pluginManager_;
+Blockly.WorkspaceSvg.prototype.getComponentManager = function() {
+  return this.componentManager_;
 };
 
 /**
@@ -1129,8 +1129,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
     this.flyout_.position();
   }
 
-  var positionables = this.pluginManager_.getPlugins(
-      Blockly.PluginManager.Type.POSITIONABLE, true);
+  var positionables = this.componentManager_.getComponents(
+      Blockly.ComponentManager.Capability.POSITIONABLE, true);
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {

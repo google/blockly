@@ -359,13 +359,13 @@ Blockly.Trashcan.prototype.init = function() {
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-  this.workspace_.getPluginManager().addPlugin({
+  this.workspace_.getComponentManager().addComponent({
     id: 'trashcan',
-    plugin: this,
+    component: this,
     weight: 1,
-    types: [
-      Blockly.PluginManager.Type.POSITIONABLE,
-      Blockly.PluginManager.Type.AUTOHIDEABLE
+    capabilities: [
+      Blockly.ComponentManager.Capability.POSITIONABLE,
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE
     ]
   });
   this.initialized_ = true;
@@ -497,7 +497,7 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
  */
 Blockly.Trashcan.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;

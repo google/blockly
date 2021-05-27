@@ -189,11 +189,11 @@ Blockly.ZoomControls.prototype.createDom = function() {
  * Initializes the zoom controls.
  */
 Blockly.ZoomControls.prototype.init = function() {
-  this.workspace_.getPluginManager().addPlugin({
+  this.workspace_.getComponentManager().addComponent({
     id: 'zoomControls',
-    plugin: this,
+    component: this,
     weight: 2,
-    types: [Blockly.PluginManager.Type.POSITIONABLE]
+    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
   });
   this.initialized_ = true;
 };
@@ -220,7 +220,7 @@ Blockly.ZoomControls.prototype.dispose = function() {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
   var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;

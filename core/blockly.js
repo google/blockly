@@ -303,8 +303,8 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
 
   var onlyClosePopups = !!opt_onlyClosePopups;
   var workspace = Blockly.getMainWorkspace();
-  var autoHideables = workspace.getPluginManager().getPlugins(
-      Blockly.PluginManager.Type.AUTOHIDEABLE, true);
+  var autoHideables = workspace.getComponentManager().getComponents(
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(function(autoHideable) {
     autoHideable.autoHide(onlyClosePopups);
   });

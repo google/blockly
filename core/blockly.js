@@ -294,7 +294,7 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox c
+ * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();

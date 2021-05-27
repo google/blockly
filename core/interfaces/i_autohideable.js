@@ -15,8 +15,12 @@
 goog.provide('Blockly.IAutoHideable');
 
 
+goog.require('Blockly.IPlugin');
+
+
 /**
  * Interface for a component that can be automatically hidden.
+ * @extends {Blockly.IPlugin}
  * @interface
  */
 Blockly.IAutoHideable = function() {};

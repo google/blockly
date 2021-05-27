@@ -19,7 +19,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.ToolboxItemSelect')
+goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IKeyboardAccessible');

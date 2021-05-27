@@ -710,6 +710,7 @@ Blockly.Toolbox.prototype.setVisible = function(isVisible) {
 /**
  * Hides the component. Called in Blockly.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
  */
 Blockly.Toolbox.prototype.autoHide = function(onlyClosePopups) {
   if (!onlyClosePopups && this.flyout_ && this.flyout_.autoClose) {

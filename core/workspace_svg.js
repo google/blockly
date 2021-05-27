@@ -2249,7 +2249,7 @@ Blockly.WorkspaceSvg.prototype.getScale = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
-  Blockly.hideChaff(true);
+  Blockly.hideChaff(/* opt_onlyClosePopups */ true);
 
   // Keep scrolling within the bounds of the content.
   var metrics = this.getMetrics();

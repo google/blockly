@@ -294,13 +294,14 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} onlyClosePopups Whether only popups should be closed.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
-Blockly.hideChaff = function(onlyClosePopups) {
+Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
 
+  var onlyClosePopups = !!opt_onlyClosePopups;
   var workspace = Blockly.getMainWorkspace();
   var autoHideables = workspace.getPluginManager().getPlugins(
       Blockly.PluginManager.Type.AUTOHIDEABLE, true);

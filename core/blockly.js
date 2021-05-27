@@ -294,21 +294,19 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
+ * @param {boolean=} onlyClosePopups Whether only popups should be closed.
  */
-Blockly.hideChaff = function(opt_allowToolbox) {
+Blockly.hideChaff = function(onlyClosePopups) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
 
-  if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
-    var autoHideables = workspace.getPluginManager().getPlugins(
-        Blockly.PluginManager.Type.AUTOHIDEABLE, true);
-    autoHideables.forEach(function(autoHideable) {
-      autoHideable.autoHide();
-    });
-  }
+  var workspace = Blockly.getMainWorkspace();
+  var autoHideables = workspace.getPluginManager().getPlugins(
+      Blockly.PluginManager.Type.AUTOHIDEABLE, true);
+  autoHideables.forEach(function(autoHideable) {
+    autoHideable.autoHide(onlyClosePopups);
+  });
 };
 
 /**

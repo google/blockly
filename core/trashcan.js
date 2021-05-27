@@ -434,11 +434,12 @@ Blockly.Trashcan.prototype.closeFlyout = function() {
 
 /**
  * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
  */
-Blockly.Trashcan.prototype.autoHide = function() {
+Blockly.Trashcan.prototype.autoHide = function(onlyClosePopups) {
   // For now the trashcan flyout always autocloses because it overlays the
   // trashcan UI (no trashcan to click to close it).
-  if (this.flyout) {
+  if (!onlyClosePopups && this.flyout) {
     this.closeFlyout();
   }
 };

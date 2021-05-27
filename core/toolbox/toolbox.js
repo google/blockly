@@ -709,9 +709,10 @@ Blockly.Toolbox.prototype.setVisible = function(isVisible) {
 
 /**
  * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
  */
-Blockly.Toolbox.prototype.autoHide = function() {
-  if (this.flyout_ && this.flyout_.autoClose) {
+Blockly.Toolbox.prototype.autoHide = function(onlyClosePopups) {
+  if (!onlyClosePopups && this.flyout_ && this.flyout_.autoClose) {
     this.clearSelection();
   }
 };

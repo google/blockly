@@ -134,9 +134,18 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
+
+  var oldDeleteArea = this.deleteArea_;
   if (this.draggingBubble_.isDeletable()) {
+    var oldDeleteArea = this.deleteArea_;
     this.deleteArea_ = this.workspace_.isDeleteArea(e);
     this.updateCursorDuringBubbleDrag_();
+  } else {
+    this.deleteArea_ = null;
+  }
+  if (this.deleteArea_ !== oldDeleteArea) {
+    oldDeleteArea && oldDeleteArea.onDragExit();
+    this.deleteArea_ && this.deleteArea_.onDragEnter();
   }
 };
 
@@ -170,17 +179,10 @@ Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {
  */
 Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
   this.wouldDeleteBubble_ = !!this.deleteArea_ ;
-  var trashcan = this.workspace_.trashcan;
   if (this.wouldDeleteBubble_) {
     this.draggingBubble_.setDeleteStyle(true);
-    if (this.deleteArea_ === trashcan) {
-      trashcan.setLidOpen(true);
-    }
   } else {
     this.draggingBubble_.setDeleteStyle(false);
-    if (trashcan) {
-      trashcan.setLidOpen(false);
-    }
   }
 };
 

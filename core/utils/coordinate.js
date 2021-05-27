@@ -42,8 +42,8 @@ Blockly.utils.Coordinate = function(x, y) {
 
 /**
  * Compares coordinates for equality.
- * @param {Blockly.utils.Coordinate} a A Coordinate.
- * @param {Blockly.utils.Coordinate} b A Coordinate.
+ * @param {?Blockly.utils.Coordinate} a A Coordinate.
+ * @param {?Blockly.utils.Coordinate} b A Coordinate.
  * @return {boolean} True iff the coordinates are equal, or if both are null.
  */
 Blockly.utils.Coordinate.equals = function(a, b) {

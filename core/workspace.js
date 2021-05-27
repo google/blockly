@@ -676,7 +676,7 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
 /**
  * Find the block on this workspace with the specified ID.
  * @param {string} id ID of block to find.
- * @return {Blockly.Block} The sought after block, or null if not found.
+ * @return {?Blockly.Block} The sought after block, or null if not found.
  */
 Blockly.Workspace.prototype.getBlockById = function(id) {
   return this.blockDB_[id] || null;
@@ -704,7 +704,7 @@ Blockly.Workspace.prototype.removeBlockById = function(id) {
 /**
  * Find the comment on this workspace with the specified ID.
  * @param {string} id ID of comment to find.
- * @return {Blockly.WorkspaceComment} The sought after comment, or null if not
+ * @return {?Blockly.WorkspaceComment} The sought after comment, or null if not
  *     found.
  * @package
  */

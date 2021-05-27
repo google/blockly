@@ -691,7 +691,7 @@ Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
 
 /**
  * Applies mutation tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @return {boolean} True if mutation may have added some elements that need
  *    initialization (requiring initSvg call).
@@ -714,7 +714,7 @@ Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies comment tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -741,7 +741,7 @@ Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies data tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -753,7 +753,7 @@ Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies field tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -787,7 +787,7 @@ Blockly.Xml.findChildBlocks_ = function(xmlNode) {
 
 /**
  * Applies input child nodes (value or statement) to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
@@ -821,7 +821,7 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
 
 /**
  * Applies next child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.

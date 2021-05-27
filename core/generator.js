@@ -16,6 +16,7 @@ goog.provide('Blockly.Generator');
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.utils.deprecation');
 
 goog.requireType('Blockly.Names');
 goog.requireType('Blockly.Workspace');
@@ -408,20 +409,22 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
    * Getter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @this {Blockly.Generator}
-   * @return {Blockly.Names} Name database.
+   * @return {!Blockly.Names|undefined} Name database.
    */
   get: function() {
-    console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
+    Blockly.utils.deprecation.warn(
+        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     return this.nameDB_;
   },
   /**
    * Setter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @this {Blockly.Generator}
-   * @param {Blockly.Names} nameDb New name database.
+   * @param {!Blockly.Names|undefined} nameDb New name database.
    */
   set: function(nameDb) {
-    console.warn('Deprecated use of "variableDB_"; change to "nameDB_"');
+    Blockly.utils.deprecation.warn(
+        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     this.nameDB_ = nameDb;
   }
 });

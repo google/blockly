@@ -293,7 +293,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
  * @param {string} name The name to check for.
  * @param {?string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
- * @return {Blockly.VariableModel} The variable with the given name, or null if
+ * @return {?Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.
  */
 Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
@@ -310,10 +310,9 @@ Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
 };
 
 /**
- * Find the variable by the given ID and return it. Return null if it is not
- *     found.
+ * Find the variable by the given ID and return it.  Return null if not found.
  * @param {string} id The ID to check for.
- * @return {Blockly.VariableModel} The variable with the given ID.
+ * @return {?Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.VariableMap.prototype.getVariableById = function(id) {
   var keys = Object.keys(this.variableMap_);

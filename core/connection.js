@@ -376,7 +376,7 @@ Blockly.Connection.connectReciprocally_ = function(first, second) {
  * an orphaned block?
  * @param {!Blockly.Block} block The superior block.
  * @param {!Blockly.Block} orphanBlock The inferior block.
- * @return {Blockly.Connection} The suitable connection point on 'block',
+ * @return {?Blockly.Connection} The suitable connection point on 'block',
  *     or null.
  * @private
  */
@@ -406,7 +406,7 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
  * Terminates early for shadow blocks.
  * @param {!Blockly.Block} startBlock The block on which to start the search.
  * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
- * @return {Blockly.Connection} The suitable connection point on the chain
+ * @return {?Blockly.Connection} The suitable connection point on the chain
  *     of blocks, or null.
  * @package
  */
@@ -505,7 +505,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.Block} The connected block or null if none is connected.
+ * @return {?Blockly.Block} The connected block or null if none is connected.
  */
 Blockly.Connection.prototype.targetBlock = function() {
   if (this.isConnected()) {
@@ -588,7 +588,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
 
 /**
  * Get a connection's compatibility.
- * @return {Array} List of compatible value types.
+ * @return {?Array} List of compatible value types.
  *     Null if all types are compatible.
  * @public
  */
@@ -598,7 +598,7 @@ Blockly.Connection.prototype.getCheck = function() {
 
 /**
  * Changes the connection's shadow block.
- * @param {Element} shadow DOM representation of a block or null.
+ * @param {?Element} shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.setShadowDom = function(shadow) {
   this.shadowDom_ = shadow;
@@ -613,8 +613,8 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
 };
 
 /**
- * Returns the xml representation of the connection's shadow block.
- * @return {Element} Shadow DOM representation of a block or null.
+ * Returns the XML representation of the connection's shadow block.
+ * @return {?Element} Shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;
@@ -638,7 +638,7 @@ Blockly.Connection.prototype.neighbours = function(_maxLimit) {
 
 /**
  * Get the parent input of a connection.
- * @return {Blockly.Input} The input that the connection belongs to or null if
+ * @return {?Blockly.Input} The input that the connection belongs to or null if
  *     no parent exists.
  * @package
  */

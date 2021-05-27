@@ -502,7 +502,7 @@ Blockly.WorkspaceSvg.prototype.targetWorkspace = null;
 
 /**
  * Inverted screen CTM, for use in mouseToSvg.
- * @type {SVGMatrix}
+ * @type {?SVGMatrix}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
@@ -516,7 +516,7 @@ Blockly.WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
  * Get the marker manager for this workspace.
- * @return {Blockly.MarkerManager} The marker manager.
+ * @return {!Blockly.MarkerManager} The marker manager.
  */
 Blockly.WorkspaceSvg.prototype.getMarkerManager = function() {
   return this.markerManager_;
@@ -573,8 +573,8 @@ Blockly.WorkspaceSvg.prototype.setMarkerSvg = function(markerSvg) {
 /**
  * Get the marker with the given ID.
  * @param {string} id The ID of the marker.
- * @return {Blockly.Marker} The marker with the given ID or null if no marker
- *     with the given id exists.
+ * @return {?Blockly.Marker} The marker with the given ID or null if no marker
+ *     with the given ID exists.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
@@ -586,7 +586,7 @@ Blockly.WorkspaceSvg.prototype.getMarker = function(id) {
 
 /**
  * The cursor for this workspace.
- * @return {Blockly.Cursor} The cursor for the workspace.
+ * @return {?Blockly.Cursor} The cursor for the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getCursor = function() {
   if (this.markerManager_) {
@@ -597,7 +597,8 @@ Blockly.WorkspaceSvg.prototype.getCursor = function() {
 
 /**
  * Get the block renderer attached to this workspace.
- * @return {!Blockly.blockRendering.Renderer} The renderer attached to this workspace.
+ * @return {!Blockly.blockRendering.Renderer} The renderer attached to this
+ *     workspace.
  */
 Blockly.WorkspaceSvg.prototype.getRenderer = function() {
   return this.renderer_;
@@ -644,7 +645,7 @@ Blockly.WorkspaceSvg.prototype.refreshTheme = function() {
   // Update all blocks in workspace that have a style name.
   this.updateBlockStyles_(this.getAllBlocks(false).filter(
       function(block) {
-        return block.getStyleName() !== undefined;
+        return !!block.getStyleName();
       }
   ));
 
@@ -684,7 +685,7 @@ Blockly.WorkspaceSvg.prototype.updateBlockStyles_ = function(blocks) {
 
 /**
  * Getter for the inverted screen CTM.
- * @return {SVGMatrix} The matrix to use in mouseToSvg
+ * @return {?SVGMatrix} The matrix to use in mouseToSvg
  */
 Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
   // Defer getting the screen CTM until we actually need it, this should
@@ -798,7 +799,7 @@ Blockly.WorkspaceSvg.prototype.getInjectionDiv = function() {
 
 /**
  * Get the SVG block canvas for the workspace.
- * @return {SVGElement} The SVG group for the workspace.
+ * @return {?SVGElement} The SVG group for the workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getBlockCanvas = function() {
@@ -1078,7 +1079,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
  * owned by either the toolbox or the workspace, depending on toolbox
  * configuration.  It will be null if there is no flyout.
  * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
- * @return {Blockly.IFlyout} The flyout on this workspace.
+ * @return {?Blockly.IFlyout} The flyout on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
@@ -1093,7 +1094,7 @@ Blockly.WorkspaceSvg.prototype.getFlyout = function(opt_own) {
 
 /**
  * Getter for the toolbox associated with this workspace, if one exists.
- * @return {Blockly.IToolbox} The toolbox on this workspace.
+ * @return {?Blockly.IToolbox} The toolbox on this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getToolbox = function() {
@@ -1342,7 +1343,7 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
 };
 
 /**
- * @return {Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
+ * @return {?Blockly.BlockDragSurfaceSvg} This workspace's block drag surface,
  *     if one is in use.
  * @package
  */
@@ -2326,7 +2327,7 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
 /**
  * Find the block on this workspace with the specified ID.
  * @param {string} id ID of block to find.
- * @return {Blockly.BlockSvg} The sought after block, or null if not found.
+ * @return {?Blockly.BlockSvg} The sought after block, or null if not found.
  * @override
  */
 Blockly.WorkspaceSvg.prototype.getBlockById = function(id) {
@@ -2511,7 +2512,7 @@ Blockly.WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  * Look up the gesture that is tracking this touch stream on this workspace.
  * May create a new gesture.
  * @param {!Event} e Mouse event or touch event.
- * @return {Blockly.TouchGesture} The gesture that is tracking this touch
+ * @return {?Blockly.TouchGesture} The gesture that is tracking this touch
  *     stream, or null if no valid gesture exists.
  * @package
  */
@@ -2569,7 +2570,7 @@ Blockly.WorkspaceSvg.prototype.getAudioManager = function() {
 
 /**
  * Get the grid object for this workspace, or null if there is none.
- * @return {Blockly.Grid} The grid object for this workspace.
+ * @return {?Blockly.Grid} The grid object for this workspace.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.getGrid = function() {

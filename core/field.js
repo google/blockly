@@ -536,7 +536,7 @@ Blockly.Field.prototype.setValidator = function(handler) {
 
 /**
  * Gets the validation function for editable fields, or null if not set.
- * @return {Function} Validation function, or null.
+ * @return {?Function} Validation function, or null.
  */
 Blockly.Field.prototype.getValidator = function() {
   return this.validator_;

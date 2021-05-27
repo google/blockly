@@ -484,7 +484,7 @@ Blockly.Trashcan.prototype.getBoundingRectangle = function() {
 
 /**
  * Return the deletion rectangle for this trash can.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * @return {?Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {

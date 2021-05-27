@@ -27,11 +27,11 @@ Blockly.ComponentManager = function() {
   this.componentData_ = {};
 
   /**
-   * A map of types to component ids.
+   * A map of capabilities to component ids.
    * @type {!Object<string, Array<string>>}
    * @private
    */
-  this.typeToComponentIds_ = {};
+  this.capabilityToComponentIds_ = {};
 };
 
 /**
@@ -39,7 +39,8 @@ Blockly.ComponentManager = function() {
  * @typedef {{
  *    id: string,
  *    component: !Blockly.IComponent,
- *    types: !Array<string|!Blockly.ComponentManager.Type<Blockly.IComponent>>,
+ *    capabilities: (
+ *     !Array<string|!Blockly.ComponentManager.Capability<Blockly.IComponent>>),
  *    weight: number
  *  }}
  */
@@ -53,12 +54,12 @@ Blockly.ComponentManager.ComponentDatum;
  */
 Blockly.ComponentManager.prototype.addComponent = function(componentInfo) {
   this.componentData_[componentInfo.id] = componentInfo;
-  for (var i = 0, type; (type = componentInfo.types[i]); i++) {
+  for (var i = 0, type; (type = componentInfo.capabilities[i]); i++) {
     var typeKey = String(type).toLowerCase();
-    if (this.typeToComponentIds_[typeKey] === undefined) {
-      this.typeToComponentIds_[typeKey] = [componentInfo.id];
+    if (this.capabilityToComponentIds_[typeKey] === undefined) {
+      this.capabilityToComponentIds_[typeKey] = [componentInfo.id];
     } else {
-      this.typeToComponentIds_[typeKey].push(componentInfo.id);
+      this.capabilityToComponentIds_[typeKey].push(componentInfo.id);
     }
   }
 };
@@ -75,15 +76,15 @@ Blockly.ComponentManager.prototype.getComponent = function(id) {
 
 /**
  * Gets all the components of the specified type.
- * @param {!Blockly.ComponentManager.Type<T>} type The type of the component.
+ * @param {!Blockly.ComponentManager.Capability<T>} capability The capability of the
+ *     component.
  * @param {boolean} sorted Whether to return list ordered by weights.
- * @return {!Array<T>} The components that match the
- *    specified type.
+ * @return {!Array<T>} The components that match the specified capability.
  * @template T
  */
-Blockly.ComponentManager.prototype.getComponents = function(type, sorted) {
-  var typeKey = String(type).toLowerCase();
-  var componentIds = this.typeToComponentIds_[typeKey];
+Blockly.ComponentManager.prototype.getComponents = function(capability, sorted) {
+  var typeKey = String(capability).toLowerCase();
+  var componentIds = this.capabilityToComponentIds_[typeKey];
   if (!componentIds) {
     return [];
   }
@@ -110,12 +111,12 @@ Blockly.ComponentManager.prototype.getComponents = function(type, sorted) {
 };
 
 /**
- * A name with the type of the element stored in the generic.
- * @param {string} name The name of the component type.
+ * A name with the capability of the element stored in the generic.
+ * @param {string} name The name of the component capability.
  * @constructor
  * @template T
  */
-Blockly.ComponentManager.Type = function(name) {
+Blockly.ComponentManager.Capability = function(name) {
   /**
    * @type {string}
    * @private
@@ -124,14 +125,14 @@ Blockly.ComponentManager.Type = function(name) {
 };
 
 /**
- * Returns the name of the type.
+ * Returns the name of the capability.
  * @return {string} The name.
  * @override
  */
-Blockly.ComponentManager.Type.prototype.toString = function() {
+Blockly.ComponentManager.Capability.prototype.toString = function() {
   return this.name_;
 };
 
-/** @type {!Blockly.ComponentManager.Type<!Blockly.IPositionable>} */
-Blockly.ComponentManager.Type.POSITIONABLE =
-    new Blockly.ComponentManager.Type('positionable');
+/** @type {!Blockly.ComponentManager.Capability<!Blockly.IPositionable>} */
+Blockly.ComponentManager.Capability.POSITIONABLE =
+    new Blockly.ComponentManager.Capability('positionable');

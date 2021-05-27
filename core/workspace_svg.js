@@ -1007,7 +1007,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
     id: 'trashcan',
     component: this.trashcan,
     weight: 1,
-    types: [Blockly.ComponentManager.Type.POSITIONABLE]
+    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
   });
 };
 
@@ -1027,7 +1027,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
     id: 'zoomControls',
     component: this.zoomControls_,
     weight: 2,
-    types: [Blockly.ComponentManager.Type.POSITIONABLE]
+    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
   });
 };
 
@@ -1142,7 +1142,7 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   }
 
   var positionables = this.componentManager_.getComponents(
-      Blockly.ComponentManager.Type.POSITIONABLE, true);
+      Blockly.ComponentManager.Capability.POSITIONABLE, true);
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {

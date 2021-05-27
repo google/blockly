@@ -23,6 +23,7 @@ goog.requireType('Blockly.utils.Rect');
  * Abstract class for a component that can delete a block that is dropped on top
  * of it.
  * @implements {Blockly.IDragTarget}
+ * @constructor
  */
 Blockly.DeleteArea = function() {};
 

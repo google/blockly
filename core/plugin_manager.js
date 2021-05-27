@@ -79,33 +79,6 @@ Blockly.PluginManager.prototype.getPlugin = function(id) {
  * Gets all the plugins of the specified type.
  * @param {!Blockly.PluginManager.Type<T>} type The type of the plugin.
  * @param {boolean} sorted Whether to return list ordered by weights.
- * @return {!Array<PluginDatum>} The plugin datums that match the
- *    specified type.
- * @template T
- */
-Blockly.PluginManager.prototype.getPluginDatums = function(type, sorted) {
-  var typeKey = String(type).toLowerCase();
-  var pluginIds = this.typeToPluginIds_[typeKey];
-  if (!pluginIds) {
-    return [];
-  }
-  var plugins = [];
-  var pluginData = this.pluginData_;
-  pluginIds.forEach(function(id) {
-    plugins.push(pluginData[id]);
-  });
-  if (sorted) {
-    plugins.sort(function(a, b) {
-      return a.weight - b.weight;
-    });
-  }
-  return plugins;
-};
-
-/**
- * Gets all the plugins of the specified type.
- * @param {!Blockly.PluginManager.Type<T>} type The type of the plugin.
- * @param {boolean} sorted Whether to return list ordered by weights.
  * @return {!Array<T>} The plugins that match the
  *    specified type.
  * @template T

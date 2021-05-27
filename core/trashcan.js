@@ -20,7 +20,6 @@ goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.IPositionable');
-goog.require('Blockly.IDragTarget');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.uiPosition');

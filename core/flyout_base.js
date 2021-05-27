@@ -25,7 +25,6 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.FlyoutMetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
-goog.require('Blockly.IDragTarget');
 goog.require('Blockly.IFlyout');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Tooltip');

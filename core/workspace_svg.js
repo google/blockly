@@ -1641,10 +1641,13 @@ Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
 
 
   for (var i = 0, plugin; (plugin = dragTargets[i]); i++) {
-    this.dragTargets_.push({
-      plugin: plugin,
-      rect: plugin.getClientRect(),
-    });
+    var rect = plugin.getClientRect();
+    if (rect) {
+      this.dragTargets_.push({
+        plugin: plugin,
+        rect: rect,
+      });
+    }
   }
 
   /**

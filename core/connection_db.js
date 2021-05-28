@@ -35,7 +35,7 @@ goog.requireType('Blockly.utils.Coordinate');
 Blockly.ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
-   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @type {!Array<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
@@ -150,7 +150,7 @@ Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
  * @param {!Blockly.RenderedConnection} connection The connection whose
  *     neighbours should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
- * @return {!Array.<!Blockly.RenderedConnection>} List of connections.
+ * @return {!Array<!Blockly.RenderedConnection>} List of connections.
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this.connections_;
@@ -286,7 +286,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
  * Initialize a set of connection DBs for a workspace.
  * @param {!Blockly.IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a drag.
- * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
+ * @return {!Array<!Blockly.ConnectionDB>} Array of databases.
  */
 Blockly.ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.

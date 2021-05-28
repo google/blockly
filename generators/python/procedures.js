@@ -26,20 +26,20 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   for (var i = 0, variable; variable = variables[i]; i++) {
     varName = variable.name;
     if (block.getVars().indexOf(varName) == -1) {
-      globals.push(Blockly.Python.variableDB_.getName(varName,
+      globals.push(Blockly.Python.nameDB_.getName(varName,
           Blockly.VARIABLE_CATEGORY_NAME));
     }
   }
   // Add developer variables.
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    globals.push(Blockly.Python.variableDB_.getName(devVarList[i],
+    globals.push(Blockly.Python.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
   globals = globals.length ?
       Blockly.Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
-  var funcName = Blockly.Python.variableDB_.getName(
+  var funcName = Blockly.Python.nameDB_.getName(
       block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var xfix1 = '';
   if (Blockly.Python.STATEMENT_PREFIX) {
@@ -73,7 +73,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var args = [];
   var variables = block.getVars();
   for (var i = 0; i < variables.length; i++) {
-    args[i] = Blockly.Python.variableDB_.getName(variables[i],
+    args[i] = Blockly.Python.nameDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = 'def ' + funcName + '(' + args.join(', ') + '):\n' +
@@ -91,7 +91,7 @@ Blockly.Python['procedures_defnoreturn'] =
 
 Blockly.Python['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcName = Blockly.Python.nameDB_.getName(block.getFieldValue('NAME'),
       Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
   var variables = block.getVars();

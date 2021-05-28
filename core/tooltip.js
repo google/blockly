@@ -124,7 +124,7 @@ Blockly.Tooltip.DIV = null;
 /**
  * Returns the tooltip text for the given element.
  * @param {?Object} object The object to get the tooltip text of.
- * @returns {string} The tooltip text of the element.
+ * @return {string} The tooltip text of the element.
  */
 Blockly.Tooltip.getTooltipOfObject = function(object) {
   var obj = Blockly.Tooltip.getTargetObject_(object);
@@ -146,7 +146,7 @@ Blockly.Tooltip.getTooltipOfObject = function(object) {
  * tooltip. Could be the object itself.
  * @param {?Object} obj The object are trying to find the target tooltip
  *     object of.
- * @returns {?{tooltip}} The target tooltip object.
+ * @return {?{tooltip}} The target tooltip object.
  * @private
  */
 Blockly.Tooltip.getTargetObject_ = function(obj) {

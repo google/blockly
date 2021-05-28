@@ -54,7 +54,7 @@ Blockly.ContextMenu.menu_ = null;
 /**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
- * @param {!Array.<!Object>} options Array of menu options.
+ * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.ContextMenu.show = function(e, options, rtl) {
@@ -75,7 +75,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
 
 /**
  * Create the context menu object and populate it with the given options.
- * @param {!Array.<!Object>} options Array of menu options.
+ * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @return {!Blockly.Menu} The menu that will be shown on right click.
  * @private

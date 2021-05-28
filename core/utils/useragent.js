@@ -20,6 +20,7 @@ goog.provide('Blockly.utils.userAgent');
 
 goog.require('Blockly.utils.global');
 
+
 /** @const {boolean} */
 Blockly.utils.userAgent.IE;
 

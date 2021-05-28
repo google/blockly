@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.object
+ * @namespace
+ */
 goog.provide('Blockly.utils.object');
 
 

@@ -234,6 +234,28 @@ Blockly.WorkspaceSvg = function(
   this.topBoundedElements_ = [];
 
   /**
+   * The recorded drag targets.
+   * @type {!Array<
+   * {
+   *   component: !Blockly.IDragTarget,
+   *   clientRect: !Blockly.utils.Rect,
+   * }>}
+   * @private
+   */
+  this.dragTargetAreas_ = [];
+
+  /**
+   * The recorded bubble delete areas.
+   * @type {!Array<
+   * {
+   *   component: !Blockly.IDragTarget,
+   *   clientRect: !Blockly.utils.Rect,
+   * }>}
+   * @private
+   */
+  this.bubbleDeleteAreas_ = [];
+
+  /**
    * The cached size of the parent svg element.
    * Used to compute svg metrics.
    * @type {!Blockly.utils.Size}
@@ -1620,70 +1642,50 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name,
  */
 Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
   var dragTargets = this.componentManager_.getComponents(
-      Blockly.ComponentManager.Capability.DRAG_TARGET, false);
+      Blockly.ComponentManager.Capability.DRAG_TARGET, true);
 
-  /**
-   * The recorded drag targets.
-   * @type {!Array<
-   * {
-   *   component: !Blockly.IDragTarget,
-   *   rect: !Blockly.utils.Rect,
-   * }>}
-   * @private
-   */
-  this.dragTargets_ = [];
-
-
+  this.dragTargetAreas_ = [];
   for (var i = 0, component; (component = dragTargets[i]); i++) {
     var rect = component.getClientRect();
     if (rect) {
-      this.dragTargets_.push({
+      this.dragTargetAreas_.push({
         component: component,
-        rect: rect,
+        clientRect: rect,
       });
     }
   }
 
-  /**
-   * The recorded delete areas.
-   * @type {!Array<
-   * {
-   *   component: !Blockly.IDragTarget,
-   *   rect: !Blockly.utils.Rect,
-   * }>}
-   * @private
-   */
-  this.deleteAreas_ = this.dragTargets_.filter(
+  this.bubbleDeleteAreas_ = this.dragTargetAreas_.filter(
       function(dragTarget) {
-        return dragTarget.component.isDeleteArea;
+        return dragTarget.component.isBubbleDeleteArea;
       });
 };
 
 /**
- * Is the mouse event over a delete area (toolbox or non-closing flyout)?
+ * Returns the bubble delete area the mouse event is over.
  * @param {!Event} e Mouse move event.
- * @return {?Blockly.IDragTarget} Null if not over a delete area, or the delete
- *     area the event is over.
+ * @return {?Blockly.IDragTarget} Null if not over a bubble delete area, or the
+ *     delete area the event is over.
  */
-Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
-  for (var i = 0, deleteArea; (deleteArea = this.deleteAreas_[i]); i++) {
-    if (deleteArea.rect.contains(e.clientX, e.clientY)) {
-      return deleteArea.component;
+Blockly.WorkspaceSvg.prototype.getBubbleDeleteArea = function(e) {
+  for (var i = 0, targetArea; (targetArea = this.bubbleDeleteAreas_[i]); i++) {
+    if (targetArea.clientRect.contains(e.clientX, e.clientY)) {
+      return targetArea.component;
     }
   }
   return null;
 };
 
 /**
- * Is the mouse event over a drag target?
+ * Returns the drag target the mouse event is over.
  * @param {!Event} e Mouse move event.
  * @return {?Blockly.IDragTarget} Null if not over a drag target, or the drag
  *     target the event is over.
  */
-Blockly.WorkspaceSvg.prototype.isDragTarget = function(e) {
-  for (var i = 0, dragTarget; (dragTarget = this.dragTargets_[i]); i++) {
-    if (dragTarget.rect.contains(e.clientX, e.clientY)) {
-      return dragTarget.component;
+Blockly.WorkspaceSvg.prototype.getDragTarget = function(e) {
+  for (var i = 0, targetArea; (targetArea = this.dragTargetAreas_[i]); i++) {
+    if (targetArea.clientRect.contains(e.clientX, e.clientY)) {
+      return targetArea.component;
     }
   }
   return null;

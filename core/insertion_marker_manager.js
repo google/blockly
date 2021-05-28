@@ -246,8 +246,10 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
  */
 Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
   var candidate = this.getCandidate_(dxy);
+  var couldDeleteBlock =
+      !this.topBlock_.getParent() && this.topBlock_.isDeletable();
   this.wouldDeleteBlock_ =
-      !!dragTarget && dragTarget.wouldDelete(
+      couldDeleteBlock && !!dragTarget && dragTarget.wouldDeleteBlock(
           this.topBlock_, candidate && !!candidate.closest);
   var shouldUpdate = this.wouldDeleteBlock_ ||
       this.shouldUpdatePreviews_(candidate, dxy);

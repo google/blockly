@@ -542,20 +542,12 @@ Blockly.Trashcan.prototype.onDragExit = function() {
   this.setLidOpen(false);
 };
 /**
- * Handles a block drop on this component.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
- *     another.
+ * Handles a block drop on this component. Should not handle delete here.
+ * @param {!Blockly.BlockSvg} _block The block.
  * @override
  */
-Blockly.Trashcan.prototype.onBlockDrop = function(block, couldConnect) {
-  Blockly.Trashcan.superClass_.onBlockDrop.call(this, block, couldConnect);
-  if (this.wouldDelete(block, couldConnect)) {
-    setTimeout(this.closeLid.bind(this), 100);
-  } else {
-    // Make sure the trash can lid is closed.
-    this.closeLid();
-  }
+Blockly.Trashcan.prototype.onBlockDrop = function(_block) {
+  setTimeout(this.closeLid.bind(this), 100);
 };
 
 /**

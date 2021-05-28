@@ -58,33 +58,27 @@ Blockly.DeleteArea.prototype.getEndDragLoc = function(startXY, delta) {
 };
 
 /**
- * Handles a block drop on this component.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
- *     another.
+ * Handles a block drop on this component. Should not handle delete here.
+ * @param {!Blockly.BlockSvg} _block The block.
  */
-Blockly.DeleteArea.prototype.onBlockDrop = function(block, couldConnect) {
-  if (this.wouldDelete(block, couldConnect)) {
-    block.dispose(false, true);
-    Blockly.draggingConnections = [];
-  }
+Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
+  // no-op
 };
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
- * @param {!Blockly.BlockSvg} block The block.
+ * @param {!Blockly.BlockSvg} _block The block.
  * @param {boolean} couldConnect Whether the block could could connect to
  *     another.
  * @return {boolean} Whether the block provided would be deleted if dropped on
  *     this area.
  */
-Blockly.DeleteArea.prototype.wouldDelete = function(block, couldConnect) {
-  var couldDelete = !block.getParent() && block.isDeletable();
-  return couldDelete && !couldConnect;
+Blockly.DeleteArea.prototype.wouldDeleteBlock = function(_block, couldConnect) {
+  return !couldConnect;
 };
 
 /**
- * Whether this is a delete area.
+ * Whether this is a bubble delete area.
  * @type {boolean}
  */
-Blockly.DeleteArea.prototype.isDeleteArea = true;
+Blockly.DeleteArea.prototype.isBubbleDeleteArea = true;

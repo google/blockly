@@ -210,16 +210,14 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   this.dragIcons_(delta);
 
   var oldDragTarget = this.dragTarget_;
-  this.dragTarget_ = this.workspace_.isDragTarget(e);
-  this.draggedConnectionManager_.update(delta, this.dragTarget_);
+  this.dragTarget_ = this.workspace_.getDragTarget(e);
   if (this.dragTarget_ !== oldDragTarget) {
     oldDragTarget && oldDragTarget.onDragExit();
     this.dragTarget_ && this.dragTarget_.onDragEnter();
   }
 
-  this.wouldDeleteBlock_ =
-      !!this.dragTarget_ && this.dragTarget_.wouldDelete(this.draggingBlock_,
-          this.draggedConnectionManager_.wouldConnectBlock());
+  this.draggedConnectionManager_.update(delta, this.dragTarget_);
+  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
 
   this.updateCursorDuringBlockDrag_();
 };
@@ -248,15 +246,15 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
-    if (this.wouldDeleteBlock_) {
-      // Fire a move event, so we know where to go back to for an undo.
-      this.fireMoveEvent_();
-    }
-    this.dragTarget_.onBlockDrop(this.draggingBlock_,
-        this.draggedConnectionManager_.wouldConnectBlock());
+    this.dragTarget_.onBlockDrop(this.draggingBlock_);
   }
 
-  if (!this.wouldDeleteBlock_) {
+  if (this.wouldDeleteBlock_) {
+    // Fire a move event, so we know where to go back to for an undo.
+    this.fireMoveEvent_();
+    this.draggingBlock_.dispose(false, true);
+    Blockly.draggingConnections = [];
+  } else {
     // These are expensive and don't need to be done if we're deleting.
     this.draggingBlock_.moveConnections(delta.x, delta.y);
     this.draggingBlock_.setDragging(false);

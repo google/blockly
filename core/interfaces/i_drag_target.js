@@ -53,8 +53,6 @@ Blockly.IDragTarget.prototype.getEndDragLoc;
 /**
  * Handles a block drop on this component. Should not handle delete here.
  * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
- *     another.
  */
 Blockly.IDragTarget.prototype.onBlockDrop;
 
@@ -69,7 +67,7 @@ Blockly.IDragTarget.prototype.onBlockDrop;
 Blockly.IDragTarget.prototype.wouldDelete;
 
 /**
- * Whether this is a delete area.
+ * Whether this is a bubble delete area.
  * @type {boolean}
  */
-Blockly.IDragTarget.prototype.isDeleteArea;
+Blockly.IDragTarget.prototype.isBubbleDeleteArea;

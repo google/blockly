@@ -294,27 +294,20 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
-Blockly.hideChaff = function(opt_allowToolbox) {
+Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
-  if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
-    // For now the trashcan flyout always autocloses because it overlays the
-    // trashcan UI (no trashcan to click to close it).
-    if (workspace.trashcan &&
-      workspace.trashcan.flyout) {
-      workspace.trashcan.closeFlyout();
-    }
-    var toolbox = workspace.getToolbox();
-    if (toolbox &&
-        toolbox.getFlyout() &&
-        toolbox.getFlyout().autoClose) {
-      toolbox.clearSelection();
-    }
-  }
+
+  var onlyClosePopups = !!opt_onlyClosePopups;
+  var workspace = Blockly.getMainWorkspace();
+  var autoHideables = workspace.getComponentManager().getComponents(
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+  autoHideables.forEach(function(autoHideable) {
+    autoHideable.autoHide(onlyClosePopups);
+  });
 };
 
 /**

@@ -309,7 +309,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
     component: this,
     weight: 1,
     capabilities: [
-      Blockly.getComponentManager.Capability.DRAG_TARGET
+      Blockly.ComponentManager.Capability.DRAG_TARGET
     ]
   });
 };

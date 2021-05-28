@@ -13,6 +13,10 @@
 
 goog.provide('Blockly.ComponentManager');
 
+goog.requireType('Blockly.IAutoHideable');
+goog.requireType('Blockly.IComponent');
+goog.requireType('Blockly.IPositionable');
+
 
 /**
  * Manager for all items registered with the workspace.
@@ -140,3 +144,7 @@ Blockly.ComponentManager.Capability.POSITIONABLE =
 /** @type {!Blockly.ComponentManager.Capability<!Blockly.IDragTarget>} */
 Blockly.ComponentManager.Capability.DRAG_TARGET =
     new Blockly.ComponentManager.Capability('drag_target');
+
+/** @type {!Blockly.ComponentManager.Capability<!Blockly.IAutoHideable>} */
+Blockly.ComponentManager.Capability.AUTOHIDEABLE =
+    new Blockly.ComponentManager.Capability('autohideable');

@@ -1003,12 +1003,6 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-  this.componentManager_.addComponent({
-    id: 'trashcan',
-    component: this.trashcan,
-    weight: 1,
-    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
-  });
 };
 
 /**
@@ -1023,12 +1017,6 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-  this.componentManager_.addComponent({
-    id: 'zoomControls',
-    component: this.zoomControls_,
-    weight: 2,
-    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
-  });
 };
 
 /**
@@ -2261,7 +2249,7 @@ Blockly.WorkspaceSvg.prototype.getScale = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.scroll = function(x, y) {
-  Blockly.hideChaff(/* opt_allowToolbox */ true);
+  Blockly.hideChaff(/* opt_onlyClosePopups */ true);
 
   // Keep scrolling within the bounds of the content.
   var metrics = this.getMetrics();

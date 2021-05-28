@@ -18,6 +18,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
+goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Options');
@@ -38,6 +39,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IPositionable}
  */
@@ -357,7 +359,15 @@ Blockly.Trashcan.prototype.init = function() {
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-
+  this.workspace_.getComponentManager().addComponent({
+    id: 'trashcan',
+    component: this,
+    weight: 1,
+    capabilities: [
+      Blockly.ComponentManager.Capability.POSITIONABLE,
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE
+    ]
+  });
   this.initialized_ = true;
   this.setLidOpen(false);
 };
@@ -420,6 +430,19 @@ Blockly.Trashcan.prototype.closeFlyout = function() {
 
   this.flyout.hide();
   this.fireUiEvent_(false);
+};
+
+/**
+ * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
+ */
+Blockly.Trashcan.prototype.autoHide = function(onlyClosePopups) {
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it).
+  if (!onlyClosePopups && this.flyout) {
+    this.closeFlyout();
+  }
 };
 
 /**

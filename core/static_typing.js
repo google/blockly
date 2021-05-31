@@ -96,7 +96,7 @@ Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
       //block.select();    // for step debugging, highlights block in workspace
       blocks.push(block);
       blockNextConnection = block.nextConnection;
-      connections = block.getConnections_();
+      connections = block.getConnections_(true);
       block = null;
       for (var j = 0; j < connections.length; j++) {
         if (connections[j].type == Blockly.NEXT_STATEMENT) {

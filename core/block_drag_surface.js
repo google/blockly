@@ -100,9 +100,10 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
         'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyBlockDragSurface'
-      }, this.container_);
-  this.dragGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.G, {}, this.SVG_);
+      },
+      this.container_);
+  this.dragGroup_ =
+      Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, this.SVG_);
 };
 
 /**
@@ -128,8 +129,8 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
  * @param {number} y Y translation in pixel coordinates.
  * @param {number} scale Scale of the group.
  */
-Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y,
-    scale) {
+Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(
+    x, y, scale) {
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
@@ -139,7 +140,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y,
   this.childSurfaceXY_.x = parseInt(fixedX, 10);
   this.childSurfaceXY_.y = parseInt(fixedY, 10);
 
-  this.dragGroup_.setAttribute('transform',
+  this.dragGroup_.setAttribute(
+      'transform',
       'translate(' + fixedX + ',' + fixedY + ') scale(' + scale + ')');
 };
 
@@ -156,8 +158,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  Blockly.utils.dom.setCssTransform(this.SVG_,
-      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+  Blockly.utils.dom.setCssTransform(
+      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0px)');
 };
 
 /**
@@ -181,7 +183,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
  * @param {number} y Y translation for the entire surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  this.surfaceXY_ = new Blockly.utils.Coordinate(x * this.scale_, y * this.scale_);
+  this.surfaceXY_ =
+      new Blockly.utils.Coordinate(x * this.scale_, y * this.scale_);
   this.translateSurfaceInternal_();
 };
 
@@ -229,7 +232,8 @@ Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
  * @return {!Blockly.utils.Coordinate} The amount the workspace has been moved.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
-  return new Blockly.utils.Coordinate(this.childSurfaceXY_.x, this.childSurfaceXY_.y);
+  return new Blockly.utils.Coordinate(
+      this.childSurfaceXY_.x, this.childSurfaceXY_.y);
 };
 
 /**

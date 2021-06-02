@@ -84,21 +84,21 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
 
   yPos = conn.y;
   // Walk forward and back on the y axis looking for the connection.
-  var pointerMin = bestGuess;
-  var pointerMax = bestGuess;
-  while (pointerMin >= 0 && this.connections_[pointerMin].y == yPos) {
-    if (this.connections_[pointerMin] == conn) {
-      return pointerMin;
+  var pointer = bestGuess;
+  while (pointer >= 0 && this.connections_[pointer].y == yPos) {
+    if (this.connections_[pointer] == conn) {
+      return pointer;
     }
-    pointerMin--;
+    pointer--;
   }
 
-  while (pointerMax < this.connections_.length &&
-         this.connections_[pointerMax].y == yPos) {
-    if (this.connections_[pointerMax] == conn) {
-      return pointerMax;
+  pointer = bestGuess;
+  while (pointer < this.connections_.length &&
+         this.connections_[pointer].y == yPos) {
+    if (this.connections_[pointer] == conn) {
+      return pointer;
     }
-    pointerMax++;
+    pointer++;
   }
   return -1;
 };

@@ -222,17 +222,8 @@ Blockly.FieldNumber.prototype.setPrecision = function(precision) {
  * @private
  */
 Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
-  if (precision == null) {
-    // Number(precision) would also be 0, but set explicitly to be clear.
-    this.precision_ = 0;
-  } else {
-    precision = Number(precision);
-    if (!isNaN(precision)) {
-      this.precision_ = precision;
-    }
-  }
-
-  var precisionString = this.precision_.toLocaleString("en-US", {maximumFractionDigits: 20});
+  this.precision_ = Number(precision) || 0;
+  var precisionString = this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
   var decimalIndex = precisionString.indexOf('.');
   if (decimalIndex == -1) {
     // If the precision is 0 (float) allow any number of decimals,

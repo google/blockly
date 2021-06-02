@@ -234,8 +234,7 @@ Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
   var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
   var topBlocks = workspace.getTopBoundedElements();
   for (var i = 0, block; (block = topBlocks[i]); i++) {
-    Blockly.bumpObjectIntoBounds_(
-        workspace, scrollMetricsInWsCoords, block);
+    Blockly.bumpObjectIntoBounds_(workspace, scrollMetricsInWsCoords, block);
   }
 };
 

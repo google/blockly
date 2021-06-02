@@ -210,14 +210,12 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
 
   // Icons always go on the first row, before anything else.
   var icons = this.block_.getIcons();
-  if (icons.length) {
-    for (var i = 0, icon; (icon = icons[i]); i++) {
-      var iconInfo = new Blockly.blockRendering.Icon(this.constants_, icon);
-      if (this.isCollapsed && icon.collapseHidden) {
-        this.hiddenIcons.push(iconInfo);
-      } else {
-        activeRow.elements.push(iconInfo);
-      }
+  for (var i = 0, icon; (icon = icons[i]); i++) {
+    var iconInfo = new Blockly.blockRendering.Icon(this.constants_, icon);
+    if (this.isCollapsed && icon.collapseHidden) {
+      this.hiddenIcons.push(iconInfo);
+    } else {
+      activeRow.elements.push(iconInfo);
     }
   }
 
@@ -264,17 +262,12 @@ Blockly.blockRendering.RenderInfo.prototype.createRows_ = function() {
 Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
   var hasPrevious = !!this.block_.previousConnection;
   var hasHat = (this.block_.hat ?
-    this.block_.hat === 'cap' : this.constants_.ADD_START_HATS) &&
-    !this.outputConnection && !hasPrevious;
-  var leftSquareCorner = this.topRow.hasLeftSquareCorner(this.block_);
+      this.block_.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+      !this.outputConnection && !hasPrevious;
 
-  if (leftSquareCorner) {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_));
-  } else {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_));
-  }
+  var cornerClass = this.topRow.hasLeftSquareCorner(this.block_) ?
+      Blockly.blockRendering.SquareCorner : Blockly.blockRendering.RoundCorner;
+  this.topRow.elements.push(new cornerClass(this.constants_));
 
   if (hasHat) {
     var hat = new Blockly.blockRendering.Hat(this.constants_);
@@ -301,15 +294,9 @@ Blockly.blockRendering.RenderInfo.prototype.populateTopRow_ = function() {
     this.topRow.minHeight = this.constants_.TOP_ROW_MIN_HEIGHT;
   }
 
-  var rightSquareCorner = this.topRow.hasRightSquareCorner(this.block_);
-
-  if (rightSquareCorner) {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.SquareCorner(this.constants_, 'right'));
-  } else {
-    this.topRow.elements.push(
-        new Blockly.blockRendering.RoundCorner(this.constants_, 'right'));
-  }
+  cornerClass = this.topRow.hasRightSquareCorner(this.block_) ?
+      Blockly.blockRendering.SquareCorner : Blockly.blockRendering.RoundCorner;
+  this.topRow.elements.push(new cornerClass(this.constants_, 'right'));
 };
 
 /**

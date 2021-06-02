@@ -1551,16 +1551,15 @@ Blockly.Block.prototype.jsonInit = function(json) {
     json['extensions'] = [json['extensions']];  // Correct and continue.
   }
 
-  // Add the mutator to the block
+  // Add the mutator to the block.
   if (json['mutator'] !== undefined) {
     Blockly.Extensions.apply(json['mutator'], this, true);
   }
 
-  if (Array.isArray(json['extensions'])) {
-    var extensionNames = json['extensions'];
+  var extensionNames = json['extensions'];
+  if (Array.isArray(extensionNames)) {
     for (var j = 0; j < extensionNames.length; ++j) {
-      var extensionName = extensionNames[j];
-      Blockly.Extensions.apply(extensionName, this, false);
+      Blockly.Extensions.apply(extensionNames[j], this, false);
     }
   }
 };

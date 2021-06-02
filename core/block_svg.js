@@ -340,33 +340,33 @@ Blockly.BlockSvg.prototype.unselect = function() {
 
 /**
  * Block's mutator icon (if any).
- * @type {Blockly.Mutator}
+ * @type {?Blockly.Mutator}
  */
 Blockly.BlockSvg.prototype.mutator = null;
 
 /**
  * Block's comment icon (if any).
- * @type {Blockly.Comment}
+ * @type {?Blockly.Comment}
  * @deprecated August 2019. Use getCommentIcon instead.
  */
 Blockly.BlockSvg.prototype.comment = null;
 
 /**
  * Block's comment icon (if any).
- * @type {Blockly.Comment}
+ * @type {?Blockly.Comment}
  * @private
  */
 Blockly.BlockSvg.prototype.commentIcon_ = null;
 
 /**
  * Block's warning icon (if any).
- * @type {Blockly.Warning}
+ * @type {?Blockly.Warning}
  */
 Blockly.BlockSvg.prototype.warning = null;
 
 /**
  * Returns a list of mutator, comment, and warning icons.
- * @return {!Array} List of icons.
+ * @return {!Array<!Blockly.Icon>} List of icons.
  */
 Blockly.BlockSvg.prototype.getIcons = function() {
   var icons = [];
@@ -384,7 +384,7 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 
 /**
  * Set parent of this block to be a new block or null.
- * @param {Blockly.Block} newParent New parent block.
+ * @param {?Blockly.Block} newParent New parent block.
  * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {

@@ -247,7 +247,7 @@ Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
 Blockly.bumpIntoBoundsHandler_ = function(workspace) {
   return function(e) {
     var metricsManager = workspace.getMetricsManager();
-    if (!metricsManager.hasFixedEdges || workspace.isDragging()) {
+    if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
       return;
     }
 

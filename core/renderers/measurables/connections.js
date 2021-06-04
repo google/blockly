@@ -18,6 +18,8 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.RenderedConnection');
 
 
 /**

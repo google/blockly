@@ -17,6 +17,10 @@ goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.Theme');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Connection');
 
 
 /**
@@ -46,7 +50,8 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement('path',
+  this.svgPath = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
@@ -92,9 +97,9 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
 };
 
 /**
- * Add the cursor svg to this block's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     block svg group.
+ * Add the cursor SVG to this block's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
@@ -108,9 +113,9 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this block's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     block svg group.
+ * Add the marker SVG to this block's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {

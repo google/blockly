@@ -13,12 +13,19 @@
 goog.provide('Blockly.BlockDragger');
 
 goog.require('Blockly.blockAnimations');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.BlockDrag');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Events.Ui');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -79,7 +86,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * A list of all of the icons (comment, warning, and mutator) that are
    * on this block and its descendants.  Moving an icon moves the bubble that
    * extends from it if that bubble is open.
-   * @type {Array.<!Object>}
+   * @type {Array<!Object>}
    * @private
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
@@ -102,7 +109,7 @@ Blockly.BlockDragger.prototype.dispose = function() {
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
  * @param {!Blockly.BlockSvg} block The root block that is being dragged.
- * @return {!Array.<!Object>} The list of all icons and their locations.
+ * @return {!Array<!Object>} The list of all icons and their locations.
  * @private
  */
 Blockly.BlockDragger.initIconData_ = function(block) {
@@ -162,6 +169,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
 
     this.draggingBlock_.translate(newLoc.x, newLoc.y);
     Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+    this.draggedConnectionManager_.updateAvailableConnections();
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -170,7 +178,7 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   this.draggingBlock_.moveToDragSurface();
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.addStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.addStyle(style);
@@ -182,8 +190,8 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
-  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStart',
-      null, this.draggingBlock_.getDescendants(false));
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+      this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
 
@@ -246,7 +254,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   this.workspace_.setResizesEnabled(true);
 
   var toolbox = this.workspace_.getToolbox();
-  if (toolbox) {
+  if (toolbox && typeof toolbox.removeStyle == 'function') {
     var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
         'blocklyToolboxGrab';
     toolbox.removeStyle(style);
@@ -259,8 +267,8 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
  * @private
  */
 Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
-  var event = new Blockly.Events.Ui(this.draggingBlock_, 'dragStop',
-      this.draggingBlock_.getDescendants(false), null);
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+      this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
 
@@ -269,7 +277,8 @@ Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
  * @private
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event = new Blockly.Events.BlockMove(this.draggingBlock_);
+  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(
+      this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);
@@ -286,15 +295,15 @@ Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
 
   if (this.wouldDeleteBlock_) {
     if (trashcan) {
-      setTimeout(trashcan.close.bind(trashcan), 100);
+      setTimeout(trashcan.closeLid.bind(trashcan), 100);
     }
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
     Blockly.draggingConnections = [];
   } else if (trashcan) {
-    // Make sure the trash can is closed.
-    trashcan.close();
+    // Make sure the trash can lid is closed.
+    trashcan.closeLid();
   }
   return this.wouldDeleteBlock_;
 };
@@ -310,12 +319,12 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   if (this.wouldDeleteBlock_) {
     this.draggingBlock_.setDeleteStyle(true);
     if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setOpen(true);
+      trashcan.setLidOpen(true);
     }
   } else {
     this.draggingBlock_.setDeleteStyle(false);
     if (trashcan) {
-      trashcan.setOpen(false);
+      trashcan.setLidOpen(false);
     }
   }
 };
@@ -363,7 +372,7 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

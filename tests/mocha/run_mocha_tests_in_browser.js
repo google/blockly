@@ -19,12 +19,13 @@ module.exports = runMochaTestsInBrowser;
  */
 async function runMochaTestsInBrowser() {
   var options = {
-      capabilities: {
-          browserName: 'chrome'
-      }
+    capabilities: {
+      browserName: 'chrome'
+    },
+    path: '/wd/hub'
   };
-  // Run in headless mode on Travis.
-  if (process.env.TRAVIS_CI) {
+  // Run in headless mode on Github Actions.
+  if (process.env.CI) {
     options.capabilities['goog:chromeOptions'] = {
       args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
     };
@@ -40,7 +41,9 @@ async function runMochaTestsInBrowser() {
     var elem = await browser.$('#failureCount');
     var text = await elem.getAttribute('tests_failed');
     return text != 'unset';
-  }, 22000);
+  }, {
+    timeout: 50000
+  });
 
   const elem = await browser.$('#failureCount');
   const numOfFailure = await elem.getAttribute('tests_failed');

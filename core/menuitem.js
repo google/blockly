@@ -20,15 +20,15 @@ goog.require('Blockly.utils.IdGenerator');
 /**
  * Class representing an item in a menu.
  *
- * @param {string} content Text caption to display as the content of
- *     the item.
+ * @param {string|!HTMLElement} content Text caption to display as the content
+ *     of the item, or a HTML element to display.
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
  */
 Blockly.MenuItem = function(content, opt_value) {
   /**
-   * Human-readable text of this menu item.
-   * @type {string}
+   * Human-readable text of this menu item, or the HTML element to display.
+   * @type {string|!HTMLElement}
    * @private
    */
   this.content_ = content;
@@ -91,7 +91,7 @@ Blockly.MenuItem = function(content, opt_value) {
 
   /**
    * Bound function to call when this menu item is clicked.
-   * @type {Function}
+   * @type {?Function}
    * @private
    */
   this.actionHandler_ = null;
@@ -112,6 +112,8 @@ Blockly.MenuItem.prototype.createDom = function() {
   element.className = 'blocklyMenuItem goog-menuitem ' +
       (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
       (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+      (this.highlight_ ?
+        'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
       (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
   var content = document.createElement('div');
@@ -123,7 +125,11 @@ Blockly.MenuItem.prototype.createDom = function() {
     content.appendChild(checkbox);
   }
 
-  content.appendChild(document.createTextNode(this.content_));
+  var contentDom = /** @type {!HTMLElement} */ (this.content_);
+  if (typeof this.content_ == 'string') {
+    contentDom = document.createTextNode(this.content_);
+  }
+  content.appendChild(contentDom);
   element.appendChild(content);
 
   // Initialize ARIA role and state.
@@ -147,7 +153,7 @@ Blockly.MenuItem.prototype.dispose = function() {
 
 /**
  * Gets the menu item's element.
- * @return {Element} The DOM element.
+ * @return {?Element} The DOM element.
  * @package
  */
 Blockly.MenuItem.prototype.getElement = function() {

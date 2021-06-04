@@ -18,7 +18,6 @@ goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 
 
 /**
@@ -40,9 +39,6 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
    */
   this.class_ = null;
 
-  if (opt_value == null) {
-    opt_value = '';
-  }
   Blockly.FieldLabel.superClass_.constructor.call(
       this, opt_value, null, opt_config);
 
@@ -51,6 +47,13 @@ Blockly.FieldLabel = function(opt_value, opt_class, opt_config) {
   }
 };
 Blockly.utils.object.inherits(Blockly.FieldLabel, Blockly.Field);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldLabel.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldLabel from a JSON arg object,
@@ -106,8 +109,8 @@ Blockly.FieldLabel.prototype.doClassValidation_ = function(opt_newValue) {
 };
 
 /**
- * Set the css class applied to the field's textElement_.
- * @param {?string} cssClass The new css class name, or null to remove.
+ * Set the CSS class applied to the field's textElement_.
+ * @param {?string} cssClass The new CSS class name, or null to remove.
  */
 Blockly.FieldLabel.prototype.setClass = function(cssClass) {
   if (this.textElement_) {

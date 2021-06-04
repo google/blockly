@@ -13,6 +13,9 @@
 
 goog.provide('Blockly.blockRendering.Types');
 
+goog.requireType('Blockly.blockRendering.Measurable');
+goog.requireType('Blockly.blockRendering.Row');
+
 
 /**
  * Types of rendering elements.
@@ -83,7 +86,7 @@ Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
  * @package
  */
 Blockly.blockRendering.Types.getType = function(type) {
-  if (!Blockly.blockRendering.Types.hasOwnProperty(type)) {
+  if (!Object.prototype.hasOwnProperty.call(Blockly.blockRendering.Types, type)) {
     Blockly.blockRendering.Types[type] =
       Blockly.blockRendering.Types.nextTypeValue_;
     Blockly.blockRendering.Types.nextTypeValue_ <<= 1;

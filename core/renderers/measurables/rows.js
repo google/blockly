@@ -24,6 +24,9 @@ goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
+
 
 /**
  * An object representing a single row on a rendered block and all of its
@@ -44,7 +47,7 @@ Blockly.blockRendering.Row = function(constants) {
   /**
    * An array of elements contained in this row.
    * @package
-   * @type {!Array.<!Blockly.blockRendering.Measurable>}
+   * @type {!Array<!Blockly.blockRendering.Measurable>}
    */
   this.elements = [];
 

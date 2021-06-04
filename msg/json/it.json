@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Albe Albe 460",
 			"Albe Albe460",
 			"Beta16",
@@ -48,7 +49,7 @@
 	"NEW_VARIABLE_TYPE_TITLE": "Tipo della nuova variabile:",
 	"NEW_VARIABLE_TITLE": "Nome della nuova variabile:",
 	"VARIABLE_ALREADY_EXISTS": "Una variabile denominata '%1' esiste già.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata '%1' esiste già per un'altro tipo: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata '%1' esiste già per un altro tipo: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Cancella %1 usi della variabile '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Non si può cancellare la variabile '%1' perché è parte della definizione della funzione '%2'",
 	"DELETE_VARIABLE": "Cancella la variabile '%1'",

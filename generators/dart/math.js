@@ -240,7 +240,7 @@ Blockly.Dart['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.Dart.valueToCode(block, 'DELTA',
       Blockly.Dart.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Dart.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Dart.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = (' + varName + ' is num ? ' + varName + ' : 0) + ' +
       argument0 + ';\n';

@@ -28,7 +28,7 @@ Blockly.Css.injected_ = false;
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
  * The provided array of CSS will be destroyed by this function.
- * @param {!Array.<string>} cssArray Array of CSS strings.
+ * @param {!Array<string>} cssArray Array of CSS strings.
  */
 Blockly.Css.register = function(cssArray) {
   if (Blockly.Css.injected_) {
@@ -70,17 +70,6 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
-};
-
-/**
- * Set the cursor to be displayed when over something draggable.
- * See https://github.com/google/blockly/issues/981 for context.
- * @param {*} _cursor Enum.
- * @deprecated April 2017.
- */
-Blockly.Css.setCursor = function(_cursor) {
-  console.warn('Deprecated call to Blockly.Css.setCursor. ' +
-      'See issue #981 for context');
 };
 
 /**
@@ -179,6 +168,7 @@ Blockly.Css.CONTENT = [
     'max-height: 300px;', // @todo: spec for maximum height.
     'overflow: auto;',
     'overflow-x: hidden;',
+    'position: relative;',
   '}',
 
   '.blocklyDropDownArrow {',
@@ -508,8 +498,11 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropDownDiv .blocklyMenu {',
+    'background: inherit;', /* Compatibility with gapi, reset from goog-menu */
+    'border: inherit;', /* Compatibility with gapi, reset from goog-menu */
     'font: normal 13px "Helvetica Neue", Helvetica, sans-serif;',
     'outline: none;',
+    'position: relative;', /* Compatibility with gapi, reset from goog-menu */
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
   '}',
 

@@ -13,11 +13,19 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
-goog.require('Blockly.Events');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.ConnectionDB');
 
 
 /**
@@ -111,7 +119,7 @@ Blockly.RenderedConnection.prototype.getSourceBlock = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.BlockSvg} The connected block or null if none is connected.
+ * @return {?Blockly.BlockSvg} The connected block or null if none is connected.
  * @override
  */
 Blockly.RenderedConnection.prototype.targetBlock = function() {
@@ -281,7 +289,8 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
   var renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
   var shape = renderConstants.shapeFor(this);
-  if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
+  if (this.type == Blockly.connectionTypes.INPUT_VALUE ||
+      this.type == Blockly.connectionTypes.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     var yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
@@ -301,7 +310,7 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var x = this.x - xy.x;
   var y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
-      'path',
+      Blockly.utils.Svg.PATH,
       {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
@@ -377,7 +386,7 @@ Blockly.RenderedConnection.prototype.stopTrackingAll = function() {
 /**
  * Start tracking this connection, as well as all down-stream connections on
  * any block attached to this connection. This happens when a block is expanded.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @return {!Array<!Blockly.Block>} List of blocks to render.
  */
 Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   this.setTracking(true);
@@ -386,7 +395,8 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   var renderList = [];
-  if (this.type != Blockly.INPUT_VALUE && this.type != Blockly.NEXT_STATEMENT) {
+  if (this.type != Blockly.connectionTypes.INPUT_VALUE &&
+      this.type != Blockly.connectionTypes.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
@@ -420,9 +430,15 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
  * @param {number=} maxRadius The maximum radius allowed for connections, in
  *     workspace units.
  * @return {boolean} True if the connection is allowed, false otherwise.
+ * @deprecated July 2020
  */
 Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
     maxRadius) {
+  Blockly.utils.deprecation.warn(
+      'RenderedConnection.prototype.isConnectionAllowed',
+      'July 2020',
+      'July 2021',
+      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
@@ -447,7 +463,8 @@ Blockly.RenderedConnection.prototype.onFailedConnect = function(
  * Disconnect two blocks that are connected by this connection.
  * @param {!Blockly.Block} parentBlock The superior block.
  * @param {!Blockly.Block} childBlock The inferior block.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
@@ -468,23 +485,22 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
 /**
  * Respawn the shadow block if there was one connected to the this connection.
  * Render/rerender blocks as needed.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
+  Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
+  var blockShadow = this.targetBlock();
+  if (!blockShadow) {
+    // This connection must not have a shadowDom_.
+    return;
+  }
+  blockShadow.initSvg();
+  blockShadow.render(false);
+
   var parentBlock = this.getSourceBlock();
-  // Respawn the shadow block if there is one.
-  var shadow = this.getShadowDom();
-  if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
-    Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
-    var blockShadow = this.targetBlock();
-    if (!blockShadow) {
-      throw Error('Couldn\'t respawn the shadow block that should exist here.');
-    }
-    blockShadow.initSvg();
-    blockShadow.render(false);
-    if (parentBlock.rendered) {
-      parentBlock.render();
-    }
+  if (parentBlock.rendered) {
+    parentBlock.render();
   }
 };
 
@@ -493,7 +509,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
  * Type checking does not apply, since this function is used for bumping.
  * @param {number} maxLimit The maximum radius to another connection, in
  *     workspace units.
- * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @return {!Array<!Blockly.Connection>} List of connections.
  * @package
  */
 Blockly.RenderedConnection.prototype.neighbours = function(maxLimit) {
@@ -522,8 +538,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
     childBlock.updateDisabled();
   }
   if (parentRendered && childRendered) {
-    if (parentConnection.type == Blockly.NEXT_STATEMENT ||
-        parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
+    if (parentConnection.type == Blockly.connectionTypes.NEXT_STATEMENT ||
+        parentConnection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
       // Rendering a child will render its parent.
       childBlock.render();
@@ -549,7 +565,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
 Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
   if (this.isConnected() && (!this.targetConnection ||
-      !this.checkType(this.targetConnection))) {
+      !this.getConnectionChecker().canConnect(
+          this, this.targetConnection, false))) {
     var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

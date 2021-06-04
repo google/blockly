@@ -11,17 +11,17 @@
 
 goog.provide('Blockly.Theme');
 
+goog.require('Blockly.registry');
 goog.require('Blockly.utils');
-goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.object');
 
 
 /**
  * Class for a theme.
  * @param {string} name Theme name.
- * @param {!Object.<string, Blockly.Theme.BlockStyle>=} opt_blockStyles A map
+ * @param {!Object<string, Blockly.Theme.BlockStyle>=} opt_blockStyles A map
  *     from style names (strings) to objects with style attributes for blocks.
- * @param {!Object.<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
+ * @param {!Object<string, Blockly.Theme.CategoryStyle>=} opt_categoryStyles A
  *     map from style names (strings) to objects with style attributes for
  *     categories.
  * @param {!Blockly.Theme.ComponentStyle=} opt_componentStyles A map of Blockly
@@ -39,14 +39,14 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
 
   /**
    * The block styles map.
-   * @type {!Object.<string, !Blockly.Theme.BlockStyle>}
+   * @type {!Object<string, !Blockly.Theme.BlockStyle>}
    * @package
    */
   this.blockStyles = opt_blockStyles || Object.create(null);
 
   /**
    * The category styles map.
-   * @type {!Object.<string, Blockly.Theme.CategoryStyle>}
+   * @type {!Object<string, Blockly.Theme.CategoryStyle>}
    * @package
    */
   this.categoryStyles = opt_categoryStyles || Object.create(null);
@@ -73,6 +73,9 @@ Blockly.Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.startHats = null;
+
+  // Register the theme by name.
+  Blockly.registry.register(Blockly.registry.Type.THEME, name, this);
 };
 
 /**
@@ -163,7 +166,7 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
  */
 Blockly.Theme.prototype.getComponentStyle = function(componentName) {
   var style = this.componentStyles[componentName];
-  if (style && typeof propertyValue == 'string' &&
+  if (style && typeof style == 'string' &&
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
   }
@@ -206,9 +209,14 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
 Blockly.Theme.defineTheme = function(name, themeObj) {
   var theme = new Blockly.Theme(name);
   var base = themeObj['base'];
-  if (base && base instanceof Blockly.Theme) {
-    Blockly.utils.object.deepMerge(theme, base);
-    theme.name = name;
+  if (base) {
+    if (typeof base == "string") {
+      base = Blockly.registry.getObject(Blockly.registry.Type.THEME, base);
+    }
+    if (base instanceof Blockly.Theme) {
+      Blockly.utils.object.deepMerge(theme, base);
+      theme.name = name;
+    }
   }
 
   Blockly.utils.object.deepMerge(theme.blockStyles,
@@ -222,5 +230,6 @@ Blockly.Theme.defineTheme = function(name, themeObj) {
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }
+
   return theme;
 };

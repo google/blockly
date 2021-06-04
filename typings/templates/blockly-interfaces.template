@@ -2,7 +2,7 @@
 declare module Blockly {
 
   interface BlocklyOptions {
-    toolbox?: HTMLElement | string;
+    toolbox?: Blockly.utils.toolbox.ToolboxDefinition;
     readOnly?: boolean;
     trashcan?: boolean;
     maxInstances?: {[type: string]: number;};
@@ -39,7 +39,7 @@ declare module Blockly {
       pinch?: boolean;
     };
     renderer?: string;
-    keyMap?: {[type: string]: Blockly.Action;};
+    parentWorkspace?: Blockly.WorkspaceSvg;
   }
 
   interface BlocklyThemeOptions {

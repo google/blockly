@@ -4,1206 +4,1103 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Connections', function() {
-  suite('Can Connect With Reason', function() {
-    test('Target Null', function() {
-      var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
-      chai.assert.equal(connection.canConnectWithReason(null),
-          Blockly.Connection.REASON_TARGET_NULL);
-    });
-    test('Target Self', function() {
-      var block = {workspace: 1};
-      var connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
-      var connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
-
-      chai.assert.equal(connection1.canConnectWithReason(connection2),
-          Blockly.Connection.REASON_SELF_CONNECTION);
-    });
-    test('Different Workspaces', function() {
-      var connection1 = new Blockly.Connection(
-          {workspace: 1}, Blockly.INPUT_VALUE);
-      var connection2 = new Blockly.Connection(
-          {workspace: 2}, Blockly.OUTPUT_VALUE);
-
-      chai.assert.equal(connection1.canConnectWithReason(connection2),
-          Blockly.Connection.REASON_DIFFERENT_WORKSPACES);
-    });
-    suite('Types', function() {
-      setup(function() {
-        // We have to declare each separately so that the connections belong
-        // on different blocks.
-        var prevBlock = { isShadow: function() {}};
-        var nextBlock = { isShadow: function() {}};
-        var outBlock = { isShadow: function() {}};
-        var inBlock = { isShadow: function() {}};
-        this.previous = new Blockly.Connection(
-            prevBlock, Blockly.PREVIOUS_STATEMENT);
-        this.next = new Blockly.Connection(
-            nextBlock, Blockly.NEXT_STATEMENT);
-        this.output = new Blockly.Connection(
-            outBlock, Blockly.OUTPUT_VALUE);
-        this.input = new Blockly.Connection(
-            inBlock, Blockly.INPUT_VALUE);
-      });
-      test('Previous, Next', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.next),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Previous, Output', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.output),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Previous, Input', function() {
-        chai.assert.equal(this.previous.canConnectWithReason(this.input),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Next, Previous', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.previous),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Next, Output', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.output),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Next, Input', function() {
-        chai.assert.equal(this.next.canConnectWithReason(this.input),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Output, Previous', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.previous),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Output, Next', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.next),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Output, Input', function() {
-        chai.assert.equal(this.output.canConnectWithReason(this.input),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Input, Previous', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.previous),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Input, Next', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.next),
-            Blockly.Connection.REASON_WRONG_TYPE);
-      });
-      test('Input, Output', function() {
-        chai.assert.equal(this.input.canConnectWithReason(this.output),
-            Blockly.Connection.CAN_CONNECT);
-      });
-    });
-    suite('Shadows', function() {
-      test('Previous Shadow', function() {
-        var prevBlock = { isShadow: function() { return true; }};
-        var nextBlock = { isShadow: function() { return false; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
-
-        chai.assert.equal(prev.canConnectWithReason(next),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Next Shadow', function() {
-        var prevBlock = { isShadow: function() { return false; }};
-        var nextBlock = { isShadow: function() { return true; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
-
-        chai.assert.equal(prev.canConnectWithReason(next),
-            Blockly.Connection.REASON_SHADOW_PARENT);
-      });
-      test('Prev and Next Shadow', function() {
-        var prevBlock = { isShadow: function() { return true; }};
-        var nextBlock = { isShadow: function() { return true; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
-
-        chai.assert.equal(prev.canConnectWithReason(next),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Output Shadow', function() {
-        var outBlock = { isShadow: function() { return true; }};
-        var inBlock = { isShadow: function() { return false; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
-
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
-            Blockly.Connection.CAN_CONNECT);
-      });
-      test('Input Shadow', function() {
-        var outBlock = { isShadow: function() { return false; }};
-        var inBlock = { isShadow: function() { return true; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
-
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
-            Blockly.Connection.REASON_SHADOW_PARENT);
-      });
-      test('Output and Input Shadow', function() {
-        var outBlock = { isShadow: function() { return true; }};
-        var inBlock = { isShadow: function() { return true; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
-
-        chai.assert.equal(outCon.canConnectWithReason(inCon),
-            Blockly.Connection.CAN_CONNECT);
-      });
-    });
+suite('Connection', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = sinon.createStubInstance(Blockly.Workspace);
+    this.workspace.connectionChecker = new Blockly.ConnectionChecker();
+    this.createConnection = function(type) {
+      var block = {
+        workspace: this.workspace,
+        isShadow: function() { return false; }
+      };
+      var connection = new Blockly.Connection(block, type);
+      return connection;
+    };
   });
-  suite('Check Types', function() {
-    setup(function() {
-      this.con1 = new Blockly.Connection({}, Blockly.PREVIOUS_STATEMENT);
-      this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
-    });
-    test('No Types', function() {
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
-    });
-    test('Same Type', function() {
-      this.con1.setCheck('type1');
-      this.con2.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
-    });
-    test('Same Types', function() {
-      this.con1.setCheck(['type1', 'type2']);
-      this.con2.setCheck(['type1', 'type2']);
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
-    });
-    test('Single Same Type', function() {
-      this.con1.setCheck(['type1', 'type2']);
-      this.con2.setCheck(['type1', 'type3']);
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
-    });
-    test('One Typed, One Promiscuous', function() {
-      this.con1.setCheck('type1');
-      chai.assert.isTrue(this.con1.checkType((this.con2)));
-    });
-    test('No Compatible Types', function() {
-      this.con1.setCheck('type1');
-      this.con2.setCheck('type2');
-      chai.assert.isFalse(this.con1.checkType((this.con2)));
-    });
+
+  teardown(function() {
+    sharedTestTeardown.call(this);
   });
+
+  test('Deprecated - canConnectWithReason passes', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
+    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
+    chai.assert.equal(conn1.canConnectWithReason(conn2),
+        Blockly.Connection.CAN_CONNECT);
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.canConnectWithReason');
+  });
+
+  test('Deprecated - canConnectWithReason fails', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
+    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
+    chai.assert.equal(conn1.canConnectWithReason(conn2),
+        Blockly.Connection.REASON_WRONG_TYPE);
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.canConnectWithReason');
+  });
+
+  test('Deprecated - checkConnection passes', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
+    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
+    chai.assert.doesNotThrow(function() {
+      conn1.checkConnection(conn2);
+    });
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.checkConnection');
+  });
+
+  test('Deprecated - checkConnection fails', function() {
+    var deprecateWarnSpy = createDeprecationWarningStub();
+    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
+    chai.assert.throws(function() {
+      conn1.checkConnection(conn2);
+    });
+    assertSingleDeprecationWarningCall(deprecateWarnSpy,
+        'Connection.prototype.checkConnection');
+  });
+
   suite('Set Shadow Dom', function() {
+
+    function assertBlockMatches(block, isShadow, opt_id) {
+      chai.assert.equal(block.isShadow(), isShadow,
+          `expected block ${block.id} to ${isShadow ? '' : 'not'} be a shadow`);
+      if (opt_id) {
+        chai.assert.equal(block.id, opt_id);
+      }
+    }
+
+    function assertInputHasBlock(parent, inputName, isShadow, opt_name) {
+      var block = parent.getInputTargetBlock(inputName);
+      chai.assert.exists(block,
+          `expected block ${opt_name || ''} to be attached to ${inputName}`);
+      assertBlockMatches(block, isShadow, opt_name);
+    }
+
+    function assertNextHasBlock(parent, isShadow, opt_name) {
+      var block = parent.getNextBlock();
+      chai.assert.exists(block,
+          `expected block ${opt_name || ''} to be attached to next connection`);
+      assertBlockMatches(block, isShadow, opt_name);
+    }
+
+    function assertInputNotHasBlock(parent, inputName) {
+      var block = parent.getInputTargetBlock(inputName);
+      chai.assert.notExists(block,
+          `expected block ${block && block.id} to not be attached to ${inputName}`);
+    }
+
+    function assertNextNotHasBlock(parent) {
+      var block = parent.getNextBlock();
+      chai.assert.notExists(block,
+          `expected block ${block && block.id} to not be attached to next connection`);
+    }
+
+    var testSuites = [
+      {
+        title: 'Rendered',
+        createWorkspace: () => {
+          return Blockly.inject('blocklyDiv');
+        },
+      },
+      {
+        title: 'Headless',
+        createWorkspace: () => {
+          return new Blockly.Workspace();
+        },
+      }
+    ];
+
+    testSuites.forEach((testSuite) => {
+      // Create a suite for each suite.
+      suite(testSuite.title, function() {
+        setup(function() {
+          this.workspace = testSuite.createWorkspace();
+
+          Blockly.defineBlocksWithJsonArray([
+            {
+              "type": "stack_block",
+              "message0": "",
+              "previousStatement": null,
+              "nextStatement": null
+            },
+            {
+              "type": "row_block",
+              "message0": "%1",
+              "args0": [
+                {
+                  "type": "input_value",
+                  "name": "INPUT"
+                }
+              ],
+              "output": null
+            },
+            {
+              "type": "statement_block",
+              "message0": "%1",
+              "args0": [
+                {
+                  "type": "input_statement",
+                  "name": "STATEMENT"
+                }
+              ],
+              "previousStatement": null,
+              "nextStatement": null
+            }]);
+        });
+
+        teardown(function() {
+          workspaceTeardown.call(this, this.workspace);
+        });
+
+        suite('Add - No Block Connected', function() {
+          // These are defined separately in each suite.
+          function createRowBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block"/>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true);
+          });
+
+          test('Multiple Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block"/>' +
+                '  </value>' +
+                '</shadow>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block"/>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true);
+          });
+
+          test('Multiple Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block"/>' +
+                '  </statement>' +
+                '</shadow>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
+          });
+
+          test('Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true);
+          });
+
+          test('Multiple Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block">' +
+                '  <next>' +
+                '    <shadow type="stack_block"/>' +
+                '  </next>' +
+                '</shadow>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true);
+            assertNextHasBlock(parent.getNextBlock(), true);
+          });
+        });
+
+        suite('Add - With Block Connected', function() {
+          // These are defined separately in each suite.
+          function createRowBlocks(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <block type="row_block"/>' +
+                '  </value>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlocks(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <block type="statement_block"/>' +
+                '  </statement>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlocks(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block">' +
+                '  <next>' +
+                '    <block type="stack_block"/>' +
+                '  </next>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block"/>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', false);
+            parent.getInput('INPUT').connection.disconnect();
+            assertInputHasBlock(parent, 'INPUT', true);
+          });
+
+          test('Multiple Value', function() {
+            var parent = createRowBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block"/>' +
+                '  </value>' +
+                '</shadow>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', false);
+            assertInputNotHasBlock(parent.getInputTargetBlock('INPUT'), 'INPUT');
+            parent.getInput('INPUT').connection.disconnect();
+            assertInputHasBlock(parent, 'INPUT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block"/>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', false);
+            parent.getInput('STATEMENT').connection.disconnect();
+            assertInputHasBlock(parent, 'STATEMENT', true);
+          });
+
+          test('Multiple Statement', function() {
+            var parent = createStatementBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block"/>' +
+                '  </statement>' +
+                '</shadow>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', false);
+            assertInputNotHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT');
+            parent.getInput('STATEMENT').connection.disconnect();
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
+          });
+
+          test('Next', function() {
+            var parent = createStackBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, false);
+            parent.nextConnection.disconnect();
+            assertNextHasBlock(parent, true);
+          });
+
+          test('Multiple Next', function() {
+            var parent = createStackBlocks(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block">' +
+                '  <next>' +
+                '    <shadow type="stack_block"/>' +
+                '  </next>' +
+                '</shadow>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, false);
+            assertNextNotHasBlock(parent.getNextBlock());
+            parent.nextConnection.disconnect();
+            assertNextHasBlock(parent, true);
+            assertNextHasBlock(parent.getNextBlock(), true);
+          });
+        });
+
+        suite('Add - With Shadow Connected', function() {
+          // These are defined separately in each suite.
+          function createRowBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block" id="1"/>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true, '1');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block" id="2"/>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true, '2');
+          });
+
+          test('Multiple Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block" id="1">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block" id="a"/>' +
+                '  </value>' +
+                '</shadow>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true, '1');
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block" id="2">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block" id="b"/>' +
+                '  </value>' +
+                '</shadow>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true, '2');
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block" id="1"/>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true, '1');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block" id="2"/>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true, '2');
+          });
+
+          test('Multiple Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block" id="1">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block" id="a"/>' +
+                '  </statement>' +
+                '</shadow>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true, '1');
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true, 'a');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block" id="2">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block" id="b"/>' +
+                '  </statement>' +
+                '</shadow>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true, '2');
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true, 'b');
+          });
+
+          test('Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block" id="1"/>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true, '1');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block" id="2"/>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true, '2');
+          });
+
+          test('Multiple Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block" id="1">' +
+                '  <next>' +
+                '    <shadow type="stack_block" id="a"/>' +
+                '  </next>' +
+                '</shadow>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true, '1');
+            assertNextHasBlock(parent.getNextBlock(), true, 'a');
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block" id="2">' +
+                '  <next>' +
+                '    <shadow type="stack_block" id="b"/>' +
+                '  </next>' +
+                '</shadow>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true, '2');
+            assertNextHasBlock(parent.getNextBlock(), true, 'b');
+          });
+        });
+
+        suite('Remove - No Block Connected', function() {
+          // These are defined separately in each suite.
+          function createRowBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block"/>' +
+                '  </value>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block"/>' +
+                '  </statement>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block">' +
+                '  <next>' +
+                '    <shadow type="stack_block"/>' +
+                '  </next>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlock(this.workspace);
+            parent.getInput('INPUT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'INPUT');
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            parent.getInput('STATEMENT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'STATMENT');
+          });
+
+          test('Next', function() {
+            var parent = createStackBlock(this.workspace);
+            parent.nextConnection.setShadowDom(null);
+            assertNextNotHasBlock(parent);
+          });
+        });
+
+        suite('Remove - Block Connected', function() {
+          // These are defined separately in each suite.
+          function createRowBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block"/>' +
+                '    <block type="row_block"/>' +
+                '  </value>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block"/>' +
+                '    <block type="statement_block"/>' +
+                '  </statement>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block">' +
+                '  <next>' +
+                '    <shadow type="stack_block"/>' +
+                '    <block type="stack_block"/>' +
+                '  </next>' +
+                '</block>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlock(this.workspace);
+            parent.getInput('INPUT').connection.setShadowDom(null);
+            assertInputHasBlock(parent, 'INPUT', false);
+            parent.getInput('INPUT').connection.disconnect();
+            assertInputNotHasBlock(parent, 'INPUT');
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            parent.getInput('STATEMENT').connection.setShadowDom(null);
+            assertInputHasBlock(parent, 'STATEMENT', false);
+            parent.getInput('STATEMENT').connection.disconnect();
+            assertInputNotHasBlock(parent, 'STATEMENT');
+          });
+
+          test('Next', function() {
+            var parent = createStackBlock(this.workspace);
+            parent.nextConnection.setShadowDom(null);
+            assertNextHasBlock(parent, false);
+            parent.nextConnection.disconnect();
+            assertNextNotHasBlock(parent);
+          });
+        });
+
+        suite('Add - Connect & Disconnect - Remove', function() {
+          // These are defined separately in each suite.
+          function createRowBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="row_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStatementBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="statement_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          function createStackBlock(workspace) {
+            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                '<block type="stack_block"/>'
+            ), workspace);
+            return block;
+          }
+
+          test('Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block"/>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true);
+            var child = createRowBlock(this.workspace);
+            parent.getInput('INPUT').connection.connect(child.outputConnection);
+            assertInputHasBlock(parent, 'INPUT', false);
+            parent.getInput('INPUT').connection.disconnect();
+            assertInputHasBlock(parent, 'INPUT', true);
+            parent.getInput('INPUT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'INPUT');
+          });
+
+          test('Multiple Value', function() {
+            var parent = createRowBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="row_block">' +
+                '  <value name="INPUT">' +
+                '    <shadow type="row_block"/>' +
+                '  </value>' +
+                '</shadow>'
+            );
+            parent.getInput('INPUT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'INPUT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+            var child = createRowBlock(this.workspace);
+            parent.getInput('INPUT').connection.connect(child.outputConnection);
+            assertInputHasBlock(parent, 'INPUT', false);
+            parent.getInput('INPUT').connection.disconnect();
+            assertInputHasBlock(parent, 'INPUT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+            parent.getInput('INPUT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'INPUT');
+          });
+
+          test('Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block"/>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            var child = createStatementBlock(this.workspace);
+            parent.getInput('STATEMENT').connection
+                .connect(child.previousConnection);
+            assertInputHasBlock(parent, 'STATEMENT', false);
+            parent.getInput('STATEMENT').connection.disconnect();
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            parent.getInput('STATEMENT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'STATEMENT');
+          });
+
+          test('Multiple Statement', function() {
+            var parent = createStatementBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="statement_block">' +
+                '  <statement name="STATEMENT">' +
+                '    <shadow type="statement_block"/>' +
+                '  </statement>' +
+                '</shadow>'
+            );
+            parent.getInput('STATEMENT').connection.setShadowDom(xml);
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
+            var child = createStatementBlock(this.workspace);
+            parent.getInput('STATEMENT').connection
+                .connect(child.previousConnection);
+            assertInputHasBlock(parent, 'STATEMENT', false);
+            parent.getInput('STATEMENT').connection.disconnect();
+            assertInputHasBlock(parent, 'STATEMENT', true);
+            assertInputHasBlock(
+                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
+            parent.getInput('STATEMENT').connection.setShadowDom(null);
+            assertInputNotHasBlock(parent, 'STATEMENT');
+          });
+
+          test('Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true);
+            var child = createStatementBlock(this.workspace);
+            parent.nextConnection.connect(child.previousConnection);
+            assertNextHasBlock(parent, false);
+            parent.nextConnection.disconnect();
+            assertNextHasBlock(parent, true);
+            parent.nextConnection.setShadowDom(null);
+            assertNextNotHasBlock(parent);
+          });
+
+          test('Multiple Next', function() {
+            var parent = createStackBlock(this.workspace);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block">' +
+                '  <next>' +
+                '    <shadow type="stack_block"/>' +
+                '  </next>' +
+                '</shadow>'
+            );
+            parent.nextConnection.setShadowDom(xml);
+            assertNextHasBlock(parent, true);
+            assertNextHasBlock(parent.getNextBlock(), true);
+            var child = createStatementBlock(this.workspace);
+            parent.nextConnection.connect(child.previousConnection);
+            assertNextHasBlock(parent, false);
+            parent.nextConnection.disconnect();
+            assertNextHasBlock(parent, true);
+            assertNextHasBlock(parent.getNextBlock(), true);
+            parent.nextConnection.setShadowDom(null);
+            assertNextNotHasBlock(parent);
+          });
+        });
+      });
+    });
+  });
+
+  suite('getConnectionForOrphanedOutput', function() {
     setup(function() {
+      this.workspace = new Blockly.Workspace();
+
       Blockly.defineBlocksWithJsonArray([
         {
-          "type": "stack_block",
-          "message0": "",
-          "previousStatement": null,
-          "nextStatement": null
-        },
-        {
-          "type": "row_block",
-          "message0": "%1",
-          "args0": [
+          'type': 'input',
+          'message0': '%1',
+          'args0': [
             {
-              "type": "input_value",
-              "name": "INPUT"
+              'type': 'input_value',
+              'name': 'INPUT',
+              'check': 'check'
             }
           ],
-          "output": null
         },
         {
-          "type": "statement_block",
-          "message0": "%1",
-          "args0": [
-            {
-              "type": "input_statement",
-              "name": "STATEMENT"
-            }
-          ],
-          "previousStatement": null,
-          "nextStatement": null
-        }]);
-
-      this.runHeadlessAndRendered = function(func, context) {
-        var workspace = new Blockly.Workspace();
-        func.call(context, workspace);
-        workspace.clear();
-        workspace.dispose();
-
-        workspace = Blockly.inject('blocklyDiv');
-        func.call(context, workspace);
-        workspace.clear();
-        workspace.dispose();
-      };
+          'type': 'output',
+          'message0': '',
+          'output': 'check',
+        },
+      ]);
     });
+
     teardown(function() {
-      delete this.runHeadlessAndRendered;
-      delete Blockly.Blocks['stack_block'];
-      delete Blockly.Blocks['row_block'];
-      delete Blockly.Blocks['statement_block'];
+      workspaceTeardown.call(this, this.workspace);
     });
-    suite('Add - No Block Connected', function() {
+
+    suite('No available spots', function() {
       setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block"/>'
-          ), workspace);
-          return block;
-        };
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'output_and_statements',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_statement',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+              {
+                'type': 'input_statement',
+                'name': 'INPUT2',
+                'check': 'check'
+              }
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'output_and_inputs',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check2'
+              },
+              {
+                'type': 'input_value',
+                'name': 'INPUT2',
+                'check': 'check2'
+              }
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'check_to_check2',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check2'
+              },
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'check2_to_check',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'CHECK2TOCHECKINPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check2',
+          },
+        ]);
       });
-      teardown(function() {
-        delete this.createRowBlock;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
-      });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block"/>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block"/>' +
-              '  </value>' +
-              '</shadow>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
+      test('No connection', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output');
+        const newChild = this.workspace.newBlock('output');
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block"/>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
 
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
+      test('All statements', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output_and_statements');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
-      test('Multiple Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block"/>' +
-              '  </statement>' +
-              '</shadow>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
 
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
+      test('Bad checks', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('output_and_inputs');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        chai.assert.notExists(
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block"/>'
-          );
-          parent.nextConnection.setShadowDom(xml);
 
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block">' +
-              '  <next>' +
-              '    <shadow type="stack_block"/>' +
-              '  </next>' +
-              '</shadow>'
-          );
-          parent.nextConnection.setShadowDom(xml);
+      test('Through different types', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('check_to_check2');
+        const otherChild = this.workspace.newBlock('check2_to_check');
+        const newChild = this.workspace.newBlock('output');
 
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
+        parent.getInput('INPUT').connection
+            .connect(oldChild.outputConnection);
+        oldChild.getInput('INPUT').connection
+            .connect(otherChild.outputConnection);
+
+        chai.assert.notExists(
+            Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
       });
     });
-    suite('Add - With Block Connected', function() {
+
+    suite('Multiple available spots', function() {
       setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlocks = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <block type="row_block"/>' +
-              '  </value>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlocks = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <block type="statement_block"/>' +
-              '  </statement>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlocks = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block">' +
-              '  <next>' +
-              '    <block type="stack_block"/>' +
-              '  </next>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'multiple_inputs',
+            'message0': '%1 %2',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+              {
+                'type': 'input_value',
+                'name': 'INPUT2',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+          {
+            'type': 'single_input',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+        ]);
       });
-      teardown(function() {
-        delete this.createRowBlocks;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
+
+      suite('No shadows', function() {
+        test('Top block', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Child blocks', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const childX = this.workspace.newBlock('single_input');
+          const childY = this.workspace.newBlock('single_input');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.connect(childX.outputConnection);
+          oldChild.getInput('INPUT2').connection.connect(childY.outputConnection);
+
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
+
+        test('Spots filled', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const otherChild = this.workspace.newBlock('output');
+          const newChild = this.workspace.newBlock('output');
+
+          parent.getInput('INPUT').connection
+              .connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection
+              .connect(otherChild.outputConnection);
+
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
       });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block"/>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
+      suite('Shadows', function() {
+        test('Top block', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const newChild = this.workspace.newBlock('output');
 
-          parent.getInput('INPUT').connection.disconnect();
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+          oldChild.getInput('INPUT2').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block"/>' +
-              '  </value>' +
-              '</shadow>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNull(target2);
+        test('Child blocks', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const childX = this.workspace.newBlock('single_input');
+          const childY = this.workspace.newBlock('single_input');
+          const newChild = this.workspace.newBlock('output');
 
-          parent.getInput('INPUT').connection.disconnect();
+          parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection.connect(childX.outputConnection);
+          oldChild.getInput('INPUT2').connection.connect(childY.outputConnection);
+          childX.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
+          childY.getInput('INPUT').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block"/>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
 
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
+        test('Spots filled', function() {
+          const parent = this.workspace.newBlock('input');
+          const oldChild = this.workspace.newBlock('multiple_inputs');
+          const otherChild = this.workspace.newBlock('output');
+          const newChild = this.workspace.newBlock('output');
 
-          parent.getInput('STATEMENT').connection.disconnect();
+          parent.getInput('INPUT').connection
+              .connect(oldChild.outputConnection);
+          oldChild.getInput('INPUT').connection
+              .connect(otherChild.outputConnection);
+          oldChild.getInput('INPUT2').connection.setShadowDom(
+              Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                  .firstChild);
 
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block"/>' +
-              '  </statement>' +
-              '</shadow>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNull(target2);
-
-          parent.getInput('STATEMENT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block"/>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.nextConnection.disconnect();
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlocks(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block">' +
-              '  <next>' +
-              '    <shadow type="stack_block"/>' +
-              '  </next>' +
-              '</shadow>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-          var target2 = target.getNextBlock();
-          chai.assert.isNull(target2);
-
-          parent.nextConnection.disconnect();
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-        };
-        this.runHeadlessAndRendered(func, this);
+          chai.assert.notExists(
+              Blockly.Connection.getConnectionForOrphanedOutput(oldChild, newChild));
+        });
       });
     });
-    suite('Add - With Shadow Connected', function() {
+
+    suite('Single available spot', function() {
       setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block"/>'
-          ), workspace);
-          return block;
-        };
+        Blockly.defineBlocksWithJsonArray([
+          {
+            'type': 'single_input',
+            'message0': '%1',
+            'args0': [
+              {
+                'type': 'input_value',
+                'name': 'INPUT',
+                'check': 'check'
+              },
+            ],
+            'output': 'check',
+          },
+        ]);
       });
-      teardown(function() {
-        delete this.createRowBlock;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
+
+      test('No shadows', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('single_input');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+
+        const result = Blockly.Connection
+            .getConnectionForOrphanedOutput(oldChild, newChild);
+        chai.assert.exists(result);
+        chai.assert.equal(result.getParentInput().name, 'INPUT');
       });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block" id="1"/>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
 
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block" id="2"/>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
-
-          var target2 = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, '2');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block" id="1">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block" id="a"/>' +
-              '  </value>' +
-              '</shadow>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'a');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block" id="2">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block" id="b"/>' +
-              '  </value>' +
-              '</shadow>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '2');
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'b');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block" id="1"/>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block" id="2"/>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '2');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block" id="1">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block" id="a"/>' +
-              '  </statement>' +
-              '</shadow>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'a');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block" id="2">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block" id="b"/>' +
-              '  </statement>' +
-              '</shadow>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '2');
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'b');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block" id="1"/>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block" id="2"/>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '2');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block" id="1">' +
-              '  <next>' +
-              '    <shadow type="stack_block" id="a"/>' +
-              '  </next>' +
-              '</shadow>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '1');
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'a');
-
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block" id="2">' +
-              '  <next>' +
-              '    <shadow type="stack_block" id="b"/>' +
-              '  </next>' +
-              '</shadow>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          chai.assert.equal(target.id, '2');
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-          chai.assert.equal(target2.id, 'b');
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-    });
-    suite('Remove - No Block Connected', function() {
-      setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block"/>' +
-              '  </value>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block"/>' +
-              '  </statement>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block">' +
-              '  <next>' +
-              '    <shadow type="stack_block"/>' +
-              '  </next>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-      });
-      teardown(function() {
-        delete this.createRowBlock;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
-      });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          parent.getInput('INPUT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          parent.getInput('STATEMENT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          parent.nextConnection.setShadowDom(null);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-    });
-    suite('Remove - Block Connected', function() {
-      setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block"/>' +
-              '    <block type="row_block"/>' +
-              '  </value>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block"/>' +
-              '    <block type="statement_block"/>' +
-              '  </statement>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block">' +
-              '  <next>' +
-              '    <shadow type="stack_block"/>' +
-              '    <block type="stack_block"/>' +
-              '  </next>' +
-              '</block>'
-          ), workspace);
-          return block;
-        };
-      });
-      teardown(function() {
-        delete this.createRowBlock;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
-      });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          parent.getInput('INPUT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('INPUT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          parent.getInput('STATEMENT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('STATEMENT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          parent.nextConnection.setShadowDom(null);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.nextConnection.disconnect();
-
-          var target = parent.getNextBlock();
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-    });
-    suite('Add - Connect & Disconnect - Remove', function() {
-      setup(function() {
-        // These are defined separately in each suite.
-        this.createRowBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="row_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStatementBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="statement_block"/>'
-          ), workspace);
-          return block;
-        };
-
-        this.createStackBlock = function(workspace) {
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-              '<block type="stack_block"/>'
-          ), workspace);
-          return block;
-        };
-      });
-      teardown(function() {
-        delete this.createRowBlock;
-        delete this.createStatementBlock;
-        delete this.createStackBlock;
-      });
-      test('Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block"/>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          var child = this.createRowBlock(workspace);
-          parent.getInput('INPUT').connection.connect(child.outputConnection);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('INPUT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          parent.getInput('INPUT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Value', function() {
-        var func = function(workspace) {
-          var parent = this.createRowBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="row_block">' +
-              '  <value name="INPUT">' +
-              '    <shadow type="row_block"/>' +
-              '  </value>' +
-              '</shadow>'
-          );
-          parent.getInput('INPUT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          var child = this.createRowBlock(workspace);
-          parent.getInput('INPUT').connection.connect(child.outputConnection);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('INPUT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('INPUT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          parent.getInput('INPUT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('INPUT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block"/>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          var child = this.createStatementBlock(workspace);
-          parent.getInput('STATEMENT').connection
-              .connect(child.previousConnection);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('STATEMENT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          parent.getInput('STATEMENT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Statement', function() {
-        var func = function(workspace) {
-          var parent = this.createStatementBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="statement_block">' +
-              '  <statement name="STATEMENT">' +
-              '    <shadow type="statement_block"/>' +
-              '  </statement>' +
-              '</shadow>'
-          );
-          parent.getInput('STATEMENT').connection.setShadowDom(xml);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          var child = this.createStatementBlock(workspace);
-          parent.getInput('STATEMENT').connection
-              .connect(child.previousConnection);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.getInput('STATEMENT').connection.disconnect();
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getInputTargetBlock('STATEMENT');
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          parent.getInput('STATEMENT').connection.setShadowDom(null);
-
-          var target = parent.getInputTargetBlock('STATEMENT');
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block"/>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          var child = this.createStatementBlock(workspace);
-          parent.nextConnection.connect(child.previousConnection);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.nextConnection.disconnect();
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-
-          parent.nextConnection.setShadowDom(null);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
-      });
-      test('Multiple Next', function() {
-        var func = function(workspace) {
-          var parent = this.createStackBlock(workspace);
-          var xml = Blockly.Xml.textToDom(
-              '<shadow type="stack_block">' +
-              '  <next>' +
-              '    <shadow type="stack_block"/>' +
-              '  </next>' +
-              '</shadow>'
-          );
-          parent.nextConnection.setShadowDom(xml);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          var child = this.createStatementBlock(workspace);
-          parent.nextConnection.connect(child.previousConnection);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isFalse(target.isShadow());
-
-          parent.nextConnection.disconnect();
-
-          var target = parent.getNextBlock();
-          chai.assert.isNotNull(target);
-          chai.assert.isTrue(target.isShadow());
-          var target2 = target.getNextBlock();
-          chai.assert.isNotNull(target2);
-          chai.assert.isTrue(target2.isShadow());
-
-          parent.nextConnection.setShadowDom(null);
-
-          var target = parent.getNextBlock();
-          chai.assert.isNull(target);
-        };
-        this.runHeadlessAndRendered(func, this);
+      test('Shadows', function() {
+        const parent = this.workspace.newBlock('input');
+        const oldChild = this.workspace.newBlock('single_input');
+        const newChild = this.workspace.newBlock('output');
+
+        parent.getInput('INPUT').connection.connect(oldChild.outputConnection);
+        oldChild.getInput('INPUT').connection.setShadowDom(
+            Blockly.Xml.textToDom('<xml><shadow type="output"/></xml>')
+                .firstChild);
+
+        const result = Blockly.Connection
+            .getConnectionForOrphanedOutput(oldChild, newChild);
+        chai.assert.exists(result);
+        chai.assert.equal(result.getParentInput().name, 'INPUT');
       });
     });
   });

@@ -12,6 +12,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.IdGenerator
+ * @namespace
+ */
 goog.provide('Blockly.utils.IdGenerator');
 
 
@@ -29,5 +33,5 @@ Blockly.utils.IdGenerator.nextId_ = 0;
  * @return {string} The next unique identifier.
  */
 Blockly.utils.IdGenerator.getNextUniqueId = function() {
-  return 'blockly:' + (Blockly.utils.IdGenerator.nextId_++).toString(36);
+  return 'blockly-' + (Blockly.utils.IdGenerator.nextId_++).toString(36);
 };

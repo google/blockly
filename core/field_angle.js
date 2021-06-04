@@ -12,14 +12,18 @@
 
 goog.provide('Blockly.FieldAngle');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 
 /**
@@ -71,7 +75,7 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
   this.round_ = Blockly.FieldAngle.ROUND;
 
   Blockly.FieldAngle.superClass_.constructor.call(
-      this, opt_value || 0, opt_validator, opt_config);
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The angle picker's gauge path depending on the value.
@@ -87,26 +91,34 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Wrapper click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
    * Surface click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickSurfaceWrapper_ = null;
 
   /**
    * Surface mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.moveSurfaceWrapper_ = null;
 };
 Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.
@@ -171,7 +183,8 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldAngle.prototype.configure_ = function(config) {
   Blockly.FieldAngle.superClass_.configure_.call(this, config);
@@ -228,14 +241,15 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
 Blockly.FieldAngle.prototype.initView = function() {
   Blockly.FieldAngle.superClass_.initView.call(this);
   // Add the degree symbol to the left of the number, even in RTL (issue #2380)
-  this.symbol_ = Blockly.utils.dom.createSvgElement('tspan', {}, null);
+  this.symbol_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.TSPAN, {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
   this.textElement_.appendChild(this.symbol_);
 };
 
 /**
  * Updates the graph when the field rerenders.
- * @private
+ * @protected
  * @override
  */
 Blockly.FieldAngle.prototype.render_ = function() {
@@ -247,7 +261,7 @@ Blockly.FieldAngle.prototype.render_ = function() {
  * Create and show the angle field's editor.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
  *     or undefined if triggered programmatically.
- * @private
+ * @protected
  */
 Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
@@ -275,75 +289,78 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
-  var svg = Blockly.utils.dom.createSvgElement('svg', {
-    'xmlns': Blockly.utils.dom.SVG_NS,
-    'xmlns:html': Blockly.utils.dom.HTML_NS,
-    'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
-    'version': '1.1',
-    'height': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'width': (Blockly.FieldAngle.HALF * 2) + 'px',
-    'style': 'touch-action: none'
-  }, null);
-  var circle = Blockly.utils.dom.createSvgElement('circle', {
-    'cx': Blockly.FieldAngle.HALF,
-    'cy': Blockly.FieldAngle.HALF,
-    'r': Blockly.FieldAngle.RADIUS,
-    'class': 'blocklyAngleCircle'
-  }, svg);
-  this.gauge_ = Blockly.utils.dom.createSvgElement('path', {
-    'class': 'blocklyAngleGauge'
-  }, svg);
-  this.line_ = Blockly.utils.dom.createSvgElement('line', {
-    'x1': Blockly.FieldAngle.HALF,
-    'y1': Blockly.FieldAngle.HALF,
-    'class': 'blocklyAngleLine'
-  }, svg);
+  var svg = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.SVG, {
+        'xmlns': Blockly.utils.dom.SVG_NS,
+        'xmlns:html': Blockly.utils.dom.HTML_NS,
+        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'version': '1.1',
+        'height': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'width': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'style': 'touch-action: none'
+      }, null);
+  var circle = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE, {
+        'cx': Blockly.FieldAngle.HALF,
+        'cy': Blockly.FieldAngle.HALF,
+        'r': Blockly.FieldAngle.RADIUS,
+        'class': 'blocklyAngleCircle'
+      }, svg);
+  this.gauge_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH, {
+        'class': 'blocklyAngleGauge'
+      }, svg);
+  this.line_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.LINE, {
+        'x1': Blockly.FieldAngle.HALF,
+        'y1': Blockly.FieldAngle.HALF,
+        'class': 'blocklyAngleLine'
+      }, svg);
   // Draw markers around the edge.
   for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.utils.dom.createSvgElement('line', {
-      'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
-      'y1': Blockly.FieldAngle.HALF,
-      'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
-          (angle % 45 == 0 ? 10 : 5),
-      'y2': Blockly.FieldAngle.HALF,
-      'class': 'blocklyAngleMarks',
-      'transform': 'rotate(' + angle + ',' +
-          Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
-    }, svg);
+    Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.LINE, {
+          'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
+          'y1': Blockly.FieldAngle.HALF,
+          'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
+              (angle % 45 == 0 ? 10 : 5),
+          'y2': Blockly.FieldAngle.HALF,
+          'class': 'blocklyAngleMarks',
+          'transform': 'rotate(' + angle + ',' +
+              Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
+        }, svg);
   }
 
   // The angle picker is different from other fields in that it updates on
   // mousemove even if it's not in the middle of a drag.  In future we may
   // change this behaviour.
   this.clickWrapper_ =
-      Blockly.bindEventWithChecks_(svg, 'click', this, this.hide_);
+      Blockly.browserEvents.conditionalBind(svg, 'click', this, this.hide_);
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
-          true, true);
-  this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
-          true, true);
+  this.clickSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'click', this, this.onMouseMove_, true, true);
+  this.moveSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'mousemove', this, this.onMouseMove_, true, true);
   return svg;
 };
 
 /**
- * Disposes of events and dom-references belonging to the angle editor.
+ * Disposes of events and DOM-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
-    Blockly.unbindEvent_(this.clickWrapper_);
+    Blockly.browserEvents.unbind(this.clickWrapper_);
     this.clickWrapper_ = null;
   }
   if (this.clickSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.clickSurfaceWrapper_);
     this.clickSurfaceWrapper_ = null;
   }
   if (this.moveSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.moveSurfaceWrapper_);
     this.moveSurfaceWrapper_ = null;
   }
   this.gauge_ = null;

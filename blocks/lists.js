@@ -15,7 +15,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.lists');  // Deprecated
 goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly');
@@ -176,7 +175,7 @@ Blockly.Blocks['lists_create_with'] = {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
     var connections = [];
-    while (itemBlock) {
+    while (itemBlock && !itemBlock.isInsertionMarker()) {
       connections.push(itemBlock.valueConnection_);
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();

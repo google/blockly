@@ -18,6 +18,9 @@ goog.provide('Blockly.WorkspaceDragSurfaceSvg');
 
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.Svg');
+
+goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
@@ -38,16 +41,6 @@ Blockly.WorkspaceDragSurfaceSvg = function(container) {
  * @private
  */
 Blockly.WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
-
-/**
- * SVG group inside the drag surface that holds blocks while a drag is in
- * progress. Blocks are moved here by the workspace at start of a drag and moved
- * back into the main SVG at the end of a drag.
- *
- * @type {Element}
- * @private
- */
-Blockly.WorkspaceDragSurfaceSvg.prototype.dragGroup_ = null;
 
 /**
  * Containing HTML element; parent of the workspace and the drag surface.
@@ -72,7 +65,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   *   <g class="blocklyBubbleCanvas">/g>
   * </svg>
   */
-  this.SVG_ = Blockly.utils.dom.createSvgElement('svg',
+  this.SVG_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.SVG,
       {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,

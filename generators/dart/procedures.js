@@ -17,7 +17,7 @@ goog.require('Blockly.Dart');
 
 Blockly.Dart['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcName = Blockly.Dart.nameDB_.getName(block.getFieldValue('NAME'),
       Blockly.PROCEDURE_CATEGORY_NAME);
   var xfix1 = '';
   if (Blockly.Dart.STATEMENT_PREFIX) {
@@ -48,8 +48,9 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   }
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
-    args[i] = Blockly.Dart.variableDB_.getName(block.arguments_[i],
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
+    args[i] = Blockly.Dart.nameDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
@@ -66,10 +67,11 @@ Blockly.Dart['procedures_defnoreturn'] = Blockly.Dart['procedures_defreturn'];
 
 Blockly.Dart['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcName = Blockly.Dart.nameDB_.getName(block.getFieldValue('NAME'),
       Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
-  for (var i = 0; i < block.arguments_.length; i++) {
+  var variables = block.getVars();
+  for (var i = 0; i < variables.length; i++) {
     args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,
         Blockly.Dart.ORDER_NONE) || 'null';
   }

@@ -432,7 +432,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
 /**
  * If given checkbox is checked, enable the given elements.  Otherwise, disable.
  * @param {boolean} enabled True if enabled, false otherwise.
- * @param {!Array.<string>} idArray Array of element IDs to enable when
+ * @param {!Array<string>} idArray Array of element IDs to enable when
  *    checkbox is checked.
  */
 AppController.prototype.ifCheckedEnable = function(enabled, idArray) {
@@ -568,7 +568,7 @@ AppController.prototype.initializeBlocklyStorage = function() {
   BlocklyStorage.HTTPREQUEST_ERROR =
       'There was a problem with the request.\n';
   BlocklyStorage.LINK_ALERT =
-      'Share your blocks with this link:\n\n%1';
+      'Share your blocks with this public link. We\'ll delete them if not used for a year. They are not associated with your account and handled as per Google\'s Privacy Policy. Please be sure not to include any private information.:\n\n%1';
   BlocklyStorage.HASH_ERROR =
       'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
   BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +

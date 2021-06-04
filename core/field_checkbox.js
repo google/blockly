@@ -12,13 +12,12 @@
 
 goog.provide('Blockly.FieldCheckbox');
 
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 
 
 /**
@@ -44,13 +43,17 @@ Blockly.FieldCheckbox = function(opt_value, opt_validator, opt_config) {
    */
   this.checkChar_ = null;
 
-  if (opt_value == null) {
-    opt_value = 'FALSE';
-  }
   Blockly.FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 };
 Blockly.utils.object.inherits(Blockly.FieldCheckbox, Blockly.Field);
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Blockly.FieldCheckbox.prototype.DEFAULT_VALUE = false;
 
 /**
  * Construct a FieldCheckbox from a JSON arg object.
@@ -85,7 +88,8 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldCheckbox.prototype.configure_ = function(config) {
   Blockly.FieldCheckbox.superClass_.configure_.call(this, config);

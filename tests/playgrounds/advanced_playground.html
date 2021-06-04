@@ -64,11 +64,11 @@
 <script src="../../blocks/variables.js"></script>
 <script src="../../blocks/variables_dynamic.js"></script>
 <script src="../../blocks/procedures.js"></script>
-<script src="../blocks/test_blocks.js"></script>
 <script src="../themes/test_themes.js"></script>
 <script src="./screenshot.js"></script>
-<script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
-<script src="https://unpkg.com/@blockly/theme-modern/dist/index.js"></script>
+<script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
+<script src="../../node_modules/@blockly/theme-dark/dist/index.js"></script>
+<script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
 <script>
 // Custom requires for the playground.
@@ -82,36 +82,42 @@ goog.require('Blockly.WorkspaceCommentSvg.render');
 </script>
 <script>
 'use strict';
-var workspace = null;
 
 function start() {
   setBackgroundColour();
-  createWorkspace();
-  // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-    // Restore event logging state.
-    var state = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(state)));
-  } else {
-    // MSIE 11 does not support sessionStorage on file:// URLs.
-    logEvents(false);
-  }
-  taChange();
-  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
-  if (autoimport) {
-    fromXml();
-  }
+  initPlayground();
 }
 
-function createWorkspace() {
-  // Parse the URL arguments.
-  var toolbox = getToolboxElement();
-  var match = location.search.match(/renderer=([^&]+)/);
+function createWorkspace(blocklyDiv, options) {
+  var workspace = Blockly.inject(blocklyDiv, options);
+  workspace.configureContextMenu = configureContextMenu.bind(workspace);
+  return workspace;
+}
 
+function configurePlayground(playground) {
+  // Rendering options.
+  var gui = playground.getGUI();
+  var renderingFolder = gui.addFolder('Rendering');
+  var renderingOptions = {
+    'font Size': 10,
+  };
+  renderingFolder.add(renderingOptions, 'font Size', 0, 50)
+    .onChange(function(value) {
+      var ws = playground.getWorkspace();
+      var fontStyle = {
+        'size': value
+      };
+      ws.getTheme().setFontStyle(fontStyle);
+      // Refresh theme.
+      ws.setTheme(ws.getTheme());
+    });
+}
+
+function initPlayground() {
+  if (typeof window.createPlayground === 'undefined') {
+    alert('You need to run \'npm install\' in order to use this playground.');
+    return;
+  }
   var defaultOptions = {
         comments: true,
         collapse: true,
@@ -136,7 +142,7 @@ function createWorkspace() {
           drag: true,
           wheel: false,
         },
-        toolbox: toolbox,
+        toolbox: toolboxCategories,
         toolboxPosition: 'start',
         renderer: 'geras',
         zoom:
@@ -150,135 +156,20 @@ function createWorkspace() {
           }
   };
 
-  // Create main workspace.
-  addGUIControls((options) => {
-    workspace = Blockly.inject('blocklyDiv', options);
-    workspace.configureContextMenu = configureContextMenu;
-    addToolboxButtonCallbacks();
-    return workspace;
-  }, defaultOptions);
-}
-
-function addToolboxButtonCallbacks() {
-  var addAllBlocksToWorkspace = function(button) {
-    var workspace = button.getTargetWorkspace();
-    var blocks = button.workspace_.getTopBlocks();
-    for(var i = 0, block; block = blocks[i]; i++) {
-      var xml = Blockly.utils.xml.createElement('xml');
-      xml.appendChild(Blockly.Xml.blockToDom(block));
-      Blockly.Xml.appendDomToWorkspace(xml, workspace);
+  const playgroundConfig = {
+    toolboxes: {
+      'categories': toolboxCategories,
+      'simple': toolboxSimple,
+      'test blocks': toolboxTestBlocks,
     }
-  };
-  var randomizeLabelText = function(button) {
-    var blocks = button.targetWorkspace_
-        .getBlocksByType('test_fields_label_serializable');
-    var possible = 'AB';
-    for (var i = 0, block; block = blocks[i]; i++) {
-      var text = '';
-      for (var j = 0; j < 4; j++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-      block.setFieldValue(text, 'LABEL');
-    }
-  };
-  var setRandomStyle = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    var styles =
-        Object.keys(workspace.getRenderer().getConstants().blockStyles);
-    styles.splice(styles.indexOf(blocks[0].getStyleName()), 1);
-    var style = styles[Math.floor(Math.random() * styles.length)];
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setStyle(style);
-    }
-  };
-  var toggleEnabled = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setEnabled(!block.isEnabled());
-    }
-  };
-  var toggleShadow = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setShadow(!block.isShadow());
-    }
-  };
-  var toggleCollapsed = function(button) {
-    var blocks = button.workspace_.getAllBlocks(false);
-    for(var i = 0, block; block = blocks[i]; i++) {
-      block.setCollapsed(!block.isCollapsed());
-    }
-  };
-  var setInput = function(button) {
-    Blockly.prompt('Input text to set.', 'ab', function(input) {
-      var blocks = button.getTargetWorkspace().getAllBlocks(false);
-      for(var i = 0, block; block = blocks[i]; i++) {
-        if (block.getField('INPUT')) {
-          block.setFieldValue(input, 'INPUT');
-        }
-      }
-    })
-  };
-  var changeImage = function(button) {
-    var blocks = button.workspace_.getBlocksByType('test_fields_image');
-    var possible = 'abcdefghijklm';
-    var image = possible.charAt(Math.floor(Math.random() * possible.length));
-    var src = 'https://blockly-demo.appspot.com/static/tests/media/'
-      + image + '.png';
-    for (var i = 0, block; block = blocks[i]; i++) {
-      var imageField = block.getField('IMAGE');
-      imageField.setValue(src);
-    }
-  };
-  var addVariables = function(button) {
-    workspace.createVariable('1b', '', '1B');
-    workspace.createVariable('1c', '', '1C');
-    workspace.createVariable('2a', '', '2A');
-    workspace.createVariable('2b', '', '2B');
-    workspace.createVariable('2c', '', '2C');
-  };
-
-  workspace.registerButtonCallback(
-      'addVariables', addVariables);
-  workspace.registerButtonCallback(
-      'changeImage', changeImage);
-  workspace.registerButtonCallback(
-      'addAllBlocksToWorkspace', addAllBlocksToWorkspace);
-  workspace.registerButtonCallback(
-      'setInput', setInput);
-  workspace.registerButtonCallback(
-      'setRandomStyle', setRandomStyle);
-  workspace.registerButtonCallback(
-      'toggleEnabled', toggleEnabled);
-  workspace.registerButtonCallback(
-      'toggleShadow', toggleShadow);
-  workspace.registerButtonCallback(
-    'toggleCollapsed', toggleCollapsed);
-  workspace.registerButtonCallback(
-      'randomizeLabelText', randomizeLabelText);
-  workspace.registerButtonCallback(
-      'addDynamicOption', Blockly.TestBlocks.addDynamicDropdownOption);
-  workspace.registerButtonCallback(
-      'removeDynamicOption', Blockly.TestBlocks.removeDynamicDropdownOption);
-  workspace.registerButtonCallback(
-      'insertConnectionRows', Blockly.TestBlocks.insertConnectionRows);
-  workspace.registerButtonCallback(
-      'insertConnectionStacks', Blockly.TestBlocks.insertConnectionStacks);
-  workspace.registerButtonCallback(
-      'insertConnectionStatements',
-          Blockly.TestBlocks.insertConnectionStatements);
-}
-
-function changeRenderingConstant(value) {
-  var type = document.getElementById('rendering-constant-selector').value;
-  if (type == 'fontSize') {
-    var fontStyle = {
-      'size': value
-    };
-    workspace.getTheme().setFontStyle(fontStyle);
   }
-  // Refresh theme.
-  workspace.setTheme(workspace.getTheme());
+
+  createPlayground(document.getElementById('root'), createWorkspace,
+      defaultOptions, playgroundConfig,
+      'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.19.2/min/vs')
+      .then(function(playground) {
+        configurePlayground(playground);
+      });
 }
 
 function setBackgroundColour() {
@@ -289,85 +180,9 @@ function setBackgroundColour() {
   }
 }
 
-function getToolboxElement() {
-  var match = location.search.match(/toolbox=([^&]+)/);
-  // Default to the basic toolbox with categories and untyped variables,
-  // but override that if the toolbox type is set in the URL.
-  var toolboxSuffix = (match ? match[1] : 'categories');
-
-  // The two toolboxes available from dev-tools are toolboxSimple and
-  // toolboxCategories.
-  if (toolboxSuffix == 'categories') {
-    document.forms.options.elements.toolbox.selectedIndex = 0;
-    return toolboxCategories;
-  }
-  document.forms.options.elements.toolbox.selectedIndex = 1;
-  return toolboxSimple;
-}
-
-function toXml() {
-  var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
-  output.focus();
-  output.select();
-  taChange();
-}
-
-function fromXml() {
-  var input = document.getElementById('importExport');
-  if (!input.value) {
-    return;
-  }
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
-  taChange();
-}
-
-function toCode(lang) {
-  var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
-  taChange();
-}
-
-// Disable the "Import from XML" button if the XML is invalid.
-// Preserve text between page reloads.
-function taChange() {
-  var textarea = document.getElementById('importExport');
-  if (sessionStorage) {
-    sessionStorage.setItem('textarea', textarea.value);
-  }
-  var valid = true;
-  try {
-    Blockly.Xml.textToDom(textarea.value);
-  } catch (e) {
-    valid = false;
-  }
-  document.getElementById('import').disabled = !valid;
-}
-
-function logEvents(state) {
-  var checkbox = document.getElementById('logCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('logEvents', Number(state));
-  }
-  if (state) {
-    workspace.addChangeListener(logger);
-  } else {
-    workspace.removeChangeListener(logger);
-  }
-}
-
-function toggleAccessibilityMode(state) {
-  if (state) {
-    Blockly.navigation.enableKeyboardAccessibility();
-  } else {
-    Blockly.navigation.disableKeyboardAccessibility();
-  }
-}
 
 function configureContextMenu(menuOptions, e) {
+  var workspace = this;
   var screenshotOption = {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
@@ -381,92 +196,11 @@ function configureContextMenu(menuOptions, e) {
   menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
 
-function logger(e) {
-  console.log(e);
-}
-
-function populateRandom(n) {
-  var names = [];
-  for (var blockName in Blockly.Blocks) {
-    names.push(blockName);
-  }
-
-  for (var i = 0; i < n; i++) {
-    var name = names[Math.floor(Math.random() * names.length)];
-    var block = workspace.newBlock(name);
-    block.initSvg();
-    block.getSvgRoot().setAttribute('transform', 'translate(' +
-        Math.round(Math.random() * 450 + 40) + ', ' +
-        Math.round(Math.random() * 600 + 40) + ')');
-    block.render();
-  }
-}
-
-function spaghetti(n) {
-  var xml = spaghettiXml;
-  for(var i = 0; i < n; i++) {
-    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
-        '$1' + spaghettiXml + '</');
-  }
-  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
-  var dom = Blockly.Xml.textToDom(xml);
-  console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(dom, workspace);
-  console.timeEnd('Spaghetti domToWorkspace');
-}
-var spaghettiXml = [
-  '  <block type="controls_if">',
-  '    <value name="IF0">',
-  '      <block type="logic_compare">',
-  '        <field name="OP">EQ</field>',
-  '        <value name="A">',
-  '          <block type="math_arithmetic">',
-  '            <field name="OP">MULTIPLY</field>',
-  '            <value name="A">',
-  '              <block type="math_number">',
-  '                <field name="NUM">6</field>',
-  '              </block>',
-  '            </value>',
-  '            <value name="B">',
-  '              <block type="math_number">',
-  '                <field name="NUM">7</field>',
-  '              </block>',
-  '            </value>',
-  '          </block>',
-  '        </value>',
-  '        <value name="B">',
-  '          <block type="math_number">',
-  '            <field name="NUM">42</field>',
-  '          </block>',
-  '        </value>',
-  '      </block>',
-  '    </value>',
-  '    <statement name="DO0"></statement>',
-  '    <next></next>',
-  '  </block>'].join('\n');
-
 </script>
 
 <style>
   html, body {
-    height: 100%;
-  }
-  body {
-    background-color: #fff;
-    font-family: sans-serif;
-    overflow: hidden;
-  }
-  h1 {
-    font-weight: normal;
-    font-size: 140%;
-  }
-  #blocklyDiv {
-    float: right;
-    height: 95%;
-    width: 70%;
-  }
-  #importExport {
-    font-family: monospace;
+    margin: 0;
   }
 
   .ioLabel>.blocklyFlyoutLabelText {
@@ -487,63 +221,6 @@ var spaghettiXml = [
 </style>
 </head>
 <body onload="start()">
-
-  <div id="blocklyDiv"></div>
-
-  <h1>Blockly Playground</h1>
-
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <form id="options">
-    <select name="toolbox" onchange="document.forms.options.submit()">
-      <option value="categories">Categories (untyped variables)</option>
-      <option value="simple">Simple</option>
-    </select>
-  </form>
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
-  </p>
-
-  <p>
-    Stress test: &nbsp;
-    <input type="button" value="Random Blocks!" onclick="populateRandom(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-  </p>
-  <p>
-    Rendering: &nbsp;
-    <select id="rendering-constant-selector">
-      <option value="fontSize">Font Size</option>
-    </select>
-    <input type="range" min="3" max="50" value="4"
-      oninput="changeRenderingConstant(this.value)"
-      onchange="changeRenderingConstant(this.value)" />
-  </p>
-  <ul class="playgroundToggleOptions">
-    <li>
-      <label for="logCheck">Log events:</label>
-      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-    </li>
-    <li>
-      <label for="accessibilityModeCheck">Enable Accessibility Mode:</label>
-      <input type="checkbox" onclick="toggleAccessibilityMode(this.checked)" id="accessibilityModeCheck">
-    </li>
-  </ul>
-
+  <div id="root"></div>
 </body>
 </html>

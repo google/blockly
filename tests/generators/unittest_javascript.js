@@ -12,7 +12,7 @@
 
 Blockly.JavaScript['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_report',
@@ -62,7 +62,7 @@ Blockly.JavaScript['unittest_main'] = function(block) {
 };
 
 Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'assertEquals',
@@ -106,9 +106,9 @@ Blockly.JavaScript['unittest_assertequals'] = function(block) {
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
       Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   var expected = Blockly.JavaScript.valueToCode(block, 'EXPECTED',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   return Blockly.JavaScript['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
@@ -118,7 +118,7 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
       Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_COMMA) || 'null';
+      Blockly.JavaScript.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
     expected = 'true';
@@ -133,7 +133,7 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
 
 Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.JavaScript.provideFunction_(

@@ -19,11 +19,16 @@ suite('Field Registry', function() {
     return new CustomFieldType(options['value']);
   };
 
+  setup(function() {
+    sharedTestSetup.call(this);
+  });
   teardown(function() {
+    sharedTestTeardown.call(this);
     if (Blockly.registry.typeMap_['field']['field_custom_test']) {
       delete Blockly.registry.typeMap_['field']['field_custom_test'];
     }
   });
+
   suite('Registration', function() {
     test('Simple', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
@@ -59,7 +64,11 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
+      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
+      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
+      deprecationWarnStub.restore();
+
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
     });
@@ -83,7 +92,11 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
+      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
+      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
+      deprecationWarnStub.restore();
+      
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
     });

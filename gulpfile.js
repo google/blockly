@@ -10,38 +10,18 @@
  */
 
 var gulp = require('gulp');
-var execSync = require('child_process').execSync;
-
-var packageJson = require('./package.json');
 
 var typings = require('./scripts/gulpfiles/typings');
 var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
-
-// See https://docs.npmjs.com/cli/version.
-const preversion = gulp.series(
-  gitTasks.syncMaster,
-  function(done) {
-    // Create a branch named bump_version for the bump and rebuild.
-    execSync('git checkout -b bump_version', { stdio: 'inherit' });
-    done();
-  },
-);
-
-// See https://docs.npmjs.com/cli/version
-function postversion(done) {
-  // Push both the branch and tag to google/blockly.
-  execSync('git push ' + upstream_url + ' bump_version',
-      { stdio: 'inherit' });
-  var tagName = 'v' + packageJson.version;
-  execSync('git push ' + upstream_url + ' ' + tagName,
-      { stdio: 'inherit' });
-  done();
-};
+var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
+var releaseTasks = require('./scripts/gulpfiles/release_tasks');
+var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
+  deployDemos: appengineTasks.deployDemos,
   default: buildTasks.build,
   build: buildTasks.build,
   buildCore: buildTasks.core,
@@ -50,14 +30,16 @@ module.exports = {
   buildUncompressed: buildTasks.uncompressed,
   buildCompressed: buildTasks.compressed,
   buildGenerators: buildTasks.generators,
-  preversion: preversion,
-  postversion: postversion,
+  buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
-  gitRecompile: gitTasks.recompile,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
   typings: gulp.series(typings.typings, typings.msgTypings),
   package: packageTasks.package,
-  checkLicenses: licenseTasks.checkLicenses
+  checkLicenses: licenseTasks.checkLicenses,
+  recompile: releaseTasks.recompile,
+  publish: releaseTasks.publish,
+  publishBeta: releaseTasks.publishBeta,
+  sortRequires: cleanupTasks.sortRequires,
 };

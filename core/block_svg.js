@@ -16,25 +16,45 @@ goog.require('Blockly.ASTNode');
 goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
+goog.require('Blockly.browserEvents');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
-goog.require('Blockly.Events.Ui');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.Selected');
+goog.require('Blockly.IASTNodeLocationSvg');
+goog.require('Blockly.IBoundedElement');
+goog.require('Blockly.ICopyable');
 goog.require('Blockly.Msg');
-goog.require('Blockly.navigation');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.Svg');
+goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IBoundedElement');
-goog.requireType('Blockly.ICopyable');
+goog.requireType('Blockly.blockRendering.Debug');
+goog.requireType('Blockly.Comment');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.Input');
+goog.requireType('Blockly.Mutator');
+goog.requireType('Blockly.Theme');
+goog.requireType('Blockly.Warning');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -54,10 +74,11 @@ goog.requireType('Blockly.ICopyable');
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
   /**
-   * @type {!SVGElement}
+   * @type {!SVGGElement}
    * @private
    */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement('g', {}, null);
+  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G, {}, null);
   this.svgGroup_.translate_ = '';
 
   /**
@@ -113,6 +134,10 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
     this.svgGroup_.dataset['id'] = this.id;
+  } else if (Blockly.utils.userAgent.IE) {
+    // SVGElement.dataset is not available on IE11, but data-* properties
+    // can be set with setAttribute().
+    this.svgGroup_.setAttribute('data-id', this.id);
   }
 };
 Blockly.utils.object.inherits(Blockly.BlockSvg, Blockly.Block);
@@ -130,23 +155,16 @@ Blockly.BlockSvg.prototype.height = 0;
 Blockly.BlockSvg.prototype.width = 0;
 
 /**
- * Original location of block being dragged.
- * @type {Blockly.utils.Coordinate}
- * @private
- */
-Blockly.BlockSvg.prototype.dragStartXY_ = null;
-
-/**
  * Map from IDs for warnings text to PIDs of functions to apply them.
  * Used to be able to maintain multiple warnings.
- * @type {Object.<string, number>}
+ * @type {Object<string, number>}
  * @private
  */
 Blockly.BlockSvg.prototype.warningTextDb_ = null;
 
 /**
  * Constant for identifying rows that are to be rendered inline.
- * Don't collide with Blockly.INPUT_VALUE and friends.
+ * Don't collide with Blockly.inputTypes.
  * @const
  */
 Blockly.BlockSvg.INLINE = -1;
@@ -182,7 +200,7 @@ Blockly.BlockSvg.prototype.compose;
 
 /**
  * An optional method for defining custom block context menu items.
- * @type {?function(!Array.<!Object>)}
+ * @type {?function(!Array<!Object>)}
  */
 Blockly.BlockSvg.prototype.customContextMenu;
 
@@ -212,7 +230,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   this.pathObject.updateMovable(this.isMovable());
   var svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-    Blockly.bindEventWithChecks_(
+    Blockly.browserEvents.conditionalBind(
         svg, 'mousedown', this, this.onMouseDown_);
   }
   this.eventsInit_ = true;
@@ -244,6 +262,11 @@ Blockly.BlockSvg.prototype.getColourTertiary = function() {
  * @deprecated Use style.colourSecondary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourShadow = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourShadow',
+      'January 2020',
+      'January 2021',
+      'style.colourSecondary');
   return this.getColourSecondary();
 };
 
@@ -257,6 +280,11 @@ Blockly.BlockSvg.prototype.getColourShadow = function() {
  * @deprecated Use style.colourTertiary. (2020 January 21)
  */
 Blockly.BlockSvg.prototype.getColourBorder = function() {
+  Blockly.utils.deprecation.warn(
+      'BlockSvg.prototype.getColourBorder',
+      'January 2020',
+      'January 2021',
+      'style.colourTertiary');
   var colourTertiary = this.getColourTertiary();
   return {
     colourBorder: colourTertiary,
@@ -288,8 +316,8 @@ Blockly.BlockSvg.prototype.select = function() {
       Blockly.Events.enable();
     }
   }
-  var event = new Blockly.Events.Ui(null, 'selected', oldId, this.id);
-  event.workspaceId = this.workspace.id;
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(oldId, this.id,
+      this.workspace.id);
   Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -302,7 +330,8 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  var event = new Blockly.Events.Ui(null, 'selected', this.id, null);
+  var event = new (Blockly.Events.get(Blockly.Events.SELECTED))(this.id, null,
+      this.workspace.id);
   event.workspaceId = this.workspace.id;
   Blockly.Events.fire(event);
   Blockly.selected = null;
@@ -311,33 +340,33 @@ Blockly.BlockSvg.prototype.unselect = function() {
 
 /**
  * Block's mutator icon (if any).
- * @type {Blockly.Mutator}
+ * @type {?Blockly.Mutator}
  */
 Blockly.BlockSvg.prototype.mutator = null;
 
 /**
  * Block's comment icon (if any).
- * @type {Blockly.Comment}
+ * @type {?Blockly.Comment}
  * @deprecated August 2019. Use getCommentIcon instead.
  */
 Blockly.BlockSvg.prototype.comment = null;
 
 /**
  * Block's comment icon (if any).
- * @type {Blockly.Comment}
+ * @type {?Blockly.Comment}
  * @private
  */
 Blockly.BlockSvg.prototype.commentIcon_ = null;
 
 /**
  * Block's warning icon (if any).
- * @type {Blockly.Warning}
+ * @type {?Blockly.Warning}
  */
 Blockly.BlockSvg.prototype.warning = null;
 
 /**
  * Returns a list of mutator, comment, and warning icons.
- * @return {!Array} List of icons.
+ * @return {!Array<!Blockly.Icon>} List of icons.
  */
 Blockly.BlockSvg.prototype.getIcons = function() {
   var icons = [];
@@ -355,7 +384,7 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 
 /**
  * Set parent of this block to be a new block or null.
- * @param {Blockly.Block} newParent New parent block.
+ * @param {?Blockly.Block} newParent New parent block.
  * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
@@ -443,7 +472,7 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   }
   var eventsEnabled = Blockly.Events.isEnabled();
   if (eventsEnabled) {
-    var event = new Blockly.Events.BlockMove(this);
+    var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this);
   }
   var xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
@@ -634,8 +663,8 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
  */
 Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   var collapsed = this.isCollapsed();
-  var collapsedInputName = Blockly.Block.COLLAPSED_INPUT_NAME;
-  var collapsedFieldName = Blockly.Block.COLLAPSED_FIELD_NAME;
+  var collapsedInputName = Blockly.constants.COLLAPSED_INPUT_NAME;
+  var collapsedFieldName = Blockly.constants.COLLAPSED_FIELD_NAME;
 
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name != collapsedInputName) {
@@ -644,6 +673,7 @@ Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
   }
 
   if (!collapsed) {
+    this.updateDisabled();
     this.removeInput(collapsedInputName);
     return;
   }
@@ -673,10 +703,12 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   var tabCursor = new Blockly.TabNavigateCursor();
   tabCursor.setCurNode(Blockly.ASTNode.createFieldNode(start));
   var currentNode = tabCursor.getCurNode();
-  var action = forward ?
-      Blockly.navigation.ACTION_NEXT : Blockly.navigation.ACTION_PREVIOUS;
 
-  tabCursor.onBlocklyAction(action);
+  if (forward) {
+    tabCursor.next();
+  } else {
+    tabCursor.prev();
+  }
 
   var nextNode = tabCursor.getCurNode();
   if (nextNode && nextNode !== currentNode) {
@@ -716,93 +748,14 @@ Blockly.BlockSvg.prototype.showHelp = function() {
 /**
  * Generate the context menu for this block.
  * @protected
- * @return {Array.<!Object>} Context menu options
+ * @return {?Array<!Object>} Context menu options or null if no menu.
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return null;
   }
-  // Save the current block in a variable for use in closures.
-  var block = this;
-  var menuOptions = [];
-
-  if (!this.isInFlyout) {
-    if (this.isDeletable() && this.isMovable()) {
-      menuOptions.push(Blockly.ContextMenu.blockDuplicateOption(block));
-    }
-
-    if (this.workspace.options.comments && !this.collapsed_ &&
-        this.isEditable()) {
-      menuOptions.push(Blockly.ContextMenu.blockCommentOption(block));
-    }
-
-    if (this.isMovable()) {
-      if (!this.collapsed_) {
-        // Option to make block inline.
-        for (var i = 1; i < this.inputList.length; i++) {
-          if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
-              this.inputList[i].type != Blockly.NEXT_STATEMENT) {
-            // Only display this option if there are two value or dummy inputs
-            // next to each other.
-            var inlineOption = {enabled: true};
-            var isInline = this.getInputsInline();
-            inlineOption.text = isInline ?
-                Blockly.Msg['EXTERNAL_INPUTS'] : Blockly.Msg['INLINE_INPUTS'];
-            inlineOption.callback = function() {
-              block.setInputsInline(!isInline);
-            };
-            menuOptions.push(inlineOption);
-            break;
-          }
-        }
-        // Option to collapse block
-        if (this.workspace.options.collapse) {
-          var collapseOption = {enabled: true};
-          collapseOption.text = Blockly.Msg['COLLAPSE_BLOCK'];
-          collapseOption.callback = function() {
-            block.setCollapsed(true);
-          };
-          menuOptions.push(collapseOption);
-        }
-      } else {
-        // Option to expand block.
-        if (this.workspace.options.collapse) {
-          var expandOption = {enabled: true};
-          expandOption.text = Blockly.Msg['EXPAND_BLOCK'];
-          expandOption.callback = function() {
-            block.setCollapsed(false);
-          };
-          menuOptions.push(expandOption);
-        }
-      }
-    }
-
-    if (this.workspace.options.disable && this.isEditable()) {
-      // Option to disable/enable block.
-      var disableOption = {
-        text: this.isEnabled() ?
-            Blockly.Msg['DISABLE_BLOCK'] : Blockly.Msg['ENABLE_BLOCK'],
-        enabled: !this.getInheritedDisabled(),
-        callback: function() {
-          var group = Blockly.Events.getGroup();
-          if (!group) {
-            Blockly.Events.setGroup(true);
-          }
-          block.setEnabled(!block.isEnabled());
-          if (!group) {
-            Blockly.Events.setGroup(false);
-          }
-        }
-      };
-      menuOptions.push(disableOption);
-    }
-
-    if (this.isDeletable()) {
-      menuOptions.push(Blockly.ContextMenu.blockDeleteOption(block));
-    }
-  }
-
-  menuOptions.push(Blockly.ContextMenu.blockHelpOption(block));
+  var menuOptions = Blockly.ContextMenuRegistry.registry.getContextMenuOptions(
+      Blockly.ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {
@@ -931,7 +884,7 @@ Blockly.BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
 
 /**
  * Return the root node of the SVG or null if none exists.
- * @return {!SVGElement} The root SVG node (probably a group).
+ * @return {!SVGGElement} The root SVG node (probably a group).
  */
 Blockly.BlockSvg.prototype.getSvgRoot = function() {
   return this.svgGroup_;
@@ -966,10 +919,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     Blockly.ContextMenu.hide();
   }
 
-  if (this.workspace.keyboardAccessibilityMode) {
-    Blockly.navigation.moveCursorOnBlockDelete(this);
-  }
-
   if (animate && this.rendered) {
     this.unplug(healStack);
     Blockly.blockAnimations.disposeUiEffect(this);
@@ -1000,11 +949,15 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 
 /**
  * Encode a block for copying.
- * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?Blockly.ICopyable.CopyData} Copy metadata, or null if the block is
+ *     an insertion marker.
  * @package
  */
 Blockly.BlockSvg.prototype.toCopyData = function() {
-  var xml = Blockly.Xml.blockToDom(this, true);
+  if (this.isInsertionMarker_) {
+    return null;
+  }
+  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
   // Copy only the selected block and internal blocks.
   Blockly.Xml.deleteNext(xml);
   // Encode start position in XML.
@@ -1043,15 +996,20 @@ Blockly.BlockSvg.prototype.applyColour = function() {
 Blockly.BlockSvg.prototype.updateDisabled = function() {
   var children = this.getChildren(false);
   this.applyColour();
+  if (this.isCollapsed()) {
+    return;
+  }
   for (var i = 0, child; (child = children[i]); i++) {
-    child.updateDisabled();
+    if (child.rendered) {
+      child.updateDisabled();
+    }
   }
 };
 
 /**
  * Get the comment icon attached to this block, or null if the block has no
  * comment.
- * @return {Blockly.Comment} The comment icon attached to this block, or null.
+ * @return {?Blockly.Comment} The comment icon attached to this block, or null.
  */
 Blockly.BlockSvg.prototype.getCommentIcon = function() {
   return this.commentIcon_;
@@ -1150,7 +1108,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
       collapsedParent.setWarningText(Blockly.Msg['COLLAPSED_WARNINGS_WARNING'],
           Blockly.BlockSvg.COLLAPSED_WARNING_ID);
     }
-    
+
     if (!this.warning) {
       this.warning = new Blockly.Warning(this);
       changedState = true;
@@ -1180,7 +1138,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
 
 /**
  * Give this block a mutator dialog.
- * @param {Blockly.Mutator} mutator A mutator dialog instance or null to remove.
+ * @param {?Blockly.Mutator} mutator A mutator dialog instance or null to remove.
  */
 Blockly.BlockSvg.prototype.setMutator = function(mutator) {
   if (this.mutator && this.mutator !== mutator) {
@@ -1196,17 +1154,6 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
     // Adding or removing a mutator icon will cause the block to change shape.
     this.bumpNeighbours();
   }
-};
-
-/**
- * Set whether the block is disabled or not.
- * @param {boolean} disabled True if disabled.
- * @deprecated May 2019
- */
-Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  console.warn('Deprecated call to Blockly.BlockSvg.prototype.setDisabled, ' +
-  'use Blockly.BlockSvg.prototype.setEnabled instead.');
-  this.setEnabled(!disabled);
 };
 
 /**
@@ -1287,7 +1234,7 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
 
 /**
  * Set the style and colour values of a block.
- * @param {string} blockStyleName Name of the block style
+ * @param {string} blockStyleName Name of the block style.
  * @throws {Error} if the block style does not exist.
  */
 Blockly.BlockSvg.prototype.setStyle = function(blockStyleName) {
@@ -1332,7 +1279,7 @@ Blockly.BlockSvg.prototype.bringToFront = function() {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
@@ -1349,7 +1296,7 @@ Blockly.BlockSvg.prototype.setPreviousStatement = function(newBoolean,
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {(string|Array.<string>|null)=} opt_check Statement type or
+ * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
@@ -1365,7 +1312,7 @@ Blockly.BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {(string|Array.<string>|null)=} opt_check Returned type or list
+ * @param {(string|Array<string>|null)=} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
@@ -1430,12 +1377,12 @@ Blockly.BlockSvg.prototype.moveNumberedInputBefore = function(
 
 /**
  * Add a value input, statement input or local variable to this block.
- * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ * @param {number} type One of Blockly.inputTypes.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
- * @private
+ * @protected
+ * @override
  */
 Blockly.BlockSvg.prototype.appendInput_ = function(type, name) {
   var input = Blockly.BlockSvg.superClass_.appendInput_.call(this, type, name);
@@ -1498,7 +1445,7 @@ Blockly.BlockSvg.prototype.setConnectionTracking = function(track) {
  * @param {boolean} all If true, return all connections even hidden ones.
  *     Otherwise, for a non-rendered block return an empty list, and for a
  *     collapsed block don't return inputs connections.
- * @return {!Array.<!Blockly.RenderedConnection>} Array of connections.
+ * @return {!Array<!Blockly.RenderedConnection>} Array of connections.
  * @package
  */
 Blockly.BlockSvg.prototype.getConnections_ = function(all) {
@@ -1526,7 +1473,7 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
- * @return {Blockly.RenderedConnection} The last next connection on the stack,
+ * @return {?Blockly.RenderedConnection} The last next connection on the stack,
  *     or null.
  * @package
  * @override
@@ -1542,7 +1489,7 @@ Blockly.BlockSvg.prototype.lastConnectionInStack = function() {
  * Used to match connections between a block and its insertion marker.
  * @param {!Blockly.Block} otherBlock The other block to match against.
  * @param {!Blockly.Connection} conn The other connection to match.
- * @return {Blockly.RenderedConnection} The matching connection on this block,
+ * @return {?Blockly.RenderedConnection} The matching connection on this block,
  *     or null.
  * @package
  * @override
@@ -1645,8 +1592,8 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
     targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == Blockly.NEXT_STATEMENT ||
-      sourceConnection.type == Blockly.INPUT_VALUE) {
+  if (sourceConnection.type == Blockly.connectionTypes.NEXT_STATEMENT ||
+      sourceConnection.type == Blockly.connectionTypes.INPUT_VALUE) {
     var dx = targetConnection.x - sourceConnection.x;
     var dy = targetConnection.y - sourceConnection.y;
 
@@ -1656,7 +1603,7 @@ Blockly.BlockSvg.prototype.positionNearConnection = function(sourceConnection,
 
 /**
  * Return the parent block or null if this block is at the top level.
- * @return {Blockly.BlockSvg} The block that holds the current block.
+ * @return {?Blockly.BlockSvg} The block (if any) that holds the current block.
  * @override
  */
 Blockly.BlockSvg.prototype.getParent = function() {
@@ -1721,7 +1668,8 @@ Blockly.BlockSvg.prototype.updateMarkers_ = function() {
     this.workspace.getCursor().draw();
   }
   if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
-    this.workspace.getMarker(Blockly.navigation.MARKER_NAME).draw();
+    // TODO(#4592): Update all markers on the block.
+    this.workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };
 
@@ -1761,9 +1709,9 @@ Blockly.BlockSvg.prototype.updateConnectionLocations_ = function() {
 };
 
 /**
- * Add the cursor svg to this block's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     block svg group.
+ * Add the cursor SVG to this block's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
@@ -1771,9 +1719,9 @@ Blockly.BlockSvg.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this block's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     block svg group.
+ * Add the marker SVG to this block's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.BlockSvg.prototype.setMarkerSvg = function(markerSvg) {

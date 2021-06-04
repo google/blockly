@@ -13,8 +13,7 @@
 
 goog.provide('Blockly.ICopyable');
 
-goog.require('Blockly.ISelectable');
-
+goog.requireType('Blockly.ISelectable');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -26,7 +25,7 @@ Blockly.ICopyable = function() {};
 
 /**
  * Encode for copying.
- * @return {!Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?Blockly.ICopyable.CopyData} Copy metadata.
  */
 Blockly.ICopyable.prototype.toCopyData;
 

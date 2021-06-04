@@ -613,7 +613,7 @@ goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
       // directly to avoid arguments instantiation, another 2x improvement.
       this.buffer_[this.bufferLength_++] = a1;
     } else {
-      var arr = /**@type {Array.<number|string|boolean>}*/(this.buffer_);
+      var arr = /**@type {Array<number|string|boolean>}*/(this.buffer_);
       arr.push.apply(arr, arguments);
       this.bufferLength_ = this.buffer_.length;
     }
@@ -1656,7 +1656,7 @@ soy.$$checkMapKey = function(key) {
 /**
  * Gets the keys in a map as an array. There are no guarantees on the order.
  * @param {Object} map The map to get the keys of.
- * @return {Array.<string>} The array of keys in the given map.
+ * @return {Array<string>} The array of keys in the given map.
  */
 soy.$$getMapKeys = function(map) {
   var mapKeys = [];
@@ -1779,9 +1779,9 @@ soy.$$getDelegateFn = function(
  * Private helper soy.$$getDelegateFn(). This is the empty template function
  * that is returned whenever there's no delegate implementation found.
  *
- * @param {Object.<string, *>=} opt_data
+ * @param {Object<string, *>=} opt_data
  * @param {soy.StringBuilder=} opt_sb
- * @param {Object.<string, *>=} opt_ijData
+ * @param {Object<string, *>=} opt_ijData
  * @return {string}
  * @private
  */
@@ -2002,7 +2002,7 @@ soy.$$cleanHtml = function(value) {
     return /** @type {!soydata.SanitizedHtml} */ (value);
   }
   return soydata.VERY_UNSAFE.ordainSanitizedHtml(
-      soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_WHITELIST_),
+      soy.$$stripHtmlTags(value, soy.esc.$$SAFE_TAG_ALLOWLIST_),
       soydata.getContentDir(value));
 };
 
@@ -2047,20 +2047,20 @@ soy.$$HTML5_VOID_ELEMENTS_ = new RegExp(
 
 /**
  * Removes HTML tags from a string of known safe HTML.
- * If opt_tagWhitelist is not specified or is empty, then
+ * If opt_tagAllowlist is not specified or is empty, then
  * the result can be used as an attribute value.
  *
  * @param {*} value The HTML to be escaped. May not be a string, but the
  *     value will be coerced to a string.
- * @param {Object.<string, number>=} opt_tagWhitelist Has an own property whose
+ * @param {Object<string, number>=} opt_tagAllowlist Has an own property whose
  *     name is a lower-case tag name and whose value is {@code 1} for
  *     each element that is allowed in the output.
  * @return {string} A representation of value without disallowed tags,
  *     HTML comments, or other non-text content.
  */
-soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
-  if (!opt_tagWhitelist) {
-    // If we have no white-list, then use a fast track which elides all tags.
+soy.$$stripHtmlTags = function(value, opt_tagAllowlist) {
+  if (!opt_tagAllowlist) {
+    // If we have no allow-list, then use a fast track which elides all tags.
     return String(value).replace(soy.esc.$$HTML_TAG_REGEX_, '')
         // This is just paranoia since callers should normalize the result
         // anyway, but if they didn't, it would be necessary to ensure that
@@ -2073,7 +2073,7 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
   // have been removed.
   var html = String(value).replace(/\[/g, '&#91;');
 
-  // Consider all uses of '<' and replace whitelisted tags with markers like
+  // Consider all uses of '<' and replace allowlisted tags with markers like
   // [1] which are indices into a list of approved tag names.
   // Replace all other uses of < and > with entities.
   var tags = [];
@@ -2082,8 +2082,8 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
     function(tok, tagName) {
       if (tagName) {
         tagName = tagName.toLowerCase();
-        if (opt_tagWhitelist.hasOwnProperty(tagName) &&
-            opt_tagWhitelist[tagName]) {
+        if (opt_tagAllowlist.hasOwnProperty(tagName) &&
+            opt_tagAllowlist[tagName]) {
           var start = tok.charAt(1) === '/' ? '</' : '<';
           var index = tags.length;
           tags[index] = start + tagName + '>';
@@ -2102,7 +2102,7 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
   // Now html contains no tags or less-than characters that could become
   // part of a tag via a replacement operation and tags only contains
   // approved tags.
-  // Reinsert the white-listed tags.
+  // Reinsert the allow-listed tags.
   html = html.replace(
        /\[(\d+)\]/g, function(_, index) { return tags[index]; });
 
@@ -2118,7 +2118,7 @@ soy.$$stripHtmlTags = function(value, opt_tagWhitelist) {
  * If {@code <table>} is used for formatting, embedded HTML shouldn't be able
  * to use a mismatched {@code </table>} to break page layout.
  *
- * @param {Array.<string>} tags an array of tags that will be modified in place
+ * @param {Array<string>} tags an array of tags that will be modified in place
  *    include tags, the empty string, or concatenations of empty tags.
  * @return {string} zero or more closed tags that close all elements that are
  *    opened in tags but not closed.
@@ -2575,7 +2575,7 @@ soy.$$isLowSurrogate_ = function(ch) {
 /**
  * Cache of bidi formatter by context directionality, so we don't keep on
  * creating new objects.
- * @type {!Object.<!goog.i18n.BidiFormatter>}
+ * @type {!Object<!goog.i18n.BidiFormatter>}
  * @private
  */
 soy.$$bidiFormatterCache_ = {};
@@ -2799,7 +2799,7 @@ soy.esc.$$escapeUriHelper = function(v) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSPACE__AND__NORMALIZE_HTML_NOSPACE_ = {
@@ -2837,7 +2837,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSPAC
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = {
@@ -2889,7 +2889,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = function(ch) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_CSS_STRING_ = {
@@ -2934,7 +2934,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_CSS_STRING_ = function(ch) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_NORMALIZE_URI__AND__FILTER_NORMALIZE_URI_ = {
@@ -3291,9 +3291,9 @@ soy.esc.$$LT_REGEX_ = /</g;
 /**
  * Maps lower-case names of innocuous tags to 1.
  *
- * @type {Object.<string,number>}
+ * @type {Object<string,number>}
  * @private
  */
-soy.esc.$$SAFE_TAG_WHITELIST_ = {'b': 1, 'br': 1, 'em': 1, 'i': 1, 's': 1, 'sub': 1, 'sup': 1, 'u': 1};
+soy.esc.$$SAFE_TAG_ALLOWLIST_ = {'b': 1, 'br': 1, 'em': 1, 'i': 1, 's': 1, 'sub': 1, 'sup': 1, 'u': 1};
 
 // END GENERATED CODE

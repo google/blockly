@@ -13,7 +13,15 @@
 goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.utils.Coordinate');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -123,7 +131,7 @@ Blockly.InsertionMarkerManager = function(block) {
    * other blocks.  This includes all open connections on the top block, as well
    * as the last connection on the block stack.
    * Does not change during a drag.
-   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @type {!Array<!Blockly.RenderedConnection>}
    * @private
    */
   this.availableConnections_ = this.initAvailableConnections_();
@@ -139,6 +147,17 @@ Blockly.InsertionMarkerManager.PREVIEW_TYPE = {
   INPUT_OUTLINE: 1,
   REPLACEMENT_FADE: 2,
 };
+
+/**
+ * An error message to throw if the block created by createMarkerBlock_ is
+ * missing any components.
+ * @type {string}
+ * @const
+ */
+Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
+    'manager tried to create a marker but the result is missing %1. If ' +
+    'you are using a mutator, make sure your domToMutation method is ' +
+    'properly defined.';
 
 /**
  * Sever all links from this object.
@@ -158,6 +177,15 @@ Blockly.InsertionMarkerManager.prototype.dispose = function() {
   } finally {
     Blockly.Events.enable();
   }
+};
+
+/**
+ * Update the available connections for the top block. These connections can
+ * change if a block is unplugged and the stack is healed.
+ * @package
+ */
+Blockly.InsertionMarkerManager.prototype.updateAvailableConnections = function() {
+  this.availableConnections_ = this.initAvailableConnections_();
 };
 
 /**
@@ -258,13 +286,21 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
     // child blocks here.
     for (var i = 0; i < sourceBlock.inputList.length; i++) {
       var sourceInput = sourceBlock.inputList[i];
-      if (sourceInput.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
+      if (sourceInput.name == Blockly.constants.COLLAPSED_INPUT_NAME) {
         continue;  // Ignore the collapsed input.
       }
       var resultInput = result.inputList[i];
+      if (!resultInput) {
+        throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+            .replace('%1', 'an input'));
+      }
       for (var j = 0; j < sourceInput.fieldRow.length; j++) {
         var sourceField = sourceInput.fieldRow[j];
         var resultField = resultInput.fieldRow[j];
+        if (!resultField) {
+          throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+              .replace('%1', 'a field'));
+        }
         resultField.setValue(sourceField.getValue());
       }
     }
@@ -286,7 +322,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
  * only be called once, at the beginning of a drag.
  * If the stack has more than one block, this function will populate
  * lastOnStack_ and create the corresponding insertion marker.
- * @return {!Array.<!Blockly.RenderedConnection>} A list of available
+ * @return {!Array<!Blockly.RenderedConnection>} A list of available
  *     connections.
  * @private
  */
@@ -297,6 +333,14 @@ Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() 
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
+    if (this.lastMarker_) {
+      Blockly.Events.disable();
+      try {
+        this.lastMarker_.dispose();
+      } finally {
+        Blockly.Events.enable();
+      }
+    }
     this.lastMarker_ = this.createMarkerBlock_(lastOnStack.getSourceBlock());
   }
   return available;
@@ -594,7 +638,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   var isFirstInStatementStack =
       (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
 
-  var isFirstInOutputStack = imConn.type == Blockly.INPUT_VALUE &&
+  var isFirstInOutputStack =
+      imConn.type == Blockly.connectionTypes.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -602,7 +647,8 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
     imConn.targetBlock().unplug(false);
   }
   // Inside of a C-block, first statement connection.
-  else if (imConn.type == Blockly.NEXT_STATEMENT && imConn != markerNext) {
+  else if (imConn.type == Blockly.connectionTypes.NEXT_STATEMENT &&
+      imConn != markerNext) {
     var innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 
@@ -667,7 +713,7 @@ Blockly.InsertionMarkerManager.prototype.hideReplacementFade_ = function() {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

@@ -14,6 +14,12 @@
 goog.provide('Blockly.Generator');
 
 goog.require('Blockly.Block');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
+goog.require('Blockly.utils.deprecation');
+
+goog.requireType('Blockly.Names');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -26,11 +32,6 @@ Blockly.Generator = function(name) {
   this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
       new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
 };
-
-/**
- * Category to separate generated function names from variables and procedures.
- */
-Blockly.Generator.NAME_TYPE = 'generated_function';
 
 /**
  * Arbitrary code to inject into locations that risk causing infinite loops.
@@ -72,13 +73,22 @@ Blockly.Generator.prototype.COMMENT_WRAP = 60;
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.Generator.prototype.ORDER_OVERRIDES = [];
 
 /**
+ * Whether the init method has been called.
+ * Generators that set this flag to false after creation and true in init
+ * will cause blockToCode to emit a warning if the generator has not been
+ * initialized. If this flag is untouched, it will have no effect.
+ * @type {?boolean}
+ */
+Blockly.Generator.prototype.isInitialized = null;
+
+/**
  * Generate code for all blocks in the workspace to the specified language.
- * @param {Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {!Blockly.Workspace=} workspace Workspace to generate code from.
  * @return {string} Generated code.
  */
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
@@ -158,6 +168,7 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
 
 /**
  * Generate code for the specified block (and attached blocks).
+ * The generator must be initialized before calling this function.
  * @param {Blockly.Block} block The block to generate code for.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string|!Array} For statement blocks, the generated code.
@@ -165,6 +176,10 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  *     operator order value.  Returns '' if block is null.
  */
 Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
+  if (this.isInitialized === false) {
+    console.warn(
+        'Generator init was not called before blockToCode was called.');
+  }
   if (!block) {
     return '';
   }
@@ -369,7 +384,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 
 /**
  * A dictionary of definitions to be printed before the code.
- * @type {Object}
+ * @type {!Object|undefined}
  * @protected
  */
 Blockly.Generator.prototype.definitions_;
@@ -377,38 +392,67 @@ Blockly.Generator.prototype.definitions_;
 /**
  * A dictionary mapping desired function names in definitions_ to actual
  * function names (to avoid collisions with user functions).
- * @type {Object}
+ * @type {!Object|undefined}
  * @protected
  */
 Blockly.Generator.prototype.functionNames_;
 
 /**
- * A database of variable names.
- * @type {Blockly.Names}
+ * A database of variable and procedure names.
+ * @type {!Blockly.Names|undefined}
  * @protected
  */
-Blockly.Generator.prototype.variableDB_;
+Blockly.Generator.prototype.nameDB_;
+
+Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
+  /**
+   * Getter.
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @this {Blockly.Generator}
+   * @return {!Blockly.Names|undefined} Name database.
+   */
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+    return this.nameDB_;
+  },
+  /**
+   * Setter.
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @this {Blockly.Generator}
+   * @param {!Blockly.Names|undefined} nameDb New name database.
+   */
+  set: function(nameDb) {
+    Blockly.utils.deprecation.warn(
+        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+    this.nameDB_ = nameDb;
+  }
+});
 
 /**
- * Define a function to be included in the generated code.
+ * Define a developer-defined function (not a user-defined procedure) to be
+ * included in the generated code.  Used for creating private helper functions.
  * The first time this is called with a given desiredName, the code is
  * saved and an actual name is generated.  Subsequent calls with the
  * same desiredName have no effect but have the same return value.
  *
  * It is up to the caller to make sure the same desiredName is not
- * used for different code values.
+ * used for different helper functions (e.g. use "colourRandom" and
+ * "listRandom", not "random").  There is no danger of colliding with reserved
+ * words, or user-defined variable or procedure names.
  *
  * The code gets output when Blockly.Generator.finish() is called.
  *
- * @param {string} desiredName The desired name of the function (e.g., isPrime).
- * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
+ * @param {string} desiredName The desired name of the function
+ *     (e.g. mathIsPrime).
+ * @param {!Array<string>} code A list of statements.  Use '  ' for indents.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @protected
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName = this.variableDB_.getDistinctName(desiredName,
+    var functionName = this.nameDB_.getDistinctName(desiredName,
         Blockly.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(
@@ -436,6 +480,12 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
  */
 Blockly.Generator.prototype.init = function(_workspace) {
   // Optionally override
+  // Create a dictionary of definitions to be printed before the code.
+  this.definitions_ = Object.create(null);
+  // Create a dictionary mapping desired developer-defined function names in
+  // definitions_ to actual function names (to avoid collisions with
+  // user-defined procedures).
+  this.functionNames_ = Object.create(null);
 };
 
 /**
@@ -458,13 +508,16 @@ Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
 
 /**
  * Hook for code to run at end of code generation.
- * Subclasses may override this, e.g. to prepend the generated code with the
- * variable definitions.
+ * Subclasses may override this, e.g. to prepend the generated code with import
+ * statements or variable definitions.
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
 Blockly.Generator.prototype.finish = function(code) {
   // Optionally override
+  // Clean up temporary data.
+  delete this.definitions_;
+  delete this.functionNames_;
   return code;
 };
 

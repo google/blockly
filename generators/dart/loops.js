@@ -28,11 +28,11 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
   var branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
   var code = '';
-  var loopVar = Blockly.Dart.variableDB_.getDistinctName(
+  var loopVar = Blockly.Dart.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   var endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
-    endVar = Blockly.Dart.variableDB_.getDistinctName(
+    endVar = Blockly.Dart.nameDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
   }
@@ -61,7 +61,7 @@ Blockly.Dart['controls_whileUntil'] = function(block) {
 
 Blockly.Dart['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Dart.variableDB_.getName(
+  var variable0 = Blockly.Dart.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.Dart.valueToCode(block, 'FROM',
       Blockly.Dart.ORDER_ASSIGNMENT) || '0';
@@ -91,19 +91,19 @@ Blockly.Dart['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
-      startVar = Blockly.Dart.variableDB_.getDistinctName(
+      startVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
-      endVar = Blockly.Dart.variableDB_.getDistinctName(
+      endVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    var incVar = Blockly.Dart.variableDB_.getDistinctName(
+    var incVar = Blockly.Dart.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'num ' + incVar + ' = ';
     if (Blockly.isNumber(increment)) {
@@ -126,7 +126,7 @@ Blockly.Dart['controls_for'] = function(block) {
 
 Blockly.Dart['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Dart.variableDB_.getName(
+  var variable0 = Blockly.Dart.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.Dart.valueToCode(block, 'LIST',
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';

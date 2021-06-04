@@ -13,15 +13,13 @@
 
 goog.provide('Blockly.geras.Highlighter');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.geras.HighlightConstantProvider');
+goog.requireType('Blockly.geras.Renderer');
+goog.requireType('Blockly.geras.RenderInfo');
 
 
 /**

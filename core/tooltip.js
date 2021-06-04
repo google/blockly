@@ -21,8 +21,18 @@
  */
 goog.provide('Blockly.Tooltip');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils.string');
 
+
+/**
+ * A type which can define a tooltip.
+ * Either a string, an object containing a tooltip property, or a function which
+ * returns either a string, or another arbitrarily nested function which
+ * eventually unwinds to a string.
+ * @typedef {string|{tooltip}|function(): (string|!Function)}
+ */
+Blockly.Tooltip.TipInfo;
 
 /**
  * Is a tooltip currently showing?
@@ -112,6 +122,45 @@ Blockly.Tooltip.MARGINS = 5;
 Blockly.Tooltip.DIV = null;
 
 /**
+ * Returns the tooltip text for the given element.
+ * @param {?Object} object The object to get the tooltip text of.
+ * @return {string} The tooltip text of the element.
+ */
+Blockly.Tooltip.getTooltipOfObject = function(object) {
+  var obj = Blockly.Tooltip.getTargetObject_(object);
+  if (obj) {
+    var tooltip = obj.tooltip;
+    while (typeof tooltip == 'function') {
+      tooltip = tooltip();
+    }
+    if (typeof tooltip != 'string') {
+      throw Error('Tooltip function must return a string.');
+    }
+    return tooltip;
+  }
+  return '';
+};
+
+/**
+ * Returns the target object that the given object is targeting for its
+ * tooltip. Could be the object itself.
+ * @param {?Object} obj The object are trying to find the target tooltip
+ *     object of.
+ * @return {?{tooltip}} The target tooltip object.
+ * @private
+ */
+Blockly.Tooltip.getTargetObject_ = function(obj) {
+  while (obj && obj.tooltip) {
+    if ((typeof obj.tooltip == 'string') ||
+        (typeof obj.tooltip == 'function')) {
+      return obj;
+    }
+    obj = obj.tooltip;
+  }
+  return null;
+};
+
+/**
  * Create the tooltip div and inject it onto the page.
  */
 Blockly.Tooltip.createDom = function() {
@@ -130,10 +179,10 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
-      Blockly.Tooltip.onMouseOver_);
-  element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
-      Blockly.Tooltip.onMouseOut_);
+  element.mouseOverWrapper_ = Blockly.browserEvents.bind(
+      element, 'mouseover', null, Blockly.Tooltip.onMouseOver_);
+  element.mouseOutWrapper_ = Blockly.browserEvents.bind(
+      element, 'mouseout', null, Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
@@ -149,8 +198,8 @@ Blockly.Tooltip.unbindMouseEvents = function(element) {
   if (!element) {
     return;
   }
-  Blockly.unbindEvent_(element.mouseOverWrapper_);
-  Blockly.unbindEvent_(element.mouseOutWrapper_);
+  Blockly.browserEvents.unbind(element.mouseOverWrapper_);
+  Blockly.browserEvents.unbind(element.mouseOutWrapper_);
   element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
 };
 
@@ -167,11 +216,8 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = e.currentTarget;
-  while ((typeof element.tooltip != 'string') &&
-         (typeof element.tooltip != 'function')) {
-    element = element.tooltip;
-  }
+  var element = /** @type {Element} */ (Blockly.Tooltip.getTargetObject_(
+      e.currentTarget));
   if (Blockly.Tooltip.element_ != element) {
     Blockly.Tooltip.hide();
     Blockly.Tooltip.poisonedElement_ = null;
@@ -296,11 +342,7 @@ Blockly.Tooltip.show_ = function() {
   }
   // Erase all existing text.
   Blockly.Tooltip.DIV.textContent = '';
-  // Get the new text.
-  var tip = Blockly.Tooltip.element_.tooltip;
-  while (typeof tip == 'function') {
-    tip = tip();
-  }
+  var tip = Blockly.Tooltip.getTooltipOfObject(Blockly.Tooltip.element_);
   tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
   // Create new text, line by line.
   var lines = tip.split('\n');
@@ -309,7 +351,7 @@ Blockly.Tooltip.show_ = function() {
     div.appendChild(document.createTextNode(lines[i]));
     Blockly.Tooltip.DIV.appendChild(div);
   }
-  var rtl = Blockly.Tooltip.element_.RTL;
+  var rtl = /** @type {{RTL: boolean}} */ (Blockly.Tooltip.element_).RTL;
   var windowWidth = document.documentElement.clientWidth;
   var windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.

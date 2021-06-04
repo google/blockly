@@ -14,7 +14,10 @@
 goog.provide('Blockly.IMovable');
 
 
-/** @interface */
+/**
+ * The interface for an object that is movable.
+ * @interface
+ */
 Blockly.IMovable = function() {};
 
 /**

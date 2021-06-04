@@ -479,7 +479,7 @@ Blockly.ContextMenuItems.registerDelete = function() {
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       Blockly.Events.setGroup(true);
-      if(scope.block.outputConnection) {
+      if (scope.block.outputConnection) {
         // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
         scope.block.dispose(false, true);
       } else {

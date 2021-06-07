@@ -233,7 +233,7 @@ Blockly.Msg.LEAPHY_BUZZ_HERTZ = 'Hertz';
 Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
 /** @type {string} */
 /// Print print
-Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Print';
+Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
 
 /** @type {string} */
 /// Sitation Category Title
@@ -250,7 +250,7 @@ Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Functions';
 
 /** @type {string} */
 /// Arduino Delay in ms
-Blockly.Msg.ARD_TIME_DELAY = 'wait'
+Blockly.Msg.ARD_TIME_DELAY = 'during'
 /** @type {string} */
 /// Arduino ms
 Blockly.Msg.ARD_TIME_MS = 'ms'
@@ -470,7 +470,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
 Blockly.Msg.CONTROLS_REPEAT_FOREVER_TITLE = 'repeat forever';
 /** @type {string} */
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
-Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
+Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = '';
 /** @type {string} */
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
@@ -478,7 +478,7 @@ Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
 /// {{Optional}} url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].
 Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://github.com/google/blockly/wiki/Loops#repeat';
 /** @type {string} */
-Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = '';
 /** @type {string} */
 /// dropdown - Specifies that a loop should [https://github.com/google/blockly/wiki/Loops#repeat-while repeat while] the following condition is true.
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'repeat while';
@@ -508,7 +508,7 @@ Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values fr
 /// [[File:Blockly-count-with.png]]
 Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 /** @type {string} */
-Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_FOR_INPUT_DO = '';
 
 /** @type {string} */
 /// {{Optional}} url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
@@ -518,7 +518,7 @@ Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/L
 /// Sequentially assigns every item in array %2 to the valiable %1.
 Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 /** @type {string} */
-Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = '';
 /** @type {string} */
 /// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
@@ -1733,7 +1733,12 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subr
 /// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// function definition].
-Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
+Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'Subprogram';
+/** @type {string} */
+/// block text - This precedes the name of the function when defining it.  See
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
+/// function definition].
+Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = 'Subprogram';
 /** @type {string} */
 /// default name - This acts as a placeholder for the name of a function on a
 /// function definition block, as shown on
@@ -1765,8 +1770,6 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
 /** @type {string} */
 /// {{Optional}} url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
-/** @type {string} */
-Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @type {string} */
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @type {string} */

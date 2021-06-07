@@ -29,7 +29,7 @@ Blockly.DeleteArea = function() {};
 
 /**
  * Return the drag target rectangle.
- * @return {Blockly.utils.Rect} Rectangle in which to block can be dragged over.
+ * @return {Blockly.utils.Rect} Rectangle in which a block can be dragged over.
  */
 Blockly.DeleteArea.prototype.getClientRect;
 

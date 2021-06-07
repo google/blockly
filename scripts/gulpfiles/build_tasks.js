@@ -133,7 +133,7 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
 
 /**
  * Helper method for possibly adding the Closure library into a sources array.
- * @param {Array.<string>} srcs
+ * @param {Array<string>} srcs
  */
 function maybeAddClosureLibrary(srcs) {
   if (argv.closureLibrary) {
@@ -155,7 +155,7 @@ function maybeAddClosureLibrary(srcs) {
  * A helper method to return an closure compiler output wrapper that wraps the
  * body in a Universal Module Definition.
  * @param {string} namespace The export namespace.
- * @param {Array.<Object>} dependencies An array of dependencies to inject.
+ * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
 function outputWrapperUMD(namespace, dependencies) {
   const amdDeps = dependencies.map(d => '\'' + d.amd + '\'' ).join(', ');

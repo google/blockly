@@ -45,14 +45,14 @@ Blockly.ThemeManager = function(workspace, theme) {
 
   /**
    * A list of workspaces that are subscribed to this theme.
-   * @type {!Array.<Blockly.Workspace>}
+   * @type {!Array<Blockly.Workspace>}
    * @private
    */
   this.subscribedWorkspaces_ = [];
 
   /**
    * A map of subscribed UI components, keyed by component name.
-   * @type {!Object.<string, !Array.<!Blockly.ThemeManager.Component>>}
+   * @type {!Object<string, !Array<!Blockly.ThemeManager.Component>>}
    * @private
    */
   this.componentDB_ = Object.create(null);

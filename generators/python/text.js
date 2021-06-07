@@ -77,7 +77,7 @@ Blockly.Python['text_join'] = function(block) {
         elements[i] = Blockly.Python.valueToCode(block, 'ADD' + i,
                 Blockly.Python.ORDER_NONE) || '\'\'';
       }
-      var tempVar = Blockly.Python.variableDB_.getDistinctName('x',
+      var tempVar = Blockly.Python.nameDB_.getDistinctName('x',
           Blockly.VARIABLE_CATEGORY_NAME);
       var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
@@ -87,7 +87,7 @@ Blockly.Python['text_join'] = function(block) {
 
 Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';

@@ -20,6 +20,7 @@ goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
+goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IKeyboardAccessible');
 goog.require('Blockly.IStyleable');
@@ -47,6 +48,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
+ * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
@@ -187,6 +189,15 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
+
+  this.workspace_.getComponentManager().addComponent({
+    id: 'toolbox',
+    component: this,
+    weight: 1,
+    capabilities: [
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE
+    ]
+  });
 };
 
 /**
@@ -694,6 +705,17 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  */
 Blockly.Toolbox.prototype.setVisible = function(isVisible) {
   this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+};
+
+/**
+ * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
+ */
+Blockly.Toolbox.prototype.autoHide = function(onlyClosePopups) {
+  if (!onlyClosePopups && this.flyout_ && this.flyout_.autoClose) {
+    this.clearSelection();
+  }
 };
 
 /**

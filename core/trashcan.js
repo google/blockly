@@ -18,6 +18,7 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
+goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Options');
@@ -38,6 +39,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
+ * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IPositionable}
  */
@@ -51,7 +53,7 @@ Blockly.Trashcan = function(workspace) {
 
   /**
    * A list of XML (stored as strings) representing blocks in the trashcan.
-   * @type {!Array.<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.contents_ = [];
@@ -357,7 +359,15 @@ Blockly.Trashcan.prototype.init = function() {
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-
+  this.workspace_.getComponentManager().addComponent({
+    id: 'trashcan',
+    component: this,
+    weight: 1,
+    capabilities: [
+      Blockly.ComponentManager.Capability.POSITIONABLE,
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE
+    ]
+  });
   this.initialized_ = true;
   this.setLidOpen(false);
 };
@@ -423,6 +433,19 @@ Blockly.Trashcan.prototype.closeFlyout = function() {
 };
 
 /**
+ * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
+ */
+Blockly.Trashcan.prototype.autoHide = function(onlyClosePopups) {
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it).
+  if (!onlyClosePopups && this.flyout) {
+    this.closeFlyout();
+  }
+};
+
+/**
  * Empties the trashcan's contents. If the contents-flyout is currently open
  * it will be closed.
  */
@@ -474,7 +497,7 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
  */
 Blockly.Trashcan.prototype.getBoundingRectangle = function() {
   var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
@@ -484,7 +507,7 @@ Blockly.Trashcan.prototype.getBoundingRectangle = function() {
 
 /**
  * Return the deletion rectangle for this trash can.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * @return {?Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {

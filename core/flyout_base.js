@@ -303,7 +303,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   this.workspace_.createPotentialVariableMap();
 
-  this.workspace_.getComponentManager().addComponent({
+  targetWorkspace.getComponentManager().addComponent({
     id: 'flyout' + Blockly.utils.genUid(),
     component: this,
     weight: 1,

@@ -1424,16 +1424,19 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
 
   // Run through our text array and simplify expression to remove parentheses
   // around single field blocks.
-  for (var i = 2, l = text.length; i < l; i++) {
+  // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
+  for (var i = 2; i < text.length; i++) {
     if (text[i - 2] == '(' && text[i] == ')') {
       text[i - 2] = text[i - 1];
       text.splice(i - 1, 2);
-      l -= 2;
     }
   }
 
-  // Join the text array, removing spaces around added paranthesis.
-  text = text.join(' ').replace(/(\() | (\))/gmi, '$1$2').trim() || '???';
+  // Join the text array, removing spaces around added parentheses.
+  text = text.reduce(function(acc, value) {
+    return acc + ((acc.substr(-1) == '(' || value == ')') ? '' : ' ') + value;
+  }, '');
+  text = text.trim() || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
     // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".

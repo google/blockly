@@ -34,6 +34,8 @@ suite('Toolbox', function() {
     test('Init called -> Toolbox is subscribed to background and foreground colour', function() {
       var themeManager = this.toolbox.workspace_.getThemeManager();
       var themeManagerSpy = sinon.spy(themeManager, 'subscribe');
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       sinon.assert.calledWith(themeManagerSpy, this.toolbox.HtmlDiv,
           'toolboxBackgroundColour', 'background-color');
@@ -42,10 +44,14 @@ suite('Toolbox', function() {
     });
     test('Init called -> Render is called', function() {
       var renderSpy = sinon.spy(this.toolbox, 'render');
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       sinon.assert.calledOnce(renderSpy);
     });
     test('Init called -> Flyout is initialized', function() {
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       chai.assert.isDefined(this.toolbox.flyout_);
     });

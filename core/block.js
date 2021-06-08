@@ -573,20 +573,21 @@ Blockly.Block.prototype.getConnections_ = function(_all) {
 
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
+ * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
+ *     block will be returned. If false, this will follow shadows to find the
+ *     last connection.
  * @return {?Blockly.Connection} The last next connection on the stack, or null.
  * @package
  */
-Blockly.Block.prototype.lastConnectionInStack = function() {
+Blockly.Block.prototype.lastConnectionInStack = function(ignoreShadows) {
   var nextConnection = this.nextConnection;
   while (nextConnection) {
     var nextBlock = nextConnection.targetBlock();
-    if (!nextBlock) {
-      // Found a next connection with nothing on the other side.
+    if (!nextBlock || (ignoreShadows && nextBlock.isShadow())) {
       return nextConnection;
     }
     nextConnection = nextBlock.nextConnection;
   }
-  // Ran out of next connections.
   return null;
 };
 
@@ -605,7 +606,6 @@ Blockly.Block.prototype.bumpNeighbours = function() {
  * @return {?Blockly.Block} The block (if any) that holds the current block.
  */
 Blockly.Block.prototype.getParent = function() {
-  // Look at the DOM to see if we are nested in another block.
   return this.parentBlock_;
 };
 

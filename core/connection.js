@@ -146,7 +146,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
     var orphanConnection = parentConnection.type == INPUT ?
         orphan.outputConnection : orphan.previousConnection;
     var connection = Blockly.Connection.getConnectionForOrphanedConnection(
-        childBlock, orphanConnection);
+        childBlock, /** @type {!Blockly.Connection} */ (orphanConnection));
     if (connection) {
       orphanConnection.connect(connection);
     } else {
@@ -594,14 +594,16 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
 
 /**
  * Returns the xml representation of the connection's shadow block.
- * @param {boolean} returnCurrent If true, and the shadow block is currently
+ * @param {boolean=} returnCurrent If true, and the shadow block is currently
  *     attached to this connection, this serializes the state of that block
- *     and returns it (so that field values are correct).
+ *     and returns it (so that field values are correct). Otherwise the saved
+ *     shadowDom is just returned.
  * @return {?Element} Shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.getShadowDom = function(returnCurrent) {
   return (returnCurrent && this.targetBlock().isShadow()) ?
-      /** @type {!Element} */ (Blockly.Xml.blockToDom(this.targetBlock())) :
+      /** @type {!Element} */ (Blockly.Xml.blockToDom(
+          /** @type {!Blockly.Block} */ (this.targetBlock()))) :
       this.shadowDom_;
 };
 

@@ -249,7 +249,8 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
       var orphanConnection = localType == Blockly.connectionTypes.OUTPUT_VALUE ?
           orphanBlock.outputConnection : orphanBlock.previousConnection;
       return !!Blockly.Connection.getConnectionForOrphanedConnection(
-          /** @type {!Blockly.Block} **/ (topBlock), orphanConnection);
+          /** @type {!Blockly.Block} **/ (topBlock),
+          /** @type {!Blockly.Connection} **/ (orphanConnection));
     };
 
 /**

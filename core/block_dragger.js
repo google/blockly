@@ -243,6 +243,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   var newLoc = this.dragTarget_ ?
       this.dragTarget_.getEndDragLoc(this.startXY_, delta) :
       Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  delta = Blockly.utils.Coordinate.difference(newLoc, this.startXY_);
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {

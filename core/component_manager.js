@@ -69,8 +69,8 @@ Blockly.ComponentManager.prototype.addComponent = function(componentInfo) {
 };
 
 /**
- * Adds capability to existing registered component.
- * @param {string} id The ID of the component to add capability to.
+ * Adds a capability to a existing registered component.
+ * @param {string} id The ID of the component to add the capability to.
  * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
  *   } capability The capability to add.
  */
@@ -90,8 +90,8 @@ Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
 };
 
 /**
- * Adds capability to existing registered component.
- * @param {string} id The ID of the component to add capability to.
+ * Removes a capability from an existing registered component.
+ * @param {string} id The ID of the component to remove the capability from.
  * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
  *   } capability The capability to remove.
  */
@@ -116,8 +116,8 @@ Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
  * Returns whether the component with this id has the specified capability.
  * @param {string} id The ID of the component to check.
  * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
- *   } capability The capability to check.
- * @return {boolean} Whether the component has the capability
+ *   } capability The capability to check for.
+ * @return {boolean} Whether the component has the capability.
  */
 Blockly.ComponentManager.prototype.hasCapability = function(id, capability) {
   capability = String(capability).toLowerCase();

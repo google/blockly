@@ -404,7 +404,7 @@ Blockly.Procedures.getDefinition = function(name, workspace) {
         blocks[i]);
       var tuple = procedureBlock.getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {
-        return procedureBlock;
+        return blocks[i];  // Can't use procedureBlock var due to type check.
       }
     }
   }

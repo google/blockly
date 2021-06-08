@@ -1249,10 +1249,6 @@ suite('Connection', function() {
       };
     });
 
-    teardown(function() {
-      sharedTestTeardown.call(this);
-    });
-
     suite('Disconnect from old parent', function() {
       test('Value', function() {
         var oldParent = this.workspace.newBlock('row_block');

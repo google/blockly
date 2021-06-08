@@ -398,7 +398,7 @@ return gulp.src(maybeAddClosureLibrary(['core/**/**/*.js']))
     const requires = `goog.addDependency("base.js", [], []);
 
 // Load Blockly.
-goog.require('Blockly.requires')
+goog.require('Blockly.requires');
 `;
     fs.writeFileSync('blockly_uncompressed.js',
       header +

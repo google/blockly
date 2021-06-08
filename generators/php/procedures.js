@@ -14,12 +14,12 @@ goog.provide('Blockly.PHP.procedures');
 
 goog.require('Blockly.PHP');
 
+
 Blockly.PHP['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
   var globals = [];
-  var varName;
   var workspace = block.workspace;
   var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {

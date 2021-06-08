@@ -169,7 +169,7 @@ Blockly.WorkspaceSvg = function(
   * @type {!Object<string, ?function(!Blockly.Workspace):!Array<!Element>>}
   * @private
   */
-  this.toolboxCategoryCallbacks_ = {};
+  this.toolboxCategoryCallbacks_ = Object.create(null);
 
   /**
   * Map from function names to callbacks, for deciding what to do when a button
@@ -177,7 +177,7 @@ Blockly.WorkspaceSvg = function(
   * @type {!Object<string, ?function(!Blockly.FlyoutButton)>}
   * @private
   */
-  this.flyoutButtonCallbacks_ = {};
+  this.flyoutButtonCallbacks_ = Object.create(null);
 
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,

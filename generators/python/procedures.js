@@ -20,7 +20,6 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
   var globals = [];
-  var varName;
   var workspace = block.workspace;
   var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {

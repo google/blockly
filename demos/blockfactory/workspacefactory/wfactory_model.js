@@ -360,7 +360,7 @@ WorkspaceFactoryModel.prototype.addCustomTag = function(category, tag) {
  * @param {!Element} xml The XML to be saved.
  */
 WorkspaceFactoryModel.prototype.savePreloadXml = function(xml) {
-  this.preloadXml = xml
+  this.preloadXml = xml;
 };
 
 /**
@@ -445,8 +445,8 @@ WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
  * @return {boolean} True if blockType is defined, false otherwise.
  */
 WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
-  var isStandardBlock = StandardCategories.coreBlockTypes.indexOf(blockType)
-      != -1;
+  var isStandardBlock =
+      StandardCategories.coreBlockTypes.indexOf(blockType) != -1;
   var isLibBlock = this.libBlockTypes.indexOf(blockType) != -1;
   var isImportedBlock = this.importedBlockTypes.indexOf(blockType) != -1;
   return (isStandardBlock || isLibBlock || isImportedBlock);

@@ -232,7 +232,7 @@ Blockly.utils.dom.setCssTransform = function(element, transform) {
 Blockly.utils.dom.startTextWidthCache = function() {
   Blockly.utils.dom.cacheReference_++;
   if (!Blockly.utils.dom.cacheWidths_) {
-    Blockly.utils.dom.cacheWidths_ = {};
+    Blockly.utils.dom.cacheWidths_ = Object.create(null);
   }
 };
 

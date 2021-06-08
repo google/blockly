@@ -587,10 +587,10 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
 
   /**
    * The block styles map.
-   * @type {Object<string, Blockly.Theme.BlockStyle>}
+   * @type {Object<string, !Blockly.Theme.BlockStyle>}
    * @package
    */
-  this.blockStyles = {};
+  this.blockStyles = Object.create(null);
 
   var blockStyles = theme.blockStyles;
   for (var key in blockStyles) {

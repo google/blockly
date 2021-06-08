@@ -953,7 +953,7 @@ Blockly.Gesture.prototype.hasStarted = function() {
 /**
  * Get a list of the insertion markers that currently exist.  Block drags have
  * 0, 1, or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

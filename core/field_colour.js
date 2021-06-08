@@ -130,14 +130,14 @@ Blockly.FieldColour.prototype.isDirty_ = false;
 
 /**
  * Array of colours used by this field.  If null, use the global list.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 Blockly.FieldColour.prototype.colours_ = null;
 
 /**
  * Array of colour tooltips used by this field.  If null, use the global list.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 Blockly.FieldColour.prototype.titles_ = null;
@@ -243,7 +243,7 @@ Blockly.FieldColour.prototype.getText = function() {
  * An array of colour strings for the palette.
  * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
  * All colour pickers use this unless overridden with setColours.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 Blockly.FieldColour.COLOURS = [
   // grays
@@ -279,7 +279,7 @@ Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
  * An array of tooltip strings for the palette.  If not the same length as
  * COLOURS, the colour's hex code will be used for any missing titles.
  * All colour pickers use this unless overridden with setColours.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 Blockly.FieldColour.TITLES = [];
 
@@ -291,9 +291,9 @@ Blockly.FieldColour.COLUMNS = 7;
 
 /**
  * Set a custom colour grid for this field.
- * @param {Array.<string>} colours Array of colours for this block,
+ * @param {Array<string>} colours Array of colours for this block,
  *     or null to use default (Blockly.FieldColour.COLOURS).
- * @param {Array.<string>=} opt_titles Optional array of colour tooltips,
+ * @param {Array<string>=} opt_titles Optional array of colour tooltips,
  *     or null to use default (Blockly.FieldColour.TITLES).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */
@@ -473,7 +473,7 @@ Blockly.FieldColour.prototype.onMouseLeave_ = function() {
 
 /**
  * Returns the currently highlighted item (if any).
- * @return {HTMLElement} Highlighted item (null if none).
+ * @return {?HTMLElement} Highlighted item (null if none).
  * @private
  */
 Blockly.FieldColour.prototype.getHighlighted_ = function() {

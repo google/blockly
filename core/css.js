@@ -28,7 +28,7 @@ Blockly.Css.injected_ = false;
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
  * The provided array of CSS will be destroyed by this function.
- * @param {!Array.<string>} cssArray Array of CSS strings.
+ * @param {!Array<string>} cssArray Array of CSS strings.
  */
 Blockly.Css.register = function(cssArray) {
   if (Blockly.Css.injected_) {

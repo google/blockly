@@ -92,7 +92,7 @@ Blockly.Flyout = function(workspaceOptions) {
 
   /**
    * Opaque data that can be passed to Blockly.unbindEvent_.
-   * @type {!Array.<!Array>}
+   * @type {!Array<!Array>}
    * @private
    */
   this.eventWrappers_ = [];
@@ -100,28 +100,28 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * List of background mats that lurk behind each block to catch clicks
    * landing in the blocks' lakes and bays.
-   * @type {!Array.<!SVGElement>}
+   * @type {!Array<!SVGElement>}
    * @private
    */
   this.mats_ = [];
 
   /**
    * List of visible buttons.
-   * @type {!Array.<!Blockly.FlyoutButton>}
+   * @type {!Array<!Blockly.FlyoutButton>}
    * @protected
    */
   this.buttons_ = [];
 
   /**
    * List of event listeners.
-   * @type {!Array.<!Array>}
+   * @type {!Array<!Array>}
    * @private
    */
   this.listeners_ = [];
 
   /**
    * List of blocks that should always be disabled.
-   * @type {!Array.<!Blockly.Block>}
+   * @type {!Array<!Blockly.Block>}
    * @private
    */
   this.permanentlyDisabled_ = [];
@@ -510,7 +510,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array, Node or NodeList into a a list of flyout items.
   var parsedContent = Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef);
   var flyoutInfo =
-    /** @type {{contents:!Array.<!Object>, gaps:!Array.<number>}} */ (
+    /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
       this.createFlyoutInfo_(parsedContent));
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
@@ -549,7 +549,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
  * the flyout.
  * @param {!Blockly.utils.toolbox.FlyoutItemInfoArray} parsedContent The array
  *     of objects to show in the flyout.
- * @return {{contents:Array.<Object>, gaps:Array.<number>}} The list of contents
+ * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
  *     and gaps needed to lay out the flyout.
  * @private
  */
@@ -606,7 +606,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 /**
  * Gets the flyout definition for the dynamic category.
  * @param {string} categoryName The name of the dynamic category.
- * @return {!Array.<!Element>} The array of flyout items.
+ * @return {!Array<!Element>} The array of flyout items.
  * @private
  */
 Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
@@ -696,7 +696,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
  * Add the necessary gap in the flyout for a separator.
  * @param {!Blockly.utils.toolbox.SeparatorInfo} sepInfo The object holding
  *    information about a separator.
- * @param {!Array.<number>} gaps The list gaps between items in the flyout.
+ * @param {!Array<number>} gaps The list gaps between items in the flyout.
  * @param {number} defaultGap The default gap between the button and next element.
  * @private
  */
@@ -1063,8 +1063,8 @@ Blockly.Flyout.prototype.setMetrics_;
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
- * @param {!Array.<number>} gaps The visible gaps between blocks.
+ * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+ * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
 Blockly.Flyout.prototype.layout_;

@@ -40,7 +40,7 @@ goog.requireType('Blockly.Workspace');
 
 /**
  * Class for a mutator dialog.
- * @param {!Array.<string>} quarkNames List of names of sub-blocks for flyout.
+ * @param {!Array<string>} quarkNames List of names of sub-blocks for flyout.
  * @extends {Blockly.Icon}
  * @constructor
  */
@@ -49,6 +49,13 @@ Blockly.Mutator = function(quarkNames) {
   this.quarkNames_ = quarkNames;
 };
 Blockly.utils.object.inherits(Blockly.Mutator, Blockly.Icon);
+
+/**
+ * Workspace in the mutator's bubble.
+ * @type {?Blockly.WorkspaceSvg}
+ * @private
+ */
+Blockly.Mutator.prototype.workspace_ = null;
 
 /**
  * Width of workspace.
@@ -64,7 +71,7 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.
- * @param {Blockly.BlockSvg} block The block associated with this mutator.
+ * @param {!Blockly.BlockSvg} block The block associated with this mutator.
  * @package
  */
 Blockly.Mutator.prototype.setBlock = function(block) {
@@ -73,8 +80,8 @@ Blockly.Mutator.prototype.setBlock = function(block) {
 
 /**
  * Returns the workspace inside this mutator icon's bubble.
- * @return {Blockly.WorkspaceSvg} The workspace inside this mutator icon's
- *     bubble.
+ * @return {?Blockly.WorkspaceSvg} The workspace inside this mutator icon's
+ *     bubble or null if the mutator isn't open.
  * @package
  */
 Blockly.Mutator.prototype.getWorkspace = function() {
@@ -466,16 +473,14 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
 
   if (ws && ws.getAllBlocks(false)) {
     var workspaceBlocks = ws.getAllBlocks(false);
-    for (var i = 0; i < workspaceBlocks.length; i++) {
-      var block = workspaceBlocks[i];
+    for (var i = 0, block; (block = workspaceBlocks[i]); i++) {
       block.setStyle(block.getStyleName());
     }
 
     var flyout = ws.getFlyout();
     if (flyout) {
       var flyoutBlocks = flyout.workspace_.getAllBlocks(false);
-      for (var i = 0; i < flyoutBlocks.length; i++) {
-        var block = flyoutBlocks[i];
+      for (var i = 0, block; (block = flyoutBlocks[i]); i++) {
         block.setStyle(block.getStyleName());
       }
     }
@@ -511,7 +516,7 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
  * Get the parent workspace of a workspace that is inside a mutator, taking into
  * account whether it is a flyout.
  * @param {Blockly.Workspace} workspace The workspace that is inside a mutator.
- * @return {Blockly.Workspace} The mutator's parent workspace or null.
+ * @return {?Blockly.Workspace} The mutator's parent workspace or null.
  * @public
  */
 Blockly.Mutator.findParentWs = function(workspace) {

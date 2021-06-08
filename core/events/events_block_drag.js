@@ -26,7 +26,7 @@ goog.requireType('Blockly.Block');
  *    dragged. Undefined for a blank event.
  * @param {boolean=} opt_isStart Whether this is the start of a block drag.
  *    Undefined for a blank event.
- * @param {!Array.<!Blockly.Block>=} opt_blocks The blocks affected by this
+ * @param {!Array<!Blockly.Block>=} opt_blocks The blocks affected by this
  *    drag. Undefined for a blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor
@@ -44,7 +44,7 @@ Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
 
   /**
    * The blocks affected by this drag event.
-   * @type {!Array.<!Blockly.Block>|undefined}
+   * @type {!Array<!Blockly.Block>|undefined}
    */
   this.blocks = opt_blocks;
 };

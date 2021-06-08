@@ -131,7 +131,7 @@ Blockly.InsertionMarkerManager = function(block) {
    * other blocks.  This includes all open connections on the top block, as well
    * as the last connection on the block stack.
    * Does not change during a drag.
-   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @type {!Array<!Blockly.RenderedConnection>}
    * @private
    */
   this.availableConnections_ = this.initAvailableConnections_();
@@ -340,7 +340,7 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
  * only be called once, at the beginning of a drag.
  * If the stack has more than one block, this function will populate
  * lastOnStack_ and create the corresponding insertion marker.
- * @return {!Array.<!Blockly.RenderedConnection>} A list of available
+ * @return {!Array<!Blockly.RenderedConnection>} A list of available
  *     connections.
  * @private
  */
@@ -709,7 +709,7 @@ Blockly.InsertionMarkerManager.prototype.hideReplacementFade_ = function() {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

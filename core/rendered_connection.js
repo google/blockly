@@ -119,7 +119,7 @@ Blockly.RenderedConnection.prototype.getSourceBlock = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.BlockSvg} The connected block or null if none is connected.
+ * @return {?Blockly.BlockSvg} The connected block or null if none is connected.
  * @override
  */
 Blockly.RenderedConnection.prototype.targetBlock = function() {
@@ -386,7 +386,7 @@ Blockly.RenderedConnection.prototype.stopTrackingAll = function() {
 /**
  * Start tracking this connection, as well as all down-stream connections on
  * any block attached to this connection. This happens when a block is expanded.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @return {!Array<!Blockly.Block>} List of blocks to render.
  */
 Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   this.setTracking(true);
@@ -509,7 +509,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
  * Type checking does not apply, since this function is used for bumping.
  * @param {number} maxLimit The maximum radius to another connection, in
  *     workspace units.
- * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @return {!Array<!Blockly.Connection>} List of connections.
  * @package
  */
 Blockly.RenderedConnection.prototype.neighbours = function(maxLimit) {

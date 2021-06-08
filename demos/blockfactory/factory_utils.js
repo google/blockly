@@ -97,7 +97,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
         // Subclass of Blockly.FieldDropdown, must test first.
         code.push(makeVar('variable', name) +
                   " = Blockly." + language +
-                  ".variableDB_.getName(block.getFieldValue('" + name +
+                  ".nameDB_.getName(block.getFieldValue('" + name +
                   "'), Blockly.Variables.NAME_TYPE);");
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.
@@ -377,7 +377,7 @@ FactoryUtils.connectionLineJs_ = function(functionName, typeName, workspace) {
 /**
  * Returns field strings and any config.
  * @param {!Blockly.Block} block Input block.
- * @return {!Array.<string>} Field strings.
+ * @return {!Array<string>} Field strings.
  * @private
  */
 FactoryUtils.getFieldsJs_ = function(block) {
@@ -484,7 +484,7 @@ FactoryUtils.getFieldsJs_ = function(block) {
 /**
  * Returns field strings and any config.
  * @param {!Blockly.Block} block Input block.
- * @return {!Array.<string|!Object>} Array of static text and field configs.
+ * @return {!Array<string|!Object>} Array of static text and field configs.
  * @private
  */
 FactoryUtils.getFieldsJson_ = function(block) {
@@ -614,7 +614,7 @@ FactoryUtils.getOptTypesFrom = function(block, name) {
  * Fetch the type(s) defined in the given input.
  * @param {!Blockly.Block} block Block with input.
  * @param {string} name Name of the input.
- * @return {!Array.<string>} List of types.
+ * @return {!Array<string>} List of types.
  * @private
  */
 FactoryUtils.getTypesFrom_ = function(block, name) {
@@ -745,7 +745,7 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
 
 /**
  * Generates a category containing blocks of the specified block types.
- * @param {!Array.<!Blockly.Block>} blocks Blocks to include in the category.
+ * @param {!Array<!Blockly.Block>} blocks Blocks to include in the category.
  * @param {string} categoryName Name to use for the generated category.
  * @return {!Element} Category XML containing the given block types.
  */
@@ -771,7 +771,7 @@ FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
  * Parses a string containing JavaScript block definition(s) to create an array
  * in which each element is a single block definition.
  * @param {string} blockDefsString JavaScript block definition(s).
- * @return {!Array.<string>} Array of block definitions.
+ * @return {!Array<string>} Array of block definitions.
  */
 FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
@@ -797,7 +797,7 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
  * JSON objects.
  * @param {string} blockDefsString String containing JSON block
  *    definition(s).
- * @return {!Array.<string>} Array of block definitions.
+ * @return {!Array<string>} Array of block definitions.
  */
 FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
@@ -827,7 +827,7 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
  * Define blocks from imported block definitions.
  * @param {string} blockDefsString Block definition(s).
  * @param {string} format Block definition format ('JSON' or 'JavaScript').
- * @return {!Array.<!Element>} Array of block types defined.
+ * @return {!Array<!Element>} Array of block types defined.
  */
 FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
   var blockTypes = [];

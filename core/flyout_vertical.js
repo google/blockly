@@ -222,8 +222,8 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
- * @param {!Array.<number>} gaps The visible gaps between blocks.
+ * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+ * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
@@ -288,7 +288,7 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
 
 /**
  * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * @return {?Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_ || this.autoClose) {

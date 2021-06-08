@@ -264,7 +264,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
-   * @return {!Array.<string>} List of variable names.
+   * @return {!Array<string>} List of variable names.
    * @this {Blockly.Block}
    */
   getVars: function() {
@@ -272,7 +272,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
-   * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+   * @return {!Array<!Blockly.VariableModel>} List of variable models.
    * @this {Blockly.Block}
    */
   getVarModels: function() {
@@ -634,8 +634,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Notification that the procedure's parameters have changed.
-   * @param {!Array.<string>} paramNames New param names, e.g. ['x', 'y', 'z'].
-   * @param {!Array.<string>} paramIds IDs of params (consistent for each
+   * @param {!Array<string>} paramNames New param names, e.g. ['x', 'y', 'z'].
+   * @param {!Array<string>} paramIds IDs of params (consistent for each
    *     parameter through the life of a mutator, regardless of param renaming),
    *     e.g. ['piua', 'f8b_', 'oi.o'].
    * @private
@@ -809,7 +809,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
-   * @return {!Array.<string>} List of variable names.
+   * @return {!Array<string>} List of variable names.
    * @this {Blockly.Block}
    */
   getVars: function() {
@@ -817,7 +817,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Return all variables referenced by this block.
-   * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+   * @return {!Array<!Blockly.VariableModel>} List of variable models.
    * @this {Blockly.Block}
    */
   getVarModels: function() {

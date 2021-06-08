@@ -38,7 +38,7 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML elements.
+ * @return {!Array<!Element>} Array of XML elements.
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   var xmlList = [];
@@ -71,7 +71,7 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
 /**
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @return {!Array<!Element>} Array of XML block elements.
  */
 Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
   var variableModelList = workspace.getAllVariables();

@@ -246,7 +246,7 @@ WorkspaceFactoryModel.prototype.getSelectedXml = function() {
 
 /**
  * Return ordered list of ListElement objects.
- * @return {!Array.<!ListElement>} ordered list of ListElement objects
+ * @return {!Array<!ListElement>} ordered list of ListElement objects
  */
 WorkspaceFactoryModel.prototype.getToolboxList = function() {
   return this.toolboxList;
@@ -383,7 +383,7 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
  * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.
- * @return {!Array.<string>} Array of block types currently being used.
+ * @return {!Array<string>} Array of block types currently being used.
  */
 WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
   var blockTypeList = [];
@@ -424,7 +424,7 @@ WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
 
 /**
  * Adds new imported block types to the list of current imported block types.
- * @param {!Array.<string>} blockTypes Array of block types imported.
+ * @param {!Array<string>} blockTypes Array of block types imported.
  */
 WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
   this.importedBlockTypes = this.importedBlockTypes.concat(blockTypes);
@@ -432,7 +432,7 @@ WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
 
 /**
  * Updates block types in block library.
- * @param {!Array.<string>} blockTypes Array of block types in block library.
+ * @param {!Array<string>} blockTypes Array of block types in block library.
  */
 WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
   this.libBlockTypes = blockTypes;
@@ -454,7 +454,7 @@ WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
 
 /**
  * Checks if any of the block types are already defined.
- * @param {!Array.<string>} blockTypes Array of block types.
+ * @param {!Array<string>} blockTypes Array of block types.
  * @return {boolean} True if a block type in the array is already defined,
  *    false if none of the blocks are already defined.
  */

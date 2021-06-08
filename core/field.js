@@ -536,7 +536,7 @@ Blockly.Field.prototype.setValidator = function(handler) {
 
 /**
  * Gets the validation function for editable fields, or null if not set.
- * @return {Function} Validation function, or null.
+ * @return {?Function} Validation function, or null.
  */
 Blockly.Field.prototype.getValidator = function() {
   return this.validator_;
@@ -949,7 +949,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 
 /**
  * Returns the tooltip text for this field.
- * @returns {string} The tooltip text for this field.
+ * @return {string} The tooltip text for this field.
  */
 Blockly.Field.prototype.getTooltip = function() {
   var clickTarget = this.getClickTarget_();

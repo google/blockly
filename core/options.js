@@ -123,7 +123,7 @@ Blockly.Options = function(options) {
   this.readOnly = readOnly;
   /** @type {number} */
   this.maxBlocks = options['maxBlocks'] || Infinity;
-  /** @type {?Object.<string, number>} */
+  /** @type {?Object<string, number>} */
   this.maxInstances = options['maxInstances'];
   /** @type {string} */
   this.pathToMedia = pathToMedia;
@@ -175,7 +175,7 @@ Blockly.Options = function(options) {
 
   /**
    * Map of plugin type to name of registered plugin or plugin class.
-   * @type {!Object.<string, (function(new:?, ...?)|string)>}
+   * @type {!Object<string, (function(new:?, ...?)|string)>}
    */
   this.plugins = plugins;
 };

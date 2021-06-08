@@ -80,7 +80,7 @@ Blockly.JavaScript['text_join'] = function(block) {
 
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.JavaScript.variableDB_.getName(
+  var varName = Blockly.JavaScript.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';

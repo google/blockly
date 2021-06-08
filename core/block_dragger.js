@@ -85,7 +85,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * A list of all of the icons (comment, warning, and mutator) that are
    * on this block and its descendants.  Moving an icon moves the bubble that
    * extends from it if that bubble is open.
-   * @type {Array.<!Object>}
+   * @type {Array<!Object>}
    * @private
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
@@ -108,7 +108,7 @@ Blockly.BlockDragger.prototype.dispose = function() {
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
  * @param {!Blockly.BlockSvg} block The root block that is being dragged.
- * @return {!Array.<!Object>} The list of all icons and their locations.
+ * @return {!Array<!Object>} The list of all icons and their locations.
  * @private
  */
 Blockly.BlockDragger.initIconData_ = function(block) {
@@ -356,7 +356,7 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

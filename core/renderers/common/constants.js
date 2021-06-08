@@ -587,7 +587,7 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
 
   /**
    * The block styles map.
-   * @type {Object.<string, Blockly.Theme.BlockStyle>}
+   * @type {Object<string, Blockly.Theme.BlockStyle>}
    * @package
    */
   this.blockStyles = {};
@@ -1181,7 +1181,7 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
 /**
  * Get any renderer specific CSS to inject when the renderer is initialized.
  * @param {string} selector CSS selector to use.
- * @return {!Array.<string>} Array of CSS strings.
+ * @return {!Array<string>} Array of CSS strings.
  * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {

@@ -52,7 +52,7 @@ Blockly.zelos.PathObject = function(root, style, constants) {
 
   /**
    * The outline paths on the block.
-   * @type {!Object.<string,!SVGElement>}
+   * @type {!Object<string,!SVGElement>}
    * @private
    */
   this.outlines_ = {};
@@ -62,7 +62,7 @@ Blockly.zelos.PathObject = function(root, style, constants) {
    * set is initialized with a reference to all the outlines in
    * `this.outlines_`. Every time we use an outline during the draw pass, the
    * reference is removed from this set.
-   * @type {Object.<string, number>}
+   * @type {Object<string, number>}
    * @private
    */
   this.remainingOutlines_ = null;

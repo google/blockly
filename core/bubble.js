@@ -37,7 +37,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace on which to draw the
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
- * @param {Element} shape SVG element to avoid eclipsing.
+ * @param {!Element} shape SVG element to avoid eclipsing.
  * @param {!Blockly.utils.Coordinate} anchorXY Absolute position of bubble's
  *     anchor point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.

@@ -117,7 +117,7 @@ Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
 
 /**
  * @param {string} id The ID of the RegistryItem to get.
- * @returns {?Blockly.ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
+ * @return {?Blockly.ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
  */
 Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
   if (this.registry_[id]) {
@@ -133,7 +133,7 @@ Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
  *     shown (e.g. on a block or on a workspace)
  * @param {!Blockly.ContextMenuRegistry.Scope} scope Current scope of context menu
  *     (i.e., the exact workspace or block being clicked on)
- * @returns {!Array.<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
+ * @return {!Array<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
  */
 Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
   var menuOptions = [];

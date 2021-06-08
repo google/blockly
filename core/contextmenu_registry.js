@@ -31,11 +31,11 @@ Blockly.ContextMenuRegistry = function() {
   Blockly.ContextMenuRegistry.registry = this;
 
   /**
-   * Registry of all registered RegistryItems, keyed by id.
-   * @type {!Object<string, Blockly.ContextMenuRegistry.RegistryItem>}
+   * Registry of all registered RegistryItems, keyed by ID.
+   * @type {!Object<string, !Blockly.ContextMenuRegistry.RegistryItem>}
    * @private
    */
-  this.registry_ = {};
+  this.registry_ = Object.create(null);
 };
 
 /**
@@ -97,7 +97,7 @@ Blockly.ContextMenuRegistry.registry = null;
  */
 Blockly.ContextMenuRegistry.prototype.register = function(item) {
   if (this.registry_[item.id]) {
-    throw Error('Menu item with id "' + item.id + '" is already registered.');
+    throw Error('Menu item with ID "' + item.id + '" is already registered.');
   }
   this.registry_[item.id] = item;
 };
@@ -108,11 +108,10 @@ Blockly.ContextMenuRegistry.prototype.register = function(item) {
  * @throws {Error} if an item with the given ID does not exist.
  */
 Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
-  if (this.registry_[id]) {
-    delete this.registry_[id];
-  } else {
-    throw new Error('Menu item with id "' + id + '" not found.');
+  if (!this.registry_[id]) {
+    throw new Error('Menu item with ID "' + id + '" not found.');
   }
+  delete this.registry_[id];
 };
 
 /**
@@ -120,10 +119,7 @@ Blockly.ContextMenuRegistry.prototype.unregister = function(id) {
  * @return {?Blockly.ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
  */
 Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
-  if (this.registry_[id]) {
-    return this.registry_[id];
-  }
-  return null;
+  return this.registry_[id] || null;
 };
 
 /**

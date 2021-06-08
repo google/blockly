@@ -411,11 +411,7 @@ Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-
-  var xml = [];
-  for (var i = 0, text; (text = this.contents_[i]); i++) {
-    xml[i] = Blockly.Xml.textToDom(text);
-  }
+  var xml = this.contents_.map(Blockly.Xml.textToDom);
   this.flyout.show(xml);
   this.fireUiEvent_(true);
 };
@@ -427,7 +423,6 @@ Blockly.Trashcan.prototype.closeFlyout = function() {
   if (!this.contentsIsOpen()) {
     return;
   }
-
   this.flyout.hide();
   this.fireUiEvent_(false);
 };

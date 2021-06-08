@@ -28,7 +28,7 @@ goog.requireType('Blockly.Block');
  * The set of all registered extensions, keyed by extension name/id.
  * @private
  */
-Blockly.Extensions.ALL_ = {};
+Blockly.Extensions.ALL_ = Object.create(null);
 
 /**
  * Registers a new extension function. Extensions are functions that help

@@ -125,10 +125,10 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * A map from toolbox item IDs to toolbox items.
-   * @type {!Object<string, Blockly.IToolboxItem>}
+   * @type {!Object<string, !Blockly.IToolboxItem>}
    * @protected
    */
-  this.contentMap_ = {};
+  this.contentMap_ = Object.create(null);
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
@@ -393,7 +393,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
     }
   }
   this.contents_ = [];
-  this.contentMap_ = {};
+  this.contentMap_ = Object.create(null);
   this.renderContents_(toolboxDef['contents']);
   this.position();
 };
@@ -537,7 +537,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
  * @public
  */
 Blockly.Toolbox.prototype.getToolboxItemById = function(id) {
-  return this.contentMap_[id];
+  return this.contentMap_[id] || null;
 };
 
 /**

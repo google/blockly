@@ -887,7 +887,6 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   if (!confirm(msg)) {
     return;
   }
-  var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
   this.model.savePreloadXml(Blockly.utils.xml.createElement('xml'));
@@ -1209,9 +1208,9 @@ WorkspaceFactoryController.prototype.importBlocks = function(file, format) {
       // If an imported block type is already defined, check if the user wants
       // to override the current block definition.
       if (controller.model.hasDefinedBlockTypes(blockTypes)) {
-        var msg = 'An imported block uses the same name as a block '
-          + 'already in your toolbox. Are you sure you want to override the '
-          + 'currently defined block?';
+        var msg = 'An imported block uses the same name as a block ' +
+          'already in your toolbox. Are you sure you want to override the ' +
+          'currently defined block?';
         var continueAnyway = confirm(msg);
         BlocklyDevTools.Analytics.onWarning(msg);
         if (!continueAnyway) {

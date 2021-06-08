@@ -28,14 +28,14 @@ Blockly.ComponentManager = function() {
    * @type {!Object<string, !Blockly.ComponentManager.ComponentDatum>}
    * @private
    */
-  this.componentData_ = {};
+  this.componentData_ = Object.create(null);
 
   /**
-   * A map of capabilities to component ids.
-   * @type {!Object<string, Array<string>>}
+   * A map of capabilities to component IDs.
+   * @type {!Object<string, !Array<string>>}
    * @private
    */
-  this.capabilityToComponentIds_ = {};
+  this.capabilityToComponentIds_ = Object.create(null);
 };
 
 /**

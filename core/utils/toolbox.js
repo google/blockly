@@ -353,7 +353,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
       obj['contents'] = Blockly.utils.toolbox.xmlToJsonArray_(child);
     }
 
-    // Add xml attributes to object
+    // Add XML attributes to object
     Blockly.utils.toolbox.addAttributes_(child, obj);
     arr.push(obj);
   }

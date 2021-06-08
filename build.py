@@ -135,7 +135,7 @@ this.BLOCKLY_BOOT = function(root) {
 
     f.write('\n')
     f.write('// Load Blockly.\n')
-    f.write('goog.require(\'Blockly.requires\')\n')
+    f.write('goog.require(\'Blockly.requires\');\n')
 
     f.write("""
 delete root.BLOCKLY_DIR;

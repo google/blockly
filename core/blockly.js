@@ -216,7 +216,12 @@ Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    selected.dispose(/* heal */ true, true);
+    if (selected.outputConnection) {
+      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      selected.dispose(false, true);
+    } else {
+      selected.dispose(/* heal */ true, true);
+    }
     Blockly.Events.setGroup(false);
   }
 };

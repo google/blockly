@@ -227,10 +227,9 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
     return true;
   } else if (!hasCompose && !hasDecompose) {
     return false;
-  } else {
-    throw Error(errorPrefix +
-        'Must have both or neither of "compose" and "decompose"');
   }
+  throw Error(errorPrefix +
+      'Must have both or neither of "compose" and "decompose"');
 };
 
 /**

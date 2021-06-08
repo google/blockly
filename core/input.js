@@ -168,9 +168,8 @@ Blockly.Input.prototype.removeField = function(name, opt_quiet) {
   }
   if (opt_quiet) {
     return false;
-  } else {
-    throw Error('Field "' + name + '" not found.');
   }
+  throw Error('Field "' + name + '" not found.');
 };
 
 /**

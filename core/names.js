@@ -95,9 +95,8 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
   var variable = this.variableMap_.getVariableById(id);
   if (variable) {
     return variable.name;
-  } else {
-    return null;
   }
+  return null;
 };
 
 /**

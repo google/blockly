@@ -165,11 +165,10 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
       delete this.keyMap_[keyCode];
     }
     return true;
-  } else if (!opt_quiet) {
-    console.warn(
-        'No keyboard shortcut with name "' + shortcutName +
+  }
+  if (!opt_quiet) {
+    console.warn('No keyboard shortcut with name "' + shortcutName +
         '" registered with key code "' + keyCode + '"');
-    return false;
   }
   return false;
 };

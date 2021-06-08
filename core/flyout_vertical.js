@@ -291,7 +291,7 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
  * @return {Blockly.utils.Rect} Rectangle in which to delete.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
-  if (!this.svgGroup_) {
+  if (!this.svgGroup_ || this.autoClose) {
     return null;
   }
 

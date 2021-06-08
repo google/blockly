@@ -1073,15 +1073,6 @@ Blockly.WorkspaceSvg.prototype.addFlyout = function(tagName) {
         Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.options, true);
     this.flyout_ = new VerticalFlyout(workspaceOptions);
   }
-  this.getComponentManager().addComponent({
-    id: 'simple_flyout',
-    component: this.flyout_,
-    weight: 1,
-    capabilities: [
-      Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET
-    ]
-  });
   this.flyout_.autoClose = false;
   this.flyout_.getWorkspace().setVisible(true);
 

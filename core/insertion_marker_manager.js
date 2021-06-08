@@ -253,7 +253,7 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
   this.wouldDeleteBlock_ = false;
   if (couldDeleteBlock) {
     if (dragTarget) {
-      // TODO(#) use hasCapability instead of getComponents
+      // TODO(#4881) use hasCapability instead of getComponents
       var deleteAreas = this.workspace_.getComponentManager().getComponents(
           Blockly.ComponentManager.Capability.DELETE_AREA, false);
       var isDeleteArea = deleteAreas.some(function(deleteArea) {

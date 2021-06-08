@@ -510,8 +510,9 @@ Blockly.Trashcan.prototype.getBoundingRectangle = function() {
 };
 
 /**
- * Return the deletion rectangle for this trash can.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {Blockly.utils.Rect} The component's bounding box.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {

@@ -28,8 +28,9 @@ goog.requireType('Blockly.utils.Rect');
 Blockly.DragTarget = function() {};
 
 /**
- * Return the drag target rectangle.
- * @return {Blockly.utils.Rect} Rectangle in which a block can be dragged over.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to the Blockly injection div.
+ * @return {Blockly.utils.Rect} The component's bounding box.
  */
 Blockly.DragTarget.prototype.getClientRect;
 

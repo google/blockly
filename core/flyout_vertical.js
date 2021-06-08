@@ -287,8 +287,9 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
 };
 
 /**
- * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {Blockly.utils.Rect} The component's bounding box.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_ || this.autoClose || this.isVisible()) {

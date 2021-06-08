@@ -1033,8 +1033,9 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 };
 
 /**
- * Return the drag target rectangle.
- * @return {Blockly.utils.Rect} Rectangle in which a block can be dragged over.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {Blockly.utils.Rect} The component's bounding box.
  */
 Blockly.Flyout.prototype.getClientRect;
 

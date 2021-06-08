@@ -499,9 +499,9 @@ Blockly.Toolbox.prototype.removeStyle = function(style) {
 };
 
 /**
- * Return the deletion rectangle for this toolbox.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
- * @public
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {Blockly.utils.Rect} The component's bounding box.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
   if (!this.HtmlDiv) {

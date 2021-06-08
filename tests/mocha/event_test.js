@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.require('Blockly.WorkspaceComment');
+
 suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});

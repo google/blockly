@@ -51,11 +51,11 @@ Blockly.BubbleDragger = function(bubble, workspace) {
   this.workspace_ = workspace;
 
   /**
-   * Which delete area the mouse pointer is over, if any.
+   * Which drag target the mouse pointer is over, if any.
    * @type {?Blockly.IDragTarget}
    * @private
    */
-  this.deleteArea_ = null;
+  this.dragTarget_ = null;
 
   /**
    * Whether the bubble would be deleted if dropped immediately.
@@ -134,18 +134,26 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
-
-  var oldDeleteArea = this.deleteArea_;
-  if (this.draggingBubble_.isDeletable()) {
-    this.deleteArea_ = this.workspace_.getBubbleDeleteArea(e);
-    this.updateCursorDuringBubbleDrag_();
+  var oldDragTarget = this.dragTarget_;
+  this.dragTarget_ = this.workspace_.getDragTarget(e);
+  if (this.dragTarget_ !== oldDragTarget) {
+    oldDragTarget && oldDragTarget.onDragExit();
+    this.dragTarget_ && this.dragTarget_.onDragEnter();
+  }
+  if (this.draggingBubble_.isDeletable() && this.dragTarget_) {
+    // TODO(#) use hasCapability instead of getComponents
+    var deleteAreas = this.workspace_.getComponentManager().getComponents(
+        Blockly.ComponentManager.Capability.DELETE_AREA, false);
+    var isDeleteArea = deleteAreas.some(function(deleteArea) {
+      return deleteArea === this.dragTarget_;
+    });
+    this.wouldDeleteBubble_ =
+        isDeleteArea && this.dragTarget_.isBubbleDeleteArea;
   } else {
-    this.deleteArea_ = null;
+    this.wouldDeleteBubble_ = false;
   }
-  if (this.deleteArea_ !== oldDeleteArea) {
-    oldDeleteArea && oldDeleteArea.onDragExit();
-    this.deleteArea_ && this.deleteArea_.onDragEnter();
-  }
+
+  this.updateCursorDuringBubbleDrag_();
 };
 
 /**
@@ -177,7 +185,6 @@ Blockly.BubbleDragger.prototype.maybeDeleteBubble_ = function() {
  * @private
  */
 Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
-  this.wouldDeleteBubble_ = !!this.deleteArea_ ;
   if (this.wouldDeleteBubble_) {
     this.draggingBubble_.setDeleteStyle(true);
   } else {

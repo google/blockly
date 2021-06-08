@@ -246,11 +246,26 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
  */
 Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
   var candidate = this.getCandidate_(dxy);
+
   var couldDeleteBlock =
       !this.topBlock_.getParent() && this.topBlock_.isDeletable();
-  this.wouldDeleteBlock_ =
-      couldDeleteBlock && !!dragTarget && dragTarget.wouldDeleteBlock(
-          this.topBlock_, candidate && !!candidate.closest);
+
+  this.wouldDeleteBlock_ = false;
+  if (couldDeleteBlock) {
+    if (dragTarget) {
+      // TODO(#) use hasCapability instead of getComponents
+      var deleteAreas = this.workspace_.getComponentManager().getComponents(
+          Blockly.ComponentManager.Capability.DELETE_AREA, false);
+      var isDeleteArea = deleteAreas.some(function(deleteArea) {
+        return deleteArea === dragTarget;
+      });
+      if (isDeleteArea) {
+        this.wouldDeleteBlock_ =
+            (/** @type {Blockly.IDeleteArea} */ dragTarget).wouldDeleteBlock(
+                this.topBlock_, candidate && !!candidate.closest);
+      }
+    }
+  }
   var shouldUpdate = this.wouldDeleteBlock_ ||
       this.shouldUpdatePreviews_(candidate, dxy);
 

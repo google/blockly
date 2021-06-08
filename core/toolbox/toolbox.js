@@ -197,6 +197,7 @@ Blockly.Toolbox.prototype.init = function() {
     weight: 1,
     capabilities: [
       Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
       Blockly.ComponentManager.Capability.DRAG_TARGET
     ]
   });

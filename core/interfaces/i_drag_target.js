@@ -55,19 +55,3 @@ Blockly.IDragTarget.prototype.getEndDragLoc;
  * @param {!Blockly.BlockSvg} block The block.
  */
 Blockly.IDragTarget.prototype.onBlockDrop;
-
-/**
- * Returns whether the provided block would be deleted if dropped on this area.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
- *     another.
- * @return {boolean} Whether the block provided would be deleted if dropped on
- *     this area.
- */
-Blockly.IDragTarget.prototype.wouldDelete;
-
-/**
- * Whether this is a bubble delete area.
- * @type {boolean}
- */
-Blockly.IDragTarget.prototype.isBubbleDeleteArea;

@@ -14,7 +14,8 @@
 
 goog.provide('Blockly.DeleteArea');
 
-goog.require('Blockly.IDragTarget');
+goog.require('Blockly.DragTarget');
+goog.require('Blockly.IDeleteArea');
 
 goog.requireType('Blockly.utils.Rect');
 
@@ -22,48 +23,14 @@ goog.requireType('Blockly.utils.Rect');
 /**
  * Abstract class for a component that can delete a block that is dropped on top
  * of it.
- * @implements {Blockly.IDragTarget}
+ * @extends {Blockly.DragTarget}
+ * @implements {Blockly.IDeleteArea}
  * @constructor
  */
-Blockly.DeleteArea = function() {};
-
-/**
- * Return the drag target rectangle.
- * @return {Blockly.utils.Rect} Rectangle in which a block can be dragged over.
- */
-Blockly.DeleteArea.prototype.getClientRect;
-
-/**
- * Handles Drag enter.
- */
-Blockly.DeleteArea.prototype.onDragEnter = function() {
-  // no-op
+Blockly.DeleteArea = function() {
+  Blockly.DeleteArea.superClass_.constructor.call(this);
 };
-
-/**
- * Handles a drag exit.
- */
-Blockly.DeleteArea.prototype.onDragExit = function() {
-  // no-op
-};
-
-/**
- * Computes the end location for a block after it is dropped on this component.
- * @param {!Blockly.utils.Coordinate} startXY The start xy.
- * @param {!Blockly.utils.Coordinate} delta The delta.
- * @return {!Blockly.utils.Coordinate} The end location.
- */
-Blockly.DeleteArea.prototype.getEndDragLoc = function(startXY, delta) {
-  return Blockly.utils.Coordinate.sum(startXY, delta);
-};
-
-/**
- * Handles a block drop on this component. Should not handle delete here.
- * @param {!Blockly.BlockSvg} _block The block.
- */
-Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
-  // no-op
-};
+Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.

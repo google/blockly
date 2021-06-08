@@ -302,15 +302,6 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.setVariableMap(this.targetWorkspace.getVariableMap());
 
   this.workspace_.createPotentialVariableMap();
-
-  targetWorkspace.getComponentManager().addComponent({
-    id: 'flyout' + Blockly.utils.genUid(),
-    component: this,
-    weight: 1,
-    capabilities: [
-      Blockly.ComponentManager.Capability.DRAG_TARGET
-    ]
-  });
 };
 
 /**

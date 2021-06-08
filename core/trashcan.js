@@ -366,9 +366,10 @@ Blockly.Trashcan.prototype.init = function() {
     component: this,
     weight: 1,
     capabilities: [
-      Blockly.ComponentManager.Capability.POSITIONABLE,
-      Blockly.ComponentManager.Capability.DRAG_TARGET,
       Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
+      Blockly.ComponentManager.Capability.DRAG_TARGET,
+      Blockly.ComponentManager.Capability.POSITIONABLE
     ]
   });
   this.initialized_ = true;

@@ -42,7 +42,8 @@ goog.addDependency('../../core/contextmenu.js', ['Blockly.ContextMenu'], ['Block
 goog.addDependency('../../core/contextmenu_items.js', ['Blockly.ContextMenuItems'], ['Blockly.ContextMenuRegistry', 'Blockly.Events', 'Blockly.constants', 'Blockly.inputTypes'], {'lang': 'es5'});
 goog.addDependency('../../core/contextmenu_registry.js', ['Blockly.ContextMenuRegistry'], [], {'lang': 'es5'});
 goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es5'});
-goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.IDragTarget']);
+goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.DragTarget', 'Blockly.IDeleteArea']);
+goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], ['Blockly.IDragTarget']);
 goog.addDependency('../../core/dropdowndiv.js', ['Blockly.DropDownDiv'], ['Blockly.utils.Rect', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.style']);
 goog.addDependency('../../core/events/block_events.js', ['Blockly.Events.BlockBase', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.Change', 'Blockly.Events.Create', 'Blockly.Events.Delete', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.registry', 'Blockly.utils.Coordinate', 'Blockly.utils.object', 'Blockly.utils.xml']);
 goog.addDependency('../../core/events/events.js', ['Blockly.Events'], ['Blockly.registry', 'Blockly.utils']);
@@ -95,6 +96,7 @@ goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IC
 goog.addDependency('../../core/interfaces/i_contextmenu.js', ['Blockly.IContextMenu'], []);
 goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], []);
 goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], []);
+goog.addDependency('../../core/interfaces/i_delete_area.js', ['Blockly.IDeleteArea'], ['Blockly.IDragTarget']);
 goog.addDependency('../../core/interfaces/i_drag_target.js', ['Blockly.IDragTarget'], ['Blockly.IComponent']);
 goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], []);
 goog.addDependency('../../core/interfaces/i_metrics_manager.js', ['Blockly.IMetricsManager'], []);

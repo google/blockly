@@ -393,7 +393,7 @@ Blockly.Flyout.prototype.setVisible = function(visible) {
   this.isVisible_ = visible;
   if (visibilityChanged) {
     if (!this.autoClose) {
-      this.workspace_.recordDeleteAreas();
+      this.workspace_.recordDragTargets();
     }
     this.updateDisplay_();
   }

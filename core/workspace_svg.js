@@ -887,15 +887,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     var ToolboxClass = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.TOOLBOX, this.options, true);
     this.toolbox_ = new ToolboxClass(this);
-    this.getComponentManager().addComponent({
-      id: 'toolbox',
-      component: this.toolbox_,
-      weight: 1,
-      capabilities: [
-        Blockly.ComponentManager.Capability.DELETE_AREA,
-        Blockly.ComponentManager.Capability.DRAG_TARGET
-      ]
-    });
   }
   if (this.grid_) {
     this.grid_.update(this.scale);
@@ -1634,24 +1625,6 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name,
       this, name, opt_type, opt_id);
   this.refreshToolboxSelection();
   return newVar;
-};
-
-/**
- * Returns the dimensions of the specified SVG image.
- * @param {!SVGElement} svg SVG image.
- * @return {!Blockly.utils.Size} Contains width and height properties.
- * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
- */
-Blockly.svgSize = function(svg) {
-  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
-  // from setCachedParentSvgSize.
-  Blockly.utils.deprecation.warn(
-      'Blockly.svgSize',
-      'March 2021',
-      'March 2022',
-      'workspace.getCachedParentSvgSize');
-  svg = /** @type {?} */ (svg);
-  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 
 /**

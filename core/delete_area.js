@@ -17,8 +17,6 @@ goog.provide('Blockly.DeleteArea');
 goog.require('Blockly.DragTarget');
 goog.require('Blockly.IDeleteArea');
 
-goog.requireType('Blockly.utils.Rect');
-
 
 /**
  * Abstract class for a component that can delete a block that is dropped on top

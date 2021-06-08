@@ -261,7 +261,7 @@ Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
       });
       if (isDeleteArea) {
         this.wouldDeleteBlock_ =
-            (/** @type {Blockly.IDeleteArea} */ dragTarget).wouldDeleteBlock(
+            (/** @type {!Blockly.IDeleteArea} */ (dragTarget)).wouldDeleteBlock(
                 this.topBlock_, candidate && !!candidate.closest);
       }
     }

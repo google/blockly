@@ -56,9 +56,19 @@ Blockly.ComponentManager.ComponentDatum;
  * Adds a component.
  * @param {!Blockly.ComponentManager.ComponentDatum} componentInfo The data for
  *   the component to register.
+ * @param {boolean=} opt_allowOverrides True to prevent an error when overriding
+ *     an already registered item.
  * @template T
  */
-Blockly.ComponentManager.prototype.addComponent = function(componentInfo) {
+Blockly.ComponentManager.prototype.addComponent = function(
+    componentInfo, opt_allowOverrides) {
+  // Don't throw an error if opt_allowOverrides is true.
+  if (!opt_allowOverrides && this.componentData_[componentInfo.id]) {
+    throw Error(
+        'Plugin "' + componentInfo.id + '" with capabilities "' +
+        this.componentData_[componentInfo.id].capabilities +
+        '" already added.');
+  }
   this.componentData_[componentInfo.id] = componentInfo;
   for (var i = 0, type; (type = componentInfo.capabilities[i]); i++) {
     var typeKey = String(type).toLowerCase();

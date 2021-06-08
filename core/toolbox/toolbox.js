@@ -406,7 +406,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   // This is for performance reasons. By using document fragment we only have to
-  // add to the dom once.
+  // add to the DOM once.
   var fragment = document.createDocumentFragment();
   for (var i = 0, toolboxItemDef; (toolboxItemDef = toolboxDef[i]); i++) {
     this.createToolboxItem_(toolboxItemDef, fragment);
@@ -426,7 +426,7 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
   var registryName = toolboxItemDef['kind'];
 
   // Categories that are collapsible are created using a class registered under
-  // a diffferent name.
+  // a different name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       Blockly.utils.toolbox.isCategoryCollapsible(
       /** @type {!Blockly.utils.toolbox.CategoryInfo} */(toolboxItemDef))) {
@@ -443,7 +443,7 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
     }
-    // Adds the id to the html element that can receive a click.
+    // Adds the ID to the HTML element that can receive a click.
     // This is used in onClick_ to find the toolboxItem that was clicked.
     if (toolboxItem.getClickTarget) {
       toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());

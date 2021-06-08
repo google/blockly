@@ -1787,7 +1787,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
       // This is needed as for some browser/system combinations which do not
       // set deltaX.
       x = this.scrollX - scrollDelta.y;
-      y = this.scrollY; // Don't scroll vertically
+      y = this.scrollY;  // Don't scroll vertically.
     }
     this.scroll(x, y);
   }
@@ -2213,8 +2213,8 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
 
   this.scrollX -= metrics.absoluteLeft;
   this.scrollY -= metrics.absoluteTop;
-  // // The scroll values and the view values are additive inverses of
-  // // each other, so when we subtract from one we have to add to the other.
+  // The scroll values and the view values are additive inverses of
+  // each other, so when we subtract from one we have to add to the other.
   metrics.viewLeft += metrics.absoluteLeft;
   metrics.viewTop += metrics.absoluteTop;
 

@@ -100,8 +100,8 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.toXml = function(fieldElement) {
-  // Replace '\n' characters with html-escaped equivalent '&#10'. This is
-  // needed so the plain-text representation of the xml produced by
+  // Replace '\n' characters with HTML-escaped equivalent '&#10'. This is
+  // needed so the plain-text representation of the XML produced by
   // `Blockly.Xml.domToText` will appear on a single line (this is a limitation
   // of the plain-text format).
   fieldElement.textContent = this.getValue().replace(/\n/g, '&#10;');

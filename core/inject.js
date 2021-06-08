@@ -166,7 +166,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
       mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
-    // Add flyout as an <svg> that is a sibling of the workspace svg.
+    // Add flyout as an <svg> that is a sibling of the workspace SVG.
     var flyout = mainWorkspace.addFlyout(Blockly.utils.Svg.SVG);
     Blockly.utils.dom.insertAfter(flyout, svg);
   }

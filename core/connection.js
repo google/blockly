@@ -493,8 +493,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
   var parentBlock = this.getSourceBlock();
   var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow) {
-    var blockShadow =
-        Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
+    var blockShadow = Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
       this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
@@ -646,11 +645,10 @@ Blockly.Connection.prototype.neighbours = function(_maxLimit) {
  */
 Blockly.Connection.prototype.getParentInput = function() {
   var parentInput = null;
-  var block = this.sourceBlock_;
-  var inputs = block.inputList;
-  for (var idx = 0; idx < block.inputList.length; idx++) {
-    if (inputs[idx].connection === this) {
-      parentInput = inputs[idx];
+  var inputs = this.sourceBlock_.inputList;
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].connection === this) {
+      parentInput = inputs[i];
       break;
     }
   }
@@ -663,11 +661,12 @@ Blockly.Connection.prototype.getParentInput = function() {
  * @return {string} The description.
  */
 Blockly.Connection.prototype.toString = function() {
-  var msg;
   var block = this.sourceBlock_;
   if (!block) {
     return 'Orphan Connection';
-  } else if (block.outputConnection == this) {
+  }
+  var msg;
+  if (block.outputConnection == this) {
     msg = 'Output Connection of ';
   } else if (block.previousConnection == this) {
     msg = 'Previous Connection of ';

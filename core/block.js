@@ -1949,9 +1949,8 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   }
   if (opt_quiet) {
     return false;
-  } else {
-    throw Error('Input not found: ' + name);
   }
+  throw Error('Input not found: ' + name);
 };
 
 /**

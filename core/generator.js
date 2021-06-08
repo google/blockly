@@ -219,9 +219,8 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   } else if (code === null) {
     // Block has handled code generation itself.
     return '';
-  } else {
-    throw SyntaxError('Invalid code generated: ' + code);
   }
+  throw SyntaxError('Invalid code generated: ' + code);
 };
 
 /**

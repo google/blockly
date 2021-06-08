@@ -1024,7 +1024,7 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
 Blockly.Block.prototype.getField = function(name) {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.name == name) {
+      if (typeof field.name !== "undefined" && field.name == name) {
         return field;
       }
     }

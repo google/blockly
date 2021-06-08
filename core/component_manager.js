@@ -79,6 +79,62 @@ Blockly.ComponentManager.prototype.addComponent = function(
 };
 
 /**
+ * Adds a capability to a existing registered component.
+ * @param {string} id The ID of the component to add the capability to.
+ * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
+ *   } capability The capability to add.
+ */
+Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
+  capability = String(capability).toLowerCase();
+  if (!this.getComponent(id)) {
+    throw Error('Cannot add capability, "' + capability + '". Plugin "' +
+        id + '" has not been added to the ComponentManager');
+  }
+  if (this.hasCapability(id, capability)) {
+    console.warn('Plugin "' + id + 'already has capability "' +
+        capability + '"');
+    return;
+  }
+  this.componentData_[id].capabilities.push(capability);
+  this.capabilityToComponentIds_[capability].push(id);
+};
+
+/**
+ * Removes a capability from an existing registered component.
+ * @param {string} id The ID of the component to remove the capability from.
+ * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
+ *   } capability The capability to remove.
+ */
+Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
+  capability = String(capability).toLowerCase();
+  if (!this.getComponent(id)) {
+    throw Error('Cannot remove capability, "' + capability + '". Plugin "' +
+        id + '" has not been added to the ComponentManager');
+  }
+  if (!this.hasCapability(id, capability)) {
+    console.warn('Plugin "' + id + 'doesn\'t have capability "' +
+        capability + '" to remove');
+    return;
+  }
+  this.componentData_[id].capabilities.splice(
+      this.componentData_[id].capabilities.indexOf(capability), 1);
+  this.capabilityToComponentIds_[capability].splice(
+      this.capabilityToComponentIds_[capability].indexOf(id), 1);
+};
+
+/**
+ * Returns whether the component with this id has the specified capability.
+ * @param {string} id The ID of the component to check.
+ * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>
+ *   } capability The capability to check for.
+ * @return {boolean} Whether the component has the capability.
+ */
+Blockly.ComponentManager.prototype.hasCapability = function(id, capability) {
+  capability = String(capability).toLowerCase();
+  return this.componentData_[id].capabilities.indexOf(capability) !== -1;
+};
+
+/**
  * Gets the component with the given ID and the given type.
  * @param {string} id The ID of the component to get.
  * @return {!Blockly.IComponent|undefined} The component with the given name

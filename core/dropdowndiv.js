@@ -493,7 +493,7 @@ Blockly.DropDownDiv.getPositionBelowMetrics_ = function(
   return {
     initialX: xCoords.divX,
     initialY : primaryY,
-    finalX: xCoords.divX, // X position remains constant during animation.
+    finalX: xCoords.divX,  // X position remains constant during animation.
     finalY: finalY,
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
@@ -525,12 +525,12 @@ Blockly.DropDownDiv.getPositionAboveMetrics_ = function(
   var arrowY = divSize.height - (Blockly.DropDownDiv.BORDER_SIZE * 2) -
       (Blockly.DropDownDiv.ARROW_SIZE / 2);
   var finalY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
-  var initialY = secondaryY - divSize.height; // No padding on Y
+  var initialY = secondaryY - divSize.height;  // No padding on Y.
 
   return {
     initialX: xCoords.divX,
     initialY : initialY,
-    finalX: xCoords.divX, // X position remains constant during animation.
+    finalX: xCoords.divX,  // X position remains constant during animation.
     finalY: finalY,
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
@@ -560,8 +560,8 @@ Blockly.DropDownDiv.getPositionTopOfPageMetrics_ = function(
   return {
     initialX: xCoords.divX,
     initialY : 0,
-    finalX: xCoords.divX, // X position remains constant during animation.
-    finalY: 0,            // Y position remains constant during animation.
+    finalX: xCoords.divX,  // X position remains constant during animation.
+    finalY: 0,             // Y position remains constant during animation.
     arrowAtTop: null,
     arrowX: null,
     arrowY: null,

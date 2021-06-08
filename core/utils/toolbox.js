@@ -345,7 +345,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
     var tagName = child.tagName.toUpperCase();
     obj['kind'] = tagName;
 
-    // Store the xml for a block
+    // Store the XML for a block.
     if (tagName == 'BLOCK') {
       obj['blockxml'] = child;
     } else if (child.childNodes && child.childNodes.length > 0) {

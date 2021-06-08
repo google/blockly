@@ -166,7 +166,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     // It's important to use setAttribute here otherwise IE11 won't serialize
-    // the block's id when domToText is called.
+    // the block's ID when domToText is called.
     element.setAttribute('id', block.id);
   }
   if (block.mutationToDom) {
@@ -637,7 +637,7 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 Blockly.Xml.childNodeTagMap;
 
 /**
- * Creates a mapping of childNodes for each supported xml tag for the provided
+ * Creates a mapping of childNodes for each supported XML tag for the provided
  * xmlBlock. Logs a warning for any encountered unsupported tags.
  * @param {!Element} xmlBlock XML block element.
  * @return {!Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
@@ -765,8 +765,8 @@ Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
 };
 
 /**
- * Finds any enclosed blocks or shadows within this xml node.
- * @param {!Element} xmlNode The xml node to extract child block info from.
+ * Finds any enclosed blocks or shadows within this XML node.
+ * @param {!Element} xmlNode The XML node to extract child block info from.
  * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
  *    found child block.
  * @private

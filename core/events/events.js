@@ -281,7 +281,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Merge duplicates.
   for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
-      // Treat all ui events as the same type in hash table.
+      // Treat all UI events as the same type in hash table.
       var eventType = event.isUiEvent ? Blockly.Events.UI : event.type;
       var key = [eventType, event.blockId, event.workspaceId].join(' ');
 

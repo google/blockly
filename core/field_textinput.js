@@ -547,7 +547,7 @@ Blockly.FieldTextInput.prototype.isTabNavigable = function() {
  */
 Blockly.FieldTextInput.prototype.getText_ = function() {
   if (this.isBeingEdited_ && this.htmlInput_) {
-    // We are currently editing, return the html input value instead.
+    // We are currently editing, return the HTML input value instead.
     return this.htmlInput_.value;
   }
   return null;

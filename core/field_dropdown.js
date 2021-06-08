@@ -337,8 +337,8 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
-    var content = options[i][0]; // Human-readable text or image.
-    var value = options[i][1];   // Language-neutral value.
+    var content = options[i][0];  // Human-readable text or image.
+    var value = options[i][1];    // Language-neutral value.
     if (typeof content == 'object') {
       // An image, not text.
       var image = new Image(content['width'], content['height']);

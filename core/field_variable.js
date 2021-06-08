@@ -129,7 +129,7 @@ Blockly.FieldVariable.prototype.configure_ = function(config) {
  */
 Blockly.FieldVariable.prototype.initModel = function() {
   if (this.variable_) {
-    return; // Initialization already happened.
+    return;  // Initialization already happened.
   }
   var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace, null,
@@ -300,7 +300,7 @@ Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
 Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
   var typeList = this.getVariableTypes_();
   if (!typeList) {
-    return true; // If it's null, all types are valid.
+    return true;  // If it's null, all types are valid.
   }
   for (var i = 0; i < typeList.length; i++) {
     if (type == typeList[i]) {

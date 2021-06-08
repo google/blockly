@@ -509,7 +509,7 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
         thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
-        return null; // More than one value input found.
+        return null;  // More than one value input found.
       }
       connection = thisConnection;
     }
@@ -1700,7 +1700,7 @@ Blockly.Block.prototype.validateTokens_ = function(tokens, argsCount) {
 };
 
 /**
- * Inserts args in place of numerical tokens. String args are converted to json
+ * Inserts args in place of numerical tokens. String args are converted to JSON
  * that defines a label field. If necessary an extra dummy input is added to
  * the end of the elements.
  * @param {!Array<!string|number>} tokens The tokens to interpolate
@@ -1742,9 +1742,9 @@ Blockly.Block.prototype.interpolateArguments_ =
     };
 
 /**
- * Creates a field from the json definition of a field. If a field with the
+ * Creates a field from the JSON definition of a field. If a field with the
  * given type cannot be found, this attempts to create a different field using
- * the 'alt' property of the json definition (if it exists).
+ * the 'alt' property of the JSON definition (if it exists).
  * @param {{alt:(string|undefined)}} element The element to try to turn into a
  *     field.
  * @return {?Blockly.Field} The field defined by the JSON, or null if one
@@ -1764,7 +1764,7 @@ Blockly.Block.prototype.fieldFromJson_ = function(element) {
 };
 
 /**
- * Creates an input from the json definition of an input. Sets the input's check
+ * Creates an input from the JSON definition of an input. Sets the input's check
  * and alignment if they are provided.
  * @param {!Object} element The JSON to turn into an input.
  * @param {string} warningPrefix The prefix to add to warnings to help the

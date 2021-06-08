@@ -22,8 +22,8 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var globals = [];
   var workspace = block.workspace;
   var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
-  for (var i = 0, variable; variable = variables[i]; i++) {
-    varName = variable.name;
+  for (var i = 0, variable; (variable = variables[i]); i++) {
+    var varName = variable.name;
     if (block.getVars().indexOf(varName) == -1) {
       globals.push(Blockly.Python.nameDB_.getName(varName,
           Blockly.VARIABLE_CATEGORY_NAME));

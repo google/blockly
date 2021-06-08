@@ -384,7 +384,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
     } else {
       console.error('Only one of localConnection_ and closestConnection_ was set.');
     }
-  } else { // No connection found.
+  } else {  // No connection found.
     // Only need to update if we were showing a preview before.
     return !!(this.localConnection_ && this.closestConnection_);
   }

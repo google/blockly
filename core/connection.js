@@ -384,7 +384,7 @@ Blockly.Connection.getConnectionForOrphanedOutput =
  * @param {!Blockly.Block} startBlock The block on which to start the search.
  * @param {!Blockly.Connection} orphanConnection The connection that is looking
  *     for a home.
- * @return {Blockly.Connection} The suitable connection point on the chain of
+ * @return {?Blockly.Connection} The suitable connection point on the chain of
  *     blocks, or null.
  */
 Blockly.Connection.getConnectionForOrphanedConnection =

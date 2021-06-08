@@ -1636,6 +1636,37 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name,
 };
 
 /**
+ * Returns the dimensions of the specified SVG image.
+ * @param {!SVGElement} svg SVG image.
+ * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
+ */
+Blockly.svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
+  Blockly.utils.deprecation.warn(
+      'Blockly.svgSize',
+      'March 2021',
+      'March 2022',
+      'workspace.getCachedParentSvgSize');
+  svg = /** @type {?} */ (svg);
+  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
+};
+
+/**
+ * Make a list of all the delete areas for this workspace.
+ * @deprecated Use workspace.recordDragTargets. (2021 June)
+ */
+Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
+  Blockly.utils.deprecation.warn(
+      'WorkspaceSvg.prototype.recordDeleteAreas',
+      'June 2021',
+      'June 2022',
+      'WorkspaceSvg.prototype.recordDragTargets');
+  this.recordDragTargets();
+};
+
+/**
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {

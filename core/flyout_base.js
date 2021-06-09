@@ -321,6 +321,8 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
+  this.workspace_.getComponentManager().removeComponent(
+      'flyout' + this.workspace_.id);
   Blockly.browserEvents.unbind(this.eventWrappers_);
   if (this.filterWrapper_) {
     this.targetWorkspace.removeChangeListener(this.filterWrapper_);

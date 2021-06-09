@@ -966,6 +966,7 @@ Blockly.Toolbox.prototype.selectPrevious_ = function() {
  * @public
  */
 Blockly.Toolbox.prototype.dispose = function() {
+  this.workspace_.getComponentManager().removeComponent('toolbox');
   this.flyout_.dispose();
   for (var i = 0; i < this.contents_.length; i++) {
     var toolboxItem = this.contents_[i];

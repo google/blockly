@@ -81,6 +81,23 @@ Blockly.ComponentManager.prototype.addComponent = function(
 };
 
 /**
+ * Removes a component.
+ * @param {string} id The ID of the component to remove.
+ * @template T
+ */
+Blockly.ComponentManager.prototype.removeComponent = function(id) {
+  var component = this.componentData_[id];
+  if (!component) {
+    return;
+  }
+  for (var i = 0, capability; (capability = component.capabilities[i]); i++) {
+    this.capabilityToComponentIds_[capability].splice(
+        this.capabilityToComponentIds_[capability].indexOf(id), 1);
+  }
+  delete this.componentData_[id];
+};
+
+/**
  * Adds a capability to a existing registered component.
  * @param {string} id The ID of the component to add the capability to.
  * @param {string|!Blockly.ComponentManager.Capability<Blockly.IComponent>

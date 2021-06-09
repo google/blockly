@@ -15,6 +15,7 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.ConnectionDB');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
@@ -36,7 +37,6 @@ goog.require('Blockly.MetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
-goog.require('Blockly.ComponentManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.ThemeManager');
 goog.require('Blockly.Themes.Classic');

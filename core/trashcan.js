@@ -13,6 +13,7 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.DeleteArea');

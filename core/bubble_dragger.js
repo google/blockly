@@ -14,6 +14,7 @@ goog.provide('Blockly.BubbleDragger');
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');

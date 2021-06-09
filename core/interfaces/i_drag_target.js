@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview The interface for a component that has a handler for when a
- *    block is dropped on top of it.
+ * block is dropped on top of it.
  * @author kozbial@google.com (Monica Kozbial)
  */
 
@@ -19,8 +19,8 @@ goog.require('Blockly.IComponent');
 goog.requireType('Blockly.utils.Rect');
 
 /**
- * Interface for a component that can delete a block that has a handler for when
- * a block is dropped on top of it.
+ * Interface for a component with custom behaviour when a block or bubble is
+ * dragged over or dropped on top of it.
  * @extends {Blockly.IComponent}
  * @interface
  */
@@ -34,12 +34,12 @@ Blockly.IDragTarget = function() {};
 Blockly.IDragTarget.prototype.getClientRect;
 
 /**
- * Handles Drag enter.
+ * Handles when a cursor with a block or bubble enters this drag target.
  */
 Blockly.IDragTarget.prototype.onDragEnter;
 
 /**
- * Handles a drag exit.
+ * Handles when a cursor with a block or bubble exits this drag target.
  */
 Blockly.IDragTarget.prototype.onDragExit;
 
@@ -52,7 +52,8 @@ Blockly.IDragTarget.prototype.onDragExit;
 Blockly.IDragTarget.prototype.getEndDragLoc;
 
 /**
- * Handles a block drop on this component. Should not handle delete here.
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
  * @param {!Blockly.BlockSvg} block The block.
  */
 Blockly.IDragTarget.prototype.onBlockDrop;

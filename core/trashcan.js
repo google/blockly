@@ -529,7 +529,7 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 };
 
 /**
- * Handles Drag enter.
+ * Handles when a cursor with a block or bubble enters this drag target.
  * @override
  */
 Blockly.Trashcan.prototype.onDragEnter = function() {
@@ -537,14 +537,15 @@ Blockly.Trashcan.prototype.onDragEnter = function() {
 };
 
 /**
- * Handles a drag exit.
+ * Handles when a cursor with a block or bubble exits this drag target.
  * @override
  */
 Blockly.Trashcan.prototype.onDragExit = function() {
   this.setLidOpen(false);
 };
 /**
- * Handles a block drop on this component. Should not handle delete here.
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
  * @param {!Blockly.BlockSvg} _block The block.
  * @override
  */

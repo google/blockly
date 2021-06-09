@@ -5,8 +5,8 @@
  */
 
 /**
- * @fileoverview The abstract class for a component that can handle a block
- * being dropped on top of it.
+ * @fileoverview The abstract class for a component with custom behaviour when a
+ * block or bubble is dragged over or dropped on top of it.
  * @author kozbial@google.com (Monica Kozbial)
  */
 
@@ -20,8 +20,8 @@ goog.requireType('Blockly.utils.Rect');
 
 
 /**
- * Abstract class for a component that can delete a block that is dropped on top
- * of it.
+ * Abstract class for a component with custom behaviour when a block or bubble
+ * is dragged over or dropped on top of it.
  * @implements {Blockly.IDragTarget}
  * @constructor
  */
@@ -35,14 +35,14 @@ Blockly.DragTarget = function() {};
 Blockly.DragTarget.prototype.getClientRect;
 
 /**
- * Handles Drag enter.
+ * Handles when a cursor with a block or bubble enters this drag target.
  */
 Blockly.DragTarget.prototype.onDragEnter = function() {
   // no-op
 };
 
 /**
- * Handles a drag exit.
+ * Handles when a cursor with a block or bubble exits this drag target.
  */
 Blockly.DragTarget.prototype.onDragExit = function() {
   // no-op
@@ -59,7 +59,8 @@ Blockly.DragTarget.prototype.getEndDragLoc = function(startXY, delta) {
 };
 
 /**
- * Handles a block drop on this component. Should not handle delete here.
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
  * @param {!Blockly.BlockSvg} _block The block.
  */
 Blockly.DragTarget.prototype.onBlockDrop = function(_block) {

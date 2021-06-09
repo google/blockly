@@ -5,8 +5,8 @@
  */
 
 /**
- * @fileoverview The abstract class for a component that can delete a block that
- *   is dropped on top of it.
+ * @fileoverview The abstract class for a component that can delete a block or
+ * bubble that is dropped on top of it.
  * @author kozbial@google.com (Monica Kozbial)
  */
 
@@ -19,8 +19,8 @@ goog.require('Blockly.IDeleteArea');
 
 
 /**
- * Abstract class for a component that can delete a block that is dropped on top
- * of it.
+ * Abstract class for a component that can delete a block or bubble that is
+ * dropped on top of it.
  * @extends {Blockly.DragTarget}
  * @implements {Blockly.IDeleteArea}
  * @constructor

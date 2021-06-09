@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview The interface for a component that can delete a block that is
- *   dropped on top of it.
- * @author aschmiedt@google.com (Abby Schmiedt)
+ * @fileoverview The interface for a component that can delete a block or bubble
+ * that is dropped on top of it.
+ * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -18,7 +18,8 @@ goog.require('Blockly.IDragTarget');
 
 
 /**
- * Interface for a component that can delete a block that is dropped on top of it.
+ * Interface for a component that can delete a block or bubble that is dropped
+ * on top of it.
  * @extends {Blockly.IDragTarget}
  * @interface
  */

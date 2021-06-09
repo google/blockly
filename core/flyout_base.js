@@ -393,6 +393,8 @@ Blockly.Flyout.prototype.setVisible = function(visible) {
   this.isVisible_ = visible;
   if (visibilityChanged) {
     if (!this.autoClose) {
+      // Auto-close flyouts are ignored as drag targets, so only non auto-close
+      // flyouts need to have their drag target updated.
       this.workspace_.recordDragTargets();
     }
     this.updateDisplay_();

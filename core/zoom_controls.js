@@ -22,6 +22,7 @@ goog.require('Blockly.Events.Click');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Touch');
 goog.require('Blockly.uiPosition');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
@@ -41,6 +42,12 @@ Blockly.ZoomControls = function(workspace) {
    * @private
    */
   this.workspace_ = workspace;
+
+  /**
+   * The unique id for this component.
+   * @type {string}
+   */
+  this.id = Blockly.utils.genUid();
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
@@ -190,7 +197,6 @@ Blockly.ZoomControls.prototype.createDom = function() {
  */
 Blockly.ZoomControls.prototype.init = function() {
   this.workspace_.getComponentManager().addComponent({
-    id: 'zoomControls',
     component: this,
     weight: 2,
     capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]

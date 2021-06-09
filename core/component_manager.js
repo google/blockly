@@ -43,7 +43,6 @@ Blockly.ComponentManager = function() {
 /**
  * An object storing component information.
  * @typedef {{
- *    id: string,
  *    component: !Blockly.IComponent,
  *    capabilities: (
  *     !Array<string|!Blockly.ComponentManager.Capability<Blockly.IComponent>>),
@@ -63,19 +62,19 @@ Blockly.ComponentManager.ComponentDatum;
 Blockly.ComponentManager.prototype.addComponent = function(
     componentInfo, opt_allowOverrides) {
   // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && this.componentData_[componentInfo.id]) {
+  var id = componentInfo.component.id;
+  if (!opt_allowOverrides && this.componentData_[id]) {
     throw Error(
-        'Plugin "' + componentInfo.id + '" with capabilities "' +
-        this.componentData_[componentInfo.id].capabilities +
-        '" already added.');
+        'Plugin "' + id + '" with capabilities "' +
+        this.componentData_[id].capabilities + '" already added.');
   }
-  this.componentData_[componentInfo.id] = componentInfo;
+  this.componentData_[id] = componentInfo;
   for (var i = 0, type; (type = componentInfo.capabilities[i]); i++) {
     var typeKey = String(type).toLowerCase();
     if (this.capabilityToComponentIds_[typeKey] === undefined) {
-      this.capabilityToComponentIds_[typeKey] = [componentInfo.id];
+      this.capabilityToComponentIds_[typeKey] = [id];
     } else {
-      this.capabilityToComponentIds_[typeKey].push(componentInfo.id);
+      this.capabilityToComponentIds_[typeKey].push(id);
     }
   }
 };

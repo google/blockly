@@ -22,3 +22,8 @@ goog.provide('Blockly.IComponent');
  */
 Blockly.IComponent = function() {};
 
+/**
+ * The unique id for this component.
+ * @type {string}
+ */
+Blockly.IComponent.id;

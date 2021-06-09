@@ -290,7 +290,7 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
  *    in workspace coordinates.
  * @param {!Blockly.IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
- * @private
+ * @package
  */
 Blockly.bumpObjectIntoBounds_ = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.

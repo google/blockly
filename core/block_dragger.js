@@ -242,8 +242,14 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  var preventMove = !!this.dragTarget_ &&
+      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
+  if (preventMove) {
+    var newLoc = this.startXY_;
+  } else {
+    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  }
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
@@ -256,17 +262,26 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     this.draggingBlock_.dispose(false, true);
     Blockly.draggingConnections = [];
   } else {
-    // These are expensive and don't need to be done if we're deleting.
-    this.draggingBlock_.moveConnections(delta.x, delta.y);
     this.draggingBlock_.setDragging(false);
-    this.fireMoveEvent_();
-    if (this.draggedConnectionManager_.wouldConnectBlock()) {
-      // Applying connections also rerenders the relevant blocks.
-      this.draggedConnectionManager_.applyConnections();
+    if (!preventMove) {
+      // These are expensive and don't need to be done if we're deleting.
+      this.draggingBlock_.moveConnections(delta.x, delta.y);
+      this.fireMoveEvent_();
+      if (this.draggedConnectionManager_.wouldConnectBlock()) {
+        // Applying connections also rerenders the relevant blocks.
+        this.draggedConnectionManager_.applyConnections();
+      } else {
+        this.draggingBlock_.render();
+      }
+      this.draggingBlock_.scheduleSnapAndBump();
     } else {
-      this.draggingBlock_.render();
+      // Blocks dragged directly from a flyout may need to be bumped into
+      // bounds.
+      Blockly.bumpObjectIntoBounds_(
+          this.draggingBlock_.workspace,
+          this.workspace_.getMetricsManager()
+              .getScrollMetrics(true), this.draggingBlock_);
     }
-    this.draggingBlock_.scheduleSnapAndBump();
   }
   this.workspace_.setResizesEnabled(true);
 

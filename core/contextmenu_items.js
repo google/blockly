@@ -479,7 +479,9 @@ Blockly.ContextMenuItems.registerDelete = function() {
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       Blockly.Events.setGroup(true);
-      scope.block.dispose(true, true);
+      if (scope.block) {
+        Blockly.deleteBlock(scope.block);
+      }
       Blockly.Events.setGroup(false);
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,

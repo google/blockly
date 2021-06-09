@@ -501,7 +501,8 @@ Blockly.Toolbox.prototype.removeStyle = function(style) {
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {Blockly.utils.Rect} The component's bounding box.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
   if (!this.HtmlDiv) {

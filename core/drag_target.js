@@ -16,6 +16,8 @@ goog.provide('Blockly.DragTarget');
 
 goog.require('Blockly.IDragTarget');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.utils.Rect');
 
 
@@ -30,7 +32,8 @@ Blockly.DragTarget = function() {};
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to the Blockly injection div.
- * @return {Blockly.utils.Rect} The component's bounding box.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.DragTarget.prototype.getClientRect;
 
@@ -49,20 +52,19 @@ Blockly.DragTarget.prototype.onDragExit = function() {
 };
 
 /**
- * Computes the end location for a block after it is dropped on this component.
- * @param {!Blockly.utils.Coordinate} startXY The start xy.
- * @param {!Blockly.utils.Coordinate} delta The delta.
- * @return {!Blockly.utils.Coordinate} The end location.
- */
-Blockly.DragTarget.prototype.getEndDragLoc = function(startXY, delta) {
-  return Blockly.utils.Coordinate.sum(startXY, delta);
-};
-
-/**
  * Handles when a block is dropped on this component. Should not handle delete
  * here.
  * @param {!Blockly.BlockSvg} _block The block.
  */
 Blockly.DragTarget.prototype.onBlockDrop = function(_block) {
+  // no-op
+};
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ */
+Blockly.DragTarget.prototype.onBubbleDrop = function(_bubble) {
   // no-op
 };

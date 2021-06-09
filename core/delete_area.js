@@ -43,7 +43,11 @@ Blockly.DeleteArea.prototype.wouldDeleteBlock = function(_block, couldConnect) {
 };
 
 /**
- * Whether this is a bubble delete area.
- * @type {boolean}
+ * Returns whether the provided bubble would be deleted if dropped on this area.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @return {boolean} Whether the bubble provided would be deleted if dropped on
+ *     this area.
  */
-Blockly.DeleteArea.prototype.isBubbleDeleteArea = true;
+Blockly.DeleteArea.prototype.wouldDeleteBubble = function(_bubble) {
+  return true;
+};

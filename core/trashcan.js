@@ -512,7 +512,8 @@ Blockly.Trashcan.prototype.getBoundingRectangle = function() {
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {Blockly.utils.Rect} The component's bounding box.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -543,6 +544,8 @@ Blockly.Trashcan.prototype.onDragEnter = function() {
 Blockly.Trashcan.prototype.onDragExit = function() {
   this.setLidOpen(false);
 };
+
+
 /**
  * Handles when a block is dropped on this component. Should not handle delete
  * here.
@@ -550,6 +553,24 @@ Blockly.Trashcan.prototype.onDragExit = function() {
  * @override
  */
 Blockly.Trashcan.prototype.onBlockDrop = function(_block) {
+  this.onDrop_();
+};
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @override
+ */
+Blockly.Trashcan.prototype.onBubbleDrop = function(_bubble) {
+  this.onDrop_();
+};
+
+/**
+ * Handles when a block or bubble is dropped on this component.
+ * @private
+ */
+Blockly.Trashcan.prototype.onDrop_ = function() {
   setTimeout(this.closeLid.bind(this), 100);
 };
 

@@ -16,6 +16,8 @@ goog.provide('Blockly.IDragTarget');
 
 goog.require('Blockly.IComponent');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.utils.Rect');
 
 /**
@@ -44,16 +46,15 @@ Blockly.IDragTarget.prototype.onDragEnter;
 Blockly.IDragTarget.prototype.onDragExit;
 
 /**
- * Computes the end location for a block after it is dropped on this component.
- * @param {!Blockly.utils.Coordinate} startXY The start xy.
- * @param {!Blockly.utils.Coordinate} delta The delta.
- * @return {!Blockly.utils.Coordinate} The end location.
- */
-Blockly.IDragTarget.prototype.getEndDragLoc;
-
-/**
  * Handles when a block is dropped on this component. Should not handle delete
  * here.
  * @param {!Blockly.BlockSvg} block The block.
  */
 Blockly.IDragTarget.prototype.onBlockDrop;
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} bubble The bubble.
+ */
+Blockly.IDragTarget.prototype.onBubbleDrop;

@@ -240,7 +240,7 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
  * Update connections based on the most recent move location.
  * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
- * @param {?Blockly.IDragTarget} dragTarget The drag target that the position is
+ * @param {?Blockly.IDragTarget} dragTarget The drag target that the block is
  *     currently over.
  * @package
  */
@@ -458,23 +458,20 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
   var couldDeleteBlock =
       !this.topBlock_.getParent() && this.topBlock_.isDeletable();
 
-  var shouldDelete = false;
-  if (couldDeleteBlock) {
-    if (dragTarget) {
-      // TODO(#4881) use hasCapability instead of getComponents
-      var deleteAreas = this.workspace_.getComponentManager().getComponents(
-          Blockly.ComponentManager.Capability.DELETE_AREA, false);
-      var isDeleteArea = deleteAreas.some(function(deleteArea) {
-        return deleteArea === dragTarget;
-      });
-      if (isDeleteArea) {
-        shouldDelete =
-            (/** @type {!Blockly.IDeleteArea} */ (dragTarget)).wouldDeleteBlock(
-                this.topBlock_, candidate && !!candidate.closest);
-      }
+  if (couldDeleteBlock && dragTarget) {
+    // TODO(#4881) use hasCapability instead of getComponents
+    var deleteAreas = this.workspace_.getComponentManager().getComponents(
+        Blockly.ComponentManager.Capability.DELETE_AREA, false);
+    var isDeleteArea = deleteAreas.some(function(deleteArea) {
+      return dragTarget === deleteArea;
+    });
+    if (isDeleteArea) {
+      return (
+        /** @type {!Blockly.IDeleteArea} */ (dragTarget))
+          .wouldDeleteBlock(this.topBlock_, candidate && !!candidate.closest);
     }
   }
-  return shouldDelete;
+  return false;
 };
 
 /**

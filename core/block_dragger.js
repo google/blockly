@@ -240,10 +240,7 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
   Blockly.blockAnimations.disconnectUiStop();
 
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = this.dragTarget_ ?
-      this.dragTarget_.getEndDragLoc(this.startXY_, delta) :
-      Blockly.utils.Coordinate.sum(this.startXY_, delta);
-  delta = Blockly.utils.Coordinate.difference(newLoc, this.startXY_);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
@@ -307,11 +304,7 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
  * @private
  */
 Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
-  if (this.wouldDeleteBlock_) {
-    this.draggingBlock_.setDeleteStyle(true);
-  } else {
-    this.draggingBlock_.setDeleteStyle(false);
-  }
+  this.draggingBlock_.setDeleteStyle(this.wouldDeleteBlock_);
 };
 
 /**

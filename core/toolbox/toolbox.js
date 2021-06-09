@@ -17,11 +17,11 @@ goog.require('Blockly.CollapsibleToolboxCategory');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.IAutoHideable');
-goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IKeyboardAccessible');
 goog.require('Blockly.IStyleable');
 goog.require('Blockly.IToolbox');
@@ -50,11 +50,12 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IKeyboardAccessible}
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Toolbox = function(workspace) {
+  Blockly.Toolbox.superClass_.constructor.call(this);
   /**
    * The workspace this toolbox is on.
    * @type {!Blockly.WorkspaceSvg}
@@ -159,6 +160,7 @@ Blockly.Toolbox = function(workspace) {
    */
   this.boundEvents_ = [];
 };
+Blockly.utils.object.inherits(Blockly.Toolbox, Blockly.DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.
@@ -189,13 +191,14 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
-
   this.workspace_.getComponentManager().addComponent({
     id: 'toolbox',
     component: this,
     weight: 1,
     capabilities: [
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
+      Blockly.ComponentManager.Capability.DRAG_TARGET
     ]
   });
 };
@@ -496,9 +499,10 @@ Blockly.Toolbox.prototype.removeStyle = function(style) {
 };
 
 /**
- * Return the deletion rectangle for this toolbox.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
- * @public
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
   if (!this.HtmlDiv) {
@@ -527,6 +531,19 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   } else {  // Right
     return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
+};
+
+/**
+ * Returns whether the provided block would be deleted if dropped on this area.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @param {boolean} _couldConnect Whether the block could could connect to
+ *     another.
+ * @return {boolean} Whether the block provided would be deleted if dropped on
+ *     this area.
+ */
+Blockly.Toolbox.prototype.wouldDeleteBlock = function(_block, _couldConnect) {
+  // Prefer dragging to the toolbox over connecting to other blocks.
+  return true;
 };
 
 /**

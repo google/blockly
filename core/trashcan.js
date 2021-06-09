@@ -15,11 +15,11 @@ goog.provide('Blockly.Trashcan');
 goog.require('Blockly.browserEvents');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 goog.require('Blockly.IAutoHideable');
-goog.require('Blockly.IDeleteArea');
 goog.require('Blockly.IPositionable');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
@@ -40,10 +40,11 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  * @implements {Blockly.IAutoHideable}
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IPositionable}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
+  Blockly.Trashcan.superClass_.constructor.call(this);
   /**
    * The workspace the trashcan sits in.
    * @type {!Blockly.WorkspaceSvg}
@@ -102,6 +103,7 @@ Blockly.Trashcan = function(workspace) {
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
+Blockly.utils.object.inherits(Blockly.Trashcan, Blockly.DeleteArea);
 
 /**
  * Width of both the trash can and lid images.
@@ -364,8 +366,10 @@ Blockly.Trashcan.prototype.init = function() {
     component: this,
     weight: 1,
     capabilities: [
-      Blockly.ComponentManager.Capability.POSITIONABLE,
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
+      Blockly.ComponentManager.Capability.DRAG_TARGET,
+      Blockly.ComponentManager.Capability.POSITIONABLE
     ]
   });
   this.initialized_ = true;
@@ -501,8 +505,10 @@ Blockly.Trashcan.prototype.getBoundingRectangle = function() {
 };
 
 /**
- * Return the deletion rectangle for this trash can.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -516,6 +522,51 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   return new Blockly.utils.Rect(top, bottom, left, right);
+};
+
+/**
+ * Handles when a cursor with a block or bubble enters this drag target.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragEnter = function() {
+  this.setLidOpen(true);
+};
+
+/**
+ * Handles when a cursor with a block or bubble exits this drag target.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragExit = function() {
+  this.setLidOpen(false);
+};
+
+
+/**
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @override
+ */
+Blockly.Trashcan.prototype.onBlockDrop = function(_block) {
+  this.onDrop_();
+};
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @override
+ */
+Blockly.Trashcan.prototype.onBubbleDrop = function(_bubble) {
+  this.onDrop_();
+};
+
+/**
+ * Handles when a block or bubble is dropped on this component.
+ * @private
+ */
+Blockly.Trashcan.prototype.onDrop_ = function() {
+  setTimeout(this.closeLid.bind(this), 100);
 };
 
 /**

@@ -15,6 +15,8 @@ goog.provide('Blockly.ComponentManager');
 
 goog.requireType('Blockly.IAutoHideable');
 goog.requireType('Blockly.IComponent');
+goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.IDragTarget');
 goog.requireType('Blockly.IPositionable');
 
 
@@ -206,6 +208,15 @@ Blockly.ComponentManager.Capability.prototype.toString = function() {
 /** @type {!Blockly.ComponentManager.Capability<!Blockly.IPositionable>} */
 Blockly.ComponentManager.Capability.POSITIONABLE =
     new Blockly.ComponentManager.Capability('positionable');
+
+/** @type {!Blockly.ComponentManager.Capability<!Blockly.IDragTarget>} */
+Blockly.ComponentManager.Capability.DRAG_TARGET =
+    new Blockly.ComponentManager.Capability('drag_target');
+
+/** @type {!Blockly.ComponentManager.Capability<!Blockly.IDeleteArea>} */
+Blockly.ComponentManager.Capability.DELETE_AREA =
+    new Blockly.ComponentManager.Capability('delete_area');
+
 /** @type {!Blockly.ComponentManager.Capability<!Blockly.IAutoHideable>} */
 Blockly.ComponentManager.Capability.AUTOHIDEABLE =
     new Blockly.ComponentManager.Capability('autohideable');

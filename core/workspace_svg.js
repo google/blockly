@@ -61,6 +61,7 @@ goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.FlyoutButton');
 goog.requireType('Blockly.IBoundedElement');
+goog.requireType('Blockly.IDragTarget');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
@@ -231,6 +232,17 @@ Blockly.WorkspaceSvg = function(
    * @private
    */
   this.topBoundedElements_ = [];
+
+  /**
+   * The recorded drag targets.
+   * @type {!Array<
+   * {
+   *   component: !Blockly.IDragTarget,
+   *   clientRect: !Blockly.utils.Rect,
+   * }>}
+   * @private
+   */
+  this.dragTargetAreas_ = [];
 
   /**
    * The cached size of the parent svg element.
@@ -879,7 +891,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.grid_) {
     this.grid_.update(this.scale);
   }
-  this.recordDeleteAreas();
+  this.recordDragTargets();
   var CursorClass = Blockly.registry.getClassFromOptions(
       Blockly.registry.Type.CURSOR, this.options);
 
@@ -1096,7 +1108,7 @@ Blockly.WorkspaceSvg.prototype.getToolbox = function() {
  */
 Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
   this.updateInverseScreenCTM();
-  this.recordDeleteAreas();
+  this.recordDragTargets();
 };
 
 /**
@@ -1617,38 +1629,50 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name,
 
 /**
  * Make a list of all the delete areas for this workspace.
+ * @deprecated Use workspace.recordDragTargets. (2021 June)
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
-  if (this.trashcan && this.svgGroup_.parentNode) {
-    this.deleteAreaTrash_ = this.trashcan.getClientRect();
-  } else {
-    this.deleteAreaTrash_ = null;
-  }
-  if (this.flyout_) {
-    this.deleteAreaToolbox_ = this.flyout_.getClientRect();
-  } else if (this.toolbox_ && typeof this.toolbox_.getClientRect == 'function') {
-    this.deleteAreaToolbox_ = this.toolbox_.getClientRect();
-  } else {
-    this.deleteAreaToolbox_ = null;
-  }
+  Blockly.utils.deprecation.warn(
+      'WorkspaceSvg.prototype.recordDeleteAreas',
+      'June 2021',
+      'June 2022',
+      'WorkspaceSvg.prototype.recordDragTargets');
+  this.recordDragTargets();
 };
 
 /**
- * Is the mouse event over a delete area (toolbox or non-closing flyout)?
- * @param {!Event} e Mouse move event.
- * @return {?number} Null if not over a delete area, or an enum representing
- *     which delete area the event is over.
+ * Make a list of all the delete areas for this workspace.
  */
-Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
-  if (this.deleteAreaTrash_ &&
-      this.deleteAreaTrash_.contains(e.clientX, e.clientY)) {
-    return Blockly.DELETE_AREA_TRASH;
+Blockly.WorkspaceSvg.prototype.recordDragTargets = function() {
+  var dragTargets = this.componentManager_.getComponents(
+      Blockly.ComponentManager.Capability.DRAG_TARGET, true);
+
+  this.dragTargetAreas_ = [];
+  for (var i = 0, targetArea; (targetArea = dragTargets[i]); i++) {
+    var rect = targetArea.getClientRect();
+    if (rect) {
+      this.dragTargetAreas_.push({
+        component: targetArea,
+        clientRect: rect,
+      });
+    }
   }
-  if (this.deleteAreaToolbox_ &&
-      this.deleteAreaToolbox_.contains(e.clientX, e.clientY)) {
-    return Blockly.DELETE_AREA_TOOLBOX;
+};
+
+
+/**
+ * Returns the drag target the mouse event is over.
+ * @param {!Event} e Mouse move event.
+ * @return {?Blockly.IDragTarget} Null if not over a drag target, or the drag
+ *     target the event is over.
+ */
+Blockly.WorkspaceSvg.prototype.getDragTarget = function(e) {
+  for (var i = 0, targetArea; (targetArea = this.dragTargetAreas_[i]); i++) {
+    if (targetArea.clientRect.contains(e.clientX, e.clientY)) {
+      return targetArea.component;
+    }
   }
-  return Blockly.DELETE_AREA_NONE;
+  return null;
 };
 
 /**
@@ -2200,7 +2224,7 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   if (this.flyout_) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
-    this.recordDeleteAreas();
+    this.recordDragTargets();
   }
   if (this.grid_) {
     this.grid_.update(this.scale);

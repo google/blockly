@@ -13,6 +13,7 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.DeleteArea');
@@ -382,6 +383,7 @@ Blockly.Trashcan.prototype.init = function() {
  * @suppress {checkTypes}
  */
 Blockly.Trashcan.prototype.dispose = function() {
+  this.workspace_.getComponentManager().removeComponent('trashcan');
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;

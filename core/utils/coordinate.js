@@ -101,6 +101,14 @@ Blockly.utils.Coordinate.sum = function(a, b) {
 };
 
 /**
+ * Creates a new copy of this coordinate.
+ * @return {!Blockly.utils.Coordinate} A copy of this coordinate.
+ */
+Blockly.utils.Coordinate.prototype.clone = function() {
+  return new Blockly.utils.Coordinate(this.x, this.y);
+};
+
+/**
  * Scales this coordinate by the given scale factor.
  * @param {number} s The scale factor to use for both x and y dimensions.
  * @return {!Blockly.utils.Coordinate} This coordinate after scaling.

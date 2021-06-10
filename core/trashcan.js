@@ -527,7 +527,8 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 };
 
 /**
- * Handles when a cursor with a block or bubble enters this drag target.
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
  * @override
  */
 Blockly.Trashcan.prototype.onDragOver = function() {

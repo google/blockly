@@ -66,31 +66,3 @@ Blockly.DeleteArea.prototype.wouldDeleteBubble = function(bubble) {
   this.wouldDelete_ = bubble.isDeletable();
   return this.wouldDelete_;
 };
-
-/**
- * Handles when a cursor with a block or bubble exits this drag target.
- * @override
- */
-Blockly.DeleteArea.prototype.onDragExit = function() {
-  // no-op
-};
-
-/**
- * Handles when a block is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.BlockSvg} _block The block.
- * @override
- */
-Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
-  // no-op
-};
-
-/**
- * Handles when a bubble is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.IBubble} _bubble The bubble.
- * @override
- */
-Blockly.DeleteArea.prototype.onBubbleDrop = function(_bubble) {
-  // no-op
-};

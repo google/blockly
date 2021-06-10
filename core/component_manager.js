@@ -69,14 +69,17 @@ Blockly.ComponentManager.prototype.addComponent = function(
         this.componentData_[id].capabilities + '" already added.');
   }
   this.componentData_[id] = componentInfo;
+  var stringCapabilities = [];
   for (var i = 0; i < componentInfo.capabilities.length; i++) {
     var capability = String(componentInfo.capabilities[i]).toLowerCase();
+    stringCapabilities.push(capability);
     if (this.capabilityToComponentIds_[capability] === undefined) {
       this.capabilityToComponentIds_[capability] = [id];
     } else {
       this.capabilityToComponentIds_[capability].push(id);
     }
   }
+  this.componentData_[id].capabilities = stringCapabilities;
 };
 
 /**
@@ -104,7 +107,6 @@ Blockly.ComponentManager.prototype.removeComponent = function(id) {
  * @template T
  */
 Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
-  capability = String(capability).toLowerCase();
   if (!this.getComponent(id)) {
     throw Error('Cannot add capability, "' + capability + '". Plugin "' +
         id + '" has not been added to the ComponentManager');
@@ -114,6 +116,7 @@ Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
         capability + '"');
     return;
   }
+  capability = String(capability).toLowerCase();
   this.componentData_[id].capabilities.push(capability);
   this.capabilityToComponentIds_[capability].push(id);
 };
@@ -126,7 +129,6 @@ Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
  * @template T
  */
 Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
-  capability = String(capability).toLowerCase();
   if (!this.getComponent(id)) {
     throw Error('Cannot remove capability, "' + capability + '". Plugin "' +
         id + '" has not been added to the ComponentManager');
@@ -136,6 +138,7 @@ Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
         capability + '" to remove');
     return;
   }
+  capability = String(capability).toLowerCase();
   this.componentData_[id].capabilities.splice(
       this.componentData_[id].capabilities.indexOf(capability), 1);
   this.capabilityToComponentIds_[capability].splice(

@@ -20,9 +20,9 @@ goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
 goog.provide('Blockly.Events.Move');  // Deprecated.
 
+goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.connectionTypes');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
@@ -44,7 +44,7 @@ Blockly.Events.BlockBase = function(opt_block) {
   this.isBlank = typeof opt_block == 'undefined';
 
   /**
-   * The block id for the block this event pertains to
+   * The block ID for the block this event pertains to
    * @type {string}
    */
   this.blockId = this.isBlank ? '' : opt_block.id;
@@ -332,7 +332,7 @@ Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
 /**
  * Class for a block deletion event.
- * @param {Blockly.Block} block The deleted block.  Null for a blank event.
+ * @param {?Blockly.Block} block The deleted block.  Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
@@ -420,7 +420,7 @@ Blockly.utils.object.inherits(Blockly.Events.Move, Blockly.Events.BlockBase);
 
 /**
  * Class for a block move event.  Created before the move.
- * @param {Blockly.Block} block The moved block.  Null for a blank event.
+ * @param {?Blockly.Block} block The moved block.  Null for a blank event.
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */

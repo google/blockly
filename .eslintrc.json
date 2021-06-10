@@ -72,8 +72,7 @@
                 "balanced": true
             },
             "exceptions": ["*"]
-        }],
-        "es5/no-es6-methods": ["warn"]
+        }]
     },
     "env": {
         "browser": true
@@ -83,7 +82,6 @@
         "goog": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:es5/no-es2015"
+        "eslint:recommended"
     ]
 }

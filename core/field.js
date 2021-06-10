@@ -15,11 +15,17 @@
 goog.provide('Blockly.Field');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Gesture');
+goog.require('Blockly.IASTNodeLocationSvg');
+goog.require('Blockly.IASTNodeLocationWithBlock');
+goog.require('Blockly.IKeyboardAccessible');
+goog.require('Blockly.IRegistrable');
+goog.require('Blockly.MarkerManager');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -28,15 +34,12 @@ goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IASTNodeLocationSvg');
-goog.requireType('Blockly.IASTNodeLocationWithBlock');
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.Input');
-goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -533,7 +536,7 @@ Blockly.Field.prototype.setValidator = function(handler) {
 
 /**
  * Gets the validation function for editable fields, or null if not set.
- * @return {Function} Validation function, or null.
+ * @return {?Function} Validation function, or null.
  */
 Blockly.Field.prototype.getValidator = function() {
   return this.validator_;
@@ -946,7 +949,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 
 /**
  * Returns the tooltip text for this field.
- * @returns {string} The tooltip text for this field.
+ * @return {string} The tooltip text for this field.
  */
 Blockly.Field.prototype.getTooltip = function() {
   var clickTarget = this.getClickTarget_();
@@ -1041,8 +1044,8 @@ Blockly.Field.prototype.onShortcut = function(_shortcut) {
 };
 
 /**
- * Add the cursor svg to this fields svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
+ * Add the cursor SVG to this fields SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
  *     field group.
  * @package
  */
@@ -1057,8 +1060,8 @@ Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this fields svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
+ * Add the marker SVG to this fields SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
  *     field group.
  * @package
  */

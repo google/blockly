@@ -77,8 +77,8 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
         var nextElement = Blockly.utils.xml.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
-        if (element.color != null) {
-          nextElement.setAttribute('colour', element.color);
+        if (element.colour != null) {
+          nextElement.setAttribute('colour', element.colour);
         }
         // Add a custom attribute if one exists.
         if (element.custom != null) {
@@ -212,8 +212,8 @@ WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
 /**
  * Given a set of block types, gets the Blockly.Block objects for each block
  * type.
- * @param {!Array.<!Element>} blockTypes Array of blocks that have been defined.
- * @return {!Array.<!Blockly.Block>} Array of Blockly.Block objects corresponding
+ * @param {!Array<!Element>} blockTypes Array of blocks that have been defined.
+ * @return {!Array<!Blockly.Block>} Array of Blockly.Block objects corresponding
  *    to the array of blockTypes.
  */
 WorkspaceFactoryGenerator.prototype.getDefinedBlocks = function(blockTypes) {

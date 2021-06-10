@@ -34,16 +34,16 @@ Blockly.IASTNodeLocation = function() {};
 Blockly.IASTNodeLocationSvg = function() {};
 
 /**
- * Add the marker svg to this node's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     svg group.
+ * Add the marker SVG to this node's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     SVG group.
  */
 Blockly.IASTNodeLocationSvg.prototype.setMarkerSvg;
 
 /**
- * Add the cursor svg to this node's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     svg group.
+ * Add the cursor SVG to this node's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     SVG group.
  */
 Blockly.IASTNodeLocationSvg.prototype.setCursorSvg;
 

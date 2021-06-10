@@ -261,14 +261,14 @@ Blockly.blockRendering.ConstantProvider = function() {
    * to be the height of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_HEIGHT = -1; // Dynamically set
+  this.FIELD_TEXT_HEIGHT = -1;  // Dynamically set.
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    * @type {number}
    */
-  this.FIELD_TEXT_BASELINE = -1; // Dynamically set
+  this.FIELD_TEXT_BASELINE = -1;  // Dynamically set.
 
   /**
    * A field's border rect corner radius.
@@ -587,10 +587,10 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
 
   /**
    * The block styles map.
-   * @type {Object.<string, Blockly.Theme.BlockStyle>}
+   * @type {Object<string, !Blockly.Theme.BlockStyle>}
    * @package
    */
-  this.blockStyles = {};
+  this.blockStyles = Object.create(null);
 
   var blockStyles = theme.blockStyles;
   for (var key in blockStyles) {
@@ -855,7 +855,7 @@ Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
     var halfHeight = height / 2;
     var control1Y = halfHeight + overlap;
     var control2Y = halfHeight + 0.5;
-    var control3Y = overlap; // 2.5
+    var control3Y = overlap;  // 2.5
 
     var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
     var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);
@@ -1181,7 +1181,7 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
 /**
  * Get any renderer specific CSS to inject when the renderer is initialized.
  * @param {string} selector CSS selector to use.
- * @return {!Array.<string>} Array of CSS strings.
+ * @return {!Array<string>} Array of CSS strings.
  * @protected
  */
 Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {

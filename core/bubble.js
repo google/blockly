@@ -13,6 +13,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.IBubble');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -27,7 +28,6 @@ goog.require('Blockly.Workspace');
 
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -37,7 +37,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace on which to draw the
  *     bubble.
  * @param {!Element} content SVG content for the bubble.
- * @param {Element} shape SVG element to avoid eclipsing.
+ * @param {!Element} shape SVG element to avoid eclipsing.
  * @param {!Blockly.utils.Coordinate} anchorXY Absolute position of bubble's
  *     anchor point.
  * @param {?number} bubbleWidth Width of bubble, or null if not resizable.

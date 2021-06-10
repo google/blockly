@@ -13,13 +13,14 @@
 goog.provide('Blockly.browserEvents');
 
 goog.require('Blockly.Touch');
+goog.require('Blockly.utils.global');
 
 
 /**
  * Blockly opaque event data used to unbind events when using
  * `Blockly.browserEvents.bind` and
  * `Blockly.browserEvents.conditionalBind`.
- * @typedef {!Array.<!Array>}
+ * @typedef {!Array<!Array>}
  */
 Blockly.browserEvents.Data;
 
@@ -30,7 +31,7 @@ Blockly.browserEvents.Data;
  * mousedown or mousemove, which may be part of a drag or click).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
+ * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
  * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
  *     should not block execution of other event handlers on this touch or
@@ -105,7 +106,7 @@ Blockly.browserEvents.conditionalBind = function(
  * mouseover for tooltips).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
+ * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
  * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.

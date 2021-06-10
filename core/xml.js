@@ -59,7 +59,7 @@ Blockly.Xml.workspaceToDom = function(workspace, opt_noId) {
 
 /**
  * Encode a list of variables as XML.
- * @param {!Array.<!Blockly.VariableModel>} variableList List of all variable
+ * @param {!Array<!Blockly.VariableModel>} variableList List of all variable
  *     models.
  * @return {!Element} Tree of XML elements.
  */
@@ -109,7 +109,7 @@ Blockly.Xml.blockToDomWithXY = function(block, opt_noId) {
 /**
  * Encode a field as XML.
  * @param {!Blockly.Field} field The field to encode.
- * @return {Element} XML element, or null if the field did not need to be
+ * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
  * @private
  */
@@ -166,7 +166,7 @@ Blockly.Xml.blockToDom = function(block, opt_noId) {
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     // It's important to use setAttribute here otherwise IE11 won't serialize
-    // the block's id when domToText is called.
+    // the block's ID when domToText is called.
     element.setAttribute('id', block.id);
   }
   if (block.mutationToDom) {
@@ -375,7 +375,7 @@ Blockly.Xml.textToDom = function(text) {
  * create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {Array.<string>} An array containing new block ids.
+ * @return {!Array<string>} An array containing new block IDs.
  */
 Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(false);
@@ -389,7 +389,7 @@ Blockly.Xml.clearWorkspaceAndLoadFromXml = function(xml, workspace) {
  * Decode an XML DOM and create blocks on the workspace.
  * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {!Array.<string>} An array containing new block IDs.
+ * @return {!Array<string>} An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  *     comments are not bundled in.
  */
@@ -489,7 +489,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
  * blocks immediately below prior blocks, aligned by their starting edge.
  * @param {!Element} xml The XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace to add to.
- * @return {Array.<string>} An array containing new block IDs.
+ * @return {!Array<string>} An array containing new block IDs.
  */
 Blockly.Xml.appendDomToWorkspace = function(xml, workspace) {
   var bbox;  // Bounding box of the current blocks.
@@ -637,10 +637,10 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
 Blockly.Xml.childNodeTagMap;
 
 /**
- * Creates a mapping of childNodes for each supported xml tag for the provided
+ * Creates a mapping of childNodes for each supported XML tag for the provided
  * xmlBlock. Logs a warning for any encountered unsupported tags.
  * @param {!Element} xmlBlock XML block element.
- * @return {Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
+ * @return {!Blockly.Xml.childNodeTagMap} The childNode map from nodeName to
  *    node.
  */
 Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
@@ -691,7 +691,7 @@ Blockly.Xml.mapSupportedXmlTags_ = function(xmlBlock) {
 
 /**
  * Applies mutation tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @return {boolean} True if mutation may have added some elements that need
  *    initialization (requiring initSvg call).
@@ -714,7 +714,7 @@ Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies comment tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -741,7 +741,7 @@ Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies data tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -753,7 +753,7 @@ Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
 
 /**
  * Applies field tag child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
  * @private
  */
@@ -765,8 +765,8 @@ Blockly.Xml.applyFieldTagNodes_ = function(xmlChildren, block) {
 };
 
 /**
- * Finds any enclosed blocks or shadows within this xml node.
- * @param {!Element} xmlNode The xml node to extract child block info from.
+ * Finds any enclosed blocks or shadows within this XML node.
+ * @param {!Element} xmlNode The XML node to extract child block info from.
  * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
  *    found child block.
  * @private
@@ -787,7 +787,7 @@ Blockly.Xml.findChildBlocks_ = function(xmlNode) {
 
 /**
  * Applies input child nodes (value or statement) to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.
@@ -821,7 +821,7 @@ Blockly.Xml.applyInputTagNodes_ = function(xmlChildren, workspace, block,
 
 /**
  * Applies next child nodes to the given block.
- * @param {Array<!Element>} xmlChildren Child nodes.
+ * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Blockly.Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Blockly.Block} block The block to apply the child nodes on.

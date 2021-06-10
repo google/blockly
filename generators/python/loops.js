@@ -32,7 +32,7 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
   }
   var branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
-  var loopVar = Blockly.Python.variableDB_.getDistinctName(
+  var loopVar = Blockly.Python.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
   return code;
@@ -56,7 +56,7 @@ Blockly.Python['controls_whileUntil'] = function(block) {
 
 Blockly.Python['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Python.variableDB_.getName(
+  var variable0 = Blockly.Python.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.Python.valueToCode(block, 'FROM',
       Blockly.Python.ORDER_NONE) || '0';
@@ -143,7 +143,7 @@ Blockly.Python['controls_for'] = function(block) {
         arg = 'float(' + arg + ')';
       } else {
         // It's complicated.
-        var varName = Blockly.Python.variableDB_.getDistinctName(
+        var varName = Blockly.Python.nameDB_.getDistinctName(
             variable0 + suffix, Blockly.VARIABLE_CATEGORY_NAME);
         code += varName + ' = float(' + arg + ')\n';
         arg = varName;
@@ -172,7 +172,7 @@ Blockly.Python['controls_for'] = function(block) {
 
 Blockly.Python['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Python.variableDB_.getName(
+  var variable0 = Blockly.Python.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_RELATIONAL) || '[]';

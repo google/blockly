@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.Metrics
+ * @namespace
+ */
 goog.provide('Blockly.utils.Metrics');
 
 

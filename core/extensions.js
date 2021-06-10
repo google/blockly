@@ -28,7 +28,7 @@ goog.requireType('Blockly.Block');
  * The set of all registered extensions, keyed by extension name/id.
  * @private
  */
-Blockly.Extensions.ALL_ = {};
+Blockly.Extensions.ALL_ = Object.create(null);
 
 /**
  * Registers a new extension function. Extensions are functions that help
@@ -78,7 +78,7 @@ Blockly.Extensions.registerMixin = function(name, mixinObj) {
  * @param {!Object} mixinObj The values to mix in.
  * @param {(function())=} opt_helperFn An optional function to apply after
  *     mixing in the object.
- * @param {!Array.<string>=} opt_blockList A list of blocks to appear in the
+ * @param {!Array<string>=} opt_blockList A list of blocks to appear in the
  *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  */
@@ -157,7 +157,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
     Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(
-        /** @type {!Array.<Object>} */ (mutatorProperties), block)) {
+        /** @type {!Array<Object>} */ (mutatorProperties), block)) {
       throw Error('Error when applying extension "' + name + '": ' +
           'mutation properties changed when applying a non-mutator extension.');
     }
@@ -227,10 +227,9 @@ Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
     return true;
   } else if (!hasCompose && !hasDecompose) {
     return false;
-  } else {
-    throw Error(errorPrefix +
-        'Must have both or neither of "compose" and "decompose"');
   }
+  throw Error(errorPrefix +
+      'Must have both or neither of "compose" and "decompose"');
 };
 
 /**
@@ -257,7 +256,7 @@ Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
 /**
  * Get a list of values of mutator properties on the given block.
  * @param {!Blockly.Block} block The block to inspect.
- * @return {!Array.<Object>} A list with all of the defined properties, which
+ * @return {!Array<Object>} A list with all of the defined properties, which
  *     should be functions, but may be anything other than undefined.
  * @private
  */
@@ -284,7 +283,7 @@ Blockly.Extensions.getMutatorProperties_ = function(block) {
  * Check that the current mutator properties match a list of old mutator
  * properties.  This should be called after applying a non-mutator extension,
  * to verify that the extension didn't change properties it shouldn't.
- * @param {!Array.<Object>} oldProperties The old values to compare to.
+ * @param {!Array<Object>} oldProperties The old values to compare to.
  * @param {!Blockly.Block} block The block to inspect for new values.
  * @return {boolean} True if the property lists match.
  * @private
@@ -317,7 +316,7 @@ Blockly.Extensions.mutatorPropertiesMatch_ = function(oldProperties, block) {
  * reported as warnings in the console, and are never fatal.
  * @param {string} dropdownName The name of the field whose value is the key
  *     to the lookup table.
- * @param {!Object.<string, string>} lookupTable The table of field values to
+ * @param {!Object<string, string>} lookupTable The table of field values to
  *     tooltip text.
  * @return {!Function} The extension function.
  */
@@ -377,7 +376,7 @@ Blockly.Extensions.buildTooltipForDropdown = function(dropdownName,
  * Emits console warnings when they are not.
  * @param {!Blockly.Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
- * @param {!Object.<string, string>} lookupTable The string lookup table
+ * @param {!Object<string, string>} lookupTable The string lookup table
  * @private
  */
 Blockly.Extensions.checkDropdownOptionsInTable_ = function(block, dropdownName,

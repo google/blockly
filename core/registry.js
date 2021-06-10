@@ -34,7 +34,7 @@ goog.requireType('Blockly.ToolboxItem');
  *
  * @type {Object<string, Object<string, function(new:?)>>}
  */
-Blockly.registry.typeMap_ = {};
+Blockly.registry.typeMap_ = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
@@ -142,7 +142,7 @@ Blockly.registry.register = function(
   var typeRegistry = Blockly.registry.typeMap_[type];
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
-    typeRegistry = Blockly.registry.typeMap_[type] = {};
+    typeRegistry = Blockly.registry.typeMap_[type] = Object.create(null);
   }
 
   // Validate that the given class has all the required properties.
@@ -265,7 +265,7 @@ Blockly.registry.getClass = function(type, name, opt_throwIfMissing) {
  * @param {string} name The plugin's name. (Ex. logic_category)
  * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
  *     are unable to find the object.
- * @returns {T} The object with the given name and type or null if none exists.
+ * @return {?T} The object with the given name and type or null if none exists.
  * @template T
  */
 Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {

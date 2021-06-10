@@ -165,11 +165,10 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
       delete this.keyMap_[keyCode];
     }
     return true;
-  } else if (!opt_quiet) {
-    console.warn(
-        'No keyboard shortcut with name "' + shortcutName +
+  }
+  if (!opt_quiet) {
+    console.warn('No keyboard shortcut with name "' + shortcutName +
         '" registered with key code "' + keyCode + '"');
-    return false;
   }
   return false;
 };
@@ -320,7 +319,7 @@ Blockly.ShortcutRegistry.prototype.checkModifiers_ = function(
 /**
  * Creates the serialized key code that will be used in the key map.
  * @param {number} keyCode Number code representing the key.
- * @param {?Array.<string>} modifiers List of modifier key codes to be used with
+ * @param {?Array<string>} modifiers List of modifier key codes to be used with
  *     the key. All valid modifiers can be found in the
  *     Blockly.ShortcutRegistry.modifierKeys.
  * @return {string} The serialized key code for the given modifiers and key.

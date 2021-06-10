@@ -17,9 +17,15 @@ goog.require('Blockly.CollapsibleToolboxCategory');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
+goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
+goog.require('Blockly.IAutoHideable');
+goog.require('Blockly.IKeyboardAccessible');
+goog.require('Blockly.IStyleable');
+goog.require('Blockly.IToolbox');
+goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -29,12 +35,8 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ICollapsibleToolboxItem');
-goog.requireType('Blockly.IDeleteArea');
 goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IKeyboardAccessible');
 goog.requireType('Blockly.ISelectableToolboxItem');
-goog.requireType('Blockly.IStyleable');
-goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.ShortcutRegistry');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -46,12 +48,14 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new
  *     blocks.
  * @constructor
+ * @implements {Blockly.IAutoHideable}
  * @implements {Blockly.IKeyboardAccessible}
- * @implements {Blockly.IDeleteArea}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Toolbox = function(workspace) {
+  Blockly.Toolbox.superClass_.constructor.call(this);
   /**
    * The workspace this toolbox is on.
    * @type {!Blockly.WorkspaceSvg}
@@ -122,10 +126,10 @@ Blockly.Toolbox = function(workspace) {
 
   /**
    * A map from toolbox item IDs to toolbox items.
-   * @type {!Object<string, Blockly.IToolboxItem>}
+   * @type {!Object<string, !Blockly.IToolboxItem>}
    * @protected
    */
-  this.contentMap_ = {};
+  this.contentMap_ = Object.create(null);
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
@@ -156,6 +160,7 @@ Blockly.Toolbox = function(workspace) {
    */
   this.boundEvents_ = [];
 };
+Blockly.utils.object.inherits(Blockly.Toolbox, Blockly.DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.
@@ -186,12 +191,22 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
+  this.workspace_.getComponentManager().addComponent({
+    id: 'toolbox',
+    component: this,
+    weight: 1,
+    capabilities: [
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
+      Blockly.ComponentManager.Capability.DRAG_TARGET
+    ]
+  });
 };
 
 /**
- * Creates the dom for the toolbox.
+ * Creates the DOM for the toolbox.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace this toolbox is on.
- * @return {!Element} The html container for the toolbox.
+ * @return {!Element} The HTML container for the toolbox.
  * @protected
  */
 Blockly.Toolbox.prototype.createDom_ = function(workspace) {
@@ -212,7 +227,7 @@ Blockly.Toolbox.prototype.createDom_ = function(workspace) {
 
 /**
  * Creates the container div for the toolbox.
- * @return {!Element} The html container for the toolbox.
+ * @return {!Element} The HTML container for the toolbox.
  * @protected
  */
 Blockly.Toolbox.prototype.createContainer_ = function() {
@@ -226,7 +241,7 @@ Blockly.Toolbox.prototype.createContainer_ = function() {
 
 /**
  * Creates the container for all the contents in the toolbox.
- * @return {!Element} The html container for the toolbox contents.
+ * @return {!Element} The HTML container for the toolbox contents.
  * @protected
  */
 Blockly.Toolbox.prototype.createContentsContainer_ = function() {
@@ -240,8 +255,8 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 
 /**
  * Adds event listeners to the toolbox container div.
- * @param {!Element} container The html container for the toolbox.
- * @param {!Element} contentsContainer The html container for the contents
+ * @param {!Element} container The HTML container for the toolbox.
+ * @param {!Element} contentsContainer The HTML container for the contents
  *     of the toolbox.
  * @protected
  */
@@ -381,7 +396,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
     }
   }
   this.contents_ = [];
-  this.contentMap_ = {};
+  this.contentMap_ = Object.create(null);
   this.renderContents_(toolboxDef['contents']);
   this.position();
 };
@@ -394,7 +409,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
  */
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   // This is for performance reasons. By using document fragment we only have to
-  // add to the dom once.
+  // add to the DOM once.
   var fragment = document.createDocumentFragment();
   for (var i = 0, toolboxItemDef; (toolboxItemDef = toolboxDef[i]); i++) {
     this.createToolboxItem_(toolboxItemDef, fragment);
@@ -414,7 +429,7 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
   var registryName = toolboxItemDef['kind'];
 
   // Categories that are collapsible are created using a class registered under
-  // a diffferent name.
+  // a different name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       Blockly.utils.toolbox.isCategoryCollapsible(
       /** @type {!Blockly.utils.toolbox.CategoryInfo} */(toolboxItemDef))) {
@@ -431,7 +446,7 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
     }
-    // Adds the id to the html element that can receive a click.
+    // Adds the ID to the HTML element that can receive a click.
     // This is used in onClick_ to find the toolboxItem that was clicked.
     if (toolboxItem.getClickTarget) {
       toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
@@ -484,9 +499,10 @@ Blockly.Toolbox.prototype.removeStyle = function(style) {
 };
 
 /**
- * Return the deletion rectangle for this toolbox.
- * @return {?Blockly.utils.Rect} Rectangle in which to delete.
- * @public
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
   if (!this.HtmlDiv) {
@@ -518,14 +534,27 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 };
 
 /**
- * Gets the toolbox item with the given id.
- * @param {string} id The id of the toolbox item.
- * @return {?Blockly.IToolboxItem} The toolbox item with the given id, or null if
- *     no item exists.
+ * Returns whether the provided block would be deleted if dropped on this area.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @param {boolean} _couldConnect Whether the block could could connect to
+ *     another.
+ * @return {boolean} Whether the block provided would be deleted if dropped on
+ *     this area.
+ */
+Blockly.Toolbox.prototype.wouldDeleteBlock = function(_block, _couldConnect) {
+  // Prefer dragging to the toolbox over connecting to other blocks.
+  return true;
+};
+
+/**
+ * Gets the toolbox item with the given ID.
+ * @param {string} id The ID of the toolbox item.
+ * @return {?Blockly.IToolboxItem} The toolbox item with the given ID, or null
+ *     if no item exists.
  * @public
  */
 Blockly.Toolbox.prototype.getToolboxItemById = function(id) {
-  return this.contentMap_[id];
+  return this.contentMap_[id] || null;
 };
 
 /**
@@ -693,6 +722,17 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  */
 Blockly.Toolbox.prototype.setVisible = function(isVisible) {
   this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+};
+
+/**
+ * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
+ */
+Blockly.Toolbox.prototype.autoHide = function(onlyClosePopups) {
+  if (!onlyClosePopups && this.flyout_ && this.flyout_.autoClose) {
+    this.clearSelection();
+  }
 };
 
 /**

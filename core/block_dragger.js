@@ -27,6 +27,7 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.IDragTarget');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -62,13 +63,11 @@ Blockly.BlockDragger = function(block, workspace) {
       new Blockly.InsertionMarkerManager(this.draggingBlock_);
 
   /**
-   * Which delete area the mouse pointer is over, if any.
-   * One of {@link Blockly.DELETE_AREA_TRASH},
-   * {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
-   * @type {?number}
-   * @protected
+   * Which drag area the mouse pointer is over, if any.
+   * @type {?Blockly.IDragTarget}
+   * @private
    */
-  this.deleteArea_ = null;
+  this.dragTarget_ = null;
 
   /**
    * Whether the block would be deleted if dropped immediately.
@@ -112,7 +111,7 @@ Blockly.BlockDragger.prototype.dispose = function() {
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
  * @param {!Blockly.BlockSvg} block The root block that is being dragged.
- * @return {!Array.<!Object>} The list of all icons and their locations.
+ * @return {!Array<!Object>} The list of all icons and their locations.
  * @private
  */
 Blockly.BlockDragger.initIconData_ = function(block) {
@@ -233,8 +232,15 @@ Blockly.BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
 
-  this.deleteArea_ = this.workspace_.isDeleteArea(e);
-  this.draggedConnectionManager_.update(delta, this.deleteArea_);
+  var oldDragTarget = this.dragTarget_;
+  this.dragTarget_ = this.workspace_.getDragTarget(e);
+  if (this.dragTarget_ !== oldDragTarget) {
+    oldDragTarget && oldDragTarget.onDragExit();
+    this.dragTarget_ && this.dragTarget_.onDragEnter();
+  }
+
+  this.draggedConnectionManager_.update(delta, this.dragTarget_);
+  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
 
   this.updateCursorDuringBlockDrag_();
 };
@@ -260,8 +266,16 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
-  var deleted = this.maybeDeleteBlock_();
-  if (!deleted) {
+  if (this.dragTarget_) {
+    this.dragTarget_.onBlockDrop(this.draggingBlock_);
+  }
+
+  if (this.wouldDeleteBlock_) {
+    // Fire a move event, so we know where to go back to for an undo.
+    this.fireMoveEvent_();
+    this.draggingBlock_.dispose(false, true);
+    Blockly.draggingConnections = [];
+  } else {
     // Moving the block is expensive, so only do it if the block is not deleted.
     this.updateBlockAfterMove_(delta);
   }
@@ -335,48 +349,12 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
 };
 
 /**
- * Shut the trash can and, if necessary, delete the dragging block.
- * Should be called at the end of a block drag.
- * @return {boolean} Whether the block was deleted.
- * @protected
- */
-Blockly.BlockDragger.prototype.maybeDeleteBlock_ = function() {
-  var trashcan = this.workspace_.trashcan;
-
-  if (this.wouldDeleteBlock_) {
-    if (trashcan) {
-      setTimeout(trashcan.closeLid.bind(trashcan), 100);
-    }
-    // Fire a move event, so we know where to go back to for an undo.
-    this.fireMoveEvent_();
-    this.draggingBlock_.dispose(false, true);
-    Blockly.draggingConnections = [];
-  } else if (trashcan) {
-    // Make sure the trash can lid is closed.
-    trashcan.closeLid();
-  }
-  return this.wouldDeleteBlock_;
-};
-
-/**
  * Update the cursor (and possibly the trash can lid) to reflect whether the
  * dragging block would be deleted if released immediately.
  * @protected
  */
 Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
-  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-  var trashcan = this.workspace_.trashcan;
-  if (this.wouldDeleteBlock_) {
-    this.draggingBlock_.setDeleteStyle(true);
-    if (this.deleteArea_ == Blockly.DELETE_AREA_TRASH && trashcan) {
-      trashcan.setLidOpen(true);
-    }
-  } else {
-    this.draggingBlock_.setDeleteStyle(false);
-    if (trashcan) {
-      trashcan.setLidOpen(false);
-    }
-  }
+  this.draggingBlock_.setDeleteStyle(this.wouldDeleteBlock_);
 };
 
 /**
@@ -422,7 +400,7 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @public
  */

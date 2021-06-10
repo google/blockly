@@ -266,9 +266,9 @@ Blockly.Events.fireNow_ = function() {
 
 /**
  * Filter the queued events and merge duplicates.
- * @param {!Array.<!Blockly.Events.Abstract>} queueIn Array of events.
+ * @param {!Array<!Blockly.Events.Abstract>} queueIn Array of events.
  * @param {boolean} forward True if forward (redo), false if backward (undo).
- * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
+ * @return {!Array<!Blockly.Events.Abstract>} Array of filtered events.
  */
 Blockly.Events.filter = function(queueIn, forward) {
   var queue = queueIn.slice();  // Shallow copy of queue.
@@ -281,7 +281,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Merge duplicates.
   for (var i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
-      // Treat all ui events as the same type in hash table.
+      // Treat all UI events as the same type in hash table.
       var eventType = event.isUiEvent ? Blockly.Events.UI : event.type;
       var key = [eventType, event.blockId, event.workspaceId].join(' ');
 
@@ -305,6 +305,12 @@ Blockly.Events.filter = function(queueIn, forward) {
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
+      } else if (event.type == Blockly.Events.VIEWPORT_CHANGE) {
+        // Merge viewport change events.
+        lastEvent.viewTop = event.viewTop;
+        lastEvent.viewLeft = event.viewLeft;
+        lastEvent.scale = event.scale;
+        lastEvent.oldScale = event.oldScale;
       } else if (event.type == Blockly.Events.CLICK &&
           lastEvent.type == Blockly.Events.BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
@@ -390,7 +396,7 @@ Blockly.Events.setGroup = function(state) {
 /**
  * Compute a list of the IDs of the specified block and all its descendants.
  * @param {!Blockly.Block} block The root block.
- * @return {!Array.<string>} List of block IDs.
+ * @return {!Array<string>} List of block IDs.
  * @package
  */
 Blockly.Events.getDescendantIds = function(block) {

@@ -39,7 +39,7 @@ Blockly.BlockDragSurfaceSvg = function(container) {
 
 /**
  * The SVG drag surface. Set once by Blockly.BlockDragSurfaceSvg.createDom.
- * @type {SVGElement}
+ * @type {?SVGElement}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.SVG_ = null;
@@ -47,14 +47,14 @@ Blockly.BlockDragSurfaceSvg.prototype.SVG_ = null;
 /**
  * This is where blocks live while they are being dragged if the drag surface
  * is enabled.
- * @type {SVGElement}
+ * @type {?SVGElement}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.dragGroup_ = null;
 
 /**
  * Containing HTML element; parent of the workspace and the drag surface.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.container_ = null;
@@ -71,7 +71,7 @@ Blockly.BlockDragSurfaceSvg.prototype.scale_ = 1;
  * Cached value for the translation of the drag surface.
  * This translation is in pixel units, because the scale is applied to the
  * drag group rather than the top-level SVG.
- * @type {Blockly.utils.Coordinate}
+ * @type {?Blockly.utils.Coordinate}
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
@@ -201,7 +201,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 /**
  * Provide a reference to the drag group (primarily for
  * BlockSvg.getRelativeToSurfaceXY).
- * @return {SVGElement} Drag surface group element.
+ * @return {?SVGElement} Drag surface group element.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
   return this.dragGroup_;
@@ -218,8 +218,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getSvgRoot = function() {
 /**
  * Get the current blocks on the drag surface, if any (primarily
  * for BlockSvg.getRelativeToSurfaceXY).
- * @return {Element} Drag surface block DOM element, or undefined if no blocks
- * exist.
+ * @return {?Element} Drag surface block DOM element, or null if no blocks exist.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
   return /** @type {Element} */ (this.dragGroup_.firstChild);

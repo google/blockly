@@ -14,31 +14,31 @@ goog.provide('Blockly.PHP.procedures');
 
 goog.require('Blockly.PHP');
 
+
 Blockly.PHP['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   // First, add a 'global' statement for every variable that is not shadowed by
   // a local parameter.
   var globals = [];
-  var varName;
   var workspace = block.workspace;
   var variables = Blockly.Variables.allUsedVarModels(workspace) || [];
   for (var i = 0, variable; variable = variables[i]; i++) {
-    varName = variable.name;
+    var varName = variable.name;
     if (block.getVars().indexOf(varName) == -1) {
-      globals.push(Blockly.PHP.variableDB_.getName(varName,
+      globals.push(Blockly.PHP.nameDB_.getName(varName,
           Blockly.VARIABLE_CATEGORY_NAME));
     }
   }
   // Add developer variables.
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    globals.push(Blockly.PHP.variableDB_.getName(devVarList[i],
+    globals.push(Blockly.PHP.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
   globals = globals.length ?
       Blockly.PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
-  var funcName = Blockly.PHP.variableDB_.getName(
+  var funcName = Blockly.PHP.nameDB_.getName(
       block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var xfix1 = '';
   if (Blockly.PHP.STATEMENT_PREFIX) {
@@ -70,7 +70,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var args = [];
   var variables = block.getVars();
   for (var i = 0; i < variables.length; i++) {
-    args[i] = Blockly.PHP.variableDB_.getName(variables[i],
+    args[i] = Blockly.PHP.nameDB_.getName(variables[i],
         Blockly.VARIABLE_CATEGORY_NAME);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
@@ -88,7 +88,7 @@ Blockly.PHP['procedures_defnoreturn'] =
 
 Blockly.PHP['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.PHP.variableDB_.getName(
+  var funcName = Blockly.PHP.nameDB_.getName(
       block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
   var args = [];
   var variables = block.getVars();

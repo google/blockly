@@ -253,7 +253,7 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
 
 /**
  * Set the array that holds the block types used in workspace factory.
- * @param {!Array.<string>} usedBlockTypes Block types used in
+ * @param {!Array<string>} usedBlockTypes Block types used in
  */
 BlockExporterController.prototype.setUsedBlockTypes =
     function(usedBlockTypes) {

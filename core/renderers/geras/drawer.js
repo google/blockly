@@ -197,7 +197,7 @@ Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.connection) {
     var connInfo = bottomRow.connection;
-    var x = connInfo.xPos; // Already contains info about startX
+    var x = connInfo.xPos;  // Already contains info about startX.
     var connX = (this.info_.RTL ? -x : x) +
         (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(

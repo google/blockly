@@ -314,7 +314,7 @@ Blockly.TouchGesture.prototype.handleTouchEnd = function(e) {
 /**
  * Helper function returning the current touch point coordinate.
  * @param {!Event} e A touch or pointer event.
- * @return {Blockly.utils.Coordinate} The current touch point coordinate
+ * @return {?Blockly.utils.Coordinate} The current touch point coordinate
  * @package
  */
 Blockly.TouchGesture.prototype.getTouchPoint = function(e) {

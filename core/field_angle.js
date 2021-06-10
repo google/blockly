@@ -18,10 +18,12 @@ goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 
 /**
@@ -345,7 +347,7 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
 };
 
 /**
- * Disposes of events and dom-references belonging to the angle editor.
+ * Disposes of events and DOM-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {

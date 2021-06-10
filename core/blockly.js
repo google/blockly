@@ -17,9 +17,9 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.connectionTypes');
+goog.require('Blockly.constants');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -83,7 +83,7 @@ Blockly.selected = null;
 
 /**
  * All of the connections on blocks that are currently being dragged.
- * @type {!Array.<!Blockly.Connection>}
+ * @type {!Array<!Blockly.Connection>}
  * @package
  */
 Blockly.draggingConnections = [];
@@ -216,7 +216,12 @@ Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
-    selected.dispose(/* heal */ true, true);
+    if (selected.outputConnection) {
+      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      selected.dispose(false, true);
+    } else {
+      selected.dispose(/* heal */ true, true);
+    }
     Blockly.Events.setGroup(false);
   }
 };
@@ -294,27 +299,20 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
-Blockly.hideChaff = function(opt_allowToolbox) {
+Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   Blockly.DropDownDiv.hideWithoutAnimation();
-  if (!opt_allowToolbox) {
-    var workspace = Blockly.getMainWorkspace();
-    // For now the trashcan flyout always autocloses because it overlays the
-    // trashcan UI (no trashcan to click to close it).
-    if (workspace.trashcan &&
-      workspace.trashcan.flyout) {
-      workspace.trashcan.closeFlyout();
-    }
-    var toolbox = workspace.getToolbox();
-    if (toolbox &&
-        toolbox.getFlyout() &&
-        toolbox.getFlyout().autoClose) {
-      toolbox.clearSelection();
-    }
-  }
+
+  var onlyClosePopups = !!opt_onlyClosePopups;
+  var workspace = Blockly.getMainWorkspace();
+  var autoHideables = workspace.getComponentManager().getComponents(
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+  autoHideables.forEach(function(autoHideable) {
+    autoHideable.autoHide(onlyClosePopups);
+  });
 };
 
 /**
@@ -380,7 +378,7 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array.<!Object>} jsonArray An array of JSON block definitions.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
   for (var i = 0; i < jsonArray.length; i++) {
@@ -475,7 +473,7 @@ Blockly.checkBlockColourConstants = function() {
  * Checks for a constant in the Blockly namespace, verifying it is undefined or
  * has the old/original value. Prints a warning if this is not true.
  * @param {string} msgName The Msg constant identifier.
- * @param {Array.<string>} blocklyNamePath The name parts of the tested
+ * @param {!Array<string>} blocklyNamePath The name parts of the tested
  *     constant.
  * @param {number|undefined} expectedValue The expected value of the constant.
  * @private

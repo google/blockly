@@ -27,6 +27,7 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
+goog.require('Blockly.Workspace');
 goog.require('Blockly.WorkspaceDragger');
 
 goog.requireType('Blockly.BlockSvg');
@@ -957,7 +958,7 @@ Blockly.Gesture.prototype.hasStarted = function() {
 /**
  * Get a list of the insertion markers that currently exist.  Block drags have
  * 0, 1, or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

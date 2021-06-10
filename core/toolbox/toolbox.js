@@ -536,6 +536,8 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
+ * This method should check if the block is deletable and is always called
+ * before onDragEnter/onDragExit.
  * @param {!Blockly.BlockSvg} block The block.
  * @param {boolean} _couldConnect Whether the block could could connect to
  *     another.

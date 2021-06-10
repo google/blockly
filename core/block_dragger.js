@@ -20,7 +20,9 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.IBlockDragger');
 goog.require('Blockly.InsertionMarkerManager');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 
@@ -35,29 +37,30 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.BlockSvg} block The block to drag.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
+ * @implements {Blockly.IBlockDragger}
  */
 Blockly.BlockDragger = function(block, workspace) {
   /**
    * The top block in the stack that is being dragged.
    * @type {!Blockly.BlockSvg}
-   * @private
+   * @protected
    */
   this.draggingBlock_ = block;
 
   /**
    * The workspace on which the block is being dragged.
    * @type {!Blockly.WorkspaceSvg}
-   * @private
+   * @protected
    */
   this.workspace_ = workspace;
 
   /**
    * Object that keeps track of connections on dragged blocks.
    * @type {!Blockly.InsertionMarkerManager}
-   * @private
+   * @protected
    */
-  this.draggedConnectionManager_ = new Blockly.InsertionMarkerManager(
-      this.draggingBlock_);
+  this.draggedConnectionManager_ =
+      new Blockly.InsertionMarkerManager(this.draggingBlock_);
 
   /**
    * Which drag area the mouse pointer is over, if any.
@@ -69,7 +72,7 @@ Blockly.BlockDragger = function(block, workspace) {
   /**
    * Whether the block would be deleted if dropped immediately.
    * @type {boolean}
-   * @private
+   * @protected
    */
   this.wouldDeleteBlock_ = false;
 
@@ -77,7 +80,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * The location of the top left corner of the dragging block at the beginning
    * of the drag in workspace coordinates.
    * @type {!Blockly.utils.Coordinate}
-   * @private
+   * @protected
    */
   this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
 
@@ -86,7 +89,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * on this block and its descendants.  Moving an icon moves the bubble that
    * extends from it if that bubble is open.
    * @type {Array<!Object>}
-   * @private
+   * @protected
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
 };
@@ -119,7 +122,8 @@ Blockly.BlockDragger.initIconData_ = function(block) {
     var icons = descendant.getIcons();
     for (var j = 0; j < icons.length; j++) {
       var data = {
-        // Blockly.utils.Coordinate with x and y properties (workspace coordinates).
+        // Blockly.utils.Coordinate with x and y properties (workspace
+        // coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
         icon: icons[j]
@@ -136,10 +140,10 @@ Blockly.BlockDragger.initIconData_ = function(block) {
  *     moved from the position at mouse down, in pixel units.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
- * @package
+ * @public
  */
-Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
-    healStack) {
+Blockly.BlockDragger.prototype.startDrag = function(
+    currentDragDeltaXY, healStack) {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
@@ -159,16 +163,8 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   this.workspace_.setResizesEnabled(false);
   Blockly.blockAnimations.disconnectUiStop();
 
-  if (this.draggingBlock_.getParent() ||
-      (healStack && this.draggingBlock_.nextConnection &&
-      this.draggingBlock_.nextConnection.targetBlock())) {
-    this.draggingBlock_.unplug(healStack);
-    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-
-    this.draggingBlock_.translate(newLoc.x, newLoc.y);
-    Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
-    this.draggedConnectionManager_.updateAvailableConnections();
+  if (this.shouldDisconnect_(healStack)) {
+    this.disconnectBlock_(healStack, currentDragDeltaXY);
   }
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
@@ -176,17 +172,44 @@ Blockly.BlockDragger.prototype.startBlockDrag = function(currentDragDeltaXY,
   // surface.
   this.draggingBlock_.moveToDragSurface();
 
-  var toolbox = this.workspace_.getToolbox();
-  if (toolbox && typeof toolbox.addStyle == 'function') {
-    var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
-    toolbox.addStyle(style);
-  }
+  this.updateToolboxStyle_(false);
+};
+
+/**
+ * Whether or not we should disconnect the block when a drag is started.
+ * @param {boolean} healStack Whether or not to heal the stack after
+ *     disconnecting.
+ * @return {boolean} True to disconnect the block, false otherwise.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
+  return !!(this.draggingBlock_.getParent() ||
+      (healStack && this.draggingBlock_.nextConnection &&
+       this.draggingBlock_.nextConnection.targetBlock()));
+};
+
+/**
+ * Disconnects the block and moves it to a new location.
+ * @param {boolean} healStack Whether or not to heal the stack after
+ *     disconnecting.
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ *     moved from the position at mouse down, in pixel units.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.disconnectBlock_ = function(
+    healStack, currentDragDeltaXY) {
+  this.draggingBlock_.unplug(healStack);
+  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+
+  this.draggingBlock_.translate(newLoc.x, newLoc.y);
+  Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+  this.draggedConnectionManager_.updateAvailableConnections();
 };
 
 /**
  * Fire a UI event at the start of a block drag.
- * @private
+ * @protected
  */
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
   var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
@@ -200,9 +223,9 @@ Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
  * @param {!Event} e The most recent move event.
  * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
- * @package
+ * @public
  */
-Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
+Blockly.BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
@@ -217,12 +240,12 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   }
 
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
-  var wouldDeleteBlock = this.draggedConnectionManager_.wouldDeleteBlock();
-  if (wouldDeleteBlock != this.wouldDeleteBlock_) {
+  var oldWouldDeleteBlock = this.wouldDeleteBlock_;
+  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
+  if (oldWouldDeleteBlock != this.wouldDeleteBlock_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBlockDrag_();
   }
-  this.wouldDeleteBlock_ = wouldDeleteBlock;
 };
 
 /**
@@ -230,11 +253,11 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
  * @param {!Event} e The mouseup/touchend event.
  * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
- * @package
+ * @public
  */
-Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
+Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
-  this.dragBlock(e, currentDragDeltaXY);
+  this.drag(e, currentDragDeltaXY);
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
 
@@ -263,40 +286,43 @@ Blockly.BlockDragger.prototype.endBlockDrag = function(e, currentDragDeltaXY) {
     Blockly.draggingConnections = [];
   } else {
     this.draggingBlock_.setDragging(false);
-    if (!preventMove) {
-      // These are expensive and don't need to be done if we're deleting.
-      this.draggingBlock_.moveConnections(delta.x, delta.y);
-      this.fireMoveEvent_();
-      if (this.draggedConnectionManager_.wouldConnectBlock()) {
-        // Applying connections also rerenders the relevant blocks.
-        this.draggedConnectionManager_.applyConnections();
-      } else {
-        this.draggingBlock_.render();
-      }
-      this.draggingBlock_.scheduleSnapAndBump();
-    } else {
+    if (preventMove) {
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
       Blockly.bumpObjectIntoBounds_(
           this.draggingBlock_.workspace,
           this.workspace_.getMetricsManager()
               .getScrollMetrics(true), this.draggingBlock_);
+    } else {
+      this.updateBlockLocationAfterMove_(delta);
     }
   }
   this.workspace_.setResizesEnabled(true);
 
-  var toolbox = this.workspace_.getToolbox();
-  if (toolbox && typeof toolbox.removeStyle == 'function') {
-    var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
-    toolbox.removeStyle(style);
+  this.updateToolboxStyle_(true);
+};
+
+/**
+ * Updates the necessary information to place a block at a certain location.
+ * @param {!Blockly.utils.Coordinate} delta The change in location from where
+ *     the block started the drag to where it ended the drag.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.updateBlockLocationAfterMove_ = function(delta) {
+  this.draggingBlock_.moveConnections(delta.x, delta.y);
+  this.fireMoveEvent_();
+  if (this.draggedConnectionManager_.wouldConnectBlock()) {
+    // Applying connections also rerenders the relevant blocks.
+    this.draggedConnectionManager_.applyConnections();
+  } else {
+    this.draggingBlock_.render();
   }
-  Blockly.Events.setGroup(false);
+  this.draggingBlock_.scheduleSnapAndBump();
 };
 
 /**
  * Fire a UI event at the end of a block drag.
- * @private
+ * @protected
  */
 Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
   var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
@@ -305,12 +331,35 @@ Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
 };
 
 /**
+ * Adds or removes the style of the cursor for the toolbox.
+ * This is what changes the cursor to display an x when a deletable block is
+ * held over the toolbox.
+ * @param {boolean} isEnd True if we are at the end of a drag, false otherwise.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
+  var toolbox = this.workspace_.getToolbox();
+
+  if (toolbox) {
+    var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
+                                                    'blocklyToolboxGrab';
+
+    if (isEnd && typeof toolbox.removeStyle == 'function') {
+      toolbox.removeStyle(style);
+    } else if (!isEnd && typeof toolbox.addStyle == 'function') {
+      toolbox.addStyle(style);
+    }
+  }
+};
+
+
+/**
  * Fire a move event at the end of a block drag.
- * @private
+ * @protected
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(
-      this.draggingBlock_);
+  var event =
+      new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   Blockly.Events.fire(event);
@@ -319,7 +368,7 @@ Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
 /**
  * Update the cursor (and possibly the trash can lid) to reflect whether the
  * dragging block would be deleted if released immediately.
- * @private
+ * @protected
  */
 Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
   this.draggingBlock_.setDeleteStyle(this.wouldDeleteBlock_);
@@ -330,11 +379,11 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y values
- *     in CSS pixel units.
- * @return {!Blockly.utils.Coordinate} The input coordinate divided by the workspace
- *     scale.
- * @private
+ * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y
+ *     values in CSS pixel units.
+ * @return {!Blockly.utils.Coordinate} The input coordinate divided by the
+ *     workspace scale.
+ * @protected
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
   var result = new Blockly.utils.Coordinate(
@@ -355,7 +404,7 @@ Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
  * Move all of the icons connected to this drag.
  * @param {!Blockly.utils.Coordinate} dxy How far to move the icons from their
  *     original positions, in workspace units.
- * @private
+ * @protected
  */
 Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
   // Moving icons moves their associated bubbles.
@@ -370,7 +419,7 @@ Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
  * or 2 insertion markers.
  * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
- * @package
+ * @public
  */
 Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
   // No insertion markers with the old style of dragged connection managers.
@@ -380,3 +429,7 @@ Blockly.BlockDragger.prototype.getInsertionMarkers = function() {
   }
   return [];
 };
+
+Blockly.registry.register(
+    Blockly.registry.Type.BLOCK_DRAGGER, Blockly.registry.DEFAULT,
+    Blockly.BlockDragger);

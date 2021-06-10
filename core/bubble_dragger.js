@@ -142,12 +142,12 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
     this.dragTarget_ && this.dragTarget_.onDragEnter();
   }
 
-  var wouldDeleteBubble = this.shouldDelete_(this.dragTarget_);
-  if (wouldDeleteBubble != this.wouldDeleteBubble_) {
+  var oldWouldDeleteBubble = this.wouldDeleteBubble_;
+  this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
+  if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBubbleDrag_();
   }
-  this.wouldDeleteBubble_ = wouldDeleteBubble;
 };
 
 /**
@@ -162,12 +162,9 @@ Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
   var couldDeleteBubble = this.draggingBubble_.isDeletable();
 
   if (couldDeleteBubble && dragTarget) {
-    // TODO(#4881) use hasCapability instead of getComponents
-    var deleteAreas = this.workspace_.getComponentManager().getComponents(
-        Blockly.ComponentManager.Capability.DELETE_AREA, false);
-    var isDeleteArea = deleteAreas.some(function(deleteArea) {
-      return dragTarget === deleteArea;
-    });
+    var componentManager = this.workspace_.getComponentManager();
+    var isDeleteArea = componentManager.hasCapability(dragTarget.id,
+        Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (/** @type {!Blockly.IDeleteArea} */ (dragTarget))
           .wouldDeleteBubble(this.draggingBubble_);

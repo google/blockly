@@ -460,12 +460,9 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
       !this.topBlock_.getParent() && this.topBlock_.isDeletable();
 
   if (couldDeleteBlock && dragTarget) {
-    // TODO(#4881) use hasCapability instead of getComponents
-    var deleteAreas = this.workspace_.getComponentManager().getComponents(
-        Blockly.ComponentManager.Capability.DELETE_AREA, false);
-    var isDeleteArea = deleteAreas.some(function(deleteArea) {
-      return dragTarget === deleteArea;
-    });
+    var componentManager = this.workspace_.getComponentManager();
+    var isDeleteArea = componentManager.hasCapability(dragTarget.id,
+        Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (
         /** @type {!Blockly.IDeleteArea} */ (dragTarget))

@@ -286,15 +286,15 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     Blockly.draggingConnections = [];
   } else {
     this.draggingBlock_.setDragging(false);
-    if (preventMove) {
+    if (delta) { // !preventMove
+      this.updateBlockLocationAfterMove_(delta);
+    } else {
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
       Blockly.bumpObjectIntoBounds_(
           this.draggingBlock_.workspace,
           this.workspace_.getMetricsManager()
               .getScrollMetrics(true), this.draggingBlock_);
-    } else {
-      this.updateBlockLocationAfterMove_(delta);
     }
   }
   this.workspace_.setResizesEnabled(true);

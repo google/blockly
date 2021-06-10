@@ -462,8 +462,7 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
   if (couldDeleteBlock && dragTarget) {
     var componentManager = this.workspace_.getComponentManager();
     var isDeleteArea = componentManager.hasCapability(dragTarget.id,
-        /** @type {!Blockly.ComponentManager.Capability<Blockly.IComponent>} */
-        (Blockly.ComponentManager.Capability.DELETE_AREA));
+        Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (
         /** @type {!Blockly.IDeleteArea} */ (dragTarget))

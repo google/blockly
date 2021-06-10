@@ -164,8 +164,7 @@ Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
   if (couldDeleteBubble && dragTarget) {
     var componentManager = this.workspace_.getComponentManager();
     var isDeleteArea = componentManager.hasCapability(dragTarget.id,
-        /** @type {!Blockly.ComponentManager.Capability<Blockly.IComponent>} */
-        (Blockly.ComponentManager.Capability.DELETE_AREA));
+        Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (/** @type {!Blockly.IDeleteArea} */ (dragTarget))
           .wouldDeleteBubble(this.draggingBubble_);

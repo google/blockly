@@ -536,16 +536,16 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
- * @param {!Blockly.BlockSvg} _block The block.
+ * @param {!Blockly.BlockSvg} block The block.
  * @param {boolean} _couldConnect Whether the block could could connect to
  *     another.
  * @return {boolean} Whether the block provided would be deleted if dropped on
  *     this area.
  * @override
  */
-Blockly.Toolbox.prototype.wouldDeleteBlock = function(_block, _couldConnect) {
+Blockly.Toolbox.prototype.wouldDeleteBlock = function(block, _couldConnect) {
   // Prefer dragging to the toolbox over connecting to other blocks.
-  this.wouldDelete_ = true;
+  this.wouldDelete_ = !block.getParent() && block.isDeletable();
   return this.wouldDelete_;
 };
 

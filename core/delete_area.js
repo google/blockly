@@ -40,26 +40,27 @@ Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
- * @param {!Blockly.BlockSvg} _block The block.
+ * @param {!Blockly.BlockSvg} block The block.
  * @param {boolean} couldConnect Whether the block could could connect to
  *     another.
  * @return {boolean} Whether the block provided would be deleted if dropped on
  *     this area.
  */
-Blockly.DeleteArea.prototype.wouldDeleteBlock = function(_block, couldConnect) {
-  this.wouldDelete_ = !couldConnect;
+Blockly.DeleteArea.prototype.wouldDeleteBlock = function(block, couldConnect) {
+  var couldDeleteBlock = !block.getParent() && block.isDeletable();
+  this.wouldDelete_ = couldDeleteBlock && !couldConnect;
   return this.wouldDelete_;
 };
 
 /**
  * Returns whether the provided bubble would be deleted if dropped on this area.
- * @param {!Blockly.IBubble} _bubble The bubble.
+ * @param {!Blockly.IBubble} bubble The bubble.
  * @return {boolean} Whether the bubble provided would be deleted if dropped on
  *     this area.
  */
-Blockly.DeleteArea.prototype.wouldDeleteBubble = function(_bubble) {
-  this.wouldDelete_ = true;
-  return true;
+Blockly.DeleteArea.prototype.wouldDeleteBubble = function(bubble) {
+  this.wouldDelete_ = bubble.isDeletable();
+  return this.wouldDelete_;
 };
 
 /**
@@ -67,7 +68,7 @@ Blockly.DeleteArea.prototype.wouldDeleteBubble = function(_bubble) {
  * @override
  */
 Blockly.DeleteArea.prototype.onDragExit = function() {
-  this.wouldDelete_ = false;
+  // no-op
 };
 
 /**
@@ -77,7 +78,7 @@ Blockly.DeleteArea.prototype.onDragExit = function() {
  * @override
  */
 Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
-  this.wouldDelete_ = false;
+  // no-op
 };
 
 /**
@@ -87,5 +88,5 @@ Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
  * @override
  */
 Blockly.DeleteArea.prototype.onBubbleDrop = function(_bubble) {
-  this.wouldDelete_ = false;
+  // no-op
 };

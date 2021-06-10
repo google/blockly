@@ -14,7 +14,6 @@
 
 goog.provide('Blockly.IAutoHideable');
 
-
 goog.require('Blockly.IComponent');
 
 

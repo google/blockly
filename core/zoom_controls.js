@@ -13,6 +13,7 @@
 goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
@@ -203,6 +204,7 @@ Blockly.ZoomControls.prototype.init = function() {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ZoomControls.prototype.dispose = function() {
+  this.workspace_.getComponentManager().removeComponent('zoomControls');
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
   }

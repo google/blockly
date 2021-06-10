@@ -16,6 +16,9 @@ goog.provide('Blockly.IDeleteArea');
 
 goog.require('Blockly.IDragTarget');
 
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.IBubble');
+
 
 /**
  * Interface for a component that can delete a block or bubble that is dropped

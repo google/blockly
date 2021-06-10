@@ -14,6 +14,7 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Css');
@@ -966,6 +967,7 @@ Blockly.Toolbox.prototype.selectPrevious_ = function() {
  * @public
  */
 Blockly.Toolbox.prototype.dispose = function() {
+  this.workspace_.getComponentManager().removeComponent('toolbox');
   this.flyout_.dispose();
   for (var i = 0; i < this.contents_.length; i++) {
     var toolboxItem = this.contents_[i];

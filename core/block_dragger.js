@@ -88,7 +88,7 @@ Blockly.BlockDragger = function(block, workspace) {
    * A list of all of the icons (comment, warning, and mutator) that are
    * on this block and its descendants.  Moving an icon moves the bubble that
    * extends from it if that bubble is open.
-   * @type {Array.<!Object>}
+   * @type {Array<!Object>}
    * @protected
    */
   this.dragIconData_ = Blockly.BlockDragger.initIconData_(block);
@@ -179,7 +179,7 @@ Blockly.BlockDragger.prototype.startDrag = function(
  * Whether or not we should disconnect the block when a drag is started.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
- * @returns {boolean} True to disconnect the block, false otherwise.
+ * @return {boolean} True to disconnect the block, false otherwise.
  * @protected
  */
 Blockly.BlockDragger.prototype.shouldDisconnect_ = function(healStack) {

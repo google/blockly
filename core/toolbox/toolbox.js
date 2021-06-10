@@ -65,6 +65,12 @@ Blockly.Toolbox = function(workspace) {
   this.workspace_ = workspace;
 
   /**
+   * The unique id for this component.
+   * @type {string}
+   */
+  this.id = Blockly.utils.genUid();
+
+  /**
    * The JSON describing the contents of this toolbox.
    * @type {!Blockly.utils.toolbox.ToolboxInfo}
    * @protected
@@ -193,7 +199,6 @@ Blockly.Toolbox.prototype.init = function() {
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
   this.workspace_.getComponentManager().addComponent({
-    id: 'toolbox',
     component: this,
     weight: 1,
     capabilities: [

@@ -31,7 +31,7 @@ Blockly.IDeleteArea = function() {};
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
  * This method should check if the block is deletable and is always called
- * before onDragEnter/onDragExit.
+ * before onDragEnter/onDragOver/onDragExit.
  * @param {!Blockly.BlockSvg} block The block.
  * @param {boolean} couldConnect Whether the block could could connect to
  *     another.
@@ -43,7 +43,7 @@ Blockly.IDeleteArea.prototype.wouldDeleteBlock;
 /**
  * Returns whether the provided bubble would be deleted if dropped on this area.
  * This method should check if the bubble is deletable and is always called
- * before onDragEnter/onDragExit.
+ * before onDragEnter/onDragOver/onDragExit.
  * @param {!Blockly.IBubble} bubble The bubble.
  * @return {boolean} Whether the bubble provided would be deleted if dropped on
  *     this area.

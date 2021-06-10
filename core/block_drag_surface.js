@@ -232,8 +232,7 @@ Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
  */
 Blockly.BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
   // Returning a copy so the coordinate can not be changed outside this class.
-  return new Blockly.utils.Coordinate(
-      this.childSurfaceXY_.x, this.childSurfaceXY_.y);
+  return this.childSurfaceXY_.clone();
 };
 
 /**

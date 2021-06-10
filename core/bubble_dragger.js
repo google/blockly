@@ -137,12 +137,12 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   var oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
 
-  var wouldDeleteBubble = this.shouldDelete_(this.dragTarget_);
-  if (wouldDeleteBubble != this.wouldDeleteBubble_) {
+  var oldWouldDeleteBubble = this.wouldDeleteBubble_;
+  this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
+  if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBubbleDrag_();
   }
-  this.wouldDeleteBubble_ = wouldDeleteBubble;
 
   if (this.dragTarget_ !== oldDragTarget) {
     oldDragTarget && oldDragTarget.onDragExit();

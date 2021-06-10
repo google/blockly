@@ -63,30 +63,6 @@ Blockly.DeleteArea.prototype.wouldDeleteBubble = function(_bubble) {
 };
 
 /**
- * Returns whether the provided block should not be moved after being dropped
- * on this component. If true, block will return to where it was when the drag
- * started.
- * @param {!Blockly.BlockSvg} _block The block.
- * @return {boolean} Whether the block provided should be returned to drag
- *     start.
- */
-Blockly.DeleteArea.prototype.shouldPreventBlockMove = function(_block) {
-  return false;
-};
-
-/**
- * Returns whether the provided bubble should not be moved after being dropped
- * on this component. If true, bubble will return to where it was when the drag
- * started.
- * @param {!Blockly.IBubble} _bubble The bubble.
- * @return {boolean} Whether the bubble provided should be returned to drag
- *    start.
- */
-Blockly.DeleteArea.prototype.shouldPreventBubbleMove = function(_bubble) {
-  return false;
-};
-
-/**
  * Handles when a cursor with a block or bubble exits this drag target.
  * @override
  */

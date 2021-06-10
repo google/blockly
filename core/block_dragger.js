@@ -303,6 +303,8 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   this.workspace_.setResizesEnabled(true);
 
   this.updateToolboxStyle_(true);
+
+  Blockly.Events.setGroup(false);
 };
 
 /**

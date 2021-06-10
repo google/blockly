@@ -16,6 +16,7 @@ goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -326,6 +327,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
+  this.workspace_.getComponentManager().removeComponent(this.id);
   Blockly.browserEvents.unbind(this.eventWrappers_);
   if (this.filterWrapper_) {
     this.targetWorkspace.removeChangeListener(this.filterWrapper_);

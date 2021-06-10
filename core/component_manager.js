@@ -43,10 +43,10 @@ Blockly.ComponentManager = function() {
 /**
  * An object storing component information.
  * @typedef {{
- *    id: string,
  *    component: !Blockly.IComponent,
  *    capabilities: (
- *     !Array<string|!Blockly.ComponentManager.Capability<!Blockly.IComponent>>),
+ *     !Array<string|!Blockly.ComponentManager.Capability<!Blockly.IComponent>>
+ *       ),
  *    weight: number
  *  }}
  */
@@ -58,26 +58,28 @@ Blockly.ComponentManager.ComponentDatum;
  *   the component to register.
  * @param {boolean=} opt_allowOverrides True to prevent an error when overriding
  *     an already registered item.
- * @template T
  */
 Blockly.ComponentManager.prototype.addComponent = function(
     componentInfo, opt_allowOverrides) {
   // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && this.componentData_[componentInfo.id]) {
+  var id = componentInfo.component.id;
+  if (!opt_allowOverrides && this.componentData_[id]) {
     throw Error(
-        'Plugin "' + componentInfo.id + '" with capabilities "' +
-        this.componentData_[componentInfo.id].capabilities +
-        '" already added.');
+        'Plugin "' + id + '" with capabilities "' +
+        this.componentData_[id].capabilities + '" already added.');
   }
-  this.componentData_[componentInfo.id] = componentInfo;
+  this.componentData_[id] = componentInfo;
+  var stringCapabilities = [];
   for (var i = 0; i < componentInfo.capabilities.length; i++) {
     var capability = String(componentInfo.capabilities[i]).toLowerCase();
+    stringCapabilities.push(capability);
     if (this.capabilityToComponentIds_[capability] === undefined) {
-      this.capabilityToComponentIds_[capability] = [componentInfo.id];
+      this.capabilityToComponentIds_[capability] = [id];
     } else {
-      this.capabilityToComponentIds_[capability].push(componentInfo.id);
+      this.capabilityToComponentIds_[capability].push(id);
     }
   }
+  this.componentData_[id].capabilities = stringCapabilities;
 };
 
 /**
@@ -100,11 +102,11 @@ Blockly.ComponentManager.prototype.removeComponent = function(id) {
 /**
  * Adds a capability to a existing registered component.
  * @param {string} id The ID of the component to add the capability to.
- * @param {string|!Blockly.ComponentManager.Capability<!Blockly.IComponent>
- *   } capability The capability to add.
+ * @param {string|!Blockly.ComponentManager.Capability<T>} capability The
+ *     capability to add.
+ * @template T
  */
 Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
-  capability = String(capability).toLowerCase();
   if (!this.getComponent(id)) {
     throw Error('Cannot add capability, "' + capability + '". Plugin "' +
         id + '" has not been added to the ComponentManager');
@@ -114,6 +116,7 @@ Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
         capability + '"');
     return;
   }
+  capability = String(capability).toLowerCase();
   this.componentData_[id].capabilities.push(capability);
   this.capabilityToComponentIds_[capability].push(id);
 };
@@ -121,11 +124,11 @@ Blockly.ComponentManager.prototype.addCapability = function(id, capability) {
 /**
  * Removes a capability from an existing registered component.
  * @param {string} id The ID of the component to remove the capability from.
- * @param {string|!Blockly.ComponentManager.Capability<!Blockly.IComponent>
- *   } capability The capability to remove.
+ * @param {string|!Blockly.ComponentManager.Capability<T>} capability The
+ *     capability to remove.
+ * @template T
  */
 Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
-  capability = String(capability).toLowerCase();
   if (!this.getComponent(id)) {
     throw Error('Cannot remove capability, "' + capability + '". Plugin "' +
         id + '" has not been added to the ComponentManager');
@@ -135,6 +138,7 @@ Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
         capability + '" to remove');
     return;
   }
+  capability = String(capability).toLowerCase();
   this.componentData_[id].capabilities.splice(
       this.componentData_[id].capabilities.indexOf(capability), 1);
   this.capabilityToComponentIds_[capability].splice(
@@ -144,9 +148,10 @@ Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
 /**
  * Returns whether the component with this id has the specified capability.
  * @param {string} id The ID of the component to check.
- * @param {string|!Blockly.ComponentManager.Capability<!Blockly.IComponent>
- *   } capability The capability to check for.
+ * @param {string|!Blockly.ComponentManager.Capability<T>} capability The
+ *     capability to check for.
  * @return {boolean} Whether the component has the capability.
+ * @template T
  */
 Blockly.ComponentManager.prototype.hasCapability = function(id, capability) {
   capability = String(capability).toLowerCase();

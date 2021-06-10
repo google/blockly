@@ -217,9 +217,12 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   }
 
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
-  this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-
-  this.updateCursorDuringBlockDrag_();
+  var wouldDeleteBlock = this.draggedConnectionManager_.wouldDeleteBlock();
+  if (wouldDeleteBlock != this.wouldDeleteBlock_) {
+    // Prevent unnecessary add/remove class calls.
+    this.updateCursorDuringBlockDrag_();
+  }
+  this.wouldDeleteBlock_ = wouldDeleteBlock;
 };
 
 /**

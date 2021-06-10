@@ -37,11 +37,15 @@ Blockly.IDragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} dragElement The block or bubble
+ *     currently being dragged.
  */
 Blockly.IDragTarget.prototype.onDragEnter;
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} dragElement The block or bubble
+ *     currently being dragged.
  */
 Blockly.IDragTarget.prototype.onDragExit;
 

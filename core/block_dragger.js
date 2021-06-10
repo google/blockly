@@ -212,8 +212,8 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
   var oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
   if (this.dragTarget_ !== oldDragTarget) {
-    oldDragTarget && oldDragTarget.onDragExit();
-    this.dragTarget_ && this.dragTarget_.onDragEnter();
+    oldDragTarget && oldDragTarget.onDragExit(this.draggingBlock_);
+    this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBlock_);
   }
 
   this.draggedConnectionManager_.update(delta, this.dragTarget_);

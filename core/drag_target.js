@@ -39,15 +39,19 @@ Blockly.DragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ *     currently being dragged.
  */
-Blockly.DragTarget.prototype.onDragEnter = function() {
+Blockly.DragTarget.prototype.onDragEnter = function(_dragElement) {
   // no-op
 };
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ *     currently being dragged.
  */
-Blockly.DragTarget.prototype.onDragExit = function() {
+Blockly.DragTarget.prototype.onDragExit = function(_dragElement) {
   // no-op
 };
 

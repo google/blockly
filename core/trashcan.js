@@ -30,9 +30,14 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
+
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.utils.Rect');
 goog.requireType('Blockly.WorkspaceSvg');
+
 
 
 /**
@@ -526,17 +531,21 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ *     currently being dragged.
  * @override
  */
-Blockly.Trashcan.prototype.onDragEnter = function() {
+Blockly.Trashcan.prototype.onDragEnter = function(_dragElement) {
   this.setLidOpen(true);
 };
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ *     currently being dragged.
  * @override
  */
-Blockly.Trashcan.prototype.onDragExit = function() {
+Blockly.Trashcan.prototype.onDragExit = function(_dragElement) {
   this.setLidOpen(false);
 };
 

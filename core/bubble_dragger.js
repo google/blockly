@@ -14,6 +14,7 @@ goog.provide('Blockly.BubbleDragger');
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
+goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
@@ -141,12 +142,12 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
     this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBubble_);
   }
 
-  var wouldDeleteBubble = this.shouldDelete_(this.dragTarget_);
-  if (wouldDeleteBubble != this.wouldDeleteBubble_) {
+  var oldWouldDeleteBubble = this.wouldDeleteBubble_;
+  this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
+  if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBubbleDrag_();
   }
-  this.wouldDeleteBubble_ = wouldDeleteBubble;
 };
 
 /**

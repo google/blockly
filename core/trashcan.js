@@ -533,11 +533,13 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 };
 
 /**
- * Handles when a cursor with a block or bubble enters this drag target.
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
  * @override
  */
-Blockly.Trashcan.prototype.onDragEnter = function() {
-  this.setLidOpen(true);
+Blockly.Trashcan.prototype.onDragOver = function() {
+  Blockly.Trashcan.superClass_.onDragOver.call(this);
+  this.setLidOpen(this.wouldDelete_);
 };
 
 /**
@@ -545,27 +547,29 @@ Blockly.Trashcan.prototype.onDragEnter = function() {
  * @override
  */
 Blockly.Trashcan.prototype.onDragExit = function() {
+  Blockly.Trashcan.superClass_.onDragExit.call(this);
   this.setLidOpen(false);
 };
-
 
 /**
  * Handles when a block is dropped on this component. Should not handle delete
  * here.
- * @param {!Blockly.BlockSvg} _block The block.
+ * @param {!Blockly.BlockSvg} block The block.
  * @override
  */
-Blockly.Trashcan.prototype.onBlockDrop = function(_block) {
+Blockly.Trashcan.prototype.onBlockDrop = function(block) {
+  Blockly.Trashcan.superClass_.onBlockDrop.call(this, block);
   this.onDrop_();
 };
 
 /**
  * Handles when a bubble is dropped on this component. Should not handle delete
  * here.
- * @param {!Blockly.IBubble} _bubble The bubble.
+ * @param {!Blockly.IBubble} bubble The bubble.
  * @override
  */
-Blockly.Trashcan.prototype.onBubbleDrop = function(_bubble) {
+Blockly.Trashcan.prototype.onBubbleDrop = function(bubble) {
+  Blockly.Trashcan.superClass_.onBubbleDrop.call(this, bubble);
   this.onDrop_();
 };
 
@@ -574,7 +578,7 @@ Blockly.Trashcan.prototype.onBubbleDrop = function(_bubble) {
  * @private
  */
 Blockly.Trashcan.prototype.onDrop_ = function() {
-  setTimeout(this.closeLid.bind(this), 100);
+  setTimeout(this.setLidOpen.bind(this, false), 100);
 };
 
 /**

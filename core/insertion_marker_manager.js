@@ -456,10 +456,7 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
  */
 Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
     candidate, dragTarget) {
-  var couldDeleteBlock =
-      !this.topBlock_.getParent() && this.topBlock_.isDeletable();
-
-  if (couldDeleteBlock && dragTarget) {
+  if (dragTarget) {
     var componentManager = this.workspace_.getComponentManager();
     var isDeleteArea = componentManager.hasCapability(dragTarget.id,
         Blockly.ComponentManager.Capability.DELETE_AREA);

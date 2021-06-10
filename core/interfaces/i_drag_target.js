@@ -41,6 +41,13 @@ Blockly.IDragTarget.prototype.getClientRect;
 Blockly.IDragTarget.prototype.onDragEnter;
 
 /**
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
+ */
+Blockly.IDragTarget.prototype.onDragOver;
+
+
+/**
  * Handles when a cursor with a block or bubble exits this drag target.
  */
 Blockly.IDragTarget.prototype.onDragExit;

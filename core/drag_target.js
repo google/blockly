@@ -45,6 +45,14 @@ Blockly.DragTarget.prototype.onDragEnter = function() {
 };
 
 /**
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
+ */
+Blockly.DragTarget.prototype.onDragOver = function() {
+  // no-op
+};
+
+/**
  * Handles when a cursor with a block or bubble exits this drag target.
  */
 Blockly.DragTarget.prototype.onDragExit = function() {

@@ -194,8 +194,14 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   // Make sure internal state is fresh.
   this.dragBubble(e, currentDragDeltaXY);
 
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  var preventMove = this.dragTarget_ &&
+      this.dragTarget_.shouldPreventBubbleMove(this.draggingBubble_);
+  if (preventMove) {
+    var newLoc = this.startXY_;
+  } else {
+    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  }
   // Move the bubble to its final location.
   this.draggingBubble_.moveTo(newLoc.x, newLoc.y);
 
@@ -212,8 +218,9 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
     if (this.dragSurface_) {
       this.dragSurface_.clearAndHide(this.workspace_.getBubbleCanvas());
     }
-
-    this.draggingBubble_.setDragging && this.draggingBubble_.setDragging(false);
+    if (this.draggingBubble_) {
+      this.draggingBubble_.setDragging(false);
+    }
     this.fireMoveEvent_();
   }
   this.workspace_.setResizesEnabled(true);

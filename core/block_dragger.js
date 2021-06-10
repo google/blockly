@@ -265,8 +265,14 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  var preventMove = !!this.dragTarget_ &&
+      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
+  if (preventMove) {
+    var newLoc = this.startXY_;
+  } else {
+    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  }
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
@@ -279,8 +285,17 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     this.draggingBlock_.dispose(false, true);
     Blockly.draggingConnections = [];
   } else {
-    // Moving the block is expensive, so only do it if the block is not deleted.
-    this.updateBlockAfterMove_(delta);
+    this.draggingBlock_.setDragging(false);
+    if (delta) { // !preventMove
+      this.updateBlockLocationAfterMove_(delta);
+    } else {
+      // Blocks dragged directly from a flyout may need to be bumped into
+      // bounds.
+      Blockly.bumpObjectIntoBounds_(
+          this.draggingBlock_.workspace,
+          this.workspace_.getMetricsManager()
+              .getScrollMetrics(true), this.draggingBlock_);
+    }
   }
   this.workspace_.setResizesEnabled(true);
 
@@ -293,9 +308,8 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
  *     the block started the drag to where it ended the drag.
  * @protected
  */
-Blockly.BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
+Blockly.BlockDragger.prototype.updateBlockLocationAfterMove_ = function(delta) {
   this.draggingBlock_.moveConnections(delta.x, delta.y);
-  this.draggingBlock_.setDragging(false);
   this.fireMoveEvent_();
   if (this.draggedConnectionManager_.wouldConnectBlock()) {
     // Applying connections also rerenders the relevant blocks.

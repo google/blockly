@@ -72,6 +72,12 @@ Blockly.Flyout = function(workspaceOptions) {
   this.workspace_.setVisible(this.isVisible_);
 
   /**
+   * The unique id for this component.
+   * @type {string}
+   */
+  this.id = 'flyout' + this.workspace_.id;
+
+  /**
    * Is RTL vs LTR.
    * @type {boolean}
    */
@@ -305,7 +311,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.createPotentialVariableMap();
 
   targetWorkspace.getComponentManager().addComponent({
-    id: 'flyout' + this.workspace_.id,
+    id: this.id,
     component: this,
     weight: 1,
     capabilities: [
@@ -322,8 +328,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
-  this.workspace_.getComponentManager().removeComponent(
-      'flyout' + this.workspace_.id);
+  this.workspace_.getComponentManager().removeComponent(this.id);
   Blockly.browserEvents.unbind(this.eventWrappers_);
   if (this.filterWrapper_) {
     this.targetWorkspace.removeChangeListener(this.filterWrapper_);

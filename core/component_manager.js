@@ -70,9 +70,8 @@ Blockly.ComponentManager.prototype.addComponent = function(
         '" already added.');
   }
   this.componentData_[componentInfo.id] = componentInfo;
-  for (var i = 0, capability; (capability = componentInfo.capabilities[i]);
-    i++) {
-    capability = String(capability).toLowerCase();
+  for (var i = 0; i < componentInfo.capabilities.length; i++) {
+    var capability = String(componentInfo.capabilities[i]).toLowerCase();
     if (this.capabilityToComponentIds_[capability] === undefined) {
       this.capabilityToComponentIds_[capability] = [componentInfo.id];
     } else {
@@ -84,15 +83,14 @@ Blockly.ComponentManager.prototype.addComponent = function(
 /**
  * Removes a component.
  * @param {string} id The ID of the component to remove.
- * @template T
  */
 Blockly.ComponentManager.prototype.removeComponent = function(id) {
-  var component = this.componentData_[id];
-  if (!component) {
+  var componentInfo = this.componentData_[id];
+  if (!componentInfo) {
     return;
   }
-  for (var i = 0, capability; (capability = component.capabilities[i]); i++) {
-    capability = String(capability).toLowerCase();
+  for (var i = 0; i < componentInfo.capabilities.length; i++) {
+    var capability = String(componentInfo.capabilities[i]).toLowerCase();
     this.capabilityToComponentIds_[capability].splice(
         this.capabilityToComponentIds_[capability].indexOf(id), 1);
   }

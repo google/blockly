@@ -27,6 +27,14 @@ goog.require('Blockly.IDeleteArea');
  */
 Blockly.DeleteArea = function() {
   Blockly.DeleteArea.superClass_.constructor.call(this);
+
+  /**
+   * Whether the current block or bubble dragged over this delete area would be
+   * deleted if dropped on this component.
+   * @type {boolean}
+   * @protected
+   */
+  this.wouldDelete_ = false;
 };
 Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
 
@@ -39,7 +47,8 @@ Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
  *     this area.
  */
 Blockly.DeleteArea.prototype.wouldDeleteBlock = function(_block, couldConnect) {
-  return !couldConnect;
+  this.wouldDelete_ = !couldConnect;
+  return this.wouldDelete_;
 };
 
 /**
@@ -49,5 +58,58 @@ Blockly.DeleteArea.prototype.wouldDeleteBlock = function(_block, couldConnect) {
  *     this area.
  */
 Blockly.DeleteArea.prototype.wouldDeleteBubble = function(_bubble) {
+  this.wouldDelete_ = true;
   return true;
+};
+
+/**
+ * Returns whether the provided block should not be moved after being dropped
+ * on this component. If true, block will return to where it was when the drag
+ * started.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @return {boolean} Whether the block provided should be returned to drag
+ *     start.
+ */
+Blockly.DeleteArea.prototype.shouldPreventBlockMove = function(_block) {
+  return false;
+};
+
+/**
+ * Returns whether the provided bubble should not be moved after being dropped
+ * on this component. If true, bubble will return to where it was when the drag
+ * started.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @return {boolean} Whether the bubble provided should be returned to drag
+ *    start.
+ */
+Blockly.DeleteArea.prototype.shouldPreventBubbleMove = function(_bubble) {
+  return false;
+};
+
+/**
+ * Handles when a cursor with a block or bubble exits this drag target.
+ * @override
+ */
+Blockly.DeleteArea.prototype.onDragExit = function() {
+  this.wouldDelete_ = false;
+};
+
+/**
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @override
+ */
+Blockly.DeleteArea.prototype.onBlockDrop = function(_block) {
+  this.wouldDelete_ = false;
+};
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @override
+ */
+Blockly.DeleteArea.prototype.onBubbleDrop = function(_bubble) {
+  this.wouldDelete_ = false;
 };

@@ -132,15 +132,10 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
 Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
   var oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
-  if (this.dragTarget_ !== oldDragTarget) {
-    oldDragTarget && oldDragTarget.onDragExit();
-    this.dragTarget_ && this.dragTarget_.onDragEnter();
-  }
 
   var wouldDeleteBubble = this.shouldDelete_(this.dragTarget_);
   if (wouldDeleteBubble != this.wouldDeleteBubble_) {
@@ -148,6 +143,12 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
     this.updateCursorDuringBubbleDrag_();
   }
   this.wouldDeleteBubble_ = wouldDeleteBubble;
+
+  if (this.dragTarget_ !== oldDragTarget) {
+    oldDragTarget && oldDragTarget.onDragExit();
+    this.dragTarget_ && this.dragTarget_.onDragEnter();
+  }
+  this.dragTarget_ && this.dragTarget_.onDragOver();
 };
 
 /**

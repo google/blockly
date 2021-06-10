@@ -219,6 +219,8 @@ Blockly.BlockDragger.prototype.dragBlock = function(e, currentDragDeltaXY) {
     this.updateCursorDuringBlockDrag_();
   }
 
+  // Call drag enter/exit/over after wouldDeleteBlock is called in
+  // InsertionMarkerManager.update.
   if (this.dragTarget_ !== oldDragTarget) {
     oldDragTarget && oldDragTarget.onDragExit();
     this.dragTarget_ && this.dragTarget_.onDragEnter();

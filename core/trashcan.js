@@ -25,6 +25,7 @@ goog.require('Blockly.IPositionable');
 goog.require('Blockly.Options');
 goog.require('Blockly.registry');
 goog.require('Blockly.uiPosition');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
@@ -52,6 +53,12 @@ Blockly.Trashcan = function(workspace) {
    * @private
    */
   this.workspace_ = workspace;
+
+  /**
+   * The unique id for this component.
+   * @type {string}
+   */
+  this.id = Blockly.utils.genUid();
 
   /**
    * A list of XML (stored as strings) representing blocks in the trashcan.
@@ -363,7 +370,6 @@ Blockly.Trashcan.prototype.init = function() {
     this.flyout.init(this.workspace_);
   }
   this.workspace_.getComponentManager().addComponent({
-    id: 'trashcan',
     component: this,
     weight: 1,
     capabilities: [

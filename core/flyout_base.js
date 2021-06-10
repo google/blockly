@@ -75,7 +75,7 @@ Blockly.Flyout = function(workspaceOptions) {
    * The unique id for this component.
    * @type {string}
    */
-  this.id = 'flyout' + this.workspace_.id;
+  this.id = Blockly.utils.genUid();
 
   /**
    * Is RTL vs LTR.
@@ -311,7 +311,6 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.createPotentialVariableMap();
 
   targetWorkspace.getComponentManager().addComponent({
-    id: this.id,
     component: this,
     weight: 1,
     capabilities: [

@@ -68,6 +68,7 @@ Blockly.inject = function(container, opt_options) {
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
+
   var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
@@ -290,7 +291,7 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
  *    in workspace coordinates.
  * @param {!Blockly.IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
- * @private
+ * @package
  */
 Blockly.bumpObjectIntoBounds_ = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.

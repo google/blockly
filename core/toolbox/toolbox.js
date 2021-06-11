@@ -607,6 +607,11 @@ Blockly.Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
   if (wouldDelete === this.wouldDelete_) {
     return;
   }
+  // This logic handles updating the deleteStyle properly if the delete state
+  // changes while the block is over the Toolbox. This could happen if the
+  // implementation of wouldDeleteBlock depends on the couldConnect parameter
+  // or if the isDeletable property of the block currently being dragged
+  // changes during the drag.
   this.updateCursorDeleteStyle(false);
   this.wouldDelete_ = wouldDelete;
   this.updateCursorDeleteStyle(true);

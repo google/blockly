@@ -183,7 +183,8 @@ Blockly.BlockDragger.prototype.startDrag = function(
  * @protected
  */
 Blockly.BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
-  return !!(this.draggingBlock_.getParent() ||
+  return !!(
+    this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
        this.draggingBlock_.nextConnection.targetBlock()));
 };
@@ -268,14 +269,9 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var preventMove = !!this.dragTarget_ &&
-      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
-  if (preventMove) {
-    var newLoc = this.startXY_;
-  } else {
-    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
-  }
+  var newValues = this.getNewLocationAfterMove_(currentDragDeltaXY);
+  var delta = newValues.delta;
+  var newLoc = newValues.newLocation;
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
@@ -283,21 +279,18 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   }
 
   if (this.wouldDeleteBlock_) {
-    // Fire a move event, so we know where to go back to for an undo.
-    this.fireMoveEvent_();
-    this.draggingBlock_.dispose(false, true);
-    Blockly.draggingConnections = [];
+    this.deleteBlockAfterMove_();
   } else {
     this.draggingBlock_.setDragging(false);
-    if (delta) { // !preventMove
+    if (delta) {  // !preventMove
       this.updateBlockLocationAfterMove_(delta);
     } else {
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
       Blockly.bumpObjectIntoBounds_(
           this.draggingBlock_.workspace,
-          this.workspace_.getMetricsManager()
-              .getScrollMetrics(true), this.draggingBlock_);
+          this.workspace_.getMetricsManager().getScrollMetrics(true),
+          this.draggingBlock_);
     }
   }
   this.workspace_.setResizesEnabled(true);
@@ -305,6 +298,41 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   this.updateToolboxStyle_(true);
 
   Blockly.Events.setGroup(false);
+};
+
+/**
+ * Calculates the drag delta and new location values after a block is dragged.
+ * If a block would not be moved because a drag target prevents block moves,
+ * then there is no delta, and the new location is the same as the startXY.
+ * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ *     moved from the start of the drag, in pixel units.
+ * @return {{delta: (!Blockly.utils.Coordinate|undefined), newLocation:
+ *     !Blockly.utils.Coordinate}} New location after drag. delta is in
+ *     workspace units, and is undefined if a move is prevented. newLocation is
+ *     the new coordinate where the block should end up.
+ * @protected
+ */
+Blockly.BlockDragger.prototype.getNewLocationAfterMove_ = function(
+    currentDragDeltaXY) {
+  var newValues = {};
+  var preventMove = !!this.dragTarget_ &&
+      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
+  if (preventMove) {
+    newValues.newLocation = this.startXY_;
+  } else {
+    newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    newValues.newLocation =
+        Blockly.utils.Coordinate.sum(this.startXY_, newValues.delta);
+  }
+
+  return newValues;
+};
+
+Blockly.BlockDragger.prototype.deleteBlockAfterMove_ = function() {
+  // Fire a move event, so we know where to go back to for an undo.
+  this.fireMoveEvent_();
+  this.draggingBlock_.dispose(false, true);
+  Blockly.draggingConnections = [];
 };
 
 /**

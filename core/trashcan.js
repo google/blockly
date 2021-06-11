@@ -533,7 +533,7 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
- * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
  *     currently being dragged.
  * @override
  */
@@ -543,7 +543,7 @@ Blockly.Trashcan.prototype.onDragEnter = function(_dragElement) {
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
- * @param {!Blockly.BlockSvg|!Blockly.IBubble} _dragElement The block or bubble
+ * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
  *     currently being dragged.
  * @override
  */

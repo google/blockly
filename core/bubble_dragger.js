@@ -217,7 +217,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
     if (this.dragSurface_) {
       this.dragSurface_.clearAndHide(this.workspace_.getBubbleCanvas());
     }
-    if (this.draggingBubble_) {
+    if (this.draggingBubble_.setDragging) {
       this.draggingBubble_.setDragging(false);
     }
     this.fireMoveEvent_();

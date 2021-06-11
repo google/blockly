@@ -30,6 +30,7 @@ goog.require('Blockly.Events.Selected');
 goog.require('Blockly.IASTNodeLocationSvg');
 goog.require('Blockly.IBoundedElement');
 goog.require('Blockly.ICopyable');
+goog.require('Blockly.IDraggable');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
@@ -69,6 +70,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IBoundedElement}
  * @implements {Blockly.ICopyable}
+ * @implements {Blockly.IDraggable}
  * @constructor
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {

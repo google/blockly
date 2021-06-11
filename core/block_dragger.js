@@ -246,10 +246,10 @@ Blockly.BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   // Call drag enter/exit/over after wouldDeleteBlock is called in
   // InsertionMarkerManager.update.
   if (this.dragTarget_ !== oldDragTarget) {
-    oldDragTarget && oldDragTarget.onDragExit();
-    this.dragTarget_ && this.dragTarget_.onDragEnter();
+    oldDragTarget && oldDragTarget.onDragExit(this.draggingBlock_);
+    this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBlock_);
   }
-  this.dragTarget_ && this.dragTarget_.onDragOver();
+  this.dragTarget_ && this.dragTarget_.onDragOver(this.draggingBlock_);
 };
 
 /**
@@ -269,13 +269,19 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var newValues = this.getNewLocationAfterMove_(currentDragDeltaXY);
-  var delta = newValues.delta;
-  var newLoc = newValues.newLocation;
+  var preventMove = !!this.dragTarget_ &&
+      this.dragTarget_.shouldPreventMove(this.draggingBlock_);
+  if (preventMove) {
+    var newLoc = this.startXY_;
+  } else {
+    var newValues = this.getNewLocationAfterMove_(currentDragDeltaXY);
+    var delta = newValues.delta;
+    var newLoc = newValues.newLocation;
+  }
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
-    this.dragTarget_.onBlockDrop(this.draggingBlock_);
+    this.dragTarget_.onDrop(this.draggingBlock_);
   }
 
   if (this.wouldDeleteBlock_) {
@@ -315,16 +321,9 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 Blockly.BlockDragger.prototype.getNewLocationAfterMove_ = function(
     currentDragDeltaXY) {
   var newValues = {};
-  var preventMove = !!this.dragTarget_ &&
-      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
-  if (preventMove) {
-    newValues.newLocation = this.startXY_;
-  } else {
-    newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    newValues.newLocation =
+  newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  newValues.newLocation =
         Blockly.utils.Coordinate.sum(this.startXY_, newValues.delta);
-  }
-
   return newValues;
 };
 

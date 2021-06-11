@@ -30,6 +30,7 @@ goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.IASTNodeLocation');
+goog.require('Blockly.IDeletable');
 goog.require('Blockly.Input');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.Tooltip');
@@ -57,6 +58,7 @@ goog.requireType('Blockly.VariableModel');
  *     create a new ID.
  * @constructor
  * @implements {Blockly.IASTNodeLocation}
+ * @implements {Blockly.IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {

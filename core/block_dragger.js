@@ -282,8 +282,8 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     this.deleteBlockAfterMove_();
   } else {
     this.draggingBlock_.setDragging(false);
-    if (delta) {  // !preventMove
-      this.updateBlockLocationAfterMove_(delta);
+    if (delta) { // !preventMove
+      this.updateBlockAfterMove_(delta);
     } else {
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
@@ -341,7 +341,7 @@ Blockly.BlockDragger.prototype.deleteBlockAfterMove_ = function() {
  *     the block started the drag to where it ended the drag.
  * @protected
  */
-Blockly.BlockDragger.prototype.updateBlockLocationAfterMove_ = function(delta) {
+Blockly.BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
   this.draggingBlock_.moveConnections(delta.x, delta.y);
   this.fireMoveEvent_();
   if (this.draggedConnectionManager_.wouldConnectBlock()) {

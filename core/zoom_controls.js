@@ -48,7 +48,7 @@ Blockly.ZoomControls = function(workspace) {
    * The unique id for this component.
    * @type {string}
    */
-  this.id = Blockly.utils.genUid();
+  this.id = 'zoomControls';
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset

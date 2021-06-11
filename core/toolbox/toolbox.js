@@ -68,7 +68,7 @@ Blockly.Toolbox = function(workspace) {
    * The unique id for this component.
    * @type {string}
    */
-  this.id = Blockly.utils.genUid();
+  this.id = 'toolbox';
 
   /**
    * The JSON describing the contents of this toolbox.

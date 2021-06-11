@@ -10,7 +10,7 @@ Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE"] = "Set servo pin";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE_DEG_180"] = "degrees";  // untranslated
 Blockly.Msg["ARD_SERVO_WRITE_TO"] = "angle to";  // untranslated
-Blockly.Msg["ARD_TIME_DELAY"] = "wait";  // untranslated
+Blockly.Msg["ARD_TIME_DELAY"] = "during";  // untranslated
 Blockly.Msg["ARD_TIME_DELAY_TIP"] = "Wait specific time in milliseconds";  // untranslated
 Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
@@ -44,9 +44,11 @@ Blockly.Msg["CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK"] = "اخرج من الحل�
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE"] = "تخط ما تبقى من هذه الحلقة، واستمر ابتداءا من التكرار التالي.";
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_WARNING"] = "تحذير: يمكن استخدام هذه القطعة فقط داخل حلقة.";
 Blockly.Msg["CONTROLS_FOREACH_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#for-each";  // untranslated
+Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_FOREACH_TITLE"] = "لكل عنصر %1 في قائمة %2";
 Blockly.Msg["CONTROLS_FOREACH_TOOLTIP"] = "لكل عنصر في قائمة ما، عين المتغير '%1' لهذا الغنصر، ومن ثم نفذ بعض الأوامر.";
 Blockly.Msg["CONTROLS_FOR_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
+Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_FOR_TITLE"] = "عد بـ %1 من %2 إلى %3 بمعدل %4";
 Blockly.Msg["CONTROLS_FOR_TOOLTIP"] = "اجعل المتغير  %1 يأخذ القيم من رقم البداية الى رقم النهاية، وقم بالعد داخل المجال المحدد، وطبق أوامر القطع المحددة.";
 Blockly.Msg["CONTROLS_IF_ELSEIF_TOOLTIP"] = "إضف شرطا إلى القطعة الشرطية \"إذا\".";
@@ -67,6 +69,7 @@ Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "نفّذ";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "كرر  %1 مرات";
 Blockly.Msg["CONTROLS_REPEAT_TOOLTIP"] = "نفّذ بعض الأوامر عدة مرات.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
+Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "اكرّر حتى";
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "اكرّر طالما";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
@@ -130,7 +133,9 @@ Blockly.Msg["LEAPHY_LED_STRIP_DEMO"] = "Ledstrip demo";  // untranslated
 Blockly.Msg["LEAPHY_LED_STRIP_GULF"] = "Gulf";  // untranslated
 Blockly.Msg["LEAPHY_LED_STRIP_LIGHTBANK"] = "Lightbank";  // untranslated
 Blockly.Msg["LEAPHY_LED_STRIP_RAINBOW"] = "Rainbow";  // untranslated
+Blockly.Msg["LEAPHY_MOTOR_A_DROPDOWN"] = "Motor_A";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_BACKWARD"] = "Backward";  // untranslated
+Blockly.Msg["LEAPHY_MOTOR_B_DROPDOWN"] = "Motor_B";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_DIRECTION"] = "Direction";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_FORWARD"] = "Forward";  // untranslated
 Blockly.Msg["LEAPHY_MOTOR_LEFT"] = "Left";  // untranslated
@@ -150,7 +155,7 @@ Blockly.Msg["LEAPHY_RGB_RAW_COLOR_BLUE"] = "RawColor Blue";  // untranslated
 Blockly.Msg["LEAPHY_RGB_RAW_COLOR_GREEN"] = "RawColor Green";  // untranslated
 Blockly.Msg["LEAPHY_RGB_RAW_COLOR_RED"] = "RawColor Red";  // untranslated
 Blockly.Msg["LEAPHY_RGB_READ_SENSOR"] = "Read RGB sensor";  // untranslated
-Blockly.Msg["LEAPHY_SERIAL_PRINT"] = "Print";  // untranslated
+Blockly.Msg["LEAPHY_SERIAL_PRINT"] = "Show on screen";  // untranslated
 Blockly.Msg["LEAPHY_SITUATION_CATEGORY"] = "Situation";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_ECHO"] = "Echo";  // untranslated
 Blockly.Msg["LEAPHY_SONAR_READ_TRIG"] = "Sonar Trig";  // untranslated
@@ -379,6 +384,7 @@ Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"] = "إلى";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TOOLTIP"] = "انشئ دالة بدون مخرجات .";
 Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://tr.wikipedia.org/wiki/دالة_(برمجة)";
 Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"] = "يرجع";
+Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = "Subprogram";  // untranslated
 Blockly.Msg["PROCEDURES_DEFRETURN_TOOLTIP"] = "انشئ دالة مع المخرجات.";
 Blockly.Msg["PROCEDURES_DEF_DUPLICATE_WARNING"] = "تحذير: هذه الدالة تحتوي على معلمات مكررة.";
 Blockly.Msg["PROCEDURES_HIGHLIGHT_DEF"] = "تسليط الضوء على تعريف الدالة";
@@ -476,12 +482,9 @@ Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "المتغير '%1' موجود بال�
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "متغير بأسم '%1' معرف من نوع اخر : '%2'.";
 Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "مساحة عمل بلوكلي";
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "قل شيئا...";
-Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
-Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_IF_ELSEIF_TITLE_ELSEIF"] = Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"];
 Blockly.Msg["CONTROLS_IF_ELSE_TITLE_ELSE"] = Blockly.Msg["CONTROLS_IF_MSG_ELSE"];
 Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
-Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["LISTS_CREATE_WITH_ITEM_TITLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["LISTS_GET_INDEX_HELPURL"] = Blockly.Msg["LISTS_INDEX_OF_HELPURL"];
 Blockly.Msg["LISTS_GET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
@@ -492,7 +495,6 @@ Blockly.Msg["MATH_CHANGE_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["PROCEDURES_DEFRETURN_COMMENT"] = Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"];
 Blockly.Msg["PROCEDURES_DEFRETURN_DO"] = Blockly.Msg["PROCEDURES_DEFNORETURN_DO"];
 Blockly.Msg["PROCEDURES_DEFRETURN_PROCEDURE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"];
-Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
 Blockly.Msg["TEXT_APPEND_VARIABLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 

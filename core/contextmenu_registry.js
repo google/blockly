@@ -16,15 +16,17 @@
  */
 goog.provide('Blockly.ContextMenuRegistry');
 
-goog.require('Blockly.ContextMenuItems');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
- * Class for the registry of context menu items. This is intended to be a singleton. You should
- * not create a new instance, and only access this class from Blockly.ContextMenuRegistry.registry.
+ * Class for the registry of context menu items. This is intended to be a
+ * singleton. You should not create a new instance, and only access this class
+ * from Blockly.ContextMenuRegistry.registry.
  * @constructor
  */
 Blockly.ContextMenuRegistry = function() {
-
   // Singleton instance should be registered once.
   Blockly.ContextMenuRegistry.registry = this;
 
@@ -34,7 +36,6 @@ Blockly.ContextMenuRegistry = function() {
    * @private
    */
   this.registry_ = {};
-  Blockly.ContextMenuItems.registerDefaultOptions();
 };
 
 /**
@@ -83,7 +84,8 @@ Blockly.ContextMenuRegistry.RegistryItem;
 Blockly.ContextMenuRegistry.ContextMenuOption;
 
 /**
- * Singleton instance of this class. All interactions with this class should be done on this object.
+ * Singleton instance of this class. All interactions with this class should be
+ * done on this object.
  * @type {?Blockly.ContextMenuRegistry}
  */
 Blockly.ContextMenuRegistry.registry = null;

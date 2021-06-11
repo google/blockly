@@ -20,6 +20,8 @@ goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.VariableModel');
+
 
 /**
  * Abstract class for a variable event.

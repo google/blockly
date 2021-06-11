@@ -1,0 +1,41 @@
+# This workflow will do a clean install, start the selenium server, and run
+# all of our tests.
+
+name: Node.js CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    # TODO (#2114): re-enable osx build.
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Npm Install
+      run: npm install
+
+    - name: Linux Test Setup
+      if: runner.os == 'Linux'
+      run: source ./tests/scripts/setup_linux_env.sh
+
+    - name: MacOS Test Setup
+      if: runner.os == 'macOS'
+      run: source ./tests/scripts/setup_osx_env.sh
+
+    - name: Run
+      run: npm run test:run
+
+      env:
+        CI: true

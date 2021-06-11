@@ -12,7 +12,8 @@
 # Q1 2020	3.20200402.0	619341
 # Q2 2020	3.20200625.0	621811
 # Q3 2020	3.20200924.0	641216
-blockly_size_expected=641216
+# Q4 2020 4.20201217.0  653624
+blockly_size_expected=653624
 
 # Size of blocks_compressed.js
 # Q2 2019	2.20190722.0	75618
@@ -21,7 +22,8 @@ blockly_size_expected=641216
 # Q1 2020	3.20200402.0	75805
 # Q2 2020	3.20200625.0	76360
 # Q3 2020	3.20200924.0	76429
-blocks_size_expected=76429
+# Q4 2020 4.20201217.0  76693
+blocks_size_expected=76693
 
 # Size of blockly_compressed.js.gz
 # Q2 2019	2.20190722.0	180925
@@ -30,7 +32,8 @@ blocks_size_expected=76429
 # Q1 2020	3.20200402.0	134133
 # Q2 2020	3.20200625.0	135181
 # Q3 2020	3.20200924.0	138003
-blockly_gz_size_expected=138003
+# Q4 2020 4.20201217.0  138115
+blockly_gz_size_expected=138115
 
 # Size of blocks_compressed.js.gz
 # Q2 2019	2.20190722.0	14552
@@ -39,7 +42,8 @@ blockly_gz_size_expected=138003
 # Q1 2020	3.20200402.0	14966
 # Q2 2020	3.20200625.0	15195
 # Q3 2020	3.20200924.0	15231
-blocks_gz_size_expected=15231
+# Q4 2020 4.20201217.0  15224
+blocks_gz_size_expected=15224
 
 # ANSI colors
 BOLD_GREEN='\033[1;32m'

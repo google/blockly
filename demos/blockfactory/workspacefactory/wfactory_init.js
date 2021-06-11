@@ -346,7 +346,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // surrounding parent, meaning it is nested in another block (blocks that
     // are not nested in parents cannot be shadow blocks).
     if (e.type == Blockly.Events.BLOCK_MOVE ||
-        e.type == Blockly.Event.SELECTED) {
+        e.type == Blockly.Events.SELECTED) {
       var selected = Blockly.selected;
 
       // Show shadow button if a block is selected. Show "Add Shadow" if

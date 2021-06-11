@@ -13,11 +13,17 @@
 goog.provide('Blockly.VariableMap');
 
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarRename');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -102,7 +108,8 @@ Blockly.VariableMap.prototype.renameVariableById = function(id, newName) {
  */
 Blockly.VariableMap.prototype.renameVariableAndUses_ = function(variable,
     newName, blocks) {
-  Blockly.Events.fire(new Blockly.Events.VarRename(variable, newName));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_RENAME))(
+      variable, newName));
   variable.name = newName;
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].updateVarName(variable);
@@ -139,7 +146,8 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
   }
 
   // Finally delete the original variable, which is now unreferenced.
-  Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
+  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_DELETE))(
+      variable));
   // And remove it from the list.
   var variableList = this.getVariablesOfType(type);
   var variableIndex = variableList.indexOf(variable);
@@ -201,7 +209,8 @@ Blockly.VariableMap.prototype.deleteVariable = function(variable) {
   for (var i = 0, tempVar; (tempVar = variableList[i]); i++) {
     if (tempVar.getId() == variable.getId()) {
       variableList.splice(i, 1);
-      Blockly.Events.fire(new Blockly.Events.VarDelete(variable));
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_DELETE))(
+          variable));
       return;
     }
   }

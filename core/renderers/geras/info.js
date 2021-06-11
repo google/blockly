@@ -14,25 +14,21 @@
 goog.provide('Blockly.geras');
 goog.provide('Blockly.geras.RenderInfo');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.blockRendering.ExternalValueInput');
+goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.InRowSpacer');
+goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.blockRendering.Types');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.geras.InlineInput');
 goog.require('Blockly.geras.StatementInput');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.blockRendering.Field');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.geras.Renderer');
 
 
 /**
@@ -69,10 +65,9 @@ Blockly.geras.RenderInfo.prototype.getRenderer = function() {
 Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
   Blockly.geras.RenderInfo.superClass_.populateBottomRow_.call(this);
 
-  var followsStatement =
-      this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1]
-          .type == Blockly.NEXT_STATEMENT;
+  var followsStatement = this.block_.inputList.length &&
+      this.block_.inputList[this.block_.inputList.length - 1].type ==
+          Blockly.inputTypes.STATEMENT;
 
   // The minimum height of the bottom row is smaller in Geras than in other
   // renderers, because the dark path adds a pixel.
@@ -90,19 +85,19 @@ Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
  */
 Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == Blockly.INPUT_VALUE) {
+  if (this.isInline && input.type == Blockly.inputTypes.VALUE) {
     activeRow.elements.push(
         new Blockly.geras.InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
-  } else if (input.type == Blockly.NEXT_STATEMENT) {
+  } else if (input.type == Blockly.inputTypes.STATEMENT) {
     activeRow.elements.push(
         new Blockly.geras.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-  } else if (input.type == Blockly.INPUT_VALUE) {
+  } else if (input.type == Blockly.inputTypes.VALUE) {
     activeRow.elements.push(
         new Blockly.blockRendering.ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
-  } else if (input.type == Blockly.DUMMY_INPUT) {
+  } else if (input.type == Blockly.inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight = Math.max(activeRow.minHeight,

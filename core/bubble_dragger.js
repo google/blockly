@@ -195,7 +195,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   this.dragBubble(e, currentDragDeltaXY);
 
   var preventMove = this.dragTarget_ &&
-      this.dragTarget_.shouldPreventBubbleMove(this.draggingBubble_);
+      this.dragTarget_.shouldPreventMove(this.draggingBubble_);
   if (preventMove) {
     var newLoc = this.startXY_;
   } else {
@@ -206,7 +206,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   this.draggingBubble_.moveTo(newLoc.x, newLoc.y);
 
   if (this.dragTarget_) {
-    this.dragTarget_.onBubbleDrop(this.draggingBubble_);
+    this.dragTarget_.onDrop(this.draggingBubble_);
   }
 
   if (this.wouldDeleteBubble_) {

@@ -269,7 +269,7 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   Blockly.blockAnimations.disconnectUiStop();
 
   var preventMove = !!this.dragTarget_ &&
-      this.dragTarget_.shouldPreventBlockMove(this.draggingBlock_);
+      this.dragTarget_.shouldPreventMove(this.draggingBlock_);
   if (preventMove) {
     var newLoc = this.startXY_;
   } else {
@@ -279,7 +279,7 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
   if (this.dragTarget_) {
-    this.dragTarget_.onBlockDrop(this.draggingBlock_);
+    this.dragTarget_.onDrop(this.draggingBlock_);
   }
 
   if (this.wouldDeleteBlock_) {

@@ -65,6 +65,12 @@ Blockly.Toolbox = function(workspace) {
   this.workspace_ = workspace;
 
   /**
+   * The unique id for this component.
+   * @type {string}
+   */
+  this.id = Blockly.utils.genUid();
+
+  /**
    * The JSON describing the contents of this toolbox.
    * @type {!Blockly.utils.toolbox.ToolboxInfo}
    * @protected
@@ -193,7 +199,6 @@ Blockly.Toolbox.prototype.init = function() {
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
   this.workspace_.getComponentManager().addComponent({
-    id: 'toolbox',
     component: this,
     weight: 1,
     capabilities: [
@@ -536,15 +541,19 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.
- * @param {!Blockly.BlockSvg} _block The block.
+ * This method should check if the block is deletable and is always called
+ * before onDragEnter/onDragOver/onDragExit.
+ * @param {!Blockly.BlockSvg} block The block.
  * @param {boolean} _couldConnect Whether the block could could connect to
  *     another.
  * @return {boolean} Whether the block provided would be deleted if dropped on
  *     this area.
+ * @override
  */
-Blockly.Toolbox.prototype.wouldDeleteBlock = function(_block, _couldConnect) {
+Blockly.Toolbox.prototype.wouldDeleteBlock = function(block, _couldConnect) {
   // Prefer dragging to the toolbox over connecting to other blocks.
-  return true;
+  this.wouldDelete_ = !block.getParent() && block.isDeletable();
+  return this.wouldDelete_;
 };
 
 /**

@@ -77,6 +77,16 @@ Blockly.BlockDragSurfaceSvg.prototype.scale_ = 1;
 Blockly.BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
 
 /**
+ * Cached value for the translation of the child drag surface in pixel units.
+ * Since the child drag surface tracks the translation of the workspace this is
+ * ultimately the translation of the workspace.
+ * @type {!Blockly.utils.Coordinate}
+ * @private
+ */
+Blockly.BlockDragSurfaceSvg.prototype.childSurfaceXY_ =
+    new Blockly.utils.Coordinate(0, 0);
+
+/**
  * Create the drag surface and inject it into the container.
  */
 Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
@@ -90,9 +100,10 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
         'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyBlockDragSurface'
-      }, this.container_);
-  this.dragGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.G, {}, this.SVG_);
+      },
+      this.container_);
+  this.dragGroup_ =
+      Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, this.SVG_);
 };
 
 /**
@@ -114,18 +125,23 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
 /**
  * Translate and scale the entire drag surface group to the given position, to
  * keep in sync with the workspace.
- * @param {number} x X translation in workspace coordinates.
- * @param {number} y Y translation in workspace coordinates.
+ * @param {number} x X translation in pixel coordinates.
+ * @param {number} y Y translation in pixel coordinates.
  * @param {number} scale Scale of the group.
  */
-Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y,
-    scale) {
+Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(
+    x, y, scale) {
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
   var fixedX = x.toFixed(0);
   var fixedY = y.toFixed(0);
-  this.dragGroup_.setAttribute('transform',
+
+  this.childSurfaceXY_.x = parseInt(fixedX, 10);
+  this.childSurfaceXY_.y = parseInt(fixedY, 10);
+
+  this.dragGroup_.setAttribute(
+      'transform',
       'translate(' + fixedX + ',' + fixedY + ') scale(' + scale + ')');
 };
 
@@ -142,8 +158,20 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  Blockly.utils.dom.setCssTransform(this.SVG_,
-      'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+  Blockly.utils.dom.setCssTransform(
+      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+};
+
+/**
+ * Translates the entire surface by a relative offset.
+ * @param {number} deltaX Horizontal offset in pixel units.
+ * @param {number} deltaY Vertical offset in pixel units.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
+  var x = this.surfaceXY_.x + deltaX;
+  var y = this.surfaceXY_.y + deltaY;
+  this.surfaceXY_ = new Blockly.utils.Coordinate(x, y);
+  this.translateSurfaceInternal_();
 };
 
 /**
@@ -155,7 +183,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
  * @param {number} y Y translation for the entire surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  this.surfaceXY_ = new Blockly.utils.Coordinate(x * this.scale_, y * this.scale_);
+  this.surfaceXY_ =
+      new Blockly.utils.Coordinate(x * this.scale_, y * this.scale_);
   this.translateSurfaceInternal_();
 };
 
@@ -179,12 +208,31 @@ Blockly.BlockDragSurfaceSvg.prototype.getGroup = function() {
 };
 
 /**
+ * Returns the SVG drag surface.
+ * @returns {?SVGElement} The SVG drag surface.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.getSvgRoot = function() {
+  return this.SVG_;
+};
+
+/**
  * Get the current blocks on the drag surface, if any (primarily
  * for BlockSvg.getRelativeToSurfaceXY).
  * @return {?Element} Drag surface block DOM element, or null if no blocks exist.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
   return /** @type {Element} */ (this.dragGroup_.firstChild);
+};
+
+/**
+ * Gets the translation of the child block surface
+ * This surface is in charge of keeping track of how much the workspace has
+ * moved.
+ * @return {!Blockly.utils.Coordinate} The amount the workspace has been moved.
+ */
+Blockly.BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
+  // Returning a copy so the coordinate can not be changed outside this class.
+  return this.childSurfaceXY_.clone();
 };
 
 /**

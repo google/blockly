@@ -14,7 +14,7 @@
 goog.provide('Blockly.IBubble');
 
 goog.require('Blockly.IContextMenu');
-goog.require('Blockly.IDeletable');
+goog.require('Blockly.IDraggable');
 
 goog.requireType('Blockly.BlockDragSurfaceSvg');
 goog.requireType('Blockly.utils.Coordinate');
@@ -23,7 +23,7 @@ goog.requireType('Blockly.utils.Coordinate');
 /**
  * A bubble interface.
  * @interface
- * @extends {Blockly.IDeletable}
+ * @extends {Blockly.IDraggable}
  * @extends {Blockly.IContextMenu}
  */
 Blockly.IBubble = function() {};

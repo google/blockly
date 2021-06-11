@@ -32,14 +32,11 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
-
-goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.utils.Rect');
 goog.requireType('Blockly.WorkspaceSvg');
-
 
 
 /**
@@ -540,35 +537,32 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
 Blockly.Trashcan.prototype.onDragOver = function(_dragElement) {
-  Blockly.Trashcan.superClass_.onDragOver.call(this, _dragElement);
   this.setLidOpen(this.wouldDelete_);
 };
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
 Blockly.Trashcan.prototype.onDragExit = function(_dragElement) {
-  Blockly.Trashcan.superClass_.onDragExit.call(this, _dragElement);
   this.setLidOpen(false);
 };
 
 /**
  * Handles when a block or bubble is dropped on this component.
  * Should not handle delete here.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dropped.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
 Blockly.Trashcan.prototype.onDrop = function(_dragElement) {
-  Blockly.Trashcan.superClass_.onDrop.call(this, _dragElement);
   setTimeout(this.setLidOpen.bind(this, false), 100);
 };
 

@@ -16,8 +16,7 @@ goog.provide('Blockly.IDragTarget');
 
 goog.require('Blockly.IComponent');
 
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.utils.Rect');
 
 /**
@@ -37,32 +36,32 @@ Blockly.IDragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
- * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragEnter;
 
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
- * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragOver;
 
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
- * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragExit;
 
 /**
  * Handles when a block or bubble is dropped on this component.
  * Should not handle delete here.
- * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
- *     currently being dropped.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDrop;
 
@@ -70,8 +69,8 @@ Blockly.IDragTarget.prototype.onDrop;
  * Returns whether the provided block or bubble should not be moved after being
  * dropped on this component. If true, the element will return to where it was
  * when the drag started.
- * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
- *     ending a drag.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  * @return {boolean} Whether the block or bubble provided should be returned to
  *     drag start.
  */

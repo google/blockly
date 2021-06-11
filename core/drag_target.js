@@ -16,8 +16,7 @@ goog.provide('Blockly.DragTarget');
 
 goog.require('Blockly.IDragTarget');
 
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.utils.Rect');
 
 
@@ -39,8 +38,8 @@ Blockly.DragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.DragTarget.prototype.onDragEnter = function(_dragElement) {
   // no-op
@@ -49,8 +48,8 @@ Blockly.DragTarget.prototype.onDragEnter = function(_dragElement) {
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.DragTarget.prototype.onDragOver = function(_dragElement) {
   // no-op
@@ -58,8 +57,8 @@ Blockly.DragTarget.prototype.onDragOver = function(_dragElement) {
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dragged.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.DragTarget.prototype.onDragExit = function(_dragElement) {
   // no-op
@@ -68,8 +67,8 @@ Blockly.DragTarget.prototype.onDragExit = function(_dragElement) {
 /**
  * Handles when a block or bubble is dropped on this component.
  * Should not handle delete here.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     currently being dropped.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.DragTarget.prototype.onDrop = function(_dragElement) {
   // no-op
@@ -79,8 +78,8 @@ Blockly.DragTarget.prototype.onDrop = function(_dragElement) {
  * Returns whether the provided block or bubble should not be moved after being
  * dropped on this component. If true, the element will return to where it was
  * when the drag started.
- * @param {!Blockly.Block|!Blockly.IBubble} _dragElement The block or bubble
- *     ending a drag.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @return {boolean} Whether the block or bubble provided should be returned to
  *     drag start.
  */

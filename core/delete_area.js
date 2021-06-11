@@ -39,30 +39,24 @@ Blockly.DeleteArea = function() {
 Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
 
 /**
- * Returns whether the provided block would be deleted if dropped on this area.
- * This method should check if the block is deletable and is always called
+ * Returns whether the provided block or bubble would be deleted if dropped on
+ * this area.
+ * This method should check if the element is deletable and is always called
  * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
+ * @param {!Blockly.IDraggable} element The block or bubble currently being
+ *   dragged.
+ * @param {boolean} couldConnect Whether the element could could connect to
  *     another.
- * @return {boolean} Whether the block provided would be deleted if dropped on
+ * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  */
-Blockly.DeleteArea.prototype.wouldDeleteBlock = function(block, couldConnect) {
-  var couldDeleteBlock = !block.getParent() && block.isDeletable();
-  this.wouldDelete_ = couldDeleteBlock && !couldConnect;
-  return this.wouldDelete_;
-};
-
-/**
- * Returns whether the provided bubble would be deleted if dropped on this area.
- * This method should check if the bubble is deletable and is always called
- * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.IBubble} bubble The bubble.
- * @return {boolean} Whether the bubble provided would be deleted if dropped on
- *     this area.
- */
-Blockly.DeleteArea.prototype.wouldDeleteBubble = function(bubble) {
-  this.wouldDelete_ = bubble.isDeletable();
+Blockly.DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
+  if (element instanceof Blockly.BlockSvg) {
+    var block = /** @type {Blockly.BlockSvg} */ (element);
+    var couldDeleteBlock = !block.getParent() && block.isDeletable();
+    this.wouldDelete_ = couldDeleteBlock && !couldConnect;
+  } else {
+    this.wouldDelete_ = element.isDeletable();
+  }
   return this.wouldDelete_;
 };

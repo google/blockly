@@ -167,7 +167,7 @@ Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
         Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (/** @type {!Blockly.IDeleteArea} */ (dragTarget))
-          .wouldDeleteBubble(this.draggingBubble_);
+          .wouldDelete(this.draggingBubble_, false);
     }
   }
   return false;

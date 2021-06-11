@@ -541,19 +541,26 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 };
 
 /**
- * Returns whether the provided block would be deleted if dropped on this area.
- * This method should check if the block is deletable and is always called
+ * Returns whether the provided block or bubble would be deleted if dropped on
+ * this area.
+ * This method should check if the element is deletable and is always called
  * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} _couldConnect Whether the block could could connect to
+ * @param {!Blockly.IDraggable} element The block or bubble currently being
+ *   dragged.
+ * @param {boolean} _couldConnect Whether the element could could connect to
  *     another.
- * @return {boolean} Whether the block provided would be deleted if dropped on
+ * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  * @override
  */
-Blockly.Toolbox.prototype.wouldDeleteBlock = function(block, _couldConnect) {
-  // Prefer dragging to the toolbox over connecting to other blocks.
-  this.wouldDelete_ = !block.getParent() && block.isDeletable();
+Blockly.Toolbox.prototype.wouldDelete = function(element, _couldConnect) {
+  if (element instanceof Blockly.BlockSvg) {
+    var block = /** @type {Blockly.BlockSvg} */ (element);
+    // Prefer dragging to the toolbox over connecting to other blocks.
+    this.wouldDelete_ = !block.getParent() && block.isDeletable();
+  } else {
+    this.wouldDelete_ = element.isDeletable();
+  }
   return this.wouldDelete_;
 };
 

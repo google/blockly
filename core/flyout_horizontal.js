@@ -136,7 +136,6 @@ Blockly.HorizontalFlyout.prototype.getY = function() {
  */
 Blockly.HorizontalFlyout.prototype.position = function(
     metrics, _savedPositions) {
-  console.error('position called');
   if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }

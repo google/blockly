@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.ComponentManager');
@@ -36,6 +37,7 @@ goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.ICollapsibleToolboxItem');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IToolboxItem');
@@ -540,60 +542,56 @@ Blockly.Toolbox.prototype.getClientRect = function() {
 };
 
 /**
- * Returns whether the provided block would be deleted if dropped on this area.
- * This method should check if the block is deletable and is always called
+ * Returns whether the provided block or bubble would be deleted if dropped on
+ * this area.
+ * This method should check if the element is deletable and is always called
  * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} _couldConnect Whether the block could could connect to
+ * @param {!Blockly.IDraggable} element The block or bubble currently being
+ *   dragged.
+ * @param {boolean} _couldConnect Whether the element could could connect to
  *     another.
- * @return {boolean} Whether the block provided would be deleted if dropped on
+ * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  * @override
  */
-Blockly.Toolbox.prototype.wouldDeleteBlock = function(block, _couldConnect) {
-  // Prefer dragging to the toolbox over connecting to other blocks.
-  this.updateWouldDelete_(!block.getParent() && block.isDeletable());
+Blockly.Toolbox.prototype.wouldDelete = function(element, _couldConnect) {
+  if (element instanceof Blockly.BlockSvg) {
+    var block = /** @type {Blockly.BlockSvg} */ (element);
+    // Prefer dragging to the toolbox over connecting to other blocks.
+    this.updateWouldDelete_(!block.getParent() && block.isDeletable());
+  } else {
+    this.updateWouldDelete_(element.isDeletable());
+  }
   return this.wouldDelete_;
 };
 
-
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
- * @override
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
-Blockly.Toolbox.prototype.onDragEnter = function() {
-  Blockly.Toolbox.superClass_.onDragEnter.call(this);
+Blockly.Toolbox.prototype.onDragEnter = function(_dragElement) {
   this.updateCursorDeleteStyle(true);
 };
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
-Blockly.Toolbox.prototype.onDragExit = function() {
-  Blockly.Toolbox.superClass_.onDragExit.call(this);
+Blockly.Toolbox.prototype.onDragExit = function(_dragElement) {
   this.updateCursorDeleteStyle(false);
 };
 
-/**
- * Handles when a block is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.BlockSvg} block The block.
- * @override
- */
-Blockly.Toolbox.prototype.onBlockDrop = function(block) {
-  Blockly.Toolbox.superClass_.onBlockDrop.call(this, block);
-  this.updateCursorDeleteStyle(false);
-};
 
 /**
- * Handles when a bubble is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.IBubble} bubble The bubble.
- * @override
+ * Handles when a block or bubble is dropped on this component.
+ * Should not handle delete here.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  */
-Blockly.Toolbox.prototype.onBubbleDrop = function(bubble) {
-  Blockly.Toolbox.superClass_.onBubbleDrop.call(this, bubble);
+Blockly.Toolbox.prototype.onDrop = function(_dragElement) {
   this.updateCursorDeleteStyle(false);
 };
 

@@ -463,7 +463,7 @@ Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
     if (isDeleteArea) {
       return (
         /** @type {!Blockly.IDeleteArea} */ (dragTarget))
-          .wouldDeleteBlock(this.topBlock_, candidate && !!candidate.closest);
+          .wouldDelete(this.topBlock_, candidate && !!candidate.closest);
     }
   }
   return false;

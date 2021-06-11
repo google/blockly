@@ -195,7 +195,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   var func = this[block.type];
   if (typeof func != 'function') {
     throw Error('Language "' + this.name_ + '" does not know how to generate ' +
-        ' code for block type "' + block.type + '".');
+        'code for block type "' + block.type + '".');
   }
   // First argument to func.call is the value of 'this' in the generator.
   // Prior to 24 September 2013 'this' was the only way to access the block.

@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.Toolbox');
 
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.CollapsibleToolboxCategory');
 goog.require('Blockly.ComponentManager');
@@ -35,8 +36,8 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.ISelectableToolboxItem');
 goog.requireType('Blockly.IToolboxItem');

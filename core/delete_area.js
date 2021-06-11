@@ -14,9 +14,11 @@
 
 goog.provide('Blockly.DeleteArea');
 
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.DragTarget');
 goog.require('Blockly.IDeleteArea');
 
+goog.requireType('Blockly.IDraggable');
 
 /**
  * Abstract class for a component that can delete a block or bubble that is

@@ -56,19 +56,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @extends {Blockly.DeleteArea}
  */
 Blockly.Toolbox = function(workspace) {
-  Blockly.Toolbox.superClass_.constructor.call(this);
-  /**
-   * The workspace this toolbox is on.
-   * @type {!Blockly.WorkspaceSvg}
-   * @protected
-   */
-  this.workspace_ = workspace;
-
-  /**
-   * The unique id for this component.
-   * @type {string}
-   */
-  this.id = Blockly.utils.genUid();
+  Blockly.Toolbox.superClass_.constructor.call(this, workspace, 'toolbox');
 
   /**
    * The JSON describing the contents of this toolbox.
@@ -170,6 +158,19 @@ Blockly.Toolbox = function(workspace) {
 Blockly.utils.object.inherits(Blockly.Toolbox, Blockly.DeleteArea);
 
 /**
+ * Returns list of initial capabilities to use for registering this component.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<
+ * !Blockly.IComponent>>} The initial capabilities.
+ * @override
+ */
+Blockly.Toolbox.prototype.getInitialCapabilities = function() {
+  var capabilites =
+      Blockly.Toolbox.superClass_.getInitialCapabilities.call();
+  capabilites.push(Blockly.ComponentManager.Capability.AUTOHIDEABLE);
+  return capabilites;
+};
+
+/**
  * Handles the given keyboard shortcut.
  * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
  * @return {boolean} True if the shortcut has been handled, false otherwise.
@@ -198,15 +199,6 @@ Blockly.Toolbox.prototype.init = function() {
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
-  this.workspace_.getComponentManager().addComponent({
-    component: this,
-    weight: 1,
-    capabilities: [
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
-      Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET
-    ]
-  });
 };
 
 /**

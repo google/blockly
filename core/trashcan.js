@@ -46,19 +46,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @extends {Blockly.DeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
-  Blockly.Trashcan.superClass_.constructor.call(this);
-  /**
-   * The workspace the trashcan sits in.
-   * @type {!Blockly.WorkspaceSvg}
-   * @private
-   */
-  this.workspace_ = workspace;
-
-  /**
-   * The unique id for this component.
-   * @type {string}
-   */
-  this.id = Blockly.utils.genUid();
+  Blockly.Trashcan.superClass_.constructor.call(this, workspace, 'trashcan');
 
   /**
    * A list of XML (stored as strings) representing blocks in the trashcan.
@@ -112,6 +100,20 @@ Blockly.Trashcan = function(workspace) {
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
 Blockly.utils.object.inherits(Blockly.Trashcan, Blockly.DeleteArea);
+
+/**
+ * Returns list of initial capabilities to use for registering this component.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<
+ * !Blockly.IComponent>>} The initial capabilities.
+ * @override
+ */
+Blockly.Trashcan.prototype.getInitialCapabilities = function() {
+  var capabilites =
+      Blockly.Trashcan.superClass_.getInitialCapabilities.call();
+  capabilites.push(Blockly.ComponentManager.Capability.AUTOHIDEABLE);
+  capabilites.push(Blockly.ComponentManager.Capability.POSITIONABLE);
+  return capabilites;
+};
 
 /**
  * Width of both the trash can and lid images.
@@ -369,16 +371,6 @@ Blockly.Trashcan.prototype.init = function() {
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-  this.workspace_.getComponentManager().addComponent({
-    component: this,
-    weight: 1,
-    capabilities: [
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
-      Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET,
-      Blockly.ComponentManager.Capability.POSITIONABLE
-    ]
-  });
   this.initialized_ = true;
   this.setLidOpen(false);
 };

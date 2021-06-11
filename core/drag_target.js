@@ -14,6 +14,7 @@
 
 goog.provide('Blockly.DragTarget');
 
+goog.require('Blockly.Component');
 goog.require('Blockly.IDragTarget');
 
 goog.requireType('Blockly.BlockSvg');
@@ -24,14 +25,32 @@ goog.requireType('Blockly.utils.Rect');
 /**
  * Abstract class for a component with custom behaviour when a block or bubble
  * is dragged over or dropped on top of it.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
+ * @param {string=} opt_id The unique id for this component.
+ * @param {number=} opt_weight The weight of this component.
  * @implements {Blockly.IDragTarget}
+ * @extends {Blockly.Component}
  * @constructor
  */
-Blockly.DragTarget = function() {};
+Blockly.DragTarget = function(workspace, opt_id, opt_weight) {
+  Blockly.DragTarget.superClass_.constructor.call(
+      this, workspace, opt_id, opt_weight);
+};
+Blockly.utils.object.inherits(Blockly.DragTarget, Blockly.Component);
+
+/**
+ * Returns list of initial capabilities to use for registering this component.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<
+ * !Blockly.IComponent>>} The initial capabilities.
+ * @override
+ */
+Blockly.DragTarget.prototype.getInitialCapabilities = function() {
+  return [Blockly.ComponentManager.Capability.DRAG_TARGET];
+};
 
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
- * relative to the Blockly injection div.
+ * relative to the viewport.
  * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */

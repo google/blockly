@@ -53,10 +53,9 @@ goog.requireType('Blockly.utils.Rect');
  * @constructor
  * @abstract
  * @implements {Blockly.IFlyout}
- * @extends {Blockly.DeleteArea}
+ * @implements {Blockly.IDeleteArea}
  */
 Blockly.Flyout = function(workspaceOptions) {
-  Blockly.Flyout.superClass_.constructor.call(this);
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
@@ -76,6 +75,14 @@ Blockly.Flyout = function(workspaceOptions) {
    * @type {string}
    */
   this.id = Blockly.utils.genUid();
+
+  /**
+   * Whether the current block or bubble dragged over this toolbox would be
+   * deleted if dropped on this component.
+   * @type {boolean}
+   * @protected
+   */
+  this.wouldDelete_ = false;
 
   /**
    * Is RTL vs LTR.
@@ -148,7 +155,6 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 };
-Blockly.utils.object.inherits(Blockly.Flyout, Blockly.DeleteArea);
 
 /**
  * Does the flyout automatically close when a block is created?
@@ -1042,13 +1048,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 };
 
 /**
- * Returns the bounding rectangle of the drag target area in pixel units
- * relative to viewport.
- * @return {Blockly.utils.Rect} The component's bounding box.
- */
-Blockly.Flyout.prototype.getClientRect;
-
-/**
  * Position the flyout.
  * @return {void}
  */
@@ -1108,3 +1107,96 @@ Blockly.Flyout.prototype.getX;
  * @return {number} Y coordinate.
  */
 Blockly.Flyout.prototype.getY;
+
+/**
+ * Handles when a cursor with a block or bubble enters this drag target.
+ */
+Blockly.Flyout.prototype.onDragEnter = function() {
+  // no-op
+};
+
+/**
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
+ */
+Blockly.Flyout.prototype.onDragOver = function() {
+  // no-op
+};
+
+/**
+ * Handles when a cursor with a block or bubble exits this drag target.
+ */
+Blockly.Flyout.prototype.onDragExit = function() {
+  // no-op
+};
+
+/**
+ * Handles when a block is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.BlockSvg} _block The block.
+ */
+Blockly.Flyout.prototype.onBlockDrop = function(_block) {
+  // no-op
+};
+
+/**
+ * Handles when a bubble is dropped on this component. Should not handle delete
+ * here.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ */
+Blockly.Flyout.prototype.onBubbleDrop = function(_bubble) {
+  // no-op
+};
+
+/**
+ * Returns whether the provided block should not be moved after being dropped
+ * on this component. If true, block will return to where it was when the drag
+ * started.
+ * @param {!Blockly.BlockSvg} _block The block.
+ * @return {boolean} Whether the block provided should be returned to drag
+ *     start.
+ */
+Blockly.Flyout.prototype.shouldPreventBlockMove = function(_block) {
+  return false;
+};
+
+/**
+ * Returns whether the provided bubble should not be moved after being dropped
+ * on this component. If true, bubble will return to where it was when the drag
+ * started.
+ * @param {!Blockly.IBubble} _bubble The bubble.
+ * @return {boolean} Whether the bubble provided should be returned to drag
+ *    start.
+ */
+Blockly.Flyout.prototype.shouldPreventBubbleMove = function(_bubble) {
+  return false;
+};
+
+/**
+ * Returns whether the provided block would be deleted if dropped on this area.
+ * This method should check if the block is deletable and is always called
+ * before onDragEnter/onDragOver/onDragExit.
+ * @param {!Blockly.BlockSvg} block The block.
+ * @param {boolean} couldConnect Whether the block could could connect to
+ *     another.
+ * @return {boolean} Whether the block provided would be deleted if dropped on
+ *     this area.
+ */
+Blockly.Flyout.prototype.wouldDeleteBlock = function(block, couldConnect) {
+  var couldDeleteBlock = !block.getParent() && block.isDeletable();
+  this.wouldDelete_ = couldDeleteBlock && !couldConnect;
+  return this.wouldDelete_;
+};
+
+/**
+ * Returns whether the provided bubble would be deleted if dropped on this area.
+ * This method should check if the bubble is deletable and is always called
+ * before onDragEnter/onDragOver/onDragExit.
+ * @param {!Blockly.IBubble} bubble The bubble.
+ * @return {boolean} Whether the bubble provided would be deleted if dropped on
+ *     this area.
+ */
+Blockly.Flyout.prototype.wouldDeleteBubble = function(bubble) {
+  this.wouldDelete_ = bubble.isDeletable();
+  return this.wouldDelete_;
+};

@@ -21,12 +21,16 @@ goog.require('Blockly.IDeleteArea');
 /**
  * Abstract class for a component that can delete a block or bubble that is
  * dropped on top of it.
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
+ * @param {string=} opt_id The unique id for this component.
+ * @param {number=} opt_weight The weight of this component.
  * @extends {Blockly.DragTarget}
  * @implements {Blockly.IDeleteArea}
  * @constructor
  */
-Blockly.DeleteArea = function() {
-  Blockly.DeleteArea.superClass_.constructor.call(this);
+Blockly.DeleteArea = function(workspace, opt_id, opt_weight) {
+  Blockly.DeleteArea.superClass_.constructor.call(
+      this, workspace, opt_id, opt_weight);
 
   /**
    * Whether the current block or bubble dragged over this delete area would be
@@ -37,6 +41,19 @@ Blockly.DeleteArea = function() {
   this.wouldDelete_ = false;
 };
 Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
+
+/**
+ * Returns list of initial capabilities to use for registering this component.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<
+ * !Blockly.IComponent>>} The initial capabilities.
+ * @override
+ */
+Blockly.DeleteArea.prototype.getInitialCapabilities = function() {
+  var capabilites =
+      Blockly.DeleteArea.superClass_.getInitialCapabilities.call();
+  capabilites.push(Blockly.ComponentManager.Capability.DELETE_AREA);
+  return capabilites;
+};
 
 /**
  * Returns whether the provided block would be deleted if dropped on this area.

@@ -16,6 +16,7 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.ComponentManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.Component');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -36,19 +37,11 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  * @implements {Blockly.IPositionable}
+ * @extends {Blockly.Component}
  */
 Blockly.ZoomControls = function(workspace) {
-  /**
-   * @type {!Blockly.WorkspaceSvg}
-   * @private
-   */
-  this.workspace_ = workspace;
-
-  /**
-   * The unique id for this component.
-   * @type {string}
-   */
-  this.id = Blockly.utils.genUid();
+  Blockly.ZoomControls.superClass_.constructor.call(
+      this, workspace, 'zoomControls', 2);
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
@@ -94,6 +87,20 @@ Blockly.ZoomControls = function(workspace) {
    * @private
    */
   this.zoomResetGroup_ = null;
+};
+Blockly.utils.object.inherits(Blockly.ZoomControls, Blockly.Component);
+
+/**
+ * Returns list of initial capabilities to use for registering this component.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<
+ * !Blockly.IComponent>>} The initial capabilities.
+ * @override
+ */
+Blockly.ZoomControls.prototype.getInitialCapabilities = function() {
+  var capabilites =
+      Blockly.ZoomControls.superClass_.getInitialCapabilities.call();
+  capabilites.push(Blockly.ComponentManager.Capability.POSITIONABLE);
+  return capabilites;
 };
 
 /**
@@ -197,11 +204,6 @@ Blockly.ZoomControls.prototype.createDom = function() {
  * Initializes the zoom controls.
  */
 Blockly.ZoomControls.prototype.init = function() {
-  this.workspace_.getComponentManager().addComponent({
-    component: this,
-    weight: 2,
-    capabilities: [Blockly.ComponentManager.Capability.POSITIONABLE]
-  });
   this.initialized_ = true;
 };
 

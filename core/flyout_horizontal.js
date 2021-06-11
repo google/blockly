@@ -310,7 +310,7 @@ Blockly.HorizontalFlyout.prototype.isDragTowardWorkspace = function(
  *   target area should be ignored.
  */
 Blockly.HorizontalFlyout.prototype.getClientRect = function() {
-  if (!this.svgGroup_ || this.autoClose || this.isVisible()) {
+  if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
     // The bounding rectangle won't compute correctly if the flyout is closed
     // and auto-close flyouts aren't valid drag targets (or delete areas).
     return null;

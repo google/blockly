@@ -45,6 +45,8 @@ Blockly.IDragTarget.prototype.onDragEnter;
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
+ * @param {!Blockly.Block|!Blockly.IBubble} dragElement The block or bubble
+ *     currently being dragged.
  */
 Blockly.IDragTarget.prototype.onDragOver;
 

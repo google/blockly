@@ -33,7 +33,9 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.utils.Rect');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -535,49 +537,32 @@ Blockly.Trashcan.prototype.getClientRect = function() {
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
-Blockly.Trashcan.prototype.onDragOver = function() {
-  Blockly.Trashcan.superClass_.onDragOver.call(this);
+Blockly.Trashcan.prototype.onDragOver = function(_dragElement) {
   this.setLidOpen(this.wouldDelete_);
 };
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
  * @override
  */
-Blockly.Trashcan.prototype.onDragExit = function() {
-  Blockly.Trashcan.superClass_.onDragExit.call(this);
+Blockly.Trashcan.prototype.onDragExit = function(_dragElement) {
   this.setLidOpen(false);
 };
 
 /**
- * Handles when a block is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.BlockSvg} block The block.
- * @override
- */
-Blockly.Trashcan.prototype.onBlockDrop = function(block) {
-  Blockly.Trashcan.superClass_.onBlockDrop.call(this, block);
-  this.onDrop_();
-};
-
-/**
- * Handles when a bubble is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.IBubble} bubble The bubble.
- * @override
- */
-Blockly.Trashcan.prototype.onBubbleDrop = function(bubble) {
-  Blockly.Trashcan.superClass_.onBubbleDrop.call(this, bubble);
-  this.onDrop_();
-};
-
-/**
  * Handles when a block or bubble is dropped on this component.
- * @private
+ * Should not handle delete here.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
  */
-Blockly.Trashcan.prototype.onDrop_ = function() {
+Blockly.Trashcan.prototype.onDrop = function(_dragElement) {
   setTimeout(this.setLidOpen.bind(this, false), 100);
 };
 

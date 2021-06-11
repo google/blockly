@@ -16,8 +16,7 @@ goog.provide('Blockly.IDragTarget');
 
 goog.require('Blockly.IComponent');
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.utils.Rect');
 
 /**
@@ -37,51 +36,42 @@ Blockly.IDragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragEnter;
 
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragOver;
 
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
 Blockly.IDragTarget.prototype.onDragExit;
 
 /**
- * Handles when a block is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.BlockSvg} block The block.
+ * Handles when a block or bubble is dropped on this component.
+ * Should not handle delete here.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
  */
-Blockly.IDragTarget.prototype.onBlockDrop;
+Blockly.IDragTarget.prototype.onDrop;
 
 /**
- * Handles when a bubble is dropped on this component. Should not handle delete
- * here.
- * @param {!Blockly.IBubble} bubble The bubble.
+ * Returns whether the provided block or bubble should not be moved after being
+ * dropped on this component. If true, the element will return to where it was
+ * when the drag started.
+ * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
+ *   dragged.
+ * @return {boolean} Whether the block or bubble provided should be returned to
+ *     drag start.
  */
-Blockly.IDragTarget.prototype.onBubbleDrop;
-
-/**
- * Returns whether the provided block should not be moved after being dropped
- * on this component. If true, block will return to where it was when the drag
- * started.
- * @param {!Blockly.BlockSvg} block The block.
- * @return {boolean} Whether the block provided should be returned to drag
- *     start.
- */
-Blockly.IDragTarget.prototype.shouldPreventBlockMove;
-
-/**
- * Returns whether the provided bubble should not be moved after being dropped
- * on this component. If true, bubble will return to where it was when the drag
- * started.
- * @param {!Blockly.IBubble} bubble The bubble.
- * @return {boolean} Whether the bubble provided should be returned to drag
- *    start.
- */
-Blockly.IDragTarget.prototype.shouldPreventBubbleMove;
+Blockly.IDragTarget.prototype.shouldPreventMove;

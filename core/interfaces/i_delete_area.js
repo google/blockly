@@ -16,8 +16,7 @@ goog.provide('Blockly.IDeleteArea');
 
 goog.require('Blockly.IDragTarget');
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IBubble');
+goog.requireType('Blockly.IDraggable');
 
 
 /**
@@ -29,23 +28,15 @@ goog.requireType('Blockly.IBubble');
 Blockly.IDeleteArea = function() {};
 
 /**
- * Returns whether the provided block would be deleted if dropped on this area.
- * This method should check if the block is deletable and is always called
+ * Returns whether the provided block or bubble would be deleted if dropped on
+ * this area.
+ * This method should check if the element is deletable and is always called
  * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.BlockSvg} block The block.
- * @param {boolean} couldConnect Whether the block could could connect to
+ * @param {!Blockly.IDraggable} element The block or bubble currently being
+ *   dragged.
+ * @param {boolean} couldConnect Whether the element could could connect to
  *     another.
- * @return {boolean} Whether the block provided would be deleted if dropped on
+ * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  */
-Blockly.IDeleteArea.prototype.wouldDeleteBlock;
-
-/**
- * Returns whether the provided bubble would be deleted if dropped on this area.
- * This method should check if the bubble is deletable and is always called
- * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.IBubble} bubble The bubble.
- * @return {boolean} Whether the bubble provided would be deleted if dropped on
- *     this area.
- */
-Blockly.IDeleteArea.prototype.wouldDeleteBubble;
+Blockly.IDeleteArea.prototype.wouldDelete;

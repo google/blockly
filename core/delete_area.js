@@ -44,8 +44,9 @@ Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
 
 /**
  * Returns list of initial capabilities to use for registering this component.
- * @return {!Array<string|!Blockly.ComponentManager.Capability<
- * !Blockly.IComponent>>} The initial capabilities.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<T>>} The initial
+ * capabilities.
+ * @template T
  * @override
  */
 Blockly.DeleteArea.prototype.getInitialCapabilities = function() {

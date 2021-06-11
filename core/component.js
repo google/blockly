@@ -59,8 +59,9 @@ Blockly.Component = function(workspace, opt_id, opt_weight) {
 
 /**
  * Returns list of initial capabilities to use for registering this component.
- * @return {!Array<string|!Blockly.ComponentManager.Capability<
- * !Blockly.IComponent>>} The initial capabilities.
+ * @return {!Array<string|!Blockly.ComponentManager.Capability<T>>} The initial
+ * capabilities.
+ * @template T
  */
 Blockly.Component.prototype.getInitialCapabilities = function() {
   return [];

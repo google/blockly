@@ -14,27 +14,24 @@
 goog.provide('Blockly.zelos');
 goog.provide('Blockly.zelos.RenderInfo');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.ExternalValueInput');
-goog.require('Blockly.blockRendering.InlineInput');
-goog.require('Blockly.blockRendering.InputRow');
+goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.OutputConnection');
-goog.require('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.RoundCorner');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SquareCorner');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldLabel');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
-goog.require('Blockly.zelos.StatementInput');
 goog.require('Blockly.zelos.TopRow');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.zelos.ConstantProvider');
+goog.requireType('Blockly.zelos.Renderer');
 
 
 /**
@@ -129,12 +126,13 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == Blockly.NEXT_STATEMENT ||
-      lastInput.type == Blockly.NEXT_STATEMENT) {
+  if (input.type == Blockly.inputTypes.STATEMENT ||
+      lastInput.type == Blockly.inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.INPUT_VALUE || input.type == Blockly.DUMMY_INPUT) {
+  if (input.type == Blockly.inputTypes.VALUE ||
+      input.type == Blockly.inputTypes.DUMMY) {
     return !this.isInline || this.isMultiRow;
   }
   return false;
@@ -268,9 +266,9 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // If we have two dummy inputs on the same row, one aligned left and the other
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
-  if (input.type == Blockly.DUMMY_INPUT && activeRow.hasDummyInput &&
-      activeRow.align == Blockly.ALIGN_LEFT &&
-      input.align == Blockly.ALIGN_RIGHT) {
+  if (input.type == Blockly.inputTypes.DUMMY && activeRow.hasDummyInput &&
+      activeRow.align == Blockly.constants.ALIGN.LEFT &&
+      input.align == Blockly.constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
   Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);

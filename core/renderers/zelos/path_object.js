@@ -14,10 +14,12 @@
 goog.provide('Blockly.zelos.PathObject');
 
 goog.require('Blockly.blockRendering.PathObject');
-goog.require('Blockly.zelos.ConstantProvider');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
+goog.require('Blockly.zelos.ConstantProvider');
+
+goog.requireType('Blockly.Theme');
 
 
 /**

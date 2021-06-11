@@ -16,10 +16,13 @@
  */
 goog.provide('Blockly.Touch');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
+
+goog.requireType('Blockly.Gesture');
 
 
 /**

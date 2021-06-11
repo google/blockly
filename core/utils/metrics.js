@@ -43,6 +43,18 @@ Blockly.utils.Metrics.prototype.contentHeight;
 Blockly.utils.Metrics.prototype.contentWidth;
 
 /**
+ * Height of the scroll area.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollHeight;
+
+/**
+ * Width of the scroll area.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollWidth;
+
+/**
  * Top-edge of the visible portion of the workspace, relative to the workspace
  * origin.
  * @type {number}
@@ -69,6 +81,18 @@ Blockly.utils.Metrics.prototype.contentTop;
 Blockly.utils.Metrics.prototype.contentLeft;
 
 /**
+ * Top-edge of the scroll area, relative to the workspace origin.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollTop;
+
+/**
+ * Left-edge of the scroll area relative to the workspace origin.
+ * @type {number}
+ */
+Blockly.utils.Metrics.prototype.scrollLeft;
+
+/**
  * Top-edge of the visible portion of the workspace, relative to the blocklyDiv.
  * @type {number}
  */
@@ -83,42 +107,42 @@ Blockly.utils.Metrics.prototype.absoluteLeft;
 
 /**
  * Height of the Blockly div (the view + the toolbox, simple of otherwise).
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.svgHeight;
 
 /**
  * Width of the Blockly div (the view + the toolbox, simple or otherwise).
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.svgWidth;
 
 /**
  * Width of the toolbox, if it exists.  Otherwise zero.
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.toolboxWidth;
 
 /**
  * Height of the toolbox, if it exists.  Otherwise zero.
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.toolboxHeight;
 
 /**
  * Top, bottom, left or right. Use TOOLBOX_AT constants to compare.
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.toolboxPosition;
 
 /**
  * Width of the flyout if it is always open.  Otherwise zero.
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.flyoutWidth;
 
 /**
  * Height of the flyout if it is always open.  Otherwise zero.
- * @type {number|undefined}
+ * @type {number}
  */
 Blockly.utils.Metrics.prototype.flyoutHeight;

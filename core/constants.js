@@ -12,6 +12,9 @@
 
 goog.provide('Blockly.constants');
 
+goog.require('Blockly.connectionTypes');
+
+
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
  * @type {number}
@@ -110,52 +113,14 @@ Blockly.SPRITE = {
 // Constants below this point are not intended to be changed.
 
 /**
- * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
- * @const
+ * Enum for alignment of inputs.
+ * @enum {number}
  */
-Blockly.INPUT_VALUE = 1;
-
-/**
- * ENUM for a left-facing value output.  E.g. 'random fraction'.
- * @const
- */
-Blockly.OUTPUT_VALUE = 2;
-
-/**
- * ENUM for a down-facing block stack.  E.g. 'if-do' or 'else'.
- * @const
- */
-Blockly.NEXT_STATEMENT = 3;
-
-/**
- * ENUM for an up-facing block stack.  E.g. 'break out of loop'.
- * @const
- */
-Blockly.PREVIOUS_STATEMENT = 4;
-
-/**
- * ENUM for an dummy input.  Used to add field(s) with no input.
- * @const
- */
-Blockly.DUMMY_INPUT = 5;
-
-/**
- * ENUM for left alignment.
- * @const
- */
-Blockly.ALIGN_LEFT = -1;
-
-/**
- * ENUM for centre alignment.
- * @const
- */
-Blockly.ALIGN_CENTRE = 0;
-
-/**
- * ENUM for right alignment.
- * @const
- */
-Blockly.ALIGN_RIGHT = 1;
+Blockly.constants.ALIGN = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1
+};
 
 /**
  * ENUM for no drag operation.
@@ -187,35 +152,14 @@ Blockly.DRAG_FREE = 2;
  * @const
  */
 Blockly.OPPOSITE_TYPE = [];
-Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
-Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
-
-
-/**
- * ENUM for toolbox and flyout at top of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_TOP = 0;
-
-/**
- * ENUM for toolbox and flyout at bottom of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_BOTTOM = 1;
-
-/**
- * ENUM for toolbox and flyout at left of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_LEFT = 2;
-
-/**
- * ENUM for toolbox and flyout at right of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_RIGHT = 3;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.INPUT_VALUE] =
+    Blockly.connectionTypes.OUTPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.OUTPUT_VALUE] =
+    Blockly.connectionTypes.INPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
+    Blockly.connectionTypes.PREVIOUS_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+    Blockly.connectionTypes.NEXT_STATEMENT;
 
 /**
  * ENUM representing that an event is not in any delete areas.
@@ -275,3 +219,15 @@ Blockly.RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
  * @const {string}
  */
 Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
+
+/**
+ * The language-neutral id given to the collapsed input.
+ * @const {string}
+ */
+Blockly.constants.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+
+/**
+ * The language-neutral id given to the collapsed field.
+ * @const {string}
+ */
+Blockly.constants.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';

@@ -16,8 +16,12 @@ var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
+var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
+var releaseTasks = require('./scripts/gulpfiles/release_tasks');
+var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
+  deployDemos: appengineTasks.deployDemos,
   default: buildTasks.build,
   build: buildTasks.build,
   buildCore: buildTasks.core,
@@ -30,10 +34,12 @@ module.exports = {
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
-  gitPreCompile: gitTasks.preCompile,
-  gitPostCompile: gitTasks.postCompile,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
   typings: gulp.series(typings.typings, typings.msgTypings),
   package: packageTasks.package,
-  checkLicenses: licenseTasks.checkLicenses
+  checkLicenses: licenseTasks.checkLicenses,
+  recompile: releaseTasks.recompile,
+  publish: releaseTasks.publish,
+  publishBeta: releaseTasks.publishBeta,
+  sortRequires: cleanupTasks.sortRequires,
 };

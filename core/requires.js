@@ -8,6 +8,7 @@
  * @fileoverview Default Blockly entry point. Use this to pick and choose which
  * fields and renderers to include in your Blockly bundle.
  * @author samelh@google.com (Sam El-Husseini)
+ * @suppress {extraRequire}
  */
 'use strict';
 
@@ -45,6 +46,10 @@ goog.require('Blockly.VariablesDynamic');
 // If zoom controls aren't required, then Blockly.inject's
 // "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');
+// This registers default keyboard shortcuts.
+goog.require('Blockly.ShortcutItems');
+// This registers default contextmenu options.
+goog.require('Blockly.ContextMenuItems');
 
 
 // Block dependencies.

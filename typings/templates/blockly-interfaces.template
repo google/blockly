@@ -2,7 +2,7 @@
 declare module Blockly {
 
   interface BlocklyOptions {
-    toolbox?: HTMLElement | string;
+    toolbox?: Blockly.utils.toolbox.ToolboxDefinition;
     readOnly?: boolean;
     trashcan?: boolean;
     maxInstances?: {[type: string]: number;};

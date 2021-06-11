@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.FieldAngle');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
@@ -88,21 +89,21 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Wrapper click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
    * Surface click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickSurfaceWrapper_ = null;
 
   /**
    * Surface mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.moveSurfaceWrapper_ = null;
@@ -331,16 +332,14 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // mousemove even if it's not in the middle of a drag.  In future we may
   // change this behaviour.
   this.clickWrapper_ =
-      Blockly.bindEventWithChecks_(svg, 'click', this, this.hide_);
+      Blockly.browserEvents.conditionalBind(svg, 'click', this, this.hide_);
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
-          true, true);
-  this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
-          true, true);
+  this.clickSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'click', this, this.onMouseMove_, true, true);
+  this.moveSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'mousemove', this, this.onMouseMove_, true, true);
   return svg;
 };
 
@@ -350,15 +349,15 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
-    Blockly.unbindEvent_(this.clickWrapper_);
+    Blockly.browserEvents.unbind(this.clickWrapper_);
     this.clickWrapper_ = null;
   }
   if (this.clickSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.clickSurfaceWrapper_);
     this.clickSurfaceWrapper_ = null;
   }
   if (this.moveSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.moveSurfaceWrapper_);
     this.moveSurfaceWrapper_ = null;
   }
   this.gauge_ = null;

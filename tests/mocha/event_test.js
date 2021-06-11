@@ -551,13 +551,13 @@ suite('Events', function() {
         getArgs: (thisObj) => [true, thisObj.workspace.id],
         getExpectedJson: () => ({type: 'trashcan_open', isOpen: true})},
       {title: 'Viewport change', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 2.666,
-          viewLeft: 1.333, scale: 1.2})},
+          viewLeft: 1.333, scale: 1.2, oldScale: 1})},
       {title: 'Viewport change (0,0)', class: Blockly.Events.ViewportChange,
-        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id],
+        getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id, 1],
         getExpectedJson: () => ({type: 'viewport_change', viewTop: 0,
-          viewLeft: 0, scale: 1.2})},
+          viewLeft: 0, scale: 1.2, oldScale: 1})},
     ];
     var blockEventTestCases = [
       {title: 'Block change', class: Blockly.Events.BlockChange,
@@ -593,6 +593,7 @@ suite('Events', function() {
           oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId2"></shadow>',
           ids: [thisObj.shadowBlock.id], recordUndo: false})},
+      // TODO(#4577) Test serialization of move event coordinate properties.
       {title: 'Block move', class: Blockly.Events.BlockMove,
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({type: 'move',
@@ -601,6 +602,33 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({type: 'move',
           blockId: thisObj.shadowBlock.id, recordUndo: false})},
+    ];
+    var workspaceEventTestCases = [
+      {title: 'Finished Loading', class: Blockly.Events.FinishedLoading,
+        getArgs: (thisObj) => [thisObj.workspace],
+        getExpectedJson: (thisObj) => ({type: 'finished_loading',
+          workspaceId: thisObj.workspace.id})},
+    ];
+    var workspaceCommentEventTestCases = [
+      {title: 'Comment change', class: Blockly.Events.CommentChange,
+        getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
+        getExpectedJson: (thisObj) => ({type: 'comment_change',
+          commentId: thisObj.comment.id, oldContents: 'bar',
+          newContents: 'foo'})},
+      {title: 'Comment create', class: Blockly.Events.CommentCreate,
+        getArgs: (thisObj) => [thisObj.comment],
+        getExpectedJson: (thisObj) => ({type: 'comment_create',
+          commentId: thisObj.comment.id,
+          xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
+      {title: 'Comment delete', class: Blockly.Events.CommentDelete,
+        getArgs: (thisObj) => [thisObj.comment],
+        getExpectedJson: (thisObj) => ({type: 'comment_delete',
+          commentId: thisObj.comment.id})},
+      // TODO(#4577) Test serialization of move event coordinate properties.
+      {title: 'Comment move', class: Blockly.Events.CommentMove,
+        getArgs: (thisObj) => [thisObj.comment],
+        getExpectedJson: (thisObj) => ({type: 'comment_move',
+          commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
     ];
     var testSuites = [
       {title: 'Variable events', testCases: variableEventTestCases,
@@ -618,7 +646,16 @@ suite('Events', function() {
           thisObj.block = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock = createSimpleTestBlock(thisObj.workspace);
           thisObj.shadowBlock.setShadow(true);
-        }}
+        }},
+      {title: 'Workspace events',
+        testCases: workspaceEventTestCases,
+        setup: (_) => {}},
+      {title: 'WorkspaceComment events',
+        testCases: workspaceCommentEventTestCases,
+        setup: (thisObj) => {
+          thisObj.comment = new Blockly.WorkspaceComment(
+              thisObj.workspace, 'comment text', 0, 0, 'comment id');
+        }},
     ];
     testSuites.forEach((testSuite) => {
       suite(testSuite.title, function() {

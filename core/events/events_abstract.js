@@ -15,6 +15,8 @@ goog.provide('Blockly.Events.Abstract');
 
 goog.require('Blockly.Events');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Abstract class for an event.

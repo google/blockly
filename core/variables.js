@@ -17,12 +17,15 @@
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
 goog.require('Blockly.Xml');
+
+goog.requireType('Blockly.Workspace');
 
 
 /**

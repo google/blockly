@@ -14,8 +14,11 @@
 goog.provide('Blockly.IASTNodeLocation');
 goog.provide('Blockly.IASTNodeLocationSvg');
 goog.provide('Blockly.IASTNodeLocationWithBlock');
-goog.provide('Blockly.IBlocklyActionable');
+goog.provide('Blockly.IKeyboardAccessible');
+
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.ShortcutRegistry');
+
 
 /**
  * An AST node location interface.
@@ -59,15 +62,14 @@ Blockly.IASTNodeLocationWithBlock.prototype.getSourceBlock;
 
 
 /**
- * An interface for an object that handles Blockly actions when keyboard
- * navigation is enabled.
+ * An interface for an object that handles keyboard shortcuts.
  * @interface
  */
-Blockly.IBlocklyActionable = function() {};
+Blockly.IKeyboardAccessible = function() {};
 
 /**
- * Handles the given action.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the action has been handled, false otherwise.
+ * Handles the given keyboard shortcut.
+ * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} shortcut The shortcut to be handled.
+ * @return {boolean} True if the shortcut has been handled, false otherwise.
  */
-Blockly.IBlocklyActionable.prototype.onBlocklyAction;
+Blockly.IKeyboardAccessible.prototype.onShortcut;

@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a toolbox item select event.
  * @param {?string=} opt_oldItem The previously selected toolbox item. Undefined

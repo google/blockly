@@ -22,6 +22,11 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.Icon');
+goog.requireType('Blockly.Input');
+
 
 /**
  * An object containing information about the space an icon takes up during

@@ -1135,20 +1135,16 @@ Blockly.WorkspaceSvg.prototype.resizeContents = function() {
  * trash, zoom, toolbox, etc. (e.g. window resize).
  */
 Blockly.WorkspaceSvg.prototype.resize = function() {
-  if (this.toolbox_) {
-    this.toolbox_.position();
-  }
-  if (this.flyout_) {
-    this.flyout_.position();
-  }
-
   var positionables = this.componentManager_.getComponents(
       Blockly.ComponentManager.Capability.POSITIONABLE, true);
   var metrics = this.getMetricsManager().getUiMetrics();
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {
     positionable.position(metrics, savedPositions);
-    savedPositions.push(positionable.getBoundingRectangle());
+    var boundingRect = positionable.getBoundingRectangle();
+    if (boundingRect) {
+      savedPositions.push(boundingRect);
+    }
   }
 
   if (this.scrollbar) {
@@ -1398,9 +1394,6 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
     }
 
     this.render();
-    if (this.toolbox_) {
-      this.toolbox_.position();
-    }
   } else {
     Blockly.hideChaff(true);
   }

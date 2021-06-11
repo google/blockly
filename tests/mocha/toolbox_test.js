@@ -429,10 +429,11 @@ suite('Toolbox', function() {
   suite('position', function() {
     setup(function() {
       this.toolbox = getBasicToolbox();
-      var metricsStub = sinon.stub(this.toolbox.workspace_, 'getMetrics');
-      metricsStub.returns({});
     });
 
+    function stubUiMetrics() {
+      return {viewMetrics: {}};
+    }
     function checkHorizontalToolbox(toolbox) {
       chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left position');
       chai.assert.equal(toolbox.HtmlDiv.style.height, 'auto', 'Check height');
@@ -447,14 +448,14 @@ suite('Toolbox', function() {
       var toolbox = this.toolbox;
       toolbox.HtmlDiv = null;
       toolbox.horizontalLayout_ = true;
-      toolbox.position();
+      toolbox.position(stubUiMetrics(), []);
       chai.assert.equal(toolbox.height_, 0);
     });
     test('Horizontal toolbox at top -> Should anchor horizontal toolbox to top', function() {
       var toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.TOP;
       toolbox.horizontalLayout_ = true;
-      toolbox.position();
+      toolbox.position(stubUiMetrics(), []);
       checkHorizontalToolbox(toolbox);
       chai.assert.equal(toolbox.HtmlDiv.style.top, '0px', 'Check top');
     });
@@ -462,7 +463,7 @@ suite('Toolbox', function() {
       var toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.BOTTOM;
       toolbox.horizontalLayout_ = true;
-      toolbox.position();
+      toolbox.position(stubUiMetrics(), []);
       checkHorizontalToolbox(toolbox);
       chai.assert.equal(toolbox.HtmlDiv.style.bottom, '0px', 'Check bottom');
     });
@@ -470,7 +471,7 @@ suite('Toolbox', function() {
       var toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.RIGHT;
       toolbox.horizontalLayout_ = false;
-      toolbox.position();
+      toolbox.position(stubUiMetrics(), []);
       chai.assert.equal(toolbox.HtmlDiv.style.right, '0px', 'Check right');
       checkVerticalToolbox(toolbox);
     });
@@ -478,7 +479,7 @@ suite('Toolbox', function() {
       var toolbox = this.toolbox;
       toolbox.toolboxPosition = Blockly.utils.toolbox.Position.LEFT;
       toolbox.horizontalLayout_ = false;
-      toolbox.position();
+      toolbox.position(stubUiMetrics(), []);
       chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left');
       checkVerticalToolbox(toolbox);
     });

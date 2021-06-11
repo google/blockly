@@ -14,6 +14,7 @@
 goog.provide('Blockly.IFlyout');
 
 goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.IPositionable');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.utils.Coordinate');
 goog.requireType('Blockly.utils.Svg');
@@ -24,6 +25,7 @@ goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Interface for a flyout.
  * @extends {Blockly.IRegistrable}
+ * @extends {Blockly.IPositionable}
  * @interface
  */
 Blockly.IFlyout = function() {};
@@ -173,10 +175,20 @@ Blockly.IFlyout.prototype.getX;
 Blockly.IFlyout.prototype.getY;
 
 /**
- * Position the flyout.
- * @return {void}
+ * Positions the flyout. Called when the window is resized.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
 Blockly.IFlyout.prototype.position;
+
+/**
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
+ */
+Blockly.IFlyout.prototype.getClientRect;
 
 /**
  * Determine if a drag delta is toward the workspace, based on the position

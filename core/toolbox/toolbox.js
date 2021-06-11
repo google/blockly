@@ -24,6 +24,7 @@ goog.require('Blockly.Events');
 goog.require('Blockly.Events.ToolboxItemSelect');
 goog.require('Blockly.IAutoHideable');
 goog.require('Blockly.IKeyboardAccessible');
+goog.require('Blockly.IPositionable');
 goog.require('Blockly.IStyleable');
 goog.require('Blockly.IToolbox');
 goog.require('Blockly.Options');
@@ -53,6 +54,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IStyleable}
  * @implements {Blockly.IToolbox}
+ * @implements {Blockly.IPositionable}
  * @extends {Blockly.DeleteArea}
  */
 Blockly.Toolbox = function(workspace) {
@@ -204,7 +206,8 @@ Blockly.Toolbox.prototype.init = function() {
     capabilities: [
       Blockly.ComponentManager.Capability.AUTOHIDEABLE,
       Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET
+      Blockly.ComponentManager.Capability.DRAG_TARGET,
+      Blockly.ComponentManager.Capability.POSITIONABLE,
     ]
   });
 };
@@ -404,7 +407,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   this.contents_ = [];
   this.contentMap_ = Object.create(null);
   this.renderContents_(toolboxDef['contents']);
-  this.position();
+  this.position(this.workspace_.getMetricsManager().getUiMetrics(), []);
 };
 
 /**
@@ -635,11 +638,16 @@ Blockly.Toolbox.prototype.isHorizontal = function() {
 
 /**
  * Positions the toolbox based on whether it is a horizontal toolbox and whether
- * the workspace is in rtl.
- * @public
+ * the workspace is in rtl. Called when the window is resized.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} _savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.Toolbox.prototype.position = function() {
-  var workspaceMetrics = this.workspace_.getMetrics();
+Blockly.Toolbox.prototype.position = function(metrics, _savedPositions) {
+  if (!metrics) {
+    metrics = this.workspace_.getMetricsManager().getUiMetrics();
+  }
+
   var toolboxDiv = this.HtmlDiv;
   if (!toolboxDiv) {
     // Not initialized yet.
@@ -651,7 +659,8 @@ Blockly.Toolbox.prototype.position = function() {
     toolboxDiv.style.height = 'auto';
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
-    this.width_ = workspaceMetrics.viewWidth;
+
+    this.width_ = metrics.viewMetrics.width;
     if (this.toolboxPosition == Blockly.utils.toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
@@ -665,10 +674,20 @@ Blockly.Toolbox.prototype.position = function() {
     }
     toolboxDiv.style.height = '100%';
     this.width_ = toolboxDiv.offsetWidth;
-    this.height_ = workspaceMetrics.viewHeight;
+    this.height_ = metrics.viewMetrics.height;
   }
-  this.flyout_.position();
 };
+
+/**
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if this
+ * UI element's position should be ignored.
+ */
+Blockly.Toolbox.prototype.getBoundingRectangle = function() {
+  return null;
+};
+
 /**
  * Handles resizing the toolbox when a toolbox item resizes.
  * @package

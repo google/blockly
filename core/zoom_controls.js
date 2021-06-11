@@ -228,7 +228,8 @@ Blockly.ZoomControls.prototype.dispose = function() {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if this
+ * UI element's position should be ignored.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
   var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;

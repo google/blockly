@@ -16,7 +16,7 @@ goog.provide('Blockly.DragTarget');
 
 goog.require('Blockly.IDragTarget');
 
-goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.utils.Rect');
 

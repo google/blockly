@@ -146,10 +146,10 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 
   // Call drag enter/exit/over after wouldDeleteBlock is called in shouldDelete_
   if (this.dragTarget_ !== oldDragTarget) {
-    oldDragTarget && oldDragTarget.onDragExit(this.draggingBlock_);
-    this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBlock_);
+    oldDragTarget && oldDragTarget.onDragExit(this.draggingBubble_);
+    this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBubble_);
   }
-  this.dragTarget_ && this.dragTarget_.onDragOver(this.draggingBlock_);
+  this.dragTarget_ && this.dragTarget_.onDragOver(this.draggingBubble_);
 };
 
 /**

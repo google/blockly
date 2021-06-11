@@ -35,6 +35,7 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IFlyout');
 goog.requireType('Blockly.ISelectableToolboxItem');

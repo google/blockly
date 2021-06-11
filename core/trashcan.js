@@ -33,7 +33,7 @@ goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
 
-goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IBubble');
 goog.requireType('Blockly.IFlyout');
@@ -545,7 +545,7 @@ Blockly.Trashcan.prototype.getClientRect = function() {
  * @override
  */
 Blockly.Trashcan.prototype.onDragOver = function(_dragElement) {
-  Blockly.Trashcan.superClass_.onDragOver.call(this);
+  Blockly.Trashcan.superClass_.onDragOver.call(this, _dragElement);
   this.setLidOpen(this.wouldDelete_);
 };
 
@@ -556,7 +556,7 @@ Blockly.Trashcan.prototype.onDragOver = function(_dragElement) {
  * @override
  */
 Blockly.Trashcan.prototype.onDragExit = function(_dragElement) {
-  Blockly.Trashcan.superClass_.onDragExit.call(this);
+  Blockly.Trashcan.superClass_.onDragExit.call(this, _dragElement);
   this.setLidOpen(false);
 };
 

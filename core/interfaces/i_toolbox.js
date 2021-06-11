@@ -13,7 +13,8 @@
 
 goog.provide('Blockly.IToolbox');
 
-goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IFlyout')
+goog.requireType('Blockly.IPositionable');
 goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
@@ -23,6 +24,7 @@ goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Interface for a toolbox.
  * @extends {Blockly.IRegistrable}
+ * @extends {Blockly.IPositionable}
  * @interface
  */
 Blockly.IToolbox = function() {};
@@ -73,10 +75,20 @@ Blockly.IToolbox.prototype.isHorizontal;
 
 /**
  * Positions the toolbox based on whether it is a horizontal toolbox and whether
- * the workspace is in rtl.
- * @return {void}
+ * the workspace is in rtl. Called when the window is resized.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
 Blockly.IToolbox.prototype.position;
+
+/**
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
+ */
+Blockly.IToolbox.prototype.getClientRect;
 
 /**
  * Handles resizing the toolbox when a toolbox item resizes.

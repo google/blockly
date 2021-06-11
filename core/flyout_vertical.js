@@ -131,14 +131,18 @@ Blockly.VerticalFlyout.prototype.getY = function() {
 };
 
 /**
- * Move the flyout to the edge of the workspace.
+ * Positions the flyout. Called when the window is resized.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} _savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.VerticalFlyout.prototype.position = function() {
+Blockly.VerticalFlyout.prototype.position = function(metrics, _savedPositions) {
   if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }
-  var metricsManager = this.targetWorkspace.getMetricsManager();
-  var targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
+  // Call getMetricsManager in case this method was called without metrics.
+  var targetWorkspaceViewMetrics = metrics ? metrics.viewMetrics :
+      this.targetWorkspace.getMetricsManager().getViewMetrics();
 
   // Record the height for workspace metrics.
   this.height_ = targetWorkspaceViewMetrics.height;
@@ -374,7 +378,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
 
     // Record the width for workspace metrics and .position.
     this.width_ = flyoutWidth;
-    this.position();
+    this.position(this.targetWorkspace.getMetricsManager().getUiMetrics(), []);
   }
 };
 

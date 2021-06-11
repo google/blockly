@@ -315,7 +315,8 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
     weight: 1,
     capabilities: [
       Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET
+      Blockly.ComponentManager.Capability.DRAG_TARGET,
+      Blockly.ComponentManager.Capability.POSITIONABLE,
     ]
   });
 };
@@ -548,9 +549,6 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
   this.reflow();
 
   this.filterForCapacity_();
-
-  // Correctly position the flyout's scrollbar when it opens.
-  this.position();
 
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
@@ -1049,10 +1047,22 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 Blockly.Flyout.prototype.getClientRect;
 
 /**
- * Position the flyout.
- * @return {void}
+ * Positions the flyout. Called when the window is resized.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
 Blockly.Flyout.prototype.position;
+
+/**
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if this
+ * UI element's position should be ignored.
+ */
+Blockly.Flyout.prototype.getBoundingRectangle = function() {
+  return null;
+};
 
 /**
  * Determine if a drag delta is toward the workspace, based on the position

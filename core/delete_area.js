@@ -31,8 +31,9 @@ Blockly.DeleteArea = function() {
   Blockly.DeleteArea.superClass_.constructor.call(this);
 
   /**
-   * Whether the current block or bubble dragged over this delete area would be
+   * Whether the last block or bubble dragged over this delete area would be
    * deleted if dropped on this component.
+   * This property is not updated after the block or bubble is deleted.
    * @type {boolean}
    * @protected
    */
@@ -56,9 +57,18 @@ Blockly.DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
   if (element instanceof Blockly.BlockSvg) {
     var block = /** @type {Blockly.BlockSvg} */ (element);
     var couldDeleteBlock = !block.getParent() && block.isDeletable();
-    this.wouldDelete_ = couldDeleteBlock && !couldConnect;
+    this.updateWouldDelete_(couldDeleteBlock && !couldConnect);
   } else {
-    this.wouldDelete_ = element.isDeletable();
+    this.updateWouldDelete_(element.isDeletable());
   }
   return this.wouldDelete_;
+};
+
+/**
+ * Updates the internal wouldDelete_ state.
+ * @param {boolean} wouldDelete The new value for the wouldDelete state.
+ * @protected
+ */
+Blockly.DeleteArea.prototype.updateWouldDelete_ = function(wouldDelete) {
+  this.wouldDelete_ = wouldDelete;
 };

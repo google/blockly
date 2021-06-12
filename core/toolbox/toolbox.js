@@ -558,11 +558,80 @@ Blockly.Toolbox.prototype.wouldDelete = function(element, _couldConnect) {
   if (element instanceof Blockly.BlockSvg) {
     var block = /** @type {Blockly.BlockSvg} */ (element);
     // Prefer dragging to the toolbox over connecting to other blocks.
-    this.wouldDelete_ = !block.getParent() && block.isDeletable();
+    this.updateWouldDelete_(!block.getParent() && block.isDeletable());
   } else {
-    this.wouldDelete_ = element.isDeletable();
+    this.updateWouldDelete_(element.isDeletable());
   }
   return this.wouldDelete_;
+};
+
+/**
+ * Handles when a cursor with a block or bubble enters this drag target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Toolbox.prototype.onDragEnter = function(_dragElement) {
+  this.updateCursorDeleteStyle_(true);
+};
+
+/**
+ * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Toolbox.prototype.onDragExit = function(_dragElement) {
+  this.updateCursorDeleteStyle_(false);
+};
+
+
+/**
+ * Handles when a block or bubble is dropped on this component.
+ * Should not handle delete here.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Toolbox.prototype.onDrop = function(_dragElement) {
+  this.updateCursorDeleteStyle_(false);
+};
+
+/**
+ * Updates the internal wouldDelete_ state.
+ * @param {boolean} wouldDelete The new value for the wouldDelete state.
+ * @protected
+ * @override
+ */
+Blockly.Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
+  if (wouldDelete === this.wouldDelete_) {
+    return;
+  }
+  // This logic handles updating the deleteStyle properly if the delete state
+  // changes while the block is over the Toolbox. This could happen if the
+  // implementation of wouldDeleteBlock depends on the couldConnect parameter
+  // or if the isDeletable property of the block currently being dragged
+  // changes during the drag.
+  this.updateCursorDeleteStyle_(false);
+  this.wouldDelete_ = wouldDelete;
+  this.updateCursorDeleteStyle_(true);
+};
+
+/**
+ * Adds or removes the CSS style of the cursor over the toolbox based whether
+ * the block or bubble over it is expected to be deleted if dropped (using the
+ * internal this.wouldDelete_ property).
+ * @param {boolean} addStyle Whether the style should be added or removed.
+ * @protected
+ */
+Blockly.Toolbox.prototype.updateCursorDeleteStyle_ = function(addStyle) {
+  var style = this.wouldDelete_ ? 'blocklyToolboxDelete' :
+      'blocklyToolboxGrab';
+  if (addStyle) {
+    this.addStyle(style);
+  } else {
+    this.removeStyle(style);
+  }
 };
 
 /**

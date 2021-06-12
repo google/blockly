@@ -171,8 +171,6 @@ Blockly.BlockDragger.prototype.startDrag = function(
   // the block dragger, which would also let the block not track the block drag
   // surface.
   this.draggingBlock_.moveToDragSurface();
-
-  this.updateToolboxStyle_(false);
 };
 
 /**
@@ -300,8 +298,6 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     }
   }
   this.workspace_.setResizesEnabled(true);
-
-  this.updateToolboxStyle_(true);
 
   Blockly.Events.setGroup(false);
 };

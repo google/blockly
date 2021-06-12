@@ -569,9 +569,10 @@ Blockly.Toolbox.prototype.wouldDelete = function(element, _couldConnect) {
  * Handles when a cursor with a block or bubble enters this drag target.
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
+ * @override
  */
 Blockly.Toolbox.prototype.onDragEnter = function(_dragElement) {
-  this.updateCursorDeleteStyle(true);
+  this.updateCursorDeleteStyle_(true);
 };
 
 /**
@@ -581,7 +582,7 @@ Blockly.Toolbox.prototype.onDragEnter = function(_dragElement) {
  * @override
  */
 Blockly.Toolbox.prototype.onDragExit = function(_dragElement) {
-  this.updateCursorDeleteStyle(false);
+  this.updateCursorDeleteStyle_(false);
 };
 
 
@@ -590,9 +591,10 @@ Blockly.Toolbox.prototype.onDragExit = function(_dragElement) {
  * Should not handle delete here.
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
+ * @override
  */
 Blockly.Toolbox.prototype.onDrop = function(_dragElement) {
-  this.updateCursorDeleteStyle(false);
+  this.updateCursorDeleteStyle_(false);
 };
 
 /**
@@ -610,9 +612,9 @@ Blockly.Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
   // implementation of wouldDeleteBlock depends on the couldConnect parameter
   // or if the isDeletable property of the block currently being dragged
   // changes during the drag.
-  this.updateCursorDeleteStyle(false);
+  this.updateCursorDeleteStyle_(false);
   this.wouldDelete_ = wouldDelete;
-  this.updateCursorDeleteStyle(true);
+  this.updateCursorDeleteStyle_(true);
 };
 
 /**
@@ -622,7 +624,7 @@ Blockly.Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
  * @param {boolean} addStyle Whether the style should be added or removed.
  * @protected
  */
-Blockly.Toolbox.prototype.updateCursorDeleteStyle = function(addStyle) {
+Blockly.Toolbox.prototype.updateCursorDeleteStyle_ = function(addStyle) {
   var style = this.wouldDelete_ ? 'blocklyToolboxDelete' :
       'blocklyToolboxGrab';
   if (addStyle) {

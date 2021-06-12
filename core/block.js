@@ -1126,7 +1126,7 @@ Blockly.Block.prototype.getFieldValue = function(name) {
  */
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   if (typeof name === "undefined") {
-    throw Error("Call to Blockly.Block.prototype.setFieldValue without " + 
+    throw Error("Call to Blockly.Block.prototype.setFieldValue without " +
         "required second argument of field name.");
   }
   var field = this.getField(name);

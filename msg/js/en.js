@@ -379,7 +379,7 @@ Blockly.Msg["PROCEDURES_CREATE_DO"] = "Create '%1'";
 Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"] = "Describe this function...";
 Blockly.Msg["PROCEDURES_DEFNORETURN_DO"] = "";
 Blockly.Msg["PROCEDURES_DEFNORETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";
-Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"] = "do something";
+Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"] = "name";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"] = "Subprogram";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TOOLTIP"] = "Creates a function with no output.";
 Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";
@@ -494,6 +494,7 @@ Blockly.Msg["LISTS_SET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
 Blockly.Msg["MATH_CHANGE_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["PROCEDURES_DEFRETURN_COMMENT"] = Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"];
 Blockly.Msg["PROCEDURES_DEFRETURN_DO"] = Blockly.Msg["PROCEDURES_DEFNORETURN_DO"];
+Blockly.Msg["PROCEDURES_DEFRETURN_PROCEDURE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"];
 Blockly.Msg["TEXT_APPEND_VARIABLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 

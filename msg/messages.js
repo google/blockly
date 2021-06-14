@@ -1744,9 +1744,7 @@ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = 'Subprogram';
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
-/** @type {string} */
-Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = "name";
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'name';
 /** @type {string} */
 /// block text - This precedes the list of parameters on a function's definition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
@@ -1772,6 +1770,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
 /** @type {string} */
 /// {{Optional}} url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
+/** @type {string} */
+Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @type {string} */
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @type {string} */

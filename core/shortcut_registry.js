@@ -1,3 +1,4 @@
+/* eslint-disable es5/no-es6-methods */
 /**
  * @license
  * Copyright 2020 Google LLC
@@ -308,10 +309,8 @@ Blockly.ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  */
 Blockly.ShortcutRegistry.prototype.checkModifiers_ = function(
     modifiers) {
-  var validModifiers = Blockly.utils.object.keys(
-      Blockly.ShortcutRegistry.modifierKeys).map(function(e) {
-    return Blockly.ShortcutRegistry.modifierKeys[e];
-  });
+  var validModifiers = Blockly.utils.object.values(
+      Blockly.ShortcutRegistry.modifierKeys);
   for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw new Error(modifier + ' is not a valid modifier key.');

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-06-11 15:20:24.181434",
+		"lastupdated": "2021-06-14 11:06:54.331070",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -72,10 +72,10 @@
 	"LEAPHY_BUZZ_HERTZ": "Hertz",
 	"LEAPHY_BUZZ_MS": "ms",
 	"LEAPHY_SERIAL_PRINT": "Show on screen",
-	"LEAPHY_SITUATION_CATEGORY": "Situation",
+	"LEAPHY_SITUATION_CATEGORY": "Thinkflow",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",
-	"LEAPHY_FUNCTIONS_CATEGORY": "Functions",
+	"LEAPHY_FUNCTIONS_CATEGORY": "Custom Blocks",
 	"ARD_TIME_DELAY": "during",
 	"ARD_TIME_MS": "ms",
 	"ARD_TIME_DELAY_TIP": "Wait specific time in milliseconds",

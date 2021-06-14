@@ -237,7 +237,7 @@ Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
 
 /** @type {string} */
 /// Sitation Category Title
-Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Situation';
+Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Thinkflow';
 /** @type {string} */
 /// Numbers Category Title
 Blockly.Msg.LEAPHY_NUMBERS_CATEGORY = 'Numbers';
@@ -246,7 +246,7 @@ Blockly.Msg.LEAPHY_NUMBERS_CATEGORY = 'Numbers';
 Blockly.Msg.LEAPHY_VARIABLES_CATEGORY = 'Variables';
 /** @type {string} */
 /// Functions Category Title
-Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Functions';
+Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Custom Blocks';
 
 /** @type {string} */
 /// Arduino Delay in ms
@@ -1746,6 +1746,8 @@ Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = 'Subprogram';
 /// The user will replace it with the function's name.
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
 /** @type {string} */
+Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = "name";
+/** @type {string} */
 /// block text - This precedes the list of parameters on a function's definition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].
@@ -1770,8 +1772,6 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
 /** @type {string} */
 /// {{Optional}} url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
-/** @type {string} */
-Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @type {string} */
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /** @type {string} */

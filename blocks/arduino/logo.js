@@ -18,7 +18,7 @@
  *  Blockly.Arduino['ardublockly_plus_both_large'] = noCode;
  *  Blockly.Arduino['ardublockly_minus_large'] = noCode;
  *  Blockly.Arduino['ardublockly_minus_small'] = noCode;
- *  
+ *
  * Toolbox:
  *  <sep></sep>
  *  <category name="Logo">

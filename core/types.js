@@ -60,9 +60,9 @@ Blockly.Types.DECIMAL = new Blockly.Type({
   typeId: 'Decimal',
   typeMsgName: 'ARD_TYPE_DECIMAL',
   compatibleTypes: [Blockly.Types.BOOLEAN,
-                    Blockly.Types.SHORT_NUMBER,
-                    Blockly.Types.NUMBER,
-                    Blockly.Types.LARGE_NUMBER]
+    Blockly.Types.SHORT_NUMBER,
+    Blockly.Types.NUMBER,
+    Blockly.Types.LARGE_NUMBER]
 });
 
 /** Array/List of items. */
@@ -98,22 +98,22 @@ Blockly.Types.CHILD_BLOCK_MISSING = new Blockly.Type({
  * after declaration.
  */
 Blockly.Types.NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN,
+  Blockly.Types.SHORT_NUMBER,
+  Blockly.Types.LARGE_NUMBER,
+  Blockly.Types.DECIMAL]);
 
 Blockly.Types.SHORT_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.NUMBER,
-    Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN,
+  Blockly.Types.NUMBER,
+  Blockly.Types.LARGE_NUMBER,
+  Blockly.Types.DECIMAL]);
 
 Blockly.Types.LARGE_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN,
+  Blockly.Types.SHORT_NUMBER,
+  Blockly.Types.NUMBER,
+  Blockly.Types.DECIMAL]);
 
 
 /**
@@ -207,18 +207,18 @@ Blockly.Types.regExpFloat_ = new RegExp(/^-?[0-9]*[.][0-9]+$/);
  * @return {!Blockly.Type} Blockly type.
  */
 Blockly.Types.identifyNumber = function(numberString) {
-    if (Blockly.Types.regExpInt_.test(numberString)) {
-      var intValue = parseInt(numberString);
-      if (isNaN(intValue)) {
-        return Blockly.Types.NULL;
-      }
-      if (intValue > 32767 || intValue < -32768) {
-        return Blockly.Types.LARGE_NUMBER;
-      }
-      return Blockly.Types.NUMBER;
-    } else if (Blockly.Types.regExpFloat_.test(numberString)) {
-      return Blockly.Types.DECIMAL;
+  if (Blockly.Types.regExpInt_.test(numberString)) {
+    var intValue = parseInt(numberString);
+    if (isNaN(intValue)) {
+      return Blockly.Types.NULL;
     }
-    return Blockly.Types.NULL;
+    if (intValue > 32767 || intValue < -32768) {
+      return Blockly.Types.LARGE_NUMBER;
+    }
+    return Blockly.Types.NUMBER;
+  } else if (Blockly.Types.regExpFloat_.test(numberString)) {
+    return Blockly.Types.DECIMAL;
+  }
+  return Blockly.Types.NULL;
 };
 

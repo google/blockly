@@ -73,7 +73,7 @@ Blockly.Blocks['serial_print'] = {
     this.setColour(Blockly.Blocks.serial.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.serial), 'SERIAL_ID')
+            Blockly.Arduino.Boards.selected.serial), 'SERIAL_ID')
         .appendField(Blockly.Msg.ARD_SERIAL_PRINT);
     this.appendValueInput('CONTENT');
     this.appendDummyInput()
@@ -88,12 +88,13 @@ Blockly.Blocks['serial_print'] = {
    * Called whenever anything on the workspace changes.
    * It checks the instances of serial_setup and attaches a warning to this
    * block if not valid data is found.
+   * @param {any} event The event
    * @this Blockly.Block
    */
   onchange: function(event) {
     if (!this.workspace || event.type == Blockly.Events.MOVE ||
         event.type == Blockly.Events.UI) {
-        return;  // Block deleted or irrelevant event
+      return;  // Block deleted or irrelevant event
     }
 
     // Get the Serial instance from this block

@@ -182,7 +182,7 @@ Blockly.Blocks['io_highlow'] = {
     this.appendDummyInput()
         .appendField(
             new Blockly.FieldDropdown([[Blockly.Msg.ARD_HIGH, 'HIGH'], [Blockly.Msg.ARD_LOW, 'LOW']]),
-           'STATE');
+            'STATE');
     this.setOutput(true, Blockly.Types.BOOLEAN.output);
     this.setTooltip(Blockly.Msg.ARD_HIGHLOW_TIP);
   },
@@ -202,14 +202,14 @@ Blockly.Blocks['io_pulsein'] = {
       "type": "math_foo",
       "message0": Blockly.Msg.ARD_PULSE_READ,
       "args0": [{
-          "type": "input_value",
-          "name": "PULSETYPE",
-          "check": Blockly.Types.BOOLEAN.check
-        }, {
-          "type": "field_dropdown",
-          "name": "PULSEPIN",
-          "options": Blockly.Arduino.Boards.selected.digitalPins
-        }
+        "type": "input_value",
+        "name": "PULSETYPE",
+        "check": Blockly.Types.BOOLEAN.check
+      }, {
+        "type": "field_dropdown",
+        "name": "PULSEPIN",
+        "options": Blockly.Arduino.Boards.selected.digitalPins
+      }
       ],
       "output": Blockly.Types.NUMBER.output,
       "inputsInline": true,
@@ -230,23 +230,23 @@ Blockly.Blocks['io_pulsetimeout'] = {
    * pin.
    * @this Blockly.Block
    */
-  init: function () {
+  init: function() {
     this.jsonInit({
       "type": "math_foo",
       "message0": Blockly.Msg.ARD_PULSE_READ_TIMEOUT,
       "args0": [{
-          "type": "input_value",
-          "name": "PULSETYPE",
-          "check": Blockly.Types.BOOLEAN.check
-        }, {
-          "type": "field_dropdown",
-          "name": "PULSEPIN",
-          "options": Blockly.Arduino.Boards.selected.digitalPins
-        }, {
-          "type": "input_value",
-          "name": "TIMEOUT",
-          "check": Blockly.Types.NUMBER.check
-        }
+        "type": "input_value",
+        "name": "PULSETYPE",
+        "check": Blockly.Types.BOOLEAN.check
+      }, {
+        "type": "field_dropdown",
+        "name": "PULSEPIN",
+        "options": Blockly.Arduino.Boards.selected.digitalPins
+      }, {
+        "type": "input_value",
+        "name": "TIMEOUT",
+        "check": Blockly.Types.NUMBER.check
+      }
       ],
       "output": Blockly.Types.NUMBER.output,
       "inputsInline": true,

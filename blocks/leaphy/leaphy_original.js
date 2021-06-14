@@ -30,104 +30,104 @@ var motorTypeOptions = [["%{BKY_LEAPHY_MOTOR_LEFT_DROPDOWN}", "9"], ["%{BKY_LEAP
 var motorDirectionOptions = [["%{BKY_LEAPHY_MOTOR_FORWARD}", "1"], ["%{BKY_LEAPHY_MOTOR_BACKWARD}", "2"], ["%{BKY_LEAPHY_MOTOR_LEFT}", "3"], ["%{BKY_LEAPHY_MOTOR_RIGHT}", "4"]];
 
 Blockly.Blocks['leaphy_original_set_led'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_LED)
-        this.appendValueInput("LED_RED", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_LED_RED)
-            .setCheck('Number');
-        this.appendValueInput("LED_GREEN", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_LED_GREEN)
-            .setCheck('Number');
-        this.appendValueInput("LED_BLUE", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_LED_BLUE)
-            .setCheck('Number');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setStyle('leaphy_blocks');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_LED);
+    this.appendValueInput("LED_RED", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_LED_RED)
+        .setCheck('Number');
+    this.appendValueInput("LED_GREEN", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_LED_GREEN)
+        .setCheck('Number');
+    this.appendValueInput("LED_BLUE", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_LED_BLUE)
+        .setCheck('Number');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  }
 };
 
 Blockly.Blocks['leaphy_original_set_motor'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_MOTOR_TYPE)
-            .appendField(new Blockly.FieldDropdown(motorTypeOptions), "MOTOR_TYPE")
-        this.appendValueInput("MOTOR_SPEED", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_MOTOR_SPEED)
-            .setCheck('Number');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setStyle('leaphy_blocks');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_MOTOR_TYPE)
+        .appendField(new Blockly.FieldDropdown(motorTypeOptions), "MOTOR_TYPE");
+    this.appendValueInput("MOTOR_SPEED", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_MOTOR_SPEED)
+        .setCheck('Number');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  }
 };
 
 Blockly.Blocks['leaphy_original_get_distance'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_GET_DISTANCE);
-        this.setOutput(true, 'Number');
-        this.setStyle('leaphy_blocks');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_GET_DISTANCE);
+    this.setOutput(true, 'Number');
+    this.setStyle('leaphy_blocks');
+  }
 };
 
 Blockly.Blocks['leaphy_original_move_motors'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_MOTOR_DIRECTION)
-            .appendField(new Blockly.FieldDropdown(motorDirectionOptions), "MOTOR_DIRECTION")
-        this.appendValueInput("MOTOR_SPEED", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_MOTOR_SPEED)
-            .setCheck('Number');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setStyle('leaphy_blocks');
-    }
-}
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_MOTOR_DIRECTION)
+        .appendField(new Blockly.FieldDropdown(motorDirectionOptions), "MOTOR_DIRECTION");
+    this.appendValueInput("MOTOR_SPEED", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_MOTOR_SPEED)
+        .setCheck('Number');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  }
+};
 
 Blockly.Blocks['leaphy_original_digital_read'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_DIGITAL_READ)
-            .appendField(new Blockly.FieldDropdown(digitalPinOptions), "PIN");
-        this.setOutput(true, 'Number');
-        this.setStyle('leaphy_blocks');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_DIGITAL_READ)
+        .appendField(new Blockly.FieldDropdown(digitalPinOptions), "PIN");
+    this.setOutput(true, 'Number');
+    this.setStyle('leaphy_blocks');
+  }
 };
 
 Blockly.Blocks['leaphy_original_analog_read'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_ANALOG_READ)
-            .appendField(new Blockly.FieldDropdown(analogPinOptions), "PIN");
-        this.setOutput(true, 'Number');
-        this.setStyle('leaphy_blocks');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_ANALOG_READ)
+        .appendField(new Blockly.FieldDropdown(analogPinOptions), "PIN");
+    this.setOutput(true, 'Number');
+    this.setStyle('leaphy_blocks');
+  }
 };
 
 Blockly.Blocks['leaphy_original_buzz'] = {
-    /**
+  /**
      * Block for making some noise!
      * @this Blockly.Block
      */
-    init: function() {
-        this.appendValueInput("FREQUENCY", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
-            .setCheck('Number');
-        this.appendValueInput("DURATION", 'Number')
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_HERTZ)
-            .setCheck('Number');
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-      this.setStyle('leaphy_blocks');
-    },
+  init: function() {
+    this.appendValueInput("FREQUENCY", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_BUZZ_BUZZ)
+        .setCheck('Number');
+    this.appendValueInput("DURATION", 'Number')
+        .appendField(Blockly.Msg.LEAPHY_BUZZ_HERTZ)
+        .setCheck('Number');
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_BUZZ_MS);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  },
 };
-//Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+// Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
-//]);  // END JSON EXTRACT (Do not delete this comment.)
+// ]);  // END JSON EXTRACT (Do not delete this comment.)

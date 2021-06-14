@@ -1,3 +1,4 @@
+/* eslint-disable es5/no-es6-methods */
 /**
  * @license
  * Copyright 2012 Google LLC

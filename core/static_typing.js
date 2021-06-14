@@ -16,7 +16,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Type');
 goog.require('Blockly.Types');
 goog.require('Blockly.Workspace');
-//goog.require('goog.asserts');
+// goog.require('goog.asserts');
 
 /**
  * Class for Static Typing.
@@ -32,15 +32,14 @@ Blockly.StaticTyping = function() {
  * their type into an associative array with the variable names as the keys and
  * the type as the values.
  * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
- * @return {Object{ String: Blockly.Type, } Associative array with the variable
- *     names as the keys and the type as the values.
+ * @return {Object} Associative of varnames - types 
  */
 Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
   this.varTypeDict = Object.create(null);
   this.pendingVarTypeDict = Object.create(null);
   var blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
   for (var i = 0; i < blocks.length; i++) {
-    //blocks[i].select();  // for step debugging, highlights block in workspace
+    // blocks[i].select();  // for step debugging, highlights block in workspace
     // Each statement block iterates through its input children collecting vars
     var blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
     for (var j = 0; j < blockVarAndTypes.length; j++) {
@@ -93,7 +92,7 @@ Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
     var blockNextConnection = null;
     var blocks = [];
     do {
-      //block.select();    // for step debugging, highlights block in workspace
+      // block.select();    // for step debugging, highlights block in workspace
       blocks.push(block);
       blockNextConnection = block.nextConnection;
       connections = block.getConnections_(true);
@@ -161,26 +160,26 @@ Blockly.StaticTyping.getBlockVars = function(block) {
  */
 Blockly.StaticTyping.prototype.assignTypeToVars =
     function(block, varName, varType) {
-  switch (this.varTypeDict[varName]) {
-    // First time variable is encountered, or previously undefined
-    case undefined:
-    case Blockly.Types.UNDEF:
-      this.varTypeDict[varName] = varType;
-      if ((varType != Blockly.Types.UNDEF) &&
+      switch (this.varTypeDict[varName]) {
+        // First time variable is encountered, or previously undefined
+        case undefined:
+        case Blockly.Types.UNDEF:
+          this.varTypeDict[varName] = varType;
+          if ((varType != Blockly.Types.UNDEF) &&
           (this.pendingVarTypeDict[varName] !== undefined)) {
-        for (var i = 0; i < this.pendingVarTypeDict[varName].length; i++) {
-          this.assignTypeToVars(
-              block, this.pendingVarTypeDict[varName][i], varType);
-        }
+            for (var i = 0; i < this.pendingVarTypeDict[varName].length; i++) {
+              this.assignTypeToVars(
+                  block, this.pendingVarTypeDict[varName][i], varType);
+            }
+          }
+          break;
+          // Variable with valid type already registered
+        default:
+          this.setBlockTypeWarning(
+              block, varType, varName, this.varTypeDict[varName]);
+          break;
       }
-      break;
-    // Variable with valid type already registered
-    default:
-      this.setBlockTypeWarning(
-          block, varType, varName, this.varTypeDict[varName]);
-      break;
-  }
-};
+    };
 
 /**
  * When a block uses a variable this function can compare its type with the
@@ -191,22 +190,22 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
  */
 Blockly.StaticTyping.prototype.setBlockTypeWarning =
     function(block, blockType, varName) {
-  var warningLabel = 'varType';
-  if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
+      var warningLabel = 'varType';
+      if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
       (this.varTypeDict[varName] == Blockly.Types.CHILD_BLOCK_MISSING)) {
-    // User still has to attach a block to this variable or its first
-    // declaration, so for now do not display any warning
-    block.setWarningText(null, warningLabel);
-  } else if ((this.varTypeDict[varName] !== blockType) &&
+        // User still has to attach a block to this variable or its first
+        // declaration, so for now do not display any warning
+        block.setWarningText(null, warningLabel);
+      } else if ((this.varTypeDict[varName] !== blockType) &&
              (blockType !== Blockly.Types.UNDEF)) {
-    block.setWarningText('The variable ' + varName + ' has been first ' +
+        block.setWarningText('The variable ' + varName + ' has been first ' +
         'assigned to the "' + this.varTypeDict[varName].typeName + '" type\n' +
         'and this block tries to assign the type "' + blockType.typeName + '"!',
         warningLabel);
-  } else {
-    block.setWarningText(null, warningLabel);
-  }
-};
+      } else {
+        block.setWarningText(null, warningLabel);
+      }
+    };
 
 /**
  * Iterates through the list of top level blocks and sets the function arguments

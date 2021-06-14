@@ -308,8 +308,10 @@ Blockly.ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  */
 Blockly.ShortcutRegistry.prototype.checkModifiers_ = function(
     modifiers) {
-  var validModifiers = Blockly.utils.object.values(
-      Blockly.ShortcutRegistry.modifierKeys);
+  var validModifiers = Blockly.utils.object.keys(
+      Blockly.ShortcutRegistry.modifierKeys).map(function(e) {
+    return Blockly.ShortcutRegistry.modifierKeys[e];
+  });
   for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw new Error(modifier + ' is not a valid modifier key.');

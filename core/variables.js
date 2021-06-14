@@ -154,12 +154,12 @@ Blockly.Variables.flyoutCategoryBlocks = function(workspace) {
       block.appendChild(
           Blockly.Variables.generateVariableFieldDom(mostRecentVariable));
       var value = Blockly.Xml.textToDom(
-            '<value name="VALUE">' +
+          '<value name="VALUE">' +
             '<shadow type="math_number">' +
             '<field name="NUM">1</field>' +
             '</shadow>' +
             '</value>');
-      block.appendChild(value);    
+      block.appendChild(value);
       xmlList.push(block);
     }
     if (Blockly.Blocks['math_change']) {

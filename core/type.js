@@ -11,7 +11,7 @@
 
 goog.provide('Blockly.Type');
 
-//goog.require('goog.asserts');
+// goog.require('goog.asserts');
 
 
 /**
@@ -41,7 +41,7 @@ Blockly.Type = function(args) {
    */
   this.typeMsgName_ = args.typeMsgName;
   /**
-   * @type {Array<Blockly.Type>} 
+   * @type {Array<Blockly.Type>}
    * @private
    */
   this.compatibleTypes_ = args.compatibleTypes;
@@ -59,7 +59,7 @@ Object.defineProperty(Blockly.Type.prototype, 'typeName', {
   get: function() {
     return Blockly.Msg[this.typeMsgName_] || this.typeId;
   },
-  set: function(value) {
+  set: function(_) {
     console.warn('"Blockly.Type" property "typeName" is not allowed to be set.');
   }
 });
@@ -69,7 +69,7 @@ Object.defineProperty(Blockly.Type.prototype, 'output', {
   get: function() {
     return this.typeId;
   },
-  set: function(value) {
+  set: function(_) {
     console.warn('"Blockly.Type" property "output" is not allowed to be set.');
   }
 });
@@ -79,17 +79,17 @@ Object.defineProperty(Blockly.Type.prototype, 'checkList', {
   get : function() {
     return this.generatedCheckList_;
   },
-  set: function(value) {
+  set: function(_) {
     console.warn('"Blockly.Type" property "check" is not allowed to be set.');
   }
 });
 
 /**
  * Generates the Type check list for the blocks input.
- * @param {!Blockly.Type} compatibleType New type to add to compatibility list.
+ * @param {!Blockly.Type} _ New type to add to compatibility list.
  * @private
  */
-Blockly.Type.prototype.generateCheckList_ = function(compatibleType) {
+Blockly.Type.prototype.generateCheckList_ = function(_) {
   this.generatedCheckList_ = [];
   for (var i = 0; i < this.compatibleTypes_.length; i++) {
     var unique = true;
@@ -126,7 +126,7 @@ Blockly.Type.prototype.addCompatibleType = function(compatibleType) {
 Blockly.Type.prototype.addCompatibleTypes = function(compatibleTypeArray) {
   if (!Array.isArray(compatibleTypeArray)) {
     throw new Error('To add compatible types to the Blockly Type ' +
-                    this.typeId +' provide an array of Blockly.Type items.');
+                    this.typeId + ' provide an array of Blockly.Type items.');
   }
   for (var i = 0; i < compatibleTypeArray.length; i++) {
     if (!compatibleTypeArray[i] || !compatibleTypeArray[i].constructor ||

@@ -40,12 +40,8 @@
     "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",
-    "test": "concurrently 'npm run test:prepare' 'sleep 5 && npm run test:run'",
-    "test:generators": "concurrently 'npm run test:prepare' 'sleep 5 && tests/scripts/run_generators.sh'",
-    "test:prepare": "npm run test:setupselenium && npm run test:startselenium",
-    "test:run": "tests/run_all_tests.sh",
-    "test:setupselenium": "selenium-standalone install --config=./tests/scripts/selenium-config.js",
-    "test:startselenium": "selenium-standalone start --config=./tests/scripts/selenium-config.js",
+    "test": "tests/run_all_tests.sh",
+    "test:generators": "tests/scripts/run_generators.sh",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
@@ -65,6 +61,7 @@
     "@blockly/dev-tools": "^2.0.1",
     "@blockly/theme-dark": "^1.0.0",
     "@blockly/theme-modern": "^2.1.1",
+    "@wdio/selenium-standalone-service": "^6.11.0",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.5.0",
@@ -92,6 +89,7 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "15.2.1"
+    "jsdom": "15.2.1",
+    "typescript": "^4.3.2"
   }
 }

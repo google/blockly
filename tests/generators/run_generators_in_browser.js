@@ -40,14 +40,18 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 async function runGeneratorsInBrowser() {
   var options = {
     capabilities: {
-      browserName: 'firefox'
+      browserName: 'chrome',
     },
-    path: '/wd/hub'
+    services: ['selenium-standalone']
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
-    options.capabilities['moz:firefoxOptions'] = {
-      args: ['-headless']
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--allow-file-access-from-files']
+    };
+  } else {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--allow-file-access-from-files']
     };
   }
 

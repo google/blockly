@@ -1,4 +1,4 @@
-  /**
+/**
  * @license Licensed under the Apache License, Version 2.0 (the "License"):
  *          http://www.apache.org/licenses/LICENSE-2.0
  */
@@ -30,29 +30,29 @@ Blockly.Blocks['spi_setup'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.ARD_SPI_SETUP)
         .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.spi), 'SPI_ID')
+            Blockly.Arduino.Boards.selected.spi), 'SPI_ID')
         .appendField(Blockly.Msg.ARD_SPI_SETUP_CONF);
     this.appendDummyInput()
         .appendField(Blockly.Msg.ARD_SPI_SETUP_SHIFT)
         .appendField(
             new Blockly.FieldDropdown(
                 [[Blockly.Msg.ARD_SPI_SETUP_MSBFIRST, 'MSBFIRST'],
-		[Blockly.Msg.ARD_SPI_SETUP_LSBFIRST, 'LSBFIRST']]),
+                  [Blockly.Msg.ARD_SPI_SETUP_LSBFIRST, 'LSBFIRST']]),
             'SPI_SHIFT_ORDER');
     this.appendDummyInput()
         .appendField(Blockly.Msg.ARD_SPI_SETUP_DIVIDE)
         .appendField(
-          new Blockly.FieldDropdown(
-              Blockly.Arduino.Boards.selected.spiClockDivide),
-          'SPI_CLOCK_DIVIDE');
+            new Blockly.FieldDropdown(
+                Blockly.Arduino.Boards.selected.spiClockDivide),
+            'SPI_CLOCK_DIVIDE');
     this.appendDummyInput()
         .appendField(Blockly.Msg.ARD_SPI_SETUP_MODE)
         .appendField(
             new Blockly.FieldDropdown(
                 [[Blockly.Msg.ARD_SPI_SETUP_MODE0, 'SPI_MODE0'],
-                 [Blockly.Msg.ARD_SPI_SETUP_MODE1, 'SPI_MODE1'],
-                 [Blockly.Msg.ARD_SPI_SETUP_MODE2, 'SPI_MODE2'],
-                 [Blockly.Msg.ARD_SPI_SETUP_MODE3, 'SPI_MODE3']]),
+                  [Blockly.Msg.ARD_SPI_SETUP_MODE1, 'SPI_MODE1'],
+                  [Blockly.Msg.ARD_SPI_SETUP_MODE2, 'SPI_MODE2'],
+                  [Blockly.Msg.ARD_SPI_SETUP_MODE3, 'SPI_MODE3']]),
             'SPI_MODE');
     this.setTooltip(Blockly.Msg.ARD_SPI_SETUP_TIP);
   },
@@ -91,7 +91,7 @@ Blockly.Blocks['spi_transfer'] = {
     this.setColour(Blockly.Blocks.spi.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.spi), 'SPI_ID');
+            Blockly.Arduino.Boards.selected.spi), 'SPI_ID');
     this.appendValueInput('SPI_DATA')
         .setCheck(Blockly.Types.NUMBER.checkList)
         .appendField(Blockly.Msg.ARD_SPI_TRANS_VAL);
@@ -108,12 +108,13 @@ Blockly.Blocks['spi_transfer'] = {
    * Called whenever anything on the workspace changes.
    * It checks the instances of stepper_config and attaches a warning to this
    * block if not valid data is found.
+   * @param {any} event The event
    * @this Blockly.Block
    */
   onchange: function(event) {
     if (!this.workspace || event.type == Blockly.Events.MOVE ||
         event.type == Blockly.Events.UI) {
-        return;  // Block deleted or irrelevant event
+      return;  // Block deleted or irrelevant event
     }
 
     // Get the Serial instance from this block
@@ -191,7 +192,7 @@ Blockly.Blocks['spi_transfer_return'] = {
     this.setColour(Blockly.Blocks.spi.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-                Blockly.Arduino.Boards.selected.spi), 'SPI_ID');
+            Blockly.Arduino.Boards.selected.spi), 'SPI_ID');
     this.appendValueInput('SPI_DATA')
         .appendField(Blockly.Msg.ARD_SPI_TRANS_VAL);
     this.appendDummyInput()

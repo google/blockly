@@ -30,7 +30,7 @@ Blockly.Blocks['stepper_config'] = {
    */
   init: function() {
     var dropdownOptions = [[Blockly.Msg.ARD_STEPPER_TWO_PINS, 'TWO'],
-                           [Blockly.Msg.ARD_STEPPER_FOUR_PINS, 'FOUR']];
+      [Blockly.Msg.ARD_STEPPER_FOUR_PINS, 'FOUR']];
     var dropdown = new Blockly.FieldDropdown(dropdownOptions, function(option) {
       var input = (option == 'FOUR');
       this.sourceBlock_.updateShape_(input);
@@ -42,8 +42,8 @@ Blockly.Blocks['stepper_config'] = {
         .appendField(Blockly.Msg.ARD_STEPPER_SETUP)
         .appendField(
             new Blockly.FieldInstance('Stepper',
-                                      Blockly.Msg.ARD_STEPPER_DEFAULT_NAME,
-                                      true, true, false),
+                Blockly.Msg.ARD_STEPPER_DEFAULT_NAME,
+                true, true, false),
             'STEPPER_NAME')
         .appendField(Blockly.Msg.ARD_STEPPER_MOTOR);
     this.appendDummyInput('PINS_DROPDOWN')
@@ -99,7 +99,7 @@ Blockly.Blocks['stepper_config'] = {
     var extraPinsExist = this.getFieldValue('STEPPER_PIN3');
     if (fourPins) {
       if (!extraPinsExist) {
-         this.getInput("PINS")
+        this.getInput("PINS")
             .appendField(Blockly.Msg.ARD_STEPPER_PIN3, "PIN3")
             .appendField(new Blockly.FieldDropdown(
                 Blockly.Arduino.Boards.selected.digitalPins), 'STEPPER_PIN3')
@@ -145,8 +145,8 @@ Blockly.Blocks['stepper_step'] = {
         .appendField(Blockly.Msg.ARD_STEPPER_STEP)
         .appendField(
             new Blockly.FieldInstance('Stepper',
-                                      Blockly.Msg.ARD_STEPPER_DEFAULT_NAME,
-                                      false, true, false),
+                Blockly.Msg.ARD_STEPPER_DEFAULT_NAME,
+                false, true, false),
             'STEPPER_NAME');
     this.appendValueInput('STEPPER_STEPS')
         .setCheck(Blockly.Types.NUMBER.checkList);
@@ -159,23 +159,24 @@ Blockly.Blocks['stepper_step'] = {
   /**
    * Called whenever anything on the workspace changes.
    * It checks/warns if the selected stepper instance has a config block.
+   * @param {any} event The event
    * @this Blockly.Block
    */
   onchange: function(event) {
     if (!this.workspace || event.type == Blockly.Events.MOVE ||
         event.type == Blockly.Events.UI) {
-        return;  // Block deleted or irrelevant event
+      return;  // Block deleted or irrelevant event
     }
 
-    var instanceName = this.getFieldValue('STEPPER_NAME')
+    var instanceName = this.getFieldValue('STEPPER_NAME');
     if (Blockly.Instances.isInstancePresent(instanceName, 'Stepper', this)) {
       this.setWarningText(null);
     } else {
       // Set a warning to select a valid stepper config block
       this.setWarningText(
-        Blockly.Msg.ARD_COMPONENT_WARN1.replace(
-            '%1', Blockly.Msg.ARD_STEPPER_COMPONENT).replace(
-                '%2', instanceName));
+          Blockly.Msg.ARD_COMPONENT_WARN1.replace(
+              '%1', Blockly.Msg.ARD_STEPPER_COMPONENT).replace(
+              '%2', instanceName));
     }
   }
 };

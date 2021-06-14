@@ -25,51 +25,51 @@ goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
 Blockly.Blocks['leaphy_start'] = {
-    init: function () {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_START)
-            .setAlign(Blockly.ALIGN_CENTRE);
-        this.setStyle('leaphy_blocks');
-        this.appendStatementInput('STACK')
-        this.setDeletable(false);
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_START)
+        .setAlign(Blockly.ALIGN_CENTRE);
+    this.setStyle('leaphy_blocks');
+    this.appendStatementInput('STACK');
+    this.setDeletable(false);
+  }
 };
 
 Blockly.Blocks['leaphy_serial_print_line'] = {
-    /**
+  /**
      * Block for printing to serial output
      * @this Blockly.Block
      */
-    init: function() {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
-        this.appendValueInput('VALUE');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setStyle('leaphy_blocks');
-    },
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT);
+    this.appendValueInput('VALUE');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  },
 };
 
 Blockly.Blocks['leaphy_serial_print_value'] = {
-    /**
+  /**
      * Block for printing to serial output
      * @this Blockly.Block
      */
-    init: function() {
-        this.appendDummyInput()
-            .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT)
-        this.appendValueInput('NAME');
-        this.appendDummyInput()
-            .appendField("=");
-        this.appendValueInput('VALUE');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setStyle('leaphy_blocks');
-    },
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT);
+    this.appendValueInput('NAME');
+    this.appendDummyInput()
+        .appendField("=");
+    this.appendValueInput('VALUE');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  },
 };
 
-//Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+// Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
 
-//]);  // END JSON EXTRACT (Do not delete this comment.)
+// ]);  // END JSON EXTRACT (Do not delete this comment.)

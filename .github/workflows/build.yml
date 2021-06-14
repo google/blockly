@@ -37,7 +37,7 @@ jobs:
       run: source ./tests/scripts/setup_osx_env.sh
 
     - name: Run
-      run: npm run test:run
+      run: npm run test
 
       env:
         CI: true

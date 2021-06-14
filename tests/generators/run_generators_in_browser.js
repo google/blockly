@@ -32,8 +32,8 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 }
 
 /**
- * Runs the generator tests in Firefox. It uses webdriverio to
- * launch Firefox and load index.html. Outputs a summary of the test results
+ * Runs the generator tests in Chrome. It uses webdriverio to
+ * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console and outputs files for later validation.
  * @return the Thenable managing the processing of the browser tests.
  */

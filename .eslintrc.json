@@ -26,7 +26,7 @@
             }
         ],
         "keyword-spacing": ["error"],
-        "linebreak-style": ["error", "windows"],
+        "linebreak-style": ["error", "unix"],
         "max-len": [
             "error",
             {

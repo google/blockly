@@ -1148,7 +1148,10 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   var savedPositions = [];
   for (var i = 0, positionable; (positionable = positionables[i]); i++) {
     positionable.position(metrics, savedPositions);
-    savedPositions.push(positionable.getBoundingRectangle());
+    var clientRect = positionable.getBoundingRectangle();
+    if (clientRect) {
+      savedPositions.push(clientRect);
+    }
   }
 
   if (this.scrollbar) {

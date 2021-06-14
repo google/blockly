@@ -32,7 +32,7 @@ Blockly.StaticTyping = function() {
  * their type into an associative array with the variable names as the keys and
  * the type as the values.
  * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
- * @return {Object} Associative of varnames - types 
+ * @return {{ String: Blockly.Type }} Associative of varnames - types 
  */
 Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
   this.varTypeDict = Object.create(null);

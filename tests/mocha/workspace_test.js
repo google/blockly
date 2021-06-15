@@ -1303,7 +1303,7 @@ function testAWorkspace() {
           this.workspace.createVariable('name1', 'type1', 'id1');
           this.workspace.deleteVariableById('id1');
           var workspace = this.workspace;
-          var warnings = captureWarnings(function() {
+          var warnings = testHelpers.captureWarnings(function() {
             workspace.deleteVariableById('id1');
           });
           chai.assert.equal(warnings.length, 1,
@@ -1332,7 +1332,7 @@ function testAWorkspace() {
           createVarBlocksNoEvents(this.workspace, ['id1']);
           this.workspace.deleteVariableById('id1');
           var workspace = this.workspace;
-          var warnings = captureWarnings(function() {
+          var warnings = testHelpers.captureWarnings(function() {
             workspace.deleteVariableById('id1');
           });
           chai.assert.equal(warnings.length, 1,

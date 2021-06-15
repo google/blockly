@@ -21,7 +21,7 @@
         "assertVariableValues": true,
         "assertNoWarnings": true,
         "assertWarnings": true,
-        "captureWarnings": true,
+        "captureWarnings": false,
         "createDeprecationWarningStub": true,
         "createKeyDownEvent": true,
         "createRenderedBlock": true,

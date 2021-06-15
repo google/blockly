@@ -100,6 +100,13 @@ Blockly.Toolbox = function(workspace) {
   this.contentsDiv_ = null;
 
   /**
+   * Whether the Toolbox is visible.
+   * @type {boolean}
+   * @protected
+   */
+  this.isVisible_ = false;
+
+  /**
    * The list of items in the toolbox.
    * @type {!Array<!Blockly.IToolboxItem>}
    * @protected
@@ -193,6 +200,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   this.HtmlDiv = this.createDom_(this.workspace_);
   Blockly.utils.dom.insertAfter(this.flyout_.createDom('svg'), svg);
+  this.setVisible(true);
   this.flyout_.init(workspace);
 
   this.render(this.toolboxDef_);
@@ -513,7 +521,7 @@ Blockly.Toolbox.prototype.removeStyle = function(style) {
  *   target area should be ignored.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
-  if (!this.HtmlDiv) {
+  if (!this.HtmlDiv || !this.isVisible_) {
     return null;
   }
 
@@ -809,7 +817,15 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  * @public
  */
 Blockly.Toolbox.prototype.setVisible = function(isVisible) {
+  if (this.isVisible_ == isVisible) {
+    return;
+  }
+
   this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+  this.isVisible_ = isVisible;
+  // Invisible toolbox is ignored as drag targets and must have the drag target
+  // updated.
+  this.workspace_.recordDragTargets();
 };
 
 /**

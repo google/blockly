@@ -78,14 +78,21 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
       this, opt_value, opt_validator, opt_config);
 
   /**
+   * The angle picker's SVG element.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.editor_ = null;
+
+  /**
    * The angle picker's gauge path depending on the value.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    */
   this.gauge_ = null;
 
   /**
    * The angle picker's line drawn representing the value's angle.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    */
   this.line_ = null;
 
@@ -271,8 +278,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
       Blockly.utils.userAgent.IPAD;
   Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
-  var editor = this.dropdownCreate_();
-  Blockly.DropDownDiv.getContentDiv().appendChild(editor);
+  this.dropdownCreate_();
+  Blockly.DropDownDiv.getContentDiv().appendChild(this.editor_);
 
   Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
       this.sourceBlock_.style.colourTertiary);
@@ -285,7 +292,6 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
 
 /**
  * Create the angle dropdown editor.
- * @return {!SVGElement} The newly created angle picker.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
@@ -343,7 +349,7 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
       circle, 'click', this, this.onMouseMove_, true, true);
   this.moveSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
       circle, 'mousemove', this, this.onMouseMove_, true, true);
-  return svg;
+  this.editor_ = svg;
 };
 
 /**

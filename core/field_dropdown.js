@@ -95,35 +95,35 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
 
   /**
    * A reference to the currently selected menu item.
-   * @type {Blockly.MenuItem}
+   * @type {?Blockly.MenuItem}
    * @private
    */
   this.selectedMenuItem_ = null;
 
   /**
    * The dropdown menu.
-   * @type {Blockly.Menu}
+   * @type {?Blockly.Menu}
    * @protected
    */
   this.menu_ = null;
 
   /**
    * SVG image element if currently selected option is an image, or null.
-   * @type {SVGImageElement}
+   * @type {?SVGImageElement}
    * @private
    */
   this.imageElement_ = null;
 
   /**
    * Tspan based arrow element.
-   * @type {SVGTSpanElement}
+   * @type {?SVGTSpanElement}
    * @private
    */
   this.arrow_ = null;
 
   /**
    * SVG based arrow element.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    * @private
    */
   this.svgArrow_ = null;
@@ -288,7 +288,7 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
  * @protected
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
-  this.menu_ = this.dropdownCreate_();
+  this.dropdownCreate_();
   if (opt_e && typeof opt_e.clientX === 'number') {
     this.menu_.openingCoords =
         new Blockly.utils.Coordinate(opt_e.clientX, opt_e.clientY);
@@ -327,12 +327,12 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
 
 /**
  * Create the dropdown editor.
- * @return {!Blockly.Menu} The newly created dropdown menu.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
+  this.menu_ = menu;
 
   var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
@@ -357,8 +357,6 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
   }
-
-  return menu;
 };
 
 /**

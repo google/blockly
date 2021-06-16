@@ -433,7 +433,10 @@ Blockly.Connection.prototype.disconnect = function() {
     Blockly.Events.setGroup(true);
   }
   this.disconnectInternal_(parentBlock, childBlock);
-  if (!childBlock.isShadow()) {
+  if (childBlock.isShadow()) {
+    // Displaced shadow blocks dissolve.
+    childBlock.dispose();
+  } else {
     // If we were disconnecting a shadow, no need to spawn a new one.
     parentConnection.respawnShadow_();
   }

@@ -407,6 +407,7 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
   this.contentMap_ = Object.create(null);
   this.renderContents_(toolboxDef['contents']);
   this.position();
+  this.handleToolboxItemResize();
 };
 
 /**

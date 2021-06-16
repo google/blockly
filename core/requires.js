@@ -82,6 +82,8 @@ goog.require('Blockly.zelos.Renderer');
 // Blockly Themes.
 // Classic is the default theme.
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.Themes.Dark');
 goog.require('Blockly.Themes.Deuteranopia');
 goog.require('Blockly.Themes.HighContrast');
 goog.require('Blockly.Themes.Tritanopia');
+// goog.require('Blockly.Themes.Modern');

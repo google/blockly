@@ -340,8 +340,9 @@ Blockly.ContextMenuItems.registerComment = function() {
     preconditionFn: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       var block = scope.block;
       // IE doesn't support necessary features for comment editing.
-      if (!Blockly.utils.userAgent.IE && !block.isInFlyout && block.workspace.options.comments &&
-        !block.isCollapsed() && block.isEditable()) {
+      if (!Blockly.utils.userAgent.IE && !block.isInFlyout &&
+          block.workspace.options.comments && !block.isCollapsed() &&
+          block.isEditable()) {
         return 'enabled';
       }
       return 'hidden';
@@ -361,7 +362,7 @@ Blockly.ContextMenuItems.registerComment = function() {
   Blockly.ContextMenuRegistry.registry.register(commentOption);
 };
 
-/** Option to inline variables. */
+/** Option to inline values. */
 Blockly.ContextMenuItems.registerInline = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var inlineOption = {
@@ -371,7 +372,8 @@ Blockly.ContextMenuItems.registerInline = function() {
     },
     preconditionFn: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       var block = scope.block;
-      if (!block.isInFlyout && block.isMovable() && !block.isCollapsed()) {
+      if (!block.isInFlyout && block.isMovable() && !block.isCollapsed() &&
+          block.workspace.options.inlineExternal) {
         for (var i = 1; i < block.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs next to each other.
           if (block.inputList[i - 1].type != Blockly.inputTypes.STATEMENT &&

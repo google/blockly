@@ -66,6 +66,10 @@ Blockly.Options = function(options) {
     if (hasDisable === undefined) {
       hasDisable = hasCategories;
     }
+    var hasInlineExternal = options['inlineExternal'];
+    if (hasInlineExternal === undefined) {
+      hasInlineExternal = hasCategories;
+    }
     var hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
@@ -119,6 +123,8 @@ Blockly.Options = function(options) {
   this.comments = hasComments;
   /** @type {boolean} */
   this.disable = hasDisable;
+  /** @type {boolean} */
+  this.inlineExternal = hasInlineExternal;
   /** @type {boolean} */
   this.readOnly = readOnly;
   /** @type {number} */

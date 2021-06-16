@@ -1022,9 +1022,15 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
  * @return {?Blockly.Field} Named field, or null if field does not exist.
  */
 Blockly.Block.prototype.getField = function(name) {
+  if (typeof name !== 'string') {
+    throw TypeError('Blockly.Block.prototype.getField expects a string ' +
+      'with the field name but received ' +
+      (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
+      ' instead');
+  }
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (typeof field.name !== "undefined" && field.name == name) {
+      if (field.name === name) {
         return field;
       }
     }
@@ -1122,13 +1128,9 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 /**
  * Sets the value of the given field for this block.
  * @param {*} newValue The value to set.
- * @param {!string} name The name of the field to set the value of.
+ * @param {string} name The name of the field to set the value of.
  */
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
-  if (typeof name === "undefined") {
-    throw Error("Call to Blockly.Block.prototype.setFieldValue without " +
-        "required second argument of field name.");
-  }
   var field = this.getField(name);
   if (!field) {
     throw Error('Field "' + name + '" not found.');

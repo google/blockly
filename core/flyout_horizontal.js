@@ -367,6 +367,7 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
     // Record the height for workspace metrics and .position.
     this.height_ = flyoutHeight;
     this.position();
+    this.targetWorkspace.recordDragTargets();
   }
 };
 

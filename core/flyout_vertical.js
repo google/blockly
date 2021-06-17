@@ -375,6 +375,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     // Record the width for workspace metrics and .position.
     this.width_ = flyoutWidth;
     this.position();
+    this.targetWorkspace.recordDragTargets();
   }
 };
 

@@ -817,7 +817,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
  * @public
  */
 Blockly.Toolbox.prototype.setVisible = function(isVisible) {
-  if (this.isVisible_ == isVisible) {
+  if (this.isVisible_ === isVisible) {
     return;
   }
 

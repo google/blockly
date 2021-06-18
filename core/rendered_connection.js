@@ -449,14 +449,26 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 
 /**
  * Behavior after a connection attempt fails.
+ * Bumps this connection away from the other connection. Called when an
+ * attempted connection fails.
  * @param {!Blockly.Connection} otherConnection Connection that this connection
  *     failed to connect to.
  * @package
  */
-Blockly.RenderedConnection.prototype.onFailedConnect = function(
-    otherConnection) {
-  this.bumpAwayFrom(otherConnection);
-};
+Blockly.RenderedConnection.prototype.onFailedConnect =
+    function(otherConnection) {
+      var block = this.getSourceBlock();
+      if (Blockly.Events.recordUndo) {
+        var group = Blockly.Events.getGroup();
+        setTimeout(function() {
+          if (!block.isDisposed() && !block.getParent()) {
+            Blockly.Events.setGroup(group);
+            this.bumpAwayFrom(otherConnection);
+            Blockly.Events.setGroup(false);
+          }
+        }.bind(this), Blockly.BUMP_DELAY);
+      }
+    };
 
 
 /**

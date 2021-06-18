@@ -143,7 +143,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
 
   // Deal with the orphan if it exists.
   if (orphan) {
-    var orphanConnection = parentConnection.type == INPUT ?
+    var orphanConnection = parentConnection.type === INPUT ?
         orphan.outputConnection : orphan.previousConnection;
     var connection = Blockly.Connection.getConnectionForOrphanedConnection(
         childBlock, /** @type {!Blockly.Connection} */ (orphanConnection));
@@ -270,7 +270,8 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
 };
 
 /**
- * Behavior after a connection attempt fails.
+ * Called when an attempted connection fails. NOP by default (i.e. for headless
+ * workspaces).
  * @param {!Blockly.Connection} _otherConnection Connection that this connection
  *     failed to connect to.
  * @package
@@ -361,9 +362,9 @@ Blockly.Connection.getSingleConnection_ = function(block, orphanBlock) {
  * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
  * @return {?Blockly.Connection} The suitable connection point on the chain
  *     of blocks, or null.
- * @package
+ * @private
  */
-Blockly.Connection.getConnectionForOrphanedOutput =
+Blockly.Connection.getConnectionForOrphanedOutput_ =
     function(startBlock, orphanBlock) {
       var newBlock = startBlock;
       var connection;
@@ -389,8 +390,8 @@ Blockly.Connection.getConnectionForOrphanedOutput =
  */
 Blockly.Connection.getConnectionForOrphanedConnection =
     function(startBlock, orphanConnection) {
-      if (orphanConnection.type == Blockly.connectionTypes.OUTPUT_VALUE) {
-        return Blockly.Connection.getConnectionForOrphanedOutput(
+      if (orphanConnection.type === Blockly.connectionTypes.OUTPUT_VALUE) {
+        return Blockly.Connection.getConnectionForOrphanedOutput_(
             startBlock, orphanConnection.getSourceBlock());
       }
       // Otherwise we're dealing with a stack.

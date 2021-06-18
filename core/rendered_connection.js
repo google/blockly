@@ -449,6 +449,8 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 
 /**
  * Behavior after a connection attempt fails.
+ * Bumps this connection away from the other connection. Called when an
+ * attempted connection fails.
  * @param {!Blockly.Connection} otherConnection Connection that this connection
  *     failed to connect to.
  * @package

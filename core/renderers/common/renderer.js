@@ -246,7 +246,7 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  */
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
-      var orphanConnection = localType == Blockly.connectionTypes.OUTPUT_VALUE ?
+      var orphanConnection = localType === Blockly.connectionTypes.OUTPUT_VALUE ?
           orphanBlock.outputConnection : orphanBlock.previousConnection;
       return !!Blockly.Connection.getConnectionForOrphanedConnection(
           /** @type {!Blockly.Block} **/ (topBlock),

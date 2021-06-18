@@ -47,7 +47,7 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 
   /**
    * The field's colour picker element.
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.picker_ = null;
@@ -321,7 +321,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @protected
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  this.picker_ = this.dropdownCreate_();
+  this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
 
   Blockly.DropDownDiv.showPositionedByField(
@@ -512,7 +512,6 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
 
 /**
  * Create a colour picker dropdown editor.
- * @return {!Element} The newly created colour picker.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownCreate_ = function() {
@@ -568,7 +567,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
       table, 'keydown', this, this.onKeyDown_);
 
-  return table;
+  this.picker_ = table;
 };
 
 /**

@@ -45,7 +45,8 @@ Blockly.ZoomControls = function(workspace) {
   this.workspace_ = workspace;
 
   /**
-   * The unique id for this component.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    * @type {string}
    */
   this.id = 'zoomControls';

@@ -21,8 +21,8 @@ var through2 = require('through2');
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
-var { getPackageJson } = require('./helper_tasks');
-
+var {BUILD_DIR} = require('./config');
+var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -217,7 +217,7 @@ function buildCompressed() {
       }))
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
-      .pipe(gulp.dest('./'));
+      .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**
@@ -242,7 +242,7 @@ function buildBlocks() {
       includeContent: false,
       sourceRoot: './'
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**
@@ -268,7 +268,7 @@ function buildGenerator(language, namespace) {
       includeContent: false,
       sourceRoot: './'
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**

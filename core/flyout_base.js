@@ -72,7 +72,8 @@ Blockly.Flyout = function(workspaceOptions) {
   this.workspace_.setVisible(this.isVisible_);
 
   /**
-   * The unique id for this component.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    * @type {string}
    */
   this.id = Blockly.utils.genUid();

@@ -57,10 +57,11 @@ Blockly.Trashcan = function(workspace) {
   this.workspace_ = workspace;
 
   /**
-   * The unique id for this component.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    * @type {string}
    */
-  this.id = Blockly.utils.genUid();
+  this.id = 'trashcan';
 
   /**
    * A list of XML (stored as strings) representing blocks in the trashcan.

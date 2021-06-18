@@ -32,6 +32,7 @@
     "deployDemos": "gulp deployDemos",
     "format": "git-clang-format",
     "format:sortrequires": "gulp sortRequires",
+    "generate:langfiles": "gulp generateLangfiles",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",

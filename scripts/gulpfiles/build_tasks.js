@@ -409,21 +409,44 @@ goog.require('Blockly.requires');
 };
 
 /**
+ * This task regenrates msg/json/en.js and msg/json/qqq.js from
+ * msg/messages.js.
+ */
+function generateLangfiles(done) {
+  // Run js_to_json.py
+  const jsToJsonCmd = `python scripts/i18n/js_to_json.py \
+      --input_file ${path.join('msg', 'messages.js')} \
+      --output_dir ${path.join('msg', 'json')} \
+      --quiet`;
+  execSync(jsToJsonCmd, { stdio: 'inherit' });
+
+  console.log(`
+Regenerated several flies in msg/json/.  Now run
+
+    git diff msg/json/*.json
+
+and check that operation has not overwritten any modifications made to
+hints, etc. by the TranslateWiki volunteers.  If it has, backport
+their changes to msg/messages.js and re-run 'npm run generate:langfiles'.
+
+Once you are satisfied that any new hints have been backported you may
+go ahead and commit the changes, but note that the generate script
+will have removed the translator credits - be careful not to commit
+this removal!
+`);
+
+  done();
+};
+
+/**
  * This task builds Blockly's lang files.
  *     msg/*.js
  */
 function buildLangfiles(done) {
-  // Run js_to_json.py
-  const jsToJsonCmd = `python ./scripts/i18n/js_to_json.py \
---input_file ${path.join('msg', 'messages.js')} \
---output_dir ${path.join('msg', 'json')} \
---quiet`;
-  execSync(jsToJsonCmd, { stdio: 'inherit' });
-
   // Run create_messages.py
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&
-    !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
+      !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
   const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
@@ -432,7 +455,7 @@ function buildLangfiles(done) {
   --key_file ${path.join('msg', 'json', 'keys.json')} \
   --output_dir ${path.join('msg', 'js')} \
   --quiet ${json_files.join(' ')}`;
-    execSync(createMessagesCmd, { stdio: 'inherit' });
+  execSync(createMessagesCmd, { stdio: 'inherit' });
 
   done();
 };
@@ -514,6 +537,7 @@ module.exports = {
   build: build,
   core: buildCore,
   blocks: buildBlocks,
+  generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
   uncompressed: buildUncompressed,
   compressed: buildCompressed,

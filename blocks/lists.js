@@ -184,7 +184,11 @@ Blockly.Blocks['lists_create_with'] = {
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
       if (connection && connections.indexOf(connection) == -1) {
+        var childBlock = connection.getSourceBlock();
         connection.disconnect();
+        if (childBlock.isShadow()) {
+          childBlock.dispose(true);
+        }
       }
     }
     this.itemCount_ = connections.length;

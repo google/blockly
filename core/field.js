@@ -410,7 +410,8 @@ Blockly.Field.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.Field.prototype.toXml = function(fieldElement) {
-  fieldElement.textContent = this.getValue();
+  fieldElement.appendChild(Blockly.utils.xml.createTextNode(
+      /** @type {string} */ (this.getValue())));
   return fieldElement;
 };
 

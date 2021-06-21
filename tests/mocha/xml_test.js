@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('XML', function() {
+suite.only('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {
     chai.assert.equal(text, fieldDom.textContent);
     chai.assert.equal(name, fieldDom.getAttribute('name'));
@@ -27,6 +27,7 @@ suite('XML', function() {
     chai.assert.equal(fieldDom.getAttribute('id'), id);
     chai.assert.equal(fieldDom.textContent, text);
   };
+
   setup(function() {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([
@@ -63,17 +64,37 @@ suite('XML', function() {
       '    </statement>',
       '  </block>',
       '</xml>'].join('\n');
+
+    this.assertXmlDoc = function(doc) {
+      chai.assert.equal(doc.nodeName.toLowerCase(), 'xml', 'XML tag');
+    };
   });
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
+
   suite('textToDom', function() {
     test('Basic', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);
-      chai.assert.equal(dom.nodeName, 'xml', 'XML tag');
-      chai.assert.equal(dom.getElementsByTagName('block').length, 6, 'Block tags');
+      this.assertXmlDoc(dom);
+      chai.assert.equal(
+          dom.getElementsByTagName('block').length, 6, 'Block tags');
+    });
+
+    test('With NCR control char', function() {
+      var dom = Blockly.Xml.textToDom('<xml>&#x1;</xml>');
+      this.assertXmlDoc(dom);
+      chai.assert.equal(dom.firstChild.textContent, ''); // u0001
+    });
+
+    test('With escaped ampersand', function() {
+      var dom = Blockly.Xml.textToDom('<xml>&amp;</xml>');
+      this.assertXmlDoc(dom);
+      chai.assert.equal(dom.firstChild.textContent, '&');
     });
   });
+
   suite('blockToDom', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
@@ -375,6 +396,7 @@ suite('XML', function() {
       });
     });
   });
+
   suite('variablesToDom', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
@@ -427,6 +449,7 @@ suite('XML', function() {
       chai.assert.equal(resultDom.children.length, 0);
     });
   });
+
   suite('domToText', function() {
     test('Round tripping', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);
@@ -434,7 +457,26 @@ suite('XML', function() {
       chai.assert.equal(text.replace(/\s+/g, ''),
           this.complexXmlText.replace(/\s+/g, ''), 'Round trip');
     });
+
+    test('With control char', function() {
+      var dom = Blockly.utils.xml.createElement('xml');
+      dom.appendChild(Blockly.utils.xml.createTextNode('')); // u0001
+      chai.assert.equal(
+          Blockly.Xml.domToText(dom),
+          '<xml xmlns="https://developers.google.com/blockly/xml">&#x1;</xml>'
+      );
+    });
+
+    test('With ampersand', function() {
+      var dom = Blockly.utils.xml.createElement('xml');
+      dom.appendChild(Blockly.utils.xml.createTextNode('&'));
+      chai.assert.equal(
+          Blockly.Xml.domToText(dom),
+          '<xml xmlns="https://developers.google.com/blockly/xml">&amp;</xml>'
+      );
+    });
   });
+
   suite('domToPrettyText', function() {
     test('Round tripping', function() {
       var dom = Blockly.Xml.textToDom(this.complexXmlText);

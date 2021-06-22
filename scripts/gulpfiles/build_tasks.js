@@ -443,7 +443,12 @@ this removal!
  *     msg/*.js
  */
 function buildLangfiles(done) {
-  // Run create_messages.py
+  // Create output directory.
+  // BUG(cpcallen): this probably doesn't work on Windows.
+  const outputDir = path.join(BUILD_DIR, 'msg', 'js');
+  execSync(`mkdir -p ${outputDir}`, {stdio: 'inherit'});
+  
+  // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
@@ -453,9 +458,9 @@ function buildLangfiles(done) {
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
   --key_file ${path.join('msg', 'json', 'keys.json')} \
-  --output_dir ${path.join('msg', 'js')} \
+  --output_dir ${outputDir} \
   --quiet ${json_files.join(' ')}`;
-  execSync(createMessagesCmd, { stdio: 'inherit' });
+  execSync(createMessagesCmd, {stdio: 'inherit'});
 
   done();
 };

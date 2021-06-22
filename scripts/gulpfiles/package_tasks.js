@@ -287,12 +287,12 @@ function packagePHP() {
 };
 
 /**
- * This task wraps each of the msg/js/* files into a UMD module.
+ * This task wraps each of the ${BUILD_DIR}/msg/js/* files into a UMD module.
  * @example import * as En from 'blockly/msg/en';
  */
 function packageLocales() {
   // Remove references to goog.provide and goog.require.
-  return gulp.src('msg/js/*.js')
+  return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
       .pipe(gulp.insert.prepend(`
       var Blockly = {};Blockly.Msg={};`))

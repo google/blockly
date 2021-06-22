@@ -33,6 +33,7 @@ module.exports = {
   buildGenerators: buildTasks.generators,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
   checkinBuilt: buildTasks.checkinBuilt,
+  clean: buildTasks.cleanBuildDir,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,

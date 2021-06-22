@@ -21,6 +21,8 @@ var through2 = require('through2');
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
+var rimraf = require('rimraf');
+
 var {BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
@@ -549,6 +551,18 @@ function checkinBuilt() {
   ]).pipe(gulp.dest('.'));
 };
 
+/**
+ * This task cleans the build directory (by deleting it).
+ */
+function cleanBuildDir(done) {
+  // Sanity check.
+  if (BUILD_DIR === '.' || BUILD_DIR === '/') {
+    throw new Error(`Refusing to rm -rf ${BUILD_DIR}`);
+  }
+  rimraf.sync(BUILD_DIR);
+  done();
+}
+
 module.exports = {
   build: build,
   core: buildCore,
@@ -559,5 +573,6 @@ module.exports = {
   compressed: buildCompressed,
   generators: buildGenerators,
   checkinBuilt: checkinBuilt,
+  cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
 }

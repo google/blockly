@@ -538,6 +538,17 @@ const build = gulp.parallel(
   buildLangfiles
 );
 
+/**
+ * This task copies built files from BUILD_DIR back to the repository
+ * so they can be committed to git.
+ */
+function checkinBuilt() {
+  return gulp.src([
+    `${BUILD_DIR}/**.js`,
+    `${BUILD_DIR}/**/**.js`,
+  ]).pipe(gulp.dest('.'));
+};
+
 module.exports = {
   build: build,
   core: buildCore,
@@ -547,5 +558,6 @@ module.exports = {
   uncompressed: buildUncompressed,
   compressed: buildCompressed,
   generators: buildGenerators,
+  checkinBuilt: checkinBuilt,
   advancedCompilationTest: buildAdvancedCompilationTest,
 }

@@ -29,6 +29,7 @@
     "build:langfiles": "gulp buildLangfiles",
     "build:uncompressed": "gulp buildUncompressed",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
+    "checkin": "gulp checkinBuilt",
     "deployDemos": "gulp deployDemos",
     "format": "git-clang-format",
     "format:sortrequires": "gulp sortRequires",

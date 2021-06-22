@@ -744,7 +744,8 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
       node.removeAttribute('y');
       node.removeAttribute('id');
       node.removeAttribute('disabled');
-      if (node.nodeName == 'comment') {  // Future proof just in case.
+      // Future proof just in case.
+      if (node.nodeName.toLowerCase() == 'comment') {
         node.removeAttribute('h');
         node.removeAttribute('w');
         node.removeAttribute('pinned');

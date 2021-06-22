@@ -278,7 +278,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
   var node = shadow;
   var textNode;
   while (node) {
-    if (opt_noId && node.nodeName == 'shadow') {
+    if (opt_noId && node.nodeName.toLowerCase() == 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
       node.removeAttribute('id');

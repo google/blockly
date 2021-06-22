@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('XML', function() {
+suite('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {
     chai.assert.equal(text, fieldDom.textContent);
     chai.assert.equal(name, fieldDom.getAttribute('name'));

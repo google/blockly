@@ -160,7 +160,9 @@ const publish = gulp.series(
 // Publish a beta version of Blockly.
 const publishBeta = gulp.series(
   updateBetaVersion,
+  buildTasks.cleanBuildDir,
   buildTasks.build,
+  buildTasks.checkinBuilt,
   packageTasks.package,
   checkBranch,
   checkReleaseDir,
@@ -172,7 +174,9 @@ const recompile = gulp.series(
   gitTasks.syncDevelop(),
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
+  buildTasks.cleanBuildDir,
   buildTasks.build,
+  buildTasks.checkinBuilt,
   typings.typings,
   gitTasks.pushRebuildBranch
   );

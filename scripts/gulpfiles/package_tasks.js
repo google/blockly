@@ -17,11 +17,19 @@ gulp.umd = require('gulp-umd');
 
 var path = require('path');
 var fs = require('fs');
+var rimraf = require('rimraf');
 var {getPackageJson} = require('./helper_tasks');
-var {BUILD_DIR, RELEASE_DIR} = require('./config');
+var {RELEASE_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
+
+// Path from which to pull files to package.
+//
+// TODO(cpcallen): Use BUILD_DIR from config.js once release_tasks are
+// updated to do build-package-release all in one go, instead of doing
+// build-checkin and then package-release as separate steps.
+var BUILD_DIR = '.';
 
 /**
  * A helper method for wrapping a file into a Universal Module Definition.

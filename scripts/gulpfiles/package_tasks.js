@@ -367,32 +367,46 @@ function packageDTS() {
 };
 
 /**
+ * This task cleans the release directory (by deleting it).
+ */
+function cleanReleaseDir(done) {
+  // Sanity check.
+  if (RELEASE_DIR === '.' || RELEASE_DIR === '/') {
+    throw new Error(`Refusing to rm -rf ${RELEASE_DIR}`);
+  }
+  rimraf(RELEASE_DIR, done);
+}
+
+/**
  * This task prepares the files to be included in the NPM by copying
  * them into the release directory.
  */
-const package = gulp.parallel(
-  packageIndex,
-  packageSources,
-  packageCompressed,
-  packageBrowser,
-  packageNode,
-  packageCore,
-  packageNodeCore,
-  packageBlockly,
-  packageBlocks,
-  packageJavascript,
-  packagePython,
-  packageLua,
-  packageDart,
-  packagePHP,
-  packageLocales,
-  packageMedia,
-  packageUMDBundle,
-  packageJSON,
-  packageReadme,
-  packageDTS
-);
+const package = gulp.series(
+    cleanReleaseDir,
+    gulp.parallel(
+        packageIndex,
+        packageSources,
+        packageCompressed,
+        packageBrowser,
+        packageNode,
+        packageCore,
+        packageNodeCore,
+        packageBlockly,
+        packageBlocks,
+        packageJavascript,
+        packagePython,
+        packageLua,
+        packageDart,
+        packagePHP,
+        packageLocales,
+        packageMedia,
+        packageUMDBundle,
+        packageJSON,
+        packageReadme,
+        packageDTS)
+    );
 
 module.exports = {
+  cleanReleaseDir: cleanReleaseDir,
   package: package,
 };

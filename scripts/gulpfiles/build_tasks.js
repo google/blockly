@@ -559,8 +559,7 @@ function cleanBuildDir(done) {
   if (BUILD_DIR === '.' || BUILD_DIR === '/') {
     throw new Error(`Refusing to rm -rf ${BUILD_DIR}`);
   }
-  rimraf.sync(BUILD_DIR);
-  done();
+  rimraf(BUILD_DIR, done);
 }
 
 module.exports = {

@@ -33,7 +33,11 @@ module.exports = {
   buildGenerators: buildTasks.generators,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
   checkinBuilt: buildTasks.checkinBuilt,
-  clean: buildTasks.cleanBuildDir,
+  clean: gulp.series(
+      buildTasks.cleanBuildDir,
+      packageTasks.cleanReleaseDir),
+  cleanBuildDir: buildTasks.cleanBuildDir,
+  cleanReleaseDir: packageTasks.cleanReleaseDir,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,

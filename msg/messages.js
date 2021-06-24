@@ -8,8 +8,8 @@
  * @fileoverview English strings.
  * @author fraser@google.com (Neil Fraser)
  *
- * After modifying this file, either run "build.py" from the parent directory,
- * or run (from this directory):
+ * After modifying this file, either run "npm run build:langfiles" from the
+ * parent directory, or run (from this directory):
  * ../scripts/i18n/js_to_json.py
  * to regenerate json/{en,qqq,synonyms}.json.
  *

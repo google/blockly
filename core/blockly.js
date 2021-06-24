@@ -61,10 +61,10 @@ goog.requireType('Blockly.Workspace');
 
 /**
  * Blockly core version.
- * This constant is overridden by the build script (build.py) to the value of the version
- * in package.json. This is done during the gen_core build step.
- * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the compiler
- * to override this constant.
+ * This constant is overridden by the build script (npm run build) to the value
+ * of the version in package.json. This is done during the gen_core build step.
+ * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the
+ * compiler to override this constant.
  * @define {string}
  */
 Blockly.VERSION = 'uncompiled';

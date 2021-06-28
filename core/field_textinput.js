@@ -456,7 +456,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
   } else if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
-    this.setValue(this.htmlInput_.defaultValue);
+    this.setValue(this.htmlInput_.untypedDefaultValue_);
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
   } else if (e.keyCode == Blockly.utils.KeyCodes.TAB) {

@@ -93,20 +93,10 @@ Blockly.utils.xml.domToText = function(dom) {
  * reference).
  * @param {string} text The text to sanitize.
  * @return {string} The sanitized text.
+ * @public
  */
 Blockly.utils.xml.sanitizeText = function(text) {
-  if (!text.match(Blockly.utils.xml.INVALID_CONTROL_CHARS)) {
-    return text;
-  }
-  var match;
-  var newText = '';
-  while ((match = text.match(Blockly.utils.xml.INVALID_CONTROL_CHARS))) {
-    newText += text.substring(0, match.index);
-    newText += '&#x';
-    newText += text.charCodeAt(match.index).toString(16);
-    newText += ';';
-    text = text.substr(match.index + 1);
-  }
-  newText += text;
-  return newText;
+  return text.replace(Blockly.utils.xml.INVALID_CONTROL_CHARS, function(match) {
+    return '&#x' + match.charCodeAt(0).toString(16) + ';';
+  });
 };

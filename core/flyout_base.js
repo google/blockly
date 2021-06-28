@@ -296,9 +296,6 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
     this.targetWorkspace.addChangeListener(this.filterWrapper_);
   }
 
-  var zoomHandler = this.handleZoom_.bind(this);
-  this.targetWorkspace.addChangeListener(zoomHandler);
-
   // Dragging the flyout up and down.
   Array.prototype.push.apply(
       this.eventWrappers_,
@@ -960,19 +957,6 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
         block = block.getNextBlock();
       }
     }
-  }
-};
-
-/**
- * Responds to workplace zoom events by reflowing the flyout to ensure that
- * blocks in the flyout adjust to the new zoom level.
- * @param {!Blockly.Events.Abstract} event The Blockly event that was fired.
- * @private
- */
-Blockly.Flyout.prototype.handleZoom_ = function(event) {
-  if (event.type === Blockly.Events.CLICK &&
-      event.targetType === 'zoom_controls') {
-    this.reflow();
   }
 };
 

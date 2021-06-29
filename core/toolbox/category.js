@@ -652,7 +652,7 @@ Blockly.Css.register([
 
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
     'margin-left: 8px;',
-    'padding-right: 0',
+    'padding-right: 0px',
   '}',
 
   '.blocklyTreeIcon {',

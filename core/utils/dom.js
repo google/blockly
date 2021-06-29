@@ -370,7 +370,7 @@ Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
 
   var block = document.createElement('div');
   block.style.width = '1px';
-  block.style.height = 0;
+  block.style.height = '0px';
 
   var div = document.createElement('div');
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');

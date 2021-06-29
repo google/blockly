@@ -40,6 +40,8 @@ goog.requireType('Blockly.utils.Coordinate');
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
   this.horizontalLayout = true;
+  var blockChangeHandler = this.handleBlockChange_.bind(this);
+  this.workspace_.addChangeListener(blockChangeHandler);
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
 
@@ -236,45 +238,13 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
  * @protected
  */
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
-  this.workspace_.scale = this.targetWorkspace.scale;
-  var margin = this.MARGIN;
-  var cursorX = margin + this.tabWidth_;
-  var cursorY = margin;
-  if (this.RTL) {
-    contents = contents.reverse();
-  }
+  Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
+  this.positionContents('x');
+};
 
-  for (var i = 0, item; (item = contents[i]); i++) {
-    if (item.type == 'block') {
-      var block = item.block;
-      var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; (child = allBlocks[j]); j++) {
-        // Mark blocks as being inside a flyout.  This is used to detect and
-        // prevent the closure of the flyout if the user right-clicks on such a
-        // block.
-        child.isInFlyout = true;
-      }
-      block.render();
-      var root = block.getSvgRoot();
-      var blockHW = block.getHeightWidth();
-
-      // Figure out where to place the block.
-      var tab = block.outputConnection ? this.tabWidth_ : 0;
-      if (this.RTL) {
-        var moveX = cursorX + blockHW.width;
-      } else {
-        var moveX = cursorX - tab;
-      }
-      block.moveBy(moveX, cursorY);
-
-      var rect = this.createRect_(block, moveX, cursorY, blockHW, i);
-      cursorX += (blockHW.width + gaps[i]);
-
-      this.addBlockListeners_(root, block, rect);
-    } else if (item.type == 'button') {
-      this.initFlyoutButton_(item.button, cursorX, cursorY);
-      cursorX += (item.button.width + gaps[i]);
-    }
+Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
+  if (event.type === Blockly.Events.BLOCK_CHANGE) {
+    this.positionContents('x');
   }
 };
 

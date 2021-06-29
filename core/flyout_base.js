@@ -121,6 +121,13 @@ Blockly.Flyout = function(workspaceOptions) {
   this.buttons_ = [];
 
   /**
+   * List of gaps between flyout content items (blocks, buttons, etc).
+   * @type {!Array<number>}
+   * @protected
+   */
+  this.gaps_ = [];
+
+  /**
    * List of event listeners.
    * @type {!Array<!Array>}
    * @private
@@ -380,6 +387,90 @@ Blockly.Flyout.prototype.getFlyoutScale = function() {
  */
 Blockly.Flyout.prototype.getWorkspace = function() {
   return this.workspace_;
+};
+
+Blockly.Flyout.prototype.getContents_ = function() {
+  var blocks = this.workspace_.getTopBlocks(false);
+  var buttons = Array.from(this.buttons_);
+  var contents = [];
+  while (blocks.length || buttons.length) {
+    if (!blocks.length) {
+      contents = contents.concat(buttons);
+      break;
+    } else if (!buttons.length) {
+      contents = contents.concat(blocks);
+      break;
+    }
+
+    var blockPosition = blocks[0].getRelativeToSurfaceXY();
+    var buttonPosition = buttons[0].getPosition();
+
+    if ((this.horizontalLayout && blockPosition.x < buttonPosition.x) ||
+        (!this.horizontalLayout && blockPosition.y < buttonPosition.y)) {
+      contents.push(blocks.shift());
+    } else {
+      contents.push(buttons.shift());
+    }
+  }
+
+  return contents;
+};
+
+Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
+  var margin = this.MARGIN;
+  var cursorX = this.RTL ? margin : margin + this.tabWidth_;
+  var cursorY = margin;
+
+  var contents = this.getContents_();
+  if (this.RTL && primaryAxis === 'x') {
+    contents = contents.reverse();
+  }
+
+  // Delete all the event listeners.
+  for (var i = 0, listen; (listen = this.listeners_[i]); i++) {
+    Blockly.browserEvents.unbind(listen);
+  }
+  
+  for (var i = 0, item; (item = contents[i]); i++) {
+    if (item instanceof Blockly.BlockSvg) {
+      var block = item;
+      var root = block.getSvgRoot();
+      var dimensions = block.getHeightWidth();
+      var position = block.getRelativeToSurfaceXY();
+
+      var destinationX = cursorX;
+      if (primaryAxis === 'y' && block.outputConnection) {
+        destinationX -= this.tabWidth_;
+      }
+
+      if (this.RTL && primaryAxis === 'x') {
+        destinationX += dimensions.width;
+      }
+      var destinationY = cursorY;
+
+      var deltaX = destinationX - position.x;
+      var deltaY = destinationY - position.y;
+
+      if (deltaX || deltaY) {
+        block.moveBy(deltaX, deltaY);
+      }
+      this.moveRectToBlock_(block.flyoutRect_, block);
+      this.addBlockListeners_(root, block, block.flyoutRect_);
+    } else if (item instanceof Blockly.FlyoutButton) {
+      item.moveTo(cursorX, cursorY);
+      var dimensions = item;
+    }
+
+
+    switch (primaryAxis) {
+      case 'x':
+        cursorX += dimensions.width + this.gaps_[i];
+        break;
+      case 'y':
+        cursorY += dimensions.height + this.gaps_[i];
+        break;
+    }
+  }
 };
 
 /**
@@ -1081,7 +1172,28 @@ Blockly.Flyout.prototype.setMetrics_;
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
-Blockly.Flyout.prototype.layout_;
+Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
+  this.gaps_ = gaps;
+  this.workspace_.scale = this.targetWorkspace.scale;
+
+  for (var i = 0, item; (item = contents[i]); i++) {
+    if (item.type == 'block') {
+      var block = item.block;
+      var allBlocks = block.getDescendants(false);
+      for (var j = 0, child; (child = allBlocks[j]); j++) {
+        // Mark blocks as being inside a flyout.  This is used to detect and
+        // prevent the closure of the flyout if the user right-clicks on such a
+        // block.
+        child.isInFlyout = true;
+      }
+      block.render();
+      var blockHW = block.getHeightWidth();
+      this.createRect_(block, 0, 0, blockHW, i);
+    } else if (item.type == 'button') {
+      this.initFlyoutButton_(item.button, 0, 0);
+    }
+  }
+};
 
 /**
  * Scroll the flyout.

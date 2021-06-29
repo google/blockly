@@ -16,6 +16,7 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
+var {BUILD_DIR} = require('./config');
 
 /**
  * Recursively generates a list of file paths with the specified extension
@@ -94,7 +95,7 @@ function typings() {
   ];
   return gulp.src(srcs)
     .pipe(gulp.concat('blockly.d.ts'))
-    .pipe(gulp.dest('typings'))
+    .pipe(gulp.dest(BUILD_DIR))
     .on('end', function () {
       // Clean up tmp directory.
       if (fs.existsSync(tmpDir)) {
@@ -110,12 +111,24 @@ function msgTypings(cb) {
   msgFiles.forEach(msg => {
     const localeName = msg.substring(0, msg.indexOf('.json'));
     const msgTypings = template.slice().replace(/<%= locale %>/gi, localeName);
-    fs.writeFileSync(path.join('typings', 'msg', localeName + '.d.ts'), msgTypings, 'utf-8');
+    fs.writeFileSync(path.join(BUILD_DIR, 'msg', localeName + '.d.ts'), msgTypings, 'utf-8');
   })
   cb();
 }
 
+/**
+ * This task copies built files from BUILD_DIR back to the repository
+ * so they can be committed to git.
+ */
+function checkinTypings() {
+  return gulp.src([
+    `${BUILD_DIR}/**.d.ts`,
+    `${BUILD_DIR}/**/**.d.ts`,
+  ]).pipe(gulp.dest('typings'));
+};
+
 module.exports = {
   typings: typings,
-  msgTypings: msgTypings
+  msgTypings: msgTypings,
+  checkinTypings: checkinTypings,
 };

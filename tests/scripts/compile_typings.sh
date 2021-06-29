@@ -1,13 +1,12 @@
 #!/bin/bash
 
+# Location that npm run typings will write .d.ts files to.
+readonly BUILD_DIR='built'
+
 # ANSI colors
 BOLD_GREEN='\033[1;32m'
 BOLD_RED='\033[1;31m'
 ANSI_RESET='\033[0m'
-
-# Download TypeScript to obtain the compiler.
-echo "Downloading TypeScript"
-npm install typescript
 
 # Generate Blockly typings.
 echo "Generating Blockly typings"
@@ -15,7 +14,8 @@ npm run typings
 
 # Use the TypeScript compiler to compile the generated typings.
 echo "Compiling typings"
-cd typings
+
+cd "${BUILD_DIR}"
 ../node_modules/.bin/tsc blockly.d.ts
 
 

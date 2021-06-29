@@ -178,6 +178,7 @@ const recompile = gulp.series(
   buildTasks.build,
   buildTasks.checkinBuilt,
   typings.typings,
+  typings.checkinTypings,
   gitTasks.pushRebuildBranch
   );
 

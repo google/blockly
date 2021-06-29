@@ -246,23 +246,11 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  */
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
-      var orphanConnection = null;
-      var lastConnection = null;
-      if (localType == Blockly.connectionTypes.OUTPUT_VALUE) {
-        orphanConnection = orphanBlock.outputConnection;
-        lastConnection =
-            Blockly.Connection.getConnectionForOrphanedOutput(
-                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
-      } else {
-        orphanConnection = orphanBlock.previousConnection;
-        lastConnection = topBlock.lastConnectionInStack();
-      }
-
-      if (!lastConnection) {
-        return false;
-      }
-      return orphanConnection.getConnectionChecker().canConnect(
-          lastConnection, orphanConnection, false);
+      var orphanConnection = localType === Blockly.connectionTypes.OUTPUT_VALUE ?
+          orphanBlock.outputConnection : orphanBlock.previousConnection;
+      return !!Blockly.Connection.getConnectionForOrphanedConnection(
+          /** @type {!Blockly.Block} **/ (topBlock),
+          /** @type {!Blockly.Connection} **/ (orphanConnection));
     };
 
 /**

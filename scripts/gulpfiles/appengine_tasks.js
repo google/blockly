@@ -59,7 +59,6 @@ function copyAppengineSrc() {
 function copyPlaygroundDeps() {
   const playgroundDeps = [
       './node_modules/@blockly/dev-tools/dist/index.js',
-      './node_modules/@blockly/theme-dark/dist/index.js',
       './node_modules/@blockly/theme-modern/dist/index.js',
       './node_modules/@blockly/block-test/dist/index.js',
   ];

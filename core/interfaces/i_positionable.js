@@ -37,6 +37,7 @@ Blockly.IPositionable.prototype.position;
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ *   bounding box should be ignored by other UI elements.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;

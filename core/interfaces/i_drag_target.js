@@ -30,7 +30,8 @@ Blockly.IDragTarget = function() {};
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {Blockly.utils.Rect} The component's bounding box.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.IDragTarget.prototype.getClientRect;
 

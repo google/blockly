@@ -101,7 +101,7 @@ suite('Colour Fields', function() {
   testHelpers.runFromJsonSuiteTests(
       Blockly.FieldColour, validValueTestCases,invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
-  
+
   suite('setValue', function() {
     suite('Empty -> New Value', function() {
       setup(function() {
@@ -165,9 +165,9 @@ suite('Colour Fields', function() {
   suite('Customizations', function() {
     suite('Colours and Titles', function() {
       function assertColoursAndTitles(field, colours, titles) {
-        var editor = field.dropdownCreate_();
+        field.dropdownCreate_();
         var index = 0;
-        var node = editor.firstChild.firstChild;
+        var node = field.picker_.firstChild.firstChild;
         while (node) {
           chai.assert.equal(node.getAttribute('title'), titles[index]);
           chai.assert.equal(
@@ -243,8 +243,8 @@ suite('Colour Fields', function() {
     });
     suite('Columns', function() {
       function assertColumns(field, columns) {
-        var editor = field.dropdownCreate_();
-        chai.assert.equal(editor.firstChild.children.length, columns);
+        field.dropdownCreate_();
+        chai.assert.equal(field.picker_.firstChild.children.length, columns);
       }
       test('Constants', function() {
         var columns = Blockly.FieldColour.COLUMNS;

@@ -45,10 +45,11 @@ Blockly.ZoomControls = function(workspace) {
   this.workspace_ = workspace;
 
   /**
-   * The unique id for this component.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    * @type {string}
    */
-  this.id = Blockly.utils.genUid();
+  this.id = 'zoomControls';
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
@@ -228,7 +229,8 @@ Blockly.ZoomControls.prototype.dispose = function() {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The UI elements’s bounding box.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ *   bounding box should be ignored by other UI elements.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
   var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;

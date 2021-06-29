@@ -21,25 +21,6 @@ function assertVariableValues(container, name, type, id) {
 }
 
 /**
- * Captures the strings sent to console.warn() when calling a function.
- * @param {function} innerFunc The function where warnings may called.
- * @return {string[]} The warning messages (only the first arguments).
- */
-function captureWarnings(innerFunc) {
-  var msgs = [];
-  var nativeConsoleWarn = console.warn;
-  try {
-    console.warn = function(msg) {
-      msgs.push(msg);
-    };
-    innerFunc();
-  } finally {
-    console.warn = nativeConsoleWarn;
-  }
-  return msgs;
-}
-
-/**
  * Asserts that the given function logs the provided warning messages.
  * @param {function} innerFunc The function to call.
  * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
@@ -49,7 +30,7 @@ function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {
     messages = [messages];
   }
-  var warnings = captureWarnings(innerFunc);
+  var warnings = testHelpers.captureWarnings(innerFunc);
   chai.assert.lengthOf(warnings, messages.length);
   messages.forEach((message, i) => {
     chai.assert.match(warnings[i], message);

@@ -397,14 +397,12 @@ Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var collapseExpandOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
-      if (scope.block.isCollapsed()) {
-        return Blockly.Msg['EXPAND_BLOCK'];
-      }
-      return Blockly.Msg['COLLAPSE_BLOCK'];
+      return scope.block.isCollapsed() ?
+          Blockly.Msg['EXPAND_BLOCK'] : Blockly.Msg['COLLAPSE_BLOCK'];
     },
     preconditionFn: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       var block = scope.block;
-      if (!block.isInFlyout && block.isMovable()) {
+      if (!block.isInFlyout && block.isMovable() && block.workspace.options.collapse) {
         return 'enabled';
       }
       return 'hidden';

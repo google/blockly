@@ -1475,14 +1475,18 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
 
 /**
  * Walks down a stack of blocks and finds the last next connection on the stack.
+ * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
+ *     block will be returned. If false, this will follow shadows to find the
+ *     last connection.
  * @return {?Blockly.RenderedConnection} The last next connection on the stack,
  *     or null.
  * @package
  * @override
  */
-Blockly.BlockSvg.prototype.lastConnectionInStack = function() {
+Blockly.BlockSvg.prototype.lastConnectionInStack = function(ignoreShadows) {
   return /** @type {Blockly.RenderedConnection} */ (
-    Blockly.BlockSvg.superClass_.lastConnectionInStack.call(this));
+    Blockly.BlockSvg.superClass_
+        .lastConnectionInStack.call(this, ignoreShadows));
 };
 
 /**

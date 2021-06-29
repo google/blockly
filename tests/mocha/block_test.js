@@ -1104,6 +1104,61 @@ suite('Blocks', function() {
       });
     });
   });
+  suite('Getting/Setting Field (Values)', function() {
+    setup(function() {
+      this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          '<block type="text"><field name = "TEXT">test</field></block>'
+      ), this.workspace);
+    });
+
+    test('Getting Field', function() {
+      chai.assert.instanceOf(this.block.getField('TEXT'), Blockly.Field);
+    });
+    test('Getting Field without Name', function() {
+      chai.assert.throws(this.block.getField.bind(this.block), TypeError);
+    });
+    test('Getting Value of Field without Name', function() {
+      chai.assert.throws(this.block.getFieldValue.bind(this.block), TypeError);
+    });
+    test('Getting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.getField.bind(this.block, inputs[i]),
+            TypeError);
+      }
+    });
+    test('Getting Value of Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(
+            this.block.getFieldValue.bind(this.block, inputs[i]), TypeError);
+      }
+    });
+    test('Getting/Setting Field Value', function() {
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'test');
+      this.block.setFieldValue('abc', 'TEXT');
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'abc');
+    });
+    test('Setting Field without Name', function() {
+      chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test'));
+    });
+    test('Setting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test',
+            inputs[i]), TypeError);
+      }
+    });
+  });
   suite('Icon Management', function() {
     suite('Bubbles and Collapsing', function() {
       setup(function() {

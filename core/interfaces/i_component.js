@@ -23,7 +23,8 @@ goog.provide('Blockly.IComponent');
 Blockly.IComponent = function() {};
 
 /**
- * The unique id for this component.
+ * The unique id for this component that is used to register with the
+ * ComponentManager.
  * @type {string}
  */
 Blockly.IComponent.id;

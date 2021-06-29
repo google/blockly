@@ -85,7 +85,7 @@ suite('Registry', function() {
     test('Incorrect Plugin Name', function() {
       this.options['plugins']['test'] = 'random';
       var testClass;
-      var warnings = captureWarnings(() => {
+      var warnings = testHelpers.captureWarnings(() => {
         testClass = Blockly.registry.getClassFromOptions('test', this.options);
       });
       chai.assert.isNull(testClass);

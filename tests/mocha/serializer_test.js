@@ -124,8 +124,490 @@ Serializer.Attributes.testSuites = [
   Serializer.Attributes.Coordinates,
 ];
 
+Serializer.Fields = new SerializerTestSuite('Fields');
 
-Serializer.testSuites = [Serializer.Attributes];
+Serializer.Fields.Angle = new SerializerTestSuite('Angle');
+Serializer.Fields.Angle.Simple = new SerializerTestCase('Simple',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_angle" id="id" x="42" y="42">' +
+    '<field name="FIELDNAME">90</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Angle.Negative = new SerializerTestCase(
+    'Negative',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_angles_wrap" id="id" x="42" y="42">' +
+    '<field name="FIELDNAME">-90</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Angle.Decimals = new SerializerTestCase('Decimals',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_angle" id="id" x="42" y="42">' +
+    '<field name="FIELDNAME">1.5</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Angle.MaxPrecision = new SerializerTestCase(
+    'MaxPrecision',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_angle" id="id" x="42" y="42">' +
+    '<field name="FIELDNAME">1.000000000000001</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Angle.SmallestNumber = new SerializerTestCase(
+    'SmallestNumber',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_angle" id="id" x="42" y="42">' +
+    '<field name="FIELDNAME">5e-324</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Angle.testCases = [
+  Serializer.Fields.Angle.Simple,
+  Serializer.Fields.Angle.Negative,
+  Serializer.Fields.Angle.Decimals,
+  Serializer.Fields.Angle.MaxPrecision,
+  Serializer.Fields.Angle.SmallestNumber,
+];
+
+Serializer.Fields.Checkbox = new SerializerTestSuite('Checkbox');
+Serializer.Fields.Checkbox.True = new SerializerTestCase('True',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_checkbox" id="id" x="42" y="42">' +
+    '<field name="CHECKBOX">TRUE</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Checkbox.False = new SerializerTestCase('False',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_checkbox" id="id" x="42" y="42">' +
+    '<field name="CHECKBOX">FALSE</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Checkbox.testCases = [
+  Serializer.Fields.Checkbox.True,
+  Serializer.Fields.Checkbox.False,
+];
+
+Serializer.Fields.Colour = new SerializerTestSuite('Colour');
+Serializer.Fields.Colour.ThreeChar = new SerializerTestCase('ThreeChar',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_colour" id="id" x="42" y="42">' +
+    '<field name="COLOUR">#ffcc00</field>' +  // Could use a 3 char code.
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Colour.SixChar = new SerializerTestCase('SixChar',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_colour" id="id" x="42" y="42">' +
+    '<field name="COLOUR">#f1c101</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Colour.Black = new SerializerTestCase('Black',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_colour" id="id" x="42" y="42">' +
+    '<field name="COLOUR">#000000</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Colour.testCases = [
+  Serializer.Fields.Colour.ThreeChar,
+  Serializer.Fields.Colour.SixChar,
+  Serializer.Fields.Colour.Black,
+];
+
+Serializer.Fields.LabelSerializable = new SerializerTestSuite(
+    'LabelSerializable');
+Serializer.Fields.LabelSerializable.Simple = new SerializerTestCase('Simple',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">test</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Symbols = new SerializerTestCase('Symbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.EscapedSymbols = new SerializerTestCase(
+    'EscapedSymbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">&amp;&lt;&gt;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.SingleQuotes = new SerializerTestCase(
+    'SingleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">\'test\'</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.DoubleQuotes = new SerializerTestCase(
+    'DoubleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">"test"</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Numbers = new SerializerTestCase(
+    'Numbers',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">1234567890a123a123a</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Emoji = new SerializerTestCase(
+    'Emoji',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Russian = new SerializerTestCase(
+    'Russian',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">ты любопытный кот</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Japanese = new SerializerTestCase(
+    'Japanese',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">あなたは好奇心旺盛な猫です</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.Zalgo = new SerializerTestCase(
+    'Zalgo',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.ControlChars = new SerializerTestCase(
+    'ControlChars',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_label_serializable" id="id" x="42" y="42">' +
+    '<field name="LABEL">&#x01;&#xa1;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.LabelSerializable.testCases = [
+  Serializer.Fields.LabelSerializable.Simple,
+  Serializer.Fields.LabelSerializable.Symbols,
+  Serializer.Fields.LabelSerializable.EscapedSymbols,
+  Serializer.Fields.LabelSerializable.SingleQuotes,
+  Serializer.Fields.LabelSerializable.DoubleQuotes,
+  Serializer.Fields.LabelSerializable.Numbers,
+  Serializer.Fields.LabelSerializable.Emoji,
+  Serializer.Fields.LabelSerializable.Russian,
+  Serializer.Fields.LabelSerializable.Japanese,
+  Serializer.Fields.LabelSerializable.Zalgo,
+  // TODO: Uncoment once #4945 is merged.
+  // Serializer.Fields.LabelSerializable.ControlChars,
+];
+
+Serializer.Fields.MultilineInput = new SerializerTestSuite('MultilineInput');
+Serializer.Fields.MultilineInput.SingleLine = new SerializerTestCase(
+    'SingleLine',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">test</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.MultipleLines = new SerializerTestCase(
+    'MultipleLines',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">line1&amp;#10;line2&amp;#10;line3</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Indentation = new SerializerTestCase(
+    'Indentation',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">line1&amp;#10;  line2&amp;#10;  line3</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Tabs = new SerializerTestCase(
+    'Tabs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">' +
+    'line1&amp;#10;	line2&amp;#10;	line3' +
+    '</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Symbols = new SerializerTestCase('Symbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.EscapedSymbols = new SerializerTestCase(
+    'EscapedSymbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">&amp;&lt;&gt;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.SingleQuotes = new SerializerTestCase(
+    'SingleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">\'test\'</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.DoubleQuotes = new SerializerTestCase(
+    'DoubleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">"test"</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Numbers = new SerializerTestCase(
+    'Numbers',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">1234567890a123a123a</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Emoji = new SerializerTestCase(
+    'Emoji',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Russian = new SerializerTestCase(
+    'Russian',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">ты любопытный кот</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Japanese = new SerializerTestCase(
+    'Japanese',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">あなたは好奇心旺盛な猫です</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.Zalgo = new SerializerTestCase(
+    'Zalgo',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.ControlChars = new SerializerTestCase(
+    'ControlChars',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_multilinetext" id="id" x="42" y="42">' +
+    '<field name="CODE">&#x01;&#xa1;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.MultilineInput.testCases = [
+  Serializer.Fields.MultilineInput.SingleLine,
+  Serializer.Fields.MultilineInput.MultipleLines,
+  Serializer.Fields.MultilineInput.Indentation,
+  Serializer.Fields.MultilineInput.Tabs,
+  Serializer.Fields.MultilineInput.Symbols,
+  Serializer.Fields.MultilineInput.EscapedSymbols,
+  Serializer.Fields.MultilineInput.SingleQuotes,
+  Serializer.Fields.MultilineInput.DoubleQuotes,
+  Serializer.Fields.MultilineInput.Numbers,
+  Serializer.Fields.MultilineInput.Emoji,
+  Serializer.Fields.MultilineInput.Russian,
+  Serializer.Fields.MultilineInput.Japanese,
+  Serializer.Fields.MultilineInput.Zalgo,
+  // TODO: Uncoment once #4945 is merged.
+  // Serializer.Fields.MultilineInput.ControlChars,
+];
+
+Serializer.Fields.Number = new SerializerTestSuite('Number');
+Serializer.Fields.Number.Simple = new SerializerTestCase('Simple',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">123</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.Negative = new SerializerTestCase('Negative',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">-123</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.PosInfinity = new SerializerTestCase('PosInfinity',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">Infinity</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.NegInfinity = new SerializerTestCase('NegInfinity',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">-Infinity</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.Decimals = new SerializerTestCase('Decimals',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">1.5</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.Smallest = new SerializerTestCase('Smallest',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">5e-324</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.Largest = new SerializerTestCase('Largest',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">1.7976931348623157e+308</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.MaxPrecisionSmall = new SerializerTestCase(
+    'MaxPrecisionSmall',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">1.000000000000001</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.MaxPrecisionLarge = new SerializerTestCase(
+    'MaxPrecisionLarge',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_numbers_float" id="id" x="42" y="42">' +
+    '<field name="NUM">1000000000000001</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.Number.testCases = [
+  Serializer.Fields.Number.Simple,
+  Serializer.Fields.Number.Negative,
+  Serializer.Fields.Number.PosInfinity,
+  Serializer.Fields.Number.NegInfinity,
+  Serializer.Fields.Number.Decimals,
+  Serializer.Fields.Number.Smallest,
+  Serializer.Fields.Number.Largest,
+  Serializer.Fields.Number.MaxPrecisionSmall,
+  Serializer.Fields.Number.MaxPrecisionLarge,
+];
+
+Serializer.Fields.TextInput = new SerializerTestSuite('TextInput');
+Serializer.Fields.TextInput.Simple = new SerializerTestCase('Simple',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">test</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Tabs = new SerializerTestCase('Tabs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">line1	line2	line3</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Tabs = new SerializerTestCase('Tabs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">line1	line2	line3</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Symbols = new SerializerTestCase('Symbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.EscapedSymbols = new SerializerTestCase(
+    'EscapedSymbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">&amp;&lt;&gt;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.SingleQuotes = new SerializerTestCase(
+    'SingleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">\'test\'</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.DoubleQuotes = new SerializerTestCase(
+    'DoubleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">"test"</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Numbers = new SerializerTestCase(
+    'Numbers',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">1234567890a123a123a</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Emoji = new SerializerTestCase(
+    'Emoji',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Russian = new SerializerTestCase(
+    'Russian',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">ты любопытный кот</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Japanese = new SerializerTestCase(
+    'Japanese',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">あなたは好奇心旺盛な猫です</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.Zalgo = new SerializerTestCase(
+    'Zalgo',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.ControlChars = new SerializerTestCase(
+    'ControlChars',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_fields_text_input" id="id" x="42" y="42">' +
+    '<field name="TEXT_INPUT">&#x01;&#xa1;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Fields.TextInput.testCases = [
+  Serializer.Fields.TextInput.Simple,
+  Serializer.Fields.TextInput.Tabs,
+  Serializer.Fields.TextInput.Symbols,
+  Serializer.Fields.TextInput.EscapedSymbols,
+  Serializer.Fields.TextInput.SingleQuotes,
+  Serializer.Fields.TextInput.DoubleQuotes,
+  Serializer.Fields.TextInput.Numbers,
+  Serializer.Fields.TextInput.Emoji,
+  Serializer.Fields.TextInput.Russian,
+  Serializer.Fields.TextInput.Japanese,
+  Serializer.Fields.TextInput.Zalgo,
+  // TODO: Uncoment once #4945 is merged.
+  // Serializer.Fields.TextInput.ControlChars,
+];
+
+Serializer.Fields.testSuites = [
+  Serializer.Fields.Angle,
+  Serializer.Fields.Checkbox,
+  Serializer.Fields.Colour,
+  Serializer.Fields.LabelSerializable,
+  Serializer.Fields.MultilineInput,
+  Serializer.Fields.Number,
+  Serializer.Fields.TextInput,
+];
+
+Serializer.testSuites = [
+  Serializer.Attributes,
+  Serializer.Fields,
+];
 
 var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 

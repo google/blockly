@@ -239,12 +239,17 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
  */
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
   Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
-  this.positionContents('x');
+  this.positionContents(Blockly.constants.AXIS.X);
 };
 
+/**
+ * Respond to changes in the dimensions of blocks by repositioning the contents
+ * of the flyout.
+ * @param {!Blockly.Events.BlockChange} event The block change event.
+ */
 Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
-    this.positionContents('x');
+    this.positionContents(Blockly.constants.AXIS.X);
   }
 };
 

@@ -230,13 +230,17 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
-  this.positionContents('y');
+  this.positionContents(Blockly.constants.AXIS.Y);
 };
 
-
+/**
+ * Respond to changes in the dimensions of blocks by repositioning the contents
+ * of the flyout.
+ * @param {!Blockly.Events.BlockChange} event The block change event.
+ */
 Blockly.VerticalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
-    this.positionContents('y');
+    this.positionContents(Blockly.constants.AXIS.Y);
   }
 };
 

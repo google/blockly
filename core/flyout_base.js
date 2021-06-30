@@ -17,6 +17,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ComponentManager');
+goog.require('Blockly.constants');
 goog.require('Blockly.DeleteArea');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -389,7 +390,15 @@ Blockly.Flyout.prototype.getWorkspace = function() {
   return this.workspace_;
 };
 
-Blockly.Flyout.prototype.getContents_ = function() {
+/**
+ * Retrieves all the blocks and buttons in the flyout.
+ * @param {!Blockly.constants.AXIS} primaryAxis The axis content is positioned
+ * along.
+ * @returns {!Array<Blockly.FlyoutButton|Blockly.BlockSvg>} An array of all of
+ * the blocks and buttons in the flyout in the same order as their visual
+ * representations.
+ */
+Blockly.Flyout.prototype.getContents_ = function(primaryAxis) {
   var blocks = this.workspace_.getTopBlocks(false);
   var buttons = Array.from(this.buttons_);
   var contents = [];
@@ -405,8 +414,10 @@ Blockly.Flyout.prototype.getContents_ = function() {
     var blockPosition = blocks[0].getRelativeToSurfaceXY();
     var buttonPosition = buttons[0].getPosition();
 
-    if ((this.horizontalLayout && blockPosition.x < buttonPosition.x) ||
-        (!this.horizontalLayout && blockPosition.y < buttonPosition.y)) {
+    if ((primaryAxis === Blockly.constants.AXIS.X &&
+      blockPosition.x < buttonPosition.x) ||
+      (primaryAxis === Blockly.constants.AXIS.Y &&
+        blockPosition.y < buttonPosition.y)) {
       contents.push(blocks.shift());
     } else {
       contents.push(buttons.shift());
@@ -416,13 +427,19 @@ Blockly.Flyout.prototype.getContents_ = function() {
   return contents;
 };
 
+/**
+ * Respositions the blocks, buttons and labels in the flyout based on their
+ * current dimensions and order.
+ * @param {!Blockly.constants.AXIS} primaryAxis The axis to position content
+ * along.
+ */
 Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
   var margin = this.MARGIN;
-  var cursorX = this.RTL ? margin : margin + this.tabWidth_;
+  var cursorX = margin + this.tabWidth_;
   var cursorY = margin;
 
-  var contents = this.getContents_();
-  if (this.RTL && primaryAxis === 'x') {
+  var contents = this.getContents_(primaryAxis);
+  if (this.RTL && primaryAxis === Blockly.constants.AXIS.X) {
     contents = contents.reverse();
   }
 
@@ -439,11 +456,11 @@ Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
       var position = block.getRelativeToSurfaceXY();
 
       var destinationX = cursorX;
-      if (primaryAxis === 'y' && block.outputConnection) {
+      if (block.outputConnection && !this.RTL) {
         destinationX -= this.tabWidth_;
       }
 
-      if (this.RTL && primaryAxis === 'x') {
+      if (this.RTL && primaryAxis === Blockly.constants.AXIS.X) {
         destinationX += dimensions.width;
       }
       var destinationY = cursorY;
@@ -463,10 +480,10 @@ Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
 
 
     switch (primaryAxis) {
-      case 'x':
+      case Blockly.constants.AXIS.X:
         cursorX += dimensions.width + this.gaps_[i];
         break;
-      case 'y':
+      case Blockly.constants.AXIS.Y:
         cursorY += dimensions.height + this.gaps_[i];
         break;
     }

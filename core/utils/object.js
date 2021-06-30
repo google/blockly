@@ -19,15 +19,25 @@ goog.provide('Blockly.utils.object');
 
 /**
  * Inherit the prototype methods from one constructor into another.
- *
  * @param {!Function} childCtor Child class.
  * @param {!Function} parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
  */
 Blockly.utils.object.inherits = function(childCtor, parentCtor) {
+  // Set a .superClass_ property so that methods can call parent methods
+  // without hard-coding the parent class name.
+  // Could be replaced by ES6's super().
   childCtor.superClass_ = parentCtor.prototype;
+
+  // Link the child class to the parent class so that static methods inherit.
+  Object.setPrototypeOf(childCtor, parentCtor);
+
+  // Replace the child constructor's prototype object with an instance
+  // of the parent class.
   childCtor.prototype = Object.create(parentCtor.prototype);
   childCtor.prototype.constructor = childCtor;
+  // Alternatively, one could use this instead:
+  // Object.setPrototypeOf(childCtor.prototype, parentCtor.prototype);
 };
 
 /**

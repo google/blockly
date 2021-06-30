@@ -135,7 +135,9 @@ Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
  * @nocollapse
  */
 Blockly.FieldAngle.fromJson = function(options) {
-  return new Blockly.FieldAngle(options['angle'], undefined, options);
+  // `this` might be a subclass of FieldAngle if that class doesn't override
+  // the static fromJson method.
+  return new this(options['angle'], undefined, options);
 };
 
 /**

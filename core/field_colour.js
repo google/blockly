@@ -104,7 +104,9 @@ Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
  * @nocollapse
  */
 Blockly.FieldColour.fromJson = function(options) {
-  return new Blockly.FieldColour(options['colour'], undefined, options);
+  // `this` might be a subclass of FieldColour if that class doesn't override
+  // the static fromJson method.
+  return new this(options['colour'], undefined, options);
 };
 
 /**

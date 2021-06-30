@@ -238,7 +238,7 @@ Blockly.WorkspaceSvg = function(
    * @type {!Array<
    * {
    *   component: !Blockly.IDragTarget,
-   *   clientRect: !Blockly.utils.Rect,
+   *   clientRect: !Blockly.utils.Rect
    * }>}
    * @private
    */

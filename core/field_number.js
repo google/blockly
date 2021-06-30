@@ -91,7 +91,9 @@ Blockly.FieldNumber.prototype.DEFAULT_VALUE = 0;
  * @nocollapse
  */
 Blockly.FieldNumber.fromJson = function(options) {
-  return new Blockly.FieldNumber(options['value'],
+  // `this` might be a subclass of FieldNumber if that class doesn't override
+  // the static fromJson method.
+  return new this(options['value'],
       undefined, undefined, undefined, undefined, options);
 };
 

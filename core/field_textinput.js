@@ -110,7 +110,9 @@ Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldTextInput(text, undefined, options);
+  // `this` might be a subclass of FieldTextInput if that class doesn't override
+  // the static fromJson method.
+  return new this(text, undefined, options);
 };
 
 /**

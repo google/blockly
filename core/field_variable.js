@@ -100,8 +100,9 @@ Blockly.utils.object.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  */
 Blockly.FieldVariable.fromJson = function(options) {
   var varName = Blockly.utils.replaceMessageReferences(options['variable']);
-  return new Blockly.FieldVariable(
-      varName, undefined, undefined, undefined, options);
+  // `this` might be a subclass of FieldVariable if that class doesn't override
+  // the static fromJson method.
+  return new this(varName, undefined, undefined, undefined, options);
 };
 
 /**

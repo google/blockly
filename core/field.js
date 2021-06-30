@@ -155,6 +155,15 @@ Blockly.Field = function(value, opt_validator, opt_config) {
 };
 
 /**
+ * Construct a Field from a JSON arg object.
+ * @param {!Object} options_ A JSON object with options (options).
+ * @return {!Blockly.Field} The new field instance.
+ */
+Blockly.Field.fromJson = function(options_) {
+  throw Error("Field subclass doesn't define fromJson");
+};
+
+/**
  * The default value for this field.
  * @type {*}
  * @protected
@@ -276,7 +285,7 @@ Blockly.Field.prototype.configure_ = function(config) {
  */
 Blockly.Field.prototype.setSourceBlock = function(block) {
   if (this.sourceBlock_) {
-    throw Error('Field already bound to a block.');
+    throw Error('Field already bound to a block');
   }
   this.sourceBlock_ = block;
 };

@@ -156,10 +156,9 @@ Blockly.Field = function(value, opt_validator, opt_config) {
 
 /**
  * Construct a Field from a JSON arg object.
- * @param {!Object} options_ A JSON object with options (options).
- * @return {!Blockly.Field} The new field instance.
+ * @param {!Object} _options A JSON object with options.
  */
-Blockly.Field.fromJson = function(options_) {
+Blockly.Field.fromJson = function(_options) {
   throw Error("Field subclass doesn't define fromJson");
 };
 

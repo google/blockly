@@ -604,9 +604,308 @@ Serializer.Fields.testSuites = [
   Serializer.Fields.TextInput,
 ];
 
+Serializer.Icons = new SerializerTestSuite('Icons');
+
+Serializer.Icons.Comment = new SerializerTestSuite('Comment');
+Serializer.Icons.Comment.Basic = new SerializerTestCase('Basic',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">test</comment>' +
+    '</block>' +
+    '</xml>');
+
+Serializer.Icons.Comment.Size = new SerializerTestSuite('Size');
+Serializer.Icons.Comment.Size.Different = new SerializerTestCase('Different',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="160" w="80">test</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Size.Large = new SerializerTestCase('Large',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="10000" w="10000">test</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Size.testCases = [
+  Serializer.Icons.Comment.Size.Different,
+  Serializer.Icons.Comment.Size.Large,
+];
+
+Serializer.Icons.Comment.Pinned = new SerializerTestSuite('Pinned');
+Serializer.Icons.Comment.Pinned.True = new SerializerTestCase('True',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="true" h="80" w="160">test</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Pinned.False = new SerializerTestCase('False',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">test</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Pinned.testCases = [
+  Serializer.Icons.Comment.Pinned.True,
+  Serializer.Icons.Comment.Pinned.False,
+];
+
+Serializer.Icons.Comment.Text = new SerializerTestSuite('Text');
+Serializer.Icons.Comment.Text.Symbols = new SerializerTestCase('Symbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">~`!@#$%^*()_+-={[}]|\\:;,.?/</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.EscapedSymbols = new SerializerTestCase(
+    'EscapedSymbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">&amp;&lt;&gt;</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.SingleQuotes = new SerializerTestCase(
+    'SingleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">\'test\'</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.DoubleQuotes = new SerializerTestCase(
+    'DoubleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">"test"</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.Numbers = new SerializerTestCase(
+    'Numbers',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">1234567890a123a123a</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.Emoji = new SerializerTestCase(
+    'Emoji',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.Russian = new SerializerTestCase(
+    'Russian',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">ты любопытный кот</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.Japanese = new SerializerTestCase(
+    'Japanese',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">あなたは好奇心旺盛な猫です</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.Zalgo = new SerializerTestCase(
+    'Zalgo',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.ControlChars = new SerializerTestCase(
+    'ControlChars',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<comment pinned="false" h="80" w="160">&#x01;&#xa1;</comment>' +
+    '</block>' +
+    '</xml>');
+Serializer.Icons.Comment.Text.testCases = [
+  Serializer.Icons.Comment.Text.Symbols,
+  Serializer.Icons.Comment.Text.EscapedSymbols,
+  Serializer.Icons.Comment.Text.SingleQuotes,
+  Serializer.Icons.Comment.Text.DoubleQuotes,
+  Serializer.Icons.Comment.Text.Numbers,
+  Serializer.Icons.Comment.Text.Emoji,
+  Serializer.Icons.Comment.Text.Russian,
+  Serializer.Icons.Comment.Text.Japanese,
+  Serializer.Icons.Comment.Text.Zalgo,
+  // TODO: Uncoment once #4945 is merged.
+  // Serializer.Icons.Comment.Text.ControlChars,
+];
+
+Serializer.Icons.Comment.testSuites = [
+  Serializer.Icons.Comment.Size,
+  Serializer.Icons.Comment.Pinned,
+  Serializer.Icons.Comment.Text,
+];
+
+Serializer.Icons.Comment.testCases = [
+  Serializer.Icons.Comment.Basic,
+];
+
+Serializer.Icons.testSuites = [Serializer.Icons.Comment];
+
+Serializer.Connections = new SerializerTestSuite('Connections');
+
+Serializer.Connections.Child = new SerializerTestSuite('Child');
+Serializer.Connections.Child.Value = new SerializerTestCase('Value',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<block type="logic_boolean" id="id2">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</block>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.Statement = new SerializerTestCase('Statement',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<block type="text_print" id="id2"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.Next = new SerializerTestCase('Next',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<block type="text_print" id="id2"></block>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.Row = new SerializerTestCase('Value',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<block type="logic_negate" id="id2">' +
+    '<value name="BOOL">' +
+    '<block type="logic_boolean" id="id3">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</block>' +
+    '</value>' +
+    '</block>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.Nested = new SerializerTestCase('Statement',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<block type="controls_repeat_ext" id="id2">' +
+    '<statement name="DO">' +
+    '<block type="text_print" id="id3"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.Stack = new SerializerTestCase('Next',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<block type="text_print" id="id2">' +
+    '<next>' +
+    '<block type="text_print" id="id3"></block>' +
+    '</next>' +
+    '</block>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Child.testCases = [
+  Serializer.Connections.Child.Value,
+  Serializer.Connections.Child.Statement,
+  Serializer.Connections.Child.Next,
+  Serializer.Connections.Child.Row,
+  Serializer.Connections.Child.Nested,
+  Serializer.Connections.Child.Stack,
+];
+
+Serializer.Connections.Shadow = new SerializerTestSuite('Shadow');
+Serializer.Connections.Shadow.Value = new SerializerTestCase('Value',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_boolean" id="id2">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</shadow>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.Statement = new SerializerTestCase('Statement',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.Next = new SerializerTestCase('Next',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.Row = new SerializerTestCase('Value',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_negate" id="id2">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_boolean" id="id3">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</shadow>' +
+    '</value>' +
+    '</shadow>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.Nested = new SerializerTestCase('Statement',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<shadow type="controls_repeat_ext" id="id2">' +
+    '<statement name="DO">' +
+    '<shadow type="text_print" id="id3"></shadow>' +
+    '</statement>' +
+    '</shadow>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.Stack = new SerializerTestCase('Next',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<shadow type="text_print" id="id2">' +
+    '<next>' +
+    '<shadow type="text_print" id="id3"></shadow>' +
+    '</next>' +
+    '</shadow>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.Shadow.testCases = [
+  Serializer.Connections.Shadow.Value,
+  Serializer.Connections.Shadow.Statement,
+  Serializer.Connections.Shadow.Next,
+  Serializer.Connections.Shadow.Row,
+  Serializer.Connections.Shadow.Nested,
+  Serializer.Connections.Shadow.Stack,
+];
+
+Serializer.Connections.testSuites = [
+  Serializer.Connections.Child,
+  Serializer.Connections.Shadow,
+];
+
 Serializer.testSuites = [
   Serializer.Attributes,
   Serializer.Fields,
+  Serializer.Icons,
+  Serializer.Connections,
 ];
 
 var runSerializerTestSuite = (serializer, deserializer, testSuite) => {

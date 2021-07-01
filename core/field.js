@@ -55,6 +55,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
+ * @abstract
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IKeyboardAccessible}
@@ -152,14 +153,6 @@ Blockly.Field = function(value, opt_validator, opt_config) {
   opt_config && this.configure_(opt_config);
   this.setValue(value);
   opt_validator && this.setValidator(opt_validator);
-};
-
-/**
- * Construct a Field from a JSON arg object.
- * @param {!Object} _options A JSON object with options.
- */
-Blockly.Field.fromJson = function(_options) {
-  throw Error("Field subclass doesn't define fromJson");
 };
 
 /**

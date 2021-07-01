@@ -13,6 +13,7 @@
 goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
+goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
@@ -131,7 +132,7 @@ Blockly.InsertionMarkerManager = function(block) {
    * other blocks.  This includes all open connections on the top block, as well
    * as the last connection on the block stack.
    * Does not change during a drag.
-   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @type {!Array<!Blockly.RenderedConnection>}
    * @private
    */
   this.availableConnections_ = this.initAvailableConnections_();
@@ -147,6 +148,17 @@ Blockly.InsertionMarkerManager.PREVIEW_TYPE = {
   INPUT_OUTLINE: 1,
   REPLACEMENT_FADE: 2,
 };
+
+/**
+ * An error message to throw if the block created by createMarkerBlock_ is
+ * missing any components.
+ * @type {string}
+ * @const
+ */
+Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
+    'manager tried to create a marker but the result is missing %1. If ' +
+    'you are using a mutator, make sure your domToMutation method is ' +
+    'properly defined.';
 
 /**
  * Sever all links from this object.
@@ -229,14 +241,15 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
  * Update connections based on the most recent move location.
  * @param {!Blockly.utils.Coordinate} dxy Position relative to drag start,
  *     in workspace units.
- * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
- *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
+ * @param {?Blockly.IDragTarget} dragTarget The drag target that the block is
+ *     currently over.
  * @package
  */
-Blockly.InsertionMarkerManager.prototype.update = function(dxy, deleteArea) {
+Blockly.InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
   var candidate = this.getCandidate_(dxy);
 
-  this.wouldDeleteBlock_ = this.shouldDelete_(candidate, deleteArea);
+  this.wouldDeleteBlock_ = this.shouldDelete_(candidate, dragTarget);
+
   var shouldUpdate = this.wouldDeleteBlock_ ||
       this.shouldUpdatePreviews_(candidate, dxy);
 
@@ -279,9 +292,17 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
         continue;  // Ignore the collapsed input.
       }
       var resultInput = result.inputList[i];
+      if (!resultInput) {
+        throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+            .replace('%1', 'an input'));
+      }
       for (var j = 0; j < sourceInput.fieldRow.length; j++) {
         var sourceField = sourceInput.fieldRow[j];
         var resultField = resultInput.fieldRow[j];
+        if (!resultField) {
+          throw new Error(Blockly.InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
+              .replace('%1', 'a field'));
+        }
         resultField.setValue(sourceField.getValue());
       }
     }
@@ -303,14 +324,14 @@ Blockly.InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlo
  * only be called once, at the beginning of a drag.
  * If the stack has more than one block, this function will populate
  * lastOnStack_ and create the corresponding insertion marker.
- * @return {!Array.<!Blockly.RenderedConnection>} A list of available
+ * @return {!Array<!Blockly.RenderedConnection>} A list of available
  *     connections.
  * @private
  */
 Blockly.InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
   var available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
-  var lastOnStack = this.topBlock_.lastConnectionInStack();
+  var lastOnStack = this.topBlock_.lastConnectionInStack(true);
   if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
@@ -365,7 +386,7 @@ Blockly.InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
     } else {
       console.error('Only one of localConnection_ and closestConnection_ was set.');
     }
-  } else { // No connection found.
+  } else {  // No connection found.
     // Only need to update if we were showing a preview before.
     return !!(this.localConnection_ && this.closestConnection_);
   }
@@ -426,23 +447,26 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
 /**
  * Whether ending the drag would delete the block.
  * @param {!Object} candidate An object containing a local connection, a closest
- *     connection, and a radius.
- * @param {?number} deleteArea One of {@link Blockly.DELETE_AREA_TRASH},
- *     {@link Blockly.DELETE_AREA_TOOLBOX}, or {@link Blockly.DELETE_AREA_NONE}.
- * @return {boolean} True if dropping the block immediately would replace
- *     delete the block.  False otherwise.
+ *    connection, and a radius.
+ * @param {?Blockly.IDragTarget} dragTarget The drag target that the block is
+ *     currently over.
+ * @return {boolean} Whether dropping the block immediately would delete the
+ *    block.
  * @private
  */
-Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(candidate,
-    deleteArea) {
-  // Prefer connecting over dropping into the trash can, but prefer dragging to
-  // the toolbox over connecting to other blocks.
-  var wouldConnect = candidate && !!candidate.closest &&
-      deleteArea != Blockly.DELETE_AREA_TOOLBOX;
-  var wouldDelete = !!deleteArea && !this.topBlock_.getParent() &&
-      this.topBlock_.isDeletable();
-
-  return wouldDelete && !wouldConnect;
+Blockly.InsertionMarkerManager.prototype.shouldDelete_ = function(
+    candidate, dragTarget) {
+  if (dragTarget) {
+    var componentManager = this.workspace_.getComponentManager();
+    var isDeleteArea = componentManager.hasCapability(dragTarget.id,
+        Blockly.ComponentManager.Capability.DELETE_AREA);
+    if (isDeleteArea) {
+      return (
+        /** @type {!Blockly.IDeleteArea} */ (dragTarget))
+          .wouldDelete(this.topBlock_, candidate && !!candidate.closest);
+    }
+  }
+  return false;
 };
 
 /**
@@ -650,7 +674,10 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   }
 
   this.markerConnection_ = null;
-  imBlock.getSvgRoot().setAttribute('visibility', 'hidden');
+  var svg = imBlock.getSvgRoot();
+  if (svg) {
+    svg.setAttribute('visibility', 'hidden');
+  }
 };
 
 /**
@@ -694,7 +721,7 @@ Blockly.InsertionMarkerManager.prototype.hideReplacementFade_ = function() {
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @package
  */

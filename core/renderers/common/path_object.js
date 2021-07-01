@@ -97,9 +97,9 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
 };
 
 /**
- * Add the cursor svg to this block's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     block svg group.
+ * Add the cursor SVG to this block's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
@@ -113,9 +113,9 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
 };
 
 /**
- * Add the marker svg to this block's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     block svg group.
+ * Add the marker SVG to this block's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {

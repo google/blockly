@@ -119,7 +119,7 @@ Blockly.RenderedConnection.prototype.getSourceBlock = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.BlockSvg} The connected block or null if none is connected.
+ * @return {?Blockly.BlockSvg} The connected block or null if none is connected.
  * @override
  */
 Blockly.RenderedConnection.prototype.targetBlock = function() {
@@ -386,7 +386,7 @@ Blockly.RenderedConnection.prototype.stopTrackingAll = function() {
 /**
  * Start tracking this connection, as well as all down-stream connections on
  * any block attached to this connection. This happens when a block is expanded.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @return {!Array<!Blockly.Block>} List of blocks to render.
  */
 Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   this.setTracking(true);
@@ -449,21 +449,34 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 
 /**
  * Behavior after a connection attempt fails.
+ * Bumps this connection away from the other connection. Called when an
+ * attempted connection fails.
  * @param {!Blockly.Connection} otherConnection Connection that this connection
  *     failed to connect to.
  * @package
  */
-Blockly.RenderedConnection.prototype.onFailedConnect = function(
-    otherConnection) {
-  this.bumpAwayFrom(otherConnection);
-};
+Blockly.RenderedConnection.prototype.onFailedConnect =
+    function(otherConnection) {
+      var block = this.getSourceBlock();
+      if (Blockly.Events.recordUndo) {
+        var group = Blockly.Events.getGroup();
+        setTimeout(function() {
+          if (!block.isDisposed() && !block.getParent()) {
+            Blockly.Events.setGroup(group);
+            this.bumpAwayFrom(otherConnection);
+            Blockly.Events.setGroup(false);
+          }
+        }.bind(this), Blockly.BUMP_DELAY);
+      }
+    };
 
 
 /**
  * Disconnect two blocks that are connected by this connection.
  * @param {!Blockly.Block} parentBlock The superior block.
  * @param {!Blockly.Block} childBlock The inferior block.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
@@ -484,7 +497,8 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
 /**
  * Respawn the shadow block if there was one connected to the this connection.
  * Render/rerender blocks as needed.
- * @private
+ * @protected
+ * @override
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
   Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
@@ -507,7 +521,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
  * Type checking does not apply, since this function is used for bumping.
  * @param {number} maxLimit The maximum radius to another connection, in
  *     workspace units.
- * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @return {!Array<!Blockly.Connection>} List of connections.
  * @package
  */
 Blockly.RenderedConnection.prototype.neighbours = function(maxLimit) {

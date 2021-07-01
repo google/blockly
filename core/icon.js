@@ -56,14 +56,14 @@ Blockly.Icon.prototype.SIZE = 17;
 
 /**
  * Bubble UI (if visible).
- * @type {Blockly.Bubble}
+ * @type {?Blockly.Bubble}
  * @protected
  */
 Blockly.Icon.prototype.bubble_ = null;
 
 /**
  * Absolute coordinate of icon's center.
- * @type {Blockly.utils.Coordinate}
+ * @type {?Blockly.utils.Coordinate}
  * @protected
  */
 Blockly.Icon.prototype.iconXY_ = null;
@@ -177,7 +177,7 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {Blockly.utils.Coordinate} Object with x and y properties in
+ * @return {?Blockly.utils.Coordinate} Object with x and y properties in
  *     workspace coordinates.
  */
 Blockly.Icon.prototype.getIconLocation = function() {

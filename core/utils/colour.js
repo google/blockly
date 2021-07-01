@@ -79,7 +79,7 @@ Blockly.utils.colour.rgbToHex = function(r, g, b) {
  * Converts a colour to RGB.
  * @param {string} colour String representing colour in any
  *     colour format ('#ff0000', 'red', '0xff000', etc).
- * @return {!Array.<number>} RGB representation of the colour.
+ * @return {!Array<number>} RGB representation of the colour.
  */
 Blockly.utils.colour.hexToRgb = function(colour) {
   var hex = Blockly.utils.colour.parse(colour);

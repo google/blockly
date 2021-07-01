@@ -214,23 +214,23 @@ Blockly.zelos.ConstantProvider = function() {
    * @package
    */
   this.SHAPE_IN_SHAPE_PADDING = {
-    1: { // Outer shape: hexagon.
-      0: 5 * this.GRID_UNIT, // Field in hexagon.
-      1: 2 * this.GRID_UNIT, // Hexagon in hexagon.
-      2: 5 * this.GRID_UNIT, // Round in hexagon.
-      3: 5 * this.GRID_UNIT  // Square in hexagon.
+    1: {  // Outer shape: hexagon.
+      0: 5 * this.GRID_UNIT,  // Field in hexagon.
+      1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
+      2: 5 * this.GRID_UNIT,  // Round in hexagon.
+      3: 5 * this.GRID_UNIT   // Square in hexagon.
     },
-    2: { // Outer shape: round.
-      0: 3 * this.GRID_UNIT, // Field in round.
-      1: 3 * this.GRID_UNIT, // Hexagon in round.
-      2: 1 * this.GRID_UNIT, // Round in round.
-      3: 2 * this.GRID_UNIT  // Square in round.
+    2: {  // Outer shape: round.
+      0: 3 * this.GRID_UNIT,  // Field in round.
+      1: 3 * this.GRID_UNIT,  // Hexagon in round.
+      2: 1 * this.GRID_UNIT,  // Round in round.
+      3: 2 * this.GRID_UNIT   // Square in round.
     },
-    3: { // Outer shape: square.
-      0: 2 * this.GRID_UNIT, // Field in square.
-      1: 2 * this.GRID_UNIT, // Hexagon in square.
-      2: 2 * this.GRID_UNIT, // Round in square.
-      3: 2 * this.GRID_UNIT  // Square in square.
+    3: {  // Outer shape: square.
+      0: 2 * this.GRID_UNIT,  // Field in square.
+      1: 2 * this.GRID_UNIT,  // Hexagon in square.
+      2: 2 * this.GRID_UNIT,  // Round in square.
+      3: 2 * this.GRID_UNIT   // Square in square.
     }
   };
 

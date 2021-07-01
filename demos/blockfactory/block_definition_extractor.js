@@ -49,7 +49,7 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * inner text.
  *
  * @param {string} name New element tag name.
- * @param {!Object.<string, string>=} opt_attrs Optional list of attributes.
+ * @param {!Object<string, string>=} opt_attrs Optional list of attributes.
  * @param {string=} opt_text Optional inner text.
  * @return {!Element} The newly created element.
  * @private
@@ -112,7 +112,7 @@ BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
     } else if (connection.check_.length === 1) {
       typeBlock = BlockDefinitionExtractor.buildBlockForType_(
           connection.check_[0]);
-    } else if (connection.check_.length > 1 ) {
+    } else if (connection.check_.length > 1) {
       typeBlock = BlockDefinitionExtractor.typeGroup_(connection.check_);
     }
   } else {
@@ -323,7 +323,7 @@ BlockDefinitionExtractor.input_ = function(input, align) {
 
 /**
  * Constructs a sequence <block> elements representing the field definition.
- * @param {Array.<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
+ * @param {Array<Blockly.Field>} fieldRow A list of fields in a Blockly.Input.
  * @return {Element} The fist <block> element of the sequence
  *     (and the root of the constructed DOM).
  * @private
@@ -600,7 +600,7 @@ BlockDefinitionExtractor.buildFieldImage_ =
 /**
  * Creates a <block> element a group of allowed connection constraint types.
  *
- * @param {Array.<string>} types List of type names in this group.
+ * @param {Array<string>} types List of type names in this group.
  * @return {Element} The <block> element representing the group, with child
  *     types attached.
  * @private
@@ -707,7 +707,7 @@ BlockDefinitionExtractor.typeOther_ = function(type) {
 };
 
 /**
- * Creates a block Element for the color_hue block, with the given hue.
+ * Creates a block Element for the colour_hue block, with the given hue.
  * @param hue {number} The hue value, from 0 to 360.
  * @return {Element} The <block> Element representing a colour_hue block
  *     with the given hue.

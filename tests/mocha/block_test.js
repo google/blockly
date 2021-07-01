@@ -1104,6 +1104,61 @@ suite('Blocks', function() {
       });
     });
   });
+  suite('Getting/Setting Field (Values)', function() {
+    setup(function() {
+      this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          '<block type="text"><field name = "TEXT">test</field></block>'
+      ), this.workspace);
+    });
+
+    test('Getting Field', function() {
+      chai.assert.instanceOf(this.block.getField('TEXT'), Blockly.Field);
+    });
+    test('Getting Field without Name', function() {
+      chai.assert.throws(this.block.getField.bind(this.block), TypeError);
+    });
+    test('Getting Value of Field without Name', function() {
+      chai.assert.throws(this.block.getFieldValue.bind(this.block), TypeError);
+    });
+    test('Getting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.getField.bind(this.block, inputs[i]),
+            TypeError);
+      }
+    });
+    test('Getting Value of Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(
+            this.block.getFieldValue.bind(this.block, inputs[i]), TypeError);
+      }
+    });
+    test('Getting/Setting Field Value', function() {
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'test');
+      this.block.setFieldValue('abc', 'TEXT');
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'abc');
+    });
+    test('Setting Field without Name', function() {
+      chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test'));
+    });
+    test('Setting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test',
+            inputs[i]), TypeError);
+      }
+    });
+  });
   suite('Icon Management', function() {
     suite('Bubbles and Collapsing', function() {
       setup(function() {
@@ -1710,7 +1765,7 @@ suite('Blocks', function() {
           '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'repeat 10 times do ?',
+        toString: 'repeat 10 times do ?'
       },
       {
         name: 'nested statement blocks',
@@ -1724,7 +1779,7 @@ suite('Blocks', function() {
             '<block type="controls_if"></block>' +
           '</statement>' +
         '</block>',
-        toString: 'repeat 10 times do if ? do ?',
+        toString: 'repeat 10 times do if ? do ?'
       },
       {
         name: 'nested Boolean output blocks',
@@ -1740,7 +1795,7 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'if ((? and ?) = ?) do ?',
+        toString: 'if ((? and ?) = ?) do ?'
       },
       {
         name: 'output block',
@@ -1752,7 +1807,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'square root 9',
+        toString: 'square root 9'
       },
       {
         name: 'nested Number output blocks',
@@ -1782,7 +1837,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: '(10 × 5) + 3',
+        toString: '(10 × 5) + 3'
       },
       {
         name: 'nested String output blocks',
@@ -1799,8 +1854,15 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'create text with “ Hello ” “ World ”',
+        toString: 'create text with “ Hello ” “ World ”'
       },
+      {
+        name: 'parentheses in string literal',
+        xml: '<block type="text">' +
+          '<field name="TEXT">foo ( bar ) baz</field>' +
+        '</block>',
+        toString: '“ foo ( bar ) baz ”'
+      }
     ];
     // Create mocha test cases for each toString test.
     toStringTests.forEach(function(t) {

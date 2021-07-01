@@ -257,7 +257,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     if (list.match(/^\$\w+$/)) {
       return '';
     }
-    var listVar = Blockly.PHP.variableDB_.getDistinctName(
+    var listVar = Blockly.PHP.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     var code = listVar + ' = &' + list + ';\n';
     list = listVar;
@@ -328,7 +328,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       var list = Blockly.PHP.valueToCode(block, 'LIST',
               Blockly.PHP.ORDER_REFERENCE) || 'array()';
       var code = cacheList();
-      var xVar = Blockly.PHP.variableDB_.getDistinctName(
+      var xVar = Blockly.PHP.nameDB_.getDistinctName(
           'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
       code += xVar + ' = rand(0, count(' + list + ')-1);\n';
       if (mode == 'SET') {

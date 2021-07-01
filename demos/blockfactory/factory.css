@@ -526,12 +526,12 @@ td.taboff:hover {
   text-decoration: none;
 }
 
-/* Change color  of dropdown links on hover. */
+/* Change colour of dropdown links on hover. */
 .dropdown-content a:hover, .dropdown-content label:hover {
   background-color: #EEE;
 }
 
-/* Change color of dropdown links on selected. */
+/* Change colour of dropdown links on selected. */
 .dropdown-content-selected {
   background-color: #DDD;
 }

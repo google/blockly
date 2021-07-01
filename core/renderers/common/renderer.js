@@ -246,29 +246,11 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  */
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
-      var orphanConnection = null;
-      var lastConnection = null;
-      if (localType ==
-          Blockly.connectionTypes
-              .OUTPUT_VALUE) {  // We are replacing an output.
-        orphanConnection = orphanBlock.outputConnection;
-        // TODO:  I don't think this function necessarily has the correct logic,
-        //  but for now it is being kept for behavioral backwards-compat.
-        lastConnection = Blockly.Connection
-            .lastConnectionInRow(
-                /** @type {!Blockly.Block} **/ (topBlock), orphanBlock);
-      } else {  // We are replacing a previous.
-        orphanConnection = orphanBlock.previousConnection;
-        // TODO: This lives on the block while lastConnectionInRow lives on
-        //  on the connection. Something is fishy.
-        lastConnection = topBlock.lastConnectionInStack();
-      }
-
-      if (!lastConnection) {
-        return false;
-      }
-      return orphanConnection.getConnectionChecker().canConnect(
-          lastConnection, orphanConnection, false);
+      var orphanConnection = localType === Blockly.connectionTypes.OUTPUT_VALUE ?
+          orphanBlock.outputConnection : orphanBlock.previousConnection;
+      return !!Blockly.Connection.getConnectionForOrphanedConnection(
+          /** @type {!Blockly.Block} **/ (topBlock),
+          /** @type {!Blockly.Connection} **/ (orphanConnection));
     };
 
 /**

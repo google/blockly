@@ -73,7 +73,7 @@ run_test_command "generators" "tests/scripts/run_generators.sh"
 run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # # Attempt advanced compilation of a Blockly app.
-# run_test_command "advanced_compile" "tests/compile/compile.sh"
+# run_test_command "advanced_compile" "npm run test:compile:advanced"
 
 
 # End of tests.

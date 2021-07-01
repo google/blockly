@@ -60,7 +60,7 @@ Blockly.Procedures.ProcedureBlock;
 /**
  * Find all user-created procedure definitions in a workspace.
  * @param {!Blockly.Workspace} root Root workspace.
- * @return {!Array.<!Array.<!Array>>} Pair of arrays, the
+ * @return {!Array<!Array<!Array>>} Pair of arrays, the
  *     first contains procedures without return variables, the second with.
  *     Each procedure is defined by a three-element list of name, parameter
  *     list, and return value boolean.
@@ -87,7 +87,7 @@ Blockly.Procedures.allProcedures = function(root) {
  * @private
  */
 Blockly.Procedures.procTupleComparator_ = function(ta, tb) {
-  return ta[0].toLowerCase().localeCompare(tb[0].toLowerCase());
+  return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
 };
 
 /**
@@ -188,7 +188,7 @@ Blockly.Procedures.rename = function(name) {
 /**
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!Blockly.Workspace} workspace The workspace containing procedures.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @return {!Array<!Element>} Array of XML block elements.
  */
 Blockly.Procedures.flyoutCategory = function(workspace) {
   var xmlList = [];
@@ -337,7 +337,7 @@ Blockly.Procedures.mutatorChangeListener_ = function(e) {
  * Find all the callers of a named procedure.
  * @param {string} name Name of procedure.
  * @param {!Blockly.Workspace} workspace The workspace to find callers in.
- * @return {!Array.<!Blockly.Block>} Array of caller blocks.
+ * @return {!Array<!Blockly.Block>} Array of caller blocks.
  */
 Blockly.Procedures.getCallers = function(name, workspace) {
   var callers = [];
@@ -391,18 +391,20 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
  * Find the definition block for the named procedure.
  * @param {string} name Name of procedure.
  * @param {!Blockly.Workspace} workspace The workspace to search.
- * @return {Blockly.Block} The procedure definition block, or null not found.
+ * @return {?Blockly.Block} The procedure definition block, or null not found.
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
-  // Assume that a procedure definition is a top block.
-  var blocks = workspace.getTopBlocks(false);
+  // Do not assume procedure is a top block. Some languages allow nested
+  // procedures. Also do not assume it is one of the built-in blocks. Only
+  // rely on getProcedureDef.
+  var blocks = workspace.getAllBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var procedureBlock = /** @type {!Blockly.Procedures.ProcedureBlock} */ (
         blocks[i]);
       var tuple = procedureBlock.getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {
-        return blocks[i];
+        return blocks[i];  // Can't use procedureBlock var due to type check.
       }
     }
   }

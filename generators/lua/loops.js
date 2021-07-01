@@ -60,7 +60,7 @@ Blockly.Lua['controls_repeat_ext'] = function(block) {
   var branch = Blockly.Lua.statementToCode(block, 'DO');
   branch = Blockly.Lua.addLoopTrap(branch, block);
   branch = Blockly.Lua.addContinueLabel_(branch);
-  var loopVar = Blockly.Lua.variableDB_.getDistinctName(
+  var loopVar = Blockly.Lua.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   var code = 'for ' + loopVar + ' = 1, ' + repeats + ' do\n' +
       branch + 'end\n';
@@ -86,7 +86,7 @@ Blockly.Lua['controls_whileUntil'] = function(block) {
 
 Blockly.Lua['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Lua.variableDB_.getName(
+  var variable0 = Blockly.Lua.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var startVar = Blockly.Lua.valueToCode(block, 'FROM',
       Blockly.Lua.ORDER_NONE) || '0';
@@ -109,7 +109,7 @@ Blockly.Lua['controls_for'] = function(block) {
     code = '';
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    incValue = Blockly.Lua.variableDB_.getDistinctName(
+    incValue = Blockly.Lua.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += incValue + ' = ';
     if (Blockly.isNumber(increment)) {
@@ -129,7 +129,7 @@ Blockly.Lua['controls_for'] = function(block) {
 
 Blockly.Lua['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Lua.variableDB_.getName(
+  var variable0 = Blockly.Lua.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var argument0 = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';

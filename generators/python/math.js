@@ -226,7 +226,7 @@ Blockly.Python['math_change'] = function(block) {
       'from numbers import Number';
   var argument0 = Blockly.Python.valueToCode(block, 'DELTA',
       Blockly.Python.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = (' + varName + ' if isinstance(' + varName +
       ', Number) else 0) + ' + argument0 + '\n';

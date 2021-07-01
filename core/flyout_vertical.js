@@ -16,6 +16,7 @@ goog.provide('Blockly.VerticalFlyout');
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.registry');
 goog.require('Blockly.Scrollbar');
@@ -221,8 +222,8 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
- * @param {!Array.<number>} gaps The visible gaps between blocks.
+ * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+ * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
@@ -286,11 +287,15 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
 };
 
 /**
- * Return the deletion rectangle for this flyout in viewport coordinates.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.VerticalFlyout.prototype.getClientRect = function() {
-  if (!this.svgGroup_) {
+  if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
+    // The bounding rectangle won't compute correctly if the flyout is closed
+    // and auto-close flyouts aren't valid drag targets (or delete areas).
     return null;
   }
 
@@ -370,6 +375,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     // Record the width for workspace metrics and .position.
     this.width_ = flyoutWidth;
     this.position();
+    this.targetWorkspace.recordDragTargets();
   }
 };
 

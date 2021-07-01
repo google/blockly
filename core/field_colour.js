@@ -47,7 +47,7 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
 
   /**
    * The field's colour picker element.
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.picker_ = null;
@@ -130,14 +130,14 @@ Blockly.FieldColour.prototype.isDirty_ = false;
 
 /**
  * Array of colours used by this field.  If null, use the global list.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 Blockly.FieldColour.prototype.colours_ = null;
 
 /**
  * Array of colour tooltips used by this field.  If null, use the global list.
- * @type {Array.<string>}
+ * @type {Array<string>}
  * @private
  */
 Blockly.FieldColour.prototype.titles_ = null;
@@ -153,7 +153,8 @@ Blockly.FieldColour.prototype.columns_ = 0;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldColour.prototype.configure_ = function(config) {
   Blockly.FieldColour.superClass_.configure_.call(this, config);
@@ -242,7 +243,7 @@ Blockly.FieldColour.prototype.getText = function() {
  * An array of colour strings for the palette.
  * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
  * All colour pickers use this unless overridden with setColours.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 Blockly.FieldColour.COLOURS = [
   // grays
@@ -278,7 +279,7 @@ Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
  * An array of tooltip strings for the palette.  If not the same length as
  * COLOURS, the colour's hex code will be used for any missing titles.
  * All colour pickers use this unless overridden with setColours.
- * @type {!Array.<string>}
+ * @type {!Array<string>}
  */
 Blockly.FieldColour.TITLES = [];
 
@@ -290,9 +291,9 @@ Blockly.FieldColour.COLUMNS = 7;
 
 /**
  * Set a custom colour grid for this field.
- * @param {Array.<string>} colours Array of colours for this block,
+ * @param {Array<string>} colours Array of colours for this block,
  *     or null to use default (Blockly.FieldColour.COLOURS).
- * @param {Array.<string>=} opt_titles Optional array of colour tooltips,
+ * @param {Array<string>=} opt_titles Optional array of colour tooltips,
  *     or null to use default (Blockly.FieldColour.TITLES).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */
@@ -320,7 +321,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @protected
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  this.picker_ = this.dropdownCreate_();
+  this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
 
   Blockly.DropDownDiv.showPositionedByField(
@@ -472,7 +473,7 @@ Blockly.FieldColour.prototype.onMouseLeave_ = function() {
 
 /**
  * Returns the currently highlighted item (if any).
- * @return {HTMLElement} Highlighted item (null if none).
+ * @return {?HTMLElement} Highlighted item (null if none).
  * @private
  */
 Blockly.FieldColour.prototype.getHighlighted_ = function() {
@@ -511,7 +512,6 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
 
 /**
  * Create a colour picker dropdown editor.
- * @return {!Element} The newly created colour picker.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownCreate_ = function() {
@@ -567,11 +567,11 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
   this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
       table, 'keydown', this, this.onKeyDown_);
 
-  return table;
+  this.picker_ = table;
 };
 
 /**
- * Disposes of events and dom-references belonging to the colour editor.
+ * Disposes of events and DOM-references belonging to the colour editor.
  * @private
  */
 Blockly.FieldColour.prototype.dropdownDispose_ = function() {

@@ -46,9 +46,9 @@ var BlockOption = function(blockSelector, blockType, previewBlockXml) {
 };
 
 /**
- * Creates the dom for a single block option. Includes checkbox, label, and div
+ * Creates the DOM for a single block option. Includes checkbox, label, and div
  * in which to inject the preview block.
- * @return {!Element} Root node of the selector dom which consists of a
+ * @return {!Element} Root node of the selector DOM which consists of a
  * checkbox, a label, and a fixed size preview workspace per block.
  */
 BlockOption.prototype.createDom = function() {

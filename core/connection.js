@@ -18,11 +18,11 @@ goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.IASTNodeLocationWithBlock');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
-goog.requireType('Blockly.IASTNodeLocationWithBlock');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.Input');
 
@@ -104,105 +104,57 @@ Blockly.Connection.prototype.y = 0;
  * @protected
  */
 Blockly.Connection.prototype.connect_ = function(childConnection) {
+  var INPUT = Blockly.connectionTypes.INPUT_VALUE;
   var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
-  // Disconnect any existing parent on the child connection.
+
+  // Make sure the childConnection is available.
   if (childConnection.isConnected()) {
     childConnection.disconnect();
   }
+
+  // Make sure the parentConnection is available.
+  var orphan;
   if (parentConnection.isConnected()) {
-    // Other connection is already connected to something.
-    // Disconnect it and reattach it or bump it as needed.
-    var orphanBlock = parentConnection.targetBlock();
-    var shadowDom = parentConnection.getShadowDom();
-    // Temporarily set the shadow DOM to null so it does not respawn.
-    parentConnection.shadowDom_ = null;
-    // Displaced shadow blocks dissolve rather than reattaching or bumping.
-    if (orphanBlock.isShadow()) {
-      // Save the shadow block so that field values are preserved.
-      // This cast assumes that a block can not be both a shadow block and an insertion marker.
-      shadowDom = /** @type {!Element} */ (Blockly.Xml.blockToDom(orphanBlock));
-      orphanBlock.dispose(false);
-      orphanBlock = null;
-    } else if (parentConnection.type == Blockly.connectionTypes.INPUT_VALUE) {
-      // Value connections.
-      // If female block is already connected, disconnect and bump the male.
-      if (!orphanBlock.outputConnection) {
-        throw Error('Orphan block does not have an output connection.');
-      }
-      // Attempt to reattach the orphan at the end of the newly inserted
-      // block.  Since this block may be a row, walk down to the end
-      // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow(
-          childBlock, orphanBlock);
-      if (connection) {
-        orphanBlock.outputConnection.connect(connection);
-        orphanBlock = null;
-      }
-    } else if (
-      parentConnection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
-      // Statement connections.
-      // Statement blocks may be inserted into the middle of a stack.
-      // Split the stack.
-      if (!orphanBlock.previousConnection) {
-        throw Error('Orphan block does not have a previous connection.');
-      }
-      // Attempt to reattach the orphan at the bottom of the newly inserted
-      // block.  Since this block may be a stack, walk down to the end.
-      var newBlock = childBlock;
-      while (newBlock.nextConnection) {
-        var nextBlock = newBlock.getNextBlock();
-        if (nextBlock && !nextBlock.isShadow()) {
-          newBlock = nextBlock;
-        } else {
-          var checker = orphanBlock.workspace.connectionChecker;
-          if (checker.canConnect(
-              orphanBlock.previousConnection, newBlock.nextConnection, false)) {
-            newBlock.nextConnection.connect(orphanBlock.previousConnection);
-            orphanBlock = null;
-          }
-          break;
-        }
-      }
-    }
-    if (orphanBlock) {
-      // Unable to reattach orphan.
+    var shadowDom = parentConnection.getShadowDom(true);
+    parentConnection.shadowDom_ = null;  // Set to null so it doesn't respawn.
+    var target = parentConnection.targetBlock();
+    if (target.isShadow()) {
+      target.dispose(false);
+    } else {
       parentConnection.disconnect();
-      if (Blockly.Events.recordUndo) {
-        // Bump it off to the side after a moment.
-        var group = Blockly.Events.getGroup();
-        setTimeout(function() {
-          // Verify orphan hasn't been deleted or reconnected.
-          if (orphanBlock.workspace && !orphanBlock.getParent()) {
-            Blockly.Events.setGroup(group);
-            if (orphanBlock.outputConnection) {
-              orphanBlock.outputConnection.onFailedConnect(parentConnection);
-            } else if (orphanBlock.previousConnection) {
-              orphanBlock.previousConnection.onFailedConnect(parentConnection);
-            }
-            Blockly.Events.setGroup(false);
-          }
-        }, Blockly.BUMP_DELAY);
-      }
+      orphan = target;
     }
-    // Restore the shadow DOM.
     parentConnection.shadowDom_ = shadowDom;
   }
 
+  // Connect the new connection to the parent.
   var event;
   if (Blockly.Events.isEnabled()) {
     event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(childBlock);
   }
-  // Establish the connections.
   Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
-  // Demote the inferior block so that one is a child of the superior one.
   childBlock.setParent(parentBlock);
   if (event) {
     event.recordNew();
     Blockly.Events.fire(event);
   }
+
+  // Deal with the orphan if it exists.
+  if (orphan) {
+    var orphanConnection = parentConnection.type === INPUT ?
+        orphan.outputConnection : orphan.previousConnection;
+    var connection = Blockly.Connection.getConnectionForOrphanedConnection(
+        childBlock, /** @type {!Blockly.Connection} */ (orphanConnection));
+    if (connection) {
+      orphanConnection.connect(connection);
+    } else {
+      orphanConnection.onFailedConnect(parentConnection);
+    }
+  }
 };
+
 
 /**
  * Dispose of this connection and deal with connected blocks.
@@ -318,7 +270,8 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
 };
 
 /**
- * Behavior after a connection attempt fails.
+ * Called when an attempted connection fails. NOP by default (i.e. for headless
+ * workspaces).
  * @param {!Blockly.Connection} _otherConnection Connection that this connection
  *     failed to connect to.
  * @package
@@ -372,30 +325,31 @@ Blockly.Connection.connectReciprocally_ = function(first, second) {
 };
 
 /**
- * Does the given block have one and only one connection point that will accept
- * an orphaned block?
+ * Returns the single connection on the block that will accept the orphaned
+ * block, if one can be found. If the block has multiple compatible connections
+ * (even if they are filled) this returns null. If the block has no compatible
+ * connections, this returns null.
  * @param {!Blockly.Block} block The superior block.
  * @param {!Blockly.Block} orphanBlock The inferior block.
- * @return {Blockly.Connection} The suitable connection point on 'block',
+ * @return {?Blockly.Connection} The suitable connection point on 'block',
  *     or null.
  * @private
  */
-Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
-  var connection = null;
+Blockly.Connection.getSingleConnection_ = function(block, orphanBlock) {
+  var foundConnection = null;
   var output = orphanBlock.outputConnection;
-  for (var i = 0; i < block.inputList.length; i++) {
-    var thisConnection = block.inputList[i].connection;
-    var typeChecker = output.getConnectionChecker();
-    if (thisConnection &&
-        thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
-        typeChecker.canConnect(output, thisConnection, false)) {
-      if (connection) {
+  var typeChecker = output.getConnectionChecker();
+
+  for (var i = 0, input; (input = block.inputList[i]); i++) {
+    var connection = input.connection;
+    if (connection && typeChecker.canConnect(output, connection, false)) {
+      if (foundConnection) {
         return null;  // More than one connection.
       }
-      connection = thisConnection;
+      foundConnection = connection;
     }
   }
-  return connection;
+  return foundConnection;
 };
 
 /**
@@ -406,22 +360,49 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
  * Terminates early for shadow blocks.
  * @param {!Blockly.Block} startBlock The block on which to start the search.
  * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
- * @return {Blockly.Connection} The suitable connection point on the chain
+ * @return {?Blockly.Connection} The suitable connection point on the chain
  *     of blocks, or null.
- * @package
+ * @private
  */
-Blockly.Connection.lastConnectionInRow = function(startBlock, orphanBlock) {
-  var newBlock = startBlock;
-  var connection;
-  while ((connection = Blockly.Connection.singleConnection_(
-      /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
-    newBlock = connection.targetBlock();
-    if (!newBlock || newBlock.isShadow()) {
-      return connection;
-    }
-  }
-  return null;
-};
+Blockly.Connection.getConnectionForOrphanedOutput_ =
+    function(startBlock, orphanBlock) {
+      var newBlock = startBlock;
+      var connection;
+      while ((connection = Blockly.Connection.getSingleConnection_(
+          /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
+        newBlock = connection.targetBlock();
+        if (!newBlock || newBlock.isShadow()) {
+          return connection;
+        }
+      }
+      return null;
+    };
+
+/**
+ * Returns the connection (starting at the startBlock) which will accept
+ * the given connection. This includes compatible connection types and
+ * connection checks.
+ * @param {!Blockly.Block} startBlock The block on which to start the search.
+ * @param {!Blockly.Connection} orphanConnection The connection that is looking
+ *     for a home.
+ * @return {?Blockly.Connection} The suitable connection point on the chain of
+ *     blocks, or null.
+ */
+Blockly.Connection.getConnectionForOrphanedConnection =
+    function(startBlock, orphanConnection) {
+      if (orphanConnection.type === Blockly.connectionTypes.OUTPUT_VALUE) {
+        return Blockly.Connection.getConnectionForOrphanedOutput_(
+            startBlock, orphanConnection.getSourceBlock());
+      }
+      // Otherwise we're dealing with a stack.
+      var connection = startBlock.lastConnectionInStack(true);
+      var checker = orphanConnection.getConnectionChecker();
+      if (connection &&
+          checker.canConnect(orphanConnection, connection, false)) {
+        return connection;
+      }
+      return null;
+    };
 
 /**
  * Disconnect this connection.
@@ -491,8 +472,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
   var parentBlock = this.getSourceBlock();
   var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow) {
-    var blockShadow =
-        Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
+    var blockShadow = Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
       this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
@@ -505,7 +485,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {Blockly.Block} The connected block or null if none is connected.
+ * @return {?Blockly.Block} The connected block or null if none is connected.
  */
 Blockly.Connection.prototype.targetBlock = function() {
   if (this.isConnected()) {
@@ -567,7 +547,7 @@ Blockly.Connection.prototype.onCheckChanged_ = function() {
 
 /**
  * Change a connection's compatibility.
- * @param {?(string|!Array.<string>)} check Compatible value type or list of
+ * @param {?(string|!Array<string>)} check Compatible value type or list of
  *     value types. Null if all types are compatible.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
@@ -588,7 +568,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
 
 /**
  * Get a connection's compatibility.
- * @return {Array} List of compatible value types.
+ * @return {?Array} List of compatible value types.
  *     Null if all types are compatible.
  * @public
  */
@@ -598,7 +578,7 @@ Blockly.Connection.prototype.getCheck = function() {
 
 /**
  * Changes the connection's shadow block.
- * @param {Element} shadow DOM representation of a block or null.
+ * @param {?Element} shadow DOM representation of a block or null.
  */
 Blockly.Connection.prototype.setShadowDom = function(shadow) {
   this.shadowDom_ = shadow;
@@ -614,10 +594,17 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
 
 /**
  * Returns the xml representation of the connection's shadow block.
- * @return {Element} Shadow DOM representation of a block or null.
+ * @param {boolean=} returnCurrent If true, and the shadow block is currently
+ *     attached to this connection, this serializes the state of that block
+ *     and returns it (so that field values are correct). Otherwise the saved
+ *     shadowDom is just returned.
+ * @return {?Element} Shadow DOM representation of a block or null.
  */
-Blockly.Connection.prototype.getShadowDom = function() {
-  return this.shadowDom_;
+Blockly.Connection.prototype.getShadowDom = function(returnCurrent) {
+  return (returnCurrent && this.targetBlock().isShadow()) ?
+      /** @type {!Element} */ (Blockly.Xml.blockToDom(
+          /** @type {!Blockly.Block} */ (this.targetBlock()))) :
+      this.shadowDom_;
 };
 
 /**
@@ -629,7 +616,7 @@ Blockly.Connection.prototype.getShadowDom = function() {
  * {@link Blockly.RenderedConnection} overrides this behavior with a list
  * computed from the rendered positioning.
  * @param {number} _maxLimit The maximum radius to another connection.
- * @return {!Array.<!Blockly.Connection>} List of connections.
+ * @return {!Array<!Blockly.Connection>} List of connections.
  * @package
  */
 Blockly.Connection.prototype.neighbours = function(_maxLimit) {
@@ -638,17 +625,16 @@ Blockly.Connection.prototype.neighbours = function(_maxLimit) {
 
 /**
  * Get the parent input of a connection.
- * @return {Blockly.Input} The input that the connection belongs to or null if
+ * @return {?Blockly.Input} The input that the connection belongs to or null if
  *     no parent exists.
  * @package
  */
 Blockly.Connection.prototype.getParentInput = function() {
   var parentInput = null;
-  var block = this.sourceBlock_;
-  var inputs = block.inputList;
-  for (var idx = 0; idx < block.inputList.length; idx++) {
-    if (inputs[idx].connection === this) {
-      parentInput = inputs[idx];
+  var inputs = this.sourceBlock_.inputList;
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].connection === this) {
+      parentInput = inputs[i];
       break;
     }
   }
@@ -661,11 +647,12 @@ Blockly.Connection.prototype.getParentInput = function() {
  * @return {string} The description.
  */
 Blockly.Connection.prototype.toString = function() {
-  var msg;
   var block = this.sourceBlock_;
   if (!block) {
     return 'Orphan Connection';
-  } else if (block.outputConnection == this) {
+  }
+  var msg;
+  if (block.outputConnection == this) {
     msg = 'Output Connection of ';
   } else if (block.previousConnection == this) {
     msg = 'Previous Connection of ';

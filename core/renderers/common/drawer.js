@@ -227,7 +227,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
 
 /**
  * Add steps for the bottom edge of a block, possibly including a notch
- * for the next connection
+ * for the next connection.
  * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
@@ -449,7 +449,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.connection) {
     var connInfo = bottomRow.connection;
-    var x = connInfo.xPos; // Already contains info about startX
+    var x = connInfo.xPos;  // Already contains info about startX.
     var connX = (this.info_.RTL ? -x : x);
     connInfo.connectionModel.setOffsetInBlock(connX, bottomRow.baseline);
   }

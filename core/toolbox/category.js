@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.ToolboxCategory');
 
+goog.require('Blockly.ISelectableToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxItem');
 goog.require('Blockly.utils');
@@ -125,7 +126,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 Blockly.utils.object.inherits(Blockly.ToolboxCategory, Blockly.ToolboxItem);
 
 /**
- * All the css class names that are used to create a category.
+ * All the CSS class names that are used to create a category.
  * @typedef {{
  *            container:(string|undefined),
  *            row:(string|undefined),
@@ -215,7 +216,7 @@ Blockly.ToolboxCategory.prototype.init = function() {
 };
 
 /**
- * Creates the dom for the category.
+ * Creates the DOM for the category.
  * @return {!Element} The parent element for the category.
  * @protected
  */
@@ -305,7 +306,7 @@ Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
 
 /**
  * Creates the span that holds the category label.
- * This should have an id for accessibility purposes.
+ * This should have an ID for accessibility purposes.
  * @param {string} name The name of the category.
  * @return {!Element} The span that holds the category label.
  * @protected
@@ -389,10 +390,10 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
 };
 
 /**
- * Gets the html element that is clickable.
- * The parent toolbox element receives clicks. The parent toolbox will add an id to this element so
- * it can pass the onClick event to the correct toolboxItem.
- * @return {!Element} The html element that receives clicks.
+ * Gets the HTML element that is clickable.
+ * The parent toolbox element receives clicks. The parent toolbox will add an ID
+ * to this element so it can pass the onClick event to the correct toolboxItem.
+ * @return {!Element} The HTML element that receives clicks.
  * @public
  */
 Blockly.ToolboxCategory.prototype.getClickTarget = function() {

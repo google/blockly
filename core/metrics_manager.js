@@ -52,7 +52,7 @@ Blockly.MetricsManager = function(workspace) {
 Blockly.MetricsManager.ToolboxMetrics;
 
 /**
- * Describes where the viewport starts in relation to the workspace svg.
+ * Describes where the viewport starts in relation to the workspace SVG.
  * @typedef {{
  *            left: number,
  *            top: number
@@ -84,7 +84,7 @@ Blockly.MetricsManager.ContainerRegion;
 Blockly.MetricsManager.FixedEdges;
 
 /**
- * Common metrics used for ui elements.
+ * Common metrics used for UI elements.
  * @typedef {{
  *            viewMetrics: !Blockly.MetricsManager.ContainerRegion,
  *            absoluteMetrics: !Blockly.MetricsManager.AbsoluteMetrics,
@@ -151,10 +151,10 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
 };
 
 /**
- * Gets the width and height of the workspace's parent svg element in pixel
+ * Gets the width and height of the workspace's parent SVG element in pixel
  * coordinates. This area includes the toolbox and the visible workspace area.
  * @return {!Blockly.utils.Size} The width and height of the workspace's parent
- *     svg element.
+ *     SVG element.
  * @public
  */
 Blockly.MetricsManager.prototype.getSvgMetrics = function() {
@@ -163,7 +163,7 @@ Blockly.MetricsManager.prototype.getSvgMetrics = function() {
 
 /**
  * Gets the absolute left and absolute top in pixel coordinates.
- * This is where the visible workspace starts in relation to the svg container.
+ * This is where the visible workspace starts in relation to the SVG container.
  * @return {!Blockly.MetricsManager.AbsoluteMetrics} The absolute metrics for
  *     the workspace.
  * @public
@@ -356,7 +356,7 @@ Blockly.MetricsManager.prototype.getPaddedContent_ = function(
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
  * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
- *    container
+ *    container.
  */
 Blockly.MetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
@@ -365,7 +365,7 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
   var contentMetrics = opt_contentMetrics || this.getContentMetrics();
   var fixedEdges = this.getComputedFixedEdges_(viewMetrics);
 
-  // Add padding around content
+  // Add padding around content.
   var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
@@ -387,8 +387,8 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
 };
 
 /**
- * Returns common metrics used by ui elements.
- * @return {!Blockly.MetricsManager.UiMetrics} The ui metrics.
+ * Returns common metrics used by UI elements.
+ * @return {!Blockly.MetricsManager.UiMetrics} The UI metrics.
  */
 Blockly.MetricsManager.prototype.getUiMetrics = function() {
   return {
@@ -502,7 +502,7 @@ Blockly.utils.object.inherits(
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.
  * This is in workspace coordinates.
- * @returns {!SVGRect|{height: number, y: number, width: number, x: number}} The
+ * @return {!SVGRect|{height: number, y: number, width: number, x: number}} The
  *     bounding box of the blocks on the workspace.
  * @private
  */
@@ -555,43 +555,4 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     top: 0,
     left: 0,
   };
-};
-
-/**
- * @override
- */
-Blockly.FlyoutMetricsManager.prototype.getViewMetrics = function(
-    opt_getWorkspaceCoordinates) {
-  var svgMetrics = this.getSvgMetrics();
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  if (this.flyout_.horizontalLayout) {
-    var viewWidth = svgMetrics.width - 2 * this.flyout_.SCROLLBAR_PADDING;
-    var viewHeight = svgMetrics.height - this.flyout_.SCROLLBAR_PADDING;
-  } else {
-    var viewWidth = svgMetrics.width - this.flyout_.SCROLLBAR_PADDING;
-    var viewHeight = svgMetrics.height - 2 * this.flyout_.SCROLLBAR_PADDING;
-  }
-  return {
-    height: viewHeight / scale,
-    width: viewWidth / scale,
-    top: -this.workspace_.scrollY / scale,
-    left: -this.workspace_.scrollX / scale,
-  };
-};
-
-/**
- * @override
- */
-Blockly.FlyoutMetricsManager.prototype.getAbsoluteMetrics = function() {
-  var scrollbarPadding = this.flyout_.SCROLLBAR_PADDING;
-
-  if (this.flyout_.horizontalLayout) {
-    // The viewWidth is svgWidth - 2 * scrollbarPadding. We want to put half
-    // of that padding to the left of the blocks.
-    return {top: 0, left: scrollbarPadding};
-  } else {
-    // The viewHeight is svgHeight - 2 * scrollbarPadding. We want to put half
-    // of that padding to the top of the blocks.
-    return {top: scrollbarPadding, left: 0};
-  }
 };

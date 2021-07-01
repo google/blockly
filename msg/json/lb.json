@@ -102,7 +102,7 @@
 	"TEXT_CHARAT_TITLE": "am Text %1 %2",
 	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "am Text",
 	"TEXT_GET_SUBSTRING_END_FROM_START": "bis bei de Buschtaf #",
-	"TEXT_GET_SUBSTRING_END_LAST": "bis bei de leschte Buschtaw",
+	"TEXT_GET_SUBSTRING_END_LAST": "bis bei de leschte Buschtaf",
 	"TEXT_PRINT_TITLE": "%1 drécken",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Frot de Benotzer no engem Text.",
 	"TEXT_COUNT_HELPURL": "https://github.com/google/blockly/wiki/Text#counting-substrings",

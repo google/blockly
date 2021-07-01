@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview The interface for a positionable ui element.
+ * @fileoverview The interface for a positionable UI element.
  * @author kozbial@google.com (Monica Kozbial)
  */
 
@@ -13,12 +13,15 @@
 
 goog.provide('Blockly.IPositionable');
 
-goog.require('Blockly.IPlugin');
+goog.require('Blockly.IComponent');
+
+goog.requireType('Blockly.MetricsManager');
+goog.requireType('Blockly.utils.Rect');
 
 
 /**
  * Interface for a component that is positioned on top of the workspace.
- * @extends {Blockly.IPlugin}
+ * @extends {Blockly.IComponent}
  * @interface
  */
 Blockly.IPositionable = function() {};
@@ -34,6 +37,7 @@ Blockly.IPositionable.prototype.position;
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {!Blockly.utils.Rect} The plugin’s bounding box.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ *   bounding box should be ignored by other UI elements.
  */
 Blockly.IPositionable.prototype.getBoundingRectangle;

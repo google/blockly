@@ -18,7 +18,7 @@ suite('Procedures', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-  
+
   suite('allProcedures', function() {
     test('Only Procedures', function() {
       var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
@@ -364,6 +364,51 @@ suite('Procedures', function() {
         assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
         assertCallBlockStructure(callBlock, ['x'], ['arg']);
       });
+    });
+  });
+
+  suite('getDefinition - Modified cases', function() {
+    setup(function() {
+      Blockly.Blocks['new_proc'] = {
+        init: function() { },
+        getProcedureDef: function() {
+          return [this.name, [], false];
+        },
+        name: 'test'
+      };
+
+      Blockly.Blocks['nested_proc'] = {
+        init: function() {
+          this.setPreviousStatement(true, null);
+          this.setNextStatement(true, null);
+        },
+        getProcedureDef: function() {
+          return [this.name, [], false];
+        },
+        name: 'test',
+      };
+    });
+
+    teardown(function() {
+      delete Blockly.Blocks['new_proc'];
+      delete Blockly.Blocks['nested_proc'];
+    });
+
+    test('Custom procedure block', function() {
+      // Do not require procedures to be the built-in procedures.
+      var defBlock = new Blockly.Block(this.workspace, 'new_proc');
+      var def = Blockly.Procedures.getDefinition('test', this.workspace);
+      chai.assert.equal(def, defBlock);
+    });
+
+    test('Stacked procedures', function() {
+      var blockA = new Blockly.Block(this.workspace, 'nested_proc');
+      var blockB = new Blockly.Block(this.workspace, 'nested_proc');
+      blockA.name = 'a';
+      blockB.name = 'b';
+      blockA.nextConnection.connect(blockB.previousConnection);
+      var def = Blockly.Procedures.getDefinition('b', this.workspace);
+      chai.assert.equal(def, blockB);
     });
   });
 

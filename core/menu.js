@@ -32,7 +32,7 @@ Blockly.Menu = function() {
    * Array of menu items.
    * (Nulls are never in the array, but typing the array as nullable prevents
    * the compiler from objecting to .indexOf(null))
-   * @type {!Array.<Blockly.MenuItem>}
+   * @type {!Array<Blockly.MenuItem>}
    * @private
    */
   this.menuItems_ = [];
@@ -49,7 +49,7 @@ Blockly.Menu = function() {
   /**
    * This is the element that we will listen to the real focus events on.
    * A value of null means no menu item is highlighted.
-   * @type {Blockly.MenuItem}
+   * @type {?Blockly.MenuItem}
    * @private
    */
   this.highlightedItem_ = null;
@@ -91,7 +91,7 @@ Blockly.Menu = function() {
 
   /**
    * The menu's root DOM element.
-   * @type {Element}
+   * @type {?Element}
    * @private
    */
   this.element_ = null;
@@ -149,7 +149,7 @@ Blockly.Menu.prototype.render = function(container) {
 
 /**
  * Gets the menu's element.
- * @return {Element} The DOM element.
+ * @return {?Element} The DOM element.
  * @package
  */
 Blockly.Menu.prototype.getElement = function() {
@@ -255,7 +255,7 @@ Blockly.Menu.prototype.getMenuItem_ = function(elem) {
 
 /**
  * Highlights the given menu item, or clears highlighting if null.
- * @param {Blockly.MenuItem} item Item to highlight, or null.
+ * @param {?Blockly.MenuItem} item Item to highlight, or null.
  * @package
  */
 Blockly.Menu.prototype.setHighlighted = function(item) {
@@ -382,7 +382,7 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
 
 /**
  * Handles mouse enter events. Focus the element.
- * @param {Event} _e Mouse event to handle.
+ * @param {!Event} _e Mouse event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
@@ -391,7 +391,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
 
 /**
  * Handles mouse leave events. Blur and clear highlight.
- * @param {Event} _e Mouse event to handle.
+ * @param {!Event} _e Mouse event to handle.
  * @private
  */
 Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {

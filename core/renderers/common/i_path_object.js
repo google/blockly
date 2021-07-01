@@ -47,14 +47,14 @@ Blockly.blockRendering.IPathObject.prototype.constants;
 Blockly.blockRendering.IPathObject.prototype.style;
 
 /**
- * Holds the cursors svg element when the cursor is attached to the block.
+ * Holds the cursors SVG element when the cursor is attached to the block.
  * This is null if there is no cursor on the block.
  * @type {SVGElement}
  */
 Blockly.blockRendering.IPathObject.prototype.cursorSvg;
 
 /**
- * Holds the markers svg element when the marker is attached to the block.
+ * Holds the markers SVG element when the marker is attached to the block.
  * This is null if there is no marker on the block.
  * @type {SVGElement}
  */
@@ -89,17 +89,17 @@ Blockly.blockRendering.IPathObject.prototype.setStyle;
 Blockly.blockRendering.IPathObject.prototype.flipRTL;
 
 /**
- * Add the cursor svg to this block's svg group.
- * @param {SVGElement} cursorSvg The svg root of the cursor to be added to the
- *     block svg group.
+ * Add the cursor SVG to this block's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.setCursorSvg;
 
 /**
- * Add the marker svg to this block's svg group.
- * @param {SVGElement} markerSvg The svg root of the marker to be added to the
- *     block svg group.
+ * Add the marker SVG to this block's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     block SVG group.
  * @package
  */
 Blockly.blockRendering.IPathObject.prototype.setMarkerSvg;

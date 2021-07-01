@@ -38,7 +38,7 @@ Blockly.VariableMap = function(workspace) {
    * A map from variable type to list of variable names.  The lists contain all
    * of the named variables in the workspace, including variables
    * that are not currently in use.
-   * @type {!Object.<string, !Array.<Blockly.VariableModel>>}
+   * @type {!Object<string, !Array<Blockly.VariableModel>>}
    * @private
    */
   this.variableMap_ = Object.create(null);
@@ -102,7 +102,7 @@ Blockly.VariableMap.prototype.renameVariableById = function(id, newName) {
  * The new name must not conflict with any existing variable names.
  * @param {!Blockly.VariableModel} variable Variable to rename.
  * @param {string} newName New variable name.
- * @param {!Array.<!Blockly.Block>} blocks The list of all blocks in the
+ * @param {!Array<!Blockly.Block>} blocks The list of all blocks in the
  *     workspace.
  * @private
  */
@@ -125,7 +125,7 @@ Blockly.VariableMap.prototype.renameVariableAndUses_ = function(variable,
  * @param {string} newName New variable name.
  * @param {!Blockly.VariableModel} conflictVar The variable that was already
  *     using newName.
- * @param {!Array.<!Blockly.Block>} blocks The list of all blocks in the
+ * @param {!Array<!Blockly.Block>} blocks The list of all blocks in the
  *     workspace.
  * @private
  */
@@ -264,7 +264,7 @@ Blockly.VariableMap.prototype.deleteVariableById = function(id) {
  * Deletes a variable and all of its uses from this workspace without asking the
  * user for confirmation.
  * @param {!Blockly.VariableModel} variable Variable to delete.
- * @param {!Array.<!Blockly.Block>} uses An array of uses of the variable.
+ * @param {!Array<!Blockly.Block>} uses An array of uses of the variable.
  * @package
  */
 Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
@@ -293,7 +293,7 @@ Blockly.VariableMap.prototype.deleteVariableInternal = function(variable,
  * @param {string} name The name to check for.
  * @param {?string=} opt_type The type of the variable.  If not provided it
  *     defaults to the empty string, which is a specific type.
- * @return {Blockly.VariableModel} The variable with the given name, or null if
+ * @return {?Blockly.VariableModel} The variable with the given name, or null if
  *     it was not found.
  */
 Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
@@ -310,14 +310,13 @@ Blockly.VariableMap.prototype.getVariable = function(name, opt_type) {
 };
 
 /**
- * Find the variable by the given ID and return it. Return null if it is not
- *     found.
+ * Find the variable by the given ID and return it.  Return null if not found.
  * @param {string} id The ID to check for.
- * @return {Blockly.VariableModel} The variable with the given ID.
+ * @return {?Blockly.VariableModel} The variable with the given ID.
  */
 Blockly.VariableMap.prototype.getVariableById = function(id) {
   var keys = Object.keys(this.variableMap_);
-  for (var i = 0; i < keys.length; i++ ) {
+  for (var i = 0; i < keys.length; i++) {
     var key = keys[i];
     for (var j = 0, variable; (variable = this.variableMap_[key][j]); j++) {
       if (variable.getId() == id) {
@@ -332,7 +331,7 @@ Blockly.VariableMap.prototype.getVariableById = function(id) {
  * Get a list containing all of the variables of a specified type. If type is
  *     null, return list of variables with empty string type.
  * @param {?string} type Type of the variables to find.
- * @return {!Array.<!Blockly.VariableModel>} The sought after variables of the
+ * @return {!Array<!Blockly.VariableModel>} The sought after variables of the
  *     passed in type. An empty array if none are found.
  */
 Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
@@ -350,7 +349,7 @@ Blockly.VariableMap.prototype.getVariablesOfType = function(type) {
  * @param {?Blockly.Workspace} ws The workspace used to look for potential
  * variables. This can be different than the workspace stored on this object
  * if the passed in ws is a flyout workspace.
- * @return {!Array.<string>} List of variable types.
+ * @return {!Array<string>} List of variable types.
  * @package
  */
 Blockly.VariableMap.prototype.getVariableTypes = function(ws) {
@@ -375,7 +374,7 @@ Blockly.VariableMap.prototype.getVariableTypes = function(ws) {
 
 /**
  * Return all variables of all types.
- * @return {!Array.<!Blockly.VariableModel>} List of variable models.
+ * @return {!Array<!Blockly.VariableModel>} List of variable models.
  */
 Blockly.VariableMap.prototype.getAllVariables = function() {
   var all_variables = [];
@@ -387,7 +386,7 @@ Blockly.VariableMap.prototype.getAllVariables = function() {
 
 /**
  * Returns all of the variable names of all types.
- * @return {!Array.<string>} All of the variable names of all types.
+ * @return {!Array<string>} All of the variable names of all types.
  */
 Blockly.VariableMap.prototype.getAllVariableNames = function() {
   var allNames = [];
@@ -403,7 +402,7 @@ Blockly.VariableMap.prototype.getAllVariableNames = function() {
 /**
  * Find all the uses of a named variable.
  * @param {string} id ID of the variable to find.
- * @return {!Array.<!Blockly.Block>} Array of block usages.
+ * @return {!Array<!Blockly.Block>} Array of block usages.
  */
 Blockly.VariableMap.prototype.getVariableUsesById = function(id) {
   var uses = [];

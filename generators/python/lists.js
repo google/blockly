@@ -187,7 +187,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
     if (list.match(/^\w+$/)) {
       return '';
     }
-    var listVar = Blockly.Python.variableDB_.getDistinctName(
+    var listVar = Blockly.Python.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     var code = listVar + ' = ' + list + '\n';
     list = listVar;
@@ -228,7 +228,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
     case 'RANDOM':
         Blockly.Python.definitions_['import_random'] = 'import random';
         var code = cacheList();
-        var xVar = Blockly.Python.variableDB_.getDistinctName(
+        var xVar = Blockly.Python.nameDB_.getDistinctName(
             'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
         code += xVar + ' = int(random.random() * len(' + list + '))\n';
         if (mode == 'SET') {

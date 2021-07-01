@@ -278,7 +278,7 @@ function connectionLineJs_(functionName, typeName) {
 /**
  * Returns field strings and any config.
  * @param {!Blockly.Block} block Input block.
- * @return {!Array.<string>} Field strings.
+ * @return {!Array<string>} Field strings.
  * @private
  */
 function getFieldsJs_(block) {
@@ -374,7 +374,7 @@ function getFieldsJs_(block) {
 /**
  * Returns field strings and any config.
  * @param {!Blockly.Block} block Input block.
- * @return {!Array.<string|!Object>} Array of static text and field configs.
+ * @return {!Array<string|!Object>} Array of static text and field configs.
  * @private
  */
 function getFieldsJson_(block) {
@@ -504,7 +504,7 @@ function getOptTypesFrom(block, name) {
  * Fetch the type(s) defined in the given input.
  * @param {!Blockly.Block} block Block with input.
  * @param {string} name Name of the input.
- * @return {!Array.<string>} List of types.
+ * @return {!Array<string>} List of types.
  * @private
  */
 function getTypesFrom_(block, name) {
@@ -558,7 +558,7 @@ function updateGenerator(block) {
         // Subclass of Blockly.FieldDropdown, must test first.
         code.push(makeVar('variable', name) +
                   " = Blockly." + language +
-                  ".variableDB_.getName(block.getFieldValue('" + name +
+                  ".nameDB_.getName(block.getFieldValue('" + name +
                   "'), Blockly.Variables.NAME_TYPE);");
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.

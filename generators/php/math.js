@@ -205,7 +205,7 @@ Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
       Blockly.PHP.ORDER_ADDITION) || '0';
-  var varName = Blockly.PHP.variableDB_.getName(
+  var varName = Blockly.PHP.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' += ' + argument0 + ';\n';
 };

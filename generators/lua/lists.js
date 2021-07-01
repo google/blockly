@@ -139,7 +139,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
       var atOrder = (where == 'FROM_END') ? Blockly.Lua.ORDER_ADDITIVE :
           Blockly.Lua.ORDER_NONE;
       var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
-      var listVar = Blockly.Lua.variableDB_.getDistinctName(
+      var listVar = Blockly.Lua.nameDB_.getDistinctName(
           'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
       at = getIndex_(listVar, where, at);
       var code = listVar + ' = ' + list + '\n' +
@@ -218,7 +218,7 @@ Blockly.Lua['lists_setIndex'] = function(block) {
       !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
     // We can use multiple statements.
-    var listVar = Blockly.Lua.variableDB_.getDistinctName(
+    var listVar = Blockly.Lua.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     code = listVar + ' = ' + list + '\n';
     list = listVar;

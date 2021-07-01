@@ -15,6 +15,7 @@ goog.provide('Blockly.JavaScript');
 goog.require('Blockly.Generator');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 
 
@@ -85,7 +86,7 @@ Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.JavaScript.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar
@@ -125,40 +126,37 @@ Blockly.JavaScript.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.JavaScript.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.JavaScript.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.JavaScript.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
-  if (!Blockly.JavaScript.variableDB_) {
-    Blockly.JavaScript.variableDB_ =
-        new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_);
+  if (!this.nameDB_) {
+    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.JavaScript.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
-  Blockly.JavaScript.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.JavaScript.variableDB_.getName(devVarList[i],
+    defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
   // Add user variables, but only ones that are being used.
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
-    defvars.push(Blockly.JavaScript.variableDB_.getName(variables[i].getId(),
+    defvars.push(this.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME));
   }
 
   // Declare all of the variables.
   if (defvars.length) {
-    Blockly.JavaScript.definitions_['variables'] =
-        'var ' + defvars.join(', ') + ';';
+    this.definitions_['variables'] = 'var ' + defvars.join(', ') + ';';
   }
   this.isInitialized = true;
 };
@@ -170,14 +168,12 @@ Blockly.JavaScript.init = function(workspace) {
  */
 Blockly.JavaScript.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var definitions = [];
-  for (var name in Blockly.JavaScript.definitions_) {
-    definitions.push(Blockly.JavaScript.definitions_[name]);
-  }
-  // Clean up temporary data.
-  delete Blockly.JavaScript.definitions_;
-  delete Blockly.JavaScript.functionNames_;
-  Blockly.JavaScript.variableDB_.reset();
+  var definitions = Blockly.utils.object.values(this.definitions_);
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 
@@ -217,7 +213,7 @@ Blockly.JavaScript.quote_ = function(string) {
 Blockly.JavaScript.multiline_quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
-  var lines = string.split(/\n/g).map(Blockly.JavaScript.quote_);
+  var lines = string.split(/\n/g).map(this.quote_);
   return lines.join(' + \'\\n\' +\n');
 };
 
@@ -238,9 +234,8 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment,
-          Blockly.JavaScript.COMMENT_WRAP - 3);
-      commentCode += Blockly.JavaScript.prefixLines(comment + '\n', '// ');
+      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      commentCode += this.prefixLines(comment + '\n', '// ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -248,16 +243,16 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          comment = Blockly.JavaScript.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.JavaScript.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : Blockly.JavaScript.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -273,23 +268,22 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
 Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
-  var order = opt_order || Blockly.JavaScript.ORDER_NONE;
+  var order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
   var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta > 0) {
-    var at = Blockly.JavaScript.valueToCode(block, atId,
-        Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+        this.ORDER_ADDITION) || defaultAtIndex;
   } else if (delta < 0) {
-    var at = Blockly.JavaScript.valueToCode(block, atId,
-        Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+        this.ORDER_SUBTRACTION) || defaultAtIndex;
   } else if (opt_negate) {
-    var at = Blockly.JavaScript.valueToCode(block, atId,
-        Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+        this.ORDER_UNARY_NEGATION) || defaultAtIndex;
   } else {
-    var at = Blockly.JavaScript.valueToCode(block, atId, order) ||
-        defaultAtIndex;
+    var at = this.valueToCode(block, atId, order) || defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {
@@ -302,10 +296,10 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = Blockly.JavaScript.ORDER_ADDITION;
+      var innerOrder = this.ORDER_ADDITION;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = Blockly.JavaScript.ORDER_SUBTRACTION;
+      var innerOrder = this.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
       if (delta) {
@@ -313,7 +307,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = Blockly.JavaScript.ORDER_UNARY_NEGATION;
+      var innerOrder = this.ORDER_UNARY_NEGATION;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);

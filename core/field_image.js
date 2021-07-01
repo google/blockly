@@ -164,7 +164,8 @@ Blockly.FieldImage.prototype.isDirty_ = false;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldImage.prototype.configure_ = function(config) {
   Blockly.FieldImage.superClass_.configure_.call(this, config);

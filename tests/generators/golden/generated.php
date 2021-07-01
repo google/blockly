@@ -1,32 +1,3 @@
-$unittestResults;
-$test_name;
-$naked;
-$proc_x;
-$proc_y;
-$func_x;
-$func_y;
-$func_a;
-$n;
-$ok;
-$log;
-$count;
-$varToChange;
-$rand;
-$item;
-$text;
-$number_of_calls;
-$list2;
-$proc_z;
-$func_z;
-$x;
-$proc_w;
-$func_c;
-$if2;
-$i;
-$loglist;
-$changing_list;
-$list_copy;
-
 function unittest_report() {
   global $unittestResults;
   // Create test report.

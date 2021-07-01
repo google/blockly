@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview Tritanopia theme.
- * A color palette for people that have tritanopia (the inability to perceive
+ * A colour palette for people that have tritanopia (the inability to perceive
  * blue light).
  */
 'use strict';

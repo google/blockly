@@ -20,6 +20,7 @@ goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
+goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
@@ -39,7 +40,7 @@ goog.requireType('Blockly.Workspace');
 
 /**
  * Class for a mutator dialog.
- * @param {!Array.<string>} quarkNames List of names of sub-blocks for flyout.
+ * @param {!Array<string>} quarkNames List of names of sub-blocks for flyout.
  * @extends {Blockly.Icon}
  * @constructor
  */
@@ -48,6 +49,13 @@ Blockly.Mutator = function(quarkNames) {
   this.quarkNames_ = quarkNames;
 };
 Blockly.utils.object.inherits(Blockly.Mutator, Blockly.Icon);
+
+/**
+ * Workspace in the mutator's bubble.
+ * @type {?Blockly.WorkspaceSvg}
+ * @private
+ */
+Blockly.Mutator.prototype.workspace_ = null;
 
 /**
  * Width of workspace.
@@ -63,7 +71,7 @@ Blockly.Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.
- * @param {Blockly.BlockSvg} block The block associated with this mutator.
+ * @param {!Blockly.BlockSvg} block The block associated with this mutator.
  * @package
  */
 Blockly.Mutator.prototype.setBlock = function(block) {
@@ -72,8 +80,8 @@ Blockly.Mutator.prototype.setBlock = function(block) {
 
 /**
  * Returns the workspace inside this mutator icon's bubble.
- * @return {Blockly.WorkspaceSvg} The workspace inside this mutator icon's
- *     bubble.
+ * @return {?Blockly.WorkspaceSvg} The workspace inside this mutator icon's
+ *     bubble or null if the mutator isn't open.
  * @package
  */
 Blockly.Mutator.prototype.getWorkspace = function() {
@@ -127,7 +135,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
  * Clicking on the icon toggles if the mutator bubble is visible.
  * Disable if block is uneditable.
  * @param {!Event} e Mouse click event.
- * @private
+ * @protected
  * @override
  */
 Blockly.Mutator.prototype.iconClick_ = function(e) {
@@ -188,9 +196,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   this.workspace_.addChangeListener(Blockly.Events.disableOrphans);
 
   // Mutator flyouts go inside the mutator workspace's <g> rather than in
-  // a top level svg. Instead of handling scale themselves, mutators
+  // a top level SVG. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
-  // To fix this, scale needs to be applied at a different level in the dom.
+  // To fix this, scale needs to be applied at a different level in the DOM.
   var flyoutSvg = hasFlyout ?
       this.workspace_.addFlyout(Blockly.utils.Svg.G) : null;
   var background = this.workspace_.createDom('blocklyMutatorBackground');
@@ -279,7 +287,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
  */
 Blockly.Mutator.prototype.onBubbleMove_ = function() {
   if (this.workspace_) {
-    this.workspace_.recordDeleteAreas();
+    this.workspace_.recordDragTargets();
   }
 };
 
@@ -465,16 +473,14 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
 
   if (ws && ws.getAllBlocks(false)) {
     var workspaceBlocks = ws.getAllBlocks(false);
-    for (var i = 0; i < workspaceBlocks.length; i++) {
-      var block = workspaceBlocks[i];
+    for (var i = 0, block; (block = workspaceBlocks[i]); i++) {
       block.setStyle(block.getStyleName());
     }
 
     var flyout = ws.getFlyout();
     if (flyout) {
       var flyoutBlocks = flyout.workspace_.getAllBlocks(false);
-      for (var i = 0; i < flyoutBlocks.length; i++) {
-        var block = flyoutBlocks[i];
+      for (var i = 0, block; (block = flyoutBlocks[i]); i++) {
         block.setStyle(block.getStyleName());
       }
     }
@@ -510,7 +516,7 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
  * Get the parent workspace of a workspace that is inside a mutator, taking into
  * account whether it is a flyout.
  * @param {Blockly.Workspace} workspace The workspace that is inside a mutator.
- * @return {Blockly.Workspace} The mutator's parent workspace or null.
+ * @return {?Blockly.Workspace} The mutator's parent workspace or null.
  * @public
  */
 Blockly.Mutator.findParentWs = function(workspace) {

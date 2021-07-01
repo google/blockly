@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.require('Blockly.WorkspaceComment');
+
 suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
@@ -908,6 +910,19 @@ suite('Events', function() {
       chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
+    });
+
+    test('Merge viewport change events', function() {
+      var events = [
+        new Blockly.Events.ViewportChange(1, 2, 3, this.workspace, 4),
+        new Blockly.Events.ViewportChange(5, 6, 7, this.workspace, 8)
+      ];
+      var filteredEvents = Blockly.Events.filter(events, true);
+      chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
+      chai.assert.equal(filteredEvents[0].viewTop, 5);
+      chai.assert.equal(filteredEvents[0].viewLeft, 6);
+      chai.assert.equal(filteredEvents[0].scale, 7);
+      chai.assert.equal(filteredEvents[0].oldScale, 8);
     });
 
     test('Merge ui events', function() {

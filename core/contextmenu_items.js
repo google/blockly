@@ -183,7 +183,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
 /**
  * Adds a block and its children to a list of deletable blocks.
  * @param {!Blockly.BlockSvg} block to delete.
- * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
+ * @param {!Array<!Blockly.BlockSvg>} deleteList list of blocks that can be deleted. This will be
  *    modifed in place with the given block and its descendants.
  * @private
  */
@@ -191,7 +191,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    var children = /** @type !Array.<!Blockly.BlockSvg> */ (block.getChildren(false));
+    var children = /** @type !Array<!Blockly.BlockSvg> */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
       Blockly.ContextMenuItems.addDeletableBlocks_(children[i], deleteList);
     }
@@ -201,7 +201,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
 /**
  * Constructs a list of blocks that can be deleted in the given workspace.
  * @param {!Blockly.WorkspaceSvg} workspace to delete all blocks from.
- * @return {!Array.<!Blockly.BlockSvg>} list of blocks to delete.
+ * @return {!Array<!Blockly.BlockSvg>} list of blocks to delete.
  * @private
  */
 Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
@@ -214,8 +214,8 @@ Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
 };
 
 /** Deletes the given blocks. Used to delete all blocks in the workspace.
- * @param {!Array.<!Blockly.BlockSvg>} deleteList list of blocks to delete.
- * @param {string} eventGroup event group id with which all delete events should be associated.
+ * @param {!Array<!Blockly.BlockSvg>} deleteList list of blocks to delete.
+ * @param {string} eventGroup event group ID with which all delete events should be associated.
  * @private
  */
 Blockly.ContextMenuItems.deleteNext_ = function(deleteList, eventGroup) {
@@ -397,14 +397,12 @@ Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var collapseExpandOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
-      if (scope.block.isCollapsed()) {
-        return Blockly.Msg['EXPAND_BLOCK'];
-      }
-      return Blockly.Msg['COLLAPSE_BLOCK'];
+      return scope.block.isCollapsed() ?
+          Blockly.Msg['EXPAND_BLOCK'] : Blockly.Msg['COLLAPSE_BLOCK'];
     },
     preconditionFn: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       var block = scope.block;
-      if (!block.isInFlyout && block.isMovable()) {
+      if (!block.isInFlyout && block.isMovable() && block.workspace.options.collapse) {
         return 'enabled';
       }
       return 'hidden';
@@ -479,7 +477,9 @@ Blockly.ContextMenuItems.registerDelete = function() {
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       Blockly.Events.setGroup(true);
-      scope.block.dispose(true, true);
+      if (scope.block) {
+        Blockly.deleteBlock(scope.block);
+      }
       Blockly.Events.setGroup(false);
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,

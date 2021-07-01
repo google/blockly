@@ -101,7 +101,7 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.Python.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar
@@ -138,46 +138,45 @@ Blockly.Python.isInitialized = false;
  * @this {Blockly.Generator}
  */
 Blockly.Python.init = function(workspace) {
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
+
   /**
    * Empty loops or conditionals are not allowed in Python.
    */
-  Blockly.Python.PASS = this.INDENT + 'pass\n';
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Python.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Python.functionNames_ = Object.create(null);
+  this.PASS = this.INDENT + 'pass\n';
 
-  if (!Blockly.Python.variableDB_) {
-    Blockly.Python.variableDB_ =
-        new Blockly.Names(Blockly.Python.RESERVED_WORDS_);
+  if (!this.nameDB_) {
+    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.Python.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
-  Blockly.Python.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.Python.variableDB_.getName(devVarList[i],
+    defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
   }
 
   // Add user variables, but only ones that are being used.
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
-    defvars.push(Blockly.Python.variableDB_.getName(variables[i].getId(),
+    defvars.push(this.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
   }
 
-  Blockly.Python.definitions_['variables'] = defvars.join('\n');
+  this.definitions_['variables'] = defvars.join('\n');
   this.isInitialized = true;
 };
 
 /**
- * Prepend the generated code with the variable definitions.
+ * Prepend the generated code with import statements and variable definitions.
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
@@ -185,18 +184,19 @@ Blockly.Python.finish = function(code) {
   // Convert the definitions dictionary into a list.
   var imports = [];
   var definitions = [];
-  for (var name in Blockly.Python.definitions_) {
-    var def = Blockly.Python.definitions_[name];
+  for (var name in this.definitions_) {
+    var def = this.definitions_[name];
     if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
       imports.push(def);
     } else {
       definitions.push(def);
     }
   }
-  // Clean up temporary data.
-  delete Blockly.Python.definitions_;
-  delete Blockly.Python.functionNames_;
-  Blockly.Python.variableDB_.reset();
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
@@ -242,7 +242,7 @@ Blockly.Python.quote_ = function(string) {
  * @protected
  */
 Blockly.Python.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(Blockly.Python.quote_);
+  var lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
   return lines.join(' + \'\\n\' + \n');
@@ -265,9 +265,8 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment,
-          Blockly.Python.COMMENT_WRAP - 3);
-      commentCode += Blockly.Python.prefixLines(comment + '\n', '# ');
+      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      commentCode += this.prefixLines(comment + '\n', '# ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -275,16 +274,16 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          comment = Blockly.Python.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Python.prefixLines(comment, '# ');
+            commentCode += this.prefixLines(comment, '# ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : Blockly.Python.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -303,9 +302,8 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
     delta--;
   }
   var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
-  var atOrder = delta ? Blockly.Python.ORDER_ADDITIVE :
-      Blockly.Python.ORDER_NONE;
-  var at = Blockly.Python.valueToCode(block, atId, atOrder) || defaultAtIndex;
+  var atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
+  var at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.

@@ -7,12 +7,14 @@ on: [pull_request]
 
 jobs:
   build:
-    # TODO (#2114): re-enable osx build.
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        # TODO (#2114): re-enable osx build.
+        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
+        node-version: [10.x, 12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -35,7 +37,7 @@ jobs:
       run: source ./tests/scripts/setup_osx_env.sh
 
     - name: Run
-      run: npm run test:run
+      run: npm run test
 
       env:
         CI: true

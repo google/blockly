@@ -12,6 +12,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.aria
+ * @namespace
+ */
 goog.provide('Blockly.utils.aria');
 
 
@@ -155,7 +159,7 @@ Blockly.utils.aria.setRole = function(element, roleName) {
  * @param {!Blockly.utils.aria.State} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
- * @param {string|boolean|number|!Array.<string>} value Value
+ * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
  */
 Blockly.utils.aria.setState = function(element, stateName, value) {

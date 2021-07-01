@@ -38,7 +38,7 @@ goog.requireType('Blockly.RenderedConnection');
 Blockly.blockRendering.Debug = function(constants) {
   /**
    * An array of SVG elements that have been created by this object.
-   * @type {Array.<!SVGElement>}
+   * @type {Array<!SVGElement>}
    * @private
    */
   this.debugElements_ = [];
@@ -62,7 +62,7 @@ Blockly.blockRendering.Debug = function(constants) {
 /**
  * Configuration object containing booleans to enable and disable debug
  * rendering of specific rendering components.
- * @type {!Object.<string, boolean>}
+ * @type {!Object<string, boolean>}
  */
 Blockly.blockRendering.Debug.config = {
   rowSpacers: true,
@@ -420,7 +420,7 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
 /**
  * Show a debug filter to highlight that a block has been rendered.
- * @param {!SVGElement} svgPath The block's svg path.
+ * @param {!SVGElement} svgPath The block's SVG path.
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {

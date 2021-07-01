@@ -49,7 +49,7 @@ Blockly.fieldRegistry.unregister = function(type) {
  * Blockly.fieldRegistry.register.
  * @param {!Object} options A JSON object with a type and options specific
  *     to the field type.
- * @return {Blockly.Field} The new field instance or null if a field wasn't
+ * @return {?Blockly.Field} The new field instance or null if a field wasn't
  *     found with the given type name
  * @package
  */

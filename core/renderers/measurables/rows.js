@@ -47,7 +47,7 @@ Blockly.blockRendering.Row = function(constants) {
   /**
    * An array of elements contained in this row.
    * @package
-   * @type {!Array.<!Blockly.blockRendering.Measurable>}
+   * @type {!Array<!Blockly.blockRendering.Measurable>}
    */
   this.elements = [];
 

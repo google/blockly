@@ -15,6 +15,7 @@ goog.provide('Blockly.Lua');
 
 goog.require('Blockly.Generator');
 goog.require('Blockly.inputTypes');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
 
 
@@ -91,19 +92,18 @@ Blockly.Lua.isInitialized = false;
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Lua.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Lua.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Lua.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
-  if (!Blockly.Lua.variableDB_) {
-    Blockly.Lua.variableDB_ =
-        new Blockly.Names(Blockly.Lua.RESERVED_WORDS_);
+  if (!this.nameDB_) {
+    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.Lua.variableDB_.reset();
+    this.nameDB_.reset();
   }
-  Blockly.Lua.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
+
   this.isInitialized = true;
 };
 
@@ -114,14 +114,12 @@ Blockly.Lua.init = function(workspace) {
  */
 Blockly.Lua.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var definitions = [];
-  for (var name in Blockly.Lua.definitions_) {
-    definitions.push(Blockly.Lua.definitions_[name]);
-  }
-  // Clean up temporary data.
-  delete Blockly.Lua.definitions_;
-  delete Blockly.Lua.functionNames_;
-  Blockly.Lua.variableDB_.reset();
+  var definitions = Blockly.utils.object.values(this.definitions_);
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 
@@ -159,7 +157,7 @@ Blockly.Lua.quote_ = function(string) {
  * @protected
  */
 Blockly.Lua.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(Blockly.Lua.quote_);
+  var lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // .. '\n' ..
   return lines.join(' .. \'\\n\' ..\n');
@@ -182,9 +180,8 @@ Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment,
-          Blockly.Lua.COMMENT_WRAP - 3);
-      commentCode += Blockly.Lua.prefixLines(comment, '-- ') + '\n';
+      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      commentCode += this.prefixLines(comment, '-- ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -192,15 +189,15 @@ Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
       if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          comment = Blockly.Lua.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Lua.prefixLines(comment, '-- ');
+            commentCode += this.prefixLines(comment, '-- ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : Blockly.Lua.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };

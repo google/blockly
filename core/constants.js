@@ -162,26 +162,6 @@ Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
     Blockly.connectionTypes.NEXT_STATEMENT;
 
 /**
- * ENUM representing that an event is not in any delete areas.
- * Null for backwards compatibility reasons.
- * @const
- */
-Blockly.DELETE_AREA_NONE = null;
-
-/**
- * ENUM representing that an event is in the delete area of the trash can.
- * @const
- */
-Blockly.DELETE_AREA_TRASH = 1;
-
-/**
- * ENUM representing that an event is in the delete area of the toolbox or
- * flyout.
- * @const
- */
-Blockly.DELETE_AREA_TOOLBOX = 2;
-
-/**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
@@ -221,13 +201,13 @@ Blockly.RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
 Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
 
 /**
- * The language-neutral id given to the collapsed input.
+ * The language-neutral ID given to the collapsed input.
  * @const {string}
  */
 Blockly.constants.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
 
 /**
- * The language-neutral id given to the collapsed field.
+ * The language-neutral ID given to the collapsed field.
  * @const {string}
  */
 Blockly.constants.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';

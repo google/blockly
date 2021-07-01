@@ -12,6 +12,7 @@
 
 goog.provide('Blockly.CollapsibleToolboxCategory');
 
+goog.require('Blockly.ICollapsibleToolboxItem');
 goog.require('Blockly.registry');
 goog.require('Blockly.ToolboxCategory');
 goog.require('Blockly.ToolboxItem');
@@ -21,7 +22,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.toolbox');
 
-goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.IToolboxItem');
 
@@ -66,7 +66,7 @@ Blockly.CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) 
 Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.ToolboxCategory);
 
 /**
- * All the css class names that are used to create a collapsible
+ * All the CSS class names that are used to create a collapsible
  * category. This is all the properties from the regular category plus contents.
  * @typedef {{
  *            container:?string,
@@ -186,7 +186,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
 };
 
 /**
- * Create the dom for all subcategories.
+ * Create the DOM for all subcategories.
  * @param {!Array<!Blockly.ToolboxItem>} subcategories The subcategories.
  * @return {!Element} The div holding all the subcategories.
  * @protected

@@ -17,7 +17,7 @@ goog.require('Blockly.Python');
 
 Blockly.Python['variables_get'] = function(block) {
   // Variable getter.
-  var code = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+  var code = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
@@ -26,7 +26,7 @@ Blockly.Python['variables_set'] = function(block) {
   // Variable setter.
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = ' + argument0 + '\n';
 };

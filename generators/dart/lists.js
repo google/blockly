@@ -83,7 +83,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
-    var listVar = Blockly.Dart.variableDB_.getDistinctName(
+    var listVar = Blockly.Dart.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     var code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
@@ -100,7 +100,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
           'import \'dart:math\' as Math;';
       // We can use multiple statements.
       var code = cacheList();
-      var xVar = Blockly.Dart.variableDB_.getDistinctName(
+      var xVar = Blockly.Dart.nameDB_.getDistinctName(
           'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
@@ -199,7 +199,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
             'import \'dart:math\' as Math;';
         if (mode == 'REMOVE') {
           // We can use multiple statements.
-          var xVar = Blockly.Dart.variableDB_.getDistinctName(
+          var xVar = Blockly.Dart.nameDB_.getDistinctName(
               'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
           var code = 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
               '.length);\n';
@@ -247,7 +247,7 @@ Blockly.Dart['lists_setIndex'] = function(block) {
     if (list.match(/^\w+$/)) {
       return '';
     }
-    var listVar = Blockly.Dart.variableDB_.getDistinctName(
+    var listVar = Blockly.Dart.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     var code = 'List ' + listVar + ' = ' + list + ';\n';
     list = listVar;
@@ -296,7 +296,7 @@ Blockly.Dart['lists_setIndex'] = function(block) {
       Blockly.Dart.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       var code = cacheList();
-      var xVar = Blockly.Dart.variableDB_.getDistinctName(
+      var xVar = Blockly.Dart.nameDB_.getDistinctName(
           'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'int ' + xVar +
           ' = new Math.Random().nextInt(' + list + '.length);\n';

@@ -156,9 +156,6 @@ suite('Connection', function() {
 
         teardown(function() {
           workspaceTeardown.call(this, this.workspace);
-          delete Blockly.Blocks['stack_block'];
-          delete Blockly.Blocks['row_block'];
-          delete Blockly.Blocks['statement_block'];
         });
 
         suite('Add - No Block Connected', function() {
@@ -779,6 +776,911 @@ suite('Connection', function() {
             assertNextHasBlock(parent.getNextBlock(), true);
             parent.nextConnection.setShadowDom(null);
             assertNextNotHasBlock(parent);
+          });
+        });
+      });
+    });
+  });
+
+  suite('Connect', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      Blockly.defineBlocksWithJsonArray([
+        {
+          "type": "stack_block",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "FIELD",
+              "text": "default"
+            }
+          ],
+          "previousStatement": 'check1',
+          "nextStatement": 'check1'
+        },
+        {
+          "type": "stack_block_1to2",
+          "message0": "",
+          "previousStatement": 'check1',
+          "nextStatement": 'check2'
+        },
+        {
+          "type": "stack_block_2to1",
+          "message0": "",
+          "previousStatement": 'check2',
+          "nextStatement": 'check1'
+        },
+        {
+          "type": "stack_block_noend",
+          "message0": "",
+          "previousStatement": 'check1',
+        },
+        {
+          "type": "row_block",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "FIELD",
+              "text": "default"
+            },
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "check": 'check1'
+            }
+          ],
+          "output": 'check1'
+        },
+        {
+          "type": "row_block_1to2",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "check": 'check1'
+            }
+          ],
+          "output": 'check2'
+        },
+        {
+          "type": "row_block_2to1",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "check": 'check2'
+            }
+          ],
+          "output": 'check1'
+        },
+        {
+          "type": "row_block_noend",
+          "message0": "",
+          "output": 'check1'
+        },
+        {
+          "type": "row_block_multiple_inputs",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "input_value",
+              "name": "INPUT",
+              "check": 'check1'
+            },
+            {
+              "type": "input_value",
+              "name": "INPUT2",
+              "check": 'check1'
+            }
+          ],
+          "output": 'check1'
+        },
+        {
+          'type': 'output_to_statements',
+          'message0': '%1 %2',
+          'args0': [
+            {
+              'type': 'input_statement',
+              'name': 'INPUT',
+              'check': 'check1'
+            },
+            {
+              'type': 'input_statement',
+              'name': 'INPUT2',
+              'check': 'check1'
+            }
+          ],
+          'output': 'check1',
+        },
+        {
+          "type": "statement_block",
+          "message0": "%1 %2",
+          "args0": [
+            {
+              "type": "field_input",
+              "name": "FIELD",
+              "text": "default"
+            },
+            {
+              "type": "input_statement",
+              "name": "STATEMENT",
+              "check": 'check1'
+            }
+          ],
+          "previousStatement": 'check1',
+          "nextStatement": 'check1'
+        },
+        {
+          "type": "statement_block_1to2",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_statement",
+              "name": "STATEMENT",
+              "check": 'check1'
+            }
+          ],
+          "previousStatement": 'check1',
+          "nextStatement": 'check2'
+        },
+        {
+          "type": "statement_block_2to1",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_statement",
+              "name": "STATEMENT",
+              "check": 'check2'
+            }
+          ],
+          "previousStatement": 'check2',
+          "nextStatement": 'check1'
+        },
+        {
+          "type": "statement_block_noend",
+          "message0": "%1",
+          "args0": [
+            {
+              "type": "input_statement",
+              "name": "STATEMENT",
+              "check": 'check1'
+            }
+          ],
+          "previousStatement": 'check1',
+        },
+      ]);
+
+      // Used to make sure we don't get stray shadow blocks or anything.
+      this.assertBlockCount = function(count) {
+        chai.assert.equal(this.workspace.getAllBlocks().length, count);
+      };
+    });
+
+    suite('Disconnect from old parent', function() {
+      test('Value', function() {
+        var oldParent = this.workspace.newBlock('row_block');
+        var newParent = this.workspace.newBlock('row_block');
+        var child = this.workspace.newBlock('row_block');
+
+        oldParent.getInput('INPUT').connection.connect(child.outputConnection);
+        newParent.getInput('INPUT').connection.connect(child.outputConnection);
+
+        chai.assert.isFalse(
+            oldParent.getInput('INPUT').connection.isConnected());
+        this.assertBlockCount(3);
+      });
+
+      test('Statement', function() {
+        var oldParent = this.workspace.newBlock('statement_block');
+        var newParent = this.workspace.newBlock('statement_block');
+        var child = this.workspace.newBlock('stack_block');
+
+        oldParent.getInput('STATEMENT').connection
+            .connect(child.previousConnection);
+        newParent.getInput('STATEMENT').connection
+            .connect(child.previousConnection);
+
+        chai.assert.isFalse(
+            oldParent.getInput('STATEMENT').connection.isConnected());
+        this.assertBlockCount(3);
+      });
+
+      test('Next', function() {
+        var oldParent = this.workspace.newBlock('stack_block');
+        var newParent = this.workspace.newBlock('stack_block');
+        var child = this.workspace.newBlock('stack_block');
+
+        oldParent.nextConnection.connect(child.previousConnection);
+        newParent.nextConnection.connect(child.previousConnection);
+
+        chai.assert.isFalse(oldParent.nextConnection.isConnected());
+        this.assertBlockCount(3);
+      });
+    });
+
+    suite('Shadow dissolves', function() {
+      test('Value', function() {
+        var newParent = this.workspace.newBlock('row_block');
+        var child = this.workspace.newBlock('row_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="row_block"/>'
+        );
+        newParent.getInput('INPUT').connection.setShadowDom(xml);
+        chai.assert.isTrue(newParent.getInputTargetBlock('INPUT').isShadow());
+
+        newParent.getInput('INPUT').connection.connect(child.outputConnection);
+
+        chai.assert.isFalse(newParent.getInputTargetBlock('INPUT').isShadow());
+        this.assertBlockCount(2);
+      });
+
+      test('Statement', function() {
+        var newParent = this.workspace.newBlock('statement_block');
+        var child = this.workspace.newBlock('stack_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="stack_block"/>'
+        );
+        newParent.getInput('STATEMENT').connection.setShadowDom(xml);
+        chai.assert.isTrue(
+            newParent.getInputTargetBlock('STATEMENT').isShadow());
+
+        newParent.getInput('STATEMENT').connection
+            .connect(child.previousConnection);
+
+        chai.assert.isFalse(
+            newParent.getInputTargetBlock('STATEMENT').isShadow());
+        this.assertBlockCount(2);
+      });
+
+      test('Next', function() {
+        var newParent = this.workspace.newBlock('stack_block');
+        var child = this.workspace.newBlock('stack_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="stack_block"/>'
+        );
+        newParent.nextConnection.setShadowDom(xml);
+        chai.assert.isTrue(newParent.getNextBlock().isShadow());
+
+        newParent.nextConnection.connect(child.previousConnection);
+
+        chai.assert.isFalse(newParent.getNextBlock().isShadow());
+        this.assertBlockCount(2);
+      });
+    });
+
+    suite('Saving shadow values', function() {
+      test('Value', function() {
+        var newParent = this.workspace.newBlock('row_block');
+        var child = this.workspace.newBlock('row_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="row_block"/>'
+        );
+        newParent.getInput('INPUT').connection.setShadowDom(xml);
+        newParent.getInputTargetBlock('INPUT').setFieldValue('new', 'FIELD');
+
+        newParent.getInput('INPUT').connection.connect(child.outputConnection);
+        newParent.getInput('INPUT').connection.disconnect();
+
+        const target = newParent.getInputTargetBlock('INPUT');
+        chai.assert.isTrue(target.isShadow());
+        chai.assert.equal(target.getFieldValue('FIELD'), 'new');
+        this.assertBlockCount(3);
+      });
+
+      test('Statement', function() {
+        var newParent = this.workspace.newBlock('statement_block');
+        var child = this.workspace.newBlock('stack_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="stack_block"/>'
+        );
+        newParent.getInput('STATEMENT').connection.setShadowDom(xml);
+        newParent.getInputTargetBlock('STATEMENT')
+            .setFieldValue('new', 'FIELD');
+
+        newParent.getInput('STATEMENT').connection
+            .connect(child.previousConnection);
+        newParent.getInput('STATEMENT').connection.disconnect();
+
+        const target = newParent.getInputTargetBlock('STATEMENT');
+        chai.assert.isTrue(target.isShadow());
+        chai.assert.equal(target.getFieldValue('FIELD'), 'new');
+        this.assertBlockCount(3);
+      });
+
+      test('Next', function() {
+        var newParent = this.workspace.newBlock('stack_block');
+        var child = this.workspace.newBlock('stack_block');
+        var xml = Blockly.Xml.textToDom(
+            '<shadow type="stack_block"/>'
+        );
+        newParent.nextConnection.setShadowDom(xml);
+        newParent.getNextBlock().setFieldValue('new', 'FIELD');
+
+        newParent.nextConnection.connect(child.previousConnection);
+        newParent.nextConnection.disconnect();
+
+        const target = newParent.getNextBlock();
+        chai.assert.isTrue(target.isShadow());
+        chai.assert.equal(target.getFieldValue('FIELD'), 'new');
+        this.assertBlockCount(3);
+      });
+    });
+
+    suite('Reattach or bump orphan', function() {
+      suite('Value', function() {
+        suite('No available spots', function() {
+          test('No connection', function() {
+            var parent = this.workspace.newBlock('row_block');
+            var oldChild = this.workspace.newBlock('row_block');
+            var newChild = this.workspace.newBlock('row_block_noend');
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isFalse(
+                oldChild.outputConnection.isConnected());
+          });
+
+          test('All statements', function() {
+            var parent = this.workspace.newBlock('row_block');
+            var oldChild = this.workspace.newBlock('row_block');
+            var newChild = this.workspace.newBlock('output_to_statements');
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isFalse(
+                oldChild.outputConnection.isConnected());
+          });
+
+          test('Bad checks', function() {
+            var parent = this.workspace.newBlock('row_block');
+            var oldChild = this.workspace.newBlock('row_block');
+            var newChild = this.workspace.newBlock('row_block_2to1');
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isFalse(
+                oldChild.outputConnection.isConnected());
+          });
+
+          test('Through different types', function() {
+            const parent = this.workspace.newBlock('row_block');
+            const oldChild = this.workspace.newBlock('row_block');
+            const newChild = this.workspace.newBlock('row_block_2to1');
+            const otherChild = this.workspace.newBlock('row_block_1to2');
+
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+            newChild.getInput('INPUT').connection
+                .connect(otherChild.outputConnection);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isFalse(
+                oldChild.outputConnection.isConnected());
+          });
+        });
+
+        suite('Multiple available spots', function() {
+          suite('No shadows', function() {
+            test('Top block', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+
+            test('Child blocks', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+              const childX = this.workspace.newBlock('row_block');
+              const childY = this.workspace.newBlock('row_block');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+              newChild.getInput('INPUT').connection
+                  .connect(childX.outputConnection);
+              newChild.getInput('INPUT2').connection
+                  .connect(childY.outputConnection);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+
+            test('Spots filled', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+              const otherChild = this.workspace.newBlock('row_block_noend');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+              newChild.getInput('INPUT').connection
+                  .connect(otherChild.outputConnection);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+          });
+
+          suite('Shadows', function() {
+            test('Top block', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+              newChild.getInput('INPUT').connection.setShadowDom(
+                  Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                      .firstChild);
+              newChild.getInput('INPUT2').connection.setShadowDom(
+                  Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                      .firstChild);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+
+            test('Child blocks', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+              const childX = this.workspace.newBlock('row_block');
+              const childY = this.workspace.newBlock('row_block');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+              newChild.getInput('INPUT').connection
+                  .connect(childX.outputConnection);
+              newChild.getInput('INPUT2').connection
+                  .connect(childY.outputConnection);
+              childX.getInput('INPUT').connection.setShadowDom(
+                  Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                      .firstChild);
+              childY.getInput('INPUT').connection.setShadowDom(
+                  Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                      .firstChild);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+
+            test('Spots filled', function() {
+              const parent = this.workspace.newBlock('row_block');
+              const oldChild = this.workspace.newBlock('row_block');
+              const newChild = this.workspace.newBlock(
+                  'row_block_multiple_inputs');
+              const otherChild = this.workspace.newBlock('row_block_noend');
+
+              parent.getInput('INPUT').connection
+                  .connect(oldChild.outputConnection);
+              newChild.getInput('INPUT').connection
+                  .connect(otherChild.outputConnection);
+              newChild.getInput('INPUT2').connection.setShadowDom(
+                  Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                      .firstChild);
+
+              parent.getInput('INPUT').connection
+                  .connect(newChild.outputConnection);
+
+              chai.assert.isTrue(
+                  parent.getInput('INPUT').connection.isConnected());
+              chai.assert.equal(
+                  parent.getInputTargetBlock('INPUT'), newChild);
+              chai.assert.isFalse(
+                  oldChild.outputConnection.isConnected());
+            });
+          });
+        });
+
+        suite('Single available spot', function() {
+          test('No shadows', function() {
+            const parent = this.workspace.newBlock('row_block');
+            const oldChild = this.workspace.newBlock('row_block');
+            const newChild = this.workspace.newBlock('row_block');
+
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isTrue(
+                newChild.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                newChild.getInputTargetBlock('INPUT'), oldChild);
+          });
+
+          test('Shadows', function() {
+            const parent = this.workspace.newBlock('row_block');
+            const oldChild = this.workspace.newBlock('row_block');
+            const newChild = this.workspace.newBlock('row_block');
+
+            parent.getInput('INPUT').connection
+                .connect(oldChild.outputConnection);
+            newChild.getInput('INPUT').connection.setShadowDom(
+                Blockly.Xml.textToDom('<xml><shadow type="row_block"/></xml>')
+                    .firstChild);
+
+            parent.getInput('INPUT').connection
+                .connect(newChild.outputConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('INPUT'), newChild);
+            chai.assert.isTrue(
+                newChild.getInput('INPUT').connection.isConnected());
+            chai.assert.equal(
+                newChild.getInputTargetBlock('INPUT'), oldChild);
+          });
+        });
+      });
+
+      suite('Statement', function() {
+        suite('No shadows', function() {
+          test('Simple', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.equal(newChild.getNextBlock(), oldChild);
+            this.assertBlockCount(3);
+          });
+
+          test('Bad check in between', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild1 = this.workspace.newBlock('stack_block_1to2');
+            var newChild2 = this.workspace.newBlock('stack_block_2to1');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            newChild1.nextConnection.connect(newChild2.previousConnection);
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild1.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild1);
+            chai.assert.isTrue(newChild2.nextConnection.isConnected());
+            chai.assert.equal(newChild2.getNextBlock(), oldChild);
+            this.assertBlockCount(4);
+          });
+
+          test('Bad check at end', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_1to2');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild);
+            chai.assert.isFalse(newChild.nextConnection.isConnected());
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(3);
+          });
+
+          test('No end connection', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_noend');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild);
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(3);
+          });
+        });
+
+        suite('Shadows', function() {
+          test('Simple', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            newChild.nextConnection.setShadowDom(xml);
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.equal(newChild.getNextBlock(), oldChild);
+            this.assertBlockCount(3);
+          });
+
+          test('Bad check in between', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild1 = this.workspace.newBlock('stack_block_1to2');
+            var newChild2 = this.workspace.newBlock('stack_block_2to1');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            newChild1.nextConnection.connect(newChild2.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            newChild2.nextConnection.setShadowDom(xml);
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild1.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild1);
+            chai.assert.isTrue(newChild2.nextConnection.isConnected());
+            chai.assert.equal(newChild2.getNextBlock(), oldChild);
+            this.assertBlockCount(4);
+          });
+
+          test('Bad check at end', function() {
+            var parent = this.workspace.newBlock('statement_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_1to2');
+            parent.getInput('STATEMENT').connection
+                .connect(oldChild.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block_2to1"/>'
+            );
+            newChild.nextConnection.setShadowDom(xml);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.getInput('STATEMENT').connection
+                .connect(newChild.previousConnection);
+
+            chai.assert.isTrue(
+                parent.getInput('STATEMENT').connection.isConnected());
+            chai.assert.equal(
+                parent.getInputTargetBlock('STATEMENT'), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.isTrue(newChild.getNextBlock().isShadow());
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(4);
+          });
+        });
+      });
+
+      suite('Next', function() {
+        suite('No shadows', function() {
+          test('Simple', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block');
+            parent.nextConnection.connect(oldChild.previousConnection);
+
+            parent.nextConnection.connect(newChild.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.equal(newChild.getNextBlock(), oldChild);
+            this.assertBlockCount(3);
+          });
+
+          test('Bad check in between', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild1 = this.workspace.newBlock('stack_block_1to2');
+            var newChild2 = this.workspace.newBlock('stack_block_2to1');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            newChild1.nextConnection.connect(newChild2.previousConnection);
+
+            parent.nextConnection.connect(newChild1.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild1);
+            chai.assert.isTrue(newChild2.nextConnection.isConnected());
+            chai.assert.equal(newChild2.getNextBlock(), oldChild);
+            this.assertBlockCount(4);
+          });
+
+          test('Bad check at end', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_1to2');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.nextConnection.connect(newChild.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild);
+            chai.assert.isFalse(newChild.nextConnection.isConnected());
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(3);
+          });
+
+          test('No end connection', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_noend');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.nextConnection.connect(newChild.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild);
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(3);
+          });
+        });
+
+        suite('Shadows', function() {
+          test('Simple', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            newChild.nextConnection.setShadowDom(xml);
+
+            parent.nextConnection.connect(newChild.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.equal(newChild.getNextBlock(), oldChild);
+            this.assertBlockCount(3);
+          });
+
+          test('Bad check in between', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild1 = this.workspace.newBlock('stack_block_1to2');
+            var newChild2 = this.workspace.newBlock('stack_block_2to1');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            newChild1.nextConnection.connect(newChild2.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block"/>'
+            );
+            newChild2.nextConnection.setShadowDom(xml);
+
+            parent.nextConnection.connect(newChild1.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild1);
+            chai.assert.isTrue(newChild2.nextConnection.isConnected());
+            chai.assert.equal(newChild2.getNextBlock(), oldChild);
+            this.assertBlockCount(4);
+          });
+
+          test('Bad check at end', function() {
+            var parent = this.workspace.newBlock('stack_block');
+            var oldChild = this.workspace.newBlock('stack_block');
+            var newChild = this.workspace.newBlock('stack_block_1to2');
+            parent.nextConnection.connect(oldChild.previousConnection);
+            var xml = Blockly.Xml.textToDom(
+                '<shadow type="stack_block_2to1"/>'
+            );
+            newChild.nextConnection.setShadowDom(xml);
+            var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
+
+            parent.nextConnection.connect(newChild.previousConnection);
+
+            chai.assert.isTrue(parent.nextConnection.isConnected());
+            chai.assert.equal(parent.getNextBlock(), newChild);
+            chai.assert.isTrue(newChild.nextConnection.isConnected());
+            chai.assert.isTrue(newChild.getNextBlock().isShadow());
+            chai.assert.isTrue(spy.calledOnce);
+            this.assertBlockCount(4);
           });
         });
       });

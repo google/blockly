@@ -38,10 +38,11 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {boolean=} addVertical Whether to add a vertical scrollbar. Defaults
  *    to true.
  * @param {string=} opt_class A class to be applied to these scrollbars.
+ * @param {number=} opt_margin The margin to apply to these scrollbars.
  * @constructor
  */
 Blockly.ScrollbarPair = function(
-    workspace, addHorizontal, addVertical, opt_class) {
+    workspace, addHorizontal, addVertical, opt_class, opt_margin) {
   /**
    * The workspace this scrollbar pair is bound to.
    * @type {!Blockly.WorkspaceSvg}
@@ -55,11 +56,11 @@ Blockly.ScrollbarPair = function(
 
   if (addHorizontal) {
     this.hScroll = new Blockly.Scrollbar(
-        workspace, true, isPair, opt_class);
+        workspace, true, isPair, opt_class, opt_margin);
   }
-  if (addVertical ) {
+  if (addVertical) {
     this.vScroll = new Blockly.Scrollbar(
-        workspace, false, isPair, opt_class);
+        workspace, false, isPair, opt_class, opt_margin);
   }
 
   if (isPair) {
@@ -335,9 +336,11 @@ Blockly.ScrollbarPair.prototype.resizeView = function(hostMetrics) {
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @param {string=} opt_class A class to be applied to this scrollbar.
+ * @param {number=} opt_margin The margin to apply to this scrollbar.
  * @constructor
  */
-Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
+Blockly.Scrollbar = function(
+    workspace, horizontal, opt_pair, opt_class, opt_margin) {
   /**
    * The workspace this scrollbar is bound to.
    * @type {!Blockly.WorkspaceSvg}
@@ -356,6 +359,15 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair, opt_class) {
    * @private
    */
   this.horizontal_ = horizontal;
+  /**
+   * Margin around the scrollbar (between the scrollbar and the edge of the
+   * viewport in pixels).
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.margin_ = (opt_margin !== undefined) ?
+      opt_margin : Blockly.Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
   /**
    * Previously recorded metrics from the workspace.
    * @type {?Blockly.utils.Metrics}
@@ -474,41 +486,34 @@ if (Blockly.Touch.TOUCH_ENABLED) {
 }
 
 /**
- * Margin around the scrollbar (between the scrollbar and the edge of the
- * viewport in pixels).
+ * Default margin around the scrollbar (between the scrollbar and the edge of
+ * the viewport in pixels).
  * @type {number}
  * @const
+ * @package
  */
-Blockly.Scrollbar.SCROLLBAR_MARGIN = 0.5;
+Blockly.Scrollbar.DEFAULT_SCROLLBAR_MARGIN = 0.5;
 
 
 /**
- * @param {Blockly.utils.Metrics} first An object containing computed
+ * @param {!Blockly.utils.Metrics} first An object containing computed
  *     measurements of a workspace.
- * @param {?Blockly.utils.Metrics} second Another object containing computed
+ * @param {!Blockly.utils.Metrics} second Another object containing computed
  *     measurements of a workspace.
  * @return {boolean} Whether the two sets of metrics are equivalent.
  * @private
  */
 Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
-  if (!(first && second)) {
-    return false;
-  }
-
-  if (first.viewWidth != second.viewWidth ||
-      first.viewHeight != second.viewHeight ||
-      first.viewLeft != second.viewLeft ||
-      first.viewTop != second.viewTop ||
-      first.absoluteTop != second.absoluteTop ||
-      first.absoluteLeft != second.absoluteLeft ||
-      first.scrollWidth != second.scrollWidth ||
-      first.scrollHeight != second.scrollHeight ||
-      first.scrollLeft != second.scrollLeft ||
-      first.scrollTop != second.scrollTop) {
-    return false;
-  }
-
-  return true;
+  return (first.viewWidth == second.viewWidth &&
+      first.viewHeight == second.viewHeight &&
+      first.viewLeft == second.viewLeft &&
+      first.viewTop == second.viewTop &&
+      first.absoluteTop == second.absoluteTop &&
+      first.absoluteLeft == second.absoluteLeft &&
+      first.scrollWidth == second.scrollWidth &&
+      first.scrollHeight == second.scrollHeight &&
+      first.scrollLeft == second.scrollLeft &&
+      first.scrollTop == second.scrollTop);
 };
 
 /**
@@ -636,8 +641,8 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     }
   }
 
-  if (Blockly.Scrollbar.metricsAreEquivalent_(hostMetrics,
-      this.oldHostMetrics_)) {
+  if (this.oldHostMetrics_ && Blockly.Scrollbar.metricsAreEquivalent_(
+      hostMetrics, this.oldHostMetrics_)) {
     return;
   }
 
@@ -658,7 +663,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  * hostMetrics with cached old host metrics.
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
- * @return {boolean} Whether a resizeView is necesssary.
+ * @return {boolean} Whether a resizeView is necessary.
  * @private
  */
 Blockly.Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
@@ -692,7 +697,7 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
-  var viewSize = hostMetrics.viewWidth - Blockly.Scrollbar.SCROLLBAR_MARGIN * 2;
+  var viewSize = hostMetrics.viewWidth - this.margin_ * 2;
   if (this.pair_) {
     // Shorten the scrollbar to make room for the corner square.
     viewSize -= Blockly.Scrollbar.scrollbarThickness;
@@ -700,18 +705,18 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   this.setScrollbarLength_(Math.max(0, viewSize));
 
   var xCoordinate =
-      hostMetrics.absoluteLeft + Blockly.Scrollbar.SCROLLBAR_MARGIN;
+      hostMetrics.absoluteLeft + this.margin_;
   if (this.pair_ && this.workspace_.RTL) {
     xCoordinate += Blockly.Scrollbar.scrollbarThickness;
   }
 
   // Horizontal toolbar should always be just above the bottom of the workspace.
   var yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
-      Blockly.Scrollbar.scrollbarThickness - Blockly.Scrollbar.SCROLLBAR_MARGIN;
+      Blockly.Scrollbar.scrollbarThickness - this.margin_;
   this.setPosition(xCoordinate, yCoordinate);
 
-  // If the view has been resized, a content resize will also be necessary.  The
-  // reverse is not true.
+  // If the view has been resized, a content resize will also be necessary.
+  // The reverse is not true.
   this.resizeContentHorizontal(hostMetrics);
 };
 
@@ -789,7 +794,7 @@ Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
  *     the required dimensions, possibly fetched from the host object.
  */
 Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
-  var viewSize = hostMetrics.viewHeight - Blockly.Scrollbar.SCROLLBAR_MARGIN * 2;
+  var viewSize = hostMetrics.viewHeight - this.margin_ * 2;
   if (this.pair_) {
     // Shorten the scrollbar to make room for the corner square.
     viewSize -= Blockly.Scrollbar.scrollbarThickness;
@@ -797,12 +802,11 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
   this.setScrollbarLength_(Math.max(0, viewSize));
 
   var xCoordinate = this.workspace_.RTL ?
-      hostMetrics.absoluteLeft + Blockly.Scrollbar.SCROLLBAR_MARGIN :
+      hostMetrics.absoluteLeft + this.margin_ :
       hostMetrics.absoluteLeft + hostMetrics.viewWidth -
-      Blockly.Scrollbar.scrollbarThickness - Blockly.Scrollbar.SCROLLBAR_MARGIN;
+      Blockly.Scrollbar.scrollbarThickness - this.margin_;
 
-  var yCoordinate =
-      hostMetrics.absoluteTop + Blockly.Scrollbar.SCROLLBAR_MARGIN;
+  var yCoordinate = hostMetrics.absoluteTop + this.margin_;
   this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The

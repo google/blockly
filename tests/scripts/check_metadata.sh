@@ -3,7 +3,8 @@
 # Checks the size of generated files and verifies they aren't growing
 # unreasonably.
 
-# These values should be updated with each release
+# These values should be updated with each release.
+# Run this script to get the new values.
 
 # Size of blockly_compressed.js
 # Q2 2019	2.20190722.0	812688
@@ -14,7 +15,8 @@
 # Q3 2020	3.20200924.0	641216
 # Q4 2020   4.20201217.0    653624
 # Q1 2021   5.20210325.0    653957
-blockly_size_expected=653957
+# Q2 2021   6.20210701.0    664497
+blockly_size_expected=664497
 
 # Size of blocks_compressed.js
 # Q2 2019	2.20190722.0	75618
@@ -25,7 +27,8 @@ blockly_size_expected=653957
 # Q3 2020	3.20200924.0	76429
 # Q4 2020   4.20201217.0    76693
 # Q1 2021   5.20210325.0    76693
-blocks_size_expected=76693
+# Q2 2021   6.20210701.0    76669
+blocks_size_expected=76669
 
 # Size of blockly_compressed.js.gz
 # Q2 2019	2.20190722.0	180925
@@ -36,7 +39,8 @@ blocks_size_expected=76693
 # Q3 2020	3.20200924.0	138003
 # Q4 2020   4.20201217.0    138115
 # Q1 2021   5.20210325.0    136118
-blockly_gz_size_expected=136118
+# Q2 2021   6.20210701.0    142112
+blockly_gz_size_expected=142112
 
 # Size of blocks_compressed.js.gz
 # Q2 2019	2.20190722.0	14552
@@ -47,7 +51,8 @@ blockly_gz_size_expected=136118
 # Q3 2020	3.20200924.0	15231
 # Q4 2020   4.20201217.0    15224
 # Q1 2021   5.20210325.0    15285
-blocks_gz_size_expected=15285
+# Q2 2021   6.20210701.0    15275
+blocks_gz_size_expected=15275
 
 # ANSI colors
 BOLD_GREEN='\033[1;32m'

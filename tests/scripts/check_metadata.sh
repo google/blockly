@@ -3,6 +3,9 @@
 # Checks the size of generated files and verifies they aren't growing
 # unreasonably.  Assumes the compressed files have already been built.
 
+# The ..._EXPECTED values should be updated with each release.
+# Run this script to get the new values.
+
 # Location of the pre-built compressed files.
 readonly BUILD_DIR='built'
 
@@ -18,7 +21,8 @@ readonly BUILD_DIR='built'
 # Q3 2020	3.20200924.0	641216
 # Q4 2020	4.20201217.0	653624
 # Q1 2021	5.20210325.0	653957
-readonly BLOCKLY_SIZE_EXPECTED=653957
+# Q2 2021	6.20210701.0	664497
+readonly BLOCKLY_SIZE_EXPECTED=664497
 
 # Size of blocks_compressed.js
 # Q2 2019	2.20190722.0	75618
@@ -29,7 +33,8 @@ readonly BLOCKLY_SIZE_EXPECTED=653957
 # Q3 2020	3.20200924.0	76429
 # Q4 2020	4.20201217.0	76693
 # Q1 2021	5.20210325.0	76693
-readonly BLOCKS_SIZE_EXPECTED=76693
+# Q2 2021	6.20210701.0	76669
+readonly BLOCKS_SIZE_EXPECTED=76669
 
 # Size of blockly_compressed.js.gz
 # Q2 2019	2.20190722.0	180925
@@ -40,7 +45,8 @@ readonly BLOCKS_SIZE_EXPECTED=76693
 # Q3 2020	3.20200924.0	138003
 # Q4 2020	4.20201217.0	138115
 # Q1 2021	5.20210325.0	136118
-readonly BLOCKLY_GZ_SIZE_EXPECTED=136118
+# Q2 2021	6.20210701.0	142112
+readonly BLOCKLY_GZ_SIZE_EXPECTED=142112
 
 # Size of blocks_compressed.js.gz
 # Q2 2019	2.20190722.0	14552
@@ -50,8 +56,9 @@ readonly BLOCKLY_GZ_SIZE_EXPECTED=136118
 # Q2 2020	3.20200625.0	15195
 # Q3 2020	3.20200924.0	15231
 # Q4 2020	4.20201217.0	15224
-# Q1 2021	5.20210325.0    15285
-readonly BLOCKS_GZ_SIZE_EXPECTED=15285
+# Q1 2021	5.20210325.0	15285
+# Q2 2021	6.20210701.0	15275
+readonly BLOCKS_GZ_SIZE_EXPECTED=15275
 
 # ANSI colors
 readonly BOLD_GREEN='\033[1;32m'

@@ -775,7 +775,7 @@ Serializer.Connections.Child.Next = new SerializerTestCase('Next',
     '</next>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Child.Row = new SerializerTestCase('Value',
+Serializer.Connections.Child.Row = new SerializerTestCase('Row',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id" x="42" y="42">' +
     '<value name="BOOL">' +
@@ -789,7 +789,7 @@ Serializer.Connections.Child.Row = new SerializerTestCase('Value',
     '</value>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Child.Nested = new SerializerTestCase('Statement',
+Serializer.Connections.Child.Nested = new SerializerTestCase('Nested',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
     '<statement name="DO">' +
@@ -801,7 +801,7 @@ Serializer.Connections.Child.Nested = new SerializerTestCase('Statement',
     '</statement>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Child.Stack = new SerializerTestCase('Next',
+Serializer.Connections.Child.Stack = new SerializerTestCase('Stack',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text_print" id="id" x="42" y="42">' +
     '<next>' +
@@ -849,7 +849,7 @@ Serializer.Connections.Shadow.Next = new SerializerTestCase('Next',
     '</next>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Shadow.Row = new SerializerTestCase('Value',
+Serializer.Connections.Shadow.Row = new SerializerTestCase('Row',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id" x="42" y="42">' +
     '<value name="BOOL">' +
@@ -863,7 +863,7 @@ Serializer.Connections.Shadow.Row = new SerializerTestCase('Value',
     '</value>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Shadow.Nested = new SerializerTestCase('Statement',
+Serializer.Connections.Shadow.Nested = new SerializerTestCase('Nested',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
     '<statement name="DO">' +
@@ -875,7 +875,7 @@ Serializer.Connections.Shadow.Nested = new SerializerTestCase('Statement',
     '</statement>' +
     '</block>' +
     '</xml>');
-Serializer.Connections.Shadow.Stack = new SerializerTestCase('Next',
+Serializer.Connections.Shadow.Stack = new SerializerTestCase('Stack',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text_print" id="id" x="42" y="42">' +
     '<next>' +
@@ -896,9 +896,100 @@ Serializer.Connections.Shadow.testCases = [
   Serializer.Connections.Shadow.Stack,
 ];
 
+Serializer.Connections.OverwrittenShadow =
+    new SerializerTestSuite('OverwrittenShadow');
+Serializer.Connections.OverwrittenShadow.Value = new SerializerTestCase(
+    'Value',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_boolean" id="id2">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</shadow>' +
+    '<block type="logic_boolean" id="id2">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</block>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.Statement = new SerializerTestCase(
+    'Statement',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '<block type="text_print" id="id2"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.Next = new SerializerTestCase('Next',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<block type="text_print" id="id2"></block>' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.Row = new SerializerTestCase('Row',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="logic_negate" id="id" x="42" y="42">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_negate" id="id2">' +
+    '<value name="BOOL">' +
+    '<shadow type="logic_boolean" id="id3">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</shadow>' +
+    '</value>' +
+    '</shadow>' +
+    '<block type="logic_boolean" id="id3">' +
+    '<field name="BOOL">TRUE</field>' +
+    '</block>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.Nested = new SerializerTestCase(
+    'Nested',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_repeat_ext" id="id" x="42" y="42">' +
+    '<statement name="DO">' +
+    '<shadow type="controls_repeat_ext" id="id2">' +
+    '<statement name="DO">' +
+    '<shadow type="text_print" id="id3"></shadow>' +
+    '</statement>' +
+    '</shadow>' +
+    '<block type="text_print" id="id3"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.Stack = new SerializerTestCase('Stack',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_print" id="id" x="42" y="42">' +
+    '<next>' +
+    '<block type="text_print" id="id3"></block>' +
+    '<shadow type="text_print" id="id2">' +
+    '<next>' +
+    '<shadow type="text_print" id="id3"></shadow>' +
+    '</next>' +
+    '</shadow>' +
+    '</next>' +
+    '</block>' +
+    '</xml>');
+Serializer.Connections.OverwrittenShadow.testCases = [
+  Serializer.Connections.OverwrittenShadow.Value,
+  Serializer.Connections.OverwrittenShadow.Statement,
+  Serializer.Connections.OverwrittenShadow.Next,
+  Serializer.Connections.OverwrittenShadow.Row,
+  Serializer.Connections.OverwrittenShadow.Nested,
+  Serializer.Connections.OverwrittenShadow.Stack,
+];
+
+Serializer
+
 Serializer.Connections.testSuites = [
   Serializer.Connections.Child,
   Serializer.Connections.Shadow,
+  Serializer.Connections.OverwrittenShadow,
 ];
 
 Serializer.testSuites = [

@@ -1183,11 +1183,355 @@ Serializer.Connections.testSuites = [
   Serializer.Connections.OverwrittenShadow,
 ];
 
+Serializer.Mutations = new SerializerTestSuite('Mutations');
+
+Serializer.Mutations.ControlsIf = new SerializerTestSuite('ControlsIf');
+Serializer.Mutations.ControlsIf.NoMutation = new SerializerTestCase(
+    'NoMutation',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42"></block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.ElseIfAndElse = new SerializerTestCase(
+    'ElseIfAndElse',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="1" else="1"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.MultipleElseIfs = new SerializerTestCase(
+    'MultipleElseIfs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="3"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.MutlipleElseIfsAndElse = new SerializerTestCase(
+    'MutlipleElseIfsAndElse',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="3" else="1"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.testCases = [
+  Serializer.Mutations.ControlsIf.NoMutation,
+  Serializer.Mutations.ControlsIf.ElseIfAndElse,
+  Serializer.Mutations.ControlsIf.MultipleElseIfs,
+  Serializer.Mutations.ControlsIf.MutlipleElseIfsAndElse,
+];
+
+Serializer.Mutations.ControlsIf.ElseIf = new SerializerTestSuite('ElseIf');
+Serializer.Mutations.ControlsIf.ElseIf.NoChild= new SerializerTestCase(
+    'NoChild',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="1"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.ElseIf.Child = new SerializerTestCase(
+    'Child',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="1"></mutation>' +
+    '<statement name="DO1">' +
+    '<block type="text_print" id="id2"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.ElseIf.Shadow = new SerializerTestCase(
+    'Shadow',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="1"></mutation>' +
+    '<statement name="DO1">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.ElseIf.OverwrittenShadow = new SerializerTestCase(
+    'OverwrittenShadow',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation elseif="1"></mutation>' +
+    '<statement name="DO1">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '<block type="text_print" id="id3"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.ElseIf.testCases = [
+  Serializer.Mutations.ControlsIf.ElseIf.NoChild,
+  Serializer.Mutations.ControlsIf.ElseIf.Child,
+  Serializer.Mutations.ControlsIf.ElseIf.Shadow,
+  Serializer.Mutations.ControlsIf.ElseIf.OverwrittenShadow,
+];
+
+Serializer.Mutations.ControlsIf.Else= new SerializerTestSuite('Else');
+Serializer.Mutations.ControlsIf.Else.NoChild= new SerializerTestCase(
+    'NoChild',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation else="1"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.Else.Child = new SerializerTestCase(
+    'Child',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation else="1"></mutation>' +
+    '<statement name="ELSE">' +
+    '<block type="text_print" id="id2"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.Else.Shadow = new SerializerTestCase(
+    'Shadow',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation else="1"></mutation>' +
+    '<statement name="ELSE">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.Else.OverwrittenShadow = new SerializerTestCase(
+    'OverwrittenShadow',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="controls_if" id="id" x="42" y="42">' +
+    '<mutation else="1"></mutation>' +
+    '<statement name="ELSE">' +
+    '<shadow type="text_print" id="id2"></shadow>' +
+    '<block type="text_print" id="id3"></block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ControlsIf.Else.testCases = [
+  Serializer.Mutations.ControlsIf.Else.NoChild,
+  Serializer.Mutations.ControlsIf.Else.Child,
+  Serializer.Mutations.ControlsIf.Else.Shadow,
+  Serializer.Mutations.ControlsIf.Else.OverwrittenShadow,
+];
+
+Serializer.Mutations.ControlsIf.testSuites = [
+  Serializer.Mutations.ControlsIf.ElseIf,
+  Serializer.Mutations.ControlsIf.Else,
+];
+
+Serializer.Mutations.ListCreate = new SerializerTestSuite('ListCreate');
+Serializer.Mutations.ListCreate.Default= new SerializerTestCase(
+    'Default',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="3"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.ZeroInputs = new SerializerTestCase(
+    'ZeroInputs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="0"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.MultipleInputs = new SerializerTestCase(
+    'MultipleInputs',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="10"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.testCases = [
+  Serializer.Mutations.ListCreate.Default,
+  Serializer.Mutations.ListCreate.ZeroInputs,
+  Serializer.Mutations.ListCreate.MultipleInputs,
+];
+
+Serializer.Mutations.ListCreate.OneInput = new SerializerTestSuite('OneIput');
+Serializer.Mutations.ListCreate.OneInput.NoChild= new SerializerTestCase(
+    'NoChild',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="1"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.OneInput.Child = new SerializerTestCase(
+    'Child',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="1"></mutation>' +
+    '<value name="ADD0">' +
+    '<block type="math_random_float" id="id2"></block>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.OneInput.Shadow = new SerializerTestCase(
+    'Shadow',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_create_with" id="id" x="42" y="42">' +
+    '<mutation items="1"></mutation>' +
+    '<value name="ADD0">' +
+    '<shadow type="math_random_float" id="id2"></shadow>' +
+    '</value>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListCreate.OneInput.OverwrittenShadow =
+    new SerializerTestCase(
+        'OverwrittenShadow',
+        '<xml xmlns="https://developers.google.com/blockly/xml">' +
+        '<block type="lists_create_with" id="id" x="42" y="42">' +
+        '<mutation items="1"></mutation>' +
+        '<value name="ADD0">' +
+        '<shadow type="math_random_float" id="id2"></shadow>' +
+        '<block type="math_random_float" id="id3"></block>' +
+        '</value>' +
+        '</block>' +
+        '</xml>');
+Serializer.Mutations.ListCreate.OneInput.testCases = [
+  Serializer.Mutations.ListCreate.OneInput.NoChild,
+  Serializer.Mutations.ListCreate.OneInput.Child,
+  Serializer.Mutations.ListCreate.OneInput.Shadow,
+  Serializer.Mutations.ListCreate.OneInput.OverwrittenShadow,
+];
+
+Serializer.Mutations.ListCreate.testSuites = [
+  Serializer.Mutations.ListCreate.OneInput
+];
+
+Serializer.Mutations.Procedure = new SerializerTestSuite('Procedure');
+Serializer.Mutations.Procedure.NoMutation = new SerializerTestCase('NoMutation',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">do something</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Variables = new SerializerTestCase('Variables',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<variables>' +
+    '<variable id="aaaaaaaaaaaaaaaaaaaa">x</variable>' +
+    '<variable id="bbbbbbbbbbbbbbbbbbbb">y</variable>' +
+    '<variable id="cccccccccccccccccccc">z</variable>' +
+    '</variables>' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<mutation>' +
+    '<arg name="x" varid="aaaaaaaaaaaaaaaaaaaa"></arg>' +
+    '<arg name="y" varid="bbbbbbbbbbbbbbbbbbbb"></arg>' +
+    '<arg name="z" varid="cccccccccccccccccccc"></arg>' +
+    '</mutation>' +
+    '<field name="NAME">do something</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.NoStatements = new SerializerTestCase(
+    'NoStatements',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<mutation statements="false"></mutation>' +
+    '<field name="NAME">do something</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.testCases = [
+  Serializer.Mutations.Procedure.NoMutation,
+  Serializer.Mutations.Procedure.Variables,
+  Serializer.Mutations.Procedure.NoStatements,
+];
+
+Serializer.Mutations.Procedure.Names = new SerializerTestSuite('Names');
+Serializer.Mutations.Procedure.Names.Symbols = new SerializerTestCase('Symbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">~`!@#$%^*()_+-={[}]|\\:;,.?/</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.EscapedSymbols = new SerializerTestCase(
+    'EscapedSymbols',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">&amp;&lt;&gt;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.SingleQuotes = new SerializerTestCase(
+    'SingleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">\'test\'</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.DoubleQuotes = new SerializerTestCase(
+    'DoubleQuotes',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">"test"</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.Numbers = new SerializerTestCase(
+    'Numbers',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">1234567890a123a123a</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.Emoji = new SerializerTestCase(
+    'Emoji',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">😀👋🏿👋🏾👋🏽👋🏼👋🏻😀❤❤❤</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.Russian = new SerializerTestCase(
+    'Russian',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">ты любопытный кот</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.Japanese = new SerializerTestCase(
+    'Japanese',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">あなたは好奇心旺盛な猫です</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.Zalgo = new SerializerTestCase(
+    'Zalgo',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">z̴̪͈̲̜͕̽̈̀͒͂̓̋̉̍a̸̧̧̜̻̘̤̫̱̲͎̞̻͆̋ļ̸̛̖̜̳͚̖͔̟̈́͂̉̀͑̑͑̎ǵ̸̫̳̽̐̃̑̚̕o̶͇̫͔̮̼̭͕̹̘̬͋̀͆̂̇̋͊̒̽</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.ControlChars = new SerializerTestCase(
+    'ControlChars',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">&#x01;&#xa1;</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Names.testCases = [
+  Serializer.Icons.Comment.Text.Symbols,
+  Serializer.Icons.Comment.Text.EscapedSymbols,
+  Serializer.Icons.Comment.Text.SingleQuotes,
+  Serializer.Icons.Comment.Text.DoubleQuotes,
+  Serializer.Icons.Comment.Text.Numbers,
+  Serializer.Icons.Comment.Text.Emoji,
+  Serializer.Icons.Comment.Text.Russian,
+  Serializer.Icons.Comment.Text.Japanese,
+  Serializer.Icons.Comment.Text.Zalgo,
+  // TODO: Uncoment once #4945 is merged.
+  // Serializer.Icons.Comment.Text.ControlChars,
+];
+
+Serializer.Mutations.Procedure.testSuites = [
+  Serializer.Mutations.Procedure.Names,
+];
+
+Serializer.Mutations.testSuites = [
+  Serializer.Mutations.ControlsIf,
+  Serializer.Mutations.ListCreate,
+  Serializer.Mutations.Procedure,
+];
+
 Serializer.testSuites = [
   Serializer.Attributes,
   Serializer.Fields,
   Serializer.Icons,
   Serializer.Connections,
+  Serializer.Mutations,
 ];
 
 var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
@@ -1211,8 +1555,7 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
     return createTestFunction(suiteOrTest);
   };
 
-  // TODO: Fix after this method is being exported.
-  // testHelpers.runTestSuites([testSuite], createTestFunction);
+  // TODO: Fix after suites method is being exported.
   var runTests = function(suite) {
     if (suite.testSuites && suite.testSuites.length) {
       suite.testSuites.forEach(runTests);
@@ -1232,6 +1575,9 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
     });
 
     runTests(testSuite);
+    // TODO: Fix after this method is being exported.
+    //testHelpers.runTestSuites(testSuite.testSuites, createSuiteOrTestFunction);
+    //testHelpers.runTestCases(testSuite.testCases, createTestFunction);
   });
 };
 

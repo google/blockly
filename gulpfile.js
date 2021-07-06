@@ -22,6 +22,7 @@ var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
   deployDemos: appengineTasks.deployDemos,
+  deployDemosBeta: appengineTasks.deployDemosBeta,
   default: buildTasks.build,
   build: buildTasks.build,
   buildCore: buildTasks.core,

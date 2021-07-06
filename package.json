@@ -30,6 +30,7 @@
     "build:uncompressed": "gulp buildUncompressed",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "deployDemos": "gulp deployDemos",
+    "deployDemos:beta": "gulp deployDemosBeta",
     "format": "git-clang-format",
     "format:sortrequires": "gulp sortRequires",
     "license": "gulp checkLicenses",

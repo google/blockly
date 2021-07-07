@@ -19,17 +19,10 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var {getPackageJson} = require('./helper_tasks');
-var {RELEASE_DIR} = require('./config');
+var {BUILD_DIR, RELEASE_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
-
-// Path from which to pull files to package.
-//
-// TODO(cpcallen): Use BUILD_DIR from config.js once release_tasks are
-// updated to do build-package-release all in one go, instead of doing
-// build-checkin and then package-release as separate steps.
-var BUILD_DIR = '.';
 
 /**
  * A helper method for wrapping a file into a Universal Module Definition.
@@ -58,6 +51,41 @@ function packageCommonJS(namespace, dependencies) {
     template: path.join(TEMPLATE_DIR, 'node.template')
   });
 };
+
+// Sanity check that the BUILD_DIR directory exists, and that certain
+// files are in it.
+function checkBuildDir(done) {
+  // Check that directory exists.
+  if (!fs.existsSync(BUILD_DIR)) {
+    done(new Error(`The ${BUILD_DIR} directory does not exist.  ` +
+        'Have both packageTasks.build and typingsTasks.typings been run?'));
+    return;
+  }
+  // Check files built by buildTasks.build exist in BUILD_DIR.
+  for (const fileName of [
+    'blockly_compressed.js',  // buildTasks.buildCompressed
+    'blocks_compressed.js',  // buildTasks.buildBlocks
+    'javascript_compressed.js',  // buildTasks.buildGenerators
+    'msg/js/en.js',  // buildTaks.buildLangfiles
+  ]) {
+    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
+      done(new Error(
+          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
+          'Has packageTasks.build been run?  Try "npm run build".'));
+      return;
+    }
+  }
+  // Check files built by typings.typings exist in BUILD_DIR.
+  for (const fileName of ['blockly.d.ts', 'msg/en.d.ts']) {
+    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
+      done(new Error(
+          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
+          'Has typings.typings been run?  Try "npm run typings".'));
+      return;
+    }
+  }
+  done();
+}
 
 /**
  * This task copies source files into the release directory.
@@ -321,7 +349,7 @@ function packageLocales() {
 function packageUMDBundle() {
   var srcs = [
     `${BUILD_DIR}/blockly_compressed.js`,
-    'msg/js/en.js',
+    `${BUILD_DIR}/msg/js/en.js`,
     `${BUILD_DIR}/blocks_compressed.js`,
     `${BUILD_DIR}/javascript_compressed.js`,
   ];
@@ -360,7 +388,7 @@ function packageJSON(cb) {
  */
 function packageReadme() {
   return gulp.src('scripts/package/README.md')
-    .pipe(gulp.dest(`${RELEASE_DIR}`));
+    .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -369,9 +397,18 @@ function packageReadme() {
  * referenced in package.json in the types property.
  */
 function packageDTS() {
-  return gulp.src(['typings/*.d.ts', 'typings/msg/*.d.ts'],
-                  {base: './typings'})
-    .pipe(gulp.dest(`${RELEASE_DIR}`));
+  const handwrittenSrcs = [
+    'typings/*.d.ts',
+    '!typings/blockly.d.ts',  // Exclude checked-in copy of blockly.d.ts.
+    'typings/msg/msg.d.ts',
+  ];
+  const builtSrcs = [
+    `${BUILD_DIR}/blockly.d.ts`,  // Use freshly-built one instead.
+    `${BUILD_DIR}/msg/*.d.ts`,
+  ];
+  return gulp.src(handwrittenSrcs, {base: 'typings'})
+      .pipe(gulp.src(builtSrcs, {base: BUILD_DIR}))
+      .pipe(gulp.dest(RELEASE_DIR));
 };
 
 /**
@@ -390,6 +427,7 @@ function cleanReleaseDir(done) {
  * them into the release directory.
  */
 const package = gulp.series(
+    checkBuildDir,
     cleanReleaseDir,
     gulp.parallel(
         packageIndex,

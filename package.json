@@ -42,7 +42,6 @@
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
-    "prepare": "npm run package",
     "publish": "gulp publish",
     "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",

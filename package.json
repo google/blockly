@@ -44,7 +44,8 @@
     "test:generators": "tests/scripts/run_generators.sh",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
-    "updateGithubPages": "gulp gitUpdateGithubPages"
+    "updateGithubPages": "gulp gitUpdateGithubPages",
+    "contributors": "gulp contributors"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",
@@ -89,6 +90,8 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "15.2.1"
+    "jsdom": "15.2.1",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2"
   }
 }

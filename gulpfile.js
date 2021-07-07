@@ -21,6 +21,7 @@ var releaseTasks = require('./scripts/gulpfiles/release_tasks');
 var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
+  contributors: releaseTasks.contributors,
   deployDemos: appengineTasks.deployDemos,
   default: buildTasks.build,
   build: buildTasks.build,

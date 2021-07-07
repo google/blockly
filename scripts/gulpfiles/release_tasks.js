@@ -11,6 +11,8 @@
 var execSync = require('child_process').execSync;
 var fs = require('fs');
 var gulp = require('gulp');
+//var request = require('request');
+var fetch = require('node-fetch');
 var readlineSync = require('readline-sync');
 var typings = require('./typings');
 
@@ -144,6 +146,94 @@ function updateBetaVersion(done) {
   done();
 }
 
+function getContributors(done) {
+  /*var options = {
+    url: 'https://api.github.com/search/issues?q=repo:google/blockly+is:issue',
+    headers: {
+      'User-Agent': 'BeksOmega'
+    }
+  }
+
+  function callback(error, response, body) {
+    console.log('test');
+    //console.log(response);
+    console.log(JSON.parse(body));
+    done();
+  }
+
+  return request(options, callback);*/
+
+  const openSource = {
+    githubConvertedToken: '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',
+    githubUserName: 'BeksOmega'
+  }
+
+  function makeQuery(cursor) {
+    return {
+      query: `
+        query {
+          repository(name: "blockly", owner: "google"){
+            pullRequests(first: 100, baseRefName: "develop",
+                ${cursor ? 'after: ' + cursor : ''}
+                orderBy: {direction: DESC, field: CREATED_AT},
+                states: [OPEN, MERGED]) {
+              nodes{
+                author{
+                  login
+                }
+                createdAt
+                title
+                url
+              }
+              pageInfo{
+                endCursor
+              }
+            }
+          }
+        }
+      `,
+    };
+  } 
+
+  const baseUrl = "https://api.github.com/graphql";
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "bearer " + openSource.githubConvertedToken,
+  };
+
+  const goalDate = Date.parse('2021-03-01');
+  console.log(goalDate);
+  let cursor = '';
+  let reachedEnd = false;
+  while(!reachedEnd) {
+    fetch(baseUrl, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(makeQuery(cursor)),
+    })
+      .then((response) => response.text())
+      .then((text) => {
+        console.log('test');
+        const response = JSON.parse(text);
+        cursor = response.data.repository.pullRequests.pageInfo.endCursor;
+        const pulls = response.data.repository.pullRequests.nodes;
+        for (let i = 0; i < pulls.length; i++) {
+          const createdDate = Date.parse(pulls[i].createdAt);
+          console.log(createdDate);
+          if (createdDate < goalDate) {
+            reachedEnd = true;
+            break;
+          }
+        }
+      })
+      .catch((error) => console.log(JSON.stringify(error)));
+  }
+  done();
+}
+
+const contributors = gulp.series(getContributors);
+
 // Package and publish to npm.
 const publish = gulp.series(
   packageTasks.package,
@@ -175,5 +265,6 @@ const recompile = gulp.series(
 module.exports = {
   recompile: recompile,
   publishBeta: publishBeta,
-  publish: publish
+  publish: publish,
+  contributors: contributors,
 }

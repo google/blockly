@@ -2225,9 +2225,10 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   this.scale = newScale;
 
   Blockly.hideChaff(false);
-  if (this.flyout_) {
-    // No toolbox, resize flyout.
-    this.flyout_.reflow();
+  // Get the flyout, if any, whether our own or owned by the toolbox.
+  var flyout = this.getFlyout(false);
+  if (flyout && flyout.isVisible()) {
+    flyout.reflow();
     this.recordDragTargets();
   }
   if (this.grid_) {

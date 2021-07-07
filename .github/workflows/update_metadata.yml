@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Check Out Blockly
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         ref: 'develop'
 

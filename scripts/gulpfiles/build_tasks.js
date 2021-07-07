@@ -547,7 +547,9 @@ const build = gulp.parallel(
 function checkinBuilt() {
   return gulp.src([
     `${BUILD_DIR}/**.js`,
+    `${BUILD_DIR}/**.js.map`,
     `${BUILD_DIR}/**/**.js`,
+    `${BUILD_DIR}/**/**.js.map`,
   ]).pipe(gulp.dest('.'));
 };
 

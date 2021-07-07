@@ -36,4 +36,4 @@ jobs:
         title: Updated build artifact sizes in check_metadata.sh
 
     - name: View Pull Request
-      run: echo "View Pull Request: ${{ steps.cpr.outputs.pull-request-url }}"
+      run: echo "View Pull Request - ${{ steps.cpr.outputs.pull-request-url }}"

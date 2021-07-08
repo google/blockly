@@ -14,7 +14,7 @@ var path = require('path');
 // trailing slash.
 module.exports = {
   // Directory to write compiled output to.
-  BUILD_DIR: 'built',
+  BUILD_DIR: 'build',
 
   // Directory in which to assemble (and from which to publish) the
   // blockly npm package.

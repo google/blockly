@@ -11,78 +11,147 @@
 var gulp = require('gulp');
 var fetch = require('node-fetch');
 
-async function getContributors(done) {
-  githubToken = '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';
+const baseUrl = "https://api.github.com/graphql";
 
-  function makeQuery(cursor) {
-    return {
-      query: `
-        query {
-          repository(name: "blockly", owner: "google"){
-            pullRequests(first: 100, baseRefName: "develop",
-                ${cursor ? `after: "${cursor}"` : ''}
-                orderBy: {direction: DESC, field: CREATED_AT},
-                states: [OPEN, MERGED]) {
-              nodes{
-                author{
-                  login
-                }
-                createdAt
-                title
-                url
-              }
-              pageInfo{
-                endCursor
-              }
-            }
-          }
-        }
-      `,
-    };
-  } 
-
-  const baseUrl = "https://api.github.com/graphql";
-
+async function generateReleaseNotes(done) {
+  const goalDate = Date.parse('2021-03-01');
+  const githubToken = process.argv[4];
   const headers = {
     "Content-Type": "application/json",
     Authorization: "bearer " + githubToken,
   };
 
-  const goalDate = Date.parse('2021-03-01');
+
+  var note = `{Insert greeting},
+
+The {Insert Month and Year} release is out! In this release:
+
+{List major features in both core and samples}
+
+🎉 **Kudos** 🎉
+{Thank forums contributors and issue filers}
+
+**Third Party Plugins**
+{List third party plugins that have been released in the last quarter}
+
+**Core contributions**
+{Reorganize into thank-yous}
+${await getContributors('blockly', goalDate, headers)}
+
+**Samples contributions**
+{Reorganize into thank-yous}
+${await getContributors('blockly-samples', goalDate, headers)}
+
+🔨 **Breaking Changes in core** 🔨 
+${await getBreakingChanges(headers)}
+
+Full release notes are below. As always, we welcome bug reports and pull requests!
+
+Cheers,
+{Your Name}
+
+**Issues Closed**:
+${await getClosedIssues(headers)}
+
+**Pull Requests**:
+${await getMergedPrs(headers)}`;
+
+  console.log(note);
+
+  done();
+}
+
+async function getContributors(repo, headers) {
   let cursor = '';
-  let reachedEnd = false;
-  while(!reachedEnd) {
-      console.log('running');
+  do {
     try {
       const response = await fetch(baseUrl, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify(makeQuery(cursor)),
+        body: makeContributorQuery(repo, cursor),
       });
-      const json = await response.json()
-      if (!json.data) {
-          console.log(json);
-          break;
-      }
-      const pullRequestData = json.data.repository.pullRequests;
+      const json = await response.json();
+
       const pulls = pullRequestData.nodes;
       cursor = pullRequestData.pageInfo.endCursor;
-  
+    
       for (let i = 0; i < pulls.length; i++) {
         const createdDate = Date.parse(pulls[i].createdAt);
         if (createdDate < goalDate) {
-          reachedEnd = true;
+          cursor = '';
           break;
         }
       }
+
     } catch (error) {
         console.log(error);
+        break;
     }
-  }
-  done();
+  } while (cursor);
 }
 
-const contributors = gulp.series(getContributors);
+async function getCollaborators(headers) {
+}
+
+async function getBreakingChanges(headers) {
+  return '';
+}
+
+async function getClosedIssues(headers) {
+  return '';
+}
+
+async function getMergedPrs(headers) {
+  return '';
+}
+
+function makeContributorQuery(repo, cursor) {
+  return JSON.stringify({
+    query: `
+      query {
+        repository(name: "${repo}", owner: "google"){
+          pullRequests(first: 100, baseRefName: "develop",
+              ${cursor ? `after: "${cursor}"` : ''}
+              orderBy: {direction: DESC, field: CREATED_AT},
+              states: [OPEN, MERGED]) {
+            nodes{
+              author{
+                login
+              }
+              createdAt
+              title
+              url
+            }
+            pageInfo{
+              endCursor
+            }
+          }
+        }
+      }
+    `,
+  });
+} 
+
+function makeCollaboratorQuery() {
+  return JSON.stringify({
+    query: `
+      query {
+        repository(name: "blockly", owner: "google"){
+        collaborators(first:100){
+            nodes{
+              login
+            }
+          }
+        }
+      }
+    `,
+  });
+}
+
+function processContributors(goalDate, pullRequestData) {
+}
+
+const contributors = gulp.series(generateReleaseNotes);
 
 module.exports = {
   contributors: contributors,

@@ -151,6 +151,7 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var y = this.getY();
 
   this.positionAt_(this.width_, this.height_, x, y);
+  this.positionContents(Blockly.constants.AXIS.X);
 };
 
 /**
@@ -250,6 +251,23 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
 Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
     this.positionContents(Blockly.constants.AXIS.X);
+    
+    // If we're RTL, rerender the text fields on this block (which were being
+    // edited to trigger this event) to fix their alignment relative to their
+    // parent block, which was just moved in the call to positionContents above.
+    // This avoids the editing field falling out of alignment with the field
+    // rendered on the block itself.
+    if (this.RTL) {
+      var block = this.workspace_.getBlockById(event.blockId);
+      for (var i = 0; i < block.inputList.length; i++) {
+        for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
+          var field = block.inputList[i].fieldRow[j];
+          if (field instanceof Blockly.FieldTextInput) {
+            field.forceRerender();
+          }
+        }
+      }
+    }
   }
 };
 

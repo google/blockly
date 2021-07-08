@@ -124,9 +124,16 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * List of gaps between flyout content items (blocks, buttons, etc).
    * @type {!Array<number>}
-   * @protected
+   * @private
    */
   this.gaps_ = [];
+
+  /**
+   * List of the contents of the flyout (blocks, buttons, etc).
+   * @type {!Array<!Blockly.FlyoutButton|!Blockly.BlockSvg>}
+   * @private
+   */
+  this.contents_ = [];
 
   /**
    * List of event listeners.
@@ -391,56 +398,40 @@ Blockly.Flyout.prototype.getWorkspace = function() {
 };
 
 /**
- * Retrieves all the blocks and buttons in the flyout.
- * @param {!Blockly.constants.AXIS} primaryAxis The axis content is positioned
- * along.
- * @returns {!Array<Blockly.FlyoutButton|Blockly.BlockSvg>} An array of all of
- * the blocks and buttons in the flyout in the same order as their visual
- * representations.
- */
-Blockly.Flyout.prototype.getContents_ = function(primaryAxis) {
-  var blocks = this.workspace_.getTopBlocks(false);
-  var buttons = Array.from(this.buttons_);
-  var contents = [];
-  while (blocks.length || buttons.length) {
-    if (!blocks.length) {
-      contents = contents.concat(buttons);
-      break;
-    } else if (!buttons.length) {
-      contents = contents.concat(blocks);
-      break;
-    }
-
-    var blockPosition = blocks[0].getRelativeToSurfaceXY();
-    var buttonPosition = buttons[0].getPosition();
-
-    if ((primaryAxis === Blockly.constants.AXIS.X &&
-      blockPosition.x < buttonPosition.x) ||
-      (primaryAxis === Blockly.constants.AXIS.Y &&
-        blockPosition.y < buttonPosition.y)) {
-      contents.push(blocks.shift());
-    } else {
-      contents.push(buttons.shift());
-    }
-  }
-
-  return contents;
-};
-
-/**
  * Respositions the blocks, buttons and labels in the flyout based on their
  * current dimensions and order.
  * @param {!Blockly.constants.AXIS} primaryAxis The axis to position content
  * along.
  */
 Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
+  this.workspace_.setResizesEnabled(false);
   var margin = this.MARGIN;
   var cursorX = margin + this.tabWidth_;
   var cursorY = margin;
 
-  var contents = this.getContents_(primaryAxis);
+  var contents = Array.from(this.contents_);
+  var gaps = Array.from(this.gaps_);
+  // For RTL in a X axis layout, if the length of the blocks is less than the
+  // width of the flyout, the blocks need to be offset so that they appear
+  // right-aligned. To do so, we calculate the width of the blocks (and offset,
+  // if any) before adjusting the blocks' positions.
   if (this.RTL && primaryAxis === Blockly.constants.AXIS.X) {
-    contents = contents.reverse();
+    contents.reverse();
+    gaps.reverse();
+
+    var contentWidth = cursorX;
+    for (var i = 0, item; (item = contents[i]); i++) {
+      if (item instanceof Blockly.BlockSvg) {
+        contentWidth += item.getHeightWidth().width;
+      } else if (item instanceof Blockly.FlyoutButton) {
+        contentWidth += item.width;
+      }
+      contentWidth += gaps[i];
+    }
+    var delta = this.getWidth() - contentWidth;
+    if (delta > 0) {
+      cursorX += delta;
+    }
   }
 
   // Delete all the event listeners.
@@ -481,13 +472,14 @@ Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
 
     switch (primaryAxis) {
       case Blockly.constants.AXIS.X:
-        cursorX += dimensions.width + this.gaps_[i];
+        cursorX += dimensions.width + gaps[i];
         break;
       case Blockly.constants.AXIS.Y:
-        cursorY += dimensions.height + this.gaps_[i];
+        cursorY += dimensions.height + gaps[i];
         break;
     }
   }
+  this.workspace_.setResizesEnabled(true);
 };
 
 /**
@@ -841,6 +833,7 @@ Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) 
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
+  this.contents_ = [];
   var oldBlocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; (block = oldBlocks[i]); i++) {
     if (block.workspace == this.workspace_) {
@@ -1206,8 +1199,10 @@ Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
       block.render();
       var blockHW = block.getHeightWidth();
       this.createRect_(block, 0, 0, blockHW, i);
+      this.contents_.push(block);
     } else if (item.type == 'button') {
       this.initFlyoutButton_(item.button, 0, 0);
+      this.contents_.push(item.button);
     }
   }
 };

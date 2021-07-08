@@ -745,9 +745,8 @@ Blockly.Block.prototype.setParent = function(newParent) {
     return;
   }
 
-  // Check that block is connected to new parent if new parent is not null.
-  //    After todo is addressed, throw error if block is not disconnected from
-  //    superior block when setting newParent to null.
+  // Check that block is connected to new parent if new parent is not null and
+  //    that block is not connected to superior one if new parent is null.
   var connection = this.previousConnection || this.outputConnection;
   var isConnected = !!(connection && connection.targetBlock());
 

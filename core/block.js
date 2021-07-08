@@ -755,11 +755,9 @@ Blockly.Block.prototype.setParent = function(newParent) {
     throw Error('Block connected to superior one that is not new parent.');
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');
-  } else if (connection && !newParent) {
-    // TODO #4989: Clean up code so that error can be thrown in this case 
-    //     without breaking things.
-    // throw Error('Cannot set parent to null while block is still connected
-    //    to superior block.');
+  } else if (isConnected && !newParent) {
+    throw Error('Cannot set parent to null while block is still connected to'
+        + ' superior block.');
   }
 
   if (this.parentBlock_) {

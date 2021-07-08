@@ -15,12 +15,12 @@ const { setEmitFlags } = require('typescript');
 const baseUrl = "https://api.github.com/graphql";
 
 async function generateReleaseNotes(done) {
-  const goalDate = Date.parse('2021-03-01');
   const githubToken = process.argv[4];
   const headers = {
     "Content-Type": "application/json",
     Authorization: "bearer " + githubToken,
   };
+  const goalDate = await getGoalDate(headers);
 
 
   var note = `{Insert greeting},
@@ -30,18 +30,17 @@ The {Insert Month and Year} release is out! In this release:
 {List major features in both core and samples}
 
 🎉 **Kudos** 🎉
-{Thank forums contributors and issue filers}
 
 **Third Party Plugins**
 {List third party plugins that have been released in the last quarter
  See internal: docs.google.com/document/d/1rhhmKyivKHeLKT_2ZkI5hjc37mqyEBSUINr0hvouqxU/edit#heading=h.racwemyaxdb}
 
 **Core contributions**
-{Reorganize into thank-yous}
+{Reorganize into kudos}
 ${await getContributors('blockly', 'develop', goalDate, headers)}
 
 **Samples contributions**
-{Reorganize into thank-yous}
+{Reorganize into kudos}
 ${await getContributors('blockly-samples', 'master', goalDate, headers)}
 
 🔨 **Breaking Changes in core** 🔨 
@@ -51,7 +50,7 @@ ${await getBreakingChanges(goalDate, headers)}
 Full release notes are below. As always, we welcome bug reports and pull requests!
 
 Cheers,
-{Your Name}
+{Insert Your Name}
 
 **Issues Closed**:
 ${await getClosedIssues(headers)}
@@ -62,6 +61,27 @@ ${await getMergedPrs(headers)}`;
   console.log(note);
 
   done();
+}
+
+async function getGoalDate(headers) {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: headers,
+      body: makeReleaseQuery(),
+    });
+    const json = await response.json();
+    const releases = json.data.repository.releases.nodes;
+    let latestTag = releases[0].tagName;
+    latestTag = latestTag.substring(0, latestTag.lastIndexOf('.'));
+    for (let release of releases) {
+      let tag = release.
+      if (release)
+    })
+  } catch (error) {
+    console.log(error);
+  }
+  return Number.MAX_VALUE;
 }
 
 async function getContributors(repo, baseRef, goalDate, headers) {
@@ -167,6 +187,24 @@ async function getClosedIssues(headers) {
 
 async function getMergedPrs(headers) {
   return '';
+}
+
+function makeReleaseQuery() {
+  // Hopefully we never have more than 20 patch releases.
+  return JSON.stringify({
+    query: `
+      query {
+        repository(name: "blockly", owner: "google"){
+          releases(first: 20, orderBy: {direction: DESC, field: CREATED_AT}){
+            nodes{
+              createdAt
+              tagName
+            }
+          }
+        }
+      }
+    `,
+  })
 }
 
 function makeContributorQuery(repo, baseRef, cursor) {

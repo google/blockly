@@ -18,10 +18,11 @@ var gitTasks = require('./scripts/gulpfiles/git_tasks');
 var licenseTasks = require('./scripts/gulpfiles/license_tasks');
 var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 var releaseTasks = require('./scripts/gulpfiles/release_tasks');
+var releaseNotes = require('./scripts/gulpfiles/release_notes');
 var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
-  contributors: releaseTasks.contributors,
+  contributors: releaseNotes.contributors,
   deployDemos: appengineTasks.deployDemos,
   default: buildTasks.build,
   build: buildTasks.build,

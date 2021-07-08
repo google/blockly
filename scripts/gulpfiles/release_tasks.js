@@ -175,5 +175,5 @@ const recompile = gulp.series(
 module.exports = {
   recompile: recompile,
   publishBeta: publishBeta,
-  publish: publish,
+  publish: publish
 }

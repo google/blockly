@@ -80,6 +80,7 @@
     "gulp-umd": "^2.0.0",
     "js-green-licenses": "^3.0.0",
     "mocha": "^8.1.1",
+    "node-fetch": "^2.6.1",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
     "selenium-standalone": "^7.1.0",
@@ -90,8 +91,6 @@
     "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "15.2.1",
-    "node-fetch": "^2.6.1",
-    "request": "^2.88.2"
+    "jsdom": "15.2.1"
   }
 }

@@ -10,6 +10,7 @@
 
 var gulp = require('gulp');
 var fetch = require('node-fetch');
+const { setEmitFlags } = require('typescript');
 
 const baseUrl = "https://api.github.com/graphql";
 
@@ -32,18 +33,20 @@ The {Insert Month and Year} release is out! In this release:
 {Thank forums contributors and issue filers}
 
 **Third Party Plugins**
-{List third party plugins that have been released in the last quarter}
+{List third party plugins that have been released in the last quarter
+ See internal: docs.google.com/document/d/1rhhmKyivKHeLKT_2ZkI5hjc37mqyEBSUINr0hvouqxU/edit#heading=h.racwemyaxdb}
 
 **Core contributions**
-{Reorganize into thank-yous and check for missed people}
+{Reorganize into thank-yous}
 ${await getContributors('blockly', 'develop', goalDate, headers)}
 
 **Samples contributions**
-{Reorganize into thank-yous and check for missed people}
+{Reorganize into thank-yous}
 ${await getContributors('blockly-samples', 'master', goalDate, headers)}
 
 🔨 **Breaking Changes in core** 🔨 
-${await getBreakingChanges(headers)}
+{Replace title with what changed}
+${await getBreakingChanges(goalDate, headers)}
 
 Full release notes are below. As always, we welcome bug reports and pull requests!
 
@@ -110,8 +113,7 @@ async function getContributors(repo, baseRef, goalDate, headers) {
   for (let [name, contributions] of contributors) {
     notes += `* ${name}\n`;
     for (let contribution of contributions) {
-      let {title, url, number} = contribution;
-      notes += `  * ([#${number}](${url})) ${title}\n`;
+      notes += `  * ${formatPull(contribution)}\n`;
     }
   }
   return notes;
@@ -132,11 +134,31 @@ async function getCollaborators(repo, headers) {
   } catch (error) {
     console.log(error);
   }
-  return '';
+  return new Set();
 }
 
-async function getBreakingChanges(headers) {
-  return '';
+async function getBreakingChanges(goalDate, headers) {
+  let notes = '';
+
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: headers,
+      body: makeApiChangeQuery(),
+    });
+    const json = await response.json();      
+    for (let pull of json.data.repository.pullRequests.nodes) {        
+      const createdDate = Date.parse(pull.createdAt);
+      if (createdDate < goalDate) {
+        cursor = '';
+        break;
+      }
+      notes += `* ${formatPull(pull)}\n`
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return notes;
 }
 
 async function getClosedIssues(headers) {
@@ -191,7 +213,31 @@ function makeCollaboratorQuery(repo) {
   });
 }
 
-function processContributors(goalDate, pullRequestData) {
+function makeApiChangeQuery() {
+  // Hopefully we will never need to get more than 100 of these.
+  return JSON.stringify({
+    query: `
+      query {
+        repository(name: "blockly", owner: "google"){
+          pullRequests(first: 100, baseRefName: "develop",
+              orderBy: {direction: DESC, field: CREATED_AT},
+              states: [MERGED]
+              labels: ["api_change"]){
+            nodes{
+              createdAt
+              title
+              url
+              number
+            }
+          }
+        }
+      }
+    `,
+  });
+}
+
+function formatPull({title, url, number}) {
+  return `([#${number}](${url})) ${title}`;
 }
 
 const contributors = gulp.series(generateReleaseNotes);

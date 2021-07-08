@@ -741,21 +741,34 @@ Blockly.Block.prototype.getChildren = function(ordered) {
  * @param {Blockly.Block} newParent New parent block.
  */
 Blockly.Block.prototype.setParent = function(newParent) {
-  if (newParent == this.parentBlock_) {
+  if (newParent === this.parentBlock_) {
     return;
   }
+
+  // Check that block is connected to new parent if new parent is not null.
+  //    After todo is addressed, throw error if block is not disconnected from
+  //    superior block when setting newParent to null. 
+  var connection = this.previousConnection || this.outputConnection;
+  var isConnected = !!(connection && connection.targetBlock());
+
+  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+    throw Error('Block connected to superior one that is not new parent.');
+  } else if (!isConnected && newParent) {
+    throw Error('Block not connected to new parent.');
+  } else if (connection && !newParent) {
+    // TODO #4989: Clean up code so that error can be thrown in this case 
+    //     without breaking things.
+    // throw Error('Cannot set parent to null while block is still connected
+    //    to superior block.');
+  }
+
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
     Blockly.utils.arrayRemove(this.parentBlock_.childBlocks_, this);
 
-    // Disconnect from superior blocks.
-    if (this.previousConnection && this.previousConnection.isConnected()) {
-      throw Error('Still connected to previous block.');
-    }
-    if (this.outputConnection && this.outputConnection.isConnected()) {
-      throw Error('Still connected to parent block.');
-    }
+    // Reflect disconnection from superior blocks.
     this.parentBlock_ = null;
+
     // This block hasn't actually moved on-screen, so there's no need to update
     // its connection locations.
   } else {

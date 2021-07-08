@@ -35,12 +35,12 @@ The {Insert Month and Year} release is out! In this release:
 {List third party plugins that have been released in the last quarter}
 
 **Core contributions**
-{Reorganize into thank-yous}
-${await getContributors('blockly', goalDate, headers)}
+{Reorganize into thank-yous and check for missed people}
+${await getContributors('blockly', 'develop', goalDate, headers)}
 
 **Samples contributions**
-{Reorganize into thank-yous}
-${await getContributors('blockly-samples', goalDate, headers)}
+{Reorganize into thank-yous and check for missed people}
+${await getContributors('blockly-samples', 'master', goalDate, headers)}
 
 🔨 **Breaking Changes in core** 🔨 
 ${await getBreakingChanges(headers)}
@@ -61,35 +61,60 @@ ${await getMergedPrs(headers)}`;
   done();
 }
 
-async function getContributors(repo, goalDate, headers) {
+async function getContributors(repo, baseRef, goalDate, headers) {
   const collaborators = await getCollaborators(repo, headers);
 
   let cursor = '';
+  const contributors = new Map();
   do {
     try {
       const response = await fetch(baseUrl, {
         method: "POST",
         headers: headers,
-        body: makeContributorQuery(repo, cursor),
+        body: makeContributorQuery(repo, baseRef, cursor),
       });
       const json = await response.json();
-
+      const pullRequestData = json.data.repository.pullRequests;
       const pulls = pullRequestData.nodes;
       cursor = pullRequestData.pageInfo.endCursor;
     
       for (let i = 0; i < pulls.length; i++) {
-        const createdDate = Date.parse(pulls[i].createdAt);
+        const pull = pulls[i];
+        const createdDate = Date.parse(pull.createdAt);
         if (createdDate < goalDate) {
           cursor = '';
           break;
         }
+
+        if (collaborators.has(pull.author.login)) {
+          continue;
+        }
+        let contributions = contributors.get(pull.author.login);
+        if (!contributions) {
+          contributions = [];
+          contributors.set(pull.author.login, contributions);
+        }
+        contributions.push({
+          title: pull.title,
+          url: pull.url,
+          number: pull.number
+        })
       }
 
     } catch (error) {
         console.log(error);
-        break;
     }
   } while (cursor);
+
+  let notes = '';
+  for (let [name, contributions] of contributors) {
+    notes += `* ${name}\n`;
+    for (let contribution of contributions) {
+      let {title, url, number} = contribution;
+      notes += `  * ([#${number}](${url})) ${title}\n`;
+    }
+  }
+  return notes;
 }
 
 async function getCollaborators(repo, headers) {
@@ -100,10 +125,12 @@ async function getCollaborators(repo, headers) {
       body: makeCollaboratorQuery(repo),
     });
     const json = await response.json();
-    console.log(json);
+    const collaborators =  json.data.repository.collaborators.nodes
+        .map((node) => node.login);
+    collaborators.push('dependabot');
+    return new Set(collaborators);
   } catch (error) {
     console.log(error);
-    break;
   }
   return '';
 }
@@ -120,12 +147,12 @@ async function getMergedPrs(headers) {
   return '';
 }
 
-function makeContributorQuery(repo, cursor) {
+function makeContributorQuery(repo, baseRef, cursor) {
   return JSON.stringify({
     query: `
       query {
         repository(name: "${repo}", owner: "google"){
-          pullRequests(first: 100, baseRefName: "develop",
+          pullRequests(first: 100, baseRefName: "${baseRef}",
               ${cursor ? `after: "${cursor}"` : ''}
               orderBy: {direction: DESC, field: CREATED_AT},
               states: [OPEN, MERGED]) {
@@ -136,6 +163,7 @@ function makeContributorQuery(repo, cursor) {
               createdAt
               title
               url
+              number
             }
             pageInfo{
               endCursor
@@ -151,7 +179,7 @@ function makeCollaboratorQuery(repo) {
   return JSON.stringify({
     query: `
       query {
-        repository(name: "blockly", owner: "google"){
+        repository(name: "${repo}", owner: "google"){
         collaborators(first:100){
             nodes{
               login

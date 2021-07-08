@@ -61,7 +61,9 @@ ${await getMergedPrs(headers)}`;
   done();
 }
 
-async function getContributors(repo, headers) {
+async function getContributors(repo, goalDate, headers) {
+  const collaborators = await getCollaborators(repo, headers);
+
   let cursor = '';
   do {
     try {
@@ -90,7 +92,20 @@ async function getContributors(repo, headers) {
   } while (cursor);
 }
 
-async function getCollaborators(headers) {
+async function getCollaborators(repo, headers) {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: headers,
+      body: makeCollaboratorQuery(repo),
+    });
+    const json = await response.json();
+    console.log(json);
+  } catch (error) {
+    console.log(error);
+    break;
+  }
+  return '';
 }
 
 async function getBreakingChanges(headers) {
@@ -132,7 +147,7 @@ function makeContributorQuery(repo, cursor) {
   });
 } 
 
-function makeCollaboratorQuery() {
+function makeCollaboratorQuery(repo) {
   return JSON.stringify({
     query: `
       query {

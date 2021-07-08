@@ -446,7 +446,7 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  // BUG(cpcallen): this probably doesn't work on Windows.
+  // TODO(#5000): does mkidr -p work on Windows?
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
   execSync(`mkdir -p ${outputDir}`, {stdio: 'inherit'});
   

@@ -1,4 +1,4 @@
-# This is a basic workflow to help you get started with Actions
+# Workflow that prepares files and deploys to appengine
 
 name: Deploy to App Engine
 
@@ -7,19 +7,18 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   prepare:
     name: Prepare
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      # When running manually this checks out the master branch.
       - uses: actions/checkout@v2
 
       - name: Prepare demo files
+        # Install all dependencies, then copy all the files needed for demos.
         run: |
           npm install
           npm run prepareDemos
@@ -33,6 +32,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    # The prepare step must succeed for this step to run.
     needs: prepare
     steps:
       - name: Download prepared files
@@ -43,12 +43,12 @@ jobs:
 
       - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v0.2.0
+        # For parameters see:
+        # https://github.com/google-github-actions/deploy-appengine#inputs
         with:
-          deliverables: app.yaml
           working_directory: _deploy/
-          # TODO: Set up project id and credentials secrets
+          deliverables: app.yaml
           project_id: ${{ secrets.GCP_PROJECT }}
           credentials: ${{ secrets.GCP_SA_KEY }}
           promote: false
-          # TODO: Generate a version string based on package.json
           version: vtest

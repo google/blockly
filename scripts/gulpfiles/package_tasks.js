@@ -19,7 +19,7 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var {getPackageJson} = require('./helper_tasks');
-var {BUILD_DIR, RELEASE_DIR} = require('./config');
+var {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
 // Path to template files for gulp-umd.
 const TEMPLATE_DIR = 'scripts/package/templates';
@@ -77,9 +77,9 @@ function checkBuildDir(done) {
   }
   // Check files built by typings.typings exist in BUILD_DIR.
   for (const fileName of ['blockly.d.ts', 'msg/en.d.ts']) {
-    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
+    if (!fs.existsSync(`${TYPINGS_BUILD_DIR}/${fileName}`)) {
       done(new Error(
-          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
+          `Your ${TYPINGS_BUILD_DIR} directory does not contain ${fileName}. ` +
           'Has typings.typings been run?  Try "npm run typings".'));
       return;
     }
@@ -403,11 +403,11 @@ function packageDTS() {
     'typings/msg/msg.d.ts',
   ];
   const builtSrcs = [
-    `${BUILD_DIR}/blockly.d.ts`,  // Use freshly-built one instead.
-    `${BUILD_DIR}/msg/*.d.ts`,
+    `${TYPINGS_BUILD_DIR}/blockly.d.ts`,  // Use freshly-built one instead.
+    `${TYPINGS_BUILD_DIR}/msg/*.d.ts`,
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
-      .pipe(gulp.src(builtSrcs, {base: BUILD_DIR}))
+      .pipe(gulp.src(builtSrcs, {base: TYPINGS_BUILD_DIR}))
       .pipe(gulp.dest(RELEASE_DIR));
 };
 

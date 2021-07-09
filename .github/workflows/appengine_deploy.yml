@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: appengine_files
-          path: ../_deploy/
+          path: _deploy/
 
   deploy:
     name: Deploy

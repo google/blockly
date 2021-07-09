@@ -47,8 +47,8 @@ function copyStaticSrc(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      path.join(demoStaticTmpDir, 'appengine/**/*'),
-      path.join(demoStaticTmpDir, 'appengine/.gcloudignore'),
+      `${demoStaticTmpDir}/appengine/**/*`,
+      `${demoStaticTmpDir}/appengine/.gcloudignore`,
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }

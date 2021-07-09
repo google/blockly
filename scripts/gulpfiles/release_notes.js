@@ -43,20 +43,13 @@ ${await getContributors('blockly', 'develop', goalDate, headers)}
 {Reorganize into kudos}
 ${await getContributors('blockly-samples', 'master', goalDate, headers)}
 
-🔨 **Breaking Changes in core** 🔨 
-{Replace title with what changed}
-${await getBreakingChanges(goalDate, headers)}
-
 Full release notes are below. As always, we welcome bug reports and pull requests!
 
 Cheers,
 {Insert Your Name}
 
-**Issues Closed**:
-${await getClosedIssues(headers)}
-
-**Pull Requests**:
-${await getMergedPrs(headers)}`;
+${await getReleaseNotes(headers)}
+`;
 
   console.log(note);
 
@@ -157,38 +150,6 @@ async function getCollaborators(repo, headers) {
   return new Set();
 }
 
-async function getBreakingChanges(goalDate, headers) {
-  let notes = '';
-
-  try {
-    const response = await fetch(baseUrl, {
-      method: "POST",
-      headers: headers,
-      body: makeApiChangeQuery(),
-    });
-    const json = await response.json();      
-    for (let pull of json.data.repository.pullRequests.nodes) {        
-      const createdDate = Date.parse(pull.createdAt);
-      if (createdDate < goalDate) {
-        cursor = '';
-        break;
-      }
-      notes += `* ${formatPull(pull)}\n`
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  return notes;
-}
-
-async function getClosedIssues(headers) {
-  return '';
-}
-
-async function getMergedPrs(headers) {
-  return '';
-}
-
 function makeReleaseQuery() {
   // Hopefully we never have more than 20 patch releases.
   return JSON.stringify({
@@ -243,29 +204,6 @@ function makeCollaboratorQuery(repo) {
         collaborators(first:100){
             nodes{
               login
-            }
-          }
-        }
-      }
-    `,
-  });
-}
-
-function makeApiChangeQuery() {
-  // Hopefully we will never need to get more than 100 of these.
-  return JSON.stringify({
-    query: `
-      query {
-        repository(name: "blockly", owner: "google"){
-          pullRequests(first: 100, baseRefName: "develop",
-              orderBy: {direction: DESC, field: CREATED_AT},
-              states: [MERGED]
-              labels: ["api_change"]){
-            nodes{
-              createdAt
-              title
-              url
-              number
             }
           }
         }

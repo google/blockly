@@ -61,16 +61,16 @@ async function getGoalDate(headers) {
     const response = await fetch(baseUrl, {
       method: "POST",
       headers: headers,
-      body: makeReleaseQuery(),
+      body: makeReleasesQuery(),
     });
     const json = await response.json();
     const releases = json.data.repository.releases.nodes;
-    let latestTag = releases[0].tagName;
-    latestTag = latestTag.substring(0, latestTag.lastIndexOf('.'));
+    let latestTag = extractMajorAndMinor(releases[0].tagName);
     for (let release of releases) {
-      let tag = release.
-      if (release)
-    })
+      if (extractMajorAndMinor(release.tagName) != latestTag) {          
+        return Date.parse(release.createdAt);
+      }
+    }
   } catch (error) {
     console.log(error);
   }
@@ -150,7 +150,22 @@ async function getCollaborators(repo, headers) {
   return new Set();
 }
 
-function makeReleaseQuery() {
+async function getReleaseNotes(headers) {
+  try {
+    const response = await fetch(baseUrl, {
+      method: "POST",
+      headers: headers,
+      body: makeLatestReleaseQuery(),
+    });
+    const json = await response.json();
+    return json.data.repository.releases.nodes[0].description;
+  } catch (error) {
+    console.log(error);
+  }
+  return '';
+}
+
+function makeReleasesQuery() {
   // Hopefully we never have more than 20 patch releases.
   return JSON.stringify({
     query: `
@@ -212,8 +227,28 @@ function makeCollaboratorQuery(repo) {
   });
 }
 
+function makeLatestReleaseQuery() {
+  return JSON.stringify({
+    query: `
+      query {
+        repository(name: "blockly", owner: "google"){
+          releases(first: 1, orderBy: {direction: DESC, field: CREATED_AT}){
+            nodes{
+              description
+            }
+          }
+        }
+      }
+    `,
+  })
+}
+
 function formatPull({title, url, number}) {
   return `([#${number}](${url})) ${title}`;
+}
+
+function extractMajorAndMinor(tag) {
+  return tag.substring(0, tag.lastIndexOf('.'));
 }
 
 const contributors = gulp.series(generateReleaseNotes);

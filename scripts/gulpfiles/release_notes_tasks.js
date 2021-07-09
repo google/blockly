@@ -21,23 +21,27 @@
    const goalDate = await getGoalDate(headers);
  
  
-   var note = `{Insert greeting},
+   var note = `Please fill in the following template and post to the forums.
+   
+ ---
+
+{Insert greeting},
  
  The {Insert Month and Year} release is out! In this release:
  
  {List major features in both core and samples}
  
- 🎉 **Kudos** 🎉
+ ## 🎉 Kudos 🎉
  
- **Third Party Plugins**
+ ### Third Party Plugins
  {List third party plugins that have been released in the last quarter
-  See internal: docs.google.com/document/d/1rhhmKyivKHeLKT_2ZkI5hjc37mqyEBSUINr0hvouqxU/edit#heading=h.racwemyaxdb}
+  See [internal doc](https://docs.google.com/document/d/1rhhmKyivKHeLKT_2ZkI5hjc37mqyEBSUINr0hvouqxU/edit#heading=h.racwemyaxdb)}
  
- **Core contributions**
+ ### Core contributions
  {Reorganize into kudos}
  ${await getContributors('blockly', 'develop', goalDate, headers)}
  
- **Samples contributions**
+ ### Samples contributions
  {Reorganize into kudos}
  ${await getContributors('blockly-samples', 'master', goalDate, headers)}
  
@@ -127,7 +131,7 @@
    for (const [name, contributions] of contributors) {
      notes += `* ${name}\n`;
      for (const contribution of contributions) {
-       notes += `  * ${formatPull(contribution)}\n`;
+       notes += `    * ${formatPull(contribution)}\n`;
      }
    }
    return notes.replace(/"/g, '');
@@ -159,7 +163,7 @@
        body: makeLatestReleaseQuery(),
      });
      const json = await response.json();
-     return json.data.repository.releases.nodes[0].description
+     return json.data.repository.releases.nodes[0].descriptionHTML
         .replace(/"/g, '');
    } catch (error) {
      console.log(error);
@@ -237,7 +241,7 @@
          repository(name: "blockly", owner: "google"){
            releases(first: 1, orderBy: {direction: DESC, field: CREATED_AT}){
              nodes{
-               description
+               descriptionHTML
              }
            }
          }
@@ -288,7 +292,7 @@
  }
  
  function formatPull({title, url, number}) {
-   return `([#${number}](${url})) ${title}`;
+   return `(<a href=${url}>#${number}</a>) ${title.replace(/#/g, '')}`;
  }
  
  function extractMajorAndMinor(tag) {

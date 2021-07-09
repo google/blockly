@@ -25,4 +25,7 @@ module.exports = {
   // Directory in which to assemble (and from which to publish) the
   // blockly npm package.
   RELEASE_DIR: 'dist',
+
+  // Directory to write typings output to.
+  TYPINGS_BUILD_DIR: path.join('build', 'typings'),
 };

@@ -77,10 +77,17 @@
      const json = await response.json();
      const releases = json.data.repository.releases.nodes;
      let latestTag = extractMajorAndMinor(releases[0].tagName);
+     let penultimateTag;
+     let date;
      for (let release of releases) {
-       if (extractMajorAndMinor(release.tagName) != latestTag) {
-         return Date.parse(release.createdAt);
+       const thisTag = extractMajorAndMinor(release.tagName);
+       if (latestTag && thisTag != latestTag) {
+         penultimateTag = thisTag;
+         latestTag = null;
+       } else if (penultimateTag && thisTag != penultimateTag) {                                
+         return date;
        }
+       date = Date.parse(release.createdAt);
      }
    } catch (error) {
      console.log(error);

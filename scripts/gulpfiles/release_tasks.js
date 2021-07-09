@@ -150,7 +150,7 @@ function updateBetaVersion(done) {
 }
 
 // Build Blockly and prepare to check in the resulting built files.
-const recompile = gulp.series(
+const rebuildAll = gulp.series(
   buildTasks.cleanBuildDir,
   buildTasks.build,
   buildTasks.checkinBuilt,
@@ -160,7 +160,7 @@ const recompile = gulp.series(
 
 // Package and publish to npm.
 const publish = gulp.series(
-  recompile,
+  rebuildAll,
   packageTasks.package,
   checkBranch,
   checkReleaseDir,
@@ -170,7 +170,7 @@ const publish = gulp.series(
 // Publish a beta version of Blockly.
 const publishBeta = gulp.series(
   updateBetaVersion,
-  recompile,
+  rebuildAll,
   packageTasks.package,
   checkBranch,
   checkReleaseDir,
@@ -183,7 +183,7 @@ const recompileDevelop = gulp.series(
   gitTasks.syncDevelop(),
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
-  recompile,
+  rebuildAll,
   gitTasks.pushRebuildBranch
   );
 

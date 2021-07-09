@@ -238,7 +238,7 @@ Blockly.WorkspaceSvg = function(
    * @type {!Array<
    * {
    *   component: !Blockly.IDragTarget,
-   *   clientRect: !Blockly.utils.Rect,
+   *   clientRect: !Blockly.utils.Rect
    * }>}
    * @private
    */
@@ -877,6 +877,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (!this.isFlyout) {
     Blockly.browserEvents.conditionalBind(
         this.svgGroup_, 'mousedown', this, this.onMouseDown_, false, true);
+    // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
+    // which otherwise prevents zoom/scroll events from being observed in
+    // Safari. Once that bug is fixed it should be removed.
+    document.body.addEventListener('wheel', function() {});
     Blockly.browserEvents.conditionalBind(
         this.svgGroup_, 'wheel', this, this.onMouseWheel_);
   }
@@ -2225,9 +2229,10 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   this.scale = newScale;
 
   Blockly.hideChaff(false);
-  if (this.flyout_) {
-    // No toolbox, resize flyout.
-    this.flyout_.reflow();
+  // Get the flyout, if any, whether our own or owned by the toolbox.
+  var flyout = this.getFlyout(false);
+  if (flyout && flyout.isVisible()) {
+    flyout.reflow();
     this.recordDragTargets();
   }
   if (this.grid_) {

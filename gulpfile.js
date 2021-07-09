@@ -46,6 +46,7 @@ module.exports = {
   package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,
+  prepareDemos: appengineTasks.prepareDemos,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
   sortRequires: cleanupTasks.sortRequires,

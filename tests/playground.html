@@ -151,10 +151,14 @@ function start() {
 }
 
 function setBackgroundColour() {
-  // Set background colour to differentiate server vs local copy.
-  if (location.protocol == 'file:') {
-    var lilac = '#d6d6ff';
-    document.body.style.backgroundColor = lilac;
+  // Set background colour to differentiate file: vs. localhost
+  // vs. server copy.
+  if (location.protocol === 'file:') {
+    document.body.style.backgroundColor = '#89A203';  // Unpleasant green.
+  } else if (location.hostname  === 'localhost' ||
+      location.hostname === '127.0.0.1' ||
+      location.hostname === '[::1]') {
+    document.body.style.backgroundColor = '#d6d6ff';  // Familliar lilac.
   }
 }
 

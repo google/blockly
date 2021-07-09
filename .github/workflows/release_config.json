@@ -1,0 +1,35 @@
+{
+  "categories": [
+    {
+      "title": "## 🚀 Features",
+      "labels": ["feature"]
+    },
+    {
+      "title": "## 🐛 Fixes",
+      "labels": ["fix"]
+    },
+    {
+      "title": "## 🧪 Tests",
+      "labels": ["test"]
+    },
+    {
+      "title": "## 📓 Documentation",
+      "labels": ["docs"]
+    }
+  ],
+  "ignore_labels": [
+    "ignore"
+  ],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>",
+  "pr_template": "- ${{TITLE}} #${{NUMBER}}",
+  "empty_template": "- no changes",
+  "max_tags_to_fetch": 200,
+  "max_back_track_time_days": 365,
+  "tag_resolver": {
+    "method": "sort"
+  },
+  "base_branches": [
+    "master"
+  ]
+}

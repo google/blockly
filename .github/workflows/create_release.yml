@@ -1,0 +1,39 @@
+name: 'Release'
+on: workflow_dispatch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get Npm Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Push tag
+        uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.package-version.outputs.current-version }}
+          message: 'Release'
+
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v1
+        with:
+          configuration: ".github/workflows/release_config.json"
+          toTag: ${{ steps.package-version.outputs.current-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.package-version.outputs.current-version }}
+          release_name: ${{ steps.package-version.outputs.current-version }}
+          body: ${{steps.github_release.outputs.changelog}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

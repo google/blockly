@@ -178,7 +178,7 @@ Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
 Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
- * Position of the the toolbox and/or flyout relative to the workspace.
+ * Position of the toolbox and/or flyout relative to the workspace.
  * @enum {number}
  */
 Blockly.utils.toolbox.Position = {

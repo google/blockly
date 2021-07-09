@@ -45,7 +45,7 @@
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages",
-    "contributors": "gulp contributors"
+    "listReleaseNotes": "gulp listReleaseNotes"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",

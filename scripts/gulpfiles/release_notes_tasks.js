@@ -48,8 +48,19 @@
  
  ${await getReleaseNotes(headers)}
  `;
+
+   try {
+     const response = await fetch(BASE_URL, {
+       method: 'POST',
+       headers: headers,
+       body: await makeIssueMutation("Post release notes", note, headers),
+     });
+     const json = await response.json();
+   } catch (error) {
+     console.log(error);
+   }
  
-   console.log(note);
+   //console.log(note);
  }
  
  async function getGoalDate(headers) {
@@ -119,7 +130,7 @@
        notes += `  * ${formatPull(contribution)}\n`;
      }
    }
-   return notes;
+   return notes.replace(/"/g, '');
  }
  
  async function getCollaborators(repo, headers) {
@@ -148,7 +159,8 @@
        body: makeLatestReleaseQuery(),
      });
      const json = await response.json();
-     return json.data.repository.releases.nodes[0].description;
+     return json.data.repository.releases.nodes[0].description
+        .replace(/"/g, '');
    } catch (error) {
      console.log(error);
    }
@@ -228,6 +240,47 @@
                description
              }
            }
+         }
+       }
+     `,
+   })
+ }
+
+ async function makeIssueMutation(title, body, headers) {
+   let repoId;
+   try {
+     const response = await fetch(BASE_URL, {
+       method: 'POST',
+       headers: headers,
+       body: makeRepoQuery("blockly", "BeksOmega"),
+     });
+     const json = await response.json();
+     repoId = json.data.repository.id;
+   } catch (error) {
+     console.log(error);
+   }
+
+   return JSON.stringify({
+     query: `
+       mutation {
+        createIssue(input: {
+            repositoryId: "${repoId}",
+            title: "${title}",
+            body: "${body}"
+        }) {
+          clientMutationId
+        }
+      }
+     `,
+   });
+ }
+
+ function makeRepoQuery(repo, owner) {
+   return JSON.stringify({
+     query: `
+       query {
+         repository(name: "${repo}", owner: "${owner}"){
+           id
          }
        }
      `,

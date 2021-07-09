@@ -739,6 +739,7 @@ Blockly.Block.prototype.getChildren = function(ordered) {
 /**
  * Set parent of this block to be a new block or null.
  * @param {Blockly.Block} newParent New parent block.
+ * @package
  */
 Blockly.Block.prototype.setParent = function(newParent) {
   if (newParent == this.parentBlock_) {
@@ -850,6 +851,7 @@ Blockly.Block.prototype.isShadow = function() {
 /**
  * Set whether this block is a shadow block or not.
  * @param {boolean} shadow True if a shadow.
+ * @package
  */
 Blockly.Block.prototype.setShadow = function(shadow) {
   this.isShadow_ = shadow;

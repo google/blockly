@@ -1,5 +1,5 @@
-# This workflow will comment on Pull Requests that are submitted while develop
-# is frozen during the week of release. Skips any Pull Requests that have the
+# This workflow will comment on pull tequests that are submitted while develop
+# is frozen during the week of release. Skips any pull tequests that have the
 # label 'ignore-freeze'.
 # This workflow should be enabled only while develop is frozen.
 
@@ -22,7 +22,5 @@ jobs:
       - name: PR Comment
         uses: github-actions-up-and-running/pr-comment@v1.0.1
         with:
-          # GITHUB_TOKEN secret
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          # Message to comment
           message: "Thanks for the PR! The develop branch is currently frozen in preparation for the release so it may not be addressed until after release week."

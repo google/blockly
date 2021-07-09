@@ -88,16 +88,18 @@ function deployAndClean(done) {
 }
 
 /**
+ * Prepares demos.
+ */
+const prepareDemos = gulp.series(
+    prepareDeployDir, copyStaticSrc, copyAppengineSrc, copyPlaygroundDeps);
+
+
+/**
  * Deploys demos.
  */
-const deployDemos = gulp.series(
-    prepareDeployDir,
-    copyStaticSrc,
-    copyAppengineSrc,
-    copyPlaygroundDeps,
-    deployAndClean
-);
+const deployDemos = gulp.series(prepareDemos, deployAndClean);
 
 module.exports = {
   deployDemos: deployDemos,
+  prepareDemos: prepareDemos
 }

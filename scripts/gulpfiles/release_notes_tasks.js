@@ -18,6 +18,9 @@
      'Content-Type': 'application/json',
      Authorization: 'bearer ' + githubToken,
    };
+
+   if (await isPatchRelease(headers)) return;
+
    const goalDate = await getGoalDate(headers);
  
  
@@ -65,6 +68,24 @@
    }
  
    //console.log(note);
+ }
+
+ async function isPatchRelease(headers) {
+   try {
+     const response = await fetch(BASE_URL, {
+       method: 'POST',
+       headers: headers,
+       body: makeReleasesQuery(),
+     });
+     const json = await response.json();
+     const releases = json.data.repository.releases.nodes;
+     const latestTag = extractMajorAndMinor(releases[0].tagName);
+     const previousTag = extractMajorAndMinor(releases[1].tagName);
+     return latestTag == previousTag;
+   } catch (error) {
+     console.log(error);
+   }
+   return false;
  }
  
  async function getGoalDate(headers) {

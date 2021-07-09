@@ -7,7 +7,10 @@
 # Run this script to get the new values.
 
 # Location of the pre-built compressed files.
-readonly BUILD_DIR='built'
+#
+# (TODO(#5007): Should fetch this from scripts/gulpfiles/config.js
+# instead of hardcoding it here.
+readonly BUILD_DIR='build'
 
 # These values should be updated with each release.  (Note that the
 # historic values are tab-delimited.)
@@ -64,6 +67,14 @@ readonly BLOCKS_GZ_SIZE_EXPECTED=15275
 readonly BOLD_GREEN='\033[1;32m'
 readonly BOLD_RED='\033[1;31m'
 readonly ANSI_RESET='\033[0m'
+
+# Terminate immediately with non-zero status if any command exits
+# with non-zero status, printing a nice message.
+set -e
+function fail {
+  echo -e "${BOLD_RED}Error while checking metadata.${ANSI_RESET}" >&2
+}
+trap fail ERR
 
 # GZip them for additional size comparisons (keep originals, force
 # overwite previously-gzipped copies).

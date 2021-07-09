@@ -12,6 +12,12 @@ var path = require('path');
 
 // Paths are all relative to the repository root.  Do not include
 // trailing slash.
+//
+// TODO(#5007): If you modify these values, you must also modify the
+// corresponding values in the following files:
+// 
+// - tests/scripts/compile_typings.sh
+// - tests/scripts/check_metadata.sh
 module.exports = {
   // Directory to write compiled output to.
   BUILD_DIR: 'build',

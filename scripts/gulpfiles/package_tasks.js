@@ -374,7 +374,7 @@ function packageJSON(cb) {
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
   if (!fs.existsSync(RELEASE_DIR)) {
-    fs.mkdirSync(RELEASE_DIR);
+    fs.mkdirSync(RELEASE_DIR, {recursive: true});
   }
   fs.writeFileSync(`${RELEASE_DIR}/package.json`,
       JSON.stringify(json, null, 2));

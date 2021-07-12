@@ -1298,6 +1298,71 @@ Serializer.Connections.testSuites = [
 ];
 
 Serializer.Mutations = new SerializerTestSuite('Mutations');
+Serializer.Mutations.MathNumberProperty = new SerializerTestCase(
+    'MathNumberProperty',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="math_number_property" id="id" x="42" y="42">' +
+    '<mutation divisor_input="true"></mutation>' +
+    '<field name="PROPERTY">DIVISIBLE_BY</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.MathOnList = new SerializerTestCase(
+    'MathOnList',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="math_on_list" id="id" x="42" y="42">' +
+    '<mutation op="MODE"></mutation>' +
+    '<field name="OP">MODE</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.TextJoin = new SerializerTestCase(
+    'TextJoin',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_join" id="id" x="42" y="42">' +
+    '<mutation items="10"></mutation>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.TextCharAt = new SerializerTestCase(
+    'TextCharAt',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_charAt" id="id" x="42" y="42">' +
+    '<mutation at="false"></mutation>' +
+    '<field name="WHERE">FIRST</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.TextGetSubstring = new SerializerTestCase(
+    'TextGetSubstring',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_getSubstring" id="id" x="42" y="42">' +
+    '<mutation at1="true" at2="false"></mutation>' +
+    '<field name="WHERE1">FROM_START</field>' +
+    '<field name="WHERE2">LAST</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.TextPromptExt = new SerializerTestCase(
+    'TextPromptExt',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_prompt_ext" id="id" x="42" y="42">' +
+    '<mutation type="NUMBER"></mutation>' +
+    '<field name="TEXT">NUMBER</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.TextPrompt= new SerializerTestCase(
+    'TextPrompt',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="text_prompt" id="id" x="42" y="42">' +
+    '<mutation type="NUMBER"></mutation>' +
+    '<field name="TEXT">NUMBER</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.testCases = [
+  Serializer.Mutations.MathNumberProperty,
+  Serializer.Mutations.MathOnList,
+  Serializer.Mutations.TextJoin,
+  Serializer.Mutations.TextCharAt,
+  Serializer.Mutations.TextGetSubstring,
+  Serializer.Mutations.TextPromptExtt,
+  Serializer.Mutations.TextPrompt,
+];
 
 Serializer.Mutations.ControlsIf = new SerializerTestSuite('ControlsIf');
 Serializer.Mutations.ControlsIf.NoMutation = new SerializerTestCase(

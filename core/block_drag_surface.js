@@ -159,7 +159,7 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   this.SVG_.style.display = 'block';
 
   Blockly.utils.dom.setCssTransform(
-      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0px)');
+      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
 };
 
 /**

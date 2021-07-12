@@ -284,10 +284,7 @@ Blockly.Extensions.checkHasFunctionPair_ =
 Blockly.Extensions.checkHasMutatorProperties_ = function(errorPrefix, object) {
   var hasXmlHooks = Blockly.Extensions.checkXmlHooks_(object, errorPrefix);
   var hasJsonHooks = Blockly.Extensions.checkJsonHooks_(object, errorPrefix);
-  if (hasXmlHooks && hasJsonHooks) {
-    throw Error(errorPrefix +
-        'Mutations should only contain either XML hooks, or JSON hooks');
-  } else if (!hasXmlHooks && !hasJsonHooks) {
+  if (!hasXmlHooks && !hasJsonHooks) {
     throw Error(errorPrefix +
         'Mutations must contain either XML hooks or JSON hooks');
   }

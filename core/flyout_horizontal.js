@@ -40,6 +40,8 @@ goog.requireType('Blockly.utils.Coordinate');
 Blockly.HorizontalFlyout = function(workspaceOptions) {
   Blockly.HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
   this.horizontalLayout = true;
+  var blockChangeHandler = this.handleBlockChange_.bind(this);
+  this.workspace_.addChangeListener(blockChangeHandler);
 };
 Blockly.utils.object.inherits(Blockly.HorizontalFlyout, Blockly.Flyout);
 
@@ -149,6 +151,7 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var y = this.getY();
 
   this.positionAt_(this.width_, this.height_, x, y);
+  this.positionContents(Blockly.constants.AXIS.X);
 };
 
 /**
@@ -236,44 +239,34 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
  * @protected
  */
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
-  this.workspace_.scale = this.targetWorkspace.scale;
-  var margin = this.MARGIN;
-  var cursorX = margin + this.tabWidth_;
-  var cursorY = margin;
-  if (this.RTL) {
-    contents = contents.reverse();
-  }
+  Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
+  this.positionContents(Blockly.constants.AXIS.X);
+};
 
-  for (var i = 0, item; (item = contents[i]); i++) {
-    if (item.type == 'block') {
-      var block = item.block;
-      var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; (child = allBlocks[j]); j++) {
-        // Mark blocks as being inside a flyout.  This is used to detect and
-        // prevent the closure of the flyout if the user right-clicks on such a
-        // block.
-        child.isInFlyout = true;
+/**
+ * Respond to changes in the dimensions of blocks by repositioning the contents
+ * of the flyout.
+ * @param {!Blockly.Events.BlockChange} event The block change event.
+ */
+Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
+  if (event.type === Blockly.Events.BLOCK_CHANGE) {
+    this.positionContents(Blockly.constants.AXIS.X);
+    
+    // If we're RTL, rerender the text fields on this block (which were being
+    // edited to trigger this event) to fix their alignment relative to their
+    // parent block, which was just moved in the call to positionContents above.
+    // This avoids the editing field falling out of alignment with the field
+    // rendered on the block itself.
+    if (this.RTL) {
+      var block = this.workspace_.getBlockById(event.blockId);
+      for (var i = 0; i < block.inputList.length; i++) {
+        for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
+          var field = block.inputList[i].fieldRow[j];
+          if (field instanceof Blockly.FieldTextInput) {
+            field.forceRerender();
+          }
+        }
       }
-      block.render();
-      var root = block.getSvgRoot();
-      var blockHW = block.getHeightWidth();
-
-      // Figure out where to place the block.
-      var tab = block.outputConnection ? this.tabWidth_ : 0;
-      if (this.RTL) {
-        var moveX = cursorX + blockHW.width;
-      } else {
-        var moveX = cursorX - tab;
-      }
-      block.moveBy(moveX, cursorY);
-
-      var rect = this.createRect_(block, moveX, cursorY, blockHW, i);
-      cursorX += (blockHW.width + gaps[i]);
-
-      this.addBlockListeners_(root, block, rect);
-    } else if (item.type == 'button') {
-      this.initFlyoutButton_(item.button, cursorX, cursorY);
-      cursorX += (item.button.width + gaps[i]);
     }
   }
 };

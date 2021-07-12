@@ -39,6 +39,8 @@ goog.requireType('Blockly.utils.Coordinate');
  */
 Blockly.VerticalFlyout = function(workspaceOptions) {
   Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
+  var blockChangeHandler = this.handleBlockChange_.bind(this);
+  this.workspace_.addChangeListener(blockChangeHandler);
 };
 Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
 
@@ -227,36 +229,26 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  * @protected
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
-  this.workspace_.scale = this.targetWorkspace.scale;
-  var margin = this.MARGIN;
-  var cursorX = this.RTL ? margin : margin + this.tabWidth_;
-  var cursorY = margin;
+  Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
+  this.positionContents(Blockly.constants.AXIS.Y);
+};
 
-  for (var i = 0, item; (item = contents[i]); i++) {
-    if (item.type == 'block') {
-      var block = item.block;
-      var allBlocks = block.getDescendants(false);
-      for (var j = 0, child; (child = allBlocks[j]); j++) {
-        // Mark blocks as being inside a flyout.  This is used to detect and
-        // prevent the closure of the flyout if the user right-clicks on such a
-        // block.
-        child.isInFlyout = true;
+/**
+ * Respond to changes in the dimensions of blocks by repositioning the contents
+ * of the flyout.
+ * @param {!Blockly.Events.BlockChange} event The block change event.
+ */
+Blockly.VerticalFlyout.prototype.handleBlockChange_ = function(event) {
+  if (event.type === Blockly.Events.BLOCK_CHANGE) {
+    this.positionContents(Blockly.constants.AXIS.Y);
+    var block = this.workspace_.getBlockById(event.blockId);
+    for (var i = 0; i < block.inputList.length; i++) {
+      for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
+        var field = block.inputList[i].fieldRow[j];
+        if (field instanceof Blockly.FieldTextInput) {
+          field.forceRerender();
+        }
       }
-      block.render();
-      var root = block.getSvgRoot();
-      var blockHW = block.getHeightWidth();
-      var moveX = block.outputConnection ? cursorX - this.tabWidth_ : cursorX;
-      block.moveBy(moveX, cursorY);
-
-      var rect = this.createRect_(block,
-          this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
-
-      this.addBlockListeners_(root, block, rect);
-
-      cursorY += blockHW.height + gaps[i];
-    } else if (item.type == 'button') {
-      this.initFlyoutButton_(item.button, cursorX, cursorY);
-      cursorY += item.button.height + gaps[i];
     }
   }
 };

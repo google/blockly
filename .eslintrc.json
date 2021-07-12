@@ -79,7 +79,8 @@
     },
     "globals": {
         "Blockly": true,
-        "goog": true
+        "goog": true,
+        "exports": true
     },
     "extends": [
         "eslint:recommended"

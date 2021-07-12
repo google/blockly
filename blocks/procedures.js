@@ -519,7 +519,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * @param {string} varName User-supplied name.
    * @return {?string} Valid name, or null if a name was not specified.
    * @private
-   * @this Blockly.FieldTextInput
+   * @this {Blockly.FieldTextInput}
    */
   validator_: function(varName) {
     var sourceBlock = this.getSourceBlock();
@@ -571,7 +571,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
    * variable name.
    * @param {string} newText The new variable name.
    * @private
-   * @this Blockly.FieldTextInput
+   * @this {Blockly.FieldTextInput}
    */
   deleteIntermediateVars_: function(newText) {
     var outerWs = Blockly.Mutator.findParentWs(this.getSourceBlock().workspace);

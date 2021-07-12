@@ -95,7 +95,7 @@
     "typescript": "^4.3.2",
     "typescript-closure-tools": "^0.0.7",
     "webdriverio": "^7.0.3",
-    "yargs": "^16.0.3"
+    "yargs": "^17.0.1"
   },
   "dependencies": {
     "jsdom": "15.2.1"

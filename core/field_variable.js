@@ -174,6 +174,7 @@ Blockly.FieldVariable.prototype.fromXml = function(fieldElement) {
   }
 
   this.setValue(variable.getId());
+  this.setEnabledFromXml_(fieldElement);
 };
 
 /**
@@ -191,6 +192,7 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
   if (this.variable_.type) {
     fieldElement.setAttribute('variabletype', this.variable_.type);
   }
+  this.addDisabledToXml_(fieldElement);
   return fieldElement;
 };
 

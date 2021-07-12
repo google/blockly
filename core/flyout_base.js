@@ -405,6 +405,7 @@ Blockly.Flyout.prototype.getWorkspace = function() {
  */
 Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
   this.workspace_.setResizesEnabled(false);
+  this.reflow();
   var margin = this.MARGIN;
   var cursorX = margin + this.tabWidth_;
   var cursorY = margin;
@@ -453,6 +454,9 @@ Blockly.Flyout.prototype.positionContents = function(primaryAxis) {
 
       if (this.RTL && primaryAxis === Blockly.constants.AXIS.X) {
         destinationX += dimensions.width;
+      } else if (this.RTL && primaryAxis === Blockly.constants.AXIS.Y) {
+        destinationX = (this.width_ / this.workspace_.scale) - (margin * 2) +
+            (block.outputConnection ? this.tabWidth_ : 0);
       }
       var destinationY = cursorY;
 

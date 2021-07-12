@@ -241,6 +241,15 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
 Blockly.VerticalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
     this.positionContents(Blockly.constants.AXIS.Y);
+    var block = this.workspace_.getBlockById(event.blockId);
+    for (var i = 0; i < block.inputList.length; i++) {
+      for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
+        var field = block.inputList[i].fieldRow[j];
+        if (field instanceof Blockly.FieldTextInput) {
+          field.forceRerender();
+        }
+      }
+    }
   }
 };
 

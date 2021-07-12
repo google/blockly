@@ -226,11 +226,11 @@ suite('Utils', function() {
   test('arrayRemove', function() {
     var arr = [1, 2, 3, 2];
     chai.assert.isFalse(Blockly.utils.arrayRemove(arr, 0), 'Remove Not found');
-    chai.assert.equal(arr.join(', '), '1,2,3,2', 'Remove Not found result');
+    chai.assert.equal(arr.join(','), '1,2,3,2', 'Remove Not found result');
     chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item');
-    chai.assert.equal(arr.join(', '), '1,3,2', 'Remove item result');
+    chai.assert.equal(arr.join(','), '1,3,2', 'Remove item result');
     chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item again');
-    chai.assert.equal(arr.join(', '), '1,3', 'Remove item again result');
+    chai.assert.equal(arr.join(','), '1,3', 'Remove item again result');
   });
 
   test('XY_REGEX_', function() {
@@ -359,9 +359,9 @@ suite('Utils', function() {
     });
 
     test('shortest string length', function() {
-      var len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(', '));
+      var len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 3, 'Length of "one"');
-      len = Blockly.utils.string.shortestStringLength('one,two,three,four,five, '.split(', '));
+      len = Blockly.utils.string.shortestStringLength('one,two,three,four,five,'.split(','));
       chai.assert.equal(len, 0, 'Length of ""');
       len = Blockly.utils.string.shortestStringLength(['Hello World']);
       chai.assert.equal(len, 11, 'List of one');
@@ -370,40 +370,40 @@ suite('Utils', function() {
     });
 
     test('comment word prefix', function() {
-      var len = Blockly.utils.string.commonWordPrefix('one,two,three,four,five'.split(', '));
+      var len = Blockly.utils.string.commonWordPrefix('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No prefix');
-      len = Blockly.utils.string.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
       chai.assert.equal(len, 0, 'No word prefix');
-      len = Blockly.utils.string.commonWordPrefix('abc de,abc de,abc de,abc de'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('abc de,abc de,abc de,abc de'.split(','));
       chai.assert.equal(len, 6, 'Full equality');
-      len = Blockly.utils.string.commonWordPrefix('abc deX,abc deY'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('abc deX,abc deY'.split(','));
       chai.assert.equal(len, 4, 'One word prefix');
-      len = Blockly.utils.string.commonWordPrefix('abc de,abc deY'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('abc de,abc deY'.split(','));
       chai.assert.equal(len, 4, 'Overflow no');
-      len = Blockly.utils.string.commonWordPrefix('abc de,abc de Y'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('abc de,abc de Y'.split(','));
       chai.assert.equal(len, 6, 'Overflow yes');
       len = Blockly.utils.string.commonWordPrefix(['Hello World']);
       chai.assert.equal(len, 11, 'List of one');
       len = Blockly.utils.string.commonWordPrefix([]);
       chai.assert.equal(len, 0, 'Empty list');
-      len = Blockly.utils.string.commonWordPrefix('turn&nbsp;left,turn&nbsp;right'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('turn&nbsp;left,turn&nbsp;right'.split(','));
       chai.assert.equal(len, 0, 'No prefix due to &amp;nbsp;');
-      len = Blockly.utils.string.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(', '));
+      len = Blockly.utils.string.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(','));
       chai.assert.equal(len, 0, 'No prefix due to \\u00A0');
     });
 
     test('comment word suffix', function() {
-      var len = Blockly.utils.string.commonWordSuffix('one,two,three,four,five'.split(', '));
+      var len = Blockly.utils.string.commonWordSuffix('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No suffix');
-      len = Blockly.utils.string.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(', '));
+      len = Blockly.utils.string.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
       chai.assert.equal(len, 0, 'No word suffix');
-      len = Blockly.utils.string.commonWordSuffix('abc de,abc de,abc de,abc de'.split(', '));
+      len = Blockly.utils.string.commonWordSuffix('abc de,abc de,abc de,abc de'.split(','));
       chai.assert.equal(len, 6, 'Full equality');
-      len = Blockly.utils.string.commonWordSuffix('Xabc de,Yabc de'.split(', '));
+      len = Blockly.utils.string.commonWordSuffix('Xabc de,Yabc de'.split(','));
       chai.assert.equal(len, 3, 'One word suffix');
-      len = Blockly.utils.string.commonWordSuffix('abc de,Yabc de'.split(', '));
+      len = Blockly.utils.string.commonWordSuffix('abc de,Yabc de'.split(','));
       chai.assert.equal(len, 3, 'Overflow no');
-      len = Blockly.utils.string.commonWordSuffix('abc de,Y abc de'.split(', '));
+      len = Blockly.utils.string.commonWordSuffix('abc de,Y abc de'.split(','));
       chai.assert.equal(len, 6, 'Overflow yes');
       len = Blockly.utils.string.commonWordSuffix(['Hello World']);
       chai.assert.equal(len, 11, 'List of one');

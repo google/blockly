@@ -17,8 +17,8 @@ var execSync = require('child_process').execSync;
 
 var packageJson = require('../../package.json');
 
-const demoTmpDir = '../_deploy';
-const demoStaticTmpDir = '../_deploy/static';
+const demoTmpDir = '_deploy';
+const demoStaticTmpDir = '_deploy/static';
 
 /**
  * Cleans and creates the tmp directory used for deploying.
@@ -47,8 +47,8 @@ function copyStaticSrc(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      `${demoStaticTmpDir}/appengine/**/*`,
-      `${demoStaticTmpDir}/appengine/.gcloudignore`,
+    path.join(demoStaticTmpDir, 'appengine/**/*'),
+    path.join(demoStaticTmpDir, 'appengine/.gcloudignore'),
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }

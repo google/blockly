@@ -18,7 +18,7 @@ suite('Key Down', function() {
    * @param {Blockly.Workspace} workspace The workspace to create a new block on.
    */
   function setSelectedBlock(workspace) {
-    defineStackBlock(this.sharedCleanup);
+    defineStackBlock();
     Blockly.selected = workspace.newBlock('stack_block');
   }
 

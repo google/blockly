@@ -45,7 +45,7 @@ suite('Gesture', function() {
 
   setup(function() {
     sharedTestSetup.call(this);
-    defineBasicBlockWithField(this.sharedCleanup);
+    defineBasicBlockWithField();
     var toolbox = document.getElementById('gesture-test-toolbox');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
   });

@@ -425,9 +425,9 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 Blockly.Field.prototype.saveState = function() {
   // Default backwards-compatible implementation.
   var container = Blockly.utils.xml.createElement('field');
-  container.setAttribute('name', field.name || '');
+  container.setAttribute('name', this.name || '');
   return Blockly.Xml.domToText(this.toXml(container));
-}
+};
 
 /**
  * Sets the field's state based on the given state value. Should only be called

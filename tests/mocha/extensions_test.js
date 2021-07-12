@@ -464,7 +464,7 @@ suite('Extensions', function() {
                 }
               });
         }, /saveExtraState/);
-      })
+      });
 
       test('No loadExtraState', function() {
         this.extensionsCleanup_.push('mutator_test');
@@ -482,7 +482,7 @@ suite('Extensions', function() {
                 }
               });
         }, /loadExtraState/);
-      })
+      });
 
       test('No serialization hooks', function() {
         this.extensionsCleanup_.push('mutator_test');
@@ -497,7 +497,7 @@ suite('Extensions', function() {
                 }
               });
         }, 'Mutations must contain either XML hooks, or JSON hooks, or both');
-      })
+      });
 
       test('Has decompose but no compose', function() {
         this.extensionsCleanup_.push('mutator_test');

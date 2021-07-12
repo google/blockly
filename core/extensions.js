@@ -210,7 +210,7 @@ Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
 Blockly.Extensions.checkXmlHooks_ = function(object, errorPrefix) {
   return Blockly.Extensions.checkHasFunctionPair_(
       object, 'mutationToDom', 'domToMutation', errorPrefix);
-}
+};
 
 /**
  * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
@@ -226,7 +226,7 @@ Blockly.Extensions.checkXmlHooks_ = function(object, errorPrefix) {
 Blockly.Extensions.checkJsonHooks_ = function(object, errorPrefix) {
   return Blockly.Extensions.checkHasFunctionPair_(
       object, 'saveExtraState', 'loadExtraState', errorPrefix);
-}
+};
 
 /**
  * Checks if the given object has both the 'compose' and 'decompose' functions.

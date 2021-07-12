@@ -1754,8 +1754,9 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 
     runTests(testSuite);
     // TODO: Fix after this method is being exported.
-    //testHelpers.runTestSuites(testSuite.testSuites, createSuiteOrTestFunction);
-    //testHelpers.runTestCases(testSuite.testCases, createTestFunction);
+    // testHelpers.runTestSuites(
+    //     testSuite.testSuites, createSuiteOrTestFunction);
+    // testHelpers.runTestCases(testSuite.testCases, createTestFunction);
   });
 };
 

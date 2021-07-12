@@ -414,7 +414,7 @@ suite('Toolbox', function() {
     });
     test('Select collapsible item -> Should close flyout', function() {
       var newItem = getCollapsibleItem(this.toolbox);
-      testHideFlyout(this.toolbox,null, newItem);
+      testHideFlyout(this.toolbox, null, newItem);
     });
     test('Select selectable item -> Should open flyout', function() {
       var showFlyoutstub = sinon.stub(this.toolbox.flyout_, 'show');

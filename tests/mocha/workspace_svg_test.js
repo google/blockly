@@ -72,7 +72,7 @@ suite('WorkspaceSvg', function() {
 
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
     var blocks = this.workspace.getAllBlocks(false);
-    chai.assert.equal(blocks.length, 2,'Block count');
+    chai.assert.equal(blocks.length, 2, 'Block count');
     var shadowBlock = blocks[1];
     chai.assert.exists(shadowBlock.getSvgRoot());
 
@@ -185,7 +185,7 @@ suite('WorkspaceSvg', function() {
       assertSpyFiredViewportEvent(
           eventsFireStub, workspace, expectedProperties);
       assertSpyFiredViewportEvent(
-          changeListenerSpy, workspace,expectedProperties);
+          changeListenerSpy, workspace, expectedProperties);
       sinon.assert.callCount(changeListenerSpy, expectedEventCount);
       sinon.assert.callCount(eventsFireStub, expectedEventCount);
     }

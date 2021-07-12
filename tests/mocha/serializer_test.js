@@ -1733,17 +1733,10 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
     return createTestFunction(suiteOrTest);
   };
 
-  // TODO: Fix after suites method is being exported.
-  var runTests = function(suite) {
-    if (suite.testSuites && suite.testSuites.length) {
-      suite.testSuites.forEach(runTests);
-    }
-    if (suite.testCases && suite.testCases.length) {
-      testHelpers.runTestCases(suite.testCases, createTestFunction);
-    }
-  };
+  let suiteCall = (testSuite.skip ? suite.skip : suite);
+  suiteCall = (testSuite.only ? suite.only : suiteCall);
 
-  suite(testSuite.title, function() {
+  suiteCall(testSuite.title, function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
     });
@@ -1752,11 +1745,9 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
       this.workspace.dispose();
     });
 
-    runTests(testSuite);
-    // TODO: Fix after this method is being exported.
-    // testHelpers.runTestSuites(
-    //     testSuite.testSuites, createSuiteOrTestFunction);
-    // testHelpers.runTestCases(testSuite.testCases, createTestFunction);
+    testHelpers.runTestSuites(
+        testSuite.testSuites, createSuiteOrTestFunction);
+    testHelpers.runTestCases(testSuite.testCases, createTestFunction);
   });
 };
 

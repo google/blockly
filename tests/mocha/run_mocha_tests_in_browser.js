@@ -29,7 +29,12 @@ async function runMochaTestsInBrowser() {
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage',
+        '--allow-file-access-from-files']
+    };
+  } else {
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--allow-file-access-from-files']
     };
   }
 

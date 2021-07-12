@@ -265,7 +265,7 @@ Blockly.Extensions.checkHasFunctionPair_ =
       if (typeof object[name1] != 'function') {
         throw Error(errorPrefix + name1 + ' must be a function.');
       } else if (typeof object[name2] != 'function') {
-        throw Error(errorPrefix + name2 + 'must be a function.');
+        throw Error(errorPrefix + name2 + ' must be a function.');
       }
       return true;
     } else if (!has1 && !has2) {
@@ -286,7 +286,7 @@ Blockly.Extensions.checkHasMutatorProperties_ = function(errorPrefix, object) {
   var hasJsonHooks = Blockly.Extensions.checkJsonHooks_(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
     throw Error(errorPrefix +
-        'Mutations must contain either XML hooks or JSON hooks');
+        'Mutations must contain either XML hooks, or JSON hooks, or both');
   }
   // A block with a mutator isn't required to have a mutation dialog, but
   // it should still have both or neither of compose and decompose.

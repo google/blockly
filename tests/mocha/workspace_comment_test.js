@@ -150,7 +150,7 @@ suite('Workspace comment', function() {
     test('Initial position', function() {
       var xy = this.comment.getXY();
       chai.assert.equal(xy.x, 0, 'Initial X position');
-      chai.assert.equal(xy.y, 0,'Initial Y position');
+      chai.assert.equal(xy.y, 0, 'Initial Y position');
     });
 
     test('moveBy', function() {
@@ -177,7 +177,7 @@ suite('Workspace comment', function() {
       chai.assert.equal(
           this.comment.getContent(), 'comment text');
       chai.assert.equal(
-          this.workspace.undoStack_.length, 1,'Workspace undo stack');
+          this.workspace.undoStack_.length, 1, 'Workspace undo stack');
     });
 
     test('Set to same value', function() {

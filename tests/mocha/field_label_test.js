@@ -64,7 +64,7 @@ suite('Label Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldLabel, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldLabel, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

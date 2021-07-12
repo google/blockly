@@ -88,7 +88,7 @@ suite('Number Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldNumber, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

@@ -14,7 +14,7 @@ suite('Utils', function() {
 
   test('genUid', function() {
     var uuids = {};
-    chai.assert.equal([1,2,3].indexOf(4), -1);
+    chai.assert.equal([1, 2, 3].indexOf(4), -1);
     for (var i = 0; i < 1000; i++) {
       var uuid = Blockly.utils.genUid();
       chai.assert.isFalse(uuid in uuids, 'UUID different: ' + uuid);

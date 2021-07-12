@@ -455,13 +455,13 @@ function testAWorkspace() {
     test('Over instance limit', function() {
       this.workspace.options.maxInstances['get_var_block'] = 1;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
-          -1,'With maxInstances limit 1');
+          -1, 'With maxInstances limit 1');
     });
 
     test('Over instance limit of 0', function() {
       this.workspace.options.maxInstances['get_var_block'] = 0;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
-          -2,'With maxInstances limit 0');
+          -2, 'With maxInstances limit 0');
     });
 
     test('Over instance limit with multiple block types', function() {
@@ -470,7 +470,7 @@ function testAWorkspace() {
       this.workspace.newBlock('');
       this.workspace.options.maxInstances['get_var_block'] = 1;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
-          -1,'With maxInstances limit 1');
+          -1, 'With maxInstances limit 1');
     });
 
     test('Over instance limit of 0 with multiple block types', function() {
@@ -479,7 +479,7 @@ function testAWorkspace() {
       this.workspace.newBlock('');
       this.workspace.options.maxInstances['get_var_block'] = 0;
       chai.assert.equal(this.workspace.remainingCapacityOfType('get_var_block'),
-          -2,'With maxInstances limit 0');
+          -2, 'With maxInstances limit 0');
     });
   });
 
@@ -611,7 +611,7 @@ function testAWorkspace() {
 
     test('Trivial', function() {
       chai.assert.equal(
-          this.workspace.getBlockById(this.blockA.id),this.blockA);
+          this.workspace.getBlockById(this.blockA.id), this.blockA);
       chai.assert.equal(
           this.workspace.getBlockById(this.blockB.id), this.blockB);
     });
@@ -1294,7 +1294,7 @@ function testAWorkspace() {
 
           this.workspace.undo(true);
           // Expect that variable 'id2' is recreated
-          assertBlockVarModelName(this.workspace,0, 'name2');
+          assertBlockVarModelName(this.workspace, 0, 'name2');
           chai.assert.isNull(this.workspace.getVariableById('id1'));
           assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
         });

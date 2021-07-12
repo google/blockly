@@ -71,7 +71,7 @@ suite('Angle Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldAngle, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldAngle, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

@@ -90,7 +90,7 @@ suite('Flyout', function() {
           this.flyout.targetWorkspace.toolboxPosition =
               Blockly.utils.toolbox.Position.RIGHT;
           this.flyout.toolboxPosition_ = Blockly.utils.toolbox.Position.RIGHT;
-          chai.assert.equal(this.flyout.getX(), 90,'x + width should be aligned with toolbox');
+          chai.assert.equal(this.flyout.getX(), 90, 'x + width should be aligned with toolbox');
         });
       });
       // These tests simulate a trashcan flyout, i.e. the flyout under test is on the
@@ -260,7 +260,7 @@ suite('Flyout', function() {
         {type: "button"},
         {type: "button"}
       ];
-      var expectedGaps = [20,24,24];
+      var expectedGaps = [20, 24, 24];
       var flyoutInfo = flyoutSpy.returnValues[0];
       var contents = flyoutInfo.contents;
       var gaps = flyoutInfo.gaps;

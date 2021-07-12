@@ -5,8 +5,6 @@
  */
 
 
-//import {TestSuite, TestCase, runTestSuites} from '@blockly/dev-tools';
-
 // TODO: Move this into samples as part of the dev-tools package.
 /**
  * Constructs a serializer test.
@@ -165,7 +163,7 @@ Serializer.Attributes.Id.Chars.testCases = [
 Serializer.Attributes.Id.testSuites = [
   Serializer.Attributes.Id.Length,
   Serializer.Attributes.Id.Chars,
-]
+];
 
 Serializer.Attributes.testSuites = [
   Serializer.Attributes.Inline,
@@ -893,7 +891,7 @@ Serializer.Fields.Variable.Id.Chars.testCases = [
 Serializer.Fields.Variable.Id.testSuites = [
   Serializer.Fields.Variable.Id.Length,
   Serializer.Fields.Variable.Id.Chars,
-]
+];
 
 Serializer.Fields.Variable.testSuites = [
   Serializer.Fields.Variable.Id,
@@ -1343,15 +1341,16 @@ Serializer.Mutations.TextPromptExt = new SerializerTestCase(
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text_prompt_ext" id="id" x="42" y="42">' +
     '<mutation type="NUMBER"></mutation>' +
-    '<field name="TEXT">NUMBER</field>' +
+    '<field name="TYPE">NUMBER</field>' +
     '</block>' +
     '</xml>');
-Serializer.Mutations.TextPrompt= new SerializerTestCase(
+Serializer.Mutations.TextPrompt = new SerializerTestCase(
     'TextPrompt',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text_prompt" id="id" x="42" y="42">' +
     '<mutation type="NUMBER"></mutation>' +
-    '<field name="TEXT">NUMBER</field>' +
+    '<field name="TYPE">NUMBER</field>' +
+    '<field name="TEXT"></field>' +
     '</block>' +
     '</xml>');
 Serializer.Mutations.testCases = [
@@ -1360,7 +1359,7 @@ Serializer.Mutations.testCases = [
   Serializer.Mutations.TextJoin,
   Serializer.Mutations.TextCharAt,
   Serializer.Mutations.TextGetSubstring,
-  Serializer.Mutations.TextPromptExtt,
+  Serializer.Mutations.TextPromptExt,
   Serializer.Mutations.TextPrompt,
 ];
 
@@ -1399,7 +1398,7 @@ Serializer.Mutations.ControlsIf.testCases = [
 ];
 
 Serializer.Mutations.ControlsIf.ElseIf = new SerializerTestSuite('ElseIf');
-Serializer.Mutations.ControlsIf.ElseIf.NoChild= new SerializerTestCase(
+Serializer.Mutations.ControlsIf.ElseIf.NoChild = new SerializerTestCase(
     'NoChild',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_if" id="id******************" x="42" y="42">' +
@@ -1444,8 +1443,8 @@ Serializer.Mutations.ControlsIf.ElseIf.testCases = [
   Serializer.Mutations.ControlsIf.ElseIf.OverwrittenShadow,
 ];
 
-Serializer.Mutations.ControlsIf.Else= new SerializerTestSuite('Else');
-Serializer.Mutations.ControlsIf.Else.NoChild= new SerializerTestCase(
+Serializer.Mutations.ControlsIf.Else = new SerializerTestSuite('Else');
+Serializer.Mutations.ControlsIf.Else.NoChild = new SerializerTestCase(
     'NoChild',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_if" id="id******************" x="42" y="42">' +
@@ -1496,7 +1495,7 @@ Serializer.Mutations.ControlsIf.testSuites = [
 ];
 
 Serializer.Mutations.ListCreate = new SerializerTestSuite('ListCreate');
-Serializer.Mutations.ListCreate.Default= new SerializerTestCase(
+Serializer.Mutations.ListCreate.Default = new SerializerTestCase(
     'Default',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
@@ -1524,7 +1523,7 @@ Serializer.Mutations.ListCreate.testCases = [
 ];
 
 Serializer.Mutations.ListCreate.OneInput = new SerializerTestSuite('OneIput');
-Serializer.Mutations.ListCreate.OneInput.NoChild= new SerializerTestCase(
+Serializer.Mutations.ListCreate.OneInput.NoChild = new SerializerTestCase(
     'NoChild',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="lists_create_with" id="id******************" x="42" y="42">' +
@@ -1682,17 +1681,17 @@ Serializer.Mutations.Procedure.Names.ControlChars = new SerializerTestCase(
     '</block>' +
     '</xml>');
 Serializer.Mutations.Procedure.Names.testCases = [
-  Serializer.Icons.Comment.Text.Symbols,
-  Serializer.Icons.Comment.Text.EscapedSymbols,
-  Serializer.Icons.Comment.Text.SingleQuotes,
-  Serializer.Icons.Comment.Text.DoubleQuotes,
-  Serializer.Icons.Comment.Text.Numbers,
-  Serializer.Icons.Comment.Text.Emoji,
-  Serializer.Icons.Comment.Text.Russian,
-  Serializer.Icons.Comment.Text.Japanese,
-  Serializer.Icons.Comment.Text.Zalgo,
+  Serializer.Mutations.Procedure.Names.Symbols,
+  Serializer.Mutations.Procedure.Names.EscapedSymbols,
+  Serializer.Mutations.Procedure.Names.SingleQuotes,
+  Serializer.Mutations.Procedure.Names.DoubleQuotes,
+  Serializer.Mutations.Procedure.Names.Numbers,
+  Serializer.Mutations.Procedure.Names.Emoji,
+  Serializer.Mutations.Procedure.Names.Russian,
+  Serializer.Mutations.Procedure.Names.Japanese,
+  Serializer.Mutations.Procedure.Names.Zalgo,
   // TODO: Uncoment once #4945 is merged.
-  // Serializer.Icons.Comment.Text.ControlChars,
+  // Serializer.Mutations.Procedure.Names.ControlChars,
 ];
 
 Serializer.Mutations.Procedure.testSuites = [

@@ -1,5 +1,4 @@
 *_compressed*.js
-*_uncompressed*.js
 gulpfile.js
 /msg/*
 /dist/*

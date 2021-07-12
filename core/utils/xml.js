@@ -25,6 +25,13 @@ goog.provide('Blockly.utils.xml');
 Blockly.utils.xml.NAME_SPACE = 'https://developers.google.com/blockly/xml';
 
 /**
+ * Matches control characters tha need to be replaced with NCRs (numerical
+ * character references) before serializing to XML.
+ */
+// eslint-disable-next-line no-control-regex
+Blockly.utils.xml.INVALID_CONTROL_CHARS = /[\u0000-\u0009\u000B\u000C\u000E-\u001F]/;
+
+/**
  * Get the document object.  This method is overridden in the Node.js build of
  * Blockly. See gulpfile.js, package-blockly-node task.
  * @return {!Document} The document object.
@@ -47,6 +54,7 @@ Blockly.utils.xml.createElement = function(tagName) {
 
 /**
  * Create text element for XML.
+ * serialized to XML.
  * @param {string} text Text content.
  * @return {!Text} New DOM text node.
  * @public
@@ -76,5 +84,19 @@ Blockly.utils.xml.textToDomDocument = function(text) {
  */
 Blockly.utils.xml.domToText = function(dom) {
   var oSerializer = new XMLSerializer();
-  return oSerializer.serializeToString(dom);
+  return Blockly.utils.xml.sanitizeText(oSerializer.serializeToString(dom));
+};
+
+/**
+ * Sanitizes a text string so that it can be serialized to XML. Specifically,
+ * this replaces control characters with their NCR (numerical character
+ * reference).
+ * @param {string} text The text to sanitize.
+ * @return {string} The sanitized text.
+ * @public
+ */
+Blockly.utils.xml.sanitizeText = function(text) {
+  return text.replace(Blockly.utils.xml.INVALID_CONTROL_CHARS, function(match) {
+    return '&#x' + match.charCodeAt(0).toString(16) + ';';
+  });
 };

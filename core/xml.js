@@ -278,7 +278,7 @@ Blockly.Xml.cloneShadow_ = function(shadow, opt_noId) {
   var node = shadow;
   var textNode;
   while (node) {
-    if (opt_noId && node.nodeName == 'shadow') {
+    if (opt_noId && node.nodeName.toLowerCase() == 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
       node.removeAttribute('id');
@@ -365,7 +365,14 @@ Blockly.Xml.textToDom = function(text) {
   var doc = Blockly.utils.xml.textToDomDocument(text);
   if (!doc || !doc.documentElement ||
       doc.getElementsByTagName('parsererror').length) {
-    throw Error('textToDom was unable to parse: ' + text);
+    var oParser = new DOMParser();
+    // Attempt to parse as html to deserialize control chars.
+    doc = oParser.parseFromString(text, 'text/html');
+    if (!doc || !doc.body.firstChild ||
+        doc.body.firstChild.nodeName.toLowerCase() != 'xml') {
+      throw Error('textToDom was unable to parse: ' + text);
+    }
+    return /** @type {!Element} */ (doc.body.firstChild);
   }
   return doc.documentElement;
 };

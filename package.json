@@ -52,7 +52,8 @@
     "test:generators": "tests/scripts/run_generators.sh",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
     "typings": "gulp typings",
-    "updateGithubPages": "gulp gitUpdateGithubPages"
+    "updateGithubPages": "gulp gitUpdateGithubPages",
+    "listReleaseNotes": "gulp listReleaseNotes"
   },
   "main": "./index.js",
   "umd": "./blockly.min.js",
@@ -88,6 +89,7 @@
     "http-server": "^0.12.3",
     "js-green-licenses": "^3.0.0",
     "mocha": "^8.1.1",
+    "node-fetch": "^2.6.1",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
     "selenium-standalone": "^7.1.0",

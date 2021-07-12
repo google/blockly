@@ -1,0 +1,16 @@
+# Copyright 2021 Google LLC
+# SPDX-License-Identifier: Apache-2.0
+
+# Creates an issue to post the release notes to the forums whenever a major
+# or minor release is triggered.
+
+name: 'Release Notes'
+on:
+  release:
+    types: [published]
+
+jobs:
+  notes:
+    steps:
+      - name: Create Notes
+        run: npm run listReleaseNotes -- --key ${{ secrets.GITHUB_TOKEN }}

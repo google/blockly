@@ -86,20 +86,11 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
     opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
-  var hasXmlHooks = Blockly.Extensions.checkXmlHooks_(mixinObj, errorPrefix);
-  var hasJsonHooks = Blockly.Extensions.checkXmlHooks_(mixinObj, errorPrefix);
-  if (hasXmlHooks && hasJsonHooks) {
-    throw Error(
-        'Mutations should only contain either XML hooks, or JSON hooks');
-  } else if (!hasXmlHooks && !hasJsonHooks) {
-    throw Error('Mutations must contain either XML hooks or JSON hooks');
-  }
-
+  Blockly.Extensions.checkHasMutatorProperties_(errorPrefix, mixinObj);
   var hasMutatorDialog =
       Blockly.Extensions.checkMutatorDialog_(mixinObj, errorPrefix);
-
   if (opt_helperFn && (typeof opt_helperFn != 'function')) {
-    throw Error('Extension "' + name + '" is not a function');
+    throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
@@ -157,7 +148,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 
   if (isMutator) {
     var errorPrefix = 'Error after applying mutator "' + name + '": ';
-    Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
+    Blockly.Extensions.checkHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(
         /** @type {!Array<Object>} */ (mutatorProperties), block)) {
@@ -285,24 +276,24 @@ Blockly.Extensions.checkHasFunctionPair_ =
   };
 
 /**
- * Check that a block has required mutator properties.  This should be called
- * after applying a mutation extension.
+ * Checks that the given object required mutator properties.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Blockly.Block} block The block to inspect.
+ * @param {!Object} object The object to inspect.
  * @private
  */
-Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
-    block) {
-  if (typeof block.domToMutation != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
+Blockly.Extensions.checkHasMutatorProperties_ = function(errorPrefix, object) {
+  var hasXmlHooks = Blockly.Extensions.checkXmlHooks_(object, errorPrefix);
+  var hasJsonHooks = Blockly.Extensions.checkJsonHooks_(object, errorPrefix);
+  if (hasXmlHooks && hasJsonHooks) {
+    throw Error(errorPrefix +
+        'Mutations should only contain either XML hooks, or JSON hooks');
+  } else if (!hasXmlHooks && !hasJsonHooks) {
+    throw Error(errorPrefix +
+        'Mutations must contain either XML hooks or JSON hooks');
   }
-  if (typeof block.mutationToDom != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
-  }
-
   // A block with a mutator isn't required to have a mutation dialog, but
   // it should still have both or neither of compose and decompose.
-  Blockly.Extensions.checkMutatorDialog_(block, errorPrefix);
+  Blockly.Extensions.checkMutatorDialog_(object, errorPrefix);
 };
 
 /**
@@ -321,6 +312,12 @@ Blockly.Extensions.getMutatorProperties_ = function(block) {
   }
   if (block.mutationToDom !== undefined) {
     result.push(block.mutationToDom);
+  }
+  if (block.saveExtraState !== undefined) {
+    result.push(block.saveExtraState);
+  }
+  if (block.loadExtraState !== undefined) {
+    result.push(block.loadExtraState);
   }
   if (block.compose !== undefined) {
     result.push(block.compose);

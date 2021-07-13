@@ -151,7 +151,6 @@ Blockly.HorizontalFlyout.prototype.position = function() {
   var y = this.getY();
 
   this.positionAt_(this.width_, this.height_, x, y);
-  this.positionContents(Blockly.constants.AXIS.X);
 };
 
 /**
@@ -240,21 +239,92 @@ Blockly.HorizontalFlyout.prototype.wheel_ = function(e) {
  */
 Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
   Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
-  this.positionContents(Blockly.constants.AXIS.X);
+  this.layoutContent_();
+};
+
+/**
+ * Respositions the blocks, buttons and labels in the flyout based on their
+ *     current dimensions and order.
+ * @protected
+ */
+Blockly.HorizontalFlyout.prototype.layoutContent_ = function() {
+  this.workspace_.setResizesEnabled(false);
+  this.reflow();
+  var margin = this.MARGIN;
+  var cursorX = margin + this.tabWidth_;
+  var cursorY = margin;
+
+  var contents = this.contents_.slice();
+  var gaps = this.gaps_.slice();
+  // For RTL in a X axis layout, if the length of the blocks is less than the
+  // width of the flyout, the blocks need to be offset so that they appear
+  // right-aligned. To do so, we calculate the width of the blocks (and offset,
+  // if any) before adjusting the blocks' positions.
+  if (this.RTL) {
+    contents.reverse();
+    gaps.reverse();
+
+    var contentWidth = cursorX;
+    for (var i = 0, item; (item = contents[i]); i++) {
+      if (item instanceof Blockly.BlockSvg) {
+        contentWidth += item.getHeightWidth().width;
+      } else if (item instanceof Blockly.FlyoutButton) {
+        contentWidth += item.width;
+      }
+      contentWidth += gaps[i];
+    }
+    var delta = this.getWidth() - contentWidth;
+    if (delta > 0) {
+      cursorX += delta;
+    }
+  }
+  
+  for (var i = 0, item; (item = contents[i]); i++) {
+    if (item instanceof Blockly.BlockSvg) {
+      var block = item;
+      var dimensions = block.getHeightWidth();
+      var position = block.getRelativeToSurfaceXY();
+
+      var destinationX = cursorX;
+      if (block.outputConnection && !this.RTL) {
+        destinationX -= this.tabWidth_;
+      }
+
+      if (this.RTL) {
+        destinationX += dimensions.width;
+      }
+      var destinationY = cursorY;
+
+      var deltaX = destinationX - position.x;
+      var deltaY = destinationY - position.y;
+
+      if (deltaX || deltaY) {
+        block.moveBy(deltaX, deltaY);
+      }
+      this.moveRectToBlock_(block.flyoutRect_, block);
+    } else if (item instanceof Blockly.FlyoutButton) {
+      item.moveTo(cursorX, cursorY);
+      var dimensions = item;
+    }
+
+    cursorX += dimensions.width + gaps[i];
+  }
+  this.workspace_.setResizesEnabled(true);
 };
 
 /**
  * Respond to changes in the dimensions of blocks by repositioning the contents
- * of the flyout.
+ *     of the flyout.
  * @param {!Blockly.Events.BlockChange} event The block change event.
+ * @protected
  */
 Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
-    this.positionContents(Blockly.constants.AXIS.X);
+    this.layoutContent_();
     
     // If we're RTL, rerender the text fields on this block (which were being
     // edited to trigger this event) to fix their alignment relative to their
-    // parent block, which was just moved in the call to positionContents above.
+    // parent block, which was just moved in the call to layoutContent_ above.
     // This avoids the editing field falling out of alignment with the field
     // rendered on the block itself.
     if (this.RTL) {
@@ -262,9 +332,7 @@ Blockly.HorizontalFlyout.prototype.handleBlockChange_ = function(event) {
       for (var i = 0; i < block.inputList.length; i++) {
         for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
           var field = block.inputList[i].fieldRow[j];
-          if (field instanceof Blockly.FieldTextInput) {
-            field.forceRerender();
-          }
+          field.forceRerender();
         }
       }
     }
@@ -363,6 +431,16 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
     this.targetWorkspace.recordDragTargets();
   }
 };
+
+/**
+ * Dispose of this flyout.
+ * Remove listeners to prevent memory leaks/errant calls.
+ */
+Blockly.HorizontalFlyout.prototype.dispose = function() {
+  this.workspace_.removeChangeListener(this.handleBlockChange_);
+  Blockly.HorizontalFlyout.superClass_.dispose.call(this);
+};
+
 
 Blockly.registry.register(Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
     Blockly.registry.DEFAULT, Blockly.HorizontalFlyout);

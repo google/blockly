@@ -230,7 +230,56 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  */
 Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   Blockly.Flyout.prototype.layout_.call(this, contents, gaps);
-  this.positionContents(Blockly.constants.AXIS.Y);
+  this.layoutContent_();
+};
+
+/**
+ * Respositions the blocks, buttons and labels in the flyout based on their
+ *     current dimensions and order.
+ * @protected
+ */
+Blockly.VerticalFlyout.prototype.layoutContent_ = function() {
+  this.workspace_.setResizesEnabled(false);
+  this.reflow();
+  var margin = this.MARGIN;
+  var cursorX = margin + this.tabWidth_;
+  var cursorY = margin;
+
+  var contents = this.contents_.slice();
+  var gaps = this.gaps_.slice();
+  
+  for (var i = 0, item; (item = contents[i]); i++) {
+    if (item instanceof Blockly.BlockSvg) {
+      var block = item;
+      var dimensions = block.getHeightWidth();
+      var position = block.getRelativeToSurfaceXY();
+
+      var destinationX = cursorX;
+      if (block.outputConnection && !this.RTL) {
+        destinationX -= this.tabWidth_;
+      }
+
+      if (this.RTL) {
+        destinationX = (this.width_ / this.workspace_.scale) - (margin * 2) +
+            (block.outputConnection ? this.tabWidth_ : 0);
+      }
+      var destinationY = cursorY;
+
+      var deltaX = destinationX - position.x;
+      var deltaY = destinationY - position.y;
+
+      if (deltaX || deltaY) {
+        block.moveBy(deltaX, deltaY);
+      }
+      this.moveRectToBlock_(block.flyoutRect_, block);
+    } else if (item instanceof Blockly.FlyoutButton) {
+      item.moveTo(cursorX, cursorY);
+      var dimensions = item;
+    }
+
+    cursorY += dimensions.height + gaps[i];
+  }
+  this.workspace_.setResizesEnabled(true);
 };
 
 /**
@@ -240,14 +289,12 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  */
 Blockly.VerticalFlyout.prototype.handleBlockChange_ = function(event) {
   if (event.type === Blockly.Events.BLOCK_CHANGE) {
-    this.positionContents(Blockly.constants.AXIS.Y);
+    this.layoutContent_();
     var block = this.workspace_.getBlockById(event.blockId);
     for (var i = 0; i < block.inputList.length; i++) {
       for (var j = 0; j < block.inputList[i].fieldRow.length; j++) {
         var field = block.inputList[i].fieldRow[j];
-        if (field instanceof Blockly.FieldTextInput) {
-          field.forceRerender();
-        }
+        field.forceRerender();
       }
     }
   }
@@ -369,6 +416,15 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
     this.position();
     this.targetWorkspace.recordDragTargets();
   }
+};
+
+/**
+ * Dispose of this flyout.
+ * Remove listeners to prevent memory leaks/errant calls.
+ */
+Blockly.VerticalFlyout.prototype.dispose = function() {
+  this.workspace_.removeChangeListener(this.handleBlockChange_);
+  Blockly.VerticalFlyout.superClass_.dispose.call(this);
 };
 
 Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,

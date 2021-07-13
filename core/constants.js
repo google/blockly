@@ -123,15 +123,6 @@ Blockly.constants.ALIGN = {
 };
 
 /**
- * Enum for axes.
- * @enum {string}
- */
-Blockly.constants.AXIS = {
-  X: 'x',
-  Y: 'y',
-};
-
-/**
  * ENUM for no drag operation.
  * @const
  */

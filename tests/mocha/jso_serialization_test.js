@@ -34,7 +34,7 @@ suite.only('JSO', function() {
 
       test('Basic', function() {
         const block = this.workspace.newBlock('row_block');
-        const jso = Blockly.serialization.blocks.save(block, true, false);
+        const jso = Blockly.serialization.blocks.save(block);
         assertProperty(jso, 'type', 'row_block');
         assertProperty(jso, 'id', 'id0');
       });
@@ -44,14 +44,14 @@ suite.only('JSO', function() {
           test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setCollapsed(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'collapsed', true);
           });
 
           test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setCollapsed(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'collapsed');
           });
         });
@@ -60,14 +60,14 @@ suite.only('JSO', function() {
           test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEnabled(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'disabled', true);
           });
   
           test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEnabled(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'disabled');
           });
         });
@@ -76,14 +76,14 @@ suite.only('JSO', function() {
           test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setDeletable(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'deletable', false);
           });
 
           test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setDeletable(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'deletable');
           });
 
@@ -91,7 +91,7 @@ suite.only('JSO', function() {
             const block = this.workspace.newBlock('row_block');
             block.setDeletable(false);
             block.setShadow(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'deletable');
           });
         });
@@ -100,14 +100,14 @@ suite.only('JSO', function() {
           test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setMovable(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'movable', false);
           });
 
           test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setMovable(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'movable');
           });
 
@@ -115,7 +115,7 @@ suite.only('JSO', function() {
             const block = this.workspace.newBlock('row_block');
             block.setMovable(false);
             block.setShadow(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'movable');
           });
         });
@@ -124,14 +124,14 @@ suite.only('JSO', function() {
           test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEditable(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'editable', false);
           });
   
           test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEditable(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'editable');
           });
         });
@@ -140,20 +140,20 @@ suite.only('JSO', function() {
           test('True', function() {
             const block = this.workspace.newBlock('statement_block');
             block.setInputsInline(true);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'inline', true);
           });
 
           test('False', function() {
             const block = this.workspace.newBlock('statement_block');
             block.setInputsInline(false);
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertProperty(jso, 'inline', false);
           });
 
           test('undefined', function() {
             const block = this.workspace.newBlock('statement_block');
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'inline');
           });
 
@@ -161,7 +161,7 @@ suite.only('JSO', function() {
             const block = this.workspace.newBlock('statement_block');
             block.setInputsInline(true);
             block.inputsInlineDefault = true;
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'inline');
           });
 
@@ -169,7 +169,7 @@ suite.only('JSO', function() {
             const block = this.workspace.newBlock('statement_block');
             block.setInputsInline(false);
             block.inputsInlineDefault = false;
-            const jso = Blockly.serialization.blocks.save(block, true, false);
+            const jso = Blockly.serialization.blocks.save(block);
             assertNoProperty(jso, 'inline');
           });
         });

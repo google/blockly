@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -11,6 +11,7 @@
  * @param {string} title The title of this testcase.
  * @param {string} xml The XML to use for the round-trip test.
  * @constructor
+ * @extends {TestCase}
  */
 function SerializerTestCase(title, xml) {
   this.title = title;
@@ -27,6 +28,7 @@ SerializerTestCase.prototype.xml = '';
 /**
  * Constructs a serializer test suite.
  * @param {string} title The title of this test suite.
+ * @extends {TestSuite}
  */
 function SerializerTestSuite(title) {
   this.title = title;
@@ -1719,18 +1721,17 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
       Blockly.Xml.domToWorkspace(
           Blockly.Xml.textToDom(test.xml), this.workspace);
       if (serializer && deserializer) {
-        // do custom serialization and deserialization.
+        // TODO: Add support for custom serializeers and deserializers.
+        //    Will be added once we have the JSO format working.
       }
       var newXml = Blockly.Xml.workspaceToDom(this.workspace);
       chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
     };
   };
 
-  const createSuiteOrTestFunction = function(suiteOrTest) {
-    if (suiteOrTest instanceof testHelpers.TestSuite) {
-      return createSuiteOrTestFunction;
-    }
-    return createTestFunction(suiteOrTest);
+  // This takes in a suite, but we don't care.
+  const createTestCaseFunction = function(_) {
+    return createTestFunction;
   };
 
   let suiteCall = (testSuite.skip ? suite.skip : suite);
@@ -1746,7 +1747,7 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
     });
 
     testHelpers.runTestSuites(
-        testSuite.testSuites, createSuiteOrTestFunction);
+        testSuite.testSuites, createTestCaseFunction);
     testHelpers.runTestCases(testSuite.testCases, createTestFunction);
   });
 };

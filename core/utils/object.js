@@ -46,7 +46,7 @@ Blockly.utils.object.inherits = function(childCtor, parentCtor) {
  * @param {!Object} source Source.
  */
 Blockly.utils.object.mixin = function(target, source) {
-  for (var x in source) {
+  for (const x in source) {
     target[x] = source[x];
   }
 };
@@ -58,7 +58,7 @@ Blockly.utils.object.mixin = function(target, source) {
  * @return {!Object} The resulting object.
  */
 Blockly.utils.object.deepMerge = function(target, source) {
-  for (var x in source) {
+  for (const x in source) {
     if (source[x] != null && typeof source[x] === 'object') {
       target[x] = Blockly.utils.object.deepMerge(
           target[x] || Object.create(null), source[x]);

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -28,6 +28,10 @@ suite.only('JSO', function() {
         chai.assert.equal(obj[property], value);
       }
 
+      function assertNoProperty(obj, property) {
+        assertProperty(obj, property, undefined);
+      }
+
       test('Basic', function() {
         const block = this.workspace.newBlock('row_block');
         const jso = Blockly.serialization.blocks.save(block, true, false);
@@ -36,39 +40,100 @@ suite.only('JSO', function() {
       });
 
       suite('Attributes', function() {
-        test('Collapsed', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.setCollapsed(true);
-          const jso = Blockly.serialization.blocks.save(block, true, false);
-          assertProperty(jso, 'collapsed', true);
+        suite('Collapsed', function() {
+          test('True', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setCollapsed(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertProperty(jso, 'collapsed', true);
+          });
+
+          test('False', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setCollapsed(false);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'collapsed');
+          });
         });
 
-        test('Disabled', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.setDisabled(true);
-          const jso = Blockly.serialization.blocks.save(block, true, false);
-          assertProperty(jso, 'disabled', true);
+        suite('Disabled', function() {
+          test('True', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setEnabled(false);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertProperty(jso, 'disabled', true);
+          });
+  
+          test('False', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setEnabled(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'disabled');
+          });
         });
 
-        test('Deletable', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.setDeletable(false);
-          const jso = Blockly.serialization.blocks.save(block, true, false);
-          assertProperty(jso, 'deletable', false);
+        suite('Deletable', function() {
+          test('False', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setDeletable(false);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertProperty(jso, 'deletable', false);
+          });
+
+          test('True', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setDeletable(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'deletable');
+          });
+
+          test('False and Shadow', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setDeletable(false);
+            block.setShadow(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'deletable');
+          });
         });
 
-        test('Movable', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.setMovable(false);
-          const jso = Blockly.serialization.blocks.save(block, true, false);
-          assertProperty(jso, 'movable', false);
+        suite('Movable', function() {
+          test('False', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setMovable(false);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertProperty(jso, 'movable', false);
+          });
+
+          test('True', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setMovable(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'movable');
+          });
+
+          test('False and Shadow', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setMovable(false);
+            block.setShadow(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'movable');
+          });
         });
 
-        test('Editable', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.setEditable(false);
-          const jso = Blockly.serialization.blocks.save(block, true, false);
-          assertProperty(jso, 'editable', false);
+        suite('Editable', function() {
+          test('False', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setEditable(false);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertProperty(jso, 'editable', false);
+          });
+  
+          test('True', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.setEditable(true);
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'editable');
+          });
         });
 
         suite('Inline', function() {
@@ -84,6 +149,28 @@ suite.only('JSO', function() {
             block.setInputsInline(false);
             const jso = Blockly.serialization.blocks.save(block, true, false);
             assertProperty(jso, 'inline', false);
+          });
+
+          test('undefined', function() {
+            const block = this.workspace.newBlock('statement_block');
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'inline');
+          });
+
+          test('True, matching default', function() {
+            const block = this.workspace.newBlock('statement_block');
+            block.setInputsInline(true);
+            block.inputsInlineDefault = true;
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'inline');
+          });
+
+          test('False, matching default', function() {
+            const block = this.workspace.newBlock('statement_block');
+            block.setInputsInline(false);
+            block.inputsInlineDefault = false;
+            const jso = Blockly.serialization.blocks.save(block, true, false);
+            assertNoProperty(jso, 'inline');
           });
         });
       });

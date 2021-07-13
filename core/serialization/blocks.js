@@ -13,34 +13,34 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
-const save =
-    function(block, {justThisBlock = false, addCoordinates = false} = {}) {
-      const state = Object.create(null);
-      state['type'] = block.type;
-      state['id'] = block.id;
-    
-      addAttributes(block, state);
-      if (addCoordinates) {
-        addCoordinates(block, state);
-      }
-    
-      return state;
-    };
+const save = function(
+    block, {justThisBlock = false, addCoordinates = false} = {}) {
+  const state = Object.create(null);
+  state['type'] = block.type;
+  state['id'] = block.id;
+
+  addAttributes(block, state);
+  if (addCoordinates) {
+    addCoordinates(block, state);
+  }
+
+  return state;
+};
 
 const addAttributes = function(block, state) {
-  if (block.isCollapsed()){
+  if (block.isCollapsed()) {
     state['collapsed'] = true;
   }
-  if (!block.isEnabled()){
+  if (!block.isEnabled()) {
     state['disabled'] = true;
   }
-  if (!block.isEditable()){
+  if (!block.isEditable()) {
     state['editable'] = false;
   }
-  if (!block.isDeletable() && !block.isShadow()){
+  if (!block.isDeletable() && !block.isShadow()) {
     state['deletable'] = false;
   }
-  if (!block.isMovable() && !block.isShadow()){
+  if (!block.isMovable() && !block.isShadow()) {
     state['movable'] = false;
   }
 
@@ -55,13 +55,11 @@ const addAttributes = function(block, state) {
   }
 };
 
-addCoordinates = function(block, state) {
+const addCoordinates = function(block, state) {
   const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 };
 
-exports = {
-  save
-}
+exports = {save}

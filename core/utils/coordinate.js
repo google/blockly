@@ -63,8 +63,8 @@ Blockly.utils.Coordinate.equals = function(a, b) {
  * @return {number} The distance between `a` and `b`.
  */
 Blockly.utils.Coordinate.distance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
   return Math.sqrt(dx * dx + dy * dy);
 };
 

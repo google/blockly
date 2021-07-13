@@ -763,13 +763,11 @@ Blockly.Block.prototype.setParent = function(newParent) {
     // Remove this block from the old parent's child list.
     Blockly.utils.arrayRemove(this.parentBlock_.childBlocks_, this);
 
-    // Reflect disconnection from superior blocks.
-    this.parentBlock_ = null;
-
     // This block hasn't actually moved on-screen, so there's no need to update
-    // its connection locations.
+    //     its connection locations.
   } else {
-    // Remove this block from the workspace's list of top-most blocks.
+    // New parent must be non-null so remove this block from the workspace's 
+    //     list of top-most blocks.
     this.workspace.removeTopBlock(this);
   }
 

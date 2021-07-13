@@ -59,6 +59,11 @@ Blockly.serialization.blocks.addAttributes_ = function(block, state) {
       block.inputsInline !== block.inputsInlineDefault) {
     state['inline'] = block.inputsInline;
   }
+
+  // Data is a nullable string, so we don't need to worry about falsy values.
+  if (block.data) {
+    state['data'] = block.data;
+  }
 };
 
 Blockly.serialization.blocks.addCoordinates_ = function(block, state) {

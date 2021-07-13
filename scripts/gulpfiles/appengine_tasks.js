@@ -28,7 +28,7 @@ function prepareDeployDir(done) {
   if (fs.existsSync(demoTmpDir)) {
     rimraf.sync(demoTmpDir);
   }
-  fs.mkdir(demoStaticTmpDir, {recursive: true});
+  fs.mkdirSync(demoStaticTmpDir, {recursive: true});
   done();
 }
 

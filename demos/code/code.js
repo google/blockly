@@ -187,11 +187,8 @@ Code.bindClick = function(el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
-  if (Blockly.utils.userAgent.MOBILE || Blockly.utils.userAgent.TABLET) {
-    el.addEventListener('touchend', func, true);
-  } else {
-    el.addEventListener('click', func, true);
-  }
+  el.addEventListener('click', func, true);
+  el.addEventListener('touchend', func, true);
 };
 
 /**
@@ -552,8 +549,14 @@ Code.initLanguage = function() {
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
+ * @param {UIEvent} event Event created from listener bound to the function
  */
-Code.runJS = function() {
+Code.runJS = function(event) {
+  // Prevent code from being executed twice on touchscreens.
+  if (event.type == 'touchend') {
+    event.preventDefault();
+  }
+
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {

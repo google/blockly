@@ -3,10 +3,10 @@
 # Determines the size of generated files and updates check_metadata.sh to
 # reflect the new values.
 
-blockly_size=$(wc -c < "blockly_compressed.js")
-blocks_size=$(wc -c < "blocks_compressed.js")
-blockly_gz_size=$(wc -c < "blockly_compressed.js.gz")
-blocks_gz_size=$(wc -c < "blocks_compressed.js.gz")
+blockly_size=$(wc -c < "build/blockly_compressed.js")
+blocks_size=$(wc -c < "build/blocks_compressed.js")
+blockly_gz_size=$(wc -c < "build/blockly_compressed.js.gz")
+blocks_gz_size=$(wc -c < "build/blocks_compressed.js.gz")
 quarter=$(date "+Q%q %Y")
 version=$(npx -c 'echo "$npm_package_version"')
 

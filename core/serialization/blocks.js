@@ -26,17 +26,6 @@ Blockly.serialization.blocks.save =
       return state;
     };
 
-Blockly.serialization.blocks.setupSaveOptions_ = function(options) {
-  options = options || Object.create(null);
-  if (options.justThisBlock === undefined) {
-    options.justThisBlock = false;
-  }
-  if (options.addCoordinates === undefined) {
-    options.addCoordinates = false;
-  }
-  return options;
-};
-
 Blockly.serialization.blocks.addAttributes_ = function(block, state) {
   if (block.isCollapsed()){
     state['collapsed'] = true;

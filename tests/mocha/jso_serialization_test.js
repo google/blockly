@@ -176,25 +176,35 @@ suite.only('JSO', function() {
       });
 
       suite('Coords', function() {
+        test('No coordinates', function() {
+          const block = this.workspace.newBlock('row_block');
+          const jso = Blockly.serialization.blocks.save(block);
+          assertNoProperty(jso, 'x');
+          assertNoProperty(jso, 'y');
+        });
+
         test('Simple', function() {
-          const block = this.workspace.newBlock('statement_block');
+          const block = this.workspace.newBlock('row_block');
           block.moveBy(42, 42);
-          const jso = Blockly.serialization.blocks.save(block, true, true);
+          const jso =
+              Blockly.serialization.blocks.save(block, {addCoordinates: true});
           assertProperty(jso, 'x', 42);
           assertProperty(jso, 'y', 42);
         });
 
         test('Negative', function() {
-          const block = this.workspace.newBlock('statement_block');
+          const block = this.workspace.newBlock('row_block');
           block.moveBy(-42, -42);
-          const jso = Blockly.serialization.blocks.save(block, true, true);
+          const jso =
+              Blockly.serialization.blocks.save(block, {addCoordinates: true});
           assertProperty(jso, 'x', -42);
           assertProperty(jso, 'y', -42);
         });
 
         test('Zero', function() {
-          const block = this.workspace.newBlock('statement_block');
-          const jso = Blockly.serialization.blocks.save(block, true, true);
+          const block = this.workspace.newBlock('row_block');
+          const jso =
+              Blockly.serialization.blocks.save(block, {addCoordinates: true});
           assertProperty(jso, 'x', 0);
           assertProperty(jso, 'y', 0);
         });

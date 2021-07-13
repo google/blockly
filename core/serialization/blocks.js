@@ -13,26 +13,30 @@
 goog.provide('Blockly.serialization.blocks');
 
 Blockly.serialization.blocks.save = function(block, options) {
-  Blockly.serialization.blocks.setupSaveOptions_(options);
+  options = Blockly.serialization.blocks.setupSaveOptions_(options);
 
   var state = Object.create(null);
   state['type'] = block.type;
   state['id'] = block.id;
 
   Blockly.serialization.blocks.addAttributes_(block, state);
-  Blockly.serialization.blocks.addCoordinates_(block, state);
+  if (options.addCoordinates) {
+    Blockly.serialization.blocks.addCoordinates_(block, state);
+  }
 
   return state;
 };
 
-Blockly.serialization.blocks.setupSaveOptions_(options) {
-  if (justThisBlock === undefined) {
-    justThisBlock = false;
+Blockly.serialization.blocks.setupSaveOptions_ = function(options) {
+  options = options || Object.create(null);
+  if (options.justThisBlock === undefined) {
+    options.justThisBlock = false;
   }
-  if (addCoordinates === undefined) {
-    addCoordinates = false;
+  if (options.addCoordinates === undefined) {
+    options.addCoordinates = false;
   }
-}
+  return options;
+};
 
 Blockly.serialization.blocks.addAttributes_ = function(block, state) {
   if (block.isCollapsed()){

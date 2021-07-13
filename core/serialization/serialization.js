@@ -12,6 +12,7 @@
 
 /**
  * The top level namespace for JavaScript Object serialization.
- * @namespace Blockly.blockRendering
+ * @namespace Blockly.serialization
  */
-goog.provide('Blockly.serialization');
+goog.module('Blockly.serialization');
+goog.module.declareLegacyNamespace();

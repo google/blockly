@@ -10,23 +10,24 @@
  */
 'use strict';
 
-goog.provide('Blockly.serialization.blocks');
+goog.module('Blockly.serialization.blocks');
+goog.module.declareLegacyNamespace();
 
-Blockly.serialization.blocks.save =
+const save =
     function(block, {justThisBlock = false, addCoordinates = false} = {}) {
       const state = Object.create(null);
       state['type'] = block.type;
       state['id'] = block.id;
     
-      Blockly.serialization.blocks.addAttributes_(block, state);
+      addAttributes(block, state);
       if (addCoordinates) {
-        Blockly.serialization.blocks.addCoordinates_(block, state);
+        addCoordinates(block, state);
       }
     
       return state;
     };
 
-Blockly.serialization.blocks.addAttributes_ = function(block, state) {
+const addAttributes = function(block, state) {
   if (block.isCollapsed()){
     state['collapsed'] = true;
   }
@@ -54,9 +55,13 @@ Blockly.serialization.blocks.addAttributes_ = function(block, state) {
   }
 };
 
-Blockly.serialization.blocks.addCoordinates_ = function(block, state) {
+addCoordinates = function(block, state) {
   const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 };
+
+exports = {
+  save
+}

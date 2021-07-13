@@ -6,13 +6,8 @@ name: Update Metadata
 on: [workflow_dispatch]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [16.x]        
+  update-metadata:
+    runs-on: ubuntu-latest        
 
     steps:
     - name: Check Out Blockly
@@ -20,10 +15,22 @@ jobs:
       with:
         ref: 'develop'
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}        
+        node-version: 16.x
+
+    - name: Build Blockly
+      run: npm run build:compressed
+
+    - name: Build Blockly blocks
+      run: npm run build:blocks
+
+    - name: Gzip Blockly
+      run: gzip -k build/blockly_compressed.js
+
+    - name: Gzip Blockly blocks
+      run: gzip -k build/blocks_compressed.js
 
     - name: Update Metadata
       run: source ./tests/scripts/update_metadata.sh
@@ -31,9 +38,9 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@9825ae65b1cb54b543b938503728b432a0176d29
       with:
-        commit-message: Updated build artifact sizes in check_metadata.sh
+        commit-message: Update build artifact sizes in check_metadata.sh
         delete-branch: true
-        title: Updated build artifact sizes in check_metadata.sh
+        title: Update build artifact sizes in check_metadata.sh
 
     - name: View Pull Request
       run: echo "View Pull Request - ${{ steps.cpr.outputs.pull-request-url }}"

@@ -173,6 +173,21 @@ suite.only('JSO', function() {
             assertNoProperty(jso, 'inline');
           });
         });
+
+        suite('Data', function() {
+          test('No data', function() {
+            const block = this.workspace.newBlock('row_block');
+            const jso = Blockly.serialization.blocks.save(block);
+            assertNoProperty(jso, 'data');
+          });
+
+          test('With data', function() {
+            const block = this.workspace.newBlock('row_block');
+            block.data = 'some data';
+            const jso = Blockly.serialization.blocks.save(block);
+            assertProperty(jso, 'data', 'some data');
+          });
+        });
       });
 
       suite('Coords', function() {

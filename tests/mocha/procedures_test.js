@@ -765,7 +765,7 @@ suite('Procedures', function() {
                 'Callers are enabled when their definition is enabled (call ' +
                 i + ')');
           }
-          chai.assert.equal(firedEvents.length,3,
+          chai.assert.equal(firedEvents.length, 3,
               'An event was fired for the definition and each caller');
           for (var i = 0; i < 3; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',
@@ -801,7 +801,7 @@ suite('Procedures', function() {
               'Caller remains in disabled state when the definition is enabled');
           chai.assert.isTrue(this.barCalls[1].isEnabled(),
               'Caller returns to previous enabled state when the definition is enabled');
-          chai.assert.equal(firedEvents.length,2,
+          chai.assert.equal(firedEvents.length, 2,
               'An event was fired for the definition and the enabled caller');
           for (var i = 0; i < 2; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',

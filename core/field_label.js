@@ -65,7 +65,9 @@ Blockly.FieldLabel.prototype.DEFAULT_VALUE = '';
  */
 Blockly.FieldLabel.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldLabel(text, undefined, options);
+  // `this` might be a subclass of FieldLabel if that class doesn't override
+  // the static fromJson method.
+  return new this(text, undefined, options);
 };
 
 /**

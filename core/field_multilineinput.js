@@ -89,7 +89,9 @@ Blockly.FieldMultilineInput.prototype.configure_ = function(config) {
  */
 Blockly.FieldMultilineInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldMultilineInput(text, undefined, options);
+  // `this` might be a subclass of FieldMultilineInput if that class doesn't
+  // override the static fromJson method.
+  return new this(text, undefined, options);
 };
 
 /**

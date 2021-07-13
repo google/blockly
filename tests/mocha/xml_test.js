@@ -713,7 +713,7 @@ suite('XML', function() {
   });
   suite('appendDomToWorkspace', function() {
     setup(function() {
-      addBlockTypeToCleanup(this.sharedCleanup,'test_block');
+      addBlockTypeToCleanup(this.sharedCleanup, 'test_block');
       Blockly.Blocks['test_block'] = {
         init: function() {
           this.jsonInit({

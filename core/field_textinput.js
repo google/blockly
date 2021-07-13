@@ -110,7 +110,9 @@ Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
  */
 Blockly.FieldTextInput.fromJson = function(options) {
   var text = Blockly.utils.replaceMessageReferences(options['text']);
-  return new Blockly.FieldTextInput(text, undefined, options);
+  // `this` might be a subclass of FieldTextInput if that class doesn't override
+  // the static fromJson method.
+  return new this(text, undefined, options);
 };
 
 /**
@@ -340,6 +342,7 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
+  Blockly.Events.setGroup(true);
   var div = Blockly.WidgetDiv.DIV;
 
   Blockly.utils.dom.addClass(this.getClickTarget_(), 'editing');
@@ -368,8 +371,8 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
     div.style.borderRadius = borderRadius;
     div.style.transition = 'box-shadow 0.25s ease 0s';
     if (this.getConstants().FIELD_TEXTINPUT_BOX_SHADOW) {
-      div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0px 0px 0px ' +
-          4 * scale + 'px';
+      div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0 0 0 ' +
+          (4 * scale) + 'px';
     }
   }
   htmlInput.style.borderRadius = borderRadius;
@@ -402,6 +405,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
   if (this.onFinishEditing_) {
     this.onFinishEditing_(this.value_);
   }
+  Blockly.Events.setGroup(false);
 
   // Actual disposal.
   this.unbindInputEvents_();
@@ -477,15 +481,10 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
   if (text !== this.htmlInput_.oldValue_) {
     this.htmlInput_.oldValue_ = text;
 
-    // TODO(#2169): Once issue is fixed the setGroup functionality could be
-    //              moved up to the Field setValue method. This would create a
-    //              broader fix for all field types.
-    Blockly.Events.setGroup(true);
     var value = this.getValueFromEditorText_(text);
     this.setValue(value);
     this.forceRerender();
     this.resizeEditor_();
-    Blockly.Events.setGroup(false);
   }
 };
 

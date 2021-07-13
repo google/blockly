@@ -383,9 +383,8 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  // TODO(#5000): does mkidr -p work on Windows?
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
-  execSync(`mkdir -p ${outputDir}`, {stdio: 'inherit'});
+  fs.mkdirSync(outputDir, {recursive: true});
   
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));

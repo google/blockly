@@ -59,7 +59,7 @@ suite('Image Fields', function() {
       validTestCaseAssertField);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldImage, validValueCreationTestCases,invalidValueTestCases,
+      Blockly.FieldImage, validValueCreationTestCases, invalidValueTestCases,
       validTestCaseAssertField);
 
   /**

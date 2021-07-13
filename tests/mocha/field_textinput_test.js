@@ -64,7 +64,7 @@ suite('Text Input Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldTextInput, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldTextInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

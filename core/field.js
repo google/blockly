@@ -55,6 +55,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
+ * @abstract
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IKeyboardAccessible}
@@ -276,7 +277,7 @@ Blockly.Field.prototype.configure_ = function(config) {
  */
 Blockly.Field.prototype.setSourceBlock = function(block) {
   if (this.sourceBlock_) {
-    throw Error('Field already bound to a block.');
+    throw Error('Field already bound to a block');
   }
   this.sourceBlock_ = block;
 };

@@ -132,8 +132,9 @@ Blockly.FieldImage.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 Blockly.FieldImage.fromJson = function(options) {
-  return new Blockly.FieldImage(
-      options['src'], options['width'], options['height'],
+  // `this` might be a subclass of FieldImage if that class doesn't override
+  // the static fromJson method.
+  return new this(options['src'], options['width'], options['height'],
       undefined, undefined, undefined, options);
 };
 

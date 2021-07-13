@@ -74,7 +74,7 @@ suite('Checkbox Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldCheckbox, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldCheckbox, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

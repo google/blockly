@@ -149,7 +149,9 @@ Blockly.FieldDropdown.ImageProperties;
  * @nocollapse
  */
 Blockly.FieldDropdown.fromJson = function(options) {
-  return new Blockly.FieldDropdown(options['options'], undefined, options);
+  // `this` might be a subclass of FieldDropdown if that class doesn't override
+  // the static fromJson method.
+  return new this(options['options'], undefined, options);
 };
 
 /**

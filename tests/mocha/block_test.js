@@ -946,7 +946,6 @@ suite('Blocks', function() {
         chai.assert.throws(this.textBlock.setParent
             .bind(this.textBlock, this.printBlock));
         assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
-        // assertNonParentAndOrphan(this.printBlock, this.textBlock, 'TEXT');
         assertBlockIsOnlyChild(this.textJoinBlock, this.textBlock, 'ADD0');
       });
       test('Setting to same parent after disconnecting from it', function() {

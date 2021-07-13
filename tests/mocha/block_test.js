@@ -901,8 +901,8 @@ suite('Blocks', function() {
             '        <block type="text">' +
             '        </block>' +
             '      </value>' +
-            '    </block>' + 
-            '  </value>' + 
+            '    </block>' +
+            '  </value>' +
             '</block>'
         ), this.workspace);
         this.textJoinBlock = this.printBlock.getInputTargetBlock('TEXT');

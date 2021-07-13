@@ -766,7 +766,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.
   } else {
-    // New parent must be non-null so remove this block from the workspace's 
+    // New parent must be non-null so remove this block from the workspace's
     //     list of top-most blocks.
     this.workspace.removeTopBlock(this);
   }

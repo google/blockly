@@ -938,11 +938,11 @@ suite('Blocks', function() {
         assertBlockIsOnlyChild(this.printBlock, this.textBlock, 'TEXT');
       });
       test('Setting to new parent while connected to other block', function() {
-        // setting to grandparent with no available input connection
+        // Setting to grandparent with no available input connection.
         chai.assert.throws(this.textBlock.setParent
             .bind(this.textBlock, this.printBlock));
         this.textJoinBlock.outputConnection.disconnect();
-        // setting to block with available input connection
+        // Setting to block with available input connection.
         chai.assert.throws(this.textBlock.setParent
             .bind(this.textBlock, this.printBlock));
         assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
@@ -956,11 +956,11 @@ suite('Blocks', function() {
       });
       test('Setting to new parent when orphan', function() {
         this.textBlock.outputConnection.disconnect();
-        // when new parent has no available input connection
+        // When new parent has no available input connection.
         chai.assert.throws(this.textBlock.setParent
             .bind(this.textBlock, this.printBlock));
         this.textJoinBlock.outputConnection.disconnect();
-        // when new parent has available input connection
+        // When new parent has available input connection.
         chai.assert.throws(this.textBlock.setParent
             .bind(this.textBlock, this.printBlock));
 

@@ -191,8 +191,7 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    /* eslint-disable indent */
-    var children =
+    var children =  /* eslint-disable-next-line indent */
         /** @type {!Array<!Blockly.BlockSvg>} */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
       Blockly.ContextMenuItems.addDeletableBlocks_(children[i], deleteList);

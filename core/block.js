@@ -742,25 +742,33 @@ Blockly.Block.prototype.getChildren = function(ordered) {
  * @package
  */
 Blockly.Block.prototype.setParent = function(newParent) {
-  if (newParent == this.parentBlock_) {
+  if (newParent === this.parentBlock_) {
     return;
   }
+
+  // Check that block is connected to new parent if new parent is not null and
+  //    that block is not connected to superior one if new parent is null.
+  var connection = this.previousConnection || this.outputConnection;
+  var isConnected = !!(connection && connection.targetBlock());
+
+  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+    throw Error('Block connected to superior one that is not new parent.');
+  } else if (!isConnected && newParent) {
+    throw Error('Block not connected to new parent.');
+  } else if (isConnected && !newParent) {
+    throw Error('Cannot set parent to null while block is still connected to' +
+        ' superior block.');
+  }
+
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
     Blockly.utils.arrayRemove(this.parentBlock_.childBlocks_, this);
 
-    // Disconnect from superior blocks.
-    if (this.previousConnection && this.previousConnection.isConnected()) {
-      throw Error('Still connected to previous block.');
-    }
-    if (this.outputConnection && this.outputConnection.isConnected()) {
-      throw Error('Still connected to parent block.');
-    }
-    this.parentBlock_ = null;
     // This block hasn't actually moved on-screen, so there's no need to update
-    // its connection locations.
+    //     its connection locations.
   } else {
-    // Remove this block from the workspace's list of top-most blocks.
+    // New parent must be non-null so remove this block from the workspace's
+    //     list of top-most blocks.
     this.workspace.removeTopBlock(this);
   }
 

@@ -890,6 +890,96 @@ suite('Blocks', function() {
         chai.assert.equal(this.getNext().length, 6);
       });
     });
+    suite('Setting Parent Block', function() {
+      setup(function() {
+        this.printBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+            '<block type="text_print">' +
+            '  <value name="TEXT">' +
+            '    <block type="text_join">' +
+            '      <mutation items="2"></mutation>' +
+            '      <value name="ADD0">' +
+            '        <block type="text">' +
+            '        </block>' +
+            '      </value>' +
+            '    </block>' +
+            '  </value>' +
+            '</block>'
+        ), this.workspace);
+        this.textJoinBlock = this.printBlock.getInputTargetBlock('TEXT');
+        this.textBlock = this.textJoinBlock.getInputTargetBlock('ADD0');
+      });
+
+      function assertBlockIsOnlyChild(parent, child, inputName) {
+        chai.assert.equal(parent.getChildren().length, 1);
+        chai.assert.equal(parent.getInputTargetBlock(inputName), child);
+        chai.assert.equal(child.getParent(), parent);
+      }
+      function assertNonParentAndOrphan(nonParent, orphan, inputName) {
+        chai.assert.equal(nonParent.getChildren().length, 0);
+        chai.assert.isNull(nonParent.getInputTargetBlock('TEXT'));
+        chai.assert.isNull(orphan.getParent());
+      }
+      function assertOriginalSetup() {
+        assertBlockIsOnlyChild(this.printBlock, this.textJoinBlock, 'TEXT');
+        assertBlockIsOnlyChild(this.textJoinBlock, this.textBlock, 'ADD0');
+      }
+
+      test('Setting to connected parent', function() {
+        chai.assert.doesNotThrow(this.textJoinBlock.setParent
+            .bind(this.textJoinBlock, this.printBlock));
+        assertOriginalSetup.call(this);
+      });
+      test('Setting to new parent after connecting to it', function() {
+        this.textJoinBlock.outputConnection.disconnect();
+        this.textBlock.outputConnection
+            .connect(this.printBlock.getInput('TEXT').connection);
+        chai.assert.doesNotThrow(this.textBlock.setParent
+            .bind(this.textBlock, this.printBlock));
+        assertBlockIsOnlyChild(this.printBlock, this.textBlock, 'TEXT');
+      });
+      test('Setting to new parent while connected to other block', function() {
+        // Setting to grandparent with no available input connection.
+        chai.assert.throws(this.textBlock.setParent
+            .bind(this.textBlock, this.printBlock));
+        this.textJoinBlock.outputConnection.disconnect();
+        // Setting to block with available input connection.
+        chai.assert.throws(this.textBlock.setParent
+            .bind(this.textBlock, this.printBlock));
+        assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
+        assertBlockIsOnlyChild(this.textJoinBlock, this.textBlock, 'ADD0');
+      });
+      test('Setting to same parent after disconnecting from it', function() {
+        this.textJoinBlock.outputConnection.disconnect();
+        chai.assert.throws(this.textJoinBlock.setParent
+            .bind(this.textJoinBlock, this.printBlock));
+        assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
+      });
+      test('Setting to new parent when orphan', function() {
+        this.textBlock.outputConnection.disconnect();
+        // When new parent has no available input connection.
+        chai.assert.throws(this.textBlock.setParent
+            .bind(this.textBlock, this.printBlock));
+        this.textJoinBlock.outputConnection.disconnect();
+        // When new parent has available input connection.
+        chai.assert.throws(this.textBlock.setParent
+            .bind(this.textBlock, this.printBlock));
+
+        assertNonParentAndOrphan(this.printBlock, this.textJoinBlock, 'TEXT');
+        assertNonParentAndOrphan(this.printBlock, this.textBlock, 'TEXT');
+        assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
+      });
+      test('Setting parent to null after disconnecting', function() {
+        this.textBlock.outputConnection.disconnect();
+        chai.assert.doesNotThrow(this.textBlock.setParent
+            .bind(this.textBlock, null));
+        assertNonParentAndOrphan(this.textJoinBlock, this.textBlock, 'ADD0');
+      });
+      test('Setting parent to null without disconnecting', function() {
+        chai.assert.throws(this.textBlock.setParent
+            .bind(this.textBlock, null));
+        assertOriginalSetup.call(this);
+      });
+    });
     suite('Remove Connections Programmatically', function() {
       test('Output', function() {
         var block = createRenderedBlock(this.workspace, 'row_block');
@@ -1106,9 +1196,14 @@ suite('Blocks', function() {
   });
   suite('Getting/Setting Field (Values)', function() {
     setup(function() {
+      this.workspace = Blockly.inject('blocklyDiv');
       this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
           '<block type="text"><field name = "TEXT">test</field></block>'
       ), this.workspace);
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
     });
 
     test('Getting Field', function() {

@@ -187,7 +187,7 @@ Code.bindClick = function(el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
-  if (Blockly.utils.userAgent.MOBILE) {
+  if (Blockly.utils.userAgent.MOBILE || Blockly.utils.userAgent.TABLET) {
     el.addEventListener('touchend', func, true);
   } else {
     el.addEventListener('click', func, true);

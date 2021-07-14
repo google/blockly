@@ -48,7 +48,7 @@ Blockly.utils.math.toDegrees = function(angleRadians) {
  */
 Blockly.utils.math.clamp = function(lowerBound, number, upperBound) {
   if (upperBound < lowerBound) {
-    var temp = upperBound;
+    const temp = upperBound;
     upperBound = lowerBound;
     lowerBound = temp;
   }

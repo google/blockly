@@ -56,4 +56,8 @@ const clamp = function(lowerBound, number, upperBound) {
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
 
-exports = {toRadians, toDegrees, clamp};
+exports = {
+  toRadians,
+  toDegrees,
+  clamp
+};

@@ -13,12 +13,11 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
+goog.require('Blockly.Xml');
+
 
 // TODO: Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
-
-// IMPORTANT: Use train-case for all property names to ensure compatibility
-//     with caseless formats.
 
 /**
  * Represents the state of a given block.
@@ -34,6 +33,7 @@ goog.module.declareLegacyNamespace();
  *     movable: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
+ *     extra-state: *
  * }}
  */
 var State;
@@ -63,6 +63,7 @@ const save = function(block, {addCoordinates = false} = {}) {
     addCoords(block, state);
   }
   addAttributes(block, state);
+  addExtraState(block, state);
 
   return state;
 };
@@ -115,3 +116,17 @@ const addCoords = function(block, state) {
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 };
+
+/**
+ * Adds any extra state the block may provide to the given state object.
+ * @param {!Blockly.Block} block The block to serialize the extra state of.
+ * @param {!Blockly.serialization.blocks.State} state The state object to append
+ *     to.
+ */
+function addExtraState(block, state) {
+  if (block.saveExtraState) {
+    state['extra-state'] = block.saveExtraState();
+  } else if (block.mutationToDom) {  // Backwards compatibility.
+    state['extra-state'] = Blockly.Xml.domToText(block.mutationToDom());
+  }
+}

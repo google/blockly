@@ -49,7 +49,7 @@ var State;
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
  */
-function save(block, {addCoordinates = false} = {}) {
+const save = function(block, {addCoordinates = false} = {}) {
   if (block.isInsertionMarker()) {
     return null;
   }
@@ -64,7 +64,7 @@ function save(block, {addCoordinates = false} = {}) {
   addAttributes(block, state);
 
   return state;
-}
+};
 
 /**
  * Adds attributes to the given state object based on the state of the block.
@@ -73,7 +73,7 @@ function save(block, {addCoordinates = false} = {}) {
  * @param {!Blockly.serialization.blocks.State} state The state object to append
  *     to.
  */
-function addAttributes(block, state) {
+const addAttributes = function(block, state) {
   if (block.isCollapsed()) {
     state['collapsed'] = true;
   }
@@ -99,7 +99,7 @@ function addAttributes(block, state) {
   if (block.data) {
     state['data'] = block.data;
   }
-}
+};
 
 /**
  * Adds the coordinates of the given block to the given state object.
@@ -107,11 +107,11 @@ function addAttributes(block, state) {
  * @param {!Blockly.serialization.blocks.State} state The state object to append
  *     to
  */
-function addCoords(block, state) {
+const addCoords = function(block, state) {
   const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
-}
+};
 
 exports = {save};

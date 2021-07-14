@@ -173,7 +173,7 @@ goog.addDependency('../../core/utils/aria.js', ['Blockly.utils.aria'], []);
 goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], []);
 goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], []);
 goog.addDependency('../../core/utils/deprecation.js', ['Blockly.utils.deprecation'], []);
-goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.Svg', 'Blockly.utils.userAgent']);
+goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.Svg', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/global.js', ['Blockly.utils.global'], []);
 goog.addDependency('../../core/utils/idgenerator.js', ['Blockly.utils.IdGenerator'], []);
 goog.addDependency('../../core/utils/keycodes.js', ['Blockly.utils.KeyCodes'], []);

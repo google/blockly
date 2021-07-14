@@ -16,7 +16,8 @@
  * @name Blockly.utils.IdGenerator
  * @namespace
  */
-goog.provide('Blockly.utils.IdGenerator');
+goog.module('Blockly.utils.IdGenerator');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -24,7 +25,7 @@ goog.provide('Blockly.utils.IdGenerator');
  * @type {number}
  * @private
  */
-Blockly.utils.IdGenerator.nextId_ = 0;
+let nextId = 0;
 
 /**
  * Gets the next unique ID.
@@ -32,6 +33,8 @@ Blockly.utils.IdGenerator.nextId_ = 0;
  * Use only ASCII letters, digits, '_', '-' and '.'
  * @return {string} The next unique identifier.
  */
-Blockly.utils.IdGenerator.getNextUniqueId = function() {
-  return 'blockly-' + (Blockly.utils.IdGenerator.nextId_++).toString(36);
+const getNextUniqueId = function() {
+  return 'blockly-' + (nextId++).toString(36);
 };
+
+exports = {getNextUniqueId};

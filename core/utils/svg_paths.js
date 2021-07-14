@@ -15,7 +15,8 @@
  * @name Blockly.utils.svgPaths
  * @namespace
  */
-goog.provide('Blockly.utils.svgPaths');
+goog.module('Blockly.utils.svgPaths');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -28,7 +29,7 @@ goog.provide('Blockly.utils.svgPaths');
  * @return {string} A string of the format ' x,y '
  * @public
  */
-Blockly.utils.svgPaths.point = function(x, y) {
+const point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
 };
 
@@ -45,7 +46,7 @@ Blockly.utils.svgPaths.point = function(x, y) {
  *     documentation for exact format.
  * @public
  */
-Blockly.utils.svgPaths.curve = function(command, points) {
+const curve = function(command, points) {
   return ' ' + command + points.join('');
 };
 
@@ -59,7 +60,7 @@ Blockly.utils.svgPaths.curve = function(command, points) {
  * @return {string} A string of the format ' M x,y '
  * @public
  */
-Blockly.utils.svgPaths.moveTo = function(x, y) {
+const moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
 };
 
@@ -73,7 +74,7 @@ Blockly.utils.svgPaths.moveTo = function(x, y) {
  * @return {string} A string of the format ' m dx,dy '
  * @public
  */
-Blockly.utils.svgPaths.moveBy = function(dx, dy) {
+const moveBy = function(dx, dy) {
   return ' m ' + dx + ',' + dy + ' ';
 };
 
@@ -87,7 +88,7 @@ Blockly.utils.svgPaths.moveBy = function(dx, dy) {
  * @return {string} A string of the format ' l dx,dy '
  * @public
  */
-Blockly.utils.svgPaths.lineTo = function(dx, dy) {
+const lineTo = function(dx, dy) {
   return ' l ' + dx + ',' + dy + ' ';
 };
 
@@ -102,7 +103,7 @@ Blockly.utils.svgPaths.lineTo = function(dx, dy) {
  * @return {string} A string of the format ' l (dx,dy)+ '
  * @public
  */
-Blockly.utils.svgPaths.line = function(points) {
+const line = function(points) {
   return ' l' + points.join('');
 };
 
@@ -119,7 +120,7 @@ Blockly.utils.svgPaths.line = function(points) {
  * @return {string} A string of the format ' command val '
  * @public
  */
-Blockly.utils.svgPaths.lineOnAxis = function(command, val) {
+const lineOnAxis = function(command, val) {
   return ' ' + command + ' ' + val + ' ';
 };
 
@@ -137,6 +138,17 @@ Blockly.utils.svgPaths.lineOnAxis = function(command, val) {
  * @return {string} A string of the format 'command radius radius flags point'
  * @public
  */
-Blockly.utils.svgPaths.arc = function(command, flags, radius, point) {
+const arc = function(command, flags, radius, point) {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
+};
+
+exports = {
+  point,
+  curve,
+  moveTo,
+  moveBy,
+  lineTo,
+  line,
+  lineOnAxis,
+  arc,
 };

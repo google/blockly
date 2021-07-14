@@ -171,7 +171,7 @@ goog.addDependency('../../core/trashcan.js', ['Blockly.Trashcan'], ['Blockly.Com
 goog.addDependency('../../core/utils.js', ['Blockly.utils'], ['Blockly.Msg', 'Blockly.constants', 'Blockly.utils.Coordinate', 'Blockly.utils.Rect', 'Blockly.utils.colour', 'Blockly.utils.global', 'Blockly.utils.string', 'Blockly.utils.style', 'Blockly.utils.userAgent']);
 goog.addDependency('../../core/utils/aria.js', ['Blockly.utils.aria'], []);
 goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], []);
+goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/deprecation.js', ['Blockly.utils.deprecation'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.Svg', 'Blockly.utils.userAgent']);
 goog.addDependency('../../core/utils/global.js', ['Blockly.utils.global'], []);

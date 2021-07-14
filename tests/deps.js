@@ -183,7 +183,7 @@ goog.addDependency('../../core/utils/object.js', ['Blockly.utils.object'], []);
 goog.addDependency('../../core/utils/rect.js', ['Blockly.utils.Rect'], []);
 goog.addDependency('../../core/utils/size.js', ['Blockly.utils.Size'], []);
 goog.addDependency('../../core/utils/string.js', ['Blockly.utils.string'], []);
-goog.addDependency('../../core/utils/style.js', ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size']);
+goog.addDependency('../../core/utils/style.js', ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/svg.js', ['Blockly.utils.Svg'], []);
 goog.addDependency('../../core/utils/svg_paths.js', ['Blockly.utils.svgPaths'], []);
 goog.addDependency('../../core/utils/toolbox.js', ['Blockly.utils.toolbox'], ['Blockly.Xml', 'Blockly.constants']);

@@ -123,11 +123,11 @@ const addCoords = function(block, state) {
  * @param {!Blockly.serialization.blocks.State} state The state object to append
  *     to.
  */
-function addExtraState(block, state) {
+const addExtraState = function(block, state) {
   if (block.saveExtraState) {
     state['extra-state'] = block.saveExtraState();
   } else if (block.mutationToDom) {  // Backwards compatibility.
     state['extra-state'] = Blockly.Xml.domToText(block.mutationToDom())
         .replace('xmlns="https://developers.google.com/blockly/xml"', '');
   }
-}
+};

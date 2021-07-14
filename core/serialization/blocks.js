@@ -14,6 +14,9 @@ goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
 
+// TODO: Remove this once lint is fixed.
+/* eslint-disable no-use-before-define */
+
 /**
  * Represents the state of a given block.
  * @typedef {{
@@ -30,7 +33,8 @@ goog.module.declareLegacyNamespace();
  *     data: ?string,
  * }}
  */
-const State;
+// eslint-disable-next-line no-unused-vars
+var State;
 
 /**
  * Returns the state of the given block as a plain JavaScript object.
@@ -45,9 +49,8 @@ const State;
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
  */
-const save = function(
-    block, {justThisBlock = false, addCoordinates = false} = {}) {
-  if (block.isInsertionarker()) {
+function save(block, {addCoordinates = false} = {}) {
+  if (block.isInsertionMarker()) {
     return null;
   }
 
@@ -56,12 +59,12 @@ const save = function(
   state['id'] = block.id;
 
   if (addCoordinates) {
-    addCoordinates(block, state);
+    addCoords(block, state);
   }
   addAttributes(block, state);
 
   return state;
-};
+}
 
 /**
  * Adds attributes to the given state object based on the state of the block.
@@ -70,7 +73,7 @@ const save = function(
  * @param {!Blockly.serialization.blocks.State} state The state object to append
  *     to.
  */
-const addAttributes = function(block, state) {
+function addAttributes(block, state) {
   if (block.isCollapsed()) {
     state['collapsed'] = true;
   }
@@ -96,7 +99,7 @@ const addAttributes = function(block, state) {
   if (block.data) {
     state['data'] = block.data;
   }
-};
+}
 
 /**
  * Adds the coordinates of the given block to the given state object.
@@ -104,11 +107,11 @@ const addAttributes = function(block, state) {
  * @param {!Blockly.serialization.blocks.State} state The state object to append
  *     to
  */
-const addCoordinates = function(block, state) {
+function addCoords(block, state) {
   const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
-};
+}
 
-exports = {save}
+exports = {save};

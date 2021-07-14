@@ -24,6 +24,7 @@ suite.only('JSO', function() {
   suite('Blocks', function() {
     test('Null on insertionMarkers', function() {
       const block = this.workspace.newBlock('row_block');
+      block.setInsertionMarker(true);
       const jso = Blockly.serialization.blocks.save(block);
       chai.assert.isNull(jso);
     });

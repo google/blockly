@@ -30,8 +30,7 @@ goog.module.declareLegacyNamespace();
  *     if any.
  * @package
  */
-const warn = function(
-    name, deprecationDate, deletionDate, opt_use) {
+const warn = function(name, deprecationDate, deletionDate, opt_use) {
   let msg = name + ' was deprecated on ' + deprecationDate +
       ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {

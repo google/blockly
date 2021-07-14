@@ -14,7 +14,8 @@
  * @name Blockly.utils.object
  * @namespace
  */
-goog.provide('Blockly.utils.object');
+goog.module('Blockly.utils.object');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -23,7 +24,7 @@ goog.provide('Blockly.utils.object');
  * @param {!Function} parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
  */
-Blockly.utils.object.inherits = function(childCtor, parentCtor) {
+const inherits = function(childCtor, parentCtor) {
   // Set a .superClass_ property so that methods can call parent methods
   // without hard-coding the parent class name.
   // Could be replaced by ES6's super().
@@ -45,8 +46,8 @@ Blockly.utils.object.inherits = function(childCtor, parentCtor) {
  * @param {!Object} target Target.
  * @param {!Object} source Source.
  */
-Blockly.utils.object.mixin = function(target, source) {
-  for (var x in source) {
+const mixin = function(target, source) {
+  for (const x in source) {
     target[x] = source[x];
   }
 };
@@ -57,11 +58,10 @@ Blockly.utils.object.mixin = function(target, source) {
  * @param {!Object} source Source.
  * @return {!Object} The resulting object.
  */
-Blockly.utils.object.deepMerge = function(target, source) {
-  for (var x in source) {
+const deepMerge = function(target, source) {
+  for (const x in source) {
     if (source[x] != null && typeof source[x] === 'object') {
-      target[x] = Blockly.utils.object.deepMerge(
-          target[x] || Object.create(null), source[x]);
+      target[x] = deepMerge(target[x] || Object.create(null), source[x]);
     } else {
       target[x] = source[x];
     }
@@ -74,7 +74,7 @@ Blockly.utils.object.deepMerge = function(target, source) {
  * @param {!Object} obj Object containing values.
  * @return {!Array} Array of values.
  */
-Blockly.utils.object.values = function(obj) {
+const values = function(obj) {
   if (Object.values) {
     return Object.values(obj);
   }
@@ -82,4 +82,11 @@ Blockly.utils.object.values = function(obj) {
   return Object.keys(obj).map(function(e) {
     return obj[e];
   });
+};
+
+exports = {
+  inherits,
+  mixin,
+  deepMerge,
+  values,
 };

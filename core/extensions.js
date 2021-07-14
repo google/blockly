@@ -20,9 +20,8 @@
 goog.module('Blockly.Extensions');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils');
-
-goog.requireType('Blockly.Block');
+const Block = goog.requireType('Blockly.Block');
+const {checkMessageReferences, replaceMessageReferences, runAfterPageLoad} = goog.require('Blockly.utils');
 
 
 /**
@@ -134,7 +133,7 @@ const unregister = function(name) {
  * Applies an extension method to a block. This should only be called during
  * block construction.
  * @param {string} name The name of the extension.
- * @param {!Blockly.Block} block The block to apply the named extension to.
+ * @param {!Block} block The block to apply the named extension to.
  * @param {boolean} isMutator True if this extension defines a mutator.
  * @throws {Error} if the extension is not found.
  */
@@ -191,7 +190,7 @@ const checkHasFunction = function(errorPrefix, func,
  * extension to a block, to make sure we are not overwriting properties.
  * @param {string} mutationName The name of the mutation to reference in error
  *     messages.
- * @param {!Blockly.Block} block The block to check.
+ * @param {!Block} block The block to check.
  * @throws {Error} if any of the properties already exist on the block.
  * @private
  */
@@ -238,7 +237,7 @@ const checkMutatorDialog = function(object, errorPrefix) {
  * Check that a block has required mutator properties.  This should be called
  * after applying a mutation extension.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Blockly.Block} block The block to inspect.
+ * @param {!Block} block The block to inspect.
  * @private
  */
 const checkBlockHasMutatorProperties = function(errorPrefix,
@@ -257,7 +256,7 @@ const checkBlockHasMutatorProperties = function(errorPrefix,
 
 /**
  * Get a list of values of mutator properties on the given block.
- * @param {!Blockly.Block} block The block to inspect.
+ * @param {!Block} block The block to inspect.
  * @return {!Array<Object>} A list with all of the defined properties, which
  *     should be functions, but may be anything other than undefined.
  * @private
@@ -286,7 +285,7 @@ const getMutatorProperties = function(block) {
  * properties.  This should be called after applying a non-mutator extension,
  * to verify that the extension didn't change properties it shouldn't.
  * @param {!Array<Object>} oldProperties The old values to compare to.
- * @param {!Blockly.Block} block The block to inspect for new values.
+ * @param {!Block} block The block to inspect for new values.
  * @return {boolean} True if the property lists match.
  * @private
  */
@@ -332,17 +331,17 @@ const buildTooltipForDropdown = function(dropdownName,
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
   // document object, in which case skip the validation.
   if (typeof document == 'object') {  // Relies on document.readyState
-    Blockly.utils.runAfterPageLoad(function() {
+    runAfterPageLoad(function() {
       for (let key in lookupTable) {
         // Will print warnings if reference is missing.
-        Blockly.utils.checkMessageReferences(lookupTable[key]);
+        checkMessageReferences(lookupTable[key]);
       }
     });
   }
 
   /**
    * The actual extension.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   const extensionFn = function () {
     if (this.type && blockTypesChecked.indexOf(this.type) == -1) {
@@ -365,7 +364,7 @@ const buildTooltipForDropdown = function(dropdownName,
           console.warn(warning + '.');
         }
       } else {
-        tooltip = Blockly.utils.replaceMessageReferences(tooltip);
+        tooltip = replaceMessageReferences(tooltip);
       }
       return tooltip;
     }.bind(this));
@@ -376,7 +375,7 @@ const buildTooltipForDropdown = function(dropdownName,
 /**
  * Checks all options keys are present in the provided string lookup table.
  * Emits console warnings when they are not.
- * @param {!Blockly.Block} block The block containing the dropdown
+ * @param {!Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
  * @param {!Object<string, string>} lookupTable The string lookup table
  * @private
@@ -413,20 +412,20 @@ const buildTooltipWithFieldText = function(msgTemplate,
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
   // document object, in which case skip the validation.
   if (typeof document == 'object') {  // Relies on document.readyState
-    Blockly.utils.runAfterPageLoad(function() {
+    runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
-      Blockly.utils.checkMessageReferences(msgTemplate);
+      checkMessageReferences(msgTemplate);
     });
   }
 
   /**
    * The actual extension.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   const extensionFn = function () {
     this.setTooltip(function () {
       const field = this.getField(fieldName);
-      return Blockly.utils.replaceMessageReferences(msgTemplate)
+      return replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
     }.bind(this));
   };
@@ -438,7 +437,7 @@ const buildTooltipWithFieldText = function(msgTemplate,
  * uses the tooltip text at the time this extension is initialized. This takes
  * advantage of the fact that all other values from JSON are initialized before
  * extensions.
- * @this {Blockly.Block}
+ * @this {Block}
  * @private
  */
 const extensionParentTooltip = function() {

@@ -26,12 +26,6 @@ jobs:
     - name: Build Blockly blocks
       run: npm run build:blocks
 
-    - name: Gzip Blockly
-      run: gzip -k build/blockly_compressed.js
-
-    - name: Gzip Blockly blocks
-      run: gzip -k build/blocks_compressed.js
-
     - name: Update Metadata
       run: source ./tests/scripts/update_metadata.sh
 

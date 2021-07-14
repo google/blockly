@@ -81,8 +81,7 @@ const getSizeWithDisplay = function(element) {
  * @private
  */
 const getStyle = function(element, style) {
-  return getComputedStyle(element, style) ||
-      getCascadedStyle(element, style) ||
+  return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
       (element.style && element.style[style]);
 };
 
@@ -221,11 +220,8 @@ const getBorderBox = function(element) {
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
-const scrollIntoContainerView = function(
-    element, container, opt_center) {
-  const offset =
-      getContainerOffsetToScrollInto(element,
-          container, opt_center);
+const scrollIntoContainerView = function(element, container, opt_center) {
+  const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
 };

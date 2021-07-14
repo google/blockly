@@ -19,8 +19,8 @@
 goog.module('Blockly.utils.dom');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.userAgent');
+const Svg = goog.require('Blockly.utils.Svg');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -76,12 +76,11 @@ let canvasContext = null;
 
 /**
  * Helper method for creating SVG elements.
- * @param {string|Blockly.utils.Svg<T>} name Element's tag name.
+ * @param {string|Svg<T>} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element=} opt_parent Optional parent on which to append the element.
  * @return {T} Newly created SVG element.  The return type is {!SVGElement} if
- *     name is a string or a more specific type if it a member of
- *     Blockly.utils.Svg
+ *     name is a string or a more specific type if it a member of Svg.
  * @template T
  */
 const createSvgElement = function(name, attrs, opt_parent) {
@@ -267,7 +266,7 @@ const getTextWidth = function(textElement) {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
+    if (userAgent.IE || userAgent.EDGE) {
       width = textElement.getBBox().width;
     } else {
       width = textElement.getComputedTextLength();

@@ -271,12 +271,14 @@ suite('JSO', function() {
 
         test('XML backwards compat', function() {
           const block = this.workspace.newBlock('row_block');
-          block.mutationToDom = function(container) {
+          block.mutationToDom = function() {
+            const container = Blockly.utils.xml.createElement('mutation');
             container.setAttribute('extra1', 'state1');
+            return container;
           };
           const jso = Blockly.serialization.blocks.save(block);
           assertProperty(
-              jso, 'extra-state', '<mutation extra1="state1"></mutation>');
+              jso, 'extra-state', '<mutation  extra1="state1"></mutation>');
         });
       });
     });

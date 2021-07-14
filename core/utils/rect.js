@@ -62,7 +62,8 @@ Rect.prototype.contains = function(x, y) {
  * @return {boolean} Whether this rectangle intersects the provided rectangle.
  */
 Rect.prototype.intersects = function(other) {
-  return !(this.left > other.right || this.right < other.left ||
+  return !(
+      this.left > other.right || this.right < other.left ||
       this.top > other.bottom || this.bottom < other.top);
 };
 

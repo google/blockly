@@ -84,9 +84,9 @@ Blockly.utils.dom.canvasContext_ = null;
  * @template T
  */
 Blockly.utils.dom.createSvgElement = function(name, attrs, opt_parent) {
-  var e = /** @type {T} */
+  const e = /** @type {T} */
       (document.createElementNS(Blockly.utils.dom.SVG_NS, String(name)));
-  for (var key in attrs) {
+  for (const key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
   // IE defines a unique attribute "runtimeStyle", it is NOT applied to
@@ -109,7 +109,7 @@ Blockly.utils.dom.createSvgElement = function(name, attrs, opt_parent) {
  * @return {boolean} True if class was added, false if already present.
  */
 Blockly.utils.dom.addClass = function(element, className) {
-  var classes = element.getAttribute('class') || '';
+  let classes = element.getAttribute('class') || '';
   if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
     return false;
   }
@@ -127,9 +127,9 @@ Blockly.utils.dom.addClass = function(element, className) {
  *    element.
  */
 Blockly.utils.dom.removeClasses = function(element, classNames) {
-  var classList = classNames.split(' ');
-  for (var i = 0; i < classList.length; i++) {
-    var cssName = classList[i];
+  const classList = classNames.split(' ');
+  for (let i = 0; i < classList.length; i++) {
+    const cssName = classList[i];
     Blockly.utils.dom.removeClass(element, cssName);
   }
 };
@@ -142,12 +142,12 @@ Blockly.utils.dom.removeClasses = function(element, classNames) {
  * @return {boolean} True if class was removed, false if never present.
  */
 Blockly.utils.dom.removeClass = function(element, className) {
-  var classes = element.getAttribute('class');
+  const classes = element.getAttribute('class');
   if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
     return false;
   }
-  var classList = classes.split(/\s+/);
-  for (var i = 0; i < classList.length; i++) {
+  const classList = classes.split(/\s+/);
+  for (let i = 0; i < classList.length; i++) {
     if (!classList[i] || classList[i] == className) {
       classList.splice(i, 1);
       i--;
@@ -169,7 +169,7 @@ Blockly.utils.dom.removeClass = function(element, className) {
  * @return {boolean} True if class exists, false otherwise.
  */
 Blockly.utils.dom.hasClass = function(element, className) {
-  var classes = element.getAttribute('class');
+  const classes = element.getAttribute('class');
   return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
 };
 
@@ -190,8 +190,8 @@ Blockly.utils.dom.removeNode = function(node) {
  * @param {!Element} refNode Existing element to precede new node.
  */
 Blockly.utils.dom.insertAfter = function(newNode, refNode) {
-  var siblingNode = refNode.nextSibling;
-  var parentNode = refNode.parentNode;
+  const siblingNode = refNode.nextSibling;
+  const parentNode = refNode.parentNode;
   if (!parentNode) {
     throw Error('Reference node has no parent.');
   }
@@ -253,8 +253,8 @@ Blockly.utils.dom.stopTextWidthCache = function() {
  * @return {number} Width of element.
  */
 Blockly.utils.dom.getTextWidth = function(textElement) {
-  var key = textElement.textContent + '\n' + textElement.className.baseVal;
-  var width;
+  const key = textElement.textContent + '\n' + textElement.className.baseVal;
+  let width;
 
   // Return the cached width if it exists.
   if (Blockly.utils.dom.cacheWidths_) {
@@ -316,9 +316,9 @@ Blockly.utils.dom.getFastTextWidth = function(textElement,
  */
 Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
     fontSize, fontWeight, fontFamily) {
-  var text = textElement.textContent;
-  var key = text + '\n' + textElement.className.baseVal;
-  var width;
+  const text = textElement.textContent;
+  const key = text + '\n' + textElement.className.baseVal;
+  let width;
 
   // Return the cached width if it exists.
   if (Blockly.utils.dom.cacheWidths_) {
@@ -330,7 +330,7 @@ Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
 
   if (!Blockly.utils.dom.canvasContext_) {
     // Inject the canvas element used for computing text widths.
-    var computeCanvas = document.createElement('canvas');
+    const computeCanvas = document.createElement('canvas');
     computeCanvas.className = 'blocklyComputeCanvas';
     document.body.appendChild(computeCanvas);
 
@@ -364,15 +364,15 @@ Blockly.utils.dom.getFastTextWidthWithSizeString = function(textElement,
 Blockly.utils.dom.measureFontMetrics = function(text, fontSize, fontWeight,
     fontFamily) {
 
-  var span = document.createElement('span');
+  const span = document.createElement('span');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 
-  var block = document.createElement('div');
+  const block = document.createElement('div');
   block.style.width = '1px';
   block.style.height = 0;
 
-  var div = document.createElement('div');
+  const div = document.createElement('div');
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
   div.appendChild(span);
   div.appendChild(block);

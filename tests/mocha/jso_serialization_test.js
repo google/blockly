@@ -22,6 +22,12 @@ suite.only('JSO', function() {
   });
 
   suite('Blocks', function() {
+    test('Null on insertionMarkers', function() {
+      const block = this.workspace.newBlock('row_block');
+      const jso = Blockly.serialization.blocks.save(block);
+      chai.assert.isNull(jso);
+    });
+
     suite('Save Single Block', function() {
 
       function assertProperty(obj, property, value) {

@@ -47,6 +47,10 @@ const State;
  */
 const save = function(
     block, {justThisBlock = false, addCoordinates = false} = {}) {
+  if (block.isInsertionarker()) {
+    return null;
+  }
+
   const state = Object.create(null);
   state['type'] = block.type;
   state['id'] = block.id;

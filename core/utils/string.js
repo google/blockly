@@ -16,7 +16,8 @@
  * @name Blockly.utils.string
  * @namespace
  */
-goog.provide('Blockly.utils.string');
+goog.module('Blockly.utils.string');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -26,7 +27,7 @@ goog.provide('Blockly.utils.string');
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
  */
-Blockly.utils.string.startsWith = function(str, prefix) {
+const startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) == 0;
 };
 
@@ -35,7 +36,7 @@ Blockly.utils.string.startsWith = function(str, prefix) {
  * @param {!Array<string>} array Array of strings.
  * @return {number} Length of shortest string.
  */
-Blockly.utils.string.shortestStringLength = function(array) {
+const shortestStringLength = function(array) {
   if (!array.length) {
     return 0;
   }
@@ -51,14 +52,14 @@ Blockly.utils.string.shortestStringLength = function(array) {
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
-Blockly.utils.string.commonWordPrefix = function(array, opt_shortest) {
+const commonWordPrefix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
   } else if (array.length == 1) {
     return array[0].length;
   }
   let wordPrefix = 0;
-  const max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
+  const max = opt_shortest || shortestStringLength(array);
   for (var len = 0; len < max; len++) {
     const letter = array[0][len];
     for (let i = 1; i < array.length; i++) {
@@ -86,14 +87,14 @@ Blockly.utils.string.commonWordPrefix = function(array, opt_shortest) {
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
-Blockly.utils.string.commonWordSuffix = function(array, opt_shortest) {
+const commonWordSuffix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
   } else if (array.length == 1) {
     return array[0].length;
   }
   let wordPrefix = 0;
-  const max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
+  const max = opt_shortest || shortestStringLength(array);
   for (var len = 0; len < max; len++) {
     const letter = array[0].substr(-len - 1, 1);
     for (let i = 1; i < array.length; i++) {
@@ -120,10 +121,10 @@ Blockly.utils.string.commonWordSuffix = function(array, opt_shortest) {
  * @param {number} limit Width to wrap each line.
  * @return {string} Wrapped text.
  */
-Blockly.utils.string.wrap = function(text, limit) {
+const wrap = function(text, limit) {
   const lines = text.split('\n');
   for (let i = 0; i < lines.length; i++) {
-    lines[i] = Blockly.utils.string.wrapLine_(lines[i], limit);
+    lines[i] = wrapLine(lines[i], limit);
   }
   return lines.join('\n');
 };
@@ -135,7 +136,7 @@ Blockly.utils.string.wrap = function(text, limit) {
  * @return {string} Wrapped text.
  * @private
  */
-Blockly.utils.string.wrapLine_ = function(text, limit) {
+const wrapLine = function(text, limit) {
   if (text.length <= limit) {
     // Short text, no need to wrap.
     return text;
@@ -170,9 +171,9 @@ Blockly.utils.string.wrapLine_ = function(text, limit) {
         wordBreaks[i] = false;
       }
     }
-    wordBreaks = Blockly.utils.string.wrapMutate_(words, wordBreaks, limit);
-    score = Blockly.utils.string.wrapScore_(words, wordBreaks, limit);
-    text = Blockly.utils.string.wrapToText_(words, wordBreaks);
+    wordBreaks = wrapMutate(words, wordBreaks, limit);
+    score = wrapScore(words, wordBreaks, limit);
+    text = wrapToText(words, wordBreaks);
     lineCount++;
   } while (score > lastScore);
   return lastText;
@@ -186,7 +187,7 @@ Blockly.utils.string.wrapLine_ = function(text, limit) {
  * @return {number} Larger the better.
  * @private
  */
-Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
+const wrapScore = function(words, wordBreaks, limit) {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
   const lineLengths = [0];
@@ -238,8 +239,8 @@ Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
  * @return {!Array<boolean>} New array of optimal line breaks.
  * @private
  */
-Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
-  let bestScore = Blockly.utils.string.wrapScore_(words, wordBreaks, limit);
+const wrapMutate = function(words, wordBreaks, limit) {
+  let bestScore = wrapScore(words, wordBreaks, limit);
   let bestBreaks;
   // Try shifting every line break forward or backward.
   for (let i = 0; i < wordBreaks.length - 1; i++) {
@@ -250,7 +251,7 @@ Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
     const mutatedScore =
-        Blockly.utils.string.wrapScore_(words, mutatedWordBreaks, limit);
+        wrapScore(words, mutatedWordBreaks, limit);
     if (mutatedScore > bestScore) {
       bestScore = mutatedScore;
       bestBreaks = mutatedWordBreaks;
@@ -258,7 +259,7 @@ Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
   }
   if (bestBreaks) {
     // Found an improvement.  See if it may be improved further.
-    return Blockly.utils.string.wrapMutate_(words, bestBreaks, limit);
+    return wrapMutate(words, bestBreaks, limit);
   }
   // No improvements found.  Done.
   return wordBreaks;
@@ -271,7 +272,7 @@ Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
  * @return {string} Plain text.
  * @private
  */
-Blockly.utils.string.wrapToText_ = function(words, wordBreaks) {
+const wrapToText = function(words, wordBreaks) {
   const text = [];
   for (let i = 0; i < words.length; i++) {
     text.push(words[i]);
@@ -280,5 +281,13 @@ Blockly.utils.string.wrapToText_ = function(words, wordBreaks) {
     }
   }
   return text.join('');
+};
+
+exports = {
+  startsWith,
+  shortestStringLength,
+  commonWordPrefix,
+  commonWordSuffix,
+  wrap,
 };
 

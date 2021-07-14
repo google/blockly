@@ -31,8 +31,8 @@ goog.provide('Blockly.utils.deprecation');
  */
 Blockly.utils.deprecation.warn = function(
     name, deprecationDate, deletionDate, opt_use) {
-  var msg = name + ' was deprecated on ' + deprecationDate +
-        ' and will be deleted on ' + deletionDate + '.';
+  let msg = name + ' was deprecated on ' + deprecationDate +
+      ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }

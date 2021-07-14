@@ -89,4 +89,4 @@ exports = {
   mixin,
   deepMerge,
   values,
-}
+};

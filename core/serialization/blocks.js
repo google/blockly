@@ -17,6 +17,9 @@ goog.module.declareLegacyNamespace();
 // TODO: Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
 
+// IMPORTANT: Use train-case for all property names to ensure compatibility
+//     with caseless formats.
+
 /**
  * Represents the state of a given block.
  * @typedef {{

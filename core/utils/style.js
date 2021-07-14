@@ -34,17 +34,17 @@ Blockly.utils.style.getSize = function(element) {
   }
 
   // Evaluate size with a temporary element.
-  var style = element.style;
-  var originalDisplay = style.display;
-  var originalVisibility = style.visibility;
-  var originalPosition = style.position;
+  const style = element.style;
+  const originalDisplay = style.display;
+  const originalVisibility = style.visibility;
+  const originalPosition = style.position;
 
   style.visibility = 'hidden';
   style.position = 'absolute';
   style.display = 'inline';
 
-  var offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
-  var offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
+  const offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
+  const offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
 
   style.display = originalDisplay;
   style.position = originalPosition;
@@ -60,8 +60,8 @@ Blockly.utils.style.getSize = function(element) {
  * @private
  */
 Blockly.utils.style.getSizeWithDisplay_ = function(element) {
-  var offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
-  var offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
+  const offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
+  const offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
   return new Blockly.utils.Size(offsetWidth, offsetHeight);
 };
 
@@ -99,7 +99,7 @@ Blockly.utils.style.getStyle_ = function(element, style) {
  */
 Blockly.utils.style.getComputedStyle = function(element, property) {
   if (document.defaultView && document.defaultView.getComputedStyle) {
-    var styles = document.defaultView.getComputedStyle(element, null);
+    const styles = document.defaultView.getComputedStyle(element, null);
     if (styles) {
       // element.style[..] is undefined for browser specific styles
       // as 'filter'.
@@ -132,13 +132,13 @@ Blockly.utils.style.getCascadedStyle = function(element, style) {
  * @return {!Blockly.utils.Coordinate} The page offset.
  */
 Blockly.utils.style.getPageOffset = function(el) {
-  var pos = new Blockly.utils.Coordinate(0, 0);
-  var box = el.getBoundingClientRect();
-  var documentElement = document.documentElement;
+  const pos = new Blockly.utils.Coordinate(0, 0);
+  const box = el.getBoundingClientRect();
+  const documentElement = document.documentElement;
   // Must add the scroll coordinates in to get the absolute page offset
   // of element since getBoundingClientRect returns relative coordinates to
   // the viewport.
-  var scrollCoord = new Blockly.utils.Coordinate(
+  const scrollCoord = new Blockly.utils.Coordinate(
       window.pageXOffset || documentElement.scrollLeft,
       window.pageYOffset || documentElement.scrollTop);
   pos.x = box.left + scrollCoord.x;
@@ -153,10 +153,10 @@ Blockly.utils.style.getPageOffset = function(el) {
  * @return {!Blockly.utils.Coordinate} The page offset of the viewport.
  */
 Blockly.utils.style.getViewportPageOffset = function() {
-  var body = document.body;
-  var documentElement = document.documentElement;
-  var scrollLeft = body.scrollLeft || documentElement.scrollLeft;
-  var scrollTop = body.scrollTop || documentElement.scrollTop;
+  const body = document.body;
+  const documentElement = document.documentElement;
+  const scrollLeft = body.scrollLeft || documentElement.scrollLeft;
+  const scrollTop = body.scrollTop || documentElement.scrollTop;
   return new Blockly.utils.Coordinate(scrollLeft, scrollTop);
 };
 
@@ -194,10 +194,10 @@ Blockly.utils.style.isRightToLeft = function(el) {
  * @return {!Object} The computed border widths.
  */
 Blockly.utils.style.getBorderBox = function(element) {
-  var left = Blockly.utils.style.getComputedStyle(element, 'borderLeftWidth');
-  var right = Blockly.utils.style.getComputedStyle(element, 'borderRightWidth');
-  var top = Blockly.utils.style.getComputedStyle(element, 'borderTopWidth');
-  var bottom = Blockly.utils.style.getComputedStyle(element, 'borderBottomWidth');
+  const left = Blockly.utils.style.getComputedStyle(element, 'borderLeftWidth');
+  const right = Blockly.utils.style.getComputedStyle(element, 'borderRightWidth');
+  const top = Blockly.utils.style.getComputedStyle(element, 'borderTopWidth');
+  const bottom = Blockly.utils.style.getComputedStyle(element, 'borderBottomWidth');
 
   return {
     top: parseFloat(top),
@@ -222,7 +222,7 @@ Blockly.utils.style.getBorderBox = function(element) {
  */
 Blockly.utils.style.scrollIntoContainerView = function(
     element, container, opt_center) {
-  var offset =
+  const offset =
       Blockly.utils.style.getContainerOffsetToScrollInto(element,
           container, opt_center);
   container.scrollLeft = offset.x;
@@ -247,21 +247,21 @@ Blockly.utils.style.scrollIntoContainerView = function(
 Blockly.utils.style.getContainerOffsetToScrollInto = function(
     element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
-  var elementPos = Blockly.utils.style.getPageOffset(element);
+  const elementPos = Blockly.utils.style.getPageOffset(element);
   // Absolute position of the container's border's top left corner.
-  var containerPos = Blockly.utils.style.getPageOffset(container);
-  var containerBorder = Blockly.utils.style.getBorderBox(container);
+  const containerPos = Blockly.utils.style.getPageOffset(container);
+  const containerBorder = Blockly.utils.style.getBorderBox(container);
   // Relative pos. of the element's border box to the container's content box.
-  var relX = elementPos.x - containerPos.x - containerBorder.left;
-  var relY = elementPos.y - containerPos.y - containerBorder.top;
+  const relX = elementPos.x - containerPos.x - containerBorder.left;
+  const relY = elementPos.y - containerPos.y - containerBorder.top;
   // How much the element can move in the container, i.e. the difference between
   // the element's bottom-right-most and top-left-most position where it's
   // fully visible.
-  var elementSize = Blockly.utils.style.getSizeWithDisplay_(element);
-  var spaceX = container.clientWidth - elementSize.width;
-  var spaceY = container.clientHeight - elementSize.height;
-  var scrollLeft = container.scrollLeft;
-  var scrollTop = container.scrollTop;
+  const elementSize = Blockly.utils.style.getSizeWithDisplay_(element);
+  const spaceX = container.clientWidth - elementSize.width;
+  const spaceY = container.clientHeight - elementSize.height;
+  let scrollLeft = container.scrollLeft;
+  let scrollTop = container.scrollTop;
   if (opt_center) {
     // All browsers round non-integer scroll positions down.
     scrollLeft += relX - spaceX / 2;

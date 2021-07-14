@@ -40,9 +40,11 @@ const shortestStringLength = function(array) {
   if (!array.length) {
     return 0;
   }
-  return array.reduce(function(a, b) {
-    return a.length < b.length ? a : b;
-  }).length;
+  return array
+      .reduce(function(a, b) {
+        return a.length < b.length ? a : b;
+      })
+      .length;
 };
 
 /**
@@ -223,8 +225,9 @@ const wrapScore = function(words, wordBreaks, limit) {
   // previous line.  For example, this looks wrong:
   // aaa bbb
   // ccc ddd eee
-  if (lineLengths.length > 1 && lineLengths[lineLengths.length - 1] <=
-      lineLengths[lineLengths.length - 2]) {
+  if (lineLengths.length > 1 &&
+      lineLengths[lineLengths.length - 1] <=
+          lineLengths[lineLengths.length - 2]) {
     score += 0.5;
   }
   return score;
@@ -250,8 +253,7 @@ const wrapMutate = function(words, wordBreaks, limit) {
     const mutatedWordBreaks = [].concat(wordBreaks);
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
-    const mutatedScore =
-        wrapScore(words, mutatedWordBreaks, limit);
+    const mutatedScore = wrapScore(words, mutatedWordBreaks, limit);
     if (mutatedScore > bestScore) {
       bestScore = mutatedScore;
       bestBreaks = mutatedWordBreaks;
@@ -290,4 +292,3 @@ exports = {
   commonWordSuffix,
   wrap,
 };
-

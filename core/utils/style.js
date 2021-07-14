@@ -19,15 +19,15 @@
 goog.module('Blockly.utils.style');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.Size');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Size = goog.require('Blockly.utils.Size');
 
 
 /**
  * Gets the height and width of an element.
  * Similar to Closure's goog.style.getSize
  * @param {!Element} element Element to get size of.
- * @return {!Blockly.utils.Size} Object with width/height properties.
+ * @return {!Size} Object with width/height properties.
  */
 const getSize = function(element) {
   if (getStyle(element, 'display') != 'none') {
@@ -51,19 +51,19 @@ const getSize = function(element) {
   style.position = originalPosition;
   style.visibility = originalVisibility;
 
-  return new Blockly.utils.Size(offsetWidth, offsetHeight);
+  return new Size(offsetWidth, offsetHeight);
 };
 
 /**
  * Gets the height and width of an element when the display is not none.
  * @param {!Element} element Element to get size of.
- * @return {!Blockly.utils.Size} Object with width/height properties.
+ * @return {!Size} Object with width/height properties.
  * @private
  */
 const getSizeWithDisplay = function(element) {
   const offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
   const offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
-  return new Blockly.utils.Size(offsetWidth, offsetHeight);
+  return new Size(offsetWidth, offsetHeight);
 };
 
 /**
@@ -130,16 +130,16 @@ const getCascadedStyle = function(element, style) {
  * Returns a Coordinate object relative to the top-left of the HTML document.
  * Similar to Closure's goog.style.getPageOffset
  * @param {!Element} el Element to get the page offset for.
- * @return {!Blockly.utils.Coordinate} The page offset.
+ * @return {!Coordinate} The page offset.
  */
 const getPageOffset = function(el) {
-  const pos = new Blockly.utils.Coordinate(0, 0);
+  const pos = new Coordinate(0, 0);
   const box = el.getBoundingClientRect();
   const documentElement = document.documentElement;
   // Must add the scroll coordinates in to get the absolute page offset
   // of element since getBoundingClientRect returns relative coordinates to
   // the viewport.
-  const scrollCoord = new Blockly.utils.Coordinate(
+  const scrollCoord = new Coordinate(
       window.pageXOffset || documentElement.scrollLeft,
       window.pageYOffset || documentElement.scrollTop);
   pos.x = box.left + scrollCoord.x;
@@ -151,14 +151,14 @@ const getPageOffset = function(el) {
 /**
  * Calculates the viewport coordinates relative to the document.
  * Similar to Closure's goog.style.getViewportPageOffset
- * @return {!Blockly.utils.Coordinate} The page offset of the viewport.
+ * @return {!Coordinate} The page offset of the viewport.
  */
 const getViewportPageOffset = function() {
   const body = document.body;
   const documentElement = document.documentElement;
   const scrollLeft = body.scrollLeft || documentElement.scrollLeft;
   const scrollTop = body.scrollTop || documentElement.scrollTop;
-  return new Blockly.utils.Coordinate(scrollLeft, scrollTop);
+  return new Coordinate(scrollLeft, scrollTop);
 };
 
 /**
@@ -242,7 +242,7 @@ const scrollIntoContainerView = function(
  *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
- * @return {!Blockly.utils.Coordinate} The new scroll position of the container,
+ * @return {!Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
 const getContainerOffsetToScrollInto = function(
@@ -278,7 +278,7 @@ const getContainerOffsetToScrollInto = function(
     scrollLeft += Math.min(relX, Math.max(relX - spaceX, 0));
     scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
-  return new Blockly.utils.Coordinate(scrollLeft, scrollTop);
+  return new Coordinate(scrollLeft, scrollTop);
 };
 
 exports = {

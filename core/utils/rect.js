@@ -16,7 +16,8 @@
  * @name Blockly.utils.Rect
  * @namespace
  */
-goog.provide('Blockly.utils.Rect');
+goog.module('Blockly.utils.Rect');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -28,7 +29,7 @@ goog.provide('Blockly.utils.Rect');
  * @struct
  * @constructor
  */
-Blockly.utils.Rect = function(top, bottom, left, right) {
+const Rect = function(top, bottom, left, right) {
   /** @type {number} */
   this.top = top;
 
@@ -49,7 +50,7 @@ Blockly.utils.Rect = function(top, bottom, left, right) {
  * @param {number} y The y coordinate to test for containment.
  * @return {boolean} Whether this rectangle contains given coordinate.
  */
-Blockly.utils.Rect.prototype.contains = function(x, y) {
+Rect.prototype.contains = function(x, y) {
   return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
 };
 
@@ -60,7 +61,9 @@ Blockly.utils.Rect.prototype.contains = function(x, y) {
  *    intersection with.
  * @return {boolean} Whether this rectangle intersects the provided rectangle.
  */
-Blockly.utils.Rect.prototype.intersects = function(other) {
+Rect.prototype.intersects = function(other) {
   return !(this.left > other.right || this.right < other.left ||
       this.top > other.bottom || this.bottom < other.top);
 };
+
+exports = Rect;

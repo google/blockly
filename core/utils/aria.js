@@ -166,6 +166,6 @@ Blockly.utils.aria.setState = function(element, stateName, value) {
   if (Array.isArray(value)) {
     value = value.join(' ');
   }
-  var attrStateName = Blockly.utils.aria.ARIA_PREFIX_ + stateName;
+  const attrStateName = Blockly.utils.aria.ARIA_PREFIX_ + stateName;
   element.setAttribute(attrStateName, value);
 };

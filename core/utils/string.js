@@ -57,11 +57,11 @@ Blockly.utils.string.commonWordPrefix = function(array, opt_shortest) {
   } else if (array.length == 1) {
     return array[0].length;
   }
-  var wordPrefix = 0;
-  var max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
+  let wordPrefix = 0;
+  const max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
   for (var len = 0; len < max; len++) {
-    var letter = array[0][len];
-    for (var i = 1; i < array.length; i++) {
+    const letter = array[0][len];
+    for (let i = 1; i < array.length; i++) {
       if (letter != array[i][len]) {
         return wordPrefix;
       }
@@ -70,8 +70,8 @@ Blockly.utils.string.commonWordPrefix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i][len];
+  for (let i = 1; i < array.length; i++) {
+    const letter = array[i][len];
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -92,11 +92,11 @@ Blockly.utils.string.commonWordSuffix = function(array, opt_shortest) {
   } else if (array.length == 1) {
     return array[0].length;
   }
-  var wordPrefix = 0;
-  var max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
+  let wordPrefix = 0;
+  const max = opt_shortest || Blockly.utils.string.shortestStringLength(array);
   for (var len = 0; len < max; len++) {
-    var letter = array[0].substr(-len - 1, 1);
-    for (var i = 1; i < array.length; i++) {
+    const letter = array[0].substr(-len - 1, 1);
+    for (let i = 1; i < array.length; i++) {
       if (letter != array[i].substr(-len - 1, 1)) {
         return wordPrefix;
       }
@@ -105,8 +105,8 @@ Blockly.utils.string.commonWordSuffix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i].charAt(array[i].length - len - 1);
+  for (let i = 1; i < array.length; i++) {
+    const letter = array[i].charAt(array[i].length - len - 1);
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -121,8 +121,8 @@ Blockly.utils.string.commonWordSuffix = function(array, opt_shortest) {
  * @return {string} Wrapped text.
  */
 Blockly.utils.string.wrap = function(text, limit) {
-  var lines = text.split('\n');
-  for (var i = 0; i < lines.length; i++) {
+  const lines = text.split('\n');
+  for (let i = 0; i < lines.length; i++) {
     lines[i] = Blockly.utils.string.wrapLine_(lines[i], limit);
   }
   return lines.join('\n');
@@ -141,28 +141,28 @@ Blockly.utils.string.wrapLine_ = function(text, limit) {
     return text;
   }
   // Split the text into words.
-  var words = text.trim().split(/\s+/);
+  const words = text.trim().split(/\s+/);
   // Set limit to be the length of the largest word.
-  for (var i = 0; i < words.length; i++) {
+  for (let i = 0; i < words.length; i++) {
     if (words[i].length > limit) {
       limit = words[i].length;
     }
   }
 
-  var lastScore;
-  var score = -Infinity;
-  var lastText;
-  var lineCount = 1;
+  let lastScore;
+  let score = -Infinity;
+  let lastText;
+  let lineCount = 1;
   do {
     lastScore = score;
     lastText = text;
     // Create a list of booleans representing if a space (false) or
     // a break (true) appears after each word.
-    var wordBreaks = [];
+    let wordBreaks = [];
     // Seed the list with evenly spaced linebreaks.
-    var steps = words.length / lineCount;
-    var insertedBreaks = 1;
-    for (var i = 0; i < words.length - 1; i++) {
+    const steps = words.length / lineCount;
+    let insertedBreaks = 1;
+    for (let i = 0; i < words.length - 1; i++) {
       if (insertedBreaks < (i + 1.5) / steps) {
         insertedBreaks++;
         wordBreaks[i] = true;
@@ -189,9 +189,9 @@ Blockly.utils.string.wrapLine_ = function(text, limit) {
 Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
-  var lineLengths = [0];
-  var linePunctuation = [];
-  for (var i = 0; i < words.length; i++) {
+  const lineLengths = [0];
+  const linePunctuation = [];
+  for (let i = 0; i < words.length; i++) {
     lineLengths[lineLengths.length - 1] += words[i].length;
     if (wordBreaks[i] === true) {
       lineLengths.push(0);
@@ -200,10 +200,10 @@ Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
       lineLengths[lineLengths.length - 1]++;
     }
   }
-  var maxLength = Math.max.apply(Math, lineLengths);
+  const maxLength = Math.max.apply(Math, lineLengths);
 
-  var score = 0;
-  for (var i = 0; i < lineLengths.length; i++) {
+  let score = 0;
+  for (let i = 0; i < lineLengths.length; i++) {
     // Optimize for width.
     // -2 points per char over limit (scaled to the power of 1.5).
     score -= Math.pow(Math.abs(limit - lineLengths[i]), 1.5) * 2;
@@ -239,17 +239,17 @@ Blockly.utils.string.wrapScore_ = function(words, wordBreaks, limit) {
  * @private
  */
 Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
-  var bestScore = Blockly.utils.string.wrapScore_(words, wordBreaks, limit);
-  var bestBreaks;
+  let bestScore = Blockly.utils.string.wrapScore_(words, wordBreaks, limit);
+  let bestBreaks;
   // Try shifting every line break forward or backward.
-  for (var i = 0; i < wordBreaks.length - 1; i++) {
+  for (let i = 0; i < wordBreaks.length - 1; i++) {
     if (wordBreaks[i] == wordBreaks[i + 1]) {
       continue;
     }
-    var mutatedWordBreaks = [].concat(wordBreaks);
+    const mutatedWordBreaks = [].concat(wordBreaks);
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
-    var mutatedScore =
+    const mutatedScore =
         Blockly.utils.string.wrapScore_(words, mutatedWordBreaks, limit);
     if (mutatedScore > bestScore) {
       bestScore = mutatedScore;
@@ -272,8 +272,8 @@ Blockly.utils.string.wrapMutate_ = function(words, wordBreaks, limit) {
  * @private
  */
 Blockly.utils.string.wrapToText_ = function(words, wordBreaks) {
-  var text = [];
-  for (var i = 0; i < words.length; i++) {
+  const text = [];
+  for (let i = 0; i < words.length; i++) {
     text.push(words[i]);
     if (wordBreaks[i] !== undefined) {
       text.push(wordBreaks[i] ? '\n' : ' ');

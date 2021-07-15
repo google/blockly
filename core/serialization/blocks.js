@@ -32,6 +32,7 @@ goog.module.declareLegacyNamespace();
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: *
+ *     fields: ?Object<string, *>
  * }}
  */
 var State;
@@ -62,6 +63,7 @@ const save = function(block, {addCoordinates = false} = {}) {
   }
   addAttributes(block, state);
   addExtraState(block, state);
+  addFields(block, state);
 
   return state;
 };
@@ -124,5 +126,28 @@ const addExtraState = function(block, state) {
     if (extraState !== null) {
       state['extraState'] = extraState;
     }
+  }
+};
+
+/**
+ * Adds the state of all of the fields on the block to the given state object.
+ * @param {!Blockly.Block} block The block to serialize the field state of.
+ * @param {!State} state The state object to append to.
+ */
+const addFields = function(block, state) {
+  let hasFieldState = false;
+  let fields = Object.create(null);
+  for (let i = 0; i < block.inputList.length; i++) {
+    const input = block.inputList[i];
+    for (let j = 0; j < input.fieldRow.length; j++) {
+      const field = input.fieldRow[j];
+      if (field.isSerializable()) {
+        hasFieldState = true;
+        fields[field.name] = field.saveState();
+      }
+    }
+  }
+  if (hasFieldState) {
+    state['fields'] = fields;
   }
 };

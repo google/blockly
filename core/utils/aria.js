@@ -16,27 +16,22 @@
  * @name Blockly.utils.aria
  * @namespace
  */
-goog.provide('Blockly.utils.aria');
+goog.module('Blockly.utils.aria');
+goog.module.declareLegacyNamespace();
 
 
-/**
- * ARIA states/properties prefix.
- * @private
- */
-Blockly.utils.aria.ARIA_PREFIX_ = 'aria-';
+/** ARIA states/properties prefix. */
+const ARIA_PREFIX = 'aria-';
 
-/**
- * ARIA role attribute.
- * @private
- */
-Blockly.utils.aria.ROLE_ATTRIBUTE_ = 'role';
+/** ARIA role attribute. */
+const ROLE_ATTRIBUTE = 'role';
 
 /**
  * ARIA role values.
  * Copied from Closure's goog.a11y.aria.Role
  * @enum {string}
  */
-Blockly.utils.aria.Role = {
+const Role = {
   // ARIA role for an interactive control of tabular data.
   GRID: 'grid',
 
@@ -80,7 +75,7 @@ Blockly.utils.aria.Role = {
  * Copied from Closure's goog.a11y.aria.State
  * @enum {string}
  */
-Blockly.utils.aria.State = {
+const State = {
   // ARIA property for setting the currently active descendant of an element,
   // for example the selected item in a list box. Value: ID of an element.
   ACTIVEDESCENDANT: 'activedescendant',
@@ -148,24 +143,31 @@ Blockly.utils.aria.State = {
  * @param {!Element} element DOM node to set role of.
  * @param {!Blockly.utils.aria.Role} roleName Role name.
  */
-Blockly.utils.aria.setRole = function(element, roleName) {
-  element.setAttribute(Blockly.utils.aria.ROLE_ATTRIBUTE_, roleName);
+const setRole = function(element, roleName) {
+  element.setAttribute(ROLE_ATTRIBUTE, roleName);
 };
 
 /**
  * Sets the state or property of an element.
  * Copied from Closure's goog.a11y.aria
  * @param {!Element} element DOM node where we set state.
- * @param {!Blockly.utils.aria.State} stateName State attribute being set.
+ * @param {!State} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
  * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
  */
-Blockly.utils.aria.setState = function(element, stateName, value) {
+const setState = function(element, stateName, value) {
   if (Array.isArray(value)) {
     value = value.join(' ');
   }
-  const attrStateName = Blockly.utils.aria.ARIA_PREFIX_ + stateName;
+  const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, value);
+};
+
+exports = {
+  Role,
+  State,
+  setRole,
+  setState,
 };

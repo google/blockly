@@ -17,12 +17,11 @@
 goog.module('Blockly.utils.toolbox');
 goog.module.declareLegacyNamespace();
 
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-goog.require('Blockly.Xml');
+const {IE} = goog.require('Blockly.utils.userAgent');
+const {textToDom} = goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.ToolboxCategory');
-goog.requireType('Blockly.ToolboxSeparator');
+const {CssConfig: CategoryCssConfig} = goog.requireType('Blockly.ToolboxCategory');
+const {CssConfig: SeparatorCssConfig} = goog.requireType('Blockly.ToolboxSeparator');
 
 
 /**
@@ -43,7 +42,7 @@ let BlockInfo;
  *            kind:string,
  *            id:(string|undefined),
  *            gap:(number|undefined),
- *            cssconfig:(!Blockly.ToolboxSeparator.CssConfig|undefined)
+ *            cssconfig:(!SeparatorCssConfig|undefined)
  *          }}
  */
 let SeparatorInfo;
@@ -84,7 +83,7 @@ let ButtonOrLabelInfo;
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
- *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
+ *            cssconfig:(!CategoryCssConfig|undefined),
  *            hidden:(string|undefined)
  *          }}
  */
@@ -98,7 +97,7 @@ let StaticCategoryInfo;
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
- *            cssconfig:(!Blockly.ToolboxCategory.CssConfig|undefined),
+ *            cssconfig:(!CategoryCssConfig|undefined),
  *            hidden:(string|undefined)
  *          }}
  */
@@ -387,7 +386,7 @@ const addAttributes = function(node, obj) {
 const parseToolboxTree = function(toolboxDef) {
   if (toolboxDef) {
     if (typeof toolboxDef != 'string') {
-      if (Blockly.utils.userAgent.IE && toolboxDef.outerHTML) {
+      if (IE && toolboxDef.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will
         // not have the proper DOM structure since the browser doesn't support
@@ -398,7 +397,7 @@ const parseToolboxTree = function(toolboxDef) {
       }
     }
     if (typeof toolboxDef == 'string') {
-      toolboxDef = Blockly.Xml.textToDom(toolboxDef);
+      toolboxDef = textToDom(toolboxDef);
       if (toolboxDef.nodeName.toLowerCase() != 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }

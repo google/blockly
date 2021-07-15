@@ -169,6 +169,29 @@ Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
 };
 
 /**
+ * Saves this field's value.
+ * @return {string} The dropdown value held by this field.
+ * @override
+ * @package
+ */
+Blockly.FieldDropdown.prototype.saveState = function() {
+  return this.value_;
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the dropdown field.
+ * @override
+ * @package
+ */
+Blockly.FieldDropdown.prototype.loadState = function(state) {
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(state);
+};
+
+/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}

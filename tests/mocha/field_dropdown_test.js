@@ -152,4 +152,29 @@ suite('Dropdown Fields', function() {
       });
     });
   });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldDropdown(
+            [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
+        field.setValue(value);
+        block.getInput('INPUT').appendField(field, 'DROPDOWN');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'DROPDOWN': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('C');
+    });
+  });
 });

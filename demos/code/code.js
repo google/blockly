@@ -549,7 +549,7 @@ Code.initLanguage = function() {
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
- * @param {UIEvent} event Event created from listener bound to the function.
+ * @param {Event} event Event created from listener bound to the function.
  */
 Code.runJS = function(event) {
   // Prevent code from being executed twice on touchscreens.

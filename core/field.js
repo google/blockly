@@ -203,7 +203,8 @@ Blockly.Field.prototype.isDirty_ = true;
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Can the field value be changed using the editor on an editable block?
+ * Whether the field value can be changed using the editor on an editable
+ *     block.
  * @type {boolean}
  * @protected
  */
@@ -399,8 +400,8 @@ Blockly.Field.prototype.bindEvents_ = function() {
 };
 
 /**
- * Sets the field's value based on the given XML element. Should only be
- * called by Blockly.Xml.
+ * Sets the field's value based on the given XML element. Should only be called
+ *     by Blockly.Xml.
  * @param {!Element} fieldElement The element containing info about the
  *    field's state.
  * @package
@@ -460,7 +461,7 @@ Blockly.Field.prototype.updateEditable = function() {
 
 /**
  * Set whether this field's value can be changed using the editor when the
- * source block is editable.
+ *     source block is editable.
  * @param {boolean} enabled True if enabled.
  */
 Blockly.Field.prototype.setEnabled = function(enabled) {
@@ -470,7 +471,7 @@ Blockly.Field.prototype.setEnabled = function(enabled) {
 
 /**
  * Check whether this field's value can be changed using the editor when the
- * source block is editable.
+ *     source block is editable.
  * @return {boolean} Whether this field is enabled.
  */
 Blockly.Field.prototype.isEnabled = function() {

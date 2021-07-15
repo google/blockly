@@ -55,19 +55,19 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
     return;
   }
   Blockly.Css.injected_ = true;
-  var text = Blockly.Css.CONTENT.join('\n');
+  let text = Blockly.Css.CONTENT.join('\n');
   Blockly.Css.CONTENT.length = 0;  // Garbage collect CSS content.
   if (!hasCss) {
     return;
   }
   // Strip off any trailing slash (either Unix or Windows).
-  var mediaPath = pathToMedia.replace(/[\\/]$/, '');
+  const mediaPath = pathToMedia.replace(/[\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, mediaPath);
 
   // Inject CSS tag at start of head.
-  var cssNode = document.createElement('style');
+  const cssNode = document.createElement('style');
   cssNode.id = 'blockly-common-style';
-  var cssTextNode = document.createTextNode(text);
+  const cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
 };

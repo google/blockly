@@ -134,8 +134,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
-  var fixedX = x.toFixed(0);
-  var fixedY = y.toFixed(0);
+  const fixedX = x.toFixed(0);
+  const fixedY = y.toFixed(0);
 
   this.childSurfaceXY_.x = parseInt(fixedX, 10);
   this.childSurfaceXY_.y = parseInt(fixedY, 10);
@@ -150,8 +150,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(
  * @private
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
-  var x = this.surfaceXY_.x;
-  var y = this.surfaceXY_.y;
+  let x = this.surfaceXY_.x;
+  let y = this.surfaceXY_.y;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
   x = x.toFixed(0);
@@ -168,8 +168,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
  * @param {number} deltaY Vertical offset in pixel units.
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
-  var x = this.surfaceXY_.x + deltaX;
-  var y = this.surfaceXY_.y + deltaY;
+  const x = this.surfaceXY_.x + deltaX;
+  const y = this.surfaceXY_.y + deltaY;
   this.surfaceXY_ = new Blockly.utils.Coordinate(x, y);
   this.translateSurfaceInternal_();
 };
@@ -194,7 +194,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @return {!Blockly.utils.Coordinate} Current translation of the surface.
  */
 Blockly.BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  var xy = Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  const xy = Blockly.utils.getRelativeXY(/** @type {!SVGElement} */
+      (this.SVG_));
   return new Blockly.utils.Coordinate(xy.x / this.scale_, xy.y / this.scale_);
 };
 

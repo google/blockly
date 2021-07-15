@@ -38,13 +38,13 @@ Blockly.blockAnimations.disconnectGroup_ = null;
  * @package
  */
 Blockly.blockAnimations.disposeUiEffect = function(block) {
-  var workspace = block.workspace;
-  var svgGroup = block.getSvgRoot();
+  const workspace = block.workspace;
+  const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
 
-  var xy = workspace.getSvgXY(svgGroup);
+  const xy = workspace.getSvgXY(svgGroup);
   // Deeply clone the current block.
-  var clone = svgGroup.cloneNode(true);
+  const clone = svgGroup.cloneNode(true);
   clone.translateX_ = xy.x;
   clone.translateY_ = xy.y;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
@@ -67,15 +67,15 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
  */
 Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
     workspaceScale) {
-  var ms = new Date - start;
-  var percent = ms / 150;
+  const ms = new Date - start;
+  const percent = ms / 150;
   if (percent > 1) {
     Blockly.utils.dom.removeNode(clone);
   } else {
-    var x = clone.translateX_ +
+    const x = clone.translateX_ +
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
-    var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
-    var scale = (1 - percent) * workspaceScale;
+    const y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
+    const scale = (1 - percent) * workspaceScale;
     clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
         ' scale(' + scale + ')');
     setTimeout(Blockly.blockAnimations.disposeUiStep_, 10, clone, rtl, start,
@@ -89,14 +89,14 @@ Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
  * @package
  */
 Blockly.blockAnimations.connectionUiEffect = function(block) {
-  var workspace = block.workspace;
-  var scale = workspace.scale;
+  const workspace = block.workspace;
+  const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
     return;  // Too small to care about visual effects.
   }
   // Determine the absolute coordinates of the inferior block.
-  var xy = workspace.getSvgXY(block.getSvgRoot());
+  const xy = workspace.getSvgXY(block.getSvgRoot());
   // Offset the coordinates based on the two connection types, fix scale.
   if (block.outputConnection) {
     xy.x += (block.RTL ? 3 : -3) * scale;
@@ -105,7 +105,7 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
     xy.x += (block.RTL ? -23 : 23) * scale;
     xy.y += 3 * scale;
   }
-  var ripple = Blockly.utils.dom.createSvgElement(
+  const ripple = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CIRCLE,
       {
         'cx': xy.x,
@@ -128,8 +128,8 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
  * @private
  */
 Blockly.blockAnimations.connectionUiStep_ = function(ripple, start, scale) {
-  var ms = new Date - start;
-  var percent = ms / 150;
+  const ms = new Date - start;
+  const percent = ms / 150;
   if (percent > 1) {
     Blockly.utils.dom.removeNode(ripple);
   } else {
@@ -151,10 +151,10 @@ Blockly.blockAnimations.disconnectUiEffect = function(block) {
     return;  // Too small to care about visual effects.
   }
   // Horizontal distance for bottom of block to wiggle.
-  var DISPLACEMENT = 10;
+  const DISPLACEMENT = 10;
   // Scale magnitude of skew to height of block.
-  var height = block.getHeightWidth().height;
-  var magnitude = Math.atan(DISPLACEMENT / height) / Math.PI * 180;
+  const height = block.getHeightWidth().height;
+  let magnitude = Math.atan(DISPLACEMENT / height) / Math.PI * 180;
   if (!block.RTL) {
     magnitude *= -1;
   }
@@ -170,16 +170,16 @@ Blockly.blockAnimations.disconnectUiEffect = function(block) {
  * @private
  */
 Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
-  var DURATION = 200;  // Milliseconds.
-  var WIGGLES = 3;  // Half oscillations.
+  const DURATION = 200;  // Milliseconds.
+  const WIGGLES = 3;  // Half oscillations.
 
-  var ms = new Date - start;
-  var percent = ms / DURATION;
+  const ms = new Date - start;
+  const percent = ms / DURATION;
 
   if (percent > 1) {
     group.skew_ = '';
   } else {
-    var skew = Math.round(
+    const skew = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     group.skew_ = 'skewX(' + skew + ')';
     Blockly.blockAnimations.disconnectGroup_ = group;
@@ -197,7 +197,7 @@ Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
 Blockly.blockAnimations.disconnectUiStop = function() {
   if (Blockly.blockAnimations.disconnectGroup_) {
     clearTimeout(Blockly.blockAnimations.disconnectPid_);
-    var group = Blockly.blockAnimations.disconnectGroup_;
+    const group = Blockly.blockAnimations.disconnectGroup_;
     group.skew_ = '';
     group.setAttribute('transform', group.translate_);
     Blockly.blockAnimations.disconnectGroup_ = null;

@@ -151,8 +151,7 @@ const hsvToHex = function(h, s, v) {
         break;
     }
   }
-  return rgbToHex(
-      Math.floor(red), Math.floor(green), Math.floor(blue));
+  return rgbToHex(Math.floor(red), Math.floor(green), Math.floor(blue));
 };
 
 /**
@@ -208,4 +207,11 @@ const names = {
   'yellow': '#ffff00'
 };
 
-exports = {parse, rgbToHex, hexToRgb, hsvToHex, blend, names};
+exports = {
+  parse,
+  rgbToHex,
+  hexToRgb,
+  hsvToHex,
+  blend,
+  names
+};

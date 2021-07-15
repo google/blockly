@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    targetNamespace="https://developers.google.com/blockly/xml"
+    xmlns="https://developers.google.com/blockly/xml">
+
+  <xs:element name="xml">
+    <xs:complexType>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element ref="variables" minOccurs="0"/>
+          <xs:element ref="comment" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="category"/>
+          <xs:element ref="sep"/>
+        </xs:choice>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="category">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="category"/>
+        <xs:element ref="sep"/>
+        <xs:element ref="label"/>
+        <xs:element ref="button"/>
+        <xs:element ref="block"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="expanded" type="xs:boolean"/>
+      <xs:attribute name="colour"/>
+      <xs:attribute name="categorystyle"/>
+      <xs:attribute name="custom"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="sep">
+    <xs:complexType>
+      <xs:attribute name="gap" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="label">
+    <xs:complexType>
+      <xs:attribute name="type" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="button">
+    <xs:complexType>
+      <xs:attribute name="text" use="required"/>
+      <xs:attribute name="callbackKey" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="variables">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="variable" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="variable">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:NCName">
+          <xs:attribute name="id"/>
+          <xs:attribute name="type"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="blockType">
+    <xs:sequence>
+      <xs:element ref="mutation" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="field" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="comment" minOccurs="0" maxOccurs="1"/>
+      <xs:element ref="data" minOccurs="0" maxOccurs="1"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="statement"/>
+        <xs:element ref="value"/>
+      </xs:choice>
+      <xs:element ref="next" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="type" use="required" type="xs:NCName"/>
+    <xs:attribute name="id"/>
+    <xs:attribute name="inline" type="xs:boolean"/>
+    <xs:attribute name="collapsed" type="xs:boolean"/>
+    <xs:attribute name="disabled" type="xs:boolean"/>
+    <xs:attribute name="deletable" type="xs:boolean"/>
+    <xs:attribute name="movable" type="xs:boolean"/>
+    <xs:attribute name="editable" type="xs:boolean"/>
+    <xs:attribute name="x" type="xs:integer"/>
+    <xs:attribute name="y" type="xs:integer"/>
+  </xs:complexType>
+
+  <xs:element name="block" type="blockType"/>
+  <xs:element name="shadow" type="blockType"/>
+
+  <xs:element name="value">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="shadow" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="block" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="statement">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="shadow" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="block" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="next">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="shadow" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="block" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="stringWithSpace">
+          <xs:attribute name="id"/>
+          <xs:attribute name="name" use="required" type="xs:NCName"/>
+          <xs:attribute name="variabletype"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="comment">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="stringWithSpace">
+          <xs:attribute name="id"/>
+          <xs:attribute name="x" type="xs:integer"/>
+          <xs:attribute name="y" type="xs:integer"/>
+          <xs:attribute name="h" type="xs:integer"/>
+          <xs:attribute name="pinned" type="xs:boolean"/>
+          <xs:attribute name="w" type="xs:integer"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="stringWithSpace"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="stringWithSpace">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Mutators can have any attributes and any child elements, no rules. -->
+  <xs:element name="mutation"/>
+
+</xs:schema>

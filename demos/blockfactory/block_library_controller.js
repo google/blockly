@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -36,7 +22,7 @@
  * Block Library Controller Class
  * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {!BlockLibraryStorage} opt_blockLibraryStorage Optional storage
+ * @param {!BlockLibraryStorage=} opt_blockLibraryStorage Optional storage
  *    object that allows user to import a block library.
  * @constructor
  */
@@ -136,7 +122,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   }
 
   // Create block XML.
-  var xmlElement = document.createElement('xml');
+  var xmlElement = Blockly.utils.xml.createElement('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
 
@@ -226,7 +212,7 @@ BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
 
 /**
  * Get all block types stored in block library.
- * @return {!Array.<string>} Array of block types.
+ * @return {!Array<string>} Array of block types.
  */
 BlockLibraryController.prototype.getStoredBlockTypes = function() {
   return this.storage.getBlockTypes();

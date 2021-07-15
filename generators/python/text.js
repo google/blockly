@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,6 +21,34 @@ Blockly.Python['text'] = function(block) {
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
+Blockly.Python['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
+  var order = code.indexOf('+') != -1 ? Blockly.Python.ORDER_ADDITIVE :
+      Blockly.Python.ORDER_ATOMIC;
+  return [code, order];
+};
+
+/**
+ * Enclose the provided value in 'str(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {[string, number]} Array containing code evaluating to a string and
+ *    the order of the returned code.
+ * @private
+ */
+Blockly.Python.text.forceString_ = function(value) {
+  if (Blockly.Python.text.forceString_.strRegExp.test(value)) {
+    return [value, Blockly.Python.ORDER_ATOMIC];
+  }
+  return ['str(' + value + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+Blockly.Python.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
 Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
@@ -45,15 +59,16 @@ Blockly.Python['text_join'] = function(block) {
     case 1:
       var element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element + ')';
-      return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+      var codeAndOrder = Blockly.Python.text.forceString_(element);
+      return codeAndOrder;
       break;
     case 2:
       var element0 = Blockly.Python.valueToCode(block, 'ADD0',
-              Blockly.Python.ORDER_NONE) || '\'\'';
+          Blockly.Python.ORDER_NONE) || '\'\'';
       var element1 = Blockly.Python.valueToCode(block, 'ADD1',
-              Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + element0 + ') + str(' + element1 + ')';
+          Blockly.Python.ORDER_NONE) || '\'\'';
+      var code = Blockly.Python.text.forceString_(element0)[0] + ' + ' +
+          Blockly.Python.text.forceString_(element1)[0];
       return [code, Blockly.Python.ORDER_ADDITIVE];
       break;
     default:
@@ -62,8 +77,8 @@ Blockly.Python['text_join'] = function(block) {
         elements[i] = Blockly.Python.valueToCode(block, 'ADD' + i,
                 Blockly.Python.ORDER_NONE) || '\'\'';
       }
-      var tempVar = Blockly.Python.variableDB_.getDistinctName('x',
-          Blockly.Variables.NAME_TYPE);
+      var tempVar = Blockly.Python.nameDB_.getDistinctName('x',
+          Blockly.VARIABLE_CATEGORY_NAME);
       var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           elements.join(', ') + ']])';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
@@ -72,11 +87,12 @@ Blockly.Python['text_join'] = function(block) {
 
 Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
+  var varName = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
+      Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return varName + ' = str(' + varName + ') + str(' + value + ')\n';
+  return varName + ' = str(' + varName + ') + ' +
+      Blockly.Python.text.forceString_(value)[0] + '\n';
 };
 
 Blockly.Python['text_length'] = function(block) {
@@ -113,8 +129,9 @@ Blockly.Python['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var text = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_MEMBER) || '\'\'';
+  var textOrder = (where == 'RANDOM') ? Blockly.Python.ORDER_NONE :
+      Blockly.Python.ORDER_MEMBER;
+  var text = Blockly.Python.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '[0]';
@@ -258,7 +275,7 @@ Blockly.Python['text_count'] = function(block) {
   var sub = Blockly.Python.valueToCode(block, 'SUB',
       Blockly.Python.ORDER_NONE) || '\'\'';
   var code = text + '.count(' + sub + ')';
-  return [code, Blockly.Python.ORDER_MEMBER];
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_replace'] = function(block) {

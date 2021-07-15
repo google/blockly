@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -35,6 +21,34 @@ Blockly.JavaScript['text'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
+  var order = code.indexOf('+') != -1 ? Blockly.JavaScript.ORDER_ADDITION :
+      Blockly.JavaScript.ORDER_ATOMIC;
+  return [code, order];
+};
+
+/**
+ * Enclose the provided value in 'String(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {[string, number]} Array containing code evaluating to a string and
+ *    the order of the returned code.
+ * @private
+ */
+Blockly.JavaScript.text.forceString_ = function(value) {
+  if (Blockly.JavaScript.text.forceString_.strRegExp.test(value)) {
+    return [value, Blockly.JavaScript.ORDER_ATOMIC];
+  }
+  return ['String(' + value + ')', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+Blockly.JavaScript.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
@@ -43,20 +57,21 @@ Blockly.JavaScript['text_join'] = function(block) {
     case 1:
       var element = Blockly.JavaScript.valueToCode(block, 'ADD0',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + element + ')';
-      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+      var codeAndOrder = Blockly.JavaScript.text.forceString_(element);
+      return codeAndOrder;
     case 2:
       var element0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
       var element1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + element0 + ') + String(' + element1 + ')';
+      var code = Blockly.JavaScript.text.forceString_(element0)[0] +
+          ' + ' + Blockly.JavaScript.text.forceString_(element1)[0];
       return [code, Blockly.JavaScript.ORDER_ADDITION];
     default:
       var elements = new Array(block.itemCount_);
       for (var i = 0; i < block.itemCount_; i++) {
         elements[i] = Blockly.JavaScript.valueToCode(block, 'ADD' + i,
-            Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+            Blockly.JavaScript.ORDER_NONE) || '\'\'';
       }
       var code = '[' + elements.join(',') + '].join(\'\')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -65,17 +80,19 @@ Blockly.JavaScript['text_join'] = function(block) {
 
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var varName = Blockly.JavaScript.nameDB_.getName(
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  return varName + ' = String(' + varName + ') + String(' + value + ');\n';
+  var code = varName + ' += ' +
+      Blockly.JavaScript.text.forceString_(value)[0] + ';\n';
+  return code;
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
   // String or array length.
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
+      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   return [text + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
@@ -142,11 +159,11 @@ Blockly.JavaScript['text_charAt'] = function(block) {
 
 /**
  * Returns an expression calculating the index into a string.
- * @private
  * @param {string} stringName Name of the string, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
  * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string} Index expression.
+ * @return {string|undefined} Index expression.
+ * @private
  */
 Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {
   if (where == 'FIRST') {
@@ -162,15 +179,18 @@ Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {
 
 Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
-  var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var requiresLengthCall = (where1 != 'FROM_END' && where1 != 'LAST' &&
+      where2 != 'FROM_END' && where2 != 'LAST');
+  var textOrder = requiresLengthCall ? Blockly.JavaScript.ORDER_MEMBER :
+      Blockly.JavaScript.ORDER_NONE;
+  var text = Blockly.JavaScript.valueToCode(block, 'STRING',
+      textOrder) || '\'\'';
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
-  } else if (text.match(/^'?\w+'?$/) ||
-      (where1 != 'FROM_END' && where1 != 'LAST' &&
-      where2 != 'FROM_END' && where2 != 'LAST')) {
+    return [code, Blockly.JavaScript.ORDER_NONE];
+  } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
     // If the text is a variable or literal or doesn't require a call for
     // length, don't generate a helper function.
     switch (where1) {
@@ -296,7 +316,7 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
   var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'parseFloat(' + code + ')';
+    code = 'Number(' + code + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
@@ -305,7 +325,7 @@ Blockly.JavaScript['text_prompt'] = Blockly.JavaScript['text_prompt_ext'];
 
 Blockly.JavaScript['text_count'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var sub = Blockly.JavaScript.valueToCode(block, 'SUB',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var functionName = Blockly.JavaScript.provideFunction_(
@@ -319,12 +339,12 @@ Blockly.JavaScript['text_count'] = function(block) {
        '  }',
        '}']);
   var code = functionName + '(' + text + ', ' + sub + ')';
-  return [code, Blockly.JavaScript.ORDER_SUBTRACTION];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['text_replace'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var from = Blockly.JavaScript.valueToCode(block, 'FROM',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var to = Blockly.JavaScript.valueToCode(block, 'TO',
@@ -341,12 +361,12 @@ Blockly.JavaScript['text_replace'] = function(block) {
        '  return haystack.replace(new RegExp(needle, \'g\'), replacement);',
        '}']);
   var code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['text_reverse'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var code = text + '.split(\'\').reverse().join(\'\')';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

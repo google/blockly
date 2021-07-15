@@ -1,0 +1,105 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="../../../../blockly_uncompressed.js"></script>
+  <script type="text/javascript"
+    src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/blocks_compressed_vertical.js"></script>
+  <script type="text/javascript"
+    src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/msg/messages.js"></script>
+  <script type="text/javascript" src="../../../playgrounds/screenshot.js"></script>
+  <script>
+
+    Blockly.Block.prototype.setColourFromRawValues_ = function (primary, secondary,
+      tertiary) {
+      primary = typeof primary === 'string' || primary instanceof String ?
+        Blockly.utils.replaceMessageReferences(primary) : primary;
+      secondary = typeof secondary === 'string' || secondary instanceof String ?
+        Blockly.utils.replaceMessageReferences(secondary) : secondary;
+      tertiary = typeof tertiary === 'string' || tertiary instanceof String ?
+        Blockly.utils.replaceMessageReferences(tertiary) : tertiary;
+
+      this.setColour(primary);
+      this.style.colourSecondary = secondary;
+      this.style.colourTertiary = tertiary;
+    };
+
+    Blockly.Block.prototype.setCategory = function (category) {
+      // NOP
+    };
+
+  </script>
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+    goog.require('Blockly.blockRendering.Debug');
+    goog.require('Blockly.zelos.Renderer');
+    // Blockly.blockRendering.startDebugger();
+
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace;
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+      if (data.type !== 'post') {
+        return;
+      }
+      var xml = data.xml;
+      try {
+        if (workspace) {
+          workspace.dispose();
+          blocklyDiv.innerHTML = '';
+          window.parent.focus();
+        }
+      } catch { }
+
+      workspace = Blockly.inject(blocklyDiv, {
+        renderer: 'zelos',
+        rendererOverrides: {
+          'FIELD_TEXT_FONTFAMILY': 'Helvetica Neue',
+          'FIELD_TEXT_FONTWEIGHT': '500',
+          'FIELD_TEXT_FONTSIZE': 12,
+          'FIELD_BORDER_RECT_X_PADDING': 2.75 * 4,
+          'ADD_START_HATS': true
+        },
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        zoom: {
+          wheel: true,
+          startScale: 2,
+        },
+        media: 'https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/media/'
+      });
+
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'zelos',
+              text: datauri
+            }, '*');
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      workspace.addChangeListener(function (e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
+    });
+  </script>
+</body>
+
+</html>

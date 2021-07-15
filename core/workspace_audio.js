@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2017 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,7 +13,13 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
-goog.require('goog.userAgent');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
+goog.require('Blockly.utils');
+goog.require('Blockly.utils.global');
+goog.require('Blockly.utils.userAgent');
+
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -49,7 +41,6 @@ Blockly.WorkspaceAudio = function(parentWorkspace) {
   /**
    * Database of pre-loaded sounds.
    * @private
-   * @const
    */
   this.SOUNDS_ = Object.create(null);
 };
@@ -72,7 +63,7 @@ Blockly.WorkspaceAudio.prototype.dispose = function() {
 
 /**
  * Load an audio file.  Cache it, ready for instantaneous playing.
- * @param {!Array.<string>} filenames List of file types in decreasing order of
+ * @param {!Array<string>} filenames List of file types in decreasing order of
  *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
  *   Filenames include path from Blockly's root.  File extensions matter.
  * @param {string} name Name of sound.
@@ -82,7 +73,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     return;
   }
   try {
-    var audioTest = new window['Audio']();
+    var audioTest = new Blockly.utils.global['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
@@ -94,7 +85,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](filename);
+      sound = new Blockly.utils.global['Audio'](filename);
       break;
     }
   }
@@ -111,11 +102,22 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
   for (var name in this.SOUNDS_) {
     var sound = this.SOUNDS_[name];
     sound.volume = 0.01;
-    sound.play();
-    sound.pause();
+    var playPromise = sound.play();
+    // Edge does not return a promise, so we need to check.
+    if (playPromise !== undefined) {
+      // If we don't wait for the play request to complete before calling pause()
+      // we will get an exception: (DOMException: The play() request was interrupted)
+      // See more: https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
+      playPromise.then(sound.pause).catch(function() {
+        // Play without user interaction was prevented.
+      });
+    } else {
+      sound.pause();
+    }
+
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (goog.userAgent.IPAD || goog.userAgent.IPHONE) {
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {
       break;
     }
   }
@@ -138,11 +140,9 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
     }
     this.lastSound_ = now;
     var mySound;
-    var ie9 = goog.userAgent.DOCUMENT_MODE &&
-              goog.userAgent.DOCUMENT_MODE === 9;
-    if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
-      // Creating a new audio node causes lag in IE9, Android and iPad. Android
-      // and IE9 refetch the file from the server, iPad uses a singleton audio
+    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
+      // Creating a new audio node causes lag in Android and iPad.  Android
+      // refetches the file from the server, iPad uses a singleton audio
       // node which must be deleted and recreated for each new audio tag.
       mySound = sound;
     } else {

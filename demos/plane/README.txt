@@ -13,11 +13,11 @@ This generates xlf/extracted_msgs.xlf, which may then be used by any
 XLIFF-compatible translation console to generate a set of files with the
 translated strings.  These should be placed in the xlf directory.
 
-Finally, generate all the language versions wih this command:
+Finally, generate all the language versions with this command:
 
 java -jar soy/SoyToJsSrcCompiler.jar --locales ar,be-tarask,br,ca,da,de,el,en,es,fa,fr,he,hrx,hu,ia,is,it,ja,ko,ms,nb,nl,pl,pms,pt-br,ro,ru,sc,sv,th,tr,uk,vi,zh-hans,zh-hant --messageFilePathFormat xlf/translated_msgs_{LOCALE}.xlf --outputPathFormat "generated/{LOCALE}.js" template.soy
 
-This is the process that Google uses for maintaining Blockly Games in 40+
+This is the process that Google uses for maintaining Blockly Games in 50+
 languages.  The XLIFF format is simple enough that it is trivial to write a
 Python script to reformat it into some other format (such as JSON) for
 compatibility with other translation consoles.

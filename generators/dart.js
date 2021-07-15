@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2014 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,6 +13,8 @@
 goog.provide('Blockly.Dart');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.inputTypes');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -63,7 +51,7 @@ Blockly.Dart.addReservedWords(
 
 /**
  * Order of operation ENUMs.
- * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
+ * https://dart.dev/guides/language/language-tour#operators
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
@@ -85,74 +73,80 @@ Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.Dart.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Dart.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Dart.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Dart.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
-  if (!Blockly.Dart.variableDB_) {
-    Blockly.Dart.variableDB_ =
-        new Blockly.Names(Blockly.Dart.RESERVED_WORDS_);
+  if (!this.nameDB_) {
+    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.Dart.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
-  Blockly.Dart.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
   var defvars = [];
   // Add developer variables (not created or named by the user).
   var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
   for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.Dart.variableDB_.getName(devVarList[i],
+    defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
   // Add user variables, but only ones that are being used.
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
-    defvars.push(Blockly.Dart.variableDB_.getName(variables[i].getId(),
-        Blockly.Variables.NAME_TYPE));
+    defvars.push(this.nameDB_.getName(variables[i].getId(),
+        Blockly.VARIABLE_CATEGORY_NAME));
   }
 
   // Declare all of the variables.
   if (defvars.length) {
-    Blockly.Dart.definitions_['variables'] =
+    this.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
+  this.isInitialized = true;
 };
 
 /**
- * Prepend the generated code with the variable definitions.
+ * Prepend the generated code with import statements and variable definitions.
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
 Blockly.Dart.finish = function(code) {
   // Indent every line.
   if (code) {
-    code = Blockly.Dart.prefixLines(code, Blockly.Dart.INDENT);
+    code = this.prefixLines(code, this.INDENT);
   }
   code = 'main() {\n' + code + '}';
 
   // Convert the definitions dictionary into a list.
   var imports = [];
   var definitions = [];
-  for (var name in Blockly.Dart.definitions_) {
-    var def = Blockly.Dart.definitions_[name];
+  for (var name in this.definitions_) {
+    var def = this.definitions_[name];
     if (def.match(/^import\s/)) {
       imports.push(def);
     } else {
       definitions.push(def);
     }
   }
-  // Clean up temporary data.
-  delete Blockly.Dart.definitions_;
-  delete Blockly.Dart.functionNames_;
-  Blockly.Dart.variableDB_.reset();
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
@@ -171,7 +165,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * Encode a string as a properly escaped Dart string, complete with quotes.
  * @param {string} string Text to encode.
  * @return {string} Dart string.
- * @private
+ * @protected
  */
 Blockly.Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
@@ -183,45 +177,60 @@ Blockly.Dart.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline Dart string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} Dart string.
+ * @protected
+ */
+Blockly.Dart.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(this.quote_);
+  // Join with the following, plus a newline:
+  // + '\n' +
+  return lines.join(' + \'\\n\' + \n');
+};
+
+/**
  * Common tasks for generating Dart from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The Dart code created for this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Dart code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
-Blockly.Dart.scrub_ = function(block, code) {
+Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.Dart.COMMENT_WRAP - 3);
     if (comment) {
+      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
-        commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');
+        commentCode += this.prefixLines(comment + '\n', '/// ');
       } else {
-        commentCode += Blockly.Dart.prefixLines(comment + '\n', '// ');
+        commentCode += this.prefixLines(comment + '\n', '// ');
       }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Dart.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Dart.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.Dart.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -237,19 +246,19 @@ Blockly.Dart.scrub_ = function(block, code) {
 Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
-  var order = opt_order || Blockly.Dart.ORDER_NONE;
+  var order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
   var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta) {
-    var at = Blockly.Dart.valueToCode(block, atId,
-        Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+        this.ORDER_ADDITIVE) || defaultAtIndex;
   } else if (opt_negate) {
-    var at = Blockly.Dart.valueToCode(block, atId,
-        Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+        this.ORDER_UNARY_PREFIX) || defaultAtIndex;
   } else {
-    var at = Blockly.Dart.valueToCode(block, atId, order) ||
+    var at = this.valueToCode(block, atId, order) ||
         defaultAtIndex;
   }
 
@@ -263,10 +272,10 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+      var innerOrder = this.ORDER_ADDITIVE;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+      var innerOrder = this.ORDER_ADDITIVE;
     }
     if (opt_negate) {
       if (delta) {
@@ -274,7 +283,7 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = Blockly.Dart.ORDER_UNARY_PREFIX;
+      var innerOrder = this.ORDER_UNARY_PREFIX;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);

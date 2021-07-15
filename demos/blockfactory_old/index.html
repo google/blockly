@@ -7,7 +7,7 @@
   <script src="/storage.js"></script>
   <script src="factory.js"></script>
   <script src="../../blockly_compressed.js"></script>
-  <script src="../../msg/messages.js"></script>
+  <script src="../../msg/js/en.js"></script>
   <script src="blocks.js"></script>
   <style>
     html, body {
@@ -148,7 +148,7 @@
           </tr>
           <tr>
             <td height="30%">
-              <pre id="languagePre"></pre>
+              <pre id="languagePre" class="prettyprint lang-js"></pre>
               <textarea id="languageTA"></textarea>
             </td>
           </tr>
@@ -167,14 +167,14 @@
           </tr>
           <tr>
             <td height="30%">
-              <pre id="generatorPre"></pre>
+              <pre id="generatorPre" class="prettyprint lang-js"></pre>
             </td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
-  <xml id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Input">
       <block type="input_value">
         <value name="TYPE">
@@ -196,11 +196,6 @@
       <block type="field_dropdown"></block>
       <block type="field_checkbox"></block>
       <block type="field_colour"></block>
-      <!--
-      Date picker commented out since it increases footprint by 60%.
-      Add it only if you need it.  See also goog.require in blockly.js.
-      <block type="field_date"></block>
-      -->
       <block type="field_variable"></block>
       <block type="field_image"></block>
     </category>

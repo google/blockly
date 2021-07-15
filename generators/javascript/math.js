@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,7 +17,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC :
               Blockly.JavaScript.ORDER_UNARY_NEGATION;
   return [code, order];
@@ -44,7 +30,7 @@ Blockly.JavaScript['math_arithmetic'] = function(block) {
     'MINUS': [' - ', Blockly.JavaScript.ORDER_SUBTRACTION],
     'MULTIPLY': [' * ', Blockly.JavaScript.ORDER_MULTIPLICATION],
     'DIVIDE': [' / ', Blockly.JavaScript.ORDER_DIVISION],
-    'POWER': [null, Blockly.JavaScript.ORDER_COMMA]  // Handle power separately.
+    'POWER': [null, Blockly.JavaScript.ORDER_NONE]  // Handle power separately.
   };
   var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
@@ -221,8 +207,8 @@ Blockly.JavaScript['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'DELTA',
       Blockly.JavaScript.ORDER_ADDITION) || '0';
-  var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var varName = Blockly.JavaScript.nameDB_.getName(
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = (typeof ' + varName + ' == \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };
@@ -244,12 +230,12 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       break;
     case 'MIN':
       list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_COMMA) || '[]';
+          Blockly.JavaScript.ORDER_NONE) || '[]';
       code = 'Math.min.apply(null, ' + list + ')';
       break;
     case 'MAX':
       list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_COMMA) || '[]';
+          Blockly.JavaScript.ORDER_NONE) || '[]';
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE':
@@ -375,11 +361,11 @@ Blockly.JavaScript['math_modulo'] = function(block) {
 Blockly.JavaScript['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_COMMA) || '0';
+      Blockly.JavaScript.ORDER_NONE) || '0';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'LOW',
-      Blockly.JavaScript.ORDER_COMMA) || '0';
+      Blockly.JavaScript.ORDER_NONE) || '0';
   var argument2 = Blockly.JavaScript.valueToCode(block, 'HIGH',
-      Blockly.JavaScript.ORDER_COMMA) || 'Infinity';
+      Blockly.JavaScript.ORDER_NONE) || 'Infinity';
   var code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -388,9 +374,9 @@ Blockly.JavaScript['math_constrain'] = function(block) {
 Blockly.JavaScript['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   var argument0 = Blockly.JavaScript.valueToCode(block, 'FROM',
-      Blockly.JavaScript.ORDER_COMMA) || '0';
+      Blockly.JavaScript.ORDER_NONE) || '0';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
-      Blockly.JavaScript.ORDER_COMMA) || '0';
+      Blockly.JavaScript.ORDER_NONE) || '0';
   var functionName = Blockly.JavaScript.provideFunction_(
       'mathRandomInt',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
@@ -410,4 +396,14 @@ Blockly.JavaScript['math_random_int'] = function(block) {
 Blockly.JavaScript['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['Math.random()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+Blockly.JavaScript['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  var argument0 = Blockly.JavaScript.valueToCode(block, 'X',
+      Blockly.JavaScript.ORDER_NONE) || '0';
+  var argument1 = Blockly.JavaScript.valueToCode(block, 'Y',
+      Blockly.JavaScript.ORDER_NONE) || '0';
+  return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
+      Blockly.JavaScript.ORDER_DIVISION];
 };

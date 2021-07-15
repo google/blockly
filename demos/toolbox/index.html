@@ -27,7 +27,7 @@
 
   <div id="blocklyDiv" style="height: 600px; width: 800px;"></div>
 
-  <xml id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <category name="If">
         <block type="controls_if"></block>
@@ -114,6 +114,7 @@
         </value>
       </block>
       <block type="math_random_float"></block>
+      <block type="math_atan2"></block>
     </category>
     <category name="Lists" colour="%{BKY_LISTS_HUE}">
       <block type="lists_create_empty"></block>

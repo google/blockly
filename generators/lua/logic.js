@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,18 +19,31 @@ Blockly.Lua['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var code = '', branchCode, conditionCode;
+  if (Blockly.Lua.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block);
+  }
   do {
     conditionCode = Blockly.Lua.valueToCode(block, 'IF' + n,
-      Blockly.Lua.ORDER_NONE) || 'false';
+        Blockly.Lua.ORDER_NONE) || 'false';
     branchCode = Blockly.Lua.statementToCode(block, 'DO' + n);
+    if (Blockly.Lua.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Lua.prefixLines(
+          Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
+          Blockly.Lua.INDENT) + branchCode;
+    }
     code += (n > 0 ? 'else' : '') +
         'if ' + conditionCode + ' then\n' + branchCode;
-
     ++n;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE')) {
+  if (block.getInput('ELSE') || Blockly.Lua.STATEMENT_SUFFIX) {
     branchCode = Blockly.Lua.statementToCode(block, 'ELSE');
+    if (Blockly.Lua.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Lua.prefixLines(
+          Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
+          Blockly.Lua.INDENT) + branchCode;
+    }
     code += 'else\n' + branchCode;
   }
   return code + 'end\n';

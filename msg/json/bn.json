@@ -2,15 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Aftabuzzaman",
-			"Rakibul",
-			"Tauhid16",
 			"MasterMinhaz",
-			"এম আবু সাঈদ",
+			"Rakibul",
 			"Rasal Lia",
-			"আফতাবুজ্জামান"
+			"Tauhid16",
+			"আফতাবুজ্জামান",
+			"এম আবু সাঈদ"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "পদ",
+	"UNNAMED_KEY": "নামহীন",
 	"TODAY": "আজ",
 	"DUPLICATE_BLOCK": "প্রতিলিপি",
 	"ADD_COMMENT": "মন্তব্য যোগ করুন",

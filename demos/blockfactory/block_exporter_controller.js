@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -253,8 +239,8 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
   }
   this.view.listSelectedBlocks();
 
-  if (unstoredCustomBlockTypes.length > 0){
-    // Warn user to import block defifnitions and generator code for blocks
+  if (unstoredCustomBlockTypes.length > 0) {
+    // Warn user to import block definitions and generator code for blocks
     // not in their Block Library nor Blockly's standard library.
     var blockTypesText = unstoredCustomBlockTypes.join(', ');
     var customWarning = 'Custom blocks used in workspace factory but not ' +
@@ -267,7 +253,7 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
 
 /**
  * Set the array that holds the block types used in workspace factory.
- * @param {!Array.<string>} usedBlockTypes Block types used in
+ * @param {!Array<string>} usedBlockTypes Block types used in
  */
 BlockExporterController.prototype.setUsedBlockTypes =
     function(usedBlockTypes) {

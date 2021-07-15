@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie",
+			"Fanjiayi",
 			"Karmwiki",
-			"Fanjiayi"
+			"McDutchie"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "cosa",
+	"UNNAMED_KEY": "sin nomine",
 	"TODAY": "Hodie",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adder commento",
@@ -55,7 +56,7 @@
 	"COLOUR_BLEND_COLOUR2": "color 2",
 	"COLOUR_BLEND_RATIO": "ration",
 	"COLOUR_BLEND_TOOLTIP": "Misce duo colores con un ration specificate (0.0 - 1.0).",
-	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
+	"CONTROLS_REPEAT_HELPURL": "https://ia.wikipedia.org/wiki/Bucla_for",
 	"CONTROLS_REPEAT_TITLE": "repeter %1 vices",
 	"CONTROLS_REPEAT_INPUT_DO": "face",
 	"CONTROLS_REPEAT_TOOLTIP": "Exequer certe instructiones plure vices.",
@@ -132,8 +133,8 @@
 	"MATH_SINGLE_TOOLTIP_ABS": "Retornar le valor absolute de un numero.",
 	"MATH_SINGLE_TOOLTIP_NEG": "Retornar le negation de un numero.",
 	"MATH_SINGLE_TOOLTIP_LN": "Retornar le logarithmo natural de un numero.",
-	"MATH_SINGLE_TOOLTIP_LOG10": "Retornar le logarithmo in base 10 del numero.",
-	"MATH_SINGLE_TOOLTIP_EXP": "Retornar e elevate al potentia del numero.",
+	"MATH_SINGLE_TOOLTIP_LOG10": "Retornar le logarithmo in base 10 de un numero.",
+	"MATH_SINGLE_TOOLTIP_EXP": "Retornar <em>e</em> elevate al potentia de un numero.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Retornar 10 elevate al potentia de un numero.",
 	"MATH_TRIG_TOOLTIP_SIN": "Retornar le sino de un grado (non radiano).",
 	"MATH_TRIG_TOOLTIP_COS": "Retornar le cosino de un grado (non radiano).",
@@ -182,6 +183,8 @@
 	"MATH_RANDOM_INT_TOOLTIP": "Retornar un numero integre aleatori inter le duo limites specificate, incluse.",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "fraction aleatori",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Retornar un fraction aleatori inter 0.0 (incluse) e 1.0 (excluse).",
+	"MATH_ATAN2_TITLE": "atan2 de X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Retornar le arco tangente del puncto (X, Y) in grados de -180 a 180.",
 	"TEXT_TEXT_TOOLTIP": "Un littera, parola o linea de texto.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "crear texto con",
 	"TEXT_JOIN_TOOLTIP": "Crear un pecia de texto uniente un certe numero de elementos.",
@@ -257,8 +260,8 @@
 	"LISTS_GET_INDEX_FIRST": "prime",
 	"LISTS_GET_INDEX_LAST": "ultime",
 	"LISTS_GET_INDEX_RANDOM": "aleatori",
-	"LISTS_INDEX_FROM_START_TOOLTIP": "№ %1 es le prime elemento.",
-	"LISTS_INDEX_FROM_END_TOOLTIP": "№ %1 es le ultime elemento.",
+	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 es le prime elemento.",
+	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 es le ultime elemento.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "Retorna le elemento presente al position specificate in un lista.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "Retorna le prime elemento in un lista.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_LAST": "Retorna le ultime elemento in un lista.",
@@ -283,7 +286,7 @@
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_LAST": "Adjunge le elemento al fin de un lista.",
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM": "Insere le elemento a un position aleatori in un lista.",
 	"LISTS_GET_SUBLIST_START_FROM_START": "prender sublista ab №",
-	"LISTS_GET_SUBLIST_START_FROM_END": "prender sublista ab le fin ab №",
+	"LISTS_GET_SUBLIST_START_FROM_END": "prender sublista ab № a partir del fin",
 	"LISTS_GET_SUBLIST_START_FIRST": "prender sublista ab initio",
 	"LISTS_GET_SUBLIST_END_FROM_START": "usque al №",
 	"LISTS_GET_SUBLIST_END_FROM_END": "usque al № ab fin",
@@ -328,5 +331,7 @@
 	"PROCEDURES_CREATE_DO": "Crear '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si un valor es ver, alora retornar un secunde valor.",
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
+	"WORKSPACE_ARIA_LABEL": "Spatio de travalio de Blockly",
+	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos."
 }

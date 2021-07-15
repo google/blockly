@@ -1,12 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
-			"Renessaince",
 			"Jim-by",
-			"Red Winged Duck"
+			"Nerogaf",
+			"Red Winged Duck",
+			"Renessaince"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "аб’ект",
+	"UNNAMED_KEY": "безназоўны",
 	"TODAY": "Сёньня",
 	"DUPLICATE_BLOCK": "Капіяваць",
 	"ADD_COMMENT": "Дадаць камэнтар",
@@ -83,7 +85,7 @@
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Дадаць умову да блёку «калі».",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Дадаць заключную ўмову для ўсіх астатніх варыянтаў блёку «калі».",
 	"IOS_OK": "Добра",
-	"IOS_CANCEL": "Адмяніць",
+	"IOS_CANCEL": "Скасаваць",
 	"IOS_ERROR": "Памылка",
 	"IOS_PROCEDURES_INPUTS": "УВАХОДНЫЯ ЗЬВЕСТКІ",
 	"IOS_PROCEDURES_ADD_INPUT": "+ Дадаць уваходныя зьвесткі",
@@ -148,9 +150,9 @@
 	"MATH_IS_ODD": "няпарная",
 	"MATH_IS_PRIME": "простая",
 	"MATH_IS_WHOLE": "цэлая",
-	"MATH_IS_POSITIVE": "станоўчая",
+	"MATH_IS_POSITIVE": "дадатная",
 	"MATH_IS_NEGATIVE": "адмоўная",
-	"MATH_IS_DIVISIBLE_BY": "дзяліць на",
+	"MATH_IS_DIVISIBLE_BY": "дзеліцца на",
 	"MATH_IS_TOOLTIP": "Правярае, ці зьяўляецца лік парным, няпарным, простым, станоўчым, адмоўным, ці ён дзеліцца на пэўны лік без астатку. Вяртае значэньне ісьціна або няпраўда.",
 	"MATH_CHANGE_HELPURL": "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
 	"MATH_CHANGE_TITLE": "зьмяніць %1 на %2",
@@ -187,6 +189,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "выпадковая дроб",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Вяртае выпадковую дроб у дыяпазоне ад 0,0 (уключна) да 1,0.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 ад X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Вяртае арктангенс пункту (X, Y) у градусах ад -180 да 180.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Літара, слова ці радок тэксту.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "стварыць тэкст з",
@@ -342,5 +347,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Калі значэньне ісьціна, вярнуць другое значэньне.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напішыце што-небудзь…"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напішыце што-небудзь…",
+	"WORKSPACE_ARIA_LABEL": "Працоўная прастора Blockly",
+	"COLLAPSED_WARNINGS_WARNING": "Згорнутыя блёкі ўтрымліваюць папярэджаньні."
 }

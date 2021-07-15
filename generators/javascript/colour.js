@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,7 +17,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['colour_picker'] = function(block) {
   // Colour picker.
-  var code = '\'' + block.getFieldValue('COLOUR') + '\'';
+  var code = Blockly.JavaScript.quote_(block.getFieldValue('COLOUR'));
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -50,11 +36,11 @@ Blockly.JavaScript['colour_random'] = function(block) {
 Blockly.JavaScript['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   var red = Blockly.JavaScript.valueToCode(block, 'RED',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var green = Blockly.JavaScript.valueToCode(block, 'GREEN',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
+      Blockly.JavaScript.ORDER_NONE) || 0;
   var functionName = Blockly.JavaScript.provideFunction_(
       'colourRgb',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
@@ -74,11 +60,11 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
 Blockly.JavaScript['colour_blend'] = function(block) {
   // Blend two colours together.
   var c1 = Blockly.JavaScript.valueToCode(block, 'COLOUR1',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
   var c2 = Blockly.JavaScript.valueToCode(block, 'COLOUR2',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
+      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
   var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
-      Blockly.JavaScript.ORDER_COMMA) || 0.5;
+      Blockly.JavaScript.ORDER_NONE) || 0.5;
   var functionName = Blockly.JavaScript.provideFunction_(
       'colourBlend',
       ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"Aefgh39622",
 			"Andibing",
+			"Bjh21",
 			"Codynguyen1116",
-			"Shirayuki",
-			"Aefgh39622"
+			"Shirayuki"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -33,7 +34,7 @@
 	"NEW_VARIABLE": "Create variable...",
 	"NEW_VARIABLE_TITLE": "New variable name:",
 	"VARIABLE_ALREADY_EXISTS": "A variable named '%1' already exists.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "A variable named '%1' already exists for another variable of type '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "A variable named '%1' already exists for another type: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Delete %1 uses of the '%2' variable?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Can't delete the variable '%1' because it's part of the definition of the function '%2'",
 	"DELETE_VARIABLE": "Delete the '%1' variable",

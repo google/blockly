@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,7 +17,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = Number(block.getFieldValue('NUM'));
   var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code == Infinity) {
@@ -188,7 +174,7 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  return true;',
          '}']);
     code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
   switch (dropdown_property) {
     case 'EVEN':
@@ -219,8 +205,8 @@ Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
       Blockly.PHP.ORDER_ADDITION) || '0';
-  var varName = Blockly.PHP.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var varName = Blockly.PHP.nameDB_.getName(
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' += ' + argument0 + ';\n';
 };
 
@@ -339,11 +325,11 @@ Blockly.PHP['math_modulo'] = function(block) {
 Blockly.PHP['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'LOW',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument2 = Blockly.PHP.valueToCode(block, 'HIGH',
-      Blockly.PHP.ORDER_COMMA) || 'Infinity';
+      Blockly.PHP.ORDER_NONE) || 'Infinity';
   var code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -352,9 +338,9 @@ Blockly.PHP['math_constrain'] = function(block) {
 Blockly.PHP['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   var argument0 = Blockly.PHP.valueToCode(block, 'FROM',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'TO',
-      Blockly.PHP.ORDER_COMMA) || '0';
+      Blockly.PHP.ORDER_NONE) || '0';
   var functionName = Blockly.PHP.provideFunction_(
       'math_random_int',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -371,4 +357,14 @@ Blockly.PHP['math_random_int'] = function(block) {
 Blockly.PHP['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['(float)rand()/(float)getrandmax()', Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
+Blockly.PHP['math_atan2'] = function(block) {
+  // Arctangent of point (X, Y) in degrees from -180 to 180.
+  var argument0 = Blockly.PHP.valueToCode(block, 'X',
+      Blockly.PHP.ORDER_NONE) || '0';
+  var argument1 = Blockly.PHP.valueToCode(block, 'Y',
+      Blockly.PHP.ORDER_NONE) || '0';
+  return ['atan2(' + argument1 + ', ' + argument0 + ') / pi() * 180',
+      Blockly.PHP.ORDER_DIVISION];
 };

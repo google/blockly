@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,6 +19,14 @@ Blockly.Lua['text'] = function(block) {
   // Text value.
   var code = Blockly.Lua.quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+
+Blockly.Lua['text_multiline'] = function(block) {
+  // Text value.
+  var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));
+  var order = code.indexOf('..') != -1 ? Blockly.Lua.ORDER_CONCATENATION :
+      Blockly.Lua.ORDER_ATOMIC;
+  return [code, order];
 };
 
 Blockly.Lua['text_join'] = function(block) {
@@ -64,8 +58,8 @@ Blockly.Lua['text_join'] = function(block) {
 
 Blockly.Lua['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.Lua.variableDB_.getName(
-      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+  var varName = Blockly.Lua.nameDB_.getName(
+      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   var value = Blockly.Lua.valueToCode(block, 'TEXT',
       Blockly.Lua.ORDER_CONCATENATION) || '\'\'';
   return varName + ' = ' + varName + ' .. ' + value + '\n';
@@ -355,7 +349,7 @@ Blockly.Lua['text_replace'] = function(block) {
 
 Blockly.Lua['text_reverse'] = function(block) {
   var text = Blockly.Lua.valueToCode(block, 'TEXT',
-      Blockly.Lua.ORDER_HIGH) || '\'\'';
+      Blockly.Lua.ORDER_NONE) || '\'\'';
   var code = 'string.reverse(' + text + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

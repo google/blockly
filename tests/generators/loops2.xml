@@ -1,8 +1,9 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="unittest_main" x="66" y="-2">
+    <field name="SUITE_NAME">Loops 2</field>
     <statement name="DO">
       <block type="procedures_callnoreturn">
-        <mutation name="test count"></mutation>
+        <mutation name="test count loops"></mutation>
         <next>
           <block type="procedures_callnoreturn">
             <mutation name="test count by"></mutation>
@@ -579,7 +580,7 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="29" y="184">
-    <field name="NAME">test count</field>
+    <field name="NAME">test count loops</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">log</field>

@@ -2,10 +2,10 @@
 	"@metadata": {
 		"authors": [
 			"Cocu",
+			"Jon Harald Søby",
 			"Kingu",
-			"아라",
 			"SuperPotato",
-			"Jon Harald Søby"
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -204,6 +204,8 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "tilfeldig flyttall",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Returner et tilfeldig flyttall mellom 0.0 (inkludert) og 1.0 (ikke inkludert).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 av X:%1 Y:%2",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "En bokstav, ett ord eller en linje med tekst.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "lag tekst med",

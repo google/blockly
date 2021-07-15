@@ -1,8 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cekli829",
 			"AZISS",
+			"Adil",
+			"Cekli829",
 			"Masalli qasimli"
 		]
 	},
@@ -200,6 +201,8 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "təsadüfi kəsr",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "0.0 (daxil olmaqla) və 1.0 (daxil olmamaqla) ədədlərinin arasından təsadüfi bir kəsr ədəd qaytarır.",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TOOLTIP": "(X,Y) nöqtələrinin -180 - 180 dərəcədə arktangensini hesabla.",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
 	"TEXT_TEXT_TOOLTIP": "Mətndəki hərf, söz və ya sətir.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "Verilmişlərlə mətn yarat",

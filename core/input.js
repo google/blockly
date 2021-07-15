@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,7 +13,17 @@
 goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
+goog.require('Blockly.fieldRegistry');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
+goog.require('Blockly.inputTypes');
+
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.RenderedConnection');
 
 
 /**
@@ -40,7 +36,7 @@ goog.require('Blockly.FieldLabel');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
-  if (type != Blockly.DUMMY_INPUT && !name) {
+  if (type != Blockly.inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
@@ -54,7 +50,7 @@ Blockly.Input = function(type, name, block, connection) {
   this.sourceBlock_ = block;
   /** @type {Blockly.Connection} */
   this.connection = connection;
-  /** @type {!Array.<!Blockly.Field>} */
+  /** @type {!Array<!Blockly.Field>} */
   this.fieldRow = [];
 };
 
@@ -62,7 +58,7 @@ Blockly.Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
+Blockly.Input.prototype.align = Blockly.constants.ALIGN.LEFT;
 
 /**
  * Is the input visible?
@@ -70,6 +66,14 @@ Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
  * @private
  */
 Blockly.Input.prototype.visible_ = true;
+
+/**
+ * Get the source block for this input.
+ * @return {?Blockly.Block} The source block, or null if there is none.
+ */
+Blockly.Input.prototype.getSourceBlock = function() {
+  return this.sourceBlock_;
+};
 
 /**
  * Add a field (or label from string), and all prefix and suffix fields, to the
@@ -95,22 +99,29 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
  */
 Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (index < 0 || index > this.fieldRow.length) {
-    throw new Error('index ' + index + ' out of bounds.');
+    throw Error('index ' + index + ' out of bounds.');
   }
-
-  // Empty string, Null or undefined generates no field, unless field is named.
-  if (!field && !opt_name) {
+  // Falsy field values don't generate a field, unless the field is an empty
+  // string and named.
+  if (!field && !(field == '' && opt_name)) {
     return index;
   }
+
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
-    field = new Blockly.FieldLabel(/** @type {string} */ (field));
+    field = /** @type {!Blockly.Field} **/ (Blockly.fieldRegistry.fromJson({
+      'type': 'field_label',
+      'text': field,
+    }));
   }
+
   field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
     field.init();
+    field.applyColour();
   }
   field.name = opt_name;
+  field.setVisible(this.isVisible());
 
   if (field.prefixField) {
     // Add any prefix.
@@ -125,9 +136,10 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
 
   if (this.sourceBlock_.rendered) {
+    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.
-    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.bumpNeighbours();
   }
   return index;
 };
@@ -135,22 +147,29 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
 /**
  * Remove a field from this input.
  * @param {string} name The name of the field.
- * @throws {Error} if the field is not present.
+ * @param {boolean=} opt_quiet True to prevent an error if field is not present.
+ * @return {boolean} True if operation succeeds, false if field is not present
+ *     and opt_quiet is true.
+ * @throws {Error} if the field is not present and opt_quiet is false.
  */
-Blockly.Input.prototype.removeField = function(name) {
-  for (var i = 0, field; field = this.fieldRow[i]; i++) {
+Blockly.Input.prototype.removeField = function(name, opt_quiet) {
+  for (var i = 0, field; (field = this.fieldRow[i]); i++) {
     if (field.name === name) {
       field.dispose();
       this.fieldRow.splice(i, 1);
       if (this.sourceBlock_.rendered) {
+        this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
-        this.sourceBlock_.bumpNeighbours_();
+        this.sourceBlock_.bumpNeighbours();
       }
-      return;
+      return true;
     }
   }
-  throw Error('Field "%s" not found.', name);
+  if (opt_quiet) {
+    return false;
+  }
+  throw Error('Field "' + name + '" not found.');
 };
 
 /**
@@ -163,42 +182,54 @@ Blockly.Input.prototype.isVisible = function() {
 
 /**
  * Sets whether this input is visible or not.
- * Used to collapse/uncollapse a block.
+ * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
+ * @return {!Array<!Blockly.BlockSvg>} List of blocks to render.
+ * @package
  */
 Blockly.Input.prototype.setVisible = function(visible) {
+  // Note: Currently there are only unit tests for block.setCollapsed()
+  // because this function is package. If this function goes back to being a
+  // public API tests (lots of tests) should be added.
   var renderList = [];
   if (this.visible_ == visible) {
     return renderList;
   }
   this.visible_ = visible;
 
-  var display = visible ? 'block' : 'none';
-  for (var y = 0, field; field = this.fieldRow[y]; y++) {
+  for (var y = 0, field; (field = this.fieldRow[y]); y++) {
     field.setVisible(visible);
   }
   if (this.connection) {
+    this.connection =
+      /** @type {!Blockly.RenderedConnection} */ (this.connection);
     // Has a connection.
     if (visible) {
-      renderList = this.connection.unhideAll();
+      renderList = this.connection.startTrackingAll();
     } else {
-      this.connection.hideAll();
+      this.connection.stopTrackingAll();
     }
     var child = this.connection.targetBlock();
     if (child) {
-      child.getSvgRoot().style.display = display;
-      if (!visible) {
-        child.rendered = false;
-      }
+      child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
   }
   return renderList;
 };
 
 /**
+ * Mark all fields on this input as dirty.
+ * @package
+ */
+Blockly.Input.prototype.markDirty = function() {
+  for (var y = 0, field; (field = this.fieldRow[y]); y++) {
+    field.markDirty();
+  }
+};
+
+/**
  * Change a connection's compatibility.
- * @param {string|Array.<string>|null} check Compatible value type or
+ * @param {string|Array<string>|null} check Compatible value type or
  *     list of value types.  Null if all types are compatible.
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
@@ -212,16 +243,41 @@ Blockly.Input.prototype.setCheck = function(check) {
 
 /**
  * Change the alignment of the connection's field(s).
- * @param {number} align One of Blockly.ALIGN_LEFT, ALIGN_CENTRE, ALIGN_RIGHT.
- *   In RTL mode directions are reversed, and ALIGN_RIGHT aligns to the left.
+ * @param {number} align One of the values of Blockly.constants.ALIGN.
+ *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
 Blockly.Input.prototype.setAlign = function(align) {
   this.align = align;
   if (this.sourceBlock_.rendered) {
+    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
   }
   return this;
+};
+
+/**
+ * Changes the connection's shadow block.
+ * @param {?Element} shadow DOM representation of a block or null.
+ * @return {!Blockly.Input} The input being modified (to allow chaining).
+ */
+Blockly.Input.prototype.setShadowDom = function(shadow) {
+  if (!this.connection) {
+    throw Error('This input does not have a connection.');
+  }
+  this.connection.setShadowDom(shadow);
+  return this;
+};
+
+/**
+ * Returns the XML representation of the connection's shadow block.
+ * @return {?Element} Shadow DOM representation of a block or null.
+ */
+Blockly.Input.prototype.getShadowDom = function() {
+  if (!this.connection) {
+    throw Error('This input does not have a connection.');
+  }
+  return this.connection.getShadowDom();
 };
 
 /**
@@ -238,9 +294,10 @@ Blockly.Input.prototype.init = function() {
 
 /**
  * Sever all links to this input.
+ * @suppress {checkTypes}
  */
 Blockly.Input.prototype.dispose = function() {
-  for (var i = 0, field; field = this.fieldRow[i]; i++) {
+  for (var i = 0, field; (field = this.fieldRow[i]); i++) {
     field.dispose();
   }
   if (this.connection) {

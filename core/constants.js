@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -26,6 +12,20 @@
 
 goog.provide('Blockly.constants');
 
+goog.require('Blockly.connectionTypes');
+
+
+/**
+ * The multiplier for scroll wheel deltas using the line delta mode.
+ * @type {number}
+ */
+Blockly.LINE_MODE_MULTIPLIER = 40;
+
+/**
+ * The multiplier for scroll wheel deltas using the page delta mode.
+ * @type {number}
+ */
+Blockly.PAGE_MODE_MULTIPLIER = 125;
 
 /**
  * Number of pixels the mouse must move before a drag starts.
@@ -42,12 +42,30 @@ Blockly.FLYOUT_DRAG_RADIUS = 10;
 /**
  * Maximum misalignment between connections for them to snap together.
  */
-Blockly.SNAP_RADIUS = 20;
+Blockly.SNAP_RADIUS = 28;
+
+/**
+ * Maximum misalignment between connections for them to snap together,
+ * when a connection is already highlighted.
+ */
+Blockly.CONNECTING_SNAP_RADIUS = Blockly.SNAP_RADIUS;
+
+/**
+ * How much to prefer staying connected to the current connection over moving to
+ * a new connection.  The current previewed connection is considered to be this
+ * much closer to the matching connection on the block than it actually is.
+ */
+Blockly.CURRENT_CONNECTION_PREFERENCE = 8;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
  */
 Blockly.BUMP_DELAY = 250;
+
+/**
+ * Maximum randomness in workspace units for bumping a block.
+ */
+Blockly.BUMP_RANDOMNESS = 10;
 
 /**
  * Number of characters to truncate a collapsed block to.
@@ -95,64 +113,14 @@ Blockly.SPRITE = {
 // Constants below this point are not intended to be changed.
 
 /**
- * Required name space for SVG elements.
- * @const
+ * Enum for alignment of inputs.
+ * @enum {number}
  */
-Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
-
-/**
- * Required name space for HTML elements.
- * @const
- */
-Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
-
-/**
- * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
- * @const
- */
-Blockly.INPUT_VALUE = 1;
-
-/**
- * ENUM for a left-facing value output.  E.g. 'random fraction'.
- * @const
- */
-Blockly.OUTPUT_VALUE = 2;
-
-/**
- * ENUM for a down-facing block stack.  E.g. 'if-do' or 'else'.
- * @const
- */
-Blockly.NEXT_STATEMENT = 3;
-
-/**
- * ENUM for an up-facing block stack.  E.g. 'break out of loop'.
- * @const
- */
-Blockly.PREVIOUS_STATEMENT = 4;
-
-/**
- * ENUM for an dummy input.  Used to add field(s) with no input.
- * @const
- */
-Blockly.DUMMY_INPUT = 5;
-
-/**
- * ENUM for left alignment.
- * @const
- */
-Blockly.ALIGN_LEFT = -1;
-
-/**
- * ENUM for centre alignment.
- * @const
- */
-Blockly.ALIGN_CENTRE = 0;
-
-/**
- * ENUM for right alignment.
- * @const
- */
-Blockly.ALIGN_RIGHT = 1;
+Blockly.constants.ALIGN = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1
+};
 
 /**
  * ENUM for no drag operation.
@@ -184,65 +152,24 @@ Blockly.DRAG_FREE = 2;
  * @const
  */
 Blockly.OPPOSITE_TYPE = [];
-Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
-Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
-
-
-/**
- * ENUM for toolbox and flyout at top of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_TOP = 0;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.INPUT_VALUE] =
+    Blockly.connectionTypes.OUTPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.OUTPUT_VALUE] =
+    Blockly.connectionTypes.INPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
+    Blockly.connectionTypes.PREVIOUS_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+    Blockly.connectionTypes.NEXT_STATEMENT;
 
 /**
- * ENUM for toolbox and flyout at bottom of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_BOTTOM = 1;
-
-/**
- * ENUM for toolbox and flyout at left of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_LEFT = 2;
-
-/**
- * ENUM for toolbox and flyout at right of screen.
- * @const
- */
-Blockly.TOOLBOX_AT_RIGHT = 3;
-
-/**
- * ENUM representing that an event is not in any delete areas.
- * Null for backwards compatibility reasons.
- * @const
- */
-Blockly.DELETE_AREA_NONE = null;
-
-/**
- * ENUM representing that an event is in the delete area of the trash can.
- * @const
- */
-Blockly.DELETE_AREA_TRASH = 1;
-
-/**
- * ENUM representing that an event is in the delete area of the toolbox or
- * flyout.
- * @const
- */
-Blockly.DELETE_AREA_TOOLBOX = 2;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
  */
 Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
@@ -250,7 +177,7 @@ Blockly.VARIABLE_CATEGORY_NAME = 'VARIABLE';
 Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
 /**
- * String for use in the "custom" attribute of a category in toolbox xml.
+ * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
  * @const {string}
@@ -272,3 +199,15 @@ Blockly.RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
  * @const {string}
  */
 Blockly.DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
+
+/**
+ * The language-neutral ID given to the collapsed input.
+ * @const {string}
+ */
+Blockly.constants.COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+
+/**
+ * The language-neutral ID given to the collapsed field.
+ * @const {string}
+ */
+Blockly.constants.COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';

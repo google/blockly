@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -201,7 +187,7 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
   // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||
       oldIndex >= table.rows.length) {
-    throw new Error('Index out of bounds when moving tab in the view.');
+    throw Error('Index out of bounds when moving tab in the view.');
   }
 
   if (newIndex < oldIndex) {
@@ -218,17 +204,23 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
 };
 
 /**
- * Given a category ID and color, use that color to color the left border of the
- * tab for that category.
- * @param {string} id The ID of the category to color.
- * @param {string} color The color for to be used for the border of the tab.
- * Must be a valid CSS string.
+ * Given a category ID and colour, use that colour to colour the left border of
+ * the tab for that category.
+ * @param {string} id The ID of the category to colour.
+ * @param {?string} colour The colour for to be used for the border of the tab,
+ *   or null if none.  Must be a valid CSS string.
  */
-WorkspaceFactoryView.prototype.setBorderColor = function(id, color) {
-  var tab = this.tabMap[id];
-  tab.style.borderLeftWidth = '8px';
-  tab.style.borderLeftStyle = 'solid';
-  tab.style.borderColor = color;
+WorkspaceFactoryView.prototype.setBorderColour = function(id, colour) {
+  var style = this.tabMap[id].style;
+  if (colour) {
+    style.borderLeftWidth = '8px';
+    style.borderLeftStyle = 'solid';
+    style.borderColor = colour;
+  } else {
+    style.borderLeftWidth = '';
+    style.borderLeftStyle = '';
+    style.borderColor = '';
+  }
 };
 
 /**
@@ -302,7 +294,7 @@ WorkspaceFactoryView.prototype.clearToolboxTabs = function() {
  * Given a set of blocks currently loaded user-generated shadow blocks, visually
  * marks them without making them actual shadow blocks (allowing them to still
  * be editable and movable).
- * @param {!Array.<!Blockly.Block>} blocks Array of user-generated shadow blocks
+ * @param {!Array<!Blockly.Block>} blocks Array of user-generated shadow blocks
  * currently loaded.
  */
 WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
@@ -320,7 +312,7 @@ WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
  */
 WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.addClass(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.dom.addClass(block.svgGroup_, 'shadowBlock');
   // If not a valid shadow block, add a warning message.
   if (!block.getSurroundParent()) {
       block.setWarningText('Shadow blocks must be nested inside' +
@@ -338,7 +330,7 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.removeClass(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.dom.removeClass(block.svgGroup_, 'shadowBlock');
 };
 
 /**

@@ -39,10 +39,8 @@ var BlockDefinitionExtractor = BlockDefinitionExtractor || Object.create(null);
  *     workspace.
  */
 BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
-  var workspaceXml = document.createElement('xml');
-  workspaceXml.append(
-      BlockDefinitionExtractor.factoryBase_(block, block.type));
-
+  var workspaceXml = Blockly.utils.xml.createElement('xml');
+  workspaceXml.append(BlockDefinitionExtractor.factoryBase_(block, block.type));
   return workspaceXml;
 };
 
@@ -51,14 +49,14 @@ BlockDefinitionExtractor.buildBlockFactoryWorkspace = function(block) {
  * inner text.
  *
  * @param {string} name New element tag name.
- * @param {Map<String,String>} opt_attrs Optional list of attributes.
- * @param {string?} opt_text Optional inner text.
+ * @param {!Object<string, string>=} opt_attrs Optional list of attributes.
+ * @param {string=} opt_text Optional inner text.
  * @return {!Element} The newly created element.
  * @private
  */
 BlockDefinitionExtractor.newDomElement_ = function(name, opt_attrs, opt_text) {
   // Avoid createDom(..)'s attributes argument for being too HTML specific.
-  var elem = document.createElement(name);
+  var elem = Blockly.utils.xml.createElement(name);
   if (opt_attrs) {
     for (var key in opt_attrs) {
       elem.setAttribute(key, opt_attrs[key]);
@@ -114,7 +112,7 @@ BlockDefinitionExtractor.buildTypeConstraintBlockForConnection_ =
     } else if (connection.check_.length === 1) {
       typeBlock = BlockDefinitionExtractor.buildBlockForType_(
           connection.check_[0]);
-    } else if (connection.check_.length > 1 ) {
+    } else if (connection.check_.length > 1) {
       typeBlock = BlockDefinitionExtractor.typeGroup_(connection.check_);
     }
   } else {
@@ -478,7 +476,7 @@ BlockDefinitionExtractor.buildFieldDropdown_ = function(dropdown) {
   } else if (Array.isArray(menuGenerator)) {
     var options = menuGenerator;
   } else {
-    throw new Error('Unrecognized type of menuGenerator: ' + menuGenerator);
+    throw Error('Unrecognized type of menuGenerator: ' + menuGenerator);
   }
 
   var fieldDropdown = BlockDefinitionExtractor.newDomElement_(
@@ -558,7 +556,7 @@ BlockDefinitionExtractor.buildFieldColour_ =
 };
 
 /**
- * Creates a <block> element representing a FieldVaraible definition.
+ * Creates a <block> element representing a FieldVariable definition.
  *
  * @param {string} fieldName The identifying name of the field.
  * @param {string} varName The variables
@@ -581,7 +579,7 @@ BlockDefinitionExtractor.buildFieldVariable_ = function(fieldName, varName) {
  * @param {string} src The URL of the field image.
  * @param {number} width The pixel width of the source image
  * @param {number} height The pixel height of the source image.
- * @param {string} alt Alterante text to describe image.
+ * @param {string} alt Alternate text to describe image.
  * @private
  */
 BlockDefinitionExtractor.buildFieldImage_ =
@@ -695,7 +693,7 @@ BlockDefinitionExtractor.typeList_ = function() {
  * Creates a <block> element representing the given custom connection
  * constraint type name.
  *
- * @param {string} type The connection constratin type name.
+ * @param {string} type The connection constraint type name.
  * @return {Element} The <block> element representing a custom input type
  *     constraint.
  * @private
@@ -709,7 +707,7 @@ BlockDefinitionExtractor.typeOther_ = function(type) {
 };
 
 /**
- * Creates a block Element for the color_hue block, with the given hue.
+ * Creates a block Element for the colour_hue block, with the given hue.
  * @param hue {number} The hue value, from 0 to 360.
  * @return {Element} The <block> Element representing a colour_hue block
  *     with the given hue.

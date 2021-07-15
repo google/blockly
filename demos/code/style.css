@@ -74,6 +74,7 @@ td.tabon {
   border-bottom-color: #ddd !important;
   background-color: #ddd;
   padding: 5px 19px;
+  white-space: nowrap;
 }
 td.taboff {
   cursor: pointer;
@@ -98,6 +99,9 @@ td.tabmax {
 }
 html[dir=rtl] td.tabmax {
   text-align: left;
+}
+#tab_code {
+  display: none;
 }
 
 table {
@@ -161,4 +165,20 @@ button {
 }
 .run {
   background-position: -42px 0px;
+}
+
+@media (max-width: 710px) {
+  .tab_collapse {
+    display: none;
+  }
+  #tab_code {
+    display: table-cell;
+  }
+}
+
+/* Privacy link */
+.privacyLink {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: small;
+  text-decoration: none;
 }

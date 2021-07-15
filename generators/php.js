@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -27,6 +13,9 @@
 goog.provide('Blockly.PHP');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.inputTypes');
+goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -105,12 +94,11 @@ Blockly.PHP.ORDER_ASSIGNMENT = 20;        // = += -= *= /= %= <<= >>= ...
 Blockly.PHP.ORDER_LOGICAL_AND_WEAK = 21;  // and
 Blockly.PHP.ORDER_LOGICAL_XOR = 22;       // xor
 Blockly.PHP.ORDER_LOGICAL_OR_WEAK = 23;   // or
-Blockly.PHP.ORDER_COMMA = 24;             // ,
 Blockly.PHP.ORDER_NONE = 99;              // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array.<!Array.<number>>}
+ * @type {!Array<!Array<number>>}
  */
 Blockly.PHP.ORDER_OVERRIDES = [
   // (foo()).bar() -> foo().bar()
@@ -132,42 +120,30 @@ Blockly.PHP.ORDER_OVERRIDES = [
 ];
 
 /**
+ * Whether the init method has been called.
+ * @type {?boolean}
+ */
+Blockly.PHP.isInitialized = false;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.PHP.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.PHP.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.PHP.functionNames_ = Object.create(null);
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
-  if (!Blockly.PHP.variableDB_) {
-    Blockly.PHP.variableDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
+  if (!this.nameDB_) {
+    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_, '$');
   } else {
-    Blockly.PHP.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
-  Blockly.PHP.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
-  var defvars = [];
-  // Add developer variables (not created or named by the user).
-  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
-  for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.PHP.variableDB_.getName(devVarList[i],
-        Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ';');
-  }
-
-  // Add user variables, but only ones that are being used.
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0, variable; variable = variables[i]; i++) {
-    defvars.push(Blockly.PHP.variableDB_.getName(variable.getId(),
-        Blockly.Variables.NAME_TYPE) + ';');
-  }
-
-  // Declare all of the variables.
-  Blockly.PHP.definitions_['variables'] = defvars.join('\n');
+  this.isInitialized = true;
 };
 
 /**
@@ -177,14 +153,12 @@ Blockly.PHP.init = function(workspace) {
  */
 Blockly.PHP.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var definitions = [];
-  for (var name in Blockly.PHP.definitions_) {
-    definitions.push(Blockly.PHP.definitions_[name]);
-  }
-  // Clean up temporary data.
-  delete Blockly.PHP.definitions_;
-  delete Blockly.PHP.functionNames_;
-  Blockly.PHP.variableDB_.reset();
+  var definitions = Blockly.utils.object.values(this.definitions_);
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 
@@ -203,7 +177,7 @@ Blockly.PHP.scrubNakedValue = function(line) {
  * quotes.
  * @param {string} string Text to encode.
  * @return {string} PHP string.
- * @private
+ * @protected
  */
 Blockly.PHP.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
@@ -213,40 +187,56 @@ Blockly.PHP.quote_ = function(string) {
 };
 
 /**
+ * Encode a string as a properly escaped multiline PHP string, complete with
+ * quotes.
+ * @param {string} string Text to encode.
+ * @return {string} PHP string.
+ * @protected
+ */
+Blockly.PHP.multiline_quote_ = function (string) {
+  var lines = string.split(/\n/g).map(this.quote_);
+  // Join with the following, plus a newline:
+  // . "\n" .
+  // Newline escaping only works in double-quoted strings.
+  return lines.join(' . \"\\n\" .\n');
+};
+
+/**
  * Common tasks for generating PHP from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The PHP code created for this block.
+ * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} PHP code with comments and subsequent blocks added.
- * @private
+ * @protected
  */
-Blockly.PHP.scrub_ = function(block, code) {
+Blockly.PHP.scrub_ = function(block, code, opt_thisOnly) {
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, Blockly.PHP.COMMENT_WRAP - 3);
     if (comment) {
-      commentCode += Blockly.PHP.prefixLines(comment, '// ') + '\n';
+      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      commentCode += this.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.PHP.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.PHP.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.PHP.blockToCode(nextBlock);
+  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -262,28 +252,28 @@ Blockly.PHP.scrub_ = function(block, code) {
 Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
-  var order = opt_order || Blockly.PHP.ORDER_NONE;
+  var order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
   var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta > 0) {
-    var at = Blockly.PHP.valueToCode(block, atId,
-            Blockly.PHP.ORDER_ADDITION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+            this.ORDER_ADDITION) || defaultAtIndex;
   } else if (delta < 0) {
-    var at = Blockly.PHP.valueToCode(block, atId,
-            Blockly.PHP.ORDER_SUBTRACTION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+            this.ORDER_SUBTRACTION) || defaultAtIndex;
   } else if (opt_negate) {
-    var at = Blockly.PHP.valueToCode(block, atId,
-            Blockly.PHP.ORDER_UNARY_NEGATION) || defaultAtIndex;
+    var at = this.valueToCode(block, atId,
+            this.ORDER_UNARY_NEGATION) || defaultAtIndex;
   } else {
-    var at = Blockly.PHP.valueToCode(block, atId, order) ||
+    var at = this.valueToCode(block, atId, order) ||
         defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
-    at = parseFloat(at) + delta;
+    at = Number(at) + delta;
     if (opt_negate) {
       at = -at;
     }
@@ -291,10 +281,10 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = Blockly.PHP.ORDER_ADDITION;
+      var innerOrder = this.ORDER_ADDITION;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = Blockly.PHP.ORDER_SUBTRACTION;
+      var innerOrder = this.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
       if (delta) {
@@ -302,7 +292,7 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = Blockly.PHP.ORDER_UNARY_NEGATION;
+      var innerOrder = this.ORDER_UNARY_NEGATION;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);

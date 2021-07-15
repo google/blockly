@@ -2,9 +2,9 @@
     "rules": {
         "curly": ["error"],
         "eol-last": ["error"],
-        "_comment": "Blockly/Google use 2-space indents",
-        "_comment": "Blockly/Google uses +4 space indents for line continuations.",
-        "_comment": "Ignore default rules for ternary expressions.",
+        // Blockly/Google use 2-space indents.
+        // Blockly/Google uses +4 space indents for line continuations.
+        // Ignore default rules for ternary expressions.
         "indent": [
             "error", 2,
             {
@@ -33,7 +33,8 @@
                 "code": 100,
                 "tabWidth": 4,
                 "ignoreStrings": true,
-                "ignoreRegExpLiterals": true
+                "ignoreRegExpLiterals": true,
+                "ignoreUrls": true
             }
         ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],
@@ -41,29 +42,37 @@
             "error",
             {
                 "args": "after-used",
-                "_comment": "Ignore vars starting with an underscore.",
+                // Ignore vars starting with an underscore.
                 "varsIgnorePattern": "^_",
-                "_comment": "Ignore arguments starting with an underscore.",
+                // Ignore arguments starting with an underscore.
                 "argsIgnorePattern": "^_"
             }
         ],
         "no-use-before-define": ["error"],
-        "_comment":"Blockly uses for exporting symbols. no-self-assign added in eslint 5.",
+        // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
         "no-self-assign": ["off"],
-        "_comment": "Blockly uses single quotes except for JSON blobs, which must use double quotes.",
+        // Blockly uses single quotes except for JSON blobs, which must use double quotes.
         "quotes": ["off"],
         "semi": ["error", "always"],
-        "_comment": "Blockly doesn't have space before function paren",
+        // Blockly doesn't have space before function paren when defining functions.
         "space-before-function-paren": ["error", "never"],
+        // Blockly doesn't have space before function paren when calling functions.
+        "func-call-spacing": ["error", "never"],
         "space-infix-ops": ["error"],
-        "_comment": "Blockly uses 'use strict' in files",
+        // Blockly uses 'use strict' in files.
         "strict": ["off"],
-        "_comment": "Blockly often uses cond-assignment in loops",
-        "no-cond-assign": ["off"],
-        "_comment": "Closure style allows redeclarations",
+        // Closure style allows redeclarations.
         "no-redeclare": ["off"],
         "valid-jsdoc": ["error", {"requireReturn": false}],
-        "no-console": ["off"]
+        "no-console": ["off"],
+        "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
+        "operator-linebreak": ["error", "after"],
+        "spaced-comment": ["error", "always", {
+            "block": {
+                "balanced": true
+            },
+            "exceptions": ["*"]
+        }]
     },
     "env": {
         "browser": true
@@ -72,5 +81,7 @@
         "Blockly": true,
         "goog": true
     },
-    "extends": "eslint:recommended"
+    "extends": [
+        "eslint:recommended"
+    ]
 }

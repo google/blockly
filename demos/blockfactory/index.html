@@ -8,12 +8,12 @@
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="../../blocks_compressed.js"></script>
-  <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="analytics.js"></script>
   <script src="block_definition_extractor.js"></script>
   <script src="factory_utils.js"></script>
   <script src="workspacefactory/wfactory_model.js"></script>
   <script src="standard_categories.js"></script>
+  <script src="cp.js"></script>
   <script src="workspacefactory/wfactory_controller.js"></script>
   <script src="workspacefactory/wfactory_view.js"></script>
   <script src="workspacefactory/wfactory_generator.js"></script>
@@ -30,6 +30,7 @@
   <script src="app_controller.js"></script>
   <script src="/storage.js"></script>
   <link rel="stylesheet" href="factory.css">
+  <link rel="stylesheet" href="cp.css">
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script>
     var blocklyFactory;
@@ -48,6 +49,8 @@
     <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
     <button id="helpButton" title="View documentation in new window.">
       <span>Help</span>
+    </button>
+    <button class="privacyButton" title="Open Google privacy policy"><a class="privacyLink" href="https://policies.google.com/privacy">Privacy</a>
     </button>
   </h1>
   <div id="tabContainer">
@@ -123,11 +126,11 @@
       <h3>Export Preview</h3>
       <div id="blockDefs" class="exportPreviewTextArea">
         <p id="blockDefs_label">Block Definitions:</p>
-        <pre id="blockDefs_textArea"></pre>
+        <pre id="blockDefs_textArea" class="prettyprint lang-js"></pre>
       </div>
       <div id="genStubs" class="exportPreviewTextArea">
         <p id="genStubs_label">Generator Stubs:</p>
-        <pre id="genStubs_textArea"></pre>
+        <pre id="genStubs_textArea" class="prettyprint lang-js"></pre>
       </div>
     </div>
   </div>
@@ -208,10 +211,11 @@
 
         <br>
         <div class="dropdown">
-          <button id="button_editCategory">Edit Category</button>
+          <button id="button_editCategory">Edit Category...</button>
           <div id="dropdownDiv_editCategory" class="dropdown-content">
-            <a id='dropdown_name'>Name</a>
-            <a id='dropdown_color'>Colour</a>
+            <input id="categoryName">
+            <input id="categoryColour" value="000000">
+            <button id="categorySave">Save</button>
           </div>
         </div>
 
@@ -376,7 +380,7 @@
           </tr>
           <tr>
             <td height="30%">
-              <pre id="languagePre"></pre>
+              <pre id="languagePre" class="prettyprint lang-js"></pre>
               <textarea id="languageTA"></textarea>
             </td>
           </tr>
@@ -395,7 +399,7 @@
           </tr>
           <tr>
             <td height="30%">
-              <pre id="generatorPre"></pre>
+              <pre id="generatorPre" class="prettyprint lang-js"></pre>
             </td>
           </tr>
         </table>
@@ -405,7 +409,7 @@
 
   <div id="modalShadow"></div>
 
-  <xml id="blockfactory_toolbox" class="toolbox">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="blockfactory_toolbox" class="toolbox">
     <category name="Input">
       <block type="input_value">
         <value name="TYPE">
@@ -421,17 +425,13 @@
     </category>
     <category name="Field">
       <block type="field_static"></block>
+      <block type="field_label_serializable"></block>
       <block type="field_input"></block>
       <block type="field_number"></block>
       <block type="field_angle"></block>
       <block type="field_dropdown"></block>
       <block type="field_checkbox"></block>
       <block type="field_colour"></block>
-      <!--
-      Date picker commented out since it increases footprint by 60%.
-      Add it only if you need it.  See also goog.require in blockly.js.
-      <block type="field_date"></block>
-      -->
       <block type="field_variable"></block>
       <block type="field_image"></block>
     </category>
@@ -457,7 +457,7 @@
     </category>
   </xml>
 
-  <xml id="workspacefactory_toolbox" class="toolbox">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="workspacefactory_toolbox" class="toolbox">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>

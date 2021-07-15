@@ -36,7 +36,7 @@
     <tr>
       <td style="width:50%">
         <textarea id="xml_input">
-<xml>
+<xml xmlns="https://developers.google.com/blockly/xml">
   <block type="controls_if" inline="false" x="20" y="20">
     <mutation else="1"></mutation>
     <value name="IF0">
@@ -103,7 +103,7 @@
       // Parse the XML into a tree.
       var xmlText = document.getElementById('xml_input').value;
       try {
-        var xml = Blockly.Xml.textToDom(xmlText)
+        var xml = Blockly.Xml.textToDom(xmlText);
       } catch (e) {
         alert(e);
         return;

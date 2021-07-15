@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mocha Tests for Blockly</title>
+
+    <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+    <script src="../../blockly_uncompressed.js"></script>
+    <script src="../../generators/dart.js"></script>
+    <script src="../../generators/javascript.js"></script>
+    <script src="../../generators/lua.js"></script>
+    <script src="../../generators/php.js"></script>
+    <script src="../../generators/python.js"></script>
+
+    <script src="../../generators/dart/text.js"></script>
+    <script src="../../generators/javascript/text.js"></script>
+    <script src="../../generators/lua/text.js"></script>
+    <script src="../../generators/php/text.js"></script>
+    <script src="../../generators/python/text.js"></script>
+
+    <script src="../../msg/messages.js"></script>
+    <script src="../../blocks/loops.js"></script>
+    <script src="../../blocks/lists.js"></script>
+    <script src="../../blocks/logic.js"></script>
+    <script src="../../blocks/math.js"></script>
+    <script src="../../blocks/procedures.js"></script>
+    <script src="../../blocks/text.js"></script>
+  </head>
+  <style>
+    #blocklyDiv {
+      height: 1000px;
+      position: fixed;
+      visibility: hidden;
+      width: 1000px;
+    }
+  </style>
+  <body>
+
+    <div id="mocha"></div>
+    <div id="failureCount" style="display:none" tests_failed="unset"></div>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+    <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
+    <script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+    <script>
+      mocha.setup({
+        ui: 'tdd'
+      });
+    </script>
+
+    <script src="test_helpers.js"></script>
+    <script src="toolbox_helper.js"></script>
+
+    <script src="astnode_test.js"></script>
+    <script src="block_json_test.js"></script>
+    <script src="block_test.js"></script>
+    <script src="comment_test.js"></script>
+    <script src="connection_db_test.js"></script>
+    <script src="connection_checker_test.js"></script>
+    <script src="connection_test.js"></script>
+    <script src="contextmenu_items_test.js"></script>
+    <script src="cursor_test.js"></script>
+    <script src="dropdowndiv_test.js"></script>
+    <script src="event_test.js"></script>
+    <script src="extensions_test.js"></script>
+    <script src="field_test.js"></script>
+    <script src="field_angle_test.js"></script>
+    <script src="field_checkbox_test.js"></script>
+    <script src="field_colour_test.js"></script>
+    <script src="field_dropdown_test.js"></script>
+    <script src="field_image_test.js"></script>
+    <script src="field_label_test.js"></script>
+    <script src="field_label_serializable_test.js"></script>
+    <script src="field_multilineinput_test.js"></script>
+    <script src="field_number_test.js"></script>
+    <script src="field_registry_test.js"></script>
+    <script src="field_textinput_test.js"></script>
+    <script src="field_variable_test.js"></script>
+    <script src="flyout_test.js"></script>
+    <script src="generator_test.js"></script>
+    <script src="gesture_test.js"></script>
+    <script src="input_test.js"></script>
+    <script src="insertion_marker_test.js"></script>
+    <script src="json_test.js"></script>
+    <script src="shortcut_registry_test.js"></script>
+    <script src="keydown_test.js"></script>
+    <script src="logic_ternary_test.js"></script>
+    <script src="metrics_test.js"></script>
+    <script src="names_test.js"></script>
+    <script src="procedures_test_helpers.js"></script>
+    <script src="procedures_test.js"></script>
+    <script src="registry_test.js"></script>
+    <script src="theme_test.js"></script>
+    <script src="toolbox_test.js"></script>
+    <script src="tooltip_test.js"></script>
+    <script src="trashcan_test.js"></script>
+    <script src="utils_test.js"></script>
+    <script src="variable_map_test.js"></script>
+    <script src="variable_model_test.js"></script>
+    <script src="variables_test.js"></script>
+    <script src="widget_div_test.js"></script>
+    <script src="workspace_test.js"></script>
+    <script src="workspace_svg_test.js"></script>
+    <script src="workspace_comment_test.js"></script>
+    <script src="xml_test.js"></script>
+    <script src="zoom_controls_test.js"></script>
+
+    <div id="blocklyDiv"></div>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+      <block type="logic_operation"></block>
+      <sep gap="20"></sep>
+      <button text="insert" callbackkey="insertConnectionRows"></button>
+      <label text="tooltips"></label>
+    </xml>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
+      <category name="First" css-container="something">
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-FirstBlock</field>
+        </block>
+        <block type="basic_block">
+          <field name="TEXT">FirstCategory-SecondBlock</field>
+        </block>
+      </category>
+      <category name="Second">
+        <block type="basic_block">
+          <field name="TEXT">SecondCategory-FirstBlock</field>
+        </block>
+      </category>
+    </xml>
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
+      <category name="First" expanded="true" categorystyle="logic_category">
+        <sep gap="-1"></sep>
+        <button text="insert" callbackkey="insertConnectionRows"></button>
+        <block type="stack_block"></block>
+        <block type="stack_block"></block>
+      </category>
+      <category name="Second">
+        <block type="stack_block"></block>
+      </category>
+      <sep toolboxitemid="separator" gap="-1"></sep>
+      <category name="Variables" custom="VARIABLE"></category>
+      <category name="NestedCategory" >
+        <category toolboxitemid="nestedCategory" name="NestedItemOne"></category>
+      </category>
+      <category name="lastItem"></category>
+    </xml>
+
+    <xml xmlns="https://developers.google.com/blockly/xml" id="gesture-test-toolbox" style="display: none">
+      <block type="test_field_block"></block>
+    </xml>
+
+    <script>
+      mocha.run(function(failures) {
+        var failureDiv = document.getElementById('failureCount');
+        failureDiv.setAttribute('tests_failed', failures);
+      });
+    </script>
+  </body>
+</html>

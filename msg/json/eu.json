@@ -1,16 +1,18 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abacus",
+			"Amaia",
 			"An13sa",
 			"Asieriko",
+			"EukeneFL",
 			"Mikel Ibaiba",
-			"Subi",
 			"RFenichel",
-			"Amaia",
-			"EukeneFL"
+			"Subi"
 		]
 	},
-	"VARIABLES_DEFAULT_NAME": "Elementua",
+	"VARIABLES_DEFAULT_NAME": "elementua",
+	"UNNAMED_KEY": "izenik gabe",
 	"TODAY": "Gaur",
 	"DUPLICATE_BLOCK": "Bikoiztu",
 	"ADD_COMMENT": "Iruzkina gehitu",
@@ -38,9 +40,9 @@
 	"NEW_STRING_VARIABLE": "Kate aldakorra sortu...",
 	"NEW_NUMBER_VARIABLE": "Zenbaki aldagaia sortu...",
 	"NEW_COLOUR_VARIABLE": "Kolore aldagaia sortu...",
-	"NEW_VARIABLE_TYPE_TITLE": "Aldagai berriaren izena:",
+	"NEW_VARIABLE_TYPE_TITLE": "Aldagai mota berria:",
 	"NEW_VARIABLE_TITLE": "Aldagai berriaren izena:",
-	"VARIABLE_ALREADY_EXISTS": "%1 parametro izena dagoeneko existitzen da",
+	"VARIABLE_ALREADY_EXISTS": "%1 izeneko aldagaia dagoeneko existitzen da.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "%1 izeneko aldagaia dagoeneko existitzen da %2 motako beste aldagai batekin.",
 	"DELETE_VARIABLE_CONFIRMATION": "Ezabatu %2 aldagaiaren %1 erabilerak?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Ezin da '%1' aldagaia ezabatu '%2' funtzioaren definizioaren zati delako.",

@@ -2,14 +2,11 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.sq');
-
-goog.require('Blockly.Msg');
-
 Blockly.Msg["ADD_COMMENT"] = "Vendos nje Koment";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Nuk mund të fshihet variabla '%1' sepse është pjesë e definicionit të funksionit '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Ndrysho Vlerat:";
 Blockly.Msg["CLEAN_UP"] = "Pastro blloqet";
+Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Blloqet e shembura përmbajnë paralajmërime.";
 Blockly.Msg["COLLAPSE_ALL"] = "Mbyll blloqet";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Mbyll bllokun";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "Ngjyra 1";
@@ -68,7 +65,7 @@ Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "Fshi përdorimin %1 të variablë
 Blockly.Msg["DELETE_X_BLOCKS"] = "Fshij %1 blloqe";
 Blockly.Msg["DISABLE_BLOCK"] = "Çaktivizo bllokun";
 Blockly.Msg["DUPLICATE_BLOCK"] = "Kopjo";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "Koment Dublikatë";
 Blockly.Msg["ENABLE_BLOCK"] = "Aktivizo bllokun";
 Blockly.Msg["EXPAND_ALL"] = "Zmadho blloqet";
 Blockly.Msg["EXPAND_BLOCK"] = "Zmadho bllokun";
@@ -206,6 +203,9 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "Kthen herësin e dy numrave.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "Kthen ndryshimin e dy numrave.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "Kthen produktin e dy numrave.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "Kthen numrin e parë të ngritur në fuqinë e numrit të dytë.";
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
+Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";
+Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Ktheni arkangjentin e pikës (X, Y) në gradë nga -180 në 180.";
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "http://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
 Blockly.Msg["MATH_CHANGE_TITLE"] = "ndrysho %1 nga %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "Shto një numër në ndryshoren '%1'.";
@@ -389,6 +389,7 @@ Blockly.Msg["TEXT_TRIM_OPERATOR_RIGHT"] = "prit hapesirat nga ana e djathte";
 Blockly.Msg["TEXT_TRIM_TOOLTIP"] = "Pergjigju me nje kopje te tekstit me hapesira te fshira nga njera ane ose te dyja anet.";
 Blockly.Msg["TODAY"] = "Sot";
 Blockly.Msg["UNDO"] = "Zhbëj";
+Blockly.Msg["UNNAMED_KEY"] = "pa emër";
 Blockly.Msg["VARIABLES_DEFAULT_NAME"] = "send";
 Blockly.Msg["VARIABLES_GET_CREATE_SET"] = "Krijo 'vendos %1";
 Blockly.Msg["VARIABLES_GET_HELPURL"] = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated
@@ -399,27 +400,28 @@ Blockly.Msg["VARIABLES_SET_HELPURL"] = "https://github.com/google/blockly/wiki/V
 Blockly.Msg["VARIABLES_SET_TOOLTIP"] = "Vendos kete variable te jete e barabarte me te dhenat ne hyrje.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "Një variabël e quajtur '%1' tashmë ekziston.";
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "Një variabël me emrin '%1' veç ekziston për një tip tjetër: '%2'.";
-Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Say something...";  // untranslated
-Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
-Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
-Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
-Blockly.Msg["CONTROLS_IF_MSG_THEN"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
-Blockly.Msg["CONTROLS_IF_ELSE_TITLE_ELSE"] = Blockly.Msg["CONTROLS_IF_MSG_ELSE"];
-Blockly.Msg["PROCEDURES_DEFRETURN_PROCEDURE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"];
-Blockly.Msg["LISTS_GET_SUBLIST_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
-Blockly.Msg["LISTS_GET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
-Blockly.Msg["MATH_CHANGE_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
-Blockly.Msg["PROCEDURES_DEFRETURN_DO"] = Blockly.Msg["PROCEDURES_DEFNORETURN_DO"];
-Blockly.Msg["CONTROLS_IF_ELSEIF_TITLE_ELSEIF"] = Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"];
-Blockly.Msg["LISTS_GET_INDEX_HELPURL"] = Blockly.Msg["LISTS_INDEX_OF_HELPURL"];
+Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Hapësira e punës e Blockly";
+Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "Thuaj dicka...";
 Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
-Blockly.Msg["LISTS_SET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
 Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
+Blockly.Msg["CONTROLS_IF_ELSEIF_TITLE_ELSEIF"] = Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"];
+Blockly.Msg["CONTROLS_IF_ELSE_TITLE_ELSE"] = Blockly.Msg["CONTROLS_IF_MSG_ELSE"];
+Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
+Blockly.Msg["CONTROLS_IF_MSG_THEN"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
+Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["LISTS_CREATE_WITH_ITEM_TITLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
+Blockly.Msg["LISTS_GET_INDEX_HELPURL"] = Blockly.Msg["LISTS_INDEX_OF_HELPURL"];
+Blockly.Msg["LISTS_GET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
+Blockly.Msg["LISTS_GET_SUBLIST_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
+Blockly.Msg["LISTS_INDEX_OF_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
+Blockly.Msg["LISTS_SET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
+Blockly.Msg["MATH_CHANGE_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
+Blockly.Msg["PROCEDURES_DEFRETURN_COMMENT"] = Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"];
+Blockly.Msg["PROCEDURES_DEFRETURN_DO"] = Blockly.Msg["PROCEDURES_DEFNORETURN_DO"];
+Blockly.Msg["PROCEDURES_DEFRETURN_PROCEDURE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"];
+Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
 Blockly.Msg["TEXT_APPEND_VARIABLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
-Blockly.Msg["LISTS_INDEX_OF_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
-Blockly.Msg["PROCEDURES_DEFRETURN_COMMENT"] = Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"];
 
 Blockly.Msg["MATH_HUE"] = "230";
 Blockly.Msg["LOOPS_HUE"] = "120";

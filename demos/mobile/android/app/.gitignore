@@ -1,0 +1,7 @@
+/build
+
+# Files copied during build:
+src/main/assets/blockly/blockly_compressed.js
+src/main/assets/blockly/blocks_compressed.js
+src/main/assets/blockly/media
+src/main/assets/blockly/webview.html

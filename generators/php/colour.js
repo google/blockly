@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2015 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2015 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -31,7 +17,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['colour_picker'] = function(block) {
   // Colour picker.
-  var code = '\'' + block.getFieldValue('COLOUR') + '\'';
+  var code = Blockly.PHP.quote_(block.getFieldValue('COLOUR'));
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
@@ -50,11 +36,11 @@ Blockly.PHP['colour_random'] = function(block) {
 Blockly.PHP['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   var red = Blockly.PHP.valueToCode(block, 'RED',
-      Blockly.PHP.ORDER_COMMA) || 0;
+      Blockly.PHP.ORDER_NONE) || 0;
   var green = Blockly.PHP.valueToCode(block, 'GREEN',
-      Blockly.PHP.ORDER_COMMA) || 0;
+      Blockly.PHP.ORDER_NONE) || 0;
   var blue = Blockly.PHP.valueToCode(block, 'BLUE',
-      Blockly.PHP.ORDER_COMMA) || 0;
+      Blockly.PHP.ORDER_NONE) || 0;
   var functionName = Blockly.PHP.provideFunction_(
       'colour_rgb',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -75,11 +61,11 @@ Blockly.PHP['colour_rgb'] = function(block) {
 Blockly.PHP['colour_blend'] = function(block) {
   // Blend two colours together.
   var c1 = Blockly.PHP.valueToCode(block, 'COLOUR1',
-      Blockly.PHP.ORDER_COMMA) || '\'#000000\'';
+      Blockly.PHP.ORDER_NONE) || '\'#000000\'';
   var c2 = Blockly.PHP.valueToCode(block, 'COLOUR2',
-      Blockly.PHP.ORDER_COMMA) || '\'#000000\'';
+      Blockly.PHP.ORDER_NONE) || '\'#000000\'';
   var ratio = Blockly.PHP.valueToCode(block, 'RATIO',
-      Blockly.PHP.ORDER_COMMA) || 0.5;
+      Blockly.PHP.ORDER_NONE) || 0.5;
   var functionName = Blockly.PHP.provideFunction_(
       'colour_blend',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +

@@ -1,6 +1,7 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml xmlns="https://developers.google.com/blockly/xml">
   <!-- Do not include <variables> here to test backward compatibility. -->
   <block type="unittest_main" x="0" y="0">
+    <field name="SUITE_NAME">Variables</field>
     <statement name="DO">
       <block type="variables_set" inline="false">
         <field name="VAR">item</field>
@@ -62,6 +63,6 @@
   </block>
   <block type="variables_get" x="300" y="100">
     <field name="VAR">naked</field>
-    <comment pinned="true" h="80" w="160">Intentionally non-connected variable.</comment>
+    <comment pinned="false" h="80" w="160">Intentionally non-connected variable.</comment>
   </block>
 </xml>

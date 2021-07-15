@@ -1,8 +1,7 @@
 {
   "name": "blockly",
-  "version": "1.20180904.0-develop",
+  "version": "6.20210701.0",
   "description": "Blockly is a library for building visual programming editors.",
-  "main": "blockly_node_javascript_en.js",
   "keywords": [
     "blockly"
   ],
@@ -18,39 +17,79 @@
     "name": "Neil Fraser"
   },
   "scripts": {
-    "prepare": "gulp blockly_javascript_en",
+    "build": "gulp build",
+    "build:blocks": "gulp buildBlocks",
+    "build:compressed": "gulp buildCompressed",
+    "build:core": "gulp buildCore",
+    "build:debug": "gulp buildCompressed --verbose --debug",
+    "build:debug:log": "npm run build:debug > build-debug.log 2>&1 && tail -3 build-debug.log",
+    "build:strict": "gulp buildCompressed --verbose --strict",
+    "build:strict:log": "npm run build:strict > build-debug.log 2>&1 && tail -3 build-debug.log",
+    "build:generators": "gulp buildGenerators",
+    "build:langfiles": "gulp buildLangfiles",
+    "build:uncompressed": "gulp buildUncompressed",
+    "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
+    "deployDemos": "gulp deployDemos",
+    "format": "git-clang-format",
+    "format:sortrequires": "gulp sortRequires",
+    "license": "gulp checkLicenses",
     "lint": "eslint .",
-    "test": "tests/run_all_tests.sh"
+    "package": "gulp package",
+    "prepare": "npm run package",
+    "prepareDemos": "gulp prepareDemos",
+    "publish": "gulp publish",
+    "publish:beta": "gulp publishBeta",
+    "recompile": "gulp recompile",
+    "release": "gulp gitCreateRC",
+    "test": "tests/run_all_tests.sh",
+    "test:generators": "tests/scripts/run_generators.sh",
+    "test:compile:advanced": "gulp buildAdvancedCompilationTest",
+    "typings": "gulp typings",
+    "updateGithubPages": "gulp gitUpdateGithubPages"
+  },
+  "main": "./index.js",
+  "umd": "./blockly.min.js",
+  "unpkg": "./blockly.min.js",
+  "types": "./index.d.ts",
+  "browser": {
+    "./node.js": "./browser.js",
+    "./core.js": "./core-browser.js",
+    "./blockly-node.js": "./blockly.js"
   },
   "license": "Apache-2.0",
-  "private": true,
   "devDependencies": {
-    "eslint": "^5.4.0",
-    "google-closure-compiler": "^20180805.0.0",
-    "google-closure-library": "^20180805.0.0",
-    "gulp": "^3.9.1",
+    "@blockly/block-test": "^1.0.0",
+    "@blockly/dev-tools": "^2.0.1",
+    "@blockly/theme-modern": "^2.1.1",
+    "@wdio/selenium-standalone-service": "^6.11.0",
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.2.0",
+    "clang-format": "^1.5.0",
+    "concurrently": "^6.0.0",
+    "eslint": "^7.28.0",
+    "google-closure-compiler": "^20210505.0.0",
+    "google-closure-deps": "^20210601.0.0",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-insert": "^0.5.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.0.0",
     "gulp-series": "^1.0.2",
-    "gulp-shell": "^0.6.5",
-    "jshint": "^2.9.5",
-    "webdriverio": "^4.13.2"
-  },
-  "jshintConfig": {
-    "globalstrict": true,
-    "predef": [
-      "Blockly",
-      "goog",
-      "window",
-      "document",
-      "soy",
-      "XMLHttpRequest"
-    ],
-    "sub": true,
-    "undef": true,
-    "unused": true
+    "gulp-shell": "^0.8.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-umd": "^2.0.0",
+    "js-green-licenses": "^3.0.0",
+    "mocha": "^8.1.1",
+    "readline-sync": "^1.4.10",
+    "rimraf": "^3.0.2",
+    "selenium-standalone": "^7.1.0",
+    "through2": "^4.0.2",
+    "typescript": "^4.3.2",
+    "typescript-closure-tools": "^0.0.7",
+    "webdriverio": "^7.0.3",
+    "yargs": "^16.0.3"
   },
   "dependencies": {
-    "jsdom": "^12.0.0"
+    "jsdom": "15.2.1"
   }
 }

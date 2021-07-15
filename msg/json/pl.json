@@ -1,28 +1,32 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chrumps",
+			"Cirasean",
 			"Cotidianis",
+			"Expert3222",
 			"Faren",
-			"Vengir",
+			"Fringoo",
+			"InternerowyGołąb",
+			"Krottyianock",
+			"Krzyz23",
+			"Liuxinyu970226",
+			"Mateon1",
+			"Mazab IZW",
 			"Pbz",
 			"Pio387",
-			"아라",
-			"Mateon1",
-			"Expert3222",
-			"Cirasean",
-			"Fringoo",
-			"Chrumps",
-			"Woytecr",
-			"Liuxinyu970226",
-			"Krottyianock",
-			"Mazab IZW",
+			"Rail",
+			"Stojex",
 			"Teeed",
-			"InternerowyGołąb",
+			"Vengir",
+			"WaldiSt",
 			"Wojtas",
-			"Stojex"
+			"Woytecr",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"UNNAMED_KEY": "bez nazwy",
 	"TODAY": "Dzisiaj",
 	"DUPLICATE_BLOCK": "Powiel",
 	"ADD_COMMENT": "Dodaj Komentarz",
@@ -219,6 +223,8 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "losowy ułamek",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Zwróć losowy ułamek między 0.0 (włącznie), a 1.0 (wyłącznie).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TOOLTIP": "Zwraca arcus tangens punktu (X, Y) w stopniach od -180 do 180.",
 	"TEXT_TEXT_HELPURL": "https://pl.wikipedia.org/wiki/Tekstowy_typ_danych",
 	"TEXT_TEXT_TOOLTIP": "Litera, wyraz lub linia tekstu.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "utwórz tekst z",
@@ -380,5 +386,6 @@
 	"PROCEDURES_CREATE_DO": "Utwórz '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jeśli warunek jest spełniony zwróć drugą wartość.",
 	"PROCEDURES_IFRETURN_WARNING": "Uwaga: Ten klocek może być używany tylko w definicji funkcji.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Powiedz coś..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Powiedz coś...",
+	"COLLAPSED_WARNINGS_WARNING": "Zwinięte bloki zawierają ostrzeżenia."
 }

@@ -1,0 +1,7 @@
+contact_links:
+  - name: Blockly Forum
+    url: https://groups.google.com/forum/#!forum/blockly
+    about: The Blockly developer forum, where you can ask and answer questions.
+  - name: Plugins and examples
+    url: https://github.com/google/blockly-samples/issues/new/choose
+    about: File bugs or feature requests about plugins and samples in our blockly-samples repository.

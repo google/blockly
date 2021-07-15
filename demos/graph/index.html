@@ -57,7 +57,7 @@
     ...
   </div>
 
-  <xml id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Math" colour="%{BKY_MATH_HUE}">
       <block type="math_number">
         <field name="NUM">123</field>
@@ -145,6 +145,18 @@
         </value>
       </block>
       <block type="math_random_float"></block>
+      <block type="math_atan2">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
     </category>
     <category name="Variables" colour="%{BKY_VARIABLES_HUE}">
       <block type="graph_get_x"></block>
@@ -158,7 +170,7 @@
     </category>
   </xml>
 
-  <xml id="startBlocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
     <block type="graph_set_y" deletable="false" x="100" y="100">
       <value name="VALUE">
         <block type="math_arithmetic">
@@ -286,7 +298,7 @@ Graph.drawVisualization = function() {
 /**
  * Plot points on the function y = f(x).
  * @param {string} code JavaScript code.
- * @return {!Array.<!Array>} 2D Array of points on the graph.
+ * @return {!Array<!Array>} 2D Array of points on the graph.
  */
 Graph.plot = function(code) {
   // Initialize a table with two column headings.

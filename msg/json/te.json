@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Naidugari Jayanna",
+			"Veeven",
 			"WP MANIKHANTA"
 		]
 	},
@@ -69,7 +70,7 @@
 	"MATH_IS_NEGATIVE": "ప్రతికూలంగా ఉంది",
 	"MATH_IS_DIVISIBLE_BY": "దీనితో భాగించబడును",
 	"MATH_ONLIST_OPERATOR_SUM": "జాబితా మొత్తం",
-	"MATH_ONLIST_OPERATOR_AVERAGE": "జాబితా యొక్క సగటు",
+	"MATH_ONLIST_OPERATOR_AVERAGE": "జాబితా సగటు",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "చేరు",
 	"TEXT_LENGTH_TITLE": "%1 పొడువు",
 	"TEXT_ISEMPTY_TITLE": "% 1 ఖాళీ",

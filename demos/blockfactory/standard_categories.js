@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -43,7 +29,7 @@ StandardCategories.categoryMap['logic'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Logic');
 StandardCategories.categoryMap['logic'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_if"></block>' +
     '<block type="logic_compare"></block>' +
     '<block type="logic_operation"></block>' +
@@ -52,13 +38,13 @@ StandardCategories.categoryMap['logic'].xml =
     '<block type="logic_null"></block>' +
     '<block type="logic_ternary"></block>' +
     '</xml>');
-StandardCategories.categoryMap['logic'].color ='#5C81A6';
+StandardCategories.categoryMap['logic'].hue = 210;
 
 StandardCategories.categoryMap['loops'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Loops');
 StandardCategories.categoryMap['loops'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="controls_repeat_ext">' +
       '<value name="TIMES">' +
         '<shadow type="math_number">' +
@@ -87,13 +73,13 @@ StandardCategories.categoryMap['loops'].xml =
     '<block type="controls_forEach"></block>' +
     '<block type="controls_flow_statements"></block>' +
     '</xml>');
-StandardCategories.categoryMap['loops'].color = '#5CA65C';
+StandardCategories.categoryMap['loops'].hue = 120;
 
 StandardCategories.categoryMap['math'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Math');
 StandardCategories.categoryMap['math'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="math_number"></block>' +
     '<block type="math_arithmetic">' +
       '<value name="A">' +
@@ -180,13 +166,13 @@ StandardCategories.categoryMap['math'].xml =
     '</block>' +
     '<block type="math_random_float"></block>' +
     '</xml>');
-StandardCategories.categoryMap['math'].color = '#5C68A6';
+StandardCategories.categoryMap['math'].hue = 230;
 
 StandardCategories.categoryMap['text'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Text');
 StandardCategories.categoryMap['text'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text"></block>' +
     '<block type="text_join"></block>' +
     '<block type="text_append">' +
@@ -263,13 +249,13 @@ StandardCategories.categoryMap['text'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-StandardCategories.categoryMap['text'].color = '#5CA68D';
+StandardCategories.categoryMap['text'].hue = 160;
 
 StandardCategories.categoryMap['lists'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Lists');
 StandardCategories.categoryMap['lists'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="lists_create_with">' +
       '<mutation items="0"></mutation>' +
     '</block>' +
@@ -320,13 +306,13 @@ StandardCategories.categoryMap['lists'].xml =
     '</block>' +
     '<block type="lists_sort"></block>' +
     '</xml>');
-StandardCategories.categoryMap['lists'].color = '#745CA6';
+StandardCategories.categoryMap['lists'].hue = 260;
 
 StandardCategories.categoryMap['colour'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Colour');
 StandardCategories.categoryMap['colour'].xml =
     Blockly.Xml.textToDom(
-    '<xml>' +
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="colour_picker"></block>' +
     '<block type="colour_random"></block>' +
     '<block type="colour_rgb">' +
@@ -364,17 +350,22 @@ StandardCategories.categoryMap['colour'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-StandardCategories.categoryMap['colour'].color = '#A6745C';
+StandardCategories.categoryMap['colour'].hue = 20;
 
 StandardCategories.categoryMap['functions'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Functions');
-StandardCategories.categoryMap['functions'].color = '#9A5CA6'
+StandardCategories.categoryMap['functions'].hue = 290;
 StandardCategories.categoryMap['functions'].custom = 'PROCEDURE';
 
 StandardCategories.categoryMap['variables'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Variables');
-StandardCategories.categoryMap['variables'].color = '#A65C81';
+StandardCategories.categoryMap['variables'].hue = 330;
 StandardCategories.categoryMap['variables'].custom = 'VARIABLE';
+
+StandardCategories.categoryMap['typedvariables'] =
+    new ListElement(ListElement.TYPE_CATEGORY, 'TypedVariables');
+StandardCategories.categoryMap['typedvariables'].custom = 'VARIABLE_DYNAMIC';
+StandardCategories.categoryMap['typedvariables'].hue = 290;
 
 // All standard block types in provided in Blockly core.
 StandardCategories.coreBlockTypes =  ["controls_if", "logic_compare",

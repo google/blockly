@@ -1,21 +1,23 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gkostov",
-			"Vodnokon4e",
 			"Alpinistbg",
+			"Gkostov",
+			"InsomniHat",
 			"Miroslav35232",
-			"StanProg",
 			"ShockD",
-			"InsomniHat"
+			"StanProg",
+			"Vlad5250",
+			"Vodnokon4e"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
+	"UNNAMED_KEY": "без име",
 	"TODAY": "Днес",
 	"DUPLICATE_BLOCK": "Копирай",
 	"ADD_COMMENT": "Добави коментар",
 	"REMOVE_COMMENT": "Премахни коментар",
-	"DUPLICATE_COMMENT": "Направете дубликат на коментара",
+	"DUPLICATE_COMMENT": "Дублиране на коментара",
 	"EXTERNAL_INPUTS": "Външни входове",
 	"INLINE_INPUTS": "Вътрешни входове",
 	"DELETE_BLOCK": "Изтрий блок",
@@ -35,9 +37,9 @@
 	"RENAME_VARIABLE": "Преименувай променливата...",
 	"RENAME_VARIABLE_TITLE": "Преименувай всички '%1' променливи на:",
 	"NEW_VARIABLE": "Създаване на променлива...",
-	"NEW_STRING_VARIABLE": "Създайте низова променлива...",
-	"NEW_NUMBER_VARIABLE": "Създайте числова променлива...",
-	"NEW_COLOUR_VARIABLE": "Създайте цветова променлива...",
+	"NEW_STRING_VARIABLE": "Създаване на низова променлива...",
+	"NEW_NUMBER_VARIABLE": "Създаване на числова променлива...",
+	"NEW_COLOUR_VARIABLE": "Създаване на цветова променлива...",
 	"NEW_VARIABLE_TYPE_TITLE": "Тип на новата променлива:",
 	"NEW_VARIABLE_TITLE": "Ново име на променливата:",
 	"VARIABLE_ALREADY_EXISTS": "Променлива с име '%1' вече съществува.",
@@ -70,7 +72,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Нека променлива '%1' премине през стойностите от началното до крайното число през зададената стъпка и изпълни избраните блокове.",
 	"CONTROLS_FOR_TITLE": "преброй чрез %1 от %2 до %3 през %4",
 	"CONTROLS_FOREACH_TITLE": "за всеки елемент %1 в списъка %2",
-	"CONTROLS_FOREACH_TOOLTIP": "За всеки елемент в списък присвои елемента на променливата '%1' и след това изпълни командите.",
+	"CONTROLS_FOREACH_TOOLTIP": "За всеки елемент в даден списък, присвои елемента на променливата „%1“ и след това изпълни командите.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "прекъсни цикъла",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "премини към следващата стъпка от цикъла",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Прекъсни цикъла, в който се съдържа тази команда.",
@@ -158,7 +160,7 @@
 	"MATH_IS_TOOLTIP": "Проверете дали дадено число е четно, нечетно, просто, цяло, положително, отрицателно или дали се дели на друго число. Връща вярно или невярно.",
 	"MATH_CHANGE_HELPURL": "https://bg.wikipedia.org/wiki/Събиране",
 	"MATH_CHANGE_TITLE": "промени %1 на %2",
-	"MATH_CHANGE_TOOLTIP": "Добави число към променлива '%1'.",
+	"MATH_CHANGE_TOOLTIP": "Добави число към променлива „%1“.",
 	"MATH_ROUND_HELPURL": "https://en.wikipedia.org/wiki/Rounding",
 	"MATH_ROUND_TOOLTIP": "Закръгли число нагоре или надолу.",
 	"MATH_ROUND_OPERATOR_ROUND": "закръгли",
@@ -191,6 +193,9 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://bg.wikipedia.org/wiki/Генератор_на_случайни_числа",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "случайно дробно число",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Върни случайно дробно число между 0.0 (включително) и 1.0 (без да го включва)",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
+	"MATH_ATAN2_TITLE": "atan2 от X:%1 Y:%2",
+	"MATH_ATAN2_TOOLTIP": "Връща аркустангенс на точка (X, Y) в градуси от -180 до 180.",
 	"TEXT_TEXT_HELPURL": "https://bg.wikipedia.org/wiki/Низ",
 	"TEXT_TEXT_TOOLTIP": "Буква, дума или ред",
 	"TEXT_JOIN_TITLE_CREATEWITH": "създай текст с",
@@ -346,5 +351,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ако стойността е вярна, върни втората стойност.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Този блок може да се използва само във функция.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо...",
+	"WORKSPACE_ARIA_LABEL": "Работна област на Blockly",
+	"COLLAPSED_WARNINGS_WARNING": "Свитите блокове съдържат предупреждения."
 }

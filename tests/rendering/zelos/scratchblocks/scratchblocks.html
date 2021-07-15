@@ -1,0 +1,70 @@
+<html>
+
+<head>
+  <script type="text/javascript"
+    src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/blockly_compressed_vertical.js"></script>
+  <script type="text/javascript"
+    src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/blocks_compressed_vertical.js"></script>
+  <script type="text/javascript"
+    src="https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/msg/messages.js"></script>
+  <script type="text/javascript" src="../../../playgrounds/screenshot.js"></script>
+</head>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <script>
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace;
+    window.addEventListener('message', function (msg) {
+      var data = msg.data;
+      if (data.type !== 'post') {
+        return;
+      }
+      var xml = data.xml;
+      try {
+        if (workspace) {
+          workspace.dispose();
+          blocklyDiv.innerHTML = '';
+        }
+      } catch { }
+
+      workspace = Blockly.inject(blocklyDiv, {
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
+        zoom: {
+          wheel: true,
+          startScale: 2,
+        },
+        media: 'https://unpkg.com/scratch-blocks@0.1.0-prerelease.1578322100/media/'
+      });
+
+      Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+
+      function postChange() {
+        try {
+          var topBlock = workspace.getTopBlocks()[0];
+          workspaceToSvg_(workspace, function (datauri) {
+            window.parent.postMessage({
+              type: 'svg',
+              from: 'scratchblocks',
+              text: datauri
+            }, '*');
+          });
+        } catch { }
+      }
+
+      workspace.addChangeListener(function (e) {
+        if (e.type != 'ui') {
+          postChange();
+        }
+      });
+
+      postChange();
+    });
+  </script>
+</body>
+
+</html>

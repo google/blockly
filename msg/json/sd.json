@@ -2,20 +2,24 @@
 	"@metadata": {
 		"authors": [
 			"Aursani",
+			"Charan",
+			"Indus Asia",
 			"Mehtab ahmed",
-			"Indus Asia"
+			"Tweety"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "اسم",
 	"TODAY": "اڄ",
 	"DUPLICATE_BLOCK": "نقل",
-	"ADD_COMMENT": "راءِ ڏيو",
-	"REMOVE_COMMENT": "راءِ ڊاهيو",
-	"EXTERNAL_INPUTS": "ٻاهرين ڄاڻ",
+	"ADD_COMMENT": "رايو ڏيو",
+	"REMOVE_COMMENT": "رايو ڊاهيو",
+	"DUPLICATE_COMMENT": "نقل رايو",
+	"EXTERNAL_INPUTS": "ٻاهريون داخلائون",
 	"INLINE_INPUTS": "اِنلائين اِن پٽس",
 	"DELETE_BLOCK": "بلاڪ ڊاهيو",
 	"DELETE_X_BLOCKS": "1٪ بلاڪ ڊاهيو",
-	"CLEAN_UP": "بندشون هٽايو",
+	"DELETE_ALL_BLOCKS": "سڀ %1 بلاڪ ڊاھيون؟",
+	"CLEAN_UP": "بلاڪ صاف ڪيو",
 	"COLLAPSE_BLOCK": "بلاڪ ڍڪيو",
 	"COLLAPSE_ALL": "بلاڪَ ڍڪيو",
 	"EXPAND_BLOCK": "بلاڪ نمايو",
@@ -23,7 +27,7 @@
 	"DISABLE_BLOCK": "بلاڪ کي غيرفعال بڻايو",
 	"ENABLE_BLOCK": "بلاڪ کي فعال بڻايو",
 	"HELP": "مدد",
-	"UNDO": "ڊاهيو",
+	"UNDO": "اڻڪريو",
 	"REDO": "ٻيهر ڪريو",
 	"CHANGE_VALUE_TITLE": "قدر بدلايو",
 	"RENAME_VARIABLE": "ڦرڻي کي نئون نالو ڏيو...",

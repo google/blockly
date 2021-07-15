@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -59,9 +45,9 @@ WorkspaceFactoryGenerator = function(model) {
  */
 WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
-  var xmlDom = document.createElement('xml');
+  var xmlDom = Blockly.utils.xml.createElement('xml');
   xmlDom.id = 'toolbox';
-  xmlDom.style.display = 'none';
+  xmlDom.setAttribute('style', 'display: none');
 
   if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
@@ -71,7 +57,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     // Toolbox has categories.
     // Assert that selected != null
     if (!this.model.getSelected()) {
-      throw new Error('Selected is null when the toolbox is empty.');
+      throw Error('Selected is null when the toolbox is empty.');
     }
 
     var xml = this.model.getSelectedXml();
@@ -85,14 +71,14 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
       var element = toolboxList[i];
       if (element.type == ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
-        var nextElement = document.createElement('sep');
+        var nextElement = Blockly.utils.xml.createElement('sep');
       } else if (element.type == ListElement.TYPE_CATEGORY) {
         // If the next element is a category.
-        var nextElement = document.createElement('category');
+        var nextElement = Blockly.utils.xml.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
-        if (element.color != null) {
-          nextElement.setAttribute('colour', element.color);
+        if (element.colour != null) {
+          nextElement.setAttribute('colour', element.colour);
         }
         // Add a custom attribute if one exists.
         if (element.custom != null) {
@@ -125,10 +111,10 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   this.setShadowBlocksInHiddenWorkspace_();
 
   // Generate XML and set attributes.
-  var generatedXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
-  generatedXml.setAttribute('id', 'workspaceBlocks');
-  generatedXml.setAttribute('style', 'display:none');
-  return generatedXml;
+  var xmlDom = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
+  xmlDom.id = 'workspaceBlocks';
+  xmlDom.setAttribute('style', 'display: none');
+  return xmlDom;
 };
 
 /**
@@ -215,7 +201,7 @@ WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
  */
 WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
     function() {
-  var blocks = this.hiddenWorkspace.getAllBlocks();
+  var blocks = this.hiddenWorkspace.getAllBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (this.model.isShadowBlock(blocks[i].id)) {
       blocks[i].setShadow(true);
@@ -226,8 +212,8 @@ WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
 /**
  * Given a set of block types, gets the Blockly.Block objects for each block
  * type.
- * @param {!Array.<!Element>} blockTypes Array of blocks that have been defined.
- * @return {!Array.<!Blockly.Block>} Array of Blockly.Block objects corresponding
+ * @param {!Array<!Element>} blockTypes Array of blocks that have been defined.
+ * @return {!Array<!Blockly.Block>} Array of Blockly.Block objects corresponding
  *    to the array of blockTypes.
  */
 WorkspaceFactoryGenerator.prototype.getDefinedBlocks = function(blockTypes) {

@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Editor
- *
- * Copyright 2013 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2013 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -32,35 +18,26 @@ goog.provide('Blockly.Css');
 
 
 /**
- * List of cursors.
- * @enum {string}
+ * Has CSS already been injected?
+ * @type {boolean}
+ * @private
  */
-Blockly.Css.Cursor = {
-  OPEN: 'handopen',
-  CLOSED: 'handclosed',
-  DELETE: 'handdelete'
+Blockly.Css.injected_ = false;
+
+/**
+ * Add some CSS to the blob that will be injected later.  Allows optional
+ * components such as fields and the toolbox to store separate CSS.
+ * The provided array of CSS will be destroyed by this function.
+ * @param {!Array<string>} cssArray Array of CSS strings.
+ */
+Blockly.Css.register = function(cssArray) {
+  if (Blockly.Css.injected_) {
+    throw Error('CSS already injected');
+  }
+  // Concatenate cssArray onto Blockly.Css.CONTENT.
+  Array.prototype.push.apply(Blockly.Css.CONTENT, cssArray);
+  cssArray.length = 0;  // Garbage collect provided CSS content.
 };
-
-/**
- * Current cursor (cached value).
- * @type {string}
- * @private
- */
-Blockly.Css.currentCursor_ = '';
-
-/**
- * Large stylesheet added by Blockly.Css.inject.
- * @type {Element}
- * @private
- */
-Blockly.Css.styleSheet_ = null;
-
-/**
- * Path to media directory, with any trailing slash removed.
- * @type {string}
- * @private
- */
-Blockly.Css.mediaPath_ = '';
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -74,44 +51,32 @@ Blockly.Css.mediaPath_ = '';
  */
 Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Only inject the CSS once.
-  if (Blockly.Css.styleSheet_) {
+  if (Blockly.Css.injected_) {
     return;
   }
-  // Placeholder for cursor rule.  Must be first rule (index 0).
-  var text = '.blocklyDraggable {}\n';
-  if (hasCss) {
-    text += Blockly.Css.CONTENT.join('\n');
-    if (Blockly.FieldDate) {
-      text += Blockly.FieldDate.CSS.join('\n');
-    }
+  Blockly.Css.injected_ = true;
+  var text = Blockly.Css.CONTENT.join('\n');
+  Blockly.Css.CONTENT.length = 0;  // Garbage collect CSS content.
+  if (!hasCss) {
+    return;
   }
   // Strip off any trailing slash (either Unix or Windows).
-  Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
-  text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
+  var mediaPath = pathToMedia.replace(/[\\/]$/, '');
+  text = text.replace(/<<<PATH>>>/g, mediaPath);
+
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
-  document.head.insertBefore(cssNode, document.head.firstChild);
-
+  cssNode.id = 'blockly-common-style';
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
-  Blockly.Css.styleSheet_ = cssNode.sheet;
-};
-
-/**
- * Set the cursor to be displayed when over something draggable.
- * See See https://github.com/google/blockly/issues/981 for context.
- * @param {Blockly.Css.Cursor} cursor Enum.
- * @deprecated April 2017.
- */
-Blockly.Css.setCursor = function(cursor) {
-  console.warn('Deprecated call to Blockly.Css.setCursor.' +
-    'See https://github.com/google/blockly/issues/981 for context');
+  document.head.insertBefore(cssNode, document.head.firstChild);
 };
 
 /**
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  /* eslint-disable indent */
   '.blocklySvg {',
     'background-color: #fff;',
     'outline: none;',
@@ -123,19 +88,18 @@ Blockly.Css.CONTENT = [
   '.blocklyWidgetDiv {',
     'display: none;',
     'position: absolute;',
-    'z-index: 99999;', /* big value for bootstrap3 compatibility */
+    'z-index: 99999;',  /* big value for bootstrap3 compatibility */
   '}',
 
   '.injectionDiv {',
     'height: 100%;',
     'position: relative;',
-    'overflow: hidden;', /* So blocks in drag surface disappear at edges */
-    'touch-action: none',
+    'overflow: hidden;',  /* So blocks in drag surface disappear at edges */
+    'touch-action: none;',
   '}',
 
   '.blocklyNonSelectable {',
     'user-select: none;',
-    '-moz-user-select: none;',
     '-ms-user-select: none;',
     '-webkit-user-select: none;',
   '}',
@@ -161,7 +125,7 @@ Blockly.Css.CONTENT = [
     'right: 0;',
     'bottom: 0;',
     'overflow: visible !important;',
-    'z-index: 50;', /* Display below toolbox, but above everything else. */
+    'z-index: 50;',  /* Display below toolbox, but above everything else. */
   '}',
 
   '.blocklyBlockCanvas.blocklyCanvasTransitioning,',
@@ -175,12 +139,73 @@ Blockly.Css.CONTENT = [
     'box-shadow: 4px 4px 20px 1px rgba(0,0,0,.15);',
     'color: #000;',
     'display: none;',
-    'font-family: sans-serif;',
-    'font-size: 9pt;',
+    'font: 9pt sans-serif;',
     'opacity: .9;',
     'padding: 2px;',
     'position: absolute;',
-    'z-index: 100000;', /* big value for bootstrap3 compatibility */
+    'z-index: 100000;',  /* big value for bootstrap3 compatibility */
+  '}',
+
+  '.blocklyDropDownDiv {',
+    'position: absolute;',
+    'left: 0;',
+    'top: 0;',
+    'z-index: 1000;',
+    'display: none;',
+    'border: 1px solid;',
+    'border-color: #dadce0;',
+    'background-color: #fff;',
+    'border-radius: 2px;',
+    'padding: 4px;',
+    'box-shadow: 0 0 3px 1px rgba(0,0,0,.3);',
+  '}',
+
+  '.blocklyDropDownDiv.blocklyFocused {',
+    'box-shadow: 0 0 6px 1px rgba(0,0,0,.3);',
+  '}',
+
+  '.blocklyDropDownContent {',
+    'max-height: 300px;',  // @todo: spec for maximum height.
+    'overflow: auto;',
+    'overflow-x: hidden;',
+    'position: relative;',
+  '}',
+
+  '.blocklyDropDownArrow {',
+    'position: absolute;',
+    'left: 0;',
+    'top: 0;',
+    'width: 16px;',
+    'height: 16px;',
+    'z-index: -1;',
+    'background-color: inherit;',
+    'border-color: inherit;',
+  '}',
+
+  '.blocklyDropDownButton {',
+    'display: inline-block;',
+    'float: left;',
+    'padding: 0;',
+    'margin: 4px;',
+    'border-radius: 4px;',
+    'outline: none;',
+    'border: 1px solid;',
+    'transition: box-shadow .1s;',
+    'cursor: pointer;',
+  '}',
+
+  '.blocklyArrowTop {',
+    'border-top: 1px solid;',
+    'border-left: 1px solid;',
+    'border-top-left-radius: 4px;',
+    'border-color: inherit;',
+  '}',
+
+  '.blocklyArrowBottom {',
+    'border-bottom: 1px solid;',
+    'border-right: 1px solid;',
+    'border-bottom-right-radius: 4px;',
+    'border-color: inherit;',
   '}',
 
   '.blocklyResizeSE {',
@@ -210,11 +235,6 @@ Blockly.Css.CONTENT = [
     'stroke-width: 1;',
   '}',
 
-  '.blocklySelected>.blocklyPath {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
-
   '.blocklySelected>.blocklyPathLight {',
     'display: none;',
   '}',
@@ -226,7 +246,7 @@ Blockly.Css.CONTENT = [
     'cursor: -webkit-grab;',
   '}',
 
-   '.blocklyDragging {',
+  '.blocklyDragging {',
     /* backup for browsers (e.g. IE11) that don't support grabbing */
     'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
     'cursor: grabbing;',
@@ -254,16 +274,6 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
 
-  '.blocklyToolboxDelete {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyToolboxGrab {',
-    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
-    'cursor: grabbing;',
-    'cursor: -webkit-grabbing;',
-  '}',
-
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',
     'fill-opacity: .8;',
@@ -284,73 +294,37 @@ Blockly.Css.CONTENT = [
     'display: none;',
   '}',
 
-  '.blocklyText {',
-    'cursor: default;',
-    'fill: #fff;',
-    'font-family: sans-serif;',
-    'font-size: 11pt;',
+  '.blocklyInsertionMarker>.blocklyPath,',
+  '.blocklyInsertionMarker>.blocklyPathLight,',
+  '.blocklyInsertionMarker>.blocklyPathDark {',
+    'fill-opacity: .2;',
+    'stroke: none;',
+  '}',
+
+  '.blocklyMultilineText {',
+    'font-family: monospace;',
   '}',
 
   '.blocklyNonEditableText>text {',
     'pointer-events: none;',
   '}',
 
-  '.blocklyNonEditableText>rect,',
-  '.blocklyEditableText>rect {',
-    'fill: #fff;',
-    'fill-opacity: .6;',
-  '}',
-
-  '.blocklyNonEditableText>text,',
-  '.blocklyEditableText>text {',
-    'fill: #000;',
-  '}',
-
-  '.blocklyEditableText:hover>rect {',
-    'stroke: #fff;',
-    'stroke-width: 2;',
-  '}',
-
-  '.blocklyBubbleText {',
-    'fill: #000;',
-  '}',
-
   '.blocklyFlyout {',
     'position: absolute;',
     'z-index: 20;',
   '}',
-  '.blocklyFlyoutButton {',
-    'fill: #888;',
+
+  '.blocklyText text {',
     'cursor: default;',
-  '}',
-
-  '.blocklyFlyoutButtonShadow {',
-    'fill: #666;',
-  '}',
-
-  '.blocklyFlyoutButton:hover {',
-    'fill: #aaa;',
-  '}',
-
-  '.blocklyFlyoutLabel {',
-    'cursor: default;',
-  '}',
-
-  '.blocklyFlyoutLabelBackground {',
-    'opacity: 0;',
-  '}',
-
-  '.blocklyFlyoutLabelText {',
-    'fill: #000;',
   '}',
 
   /*
     Don't allow users to select text.  It gets annoying when trying to
     drag a block and selected text moves instead.
   */
-  '.blocklySvg text, .blocklyBlockDragSurface text {',
+  '.blocklySvg text,',
+  '.blocklyBlockDragSurface text {',
     'user-select: none;',
-    '-moz-user-select: none;',
     '-ms-user-select: none;',
     '-webkit-user-select: none;',
     'cursor: inherit;',
@@ -388,85 +362,24 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
   '}',
 
-  '.blocklyCommentForeignObject {',
-    'position: relative;',
-    'z-index: 0;',
-  '}',
-
-  '.blocklyCommentRect {',
-    'fill: #E7DE8E;',
-    'stroke: #bcA903;',
-    'stroke-width: 1px',
-  '}',
-
-  '.blocklyCommentTarget {',
-    'fill: transparent;',
-    'stroke: #bcA903;',
-  '}',
-
-  '.blocklyCommentTargetFocused {',
-    'fill: none;',
-  '}',
-
-  '.blocklyCommentHandleTarget {',
-    'fill: none;',
-  '}',
-
-  '.blocklyCommentHandleTargetFocused {',
-    'fill: transparent;',
-  '}',
-
-  '.blocklyFocused>.blocklyCommentRect {',
-    'fill: #B9B272;',
-    'stroke: #B9B272;',
-  '}',
-
-  '.blocklySelected>.blocklyCommentTarget {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
-
-
-  '.blocklyCommentTextarea {',
-    'background-color: #fef49c;',
-    'border: 0;',
-    'outline: 0;',
-    'margin: 0;',
-    'padding: 3px;',
-    'resize: none;',
-    'display: block;',
-    'overflow: hidden;',
-  '}',
-
-  '.blocklyCommentDeleteIcon {',
-    'cursor: pointer;',
-    'fill: #000;',
-    'display: none',
-  '}',
-
-  '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block',
-  '}',
-
-  '.blocklyDeleteIconShape {',
-    'fill: #000;',
-    'stroke: #000;',
-    'stroke-width: 1px;',
-  '}',
-
-  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
-    'stroke: #fc3;',
-  '}',
-
   '.blocklyHtmlInput {',
     'border: none;',
     'border-radius: 4px;',
-    'font-family: sans-serif;',
     'height: 100%;',
     'margin: 0;',
     'outline: none;',
-    'padding: 0 1px;',
-    'width: 100%',
+    'padding: 0;',
+    'width: 100%;',
+    'text-align: center;',
+    'display: block;',
+    'box-sizing: border-box;',
+  '}',
+
+  /* Edge and IE introduce a close icon when the input value is longer than a
+     certain length. This affects our sizing calculations of the text input.
+     Hiding the close icon to avoid that. */
+  '.blocklyHtmlInput::-ms-clear {',
+    'display: none;',
   '}',
 
   '.blocklyMainBackground {',
@@ -485,10 +398,6 @@ Blockly.Css.CONTENT = [
     'fill-opacity: .8;',
   '}',
 
-  '.blocklyTransparentBackground {',
-    'opacity: 0;',
-  '}',
-
   '.blocklyMainWorkspaceScrollbar {',
     'z-index: 20;',
   '}',
@@ -497,7 +406,8 @@ Blockly.Css.CONTENT = [
     'z-index: 30;',
   '}',
 
-  '.blocklyScrollbarHorizontal, .blocklyScrollbarVertical {',
+  '.blocklyScrollbarHorizontal,',
+  '.blocklyScrollbarVertical {',
     'position: absolute;',
     'outline: none;',
   '}',
@@ -515,18 +425,6 @@ Blockly.Css.CONTENT = [
     'fill: #bbb;',
   '}',
 
-  '.blocklyZoom>image {',
-    'opacity: .4;',
-  '}',
-
-  '.blocklyZoom>image:hover {',
-    'opacity: .6;',
-  '}',
-
-  '.blocklyZoom>image:active {',
-    'opacity: .8;',
-  '}',
-
   /* Darken flyout scrollbars due to being on a grey background. */
   /* By contrast, workspace scrollbars are on a white background. */
   '.blocklyFlyout .blocklyScrollbarHandle {',
@@ -542,202 +440,48 @@ Blockly.Css.CONTENT = [
     'background: #faa;',
   '}',
 
-  '.blocklyAngleCircle {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-    'fill: #ddd;',
-    'fill-opacity: .8;',
+  '.blocklyVerticalMarker {',
+    'stroke-width: 3px;',
+    'fill: rgba(255,255,255,.5);',
+    'pointer-events: none;',
   '}',
 
-  '.blocklyAngleMarks {',
-    'stroke: #444;',
-    'stroke-width: 1;',
+  '.blocklyComputeCanvas {',
+    'position: absolute;',
+    'width: 0;',
+    'height: 0;',
   '}',
 
-  '.blocklyAngleGauge {',
-    'fill: #f88;',
-    'fill-opacity: .8;',
-  '}',
-
-  '.blocklyAngleLine {',
-    'stroke: #f00;',
-    'stroke-width: 2;',
-    'stroke-linecap: round;',
+  '.blocklyNoPointerEvents {',
     'pointer-events: none;',
   '}',
 
   '.blocklyContextMenu {',
     'border-radius: 4px;',
+    'max-height: 100%;',
   '}',
 
   '.blocklyDropdownMenu {',
+    'border-radius: 2px;',
     'padding: 0 !important;',
   '}',
 
-  /* Override the default Closure URL. */
-  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
-  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
-    'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px !important;',
+  '.blocklyDropdownMenu .blocklyMenuItem {',
+    /* 28px on the left for icon or checkbox. */
+    'padding-left: 28px;',
   '}',
 
-  /* Category tree in Toolbox. */
-  '.blocklyToolboxDiv {',
-    'background-color: #ddd;',
-    'overflow-x: visible;',
-    'overflow-y: auto;',
-    'position: absolute;',
-    'user-select: none;',
-    '-moz-user-select: none;',
-    '-ms-user-select: none;',
-    '-webkit-user-select: none;',
-    'z-index: 70;', /* so blocks go under toolbox when dragging */
-    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  /* BiDi override for the resting state. */
+  '.blocklyDropdownMenu .blocklyMenuItemRtl {',
+     /* Flip left/right padding for BiDi. */
+    'padding-left: 5px;',
+    'padding-right: 28px;',
   '}',
 
-  '.blocklyTreeRoot {',
-    'padding: 4px 0;',
-  '}',
-
-  '.blocklyTreeRoot:focus {',
-    'outline: none;',
-  '}',
-
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
-    'padding-right: 8px;',
-    'white-space: nowrap;',
-  '}',
-
-  '.blocklyHorizontalTree {',
-    'float: left;',
-    'margin: 1px 5px 8px 0;',
-  '}',
-
-  '.blocklyHorizontalTreeRtl {',
-    'float: right;',
-    'margin: 1px 0 8px 5px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-  '}',
-
-  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: #e4e4e4;',
-  '}',
-
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
-
-  '.blocklyTreeSeparatorHorizontal {',
-    'border-right: solid #e5e5e5 1px;',
-    'width: 0;',
-    'padding: 5px 0;',
-    'margin: 0 5px;',
-  '}',
-
-
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'width: 16px;',
-  '}',
-
-  '.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -1px;',
-  '}',
-
-  '.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -1px;',
-  '}',
-
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
-    'background-position: -32px -17px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
-    'background-position: 0 -17px;',
-  '}',
-
-  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
-
-  '.blocklyTreeIconNone,',
-  '.blocklyTreeSelected>.blocklyTreeIconNone {',
-    'background-position: -48px -1px;',
-  '}',
-
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font-family: sans-serif;',
-    'font-size: 16px;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
-
-  '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
-
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}',
-
-  /* Colour Picker Field */
-  '.blocklyColourTable {',
-    'border-collapse: collapse;',
-  '}',
-
-  '.blocklyColourTable>tr>td {',
-    'border: 1px solid #666;',
-    'padding: 0;',
-  '}',
-
-  '.blocklyColourTable>tr>td>div {',
-    'border: 1px solid #666;',
-    'height: 13px;',
-    'width: 15px;',
-  '}',
-
-  '.blocklyColourTable>tr>td>div:hover {',
-    'border: 1px solid #fff;',
-  '}',
-
-  '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border: 1px solid #000 !important;',
-  '}',
-
-  /* Copied from: goog/css/menu.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  '.blocklyWidgetDiv .goog-menu {',
+  '.blocklyWidgetDiv .blocklyMenu {',
     'background: #fff;',
-    'border-color: #ccc #666 #666 #ccc;',
-    'border-style: solid;',
-    'border-width: 1px;',
-    'cursor: default;',
+    'border: 1px solid transparent;',
+    'box-shadow: 0 0 3px 1px rgba(0,0,0,.3);',
     'font: normal 13px Arial, sans-serif;',
     'margin: 0;',
     'outline: none;',
@@ -749,175 +493,60 @@ Blockly.Css.CONTENT = [
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
   '}',
 
-  /* Copied from: goog/css/menuitem.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
+  '.blocklyWidgetDiv .blocklyMenu.blocklyFocused {',
+    'box-shadow: 0 0 6px 1px rgba(0,0,0,.3);',
+  '}',
 
-  /**
-   * Standard styling for menus created by goog.ui.MenuItemRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
+  '.blocklyDropDownDiv .blocklyMenu {',
+    'background: inherit;',  /* Compatibility with gapi, reset from goog-menu */
+    'border: inherit;',  /* Compatibility with gapi, reset from goog-menu */
+    'font: normal 13px "Helvetica Neue", Helvetica, sans-serif;',
+    'outline: none;',
+    'position: relative;',  /* Compatibility with gapi, reset from goog-menu */
+    'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
+  '}',
 
-  /**
-   * State: resting.
-   *
-   * NOTE(mleibman,chrishenry):
-   * The RTL support in Closure is provided via two mechanisms -- "rtl" CSS
-   * classes and BiDi flipping done by the CSS compiler.  Closure supports RTL
-   * with or without the use of the CSS compiler.  In order for them not
-   * to conflict with each other, the "rtl" CSS classes need to have the #noflip
-   * annotation.  The non-rtl counterparts should ideally have them as well, but,
-   * since .goog-menuitem existed without .goog-menuitem-rtl for so long before
-   * being added, there is a risk of people having templates where they are not
-   * rendering the .goog-menuitem-rtl class when in RTL and instead rely solely
-   * on the BiDi flipping by the CSS compiler.  That's why we're not adding the
-   * #noflip to .goog-menuitem.
-   */
-  '.blocklyWidgetDiv .goog-menuitem {',
+  /* State: resting. */
+  '.blocklyMenuItem {',
+    'border: none;',
     'color: #000;',
-    'font: normal 13px Arial, sans-serif;',
+    'cursor: pointer;',
     'list-style: none;',
     'margin: 0;',
-     /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
-    'padding: 4px 7em 4px 28px;',
+     /* 7em on the right for shortcut. */
+    'min-width: 7em;',
+    'padding: 6px 15px;',
     'white-space: nowrap;',
   '}',
 
-  /* BiDi override for the resting state. */
-  /* #noflip */
-  '.blocklyWidgetDiv .goog-menuitem.goog-menuitem-rtl {',
-     /* Flip left/right padding for BiDi. */
-    'padding-left: 7em;',
-    'padding-right: 28px;',
-  '}',
-
-  /* If a menu doesn't have checkable items or items with icons, remove padding. */
-  '.blocklyWidgetDiv .goog-menu-nocheckbox .goog-menuitem,',
-  '.blocklyWidgetDiv .goog-menu-noicon .goog-menuitem {',
-    'padding-left: 12px;',
-  '}',
-
-  /*
-   * If a menu doesn't have items with shortcuts, leave just enough room for
-   * submenu arrows, if they are rendered.
-   */
-  '.blocklyWidgetDiv .goog-menu-noaccel .goog-menuitem {',
-    'padding-right: 20px;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-menuitem-content {',
-    'color: #000;',
-    'font: normal 13px Arial, sans-serif;',
-  '}',
-
   /* State: disabled. */
-  '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-accel,',
-  '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-content {',
-    'color: #ccc !important;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-icon {',
-    'opacity: 0.3;',
-    'filter: alpha(opacity=30);',
+  '.blocklyMenuItemDisabled {',
+    'color: #ccc;',
+    'cursor: inherit;',
   '}',
 
   /* State: hover. */
-  '.blocklyWidgetDiv .goog-menuitem-highlight,',
-  '.blocklyWidgetDiv .goog-menuitem-hover {',
-    'background-color: #d6e9f8;',
-     /* Use an explicit top and bottom border so that the selection is visible',
-      * in high contrast mode. */
-    'border-color: #d6e9f8;',
-    'border-style: dotted;',
-    'border-width: 1px 0;',
-    'padding-bottom: 3px;',
-    'padding-top: 3px;',
+  '.blocklyMenuItemHighlight {',
+    'background-color: rgba(0,0,0,.1);',
   '}',
 
   /* State: selected/checked. */
-  '.blocklyWidgetDiv .goog-menuitem-checkbox,',
-  '.blocklyWidgetDiv .goog-menuitem-icon {',
-    'background-repeat: no-repeat;',
+  '.blocklyMenuItemCheckbox {',
     'height: 16px;',
-    'left: 6px;',
     'position: absolute;',
-    'right: auto;',
-    'vertical-align: middle;',
     'width: 16px;',
   '}',
 
-  /* BiDi override for the selected/checked state. */
-  /* #noflip */
-  '.blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-checkbox,',
-  '.blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-icon {',
-     /* Flip left/right positioning. */
-    'left: auto;',
-    'right: 6px;',
+  '.blocklyMenuItemSelected .blocklyMenuItemCheckbox {',
+    'background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;',
+    'float: left;',
+    'margin-left: -24px;',
+    'position: static;',  /* Scroll with the menu. */
   '}',
 
-  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
-  '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
-     /* Client apps may override the URL at which they serve the sprite. */
-    'background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;',
+  '.blocklyMenuItemRtl .blocklyMenuItemCheckbox {',
+    'float: right;',
+    'margin-right: -24px;',
   '}',
-
-  /* Keyboard shortcut ("accelerator") style. */
-  '.blocklyWidgetDiv .goog-menuitem-accel {',
-    'color: #999;',
-     /* Keyboard shortcuts are untranslated; always left-to-right. */
-     /* #noflip */
-    'direction: ltr;',
-    'left: auto;',
-    'padding: 0 6px;',
-    'position: absolute;',
-    'right: 0;',
-    'text-align: right;',
-  '}',
-
-  /* BiDi override for shortcut style. */
-  /* #noflip */
-  '.blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-accel {',
-     /* Flip left/right positioning and text alignment. */
-    'left: 0;',
-    'right: auto;',
-    'text-align: left;',
-  '}',
-
-  /* Mnemonic styles. */
-  '.blocklyWidgetDiv .goog-menuitem-mnemonic-hint {',
-    'text-decoration: underline;',
-  '}',
-
-  '.blocklyWidgetDiv .goog-menuitem-mnemonic-separator {',
-    'color: #999;',
-    'font-size: 12px;',
-    'padding-left: 4px;',
-  '}',
-
-  /* Copied from: goog/css/menuseparator.css */
-  /*
-   * Copyright 2009 The Closure Library Authors. All Rights Reserved.
-   *
-   * Use of this source code is governed by the Apache License, Version 2.0.
-   * See the COPYING file for details.
-   */
-
-  /**
-   * Standard styling for menus created by goog.ui.MenuSeparatorRenderer.
-   *
-   * @author attila@google.com (Attila Bodis)
-   */
-
-  '.blocklyWidgetDiv .goog-menuseparator {',
-    'border-top: 1px solid #ccc;',
-    'margin: 4px 0;',
-    'padding: 0;',
-  '}',
-
-  ''
+  /* eslint-enable indent */
 ];

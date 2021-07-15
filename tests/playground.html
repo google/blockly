@@ -64,24 +64,30 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/variables_dynamic.js"></script>
 <script src="../blocks/procedures.js"></script>
-<script src="blocks/test_blocks.js"></script>
+<script src="themes/test_themes.js"></script>
+<script src="./playgrounds/screenshot.js"></script>
+<script src="../node_modules/@blockly/block-test/dist/index.js"></script>
+
+<script>
+// Custom requires for the playground.
+goog.require('Blockly.WorkspaceCommentSvg');
+goog.require('Blockly.WorkspaceCommentSvg.render');
+</script>
 <script>
 'use strict';
 var workspace = null;
 
 function start() {
-  setBackgroundColor();
+  setBackgroundColour();
 
   // Parse the URL arguments.
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
   var toolbox = getToolboxElement();
-  document.forms.options.elements.toolbox.selectedIndex =
-      getToolboxFormIndex(toolbox.id);
+  setToolboxDropdown();
   match = location.search.match(/side=([^&]+)/);
-  var side = match ? match[1] : 'start';
-  document.forms.options.elements.side.value = side;
+  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
       {
@@ -95,25 +101,34 @@ function start() {
             colour: '#ccc',
             snap: true
           },
-        horizontalLayout: side == 'top' || side == 'bottom',
+        horizontalLayout: false,
         maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        maxTrashcanContents: 256,
         media: '../media/',
         oneBasedIndex: true,
         readOnly: false,
         rtl: rtl,
-        scrollbars: true,
+        move: {
+          scrollbars: true,
+          drag: true,
+          wheel: false,
+        },
         toolbox: toolbox,
-        toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
+        toolboxPosition: 'start',
+        renderer: 'geras',
         zoom:
           {
             controls: true,
             wheel: true,
             startScale: 1.0,
             maxScale: 4,
-            minScale: .25,
+            minScale: 0.25,
             scaleSpeed: 1.1
           }
       });
+  initToolbox(workspace);
+  workspace.configureContextMenu = configureContextMenu;
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -121,46 +136,68 @@ function start() {
       document.getElementById('importExport').value = text;
     }
     // Restore event logging state.
-    var state = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(state)));
+    var logMainEventsState = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(logMainEventsState)));
+    var logToolboxFlyoutEventsState = sessionStorage.getItem('logFlyoutEvents');
+    logFlyoutEvents(Boolean(Number(logToolboxFlyoutEventsState)));
   } else {
     // MSIE 11 does not support sessionStorage on file:// URLs.
     logEvents(false);
   }
   taChange();
-}
-
-function setBackgroundColor() {
-  var lilac = '#d6d6ff';
-
-  var currentPage = window.location.href;
-  var regexFile = /^file[\S]*$/;
-
-  if (regexFile.test(currentPage)) {
-    document.getElementsByTagName('body')[0].style.backgroundColor = lilac;
+  if (autoimport) {
+    fromXml();
   }
 }
 
-function getToolboxElement() {
+function setBackgroundColour() {
+  // Set background colour to differentiate server vs local copy.
+  if (location.protocol == 'file:') {
+    var lilac = '#d6d6ff';
+    document.body.style.backgroundColor = lilac;
+  }
+}
+
+function getToolboxSuffix() {
   var match = location.search.match(/toolbox=([^&]+)/);
   // Default to the basic toolbox with categories and untyped variables,
   // but override that if the toolbox type is set in the URL.
-  var toolboxSuffix = (match ? match[1] : 'categories');
+  return (match ? match[1] : 'categories');
+}
+
+function getToolboxElement() {
+  var toolboxSuffix = getToolboxSuffix();
+  if (toolboxSuffix == 'test-blocks') {
+    if (typeof window.toolboxTestBlocks !== 'undefined') {
+      return toolboxTestBlocks;
+    } else {
+      alert('You need to run \'npm install\' in order to use the test blocks.');
+      toolboxSuffix = 'categories';
+    }
+  }
   // The three possible values are: "simple", "categories",
   // "categories-typed-variables".
   return document.getElementById('toolbox-' + toolboxSuffix);
 }
 
-function getToolboxFormIndex(id) {
-  if (id == 'toolbox-categories') {
-    return 0;
-  } else if (id == 'toolbox-categories-typed-variables') {
-    return 1;
-  } else if (id == 'toolbox-simple') {
-    return 2;
+function setToolboxDropdown() {
+  var toolboxNames = [
+      'toolbox-categories',
+      'toolbox-categories-typed-variables',
+      'toolbox-simple',
+      'toolbox-test-blocks'
+  ];
+  var toolboxSuffix = getToolboxSuffix();
+  document.forms.options.elements.toolbox.selectedIndex =
+      toolboxNames.indexOf('toolbox-' + toolboxSuffix);
+}
+
+function initToolbox(workspace) {
+  var toolboxSuffix = getToolboxSuffix();
+  if (toolboxSuffix == 'test-blocks' &&
+      typeof window.toolboxTestBlocksInit !== 'undefined') {
+    toolboxTestBlocksInit(workspace);
   }
-  // Didn't recognize it.
-  return 0;
 }
 
 function toXml() {
@@ -174,6 +211,9 @@ function toXml() {
 
 function fromXml() {
   var input = document.getElementById('importExport');
+  if (!input.value) {
+    return;
+  }
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(xml, workspace);
   taChange();
@@ -214,6 +254,34 @@ function logEvents(state) {
   }
 }
 
+function logFlyoutEvents(state) {
+  var checkbox = document.getElementById('logFlyoutCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logFlyoutEvents', Number(state));
+  }
+  var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+  if (state) {
+    flyoutWorkspace.addChangeListener(logger);
+  } else {
+    flyoutWorkspace.removeChangeListener(logger);
+  }
+}
+
+function configureContextMenu(menuOptions, e) {
+  var screenshotOption = {
+    text: 'Download Screenshot',
+    enabled: workspace.getTopBlocks().length,
+    callback: function() {
+      Blockly.downloadScreenshot(workspace);
+    }
+  };
+  menuOptions.push(screenshotOption);
+
+  // Adds a default-sized workspace comment to the workspace.
+  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
+}
+
 function logger(e) {
   console.log(e);
 }
@@ -242,7 +310,7 @@ function spaghetti(n) {
     xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
         '$1' + spaghettiXml + '</');
   }
-  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
   Blockly.Xml.domToWorkspace(dom, workspace);
@@ -282,31 +350,50 @@ var spaghettiXml = [
 </script>
 
 <style>
-html, body {
-  height: 100%;
-}
-body {
-  background-color: #fff;
-  font-family: sans-serif;
-  overflow: hidden;
-}
-h1 {
-  font-weight: normal;
-  font-size: 140%;
-}
-#blocklyDiv {
-  float: right;
-  height: 95%;
-  width: 70%;
-}
-#importExport {
-  font-family: monospace;
-}
+  html, body {
+    height: 100%;
+  }
+  body {
+    background-color: #fff;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 140%;
+  }
+  #blocklyDiv {
+    float: right;
+    height: 95%;
+    width: 70%;
+  }
+  #importExport {
+    font-family: monospace;
+  }
 
-.ioLabel>.blocklyFlyoutLabelText {
-  font-style: italic;
-}
+  .ioLabel>.blocklyFlyoutLabelText {
+    font-style: italic;
+  }
 
+  #blocklyDiv.renderingDebug .blockRenderDebug {
+    display: block;
+  }
+
+  .playgroundToggleOptions {
+    list-style: none;
+    padding: 0;
+  }
+  .playgroundToggleOptions li {
+    margin-top: 1em;
+  }
+
+  .blockRenderDebug {
+    display: none;
+  }
+
+  .zelos-renderer .blocklyFlyoutButton .blocklyText {
+    font-size: 1.5rem;
+  }
 </style>
 </head>
 <body onload="start()">
@@ -316,7 +403,8 @@ h1 {
   <h1>Blockly Playground</h1>
 
   <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a>
+   - <a href="playgrounds/advanced_playground.html">Advanced</a></p>
 
   <form id="options">
     <select name="dir" onchange="document.forms.options.submit()">
@@ -329,14 +417,7 @@ h1 {
       <option value="simple">Simple</option>
       <option value="test-blocks">Test Blocks</option>
     </select>
-    <select name="side" onchange="document.forms.options.submit()">
-      <option value="start">Start</option>
-      <option value="end">End</option>
-      <option value="top">Top</option>
-      <option value="bottom">Bottom</option>
-    </select>
   </form>
-
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
@@ -361,17 +442,24 @@ h1 {
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p>
+  <ul class="playgroundToggleOptions">
+    <li>
+      <label for="logCheck">Log main workspace events:</label>
+      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+    </li>
+    <li>
+    <label for="logFlyoutCheck">Log flyout events:</label>
+    <input type="checkbox" onclick="logFlyoutEvents(this.checked)" id="logFlyoutCheck">
+  </li>
+  </ul>
+
 
   <!-- The next three blocks of XML are sample toolboxes for testing basic
   configurations.  For more information on building toolboxes, see https://developers.google.com/blockly/guides/configure/web/toolbox -->
 
   <!-- toolbox-simple is an always-open flyout with no category menu.
   Always-open flyouts are a good idea if you have a small number of blocks. -->
-  <xml id="toolbox-simple" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
     <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
@@ -400,8 +488,8 @@ h1 {
   <!-- toolbox-categories has a category menu and an auto-closing flyout.  The
   Variables category uses untyped variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#untyped_variable_blocks for more information. -->
-  <xml id="toolbox-categories" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -410,7 +498,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+    <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -440,7 +528,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+    <category name="Math" categorystyle="math_category">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -528,9 +616,22 @@ h1 {
         </value>
       </block>
       <block type="math_random_float"></block>
+      <block type="math_atan2">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
     </category>
-    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+    <category name="Text" categorystyle="text_category">
       <block type="text"></block>
+      <block type="text_multiline"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -631,7 +732,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="%{BKY_LISTS_HUE}">
+    <category name="Lists" categorystyle="list_category">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -683,7 +784,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
+    <category name="Colour" categorystyle="colour_category">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -722,15 +823,15 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
-    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
 
   <!-- toolbox-categories-typed-variables has a category menu and an
   auto-closing flyout.  The Variables category uses typed variable blocks.
   See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
-  <xml id="toolbox-categories-typed-variables" style="display: none">
-    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
+    <category name="Logic" categorystyle="logic_category">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -739,7 +840,7 @@ h1 {
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+    <category name="Loops" categorystyle="loop_category">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -769,7 +870,7 @@ h1 {
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math" colour="%{BKY_MATH_HUE}">
+    <category name="Math" categorystyle="math_category">
       <block type="math_number" gap="32">
         <field name="NUM">123</field>
       </block>
@@ -857,9 +958,22 @@ h1 {
         </value>
       </block>
       <block type="math_random_float"></block>
+      <block type="math_atan2">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
     </category>
-    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+    <category name="Text" categorystyle="text_category">
       <block type="text"></block>
+      <block type="text_multiline"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -960,7 +1074,7 @@ h1 {
         </value>
       </block>
     </category>
-    <category name="Lists" colour="%{BKY_LISTS_HUE}">
+    <category name="Lists" categorystyle="list_category">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -1012,7 +1126,7 @@ h1 {
       <block type="lists_sort"></block>
       <block type="lists_reverse"></block>
     </category>
-    <category name="Colour" colour="%{BKY_COLOUR_HUE}">
+    <category name="Colour" categorystyle="colour_category">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -1051,159 +1165,8 @@ h1 {
       </block>
     </category>
     <sep></sep>
-    <category name="Variables" colour="%{BKY_VARIABLES_DYNAMIC_HUE}" custom="VARIABLE_DYNAMIC"></category>
-    <category name="Functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
-  </xml>
-
-  <!-- toolbox-test-blocks has a category menu and an auto-closing flyout.
-  The blocks in this toolbox reflect block configurations not used by
-  the standard predefined blocks, and so test alernative block rendering
-  code paths. -->
-  <xml id="toolbox-test-blocks" style="display: none">
-    <category name="Basic">
-      <block type="empty_block"></block>
-      <block type="empty_block_with_mutator"></block>
-    </category>
-    <category name="Drag">
-      <label text="Drag each to the workspace"></label>
-      <block type="text_print">
-        <value name="TEXT">
-          <block type="text">
-            <field name="TEXT">Drag me by this child</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_print">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">Drag me by this shadow</field>
-          </shadow>
-        </value>
-      </block>
-      <label text="Multiple Variable Refs"></label>
-      <block type="text_print">
-        <value name="TEXT">
-          <block type="variables_get">
-            <field name="VAR" id="item" variabletype="">item</field>
-          </block>
-        </value>
-        <next>
-          <block type="text_print">
-            <value name="TEXT">
-              <block type="variables_get">
-                <field name="VAR" id="item" variabletype="">item</field>
-              </block>
-            </value>
-          </block>
-        </next>
-      </block>
-      <label text="Procedure Definitions"></label>
-      <block type="procedures_defnoreturn">
-        <field name="NAME">without arguments</field>
-        <statement name="STACK">
-          <block type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">No argument reference.</field>
-              </shadow>
-            </value>
-          </block>
-        </statement>
-      </block>
-      <block type="procedures_defnoreturn">
-        <mutation>
-          <arg name="fnArgument"></arg>
-        </mutation>
-        <field name="NAME">with one argument</field>
-        <statement name="STACK">
-          <block type="text_print">
-            <value name="TEXT">
-              <shadow type="text">
-                <field name="TEXT">Expected an argument reference here.</field>
-              </shadow>
-              <block type="variables_get">
-                <field name="VAR">fnArgument</field>
-              </block>
-            </value>
-          </block>
-        </statement>
-      </block>
-    </category>
-    <category name="Fields">
-      <label text="Numbers"></label>
-      <block type="test_number">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_integer">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_number_hundredths">
-        <field name="NUM">123.456</field>
-      </block>
-      <block type="test_integer_bounded">
-        <field name="NOTE">60</field>
-      </block>
-      <label text="Drop-downs"></label>
-      <block type="example_dropdown_long"></block>
-      <block type="example_dropdown_images"></block>
-      <block type="example_dropdown_images_and_text"></block>
-      <label text="Others"></label>
-      <block type="example_angle"></block>
-      <block type="example_date"></block>
-    </category>
-    <category name="Mutators">
-      <label text="logic_compare"></label>
-      <block type="logic_compare">
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="logic_compare">
-        <value name="A">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-        <value name="B">
-          <block type="math_number">
-            <field name="NUM">10</field>
-          </block>
-        </value>
-      </block>
-    </category>
-    <category name="Style">
-      <label text="Hats"></label>
-      <block type="styled_event_cap"></block>
-      <label text="Colour"></label>
-      <block type="block_colour_hex1"></block>
-      <block type="block_colour_hex2"></block>
-      <block type="block_colour_hex3"></block>
-      <block type="block_no_colour"></block>
-      <block type="block_colour_hex4"></block>
-      <block type="block_colour_hex5"></block>
-    </category>
-    <category name="Images">
-      <block type="image_datauri"></block>
-      <block type="image_small"></block>
-      <block type="image_large"></block>
-      <block type="image_missing"></block>
-      <block type="test_with_lots_of_network_icons"></block>
-      <label text="Unicode & Emojis"></label>
-      <block type="emoji_label_robot_face"></block>
-      <block type="text">
-        <field name="TEXT">Robot face in text field: &#x1f916;</field>
-      </block>
-      <block type="text">
-        <field name="TEXT">Zalgo in text field: B&#776;&#788;&#862;&#795;&#842;&#827;&#806;&#837;&#812;&#792;&#816;&#846;&#805;l&#771;&#832;&#833;&#864;&#849;&#849;&#789;&#861;&#801;&#854;&#863;&#811;&#826;&#812;&#790;&#803;&#819;o&#843;&#777;&#778;&#785;&#831;&#829;&#794;&#825;&#857;&#814;&#802;&#811;&#852;c&#843;&#786;&#849;&#778;&#861;&#775;&#825;&#825;&#796;&#857;&#825;&#800;&#824;k&#778;&#850;&#833;&#774;&#772;&#782;&#862;&#770;&#789;&#788;&#841;&#801;&#811;&#860;&#839;&#790;&#819;&#854;l&#832;&#774;&#836;&#831;&#776;&#787;&#855;&#816;&#793;&#798;&#819;&#809;&#800;&#854;&#815;y&#864;&#783;&#856;&#773;&#832;&#808;&#799;&#839;&#814;&#840;&#812;&#793;&#818;&#801;</field>
-      </block>
-    </category>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
   </xml>
 </body>
 </html>

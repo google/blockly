@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2014 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2014 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -33,18 +19,31 @@ Blockly.Dart['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
   var code = '', branchCode, conditionCode;
+  if (Blockly.Dart.STATEMENT_PREFIX) {
+    // Automatic prefix insertion is switched off for this block.  Add manually.
+    code += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
+  }
   do {
     conditionCode = Blockly.Dart.valueToCode(block, 'IF' + n,
-      Blockly.Dart.ORDER_NONE) || 'false';
+        Blockly.Dart.ORDER_NONE) || 'false';
     branchCode = Blockly.Dart.statementToCode(block, 'DO' + n);
+    if (Blockly.Dart.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Dart.prefixLines(
+          Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block),
+          Blockly.Dart.INDENT) + branchCode;
+    }
     code += (n > 0 ? 'else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-
     ++n;
   } while (block.getInput('IF' + n));
 
-  if (block.getInput('ELSE')) {
+  if (block.getInput('ELSE') || Blockly.Dart.STATEMENT_SUFFIX) {
     branchCode = Blockly.Dart.statementToCode(block, 'ELSE');
+    if (Blockly.Dart.STATEMENT_SUFFIX) {
+      branchCode = Blockly.Dart.prefixLines(
+          Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block),
+          Blockly.Dart.INDENT) + branchCode;
+    }
     code += ' else {\n' + branchCode + '}';
   }
   return code + '\n';

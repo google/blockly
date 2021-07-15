@@ -1,21 +1,7 @@
 /**
  * @license
- * Blockly Demos: Block Factory
- *
- * Copyright 2016 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -25,8 +11,6 @@
  *
  * @author quachtina96 (Tina Quach)
  */
-
-goog.require('goog.dom.xml');  // Used to detect Closure
 
 /**
  * Controller for the Blockly Factory
@@ -152,7 +136,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
-  var xmlDom = document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+  var xmlDom = Blockly.utils.xml.createElement('xml');
 
   // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
@@ -178,7 +162,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
   // since the addition to editorWorkspaceXml below removes it from inputXml.
   var inputChildren = Array.from(inputXml.children);
 
-  // Create empty map. The line below creates a  truly empy object. It doesn't
+  // Create empty map. The line below creates a  truly empty object. It doesn't
   // have built-in attributes/functions such as length or toString.
   var blockXmlTextMap = Object.create(null);
 
@@ -187,8 +171,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
     // Add outer XML tag to the block for proper injection in to the
     // main workspace.
     // Create DOM for XML.
-    var editorWorkspaceXml =
-        document.createElementNS('http://www.w3.org/1999/xhtml', 'xml');
+    var editorWorkspaceXml = Blockly.utils.xml.createElement('xml');
     editorWorkspaceXml.appendChild(blockNode);
 
     xmlText = Blockly.Xml.domToText(editorWorkspaceXml);
@@ -449,7 +432,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
 /**
  * If given checkbox is checked, enable the given elements.  Otherwise, disable.
  * @param {boolean} enabled True if enabled, false otherwise.
- * @param {!Array.<string>} idArray Array of element IDs to enable when
+ * @param {!Array<string>} idArray Array of element IDs to enable when
  *    checkbox is checked.
  */
 AppController.prototype.ifCheckedEnable = function(enabled, idArray) {
@@ -585,7 +568,7 @@ AppController.prototype.initializeBlocklyStorage = function() {
   BlocklyStorage.HTTPREQUEST_ERROR =
       'There was a problem with the request.\n';
   BlocklyStorage.LINK_ALERT =
-      'Share your blocks with this link:\n\n%1';
+      'Share your blocks with this public link. We\'ll delete them if not used for a year. They are not associated with your account and handled as per Google\'s Privacy Policy. Please be sure not to include any private information.:\n\n%1';
   BlocklyStorage.HASH_ERROR =
       'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
   BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
@@ -678,20 +661,6 @@ AppController.prototype.modalName_ = null;
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
-  // Block Factory has a dependency on bits of Closure that core Blockly
-  // doesn't have. When you run this from file:// without a copy of Closure,
-  // it breaks it non-obvious ways.  Warning about this for now until the
-  // dependency is broken.
-  // TODO: #668.
-  if (!window.goog.dom.xml) {
-    alert('Sorry: Closure dependency not found. We are working on removing ' +
-      'this dependency.  In the meantime, you can use our hosted demo\n ' +
-      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html' +
-      '\nor use these instructions to continue running locally:\n' +
-      'https://developers.google.com/blockly/guides/modify/web/closure');
-    return;
-  }
-
   var self = this;
   // Handle Blockly Storage with App Engine.
   if ('BlocklyStorage' in window) {
@@ -718,6 +687,8 @@ AppController.prototype.init = function() {
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
+       comments: false,
+       disable: false,
        media: '../../media/'});
 
   // Add tab handlers for switching between Block Factory and Block Exporter.

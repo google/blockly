@@ -15,7 +15,8 @@
  * @name Blockly.utils.deprecation
  * @namespace
  */
-goog.provide('Blockly.utils.deprecation');
+goog.module('Blockly.utils.deprecation');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -29,12 +30,13 @@ goog.provide('Blockly.utils.deprecation');
  *     if any.
  * @package
  */
-Blockly.utils.deprecation.warn = function(
-    name, deprecationDate, deletionDate, opt_use) {
-  var msg = name + ' was deprecated on ' + deprecationDate +
-        ' and will be deleted on ' + deletionDate + '.';
+const warn = function(name, deprecationDate, deletionDate, opt_use) {
+  let msg = name + ' was deprecated on ' + deprecationDate +
+      ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }
   console.warn(msg);
 };
+
+exports = {warn};

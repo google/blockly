@@ -28,7 +28,7 @@ const {checkMessageReferences, replaceMessageReferences, runAfterPageLoad} = goo
  * The set of all registered extensions, keyed by extension name/id.
  * @private
  */
-const ALL = Object.create(null);
+const allExtensions = Object.create(null);
 
 /**
  * Registers a new extension function. Extensions are functions that help
@@ -44,13 +44,13 @@ const register = function(name, initFn) {
   if ((typeof name != 'string') || (name.trim() == '')) {
     throw Error('Error: Invalid extension name "' + name + '"');
   }
-  if (ALL[name]) {
+  if (allExtensions[name]) {
     throw Error('Error: Extension "' + name + '" is already registered.');
   }
   if (typeof initFn != 'function') {
     throw Error('Error: Extension "' + name + '" must be a function');
   }
-  ALL[name] = initFn;
+  allExtensions[name] = initFn;
 };
 
 /**
@@ -117,8 +117,8 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
  * @param {string} name The name of the extension to unregister.
  */
 const unregister = function(name) {
-  if (ALL[name]) {
-    delete ALL[name];
+  if (allExtensions[name]) {
+    delete allExtensions[name];
   } else {
     console.warn(
         'No extension mapping for name "' + name + '" found to unregister');
@@ -134,7 +134,7 @@ const unregister = function(name) {
  * @throws {Error} if the extension is not found.
  */
 const apply = function(name, block, isMutator) {
-  const extensionFn = ALL[name];
+  const extensionFn = allExtensions[name];
   if (typeof extensionFn != 'function') {
     throw Error('Error: Extension "' + name + '" not found.');
   }
@@ -445,7 +445,7 @@ const extensionParentTooltip = function() {
 register('parent_tooltip_when_inline', extensionParentTooltip);
 
 exports = {
-  ALL_: ALL,
+  ALL_: allExtensions,
   register,
   registerMixin,
   registerMutator,

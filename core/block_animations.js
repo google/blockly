@@ -13,10 +13,9 @@
 goog.module('Blockly.blockAnimations');
 goog.module.declareLegacyNamespace();
 
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const dom = goog.require('Blockly.utils.dom');
 const Svg = goog.require('Blockly.utils.Svg');
-
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -49,8 +48,7 @@ function disposeUiEffect(block) {
   workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  disposeUiStep(clone, workspace.RTL, new Date,
-      workspace.scale);
+  disposeUiStep(clone, workspace.RTL, new Date, workspace.scale);
 }
 /** @package */
 exports.disposeUiEffect = disposeUiEffect;
@@ -64,8 +62,7 @@ exports.disposeUiEffect = disposeUiEffect;
  * @param {!Date} start Date of animation's start.
  * @param {number} workspaceScale Scale of workspace.
  */
-function disposeUiStep(clone, rtl, start,
-    workspaceScale) {
+function disposeUiStep(clone, rtl, start, workspaceScale) {
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
@@ -75,10 +72,11 @@ function disposeUiStep(clone, rtl, start,
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
     const y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
     const scale = (1 - percent) * workspaceScale;
-    clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
-        ' scale(' + scale + ')');
-    setTimeout(disposeUiStep, 10, clone, rtl, start,
-        workspaceScale);
+    clone.setAttribute(
+        'transform',
+        'translate(' + x + ',' + y + ')' +
+            ' scale(' + scale + ')');
+    setTimeout(disposeUiStep, 10, clone, rtl, start, workspaceScale);
   }
 }
 
@@ -104,8 +102,7 @@ function connectionUiEffect(block) {
     xy.y += 3 * scale;
   }
   const ripple = dom.createSvgElement(
-      Svg.CIRCLE,
-      {
+      Svg.CIRCLE, {
         'cx': xy.x,
         'cy': xy.y,
         'r': 0,
@@ -134,8 +131,7 @@ function connectionUiStep(ripple, start, scale) {
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;
-    disconnectPid = setTimeout(
-        connectionUiStep, 10, ripple, start, scale);
+    disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }
 
@@ -157,8 +153,7 @@ function disconnectUiEffect(block) {
     magnitude *= -1;
   }
   // Start the animation.
-  disconnectUiStep(
-      block.getSvgRoot(), magnitude, new Date);
+  disconnectUiStep(block.getSvgRoot(), magnitude, new Date);
 }
 /** @package */
 exports.disconnectUiEffect = disconnectUiEffect;
@@ -171,7 +166,7 @@ exports.disconnectUiEffect = disconnectUiEffect;
  */
 function disconnectUiStep(group, magnitude, start) {
   const DURATION = 200;  // Milliseconds.
-  const WIGGLES = 3;  // Half oscillations.
+  const WIGGLES = 3;     // Half oscillations.
 
   const ms = new Date - start;
   const percent = ms / DURATION;
@@ -183,9 +178,7 @@ function disconnectUiStep(group, magnitude, start) {
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     group.skew_ = 'skewX(' + skew + ')';
     disconnectGroup = group;
-    disconnectPid =
-        setTimeout(disconnectUiStep, 10, group,
-            magnitude, start);
+    disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
   group.setAttribute('transform', group.translate_ + group.skew_);
 }

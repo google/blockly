@@ -224,11 +224,11 @@ const validateToolbox = function(toolboxJson) {
 
   if (toolboxKind) {
     if (toolboxKind != FLYOUT_TOOLBOX_KIND &&
-      toolboxKind != CATEGORY_TOOLBOX_KIND) {
-      throw Error('Invalid toolbox kind ' + toolboxKind + '.' +
-        ' Please supply either ' +
-        FLYOUT_TOOLBOX_KIND + ' or ' +
-        CATEGORY_TOOLBOX_KIND);
+        toolboxKind != CATEGORY_TOOLBOX_KIND) {
+      throw Error(
+          'Invalid toolbox kind ' + toolboxKind + '.' +
+          ' Please supply either ' + FLYOUT_TOOLBOX_KIND + ' or ' +
+          CATEGORY_TOOLBOX_KIND);
     }
   }
   if (!toolboxContents) {
@@ -278,7 +278,7 @@ const hasCategories = function(toolboxJson) {
     return toolboxKind == CATEGORY_TOOLBOX_KIND;
   }
 
-  const categories = toolboxJson['contents'].filter(function (item) {
+  const categories = toolboxJson['contents'].filter(function(item) {
     return item['kind'].toUpperCase() == 'CATEGORY';
   });
   return !!categories.length;
@@ -304,7 +304,8 @@ const isCategoryCollapsible = function(categoryInfo) {
 
 /**
  * Parses the provided toolbox definition into a consistent format.
- * @param {Node} toolboxDef The definition of the toolbox in one of its many forms.
+ * @param {Node} toolboxDef The definition of the toolbox in one of its many
+ *     forms.
  * @return {!ToolboxInfo} Object holding information
  *     for creating a toolbox.
  * @private
@@ -408,4 +409,25 @@ const parseToolboxTree = function(toolboxDef) {
   return toolboxDef;
 };
 
-exports = {BlockInfo, SeparatorInfo, ButtonInfo, LabelInfo, ButtonOrLabelInfo, StaticCategoryInfo, DynamicCategoryInfo, CategoryInfo, ToolboxItemInfo, FlyoutItemInfo, ToolboxInfo, FlyoutItemInfoArray, ToolboxDefinition, FlyoutDefinition, Position, convertToolboxDefToJson, convertFlyoutDefToJsonArray, hasCategories, isCategoryCollapsible, parseToolboxTree}
+exports = {
+  BlockInfo,
+  SeparatorInfo,
+  ButtonInfo,
+  LabelInfo,
+  ButtonOrLabelInfo,
+  StaticCategoryInfo,
+  DynamicCategoryInfo,
+  CategoryInfo,
+  ToolboxItemInfo,
+  FlyoutItemInfo,
+  ToolboxInfo,
+  FlyoutItemInfoArray,
+  ToolboxDefinition,
+  FlyoutDefinition,
+  Position,
+  convertToolboxDefToJson,
+  convertFlyoutDefToJsonArray,
+  hasCategories,
+  isCategoryCollapsible,
+  parseToolboxTree
+}

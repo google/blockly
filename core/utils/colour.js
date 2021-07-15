@@ -16,7 +16,8 @@
  * @name Blockly.utils.colour
  * @namespace
  */
-goog.provide('Blockly.utils.colour');
+goog.module('Blockly.utils.colour');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -30,9 +31,9 @@ goog.provide('Blockly.utils.colour');
  * @return {?string} A string containing a hex representation of the colour,
  *   or null if can't be parsed.
  */
-Blockly.utils.colour.parse = function(str) {
+const parse = function(str) {
   str = String(str).toLowerCase().trim();
-  let hex = Blockly.utils.colour.names[str];
+  let hex = names[str];
   if (hex) {
     // e.g. 'red'
     return hex;
@@ -54,7 +55,7 @@ Blockly.utils.colour.parse = function(str) {
     const g = Number(rgb[2]);
     const b = Number(rgb[3]);
     if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
-      return Blockly.utils.colour.rgbToHex(r, g, b);
+      return rgbToHex(r, g, b);
     }
   }
   return null;
@@ -67,7 +68,7 @@ Blockly.utils.colour.parse = function(str) {
  * @param {number} b Amount of blue, int between 0 and 255.
  * @return {string} Hex representation of the colour.
  */
-Blockly.utils.colour.rgbToHex = function(r, g, b) {
+const rgbToHex = function(r, g, b) {
   const rgb = (r << 16) | (g << 8) | b;
   if (r < 0x10) {
     return '#' + (0x1000000 | rgb).toString(16).substr(1);
@@ -81,8 +82,8 @@ Blockly.utils.colour.rgbToHex = function(r, g, b) {
  *     colour format ('#ff0000', 'red', '0xff000', etc).
  * @return {!Array<number>} RGB representation of the colour.
  */
-Blockly.utils.colour.hexToRgb = function(colour) {
-  const hex = Blockly.utils.colour.parse(colour);
+const hexToRgb = function(colour) {
+  const hex = parse(colour);
   if (!hex) {
     return [0, 0, 0];
   }
@@ -102,7 +103,7 @@ Blockly.utils.colour.hexToRgb = function(colour) {
  * @param {number} v Brightness in [0, 255].
  * @return {string} Hex representation of the colour.
  */
-Blockly.utils.colour.hsvToHex = function(h, s, v) {
+const hsvToHex = function(h, s, v) {
   let red = 0;
   let green = 0;
   let blue = 0;
@@ -150,7 +151,7 @@ Blockly.utils.colour.hsvToHex = function(h, s, v) {
         break;
     }
   }
-  return Blockly.utils.colour.rgbToHex(
+  return rgbToHex(
       Math.floor(red), Math.floor(green), Math.floor(blue));
 };
 
@@ -163,21 +164,21 @@ Blockly.utils.colour.hsvToHex = function(h, s, v) {
  *     Values should be in the range [0, 1].
  * @return {?string} Combined colour represented in hex.
  */
-Blockly.utils.colour.blend = function(colour1, colour2, factor) {
-  const hex1 = Blockly.utils.colour.parse(colour1);
+const blend = function(colour1, colour2, factor) {
+  const hex1 = parse(colour1);
   if (!hex1) {
     return null;
   }
-  const hex2 = Blockly.utils.colour.parse(colour2);
+  const hex2 = parse(colour2);
   if (!hex2) {
     return null;
   }
-  const rgb1 = Blockly.utils.colour.hexToRgb(hex1);
-  const rgb2 = Blockly.utils.colour.hexToRgb(hex2);
+  const rgb1 = hexToRgb(hex1);
+  const rgb2 = hexToRgb(hex2);
   const r = Math.round(rgb2[0] + factor * (rgb1[0] - rgb2[0]));
   const g = Math.round(rgb2[1] + factor * (rgb1[1] - rgb2[1]));
   const b = Math.round(rgb2[2] + factor * (rgb1[2] - rgb2[2]));
-  return Blockly.utils.colour.rgbToHex(r, g, b);
+  return rgbToHex(r, g, b);
 };
 
 /**
@@ -188,7 +189,7 @@ Blockly.utils.colour.blend = function(colour1, colour2, factor) {
  *
  * @type {!Object<string, string>}
  */
-Blockly.utils.colour.names = {
+const names = {
   'aqua': '#00ffff',
   'black': '#000000',
   'blue': '#0000ff',
@@ -206,3 +207,5 @@ Blockly.utils.colour.names = {
   'white': '#ffffff',
   'yellow': '#ffff00'
 };
+
+exports = {parse, rgbToHex, hexToRgb, hsvToHex, blend, names};

@@ -14,7 +14,8 @@
  * @name Blockly.utils.toolbox
  * @namespace
  */
-goog.provide('Blockly.utils.toolbox');
+goog.module('Blockly.utils.toolbox');
+goog.module.declareLegacyNamespace();
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
@@ -34,7 +35,7 @@ goog.requireType('Blockly.ToolboxSeparator');
  *            disabled: (string|boolean|undefined)
  *          }}
  */
-Blockly.utils.toolbox.BlockInfo;
+let BlockInfo;
 
 /**
  * The information needed to create a separator in the toolbox.
@@ -45,7 +46,7 @@ Blockly.utils.toolbox.BlockInfo;
  *            cssconfig:(!Blockly.ToolboxSeparator.CssConfig|undefined)
  *          }}
  */
-Blockly.utils.toolbox.SeparatorInfo;
+let SeparatorInfo;
 
 /**
  * The information needed to create a button in the toolbox.
@@ -55,7 +56,7 @@ Blockly.utils.toolbox.SeparatorInfo;
  *            callbackkey:string
  *          }}
  */
-Blockly.utils.toolbox.ButtonInfo;
+let ButtonInfo;
 
 /**
  * The information needed to create a label in the toolbox.
@@ -65,21 +66,21 @@ Blockly.utils.toolbox.ButtonInfo;
  *            id:(string|undefined)
  *          }}
  */
-Blockly.utils.toolbox.LabelInfo;
+let LabelInfo;
 
 /**
  * The information needed to create either a button or a label in the flyout.
- * @typedef {Blockly.utils.toolbox.ButtonInfo|
- *           Blockly.utils.toolbox.LabelInfo}
+ * @typedef {ButtonInfo|
+ *           LabelInfo}
  */
-Blockly.utils.toolbox.ButtonOrLabelInfo;
+let ButtonOrLabelInfo;
 
 /**
  * The information needed to create a category in the toolbox.
  * @typedef {{
  *            kind:string,
  *            name:string,
- *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>,
+ *            contents:!Array<!ToolboxItemInfo>,
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
@@ -87,7 +88,7 @@ Blockly.utils.toolbox.ButtonOrLabelInfo;
  *            hidden:(string|undefined)
  *          }}
  */
-Blockly.utils.toolbox.StaticCategoryInfo;
+let StaticCategoryInfo;
 
 /**
  * The information needed to create a custom category.
@@ -101,65 +102,65 @@ Blockly.utils.toolbox.StaticCategoryInfo;
  *            hidden:(string|undefined)
  *          }}
  */
-Blockly.utils.toolbox.DynamicCategoryInfo;
+let DynamicCategoryInfo;
 
 /**
  * The information needed to create either a dynamic or static category.
- * @typedef {Blockly.utils.toolbox.StaticCategoryInfo|
- *           Blockly.utils.toolbox.DynamicCategoryInfo}
+ * @typedef {StaticCategoryInfo|
+ *           DynamicCategoryInfo}
  */
-Blockly.utils.toolbox.CategoryInfo;
+let CategoryInfo;
 
 /**
  * Any information that can be used to create an item in the toolbox.
- * @typedef {Blockly.utils.toolbox.FlyoutItemInfo|
- *           Blockly.utils.toolbox.StaticCategoryInfo}
+ * @typedef {FlyoutItemInfo|
+ *           StaticCategoryInfo}
  */
-Blockly.utils.toolbox.ToolboxItemInfo;
+let ToolboxItemInfo;
 
 /**
  * All the different types that can be displayed in a flyout.
- * @typedef {Blockly.utils.toolbox.BlockInfo|
- *           Blockly.utils.toolbox.SeparatorInfo|
- *           Blockly.utils.toolbox.ButtonInfo|
- *           Blockly.utils.toolbox.LabelInfo|
- *           Blockly.utils.toolbox.DynamicCategoryInfo}
+ * @typedef {BlockInfo|
+ *           SeparatorInfo|
+ *           ButtonInfo|
+ *           LabelInfo|
+ *           DynamicCategoryInfo}
  */
-Blockly.utils.toolbox.FlyoutItemInfo;
+let FlyoutItemInfo;
 
 /**
  * The JSON definition of a toolbox.
  * @typedef {{
  *            kind:(string|undefined),
- *            contents:!Array<!Blockly.utils.toolbox.ToolboxItemInfo>
+ *            contents:!Array<!ToolboxItemInfo>
  *          }}
  */
-Blockly.utils.toolbox.ToolboxInfo;
+let ToolboxInfo;
 
 /**
  * An array holding flyout items.
  * @typedef {
- *            Array<!Blockly.utils.toolbox.FlyoutItemInfo>
+ *            Array<!FlyoutItemInfo>
  *          }
  */
-Blockly.utils.toolbox.FlyoutItemInfoArray;
+let FlyoutItemInfoArray;
 
 /**
  * All of the different types that can create a toolbox.
  * @typedef {Node|
- *           Blockly.utils.toolbox.ToolboxInfo|
+ *           ToolboxInfo|
  *           string}
  */
-Blockly.utils.toolbox.ToolboxDefinition;
+let ToolboxDefinition;
 
 /**
  * All of the different types that can be used to show items in a flyout.
- * @typedef {Blockly.utils.toolbox.FlyoutItemInfoArray|
+ * @typedef {FlyoutItemInfoArray|
  *           NodeList|
- *           Blockly.utils.toolbox.ToolboxInfo|
+ *           ToolboxInfo|
  *           Array<!Node>}
  */
-Blockly.utils.toolbox.FlyoutDefinition;
+let FlyoutDefinition;
 
 /**
  * The name used to identify a toolbox that has category like items.
@@ -168,20 +169,20 @@ Blockly.utils.toolbox.FlyoutDefinition;
  * 'category'.
  * @const {string}
  */
-Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
+const CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
 
 /**
  * The name used to identify a toolbox that has no categories and is displayed
  * as a simple flyout displaying blocks, buttons, or labels.
  * @const {string}
  */
-Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
+const FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
  * Position of the toolbox and/or flyout relative to the workspace.
  * @enum {number}
  */
-Blockly.utils.toolbox.Position = {
+const Position = {
   TOP: 0,
   BOTTOM: 1,
   LEFT: 2,
@@ -190,45 +191,45 @@ Blockly.utils.toolbox.Position = {
 
 /**
  * Converts the toolbox definition into toolbox JSON.
- * @param {?Blockly.utils.toolbox.ToolboxDefinition} toolboxDef The definition
+ * @param {?ToolboxDefinition} toolboxDef The definition
  *     of the toolbox in one of its many forms.
- * @return {?Blockly.utils.toolbox.ToolboxInfo} Object holding information
+ * @return {?ToolboxInfo} Object holding information
  *     for creating a toolbox.
  * @package
  */
-Blockly.utils.toolbox.convertToolboxDefToJson = function(toolboxDef) {
+const convertToolboxDefToJson = function(toolboxDef) {
   if (!toolboxDef) {
     return null;
   }
 
   if (toolboxDef instanceof Element || typeof toolboxDef == 'string') {
-    toolboxDef = Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
-    toolboxDef = Blockly.utils.toolbox.convertToToolboxJson_(toolboxDef);
+    toolboxDef = parseToolboxTree(toolboxDef);
+    toolboxDef = convertToToolboxJson(toolboxDef);
   }
 
-  const toolboxJson = /** @type {Blockly.utils.toolbox.ToolboxInfo} */ (toolboxDef);
-  Blockly.utils.toolbox.validateToolbox_(toolboxJson);
+  const toolboxJson = /** @type {ToolboxInfo} */ (toolboxDef);
+  validateToolbox(toolboxJson);
   return toolboxJson;
 };
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
- * @param {!Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
+ * @param {!ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @throws {Error} if the toolbox is not the correct format.
  * @private
  */
-Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson) {
+const validateToolbox = function(toolboxJson) {
   const toolboxKind = toolboxJson['kind'];
   const toolboxContents = toolboxJson['contents'];
 
   if (toolboxKind) {
-    if (toolboxKind != Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND &&
-      toolboxKind != Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND) {
+    if (toolboxKind != FLYOUT_TOOLBOX_KIND &&
+      toolboxKind != CATEGORY_TOOLBOX_KIND) {
       throw Error('Invalid toolbox kind ' + toolboxKind + '.' +
         ' Please supply either ' +
-        Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND + ' or ' +
-        Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND);
+        FLYOUT_TOOLBOX_KIND + ' or ' +
+        CATEGORY_TOOLBOX_KIND);
     }
   }
   if (!toolboxContents) {
@@ -238,12 +239,12 @@ Blockly.utils.toolbox.validateToolbox_ = function(toolboxJson) {
 
 /**
  * Converts the flyout definition into a list of flyout items.
- * @param {?Blockly.utils.toolbox.FlyoutDefinition} flyoutDef The definition of
+ * @param {?FlyoutDefinition} flyoutDef The definition of
  *    the flyout in one of its many forms.
- * @return {!Blockly.utils.toolbox.FlyoutItemInfoArray} A list of flyout items.
+ * @return {!FlyoutItemInfoArray} A list of flyout items.
  * @package
  */
-Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
+const convertFlyoutDefToJsonArray = function(flyoutDef) {
   if (!flyoutDef) {
     return [];
   }
@@ -258,25 +259,24 @@ Blockly.utils.toolbox.convertFlyoutDefToJsonArray = function(flyoutDef) {
     return flyoutDef;
   }
 
-  return Blockly.utils.toolbox.xmlToJsonArray_(
-      /** @type {!Array<Node>|!NodeList} */ (flyoutDef));
+  return xmlToJsonArray(/** @type {!Array<Node>|!NodeList} */ (flyoutDef));
 };
 
 /**
  * Whether or not the toolbox definition has categories.
- * @param {?Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
+ * @param {?ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @return {boolean} True if the toolbox has categories.
  * @package
  */
-Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
+const hasCategories = function(toolboxJson) {
   if (!toolboxJson) {
     return false;
   }
 
   let toolboxKind = toolboxJson['kind'];
   if (toolboxKind) {
-    return toolboxKind == Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND;
+    return toolboxKind == CATEGORY_TOOLBOX_KIND;
   }
 
   const categories = toolboxJson['contents'].filter(function (item) {
@@ -287,12 +287,12 @@ Blockly.utils.toolbox.hasCategories = function(toolboxJson) {
 
 /**
  * Whether or not the category is collapsible.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryInfo Object holing
+ * @param {!CategoryInfo} categoryInfo Object holing
  *    information for creating a category.
  * @return {boolean} True if the category has subcategories.
  * @package
  */
-Blockly.utils.toolbox.isCategoryCollapsible = function(categoryInfo) {
+const isCategoryCollapsible = function(categoryInfo) {
   if (!categoryInfo || !categoryInfo['contents']) {
     return false;
   }
@@ -306,16 +306,16 @@ Blockly.utils.toolbox.isCategoryCollapsible = function(categoryInfo) {
 /**
  * Parses the provided toolbox definition into a consistent format.
  * @param {Node} toolboxDef The definition of the toolbox in one of its many forms.
- * @return {!Blockly.utils.toolbox.ToolboxInfo} Object holding information
+ * @return {!ToolboxInfo} Object holding information
  *     for creating a toolbox.
  * @private
  */
-Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
-  const contents = Blockly.utils.toolbox.xmlToJsonArray_(
+const convertToToolboxJson = function(toolboxDef) {
+  const contents = xmlToJsonArray(
       /** @type {!Node|!Array<Node>} */ (toolboxDef));
   const toolboxJson = {'contents': contents};
   if (toolboxDef instanceof Node) {
-    Blockly.utils.toolbox.addAttributes_(toolboxDef, toolboxJson);
+    addAttributes(toolboxDef, toolboxJson);
   }
   return toolboxJson;
 };
@@ -324,12 +324,12 @@ Blockly.utils.toolbox.convertToToolboxJson_ = function(toolboxDef) {
  * Converts the xml for a toolbox to JSON.
  * @param {!Node|!Array<Node>|!NodeList} toolboxDef The
  *     definition of the toolbox in one of its many forms.
- * @return {!Blockly.utils.toolbox.FlyoutItemInfoArray|
- *          !Array<Blockly.utils.toolbox.ToolboxItemInfo>} A list of objects in
+ * @return {!FlyoutItemInfoArray|
+ *          !Array<ToolboxItemInfo>} A list of objects in
  *          the toolbox.
  * @private
  */
-Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
+const xmlToJsonArray = function(toolboxDef) {
   const arr = [];
   // If it is a node it will have children.
   let childNodes = toolboxDef.childNodes;
@@ -350,11 +350,11 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
       obj['blockxml'] = child;
     } else if (child.childNodes && child.childNodes.length > 0) {
       // Get the contents of a category
-      obj['contents'] = Blockly.utils.toolbox.xmlToJsonArray_(child);
+      obj['contents'] = xmlToJsonArray(child);
     }
 
     // Add XML attributes to object
-    Blockly.utils.toolbox.addAttributes_(child, obj);
+    addAttributes(child, obj);
     arr.push(obj);
   }
   return arr;
@@ -366,7 +366,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
  * @param {!Object} obj The object to copy the attributes to.
  * @private
  */
-Blockly.utils.toolbox.addAttributes_ = function(node, obj) {
+const addAttributes = function(node, obj) {
   for (let j = 0; j < node.attributes.length; j++) {
     const attr = node.attributes[j];
     if (attr.nodeName.indexOf('css-') > -1) {
@@ -384,7 +384,7 @@ Blockly.utils.toolbox.addAttributes_ = function(node, obj) {
  *    of same.
  * @return {?Node} DOM tree of blocks, or null.
  */
-Blockly.utils.toolbox.parseToolboxTree = function(toolboxDef) {
+const parseToolboxTree = function(toolboxDef) {
   if (toolboxDef) {
     if (typeof toolboxDef != 'string') {
       if (Blockly.utils.userAgent.IE && toolboxDef.outerHTML) {
@@ -408,3 +408,5 @@ Blockly.utils.toolbox.parseToolboxTree = function(toolboxDef) {
   }
   return toolboxDef;
 };
+
+exports = {BlockInfo, SeparatorInfo, ButtonInfo, LabelInfo, ButtonOrLabelInfo, StaticCategoryInfo, DynamicCategoryInfo, CategoryInfo, ToolboxItemInfo, FlyoutItemInfo, ToolboxInfo, FlyoutItemInfoArray, ToolboxDefinition, FlyoutDefinition, Position, convertToolboxDefToJson, convertFlyoutDefToJsonArray, hasCategories, isCategoryCollapsible, parseToolboxTree}

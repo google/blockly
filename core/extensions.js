@@ -82,18 +82,14 @@ const registerMixin = function(name, mixinObj) {
  *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  */
-const registerMutator = function(name, mixinObj, opt_helperFn,
-    opt_blockList) {
+const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   // Sanity check the mixin object before registering it.
-  checkHasFunction(
-      errorPrefix, mixinObj.domToMutation, 'domToMutation');
-  checkHasFunction(
-      errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
+  checkHasFunction(errorPrefix, mixinObj.domToMutation, 'domToMutation');
+  checkHasFunction(errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
 
-  const hasMutatorDialog =
-      checkMutatorDialog(mixinObj, errorPrefix);
+  const hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
   if (opt_helperFn && (typeof opt_helperFn != 'function')) {
     throw Error('Extension "' + name + '" is not a function');
@@ -124,8 +120,8 @@ const unregister = function(name) {
   if (ALL[name]) {
     delete ALL[name];
   } else {
-    console.warn('No extension mapping for name "' + name +
-        '" found to unregister');
+    console.warn(
+        'No extension mapping for name "' + name + '" found to unregister');
   }
 };
 
@@ -158,8 +154,9 @@ const apply = function(name, block, isMutator) {
     checkBlockHasMutatorProperties(errorPrefix, block);
   } else {
     if (!mutatorPropertiesMatch(
-        /** @type {!Array<Object>} */ (mutatorProperties), block)) {
-      throw Error('Error when applying extension "' + name + '": ' +
+            /** @type {!Array<Object>} */ (mutatorProperties), block)) {
+      throw Error(
+          'Error when applying extension "' + name + '": ' +
           'mutation properties changed when applying a non-mutator extension.');
     }
   }
@@ -173,14 +170,14 @@ const apply = function(name, block, isMutator) {
  * @throws {Error} if the property does not exist or is not a function.
  * @private
  */
-const checkHasFunction = function(errorPrefix, func,
-    propertyName) {
+const checkHasFunction = function(errorPrefix, func, propertyName) {
   if (!func) {
-    throw Error(errorPrefix +
-        'missing required property "' + propertyName + '"');
+    throw Error(
+        errorPrefix + 'missing required property "' + propertyName + '"');
   } else if (typeof func != 'function') {
-    throw Error(errorPrefix +
-        '" required property "' + propertyName + '" must be a function');
+    throw Error(
+        errorPrefix + '" required property "' + propertyName +
+        '" must be a function');
   }
 };
 
@@ -197,7 +194,8 @@ const checkHasFunction = function(errorPrefix, func,
 const checkNoMutatorProperties = function(mutationName, block) {
   const properties = getMutatorProperties(block);
   if (properties.length) {
-    throw Error('Error: tried to apply mutation "' + mutationName +
+    throw Error(
+        'Error: tried to apply mutation "' + mutationName +
         '" to a block that already has mutator functions.' +
         '  Block id: ' + block.id);
   }
@@ -229,8 +227,8 @@ const checkMutatorDialog = function(object, errorPrefix) {
   } else if (!hasCompose && !hasDecompose) {
     return false;
   }
-  throw Error(errorPrefix +
-      'Must have both or neither of "compose" and "decompose"');
+  throw Error(
+      errorPrefix + 'Must have both or neither of "compose" and "decompose"');
 };
 
 /**
@@ -240,8 +238,7 @@ const checkMutatorDialog = function(object, errorPrefix) {
  * @param {!Block} block The block to inspect.
  * @private
  */
-const checkBlockHasMutatorProperties = function(errorPrefix,
-    block) {
+const checkBlockHasMutatorProperties = function(errorPrefix, block) {
   if (typeof block.domToMutation != 'function') {
     throw Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
   }
@@ -321,8 +318,7 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
  *     tooltip text.
  * @return {!Function} The extension function.
  */
-const buildTooltipForDropdown = function(dropdownName,
-    lookupTable) {
+const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   // List of block types already validated, to minimize duplicate warnings.
   const blockTypesChecked = [];
 
@@ -343,21 +339,20 @@ const buildTooltipForDropdown = function(dropdownName,
    * The actual extension.
    * @this {Block}
    */
-  const extensionFn = function () {
+  const extensionFn = function() {
     if (this.type && blockTypesChecked.indexOf(this.type) == -1) {
-      checkDropdownOptionsInTable(
-          this, dropdownName, lookupTable);
+      checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
 
-    this.setTooltip(function () {
+    this.setTooltip(function() {
       const value = String(this.getFieldValue(dropdownName));
       let tooltip = lookupTable[value];
       if (tooltip == null) {
         if (blockTypesChecked.indexOf(this.type) == -1) {
           // Warn for missing values on generated tooltips.
-          let warning = 'No tooltip mapping for value ' + value +
-              ' of field ' + dropdownName;
+          let warning = 'No tooltip mapping for value ' + value + ' of field ' +
+              dropdownName;
           if (this.type != null) {
             warning += (' of block type ' + this.type);
           }
@@ -380,8 +375,7 @@ const buildTooltipForDropdown = function(dropdownName,
  * @param {!Object<string, string>} lookupTable The string lookup table
  * @private
  */
-const checkDropdownOptionsInTable = function(block, dropdownName,
-    lookupTable) {
+const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   // Validate all dropdown options have values.
   const dropdown = block.getField(dropdownName);
   if (!dropdown.isOptionListDynamic()) {
@@ -389,8 +383,9 @@ const checkDropdownOptionsInTable = function(block, dropdownName,
     for (let i = 0; i < options.length; ++i) {
       const optionKey = options[i][1];  // label, then value
       if (lookupTable[optionKey] == null) {
-        console.warn('No tooltip mapping for value ' + optionKey +
-           ' of field ' + dropdownName + ' of block type ' + block.type);
+        console.warn(
+            'No tooltip mapping for value ' + optionKey + ' of field ' +
+            dropdownName + ' of block type ' + block.type);
       }
     }
   }
@@ -405,8 +400,7 @@ const checkDropdownOptionsInTable = function(block, dropdownName,
  * @param {string} fieldName The field with the replacement text.
  * @return {!Function} The extension function.
  */
-const buildTooltipWithFieldText = function(msgTemplate,
-    fieldName) {
+const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack of
@@ -422,8 +416,8 @@ const buildTooltipWithFieldText = function(msgTemplate,
    * The actual extension.
    * @this {Block}
    */
-  const extensionFn = function () {
-    this.setTooltip(function () {
+  const extensionFn = function() {
+    this.setTooltip(function() {
       const field = this.getField(fieldName);
       return replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
@@ -448,7 +442,15 @@ const extensionParentTooltip = function() {
         this.tooltipWhenNotConnected;
   }.bind(this));
 };
-register('parent_tooltip_when_inline',
-    extensionParentTooltip);
+register('parent_tooltip_when_inline', extensionParentTooltip);
 
-exports = {ALL_: ALL, register, registerMixin, registerMutator, unregister, apply, buildTooltipForDropdown, buildTooltipWithFieldText};
+exports = {
+  ALL_: ALL,
+  register,
+  registerMixin,
+  registerMutator,
+  unregister,
+  apply,
+  buildTooltipForDropdown,
+  buildTooltipWithFieldText
+};

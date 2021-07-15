@@ -1739,11 +1739,13 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 
   suiteCall(testSuite.title, function() {
     setup(function() {
+      sharedTestSetup.call(this);
       this.workspace = new Blockly.Workspace();
     });
 
     teardown(function() {
-      this.workspace.dispose();
+      workspaceTeardown.call(this, this.workspace);
+      sharedTestTeardown.call(this);
     });
 
     testHelpers.runTestSuites(

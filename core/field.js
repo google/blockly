@@ -399,39 +399,14 @@ Blockly.Field.prototype.bindEvents_ = function() {
 };
 
 /**
- * Disables field if the given XML element specifies this.
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
  * @param {!Element} fieldElement The element containing info about the
- *     field's state.
- * @protected
- */
-Blockly.Field.prototype.setEnabledFromXml_ = function(fieldElement) {
-  if (fieldElement.getAttribute('enabled') === 'false') {
-    this.setEnabled(false);
-  }
-};
-
-/**
- * Sets the field's value and possibly disables field based on the given XML
- *     element. Should only be called by Blockly.Xml.
- * @param {!Element} fieldElement The element containing info about the
- *     field's state.
+ *    field's state.
  * @package
  */
 Blockly.Field.prototype.fromXml = function(fieldElement) {
   this.setValue(fieldElement.textContent);
-  this.setEnabledFromXml_(fieldElement);
-};
-
-/**
- * Adds false enabled attribute to the given XML element if field is disabled.
- * @param {!Element} fieldElement The element containing info about the
- *     field's state.
- * @protected
- */
-Blockly.Field.prototype.addDisabledToXml_ = function(fieldElement) {
-  if (!this.enabled_) {
-    fieldElement.setAttribute('enabled', 'false');
-  }
 };
 
 /**
@@ -443,7 +418,6 @@ Blockly.Field.prototype.addDisabledToXml_ = function(fieldElement) {
  */
 Blockly.Field.prototype.toXml = function(fieldElement) {
   fieldElement.textContent = this.getValue();
-  this.addDisabledToXml_(fieldElement);
   return fieldElement;
 };
 
@@ -486,7 +460,7 @@ Blockly.Field.prototype.updateEditable = function() {
 
 /**
  * Set whether this field's value can be changed using the editor when the
- *     source block is editable.
+ * source block is editable.
  * @param {boolean} enabled True if enabled.
  */
 Blockly.Field.prototype.setEnabled = function(enabled) {
@@ -496,7 +470,7 @@ Blockly.Field.prototype.setEnabled = function(enabled) {
 
 /**
  * Check whether this field's value can be changed using the editor when the
- *     source block is editable.
+ * source block is editable.
  * @return {boolean} Whether this field is enabled.
  */
 Blockly.Field.prototype.isEnabled = function() {

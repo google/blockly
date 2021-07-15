@@ -105,20 +105,18 @@ Blockly.FieldMultilineInput.prototype.toXml = function(fieldElement) {
   // `Blockly.Xml.domToText` will appear on a single line (this is a limitation
   // of the plain-text format).
   fieldElement.textContent = this.getValue().replace(/\n/g, '&#10;');
-  this.addDisabledToXml_(fieldElement);
   return fieldElement;
 };
 
 /**
- * Sets the field's value and possibly disables field based on the given XML
- *     element. Should only be called by Blockly.Xml.
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
  * @param {!Element} fieldElement The element containing info about the
  *    field's state.
  * @package
  */
 Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
   this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
-  this.setEnabledFromXml_(fieldElement);
 };
 
 /**

@@ -209,8 +209,9 @@ const insertAfter = function(newNode, refNode) {
  * @return {boolean} Whether the parent node contains the descendant node.
  */
 const containsNode = function(parent, descendant) {
-  return !!(parent.compareDocumentPosition(descendant) &
-            NodeType.DOCUMENT_POSITION_CONTAINED_BY);
+  return !!(
+      parent.compareDocumentPosition(descendant) &
+      NodeType.DOCUMENT_POSITION_CONTAINED_BY);
 };
 
 /**
@@ -296,10 +297,10 @@ const getTextWidth = function(textElement) {
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
-const getFastTextWidth = function(textElement,
-    fontSize, fontWeight, fontFamily) {
-  return getFastTextWidthWithSizeString(textElement,
-      fontSize + 'pt', fontWeight, fontFamily);
+const getFastTextWidth = function(
+    textElement, fontSize, fontWeight, fontFamily) {
+  return getFastTextWidthWithSizeString(
+      textElement, fontSize + 'pt', fontWeight, fontFamily);
 };
 
 /**
@@ -314,8 +315,8 @@ const getFastTextWidth = function(textElement,
  * @param {string} fontFamily The font family to use.
  * @return {number} Width of element.
  */
-const getFastTextWidthWithSizeString = function(textElement,
-    fontSize, fontWeight, fontFamily) {
+const getFastTextWidthWithSizeString = function(
+    textElement, fontSize, fontWeight, fontFamily) {
   const text = textElement.textContent;
   const key = text + '\n' + textElement.className.baseVal;
   let width;
@@ -340,8 +341,7 @@ const getFastTextWidthWithSizeString = function(textElement,
     canvasContext = computeCanvas.getContext('2d');
   }
   // Set the desired font size and family.
-  canvasContext.font =
-      fontWeight + ' ' + fontSize + ' ' + fontFamily;
+  canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
   width = canvasContext.measureText(text).width;
@@ -361,9 +361,7 @@ const getFastTextWidthWithSizeString = function(textElement,
  * @param {string} fontFamily The font family to use.
  * @return {{height: number, baseline: number}} Font measurements.
  */
-const measureFontMetrics = function(text, fontSize, fontWeight,
-    fontFamily) {
-
+const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
   const span = document.createElement('span');
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;

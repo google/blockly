@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.blockAnimations');
+goog.module('Blockly.blockAnimations');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
@@ -21,23 +22,20 @@ goog.requireType('Blockly.BlockSvg');
 /**
  * PID of disconnect UI animation.  There can only be one at a time.
  * @type {number}
- * @private
  */
-Blockly.blockAnimations.disconnectPid_ = 0;
+let disconnectPid = 0;
 
 /**
  * SVG group of wobbling block.  There can only be one at a time.
  * @type {Element}
- * @private
  */
-Blockly.blockAnimations.disconnectGroup_ = null;
+let disconnectGroup = null;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param {!Blockly.BlockSvg} block The block being disposed of.
- * @package
  */
-Blockly.blockAnimations.disposeUiEffect = function(block) {
+function disposeUiEffect(block) {
   const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -51,9 +49,11 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
   workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  Blockly.blockAnimations.disposeUiStep_(clone, workspace.RTL, new Date,
+  disposeUiStep(clone, workspace.RTL, new Date,
       workspace.scale);
-};
+}
+/** @package */
+exports.disposeUiEffect = disposeUiEffect;
 
 /**
  * Animate a cloned block and eventually dispose of it.
@@ -63,9 +63,8 @@ Blockly.blockAnimations.disposeUiEffect = function(block) {
  * @param {boolean} rtl True if RTL, false if LTR.
  * @param {!Date} start Date of animation's start.
  * @param {number} workspaceScale Scale of workspace.
- * @private
  */
-Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
+function disposeUiStep(clone, rtl, start,
     workspaceScale) {
   const ms = new Date - start;
   const percent = ms / 150;
@@ -78,17 +77,16 @@ Blockly.blockAnimations.disposeUiStep_ = function(clone, rtl, start,
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
         ' scale(' + scale + ')');
-    setTimeout(Blockly.blockAnimations.disposeUiStep_, 10, clone, rtl, start,
+    setTimeout(disposeUiStep, 10, clone, rtl, start,
         workspaceScale);
   }
-};
+}
 
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
  * @param {!Blockly.BlockSvg} block The block being connected.
- * @package
  */
-Blockly.blockAnimations.connectionUiEffect = function(block) {
+function connectionUiEffect(block) {
   const workspace = block.workspace;
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
@@ -117,17 +115,18 @@ Blockly.blockAnimations.connectionUiEffect = function(block) {
       },
       workspace.getParentSvg());
   // Start the animation.
-  Blockly.blockAnimations.connectionUiStep_(ripple, new Date, scale);
-};
+  connectionUiStep(ripple, new Date, scale);
+}
+/** @package */
+exports.connectionUiEffect = connectionUiEffect;
 
 /**
  * Expand a ripple around a connection.
  * @param {!SVGElement} ripple Element to animate.
  * @param {!Date} start Date of animation's start.
  * @param {number} scale Scale of workspace.
- * @private
  */
-Blockly.blockAnimations.connectionUiStep_ = function(ripple, start, scale) {
+function connectionUiStep(ripple, start, scale) {
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
@@ -135,17 +134,16 @@ Blockly.blockAnimations.connectionUiStep_ = function(ripple, start, scale) {
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;
-    Blockly.blockAnimations.disconnectPid_ = setTimeout(
-        Blockly.blockAnimations.connectionUiStep_, 10, ripple, start, scale);
+    disconnectPid = setTimeout(
+        connectionUiStep, 10, ripple, start, scale);
   }
-};
+}
 
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
  * @param {!Blockly.BlockSvg} block The block being disconnected.
- * @package
  */
-Blockly.blockAnimations.disconnectUiEffect = function(block) {
+function disconnectUiEffect(block) {
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
@@ -159,17 +157,19 @@ Blockly.blockAnimations.disconnectUiEffect = function(block) {
     magnitude *= -1;
   }
   // Start the animation.
-  Blockly.blockAnimations.disconnectUiStep_(
+  disconnectUiStep(
       block.getSvgRoot(), magnitude, new Date);
-};
+}
+/** @package */
+exports.disconnectUiEffect = disconnectUiEffect;
+
 /**
  * Animate a brief wiggle of a disconnected block.
  * @param {!SVGElement} group SVG element to animate.
  * @param {number} magnitude Maximum degrees skew (reversed for RTL).
  * @param {!Date} start Date of animation's start.
- * @private
  */
-Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
+function disconnectUiStep(group, magnitude, start) {
   const DURATION = 200;  // Milliseconds.
   const WIGGLES = 3;  // Half oscillations.
 
@@ -182,24 +182,25 @@ Blockly.blockAnimations.disconnectUiStep_ = function(group, magnitude, start) {
     const skew = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     group.skew_ = 'skewX(' + skew + ')';
-    Blockly.blockAnimations.disconnectGroup_ = group;
-    Blockly.blockAnimations.disconnectPid_ =
-        setTimeout(Blockly.blockAnimations.disconnectUiStep_, 10, group,
+    disconnectGroup = group;
+    disconnectPid =
+        setTimeout(disconnectUiStep, 10, group,
             magnitude, start);
   }
   group.setAttribute('transform', group.translate_ + group.skew_);
-};
+}
 
 /**
  * Stop the disconnect UI animation immediately.
- * @package
  */
-Blockly.blockAnimations.disconnectUiStop = function() {
-  if (Blockly.blockAnimations.disconnectGroup_) {
-    clearTimeout(Blockly.blockAnimations.disconnectPid_);
-    const group = Blockly.blockAnimations.disconnectGroup_;
+function disconnectUiStop() {
+  if (disconnectGroup) {
+    clearTimeout(disconnectPid);
+    const group = disconnectGroup;
     group.skew_ = '';
     group.setAttribute('transform', group.translate_);
-    Blockly.blockAnimations.disconnectGroup_ = null;
+    disconnectGroup = null;
   }
-};
+}
+/** @package */
+exports.disconnectUiStop = disconnectUiStop;

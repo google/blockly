@@ -13,10 +13,10 @@
 goog.module('Blockly.blockAnimations');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
+const Svg = goog.require('Blockly.utils.Svg');
 
-goog.requireType('Blockly.BlockSvg');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -33,7 +33,7 @@ let disconnectGroup = null;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
- * @param {!Blockly.BlockSvg} block The block being disposed of.
+ * @param {!BlockSvg} block The block being disposed of.
  */
 function disposeUiEffect(block) {
   const workspace = block.workspace;
@@ -69,7 +69,7 @@ function disposeUiStep(clone, rtl, start,
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
-    Blockly.utils.dom.removeNode(clone);
+    dom.removeNode(clone);
   } else {
     const x = clone.translateX_ +
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
@@ -84,7 +84,7 @@ function disposeUiStep(clone, rtl, start,
 
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
- * @param {!Blockly.BlockSvg} block The block being connected.
+ * @param {!BlockSvg} block The block being connected.
  */
 function connectionUiEffect(block) {
   const workspace = block.workspace;
@@ -103,8 +103,8 @@ function connectionUiEffect(block) {
     xy.x += (block.RTL ? -23 : 23) * scale;
     xy.y += 3 * scale;
   }
-  const ripple = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.CIRCLE,
+  const ripple = dom.createSvgElement(
+      Svg.CIRCLE,
       {
         'cx': xy.x,
         'cy': xy.y,
@@ -130,7 +130,7 @@ function connectionUiStep(ripple, start, scale) {
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
-    Blockly.utils.dom.removeNode(ripple);
+    dom.removeNode(ripple);
   } else {
     ripple.setAttribute('r', percent * 25 * scale);
     ripple.style.opacity = 1 - percent;
@@ -141,7 +141,7 @@ function connectionUiStep(ripple, start, scale) {
 
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
- * @param {!Blockly.BlockSvg} block The block being disconnected.
+ * @param {!BlockSvg} block The block being disconnected.
  */
 function disconnectUiEffect(block) {
   block.workspace.getAudioManager().play('disconnect');

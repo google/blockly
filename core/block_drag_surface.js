@@ -18,10 +18,10 @@
 goog.module('Blockly.BlockDragSurfaceSvg');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {G, SVG} = goog.require('Blockly.utils.Svg');
+const {getRelativeXY} = goog.require('Blockly.utils');
+const {createSvgElement, HTML_NS, setCssTransform, SVG_NS, XLINK_NS} = goog.require('Blockly.utils.dom');
 
 
 /**
@@ -73,7 +73,7 @@ BlockDragSurfaceSvg.prototype.scale_ = 1;
  * Cached value for the translation of the drag surface.
  * This translation is in pixel units, because the scale is applied to the
  * drag group rather than the top-level SVG.
- * @type {?Blockly.utils.Coordinate}
+ * @type {?Coordinate}
  * @private
  */
 BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
@@ -82,11 +82,11 @@ BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
  * Cached value for the translation of the child drag surface in pixel units.
  * Since the child drag surface tracks the translation of the workspace this is
  * ultimately the translation of the workspace.
- * @type {!Blockly.utils.Coordinate}
+ * @type {!Coordinate}
  * @private
  */
 BlockDragSurfaceSvg.prototype.childSurfaceXY_ =
-    new Blockly.utils.Coordinate(0, 0);
+    new Coordinate(0, 0);
 
 /**
  * Create the drag surface and inject it into the container.
@@ -95,17 +95,17 @@ BlockDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
-  this.SVG_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.SVG, {
-        'xmlns': Blockly.utils.dom.SVG_NS,
-        'xmlns:html': Blockly.utils.dom.HTML_NS,
-        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+  this.SVG_ = createSvgElement(
+      SVG, {
+        'xmlns': SVG_NS,
+        'xmlns:html': HTML_NS,
+        'xmlns:xlink': XLINK_NS,
         'version': '1.1',
         'class': 'blocklyBlockDragSurface'
       },
       this.container_);
   this.dragGroup_ =
-      Blockly.utils.dom.createSvgElement(Blockly.utils.Svg.G, {}, this.SVG_);
+      createSvgElement(G, {}, this.SVG_);
 };
 
 /**
@@ -121,7 +121,7 @@ BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
   // appendChild removes the blocks from the previous parent
   this.dragGroup_.appendChild(blocks);
   this.SVG_.style.display = 'block';
-  this.surfaceXY_ = new Blockly.utils.Coordinate(0, 0);
+  this.surfaceXY_ = new Coordinate(0, 0);
 };
 
 /**
@@ -160,7 +160,7 @@ BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  Blockly.utils.dom.setCssTransform(
+  setCssTransform(
       this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
 };
 
@@ -172,7 +172,7 @@ BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
 BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
   const x = this.surfaceXY_.x + deltaX;
   const y = this.surfaceXY_.y + deltaY;
-  this.surfaceXY_ = new Blockly.utils.Coordinate(x, y);
+  this.surfaceXY_ = new Coordinate(x, y);
   this.translateSurfaceInternal_();
 };
 
@@ -186,19 +186,18 @@ BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
  */
 BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   this.surfaceXY_ =
-      new Blockly.utils.Coordinate(x * this.scale_, y * this.scale_);
+      new Coordinate(x * this.scale_, y * this.scale_);
   this.translateSurfaceInternal_();
 };
 
 /**
  * Reports the surface translation in scaled workspace coordinates.
  * Use this when finishing a drag to return blocks to the correct position.
- * @return {!Blockly.utils.Coordinate} Current translation of the surface.
+ * @return {!Coordinate} Current translation of the surface.
  */
 BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  const xy = Blockly.utils.getRelativeXY(/** @type {!SVGElement} */
-      (this.SVG_));
-  return new Blockly.utils.Coordinate(xy.x / this.scale_, xy.y / this.scale_);
+  const xy = getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
 };
 
 /**
@@ -231,7 +230,7 @@ BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
  * Gets the translation of the child block surface
  * This surface is in charge of keeping track of how much the workspace has
  * moved.
- * @return {!Blockly.utils.Coordinate} The amount the workspace has been moved.
+ * @return {!Coordinate} The amount the workspace has been moved.
  */
 BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
   // Returning a copy so the coordinate can not be changed outside this class.

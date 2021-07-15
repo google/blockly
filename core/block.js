@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Block');
+goog.module('Blockly.Block');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
@@ -61,7 +62,7 @@ goog.requireType('Blockly.VariableModel');
  * @implements {Blockly.IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
  */
-Blockly.Block = function(workspace, prototypeName, opt_id) {
+const Block = function(workspace, prototypeName, opt_id) {
   if (Blockly.Generator &&
       typeof Blockly.Generator.prototype[prototypeName] != 'undefined') {
     // Occluding Generator class members is not allowed.
@@ -100,7 +101,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   this.parentBlock_ = null;
 
   /**
-   * @type {!Array<!Blockly.Block>}
+   * @type {!Array<!Block>}
    * @protected
    */
   this.childBlocks_ = [];
@@ -150,7 +151,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   /**
    * A model of the comment attached to this block.
-   * @type {!Blockly.Block.CommentModel}
+   * @type {!Block.CommentModel}
    * @package
    */
   this.commentModel = {
@@ -262,33 +263,33 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
  *            size:Blockly.utils.Size
  *          }}
  */
-Blockly.Block.CommentModel;
+Block.CommentModel;
 
 /**
  * The language-neutral ID given to the collapsed input.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
 
 /**
  * The language-neutral ID given to the collapsed field.
  * @const {string}
  */
-Blockly.Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
+Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
 
 /**
  * Optional text data that round-trips between blocks and XML.
  * Has no effect. May be used by 3rd parties for meta information.
  * @type {?string}
  */
-Blockly.Block.prototype.data = null;
+Block.prototype.data = null;
 
 /**
  * Has this block been disposed of?
  * @type {boolean}
  * @package
  */
-Blockly.Block.prototype.disposed = false;
+Block.prototype.disposed = false;
 
 /**
  * Colour of the block as HSV hue value (0-360)
@@ -296,27 +297,27 @@ Blockly.Block.prototype.disposed = false;
  * @type {?number}
  * @private
  */
-Blockly.Block.prototype.hue_ = null;
+Block.prototype.hue_ = null;
 
 /**
  * Colour of the block in '#RRGGBB' format.
  * @type {string}
  * @protected
  */
-Blockly.Block.prototype.colour_ = '#000000';
+Block.prototype.colour_ = '#000000';
 
 /**
  * Name of the block style.
  * @type {string}
  * @protected
  */
-Blockly.Block.prototype.styleName_ = '';
+Block.prototype.styleName_ = '';
 
 /**
  * An optional method called during initialization.
  * @type {?function()}
  */
-Blockly.Block.prototype.init;
+Block.prototype.init;
 
 /**
  * An optional callback method to use whenever the block's parent workspace
@@ -324,28 +325,28 @@ Blockly.Block.prototype.init;
  * initializer function, or an extension initializer function.
  * @type {?function(Blockly.Events.Abstract)}
  */
-Blockly.Block.prototype.onchange;
+Block.prototype.onchange;
 
 /**
  * An optional serialization method for defining how to serialize the
  * mutation state. This must be coupled with defining `domToMutation`.
  * @type {?function(...):!Element}
  */
-Blockly.Block.prototype.mutationToDom;
+Block.prototype.mutationToDom;
 
 /**
  * An optional deserialization method for defining how to deserialize the
  * mutation state. This must be coupled with defining `mutationToDom`.
  * @type {?function(!Element)}
  */
-Blockly.Block.prototype.domToMutation;
+Block.prototype.domToMutation;
 
 /**
  * An optional property for suppressing adding STATEMENT_PREFIX and
  * STATEMENT_SUFFIX to generated code.
  * @type {?boolean}
  */
-Blockly.Block.prototype.suppressPrefixSuffix;
+Block.prototype.suppressPrefixSuffix;
 
 /**
  * An optional property for declaring developer variables.  Return a list of
@@ -353,7 +354,7 @@ Blockly.Block.prototype.suppressPrefixSuffix;
  * the user, but are declared as global variables in the generated code.
  * @type {?function():!Array<string>}
  */
-Blockly.Block.prototype.getDeveloperVariables;
+Block.prototype.getDeveloperVariables;
 
 /**
  * Dispose of this block.
@@ -362,7 +363,7 @@ Blockly.Block.prototype.getDeveloperVariables;
  *     all children of this block.
  * @suppress {checkTypes}
  */
-Blockly.Block.prototype.dispose = function(healStack) {
+Block.prototype.dispose = function(healStack) {
   if (!this.workspace) {
     // Already deleted.
     return;
@@ -428,7 +429,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
  * change).
  * @public
  */
-Blockly.Block.prototype.initModel = function() {
+Block.prototype.initModel = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
       if (field.initModel) {
@@ -444,7 +445,7 @@ Blockly.Block.prototype.initModel = function() {
  * @param {boolean=} opt_healStack Disconnect child statement and reconnect
  *   stack.  Defaults to false.
  */
-Blockly.Block.prototype.unplug = function(opt_healStack) {
+Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     this.unplugFromRow_(opt_healStack);
   } else if (this.previousConnection) {
@@ -459,7 +460,7 @@ Blockly.Block.prototype.unplug = function(opt_healStack) {
  *     left-side block.  Defaults to false.
  * @private
  */
-Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
+Block.prototype.unplugFromRow_ = function(opt_healStack) {
   let parentConnection = null;
   if (this.outputConnection.isConnected()) {
     parentConnection = this.outputConnection.targetConnection;
@@ -503,7 +504,7 @@ Blockly.Block.prototype.unplugFromRow_ = function(opt_healStack) {
  * @return {?Blockly.Connection} The connection on the value input, or null.
  * @private
  */
-Blockly.Block.prototype.getOnlyValueConnection_ = function() {
+Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
@@ -526,7 +527,7 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
  *   stack.  Defaults to false.
  * @private
  */
-Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
+Block.prototype.unplugFromStack_ = function(opt_healStack) {
   let previousTarget = null;
   if (this.previousConnection.isConnected()) {
     // Remember the connection that any next statements need to connect to.
@@ -554,7 +555,7 @@ Blockly.Block.prototype.unplugFromStack_ = function(opt_healStack) {
  * @return {!Array<!Blockly.Connection>} Array of connections.
  * @package
  */
-Blockly.Block.prototype.getConnections_ = function(_all) {
+Block.prototype.getConnections_ = function(_all) {
   const myConnections = [];
   if (this.outputConnection) {
     myConnections.push(this.outputConnection);
@@ -581,7 +582,7 @@ Blockly.Block.prototype.getConnections_ = function(_all) {
  * @return {?Blockly.Connection} The last next connection on the stack, or null.
  * @package
  */
-Blockly.Block.prototype.lastConnectionInStack = function(ignoreShadows) {
+Block.prototype.lastConnectionInStack = function(ignoreShadows) {
   let nextConnection = this.nextConnection;
   while (nextConnection) {
     const nextBlock = nextConnection.targetBlock();
@@ -597,7 +598,7 @@ Blockly.Block.prototype.lastConnectionInStack = function(ignoreShadows) {
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
  */
-Blockly.Block.prototype.bumpNeighbours = function() {
+Block.prototype.bumpNeighbours = function() {
   // noop.
 };
 
@@ -607,7 +608,7 @@ Blockly.Block.prototype.bumpNeighbours = function() {
  * block) or the block connected to the output connection (for a value block).
  * @return {?Blockly.Block} The block (if any) that holds the current block.
  */
-Blockly.Block.prototype.getParent = function() {
+Block.prototype.getParent = function() {
   return this.parentBlock_;
 };
 
@@ -617,7 +618,7 @@ Blockly.Block.prototype.getParent = function() {
  * @return {?Blockly.Input} The input (if any) that connects to the specified
  *     block.
  */
-Blockly.Block.prototype.getInputWithBlock = function(block) {
+Block.prototype.getInputWithBlock = function(block) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection && input.connection.targetBlock() == block) {
       return input;
@@ -632,7 +633,7 @@ Blockly.Block.prototype.getInputWithBlock = function(block) {
  * statement, whereas the surrounding block is an if statement, while loop, etc.
  * @return {?Blockly.Block} The block (if any) that surrounds the current block.
  */
-Blockly.Block.prototype.getSurroundParent = function() {
+Block.prototype.getSurroundParent = function() {
   let block = this;
   let prevBlock;
   do {
@@ -651,7 +652,7 @@ Blockly.Block.prototype.getSurroundParent = function() {
  * Return the next statement block directly connected to this block.
  * @return {?Blockly.Block} The next statement block or null.
  */
-Blockly.Block.prototype.getNextBlock = function() {
+Block.prototype.getNextBlock = function() {
   return this.nextConnection && this.nextConnection.targetBlock();
 };
 
@@ -659,7 +660,7 @@ Blockly.Block.prototype.getNextBlock = function() {
  * Returns the block connected to the previous connection.
  * @return {?Blockly.Block} The previous statement block or null.
  */
-Blockly.Block.prototype.getPreviousBlock = function() {
+Block.prototype.getPreviousBlock = function() {
   return this.previousConnection && this.previousConnection.targetBlock();
 };
 
@@ -669,7 +670,7 @@ Blockly.Block.prototype.getPreviousBlock = function() {
  * @return {?Blockly.Connection} The first statement connection or null.
  * @package
  */
-Blockly.Block.prototype.getFirstStatementConnection = function() {
+Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
         input.connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
@@ -684,7 +685,7 @@ Blockly.Block.prototype.getFirstStatementConnection = function() {
  * This will return itself if this block is at the top level.
  * @return {!Blockly.Block} The root block.
  */
-Blockly.Block.prototype.getRootBlock = function() {
+Block.prototype.getRootBlock = function() {
   let rootBlock;
   let block = this;
   do {
@@ -701,7 +702,7 @@ Blockly.Block.prototype.getRootBlock = function() {
  * @return {!Blockly.Block} The top block in a stack.
  * @package
  */
-Blockly.Block.prototype.getTopStackBlock = function() {
+Block.prototype.getTopStackBlock = function() {
   let block = this;
   let previous;
   do {
@@ -718,7 +719,7 @@ Blockly.Block.prototype.getTopStackBlock = function() {
  * @param {boolean} ordered Sort the list if true.
  * @return {!Array<!Blockly.Block>} Array of blocks.
  */
-Blockly.Block.prototype.getChildren = function(ordered) {
+Block.prototype.getChildren = function(ordered) {
   if (!ordered) {
     return this.childBlocks_;
   }
@@ -743,7 +744,7 @@ Blockly.Block.prototype.getChildren = function(ordered) {
  * @param {Blockly.Block} newParent New parent block.
  * @package
  */
-Blockly.Block.prototype.setParent = function(newParent) {
+Block.prototype.setParent = function(newParent) {
   if (newParent === this.parentBlock_) {
     return;
   }
@@ -792,7 +793,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
  * @param {boolean} ordered Sort the list if true.
  * @return {!Array<!Blockly.Block>} Flattened array of blocks.
  */
-Blockly.Block.prototype.getDescendants = function(ordered) {
+Block.prototype.getDescendants = function(ordered) {
   const blocks = [this];
   const childBlocks = this.getChildren(ordered);
   for (let child, i = 0; (child = childBlocks[i]); i++) {
@@ -805,7 +806,7 @@ Blockly.Block.prototype.getDescendants = function(ordered) {
  * Get whether this block is deletable or not.
  * @return {boolean} True if deletable.
  */
-Blockly.Block.prototype.isDeletable = function() {
+Block.prototype.isDeletable = function() {
   return this.deletable_ && !this.isShadow_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
@@ -814,7 +815,7 @@ Blockly.Block.prototype.isDeletable = function() {
  * Set whether this block is deletable or not.
  * @param {boolean} deletable True if deletable.
  */
-Blockly.Block.prototype.setDeletable = function(deletable) {
+Block.prototype.setDeletable = function(deletable) {
   this.deletable_ = deletable;
 };
 
@@ -822,7 +823,7 @@ Blockly.Block.prototype.setDeletable = function(deletable) {
  * Get whether this block is movable or not.
  * @return {boolean} True if movable.
  */
-Blockly.Block.prototype.isMovable = function() {
+Block.prototype.isMovable = function() {
   return this.movable_ && !this.isShadow_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
@@ -831,7 +832,7 @@ Blockly.Block.prototype.isMovable = function() {
  * Set whether this block is movable or not.
  * @param {boolean} movable True if movable.
  */
-Blockly.Block.prototype.setMovable = function(movable) {
+Block.prototype.setMovable = function(movable) {
   this.movable_ = movable;
 };
 
@@ -842,7 +843,7 @@ Blockly.Block.prototype.setMovable = function(movable) {
  * type over their maxInstances this block is not duplicatable.
  * @return {boolean} True if duplicatable.
  */
-Blockly.Block.prototype.isDuplicatable = function() {
+Block.prototype.isDuplicatable = function() {
   if (!this.workspace.hasBlockLimits()) {
     return true;
   }
@@ -854,7 +855,7 @@ Blockly.Block.prototype.isDuplicatable = function() {
  * Get whether this block is a shadow block or not.
  * @return {boolean} True if a shadow.
  */
-Blockly.Block.prototype.isShadow = function() {
+Block.prototype.isShadow = function() {
   return this.isShadow_;
 };
 
@@ -863,7 +864,7 @@ Blockly.Block.prototype.isShadow = function() {
  * @param {boolean} shadow True if a shadow.
  * @package
  */
-Blockly.Block.prototype.setShadow = function(shadow) {
+Block.prototype.setShadow = function(shadow) {
   this.isShadow_ = shadow;
 };
 
@@ -871,7 +872,7 @@ Blockly.Block.prototype.setShadow = function(shadow) {
  * Get whether this block is an insertion marker block or not.
  * @return {boolean} True if an insertion marker.
  */
-Blockly.Block.prototype.isInsertionMarker = function() {
+Block.prototype.isInsertionMarker = function() {
   return this.isInsertionMarker_;
 };
 
@@ -881,7 +882,7 @@ Blockly.Block.prototype.isInsertionMarker = function() {
  * @param {boolean} insertionMarker True if an insertion marker.
  * @package
  */
-Blockly.Block.prototype.setInsertionMarker = function(insertionMarker) {
+Block.prototype.setInsertionMarker = function(insertionMarker) {
   this.isInsertionMarker_ = insertionMarker;
 };
 
@@ -889,7 +890,7 @@ Blockly.Block.prototype.setInsertionMarker = function(insertionMarker) {
  * Get whether this block is editable or not.
  * @return {boolean} True if editable.
  */
-Blockly.Block.prototype.isEditable = function() {
+Block.prototype.isEditable = function() {
   return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
@@ -897,7 +898,7 @@ Blockly.Block.prototype.isEditable = function() {
  * Set whether this block is editable or not.
  * @param {boolean} editable True if editable.
  */
-Blockly.Block.prototype.setEditable = function(editable) {
+Block.prototype.setEditable = function(editable) {
   this.editable_ = editable;
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
@@ -910,7 +911,7 @@ Blockly.Block.prototype.setEditable = function(editable) {
  * Returns if this block has been disposed of / deleted.
  * @return {boolean} True if this block has been disposed of / deleted.
  */
-Blockly.Block.prototype.isDisposed = function() {
+Block.prototype.isDisposed = function() {
   return this.disposed;
 };
 
@@ -923,7 +924,7 @@ Blockly.Block.prototype.isDisposed = function() {
  * @return {?Blockly.Connection} The matching connection on this block, or null.
  * @package
  */
-Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {
+Block.prototype.getMatchingConnection = function(otherBlock, conn) {
   const connections = this.getConnections_(true);
   const otherConnections = otherBlock.getConnections_(true);
   if (connections.length != otherConnections.length) {
@@ -942,7 +943,7 @@ Blockly.Block.prototype.getMatchingConnection = function(otherBlock, conn) {
  * @param {string|Function} url URL string for block help, or function that
  *     returns a URL.  Null for no help.
  */
-Blockly.Block.prototype.setHelpUrl = function(url) {
+Block.prototype.setHelpUrl = function(url) {
   this.helpUrl = url;
 };
 
@@ -952,7 +953,7 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
  *     that returns the text for the tooltip, or a parent object whose tooltip
  *     will be used. To not display a tooltip pass the empty string.
  */
-Blockly.Block.prototype.setTooltip = function(newTip) {
+Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
 };
 
@@ -960,7 +961,7 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  * Returns the tooltip text for this block.
  * @return {!string} The tooltip text for this block.
  */
-Blockly.Block.prototype.getTooltip = function() {
+Block.prototype.getTooltip = function() {
   return Blockly.Tooltip.getTooltipOfObject(this);
 };
 
@@ -968,7 +969,7 @@ Blockly.Block.prototype.getTooltip = function() {
  * Get the colour of a block.
  * @return {string} #RRGGBB string.
  */
-Blockly.Block.prototype.getColour = function() {
+Block.prototype.getColour = function() {
   return this.colour_;
 };
 
@@ -976,7 +977,7 @@ Blockly.Block.prototype.getColour = function() {
  * Get the name of the block style.
  * @return {string} Name of the block style.
  */
-Blockly.Block.prototype.getStyleName = function() {
+Block.prototype.getStyleName = function() {
   return this.styleName_;
 };
 
@@ -984,7 +985,7 @@ Blockly.Block.prototype.getStyleName = function() {
  * Get the HSV hue value of a block.  Null if hue not set.
  * @return {?number} Hue value (0-360).
  */
-Blockly.Block.prototype.getHue = function() {
+Block.prototype.getHue = function() {
   return this.hue_;
 };
 
@@ -993,7 +994,7 @@ Blockly.Block.prototype.getHue = function() {
  * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
  *     or a message reference string pointing to one of those two values.
  */
-Blockly.Block.prototype.setColour = function(colour) {
+Block.prototype.setColour = function(colour) {
   const parsed = Blockly.utils.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
@@ -1003,7 +1004,7 @@ Blockly.Block.prototype.setColour = function(colour) {
  * Set the style and colour values of a block.
  * @param {string} blockStyleName Name of the block style.
  */
-Blockly.Block.prototype.setStyle = function(blockStyleName) {
+Block.prototype.setStyle = function(blockStyleName) {
   this.styleName_ = blockStyleName;
 };
 
@@ -1016,7 +1017,7 @@ Blockly.Block.prototype.setStyle = function(blockStyleName) {
  *     when the block's workspace changes.
  * @throws {Error} if onchangeFn is not falsey and not a function.
  */
-Blockly.Block.prototype.setOnChange = function(onchangeFn) {
+Block.prototype.setOnChange = function(onchangeFn) {
   if (onchangeFn && typeof onchangeFn != 'function') {
     throw Error('onchange must be a function.');
   }
@@ -1035,9 +1036,9 @@ Blockly.Block.prototype.setOnChange = function(onchangeFn) {
  * @param {string} name The name of the field.
  * @return {?Blockly.Field} Named field, or null if field does not exist.
  */
-Blockly.Block.prototype.getField = function(name) {
+Block.prototype.getField = function(name) {
   if (typeof name !== 'string') {
-    throw TypeError('Blockly.Block.prototype.getField expects a string ' +
+    throw TypeError('Block.prototype.getField expects a string ' +
       'with the field name but received ' +
       (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
       ' instead');
@@ -1056,7 +1057,7 @@ Blockly.Block.prototype.getField = function(name) {
  * Return all variables referenced by this block.
  * @return {!Array<string>} List of variable names.
  */
-Blockly.Block.prototype.getVars = function() {
+Block.prototype.getVars = function() {
   const vars = [];
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
@@ -1073,7 +1074,7 @@ Blockly.Block.prototype.getVars = function() {
  * @return {!Array<!Blockly.VariableModel>} List of variable models.
  * @package
  */
-Blockly.Block.prototype.getVarModels = function() {
+Block.prototype.getVarModels = function() {
   const vars = [];
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
@@ -1097,7 +1098,7 @@ Blockly.Block.prototype.getVarModels = function() {
  * @param {!Blockly.VariableModel} variable The variable being renamed.
  * @package
  */
-Blockly.Block.prototype.updateVarName = function(variable) {
+Block.prototype.updateVarName = function(variable) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
       if (field.referencesVariables() &&
@@ -1115,7 +1116,7 @@ Blockly.Block.prototype.updateVarName = function(variable) {
  * @param {string} newId ID of new variable.  May be the same as oldId, but with
  *     an updated name.
  */
-Blockly.Block.prototype.renameVarById = function(oldId, newId) {
+Block.prototype.renameVarById = function(oldId, newId) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
       if (field.referencesVariables() &&
@@ -1131,7 +1132,7 @@ Blockly.Block.prototype.renameVarById = function(oldId, newId) {
  * @param {string} name The name of the field.
  * @return {*} Value of the field or null if field does not exist.
  */
-Blockly.Block.prototype.getFieldValue = function(name) {
+Block.prototype.getFieldValue = function(name) {
   const field = this.getField(name);
   if (field) {
     return field.getValue();
@@ -1144,7 +1145,7 @@ Blockly.Block.prototype.getFieldValue = function(name) {
  * @param {*} newValue The value to set.
  * @param {string} name The name of the field to set the value of.
  */
-Blockly.Block.prototype.setFieldValue = function(newValue, name) {
+Block.prototype.setFieldValue = function(newValue, name) {
   const field = this.getField(name);
   if (!field) {
     throw Error('Field "' + name + '" not found.');
@@ -1158,7 +1159,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
  * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
-Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
+Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   if (newBoolean) {
     if (opt_check === undefined) {
       opt_check = null;
@@ -1190,7 +1191,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
-Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
+Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   if (newBoolean) {
     if (opt_check === undefined) {
       opt_check = null;
@@ -1219,7 +1220,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
-Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
+Block.prototype.setOutput = function(newBoolean, opt_check) {
   if (newBoolean) {
     if (opt_check === undefined) {
       opt_check = null;
@@ -1248,7 +1249,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
  * Set whether value inputs are arranged horizontally or vertically.
  * @param {boolean} newBoolean True if inputs are horizontal.
  */
-Blockly.Block.prototype.setInputsInline = function(newBoolean) {
+Block.prototype.setInputsInline = function(newBoolean) {
   if (this.inputsInline != newBoolean) {
     Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
@@ -1260,7 +1261,7 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
  * Get whether value inputs are arranged horizontally or vertically.
  * @return {boolean} True if inputs are horizontal.
  */
-Blockly.Block.prototype.getInputsInline = function() {
+Block.prototype.getInputsInline = function() {
   if (this.inputsInline != undefined) {
     // Set explicitly.
     return this.inputsInline;
@@ -1287,7 +1288,7 @@ Blockly.Block.prototype.getInputsInline = function() {
  * Set the block's output shape.
  * @param {?number} outputShape Value representing an output shape.
  */
-Blockly.Block.prototype.setOutputShape = function(outputShape) {
+Block.prototype.setOutputShape = function(outputShape) {
   this.outputShape_ = outputShape;
 };
 
@@ -1295,7 +1296,7 @@ Blockly.Block.prototype.setOutputShape = function(outputShape) {
  * Get the block's output shape.
  * @return {?number} Value representing output shape if one exists.
  */
-Blockly.Block.prototype.getOutputShape = function() {
+Block.prototype.getOutputShape = function() {
   return this.outputShape_;
 };
 
@@ -1303,7 +1304,7 @@ Blockly.Block.prototype.getOutputShape = function() {
  * Get whether this block is enabled or not.
  * @return {boolean} True if enabled.
  */
-Blockly.Block.prototype.isEnabled = function() {
+Block.prototype.isEnabled = function() {
   return !this.disabled;
 };
 
@@ -1311,7 +1312,7 @@ Blockly.Block.prototype.isEnabled = function() {
  * Set whether the block is enabled or not.
  * @param {boolean} enabled True if enabled.
  */
-Blockly.Block.prototype.setEnabled = function(enabled) {
+Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
     Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'disabled', null, this.disabled, !enabled));
@@ -1324,7 +1325,7 @@ Blockly.Block.prototype.setEnabled = function(enabled) {
  * The block's own disabled property is not considered.
  * @return {boolean} True if disabled.
  */
-Blockly.Block.prototype.getInheritedDisabled = function() {
+Block.prototype.getInheritedDisabled = function() {
   let ancestor = this.getSurroundParent();
   while (ancestor) {
     if (ancestor.disabled) {
@@ -1340,7 +1341,7 @@ Blockly.Block.prototype.getInheritedDisabled = function() {
  * Get whether the block is collapsed or not.
  * @return {boolean} True if collapsed.
  */
-Blockly.Block.prototype.isCollapsed = function() {
+Block.prototype.isCollapsed = function() {
   return this.collapsed_;
 };
 
@@ -1348,7 +1349,7 @@ Blockly.Block.prototype.isCollapsed = function() {
  * Set whether the block is collapsed or not.
  * @param {boolean} collapsed True if collapsed.
  */
-Blockly.Block.prototype.setCollapsed = function(collapsed) {
+Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
     Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
@@ -1363,7 +1364,7 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
  *     empty field. If not specified, '?' is used.
  * @return {string} Text of block.
  */
-Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
+Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   let text = [];
   const emptyFieldPlaceholder = opt_emptyToken || '?';
 
@@ -1476,7 +1477,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendValueInput = function(name) {
+Block.prototype.appendValueInput = function(name) {
   return this.appendInput_(Blockly.inputTypes.VALUE, name);
 };
 
@@ -1486,7 +1487,7 @@ Blockly.Block.prototype.appendValueInput = function(name) {
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendStatementInput = function(name) {
+Block.prototype.appendStatementInput = function(name) {
   return this.appendInput_(Blockly.inputTypes.STATEMENT, name);
 };
 
@@ -1496,7 +1497,7 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
  *     this input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
-Blockly.Block.prototype.appendDummyInput = function(opt_name) {
+Block.prototype.appendDummyInput = function(opt_name) {
   return this.appendInput_(Blockly.inputTypes.DUMMY, opt_name || '');
 };
 
@@ -1505,7 +1506,7 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * JSON description.
  * @param {!Object} json Structured data describing the block.
  */
-Blockly.Block.prototype.jsonInit = function(json) {
+Block.prototype.jsonInit = function(json) {
   const warningPrefix = json['type'] ? 'Block "' + json['type'] + '": ' : '';
 
   // Validate inputs.
@@ -1595,7 +1596,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
  * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
+Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
   if ('colour' in json) {
     if (json['colour'] === undefined) {
       console.warn(warningPrefix + 'Undefined colour value.');
@@ -1616,7 +1617,7 @@ Blockly.Block.prototype.jsonInitColour_ = function(json, warningPrefix) {
  * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
+Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
   const blockStyleName = json['style'];
   try {
     this.setStyle(blockStyleName);
@@ -1634,7 +1635,7 @@ Blockly.Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
  * @param {!Object} mixinObj The key/values pairs to add to this block object.
  * @param {boolean=} opt_disableCheck Option flag to disable overwrite checks.
  */
-Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
+Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
   if (opt_disableCheck !== undefined && typeof opt_disableCheck != 'boolean') {
     throw Error('opt_disableCheck must be a boolean if provided');
   }
@@ -1663,7 +1664,7 @@ Blockly.Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
+Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
     warningPrefix) {
   const tokens = Blockly.utils.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
@@ -1699,7 +1700,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
  * @param {number} argsCount The number of args that need to be referred to.
  * @private
  */
-Blockly.Block.prototype.validateTokens_ = function(tokens, argsCount) {
+Block.prototype.validateTokens_ = function(tokens, argsCount) {
   const visitedArgsHash = [];
   let visitedArgsCount = 0;
   for (let i = 0; i < tokens.length; i++) {
@@ -1736,7 +1737,7 @@ Blockly.Block.prototype.validateTokens_ = function(tokens, argsCount) {
  *     to the block.
  * @private
  */
-Blockly.Block.prototype.interpolateArguments_ =
+Block.prototype.interpolateArguments_ =
     function(tokens, args, lastDummyAlign) {
       const elements = [];
       for (let i = 0; i < tokens.length; i++) {
@@ -1776,7 +1777,7 @@ Blockly.Block.prototype.interpolateArguments_ =
  *     couldn't be created.
  * @private
  */
-Blockly.Block.prototype.fieldFromJson_ = function(element) {
+Block.prototype.fieldFromJson_ = function(element) {
   const field = Blockly.fieldRegistry.fromJson(element);
   if (!field && element['alt']) {
     if (typeof element['alt'] == 'string') {
@@ -1798,7 +1799,7 @@ Blockly.Block.prototype.fieldFromJson_ = function(element) {
  *     could not be created for some reason (should never happen).
  * @private
  */
-Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
+Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   const alignmentLookup = {
     'LEFT': Blockly.constants.ALIGN.LEFT,
     'RIGHT': Blockly.constants.ALIGN.RIGHT,
@@ -1845,7 +1846,7 @@ Blockly.Block.prototype.inputFromJson_ = function(element, warningPrefix) {
  *     false otherwise.
  * @private
  */
-Blockly.Block.prototype.isInputKeyword_ = function(str) {
+Block.prototype.isInputKeyword_ = function(str) {
   return str == 'input_value' ||
       str == 'input_statement' ||
       str == 'input_dummy';
@@ -1858,7 +1859,7 @@ Blockly.Block.prototype.isInputKeyword_ = function(str) {
  * @return {?{text: string, type: string}} The JSON definition or null.
  * @private
  */
-Blockly.Block.prototype.stringToFieldJson_ = function(str) {
+Block.prototype.stringToFieldJson_ = function(str) {
   str = str.trim();
   if (str) {
     return {
@@ -1877,7 +1878,7 @@ Blockly.Block.prototype.stringToFieldJson_ = function(str) {
  * @return {!Blockly.Input} The input object created.
  * @protected
  */
-Blockly.Block.prototype.appendInput_ = function(type, name) {
+Block.prototype.appendInput_ = function(type, name) {
   let connection = null;
   if (type == Blockly.inputTypes.VALUE ||
       type == Blockly.inputTypes.STATEMENT) {
@@ -1898,7 +1899,7 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
  * @param {?string} refName Name of input that should be after the moved input,
  *   or null to be the input at the end.
  */
-Blockly.Block.prototype.moveInputBefore = function(name, refName) {
+Block.prototype.moveInputBefore = function(name, refName) {
   if (name == refName) {
     return;
   }
@@ -1932,7 +1933,7 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
  * @param {number} inputIndex Index of the input to move.
  * @param {number} refIndex Index of input that should be after the moved input.
  */
-Blockly.Block.prototype.moveNumberedInputBefore = function(
+Block.prototype.moveNumberedInputBefore = function(
     inputIndex, refIndex) {
   // Validate arguments.
   if (inputIndex == refIndex) {
@@ -1961,7 +1962,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
  * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */
-Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
+Block.prototype.removeInput = function(name, opt_quiet) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
       if (input.type == Blockly.inputTypes.STATEMENT) {
@@ -1983,7 +1984,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
  * @param {string} name The name of the input.
  * @return {?Blockly.Input} The input object, or null if input does not exist.
  */
-Blockly.Block.prototype.getInput = function(name) {
+Block.prototype.getInput = function(name) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
       return input;
@@ -1999,7 +2000,7 @@ Blockly.Block.prototype.getInput = function(name) {
  * @return {?Blockly.Block} The attached value block, or null if the input is
  *     either disconnected or if the input does not exist.
  */
-Blockly.Block.prototype.getInputTargetBlock = function(name) {
+Block.prototype.getInputTargetBlock = function(name) {
   const input = this.getInput(name);
   return input && input.connection && input.connection.targetBlock();
 };
@@ -2008,7 +2009,7 @@ Blockly.Block.prototype.getInputTargetBlock = function(name) {
  * Returns the comment on this block (or null if there is no comment).
  * @return {?string} Block's comment.
  */
-Blockly.Block.prototype.getCommentText = function() {
+Block.prototype.getCommentText = function() {
   return this.commentModel.text;
 };
 
@@ -2016,7 +2017,7 @@ Blockly.Block.prototype.getCommentText = function() {
  * Set this block's comment text.
  * @param {?string} text The text, or null to delete.
  */
-Blockly.Block.prototype.setCommentText = function(text) {
+Block.prototype.setCommentText = function(text) {
   if (this.commentModel.text == text) {
     return;
   }
@@ -2032,7 +2033,7 @@ Blockly.Block.prototype.setCommentText = function(text) {
  * @param {string=} _opt_id An optional ID for the warning text to be able to
  *     maintain multiple warnings.
  */
-Blockly.Block.prototype.setWarningText = function(_text, _opt_id) {
+Block.prototype.setWarningText = function(_text, _opt_id) {
   // NOP.
 };
 
@@ -2041,7 +2042,7 @@ Blockly.Block.prototype.setWarningText = function(_text, _opt_id) {
  * @param {Blockly.Mutator} _mutator A mutator dialog instance or null to
  *     remove.
  */
-Blockly.Block.prototype.setMutator = function(_mutator) {
+Block.prototype.setMutator = function(_mutator) {
   // NOP.
 };
 
@@ -2050,7 +2051,7 @@ Blockly.Block.prototype.setMutator = function(_mutator) {
  * drawing surface's origin (0,0), in workspace units.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
-Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
+Block.prototype.getRelativeToSurfaceXY = function() {
   return this.xy_;
 };
 
@@ -2059,7 +2060,7 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dx Horizontal offset, in workspace units.
  * @param {number} dy Vertical offset, in workspace units.
  */
-Blockly.Block.prototype.moveBy = function(dx, dy) {
+Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
@@ -2075,7 +2076,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
  * @return {!Blockly.Connection} A new connection of the specified type.
  * @protected
  */
-Blockly.Block.prototype.makeConnection_ = function(type) {
+Block.prototype.makeConnection_ = function(type) {
   return new Blockly.Connection(this, type);
 };
 
@@ -2086,7 +2087,7 @@ Blockly.Block.prototype.makeConnection_ = function(type) {
  *     whether shadow blocks are counted as filled. Defaults to true.
  * @return {boolean} True if all inputs are filled, false otherwise.
  */
-Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
+Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
   // Account for the shadow block filledness toggle.
   if (opt_shadowBlocksAreFilled === undefined) {
     opt_shadowBlocksAreFilled = true;
@@ -2124,10 +2125,12 @@ Blockly.Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
  * child blocks), use [toString()]{@link Blockly.Block#toString}.
  * @return {string} The description.
  */
-Blockly.Block.prototype.toDevString = function() {
+Block.prototype.toDevString = function() {
   let msg = this.type ? '"' + this.type + '" block' : 'Block';
   if (this.id) {
     msg += ' (id="' + this.id + '")';
   }
   return msg;
 };
+
+exports = Block;

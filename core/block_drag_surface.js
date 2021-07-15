@@ -85,8 +85,7 @@ BlockDragSurfaceSvg.prototype.surfaceXY_ = null;
  * @type {!Coordinate}
  * @private
  */
-BlockDragSurfaceSvg.prototype.childSurfaceXY_ =
-    new Coordinate(0, 0);
+BlockDragSurfaceSvg.prototype.childSurfaceXY_ = new Coordinate(0, 0);
 
 /**
  * Create the drag surface and inject it into the container.
@@ -104,8 +103,7 @@ BlockDragSurfaceSvg.prototype.createDom = function() {
         'class': 'blocklyBlockDragSurface'
       },
       this.container_);
-  this.dragGroup_ =
-      createSvgElement(G, {}, this.SVG_);
+  this.dragGroup_ = createSvgElement(G, {}, this.SVG_);
 };
 
 /**
@@ -131,8 +129,7 @@ BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
  * @param {number} y Y translation in pixel coordinates.
  * @param {number} scale Scale of the group.
  */
-BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(
-    x, y, scale) {
+BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, scale) {
   this.scale_ = scale;
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being dragged on the drag surface.
@@ -160,8 +157,7 @@ BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  setCssTransform(
-      this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+  setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
 };
 
 /**
@@ -185,8 +181,7 @@ BlockDragSurfaceSvg.prototype.translateBy = function(deltaX, deltaY) {
  * @param {number} y Y translation for the entire surface.
  */
 BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  this.surfaceXY_ =
-      new Coordinate(x * this.scale_, y * this.scale_);
+  this.surfaceXY_ = new Coordinate(x * this.scale_, y * this.scale_);
   this.translateSurfaceInternal_();
 };
 
@@ -220,7 +215,8 @@ BlockDragSurfaceSvg.prototype.getSvgRoot = function() {
 /**
  * Get the current blocks on the drag surface, if any (primarily
  * for BlockSvg.getRelativeToSurfaceXY).
- * @return {?Element} Drag surface block DOM element, or null if no blocks exist.
+ * @return {?Element} Drag surface block DOM element, or null if no blocks
+ *     exist.
  */
 BlockDragSurfaceSvg.prototype.getCurrentBlock = function() {
   return /** @type {Element} */ (this.dragGroup_.firstChild);

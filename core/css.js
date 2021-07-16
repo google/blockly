@@ -14,7 +14,8 @@
  * @name Blockly.Css
  * @namespace
  */
-goog.provide('Blockly.Css');
+goog.module('Blockly.Css');
+goog.module.declareLegacyNamespace();
 
 
 /**
@@ -22,7 +23,7 @@ goog.provide('Blockly.Css');
  * @type {boolean}
  * @private
  */
-Blockly.Css.injected_ = false;
+let injected = false;
 
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
@@ -30,12 +31,12 @@ Blockly.Css.injected_ = false;
  * The provided array of CSS will be destroyed by this function.
  * @param {!Array<string>} cssArray Array of CSS strings.
  */
-Blockly.Css.register = function(cssArray) {
-  if (Blockly.Css.injected_) {
+const register = function(cssArray) {
+  if (injected) {
     throw Error('CSS already injected');
   }
-  // Concatenate cssArray onto Blockly.Css.CONTENT.
-  Array.prototype.push.apply(Blockly.Css.CONTENT, cssArray);
+  // Concatenate cssArray onto CONTENT.
+  Array.prototype.push.apply(CONTENT, cssArray);
   cssArray.length = 0;  // Garbage collect provided CSS content.
 };
 
@@ -49,14 +50,14 @@ Blockly.Css.register = function(cssArray) {
  *     (providing CSS becomes the document's responsibility).
  * @param {string} pathToMedia Path from page to the Blockly media directory.
  */
-Blockly.Css.inject = function(hasCss, pathToMedia) {
+const inject = function(hasCss, pathToMedia) {
   // Only inject the CSS once.
-  if (Blockly.Css.injected_) {
+  if (injected) {
     return;
   }
-  Blockly.Css.injected_ = true;
-  let text = Blockly.Css.CONTENT.join('\n');
-  Blockly.Css.CONTENT.length = 0;  // Garbage collect CSS content.
+  injected = true;
+  let text = CONTENT.join('\n');
+  CONTENT.length = 0;  // Garbage collect CSS content.
   if (!hasCss) {
     return;
   }
@@ -75,7 +76,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
 /**
  * Array making up the CSS content for Blockly.
  */
-Blockly.Css.CONTENT = [
+const CONTENT = [
 `.blocklySvg {
   background-color: #fff;
   outline: none;
@@ -552,3 +553,5 @@ Blockly.Css.CONTENT = [
   margin-right: -24px;
 }`,
 ];
+
+exports = {register, inject, CONTENT};

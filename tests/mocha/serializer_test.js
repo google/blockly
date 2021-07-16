@@ -6,12 +6,14 @@
 
 
 // TODO: Move this into samples as part of the dev-tools package.
+// TODO: Fix up typing of SerializerTestCase & SerializerTestSuite to match
+//     decision in google/blockly-samples#819.
 /**
  * Constructs a serializer test.
  * @param {string} title The title of this testcase.
  * @param {string} xml The XML to use for the round-trip test.
  * @constructor
- * @extends {TestCase}
+ * @implements {TestCase}
  */
 function SerializerTestCase(title, xml) {
   this.title = title;
@@ -28,7 +30,7 @@ SerializerTestCase.prototype.xml = '';
 /**
  * Constructs a serializer test suite.
  * @param {string} title The title of this test suite.
- * @extends {TestSuite}
+ * @implements {TestSuite<SerializerTestCase>}
  */
 function SerializerTestSuite(title) {
   this.title = title;
@@ -37,6 +39,7 @@ SerializerTestSuite.prototype = new testHelpers.TestSuite();
 
 var Serializer = new SerializerTestSuite('Serializer');
 
+// TODO: Make sure all of these properties are documented ad exported properly.
 Serializer.Empty = new SerializerTestCase('Empty',
     '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
 );

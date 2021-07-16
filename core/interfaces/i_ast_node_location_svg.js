@@ -1,0 +1,38 @@
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The interface for an AST node location SVG.
+ * @author samelh@google.com (Sam El-Husseini)
+ */
+
+'use strict';
+
+goog.provide('Blockly.IASTNodeLocationSvg');
+
+goog.require('Blockly.IASTNodeLocation');
+
+
+/**
+ * An AST node location SVG interface.
+ * @interface
+ * @extends {Blockly.IASTNodeLocation}
+ */
+Blockly.IASTNodeLocationSvg = function() {};
+
+/**
+ * Add the marker SVG to this node's SVG group.
+ * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
+ *     SVG group.
+ */
+Blockly.IASTNodeLocationSvg.prototype.setMarkerSvg;
+
+/**
+ * Add the cursor SVG to this node's SVG group.
+ * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
+ *     SVG group.
+ */
+Blockly.IASTNodeLocationSvg.prototype.setCursorSvg;

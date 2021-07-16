@@ -5,8 +5,8 @@
  */
 
 /**
- * @fileoverview An object that encapsulates logic for checking whether a potential
- * connection is safe and valid.
+ * @fileoverview An object that encapsulates logic for checking whether a
+ * potential connection is safe and valid.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -28,8 +28,7 @@ goog.require('Blockly.constants');
  * @implements {IConnectionChecker}
  * @constructor
  */
-const ConnectionChecker = function() {
-};
+const ConnectionChecker = function() {};
 
 /**
  * Check whether the current connection can connect with the target
@@ -43,8 +42,8 @@ const ConnectionChecker = function() {
  * @return {boolean} Whether the connection is legal.
  * @public
  */
-ConnectionChecker.prototype.canConnect = function(a, b,
-    isDragging, opt_distance) {
+ConnectionChecker.prototype.canConnect = function(
+    a, b, isDragging, opt_distance) {
   return this.canConnectWithReason(a, b, isDragging, opt_distance) ==
       Connection.CAN_CONNECT;
 };
@@ -79,8 +78,7 @@ ConnectionChecker.prototype.canConnectWithReason = function(
   if (isDragging &&
       !this.doDragChecks(
           /** @type {!RenderedConnection} **/ (a),
-          /** @type {!RenderedConnection} **/ (b),
-          opt_distance || 0)) {
+          /** @type {!RenderedConnection} **/ (b), opt_distance || 0)) {
     return Connection.REASON_DRAG_CHECKS_FAILED;
   }
 
@@ -96,8 +94,7 @@ ConnectionChecker.prototype.canConnectWithReason = function(
  * @return {string} A developer-readable error string.
  * @public
  */
-ConnectionChecker.prototype.getErrorMessage = function(errorCode,
-    a, b) {
+ConnectionChecker.prototype.getErrorMessage = function(errorCode, a, b) {
   switch (errorCode) {
     case Connection.REASON_SELF_CONNECTION:
       return 'Attempted to connect a block to itself.';
@@ -112,7 +109,8 @@ ConnectionChecker.prototype.getErrorMessage = function(errorCode,
       const connOne = /** @type {!Connection} **/ (a);
       const connTwo = /** @type {!Connection} **/ (b);
       let msg = 'Connection checks failed. ';
-      msg += connOne + ' expected ' + connOne.getCheck() + ', found ' + connTwo.getCheck();
+      msg += connOne + ' expected ' + connOne.getCheck() + ', found ' +
+          connTwo.getCheck();
       return msg;
     }
     case Connection.REASON_SHADOW_PARENT:
@@ -207,8 +205,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
     case connectionTypes.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
-      if ((b.isConnected() &&
-          !b.targetBlock().isInsertionMarker()) ||
+      if ((b.isConnected() && !b.targetBlock().isInsertionMarker()) ||
           a.isConnected()) {
         return false;
       }
@@ -218,8 +215,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
-      if (b.isConnected() &&
-          !b.targetBlock().isMovable() &&
+      if (b.isConnected() && !b.targetBlock().isMovable() &&
           !b.targetBlock().isShadow()) {
         return false;
       }
@@ -230,10 +226,8 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal
       // statement is allowed.
-      if (b.isConnected() &&
-          !a.getSourceBlock().nextConnection &&
-          !b.targetBlock().isShadow() &&
-          b.targetBlock().nextConnection) {
+      if (b.isConnected() && !a.getSourceBlock().nextConnection &&
+          !b.targetBlock().isShadow() && b.targetBlock().nextConnection) {
         return false;
       }
       break;
@@ -287,7 +281,7 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   return !targetBlock.getPreviousBlock();
 };
 
-registry.register(registry.Type.CONNECTION_CHECKER,
-    registry.DEFAULT, ConnectionChecker);
+registry.register(
+    registry.Type.CONNECTION_CHECKER, registry.DEFAULT, ConnectionChecker);
 
 exports = ConnectionChecker;

@@ -13,31 +13,30 @@
 goog.module('Blockly.Connection');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const Block = goog.requireType('Blockly.Block');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const Events = goog.require('Blockly.Events');
+const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
+const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+const Input = goog.requireType('Blockly.Input');
+const Xml = goog.require('Blockly.Xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.IASTNodeLocationWithBlock');
-goog.require('Blockly.utils.deprecation');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.IConnectionChecker');
-goog.requireType('Blockly.Input');
 
 
 /**
  * Class for a connection between blocks.
- * @param {!Blockly.Block} source The block establishing this connection.
+ * @param {!Block} source The block establishing this connection.
  * @param {number} type The type of the connection.
  * @constructor
- * @implements {Blockly.IASTNodeLocationWithBlock}
+ * @implements {IASTNodeLocationWithBlock}
  */
 const Connection = function(source, type) {
   /**
-   * @type {!Blockly.Block}
+   * @type {!Block}
    * @protected
    */
   this.sourceBlock_ = source;
@@ -105,7 +104,7 @@ Connection.prototype.y = 0;
  * @protected
  */
 Connection.prototype.connect_ = function(childConnection) {
-  const INPUT = Blockly.connectionTypes.INPUT_VALUE;
+  const INPUT = connectionTypes.INPUT_VALUE;
   const parentConnection = this;
   const parentBlock = parentConnection.getSourceBlock();
   const childBlock = childConnection.getSourceBlock();
@@ -132,14 +131,14 @@ Connection.prototype.connect_ = function(childConnection) {
 
   // Connect the new connection to the parent.
   let event;
-  if (Blockly.Events.isEnabled()) {
-    event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(childBlock);
+  if (Events.isEnabled()) {
+    event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
   }
   Connection.connectReciprocally_(parentConnection, childConnection);
   childBlock.setParent(parentBlock);
   if (event) {
     event.recordNew();
-    Blockly.Events.fire(event);
+    Events.fire(event);
   }
 
   // Deal with the orphan if it exists.
@@ -180,7 +179,7 @@ Connection.prototype.dispose = function() {
 
 /**
  * Get the source block for this connection.
- * @return {!Blockly.Block} The source block.
+ * @return {!Block} The source block.
  */
 Connection.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
@@ -191,8 +190,8 @@ Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Connection.prototype.isSuperior = function() {
-  return this.type == Blockly.connectionTypes.INPUT_VALUE ||
-      this.type == Blockly.connectionTypes.NEXT_STATEMENT;
+  return this.type == connectionTypes.INPUT_VALUE ||
+      this.type == connectionTypes.NEXT_STATEMENT;
 };
 
 /**
@@ -213,7 +212,7 @@ Connection.prototype.isConnected = function() {
  *     connectionChecker instead.
  */
 Connection.prototype.canConnectWithReason = function(target) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Connection.prototype.canConnectWithReason',
       'July 2020',
       'July 2021',
@@ -232,7 +231,7 @@ Connection.prototype.canConnectWithReason = function(target) {
  *     connectionChecker instead.
  */
 Connection.prototype.checkConnection = function(target) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Connection.prototype.checkConnection',
       'July 2020',
       'July 2021',
@@ -246,7 +245,7 @@ Connection.prototype.checkConnection = function(target) {
 
 /**
  * Get the workspace's connection type checker object.
- * @return {!Blockly.IConnectionChecker} The connection type checker for the
+ * @return {!IConnectionChecker} The connection type checker for the
  *     source block's workspace.
  * @package
  */
@@ -262,7 +261,7 @@ Connection.prototype.getConnectionChecker = function() {
  *     connectionChecker instead.
  */
 Connection.prototype.isConnectionAllowed = function(candidate) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Connection.prototype.isConnectionAllowed',
       'July 2020',
       'July 2021',
@@ -293,9 +292,9 @@ Connection.prototype.connect = function(otherConnection) {
 
   const checker = this.getConnectionChecker();
   if (checker.canConnect(this, otherConnection, false)) {
-    const eventGroup = Blockly.Events.getGroup();
+    const eventGroup = Events.getGroup();
     if (!eventGroup) {
-      Blockly.Events.setGroup(true);
+      Events.setGroup(true);
     }
     // Determine which block is superior (higher in the source stack).
     if (this.isSuperior()) {
@@ -306,7 +305,7 @@ Connection.prototype.connect = function(otherConnection) {
       otherConnection.connect_(this);
     }
     if (!eventGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
   }
 };
@@ -330,8 +329,8 @@ Connection.connectReciprocally_ = function(first, second) {
  * block, if one can be found. If the block has multiple compatible connections
  * (even if they are filled) this returns null. If the block has no compatible
  * connections, this returns null.
- * @param {!Blockly.Block} block The superior block.
- * @param {!Blockly.Block} orphanBlock The inferior block.
+ * @param {!Block} block The superior block.
+ * @param {!Block} orphanBlock The inferior block.
  * @return {?Connection} The suitable connection point on 'block',
  *     or null.
  * @private
@@ -359,8 +358,8 @@ Connection.getSingleConnection_ = function(block, orphanBlock) {
  * are zero or multiple eligible connections, returns null.  Otherwise
  * returns the only input on the last block in the chain.
  * Terminates early for shadow blocks.
- * @param {!Blockly.Block} startBlock The block on which to start the search.
- * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
+ * @param {!Block} startBlock The block on which to start the search.
+ * @param {!Block} orphanBlock The block that is looking for a home.
  * @return {?Connection} The suitable connection point on the chain
  *     of blocks, or null.
  * @private
@@ -370,7 +369,7 @@ Connection.getConnectionForOrphanedOutput_ =
       let newBlock = startBlock;
       let connection;
       while ((connection = Connection.getSingleConnection_(
-          /** @type {!Blockly.Block} */ (newBlock), orphanBlock))) {
+          /** @type {!Block} */ (newBlock), orphanBlock))) {
         newBlock = connection.targetBlock();
         if (!newBlock || newBlock.isShadow()) {
           return connection;
@@ -383,7 +382,7 @@ Connection.getConnectionForOrphanedOutput_ =
  * Returns the connection (starting at the startBlock) which will accept
  * the given connection. This includes compatible connection types and
  * connection checks.
- * @param {!Blockly.Block} startBlock The block on which to start the search.
+ * @param {!Block} startBlock The block on which to start the search.
  * @param {!Connection} orphanConnection The connection that is looking
  *     for a home.
  * @return {?Connection} The suitable connection point on the chain of
@@ -391,7 +390,7 @@ Connection.getConnectionForOrphanedOutput_ =
  */
 Connection.getConnectionForOrphanedConnection =
     function(startBlock, orphanConnection) {
-      if (orphanConnection.type === Blockly.connectionTypes.OUTPUT_VALUE) {
+      if (orphanConnection.type === connectionTypes.OUTPUT_VALUE) {
         return Connection.getConnectionForOrphanedOutput_(
             startBlock, orphanConnection.getSourceBlock());
       }
@@ -429,9 +428,9 @@ Connection.prototype.disconnect = function() {
     parentConnection = otherConnection;
   }
 
-  const eventGroup = Blockly.Events.getGroup();
+  const eventGroup = Events.getGroup();
   if (!eventGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
   this.disconnectInternal_(parentBlock, childBlock);
   if (!childBlock.isShadow()) {
@@ -439,21 +438,21 @@ Connection.prototype.disconnect = function() {
     parentConnection.respawnShadow_();
   }
   if (!eventGroup) {
-    Blockly.Events.setGroup(false);
+    Events.setGroup(false);
   }
 };
 
 /**
  * Disconnect two blocks that are connected by this connection.
- * @param {!Blockly.Block} parentBlock The superior block.
- * @param {!Blockly.Block} childBlock The inferior block.
+ * @param {!Block} parentBlock The superior block.
+ * @param {!Block} childBlock The inferior block.
  * @protected
  */
 Connection.prototype.disconnectInternal_ = function(parentBlock,
     childBlock) {
   let event;
-  if (Blockly.Events.isEnabled()) {
-    event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(childBlock);
+  if (Events.isEnabled()) {
+    event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
   }
   const otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;
@@ -461,7 +460,7 @@ Connection.prototype.disconnectInternal_ = function(parentBlock,
   childBlock.setParent(null);
   if (event) {
     event.recordNew();
-    Blockly.Events.fire(event);
+    Events.fire(event);
   }
 };
 
@@ -473,7 +472,7 @@ Connection.prototype.respawnShadow_ = function() {
   const parentBlock = this.getSourceBlock();
   const shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow) {
-    const blockShadow = Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
+    const blockShadow = Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
       this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
@@ -486,7 +485,7 @@ Connection.prototype.respawnShadow_ = function() {
 
 /**
  * Returns the block that this connection connects to.
- * @return {?Blockly.Block} The connected block or null if none is connected.
+ * @return {?Block} The connected block or null if none is connected.
  */
 Connection.prototype.targetBlock = function() {
   if (this.isConnected()) {
@@ -504,7 +503,7 @@ Connection.prototype.targetBlock = function() {
  *     connectionChecker instead.
  */
 Connection.prototype.checkType = function(otherConnection) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Connection.prototype.checkType',
       'October 2019',
       'January 2021',
@@ -524,7 +523,7 @@ Connection.prototype.checkType = function(otherConnection) {
  * @suppress {unusedPrivateMembers}
  */
 Connection.prototype.checkType_ = function(otherConnection) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Connection.prototype.checkType_',
       'October 2019',
       'January 2021',
@@ -603,8 +602,8 @@ Connection.prototype.setShadowDom = function(shadow) {
  */
 Connection.prototype.getShadowDom = function(returnCurrent) {
   return (returnCurrent && this.targetBlock().isShadow()) ?
-      /** @type {!Element} */ (Blockly.Xml.blockToDom(
-          /** @type {!Blockly.Block} */ (this.targetBlock()))) :
+      /** @type {!Element} */ (Xml.blockToDom(
+          /** @type {!Block} */ (this.targetBlock()))) :
       this.shadowDom_;
 };
 
@@ -626,7 +625,7 @@ Connection.prototype.neighbours = function(_maxLimit) {
 
 /**
  * Get the parent input of a connection.
- * @return {?Blockly.Input} The input that the connection belongs to or null if
+ * @return {?Input} The input that the connection belongs to or null if
  *     no parent exists.
  * @package
  */

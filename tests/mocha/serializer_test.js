@@ -30,7 +30,7 @@ SerializerTestCase.prototype.xml = '';
 /**
  * Constructs a serializer test suite.
  * @param {string} title The title of this test suite.
- * @implements {TestSuite<SerializerTestCase>}
+ * @extends {TestSuite<SerializerTestSuite, SerializerTestCase>}
  */
 function SerializerTestSuite(title) {
   this.title = title;

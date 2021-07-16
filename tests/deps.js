@@ -83,7 +83,7 @@ goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IC
 goog.addDependency('../../core/interfaces/i_contextmenu.js', ['Blockly.IContextMenu'], []);
 goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], []);
 goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_delete_area.js', ['Blockly.IDeleteArea'], ['Blockly.IDragTarget']);
+goog.addDependency('../../core/interfaces/i_delete_area.js', ['Blockly.IDeleteArea'], ['Blockly.IDragTarget'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_drag_target.js', ['Blockly.IDragTarget'], ['Blockly.IComponent']);
 goog.addDependency('../../core/interfaces/i_draggable.js', ['Blockly.IDraggable'], ['Blockly.IDeletable']);
 goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], []);

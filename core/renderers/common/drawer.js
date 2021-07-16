@@ -13,7 +13,6 @@
 goog.module('Blockly.blockRendering.Drawer');
 goog.module.declareLegacyNamespace();
 
-const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 const Row = goog.require('Blockly.blockRendering.Row');
 const Types = goog.require('Blockly.blockRendering.Types');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -22,6 +21,7 @@ const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvid
 const Field = goog.requireType('Blockly.blockRendering.Field');
 const Icon = goog.requireType('Blockly.blockRendering.Icon');
 const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
+const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 
 
@@ -132,11 +132,9 @@ Drawer.prototype.drawTop_ = function() {
   this.outlinePath_ += svgPaths.moveBy(topRow.xPos, this.info_.startY);
   for (let i = 0, elem; (elem = elements[i]); i++) {
     if (Types.isLeftRoundedCorner(elem)) {
-      this.outlinePath_ +=
-          this.constants_.OUTSIDE_CORNERS.topLeft;
+      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topLeft;
     } else if (Types.isRightRoundedCorner(elem)) {
-      this.outlinePath_ +=
-          this.constants_.OUTSIDE_CORNERS.topRight;
+      this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topRight;
     } else if (Types.isPreviousConnection(elem)) {
       this.outlinePath_ += elem.shape.pathLeft;
     } else if (Types.isHat(elem)) {
@@ -163,8 +161,7 @@ Drawer.prototype.drawJaggedEdge_ = function(row) {
 /**
  * Add steps for an external value input, rendered as a notch in the side
  * of the block.
- * @param {!Row} row The row that this input
- *     belongs to.
+ * @param {!Row} row The row that this input belongs to.
  * @protected
  */
 Drawer.prototype.drawValueInput_ = function(row) {
@@ -182,8 +179,7 @@ Drawer.prototype.drawValueInput_ = function(row) {
 
 /**
  * Add steps for a statement input.
- * @param {!Row} row The row that this input
- *     belongs to.
+ * @param {!Row} row The row that this input belongs to.
  * @protected
  */
 Drawer.prototype.drawStatementInput_ = function(row) {
@@ -209,8 +205,7 @@ Drawer.prototype.drawStatementInput_ = function(row) {
 /**
  * Add steps for the right side of a row that does not have value or
  * statement input connections.
- * @param {!Row} row The row to draw the
- *     side of.
+ * @param {!Row} row The row to draw the side of.
  * @protected
  */
 Drawer.prototype.drawRightSideRow_ = function(row) {
@@ -375,8 +370,8 @@ Drawer.prototype.positionInlineInputConnection_ = function(input) {
     if (this.info_.RTL) {
       connX *= -1;
     }
-    input.connectionModel.setOffsetInBlock(connX,
-        yPos + input.connectionOffsetY);
+    input.connectionModel.setOffsetInBlock(
+        connX, yPos + input.connectionOffsetY);
   }
 };
 
@@ -452,8 +447,8 @@ Drawer.prototype.positionOutputConnection_ = function() {
   if (this.info_.outputConnection) {
     const x = this.info_.startX + this.info_.outputConnection.connectionOffsetX;
     const connX = this.info_.RTL ? -x : x;
-    this.block_.outputConnection.setOffsetInBlock(connX,
-        this.info_.outputConnection.connectionOffsetY);
+    this.block_.outputConnection.setOffsetInBlock(
+        connX, this.info_.outputConnection.connectionOffsetY);
   }
 };
 

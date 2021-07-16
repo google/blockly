@@ -14,25 +14,24 @@
 goog.module('Blockly.IBubble');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IContextMenu');
-goog.require('Blockly.IDraggable');
-
-goog.requireType('Blockly.BlockDragSurfaceSvg');
-goog.requireType('Blockly.utils.Coordinate');
+const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const IContextMenu = goog.require('Blockly.IContextMenu');
+const IDraggable = goog.require('Blockly.IDraggable');
 
 
 /**
  * A bubble interface.
  * @interface
- * @extends {Blockly.IDraggable}
- * @extends {Blockly.IContextMenu}
+ * @extends {IDraggable}
+ * @extends {IContextMenu}
  */
 const IBubble = function() {};
 
 /**
  * Return the coordinates of the top-left corner of this bubble's body relative
  * to the drawing surface's origin (0,0), in workspace units.
- * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Object with .x and .y properties.
  */
 IBubble.prototype.getRelativeToSurfaceXY;
 
@@ -60,9 +59,9 @@ IBubble.prototype.setDragging;
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
- * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
+ * @param {!Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  */
 IBubble.prototype.moveDuringDrag;

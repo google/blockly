@@ -158,8 +158,8 @@ BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
   if (dragTarget) {
     const componentManager = this.workspace_.getComponentManager();
-    const isDeleteArea = componentManager.hasCapability(dragTarget.id,
-        ComponentManager.Capability.DELETE_AREA);
+    const isDeleteArea = componentManager.hasCapability(
+        dragTarget.id, ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (/** @type {!IDeleteArea} */ (dragTarget))
           .wouldDelete(this.draggingBubble_, false);
@@ -184,8 +184,7 @@ BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
-BubbleDragger.prototype.endBubbleDrag = function(
-    e, currentDragDeltaXY) {
+BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBubble(e, currentDragDeltaXY);
 

@@ -14,8 +14,8 @@
 goog.module('Blockly.IBlockDragger');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.utils.Coordinate');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
@@ -26,7 +26,7 @@ const IBlockDragger = function() {};
 
 /**
  * Start dragging a block.  This includes moving it to the drag surface.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
@@ -37,7 +37,7 @@ IBlockDragger.prototype.startDrag;
  * Execute a step of block dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  */
 IBlockDragger.prototype.drag;
@@ -45,7 +45,7 @@ IBlockDragger.prototype.drag;
 /**
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  */
 IBlockDragger.prototype.endDrag;
@@ -53,7 +53,7 @@ IBlockDragger.prototype.endDrag;
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array.<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array.<!BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  */
 IBlockDragger.prototype.getInsertionMarkers;

@@ -123,14 +123,14 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
  * @package
  */
 Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
 
-  var oldDragTarget = this.dragTarget_;
+  const oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
 
-  var oldWouldDeleteBubble = this.wouldDeleteBubble_;
+  const oldWouldDeleteBubble = this.wouldDeleteBubble_;
   this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
   if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
@@ -155,8 +155,8 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
  */
 Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
   if (dragTarget) {
-    var componentManager = this.workspace_.getComponentManager();
-    var isDeleteArea = componentManager.hasCapability(dragTarget.id,
+    const componentManager = this.workspace_.getComponentManager();
+    const isDeleteArea = componentManager.hasCapability(dragTarget.id,
         Blockly.ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (/** @type {!Blockly.IDeleteArea} */ (dragTarget))
@@ -187,13 +187,14 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
   // Make sure internal state is fresh.
   this.dragBubble(e, currentDragDeltaXY);
 
-  var preventMove = this.dragTarget_ &&
+  const preventMove = this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBubble_);
+  let newLoc;
   if (preventMove) {
-    var newLoc = this.startXY_;
+    newLoc = this.startXY_;
   } else {
-    var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-    var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+    const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+    newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   }
   // Move the bubble to its final location.
   this.draggingBubble_.moveTo(newLoc.x, newLoc.y);
@@ -227,7 +228,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  */
 Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
-    var event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(
+    const event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(
         /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);
     event.recordNew();
@@ -249,7 +250,7 @@ Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
  * @private
  */
 Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  var result = new Blockly.utils.Coordinate(
+  const result = new Blockly.utils.Coordinate(
       pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
@@ -257,7 +258,7 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     // oddities in our rendering optimizations.  The actual scale is the same as
     // the scale on the parent workspace.
     // Fix that for dragging.
-    var mainScale = this.workspace_.options.parentWorkspace.scale;
+    const mainScale = this.workspace_.options.parentWorkspace.scale;
     result.scale(1 / mainScale);
   }
   return result;

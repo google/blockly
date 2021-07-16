@@ -73,7 +73,9 @@ goog.addDependency('../../core/inject.js', ['Blockly.inject'], ['Blockly.BlockDr
 goog.addDependency('../../core/input.js', ['Blockly.Input'], ['Blockly.Connection', 'Blockly.FieldLabel', 'Blockly.constants', 'Blockly.fieldRegistry', 'Blockly.inputTypes'], {'lang': 'es5'});
 goog.addDependency('../../core/input_types.js', ['Blockly.inputTypes'], ['Blockly.connectionTypes']);
 goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.InsertionMarkerManager'], ['Blockly.ComponentManager', 'Blockly.Events', 'Blockly.blockAnimations', 'Blockly.connectionTypes', 'Blockly.constants'], {'lang': 'es5'});
-goog.addDependency('../../core/interfaces/i_accessibility.js', ['Blockly.IASTNodeLocation', 'Blockly.IASTNodeLocationSvg', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.IKeyboardAccessible'], []);
+goog.addDependency('../../core/interfaces/i_ast_node_location.js', ['Blockly.IASTNodeLocation'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/interfaces/i_ast_node_location_svg.js', ['Blockly.IASTNodeLocationSvg'], ['Blockly.IASTNodeLocation']);
+goog.addDependency('../../core/interfaces/i_ast_node_location_with_block.js', ['Blockly.IASTNodeLocationWithBlock'], ['Blockly.IASTNodeLocation']);
 goog.addDependency('../../core/interfaces/i_autohideable.js', ['Blockly.IAutoHideable'], ['Blockly.IComponent']);
 goog.addDependency('../../core/interfaces/i_block_dragger.js', ['Blockly.IBlockDragger'], []);
 goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoundedElement'], []);
@@ -87,6 +89,7 @@ goog.addDependency('../../core/interfaces/i_delete_area.js', ['Blockly.IDeleteAr
 goog.addDependency('../../core/interfaces/i_drag_target.js', ['Blockly.IDragTarget'], ['Blockly.IComponent']);
 goog.addDependency('../../core/interfaces/i_draggable.js', ['Blockly.IDraggable'], ['Blockly.IDeletable']);
 goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], []);
+goog.addDependency('../../core/interfaces/i_keyboard_accessible.js', ['Blockly.IKeyboardAccessible'], []);
 goog.addDependency('../../core/interfaces/i_metrics_manager.js', ['Blockly.IMetricsManager'], []);
 goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], []);
 goog.addDependency('../../core/interfaces/i_positionable.js', ['Blockly.IPositionable'], ['Blockly.IComponent']);

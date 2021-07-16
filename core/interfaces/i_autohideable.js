@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IAutoHideable');
+goog.module('Blockly.IAutoHideable');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IComponent');
 
@@ -22,11 +23,13 @@ goog.require('Blockly.IComponent');
  * @extends {Blockly.IComponent}
  * @interface
  */
-Blockly.IAutoHideable = function() {};
+const IAutoHideable = function() {};
 
 /**
  * Hides the component. Called in Blockly.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
  *   Flyouts should not be closed if this is true.
  */
-Blockly.IAutoHideable.prototype.autoHide;
+IAutoHideable.prototype.autoHide;
+
+exports = IAutoHideable;

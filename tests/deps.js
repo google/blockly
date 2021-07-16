@@ -76,7 +76,7 @@ goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.Insertion
 goog.addDependency('../../core/interfaces/i_ast_node_location.js', ['Blockly.IASTNodeLocation'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_ast_node_location_svg.js', ['Blockly.IASTNodeLocationSvg'], ['Blockly.IASTNodeLocation'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_ast_node_location_with_block.js', ['Blockly.IASTNodeLocationWithBlock'], ['Blockly.IASTNodeLocation'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_autohideable.js', ['Blockly.IAutoHideable'], ['Blockly.IComponent']);
+goog.addDependency('../../core/interfaces/i_autohideable.js', ['Blockly.IAutoHideable'], ['Blockly.IComponent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_block_dragger.js', ['Blockly.IBlockDragger'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoundedElement'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_bubble.js', ['Blockly.IBubble'], ['Blockly.IContextMenu', 'Blockly.IDraggable'], {'lang': 'es6', 'module': 'goog'});

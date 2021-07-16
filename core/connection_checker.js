@@ -64,14 +64,14 @@ Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
  */
 Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
     a, b, isDragging, opt_distance) {
-  var safety = this.doSafetyChecks(a, b);
+  const safety = this.doSafetyChecks(a, b);
   if (safety != Blockly.Connection.CAN_CONNECT) {
     return safety;
   }
 
   // If the safety checks passed, both connections are non-null.
-  var connOne = /** @type {!Blockly.Connection} **/ (a);
-  var connTwo = /** @type {!Blockly.Connection} **/ (b);
+  const connOne = /** @type {!Blockly.Connection} **/ (a);
+  const connTwo = /** @type {!Blockly.Connection} **/ (b);
   if (!this.doTypeChecks(connOne, connTwo)) {
     return Blockly.Connection.REASON_CHECKS_FAILED;
   }
@@ -108,12 +108,13 @@ Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
       return 'Attempt to connect incompatible types.';
     case Blockly.Connection.REASON_TARGET_NULL:
       return 'Target connection is null.';
-    case Blockly.Connection.REASON_CHECKS_FAILED:
-      var connOne = /** @type {!Blockly.Connection} **/ (a);
-      var connTwo = /** @type {!Blockly.Connection} **/ (b);
-      var msg = 'Connection checks failed. ';
+    case Blockly.Connection.REASON_CHECKS_FAILED: {
+      const connOne = /** @type {!Blockly.Connection} **/ (a);
+      const connTwo = /** @type {!Blockly.Connection} **/ (b);
+      let msg = 'Connection checks failed. ';
       msg += connOne + ' expected ' + connOne.getCheck() + ', found ' + connTwo.getCheck();
       return msg;
+    }
     case Blockly.Connection.REASON_SHADOW_PARENT:
       return 'Connecting non-shadow to shadow block.';
     case Blockly.Connection.REASON_DRAG_CHECKS_FAILED:
@@ -135,12 +136,13 @@ Blockly.ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   if (!a || !b) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
+  let blockA, blockB;
   if (a.isSuperior()) {
-    var blockA = a.getSourceBlock();
-    var blockB = b.getSourceBlock();
+    blockA = a.getSourceBlock();
+    blockB = b.getSourceBlock();
   } else {
-    var blockB = a.getSourceBlock();
-    var blockA = b.getSourceBlock();
+    blockB = a.getSourceBlock();
+    blockA = b.getSourceBlock();
   }
   if (blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
@@ -164,15 +166,15 @@ Blockly.ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
  * @public
  */
 Blockly.ConnectionChecker.prototype.doTypeChecks = function(a, b) {
-  var checkArrayOne = a.getCheck();
-  var checkArrayTwo = b.getCheck();
+  const checkArrayOne = a.getCheck();
+  const checkArrayTwo = b.getCheck();
 
   if (!checkArrayOne || !checkArrayTwo) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;
   }
   // Find any intersection in the check lists.
-  for (var i = 0; i < checkArrayOne.length; i++) {
+  for (let i = 0; i < checkArrayOne.length; i++) {
     if (checkArrayTwo.indexOf(checkArrayOne[i]) != -1) {
       return true;
     }
@@ -274,7 +276,7 @@ Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
     return true;
   }
 
-  var targetBlock = b.targetBlock();
+  const targetBlock = b.targetBlock();
   // If it is connected to a real block, game over.
   if (!targetBlock.isInsertionMarker()) {
     return false;

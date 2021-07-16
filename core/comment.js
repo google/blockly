@@ -103,24 +103,22 @@ utilsObject.inherits(Comment, Icon);
 Comment.prototype.drawIcon_ = function(group) {
   // Circle.
   dom.createSvgElement(
-      Svg.CIRCLE,
-      {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
+      Svg.CIRCLE, {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
   dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
-          '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-          '-1.201,0.998 -1.201,1.528 -1.204,2.19z'},
+            '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
+            '-1.201,0.998 -1.201,1.528 -1.204,2.19z'
+      },
       group);
   // Dot of question mark.
   dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
         'y': '10.78',
@@ -149,16 +147,14 @@ Comment.prototype.createEditor_ = function() {
    */
 
   this.foreignObject_ = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH},
+      Svg.FOREIGNOBJECT, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH},
       null);
 
   const body = document.createElementNS(dom.HTML_NS, 'body');
   body.setAttribute('xmlns', dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
 
-  this.textarea_ = document.createElementNS(
-      dom.HTML_NS, 'textarea');
+  this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea');
   const textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
@@ -174,21 +170,20 @@ Comment.prototype.createEditor_ = function() {
   this.onMouseUpWrapper_ = browserEvents.conditionalBind(
       textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  this.onWheelWrapper_ = browserEvents.conditionalBind(
-      textarea, 'wheel', this, function(e) {
+  this.onWheelWrapper_ =
+      browserEvents.conditionalBind(textarea, 'wheel', this, function(e) {
         e.stopPropagation();
       });
-  this.onChangeWrapper_ = browserEvents.conditionalBind(
-      textarea, 'change', this, function(_e) {
+  this.onChangeWrapper_ =
+      browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
-          Events.fire(
-              new (Events.get(Events.BLOCK_CHANGE))(
-                  this.block_, 'comment', null, this.cachedText_,
-                  this.model_.text));
+          Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+              this.block_, 'comment', null, this.cachedText_,
+              this.model_.text));
         }
       });
-  this.onInputWrapper_ = browserEvents.conditionalBind(
-      textarea, 'input', this, function(_e) {
+  this.onInputWrapper_ =
+      browserEvents.conditionalBind(textarea, 'input', this, function(_e) {
         this.model_.text = textarea.value;
       });
 
@@ -247,8 +242,8 @@ Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Events.fire(new (Events.get(Events.BUBBLE_OPEN))(
-      this.block_, visible, 'comment'));
+  Events.fire(
+      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();
@@ -280,8 +275,8 @@ Comment.prototype.createEditableBubble_ = function() {
   this.bubble_ = new Bubble(
       /** @type {!WorkspaceSvg} */ (this.block_.workspace),
       this.createEditor_(), this.block_.pathObject.svgPath,
-      /** @type {!Coordinate} */ (this.iconXY_),
-      this.model_.size.width, this.model_.size.height);
+      /** @type {!Coordinate} */ (this.iconXY_), this.model_.size.width,
+      this.model_.size.height);
   // Expose this comment's block's ID on its top-level SVG group.
   this.bubble_.setSvgId(this.block_.id);
   this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));

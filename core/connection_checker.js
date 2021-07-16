@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.ConnectionChecker');
+goog.module('Blockly.ConnectionChecker');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
@@ -28,7 +29,7 @@ goog.requireType('Blockly.RenderedConnection');
  * @implements {Blockly.IConnectionChecker}
  * @constructor
  */
-Blockly.ConnectionChecker = function() {
+const ConnectionChecker = function() {
 };
 
 /**
@@ -43,7 +44,7 @@ Blockly.ConnectionChecker = function() {
  * @return {boolean} Whether the connection is legal.
  * @public
  */
-Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
+ConnectionChecker.prototype.canConnect = function(a, b,
     isDragging, opt_distance) {
   return this.canConnectWithReason(a, b, isDragging, opt_distance) ==
       Blockly.Connection.CAN_CONNECT;
@@ -62,7 +63,7 @@ Blockly.ConnectionChecker.prototype.canConnect = function(a, b,
  *    an error code otherwise.
  * @public
  */
-Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
+ConnectionChecker.prototype.canConnectWithReason = function(
     a, b, isDragging, opt_distance) {
   const safety = this.doSafetyChecks(a, b);
   if (safety != Blockly.Connection.CAN_CONNECT) {
@@ -96,7 +97,7 @@ Blockly.ConnectionChecker.prototype.canConnectWithReason = function(
  * @return {string} A developer-readable error string.
  * @public
  */
-Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
+ConnectionChecker.prototype.getErrorMessage = function(errorCode,
     a, b) {
   switch (errorCode) {
     case Blockly.Connection.REASON_SELF_CONNECTION:
@@ -132,7 +133,7 @@ Blockly.ConnectionChecker.prototype.getErrorMessage = function(errorCode,
  * @return {number} An enum with the reason this connection is safe or unsafe.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
+ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   if (!a || !b) {
     return Blockly.Connection.REASON_TARGET_NULL;
   }
@@ -165,7 +166,7 @@ Blockly.ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
  * @return {boolean} True if the connections share a type.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doTypeChecks = function(a, b) {
+ConnectionChecker.prototype.doTypeChecks = function(a, b) {
   const checkArrayOne = a.getCheck();
   const checkArrayTwo = b.getCheck();
 
@@ -191,7 +192,7 @@ Blockly.ConnectionChecker.prototype.doTypeChecks = function(a, b) {
  * @return {boolean} True if the connection is allowed during a drag.
  * @public
  */
-Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
+ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   if (a.distanceFrom(b) > distance) {
     return false;
   }
@@ -260,7 +261,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
  * @return {boolean} True if the connection is allowed, false otherwise.
  * @protected
  */
-Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
+ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   if (a.targetConnection) {
     // This connection is already occupied.
     // A next connection will never disconnect itself mid-drag.
@@ -288,4 +289,6 @@ Blockly.ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.CONNECTION_CHECKER,
-    Blockly.registry.DEFAULT, Blockly.ConnectionChecker);
+    Blockly.registry.DEFAULT, ConnectionChecker);
+
+exports = ConnectionChecker;

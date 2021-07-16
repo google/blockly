@@ -20,7 +20,7 @@ goog.addDependency('../../core/bubble_dragger.js', ['Blockly.BubbleDragger'], ['
 goog.addDependency('../../core/comment.js', ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.BubbleOpen', 'Blockly.Icon', 'Blockly.Warning', 'Blockly.browserEvents', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.userAgent']);
 goog.addDependency('../../core/component_manager.js', ['Blockly.ComponentManager'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/connection.js', ['Blockly.Connection'], ['Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.deprecation']);
-goog.addDependency('../../core/connection_checker.js', ['Blockly.ConnectionChecker'], ['Blockly.Connection', 'Blockly.IConnectionChecker', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.registry']);
+goog.addDependency('../../core/connection_checker.js', ['Blockly.ConnectionChecker'], ['Blockly.Connection', 'Blockly.IConnectionChecker', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.registry'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/connection_db.js', ['Blockly.ConnectionDB'], ['Blockly.RenderedConnection', 'Blockly.connectionTypes', 'Blockly.constants']);
 goog.addDependency('../../core/connection_types.js', ['Blockly.connectionTypes'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/constants.js', ['Blockly.constants'], ['Blockly.connectionTypes']);

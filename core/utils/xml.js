@@ -29,7 +29,7 @@ Blockly.utils.xml.NAME_SPACE = 'https://developers.google.com/blockly/xml';
  * character references) before serializing to XML.
  */
 // eslint-disable-next-line no-control-regex
-Blockly.utils.xml.INVALID_CONTROL_CHARS = /[\u0000-\u0009\u000B\u000C\u000E-\u001F]/;
+Blockly.utils.xml.INVALID_CONTROL_CHARS = /[\x00-\x09\x0B\x0C\x0E-\x1F]/;
 
 /**
  * Get the document object.  This method is overridden in the Node.js build of
@@ -54,7 +54,6 @@ Blockly.utils.xml.createElement = function(tagName) {
 
 /**
  * Create text element for XML.
- * serialized to XML.
  * @param {string} text Text content.
  * @return {!Text} New DOM text node.
  * @public

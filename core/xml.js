@@ -366,11 +366,11 @@ Blockly.Xml.textToDom = function(text) {
   if (!doc || !doc.documentElement ||
       doc.getElementsByTagName('parsererror').length) {
     var oParser = new DOMParser();
-    // Attempt to parse as html to deserialize control chars.
+    // Attempt to parse as HTML to deserialize control chars.
     doc = oParser.parseFromString(text, 'text/html');
     if (!doc || !doc.body.firstChild ||
         doc.body.firstChild.nodeName.toLowerCase() != 'xml') {
-      throw Error('textToDom was unable to parse: ' + text);
+      throw Error('DOMParser was unable to parse: ' + text);
     }
     return /** @type {!Element} */ (doc.body.firstChild);
   }

@@ -337,6 +337,7 @@ goog.addDependency('../../tests/mocha/procedures_test.js', ['Blockly.test.proced
 goog.addDependency('../../tests/mocha/procedures_test_helpers.js', ['Blockly.test.procedureHelpers'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/registry_test.js', ['Blockly.test.registry'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/run_mocha_tests_in_browser.js', [], [], {'lang': 'es8'});
+goog.addDependency('../../tests/mocha/serializer_test.js', ['Blockly.test.serialization'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/shortcut_registry_test.js', ['Blockly.test.shortcutRegistry'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/test_helpers.js', ['Blockly.test.helpers'], ['Blockly.utils.KeyCodes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/theme_test.js', ['Blockly.test.theme'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});

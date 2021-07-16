@@ -11,10 +11,13 @@
 
 'use strict';
 
-goog.provide('Blockly.IASTNodeLocation');
+goog.module('Blockly.IASTNodeLocation');
+goog.module.declareLegacyNamespace();
 
 /**
  * An AST node location interface.
  * @interface
  */
-Blockly.IASTNodeLocation = function() {};
+const IASTNodeLocation = function() {};
+
+exports = IASTNodeLocation;

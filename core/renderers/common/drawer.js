@@ -13,22 +13,22 @@
 goog.module('Blockly.blockRendering.Drawer');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.svgPaths');
+const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
+const Row = goog.require('Blockly.blockRendering.Row');
+const Types = goog.require('Blockly.blockRendering.Types');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
 
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.blockRendering.Field');
-goog.requireType('Blockly.blockRendering.Icon');
-goog.requireType('Blockly.blockRendering.InlineInput');
-goog.requireType('Blockly.BlockSvg');
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const Field = goog.requireType('Blockly.blockRendering.Field');
+const Icon = goog.requireType('Blockly.blockRendering.Icon');
+const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 
 
 /**
  * An object that draws a block based on the given rendering information.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ * @param {!BlockSvg} block The block to render.
+ * @param {!RenderInfo} info An object containing all
  *   information needed to render this block.
  * @package
  * @constructor
@@ -42,7 +42,7 @@ const Drawer = function(block, info) {
 
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @type {!ConstantProvider}
    * @protected
    */
   this.constants_ = info.getRenderer().getConstants();
@@ -129,42 +129,41 @@ Drawer.prototype.drawTop_ = function() {
   const elements = topRow.elements;
 
   this.positionPreviousConnection_();
-  this.outlinePath_ +=
-      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
+  this.outlinePath_ += svgPaths.moveBy(topRow.xPos, this.info_.startY);
   for (let i = 0, elem; (elem = elements[i]); i++) {
-    if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
+    if (Types.isLeftRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topLeft;
-    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
+    } else if (Types.isRightRoundedCorner(elem)) {
       this.outlinePath_ +=
           this.constants_.OUTSIDE_CORNERS.topRight;
-    } else if (Blockly.blockRendering.Types.isPreviousConnection(elem)) {
+    } else if (Types.isPreviousConnection(elem)) {
       this.outlinePath_ += elem.shape.pathLeft;
-    } else if (Blockly.blockRendering.Types.isHat(elem)) {
+    } else if (Types.isHat(elem)) {
       this.outlinePath_ += this.constants_.START_HAT.path;
-    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', elem.width);
+    } else if (Types.isSpacer(elem)) {
+      this.outlinePath_ += svgPaths.lineOnAxis('h', elem.width);
     }
     // No branch for a square corner, because it's a no-op.
   }
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('v', topRow.height);
+  this.outlinePath_ += svgPaths.lineOnAxis('v', topRow.height);
 };
 
 /**
  * Add steps for the jagged edge of a row on a collapsed block.
- * @param {!Blockly.blockRendering.Row} row The row to draw the side of.
+ * @param {!Row} row The row to draw the side of.
  * @protected
  */
 Drawer.prototype.drawJaggedEdge_ = function(row) {
   const remainder = row.height - this.constants_.JAGGED_TEETH.height;
-  this.outlinePath_ += this.constants_.JAGGED_TEETH.path +
-      Blockly.utils.svgPaths.lineOnAxis('v', remainder);
+  this.outlinePath_ +=
+      this.constants_.JAGGED_TEETH.path + svgPaths.lineOnAxis('v', remainder);
 };
 
 /**
  * Add steps for an external value input, rendered as a notch in the side
  * of the block.
- * @param {!Blockly.blockRendering.Row} row The row that this input
+ * @param {!Row} row The row that this input
  *     belongs to.
  * @protected
  */
@@ -176,16 +175,14 @@ Drawer.prototype.drawValueInput_ = function(row) {
       input.shape.pathDown(input.height) :
       input.shape.pathDown;
 
-  this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', input.xPos + input.width) +
-      pathDown +
-      Blockly.utils.svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+  this.outlinePath_ += svgPaths.lineOnAxis('H', input.xPos + input.width) +
+      pathDown + svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
 };
 
 
 /**
  * Add steps for a statement input.
- * @param {!Blockly.blockRendering.Row} row The row that this input
+ * @param {!Row} row The row that this input
  *     belongs to.
  * @protected
  */
@@ -195,17 +192,16 @@ Drawer.prototype.drawStatementInput_ = function(row) {
   const x = input.xPos + input.notchOffset + input.shape.width;
 
   const innerTopLeftCorner = input.shape.pathRight +
-      Blockly.utils.svgPaths.lineOnAxis(
+      svgPaths.lineOnAxis(
           'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
   const innerHeight = row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
-      innerTopLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+  this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
+      svgPaths.lineOnAxis('v', innerHeight) +
       this.constants_.INSIDE_CORNERS.pathBottom +
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
+      svgPaths.lineOnAxis('H', row.xPos + row.width);
 
   this.positionStatementInputConnection_(row);
 };
@@ -213,13 +209,12 @@ Drawer.prototype.drawStatementInput_ = function(row) {
 /**
  * Add steps for the right side of a row that does not have value or
  * statement input connections.
- * @param {!Blockly.blockRendering.Row} row The row to draw the
+ * @param {!Row} row The row to draw the
  *     side of.
  * @protected
  */
 Drawer.prototype.drawRightSideRow_ = function(row) {
-  this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+  this.outlinePath_ += svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
 
@@ -236,22 +231,22 @@ Drawer.prototype.drawBottom_ = function() {
   let rightCornerYOffset = 0;
   let outlinePath = '';
   for (let i = elems.length - 1, elem; (elem = elems[i]); i--) {
-    if (Blockly.blockRendering.Types.isNextConnection(elem)) {
+    if (Types.isNextConnection(elem)) {
       outlinePath += elem.shape.pathRight;
-    } else if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
-      outlinePath += Blockly.utils.svgPaths.lineOnAxis('H', bottomRow.xPos);
-    } else if (Blockly.blockRendering.Types.isLeftRoundedCorner(elem)) {
+    } else if (Types.isLeftSquareCorner(elem)) {
+      outlinePath += svgPaths.lineOnAxis('H', bottomRow.xPos);
+    } else if (Types.isLeftRoundedCorner(elem)) {
       outlinePath += this.constants_.OUTSIDE_CORNERS.bottomLeft;
-    } else if (Blockly.blockRendering.Types.isRightRoundedCorner(elem)) {
+    } else if (Types.isRightRoundedCorner(elem)) {
       outlinePath += this.constants_.OUTSIDE_CORNERS.bottomRight;
       rightCornerYOffset = this.constants_.OUTSIDE_CORNERS.rightHeight;
-    } else if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      outlinePath += Blockly.utils.svgPaths.lineOnAxis('h', elem.width * -1);
+    } else if (Types.isSpacer(elem)) {
+      outlinePath += svgPaths.lineOnAxis('h', elem.width * -1);
     }
   }
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('V',
-      bottomRow.baseline - rightCornerYOffset);
+  this.outlinePath_ +=
+      svgPaths.lineOnAxis('V', bottomRow.baseline - rightCornerYOffset);
   this.outlinePath_ += outlinePath;
 };
 
@@ -272,9 +267,7 @@ Drawer.prototype.drawLeft_ = function() {
         outputConnection.shape.pathUp;
 
     // Draw a line up to the bottom of the tab.
-    this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('V', tabBottom) +
-        pathUp;
+    this.outlinePath_ += svgPaths.lineOnAxis('V', tabBottom) + pathUp;
   }
   // Close off the path.  This draws a vertical line up to the start of the
   // block's path, which may be either a rounded or a sharp corner.
@@ -289,13 +282,12 @@ Drawer.prototype.drawLeft_ = function() {
 Drawer.prototype.drawInternals_ = function() {
   for (let i = 0, row; (row = this.info_.rows[i]); i++) {
     for (let j = 0, elem; (elem = row.elements[j]); j++) {
-      if (Blockly.blockRendering.Types.isInlineInput(elem)) {
+      if (Types.isInlineInput(elem)) {
         this.drawInlineInput_(
-            /** @type {!Blockly.blockRendering.InlineInput} */ (elem));
-      } else if (Blockly.blockRendering.Types.isIcon(elem) ||
-          Blockly.blockRendering.Types.isField(elem)) {
+            /** @type {!InlineInput} */ (elem));
+      } else if (Types.isIcon(elem) || Types.isField(elem)) {
         this.layoutField_(
-            /** @type {!Blockly.blockRendering.Field|!Blockly.blockRendering.Icon} */
+            /** @type {!Field|!Icon} */
             (elem));
       }
     }
@@ -304,15 +296,15 @@ Drawer.prototype.drawInternals_ = function() {
 
 /**
  * Push a field or icon's new position to its SVG root.
- * @param {!Blockly.blockRendering.Icon|!Blockly.blockRendering.Field} fieldInfo
+ * @param {!Icon|!Field} fieldInfo
  *     The rendering information for the field or icon.
  * @protected
  */
 Drawer.prototype.layoutField_ = function(fieldInfo) {
   let svgGroup;
-  if (Blockly.blockRendering.Types.isField(fieldInfo)) {
+  if (Types.isField(fieldInfo)) {
     svgGroup = fieldInfo.field.getSvgRoot();
-  } else if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
+  } else if (Types.isIcon(fieldInfo)) {
     svgGroup = fieldInfo.icon.iconGroup_;
   }
 
@@ -326,7 +318,7 @@ Drawer.prototype.layoutField_ = function(fieldInfo) {
       scale = 'scale(-1 1)';
     }
   }
-  if (Blockly.blockRendering.Types.isIcon(fieldInfo)) {
+  if (Types.isIcon(fieldInfo)) {
     svgGroup.setAttribute('display', 'block');
     svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
     fieldInfo.icon.computeIconLocation();
@@ -344,7 +336,7 @@ Drawer.prototype.layoutField_ = function(fieldInfo) {
 
 /**
  * Add steps for an inline input.
- * @param {!Blockly.blockRendering.InlineInput} input The information about the
+ * @param {!InlineInput} input The information about the
  * input to render.
  * @protected
  */
@@ -357,13 +349,11 @@ Drawer.prototype.drawInlineInput_ = function(input) {
   const connectionBottom = input.connectionHeight + connectionTop;
   const connectionRight = input.xPos + input.connectionWidth;
 
-  this.inlinePath_ += Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
-      Blockly.utils.svgPaths.lineOnAxis('v', connectionTop) +
-      input.shape.pathDown +
-      Blockly.utils.svgPaths.lineOnAxis('v', height - connectionBottom) +
-      Blockly.utils.svgPaths.lineOnAxis('h', width - input.connectionWidth) +
-      Blockly.utils.svgPaths.lineOnAxis('v', -height) +
-      'z';
+  this.inlinePath_ += svgPaths.moveTo(connectionRight, yPos) +
+      svgPaths.lineOnAxis('v', connectionTop) + input.shape.pathDown +
+      svgPaths.lineOnAxis('v', height - connectionBottom) +
+      svgPaths.lineOnAxis('h', width - input.connectionWidth) +
+      svgPaths.lineOnAxis('v', -height) + 'z';
 
   this.positionInlineInputConnection_(input);
 };
@@ -372,7 +362,7 @@ Drawer.prototype.drawInlineInput_ = function(input) {
  * Position the connection on an inline value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {Blockly.blockRendering.InlineInput} input The information about
+ * @param {InlineInput} input The information about
  * the input that the connection is on.
  * @protected
  */
@@ -394,7 +384,7 @@ Drawer.prototype.positionInlineInputConnection_ = function(input) {
  * Position the connection on a statement input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
+ * @param {!Row} row The row that the connection is on.
  * @protected
  */
 Drawer.prototype.positionStatementInputConnection_ = function(row) {
@@ -412,7 +402,7 @@ Drawer.prototype.positionStatementInputConnection_ = function(row) {
  * Position the connection on an external value input, taking into account
  * RTL and the small gap between the parent block and child block which lets the
  * parent block's dark path show through.
- * @param {!Blockly.blockRendering.Row} row The row that the connection is on.
+ * @param {!Row} row The row that the connection is on.
  * @protected
  */
 Drawer.prototype.positionExternalValueConnection_ = function(row) {

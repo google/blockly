@@ -93,7 +93,7 @@ goog.addDependency('../../core/interfaces/i_positionable.js', ['Blockly.IPositio
 goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistrable'], []);
 goog.addDependency('../../core/interfaces/i_registrable_field.js', ['Blockly.IRegistrableField'], []);
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], []);
-goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'], []);
+goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_toolbox.js', ['Blockly.IToolbox'], []);
 goog.addDependency('../../core/interfaces/i_toolbox_item.js', ['Blockly.ICollapsibleToolboxItem', 'Blockly.ISelectableToolboxItem', 'Blockly.IToolboxItem'], []);
 goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.Coordinate'], {'lang': 'es5'});

@@ -14,11 +14,11 @@
 goog.module('Blockly.ComponentManager');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.IAutoHideable');
-goog.requireType('Blockly.IComponent');
-goog.requireType('Blockly.IDeleteArea');
-goog.requireType('Blockly.IDragTarget');
-goog.requireType('Blockly.IPositionable');
+const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
+const IComponent = goog.requireType('Blockly.IComponent');
+const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const IPositionable = goog.requireType('Blockly.IPositionable');
 
 
 /**
@@ -44,9 +44,9 @@ const ComponentManager = function() {
 /**
  * An object storing component information.
  * @typedef {{
- *    component: !Blockly.IComponent,
+ *    component: !IComponent,
  *    capabilities: (
- *     !Array<string|!ComponentManager.Capability<!Blockly.IComponent>>
+ *     !Array<string|!ComponentManager.Capability<!IComponent>>
  *       ),
  *    weight: number
  *  }}
@@ -162,7 +162,7 @@ ComponentManager.prototype.hasCapability = function(id, capability) {
 /**
  * Gets the component with the given ID.
  * @param {string} id The ID of the component to get.
- * @return {!Blockly.IComponent|undefined} The component with the given name
+ * @return {!IComponent|undefined} The component with the given name
  *    or undefined if not found.
  */
 ComponentManager.prototype.getComponent = function(id) {
@@ -228,19 +228,19 @@ ComponentManager.Capability.prototype.toString = function() {
   return this.name_;
 };
 
-/** @type {!ComponentManager.Capability<!Blockly.IPositionable>} */
+/** @type {!ComponentManager.Capability<!IPositionable>} */
 ComponentManager.Capability.POSITIONABLE =
     new ComponentManager.Capability('positionable');
 
-/** @type {!ComponentManager.Capability<!Blockly.IDragTarget>} */
+/** @type {!ComponentManager.Capability<!IDragTarget>} */
 ComponentManager.Capability.DRAG_TARGET =
     new ComponentManager.Capability('drag_target');
 
-/** @type {!ComponentManager.Capability<!Blockly.IDeleteArea>} */
+/** @type {!ComponentManager.Capability<!IDeleteArea>} */
 ComponentManager.Capability.DELETE_AREA =
     new ComponentManager.Capability('delete_area');
 
-/** @type {!ComponentManager.Capability<!Blockly.IAutoHideable>} */
+/** @type {!ComponentManager.Capability<!IAutoHideable>} */
 ComponentManager.Capability.AUTOHIDEABLE =
     new ComponentManager.Capability('autohideable');
 

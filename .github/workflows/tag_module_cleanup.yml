@@ -4,8 +4,9 @@
 name: Tag module cleanup
 
 # Trigger on pull requests against goog_module branch only
+# Uses pull_request_target to get write permissions so that it can write labels.
 on: 
-  pull_request:
+  pull_request_target:
     branches:
       - goog_module
 

@@ -13,16 +13,15 @@
 goog.module('Blockly.blockRendering.Drawer');
 goog.module.declareLegacyNamespace();
 
-const Row = goog.require('Blockly.blockRendering.Row');
-const Types = goog.require('Blockly.blockRendering.Types');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
-
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const Field = goog.requireType('Blockly.blockRendering.Field');
 const Icon = goog.requireType('Blockly.blockRendering.Icon');
 const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
 const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Row = goog.require('Blockly.blockRendering.Row');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
+const Types = goog.require('Blockly.blockRendering.Types');
 
 
 /**

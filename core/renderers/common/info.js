@@ -313,7 +313,7 @@ RenderInfo.prototype.populateBottomRow_ = function() {
   // greater height it will be overwritten in the compute pass.
   if (followsStatement) {
     this.bottomRow.minHeight =
-      this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
+        this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
   } else {
     this.bottomRow.minHeight = this.constants_.BOTTOM_ROW_MIN_HEIGHT;
   }
@@ -364,10 +364,11 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
   } else if (input.type == inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
-    activeRow.minHeight = Math.max(activeRow.minHeight,
+    activeRow.minHeight = Math.max(
+        activeRow.minHeight,
         input.getSourceBlock() && input.getSourceBlock().isShadow() ?
-        this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+            this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
+            this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
   if (activeRow.align == null) {
@@ -478,8 +479,8 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 };
 
 /**
- * Figure out where the right edge of the block and right edge of statement inputs
- * should be placed.
+ * Figure out where the right edge of the block and right edge of statement
+ * inputs should be placed.
  * @protected
  */
 // TODO: More cleanup.
@@ -607,8 +608,8 @@ RenderInfo.prototype.alignStatementRow_ = function(row) {
   statementInput.width += (desiredWidth - currentWidth);
   statementInput.height = Math.max(statementInput.height, row.height);
   row.width += (desiredWidth - currentWidth);
-  row.widthWithConnectedBlocks = Math.max(row.width,
-      this.statementEdge + row.connectedBlockWidths);
+  row.widthWithConnectedBlocks =
+      Math.max(row.width, this.statementEdge + row.connectedBlockWidths);
 };
 
 /**
@@ -742,9 +743,9 @@ RenderInfo.prototype.finalize_ = function() {
   if (this.outputConnection && this.block_.nextConnection &&
       this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks,
-            this.block_.nextConnection.targetBlock().getHeightWidth().width);
+    widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;

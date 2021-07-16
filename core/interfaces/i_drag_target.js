@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IDragTarget');
+goog.module('Blockly.IDragTarget');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IComponent');
 
@@ -25,7 +26,7 @@ goog.requireType('Blockly.utils.Rect');
  * @extends {Blockly.IComponent}
  * @interface
  */
-Blockly.IDragTarget = function() {};
+const IDragTarget = function() {};
 
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
@@ -33,14 +34,14 @@ Blockly.IDragTarget = function() {};
  * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
-Blockly.IDragTarget.prototype.getClientRect;
+IDragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
  * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.IDragTarget.prototype.onDragEnter;
+IDragTarget.prototype.onDragEnter;
 
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
@@ -48,7 +49,7 @@ Blockly.IDragTarget.prototype.onDragEnter;
  * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.IDragTarget.prototype.onDragOver;
+IDragTarget.prototype.onDragOver;
 
 
 /**
@@ -56,7 +57,7 @@ Blockly.IDragTarget.prototype.onDragOver;
  * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.IDragTarget.prototype.onDragExit;
+IDragTarget.prototype.onDragExit;
 
 /**
  * Handles when a block or bubble is dropped on this component.
@@ -64,7 +65,7 @@ Blockly.IDragTarget.prototype.onDragExit;
  * @param {!Blockly.IDraggable} dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.IDragTarget.prototype.onDrop;
+IDragTarget.prototype.onDrop;
 
 /**
  * Returns whether the provided block or bubble should not be moved after being
@@ -75,4 +76,6 @@ Blockly.IDragTarget.prototype.onDrop;
  * @return {boolean} Whether the block or bubble provided should be returned to
  *     drag start.
  */
-Blockly.IDragTarget.prototype.shouldPreventMove;
+IDragTarget.prototype.shouldPreventMove;
+
+exports = IDragTarget;

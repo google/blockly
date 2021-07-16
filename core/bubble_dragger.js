@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.BubbleDragger');
+goog.module('Blockly.BubbleDragger');
+goog.module.declareLegacyNamespace();
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
@@ -36,7 +37,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
  */
-Blockly.BubbleDragger = function(bubble, workspace) {
+const BubbleDragger = function(bubble, workspace) {
   /**
    * The item on the bubble canvas that is being dragged.
    * @type {!Blockly.IBubble}
@@ -90,7 +91,7 @@ Blockly.BubbleDragger = function(bubble, workspace) {
  * @package
  * @suppress {checkTypes}
  */
-Blockly.BubbleDragger.prototype.dispose = function() {
+BubbleDragger.prototype.dispose = function() {
   this.draggingBubble_ = null;
   this.workspace_ = null;
   this.dragSurface_ = null;
@@ -100,7 +101,7 @@ Blockly.BubbleDragger.prototype.dispose = function() {
  * Start dragging a bubble.  This includes moving it to the drag surface.
  * @package
  */
-Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
+BubbleDragger.prototype.startBubbleDrag = function() {
   if (!Blockly.Events.getGroup()) {
     Blockly.Events.setGroup(true);
   }
@@ -122,7 +123,7 @@ Blockly.BubbleDragger.prototype.startBubbleDrag = function() {
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
-Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
+BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
   const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBubble_.moveDuringDrag(this.dragSurface_, newLoc);
@@ -153,7 +154,7 @@ Blockly.BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
  *    block.
  * @private
  */
-Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
+BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
   if (dragTarget) {
     const componentManager = this.workspace_.getComponentManager();
     const isDeleteArea = componentManager.hasCapability(dragTarget.id,
@@ -171,7 +172,7 @@ Blockly.BubbleDragger.prototype.shouldDelete_ = function(dragTarget) {
  * dragging bubble would be deleted if released immediately.
  * @private
  */
-Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
+BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
   this.draggingBubble_.setDeleteStyle(this.wouldDeleteBubble_);
 };
 
@@ -182,7 +183,7 @@ Blockly.BubbleDragger.prototype.updateCursorDuringBubbleDrag_ = function() {
  *     moved from the position at the start of the drag, in pixel units.
  * @package
  */
-Blockly.BubbleDragger.prototype.endBubbleDrag = function(
+BubbleDragger.prototype.endBubbleDrag = function(
     e, currentDragDeltaXY) {
   // Make sure internal state is fresh.
   this.dragBubble(e, currentDragDeltaXY);
@@ -226,7 +227,7 @@ Blockly.BubbleDragger.prototype.endBubbleDrag = function(
  * Fire a move event at the end of a bubble drag.
  * @private
  */
-Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
+BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
     const event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(
         /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
@@ -249,7 +250,7 @@ Blockly.BubbleDragger.prototype.fireMoveEvent_ = function() {
  *     workspace scale.
  * @private
  */
-Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
+BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
   const result = new Blockly.utils.Coordinate(
       pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
@@ -269,9 +270,11 @@ Blockly.BubbleDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
  * drag surface to preserve the apparent location of the bubble.
  * @private
  */
-Blockly.BubbleDragger.prototype.moveToDragSurface_ = function() {
+BubbleDragger.prototype.moveToDragSurface_ = function() {
   this.draggingBubble_.moveTo(0, 0);
   this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
   // Execute the move on the top-level SVG component.
   this.dragSurface_.setBlocksAndShow(this.draggingBubble_.getSvgRoot());
 };
+
+exports = BubbleDragger;

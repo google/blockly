@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IDraggable');
+goog.module('Blockly.IDraggable');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IDeletable');
 
@@ -21,4 +22,6 @@ goog.require('Blockly.IDeletable');
  * @extends {Blockly.IDeletable}
  * @interface
  */
-Blockly.IDraggable = function() {};
+const IDraggable = function() {};
+
+exports = IDraggable;

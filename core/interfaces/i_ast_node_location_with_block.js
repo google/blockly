@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IASTNodeLocationWithBlock');
+goog.module('Blockly.IASTNodeLocationWithBlock');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IASTNodeLocation');
 goog.requireType('Blockly.Block');
@@ -23,10 +24,12 @@ goog.requireType('Blockly.Block');
  * @interface
  * @extends {Blockly.IASTNodeLocation}
  */
-Blockly.IASTNodeLocationWithBlock = function() {};
+const IASTNodeLocationWithBlock = function() {};
 
 /**
  * Get the source block associated with this node.
  * @return {Blockly.Block} The source block.
  */
-Blockly.IASTNodeLocationWithBlock.prototype.getSourceBlock;
+IASTNodeLocationWithBlock.prototype.getSourceBlock;
+
+exports = IASTNodeLocationWithBlock;

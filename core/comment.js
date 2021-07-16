@@ -152,13 +152,13 @@ Blockly.Comment.prototype.createEditor_ = function() {
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
 
-  var body = document.createElementNS(Blockly.utils.dom.HTML_NS, 'body');
+  const body = document.createElementNS(Blockly.utils.dom.HTML_NS, 'body');
   body.setAttribute('xmlns', Blockly.utils.dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
 
   this.textarea_ = document.createElementNS(
       Blockly.utils.dom.HTML_NS, 'textarea');
-  var textarea = this.textarea_;
+  const textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
   textarea.value = this.model_.text;
@@ -228,10 +228,10 @@ Blockly.Comment.prototype.onBubbleResize_ = function() {
  * @private
  */
 Blockly.Comment.prototype.resizeTextarea_ = function() {
-  var size = this.model_.size;
-  var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
-  var widthMinusBorder = size.width - doubleBorderWidth;
-  var heightMinusBorder = size.height - doubleBorderWidth;
+  const size = this.model_.size;
+  const doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
+  const widthMinusBorder = size.width - doubleBorderWidth;
+  const heightMinusBorder = size.height - doubleBorderWidth;
   this.foreignObject_.setAttribute('width', widthMinusBorder);
   this.foreignObject_.setAttribute('height', heightMinusBorder);
   this.textarea_.style.width = (widthMinusBorder - 4) + 'px';

@@ -14,17 +14,17 @@
 goog.module('Blockly.IFlyout');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IRegistrable');
-goog.requireType('Blockly.utils.Coordinate');
-goog.requireType('Blockly.utils.Svg');
-goog.requireType('Blockly.utils.toolbox');
-goog.requireType('Blockly.WorkspaceSvg');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const IRegistrable = goog.require('Blockly.IRegistrable');
+const Svg = goog.requireType('Blockly.utils.Svg');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {FlyoutDefinition} = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
  * Interface for a flyout.
- * @extends {Blockly.IRegistrable}
+ * @extends {IRegistrable}
  * @interface
  */
 const IFlyout = function() {};
@@ -43,7 +43,7 @@ IFlyout.prototype.RTL;
 
 /**
  * The target workspace
- * @type {?Blockly.WorkspaceSvg}
+ * @type {?WorkspaceSvg}
  */
 IFlyout.prototype.targetWorkspace;
 
@@ -72,8 +72,8 @@ IFlyout.prototype.CORNER_RADIUS;
  * either exist as its own svg element or be a g element nested inside a
  * separate svg element.
  * @param {string|
- * !Blockly.utils.Svg<!SVGSVGElement>|
- * !Blockly.utils.Svg<!SVGGElement>} tagName The type of tag to
+ * !Svg<!SVGSVGElement>|
+ * !Svg<!SVGGElement>} tagName The type of tag to
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */
@@ -81,7 +81,7 @@ IFlyout.prototype.createDom;
 
 /**
  * Initializes the flyout.
- * @param {!Blockly.WorkspaceSvg} targetWorkspace The workspace in which to
+ * @param {!WorkspaceSvg} targetWorkspace The workspace in which to
  *     create new blocks.
  */
 IFlyout.prototype.init;
@@ -106,7 +106,7 @@ IFlyout.prototype.getHeight;
 
 /**
  * Get the workspace inside the flyout.
- * @return {!Blockly.WorkspaceSvg} The workspace inside the flyout.
+ * @return {!WorkspaceSvg} The workspace inside the flyout.
  */
 IFlyout.prototype.getWorkspace;
 
@@ -136,7 +136,7 @@ IFlyout.prototype.hide;
 
 /**
  * Show and populate the flyout.
- * @param {!Blockly.utils.toolbox.FlyoutDefinition|string} flyoutDef Contents to
+ * @param {!FlyoutDefinition|string} flyoutDef Contents to
  *     display in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
@@ -144,8 +144,8 @@ IFlyout.prototype.show;
 
 /**
  * Create a copy of this block on the workspace.
- * @param {!Blockly.BlockSvg} originalBlock The block to copy from the flyout.
- * @return {!Blockly.BlockSvg} The newly created block.
+ * @param {!BlockSvg} originalBlock The block to copy from the flyout.
+ * @return {!BlockSvg} The newly created block.
  * @throws {Error} if something went wrong with deserialization.
  */
 IFlyout.prototype.createBlock;
@@ -183,7 +183,7 @@ IFlyout.prototype.position;
  * Determine if a drag delta is toward the workspace, based on the position
  * and orientation of the flyout. This is used in determineDragIntention_ to
  * determine if a new block should be created or if the flyout should scroll.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @return {boolean} True if the drag is toward the workspace.
  */

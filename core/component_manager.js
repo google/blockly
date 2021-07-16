@@ -109,12 +109,13 @@ ComponentManager.prototype.removeComponent = function(id) {
  */
 ComponentManager.prototype.addCapability = function(id, capability) {
   if (!this.getComponent(id)) {
-    throw Error('Cannot add capability, "' + capability + '". Plugin "' +
-        id + '" has not been added to the ComponentManager');
+    throw Error(
+        'Cannot add capability, "' + capability + '". Plugin "' + id +
+        '" has not been added to the ComponentManager');
   }
   if (this.hasCapability(id, capability)) {
-    console.warn('Plugin "' + id + 'already has capability "' +
-        capability + '"');
+    console.warn(
+        'Plugin "' + id + 'already has capability "' + capability + '"');
     return;
   }
   capability = String(capability).toLowerCase();
@@ -131,12 +132,14 @@ ComponentManager.prototype.addCapability = function(id, capability) {
  */
 ComponentManager.prototype.removeCapability = function(id, capability) {
   if (!this.getComponent(id)) {
-    throw Error('Cannot remove capability, "' + capability + '". Plugin "' +
-        id + '" has not been added to the ComponentManager');
+    throw Error(
+        'Cannot remove capability, "' + capability + '". Plugin "' + id +
+        '" has not been added to the ComponentManager');
   }
   if (!this.hasCapability(id, capability)) {
-    console.warn('Plugin "' + id + 'doesn\'t have capability "' +
-        capability + '" to remove');
+    console.warn(
+        'Plugin "' + id + 'doesn\'t have capability "' + capability +
+        '" to remove');
     return;
   }
   capability = String(capability).toLowerCase();

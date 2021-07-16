@@ -144,7 +144,8 @@ Connection.prototype.connect_ = function(childConnection) {
   // Deal with the orphan if it exists.
   if (orphan) {
     const orphanConnection = parentConnection.type === INPUT ?
-        orphan.outputConnection : orphan.previousConnection;
+        orphan.outputConnection :
+        orphan.previousConnection;
     const connection = Connection.getConnectionForOrphanedConnection(
         childBlock, /** @type {!Connection} */ (orphanConnection));
     if (connection) {
@@ -161,7 +162,6 @@ Connection.prototype.connect_ = function(childConnection) {
  * @package
  */
 Connection.prototype.dispose = function() {
-
   // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
     // Destroy the attached shadow block & its children (if it exists).
@@ -213,12 +213,9 @@ Connection.prototype.isConnected = function() {
  */
 Connection.prototype.canConnectWithReason = function(target) {
   deprecation.warn(
-      'Connection.prototype.canConnectWithReason',
-      'July 2020',
-      'July 2021',
+      'Connection.prototype.canConnectWithReason', 'July 2020', 'July 2021',
       'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnectWithReason(
-      this, target, false);
+  return this.getConnectionChecker().canConnectWithReason(this, target, false);
 };
 
 /**
@@ -232,9 +229,7 @@ Connection.prototype.canConnectWithReason = function(target) {
  */
 Connection.prototype.checkConnection = function(target) {
   deprecation.warn(
-      'Connection.prototype.checkConnection',
-      'July 2020',
-      'July 2021',
+      'Connection.prototype.checkConnection', 'July 2020', 'July 2021',
       'the workspace\'s connection checker');
   const checker = this.getConnectionChecker();
   const reason = checker.canConnectWithReason(this, target, false);
@@ -262,9 +257,7 @@ Connection.prototype.getConnectionChecker = function() {
  */
 Connection.prototype.isConnectionAllowed = function(candidate) {
   deprecation.warn(
-      'Connection.prototype.isConnectionAllowed',
-      'July 2020',
-      'July 2021',
+      'Connection.prototype.isConnectionAllowed', 'July 2020', 'July 2021',
       'the workspace\'s connection checker');
   return this.getConnectionChecker().canConnect(this, candidate, true);
 };
@@ -364,19 +357,19 @@ Connection.getSingleConnection_ = function(block, orphanBlock) {
  *     of blocks, or null.
  * @private
  */
-Connection.getConnectionForOrphanedOutput_ =
-    function(startBlock, orphanBlock) {
-      let newBlock = startBlock;
-      let connection;
-      while ((connection = Connection.getSingleConnection_(
-          /** @type {!Block} */ (newBlock), orphanBlock))) {
-        newBlock = connection.targetBlock();
-        if (!newBlock || newBlock.isShadow()) {
-          return connection;
-        }
-      }
-      return null;
-    };
+Connection.getConnectionForOrphanedOutput_ = function(startBlock, orphanBlock) {
+  let newBlock = startBlock;
+  let connection;
+  while (
+      (connection = Connection.getSingleConnection_(
+           /** @type {!Block} */ (newBlock), orphanBlock))) {
+    newBlock = connection.targetBlock();
+    if (!newBlock || newBlock.isShadow()) {
+      return connection;
+    }
+  }
+  return null;
+};
 
 /**
  * Returns the connection (starting at the startBlock) which will accept
@@ -388,21 +381,20 @@ Connection.getConnectionForOrphanedOutput_ =
  * @return {?Connection} The suitable connection point on the chain of
  *     blocks, or null.
  */
-Connection.getConnectionForOrphanedConnection =
-    function(startBlock, orphanConnection) {
-      if (orphanConnection.type === connectionTypes.OUTPUT_VALUE) {
-        return Connection.getConnectionForOrphanedOutput_(
-            startBlock, orphanConnection.getSourceBlock());
-      }
-      // Otherwise we're dealing with a stack.
-      const connection = startBlock.lastConnectionInStack(true);
-      const checker = orphanConnection.getConnectionChecker();
-      if (connection &&
-          checker.canConnect(orphanConnection, connection, false)) {
-        return connection;
-      }
-      return null;
-    };
+Connection.getConnectionForOrphanedConnection = function(
+    startBlock, orphanConnection) {
+  if (orphanConnection.type === connectionTypes.OUTPUT_VALUE) {
+    return Connection.getConnectionForOrphanedOutput_(
+        startBlock, orphanConnection.getSourceBlock());
+  }
+  // Otherwise we're dealing with a stack.
+  const connection = startBlock.lastConnectionInStack(true);
+  const checker = orphanConnection.getConnectionChecker();
+  if (connection && checker.canConnect(orphanConnection, connection, false)) {
+    return connection;
+  }
+  return null;
+};
 
 /**
  * Disconnect this connection.
@@ -448,8 +440,7 @@ Connection.prototype.disconnect = function() {
  * @param {!Block} childBlock The inferior block.
  * @protected
  */
-Connection.prototype.disconnectInternal_ = function(parentBlock,
-    childBlock) {
+Connection.prototype.disconnectInternal_ = function(parentBlock, childBlock) {
   let event;
   if (Events.isEnabled()) {
     event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
@@ -504,12 +495,9 @@ Connection.prototype.targetBlock = function() {
  */
 Connection.prototype.checkType = function(otherConnection) {
   deprecation.warn(
-      'Connection.prototype.checkType',
-      'October 2019',
-      'January 2021',
+      'Connection.prototype.checkType', 'October 2019', 'January 2021',
       'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnect(this, otherConnection,
-      false);
+  return this.getConnectionChecker().canConnect(this, otherConnection, false);
 };
 
 /**
@@ -524,9 +512,7 @@ Connection.prototype.checkType = function(otherConnection) {
  */
 Connection.prototype.checkType_ = function(otherConnection) {
   deprecation.warn(
-      'Connection.prototype.checkType_',
-      'October 2019',
-      'January 2021',
+      'Connection.prototype.checkType_', 'October 2019', 'January 2021',
       'the workspace\'s connection checker');
   return this.checkType(otherConnection);
 };
@@ -537,9 +523,10 @@ Connection.prototype.checkType_ = function(otherConnection) {
  */
 Connection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
-  if (this.isConnected() && (!this.targetConnection ||
-      !this.getConnectionChecker().canConnect(
-          this, this.targetConnection, false))) {
+  if (this.isConnected() &&
+      (!this.targetConnection ||
+       !this.getConnectionChecker().canConnect(
+           this, this.targetConnection, false))) {
     const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
   }

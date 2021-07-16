@@ -27,7 +27,7 @@ goog.addDependency('../../core/constants.js', ['Blockly.constants'], ['Blockly.c
 goog.addDependency('../../core/contextmenu.js', ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Menu', 'Blockly.MenuItem', 'Blockly.Msg', 'Blockly.WidgetDiv', 'Blockly.Xml', 'Blockly.browserEvents', 'Blockly.constants', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.userAgent']);
 goog.addDependency('../../core/contextmenu_items.js', ['Blockly.ContextMenuItems'], ['Blockly.ContextMenuRegistry', 'Blockly.Events', 'Blockly.constants', 'Blockly.inputTypes'], {'lang': 'es5'});
 goog.addDependency('../../core/contextmenu_registry.js', ['Blockly.ContextMenuRegistry'], [], {'lang': 'es5'});
-goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es5'});
+goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.BlockSvg', 'Blockly.DragTarget', 'Blockly.IDeleteArea']);
 goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], ['Blockly.IDragTarget']);
 goog.addDependency('../../core/dropdowndiv.js', ['Blockly.DropDownDiv'], ['Blockly.utils.Rect', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.style']);

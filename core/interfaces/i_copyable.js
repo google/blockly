@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.ICopyable');
+goog.module('Blockly.ICopyable');
+goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.ISelectable');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -21,13 +22,13 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @extends {Blockly.ISelectable}
  * @interface
  */
-Blockly.ICopyable = function() {};
+const ICopyable = function() {};
 
 /**
  * Encode for copying.
- * @return {?Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?ICopyable.CopyData} Copy metadata.
  */
-Blockly.ICopyable.prototype.toCopyData;
+ICopyable.prototype.toCopyData;
 
 /**
  * Copy Metadata.
@@ -37,4 +38,6 @@ Blockly.ICopyable.prototype.toCopyData;
  *            typeCounts:?Object
  *          }}
  */
-Blockly.ICopyable.CopyData;
+ICopyable.CopyData;
+
+exports = ICopyable;

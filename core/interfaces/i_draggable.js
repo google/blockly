@@ -14,12 +14,12 @@
 goog.module('Blockly.IDraggable');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IDeletable');
+const IDeletable = goog.require('Blockly.IDeletable');
 
 
 /**
  * The interface for an object that can be dragged.
- * @extends {Blockly.IDeletable}
+ * @extends {IDeletable}
  * @interface
  */
 const IDraggable = function() {};

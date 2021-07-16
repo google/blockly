@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IBoundedElement');
+goog.module('Blockly.IBoundedElement');
+goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.utils.Rect');
 
@@ -20,7 +21,7 @@ goog.requireType('Blockly.utils.Rect');
  * A bounded element interface.
  * @interface
  */
-Blockly.IBoundedElement = function() {};
+const IBoundedElement = function() {};
 
 /**
  * Returns the coordinates of a bounded element describing the dimensions of the
@@ -28,11 +29,13 @@ Blockly.IBoundedElement = function() {};
  * Coordinate system: workspace coordinates.
  * @return {!Blockly.utils.Rect} Object with coordinates of the bounded element.
  */
-Blockly.IBoundedElement.prototype.getBoundingRectangle;
+IBoundedElement.prototype.getBoundingRectangle;
 
 /**
  * Move the element by a relative offset.
  * @param {number} dx Horizontal offset in workspace units.
  * @param {number} dy Vertical offset in workspace units.
  */
-Blockly.IBoundedElement.prototype.moveBy;
+IBoundedElement.prototype.moveBy;
+
+exports = IBoundedElement;

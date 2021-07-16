@@ -14,13 +14,13 @@
 goog.module('Blockly.IASTNodeLocationSvg');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 
 
 /**
  * An AST node location SVG interface.
  * @interface
- * @extends {Blockly.IASTNodeLocation}
+ * @extends {IASTNodeLocation}
  */
 const IASTNodeLocationSvg = function() {};
 

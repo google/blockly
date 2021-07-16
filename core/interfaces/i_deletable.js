@@ -11,17 +11,20 @@
 
 'use strict';
 
-goog.provide('Blockly.IDeletable');
+goog.module('Blockly.IDeletable');
+goog.module.declareLegacyNamespace();
 
 
 /**
  * The interface for an object that can be deleted.
  * @interface
  */
-Blockly.IDeletable = function() {};
+const IDeletable = function() {};
 
 /**
  * Get whether this object is deletable or not.
  * @return {boolean} True if deletable.
  */
-Blockly.IDeletable.prototype.isDeletable;
+IDeletable.prototype.isDeletable;
+
+exports = IDeletable;

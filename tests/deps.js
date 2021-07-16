@@ -74,7 +74,7 @@ goog.addDependency('../../core/input.js', ['Blockly.Input'], ['Blockly.Connectio
 goog.addDependency('../../core/input_types.js', ['Blockly.inputTypes'], ['Blockly.connectionTypes']);
 goog.addDependency('../../core/insertion_marker_manager.js', ['Blockly.InsertionMarkerManager'], ['Blockly.ComponentManager', 'Blockly.Events', 'Blockly.blockAnimations', 'Blockly.connectionTypes', 'Blockly.constants'], {'lang': 'es5'});
 goog.addDependency('../../core/interfaces/i_ast_node_location.js', ['Blockly.IASTNodeLocation'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_ast_node_location_svg.js', ['Blockly.IASTNodeLocationSvg'], ['Blockly.IASTNodeLocation']);
+goog.addDependency('../../core/interfaces/i_ast_node_location_svg.js', ['Blockly.IASTNodeLocationSvg'], ['Blockly.IASTNodeLocation'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_ast_node_location_with_block.js', ['Blockly.IASTNodeLocationWithBlock'], ['Blockly.IASTNodeLocation']);
 goog.addDependency('../../core/interfaces/i_autohideable.js', ['Blockly.IAutoHideable'], ['Blockly.IComponent']);
 goog.addDependency('../../core/interfaces/i_block_dragger.js', ['Blockly.IBlockDragger'], [], {'lang': 'es6', 'module': 'goog'});

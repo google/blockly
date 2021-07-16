@@ -14,16 +14,16 @@
 goog.module('Blockly.IToolbox');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IRegistrable');
-goog.requireType('Blockly.IToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
-goog.requireType('Blockly.WorkspaceSvg');
+const IFlyout = goog.requireType('Blockly.IFlyout');
+const IRegistrable = goog.require('Blockly.IRegistrable');
+const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {ToolboxInfo} = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
  * Interface for a toolbox.
- * @extends {Blockly.IRegistrable}
+ * @extends {IRegistrable}
  * @interface
  */
 const IToolbox = function() {};
@@ -36,7 +36,7 @@ IToolbox.prototype.init;
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!Blockly.utils.toolbox.ToolboxInfo} toolboxDef Object holding information
+ * @param {!ToolboxInfo} toolboxDef Object holding information
  *     for creating a toolbox.
  */
 IToolbox.prototype.render;
@@ -55,13 +55,13 @@ IToolbox.prototype.getHeight;
 
 /**
  * Gets the toolbox flyout.
- * @return {?Blockly.IFlyout} The toolbox flyout.
+ * @return {?IFlyout} The toolbox flyout.
  */
 IToolbox.prototype.getFlyout;
 
 /**
  * Gets the workspace for the toolbox.
- * @return {!Blockly.WorkspaceSvg} The parent workspace for the toolbox.
+ * @return {!WorkspaceSvg} The parent workspace for the toolbox.
  */
 IToolbox.prototype.getWorkspace;
 
@@ -120,7 +120,7 @@ IToolbox.prototype.selectItemByPosition;
 
 /**
  * Gets the selected item.
- * @return {?Blockly.IToolboxItem} The selected item, or null if no item is
+ * @return {?IToolboxItem} The selected item, or null if no item is
  *     currently selected.
  */
 IToolbox.prototype.getSelectedItem;

@@ -338,5 +338,128 @@ suite('JSO', function() {
         assertProperty(jso, 'fields', {'FIELD': ['state1', 42, true]});
       });
     });
+
+    suite.only('Connected blocks', function() {
+      setup(function() {
+        this.assertInput = function(jso, name, value) {
+          chai.assert.deepInclude(jso['inputs'][name], value);
+        };
+  
+        this.assertChild = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          const childBlock = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.connect(
+              childBlock.outputConnection || childBlock.previousConnection);
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso, inputName, {'block': { 'type': blockType, 'id': 'id2'}});
+        };
+  
+        this.assertShadow = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="' + blockType + '" id="test"></block>'));
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso, inputName, {'shadow': { 'type': blockType, 'id': 'test'}});
+        };
+  
+        this.assertOverwrittenShadow = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          const childBlock = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.connect(
+              childBlock.outputConnection || childBlock.previousConnection);
+          block.getInput(inputName).connection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="' + blockType + '" id="test"></block>'));
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso,
+              inputName,
+              {
+                'block': {
+                  'type': blockType,
+                  'id': 'id2'
+                },
+                'shadow': {
+                  'type': blockType,
+                  'id': 'test'
+                }
+              });
+        };
+      });
+
+      suite('Value', function() {
+        test('Child', function() {
+          this.assertChild('row_block', 'INPUT');
+        });
+
+        test('Shadow', function() {
+          this.assertShadow('row_block', 'INPUT');
+        });
+
+        test('Overwritten shadow', function() {
+          this.assertOverwrittenShadow('row_block', 'INPUT');
+        });
+      });
+
+      suite('Statement', function() {
+        test('Child', function() {
+          this.assertChild('statement_block', 'NAME');
+        });
+
+        test('Shadow', function() {
+          this.assertShadow('statement_block', 'NAME');
+        });
+
+        test('Overwritten shadow', function() {
+          this.assertOverwrittenShadow('statement_block', 'NAME');
+        });
+      });
+
+      suite('Next', function() {
+        test('Child', function() {
+          const block = this.workspace.newBlock('stack_block');
+          const childBlock = this.workspace.newBlock('stack_block');
+          block.nextConnection.connect(childBlock.previousConnection);
+          const jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepInclude(
+              jso['next'], {'block': { 'type': 'stack_block', 'id': 'id2'}});
+        });
+
+        test('Shadow', function() {
+          const block = this.workspace.newBlock('stack_block');
+          block.nextConnection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="test"></block>'));
+          const jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepInclude(
+              jso['next'], {'shadow': { 'type': 'stack_block', 'id': 'test'}});
+        });
+
+        test('Overwritten shadow', function() {
+          const block = this.workspace.newBlock('stack_block');
+          const childBlock = this.workspace.newBlock('stack_block');
+          block.nextConnection.connect(childBlock.previousConnection);
+          block.nextConnection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="test"></block>'));
+          const jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepInclude(
+              jso['next'],
+              {
+                'block': {
+                  'type': 'stack_block',
+                  'id': 'id2'
+                },
+                'shadow': {
+                  'type': 'stack_block',
+                  'id': 'test'
+                }
+              });
+        });
+      });
+    });
   });
 });

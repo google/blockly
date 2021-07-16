@@ -81,14 +81,14 @@ goog.addDependency('../../core/interfaces/i_block_dragger.js', ['Blockly.IBlockD
 goog.addDependency('../../core/interfaces/i_bounded_element.js', ['Blockly.IBoundedElement'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_bubble.js', ['Blockly.IBubble'], ['Blockly.IContextMenu', 'Blockly.IDraggable'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_component.js', ['Blockly.IComponent'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IConnectionChecker'], []);
+goog.addDependency('../../core/interfaces/i_connection_checker.js', ['Blockly.IConnectionChecker'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_contextmenu.js', ['Blockly.IContextMenu'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_copyable.js', ['Blockly.ICopyable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_deletable.js', ['Blockly.IDeletable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_delete_area.js', ['Blockly.IDeleteArea'], ['Blockly.IDragTarget'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_drag_target.js', ['Blockly.IDragTarget'], ['Blockly.IComponent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_draggable.js', ['Blockly.IDraggable'], ['Blockly.IDeletable'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], ['Blockly.IRegistrable'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_keyboard_accessible.js', ['Blockly.IKeyboardAccessible'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_metrics_manager.js', ['Blockly.IMetricsManager'], []);
 goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], [], {'lang': 'es6', 'module': 'goog'});
@@ -97,7 +97,7 @@ goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistra
 goog.addDependency('../../core/interfaces/i_registrable_field.js', ['Blockly.IRegistrableField'], []);
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_toolbox.js', ['Blockly.IToolbox'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/interfaces/i_toolbox.js', ['Blockly.IToolbox'], ['Blockly.IRegistrable'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_toolbox_item.js', ['Blockly.ICollapsibleToolboxItem', 'Blockly.ISelectableToolboxItem', 'Blockly.IToolboxItem'], []);
 goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.Coordinate'], {'lang': 'es5'});
 goog.addDependency('../../core/keyboard_nav/basic_cursor.js', ['Blockly.BasicCursor'], ['Blockly.ASTNode', 'Blockly.Cursor', 'Blockly.registry'], {'lang': 'es5'});

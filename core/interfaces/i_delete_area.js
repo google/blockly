@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IDeleteArea');
+goog.module('Blockly.IDeleteArea');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IDragTarget');
 
@@ -25,7 +26,7 @@ goog.requireType('Blockly.IDraggable');
  * @extends {Blockly.IDragTarget}
  * @interface
  */
-Blockly.IDeleteArea = function() {};
+const IDeleteArea = function() {};
 
 /**
  * Returns whether the provided block or bubble would be deleted if dropped on
@@ -39,4 +40,6 @@ Blockly.IDeleteArea = function() {};
  * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  */
-Blockly.IDeleteArea.prototype.wouldDelete;
+IDeleteArea.prototype.wouldDelete;
+
+exports = IDeleteArea;

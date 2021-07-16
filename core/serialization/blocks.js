@@ -125,9 +125,16 @@ const addCoords = function(block, state) {
  */
 const addExtraState = function(block, state) {
   if (block.saveExtraState) {
-    state['extra-state'] = block.saveExtraState();
+    const extraState = block.saveExtraState();
+    if (extraState !== null) {
+      state['extraState'] = extraState;
+    }
   } else if (block.mutationToDom) {  // Backwards compatibility.
-    state['extra-state'] = Blockly.Xml.domToText(block.mutationToDom())
-        .replace('xmlns="https://developers.google.com/blockly/xml"', '');
+    const mutation = block.mutationToDom();
+    if (mutation !== null) {
+      state['extraState'] = Blockly.Xml.domToText(mutation)
+          .replace('xmlns="https://developers.google.com/blockly/xml"', '');
+ 
+    }
   }
 };

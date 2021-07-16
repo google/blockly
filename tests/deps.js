@@ -89,7 +89,7 @@ goog.addDependency('../../core/interfaces/i_draggable.js', ['Blockly.IDraggable'
 goog.addDependency('../../core/interfaces/i_flyout.js', ['Blockly.IFlyout'], []);
 goog.addDependency('../../core/interfaces/i_metrics_manager.js', ['Blockly.IMetricsManager'], []);
 goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_positionable.js', ['Blockly.IPositionable'], ['Blockly.IComponent']);
+goog.addDependency('../../core/interfaces/i_positionable.js', ['Blockly.IPositionable'], ['Blockly.IComponent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistrable'], []);
 goog.addDependency('../../core/interfaces/i_registrable_field.js', ['Blockly.IRegistrableField'], []);
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], []);

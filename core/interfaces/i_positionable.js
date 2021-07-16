@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IPositionable');
+goog.module('Blockly.IPositionable');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IComponent');
 
@@ -24,7 +25,7 @@ goog.requireType('Blockly.utils.Rect');
  * @extends {Blockly.IComponent}
  * @interface
  */
-Blockly.IPositionable = function() {};
+const IPositionable = function() {};
 
 /**
  * Positions the element. Called when the window is resized.
@@ -32,7 +33,7 @@ Blockly.IPositionable = function() {};
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.IPositionable.prototype.position;
+IPositionable.prototype.position;
 
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
@@ -40,4 +41,6 @@ Blockly.IPositionable.prototype.position;
  * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
-Blockly.IPositionable.prototype.getBoundingRectangle;
+IPositionable.prototype.getBoundingRectangle;
+
+exports = IPositionable;

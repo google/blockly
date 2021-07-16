@@ -14,7 +14,7 @@
 goog.module('Blockly.IBoundedElement');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.utils.Rect');
+const Rect = goog.requireType('Blockly.utils.Rect');
 
 
 /**
@@ -27,7 +27,7 @@ const IBoundedElement = function() {};
  * Returns the coordinates of a bounded element describing the dimensions of the
  * element.
  * Coordinate system: workspace coordinates.
- * @return {!Blockly.utils.Rect} Object with coordinates of the bounded element.
+ * @return {!Rect} Object with coordinates of the bounded element.
  */
 IBoundedElement.prototype.getBoundingRectangle;
 

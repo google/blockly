@@ -15,12 +15,12 @@
 goog.module('Blockly.IAutoHideable');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IComponent');
+const IComponent = goog.require('Blockly.IComponent');
 
 
 /**
  * Interface for a component that can be automatically hidden.
- * @extends {Blockly.IComponent}
+ * @extends {IComponent}
  * @interface
  */
 const IAutoHideable = function() {};

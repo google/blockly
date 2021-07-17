@@ -203,8 +203,7 @@ Blockly.Field.prototype.isDirty_ = true;
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Whether the field value can be changed using the editor on an editable
- *     block.
+ * Can the field value be changed using the editor on an editable block?
  * @type {boolean}
  * @protected
  */

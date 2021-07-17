@@ -153,10 +153,10 @@ Blockly.FieldDropdown.fromJson = function(options) {
 };
 
 /**
- * Sets the field's value based on the given XML element. Should only be called
- *     by Blockly.Xml.
- * @param {!Element} fieldElement The element containing info about the field's
- *     state.
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
+ * @param {!Element} fieldElement The element containing info about the
+ * field's state.
  * @package
  */
 Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {

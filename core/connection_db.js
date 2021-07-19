@@ -285,7 +285,7 @@ ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dxy) {
  * Initialize a set of connection DBs for a workspace.
  * @param {!IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a
- * drag.
+ *     drag.
  * @return {!Array<!ConnectionDB>} Array of databases.
  */
 ConnectionDB.init = function(checker) {

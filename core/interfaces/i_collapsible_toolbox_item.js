@@ -14,20 +14,20 @@
 goog.module('Blockly.ICollapsibleToolboxItem');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.ISelectableToolboxItem');
-goog.requireType('Blockly.IToolboxItem');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
+const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 
 
 /**
  * Interface for an item in the toolbox that can be collapsed.
- * @extends {Blockly.ISelectableToolboxItem}
+ * @extends {ISelectableToolboxItem}
  * @interface
  */
 const ICollapsibleToolboxItem = function() {};
 
 /**
  * Gets any children toolbox items. (ex. Gets the subcategories)
- * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
+ * @return {!Array<!IToolboxItem>} The child toolbox items.
  */
 ICollapsibleToolboxItem.prototype.getChildToolboxItems;
 

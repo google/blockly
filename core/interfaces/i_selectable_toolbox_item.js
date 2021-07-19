@@ -14,13 +14,13 @@
 goog.module('Blockly.ISelectableToolboxItem');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
+const {FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
  * Interface for an item in the toolbox that can be selected.
- * @extends {Blockly.IToolboxItem}
+ * @extends {IToolboxItem}
  * @interface
  */
 const ISelectableToolboxItem = function() {};
@@ -35,7 +35,7 @@ ISelectableToolboxItem.prototype.getName;
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Blockly.utils.toolbox.FlyoutItemInfoArray|string} The definition
+ * @return {!FlyoutItemInfoArray|string} The definition
  *     of items to be displayed in the flyout.
  * @public
  */

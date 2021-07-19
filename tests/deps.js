@@ -105,7 +105,7 @@ goog.addDependency('../../core/internal_constants.js', ['Blockly.internalConstan
 goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.connectionTypes', 'Blockly.utils.Coordinate'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/basic_cursor.js', ['Blockly.BasicCursor'], ['Blockly.ASTNode', 'Blockly.Cursor', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/cursor.js', ['Blockly.Cursor'], ['Blockly.ASTNode', 'Blockly.Marker', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/keyboard_nav/marker.js', ['Blockly.Marker'], ['Blockly.ASTNode']);
+goog.addDependency('../../core/keyboard_nav/marker.js', ['Blockly.Marker'], ['Blockly.ASTNode'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/tab_navigate_cursor.js', ['Blockly.TabNavigateCursor'], ['Blockly.ASTNode', 'Blockly.BasicCursor', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/marker_manager.js', ['Blockly.MarkerManager'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/menu.js', ['Blockly.Menu'], ['Blockly.browserEvents', 'Blockly.utils.Coordinate', 'Blockly.utils.KeyCodes', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.style'], {'lang': 'es6', 'module': 'goog'});

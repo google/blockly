@@ -15,19 +15,17 @@ goog.module.declareLegacyNamespace();
 
 const Block = goog.requireType('Blockly.Block');
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
-const browserEvents = goog.require('Blockly.browserEvents');
 const Bubble = goog.require('Blockly.Bubble');
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Css = goog.require('Blockly.Css');
-const dom = goog.require('Blockly.utils.dom');
 const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 const Size = goog.requireType('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const utilsObject = goog.require('Blockly.utils.object');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const {CommentModel} = goog.requireType('Blockly.Block');
+const {conditionalBind, Data, unbind} = goog.require('Blockly.browserEvents');
+const {dom, userAgent, object: utilsObject} = goog.require('Blockly.utils');
+const {register} = goog.require('Blockly.Css');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -65,28 +63,28 @@ const Comment = function(block) {
 
   /**
    * Mouse up event data.
-   * @type {?browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Wheel event data.
-   * @type {?browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.onWheelWrapper_ = null;
 
   /**
    * Change event data.
-   * @type {?browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.onChangeWrapper_ = null;
 
   /**
    * Input event data.
-   * @type {?browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.onInputWrapper_ = null;
@@ -167,25 +165,23 @@ Comment.prototype.createEditor_ = function() {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-      textarea, 'mouseup', this, this.startEdit_, true, true);
+  this.onMouseUpWrapper_ =
+      conditionalBind(textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  this.onWheelWrapper_ =
-      browserEvents.conditionalBind(textarea, 'wheel', this, function(e) {
-        e.stopPropagation();
-      });
+  this.onWheelWrapper_ = conditionalBind(textarea, 'wheel', this, function(e) {
+    e.stopPropagation();
+  });
   this.onChangeWrapper_ =
-      browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
+      conditionalBind(textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
           Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
         }
       });
-  this.onInputWrapper_ =
-      browserEvents.conditionalBind(textarea, 'input', this, function(_e) {
-        this.model_.text = textarea.value;
-      });
+  this.onInputWrapper_ = conditionalBind(textarea, 'input', this, function(_e) {
+    this.model_.text = textarea.value;
+  });
 
   setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -304,19 +300,19 @@ Comment.prototype.createNonEditableBubble_ = function() {
  */
 Comment.prototype.disposeBubble_ = function() {
   if (this.onMouseUpWrapper_) {
-    browserEvents.unbind(this.onMouseUpWrapper_);
+    unbind(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
   }
   if (this.onWheelWrapper_) {
-    browserEvents.unbind(this.onWheelWrapper_);
+    unbind(this.onWheelWrapper_);
     this.onWheelWrapper_ = null;
   }
   if (this.onChangeWrapper_) {
-    browserEvents.unbind(this.onChangeWrapper_);
+    unbind(this.onChangeWrapper_);
     this.onChangeWrapper_ = null;
   }
   if (this.onInputWrapper_) {
-    browserEvents.unbind(this.onInputWrapper_);
+    unbind(this.onInputWrapper_);
     this.onInputWrapper_ = null;
   }
   this.bubble_.dispose();
@@ -394,7 +390,7 @@ Comment.prototype.dispose = function() {
 /**
  * CSS for block comment.  See css.js for use.
  */
-Css.register([
+register([
   /* eslint-disable indent */
   '.blocklyCommentTextarea {',
     'background-color: #fef49c;',

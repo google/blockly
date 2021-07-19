@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Cursor');
+goog.module('Blockly.Cursor');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Marker');
@@ -25,15 +26,15 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.Marker}
  */
-Blockly.Cursor = function() {
-  Blockly.Cursor.superClass_.constructor.call(this);
+const Cursor = function() {
+  Cursor.superClass_.constructor.call(this);
 
   /**
    * @override
    */
   this.type = 'cursor';
 };
-Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
+Blockly.utils.object.inherits(Cursor, Blockly.Marker);
 
 /**
  * Find the next connection, field, or block.
@@ -41,7 +42,7 @@ Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
  *     not set or there is no next value.
  * @public
  */
-Blockly.Cursor.prototype.next = function() {
+Cursor.prototype.next = function() {
   const curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -66,7 +67,7 @@ Blockly.Cursor.prototype.next = function() {
  *     not set or there is no in value.
  * @public
  */
-Blockly.Cursor.prototype.in = function() {
+Cursor.prototype.in = function() {
   let curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -91,7 +92,7 @@ Blockly.Cursor.prototype.in = function() {
  *     is not set or there is no previous value.
  * @public
  */
-Blockly.Cursor.prototype.prev = function() {
+Cursor.prototype.prev = function() {
   const curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -116,7 +117,7 @@ Blockly.Cursor.prototype.prev = function() {
  *     not set or there is no out value.
  * @public
  */
-Blockly.Cursor.prototype.out = function() {
+Cursor.prototype.out = function() {
   const curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -134,4 +135,6 @@ Blockly.Cursor.prototype.out = function() {
 };
 
 Blockly.registry.register(
-    Blockly.registry.Type.CURSOR, Blockly.registry.DEFAULT, Blockly.Cursor);
+    Blockly.registry.Type.CURSOR, Blockly.registry.DEFAULT, Cursor);
+
+exports = Cursor;

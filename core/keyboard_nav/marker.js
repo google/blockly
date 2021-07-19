@@ -85,7 +85,7 @@ Blockly.Marker.prototype.getCurNode = function() {
  * @param {Blockly.ASTNode} newNode The new location of the marker.
  */
 Blockly.Marker.prototype.setCurNode = function(newNode) {
-  var oldNode = this.curNode_;
+  const oldNode = this.curNode_;
   this.curNode_ = newNode;
   if (this.drawer_) {
     this.drawer_.draw(oldNode, this.curNode_);

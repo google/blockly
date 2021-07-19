@@ -4,7 +4,6 @@ goog.addDependency('../../blocks/logic.js', ['Blockly.Blocks.logic', 'Blockly.Co
 goog.addDependency('../../blocks/loops.js', ['Blockly.Blocks.loops', 'Blockly.Constants.Loops'], ['Blockly', 'Blockly.Blocks', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Warning']);
 goog.addDependency('../../blocks/math.js', ['Blockly.Blocks.math', 'Blockly.Constants.Math'], ['Blockly', 'Blockly.Blocks', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.FieldNumber', 'Blockly.FieldVariable']);
 goog.addDependency('../../blocks/procedures.js', ['Blockly.Blocks.procedures'], ['Blockly', 'Blockly.Blocks', 'Blockly.Comment', 'Blockly.FieldCheckbox', 'Blockly.FieldLabel', 'Blockly.FieldTextInput', 'Blockly.Mutator', 'Blockly.Warning'], {'lang': 'es5'});
-goog.addDependency('../../blocks/test_blocks.js', ['Blockly.TestBlocks'], ['Blockly', 'Blockly.Blocks'], {'lang': 'es5'});
 goog.addDependency('../../blocks/text.js', ['Blockly.Blocks.texts', 'Blockly.Constants.Text'], ['Blockly', 'Blockly.Blocks', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldMultilineInput', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.Mutator']);
 goog.addDependency('../../blocks/variables.js', ['Blockly.Blocks.variables', 'Blockly.Constants.Variables'], ['Blockly', 'Blockly.Blocks', 'Blockly.FieldLabel', 'Blockly.FieldVariable']);
 goog.addDependency('../../blocks/variables_dynamic.js', ['Blockly.Constants.VariablesDynamic'], ['Blockly', 'Blockly.Blocks', 'Blockly.FieldLabel', 'Blockly.FieldVariable']);

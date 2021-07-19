@@ -17,7 +17,7 @@
 goog.module('Blockly.utils.toolbox');
 goog.module.declareLegacyNamespace();
 
-const {IE} = goog.require('Blockly.utils.userAgent');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const {textToDom} = goog.require('Blockly.Xml');
 
 const {CssConfig: CategoryCssConfig} = goog.requireType('Blockly.ToolboxCategory');
@@ -273,7 +273,7 @@ const hasCategories = function(toolboxJson) {
     return false;
   }
 
-  let toolboxKind = toolboxJson['kind'];
+  const toolboxKind = toolboxJson['kind'];
   if (toolboxKind) {
     return toolboxKind == CATEGORY_TOOLBOX_KIND;
   }
@@ -387,7 +387,7 @@ const addAttributes = function(node, obj) {
 const parseToolboxTree = function(toolboxDef) {
   if (toolboxDef) {
     if (typeof toolboxDef != 'string') {
-      if (IE && toolboxDef.outerHTML) {
+      if (userAgent.IE && toolboxDef.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will
         // not have the proper DOM structure since the browser doesn't support
@@ -430,4 +430,4 @@ exports = {
   hasCategories,
   isCategoryCollapsible,
   parseToolboxTree
-}
+};

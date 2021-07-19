@@ -95,7 +95,7 @@ goog.addDependency('../../core/interfaces/i_metrics_manager.js', ['Blockly.IMetr
 goog.addDependency('../../core/interfaces/i_movable.js', ['Blockly.IMovable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_positionable.js', ['Blockly.IPositionable'], ['Blockly.IComponent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_registrable.js', ['Blockly.IRegistrable'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/interfaces/i_registrable_field.js', ['Blockly.IRegistrableField'], []);
+goog.addDependency('../../core/interfaces/i_registrable_field.js', ['Blockly.IRegistrableField'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_selectable.js', ['Blockly.ISelectable'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_selectable_toolbox_item.js', ['Blockly.ISelectableToolboxItem'], ['Blockly.IToolboxItem'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'], [], {'lang': 'es6', 'module': 'goog'});

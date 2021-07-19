@@ -14,7 +14,7 @@
 goog.module('Blockly.IRegistrableField');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.Field');
+const Field = goog.requireType('Blockly.Field');
 
 
 /**
@@ -28,7 +28,7 @@ goog.requireType('Blockly.Field');
 let IRegistrableField;
 
 /**
- * @typedef {function(!Object): Blockly.Field}
+ * @typedef {function(!Object): Field}
  */
 IRegistrableField.fromJson;
 

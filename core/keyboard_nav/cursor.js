@@ -14,17 +14,17 @@
 goog.module('Blockly.Cursor');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.ASTNode');
-goog.require('Blockly.Marker');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const ASTNode = goog.require('Blockly.ASTNode');
+const Marker = goog.require('Blockly.Marker');
+const {DEFAULT, register, Type} = goog.require('Blockly.registry');
+const {inherits} = goog.require('Blockly.utils.object');
 
 
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
- * @extends {Blockly.Marker}
+ * @extends {Marker}
  */
 const Cursor = function() {
   Cursor.superClass_.constructor.call(this);
@@ -34,11 +34,11 @@ const Cursor = function() {
    */
   this.type = 'cursor';
 };
-Blockly.utils.object.inherits(Cursor, Blockly.Marker);
+inherits(Cursor, Marker);
 
 /**
  * Find the next connection, field, or block.
- * @return {Blockly.ASTNode} The next element, or null if the current node is
+ * @return {ASTNode} The next element, or null if the current node is
  *     not set or there is no next value.
  * @public
  */
@@ -50,8 +50,8 @@ Cursor.prototype.next = function() {
 
   let newNode = curNode.next();
   while (newNode && newNode.next() &&
-         (newNode.getType() == Blockly.ASTNode.types.NEXT ||
-          newNode.getType() == Blockly.ASTNode.types.BLOCK)) {
+         (newNode.getType() == ASTNode.types.NEXT ||
+          newNode.getType() == ASTNode.types.BLOCK)) {
     newNode = newNode.next();
   }
 
@@ -63,7 +63,7 @@ Cursor.prototype.next = function() {
 
 /**
  * Find the in connection or field.
- * @return {Blockly.ASTNode} The in element, or null if the current node is
+ * @return {ASTNode} The in element, or null if the current node is
  *     not set or there is no in value.
  * @public
  */
@@ -74,8 +74,8 @@ Cursor.prototype.in = function() {
   }
   // If we are on a previous or output connection, go to the block level before
   // performing next operation.
-  if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS ||
-      curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
+  if (curNode.getType() == ASTNode.types.PREVIOUS ||
+      curNode.getType() == ASTNode.types.OUTPUT) {
     curNode = curNode.next();
   }
   const newNode = curNode.in();
@@ -88,7 +88,7 @@ Cursor.prototype.in = function() {
 
 /**
  * Find the previous connection, field, or block.
- * @return {Blockly.ASTNode} The previous element, or null if the current node
+ * @return {ASTNode} The previous element, or null if the current node
  *     is not set or there is no previous value.
  * @public
  */
@@ -100,8 +100,8 @@ Cursor.prototype.prev = function() {
   let newNode = curNode.prev();
 
   while (newNode && newNode.prev() &&
-         (newNode.getType() == Blockly.ASTNode.types.NEXT ||
-          newNode.getType() == Blockly.ASTNode.types.BLOCK)) {
+         (newNode.getType() == ASTNode.types.NEXT ||
+          newNode.getType() == ASTNode.types.BLOCK)) {
     newNode = newNode.prev();
   }
 
@@ -113,7 +113,7 @@ Cursor.prototype.prev = function() {
 
 /**
  * Find the out connection, field, or block.
- * @return {Blockly.ASTNode} The out element, or null if the current node is
+ * @return {ASTNode} The out element, or null if the current node is
  *     not set or there is no out value.
  * @public
  */
@@ -124,7 +124,7 @@ Cursor.prototype.out = function() {
   }
   let newNode = curNode.out();
 
-  if (newNode && newNode.getType() == Blockly.ASTNode.types.BLOCK) {
+  if (newNode && newNode.getType() == ASTNode.types.BLOCK) {
     newNode = newNode.prev() || newNode;
   }
 
@@ -134,7 +134,6 @@ Cursor.prototype.out = function() {
   return newNode;
 };
 
-Blockly.registry.register(
-    Blockly.registry.Type.CURSOR, Blockly.registry.DEFAULT, Cursor);
+register(Type.CURSOR, DEFAULT, Cursor);
 
 exports = Cursor;

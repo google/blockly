@@ -15,20 +15,19 @@
 goog.module('Blockly.ConnectionDB');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.connectionTypes');
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+const RenderedConnection = goog.require('Blockly.RenderedConnection');
+const connectionTypes = goog.require('Blockly.connectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.RenderedConnection');
-
-goog.requireType('Blockly.IConnectionChecker');
-goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
- * @param {!Blockly.IConnectionChecker} checker The workspace's
+ * @param {!IConnectionChecker} checker The workspace's
  *     connection type checker, used to decide if connections are valid during a
  *     drag.
  * @constructor
@@ -36,14 +35,14 @@ goog.requireType('Blockly.utils.Coordinate');
 const ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
-   * @type {!Array<!Blockly.RenderedConnection>}
+   * @type {!Array<!RenderedConnection>}
    * @private
    */
   this.connections_ = [];
   /**
    * The workspace's connection type checker, used to decide if connections are
    * valid during a drag.
-   * @type {!Blockly.IConnectionChecker}
+   * @type {!IConnectionChecker}
    * @private
    */
   this.connectionChecker_ = checker;
@@ -51,7 +50,7 @@ const ConnectionDB = function(checker) {
 
 /**
  * Add a connection to the database. Should not already exist in the database.
- * @param {!Blockly.RenderedConnection} connection The connection to be added.
+ * @param {!RenderedConnection} connection The connection to be added.
  * @param {number} yPos The y position used to decide where to insert the
  *    connection.
  * @package
@@ -66,7 +65,7 @@ ConnectionDB.prototype.addConnection = function(connection, yPos) {
  *
  * Starts by doing a binary search to find the approximate location, then
  * linearly searches nearby for the exact connection.
- * @param {!Blockly.RenderedConnection} conn The connection to find.
+ * @param {!RenderedConnection} conn The connection to find.
  * @param {number} yPos The y position used to find the index of the connection.
  * @return {number} The index of the connection, or -1 if the connection was
  *     not found.
@@ -133,7 +132,7 @@ ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
 
 /**
  * Remove a connection from the database.  Must already exist in DB.
- * @param {!Blockly.RenderedConnection} connection The connection to be removed.
+ * @param {!RenderedConnection} connection The connection to be removed.
  * @param {number} yPos The y position used to find the index of the connection.
  * @throws {Error} If the connection cannot be found in the database.
  */
@@ -148,10 +147,10 @@ ConnectionDB.prototype.removeConnection = function(connection, yPos) {
 /**
  * Find all nearby connections to the given connection.
  * Type checking does not apply, since this function is used for bumping.
- * @param {!Blockly.RenderedConnection} connection The connection whose
+ * @param {!RenderedConnection} connection The connection whose
  *     neighbours should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
- * @return {!Array<!Blockly.RenderedConnection>} List of connections.
+ * @return {!Array<!RenderedConnection>} List of connections.
  */
 ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   const db = this.connections_;
@@ -220,13 +219,13 @@ ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
 
 /**
  * Find the closest compatible connection to this connection.
- * @param {!Blockly.RenderedConnection} conn The connection searching for a compatible
+ * @param {!RenderedConnection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
- * @param {!Blockly.utils.Coordinate} dxy Offset between this connection's
+ * @param {!Coordinate} dxy Offset between this connection's
  *     location in the database and the current location (as a result of
  *     dragging).
- * @return {!{connection: Blockly.RenderedConnection, radius: number}}
+ * @return {!{connection: RenderedConnection, radius: number}}
  *     Contains two properties: 'connection' which is either another
  *     connection or null, and 'radius' which is the distance.
  */
@@ -285,20 +284,20 @@ ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
 /**
  * Initialize a set of connection DBs for a workspace.
- * @param {!Blockly.IConnectionChecker} checker The workspace's
+ * @param {!IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a drag.
  * @return {!Array<!ConnectionDB>} Array of databases.
  */
 ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   const dbList = [];
-  dbList[Blockly.connectionTypes.INPUT_VALUE] =
+  dbList[connectionTypes.INPUT_VALUE] =
       new ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.OUTPUT_VALUE] =
+  dbList[connectionTypes.OUTPUT_VALUE] =
       new ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.NEXT_STATEMENT] =
+  dbList[connectionTypes.NEXT_STATEMENT] =
       new ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+  dbList[connectionTypes.PREVIOUS_STATEMENT] =
       new ConnectionDB(checker);
   return dbList;
 };

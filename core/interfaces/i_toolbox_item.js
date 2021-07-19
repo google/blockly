@@ -11,16 +11,15 @@
 
 'use strict';
 
-goog.provide('Blockly.IToolboxItem');
-
-goog.requireType('Blockly.utils.toolbox');
+goog.module('Blockly.IToolboxItem');
+goog.module.declareLegacyNamespace();
 
 
 /**
  * Interface for an item in the toolbox.
  * @interface
  */
-Blockly.IToolboxItem = function() {};
+const IToolboxItem = function() {};
 
 /**
  * Initializes the toolbox item.
@@ -29,21 +28,21 @@ Blockly.IToolboxItem = function() {};
  * @return {void}
  * @public
  */
-Blockly.IToolboxItem.prototype.init;
+IToolboxItem.prototype.init;
 
 /**
  * Gets the div for the toolbox item.
  * @return {?Element} The div for the toolbox item.
  * @public
  */
-Blockly.IToolboxItem.prototype.getDiv;
+IToolboxItem.prototype.getDiv;
 
 /**
  * Gets a unique identifier for this toolbox item.
  * @return {string} The ID for the toolbox item.
  * @public
  */
-Blockly.IToolboxItem.prototype.getId;
+IToolboxItem.prototype.getId;
 
 /**
  * Gets the parent if the toolbox item is nested.
@@ -51,31 +50,33 @@ Blockly.IToolboxItem.prototype.getId;
  *     this toolbox item is not nested.
  * @public
  */
-Blockly.IToolboxItem.prototype.getParent;
+IToolboxItem.prototype.getParent;
 
 /**
  * Gets the nested level of the category.
  * @return {number} The nested level of the category.
  * @package
  */
-Blockly.IToolboxItem.prototype.getLevel;
+IToolboxItem.prototype.getLevel;
 
 /**
  * Whether the toolbox item is selectable.
  * @return {boolean} True if the toolbox item can be selected.
  * @public
  */
-Blockly.IToolboxItem.prototype.isSelectable;
+IToolboxItem.prototype.isSelectable;
 
 /**
  * Whether the toolbox item is collapsible.
  * @return {boolean} True if the toolbox item is collapsible.
  * @public
  */
-Blockly.IToolboxItem.prototype.isCollapsible;
+IToolboxItem.prototype.isCollapsible;
 
 /**
  * Dispose of this toolbox item. No-op by default.
  * @public
  */
-Blockly.IToolboxItem.prototype.dispose;
+IToolboxItem.prototype.dispose;
+
+exports = IToolboxItem;

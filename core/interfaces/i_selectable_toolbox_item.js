@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.ISelectableToolboxItem');
+goog.module('Blockly.ISelectableToolboxItem');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IToolboxItem');
 goog.requireType('Blockly.utils.toolbox');
@@ -22,14 +23,14 @@ goog.requireType('Blockly.utils.toolbox');
  * @extends {Blockly.IToolboxItem}
  * @interface
  */
-Blockly.ISelectableToolboxItem = function() {};
+const ISelectableToolboxItem = function() {};
 
 /**
  * Gets the name of the toolbox item. Used for emitting events.
  * @return {string} The name of the toolbox item.
  * @public
  */
-Blockly.ISelectableToolboxItem.prototype.getName;
+ISelectableToolboxItem.prototype.getName;
 
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
@@ -38,7 +39,7 @@ Blockly.ISelectableToolboxItem.prototype.getName;
  *     of items to be displayed in the flyout.
  * @public
  */
-Blockly.ISelectableToolboxItem.prototype.getContents;
+ISelectableToolboxItem.prototype.getContents;
 
 /**
  * Sets the current toolbox item as selected.
@@ -46,7 +47,7 @@ Blockly.ISelectableToolboxItem.prototype.getContents;
  *     otherwise.
  * @public
  */
-Blockly.ISelectableToolboxItem.prototype.setSelected;
+ISelectableToolboxItem.prototype.setSelected;
 
 /**
  * Gets the HTML element that is clickable.
@@ -55,11 +56,13 @@ Blockly.ISelectableToolboxItem.prototype.setSelected;
  * @return {!Element} The HTML element that receives clicks.
  * @public
  */
-Blockly.ISelectableToolboxItem.prototype.getClickTarget;
+ISelectableToolboxItem.prototype.getClickTarget;
 
 /**
  * Handles when the toolbox item is clicked.
  * @param {!Event} _e Click event to handle.
  * @public
  */
-Blockly.ISelectableToolboxItem.prototype.onClick;
+ISelectableToolboxItem.prototype.onClick;
+
+exports = ISelectableToolboxItem;

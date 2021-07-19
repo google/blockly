@@ -43,11 +43,11 @@ Blockly.BasicCursor.registrationName = 'basicCursor';
  * @override
  */
 Blockly.BasicCursor.prototype.next = function() {
-  var curNode = this.getCurNode();
+  const curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
-  var newNode = this.getNextNode_(curNode, this.validNode_);
+  const newNode = this.getNextNode_(curNode, this.validNode_);
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -74,11 +74,11 @@ Blockly.BasicCursor.prototype.in = function() {
  * @override
  */
 Blockly.BasicCursor.prototype.prev = function() {
-  var curNode = this.getCurNode();
+  const curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
-  var newNode = this.getPreviousNode_(curNode, this.validNode_);
+  const newNode = this.getPreviousNode_(curNode, this.validNode_);
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -112,13 +112,13 @@ Blockly.BasicCursor.prototype.getNextNode_ = function(node, isValid) {
   if (!node) {
     return null;
   }
-  var newNode = node.in() || node.next();
+  const newNode = node.in() || node.next();
   if (isValid(newNode)) {
     return newNode;
   } else if (newNode) {
     return this.getNextNode_(newNode, isValid);
   }
-  var siblingOrParent = this.findSiblingOrParent_(node.out());
+  const siblingOrParent = this.findSiblingOrParent_(node.out());
   if (isValid(siblingOrParent)) {
     return siblingOrParent;
   } else if (siblingOrParent) {
@@ -142,7 +142,7 @@ Blockly.BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
   if (!node) {
     return null;
   }
-  var newNode = node.prev();
+  let newNode = node.prev();
 
   if (newNode) {
     newNode = this.getRightMostChild_(newNode);
@@ -165,8 +165,8 @@ Blockly.BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
  * @protected
  */
 Blockly.BasicCursor.prototype.validNode_ = function(node) {
-  var isValid = false;
-  var type = node && node.getType();
+  let isValid = false;
+  const type = node && node.getType();
   if (type == Blockly.ASTNode.types.OUTPUT ||
       type == Blockly.ASTNode.types.INPUT ||
       type == Blockly.ASTNode.types.FIELD ||
@@ -189,7 +189,7 @@ Blockly.BasicCursor.prototype.findSiblingOrParent_ = function(node) {
   if (!node) {
     return null;
   }
-  var nextNode = node.next();
+  const nextNode = node.next();
   if (nextNode) {
     return nextNode;
   }
@@ -208,7 +208,7 @@ Blockly.BasicCursor.prototype.getRightMostChild_ = function(node) {
   if (!node.in()) {
     return node;
   }
-  var newNode = node.in();
+  let newNode = node.in();
   while (newNode.next()) {
     newNode = newNode.next();
   }

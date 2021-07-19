@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.BasicCursor');
+goog.module('Blockly.BasicCursor');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Cursor');
@@ -25,16 +26,16 @@ goog.require('Blockly.registry');
  * @constructor
  * @extends {Blockly.Cursor}
  */
-Blockly.BasicCursor = function() {
-  Blockly.BasicCursor.superClass_.constructor.call(this);
+const BasicCursor = function() {
+  BasicCursor.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.BasicCursor, Blockly.Cursor);
+Blockly.utils.object.inherits(BasicCursor, Blockly.Cursor);
 
 /**
  * Name used for registering a basic cursor.
  * @const {string}
  */
-Blockly.BasicCursor.registrationName = 'basicCursor';
+BasicCursor.registrationName = 'basicCursor';
 
 /**
  * Find the next node in the pre order traversal.
@@ -42,7 +43,7 @@ Blockly.BasicCursor.registrationName = 'basicCursor';
  *     not set or there is no next value.
  * @override
  */
-Blockly.BasicCursor.prototype.next = function() {
+BasicCursor.prototype.next = function() {
   const curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -63,7 +64,7 @@ Blockly.BasicCursor.prototype.next = function() {
  *     not set or there is no next value.
  * @override
  */
-Blockly.BasicCursor.prototype.in = function() {
+BasicCursor.prototype.in = function() {
   return this.next();
 };
 
@@ -73,7 +74,7 @@ Blockly.BasicCursor.prototype.in = function() {
  *     is not set or there is no previous value.
  * @override
  */
-Blockly.BasicCursor.prototype.prev = function() {
+BasicCursor.prototype.prev = function() {
   const curNode = this.getCurNode();
   if (!curNode) {
     return null;
@@ -94,7 +95,7 @@ Blockly.BasicCursor.prototype.prev = function() {
  *     not set or there is no previous value.
  * @override
  */
-Blockly.BasicCursor.prototype.out = function() {
+BasicCursor.prototype.out = function() {
   return this.prev();
 };
 
@@ -108,7 +109,7 @@ Blockly.BasicCursor.prototype.out = function() {
  * @return {Blockly.ASTNode} The next node in the traversal.
  * @protected
  */
-Blockly.BasicCursor.prototype.getNextNode_ = function(node, isValid) {
+BasicCursor.prototype.getNextNode_ = function(node, isValid) {
   if (!node) {
     return null;
   }
@@ -138,7 +139,7 @@ Blockly.BasicCursor.prototype.getNextNode_ = function(node, isValid) {
  *     previous node exists.
  * @protected
  */
-Blockly.BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
+BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
   if (!node) {
     return null;
   }
@@ -164,7 +165,7 @@ Blockly.BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
  * @return {boolean} True if the node should be visited, false otherwise.
  * @protected
  */
-Blockly.BasicCursor.prototype.validNode_ = function(node) {
+BasicCursor.prototype.validNode_ = function(node) {
   let isValid = false;
   const type = node && node.getType();
   if (type == Blockly.ASTNode.types.OUTPUT ||
@@ -185,7 +186,7 @@ Blockly.BasicCursor.prototype.validNode_ = function(node) {
  *     valid parents.
  * @private
  */
-Blockly.BasicCursor.prototype.findSiblingOrParent_ = function(node) {
+BasicCursor.prototype.findSiblingOrParent_ = function(node) {
   if (!node) {
     return null;
   }
@@ -204,7 +205,7 @@ Blockly.BasicCursor.prototype.findSiblingOrParent_ = function(node) {
  *     if no child exists.
  * @private
  */
-Blockly.BasicCursor.prototype.getRightMostChild_ = function(node) {
+BasicCursor.prototype.getRightMostChild_ = function(node) {
   if (!node.in()) {
     return node;
   }
@@ -216,5 +217,7 @@ Blockly.BasicCursor.prototype.getRightMostChild_ = function(node) {
 };
 
 Blockly.registry.register(
-    Blockly.registry.Type.CURSOR, Blockly.BasicCursor.registrationName,
-    Blockly.BasicCursor);
+    Blockly.registry.Type.CURSOR, BasicCursor.registrationName,
+    BasicCursor);
+
+exports = BasicCursor;

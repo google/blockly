@@ -23,7 +23,6 @@ const Icon = goog.require('Blockly.blockRendering.Icon');
 const InlineInput = goog.require('Blockly.blockRendering.InlineInput');
 const Input = goog.requireType('Blockly.Input');
 const InputRow = goog.require('Blockly.blockRendering.InputRow');
-const inputTypes = goog.require('Blockly.inputTypes');
 const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
 const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
 const Measurable = goog.require('Blockly.blockRendering.Measurable');
@@ -39,8 +38,9 @@ const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');
 const StatementInput = goog.require('Blockly.blockRendering.StatementInput');
 const TopRow = goog.require('Blockly.blockRendering.TopRow');
 const Types = goog.require('Blockly.blockRendering.Types');
-/** @suppress {extraRequire} */
-const blocklyConstants = goog.require('Blockly.constants');
+const {ALIGN} = goog.require('Blockly.constants');
+const {VALUE, STATEMENT, DUMMY} = goog.require('Blockly.inputTypes');
+
 
 
 /**
@@ -282,7 +282,7 @@ RenderInfo.prototype.populateTopRow_ = function() {
   }
 
   const precedesStatement = this.block_.inputList.length &&
-      this.block_.inputList[0].type == inputTypes.STATEMENT;
+      this.block_.inputList[0].type == STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
@@ -306,8 +306,7 @@ RenderInfo.prototype.populateBottomRow_ = function() {
   this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
   const followsStatement = this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1].type ==
-          inputTypes.STATEMENT;
+      this.block_.inputList[this.block_.inputList.length - 1].type == STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
@@ -352,16 +351,16 @@ RenderInfo.prototype.populateBottomRow_ = function() {
  */
 RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == inputTypes.VALUE) {
+  if (this.isInline && input.type == VALUE) {
     activeRow.elements.push(new InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
-  } else if (input.type == inputTypes.STATEMENT) {
+  } else if (input.type == STATEMENT) {
     activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-  } else if (input.type == inputTypes.VALUE) {
+  } else if (input.type == VALUE) {
     activeRow.elements.push(new ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
-  } else if (input.type == inputTypes.DUMMY) {
+  } else if (input.type == DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight = Math.max(
@@ -390,12 +389,11 @@ RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == inputTypes.STATEMENT ||
-      lastInput.type == inputTypes.STATEMENT) {
+  if (input.type == STATEMENT || lastInput.type == STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == inputTypes.VALUE || input.type == inputTypes.DUMMY) {
+  if (input.type == VALUE || input.type == DUMMY) {
     return !this.isInline;
   }
   return false;
@@ -569,14 +567,14 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   }
 
   // Decide where the extra padding goes.
-  if (row.align == blocklyConstants.ALIGN.LEFT) {
+  if (row.align == ALIGN.LEFT) {
     // Add padding to the end of the row.
     lastSpacer.width += missingSpace;
-  } else if (row.align == blocklyConstants.ALIGN.CENTRE) {
+  } else if (row.align == ALIGN.CENTRE) {
     // Split the padding between the beginning and end of the row.
     firstSpacer.width += missingSpace / 2;
     lastSpacer.width += missingSpace / 2;
-  } else if (row.align == blocklyConstants.ALIGN.RIGHT) {
+  } else if (row.align == ALIGN.RIGHT) {
     // Add padding at the beginning of the row.
     firstSpacer.width += missingSpace;
   } else {

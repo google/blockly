@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.ISelectable');
+goog.module('Blockly.ISelectable');
+goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.IDeletable');
 goog.requireType('Blockly.IMovable');
@@ -23,21 +24,23 @@ goog.requireType('Blockly.IMovable');
  * @extends {Blockly.IMovable}
  * @interface
  */
-Blockly.ISelectable = function() {};
+const ISelectable = function() {};
 
 /**
  * @type {string}
  */
-Blockly.ISelectable.prototype.id;
+ISelectable.prototype.id;
 
 /**
  * Select this.  Highlight it visually.
  * @return {void}
  */
-Blockly.ISelectable.prototype.select;
+ISelectable.prototype.select;
 
 /**
  * Unselect this.  Unhighlight it visually.
  * @return {void}
  */
-Blockly.ISelectable.prototype.unselect;
+ISelectable.prototype.unselect;
+
+exports = ISelectable;

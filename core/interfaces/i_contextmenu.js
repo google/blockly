@@ -11,16 +11,19 @@
 
 'use strict';
 
-goog.provide('Blockly.IContextMenu');
+goog.module('Blockly.IContextMenu');
+goog.module.declareLegacyNamespace();
 
 
 /**
  * @interface
  */
-Blockly.IContextMenu = function() {};
+const IContextMenu = function() {};
 
 /**
  * Show the context menu for this object.
  * @param {!Event} e Mouse event.
  */
-Blockly.IContextMenu.prototype.showContextMenu;
+IContextMenu.prototype.showContextMenu;
+
+exports = IContextMenu;

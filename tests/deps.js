@@ -21,7 +21,7 @@ goog.addDependency('../../core/comment.js', ['Blockly.Comment'], ['Blockly.Bubbl
 goog.addDependency('../../core/component_manager.js', ['Blockly.ComponentManager'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/connection.js', ['Blockly.Connection'], ['Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.deprecation']);
 goog.addDependency('../../core/connection_checker.js', ['Blockly.ConnectionChecker'], ['Blockly.Connection', 'Blockly.IConnectionChecker', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.registry'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/connection_db.js', ['Blockly.ConnectionDB'], ['Blockly.RenderedConnection', 'Blockly.connectionTypes', 'Blockly.constants']);
+goog.addDependency('../../core/connection_db.js', ['Blockly.ConnectionDB'], ['Blockly.RenderedConnection', 'Blockly.connectionTypes', 'Blockly.constants'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/connection_types.js', ['Blockly.connectionTypes'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/constants.js', ['Blockly.constants'], ['Blockly.connectionTypes']);
 goog.addDependency('../../core/contextmenu.js', ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Menu', 'Blockly.MenuItem', 'Blockly.Msg', 'Blockly.WidgetDiv', 'Blockly.Xml', 'Blockly.browserEvents', 'Blockly.constants', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.userAgent']);

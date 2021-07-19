@@ -12,7 +12,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.ConnectionDB');
+goog.module('Blockly.ConnectionDB');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.connectionTypes');
 /** @suppress {extraRequire} */
@@ -32,7 +33,7 @@ goog.requireType('Blockly.utils.Coordinate');
  *     drag.
  * @constructor
  */
-Blockly.ConnectionDB = function(checker) {
+const ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
    * @type {!Array<!Blockly.RenderedConnection>}
@@ -55,7 +56,7 @@ Blockly.ConnectionDB = function(checker) {
  *    connection.
  * @package
  */
-Blockly.ConnectionDB.prototype.addConnection = function(connection, yPos) {
+ConnectionDB.prototype.addConnection = function(connection, yPos) {
   const index = this.calculateIndexForYPos_(yPos);
   this.connections_.splice(index, 0, connection);
 };
@@ -71,7 +72,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection, yPos) {
  *     not found.
  * @private
  */
-Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
+ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
   if (!this.connections_.length) {
     return -1;
   }
@@ -110,7 +111,7 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
  * @return {number} The candidate index.
  * @private
  */
-Blockly.ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
+ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
   if (!this.connections_.length) {
     return 0;
   }
@@ -136,7 +137,7 @@ Blockly.ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
  * @param {number} yPos The y position used to find the index of the connection.
  * @throws {Error} If the connection cannot be found in the database.
  */
-Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
+ConnectionDB.prototype.removeConnection = function(connection, yPos) {
   const index = this.findIndexOfConnection_(connection, yPos);
   if (index == -1) {
     throw Error('Unable to find connection in connectionDB.');
@@ -152,7 +153,7 @@ Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
  * @param {number} maxRadius The maximum radius to another connection.
  * @return {!Array<!Blockly.RenderedConnection>} List of connections.
  */
-Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
+ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   const db = this.connections_;
   const currentX = connection.x;
   const currentY = connection.y;
@@ -213,7 +214,7 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
  * @return {boolean} True if connection is in range.
  * @private
  */
-Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
+ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
   return (Math.abs(this.connections_[index].y - baseY) <= maxRadius);
 };
 
@@ -229,7 +230,7 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  *     Contains two properties: 'connection' which is either another
  *     connection or null, and 'radius' which is the distance.
  */
-Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
+ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
     dxy) {
   if (!this.connections_.length) {
     // Don't bother.
@@ -286,18 +287,20 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
  * Initialize a set of connection DBs for a workspace.
  * @param {!Blockly.IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a drag.
- * @return {!Array<!Blockly.ConnectionDB>} Array of databases.
+ * @return {!Array<!ConnectionDB>} Array of databases.
  */
-Blockly.ConnectionDB.init = function(checker) {
+ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   const dbList = [];
   dbList[Blockly.connectionTypes.INPUT_VALUE] =
-      new Blockly.ConnectionDB(checker);
+      new ConnectionDB(checker);
   dbList[Blockly.connectionTypes.OUTPUT_VALUE] =
-      new Blockly.ConnectionDB(checker);
+      new ConnectionDB(checker);
   dbList[Blockly.connectionTypes.NEXT_STATEMENT] =
-      new Blockly.ConnectionDB(checker);
+      new ConnectionDB(checker);
   dbList[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
-      new Blockly.ConnectionDB(checker);
+      new ConnectionDB(checker);
   return dbList;
 };
+
+exports = ConnectionDB;

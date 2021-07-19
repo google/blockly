@@ -15,10 +15,10 @@ goog.module('Blockly.ConnectionChecker');
 goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
-const registry = goog.require('Blockly.registry');
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const registry = goog.require('Blockly.registry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 

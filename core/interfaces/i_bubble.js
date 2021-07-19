@@ -59,7 +59,7 @@ IBubble.prototype.setDragging;
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {?BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
  * @param {!Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.

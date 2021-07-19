@@ -229,6 +229,7 @@ BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) {
  */
 BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
+    // TODO (adodson): Resolve build errors when requiring WorkspaceCommentSvg.
     const event = new (Events.get(Events.COMMENT_MOVE))(
         /** @type {!Blockly.WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);

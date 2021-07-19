@@ -49,7 +49,10 @@ run_test_command () {
 }
 
 # Lint the codebase.
-run_test_command "eslint" "eslint ."
+# Skip for CI environments, because linting is run separately.
+if [ ! -z $CI ]; then
+  run_test_command "eslint" "eslint ."
+fi
 
 # Run the full usual build process.
 run_test_command "build" "npm run build"

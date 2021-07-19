@@ -11,10 +11,11 @@
 
 'use strict';
 
-goog.provide('Blockly.ICollapsibleToolboxItem');
+goog.module('Blockly.ICollapsibleToolboxItem');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
+goog.require('Blockly.ISelectableToolboxItem');
+goog.requireType('Blockly.IToolboxItem');
 
 
 /**
@@ -22,13 +23,13 @@ goog.requireType('Blockly.utils.toolbox');
  * @extends {Blockly.ISelectableToolboxItem}
  * @interface
  */
-Blockly.ICollapsibleToolboxItem = function() {};
+const ICollapsibleToolboxItem = function() {};
 
 /**
  * Gets any children toolbox items. (ex. Gets the subcategories)
  * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
  */
-Blockly.ICollapsibleToolboxItem.prototype.getChildToolboxItems;
+ICollapsibleToolboxItem.prototype.getChildToolboxItems;
 
 /**
  * Whether the toolbox item is expanded to show its child subcategories.
@@ -36,10 +37,12 @@ Blockly.ICollapsibleToolboxItem.prototype.getChildToolboxItems;
  *     is collapsed.
  * @public
  */
-Blockly.ICollapsibleToolboxItem.prototype.isExpanded;
+ICollapsibleToolboxItem.prototype.isExpanded;
 
 /**
  * Toggles whether or not the toolbox item is expanded.
  * @public
  */
-Blockly.ICollapsibleToolboxItem.prototype.toggleExpanded;
+ICollapsibleToolboxItem.prototype.toggleExpanded;
+
+exports = ICollapsibleToolboxItem;

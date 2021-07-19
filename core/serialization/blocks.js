@@ -58,14 +58,27 @@ exports.State = State;
 /**
  * Returns the state of the given block as a plain JavaScript object.
  * @param {!Block} block The block to serialize.
- * @param {{addCoordinates: (boolean|undefined)}=} param1
- *     addCoordinates: If true the coordinates of the block are added to the
+ * @param {{addCoordinates: (boolean|undefined), addInputBlocks:
+ *     (boolean|undefined), addNextBlocks: (boolean|undefined)}=} param1
+ *     addCoordinates: If true, the coordinates of the block are added to the
  *       serialized state. False by default.
+ *     addinputBlocks: If true, children of the block which are connected to
+ *       inputs will be serialized. True by default.
+ *     addNextBlocks: If true, children of the block which are connected to the
+ *       block's next connection (if it exists) will be serialized.
+ *       False by default.
  * @return {?State} The serialized state of the
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
  */
-const save = function(block, {addCoordinates = false} = {}) {
+const save = function(
+    block,
+    {
+      addCoordinates = false,
+      addInputBlocks = true,
+      addNextBlocks = false
+    } = {}
+) {
   if (block.isInsertionMarker()) {
     return null;
   }
@@ -81,8 +94,12 @@ const save = function(block, {addCoordinates = false} = {}) {
   saveAttributes(block, state);
   saveExtraState(block, state);
   saveFields(block, state);
-  saveInputBlocks(block, state);
-  saveNextBlocks(block, state);
+  if (addInputBlocks) {
+    saveInputBlocks(block, state);
+  }
+  if (addNextBlocks) {
+    saveNextBlocks(block, state);
+  }
 
   return state;
 };
@@ -234,7 +251,7 @@ const saveConnection = function(connection) {
         .replace('xmlns="https://developers.google.com/blockly/xml"', '');
   }
   if (child) {
-    state['block'] = save(child, {addCoordinates: false});
+    state['block'] = save(child, {addNextBlocks: true});
   }
   return state;
 };

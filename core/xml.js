@@ -617,7 +617,7 @@ Blockly.Xml.domToVariables = function(xmlVariables, workspace) {
     }
     var type = xmlChild.getAttribute('type');
     var id = xmlChild.getAttribute('id');
-    var name = xmlChild.textContent;
+    var name = Blockly.utils.replaceMessageReferences(xmlChild.textContent);
 
     workspace.createVariable(name, type, id);
   }
@@ -720,7 +720,7 @@ Blockly.Xml.applyMutationTagNodes_ = function(xmlChildren, block) {
  */
 Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
   for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
-    var text = xmlChild.textContent;
+    var text = Blockly.utils.replaceMessageReferences(xmlChild.textContent);
     var pinned = xmlChild.getAttribute('pinned') == 'true';
     var width = parseInt(xmlChild.getAttribute('w'), 10);
     var height = parseInt(xmlChild.getAttribute('h'), 10);
@@ -747,7 +747,7 @@ Blockly.Xml.applyCommentTagNodes_ = function(xmlChildren, block) {
  */
 Blockly.Xml.applyDataTagNodes_ = function(xmlChildren, block) {
   for (var i = 0, xmlChild; (xmlChild = xmlChildren[i]); i++) {
-    block.data = xmlChild.textContent;
+    block.data = Blockly.utils.replaceMessageReferences(xmlChild.textContent);
   }
 };
 

@@ -400,7 +400,8 @@ Blockly.Field.prototype.bindEvents_ = function() {
  * @package
  */
 Blockly.Field.prototype.fromXml = function(fieldElement) {
-  this.setValue(fieldElement.textContent);
+  let value = Blockly.utils.replaceMessageReferences(fieldElement.textContent);
+  this.setValue(value);
 };
 
 /**

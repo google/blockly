@@ -29,7 +29,7 @@ const Size = goog.require('Blockly.utils.Size');
  * @param {!Element} element Element to get size of.
  * @return {!Size} Object with width/height properties.
  */
-const getSize = function(element) {
+function getSize(element) {
   if (getStyle(element, 'display') != 'none') {
     return getSizeWithDisplay(element);
   }
@@ -52,19 +52,19 @@ const getSize = function(element) {
   style.visibility = originalVisibility;
 
   return new Size(offsetWidth, offsetHeight);
-};
+}
+exports.getSize = getSize;
 
 /**
  * Gets the height and width of an element when the display is not none.
  * @param {!Element} element Element to get size of.
  * @return {!Size} Object with width/height properties.
- * @private
  */
-const getSizeWithDisplay = function(element) {
+function getSizeWithDisplay(element) {
   const offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
   const offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
   return new Size(offsetWidth, offsetHeight);
-};
+}
 
 /**
  * Cross-browser pseudo get computed style. It returns the computed style where
@@ -78,12 +78,11 @@ const getSizeWithDisplay = function(element) {
  * @param {!Element} element Element to get style of.
  * @param {string} style Property to get (must be camelCase, not CSS-style).
  * @return {string} Style value.
- * @private
  */
-const getStyle = function(element, style) {
+function getStyle(element, style) {
   return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
       (element.style && element.style[style]);
-};
+}
 
 /**
  * Retrieves a computed style value of a node. It returns empty string if the
@@ -97,7 +96,7 @@ const getStyle = function(element, style) {
  * @param {string} property Property to get (camel-case).
  * @return {string} Style value.
  */
-const getComputedStyle = function(element, property) {
+function getComputedStyle(element, property) {
   if (document.defaultView && document.defaultView.getComputedStyle) {
     const styles = document.defaultView.getComputedStyle(element, null);
     if (styles) {
@@ -108,7 +107,8 @@ const getComputedStyle = function(element, property) {
   }
 
   return '';
-};
+}
+exports.getComputedStyle = getComputedStyle;
 
 /**
  * Gets the cascaded style value of a node, or null if the value cannot be
@@ -120,10 +120,11 @@ const getComputedStyle = function(element, property) {
  * @param {string} style Property to get (camel-case).
  * @return {string} Style value.
  */
-const getCascadedStyle = function(element, style) {
+function getCascadedStyle(element, style) {
   return /** @type {string} */ (
       element.currentStyle ? element.currentStyle[style] : null);
-};
+}
+exports.getCascadedStyle = getCascadedStyle;
 
 /**
  * Returns a Coordinate object relative to the top-left of the HTML document.
@@ -131,7 +132,7 @@ const getCascadedStyle = function(element, style) {
  * @param {!Element} el Element to get the page offset for.
  * @return {!Coordinate} The page offset.
  */
-const getPageOffset = function(el) {
+function getPageOffset(el) {
   const pos = new Coordinate(0, 0);
   const box = el.getBoundingClientRect();
   const documentElement = document.documentElement;
@@ -145,20 +146,22 @@ const getPageOffset = function(el) {
   pos.y = box.top + scrollCoord.y;
 
   return pos;
-};
+}
+exports.getPageOffset = getPageOffset;
 
 /**
  * Calculates the viewport coordinates relative to the document.
  * Similar to Closure's goog.style.getViewportPageOffset
  * @return {!Coordinate} The page offset of the viewport.
  */
-const getViewportPageOffset = function() {
+function getViewportPageOffset() {
   const body = document.body;
   const documentElement = document.documentElement;
   const scrollLeft = body.scrollLeft || documentElement.scrollLeft;
   const scrollTop = body.scrollTop || documentElement.scrollTop;
   return new Coordinate(scrollLeft, scrollTop);
-};
+}
+exports.getViewportPageOffset = getViewportPageOffset;
 
 /**
  * Shows or hides an element from the page. Hiding the element is done by
@@ -172,9 +175,10 @@ const getViewportPageOffset = function() {
  * @param {*} isShown True to render the element in its default style,
  *     false to disable rendering the element.
  */
-const setElementShown = function(el, isShown) {
+function setElementShown(el, isShown) {
   el.style.display = isShown ? '' : 'none';
-};
+}
+exports.setElementShown = setElementShown;
 
 /**
  * Returns true if the element is using right to left (RTL) direction.
@@ -183,9 +187,10 @@ const setElementShown = function(el, isShown) {
  * @param {!Element} el The element to test.
  * @return {boolean} True for right to left, false for left to right.
  */
-const isRightToLeft = function(el) {
+function isRightToLeft(el) {
   return 'rtl' == getStyle(el, 'direction');
-};
+}
+exports.isRightToLeft = isRightToLeft;
 
 /**
  * Gets the computed border widths (on all sides) in pixels
@@ -193,7 +198,7 @@ const isRightToLeft = function(el) {
  * @param {!Element} element  The element to get the border widths for.
  * @return {!Object} The computed border widths.
  */
-const getBorderBox = function(element) {
+function getBorderBox(element) {
   const left = getComputedStyle(element, 'borderLeftWidth');
   const right = getComputedStyle(element, 'borderRightWidth');
   const top = getComputedStyle(element, 'borderTopWidth');
@@ -205,7 +210,8 @@ const getBorderBox = function(element) {
     bottom: parseFloat(bottom),
     left: parseFloat(left)
   };
-};
+}
+exports.getBorderBox = getBorderBox;
 
 /**
  * Changes the scroll position of `container` with the minimum amount so
@@ -220,11 +226,12 @@ const getBorderBox = function(element) {
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
-const scrollIntoContainerView = function(element, container, opt_center) {
+function scrollIntoContainerView(element, container, opt_center) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
-};
+}
+exports.scrollIntoContainerView = scrollIntoContainerView;
 
 /**
  * Calculate the scroll position of `container` with the minimum amount so
@@ -241,8 +248,7 @@ const scrollIntoContainerView = function(element, container, opt_center) {
  * @return {!Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
-const getContainerOffsetToScrollInto = function(
-    element, container, opt_center) {
+function getContainerOffsetToScrollInto(element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.
@@ -275,17 +281,5 @@ const getContainerOffsetToScrollInto = function(
     scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
   return new Coordinate(scrollLeft, scrollTop);
-};
-
-exports = {
-  getSize,
-  getComputedStyle,
-  getCascadedStyle,
-  getPageOffset,
-  getViewportPageOffset,
-  setElementShown,
-  isRightToLeft,
-  getBorderBox,
-  scrollIntoContainerView,
-  getContainerOffsetToScrollInto,
-};
+}
+exports.getContainerOffsetToScrollInto = getContainerOffsetToScrollInto;

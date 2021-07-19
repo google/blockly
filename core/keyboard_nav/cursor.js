@@ -42,12 +42,12 @@ Blockly.utils.object.inherits(Blockly.Cursor, Blockly.Marker);
  * @public
  */
 Blockly.Cursor.prototype.next = function() {
-  var curNode = this.getCurNode();
+  const curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
 
-  var newNode = curNode.next();
+  let newNode = curNode.next();
   while (newNode && newNode.next() &&
          (newNode.getType() == Blockly.ASTNode.types.NEXT ||
           newNode.getType() == Blockly.ASTNode.types.BLOCK)) {
@@ -67,7 +67,7 @@ Blockly.Cursor.prototype.next = function() {
  * @public
  */
 Blockly.Cursor.prototype.in = function() {
-  var curNode = this.getCurNode();
+  let curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
@@ -77,7 +77,7 @@ Blockly.Cursor.prototype.in = function() {
       curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     curNode = curNode.next();
   }
-  var newNode = curNode.in();
+  const newNode = curNode.in();
 
   if (newNode) {
     this.setCurNode(newNode);
@@ -92,11 +92,11 @@ Blockly.Cursor.prototype.in = function() {
  * @public
  */
 Blockly.Cursor.prototype.prev = function() {
-  var curNode = this.getCurNode();
+  const curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
-  var newNode = curNode.prev();
+  let newNode = curNode.prev();
 
   while (newNode && newNode.prev() &&
          (newNode.getType() == Blockly.ASTNode.types.NEXT ||
@@ -117,11 +117,11 @@ Blockly.Cursor.prototype.prev = function() {
  * @public
  */
 Blockly.Cursor.prototype.out = function() {
-  var curNode = this.getCurNode();
+  const curNode = this.getCurNode();
   if (!curNode) {
     return null;
   }
-  var newNode = curNode.out();
+  let newNode = curNode.out();
 
   if (newNode && newNode.getType() == Blockly.ASTNode.types.BLOCK) {
     newNode = newNode.prev() || newNode;

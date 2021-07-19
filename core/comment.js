@@ -22,10 +22,11 @@ const Icon = goog.require('Blockly.Icon');
 const Size = goog.requireType('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const {CommentModel} = goog.requireType('Blockly.Block');
 const {conditionalBind, Data, unbind} = goog.require('Blockly.browserEvents');
-const {dom, userAgent, object: utilsObject} = goog.require('Blockly.utils');
+const {createSvgElement, HTML_NS} = goog.require('Blockly.utils.dom');
+const {inherits} = goog.require('Blockly.utils.object');
 const {register} = goog.require('Blockly.Css');
+const {IE} = goog.require('Blockly.utils.userAgent');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -45,7 +46,7 @@ const Comment = function(block) {
 
   /**
    * The model for this comment.
-   * @type {!CommentModel}
+   * @type {!Block.CommentModel}
    * @private
    */
   this.model_ = block.commentModel;
@@ -91,7 +92,7 @@ const Comment = function(block) {
 
   this.createIcon();
 };
-utilsObject.inherits(Comment, Icon);
+inherits(Comment, Icon);
 
 /**
  * Draw the comment icon.
@@ -100,13 +101,13 @@ utilsObject.inherits(Comment, Icon);
  */
 Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  dom.createSvgElement(
+  createSvgElement(
       Svg.CIRCLE, {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
-  dom.createSvgElement(
+  createSvgElement(
       Svg.PATH, {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -115,7 +116,7 @@ Comment.prototype.drawIcon_ = function(group) {
       },
       group);
   // Dot of question mark.
-  dom.createSvgElement(
+  createSvgElement(
       Svg.RECT, {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -144,15 +145,15 @@ Comment.prototype.createEditor_ = function() {
    * For non-editable mode see Warning.textToDom_.
    */
 
-  this.foreignObject_ = dom.createSvgElement(
+  this.foreignObject_ = createSvgElement(
       Svg.FOREIGNOBJECT, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH},
       null);
 
-  const body = document.createElementNS(dom.HTML_NS, 'body');
-  body.setAttribute('xmlns', dom.HTML_NS);
+  const body = document.createElementNS(HTML_NS, 'body');
+  body.setAttribute('xmlns', HTML_NS);
   body.className = 'blocklyMinimalBody';
 
-  this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea');
+  this.textarea_ = document.createElementNS(HTML_NS, 'textarea');
   const textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
@@ -253,7 +254,7 @@ Comment.prototype.setVisible = function(visible) {
  * @private
  */
 Comment.prototype.createBubble_ = function() {
-  if (!this.block_.isEditable() || userAgent.IE) {
+  if (!this.block_.isEditable() || IE) {
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.
@@ -392,16 +393,9 @@ Comment.prototype.dispose = function() {
  */
 register([
   /* eslint-disable indent */
-  '.blocklyCommentTextarea {',
-    'background-color: #fef49c;',
-    'border: 0;',
-    'outline: 0;',
-    'margin: 0;',
-    'padding: 3px;',
-    'resize: none;',
-    'display: block;',
-    'text-overflow: hidden;',
-  '}'
+  '.blocklyCommentTextarea {', 'background-color: #fef49c;', 'border: 0;',
+  'outline: 0;', 'margin: 0;', 'padding: 3px;', 'resize: none;',
+  'display: block;', 'text-overflow: hidden;', '}'
   /* eslint-enable indent */
 ]);
 

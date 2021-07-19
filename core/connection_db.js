@@ -229,8 +229,7 @@ ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  *     Contains two properties: 'connection' which is either another
  *     connection or null, and 'radius' which is the distance.
  */
-ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
-    dxy) {
+ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dxy) {
   if (!this.connections_.length) {
     // Don't bother.
     return {connection: null, radius: maxRadius};
@@ -265,7 +264,7 @@ ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 
   let pointerMax = closestIndex;
   while (pointerMax < this.connections_.length &&
-      this.isInYRange_(pointerMax, conn.y, maxRadius)) {
+         this.isInYRange_(pointerMax, conn.y, maxRadius)) {
     temp = this.connections_[pointerMax];
     if (this.connectionChecker_.canConnect(conn, temp, true, bestRadius)) {
       bestConnection = temp;
@@ -285,20 +284,17 @@ ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 /**
  * Initialize a set of connection DBs for a workspace.
  * @param {!IConnectionChecker} checker The workspace's
- *     connection checker, used to decide if connections are valid during a drag.
+ *     connection checker, used to decide if connections are valid during a
+ * drag.
  * @return {!Array<!ConnectionDB>} Array of databases.
  */
 ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   const dbList = [];
-  dbList[connectionTypes.INPUT_VALUE] =
-      new ConnectionDB(checker);
-  dbList[connectionTypes.OUTPUT_VALUE] =
-      new ConnectionDB(checker);
-  dbList[connectionTypes.NEXT_STATEMENT] =
-      new ConnectionDB(checker);
-  dbList[connectionTypes.PREVIOUS_STATEMENT] =
-      new ConnectionDB(checker);
+  dbList[connectionTypes.INPUT_VALUE] = new ConnectionDB(checker);
+  dbList[connectionTypes.OUTPUT_VALUE] = new ConnectionDB(checker);
+  dbList[connectionTypes.NEXT_STATEMENT] = new ConnectionDB(checker);
+  dbList[connectionTypes.PREVIOUS_STATEMENT] = new ConnectionDB(checker);
   return dbList;
 };
 

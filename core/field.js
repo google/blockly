@@ -433,6 +433,26 @@ Field.prototype.toXml = function(fieldElement) {
 };
 
 /**
+ * Saves this fields value as something which can be serialized to JSON. Should
+ * only be called by the serialization system.
+ * @return {*} JSON serializable state.
+ * @package
+ */
+Field.prototype.saveState = function() {
+  return this.getValue();
+};
+
+/**
+ * Sets the field's state based on the given state value. Should only be called
+ * by the serialization system.
+ * @param {*} state The state we want to apply to the field.
+ * @package
+ */
+Field.prototype.loadState = function(state) {
+  this.setValue(state);
+};
+
+/**
  * Dispose of all DOM objects and events belonging to this editable field.
  * @package
  */

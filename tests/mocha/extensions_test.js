@@ -453,6 +453,57 @@ suite('Extensions', function() {
         }, /mutationToDom/);
       });
 
+      test('No saveExtraState', function() {
+        this.extensionsCleanup_.push('mutator_test');
+        chai.assert.throws(function() {
+          Blockly.Extensions.registerMutator('mutator_test',
+              {
+                loadExtraState: function() {
+                  return 'loadExtraState';
+                },
+                compose: function() {
+                  return 'composeFn';
+                },
+                decompose: function() {
+                  return 'decomposeFn';
+                }
+              });
+        }, /saveExtraState/);
+      });
+
+      test('No loadExtraState', function() {
+        this.extensionsCleanup_.push('mutator_test');
+        chai.assert.throws(function() {
+          Blockly.Extensions.registerMutator('mutator_test',
+              {
+                saveExtraState: function() {
+                  return 'saveExtraState';
+                },
+                compose: function() {
+                  return 'composeFn';
+                },
+                decompose: function() {
+                  return 'decomposeFn';
+                }
+              });
+        }, /loadExtraState/);
+      });
+
+      test('No serialization hooks', function() {
+        this.extensionsCleanup_.push('mutator_test');
+        chai.assert.throws(function() {
+          Blockly.Extensions.registerMutator('mutator_test',
+              {
+                compose: function() {
+                  return 'composeFn';
+                },
+                decompose: function() {
+                  return 'decomposeFn';
+                }
+              });
+        }, 'Mutations must contain either XML hooks, or JSON hooks, or both');
+      });
+
       test('Has decompose but no compose', function() {
         this.extensionsCleanup_.push('mutator_test');
         chai.assert.throws(function() {

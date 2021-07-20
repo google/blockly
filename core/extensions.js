@@ -90,14 +90,11 @@ exports.registerMixin = registerMixin;
 const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
-  // Sanity check the mixin object before registering it.
-  checkHasFunction(errorPrefix, mixinObj.domToMutation, 'domToMutation');
-  checkHasFunction(errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
-
-  const hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
+  checkHasMutatorProperties(errorPrefix, mixinObj);
+  var hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
   if (opt_helperFn && (typeof opt_helperFn != 'function')) {
-    throw Error('Extension "' + name + '" is not a function');
+    throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
@@ -159,7 +156,7 @@ const apply = function(name, block, isMutator) {
 
   if (isMutator) {
     const errorPrefix = 'Error after applying mutator "' + name + '": ';
-    checkBlockHasMutatorProperties(errorPrefix, block);
+    checkHasMutatorProperties(errorPrefix, block);
   } else {
     if (!mutatorPropertiesMatch(
             /** @type {!Array<Object>} */ (mutatorProperties), block)) {
@@ -172,25 +169,6 @@ const apply = function(name, block, isMutator) {
 exports.apply = apply;
 
 /**
- * Check that the given value is a function.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @param {*} func Function to check.
- * @param {string} propertyName Which property to check.
- * @throws {Error} if the property does not exist or is not a function.
- * @private
- */
-const checkHasFunction = function(errorPrefix, func, propertyName) {
-  if (!func) {
-    throw Error(
-        errorPrefix + 'missing required property "' + propertyName + '"');
-  } else if (typeof func != 'function') {
-    throw Error(
-        errorPrefix + '" required property "' + propertyName +
-        '" must be a function');
-  }
-};
-
-/**
  * Check that the given block does not have any of the four mutator properties
  * defined on it.  This function should be called before applying a mutator
  * extension to a block, to make sure we are not overwriting properties.
@@ -198,7 +176,6 @@ const checkHasFunction = function(errorPrefix, func, propertyName) {
  *     messages.
  * @param {!Block} block The block to check.
  * @throws {Error} if any of the properties already exist on the block.
- * @private
  */
 const checkNoMutatorProperties = function(mutationName, block) {
   const properties = getMutatorProperties(block);
@@ -211,53 +188,94 @@ const checkNoMutatorProperties = function(mutationName, block) {
 };
 
 /**
- * Check that the given object has both or neither of the functions required
- * to have a mutator dialog.
- * These functions are 'compose' and 'decompose'.  If a block has one, it must
- * have both.
+ * Checks if the given object has both the 'mutationToDom' and 'domToMutation'
+ * functions.
  * @param {!Object} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
  * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
- * @throws {Error} if the object has only one of the functions.
- * @private
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
  */
-const checkMutatorDialog = function(object, errorPrefix) {
-  const hasCompose = object.compose !== undefined;
-  const hasDecompose = object.decompose !== undefined;
-
-  if (hasCompose && hasDecompose) {
-    if (typeof object.compose != 'function') {
-      throw Error(errorPrefix + 'compose must be a function.');
-    } else if (typeof object.decompose != 'function') {
-      throw Error(errorPrefix + 'decompose must be a function.');
-    }
-    return true;
-  } else if (!hasCompose && !hasDecompose) {
-    return false;
-  }
-  throw Error(
-      errorPrefix + 'Must have both or neither of "compose" and "decompose"');
+const checkXmlHooks = function(object, errorPrefix) {
+  return checkHasFunctionPair(
+      object, 'mutationToDom', 'domToMutation', errorPrefix);
 };
 
 /**
- * Check that a block has required mutator properties.  This should be called
- * after applying a mutation extension.
+ * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
+ * functions.
+ * @param {!Object} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Block} block The block to inspect.
- * @private
+ * @return {boolean} True if the object has both functions.  False if it has
+ *     neither function.
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
  */
-const checkBlockHasMutatorProperties = function(errorPrefix, block) {
-  if (typeof block.domToMutation != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
-  }
-  if (typeof block.mutationToDom != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
-  }
+const checkJsonHooks = function(object, errorPrefix) {
+  return checkHasFunctionPair(
+      object, 'saveExtraState', 'loadExtraState', errorPrefix);
+};
 
+/**
+ * Checks if the given object has both the 'compose' and 'decompose' functions.
+ * @param {!Object} object The object to check.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @return {boolean} True if the object has both functions.  False if it has
+ *     neither function.
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
+ */
+const checkMutatorDialog = function(object, errorPrefix) {
+  return checkHasFunctionPair(object, 'compose', 'decompose', errorPrefix);
+};
+
+/**
+ * Checks that the given object has both or neither of the given functions, and
+ * that they are indeed functions.
+ * @param {!Object} object The object to check.
+ * @param {string} name1 The name of the first function in the pair.
+ * @param {string} name2 The name of the second function in the pair.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @return {boolean} True if the object has both functions. False if it has
+ *     neither function.
+ * @throws {Error} If the object has only one of the functions, or either is
+ *     not actually a function.
+ */
+const checkHasFunctionPair =
+  function(object, name1, name2, errorPrefix) {
+    var has1 = object[name1] !== undefined;
+    var has2 = object[name2] !== undefined;
+  
+    if (has1 && has2) {
+      if (typeof object[name1] != 'function') {
+        throw Error(errorPrefix + name1 + ' must be a function.');
+      } else if (typeof object[name2] != 'function') {
+        throw Error(errorPrefix + name2 + ' must be a function.');
+      }
+      return true;
+    } else if (!has1 && !has2) {
+      return false;
+    }
+    throw Error(errorPrefix +
+      'Must have both or neither of "' + name1 + '" and "' + name2 + '"');
+  };
+
+/**
+ * Checks that the given object required mutator properties.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @param {!Object} object The object to inspect.
+ */
+const checkHasMutatorProperties = function(errorPrefix, object) {
+  var hasXmlHooks = checkXmlHooks(object, errorPrefix);
+  var hasJsonHooks = checkJsonHooks(object, errorPrefix);
+  if (!hasXmlHooks && !hasJsonHooks) {
+    throw Error(errorPrefix +
+        'Mutations must contain either XML hooks, or JSON hooks, or both');
+  }
   // A block with a mutator isn't required to have a mutation dialog, but
   // it should still have both or neither of compose and decompose.
-  checkMutatorDialog(block, errorPrefix);
+  checkMutatorDialog(object, errorPrefix);
 };
 
 /**
@@ -265,7 +283,6 @@ const checkBlockHasMutatorProperties = function(errorPrefix, block) {
  * @param {!Block} block The block to inspect.
  * @return {!Array<Object>} A list with all of the defined properties, which
  *     should be functions, but may be anything other than undefined.
- * @private
  */
 const getMutatorProperties = function(block) {
   const result = [];
@@ -276,6 +293,12 @@ const getMutatorProperties = function(block) {
   }
   if (block.mutationToDom !== undefined) {
     result.push(block.mutationToDom);
+  }
+  if (block.saveExtraState !== undefined) {
+    result.push(block.saveExtraState);
+  }
+  if (block.loadExtraState !== undefined) {
+    result.push(block.loadExtraState);
   }
   if (block.compose !== undefined) {
     result.push(block.compose);
@@ -293,7 +316,6 @@ const getMutatorProperties = function(block) {
  * @param {!Array<Object>} oldProperties The old values to compare to.
  * @param {!Block} block The block to inspect for new values.
  * @return {boolean} True if the property lists match.
- * @private
  */
 const mutatorPropertiesMatch = function(oldProperties, block) {
   const newProperties = getMutatorProperties(block);
@@ -383,7 +405,6 @@ exports.buildTooltipForDropdown = buildTooltipForDropdown;
  * @param {!Block} block The block containing the dropdown
  * @param {string} dropdownName The name of the dropdown
  * @param {!Object<string, string>} lookupTable The string lookup table
- * @private
  */
 const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   // Validate all dropdown options have values.
@@ -443,7 +464,6 @@ exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
  * advantage of the fact that all other values from JSON are initialized before
  * extensions.
  * @this {Block}
- * @private
  */
 const extensionParentTooltip = function() {
   this.tooltipWhenNotConnected = this.tooltip;

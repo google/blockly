@@ -189,7 +189,7 @@ goog.addDependency('../../core/utils/string.js', ['Blockly.utils.string'], []);
 goog.addDependency('../../core/utils/style.js', ['Blockly.utils.style'], ['Blockly.utils.Coordinate', 'Blockly.utils.Size'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/svg.js', ['Blockly.utils.Svg'], []);
 goog.addDependency('../../core/utils/svg_paths.js', ['Blockly.utils.svgPaths'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/toolbox.js', ['Blockly.utils.toolbox'], ['Blockly.Xml', 'Blockly.constants']);
+goog.addDependency('../../core/utils/toolbox.js', ['Blockly.utils.toolbox'], ['Blockly.Xml', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/useragent.js', ['Blockly.utils.userAgent'], ['Blockly.utils.global']);
 goog.addDependency('../../core/utils/xml.js', ['Blockly.utils.xml'], []);
 goog.addDependency('../../core/variable_map.js', ['Blockly.VariableMap'], ['Blockly.Events', 'Blockly.Events.VarDelete', 'Blockly.Events.VarRename', 'Blockly.Msg', 'Blockly.utils', 'Blockly.utils.object']);

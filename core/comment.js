@@ -22,11 +22,11 @@ const Icon = goog.require('Blockly.Icon');
 const Size = goog.requireType('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const {conditionalBind, Data, unbind} = goog.require('Blockly.browserEvents');
 const {createSvgElement, HTML_NS} = goog.require('Blockly.utils.dom');
 const {inherits} = goog.require('Blockly.utils.object');
 const {register} = goog.require('Blockly.Css');
-const {IE} = goog.require('Blockly.utils.userAgent');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -254,7 +254,7 @@ Comment.prototype.setVisible = function(visible) {
  * @private
  */
 Comment.prototype.createBubble_ = function() {
-  if (!this.block_.isEditable() || IE) {
+  if (!this.block_.isEditable() || userAgent.IE) {
     // MSIE does not support foreignobject; textareas are impossible.
     // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
     // Always treat comments in IE as uneditable.

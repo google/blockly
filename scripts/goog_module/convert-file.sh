@@ -159,6 +159,7 @@ step3() {
 
   # Process each require
   echo "${requires}" | while read -r require ; do
+    inf "Processing require \"${require}\""
     local usages=$(grep -Pe ''"${require}"'(?!'\'')' "${filepath}" | wc -l)
     if [[ "${usages}" -eq "0" ]]; then
       warn "Unused require \"${require}\""
@@ -166,18 +167,26 @@ step3() {
     fi
 
     local direct_access_count=$(grep -Pe ''"${require}"'[^\.'\'']' "${filepath}" | wc -l)
-    local prop_access_count=$(grep -Pe ''"${require}"'\.(?!prototype)' "${filepath}" | wc -l)
-    if [[ "${direct_access_count}" -eq "0" && "${prop_access_count}" -gt "0" ]]; then
-      local deconstructed=$(grep -Pe ''"${require}"'\.(?!prototype)' "${filepath}" | perl -pe 's/'"${require}"'\.([^\(\[,\.]+).*/\1/g')
-      local deconstructed_comma=$(echo "${deconstructed}" | perl -zpe 's/\s+/, /g' | perl 's/, $//')
-      inf "Deconstructing ${require} into \"${deconstructed_comma}\""
+    local properties_accessed=$(grep -Po '(?<='"${require}"'\.)(?!prototype)\w+' "${filepath}" | tr ' ' '\n' | sort -u)
+    # Detect overlap (ex: Blockly.utils and Blockly.utils.dom)
+    local overlap=$(echo "${requires}"| grep -Po "(?<=${require}\.)\w+")
+    if [[ ! -z "${overlap}" ]]; then
+      while read -r overlap_prop ; do
+        properties_accessed=$(echo "$properties_accessed" | perl -pe 's/'"${overlap_prop}"'//g')
+      done <<<"${overlap}"
+      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
+    fi
+
+    if [[ "${direct_access_count}" -eq "0" && ! -z "${properties_accessed}" ]]; then
+      local deconstructed_comma=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')
+      inf "Deconstructing ${require} into \"{${deconstructed_comma}}\""
 
       inf "Updating require declaration for ${require}..."
-    perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
+      perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
 
-      echo "${deconstructed}" | while read -r require_prop ; do
+      echo "${properties_accessed}" | while read -r require_prop ; do
         inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
-        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''])/'"${require_prop}"'\1/g' "${filepath}"
+        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
       done
       continue
     fi
@@ -187,13 +196,13 @@ step3() {
     perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const '"${require_name}"' = \1/' "${filepath}"
 
     inf "Updating references of ${require} to ${require_name}..."
-    perl -pi -e 's/'"${require}"'([^'\''])/'"${require_name}"'\1/g' "${filepath}"
+    perl -pi -e 's/'"${require}"'([^'\''\w])/'"${require_name}"'\1/g' "${filepath}"
   done
 
-  local missing_requires=$(grep -Pe '(?<!'\'')Blockly\.' "${filepath}")
-  local missing_require_lines=$(grep -Pe '(?<!'\'')Blockly\.' "${filepath}" | wc -l)
+  local missing_requires=$(grep -Po '(?<!'\'')Blockly(\.\w+)+' "${filepath}")
+  local missing_require_lines=$(echo "${missing_requires}" | wc -l)
   if [[ "${missing_require_lines}" -gt "0" ]]; then
-    warn "Missing require for \"${missing_requires}\". Please manually fix."
+    err "Missing requires for: ${missing_requires} Please manually fix."
   fi
 
   inf "Add missing nullability modifier..."

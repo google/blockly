@@ -113,7 +113,7 @@ step2 () {
   inf "Extracted module name \"${module_name}\""
 
   if [[ $(grep "${module_name} = " "${filepath}") ]]; then
-    local class_name=$(echo "${module_name}" | grep -E -o "(\w+)$")
+    local class_name=$(echo "${module_name}" | perl -nle'print $& while m{(\w+)$}g')
     inf "Found class \"${class_name}\" in file."
     inf "Updating class declaration..."
     perl -pi -e 's/^('"${module_name}"') =/const '"${class_name}"' =/g' "${filepath}"
@@ -155,7 +155,7 @@ step3() {
     return 1
   fi
 
-  local requires=$(grep -E -o '^goog.require(|Type)\('\''(.*)'\''\)' "${filepath}" | perl -pe 's/goog.require(|Type)\('\''(.*)'\''\)/\2/g')
+  local requires=$(perl -nle'print $& while m{^goog.require(|Type)\('\''(.*)'\''\)}g' "${filepath}" | perl -pe 's/goog.require(|Type)\('\''(.*)'\''\)/\2/g')
 
   # Process each require
   echo "${requires}" | while read -r require ; do
@@ -200,7 +200,7 @@ step3() {
     perl -pi -e 's/'"${require}"'([^'\''\w])/'"${require_name}"'\1/g' "${filepath}"
   done
 
-  local missing_requires=$(grep -Po '(?<!'\'')Blockly(\.\w+)+' "${filepath}")
+  local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
   local missing_require_lines=$(echo "${missing_requires}" | wc -l)
   if [[ "${missing_require_lines}" -gt "0" ]]; then
     err "Missing requires for: ${missing_requires} Please manually fix."

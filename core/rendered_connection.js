@@ -471,7 +471,7 @@ Blockly.RenderedConnection.prototype.onFailedConnect =
             this.bumpAwayFrom(otherConnection);
             Blockly.Events.setGroup(false);
           }
-        }.bind(this), Blockly.BUMP_DELAY);
+        }.bind(this), Blockly.internalConstants.BUMP_DELAY);
       }
     };
 

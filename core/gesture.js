@@ -229,7 +229,7 @@ Blockly.Gesture = function(e, creatorWorkspace) {
    * @type {boolean}
    * @private
    */
-  this.healStack_ = !Blockly.DRAG_STACK;
+  this.healStack_ = !Blockly.internalConstants.DRAG_STACK;
 };
 
 /**

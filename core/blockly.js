@@ -425,8 +425,9 @@ Blockly.isNumber = function(str) {
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
+  return Blockly.utils.colour.hsvToHex(
+      hue, Blockly.internalConstants.HSV_SATURATION,
+      Blockly.internalConstants.HSV_VALUE * 255);
 };
 
 /**

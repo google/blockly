@@ -18,7 +18,6 @@ goog.require('Blockly.Comment');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.internalConstants');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
 
@@ -868,9 +867,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         var block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', this.defType_);
         var xy = this.getRelativeToSurfaceXY();
-        var x =
-            xy.x + Blockly.internalConstants.SNAP_RADIUS * (this.RTL ? -1 : 1);
-        var y = xy.y + Blockly.internalConstants.SNAP_RADIUS * 2;
+        var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
+        var y = xy.y + Blockly.SNAP_RADIUS * 2;
         block.setAttribute('x', x);
         block.setAttribute('y', y);
         var mutation = this.mutationToDom();

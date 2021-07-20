@@ -16,8 +16,7 @@
  */
 goog.provide('Blockly.Touch');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.string');
@@ -107,8 +106,7 @@ Blockly.longStart = function(e, gesture) {
     if (gesture) {
       gesture.handleRightClick(e);
     }
-
-  }, Blockly.LONGPRESS);
+  }, Blockly.internalConstants.LONGPRESS);
 };
 
 /**

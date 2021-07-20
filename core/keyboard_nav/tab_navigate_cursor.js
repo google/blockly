@@ -37,10 +37,10 @@ Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.BasicCursor);
  * @override
  */
 Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
-  var isValid = false;
-  var type = node && node.getType();
+  let isValid = false;
+  const type = node && node.getType();
   if (node) {
-    var location = /** @type {Blockly.Field} */ (node.getLocation());
+    const location = /** @type {Blockly.Field} */ (node.getLocation());
     if (type == Blockly.ASTNode.types.FIELD &&
         location && location.isTabNavigable() && location.isClickable()) {
       isValid = true;

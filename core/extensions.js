@@ -86,17 +86,11 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
     opt_blockList) {
   var errorPrefix = 'Error when registering mutator "' + name + '": ';
 
-  // Sanity check the mixin object before registering it.
-  Blockly.Extensions.checkHasFunction_(
-      errorPrefix, mixinObj.domToMutation, 'domToMutation');
-  Blockly.Extensions.checkHasFunction_(
-      errorPrefix, mixinObj.mutationToDom, 'mutationToDom');
-
+  Blockly.Extensions.checkHasMutatorProperties_(errorPrefix, mixinObj);
   var hasMutatorDialog =
       Blockly.Extensions.checkMutatorDialog_(mixinObj, errorPrefix);
-
   if (opt_helperFn && (typeof opt_helperFn != 'function')) {
-    throw Error('Extension "' + name + '" is not a function');
+    throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
@@ -154,7 +148,7 @@ Blockly.Extensions.apply = function(name, block, isMutator) {
 
   if (isMutator) {
     var errorPrefix = 'Error after applying mutator "' + name + '": ';
-    Blockly.Extensions.checkBlockHasMutatorProperties_(errorPrefix, block);
+    Blockly.Extensions.checkHasMutatorProperties_(errorPrefix, block);
   } else {
     if (!Blockly.Extensions.mutatorPropertiesMatch_(
         /** @type {!Array<Object>} */ (mutatorProperties), block)) {
@@ -203,54 +197,100 @@ Blockly.Extensions.checkNoMutatorProperties_ = function(mutationName, block) {
 };
 
 /**
- * Check that the given object has both or neither of the functions required
- * to have a mutator dialog.
- * These functions are 'compose' and 'decompose'.  If a block has one, it must
- * have both.
+ * Checks if the given object has both the 'mutationToDom' and 'domToMutation'
+ * functions.
  * @param {!Object} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
  * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
- * @throws {Error} if the object has only one of the functions.
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
  * @private
  */
-Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
-  var hasCompose = object.compose !== undefined;
-  var hasDecompose = object.decompose !== undefined;
-
-  if (hasCompose && hasDecompose) {
-    if (typeof object.compose != 'function') {
-      throw Error(errorPrefix + 'compose must be a function.');
-    } else if (typeof object.decompose != 'function') {
-      throw Error(errorPrefix + 'decompose must be a function.');
-    }
-    return true;
-  } else if (!hasCompose && !hasDecompose) {
-    return false;
-  }
-  throw Error(errorPrefix +
-      'Must have both or neither of "compose" and "decompose"');
+Blockly.Extensions.checkXmlHooks_ = function(object, errorPrefix) {
+  return Blockly.Extensions.checkHasFunctionPair_(
+      object, 'mutationToDom', 'domToMutation', errorPrefix);
 };
 
 /**
- * Check that a block has required mutator properties.  This should be called
- * after applying a mutation extension.
+ * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
+ * functions.
+ * @param {!Object} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Blockly.Block} block The block to inspect.
+ * @return {boolean} True if the object has both functions.  False if it has
+ *     neither function.
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
  * @private
  */
-Blockly.Extensions.checkBlockHasMutatorProperties_ = function(errorPrefix,
-    block) {
-  if (typeof block.domToMutation != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "domToMutation"');
-  }
-  if (typeof block.mutationToDom != 'function') {
-    throw Error(errorPrefix + 'Applying a mutator didn\'t add "mutationToDom"');
-  }
+Blockly.Extensions.checkJsonHooks_ = function(object, errorPrefix) {
+  return Blockly.Extensions.checkHasFunctionPair_(
+      object, 'saveExtraState', 'loadExtraState', errorPrefix);
+};
 
+/**
+ * Checks if the given object has both the 'compose' and 'decompose' functions.
+ * @param {!Object} object The object to check.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @return {boolean} True if the object has both functions.  False if it has
+ *     neither function.
+ * @throws {Error} if the object has only one of the functions, or either is
+ *     not actually a function.
+ * @private
+ */
+Blockly.Extensions.checkMutatorDialog_ = function(object, errorPrefix) {
+  return Blockly.Extensions
+      .checkHasFunctionPair_(object, 'compose', 'decompose', errorPrefix);
+};
+
+/**
+ * Checks that the given object has both or neither of the given functions, and
+ * that they are indeed functions.
+ * @param {!Object} object The object to check.
+ * @param {string} name1 The name of the first function in the pair.
+ * @param {string} name2 The name of the second function in the pair.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @return {boolean} True if the object has both functions. False if it has
+ *     neither function.
+ * @throws {Error} If the object has only one of the functions, or either is
+ *     not actually a function.
+ * @private
+ */
+Blockly.Extensions.checkHasFunctionPair_ =
+  function(object, name1, name2, errorPrefix) {
+    var has1 = object[name1] !== undefined;
+    var has2 = object[name2] !== undefined;
+  
+    if (has1 && has2) {
+      if (typeof object[name1] != 'function') {
+        throw Error(errorPrefix + name1 + ' must be a function.');
+      } else if (typeof object[name2] != 'function') {
+        throw Error(errorPrefix + name2 + ' must be a function.');
+      }
+      return true;
+    } else if (!has1 && !has2) {
+      return false;
+    }
+    throw Error(errorPrefix +
+      'Must have both or neither of "' + name1 + '" and "' + name2 + '"');
+  };
+
+/**
+ * Checks that the given object required mutator properties.
+ * @param {string} errorPrefix The string to prepend to any error message.
+ * @param {!Object} object The object to inspect.
+ * @private
+ */
+Blockly.Extensions.checkHasMutatorProperties_ = function(errorPrefix, object) {
+  var hasXmlHooks = Blockly.Extensions.checkXmlHooks_(object, errorPrefix);
+  var hasJsonHooks = Blockly.Extensions.checkJsonHooks_(object, errorPrefix);
+  if (!hasXmlHooks && !hasJsonHooks) {
+    throw Error(errorPrefix +
+        'Mutations must contain either XML hooks, or JSON hooks, or both');
+  }
   // A block with a mutator isn't required to have a mutation dialog, but
   // it should still have both or neither of compose and decompose.
-  Blockly.Extensions.checkMutatorDialog_(block, errorPrefix);
+  Blockly.Extensions.checkMutatorDialog_(object, errorPrefix);
 };
 
 /**
@@ -269,6 +309,12 @@ Blockly.Extensions.getMutatorProperties_ = function(block) {
   }
   if (block.mutationToDom !== undefined) {
     result.push(block.mutationToDom);
+  }
+  if (block.saveExtraState !== undefined) {
+    result.push(block.saveExtraState);
+  }
+  if (block.loadExtraState !== undefined) {
+    result.push(block.loadExtraState);
   }
   if (block.compose !== undefined) {
     result.push(block.compose);

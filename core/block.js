@@ -328,17 +328,33 @@ Blockly.Block.prototype.onchange;
 
 /**
  * An optional serialization method for defining how to serialize the
- * mutation state. This must be coupled with defining `domToMutation`.
+ * mutation state to XML. This must be coupled with defining `domToMutation`.
  * @type {?function(...):!Element}
  */
 Blockly.Block.prototype.mutationToDom;
 
 /**
  * An optional deserialization method for defining how to deserialize the
- * mutation state. This must be coupled with defining `mutationToDom`.
+ * mutation state from XML. This must be coupled with defining `mutationToDom`.
  * @type {?function(!Element)}
  */
 Blockly.Block.prototype.domToMutation;
+
+/**
+ * An optional serialization method for defining how to serialize the block's
+ * extra state (eg mutation state) to something JSON compatible. This must be
+ * coupled with defining `loadExtraState`.
+ * @type {?function(): *}
+ */
+Blockly.Block.prototype.saveExtraState;
+
+/**
+ * An optional serialization method for defining how to deserialize the block's
+ * extra state (eg mutation state) from something JSON compatible. This must be
+ * coupled with defining `saveExtraState`.
+ * @type {?function(*)}
+ */
+Blockly.Block.prototype.loadExtraState;
 
 /**
  * An optional property for suppressing adding STATEMENT_PREFIX and

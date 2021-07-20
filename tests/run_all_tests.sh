@@ -50,7 +50,7 @@ run_test_command () {
 
 # Lint the codebase.
 # Skip for CI environments, because linting is run separately.
-if [ ! -z $CI ]; then
+if [ -z $CI ]; then
   run_test_command "eslint" "eslint ."
 fi
 

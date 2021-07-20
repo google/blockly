@@ -57,6 +57,3 @@ jobs:
 
     - name: Lint
       run: npm run lint
-
-      env:
-        CI: true

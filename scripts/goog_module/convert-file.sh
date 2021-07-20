@@ -105,7 +105,7 @@ step2 () {
 
 
   inf "Extracting module name..."
-  local module_name=$(grep -oP "(?<=^goog\.module\(\')([^\')]+)" "${filepath}")
+  local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
   if [[ -z "${module_name}" ]]; then
     err "Could not extract module name"
     return 1
@@ -113,7 +113,7 @@ step2 () {
   inf "Extracted module name \"${module_name}\""
 
   if [[ $(grep "${module_name} = " "${filepath}") ]]; then
-    local class_name=$(echo "${module_name}" | grep -oP "(\w+)$")
+    local class_name=$(echo "${module_name}" | grep -E -o "(\w+)$")
     inf "Found class \"${class_name}\" in file."
     inf "Updating class declaration..."
     perl -pi -e 's/^('"${module_name}"') =/const '"${class_name}"' =/g' "${filepath}"
@@ -160,16 +160,17 @@ step3() {
   # Process each require
   echo "${requires}" | while read -r require ; do
     inf "Processing require \"${require}\""
-    local usages=$(grep -Pe ''"${require}"'(?!'\'')' "${filepath}" | wc -l)
+    local usages=$(perl -nle'print $& while m{'"${require}"'(?!'\'')}g' "${filepath}" | wc -l)
+
     if [[ "${usages}" -eq "0" ]]; then
       warn "Unused require \"${require}\""
       continue
     fi
 
-    local direct_access_count=$(grep -Pe ''"${require}"'[^\.'\'']' "${filepath}" | wc -l)
-    local properties_accessed=$(grep -Po '(?<='"${require}"'\.)(?!prototype)\w+' "${filepath}" | tr ' ' '\n' | sort -u)
+    local direct_access_count=$(perl -nle'print $& while m{'"${require}"'[^\.'\'']}g' "${filepath}" | wc -l)
+    local properties_accessed=$(perl -nle'print $& while m{(?<='"${require}"'\.)(?!prototype)\w+}g' "${filepath}" | tr ' ' '\n' | sort -u)
     # Detect overlap (ex: Blockly.utils and Blockly.utils.dom)
-    local overlap=$(echo "${requires}"| grep -Po "(?<=${require}\.)\w+")
+    local overlap=$(echo "${requires}"| perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
     if [[ ! -z "${overlap}" ]]; then
       while read -r overlap_prop ; do
         properties_accessed=$(echo "$properties_accessed" | perl -pe 's/'"${overlap_prop}"'//g')

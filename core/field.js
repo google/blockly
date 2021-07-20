@@ -418,27 +418,21 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
 /**
  * Saves this fields value as something which can be serialized to JSON. Should
  * only be called by the serialization system.
- * Default implementation calls the XML versions for backwards compatibility.
  * @return {*} JSON serializable state.
  * @package
  */
 Blockly.Field.prototype.saveState = function() {
-  // Default backwards-compatible implementation.
-  var container = Blockly.utils.xml.createElement('field');
-  container.setAttribute('name', this.name || '');
-  return Blockly.Xml.domToText(this.toXml(container));
+  return this.getValue();
 };
 
 /**
  * Sets the field's state based on the given state value. Should only be called
  * by the serialization system.
- * Default implementation calls the XLM versions for backwards compatibility.
  * @param {*} state The state we want to apply to the field.
  * @package
  */
 Blockly.Field.prototype.loadState = function(state) {
-  // Default backwards-compatible implementation.
-  this.fromXml(Blockly.Xml.textToDom(/** @type{string} */ (state)));
+  this.setValue(state);
 };
 
 /**

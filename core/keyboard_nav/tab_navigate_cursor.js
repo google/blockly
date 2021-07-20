@@ -41,8 +41,8 @@ TabNavigateCursor.prototype.validNode_ = function(node) {
   const type = node && node.getType();
   if (node) {
     const location = /** @type {Field} */ (node.getLocation());
-    if (type == ASTNode.types.FIELD &&
-        location && location.isTabNavigable() && location.isClickable()) {
+    if (type == ASTNode.types.FIELD && location && location.isTabNavigable() &&
+        location.isClickable()) {
       isValid = true;
     }
   }

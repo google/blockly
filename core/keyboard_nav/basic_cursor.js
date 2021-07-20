@@ -14,9 +14,10 @@
 goog.module('Blockly.BasicCursor');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.ASTNode');
-goog.require('Blockly.Cursor');
-goog.require('Blockly.registry');
+const ASTNode = goog.require('Blockly.ASTNode');
+const Cursor = goog.require('Blockly.Cursor');
+const {register, Type} = goog.require('Blockly.registry');
+const {inherits} = goog.require('Blockly.utils.object');
 
 
 /**
@@ -24,12 +25,12 @@ goog.require('Blockly.registry');
  * This will allow the user to get to all nodes in the AST by hitting next or
  * previous.
  * @constructor
- * @extends {Blockly.Cursor}
+ * @extends {Cursor}
  */
 const BasicCursor = function() {
   BasicCursor.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(BasicCursor, Blockly.Cursor);
+inherits(BasicCursor, Cursor);
 
 /**
  * Name used for registering a basic cursor.
@@ -39,7 +40,7 @@ BasicCursor.registrationName = 'basicCursor';
 
 /**
  * Find the next node in the pre order traversal.
- * @return {Blockly.ASTNode} The next node, or null if the current node is
+ * @return {?ASTNode} The next node, or null if the current node is
  *     not set or there is no next value.
  * @override
  */
@@ -60,7 +61,7 @@ BasicCursor.prototype.next = function() {
  * For a basic cursor we only have the ability to go next and previous, so
  * in will also allow the user to get to the next node in the pre order
  * traversal.
- * @return {Blockly.ASTNode} The next node, or null if the current node is
+ * @return {?ASTNode} The next node, or null if the current node is
  *     not set or there is no next value.
  * @override
  */
@@ -70,7 +71,7 @@ BasicCursor.prototype.in = function() {
 
 /**
  * Find the previous node in the pre order traversal.
- * @return {Blockly.ASTNode} The previous node, or null if the current node
+ * @return {?ASTNode} The previous node, or null if the current node
  *     is not set or there is no previous value.
  * @override
  */
@@ -91,7 +92,7 @@ BasicCursor.prototype.prev = function() {
  * For a basic cursor we only have the ability to go next and previous, so
  * out will allow the user to get to the previous node in the pre order
  * traversal.
- * @return {Blockly.ASTNode} The previous node, or null if the current node is
+ * @return {?ASTNode} The previous node, or null if the current node is
  *     not set or there is no previous value.
  * @override
  */
@@ -103,10 +104,10 @@ BasicCursor.prototype.out = function() {
  * Uses pre order traversal to navigate the Blockly AST. This will allow
  * a user to easily navigate the entire Blockly AST without having to go in
  * and out levels on the tree.
- * @param {Blockly.ASTNode} node The current position in the AST.
- * @param {!function(Blockly.ASTNode) : boolean} isValid A function true/false
+ * @param {?ASTNode} node The current position in the AST.
+ * @param {!function(ASTNode) : boolean} isValid A function true/false
  *     depending on whether the given node should be traversed.
- * @return {Blockly.ASTNode} The next node in the traversal.
+ * @return {?ASTNode} The next node in the traversal.
  * @protected
  */
 BasicCursor.prototype.getNextNode_ = function(node, isValid) {
@@ -132,10 +133,10 @@ BasicCursor.prototype.getNextNode_ = function(node, isValid) {
  * Reverses the pre order traversal in order to find the previous node. This
  * will allow a user to easily navigate the entire Blockly AST without having to
  * go in and out levels on the tree.
- * @param {Blockly.ASTNode} node The current position in the AST.
- * @param {!function(Blockly.ASTNode) : boolean} isValid A function true/false
+ * @param {?ASTNode} node The current position in the AST.
+ * @param {!function(ASTNode) : boolean} isValid A function true/false
  *     depending on whether the given node should be traversed.
- * @return {Blockly.ASTNode} The previous node in the traversal or null if no
+ * @return {?ASTNode} The previous node in the traversal or null if no
  *     previous node exists.
  * @protected
  */
@@ -161,19 +162,19 @@ BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
 /**
  * Decides what nodes to traverse and which ones to skip. Currently, it
  * skips output, stack and workspace nodes.
- * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
+ * @param {?ASTNode} node The AST node to check whether it is valid.
  * @return {boolean} True if the node should be visited, false otherwise.
  * @protected
  */
 BasicCursor.prototype.validNode_ = function(node) {
   let isValid = false;
   const type = node && node.getType();
-  if (type == Blockly.ASTNode.types.OUTPUT ||
-      type == Blockly.ASTNode.types.INPUT ||
-      type == Blockly.ASTNode.types.FIELD ||
-      type == Blockly.ASTNode.types.NEXT ||
-      type == Blockly.ASTNode.types.PREVIOUS ||
-      type == Blockly.ASTNode.types.WORKSPACE) {
+  if (type == ASTNode.types.OUTPUT ||
+      type == ASTNode.types.INPUT ||
+      type == ASTNode.types.FIELD ||
+      type == ASTNode.types.NEXT ||
+      type == ASTNode.types.PREVIOUS ||
+      type == ASTNode.types.WORKSPACE) {
     isValid = true;
   }
   return isValid;
@@ -181,8 +182,8 @@ BasicCursor.prototype.validNode_ = function(node) {
 
 /**
  * From the given node find either the next valid sibling or parent.
- * @param {Blockly.ASTNode} node The current position in the AST.
- * @return {Blockly.ASTNode} The parent AST node or null if there are no
+ * @param {?ASTNode} node The current position in the AST.
+ * @return {?ASTNode} The parent AST node or null if there are no
  *     valid parents.
  * @private
  */
@@ -200,8 +201,8 @@ BasicCursor.prototype.findSiblingOrParent_ = function(node) {
 
 /**
  * Get the right most child of a node.
- * @param {Blockly.ASTNode} node The node to find the right most child of.
- * @return {Blockly.ASTNode} The right most child of the given node, or the node
+ * @param {?ASTNode} node The node to find the right most child of.
+ * @return {?ASTNode} The right most child of the given node, or the node
  *     if no child exists.
  * @private
  */
@@ -216,8 +217,8 @@ BasicCursor.prototype.getRightMostChild_ = function(node) {
   return this.getRightMostChild_(newNode);
 };
 
-Blockly.registry.register(
-    Blockly.registry.Type.CURSOR, BasicCursor.registrationName,
+register(
+    Type.CURSOR, BasicCursor.registrationName,
     BasicCursor);
 
 exports = BasicCursor;

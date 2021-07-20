@@ -39,7 +39,7 @@ const StatementInput = goog.require('Blockly.blockRendering.StatementInput');
 const TopRow = goog.require('Blockly.blockRendering.TopRow');
 const Types = goog.require('Blockly.blockRendering.Types');
 const {ALIGN} = goog.require('Blockly.constants');
-const {VALUE, STATEMENT, DUMMY} = goog.require('Blockly.inputTypes');
+const {DUMMY, STATEMENT, VALUE} = goog.require('Blockly.inputTypes');
 
 
 

@@ -39,10 +39,7 @@ var State;
 /**
  * Returns the state of the given block as a plain JavaScript object.
  * @param {!Blockly.Block} block The block to serialize.
- * @param {{justThisBlock: (boolean|undefined), addCoordinates:
- *     (boolean|undefined)}=} param1
- *     justThisBlock: If true, none of the children of the given block are
- *       serialized. False by default.
+ * @param {{addCoordinates: (boolean|undefined)}=} param1
  *     addCoordinates: If true the coordinates of the block are added to the
  *       serialized state. False by default.
  * @return {?Blockly.serialization.blocks.State} The serialized state of the
@@ -65,6 +62,7 @@ const save = function(block, {addCoordinates = false} = {}) {
 
   return state;
 };
+exports.save = save;
 
 /**
  * Adds attributes to the given state object based on the state of the block.
@@ -113,5 +111,3 @@ const addCoords = function(block, state) {
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
 };
-
-exports = {save};

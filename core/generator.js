@@ -14,8 +14,7 @@
 goog.provide('Blockly.Generator');
 
 goog.require('Blockly.Block');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.utils.deprecation');
 
 goog.requireType('Blockly.Names');
@@ -451,8 +450,8 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName = this.nameDB_.getDistinctName(desiredName,
-        Blockly.PROCEDURE_CATEGORY_NAME);
+    var functionName = this.nameDB_.getDistinctName(
+        desiredName, Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);

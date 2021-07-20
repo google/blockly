@@ -50,8 +50,9 @@ Blockly.RenderedConnection = function(source, type) {
    * @const {!Blockly.ConnectionDB}
    * @private
    */
-  this.dbOpposite_ = source.workspace
-      .connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+  this.dbOpposite_ =
+      source.workspace
+          .connectionDBList[Blockly.internalConstants.OPPOSITE_TYPE[type]];
 
   /**
    * Workspace units, (0, 0) is top left of block.

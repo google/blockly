@@ -180,15 +180,18 @@ Blockly.WorkspaceSvg = function(
   this.flyoutButtonCallbacks_ = Object.create(null);
 
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.VARIABLE_CATEGORY_NAME,
         Blockly.Variables.flyoutCategory);
   }
   if (Blockly.VariablesDynamic && Blockly.VariablesDynamic.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME,
         Blockly.VariablesDynamic.flyoutCategory);
   }
   if (Blockly.Procedures && Blockly.Procedures.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
     this.addChangeListener(Blockly.Procedures.mutatorOpenListener);
   }

@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.TabNavigateCursor');
+goog.module('Blockly.TabNavigateCursor');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.BasicCursor');
@@ -25,10 +26,10 @@ goog.requireType('Blockly.Field');
  * @constructor
  * @extends {Blockly.BasicCursor}
  */
-Blockly.TabNavigateCursor = function() {
-  Blockly.TabNavigateCursor.superClass_.constructor.call(this);
+const TabNavigateCursor = function() {
+  TabNavigateCursor.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.BasicCursor);
+Blockly.utils.object.inherits(TabNavigateCursor, Blockly.BasicCursor);
 
 /**
  * Skip all nodes except for tab navigable fields.
@@ -36,7 +37,7 @@ Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.BasicCursor);
  * @return {boolean} True if the node should be visited, false otherwise.
  * @override
  */
-Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
+TabNavigateCursor.prototype.validNode_ = function(node) {
   let isValid = false;
   const type = node && node.getType();
   if (node) {
@@ -48,3 +49,5 @@ Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
   }
   return isValid;
 };
+
+exports = TabNavigateCursor;

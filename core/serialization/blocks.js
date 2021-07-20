@@ -22,15 +22,15 @@ goog.module.declareLegacyNamespace();
  * @typedef {{
  *     type: string,
  *     id: string,
- *     x: ?number,
- *     y: ?number,
- *     collapsed: ?boolean,
- *     disabled: ?boolean,
- *     editable: ?boolean,
- *     deletable: ?boolean,
- *     movable: ?boolean,
- *     inline: ?boolean,
- *     data: ?string,
+ *     x: (number|undefined),
+ *     y: (number|undefined),
+ *     collapsed: (boolean|undefined),
+ *     disabled: (boolean|undefined),
+ *     editable: (boolean|undefined),
+ *     deletable: (boolean|undefined),
+ *     movable: (boolean|undefined),
+ *     inline: (boolean|undefined),
+ *     data: (string|undefined),
  * }}
  */
 // eslint-disable-next-line no-unused-vars
@@ -42,7 +42,7 @@ var State;
  * @param {{addCoordinates: (boolean|undefined)}=} param1
  *     addCoordinates: If true the coordinates of the block are added to the
  *       serialized state. False by default.
- * @return {?Blockly.serialization.blocks.State} The serialized state of the
+ * @return {?State} The serialized state of the
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
  */
@@ -51,9 +51,10 @@ const save = function(block, {addCoordinates = false} = {}) {
     return null;
   }
 
-  const state = Object.create(null);
-  state['type'] = block.type;
-  state['id'] = block.id;
+  const state = {
+    'type': block.type,
+    'id': block.id
+  };
 
   if (addCoordinates) {
     addCoords(block, state);
@@ -68,7 +69,7 @@ exports.save = save;
  * Adds attributes to the given state object based on the state of the block.
  * Eg collapsed, disabled, editable, etc.
  * @param {!Blockly.Block} block The block to base the attributes on.
- * @param {!Blockly.serialization.blocks.State} state The state object to append
+ * @param {!State} state The state object to append
  *     to.
  */
 const addAttributes = function(block, state) {
@@ -102,7 +103,7 @@ const addAttributes = function(block, state) {
 /**
  * Adds the coordinates of the given block to the given state object.
  * @param {!Blockly.Block} block The block to base the coordinates on
- * @param {!Blockly.serialization.blocks.State} state The state object to append
+ * @param {!State} state The state object to append
  *     to
  */
 const addCoords = function(block, state) {

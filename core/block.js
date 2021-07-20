@@ -47,8 +47,6 @@ goog.requireType('Blockly.Mutator');
 goog.requireType('Blockly.utils.Size');
 goog.requireType('Blockly.VariableModel');
 
-// This should be a lint error as the line is too long and it should show up as a lint error on GitHub.
-
 
 /**
  * Class for one block.

@@ -631,7 +631,7 @@ suite('JSO', function() {
     });
   });
 
-  suite.only('Variables', function() {
+  suite('Variables', function() {
     test('Without type', function() {
       const variable = this.workspace.createVariable('testVar', '', 'testId');
       const jso = Blockly.serialization.variables.save(variable);

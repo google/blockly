@@ -35,6 +35,7 @@ goog.require('Blockly.Events.VarCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.inject');
 goog.require('Blockly.inputTypes');
+goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
@@ -596,3 +597,38 @@ Blockly.TOOLBOX_AT_LEFT = Blockly.utils.toolbox.Position.LEFT;
  * @see Blockly.utils.toolbox.Position.RIGHT
  */
 Blockly.TOOLBOX_AT_RIGHT = Blockly.utils.toolbox.Position.RIGHT;
+
+// Aliases to allow external code to access these values for legacy reasons.
+Blockly.LINE_MODE_MULTIPLIER = Blockly.internalConstants.LINE_MODE_MULTIPLIER;
+Blockly.PAGE_MODE_MULTIPLIER = Blockly.internalConstants.PAGE_MODE_MULTIPLIER;
+Blockly.DRAG_RADIUS = Blockly.internalConstants.DRAG_RADIUS;
+Blockly.FLYOUT_DRAG_RADIUS = Blockly.internalConstants.FLYOUT_DRAG_RADIUS;
+Blockly.SNAP_RADIUS = Blockly.internalConstants.SNAP_RADIUS;
+Blockly.CONNECTING_SNAP_RADIUS =
+    Blockly.internalConstants.CONNECTING_SNAP_RADIUS;
+Blockly.CURRENT_CONNECTION_PREFERENCE =
+    Blockly.internalConstants.CURRENT_CONNECTION_PREFERENCE;
+Blockly.BUMP_DELAY = Blockly.internalConstants.BUMP_DELAY;
+Blockly.BUMP_RANDOMNESS = Blockly.internalConstants.BUMP_RANDOMNESS;
+Blockly.COLLAPSE_CHARS = Blockly.internalConstants.COLLAPSE_CHARS;
+Blockly.LONGPRESS = Blockly.internalConstants.LONGPRESS;
+Blockly.SOUND_LIMIT = Blockly.internalConstants.SOUND_LIMIT;
+Blockly.DRAG_STACK = Blockly.internalConstants.DRAG_STACK;
+Blockly.HSV_SATURATION = Blockly.internalConstants.HSV_SATURATION;
+Blockly.HSV_VALUE = Blockly.internalConstants.HSV_VALUE;
+Blockly.SPRITE = Blockly.internalConstants.SPRITE;
+Blockly.DRAG_NONE = Blockly.internalConstants.DRAG_NONE;
+Blockly.DRAG_STICKY = Blockly.internalConstants.DRAG_STICKY;
+Blockly.DRAG_BEGIN = Blockly.internalConstants.DRAG_BEGIN;
+Blockly.DRAG_FREE = Blockly.internalConstants.DRAG_FREE;
+Blockly.OPPOSITE_TYPE = Blockly.internalConstants.OPPOSITE_TYPE;
+Blockly.VARIABLE_CATEGORY_NAME =
+    Blockly.internalConstants.VARIABLE_CATEGORY_NAME;
+Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME =
+    Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
+Blockly.PROCEDURE_CATEGORY_NAME =
+    Blockly.internalConstants.PROCEDURE_CATEGORY_NAME;
+Blockly.RENAME_VARIABLE_ID = Blockly.internalConstants.RENAME_VARIABLE_ID;
+Blockly.DELETE_VARIABLE_ID = Blockly.internalConstants.DELETE_VARIABLE_ID;
+Blockly.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+Blockly.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;

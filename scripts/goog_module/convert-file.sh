@@ -201,12 +201,12 @@ step3() {
   done
 
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
-  local missing_require_lines=$(echo "${missing_requires}" | wc -l)
-  if [[ "${missing_require_lines}" -gt "0" ]]; then
+  if [[ ! -z "${missing_require_lines}" ]]; then
+    err $missing_require_lines
     err "Missing requires for: ${missing_requires} Please manually fix."
   fi
 
-  inf "Add missing nullability modifier..."
+  inf "Add missing nullability modifiers..."
   perl -pi -e 's/@(param|return) \{([A-Z])/@\1 \{?\2/g' "${filepath}"
 
   success "Completed automation for step 3. Please manually review and reorder requires."

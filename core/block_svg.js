@@ -1550,7 +1550,8 @@ Blockly.BlockSvg.prototype.bumpNeighbours = function() {
       connection.targetBlock().bumpNeighbours();
     }
 
-    var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
+    var neighbours =
+        connection.neighbours(Blockly.internalConstants.SNAP_RADIUS);
     for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
 
       // If both connections are connected, that's probably fine.  But if

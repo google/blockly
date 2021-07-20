@@ -15,9 +15,8 @@ goog.provide('Blockly.InsertionMarkerManager');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.Events');
+goog.require('Blockly.internalConstants');
 
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.RenderedConnection');
@@ -439,9 +438,9 @@ Blockly.InsertionMarkerManager.prototype.getStartRadius_ = function() {
   // By increasing radiusConnection when a connection already exists,
   // we never "lose" the connection from the offset.
   if (this.closestConnection_ && this.localConnection_) {
-    return Blockly.CONNECTING_SNAP_RADIUS;
+    return Blockly.internalConstants.CONNECTING_SNAP_RADIUS;
   }
-  return Blockly.SNAP_RADIUS;
+  return Blockly.internalConstants.SNAP_RADIUS;
 };
 
 /**

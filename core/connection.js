@@ -134,7 +134,7 @@ Connection.prototype.connect_ = function(childConnection) {
   if (Events.isEnabled()) {
     event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
   }
-  Connection.connectReciprocally_(parentConnection, childConnection);
+  connectReciprocally(parentConnection, childConnection);
   childBlock.setParent(parentBlock);
   if (event) {
     event.recordNew();
@@ -307,9 +307,8 @@ Connection.prototype.connect = function(otherConnection) {
  * Update two connections to target each other.
  * @param {Connection} first The first connection to update.
  * @param {Connection} second The second connection to update.
- * @private
  */
-Connection.connectReciprocally_ = function(first, second) {
+const connectReciprocally = function(first, second) {
   if (!first || !second) {
     throw Error('Cannot connect null connections.');
   }
@@ -326,9 +325,8 @@ Connection.connectReciprocally_ = function(first, second) {
  * @param {!Block} orphanBlock The inferior block.
  * @return {?Connection} The suitable connection point on 'block',
  *     or null.
- * @private
  */
-Connection.getSingleConnection_ = function(block, orphanBlock) {
+const getSingleConnection = function(block, orphanBlock) {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
   const typeChecker = output.getConnectionChecker();
@@ -355,13 +353,12 @@ Connection.getSingleConnection_ = function(block, orphanBlock) {
  * @param {!Block} orphanBlock The block that is looking for a home.
  * @return {?Connection} The suitable connection point on the chain
  *     of blocks, or null.
- * @private
  */
-Connection.getConnectionForOrphanedOutput_ = function(startBlock, orphanBlock) {
+const getConnectionForOrphanedOutput = function(startBlock, orphanBlock) {
   let newBlock = startBlock;
   let connection;
   while (
-      (connection = Connection.getSingleConnection_(
+      (connection = getSingleConnection(
            /** @type {!Block} */ (newBlock), orphanBlock))) {
     newBlock = connection.targetBlock();
     if (!newBlock || newBlock.isShadow()) {
@@ -384,7 +381,7 @@ Connection.getConnectionForOrphanedOutput_ = function(startBlock, orphanBlock) {
 Connection.getConnectionForOrphanedConnection = function(
     startBlock, orphanConnection) {
   if (orphanConnection.type === connectionTypes.OUTPUT_VALUE) {
-    return Connection.getConnectionForOrphanedOutput_(
+    return getConnectionForOrphanedOutput(
         startBlock, orphanConnection.getSourceBlock());
   }
   // Otherwise we're dealing with a stack.

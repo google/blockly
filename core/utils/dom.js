@@ -129,8 +129,7 @@ const addClass = function(element, className) {
 const removeClasses = function(element, classNames) {
   const classList = classNames.split(' ');
   for (let i = 0; i < classList.length; i++) {
-    const cssName = classList[i];
-    removeClass(element, cssName);
+    removeClass(element, classList[i]);
   }
 };
 

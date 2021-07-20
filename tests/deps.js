@@ -102,7 +102,7 @@ goog.addDependency('../../core/interfaces/i_styleable.js', ['Blockly.IStyleable'
 goog.addDependency('../../core/interfaces/i_toolbox.js', ['Blockly.IToolbox'], ['Blockly.IRegistrable'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/interfaces/i_toolbox_item.js', ['Blockly.IToolboxItem'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/internal_constants.js', ['Blockly.internalConstants'], ['Blockly.connectionTypes'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.connectionTypes', 'Blockly.utils.Coordinate'], {'lang': 'es5'});
+goog.addDependency('../../core/keyboard_nav/ast_node.js', ['Blockly.ASTNode'], ['Blockly.connectionTypes', 'Blockly.utils.Coordinate'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/basic_cursor.js', ['Blockly.BasicCursor'], ['Blockly.ASTNode', 'Blockly.Cursor', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/cursor.js', ['Blockly.Cursor'], ['Blockly.ASTNode', 'Blockly.Marker', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/keyboard_nav/marker.js', ['Blockly.Marker'], ['Blockly.ASTNode']);

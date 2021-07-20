@@ -549,8 +549,14 @@ Code.initLanguage = function() {
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
+ * @param {Event} event Event created from listener bound to the function.
  */
-Code.runJS = function() {
+Code.runJS = function(event) {
+  // Prevent code from being executed twice on touchscreens.
+  if (event.type == 'touchend') {
+    event.preventDefault();
+  }
+
   Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
   var timeouts = 0;
   var checkTimeout = function() {

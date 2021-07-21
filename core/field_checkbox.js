@@ -14,9 +14,9 @@ goog.module('Blockly.FieldCheckbox');
 goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
-const {addClass} = goog.require('Blockly.utils.dom');
+const dom = goog.require('Blockly.utils.dom');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const {inherits} = goog.require('Blockly.utils.object');
-const {register} = goog.require('Blockly.fieldRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -109,7 +109,7 @@ FieldCheckbox.prototype.configure_ = function(config) {
 FieldCheckbox.prototype.initView = function() {
   FieldCheckbox.superClass_.initView.call(this);
 
-  addClass(
+  dom.addClass(
       /** @type {!SVGTextElement} **/ (this.textElement_), 'blocklyCheckbox');
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
 };
@@ -221,6 +221,6 @@ FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-register('field_checkbox', FieldCheckbox);
+fieldRegistry.register('field_checkbox', FieldCheckbox);
 
 exports = FieldCheckbox;

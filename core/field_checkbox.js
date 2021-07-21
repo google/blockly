@@ -13,12 +13,12 @@
 goog.module('Blockly.FieldCheckbox');
 goog.module.declareLegacyNamespace();
 
+const Field = goog.require('Blockly.Field');
+const {addClass} = goog.require('Blockly.utils.dom');
+const {inherits} = goog.require('Blockly.utils.object');
+const {register} = goog.require('Blockly.fieldRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
 
 
 /**
@@ -32,7 +32,7 @@ goog.require('Blockly.utils.object');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.Field}
+ * @extends {Field}
  * @constructor
  */
 const FieldCheckbox = function(opt_value, opt_validator, opt_config) {
@@ -47,7 +47,7 @@ const FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 };
-Blockly.utils.object.inherits(FieldCheckbox, Blockly.Field);
+inherits(FieldCheckbox, Field);
 
 /**
  * The default value for this field.
@@ -108,7 +108,7 @@ FieldCheckbox.prototype.configure_ = function(config) {
 FieldCheckbox.prototype.initView = function() {
   FieldCheckbox.superClass_.initView.call(this);
 
-  Blockly.utils.dom.addClass(
+  addClass(
       /** @type {!SVGTextElement} **/ (this.textElement_), 'blocklyCheckbox');
   this.textElement_.style.display = this.value_ ? 'block' : 'none';
 };
@@ -220,6 +220,6 @@ FieldCheckbox.prototype.convertValueToBool_ = function(value) {
   }
 };
 
-Blockly.fieldRegistry.register('field_checkbox', FieldCheckbox);
+register('field_checkbox', FieldCheckbox);
 
 exports = FieldCheckbox;

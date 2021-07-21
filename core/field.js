@@ -281,8 +281,7 @@ Field.prototype.SERIALIZABLE = false;
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
-    tooltip = replaceMessageReferences(
-        config['tooltip']);
+    tooltip = replaceMessageReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 
@@ -332,8 +331,7 @@ Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = createSvgElement(
-      Svg.G, {}, null);
+  this.fieldGroup_ = createSvgElement(Svg.G, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -360,8 +358,7 @@ Field.prototype.initView = function() {
  * No-op by default.
  * @package
  */
-Field.prototype.initModel = function() {
-};
+Field.prototype.initModel = function() {};
 
 /**
  * Create a field border rect element. Not to be overridden by subclasses.
@@ -379,7 +376,8 @@ Field.prototype.createBorderRect_ = function() {
         'height': this.size_.height,
         'width': this.size_.width,
         'class': 'blocklyFieldRect'
-      }, this.fieldGroup_);
+      },
+      this.fieldGroup_);
 };
 
 /**
@@ -392,7 +390,8 @@ Field.prototype.createTextElement_ = function() {
   this.textElement_ = createSvgElement(
       Svg.TEXT, {
         'class': 'blocklyText',
-      }, this.fieldGroup_);
+      },
+      this.fieldGroup_);
   if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {
     this.textElement_.setAttribute('dominant-baseline', 'central');
   }
@@ -523,9 +522,10 @@ Field.prototype.isSerializable = function() {
     if (this.SERIALIZABLE) {
       isSerializable = true;
     } else if (this.EDITABLE) {
-      console.warn('Detected an editable field that was not serializable.' +
-        ' Please define SERIALIZABLE property as true on all editable custom' +
-        ' fields. Proceeding with serialization.');
+      console.warn(
+          'Detected an editable field that was not serializable.' +
+          ' Please define SERIALIZABLE property as true on all editable custom' +
+          ' fields. Proceeding with serialization.');
       isSerializable = true;
     }
   }
@@ -635,17 +635,17 @@ Field.prototype.showEditor = function(opt_e) {
  */
 Field.prototype.updateSize_ = function(opt_margin) {
   const constants = this.getConstants();
-  const xOffset = opt_margin != undefined ? opt_margin :
+  const xOffset = opt_margin != undefined ?
+      opt_margin :
       (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
   let totalWidth = xOffset * 2;
   let totalHeight = constants.FIELD_TEXT_HEIGHT;
 
   let contentWidth = 0;
   if (this.textElement_) {
-    contentWidth = getFastTextWidth(this.textElement_,
-        constants.FIELD_TEXT_FONTSIZE,
-        constants.FIELD_TEXT_FONTWEIGHT,
-        constants.FIELD_TEXT_FONTFAMILY);
+    contentWidth = getFastTextWidth(
+        this.textElement_, constants.FIELD_TEXT_FONTSIZE,
+        constants.FIELD_TEXT_FONTWEIGHT, constants.FIELD_TEXT_FONTFAMILY);
     totalWidth += contentWidth;
   }
   if (this.borderRect_) {
@@ -673,11 +673,15 @@ Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
   const constants = this.getConstants();
   const halfHeight = this.size_.height / 2;
 
-  this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
-      this.size_.width - contentWidth - xOffset : xOffset);
-  this.textElement_.setAttribute('y', constants.FIELD_TEXT_BASELINE_CENTER ?
-      halfHeight : halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
-      constants.FIELD_TEXT_BASELINE);
+  this.textElement_.setAttribute(
+      'x',
+      this.sourceBlock_.RTL ? this.size_.width - contentWidth - xOffset :
+                              xOffset);
+  this.textElement_.setAttribute(
+      'y',
+      constants.FIELD_TEXT_BASELINE_CENTER ? halfHeight :
+                                             halfHeight -
+              constants.FIELD_TEXT_HEIGHT / 2 + constants.FIELD_TEXT_BASELINE);
 };
 
 /**
@@ -690,10 +694,10 @@ Field.prototype.positionBorderRect_ = function() {
   }
   this.borderRect_.setAttribute('width', this.size_.width);
   this.borderRect_.setAttribute('height', this.size_.height);
-  this.borderRect_.setAttribute('rx',
-      this.getConstants().FIELD_BORDER_RECT_RADIUS);
-  this.borderRect_.setAttribute('ry',
-      this.getConstants().FIELD_BORDER_RECT_RADIUS);
+  this.borderRect_.setAttribute(
+      'rx', this.getConstants().FIELD_BORDER_RECT_RADIUS);
+  this.borderRect_.setAttribute(
+      'ry', this.getConstants().FIELD_BORDER_RECT_RADIUS);
 };
 
 
@@ -714,8 +718,9 @@ Field.prototype.getSize = function() {
   } else if (this.visible_ && this.size_.width == 0) {
     // If the field is not visible the width will be 0 as well, one of the
     // problems with the old system.
-    console.warn('Deprecated use of setting size_.width to 0 to rerender a' +
-      ' field. Set field.isDirty_ to true instead.');
+    console.warn(
+        'Deprecated use of setting size_.width to 0 to rerender a' +
+        ' field. Set field.isDirty_ to true instead.');
     this.render_();
   }
   return this.size_;
@@ -759,12 +764,7 @@ Field.prototype.getScaledBBox = function() {
     scaledWidth = bBox.width;
     scaledHeight = bBox.height;
   }
-  return new Rect(
-      xy.y,
-      xy.y + scaledHeight,
-      xy.x,
-      xy.x + scaledWidth
-  );
+  return new Rect(xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
 };
 
 /**
@@ -896,8 +896,7 @@ Field.prototype.setValue = function(newValue) {
  * @return {*} New value, or an Error object.
  * @private
  */
-Field.prototype.processValidation_ = function(newValue,
-    validatedValue) {
+Field.prototype.processValidation_ = function(newValue, validatedValue) {
   if (validatedValue === null) {
     this.doValueInvalid_(newValue);
     if (this.isDirty_) {
@@ -1078,7 +1077,8 @@ Field.prototype.isTabNavigable = function() {
 
 /**
  * Handles the given keyboard shortcut.
- * @param {!ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @param {!ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be
+ *     handled.
  * @return {boolean} True if the shortcut has been handled, false otherwise.
  * @public
  */
@@ -1124,7 +1124,7 @@ Field.prototype.setMarkerSvg = function(markerSvg) {
  */
 Field.prototype.updateMarkers_ = function() {
   const workspace =
-    /** @type {!WorkspaceSvg} */ (this.sourceBlock_.workspace);
+      /** @type {!WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();
   }

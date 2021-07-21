@@ -299,14 +299,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
   }
   // Element gets created in render.
   this.menu_.render(Blockly.DropDownDiv.getContentDiv());
-  var menuElement = /** @type {!Element} */ (this.menu_.getElement());
+  const menuElement = /** @type {!Element} */ (this.menu_.getElement());
   Blockly.utils.dom.addClass(menuElement, 'blocklyDropdownMenu');
 
   if (this.getConstants().FIELD_DROPDOWN_COLOURED_DIV) {
-    var primaryColour = (this.sourceBlock_.isShadow()) ?
+    const primaryColour = (this.sourceBlock_.isShadow()) ?
         this.sourceBlock_.getParent().getColour() :
         this.sourceBlock_.getColour();
-    var borderColour = (this.sourceBlock_.isShadow()) ?
+    const borderColour = (this.sourceBlock_.isShadow()) ?
         this.sourceBlock_.getParent().style.colourTertiary :
         this.sourceBlock_.style.colourTertiary;
     Blockly.DropDownDiv.setColour(primaryColour, borderColour);
@@ -332,23 +332,23 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
-  var menu = new Blockly.Menu();
+  const menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
   this.menu_ = menu;
 
-  var options = this.getOptions(false);
+  const options = this.getOptions(false);
   this.selectedMenuItem_ = null;
-  for (var i = 0; i < options.length; i++) {
-    var content = options[i][0];  // Human-readable text or image.
-    var value = options[i][1];    // Language-neutral value.
+  for (let i = 0; i < options.length; i++) {
+    let content = options[i][0];  // Human-readable text or image.
+    const value = options[i][1];    // Language-neutral value.
     if (typeof content == 'object') {
       // An image, not text.
-      var image = new Image(content['width'], content['height']);
+      const image = new Image(content['width'], content['height']);
       image.src = content['src'];
       image.alt = content['alt'] || '';
       content = image;
     }
-    var menuItem = new Blockly.MenuItem(content, value);
+    const menuItem = new Blockly.MenuItem(content, value);
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setCheckable(true);
@@ -400,15 +400,15 @@ Blockly.FieldDropdown.prototype.onItemSelected_ = function(menu, menuItem) {
  * @private
  */
 Blockly.FieldDropdown.prototype.trimOptions_ = function() {
-  var options = this.menuGenerator_;
+  const options = this.menuGenerator_;
   if (!Array.isArray(options)) {
     return;
   }
-  var hasImages = false;
+  let hasImages = false;
 
   // Localize label text and image alt text.
-  for (var i = 0; i < options.length; i++) {
-    var label = options[i][0];
+  for (let i = 0; i < options.length; i++) {
+    const label = options[i][0];
     if (typeof label == 'string') {
       options[i][0] = Blockly.utils.replaceMessageReferences(label);
     } else {
@@ -421,13 +421,13 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   if (hasImages || options.length < 2) {
     return;  // Do nothing if too few items or at least one label is an image.
   }
-  var strings = [];
-  for (var i = 0; i < options.length; i++) {
+  const strings = [];
+  for (let i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  var shortest = Blockly.utils.string.shortestStringLength(strings);
-  var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
+  const shortest = Blockly.utils.string.shortestStringLength(strings);
+  const prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
+  const suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
   if (!prefixLength && !suffixLength) {
     return;
   }
@@ -457,11 +457,11 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
  */
 Blockly.FieldDropdown.applyTrim_ = function(options,
     prefixLength, suffixLength) {
-  var newOptions = [];
+  const newOptions = [];
   // Remove the prefix and suffix from the options.
-  for (var i = 0; i < options.length; i++) {
-    var text = options[i][0];
-    var value = options[i][1];
+  for (let i = 0; i < options.length; i++) {
+    let text = options[i][0];
+    const value = options[i][1];
     text = text.substring(prefixLength, text.length - suffixLength);
     newOptions[i] = [text, value];
   }
@@ -502,9 +502,9 @@ Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
  * @protected
  */
 Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
-  var isValueValid = false;
-  var options = this.getOptions(true);
-  for (var i = 0, option; (option = options[i]); i++) {
+  let isValueValid = false;
+  const options = this.getOptions(true);
+  for (let i = 0, option; (option = options[i]); i++) {
     // Options are tuples of human-readable text and language-neutral values.
     if (option[1] == opt_newValue) {
       isValueValid = true;
@@ -530,8 +530,8 @@ Blockly.FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
  */
 Blockly.FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   Blockly.FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
-  var options = this.getOptions(true);
-  for (var i = 0, option; (option = options[i]); i++) {
+  const options = this.getOptions(true);
+  for (let i = 0, option; (option = options[i]); i++) {
     if (option[1] == this.value_) {
       this.selectedOption_ = option;
     }
@@ -573,7 +573,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
   this.imageElement_.style.display = 'none';
 
   // Show correct element.
-  var option = this.selectedOption_ && this.selectedOption_[0];
+  const option = this.selectedOption_ && this.selectedOption_[0];
   if (option && typeof option == 'object') {
     this.renderSelectedImage_(
         /** @type {!Blockly.FieldDropdown.ImageProperties} */ (option));
@@ -597,16 +597,16 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.imageElement_.setAttribute('height', imageJson.height);
   this.imageElement_.setAttribute('width', imageJson.width);
 
-  var imageHeight = Number(imageJson.height);
-  var imageWidth = Number(imageJson.width);
+  const imageHeight = Number(imageJson.height);
+  const imageWidth = Number(imageJson.width);
 
   // Height and width include the border rect.
-  var hasBorder = !!this.borderRect_;
-  var height = Math.max(
+  const hasBorder = !!this.borderRect_;
+  const height = Math.max(
       hasBorder ? this.getConstants().FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       imageHeight + Blockly.FieldDropdown.IMAGE_Y_PADDING);
-  var xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
-  var arrowWidth = 0;
+  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  let arrowWidth = 0;
   if (this.svgArrow_) {
     arrowWidth = this.positionSVGArrow_(imageWidth + xPadding, height / 2 -
       this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
@@ -620,9 +620,9 @@ Blockly.FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.size_.width = imageWidth + arrowWidth + xPadding * 2;
   this.size_.height = height;
 
-  var arrowX = 0;
+  let arrowX = 0;
   if (this.sourceBlock_.RTL) {
-    var imageX = xPadding + arrowWidth;
+    const imageX = xPadding + arrowWidth;
     this.imageElement_.setAttribute('x', imageX);
   } else {
     arrowX = imageWidth + arrowWidth;
@@ -646,16 +646,16 @@ Blockly.FieldDropdown.prototype.renderSelectedText_ = function() {
   this.textElement_.setAttribute('text-anchor', 'start');
 
   // Height and width include the border rect.
-  var hasBorder = !!this.borderRect_;
-  var height = Math.max(
+  const hasBorder = !!this.borderRect_;
+  const height = Math.max(
       hasBorder ? this.getConstants().FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.getConstants().FIELD_TEXT_HEIGHT);
-  var textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
+  const textWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
       this.getConstants().FIELD_TEXT_FONTSIZE,
       this.getConstants().FIELD_TEXT_FONTWEIGHT,
       this.getConstants().FIELD_TEXT_FONTFAMILY);
-  var xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
-  var arrowWidth = 0;
+  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  let arrowWidth = 0;
   if (this.svgArrow_) {
     arrowWidth = this.positionSVGArrow_(textWidth + xPadding, height / 2 -
         this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
@@ -677,11 +677,11 @@ Blockly.FieldDropdown.prototype.positionSVGArrow_ = function(x, y) {
   if (!this.svgArrow_) {
     return 0;
   }
-  var hasBorder = !!this.borderRect_;
-  var xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
-  var textPadding = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_PADDING;
-  var svgArrowSize = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE;
-  var arrowX = this.sourceBlock_.RTL ? xPadding : x + textPadding;
+  const hasBorder = !!this.borderRect_;
+  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  const textPadding = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_PADDING;
+  const svgArrowSize = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE;
+  const arrowX = this.sourceBlock_.RTL ? xPadding : x + textPadding;
   this.svgArrow_.setAttribute('transform',
       'translate(' + arrowX + ',' + y + ')');
   return svgArrowSize + textPadding;
@@ -699,7 +699,7 @@ Blockly.FieldDropdown.prototype.getText_ = function() {
   if (!this.selectedOption_) {
     return null;
   }
-  var option = this.selectedOption_[0];
+  const option = this.selectedOption_[0];
   if (typeof option == 'object') {
     return option['alt'];
   }
@@ -719,9 +719,9 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
   if (!options.length) {
     throw TypeError('FieldDropdown options must not be an empty array.');
   }
-  var foundError = false;
-  for (var i = 0; i < options.length; ++i) {
-    var tuple = options[i];
+  let foundError = false;
+  for (let i = 0; i < options.length; ++i) {
+    const tuple = options[i];
     if (!Array.isArray(tuple)) {
       foundError = true;
       console.error(

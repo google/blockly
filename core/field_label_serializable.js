@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldLabelSerializable');
+goog.module('Blockly.FieldLabelSerializable');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.fieldRegistry');
@@ -31,22 +32,22 @@ goog.require('Blockly.utils.object');
  * @constructor
  *
  */
-Blockly.FieldLabelSerializable = function(opt_value, opt_class, opt_config) {
-  Blockly.FieldLabelSerializable.superClass_.constructor.call(
+const FieldLabelSerializable = function(opt_value, opt_class, opt_config) {
+  FieldLabelSerializable.superClass_.constructor.call(
       this, opt_value, opt_class, opt_config);
 };
-Blockly.utils.object.inherits(Blockly.FieldLabelSerializable,
+Blockly.utils.object.inherits(FieldLabelSerializable,
     Blockly.FieldLabel);
 
 /**
  * Construct a FieldLabelSerializable from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and class).
- * @return {!Blockly.FieldLabelSerializable} The new field instance.
+ * @return {!FieldLabelSerializable} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldLabelSerializable.fromJson = function(options) {
+FieldLabelSerializable.fromJson = function(options) {
   const text = Blockly.utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabelSerializable if that class doesn't
   // override the static fromJson method.
@@ -58,14 +59,16 @@ Blockly.FieldLabelSerializable.fromJson = function(options) {
  * editable. This field should not.
  * @type {boolean}
  */
-Blockly.FieldLabelSerializable.prototype.EDITABLE = false;
+FieldLabelSerializable.prototype.EDITABLE = false;
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not.  This field should be serialized, but only edited programmatically.
  * @type {boolean}
  */
-Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
+FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
 Blockly.fieldRegistry.register(
-    'field_label_serializable', Blockly.FieldLabelSerializable);
+    'field_label_serializable', FieldLabelSerializable);
+
+exports = FieldLabelSerializable;

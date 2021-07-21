@@ -12,7 +12,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldMultilineInput');
+goog.module('Blockly.FieldMultilineInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Field');
@@ -42,8 +43,8 @@ goog.require('Blockly.WidgetDiv');
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
-  Blockly.FieldMultilineInput.superClass_.constructor.call(this,
+const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
+  FieldMultilineInput.superClass_.constructor.call(this,
       opt_value, opt_validator, opt_config);
 
   /**
@@ -68,14 +69,14 @@ Blockly.FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    */
   this.isOverflowedY_ = false;
 };
-Blockly.utils.object.inherits(Blockly.FieldMultilineInput,
+Blockly.utils.object.inherits(FieldMultilineInput,
     Blockly.FieldTextInput);
 
 /**
  * @override
  */
-Blockly.FieldMultilineInput.prototype.configure_ = function(config) {
-  Blockly.FieldMultilineInput.superClass_.configure_.call(this, config);
+FieldMultilineInput.prototype.configure_ = function(config) {
+  FieldMultilineInput.superClass_.configure_.call(this, config);
   config.maxLines && this.setMaxLines(config.maxLines);
 };
 
@@ -83,11 +84,11 @@ Blockly.FieldMultilineInput.prototype.configure_ = function(config) {
  * Construct a FieldMultilineInput from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (text, and spellcheck).
- * @return {!Blockly.FieldMultilineInput} The new field instance.
+ * @return {!FieldMultilineInput} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldMultilineInput.fromJson = function(options) {
+FieldMultilineInput.fromJson = function(options) {
   const text = Blockly.utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
@@ -101,7 +102,7 @@ Blockly.FieldMultilineInput.fromJson = function(options) {
  * @return {!Element} The element containing info about the field's state.
  * @package
  */
-Blockly.FieldMultilineInput.prototype.toXml = function(fieldElement) {
+FieldMultilineInput.prototype.toXml = function(fieldElement) {
   // Replace '\n' characters with HTML-escaped equivalent '&#10'. This is
   // needed so the plain-text representation of the XML produced by
   // `Blockly.Xml.domToText` will appear on a single line (this is a limitation
@@ -117,7 +118,7 @@ Blockly.FieldMultilineInput.prototype.toXml = function(fieldElement) {
  *    field's state.
  * @package
  */
-Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
+FieldMultilineInput.prototype.fromXml = function(fieldElement) {
   this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
 };
 
@@ -125,7 +126,7 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
  * Create the block UI for this field.
  * @package
  */
-Blockly.FieldMultilineInput.prototype.initView = function() {
+FieldMultilineInput.prototype.initView = function() {
   this.createBorderRect_();
   this.textGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G, {
@@ -140,7 +141,7 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * @protected
  * @override
  */
-Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
+FieldMultilineInput.prototype.getDisplayText_ = function() {
   let textLines = this.getText();
   if (!textLines) {
     // Prevent the field from disappearing if empty.
@@ -182,8 +183,8 @@ Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
  * that this is a string.
  * @protected
  */
-Blockly.FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
-  Blockly.FieldMultilineInput.superClass_.doValueUpdate_.call(this, newValue);
+FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
+  FieldMultilineInput.superClass_.doValueUpdate_.call(this, newValue);
   this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
 };
 
@@ -191,7 +192,7 @@ Blockly.FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
  * Updates the text of the textElement.
  * @protected
  */
-Blockly.FieldMultilineInput.prototype.render_ = function() {
+FieldMultilineInput.prototype.render_ = function() {
   // Remove all text group children.
   let currentChild;
   while ((currentChild = this.textGroup_.firstChild)) {
@@ -252,7 +253,7 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
  * Updates the size of the field based on the text.
  * @protected
  */
-Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
+FieldMultilineInput.prototype.updateSize_ = function() {
   const nodes = this.textGroup_.childNodes;
   let totalWidth = 0;
   let totalHeight = 0;
@@ -316,8 +317,8 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
  *     focus.  Defaults to false.
  * @override
  */
-Blockly.FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
-  Blockly.FieldMultilineInput.superClass_.showEditor_.call(this, _opt_e, opt_quietInput);
+FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
+  FieldMultilineInput.superClass_.showEditor_.call(this, _opt_e, opt_quietInput);
   this.forceRerender();
 };
 
@@ -326,7 +327,7 @@ Blockly.FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietIn
  * @return {!HTMLTextAreaElement} The newly created text input editor.
  * @protected
  */
-Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
+FieldMultilineInput.prototype.widgetCreate_ = function() {
   const div = Blockly.WidgetDiv.DIV;
   const scale = this.workspace_.getScale();
 
@@ -369,7 +370,7 @@ Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
  * @param {number} maxLines Defines the maximum number of lines allowed,
  *     before scrolling functionality is enabled.
  */
-Blockly.FieldMultilineInput.prototype.setMaxLines = function(maxLines) {
+FieldMultilineInput.prototype.setMaxLines = function(maxLines) {
   if (typeof maxLines === 'number' && maxLines > 0 && maxLines !== this.maxLines_) {
     this.maxLines_ = maxLines;
     this.forceRerender();
@@ -380,7 +381,7 @@ Blockly.FieldMultilineInput.prototype.setMaxLines = function(maxLines) {
  * Returns the maxLines config of this field.
  * @return {number} The maxLines config value.
  */
-Blockly.FieldMultilineInput.prototype.getMaxLines = function() {
+FieldMultilineInput.prototype.getMaxLines = function() {
   return this.maxLines_;
 };
 
@@ -390,9 +391,9 @@ Blockly.FieldMultilineInput.prototype.getMaxLines = function() {
  * @param {!Event} e Keyboard event.
  * @protected
  */
-Blockly.FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
+FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
   if (e.keyCode !== Blockly.utils.KeyCodes.ENTER) {
-    Blockly.FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
+    FieldMultilineInput.superClass_.onHtmlInputKeyDown_.call(this, e);
   }
 };
 
@@ -415,4 +416,6 @@ Blockly.Css.register([
 ]);
 
 
-Blockly.fieldRegistry.register('field_multilinetext', Blockly.FieldMultilineInput);
+Blockly.fieldRegistry.register('field_multilinetext', FieldMultilineInput);
+
+exports = FieldMultilineInput;

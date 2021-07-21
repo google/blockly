@@ -16,10 +16,10 @@ goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
 const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
-const {OPPOSITE_TYPE} = goog.require('Blockly.internalConstants');
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const registry = goog.require('Blockly.registry');
+const {OPPOSITE_TYPE} = goog.require('Blockly.internalConstants');
 
 
 /**

@@ -8,6 +8,7 @@
  * @fileoverview Module that provides constants for use inside Blockly. Do not
  * use these constants outside of the core library.
  * @author fenichel@google.com (Rachel Fenichel)
+ * @package
  */
 'use strict';
 

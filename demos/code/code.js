@@ -191,7 +191,7 @@ Code.bindClick = function(el, func) {
   function touchFunc(e) {
     // Prevent code from being executed twice on touchscreens.
     e.preventDefault();
-    func();
+    func(e);
   }
   el.addEventListener('touchend', touchFunc, true);
 };

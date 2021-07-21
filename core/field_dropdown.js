@@ -48,7 +48,7 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  */
 const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   if (typeof menuGenerator != 'function') {
-    FieldDropdown.validateOptions_(menuGenerator);
+    validateOptions(menuGenerator);
   }
 
   /**
@@ -192,17 +192,15 @@ FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
  * is selected.
  * @type {number}
  * @const
- * @private
  */
-FieldDropdown.IMAGE_Y_OFFSET = 5;
+const IMAGE_Y_OFFSET = 5;
 
 /**
  * The total vertical padding above and below an image.
  * @type {number}
  * @const
- * @private
  */
-FieldDropdown.IMAGE_Y_PADDING = FieldDropdown.IMAGE_Y_OFFSET * 2;
+const IMAGE_Y_PADDING = IMAGE_Y_OFFSET * 2;
 
 /**
  * Android can't (in 2014) display "▾", so use "▼" instead.
@@ -484,7 +482,7 @@ FieldDropdown.prototype.getOptions = function(opt_useCache) {
   if (this.isOptionListDynamic()) {
     if (!this.generatedOptions_ || !opt_useCache) {
       this.generatedOptions_ = this.menuGenerator_.call(this);
-      FieldDropdown.validateOptions_(this.generatedOptions_);
+      validateOptions(this.generatedOptions_);
     }
     return this.generatedOptions_;
   }
@@ -600,7 +598,7 @@ FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   const hasBorder = !!this.borderRect_;
   const height = Math.max(
       hasBorder ? this.getConstants().FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      imageHeight + FieldDropdown.IMAGE_Y_PADDING);
+      imageHeight + IMAGE_Y_PADDING);
   const xPadding =
       hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
   let arrowWidth = 0;
@@ -711,9 +709,8 @@ FieldDropdown.prototype.getText_ = function() {
  * Validates the data structure to be processed as an options list.
  * @param {?} options The proposed dropdown options.
  * @throws {TypeError} If proposed options are incorrectly structured.
- * @private
  */
-FieldDropdown.validateOptions_ = function(options) {
+const validateOptions = function(options) {
   if (!Array.isArray(options)) {
     throw TypeError('FieldDropdown options must be an array.');
   }

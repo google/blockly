@@ -13,13 +13,13 @@
 goog.module('Blockly.FieldImage');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.Svg');
+const Field = goog.require('Blockly.Field');
+const Size = goog.require('Blockly.utils.Size');
+const Svg = goog.require('Blockly.utils.Svg');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const {createSvgElement, XLINK_NS} = goog.require('Blockly.utils.dom');
+const {inherits} = goog.require('Blockly.utils.object');
+const {replaceMessageReferences} = goog.require('Blockly.utils');
 
 
 /**
@@ -35,7 +35,7 @@ goog.require('Blockly.utils.Svg');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.Field}
+ * @extends {Field}
  * @constructor
  */
 const FieldImage = function(src, width, height,
@@ -44,9 +44,9 @@ const FieldImage = function(src, width, height,
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-  src = Blockly.utils.replaceMessageReferences(src);
-  const imageHeight = Number(Blockly.utils.replaceMessageReferences(height));
-  const imageWidth = Number(Blockly.utils.replaceMessageReferences(width));
+  src = replaceMessageReferences(src);
+  const imageHeight = Number(replaceMessageReferences(height));
+  const imageWidth = Number(replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error('Height and width values of an image field must cast to' +
       ' numbers.');
@@ -76,17 +76,17 @@ const FieldImage = function(src, width, height,
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = Blockly.utils.replaceMessageReferences(opt_alt) || '';
+    this.altText_ = replaceMessageReferences(opt_alt) || '';
   }
 
   // Initialize other properties.
   /**
    * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
+   * @type {Size}
    * @protected
    * @override
    */
-  this.size_ = new Blockly.utils.Size(imageWidth,
+  this.size_ = new Size(imageWidth,
       imageHeight + FieldImage.Y_PADDING);
 
   /**
@@ -114,7 +114,7 @@ const FieldImage = function(src, width, height,
    */
   this.imageElement_ = null;
 };
-Blockly.utils.object.inherits(FieldImage, Blockly.Field);
+inherits(FieldImage, Field);
 
 /**
  * The default value for this field.
@@ -172,7 +172,7 @@ FieldImage.prototype.isDirty_ = false;
 FieldImage.prototype.configure_ = function(config) {
   FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
-  this.altText_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
+  this.altText_ = replaceMessageReferences(config['alt']) || '';
 };
 
 /**
@@ -180,15 +180,15 @@ FieldImage.prototype.configure_ = function(config) {
  * @package
  */
 FieldImage.prototype.initView = function() {
-  this.imageElement_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE,
+  this.imageElement_ = createSvgElement(
+      Svg.IMAGE,
       {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
         'alt': this.altText_
       },
       this.fieldGroup_);
-  this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
+  this.imageElement_.setAttributeNS(XLINK_NS,
       'xlink:href', /** @type {string} */ (this.value_));
 
   if (this.clickHandler_) {
@@ -225,7 +225,7 @@ FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
 FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
-    this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
+    this.imageElement_.setAttributeNS(XLINK_NS,
         'xlink:href', String(this.value_));
   }
 };
@@ -286,6 +286,6 @@ FieldImage.prototype.getText_ = function() {
   return this.altText_;
 };
 
-Blockly.fieldRegistry.register('field_image', FieldImage);
+fieldRegistry.register('field_image', FieldImage);
 
 exports = FieldImage;

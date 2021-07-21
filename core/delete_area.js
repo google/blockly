@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.DeleteArea');
+goog.module('Blockly.DeleteArea');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.DragTarget');
@@ -27,8 +28,8 @@ goog.requireType('Blockly.IDraggable');
  * @implements {Blockly.IDeleteArea}
  * @constructor
  */
-Blockly.DeleteArea = function() {
-  Blockly.DeleteArea.superClass_.constructor.call(this);
+const DeleteArea = function() {
+  DeleteArea.superClass_.constructor.call(this);
 
   /**
    * Whether the last block or bubble dragged over this delete area would be
@@ -39,7 +40,7 @@ Blockly.DeleteArea = function() {
    */
   this.wouldDelete_ = false;
 };
-Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
+Blockly.utils.object.inherits(DeleteArea, Blockly.DragTarget);
 
 /**
  * Returns whether the provided block or bubble would be deleted if dropped on
@@ -53,7 +54,7 @@ Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
  * @return {boolean} Whether the element provided would be deleted if dropped on
  *     this area.
  */
-Blockly.DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
+DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
   if (element instanceof Blockly.BlockSvg) {
     const block = /** @type {Blockly.BlockSvg} */ (element);
     const couldDeleteBlock = !block.getParent() && block.isDeletable();
@@ -69,6 +70,8 @@ Blockly.DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
  * @param {boolean} wouldDelete The new value for the wouldDelete state.
  * @protected
  */
-Blockly.DeleteArea.prototype.updateWouldDelete_ = function(wouldDelete) {
+DeleteArea.prototype.updateWouldDelete_ = function(wouldDelete) {
   this.wouldDelete_ = wouldDelete;
 };
+
+exports = DeleteArea;

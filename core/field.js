@@ -267,7 +267,7 @@ Blockly.Field.prototype.SERIALIZABLE = false;
  * @protected
  */
 Blockly.Field.prototype.configure_ = function(config) {
-  var tooltip = config['tooltip'];
+  let tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
     tooltip = Blockly.utils.replaceMessageReferences(
         config['tooltip']);
@@ -325,7 +325,7 @@ Blockly.Field.prototype.init = function() {
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
-  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} **/ (this.sourceBlock_);
+  const sourceBlockSvg = /** @type {!Blockly.BlockSvg} **/ (this.sourceBlock_);
   sourceBlockSvg.getSvgRoot().appendChild(this.fieldGroup_);
   this.initView();
   this.updateEditable();
@@ -444,7 +444,7 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  var group = this.fieldGroup_;
+  const group = this.fieldGroup_;
   if (!this.EDITABLE || !group) {
     return;
   }
@@ -506,7 +506,7 @@ Blockly.Field.prototype.isCurrentlyEditable = function() {
  * @return {boolean} Whether this field should be serialized or not.
  */
 Blockly.Field.prototype.isSerializable = function() {
-  var isSerializable = false;
+  let isSerializable = false;
   if (this.name) {
     if (this.SERIALIZABLE) {
       isSerializable = true;
@@ -539,7 +539,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
     return;
   }
   this.visible_ = visible;
-  var root = this.getSvgRoot();
+  const root = this.getSvgRoot();
   if (root) {
     root.style.display = visible ? 'block' : 'none';
   }
@@ -622,13 +622,13 @@ Blockly.Field.prototype.showEditor = function(opt_e) {
  * @protected
  */
 Blockly.Field.prototype.updateSize_ = function(opt_margin) {
-  var constants = this.getConstants();
-  var xOffset = opt_margin != undefined ? opt_margin :
+  const constants = this.getConstants();
+  const xOffset = opt_margin != undefined ? opt_margin :
       (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
-  var totalWidth = xOffset * 2;
-  var totalHeight = constants.FIELD_TEXT_HEIGHT;
+  let totalWidth = xOffset * 2;
+  let totalHeight = constants.FIELD_TEXT_HEIGHT;
 
-  var contentWidth = 0;
+  let contentWidth = 0;
   if (this.textElement_) {
     contentWidth = Blockly.utils.dom.getFastTextWidth(this.textElement_,
         constants.FIELD_TEXT_FONTSIZE,
@@ -658,8 +658,8 @@ Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
   if (!this.textElement_) {
     return;
   }
-  var constants = this.getConstants();
-  var halfHeight = this.size_.height / 2;
+  const constants = this.getConstants();
+  const halfHeight = this.size_.height / 2;
 
   this.textElement_.setAttribute('x', this.sourceBlock_.RTL ?
       this.size_.width - contentWidth - xOffset : xOffset);
@@ -717,15 +717,16 @@ Blockly.Field.prototype.getSize = function() {
  * @package
  */
 Blockly.Field.prototype.getScaledBBox = function() {
+  let scaledWidth, scaledHeight, xy;
   if (!this.borderRect_) {
     // Browsers are inconsistent in what they return for a bounding box.
     // - Webkit / Blink: fill-box / object bounding box
     // - Gecko / Triden / EdgeHTML: stroke-box
-    var bBox = this.sourceBlock_.getHeightWidth();
-    var scale = this.sourceBlock_.workspace.scale;
-    var xy = this.getAbsoluteXY_();
-    var scaledWidth = bBox.width * scale;
-    var scaledHeight = bBox.height * scale;
+    const bBox = this.sourceBlock_.getHeightWidth();
+    const scale = this.sourceBlock_.workspace.scale;
+    xy = this.getAbsoluteXY_();
+    scaledWidth = bBox.width * scale;
+    scaledHeight = bBox.height * scale;
 
     if (Blockly.utils.userAgent.GECKO) {
       xy.x += 1.5 * scale;
@@ -741,10 +742,10 @@ Blockly.Field.prototype.getScaledBBox = function() {
       scaledHeight += 1 * scale;
     }
   } else {
-    var bBox = this.borderRect_.getBoundingClientRect();
-    var xy = Blockly.utils.style.getPageOffset(this.borderRect_);
-    var scaledWidth = bBox.width;
-    var scaledHeight = bBox.height;
+    const bBox = this.borderRect_.getBoundingClientRect();
+    xy = Blockly.utils.style.getPageOffset(this.borderRect_);
+    scaledWidth = bBox.width;
+    scaledHeight = bBox.height;
   }
   return new Blockly.utils.Rect(
       xy.y,
@@ -761,7 +762,7 @@ Blockly.Field.prototype.getScaledBBox = function() {
  * @protected
  */
 Blockly.Field.prototype.getDisplayText_ = function() {
-  var text = this.getText();
+  let text = this.getText();
   if (!text) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
@@ -785,7 +786,7 @@ Blockly.Field.prototype.getDisplayText_ = function() {
  */
 Blockly.Field.prototype.getText = function() {
   if (this.getText_) {
-    var text = this.getText_.call(this);
+    const text = this.getText_.call(this);
     if (text !== null) {
       return String(text);
     }
@@ -828,14 +829,14 @@ Blockly.Field.prototype.forceRerender = function() {
  * @param {*} newValue New value.
  */
 Blockly.Field.prototype.setValue = function(newValue) {
-  var doLogging = false;
+  const doLogging = false;
   if (newValue === null) {
     doLogging && console.log('null, return');
     // Not a valid value to check.
     return;
   }
 
-  var validatedValue = this.doClassValidation_(newValue);
+  let validatedValue = this.doClassValidation_(newValue);
   // Class validators might accidentally forget to return, we'll ignore that.
   newValue = this.processValidation_(newValue, validatedValue);
   if (newValue instanceof Error) {
@@ -843,7 +844,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
     return;
   }
 
-  var localValidator = this.getValidator();
+  const localValidator = this.getValidator();
   if (localValidator) {
     validatedValue = localValidator.call(this, newValue);
     // Local validators might accidentally forget to return, we'll ignore that.
@@ -853,12 +854,12 @@ Blockly.Field.prototype.setValue = function(newValue) {
       return;
     }
   }
-  var source = this.sourceBlock_;
+  const source = this.sourceBlock_;
   if (source && source.disposed) {
     doLogging && console.log('source disposed, return');
     return;
   }
-  var oldValue = this.getValue();
+  const oldValue = this.getValue();
   if (oldValue === newValue) {
     doLogging && console.log('same, doValueUpdate_, return');
     this.doValueUpdate_(newValue);
@@ -951,7 +952,7 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
-  var gesture = this.sourceBlock_.workspace.getGesture(e);
+  const gesture = this.sourceBlock_.workspace.getGesture(e);
   if (gesture) {
     gesture.setStartField(this);
   }
@@ -968,7 +969,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
   if (!newTip && newTip !== '') {  // If null or undefined.
     newTip = this.sourceBlock_;
   }
-  var clickTarget = this.getClickTarget_();
+  const clickTarget = this.getClickTarget_();
   if (clickTarget) {
     clickTarget.tooltip = newTip;
   } else {
@@ -982,7 +983,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
  * @return {string} The tooltip text for this field.
  */
 Blockly.Field.prototype.getTooltip = function() {
-  var clickTarget = this.getClickTarget_();
+  const clickTarget = this.getClickTarget_();
   if (clickTarget) {
     return Blockly.Tooltip.getTooltipOfObject(clickTarget);
   }
@@ -1030,14 +1031,14 @@ Blockly.Field.prototype.referencesVariables = function() {
  * @package
  */
 Blockly.Field.prototype.getParentInput = function() {
-  var parentInput = null;
-  var block = this.sourceBlock_;
-  var inputs = block.inputList;
+  let parentInput = null;
+  const block = this.sourceBlock_;
+  const inputs = block.inputList;
 
-  for (var idx = 0; idx < block.inputList.length; idx++) {
-    var input = inputs[idx];
-    var fieldRows = input.fieldRow;
-    for (var j = 0; j < fieldRows.length; j++) {
+  for (let idx = 0; idx < block.inputList.length; idx++) {
+    const input = inputs[idx];
+    const fieldRows = input.fieldRow;
+    for (let j = 0; j < fieldRows.length; j++) {
       if (fieldRows[j] === this) {
         parentInput = input;
         break;
@@ -1110,7 +1111,7 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * @protected
  */
 Blockly.Field.prototype.updateMarkers_ = function() {
-  var workspace =
+  const workspace =
     /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
     workspace.getCursor().draw();

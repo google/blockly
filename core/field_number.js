@@ -30,14 +30,14 @@ const {register} = goog.require('Blockly.fieldRegistry');
  *    changes to the field's value. Takes in a number & returns a validated
  *    number, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
  */
-const FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
-    opt_validator, opt_config) {
-
+const FieldNumber = function(
+    opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {
   /**
    * The minimum value this number field can contain.
    * @type {number}
@@ -94,8 +94,8 @@ FieldNumber.prototype.DEFAULT_VALUE = 0;
 FieldNumber.fromJson = function(options) {
   // `this` might be a subclass of FieldNumber if that class doesn't override
   // the static fromJson method.
-  return new this(options['value'],
-      undefined, undefined, undefined, undefined, options);
+  return new this(
+      options['value'], undefined, undefined, undefined, undefined, options);
 };
 
 /**
@@ -305,12 +305,10 @@ FieldNumber.prototype.widgetCreate_ = function() {
 
   // Set the accessibility state
   if (this.min_ > -Infinity) {
-    aria.setState(htmlInput,
-        aria.State.VALUEMIN, this.min_);
+    aria.setState(htmlInput, aria.State.VALUEMIN, this.min_);
   }
   if (this.max_ < Infinity) {
-    aria.setState(htmlInput,
-        aria.State.VALUEMAX, this.max_);
+    aria.setState(htmlInput, aria.State.VALUEMAX, this.max_);
   }
   return htmlInput;
 };

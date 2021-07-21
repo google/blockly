@@ -16,7 +16,7 @@ suite('JSO Deserialization', function() {
   });
 
   suite('Events', function() {
-    test('Finished loading', function() {
+    test.skip('Finished loading', function() {
       const state = {
         'blocks': {
           'blocks': [

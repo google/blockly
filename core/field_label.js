@@ -14,11 +14,11 @@
 goog.module('Blockly.FieldLabel');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Field');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
+const Field = goog.require('Blockly.Field');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const dom = goog.require('Blockly.utils.dom');
+const {inherits} = goog.require('Blockly.utils.object');
+const {replaceMessageReferences} = goog.require('Blockly.utils');
 
 
 /**
@@ -29,7 +29,7 @@ goog.require('Blockly.utils.object');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.Field}
+ * @extends {Field}
  * @constructor
  */
 const FieldLabel = function(opt_value, opt_class, opt_config) {
@@ -47,7 +47,7 @@ const FieldLabel = function(opt_value, opt_class, opt_config) {
     this.class_ = opt_class || null;
   }
 };
-Blockly.utils.object.inherits(FieldLabel, Blockly.Field);
+inherits(FieldLabel, Field);
 
 /**
  * The default value for this field.
@@ -65,7 +65,7 @@ FieldLabel.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldLabel.fromJson = function(options) {
-  const text = Blockly.utils.replaceMessageReferences(options['text']);
+  const text = replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabel if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);
@@ -93,7 +93,7 @@ FieldLabel.prototype.configure_ = function(config) {
 FieldLabel.prototype.initView = function() {
   this.createTextElement_();
   if (this.class_) {
-    Blockly.utils.dom.addClass(
+    dom.addClass(
         /** @type {!SVGTextElement} */ (this.textElement_), this.class_);
   }
 };
@@ -120,15 +120,15 @@ FieldLabel.prototype.setClass = function(cssClass) {
     // This check isn't necessary, but it's faster than letting removeClass
     // figure it out.
     if (this.class_) {
-      Blockly.utils.dom.removeClass(this.textElement_, this.class_);
+      dom.removeClass(this.textElement_, this.class_);
     }
     if (cssClass) {
-      Blockly.utils.dom.addClass(this.textElement_, cssClass);
+      dom.addClass(this.textElement_, cssClass);
     }
   }
   this.class_ = cssClass;
 };
 
-Blockly.fieldRegistry.register('field_label', FieldLabel);
+fieldRegistry.register('field_label', FieldLabel);
 
 exports = FieldLabel;

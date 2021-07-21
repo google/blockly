@@ -225,14 +225,14 @@ Blockly.FieldNumber.prototype.setPrecision = function(precision) {
  */
 Blockly.FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
   this.precision_ = Number(precision) || 0;
-  var precisionString = String(this.precision_);
+  let precisionString = String(this.precision_);
   if (precisionString.indexOf('e') != -1) {
     // String() is fast.  But it turns .0000001 into '1e-7'.
     // Use the much slower toLocaleString to access all the digits.
     precisionString =
         this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
   }
-  var decimalIndex = precisionString.indexOf('.');
+  const decimalIndex = precisionString.indexOf('.');
   if (decimalIndex == -1) {
     // If the precision is 0 (float) allow any number of decimals,
     // otherwise allow none.
@@ -265,7 +265,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   // Clean up text.
-  var newValue = String(opt_newValue);
+  let newValue = String(opt_newValue);
   // TODO: Handle cases like 'ten', '1.203,14', etc.
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   newValue = newValue.replace(/O/ig, '0');
@@ -275,7 +275,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
   newValue = newValue.replace(/infinity/i, 'Infinity');
 
   // Clean up number.
-  var n = Number(newValue || 0);
+  let n = Number(newValue || 0);
   if (isNaN(n)) {
     // Invalid number.
     return null;
@@ -300,7 +300,7 @@ Blockly.FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
  * @override
  */
 Blockly.FieldNumber.prototype.widgetCreate_ = function() {
-  var htmlInput = Blockly.FieldNumber.superClass_.widgetCreate_.call(this);
+  const htmlInput = Blockly.FieldNumber.superClass_.widgetCreate_.call(this);
 
   // Set the accessibility state
   if (this.min_ > -Infinity) {

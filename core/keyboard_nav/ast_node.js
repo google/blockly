@@ -418,7 +418,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
  */
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
-  if (!(curLocation instanceof Blockly.Block)) {
+  if (curLocation.getSourceBlock) {
     curLocation = /** @type {!Blockly.IASTNodeLocationWithBlock} */ (
       curLocation).getSourceBlock();
   }

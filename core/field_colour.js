@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldColour');
+goog.module('Blockly.FieldColour');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
@@ -41,8 +42,8 @@ goog.require('Blockly.utils.Size');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
-  Blockly.FieldColour.superClass_.constructor.call(
+const FieldColour = function(opt_value, opt_validator, opt_config) {
+  FieldColour.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 
   /**
@@ -94,16 +95,16 @@ Blockly.FieldColour = function(opt_value, opt_validator, opt_config) {
    */
   this.onKeyDownWrapper_ = null;
 };
-Blockly.utils.object.inherits(Blockly.FieldColour, Blockly.Field);
+Blockly.utils.object.inherits(FieldColour, Blockly.Field);
 
 /**
  * Construct a FieldColour from a JSON arg object.
  * @param {!Object} options A JSON object with options (colour).
- * @return {!Blockly.FieldColour} The new field instance.
+ * @return {!FieldColour} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldColour.fromJson = function(options) {
+FieldColour.fromJson = function(options) {
   // `this` might be a subclass of FieldColour if that class doesn't override
   // the static fromJson method.
   return new this(options['colour'], undefined, options);
@@ -114,12 +115,12 @@ Blockly.FieldColour.fromJson = function(options) {
  * are not. Editable fields should also be serializable.
  * @type {boolean}
  */
-Blockly.FieldColour.prototype.SERIALIZABLE = true;
+FieldColour.prototype.SERIALIZABLE = true;
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
-Blockly.FieldColour.prototype.CURSOR = 'default';
+FieldColour.prototype.CURSOR = 'default';
 
 /**
  * Used to tell if the field needs to be rendered the next time the block is
@@ -128,21 +129,21 @@ Blockly.FieldColour.prototype.CURSOR = 'default';
  * @type {boolean}
  * @protected
  */
-Blockly.FieldColour.prototype.isDirty_ = false;
+FieldColour.prototype.isDirty_ = false;
 
 /**
  * Array of colours used by this field.  If null, use the global list.
  * @type {Array<string>}
  * @private
  */
-Blockly.FieldColour.prototype.colours_ = null;
+FieldColour.prototype.colours_ = null;
 
 /**
  * Array of colour tooltips used by this field.  If null, use the global list.
  * @type {Array<string>}
  * @private
  */
-Blockly.FieldColour.prototype.titles_ = null;
+FieldColour.prototype.titles_ = null;
 
 /**
  * Number of colour columns used by this field.  If 0, use the global setting.
@@ -150,7 +151,7 @@ Blockly.FieldColour.prototype.titles_ = null;
  * @type {number}
  * @private
  */
-Blockly.FieldColour.prototype.columns_ = 0;
+FieldColour.prototype.columns_ = 0;
 
 /**
  * Configure the field based on the given map of options.
@@ -158,8 +159,8 @@ Blockly.FieldColour.prototype.columns_ = 0;
  * @protected
  * @override
  */
-Blockly.FieldColour.prototype.configure_ = function(config) {
-  Blockly.FieldColour.superClass_.configure_.call(this, config);
+FieldColour.prototype.configure_ = function(config) {
+  FieldColour.superClass_.configure_.call(this, config);
   if (config['colourOptions']) {
     this.colours_ = config['colourOptions'];
     this.titles_ = config['colourTitles'];
@@ -173,7 +174,7 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
  * Create the block UI for this colour field.
  * @package
  */
-Blockly.FieldColour.prototype.initView = function() {
+FieldColour.prototype.initView = function() {
   this.size_ = new Blockly.utils.Size(
       this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH,
       this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
@@ -188,7 +189,7 @@ Blockly.FieldColour.prototype.initView = function() {
 /**
  * @override
  */
-Blockly.FieldColour.prototype.applyColour = function() {
+FieldColour.prototype.applyColour = function() {
   if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     if (this.borderRect_) {
       this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
@@ -205,7 +206,7 @@ Blockly.FieldColour.prototype.applyColour = function() {
  * @return {?string} A valid colour, or null if invalid.
  * @protected
  */
-Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
+FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
   if (typeof opt_newValue != 'string') {
     return null;
   }
@@ -218,7 +219,7 @@ Blockly.FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
  * that this is a colour in '#rrggbb' format.
  * @protected
  */
-Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
+FieldColour.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.borderRect_) {
     this.borderRect_.style.fill = /** @type {string} */ (newValue);
@@ -232,7 +233,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
  * Get the text for this field.  Used when the block is collapsed.
  * @return {string} Text representing the value of this field.
  */
-Blockly.FieldColour.prototype.getText = function() {
+FieldColour.prototype.getText = function() {
   let colour = /** @type {string} */ (this.value_);
   // Try to use #rgb format if possible, rather than #rrggbb.
   if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
@@ -247,7 +248,7 @@ Blockly.FieldColour.prototype.getText = function() {
  * All colour pickers use this unless overridden with setColours.
  * @type {!Array<string>}
  */
-Blockly.FieldColour.COLOURS = [
+FieldColour.COLOURS = [
   // grays
   '#ffffff', '#cccccc', '#c0c0c0', '#999999', '#666666', '#333333', '#000000',
   // reds
@@ -275,7 +276,7 @@ Blockly.FieldColour.COLOURS = [
  * @type {*}
  * @protected
  */
-Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
+FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 /**
  * An array of tooltip strings for the palette.  If not the same length as
@@ -283,23 +284,23 @@ Blockly.FieldColour.prototype.DEFAULT_VALUE = Blockly.FieldColour.COLOURS[0];
  * All colour pickers use this unless overridden with setColours.
  * @type {!Array<string>}
  */
-Blockly.FieldColour.TITLES = [];
+FieldColour.TITLES = [];
 
 /**
  * Number of columns in the palette.
  * All colour pickers use this unless overridden with setColumns.
  */
-Blockly.FieldColour.COLUMNS = 7;
+FieldColour.COLUMNS = 7;
 
 /**
  * Set a custom colour grid for this field.
  * @param {Array<string>} colours Array of colours for this block,
- *     or null to use default (Blockly.FieldColour.COLOURS).
+ *     or null to use default (FieldColour.COLOURS).
  * @param {Array<string>=} opt_titles Optional array of colour tooltips,
- *     or null to use default (Blockly.FieldColour.TITLES).
- * @return {!Blockly.FieldColour} Returns itself (for method chaining).
+ *     or null to use default (FieldColour.TITLES).
+ * @return {!FieldColour} Returns itself (for method chaining).
  */
-Blockly.FieldColour.prototype.setColours = function(colours, opt_titles) {
+FieldColour.prototype.setColours = function(colours, opt_titles) {
   this.colours_ = colours;
   if (opt_titles) {
     this.titles_ = opt_titles;
@@ -310,10 +311,10 @@ Blockly.FieldColour.prototype.setColours = function(colours, opt_titles) {
 /**
  * Set a custom grid size for this field.
  * @param {number} columns Number of columns for this block,
- *     or 0 to use default (Blockly.FieldColour.COLUMNS).
- * @return {!Blockly.FieldColour} Returns itself (for method chaining).
+ *     or 0 to use default (FieldColour.COLUMNS).
+ * @return {!FieldColour} Returns itself (for method chaining).
  */
-Blockly.FieldColour.prototype.setColumns = function(columns) {
+FieldColour.prototype.setColumns = function(columns) {
   this.columns_ = columns;
   return this;
 };
@@ -322,7 +323,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * Create and show the colour field's editor.
  * @protected
  */
-Blockly.FieldColour.prototype.showEditor_ = function() {
+FieldColour.prototype.showEditor_ = function() {
   this.dropdownCreate_();
   Blockly.DropDownDiv.getContentDiv().appendChild(this.picker_);
 
@@ -338,7 +339,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
  * @param {!MouseEvent} e Mouse event.
  * @private
  */
-Blockly.FieldColour.prototype.onClick_ = function(e) {
+FieldColour.prototype.onClick_ = function(e) {
   const cell = /** @type {!Element} */ (e.target);
   const colour = cell && cell.label;
   if (colour !== null) {
@@ -353,7 +354,7 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
  * @param {!KeyboardEvent} e Keyboard event.
  * @private
  */
-Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
+FieldColour.prototype.onKeyDown_ = function(e) {
   let handled = false;
   if (e.keyCode === Blockly.utils.KeyCodes.UP) {
     this.moveHighlightBy_(0, -1);
@@ -390,9 +391,9 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
  * @param {number} dy Change of y
  * @private
  */
-Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
-  const colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
+  const colours = this.colours_ || FieldColour.COLOURS;
+  const columns = this.columns_ || FieldColour.COLUMNS;
 
   // Get the current x and y coordinates
   let x = this.highlightedIndex_ % columns;
@@ -444,7 +445,7 @@ Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
  * @param {!MouseEvent} e Mouse event.
  * @private
  */
-Blockly.FieldColour.prototype.onMouseMove_ = function(e) {
+FieldColour.prototype.onMouseMove_ = function(e) {
   const cell = /** @type {!Element} */ (e.target);
   const index = cell && Number(cell.getAttribute('data-index'));
   if (index !== null && index !== this.highlightedIndex_) {
@@ -456,7 +457,7 @@ Blockly.FieldColour.prototype.onMouseMove_ = function(e) {
  * Handle a mouse enter event. Focus the picker.
  * @private
  */
-Blockly.FieldColour.prototype.onMouseEnter_ = function() {
+FieldColour.prototype.onMouseEnter_ = function() {
   this.picker_.focus({preventScroll:true});
 };
 
@@ -465,7 +466,7 @@ Blockly.FieldColour.prototype.onMouseEnter_ = function() {
  * the currently highlighted colour.
  * @private
  */
-Blockly.FieldColour.prototype.onMouseLeave_ = function() {
+FieldColour.prototype.onMouseLeave_ = function() {
   this.picker_.blur();
   const highlighted = this.getHighlighted_();
   if (highlighted) {
@@ -478,8 +479,8 @@ Blockly.FieldColour.prototype.onMouseLeave_ = function() {
  * @return {?HTMLElement} Highlighted item (null if none).
  * @private
  */
-Blockly.FieldColour.prototype.getHighlighted_ = function() {
-  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+FieldColour.prototype.getHighlighted_ = function() {
+  const columns = this.columns_ || FieldColour.COLUMNS;
   const x = this.highlightedIndex_ % columns;
   const y = Math.floor(this.highlightedIndex_ / columns);
   const row = this.picker_.childNodes[y];
@@ -496,7 +497,7 @@ Blockly.FieldColour.prototype.getHighlighted_ = function() {
  * @param {number} index the index of the new cell
  * @private
  */
-Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
+FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   // Unhighlight the current item.
   const highlighted = this.getHighlighted_();
   if (highlighted) {
@@ -516,10 +517,10 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
  * Create a colour picker dropdown editor.
  * @private
  */
-Blockly.FieldColour.prototype.dropdownCreate_ = function() {
-  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
-  const colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  const titles = this.titles_ || Blockly.FieldColour.TITLES;
+FieldColour.prototype.dropdownCreate_ = function() {
+  const columns = this.columns_ || FieldColour.COLUMNS;
+  const colours = this.colours_ || FieldColour.COLOURS;
+  const titles = this.titles_ || FieldColour.TITLES;
   const selectedColour = this.getValue();
   // Create the palette.
   const table = document.createElement('table');
@@ -576,7 +577,7 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
  * Disposes of events and DOM-references belonging to the colour editor.
  * @private
  */
-Blockly.FieldColour.prototype.dropdownDispose_ = function() {
+FieldColour.prototype.dropdownDispose_ = function() {
   if (this.onClickWrapper_) {
     Blockly.browserEvents.unbind(this.onClickWrapper_);
     this.onClickWrapper_ = null;
@@ -637,4 +638,6 @@ Blockly.Css.register([
   /* eslint-enable indent */
 ]);
 
-Blockly.fieldRegistry.register('field_colour', Blockly.FieldColour);
+Blockly.fieldRegistry.register('field_colour', FieldColour);
+
+exports = FieldColour;

@@ -30,7 +30,8 @@ goog.require('Blockly.Events.BlockChange');
  *    returns a validated value ('TRUE' or 'FALSE'), or null to abort the
  *    change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
+ *    See the [field creation documentation]{@link
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor

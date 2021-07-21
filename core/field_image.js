@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldImage');
+goog.module('Blockly.FieldImage');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
@@ -27,7 +28,7 @@ goog.require('Blockly.utils.Svg');
  * @param {!(string|number)} width Width of the image.
  * @param {!(string|number)} height Height of the image.
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
- * @param {function(!Blockly.FieldImage)=} opt_onClick Optional function to be
+ * @param {function(!FieldImage)=} opt_onClick Optional function to be
  *     called when the image is clicked. If opt_onClick is defined, opt_alt must
  *     also be defined.
  * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
@@ -37,7 +38,7 @@ goog.require('Blockly.utils.Svg');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height,
+const FieldImage = function(src, width, height,
     opt_alt, opt_onClick, opt_flipRtl, opt_config) {
   // Return early.
   if (!src) {
@@ -70,7 +71,7 @@ Blockly.FieldImage = function(src, width, height,
    */
   this.altText_ = '';
 
-  Blockly.FieldImage.superClass_.constructor.call(
+  FieldImage.superClass_.constructor.call(
       this, src, null, opt_config);
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
@@ -86,7 +87,7 @@ Blockly.FieldImage = function(src, width, height,
    * @override
    */
   this.size_ = new Blockly.utils.Size(imageWidth,
-      imageHeight + Blockly.FieldImage.Y_PADDING);
+      imageHeight + FieldImage.Y_PADDING);
 
   /**
    * Store the image height, since it is different from the field height.
@@ -97,7 +98,7 @@ Blockly.FieldImage = function(src, width, height,
 
   /**
    * The function to be called when this field is clicked.
-   * @type {?function(!Blockly.FieldImage)}
+   * @type {?function(!FieldImage)}
    * @private
    */
   this.clickHandler_ = null;
@@ -113,25 +114,25 @@ Blockly.FieldImage = function(src, width, height,
    */
   this.imageElement_ = null;
 };
-Blockly.utils.object.inherits(Blockly.FieldImage, Blockly.Field);
+Blockly.utils.object.inherits(FieldImage, Blockly.Field);
 
 /**
  * The default value for this field.
  * @type {*}
  * @protected
  */
-Blockly.FieldImage.prototype.DEFAULT_VALUE = '';
+FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldImage from a JSON arg object,
  * dereferencing any string table references.
  * @param {!Object} options A JSON object with options (src, width, height,
  *    alt, and flipRtl).
- * @return {!Blockly.FieldImage} The new field instance.
+ * @return {!FieldImage} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldImage.fromJson = function(options) {
+FieldImage.fromJson = function(options) {
   // `this` might be a subclass of FieldImage if that class doesn't override
   // the static fromJson method.
   return new this(options['src'], options['width'], options['height'],
@@ -144,14 +145,14 @@ Blockly.FieldImage.fromJson = function(options) {
  * @type {number}
  * @private
  */
-Blockly.FieldImage.Y_PADDING = 1;
+FieldImage.Y_PADDING = 1;
 
 /**
  * Editable fields usually show some sort of UI indicating they are
  * editable. This field should not.
  * @type {boolean}
  */
-Blockly.FieldImage.prototype.EDITABLE = false;
+FieldImage.prototype.EDITABLE = false;
 
 /**
  * Used to tell if the field needs to be rendered the next time the block is
@@ -160,7 +161,7 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  * @type {boolean}
  * @protected
  */
-Blockly.FieldImage.prototype.isDirty_ = false;
+FieldImage.prototype.isDirty_ = false;
 
 /**
  * Configure the field based on the given map of options.
@@ -168,8 +169,8 @@ Blockly.FieldImage.prototype.isDirty_ = false;
  * @protected
  * @override
  */
-Blockly.FieldImage.prototype.configure_ = function(config) {
-  Blockly.FieldImage.superClass_.configure_.call(this, config);
+FieldImage.prototype.configure_ = function(config) {
+  FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
   this.altText_ = Blockly.utils.replaceMessageReferences(config['alt']) || '';
 };
@@ -178,7 +179,7 @@ Blockly.FieldImage.prototype.configure_ = function(config) {
  * Create the block UI for this image.
  * @package
  */
-Blockly.FieldImage.prototype.initView = function() {
+FieldImage.prototype.initView = function() {
   this.imageElement_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.IMAGE,
       {
@@ -198,7 +199,7 @@ Blockly.FieldImage.prototype.initView = function() {
 /**
  * @override
  */
-Blockly.FieldImage.prototype.updateSize_ = function() {
+FieldImage.prototype.updateSize_ = function() {
   // NOP
 };
 
@@ -208,7 +209,7 @@ Blockly.FieldImage.prototype.updateSize_ = function() {
  * @return {?string} A string, or null if invalid.
  * @protected
  */
-Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
+FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
   if (typeof opt_newValue != 'string') {
     return null;
   }
@@ -221,7 +222,7 @@ Blockly.FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
  * that this is a string.
  * @protected
  */
-Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
+FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS(Blockly.utils.dom.XLINK_NS,
@@ -234,7 +235,7 @@ Blockly.FieldImage.prototype.doValueUpdate_ = function(newValue) {
  * @return {boolean} True if we should flip in RTL.
  * @override
  */
-Blockly.FieldImage.prototype.getFlipRtl = function() {
+FieldImage.prototype.getFlipRtl = function() {
   return this.flipRtl_;
 };
 
@@ -243,7 +244,7 @@ Blockly.FieldImage.prototype.getFlipRtl = function() {
  * @param {?string} alt New alt text.
  * @public
  */
-Blockly.FieldImage.prototype.setAlt = function(alt) {
+FieldImage.prototype.setAlt = function(alt) {
   if (alt == this.altText_) {
     return;
   }
@@ -258,7 +259,7 @@ Blockly.FieldImage.prototype.setAlt = function(alt) {
  * call the handler.
  * @protected
  */
-Blockly.FieldImage.prototype.showEditor_ = function() {
+FieldImage.prototype.showEditor_ = function() {
   if (this.clickHandler_) {
     this.clickHandler_(this);
   }
@@ -266,10 +267,10 @@ Blockly.FieldImage.prototype.showEditor_ = function() {
 
 /**
  * Set the function that is called when this image  is clicked.
- * @param {?function(!Blockly.FieldImage)} func The function that is called
+ * @param {?function(!FieldImage)} func The function that is called
  *    when the image is clicked, or null to remove.
  */
-Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
+FieldImage.prototype.setOnClickHandler = function(func) {
   this.clickHandler_ = func;
 };
 
@@ -281,8 +282,10 @@ Blockly.FieldImage.prototype.setOnClickHandler = function(func) {
  * @protected
  * @override
  */
-Blockly.FieldImage.prototype.getText_ = function() {
+FieldImage.prototype.getText_ = function() {
   return this.altText_;
 };
 
-Blockly.fieldRegistry.register('field_image', Blockly.FieldImage);
+Blockly.fieldRegistry.register('field_image', FieldImage);
+
+exports = FieldImage;

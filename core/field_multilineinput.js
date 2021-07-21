@@ -88,7 +88,7 @@ Blockly.FieldMultilineInput.prototype.configure_ = function(config) {
  * @nocollapse
  */
 Blockly.FieldMultilineInput.fromJson = function(options) {
-  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  const text = Blockly.utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);
@@ -141,16 +141,17 @@ Blockly.FieldMultilineInput.prototype.initView = function() {
  * @override
  */
 Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
-  var textLines = this.getText();
+  let textLines = this.getText();
   if (!textLines) {
     // Prevent the field from disappearing if empty.
     return Blockly.Field.NBSP;
   }
-  var lines = textLines.split('\n');
+  const lines = textLines.split('\n');
   textLines = '';
-  var displayLinesNumber = this.isOverflowedY_ ? this.maxLines_ : lines.length;
-  for (var i = 0; i < displayLinesNumber; i++) {
-    var text = lines[i];
+  const displayLinesNumber = this.isOverflowedY_ ? this.maxLines_
+      : lines.length;
+  for (let i = 0; i < displayLinesNumber; i++) {
+    let text = lines[i];
     if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
       text = text.substring(0, this.maxDisplayLength - 4) + '...';
@@ -192,18 +193,18 @@ Blockly.FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
  */
 Blockly.FieldMultilineInput.prototype.render_ = function() {
   // Remove all text group children.
-  var currentChild;
+  let currentChild;
   while ((currentChild = this.textGroup_.firstChild)) {
     this.textGroup_.removeChild(currentChild);
   }
 
   // Add in text elements into the group.
-  var lines = this.getDisplayText_().split('\n');
-  var y = 0;
-  for (var i = 0; i < lines.length; i++) {
-    var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
+  const lines = this.getDisplayText_().split('\n');
+  let y = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
         this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
-    var span = Blockly.utils.dom.createSvgElement(
+    const span = Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.TEXT, {
           'class': 'blocklyText blocklyMultilineText',
           x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
@@ -252,12 +253,12 @@ Blockly.FieldMultilineInput.prototype.render_ = function() {
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
-  var nodes = this.textGroup_.childNodes;
-  var totalWidth = 0;
-  var totalHeight = 0;
+  const nodes = this.textGroup_.childNodes;
+  let totalWidth = 0;
+  let totalHeight = 0;
   for (var i = 0; i < nodes.length; i++) {
-    var tspan = /** @type {!Element} */ (nodes[i]);
-    var textWidth = Blockly.utils.dom.getTextWidth(tspan);
+    const tspan = /** @type {!Element} */ (nodes[i]);
+    const textWidth = Blockly.utils.dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
       totalWidth = textWidth;
     }
@@ -270,26 +271,27 @@ Blockly.FieldMultilineInput.prototype.updateSize_ = function() {
     // absolute longest line, even if it would be truncated after editing.
     // Otherwise we would get wrong editor width when there are more
     // lines than this.maxLines_.
-    var actualEditorLines = this.value_.split('\n');
-    var dummyTextElement = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.TEXT,{'class': 'blocklyText blocklyMultilineText'});
-    var fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
-    var fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
-    var fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+    const actualEditorLines = this.value_.split('\n');
+    const dummyTextElement = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
+    const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
+    const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
+    const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
 
     for (var i = 0; i < actualEditorLines.length; i++) {
       if (actualEditorLines[i].length > this.maxDisplayLength) {
         actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength);
       }
       dummyTextElement.textContent = actualEditorLines[i];
-      var lineWidth = Blockly.utils.dom.getFastTextWidth(
+      const lineWidth = Blockly.utils.dom.getFastTextWidth(
           dummyTextElement, fontSize, fontWeight, fontFamily);
       if (lineWidth > totalWidth) {
         totalWidth = lineWidth;
       }
     }
 
-    var scrollbarWidth = this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
+    const scrollbarWidth = this.htmlInput_.offsetWidth
+        - this.htmlInput_.clientWidth;
     totalWidth += scrollbarWidth;
   }
   if (this.borderRect_) {
@@ -325,23 +327,23 @@ Blockly.FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietIn
  * @protected
  */
 Blockly.FieldMultilineInput.prototype.widgetCreate_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  var scale = this.workspace_.getScale();
+  const div = Blockly.WidgetDiv.DIV;
+  const scale = this.workspace_.getScale();
 
-  var htmlInput =
-    /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
+  const htmlInput =
+      /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
   htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
+  const fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  var borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
+  const borderRadius = (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
   htmlInput.style.borderRadius = borderRadius;
-  var paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
-  var paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
+  const paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
+  const paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
   htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
       'px ' + paddingX + 'px';
-  var lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
+  const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
       this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
   htmlInput.style.lineHeight = (lineHeight * scale) + 'px';
 

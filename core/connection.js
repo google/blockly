@@ -13,14 +13,18 @@
 goog.module('Blockly.Connection');
 goog.module.declareLegacyNamespace();
 
-const connectionTypes = goog.require('Blockly.connectionTypes');
+/* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const deprecation = goog.require('Blockly.utils.deprecation');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 /** @suppress {extraRequire} */

@@ -27,11 +27,11 @@ goog.module.declareLegacyNamespace();
  * @param {number} x The x coordinate.
  * @param {number} y The y coordinate.
  * @return {string} A string of the format ' x,y '
- * @public
  */
 const point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
 };
+exports.point = point;
 
 /**
  * Draw a cubic or quadratic curve.  See
@@ -44,11 +44,11 @@ const point = function(x, y) {
  *     the format ' x, y '.
  * @return {string} A string defining one or more Bezier curves.  See the MDN
  *     documentation for exact format.
- * @public
  */
 const curve = function(command, points) {
   return ' ' + command + points.join('');
 };
+exports.curve = curve;
 
 /**
  * Move the cursor to the given position without drawing a line.
@@ -58,11 +58,11 @@ const curve = function(command, points) {
  * @param {number} x The absolute x coordinate.
  * @param {number} y The absolute y coordinate.
  * @return {string} A string of the format ' M x,y '
- * @public
  */
 const moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
 };
+exports.moveTo = moveTo;
 
 /**
  * Move the cursor to the given position without drawing a line.
@@ -72,11 +72,11 @@ const moveTo = function(x, y) {
  * @param {number} dx The relative x coordinate.
  * @param {number} dy The relative y coordinate.
  * @return {string} A string of the format ' m dx,dy '
- * @public
  */
 const moveBy = function(dx, dy) {
   return ' m ' + dx + ',' + dy + ' ';
 };
+exports.moveBy = moveBy;
 
 /**
  * Draw a line from the current point to the end point, which is the current
@@ -86,11 +86,11 @@ const moveBy = function(dx, dy) {
  * @param {number} dx The relative x coordinate.
  * @param {number} dy The relative y coordinate.
  * @return {string} A string of the format ' l dx,dy '
- * @public
  */
 const lineTo = function(dx, dy) {
   return ' l ' + dx + ',' + dy + ' ';
 };
+exports.lineTo = lineTo;
 
 /**
  * Draw multiple lines connecting all of the given points in order.  This is
@@ -101,11 +101,11 @@ const lineTo = function(dx, dy) {
  *     draw lines to, in order.  The points are represented as strings of the
  *     format ' dx,dy '.
  * @return {string} A string of the format ' l (dx,dy)+ '
- * @public
  */
 const line = function(points) {
   return ' l' + points.join('');
 };
+exports.line = line;
 
 /**
  * Draw a horizontal or vertical line.
@@ -118,11 +118,11 @@ const line = function(points) {
  * @param {number} val The coordinate to pass to the command.  It may be
  *     absolute or relative.
  * @return {string} A string of the format ' command val '
- * @public
  */
 const lineOnAxis = function(command, val) {
   return ' ' + command + ' ' + val + ' ';
 };
+exports.lineOnAxis = lineOnAxis;
 
 /**
  * Draw an elliptical arc curve.
@@ -136,19 +136,8 @@ const lineOnAxis = function(command, val) {
  *     specified either in absolute or relative coordinates depending on the
  *     command.
  * @return {string} A string of the format 'command radius radius flags point'
- * @public
  */
 const arc = function(command, flags, radius, point) {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 };
-
-exports = {
-  point,
-  curve,
-  moveTo,
-  moveBy,
-  lineTo,
-  line,
-  lineOnAxis,
-  arc,
-};
+exports.arc = arc;

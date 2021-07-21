@@ -39,7 +39,8 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  *    option & returns a validated language-neutral dropdown option, or null to
  *    abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
+ *    See the [field creation documentation]{@link
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
@@ -134,12 +135,12 @@ inherits(FieldDropdown, Field);
 /**
  * Dropdown image properties.
  * @typedef {{
-  *            src:string,
-  *            alt:string,
-  *            width:number,
-  *            height:number
-  *          }}
-  */
+ *            src:string,
+ *            alt:string,
+ *            width:number,
+ *            height:number
+ *          }}
+ */
 FieldDropdown.ImageProperties;
 
 /**
@@ -201,14 +202,12 @@ FieldDropdown.IMAGE_Y_OFFSET = 5;
  * @const
  * @private
  */
-FieldDropdown.IMAGE_Y_PADDING =
-    FieldDropdown.IMAGE_Y_OFFSET * 2;
+FieldDropdown.IMAGE_Y_PADDING = FieldDropdown.IMAGE_Y_OFFSET * 2;
 
 /**
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
-FieldDropdown.ARROW_CHAR =
-    userAgent.ANDROID ? '\u25BC' : '\u25BE';
+FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.
@@ -227,8 +226,7 @@ FieldDropdown.prototype.initView = function() {
   }
   this.createTextElement_();
 
-  this.imageElement_ = dom.createSvgElement(
-      Svg.IMAGE, {}, this.fieldGroup_);
+  this.imageElement_ = dom.createSvgElement(Svg.IMAGE, {}, this.fieldGroup_);
 
   if (this.getConstants().FIELD_DROPDOWN_SVG_ARROW) {
     this.createSVGArrow_();
@@ -249,7 +247,7 @@ FieldDropdown.prototype.initView = function() {
 FieldDropdown.prototype.shouldAddBorderRect_ = function() {
   return !this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
       (this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
-          !this.sourceBlock_.isShadow());
+       !this.sourceBlock_.isShadow());
 };
 
 /**
@@ -257,12 +255,10 @@ FieldDropdown.prototype.shouldAddBorderRect_ = function() {
  * @protected
  */
 FieldDropdown.prototype.createTextArrow_ = function() {
-  this.arrow_ = dom.createSvgElement(
-      Svg.TSPAN, {}, this.textElement_);
+  this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
   this.arrow_.appendChild(document.createTextNode(
-      this.sourceBlock_.RTL ?
-      FieldDropdown.ARROW_CHAR + ' ' :
-      ' ' + FieldDropdown.ARROW_CHAR));
+      this.sourceBlock_.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
+                              ' ' + FieldDropdown.ARROW_CHAR));
   if (this.sourceBlock_.RTL) {
     this.textElement_.insertBefore(this.arrow_, this.textContent_);
   } else {
@@ -279,8 +275,10 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
       Svg.IMAGE, {
         'height': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px'
-      }, this.fieldGroup_);
-  this.svgArrow_.setAttributeNS(dom.XLINK_NS, 'xlink:href',
+      },
+      this.fieldGroup_);
+  this.svgArrow_.setAttributeNS(
+      dom.XLINK_NS, 'xlink:href',
       this.getConstants().FIELD_DROPDOWN_SVG_ARROW_DATAURI);
 };
 
@@ -293,8 +291,7 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
 FieldDropdown.prototype.showEditor_ = function(opt_e) {
   this.dropdownCreate_();
   if (opt_e && typeof opt_e.clientX === 'number') {
-    this.menu_.openingCoords =
-        new Coordinate(opt_e.clientX, opt_e.clientY);
+    this.menu_.openingCoords = new Coordinate(opt_e.clientX, opt_e.clientY);
   } else {
     this.menu_.openingCoords = null;
   }
@@ -313,8 +310,7 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
     DropDownDiv.setColour(primaryColour, borderColour);
   }
 
-  DropDownDiv.showPositionedByField(
-      this, this.dropdownDispose_.bind(this));
+  DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
   // Focusing needs to be handled after the menu is rendered and positioned.
   // Otherwise it will cause a page scroll to get the misplaced menu in
@@ -341,7 +337,7 @@ FieldDropdown.prototype.dropdownCreate_ = function() {
   this.selectedMenuItem_ = null;
   for (let i = 0; i < options.length; i++) {
     let content = options[i][0];  // Human-readable text or image.
-    const value = options[i][1];    // Language-neutral value.
+    const value = options[i][1];  // Language-neutral value.
     if (typeof content == 'object') {
       // An image, not text.
       const image = new Image(content['width'], content['height']);
@@ -443,8 +439,8 @@ FieldDropdown.prototype.trimOptions_ = function() {
     this.suffixField = strings[0].substr(1 - suffixLength);
   }
 
-  this.menuGenerator_ = FieldDropdown.applyTrim_(options, prefixLength,
-      suffixLength);
+  this.menuGenerator_ =
+      FieldDropdown.applyTrim_(options, prefixLength, suffixLength);
 };
 
 /**
@@ -456,8 +452,7 @@ FieldDropdown.prototype.trimOptions_ = function() {
  * @param {number} suffixLength The length of the common suffix
  * @return {!Array<!Array>} A new array with all of the option text trimmed.
  */
-FieldDropdown.applyTrim_ = function(options,
-    prefixLength, suffixLength) {
+FieldDropdown.applyTrim_ = function(options, prefixLength, suffixLength) {
   const newOptions = [];
   // Remove the prefix and suffix from the options.
   for (let i = 0; i < options.length; i++) {
@@ -514,9 +509,10 @@ FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   }
   if (!isValueValid) {
     if (this.sourceBlock_) {
-      console.warn('Cannot set the dropdown\'s value to an unavailable option.' +
-        ' Block type: ' + this.sourceBlock_.type + ', Field name: ' + this.name +
-        ', Value: ' + opt_newValue);
+      console.warn(
+          'Cannot set the dropdown\'s value to an unavailable option.' +
+          ' Block type: ' + this.sourceBlock_.type +
+          ', Field name: ' + this.name + ', Value: ' + opt_newValue);
     }
     return null;
   }
@@ -545,11 +541,11 @@ FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
  */
 FieldDropdown.prototype.applyColour = function() {
   if (this.borderRect_) {
-    this.borderRect_.setAttribute('stroke',
-        this.sourceBlock_.style.colourTertiary);
+    this.borderRect_.setAttribute(
+        'stroke', this.sourceBlock_.style.colourTertiary);
     if (this.menu_) {
-      this.borderRect_.setAttribute('fill',
-          this.sourceBlock_.style.colourTertiary);
+      this.borderRect_.setAttribute(
+          'fill', this.sourceBlock_.style.colourTertiary);
     } else {
       this.borderRect_.setAttribute('fill', 'transparent');
     }
@@ -593,8 +589,7 @@ FieldDropdown.prototype.render_ = function() {
  */
 FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   this.imageElement_.style.display = '';
-  this.imageElement_.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href', imageJson.src);
+  this.imageElement_.setAttributeNS(dom.XLINK_NS, 'xlink:href', imageJson.src);
   this.imageElement_.setAttribute('height', imageJson.height);
   this.imageElement_.setAttribute('width', imageJson.width);
 
@@ -606,11 +601,13 @@ FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
   const height = Math.max(
       hasBorder ? this.getConstants().FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       imageHeight + FieldDropdown.IMAGE_Y_PADDING);
-  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  const xPadding =
+      hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
   let arrowWidth = 0;
   if (this.svgArrow_) {
-    arrowWidth = this.positionSVGArrow_(imageWidth + xPadding, height / 2 -
-      this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+    arrowWidth = this.positionSVGArrow_(
+        imageWidth + xPadding,
+        height / 2 - this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
   } else {
     arrowWidth = dom.getFastTextWidth(
         /** @type {!SVGTSpanElement} */ (this.arrow_),
@@ -642,8 +639,8 @@ FieldDropdown.prototype.renderSelectedImage_ = function(imageJson) {
 FieldDropdown.prototype.renderSelectedText_ = function() {
   // Retrieves the selected option to display through getText_.
   this.textContent_.nodeValue = this.getDisplayText_();
-  dom.addClass(/** @type {!Element} */ (this.textElement_),
-      'blocklyDropdownText');
+  dom.addClass(
+      /** @type {!Element} */ (this.textElement_), 'blocklyDropdownText');
   this.textElement_.setAttribute('text-anchor', 'start');
 
   // Height and width include the border rect.
@@ -651,15 +648,17 @@ FieldDropdown.prototype.renderSelectedText_ = function() {
   const height = Math.max(
       hasBorder ? this.getConstants().FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
       this.getConstants().FIELD_TEXT_HEIGHT);
-  const textWidth = dom.getFastTextWidth(this.textElement_,
-      this.getConstants().FIELD_TEXT_FONTSIZE,
+  const textWidth = dom.getFastTextWidth(
+      this.textElement_, this.getConstants().FIELD_TEXT_FONTSIZE,
       this.getConstants().FIELD_TEXT_FONTWEIGHT,
       this.getConstants().FIELD_TEXT_FONTFAMILY);
-  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  const xPadding =
+      hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
   let arrowWidth = 0;
   if (this.svgArrow_) {
-    arrowWidth = this.positionSVGArrow_(textWidth + xPadding, height / 2 -
-        this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+    arrowWidth = this.positionSVGArrow_(
+        textWidth + xPadding,
+        height / 2 - this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
   }
   this.size_.width = textWidth + arrowWidth + xPadding * 2;
   this.size_.height = height;
@@ -679,12 +678,13 @@ FieldDropdown.prototype.positionSVGArrow_ = function(x, y) {
     return 0;
   }
   const hasBorder = !!this.borderRect_;
-  const xPadding = hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
+  const xPadding =
+      hasBorder ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0;
   const textPadding = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_PADDING;
   const svgArrowSize = this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE;
   const arrowX = this.sourceBlock_.RTL ? xPadding : x + textPadding;
-  this.svgArrow_.setAttribute('transform',
-      'translate(' + arrowX + ',' + y + ')');
+  this.svgArrow_.setAttribute(
+      'transform', 'translate(' + arrowX + ',' + y + ')');
   return svgArrowSize + textPadding;
 };
 
@@ -727,19 +727,21 @@ FieldDropdown.validateOptions_ = function(options) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
-          'array. Found: ', tuple);
+              'array. Found: ',
+          tuple);
     } else if (typeof tuple[1] != 'string') {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
-          'a string. Found ' + tuple[1] + ' in: ', tuple);
-    } else if (tuple[0] &&
-              (typeof tuple[0] != 'string') &&
-              (typeof tuple[0].src != 'string')) {
+              'a string. Found ' + tuple[1] + ' in: ',
+          tuple);
+    } else if (
+        tuple[0] && (typeof tuple[0] != 'string') &&
+        (typeof tuple[0].src != 'string')) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
-          'string label or image description. Found' + tuple[0] + ' in: ',
+              'string label or image description. Found' + tuple[0] + ' in: ',
           tuple);
     }
   }

@@ -55,8 +55,8 @@ Blockly.utils.object.inherits(Blockly.DeleteArea, Blockly.DragTarget);
  */
 Blockly.DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
   if (element instanceof Blockly.BlockSvg) {
-    var block = /** @type {Blockly.BlockSvg} */ (element);
-    var couldDeleteBlock = !block.getParent() && block.isDeletable();
+    const block = /** @type {Blockly.BlockSvg} */ (element);
+    const couldDeleteBlock = !block.getParent() && block.isDeletable();
     this.updateWouldDelete_(couldDeleteBlock && !couldConnect);
   } else {
     this.updateWouldDelete_(element.isDeletable());

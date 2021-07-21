@@ -36,9 +36,11 @@ goog.require('Blockly.Events.BlockChange');
  *    '#rrggbb' format. Defaults to the first value in the default colour array.
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a colour string & returns a
- *    validated colour string ('#rrggbb' format), or null to abort the change.Blockly.
+ *    validated colour string ('#rrggbb' format), or null to abort the
+ *    change.Blockly.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
+ *    See the [field creation documentation]{@link
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
@@ -328,11 +330,10 @@ FieldColour.prototype.showEditor_ = function() {
   this.dropdownCreate_();
   DropDownDiv.getContentDiv().appendChild(this.picker_);
 
-  DropDownDiv.showPositionedByField(
-      this, this.dropdownDispose_.bind(this));
+  DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
   // Focus so we can start receiving keyboard events.
-  this.picker_.focus({preventScroll:true});
+  this.picker_.focus({preventScroll: true});
 };
 
 /**
@@ -416,8 +417,7 @@ FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
   } else if (dx > 0) {
     // Move right one grid cell, even in RTL.
     // Loop to the start of the next row, if there's room.
-    if (x > columns - 1 &&
-      y < Math.floor(colours.length / columns) - 1) {
+    if (x > columns - 1 && y < Math.floor(colours.length / columns) - 1) {
       x = 0;
       y++;
     } else if (x > columns - 1) {
@@ -436,7 +436,8 @@ FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
   }
 
   // Move the highlight to the new coordinates.
-  const cell = /** @type {!Element} */ (this.picker_.childNodes[y].childNodes[x]);
+  const cell =
+      /** @type {!Element} */ (this.picker_.childNodes[y].childNodes[x]);
   const index = (y * columns) + x;
   this.setHighlightedCell_(cell, index);
 };
@@ -459,7 +460,7 @@ FieldColour.prototype.onMouseMove_ = function(e) {
  * @private
  */
 FieldColour.prototype.onMouseEnter_ = function() {
-  this.picker_.focus({preventScroll:true});
+  this.picker_.focus({preventScroll: true});
 };
 
 /**
@@ -510,8 +511,9 @@ FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   this.highlightedIndex_ = index;
 
   // Update accessibility roles.
-  aria.setState(/** @type {!Element} */ (this.picker_),
-      aria.State.ACTIVEDESCENDANT, cell.getAttribute('id'));
+  aria.setState(
+      /** @type {!Element} */ (this.picker_), aria.State.ACTIVEDESCENDANT,
+      cell.getAttribute('id'));
 };
 
 /**
@@ -530,10 +532,9 @@ FieldColour.prototype.dropdownCreate_ = function() {
   table.dir = 'ltr';
   aria.setRole(table, aria.Role.GRID);
   aria.setState(table, aria.State.EXPANDED, true);
-  aria.setState(table, aria.State.ROWCOUNT,
-      Math.floor(colours.length / columns));
-  aria.setState(table, aria.State.COLCOUNT,
-      columns);
+  aria.setState(
+      table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
+  aria.setState(table, aria.State.COLCOUNT, columns);
   let row;
   for (let i = 0; i < colours.length; i++) {
     if (i % columns == 0) {
@@ -548,10 +549,8 @@ FieldColour.prototype.dropdownCreate_ = function() {
     cell.id = IdGenerator.getNextUniqueId();
     cell.setAttribute('data-index', i);
     aria.setRole(cell, aria.Role.GRIDCELL);
-    aria.setState(cell,
-        aria.State.LABEL, colours[i]);
-    aria.setState(cell,
-        aria.State.SELECTED, colours[i] == selectedColour);
+    aria.setState(cell, aria.State.LABEL, colours[i]);
+    aria.setState(cell, aria.State.SELECTED, colours[i] == selectedColour);
     cell.style.backgroundColor = colours[i];
     if (colours[i] == selectedColour) {
       cell.className = 'blocklyColourSelected';
@@ -560,16 +559,16 @@ FieldColour.prototype.dropdownCreate_ = function() {
   }
 
   // Configure event handler on the table to listen for any event in a cell.
-  this.onClickWrapper_ = conditionalBind(
-      table, 'click', this, this.onClick_, true);
-  this.onMouseMoveWrapper_ = conditionalBind(
-      table, 'mousemove', this, this.onMouseMove_, true);
-  this.onMouseEnterWrapper_ = conditionalBind(
-      table, 'mouseenter', this, this.onMouseEnter_, true);
-  this.onMouseLeaveWrapper_ = conditionalBind(
-      table, 'mouseleave', this, this.onMouseLeave_, true);
-  this.onKeyDownWrapper_ = conditionalBind(
-      table, 'keydown', this, this.onKeyDown_);
+  this.onClickWrapper_ =
+      conditionalBind(table, 'click', this, this.onClick_, true);
+  this.onMouseMoveWrapper_ =
+      conditionalBind(table, 'mousemove', this, this.onMouseMove_, true);
+  this.onMouseEnterWrapper_ =
+      conditionalBind(table, 'mouseenter', this, this.onMouseEnter_, true);
+  this.onMouseLeaveWrapper_ =
+      conditionalBind(table, 'mouseleave', this, this.onMouseLeave_, true);
+  this.onKeyDownWrapper_ =
+      conditionalBind(table, 'keydown', this, this.onKeyDown_);
 
   this.picker_ = table;
 };

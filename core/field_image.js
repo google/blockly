@@ -44,8 +44,8 @@ Blockly.FieldImage = function(src, width, height,
     throw Error('Src value of an image field is required');
   }
   src = Blockly.utils.replaceMessageReferences(src);
-  var imageHeight = Number(Blockly.utils.replaceMessageReferences(height));
-  var imageWidth = Number(Blockly.utils.replaceMessageReferences(width));
+  const imageHeight = Number(Blockly.utils.replaceMessageReferences(height));
+  const imageWidth = Number(Blockly.utils.replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error('Height and width values of an image field must cast to' +
       ' numbers.');

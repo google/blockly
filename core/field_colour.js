@@ -233,7 +233,7 @@ Blockly.FieldColour.prototype.doValueUpdate_ = function(newValue) {
  * @return {string} Text representing the value of this field.
  */
 Blockly.FieldColour.prototype.getText = function() {
-  var colour = /** @type {string} */ (this.value_);
+  let colour = /** @type {string} */ (this.value_);
   // Try to use #rgb format if possible, rather than #rrggbb.
   if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
     colour = '#' + colour[1] + colour[3] + colour[5];
@@ -339,8 +339,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
  * @private
  */
 Blockly.FieldColour.prototype.onClick_ = function(e) {
-  var cell = /** @type {!Element} */ (e.target);
-  var colour = cell && cell.label;
+  const cell = /** @type {!Element} */ (e.target);
+  const colour = cell && cell.label;
   if (colour !== null) {
     this.setValue(colour);
     Blockly.DropDownDiv.hideIfOwner(this);
@@ -354,7 +354,7 @@ Blockly.FieldColour.prototype.onClick_ = function(e) {
  * @private
  */
 Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
-  var handled = false;
+  let handled = false;
   if (e.keyCode === Blockly.utils.KeyCodes.UP) {
     this.moveHighlightBy_(0, -1);
     handled = true;
@@ -369,9 +369,9 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
     handled = true;
   } else if (e.keyCode === Blockly.utils.KeyCodes.ENTER) {
     // Select the highlighted colour.
-    var highlighted = this.getHighlighted_();
+    const highlighted = this.getHighlighted_();
     if (highlighted) {
-      var colour = highlighted && highlighted.label;
+      const colour = highlighted && highlighted.label;
       if (colour !== null) {
         this.setValue(colour);
       }
@@ -391,12 +391,12 @@ Blockly.FieldColour.prototype.onKeyDown_ = function(e) {
  * @private
  */
 Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
-  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+  const colours = this.colours_ || Blockly.FieldColour.COLOURS;
+  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
 
   // Get the current x and y coordinates
-  var x = this.highlightedIndex_ % columns;
-  var y = Math.floor(this.highlightedIndex_ / columns);
+  let x = this.highlightedIndex_ % columns;
+  let y = Math.floor(this.highlightedIndex_ / columns);
 
   // Add the offset
   x += dx;
@@ -434,8 +434,8 @@ Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
   }
 
   // Move the highlight to the new coordinates.
-  var cell = /** @type {!Element} */ (this.picker_.childNodes[y].childNodes[x]);
-  var index = (y * columns) + x;
+  const cell = /** @type {!Element} */ (this.picker_.childNodes[y].childNodes[x]);
+  const index = (y * columns) + x;
   this.setHighlightedCell_(cell, index);
 };
 
@@ -445,8 +445,8 @@ Blockly.FieldColour.prototype.moveHighlightBy_ = function(dx, dy) {
  * @private
  */
 Blockly.FieldColour.prototype.onMouseMove_ = function(e) {
-  var cell = /** @type {!Element} */ (e.target);
-  var index = cell && Number(cell.getAttribute('data-index'));
+  const cell = /** @type {!Element} */ (e.target);
+  const index = cell && Number(cell.getAttribute('data-index'));
   if (index !== null && index !== this.highlightedIndex_) {
     this.setHighlightedCell_(cell, index);
   }
@@ -467,7 +467,7 @@ Blockly.FieldColour.prototype.onMouseEnter_ = function() {
  */
 Blockly.FieldColour.prototype.onMouseLeave_ = function() {
   this.picker_.blur();
-  var highlighted = this.getHighlighted_();
+  const highlighted = this.getHighlighted_();
   if (highlighted) {
     Blockly.utils.dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
@@ -479,14 +479,14 @@ Blockly.FieldColour.prototype.onMouseLeave_ = function() {
  * @private
  */
 Blockly.FieldColour.prototype.getHighlighted_ = function() {
-  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
-  var x = this.highlightedIndex_ % columns;
-  var y = Math.floor(this.highlightedIndex_ / columns);
-  var row = this.picker_.childNodes[y];
+  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+  const x = this.highlightedIndex_ % columns;
+  const y = Math.floor(this.highlightedIndex_ / columns);
+  const row = this.picker_.childNodes[y];
   if (!row) {
     return null;
   }
-  var col = /** @type {HTMLElement} */ (row.childNodes[x]);
+  const col = /** @type {HTMLElement} */ (row.childNodes[x]);
   return col;
 };
 
@@ -498,7 +498,7 @@ Blockly.FieldColour.prototype.getHighlighted_ = function() {
  */
 Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   // Unhighlight the current item.
-  var highlighted = this.getHighlighted_();
+  const highlighted = this.getHighlighted_();
   if (highlighted) {
     Blockly.utils.dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
@@ -517,12 +517,12 @@ Blockly.FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
  * @private
  */
 Blockly.FieldColour.prototype.dropdownCreate_ = function() {
-  var columns = this.columns_ || Blockly.FieldColour.COLUMNS;
-  var colours = this.colours_ || Blockly.FieldColour.COLOURS;
-  var titles = this.titles_ || Blockly.FieldColour.TITLES;
-  var selectedColour = this.getValue();
+  const columns = this.columns_ || Blockly.FieldColour.COLUMNS;
+  const colours = this.colours_ || Blockly.FieldColour.COLOURS;
+  const titles = this.titles_ || Blockly.FieldColour.TITLES;
+  const selectedColour = this.getValue();
   // Create the palette.
-  var table = document.createElement('table');
+  const table = document.createElement('table');
   table.className = 'blocklyColourTable';
   table.tabIndex = 0;
   table.dir = 'ltr';
@@ -532,14 +532,14 @@ Blockly.FieldColour.prototype.dropdownCreate_ = function() {
       Math.floor(colours.length / columns));
   Blockly.utils.aria.setState(table, Blockly.utils.aria.State.COLCOUNT,
       columns);
-  var row;
-  for (var i = 0; i < colours.length; i++) {
+  let row;
+  for (let i = 0; i < colours.length; i++) {
     if (i % columns == 0) {
       row = document.createElement('tr');
       Blockly.utils.aria.setRole(row, Blockly.utils.aria.Role.ROW);
       table.appendChild(row);
     }
-    var cell = document.createElement('td');
+    const cell = document.createElement('td');
     row.appendChild(cell);
     cell.label = colours[i];  // This becomes the value, if clicked.
     cell.title = titles[i] || colours[i];

@@ -13,8 +13,6 @@
 goog.provide('Blockly.ASTNode');
 
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
 
 goog.requireType('Blockly.Block');

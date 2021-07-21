@@ -17,8 +17,6 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.ConnectionDB');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
 goog.require('Blockly.Events');
@@ -31,6 +29,7 @@ goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.Grid');
 goog.require('Blockly.IASTNodeLocationSvg');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.MarkerManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.MetricsManager');
@@ -181,15 +180,18 @@ Blockly.WorkspaceSvg = function(
   this.flyoutButtonCallbacks_ = Object.create(null);
 
   if (Blockly.Variables && Blockly.Variables.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.VARIABLE_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.VARIABLE_CATEGORY_NAME,
         Blockly.Variables.flyoutCategory);
   }
   if (Blockly.VariablesDynamic && Blockly.VariablesDynamic.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME,
         Blockly.VariablesDynamic.flyoutCategory);
   }
   if (Blockly.Procedures && Blockly.Procedures.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
+    this.registerToolboxCategoryCallback(
+        Blockly.internalConstants.PROCEDURE_CATEGORY_NAME,
         Blockly.Procedures.flyoutCategory);
     this.addChangeListener(Blockly.Procedures.mutatorOpenListener);
   }
@@ -1521,7 +1523,8 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
           // Check for blocks in snap range to any of its connections.
           var connections = block.getConnections_(false);
           for (var i = 0, connection; (connection = connections[i]); i++) {
-            var neighbour = connection.closest(Blockly.SNAP_RADIUS,
+            var neighbour = connection.closest(
+                Blockly.internalConstants.SNAP_RADIUS,
                 new Blockly.utils.Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;
@@ -1531,11 +1534,11 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
         }
         if (collide) {
           if (this.RTL) {
-            blockX -= Blockly.SNAP_RADIUS;
+            blockX -= Blockly.internalConstants.SNAP_RADIUS;
           } else {
-            blockX += Blockly.SNAP_RADIUS;
+            blockX += Blockly.internalConstants.SNAP_RADIUS;
           }
-          blockY += Blockly.SNAP_RADIUS * 2;
+          blockY += Blockly.internalConstants.SNAP_RADIUS * 2;
         }
       } while (collide);
       block.moveBy(blockX, blockY);

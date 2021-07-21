@@ -17,8 +17,10 @@
 goog.module('Blockly.ContextMenuRegistry');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -53,8 +55,8 @@ ContextMenuRegistry.ScopeType = {
  * The actual workspace/block where the menu is being rendered. This is passed to callback and
  * displayText functions that depend on this information.
  * @typedef {{
- *    block: (Blockly.BlockSvg|undefined),
- *    workspace: (Blockly.WorkspaceSvg|undefined)
+ *    block: (BlockSvg|undefined),
+ *    workspace: (WorkspaceSvg|undefined)
  * }}
  */
 ContextMenuRegistry.Scope;

@@ -13,10 +13,10 @@
 goog.module('Blockly.FieldNumber');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.object');
+const FieldTextInput = goog.require('Blockly.FieldTextInput');
+const aria = goog.require('Blockly.utils.aria');
+const {inherits} = goog.require('Blockly.utils.object');
+const {register} = goog.require('Blockly.fieldRegistry');
 
 
 /**
@@ -32,7 +32,7 @@ goog.require('Blockly.utils.object');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.FieldTextInput}
+ * @extends {FieldTextInput}
  * @constructor
  */
 const FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
@@ -74,7 +74,7 @@ const FieldNumber = function(opt_value, opt_min, opt_max, opt_precision,
     this.setConstraints(opt_min, opt_max, opt_precision);
   }
 };
-Blockly.utils.object.inherits(FieldNumber, Blockly.FieldTextInput);
+inherits(FieldNumber, FieldTextInput);
 
 /**
  * The default value for this field.
@@ -305,16 +305,16 @@ FieldNumber.prototype.widgetCreate_ = function() {
 
   // Set the accessibility state
   if (this.min_ > -Infinity) {
-    Blockly.utils.aria.setState(htmlInput,
-        Blockly.utils.aria.State.VALUEMIN, this.min_);
+    aria.setState(htmlInput,
+        aria.State.VALUEMIN, this.min_);
   }
   if (this.max_ < Infinity) {
-    Blockly.utils.aria.setState(htmlInput,
-        Blockly.utils.aria.State.VALUEMAX, this.max_);
+    aria.setState(htmlInput,
+        aria.State.VALUEMAX, this.max_);
   }
   return htmlInput;
 };
 
-Blockly.fieldRegistry.register('field_number', FieldNumber);
+register('field_number', FieldNumber);
 
 exports = FieldNumber;

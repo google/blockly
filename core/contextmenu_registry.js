@@ -42,8 +42,9 @@ const ContextMenuRegistry = function() {
 };
 
 /**
- * Where this menu item should be rendered. If the menu item should be rendered in multiple
- * scopes, e.g. on both a block and a workspace, it should be registered for each scope.
+ * Where this menu item should be rendered. If the menu item should be rendered
+ * in multiple scopes, e.g. on both a block and a workspace, it should be
+ * registered for each scope.
  * @enum {string}
  */
 ContextMenuRegistry.ScopeType = {
@@ -52,8 +53,8 @@ ContextMenuRegistry.ScopeType = {
 };
 
 /**
- * The actual workspace/block where the menu is being rendered. This is passed to callback and
- * displayText functions that depend on this information.
+ * The actual workspace/block where the menu is being rendered. This is passed
+ * to callback and displayText functions that depend on this information.
  * @typedef {{
  *    block: (BlockSvg|undefined),
  *    workspace: (WorkspaceSvg|undefined)
@@ -71,7 +72,7 @@ ContextMenuRegistry.Scope;
  *    weight: number,
  *    id: string
  * }}
-*/
+ */
 ContextMenuRegistry.RegistryItem;
 
 /**
@@ -95,7 +96,8 @@ ContextMenuRegistry.registry = null;
 
 /**
  * Registers a RegistryItem.
- * @param {!ContextMenuRegistry.RegistryItem} item Context menu item to register.
+ * @param {!ContextMenuRegistry.RegistryItem} item Context menu item to
+ *     register.
  * @throws {Error} if an item with the given ID already exists.
  */
 ContextMenuRegistry.prototype.register = function(item) {
@@ -126,15 +128,18 @@ ContextMenuRegistry.prototype.getItem = function(id) {
 };
 
 /**
- * Gets the valid context menu options for the given scope type (e.g. block or workspace) and scope.
- * Blocks are only shown if the preconditionFn shows they should not be hidden.
- * @param {!ContextMenuRegistry.ScopeType} scopeType Type of scope where menu should be
- *     shown (e.g. on a block or on a workspace)
+ * Gets the valid context menu options for the given scope type (e.g. block or
+ * workspace) and scope. Blocks are only shown if the preconditionFn shows they
+ * should not be hidden.
+ * @param {!ContextMenuRegistry.ScopeType} scopeType Type of scope where menu
+ *     should be shown (e.g. on a block or on a workspace)
  * @param {!ContextMenuRegistry.Scope} scope Current scope of context menu
  *     (i.e., the exact workspace or block being clicked on)
- * @return {!Array<!ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
+ * @return {!Array<!ContextMenuRegistry.ContextMenuOption>} the list of
+ *     ContextMenuOptions
  */
-ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
+ContextMenuRegistry.prototype.getContextMenuOptions = function(
+    scopeType, scope) {
   const menuOptions = [];
   const registry = this.registry_;
   Object.keys(registry).forEach(function(id) {
@@ -143,7 +148,8 @@ ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope)
       const precondition = item.preconditionFn(scope);
       if (precondition != 'hidden') {
         const displayText = typeof item.displayText == 'function' ?
-                            item.displayText(scope) : item.displayText;
+            item.displayText(scope) :
+            item.displayText;
         /** @type {!ContextMenuRegistry.ContextMenuOption} */
         const menuOption = {
           text: displayText,

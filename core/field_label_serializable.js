@@ -47,7 +47,7 @@ Blockly.utils.object.inherits(Blockly.FieldLabelSerializable,
  * @nocollapse
  */
 Blockly.FieldLabelSerializable.fromJson = function(options) {
-  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  const text = Blockly.utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabelSerializable if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);

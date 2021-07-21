@@ -15,17 +15,19 @@
 goog.module('Blockly.DeleteArea');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.BlockSvg');
-goog.require('Blockly.DragTarget');
-goog.require('Blockly.IDeleteArea');
-
-goog.requireType('Blockly.IDraggable');
+const BlockSvg = goog.require('Blockly.BlockSvg');
+const DragTarget = goog.require('Blockly.DragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const IDeleteArea = goog.require('Blockly.IDeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const IDraggable = goog.requireType('Blockly.IDraggable');
+const {inherits} = goog.require('Blockly.utils.object');
 
 /**
  * Abstract class for a component that can delete a block or bubble that is
  * dropped on top of it.
- * @extends {Blockly.DragTarget}
- * @implements {Blockly.IDeleteArea}
+ * @extends {DragTarget}
+ * @implements {IDeleteArea}
  * @constructor
  */
 const DeleteArea = function() {
@@ -40,14 +42,14 @@ const DeleteArea = function() {
    */
   this.wouldDelete_ = false;
 };
-Blockly.utils.object.inherits(DeleteArea, Blockly.DragTarget);
+inherits(DeleteArea, DragTarget);
 
 /**
  * Returns whether the provided block or bubble would be deleted if dropped on
  * this area.
  * This method should check if the element is deletable and is always called
  * before onDragEnter/onDragOver/onDragExit.
- * @param {!Blockly.IDraggable} element The block or bubble currently being
+ * @param {!IDraggable} element The block or bubble currently being
  *   dragged.
  * @param {boolean} couldConnect Whether the element could could connect to
  *     another.
@@ -55,8 +57,8 @@ Blockly.utils.object.inherits(DeleteArea, Blockly.DragTarget);
  *     this area.
  */
 DeleteArea.prototype.wouldDelete = function(element, couldConnect) {
-  if (element instanceof Blockly.BlockSvg) {
-    const block = /** @type {Blockly.BlockSvg} */ (element);
+  if (element instanceof BlockSvg) {
+    const block = /** @type {BlockSvg} */ (element);
     const couldDeleteBlock = !block.getParent() && block.isDeletable();
     this.updateWouldDelete_(couldDeleteBlock && !couldConnect);
   } else {

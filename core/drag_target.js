@@ -12,7 +12,8 @@
 
 'use strict';
 
-goog.provide('Blockly.DragTarget');
+goog.module('Blockly.DragTarget');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IDragTarget');
 
@@ -26,7 +27,7 @@ goog.requireType('Blockly.utils.Rect');
  * @implements {Blockly.IDragTarget}
  * @constructor
  */
-Blockly.DragTarget = function() {};
+const DragTarget = function() {};
 
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
@@ -34,14 +35,14 @@ Blockly.DragTarget = function() {};
  * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
-Blockly.DragTarget.prototype.getClientRect;
+DragTarget.prototype.getClientRect;
 
 /**
  * Handles when a cursor with a block or bubble enters this drag target.
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.DragTarget.prototype.onDragEnter = function(_dragElement) {
+DragTarget.prototype.onDragEnter = function(_dragElement) {
   // no-op
 };
 
@@ -51,7 +52,7 @@ Blockly.DragTarget.prototype.onDragEnter = function(_dragElement) {
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.DragTarget.prototype.onDragOver = function(_dragElement) {
+DragTarget.prototype.onDragOver = function(_dragElement) {
   // no-op
 };
 
@@ -60,7 +61,7 @@ Blockly.DragTarget.prototype.onDragOver = function(_dragElement) {
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.DragTarget.prototype.onDragExit = function(_dragElement) {
+DragTarget.prototype.onDragExit = function(_dragElement) {
   // no-op
 };
 
@@ -70,7 +71,7 @@ Blockly.DragTarget.prototype.onDragExit = function(_dragElement) {
  * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  */
-Blockly.DragTarget.prototype.onDrop = function(_dragElement) {
+DragTarget.prototype.onDrop = function(_dragElement) {
   // no-op
 };
 
@@ -83,6 +84,8 @@ Blockly.DragTarget.prototype.onDrop = function(_dragElement) {
  * @return {boolean} Whether the block or bubble provided should be returned to
  *     drag start.
  */
-Blockly.DragTarget.prototype.shouldPreventMove = function(_dragElement) {
+DragTarget.prototype.shouldPreventMove = function(_dragElement) {
   return false;
 };
+
+exports = DragTarget;

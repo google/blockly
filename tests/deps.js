@@ -29,7 +29,7 @@ goog.addDependency('../../core/contextmenu_items.js', ['Blockly.ContextMenuItems
 goog.addDependency('../../core/contextmenu_registry.js', ['Blockly.ContextMenuRegistry'], [], {'lang': 'es5'});
 goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.BlockSvg', 'Blockly.DragTarget', 'Blockly.IDeleteArea']);
-goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], ['Blockly.IDragTarget']);
+goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], ['Blockly.IDragTarget'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/dropdowndiv.js', ['Blockly.DropDownDiv'], ['Blockly.utils.Rect', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.style']);
 goog.addDependency('../../core/events/block_events.js', ['Blockly.Events.BlockBase', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.Change', 'Blockly.Events.Create', 'Blockly.Events.Delete', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.registry', 'Blockly.utils.Coordinate', 'Blockly.utils.object', 'Blockly.utils.xml']);
 goog.addDependency('../../core/events/events.js', ['Blockly.Events'], ['Blockly.registry', 'Blockly.utils']);

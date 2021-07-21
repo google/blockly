@@ -132,17 +132,17 @@ Blockly.ContextMenuRegistry.prototype.getItem = function(id) {
  * @return {!Array<!Blockly.ContextMenuRegistry.ContextMenuOption>} the list of ContextMenuOptions
  */
 Blockly.ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
-  var menuOptions = [];
-  var registry = this.registry_;
+  const menuOptions = [];
+  const registry = this.registry_;
   Object.keys(registry).forEach(function(id) {
-    var item = registry[id];
+    const item = registry[id];
     if (scopeType == item.scopeType) {
-      var precondition = item.preconditionFn(scope);
+      const precondition = item.preconditionFn(scope);
       if (precondition != 'hidden') {
-        var displayText = typeof item.displayText == 'function' ?
+        const displayText = typeof item.displayText == 'function' ?
                             item.displayText(scope) : item.displayText;
         /** @type {!Blockly.ContextMenuRegistry.ContextMenuOption} */
-        var menuOption = {
+        const menuOption = {
           text: displayText,
           enabled: (precondition == 'enabled'),
           callback: item.callback,

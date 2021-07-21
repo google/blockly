@@ -7,12 +7,13 @@
 /**
  * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
- * instances would be Blockly.FieldTextInput, Blockly.FieldDropdown, etc.
+ * instances would be FieldTextInput, FieldDropdown, etc.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Field');
+goog.module('Blockly.Field');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.DropDownDiv');
@@ -61,7 +62,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @implements {Blockly.IKeyboardAccessible}
  * @implements {Blockly.IRegistrable}
  */
-Blockly.Field = function(value, opt_validator, opt_config) {
+const Field = function(value, opt_validator, opt_config) {
   /**
    * A generic value possessed by the field.
    * Should generally be non-null, only null when the field is created.
@@ -160,62 +161,62 @@ Blockly.Field = function(value, opt_validator, opt_config) {
  * @type {*}
  * @protected
  */
-Blockly.Field.prototype.DEFAULT_VALUE = null;
+Field.prototype.DEFAULT_VALUE = null;
 
 /**
  * Name of field.  Unique within each block.
  * Static labels are usually unnamed.
  * @type {string|undefined}
  */
-Blockly.Field.prototype.name = undefined;
+Field.prototype.name = undefined;
 
 /**
  * Has this field been disposed of?
  * @type {boolean}
  * @package
  */
-Blockly.Field.prototype.disposed = false;
+Field.prototype.disposed = false;
 
 /**
  * Maximum characters of text to display before adding an ellipsis.
  * @type {number}
  */
-Blockly.Field.prototype.maxDisplayLength = 50;
+Field.prototype.maxDisplayLength = 50;
 
 /**
  * Block this field is attached to.  Starts as null, then set in init.
  * @type {Blockly.Block}
  * @protected
  */
-Blockly.Field.prototype.sourceBlock_ = null;
+Field.prototype.sourceBlock_ = null;
 
 /**
  * Does this block need to be re-rendered?
  * @type {boolean}
  * @protected
  */
-Blockly.Field.prototype.isDirty_ = true;
+Field.prototype.isDirty_ = true;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
  * @type {boolean}
  * @protected
  */
-Blockly.Field.prototype.visible_ = true;
+Field.prototype.visible_ = true;
 
 /**
  * Can the field value be changed using the editor on an editable block?
  * @type {boolean}
  * @protected
  */
-Blockly.Field.prototype.enabled_ = true;
+Field.prototype.enabled_ = true;
 
 /**
  * The element the click handler is bound to.
  * @type {Element}
  * @protected
  */
-Blockly.Field.prototype.clickTarget_ = null;
+Field.prototype.clickTarget_ = null;
 
 /**
  * A developer hook to override the returned text of this field.
@@ -225,7 +226,7 @@ Blockly.Field.prototype.clickTarget_ = null;
  * @return {?string} Current text. Return null to resort to a string cast.
  * @protected
  */
-Blockly.Field.prototype.getText_;
+Field.prototype.getText_;
 
 /**
  * An optional method that can be defined to show an editor when the field is
@@ -236,20 +237,20 @@ Blockly.Field.prototype.getText_;
  * @return {void}
  * @protected
  */
-Blockly.Field.prototype.showEditor_;
+Field.prototype.showEditor_;
 
 /**
  * Non-breaking space.
  * @const
  */
-Blockly.Field.NBSP = '\u00A0';
+Field.NBSP = '\u00A0';
 
 /**
  * Editable fields usually show some sort of UI indicating they are editable.
  * They will also be saved by the XML renderer.
  * @type {boolean}
  */
-Blockly.Field.prototype.EDITABLE = true;
+Field.prototype.EDITABLE = true;
 
 /**
  * Serializable fields are saved by the XML renderer, non-serializable fields
@@ -257,7 +258,7 @@ Blockly.Field.prototype.EDITABLE = true;
  * case by default so that SERIALIZABLE is backwards compatible.
  * @type {boolean}
  */
-Blockly.Field.prototype.SERIALIZABLE = false;
+Field.prototype.SERIALIZABLE = false;
 
 /**
  * Process the configuration map passed to the field.
@@ -266,7 +267,7 @@ Blockly.Field.prototype.SERIALIZABLE = false;
  *    parameter supports.
  * @protected
  */
-Blockly.Field.prototype.configure_ = function(config) {
+Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
     tooltip = Blockly.utils.replaceMessageReferences(
@@ -282,7 +283,7 @@ Blockly.Field.prototype.configure_ = function(config) {
  * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.
  */
-Blockly.Field.prototype.setSourceBlock = function(block) {
+Field.prototype.setSourceBlock = function(block) {
   if (this.sourceBlock_) {
     throw Error('Field already bound to a block');
   }
@@ -294,7 +295,7 @@ Blockly.Field.prototype.setSourceBlock = function(block) {
  * @return {?Blockly.blockRendering.ConstantProvider} The renderer constant
  *     provider.
  */
-Blockly.Field.prototype.getConstants = function() {
+Field.prototype.getConstants = function() {
   if (!this.constants_ && this.sourceBlock_ && this.sourceBlock_.workspace &&
       this.sourceBlock_.workspace.rendered) {
     this.constants_ = this.sourceBlock_.workspace.getRenderer().getConstants();
@@ -306,7 +307,7 @@ Blockly.Field.prototype.getConstants = function() {
  * Get the block this field is attached to.
  * @return {Blockly.Block} The block containing this field.
  */
-Blockly.Field.prototype.getSourceBlock = function() {
+Field.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
 };
 
@@ -315,7 +316,7 @@ Blockly.Field.prototype.getSourceBlock = function() {
  * methods initModel and initView rather than this method.
  * @package
  */
-Blockly.Field.prototype.init = function() {
+Field.prototype.init = function() {
   if (this.fieldGroup_) {
     // Field has already been initialized once.
     return;
@@ -338,7 +339,7 @@ Blockly.Field.prototype.init = function() {
  * Create the block UI for this field.
  * @package
  */
-Blockly.Field.prototype.initView = function() {
+Field.prototype.initView = function() {
   this.createBorderRect_();
   this.createTextElement_();
 };
@@ -348,7 +349,7 @@ Blockly.Field.prototype.initView = function() {
  * No-op by default.
  * @package
  */
-Blockly.Field.prototype.initModel = function() {
+Field.prototype.initModel = function() {
 };
 
 /**
@@ -357,7 +358,7 @@ Blockly.Field.prototype.initModel = function() {
  * separate function to call.
  * @protected
  */
-Blockly.Field.prototype.createBorderRect_ = function() {
+Field.prototype.createBorderRect_ = function() {
   this.borderRect_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT, {
         'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
@@ -376,7 +377,7 @@ Blockly.Field.prototype.createBorderRect_ = function() {
  * function to call.
  * @protected
  */
-Blockly.Field.prototype.createTextElement_ = function() {
+Field.prototype.createTextElement_ = function() {
   this.textElement_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.TEXT, {
         'class': 'blocklyText',
@@ -393,7 +394,7 @@ Blockly.Field.prototype.createTextElement_ = function() {
  * custom input handling.
  * @protected
  */
-Blockly.Field.prototype.bindEvents_ = function() {
+Field.prototype.bindEvents_ = function() {
   Blockly.Tooltip.bindMouseEvents(this.getClickTarget_());
   this.mouseDownWrapper_ = Blockly.browserEvents.conditionalBind(
       this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
@@ -406,7 +407,7 @@ Blockly.Field.prototype.bindEvents_ = function() {
  *    field's state.
  * @package
  */
-Blockly.Field.prototype.fromXml = function(fieldElement) {
+Field.prototype.fromXml = function(fieldElement) {
   this.setValue(fieldElement.textContent);
 };
 
@@ -417,7 +418,7 @@ Blockly.Field.prototype.fromXml = function(fieldElement) {
  * @return {!Element} The element containing info about the field's state.
  * @package
  */
-Blockly.Field.prototype.toXml = function(fieldElement) {
+Field.prototype.toXml = function(fieldElement) {
   fieldElement.textContent = this.getValue();
   return fieldElement;
 };
@@ -426,7 +427,7 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
  * Dispose of all DOM objects and events belonging to this editable field.
  * @package
  */
-Blockly.Field.prototype.dispose = function() {
+Field.prototype.dispose = function() {
   Blockly.DropDownDiv.hideIfOwner(this);
   Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.Tooltip.unbindMouseEvents(this.getClickTarget_());
@@ -443,7 +444,7 @@ Blockly.Field.prototype.dispose = function() {
 /**
  * Add or remove the UI indicating if this field is editable or not.
  */
-Blockly.Field.prototype.updateEditable = function() {
+Field.prototype.updateEditable = function() {
   const group = this.fieldGroup_;
   if (!this.EDITABLE || !group) {
     return;
@@ -464,7 +465,7 @@ Blockly.Field.prototype.updateEditable = function() {
  *     source block is editable.
  * @param {boolean} enabled True if enabled.
  */
-Blockly.Field.prototype.setEnabled = function(enabled) {
+Field.prototype.setEnabled = function(enabled) {
   this.enabled_ = enabled;
   this.updateEditable();
 };
@@ -474,7 +475,7 @@ Blockly.Field.prototype.setEnabled = function(enabled) {
  *     source block is editable.
  * @return {boolean} Whether this field is enabled.
  */
-Blockly.Field.prototype.isEnabled = function() {
+Field.prototype.isEnabled = function() {
   return this.enabled_;
 };
 
@@ -482,7 +483,7 @@ Blockly.Field.prototype.isEnabled = function() {
  * Check whether this field defines the showEditor_ function.
  * @return {boolean} Whether this field is clickable.
  */
-Blockly.Field.prototype.isClickable = function() {
+Field.prototype.isClickable = function() {
   return this.enabled_ && !!this.sourceBlock_ &&
       this.sourceBlock_.isEditable() && !!this.showEditor_ &&
       (typeof this.showEditor_ === 'function');
@@ -495,7 +496,7 @@ Blockly.Field.prototype.isClickable = function() {
  * @return {boolean} Whether this field is currently enabled, editable and on
  * an editable block.
  */
-Blockly.Field.prototype.isCurrentlyEditable = function() {
+Field.prototype.isCurrentlyEditable = function() {
   return this.enabled_ && this.EDITABLE && !!this.sourceBlock_ &&
       this.sourceBlock_.isEditable();
 };
@@ -505,7 +506,7 @@ Blockly.Field.prototype.isCurrentlyEditable = function() {
  * Handles the logic for backwards compatibility and incongruous states.
  * @return {boolean} Whether this field should be serialized or not.
  */
-Blockly.Field.prototype.isSerializable = function() {
+Field.prototype.isSerializable = function() {
   let isSerializable = false;
   if (this.name) {
     if (this.SERIALIZABLE) {
@@ -524,7 +525,7 @@ Blockly.Field.prototype.isSerializable = function() {
  * Gets whether this editable field is visible or not.
  * @return {boolean} True if visible.
  */
-Blockly.Field.prototype.isVisible = function() {
+Field.prototype.isVisible = function() {
   return this.visible_;
 };
 
@@ -534,7 +535,7 @@ Blockly.Field.prototype.isVisible = function() {
  * @param {boolean} visible True if visible.
  * @package
  */
-Blockly.Field.prototype.setVisible = function(visible) {
+Field.prototype.setVisible = function(visible) {
   if (this.visible_ == visible) {
     return;
   }
@@ -560,7 +561,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
  * @param {Function} handler The validator function
  *     or null to clear a previous validator.
  */
-Blockly.Field.prototype.setValidator = function(handler) {
+Field.prototype.setValidator = function(handler) {
   this.validator_ = handler;
 };
 
@@ -568,7 +569,7 @@ Blockly.Field.prototype.setValidator = function(handler) {
  * Gets the validation function for editable fields, or null if not set.
  * @return {?Function} Validation function, or null.
  */
-Blockly.Field.prototype.getValidator = function() {
+Field.prototype.getValidator = function() {
   return this.validator_;
 };
 
@@ -577,7 +578,7 @@ Blockly.Field.prototype.getValidator = function() {
  * Used for measuring the size and for positioning.
  * @return {!SVGGElement} The group element.
  */
-Blockly.Field.prototype.getSvgRoot = function() {
+Field.prototype.getSvgRoot = function() {
   return /** @type {!SVGGElement} */ (this.fieldGroup_);
 };
 
@@ -586,7 +587,7 @@ Blockly.Field.prototype.getSvgRoot = function() {
  * called by BlockSvg.applyColour().
  * @package
  */
-Blockly.Field.prototype.applyColour = function() {
+Field.prototype.applyColour = function() {
   // Non-abstract sub-classes may wish to implement this. See FieldDropdown.
 };
 
@@ -597,7 +598,7 @@ Blockly.Field.prototype.applyColour = function() {
  * done here, and should be triggered by getSize().
  * @protected
  */
-Blockly.Field.prototype.render_ = function() {
+Field.prototype.render_ = function() {
   if (this.textContent_) {
     this.textContent_.nodeValue = this.getDisplayText_();
   }
@@ -610,7 +611,7 @@ Blockly.Field.prototype.render_ = function() {
  *     or undefined if triggered programmatically.
  * @package
  */
-Blockly.Field.prototype.showEditor = function(opt_e) {
+Field.prototype.showEditor = function(opt_e) {
   if (this.isClickable()) {
     this.showEditor_(opt_e);
   }
@@ -621,7 +622,7 @@ Blockly.Field.prototype.showEditor = function(opt_e) {
  * @param {number=} opt_margin margin to use when positioning the text element.
  * @protected
  */
-Blockly.Field.prototype.updateSize_ = function(opt_margin) {
+Field.prototype.updateSize_ = function(opt_margin) {
   const constants = this.getConstants();
   const xOffset = opt_margin != undefined ? opt_margin :
       (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
@@ -654,7 +655,7 @@ Blockly.Field.prototype.updateSize_ = function(opt_margin) {
  * @param {number} contentWidth The content width.
  * @protected
  */
-Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
+Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
   if (!this.textElement_) {
     return;
   }
@@ -672,7 +673,7 @@ Blockly.Field.prototype.positionTextElement_ = function(xOffset, contentWidth) {
  * Position a field's border rect after a size change.
  * @protected
  */
-Blockly.Field.prototype.positionBorderRect_ = function() {
+Field.prototype.positionBorderRect_ = function() {
   if (!this.borderRect_) {
     return;
   }
@@ -691,7 +692,7 @@ Blockly.Field.prototype.positionBorderRect_ = function() {
  * This should *in general* be the only place render_ gets called from.
  * @return {!Blockly.utils.Size} Height and width.
  */
-Blockly.Field.prototype.getSize = function() {
+Field.prototype.getSize = function() {
   if (!this.isVisible()) {
     return new Blockly.utils.Size(0, 0);
   }
@@ -716,7 +717,7 @@ Blockly.Field.prototype.getSize = function() {
  *     pixels relative to the top left corner of the page (window coordinates).
  * @package
  */
-Blockly.Field.prototype.getScaledBBox = function() {
+Field.prototype.getScaledBBox = function() {
   let scaledWidth, scaledHeight, xy;
   if (!this.borderRect_) {
     // Browsers are inconsistent in what they return for a bounding box.
@@ -761,18 +762,18 @@ Blockly.Field.prototype.getScaledBBox = function() {
  * @return {string} Text to display.
  * @protected
  */
-Blockly.Field.prototype.getDisplayText_ = function() {
+Field.prototype.getDisplayText_ = function() {
   let text = this.getText();
   if (!text) {
     // Prevent the field from disappearing if empty.
-    return Blockly.Field.NBSP;
+    return Field.NBSP;
   }
   if (text.length > this.maxDisplayLength) {
     // Truncate displayed string and add an ellipsis ('...').
     text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
   }
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-  text = text.replace(/\s/g, Blockly.Field.NBSP);
+  text = text.replace(/\s/g, Field.NBSP);
   if (this.sourceBlock_ && this.sourceBlock_.RTL) {
     // The SVG is LTR, force text to be RTL.
     text += '\u200F';
@@ -784,7 +785,7 @@ Blockly.Field.prototype.getDisplayText_ = function() {
  * Get the text from this field.
  * @return {string} Current text.
  */
-Blockly.Field.prototype.getText = function() {
+Field.prototype.getText = function() {
   if (this.getText_) {
     const text = this.getText_.call(this);
     if (text !== null) {
@@ -801,7 +802,7 @@ Blockly.Field.prototype.getText = function() {
  * already been recorded.
  * @package
  */
-Blockly.Field.prototype.markDirty = function() {
+Field.prototype.markDirty = function() {
   this.isDirty_ = true;
   this.constants_ = null;
 };
@@ -813,7 +814,7 @@ Blockly.Field.prototype.markDirty = function() {
  * already been recorded.
  * @package
  */
-Blockly.Field.prototype.forceRerender = function() {
+Field.prototype.forceRerender = function() {
   this.isDirty_ = true;
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
@@ -828,7 +829,7 @@ Blockly.Field.prototype.forceRerender = function() {
  * than this method.
  * @param {*} newValue New value.
  */
-Blockly.Field.prototype.setValue = function(newValue) {
+Field.prototype.setValue = function(newValue) {
   const doLogging = false;
   if (newValue === null) {
     doLogging && console.log('null, return');
@@ -884,7 +885,7 @@ Blockly.Field.prototype.setValue = function(newValue) {
  * @return {*} New value, or an Error object.
  * @private
  */
-Blockly.Field.prototype.processValidation_ = function(newValue,
+Field.prototype.processValidation_ = function(newValue,
     validatedValue) {
   if (validatedValue === null) {
     this.doValueInvalid_(newValue);
@@ -903,7 +904,7 @@ Blockly.Field.prototype.processValidation_ = function(newValue,
  * Get the current value of the field.
  * @return {*} Current value.
  */
-Blockly.Field.prototype.getValue = function() {
+Field.prototype.getValue = function() {
   return this.value_;
 };
 
@@ -914,7 +915,7 @@ Blockly.Field.prototype.getValue = function() {
  * @return {*} The validated value, same as input by default.
  * @protected
  */
-Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
+Field.prototype.doClassValidation_ = function(opt_newValue) {
   if (opt_newValue === null || opt_newValue === undefined) {
     return null;
   }
@@ -927,7 +928,7 @@ Blockly.Field.prototype.doClassValidation_ = function(opt_newValue) {
  * @param {*} newValue The value to be saved.
  * @protected
  */
-Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
+Field.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   this.isDirty_ = true;
 };
@@ -939,7 +940,7 @@ Blockly.Field.prototype.doValueUpdate_ = function(newValue) {
  * @param {*} _invalidValue The input value that was determined to be invalid.
  * @protected
  */
-Blockly.Field.prototype.doValueInvalid_ = function(_invalidValue) {
+Field.prototype.doValueInvalid_ = function(_invalidValue) {
   // NOP
 };
 
@@ -948,7 +949,7 @@ Blockly.Field.prototype.doValueInvalid_ = function(_invalidValue) {
  * @param {!Event} e Mouse down event.
  * @protected
  */
-Blockly.Field.prototype.onMouseDown_ = function(e) {
+Field.prototype.onMouseDown_ = function(e) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
@@ -965,7 +966,7 @@ Blockly.Field.prototype.onMouseDown_ = function(e) {
  *     parent object whose tooltip will be used, or null to display the tooltip
  *     of the parent block. To not display a tooltip pass the empty string.
  */
-Blockly.Field.prototype.setTooltip = function(newTip) {
+Field.prototype.setTooltip = function(newTip) {
   if (!newTip && newTip !== '') {  // If null or undefined.
     newTip = this.sourceBlock_;
   }
@@ -982,7 +983,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
  * Returns the tooltip text for this field.
  * @return {string} The tooltip text for this field.
  */
-Blockly.Field.prototype.getTooltip = function() {
+Field.prototype.getTooltip = function() {
   const clickTarget = this.getClickTarget_();
   if (clickTarget) {
     return Blockly.Tooltip.getTooltipOfObject(clickTarget);
@@ -998,7 +999,7 @@ Blockly.Field.prototype.getTooltip = function() {
  * @return {!Element} Element to bind click handler to.
  * @protected
  */
-Blockly.Field.prototype.getClickTarget_ = function() {
+Field.prototype.getClickTarget_ = function() {
   return this.clickTarget_ || this.getSvgRoot();
 };
 
@@ -1008,7 +1009,7 @@ Blockly.Field.prototype.getClickTarget_ = function() {
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  * @protected
  */
-Blockly.Field.prototype.getAbsoluteXY_ = function() {
+Field.prototype.getAbsoluteXY_ = function() {
   return Blockly.utils.style.getPageOffset(
       /** @type {!SVGRectElement} */ (this.getClickTarget_()));
 };
@@ -1020,7 +1021,7 @@ Blockly.Field.prototype.getAbsoluteXY_ = function() {
  * @return {boolean} True if this field has any variable references.
  * @package
  */
-Blockly.Field.prototype.referencesVariables = function() {
+Field.prototype.referencesVariables = function() {
   return false;
 };
 
@@ -1030,7 +1031,7 @@ Blockly.Field.prototype.referencesVariables = function() {
  * @return {Blockly.Input} The input that the field belongs to.
  * @package
  */
-Blockly.Field.prototype.getParentInput = function() {
+Field.prototype.getParentInput = function() {
   let parentInput = null;
   const block = this.sourceBlock_;
   const inputs = block.inputList;
@@ -1052,7 +1053,7 @@ Blockly.Field.prototype.getParentInput = function() {
  * Returns whether or not we should flip the field in RTL.
  * @return {boolean} True if we should flip in RTL.
  */
-Blockly.Field.prototype.getFlipRtl = function() {
+Field.prototype.getFlipRtl = function() {
   return false;
 };
 
@@ -1060,7 +1061,7 @@ Blockly.Field.prototype.getFlipRtl = function() {
  * Returns whether or not the field is tab navigable.
  * @return {boolean} True if the field is tab navigable.
  */
-Blockly.Field.prototype.isTabNavigable = function() {
+Field.prototype.isTabNavigable = function() {
   return false;
 };
 
@@ -1070,7 +1071,7 @@ Blockly.Field.prototype.isTabNavigable = function() {
  * @return {boolean} True if the shortcut has been handled, false otherwise.
  * @public
  */
-Blockly.Field.prototype.onShortcut = function(_shortcut) {
+Field.prototype.onShortcut = function(_shortcut) {
   return false;
 };
 
@@ -1080,7 +1081,7 @@ Blockly.Field.prototype.onShortcut = function(_shortcut) {
  *     field group.
  * @package
  */
-Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
+Field.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
     this.cursorSvg_ = null;
     return;
@@ -1096,7 +1097,7 @@ Blockly.Field.prototype.setCursorSvg = function(cursorSvg) {
  *     field group.
  * @package
  */
-Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
+Field.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
     this.markerSvg_ = null;
     return;
@@ -1110,7 +1111,7 @@ Blockly.Field.prototype.setMarkerSvg = function(markerSvg) {
  * Redraw any attached marker or cursor svgs if needed.
  * @protected
  */
-Blockly.Field.prototype.updateMarkers_ = function() {
+Field.prototype.updateMarkers_ = function() {
   const workspace =
     /** @type {!Blockly.WorkspaceSvg} */ (this.sourceBlock_.workspace);
   if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
@@ -1121,3 +1122,5 @@ Blockly.Field.prototype.updateMarkers_ = function() {
     workspace.getMarker(Blockly.MarkerManager.LOCAL_MARKER).draw();
   }
 };
+
+exports = Field;

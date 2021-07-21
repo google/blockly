@@ -219,9 +219,6 @@ step3() {
     err "Missing requires for: ${missing_requires} Please manually fix."
   fi
 
-  inf "Add missing nullability modifiers..."
-  perl -pi -e 's/@(param|return) \{([A-Z])/@\1 \{?\2/g' "${filepath}"
-
   success "Completed automation for step 3. Please manually review and reorder requires."
 }
 #######################################

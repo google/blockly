@@ -141,7 +141,6 @@ step2 () {
 
   npm run build:deps
   success "Completed automation for step 3. Please manually review and add exports for non-private top-level functions."
-
 }
 #######################################
 # Runs step 3 of the automated conversion.
@@ -285,7 +284,7 @@ function help {
   echo " 3. Rewrite goog.requires statements and add missing requires (often skipped for simple files)"
   echo " 4. Run clang-format on the whole file"
   echo ""
-  echo "Usage: $0 [-h|-c <number>|-s <number>|-f] <filepath>"
+  echo "Usage: $0 [-h|-c <number>|-s <number>] <filepath>"
   echo "  -h                      Display help"
   echo "  -c <step> <filepath>    Create a commit for the specified step [2-4]"
   echo "  -s <step> <filepath>    Run the specified step [1-4]"

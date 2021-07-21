@@ -20,7 +20,7 @@ suite('Theme', function() {
     Blockly.registry.typeMap_['theme'] = {};
   });
 
-  function defineThemeTestBlocks(sharedCleanupObj) {
+  function defineThemeTestBlocks() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "stack_block",
       "message0": "",
@@ -117,7 +117,7 @@ suite('Theme', function() {
   });
 
   test('Set Theme', function() {
-    defineThemeTestBlocks(this.sharedCleanup);
+    defineThemeTestBlocks();
     try {
       var blockStyles = createBlockStyles();
       var theme = new Blockly.Theme('themeName', blockStyles);

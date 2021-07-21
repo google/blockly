@@ -934,7 +934,7 @@ suite('Events', function() {
         new Blockly.Events.Click(block1),
         new Blockly.Events.BubbleOpen(block2, true, 'mutator'),
         new Blockly.Events.Click(block2),
-        new Blockly.Events.BubbleOpen(block3, true,'warning'),
+        new Blockly.Events.BubbleOpen(block3, true, 'warning'),
         new Blockly.Events.Click(block3)
       ];
       var filteredEvents = Blockly.Events.filter(events, true);

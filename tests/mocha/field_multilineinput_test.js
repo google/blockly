@@ -66,7 +66,7 @@ suite('Multiline Input Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldMultilineInput, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldMultilineInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

@@ -99,7 +99,7 @@ suite('Colour Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldColour, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldColour, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {

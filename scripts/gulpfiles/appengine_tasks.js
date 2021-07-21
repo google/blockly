@@ -28,8 +28,8 @@ function prepareDeployDir(done) {
   if (fs.existsSync(demoTmpDir)) {
     rimraf.sync(demoTmpDir);
   }
-  fs.mkdirSync(demoStaticTmpDir, { recursive: true });
-  done()
+  fs.mkdirSync(demoStaticTmpDir, {recursive: true});
+  done();
 }
 
 /**
@@ -47,8 +47,8 @@ function copyStaticSrc(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      path.join(demoStaticTmpDir, 'appengine/**/*'),
-      path.join(demoStaticTmpDir, 'appengine/.gcloudignore'),
+      `${demoStaticTmpDir}/appengine/**/*`,
+      `${demoStaticTmpDir}/appengine/.gcloudignore`,
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }
@@ -126,25 +126,24 @@ function deployBetaAndClean(done) {
 }
 
 /**
+ * Prepares demos.
+ */
+const prepareDemos = gulp.series(
+    prepareDeployDir, copyStaticSrc, copyAppengineSrc, copyPlaygroundDeps);
+
+
+/**
  * Deploys demos.
  */
-const deployDemos = gulp.series(
-    prepareDeployDir,
-    copyStaticSrc,
-    copyAppengineSrc,
-    copyPlaygroundDeps,
-    deployAndClean
-);
+const deployDemos = gulp.series(prepareDemos, deployAndClean);
 
-const deployDemosBeta = gulp.series(
-    prepareDeployDir,
-    copyStaticSrc,
-    copyAppengineSrc,
-    copyPlaygroundDeps,
-    deployBetaAndClean
-);
+/**
+ * Deploys beta version of demos (version appended with -beta).
+ */
+const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);
 
 module.exports = {
   deployDemos: deployDemos,
   deployDemosBeta: deployDemosBeta,
-};
+  prepareDemos: prepareDemos
+}

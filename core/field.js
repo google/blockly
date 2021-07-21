@@ -55,6 +55,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *    the individual field's documentation for a list of properties this
  *    parameter supports.
  * @constructor
+ * @abstract
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IASTNodeLocationWithBlock}
  * @implements {Blockly.IKeyboardAccessible}
@@ -203,6 +204,13 @@ Blockly.Field.prototype.isDirty_ = true;
 Blockly.Field.prototype.visible_ = true;
 
 /**
+ * Can the field value be changed using the editor on an editable block?
+ * @type {boolean}
+ * @protected
+ */
+Blockly.Field.prototype.enabled_ = true;
+
+/**
  * The element the click handler is bound to.
  * @type {Element}
  * @protected
@@ -276,7 +284,7 @@ Blockly.Field.prototype.configure_ = function(config) {
  */
 Blockly.Field.prototype.setSourceBlock = function(block) {
   if (this.sourceBlock_) {
-    throw Error('Field already bound to a block.');
+    throw Error('Field already bound to a block');
   }
   this.sourceBlock_ = block;
 };
@@ -392,8 +400,8 @@ Blockly.Field.prototype.bindEvents_ = function() {
 };
 
 /**
- * Sets the field's value based on the given XML element. Should only be
- * called by Blockly.Xml.
+ * Sets the field's value based on the given XML element. Should only be called
+ *     by Blockly.Xml.
  * @param {!Element} fieldElement The element containing info about the
  *    field's state.
  * @package
@@ -440,7 +448,7 @@ Blockly.Field.prototype.updateEditable = function() {
   if (!this.EDITABLE || !group) {
     return;
   }
-  if (this.sourceBlock_.isEditable()) {
+  if (this.enabled_ && this.sourceBlock_.isEditable()) {
     Blockly.utils.dom.addClass(group, 'blocklyEditableText');
     Blockly.utils.dom.removeClass(group, 'blocklyNonEditableText');
     group.style.cursor = this.CURSOR;
@@ -452,22 +460,44 @@ Blockly.Field.prototype.updateEditable = function() {
 };
 
 /**
+ * Set whether this field's value can be changed using the editor when the
+ *     source block is editable.
+ * @param {boolean} enabled True if enabled.
+ */
+Blockly.Field.prototype.setEnabled = function(enabled) {
+  this.enabled_ = enabled;
+  this.updateEditable();
+};
+
+/**
+ * Check whether this field's value can be changed using the editor when the
+ *     source block is editable.
+ * @return {boolean} Whether this field is enabled.
+ */
+Blockly.Field.prototype.isEnabled = function() {
+  return this.enabled_;
+};
+
+/**
  * Check whether this field defines the showEditor_ function.
  * @return {boolean} Whether this field is clickable.
  */
 Blockly.Field.prototype.isClickable = function() {
-  return !!this.sourceBlock_ && this.sourceBlock_.isEditable() &&
-      !!this.showEditor_ && (typeof this.showEditor_ === 'function');
+  return this.enabled_ && !!this.sourceBlock_ &&
+      this.sourceBlock_.isEditable() && !!this.showEditor_ &&
+      (typeof this.showEditor_ === 'function');
 };
 
 /**
  * Check whether this field is currently editable.  Some fields are never
  * EDITABLE (e.g. text labels). Other fields may be EDITABLE but may exist on
- * non-editable blocks.
- * @return {boolean} Whether this field is editable and on an editable block
+ * non-editable blocks or be currently disabled.
+ * @return {boolean} Whether this field is currently enabled, editable and on
+ * an editable block.
  */
 Blockly.Field.prototype.isCurrentlyEditable = function() {
-  return this.EDITABLE && !!this.sourceBlock_ && this.sourceBlock_.isEditable();
+  return this.enabled_ && this.EDITABLE && !!this.sourceBlock_ &&
+      this.sourceBlock_.isEditable();
 };
 
 /**

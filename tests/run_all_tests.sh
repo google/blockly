@@ -49,16 +49,20 @@ run_test_command () {
 }
 
 # Lint the codebase.
-run_test_command "eslint" "eslint ."
+# Skip for CI environments, because linting is run separately.
+if [ -z $CI ]; then
+  run_test_command "eslint" "eslint ."
+fi
 
-# Run the closure compiler.
-run_test_command "compile" "npm run build"
+# Run the full usual build process.
+run_test_command "build" "npm run build"
 
-# Run the closure compiler ensuring there are no compiler warnings / errors.
-run_test_command "compile:warnings" "npm run build:debug"
+# Run the debug build, to ensure there are no closure compiler
+# warnings / errors.
+run_test_command "build:debug" "npm run build:debug"
 
 # Generate TypeScript typings and ensure there are no errors.
-run_test_command "typings" "tests/scripts/compile_typings.sh"
+run_test_command "typings" "npm run typings"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
@@ -68,6 +72,9 @@ run_test_command "mocha" "node tests/mocha/run_mocha_tests_in_browser.js"
 
 # Run generator tests inside a browser and check the results.
 run_test_command "generators" "tests/scripts/run_generators.sh"
+
+# Run the package build process, as Node tests depend on it.
+run_test_command "package" "npm run package"
 
 # Run Node tests.
 run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"

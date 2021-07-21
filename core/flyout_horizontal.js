@@ -343,6 +343,10 @@ Blockly.HorizontalFlyout.prototype.reflowInternal_ = function() {
   for (var i = 0, block; (block = blocks[i]); i++) {
     flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }
+  var buttons = this.buttons_;
+  for (var i = 0, button; (button = buttons[i]); i++) {
+    flyoutHeight = Math.max(flyoutHeight, button.height);
+  }
   flyoutHeight += this.MARGIN * 1.5;
   flyoutHeight *= this.workspace_.scale;
   flyoutHeight += Blockly.Scrollbar.scrollbarThickness;

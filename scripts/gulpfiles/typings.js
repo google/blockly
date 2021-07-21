@@ -16,6 +16,7 @@ var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
 var execSync = require('child_process').execSync;
+var {TYPINGS_BUILD_DIR} = require('./config');
 
 /**
  * Recursively generates a list of file paths with the specified extension
@@ -51,13 +52,13 @@ function getFilePath(basePath, filter, excludePaths) {
 // This includes the header (incl License), additional useful interfaces
 // including Blockly Options and Google Closure typings.
 function typings() {
-  const tmpDir = './typings/tmp';
+  const tmpDir = path.join(TYPINGS_BUILD_DIR, 'tmp');
 
   // Clean directory if exists.
   if (fs.existsSync(tmpDir)) {
     rimraf.sync(tmpDir);
   }
-  fs.mkdirSync(tmpDir);
+  fs.mkdirSync(tmpDir, {recursive: true});
 
   const excludePaths = [
     "core/renderers/geras",
@@ -81,7 +82,7 @@ function typings() {
     if (file.indexOf('core/msg.js') > -1) {
       return;
     }
-    const cmd = `node ./node_modules/typescript-closure-tools/definition-generator/src/main.js ${file} ${typescriptFileName}`;
+    const cmd = `closure2ts ${file} ${typescriptFileName}`;
     console.log(`Generating typings for ${file}`);
     execSync(cmd, { stdio: 'inherit' });
   });
@@ -94,7 +95,7 @@ function typings() {
   ];
   return gulp.src(srcs)
     .pipe(gulp.concat('blockly.d.ts'))
-    .pipe(gulp.dest('typings'))
+    .pipe(gulp.dest(TYPINGS_BUILD_DIR))
     .on('end', function () {
       // Clean up tmp directory.
       if (fs.existsSync(tmpDir)) {
@@ -105,17 +106,35 @@ function typings() {
 
 // Generates the TypeScript definition files (d.ts) for Blockly locales.
 function msgTypings(cb) {
-  const template = fs.readFileSync(path.join('typings/templates/msg.template'), 'utf-8');
+  const template =
+      fs.readFileSync(path.join('typings/templates/msg.template'), 'utf-8');
   const msgFiles = fs.readdirSync(path.join('msg', 'json'));
+  const msgDir = path.join(TYPINGS_BUILD_DIR, 'msg');
+  if (!fs.existsSync(msgDir)) {
+    fs.mkdirSync(msgDir, {recursive: true});
+  }
   msgFiles.forEach(msg => {
     const localeName = msg.substring(0, msg.indexOf('.json'));
     const msgTypings = template.slice().replace(/<%= locale %>/gi, localeName);
-    fs.writeFileSync(path.join('typings', 'msg', localeName + '.d.ts'), msgTypings, 'utf-8');
-  })
+    fs.writeFileSync(path.join(TYPINGS_BUILD_DIR, 'msg', localeName + '.d.ts'),
+                     msgTypings, 'utf-8');
+  });
   cb();
 }
 
+/**
+ * This task copies built files from BUILD_DIR back to the repository
+ * so they can be committed to git.
+ */
+function checkinTypings() {
+  return gulp.src([
+    `${TYPINGS_BUILD_DIR}/**.d.ts`,
+    `${TYPINGS_BUILD_DIR}/**/**.d.ts`,
+  ]).pipe(gulp.dest('typings'));
+};
+
 module.exports = {
   typings: typings,
-  msgTypings: msgTypings
+  msgTypings: msgTypings,
+  checkinTypings: checkinTypings,
 };

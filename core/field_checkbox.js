@@ -63,7 +63,9 @@ Blockly.FieldCheckbox.prototype.DEFAULT_VALUE = false;
  * @nocollapse
  */
 Blockly.FieldCheckbox.fromJson = function(options) {
-  return new Blockly.FieldCheckbox(options['checked'], undefined, options);
+  // `this` might be a subclass of FieldCheckbox if that class doesn't override
+  // the static fromJson method.
+  return new this(options['checked'], undefined, options);
 };
 
 /**

@@ -21,8 +21,10 @@ var through2 = require('through2');
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
-var { getPackageJson } = require('./helper_tasks');
+var rimraf = require('rimraf');
 
+var {BUILD_DIR} = require('./config');
+var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -217,7 +219,7 @@ function buildCompressed() {
       }))
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
-      .pipe(gulp.dest('./'));
+      .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**
@@ -242,7 +244,7 @@ function buildBlocks() {
       includeContent: false,
       sourceRoot: './'
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**
@@ -268,7 +270,7 @@ function buildGenerator(language, namespace) {
       includeContent: false,
       sourceRoot: './'
     }))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest(BUILD_DIR));
 };
 
 /**
@@ -409,30 +411,57 @@ goog.require('Blockly.requires');
 };
 
 /**
+ * This task regenrates msg/json/en.js and msg/json/qqq.js from
+ * msg/messages.js.
+ */
+function generateLangfiles(done) {
+  // Run js_to_json.py
+  const jsToJsonCmd = `python scripts/i18n/js_to_json.py \
+      --input_file ${path.join('msg', 'messages.js')} \
+      --output_dir ${path.join('msg', 'json')} \
+      --quiet`;
+  execSync(jsToJsonCmd, { stdio: 'inherit' });
+
+  console.log(`
+Regenerated several flies in msg/json/.  Now run
+
+    git diff msg/json/*.json
+
+and check that operation has not overwritten any modifications made to
+hints, etc. by the TranslateWiki volunteers.  If it has, backport
+their changes to msg/messages.js and re-run 'npm run generate:langfiles'.
+
+Once you are satisfied that any new hints have been backported you may
+go ahead and commit the changes, but note that the generate script
+will have removed the translator credits - be careful not to commit
+this removal!
+`);
+
+  done();
+};
+
+/**
  * This task builds Blockly's lang files.
  *     msg/*.js
  */
 function buildLangfiles(done) {
-  // Run js_to_json.py
-  const jsToJsonCmd = `python ./scripts/i18n/js_to_json.py \
---input_file ${path.join('msg', 'messages.js')} \
---output_dir ${path.join('msg', 'json')} \
---quiet`;
-  execSync(jsToJsonCmd, { stdio: 'inherit' });
-
-  // Run create_messages.py
+  // Create output directory.
+  const outputDir = path.join(BUILD_DIR, 'msg', 'js');
+  fs.mkdirSync(outputDir, {recursive: true});
+  
+  // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&
-    !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
+      !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
   const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \
   --key_file ${path.join('msg', 'json', 'keys.json')} \
-  --output_dir ${path.join('msg', 'js')} \
+  --output_dir ${outputDir} \
   --quiet ${json_files.join(' ')}`;
-    execSync(createMessagesCmd, { stdio: 'inherit' });
+  execSync(createMessagesCmd, {stdio: 'inherit'});
 
   done();
 };
@@ -510,13 +539,40 @@ const build = gulp.parallel(
   buildLangfiles
 );
 
+/**
+ * This task copies built files from BUILD_DIR back to the repository
+ * so they can be committed to git.
+ */
+function checkinBuilt() {
+  return gulp.src([
+    `${BUILD_DIR}/**.js`,
+    `${BUILD_DIR}/**.js.map`,
+    `${BUILD_DIR}/**/**.js`,
+    `${BUILD_DIR}/**/**.js.map`,
+  ]).pipe(gulp.dest('.'));
+};
+
+/**
+ * This task cleans the build directory (by deleting it).
+ */
+function cleanBuildDir(done) {
+  // Sanity check.
+  if (BUILD_DIR === '.' || BUILD_DIR === '/') {
+    throw new Error(`Refusing to rm -rf ${BUILD_DIR}`);
+  }
+  rimraf(BUILD_DIR, done);
+}
+
 module.exports = {
   build: build,
   core: buildCore,
   blocks: buildBlocks,
+  generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
   uncompressed: buildUncompressed,
   compressed: buildCompressed,
   generators: buildGenerators,
+  checkinBuilt: checkinBuilt,
+  cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
 }

@@ -296,7 +296,8 @@ Blockly.BlockSvg.prototype.getColourBorder = function() {
 };
 
 /**
- * Select this block.  Highlight it visually.
+ * Selects this block. Highlights the block visually and fires a select event
+ * if the block is not already selected.
  */
 Blockly.BlockSvg.prototype.select = function() {
   if (this.isShadow() && this.getParent()) {
@@ -326,7 +327,8 @@ Blockly.BlockSvg.prototype.select = function() {
 };
 
 /**
- * Unselect this block.  Remove its highlighting.
+ * Unselects this block. Unhighlights the block and fires a select (false) event
+ * if the block is currently selected.
  */
 Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
@@ -385,8 +387,9 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 };
 
 /**
- * Set parent of this block to be a new block or null.
+ * Sets the parent of this block to be a new block or null.
  * @param {?Blockly.Block} newParent New parent block.
+ * @package
  * @override
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
@@ -749,8 +752,8 @@ Blockly.BlockSvg.prototype.showHelp = function() {
 
 /**
  * Generate the context menu for this block.
- * @protected
  * @return {?Array<!Object>} Context menu options or null if no menu.
+ * @protected
  */
 Blockly.BlockSvg.prototype.generateContextMenu = function() {
   if (this.workspace.options.readOnly || !this.contextMenu) {
@@ -858,8 +861,9 @@ Blockly.BlockSvg.prototype.setEditable = function(editable) {
 };
 
 /**
- * Set whether this block is a shadow block or not.
+ * Sets whether this block is a shadow block or not.
  * @param {boolean} shadow True if a shadow.
+ * @package
  */
 Blockly.BlockSvg.prototype.setShadow = function(shadow) {
   Blockly.BlockSvg.superClass_.setShadow.call(this, shadow);
@@ -974,7 +978,7 @@ Blockly.BlockSvg.prototype.toCopyData = function() {
 };
 
 /**
- * Change the colour of a block.
+ * Updates the colour of the block to match the block's state.
  * @package
  */
 Blockly.BlockSvg.prototype.applyColour = function() {
@@ -993,7 +997,9 @@ Blockly.BlockSvg.prototype.applyColour = function() {
 };
 
 /**
- * Enable or disable a block.
+ * Updates the color of the block (and children) to match the current disabled
+ * state.
+ * @package
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
   var children = this.getChildren(false);
@@ -1184,14 +1190,18 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
 };
 
 /**
- * Select this block.  Highlight it visually.
+ * Adds the visual "select" effect to the block, but does not actually select
+ * it or fire an event.
+ * @see Blockly.BlockSvg#select
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
 };
 
 /**
- * Unselect this block.  Remove its highlighting.
+ * Removes the visual "select" effect from the block, but does not actually
+ * unselect it or fire an event.
+ * @see Blockly.BlockSvg#unselect
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
   this.pathObject.updateSelected(false);

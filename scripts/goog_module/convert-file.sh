@@ -217,7 +217,6 @@ step3() {
 
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
   if [[ ! -z "${missing_require_lines}" ]]; then
-    err $missing_require_lines
     err "Missing requires for: ${missing_requires} Please manually fix."
   fi
 

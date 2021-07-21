@@ -155,6 +155,14 @@ step3() {
     return 1
   fi
 
+  inf "Extracting module name..."
+  local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
+  if [[ -z "${module_name}" ]]; then
+    err "Could not extract module name"
+    return 1
+  fi
+  inf "Extracted module name \"${module_name}\""
+
   local requires=$(perl -nle'print $& while m{^goog.require(|Type)\('\''(.*)'\''\)}g' "${filepath}" | perl -pe 's/goog.require(|Type)\('\''(.*)'\''\)/\2/g')
 
   # Process each require
@@ -169,14 +177,21 @@ step3() {
 
     local direct_access_count=$(perl -nle'print $& while m{'"${require}"'[^\.'\'']}g' "${filepath}" | wc -l)
     local properties_accessed=$(perl -nle'print $& while m{(?<='"${require}"'\.)(?!prototype)\w+}g' "${filepath}" | tr ' ' '\n' | sort -u)
-    # Detect overlap (ex: Blockly.utils and Blockly.utils.dom)
-    local overlap=$(echo "${requires}"| perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
-    if [[ ! -z "${overlap}" ]]; then
-      while read -r overlap_prop ; do
-        properties_accessed=$(echo "$properties_accessed" | perl -pe 's/'"${overlap_prop}"'//g')
-      done <<<"${overlap}"
-      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
+    # Detect requires overlap
+    # (ex: Blockly.utils require and Blockly.utils.dom also in requires)
+    local requires_overlap=$(echo "${requires}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
+    if [[ ! -z "${requires_overlap}" ]]; then
+      while read -r requires_overlap_prop ; do
+        properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
+      done <<<"${requires_overlap}"
     fi
+    # Detect module name overlap
+    # (ex: Blockly require and Blockly.ContextMenuItems module being converted)
+    local module_overlap=$(echo "${module_name}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
+    if [[ ! -z "${module_overlap}" ]]; then
+      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${module_overlap}"'//g')
+    fi
+    properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
 
     if [[ "${direct_access_count}" -eq "0" && ! -z "${properties_accessed}" ]]; then
       local deconstructed_comma=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')
@@ -185,7 +200,7 @@ step3() {
       inf "Updating require declaration for ${require}..."
       perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
 
-      echo "${properties_accessed}" | while read -r require_prop ; do
+      for require_prop in $(echo "${properties_accessed}"); do
         inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
         perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
       done

@@ -146,7 +146,7 @@ function start() {
   }
   taChange();
   if (autoimport) {
-    fromXml();
+    load();
   }
 }
 
@@ -204,22 +204,22 @@ function initToolbox(workspace) {
   }
 }
 
-function toXml() {
+function save() {
   var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
+  var state = Blockly.serialization.save(workspace);
+  output.value = JSON.stringify(state, null, 2);
   output.focus();
   output.select();
   taChange();
 }
 
-function fromXml() {
+function load() {
   var input = document.getElementById('importExport');
   if (!input.value) {
     return;
   }
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  var state = JSON.parse(input.value);
+  Blockly.serialization.load(state, workspace);
   taChange();
 }
 
@@ -229,7 +229,7 @@ function toCode(lang) {
   taChange();
 }
 
-// Disable the "Import from XML" button if the XML is invalid.
+// Disable the "Load" button if the save state is invalid.
 // Preserve text between page reloads.
 function taChange() {
   var textarea = document.getElementById('importExport');
@@ -238,7 +238,7 @@ function taChange() {
   }
   var valid = true;
   try {
-    Blockly.Xml.textToDom(textarea.value);
+    JSON.parse(textarea.value);
   } catch (e) {
     valid = false;
   }
@@ -423,9 +423,9 @@ var spaghettiXml = [
     </select>
   </form>
   <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
+    <input type="button" value="Save" onclick="save()">
     &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <input type="button" value="Load" onclick="load()" id="import">
     <br>
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;

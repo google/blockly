@@ -20,6 +20,9 @@ warn() {
 err() {
   echo -e  "${RED}[ERROR]:${COLOR_NONE} $*" >&2
 }
+reenter_instructions() {
+  echo -e  "${ORANGE}$*${COLOR_NONE}" >&2
+}
 
 #######################################
 # Checks whether the provided filepath exists.
@@ -180,14 +183,32 @@ step3() {
 
     if [[ "${direct_access_count}" -eq "0" && -n "${properties_accessed}" ]]; then
       local deconstructed_comma=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')
-      inf "Deconstructing ${require} into \"{${deconstructed_comma}}\"..."
-      perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
-
-      for require_prop in echo "${properties_accessed}"; do
-        inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
-        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
+      local confirm=''
+      while true; do
+        read -p "Would you like to deconstruct ${require} into \"{${deconstructed_comma}}\"? (y/n): " yn </dev/tty
+        case $yn in
+          [Yy]* )
+            confirm='true'
+            break
+            ;;
+          [Nn]* )
+            confirm='false'
+            break
+            ;;
+          * ) reenter_instructions "Please type y or n \"${yn}\"";;
+        esac
       done
-      continue
+
+      if [[ "${confirm}" == 'true' ]]; then
+        inf "Deconstructing ${require} into \"{${deconstructed_comma}}\"..."
+        perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
+
+        for require_prop in $(echo "${properties_accessed}"); do
+          inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
+          perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
+        done
+        continue
+      fi
     fi
 
     local require_name=$(echo "${require}" | perl -pe 's/(\w+\.)+(\w+)/\2/g')

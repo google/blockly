@@ -13,22 +13,21 @@
 goog.module('Blockly.FieldVariable');
 goog.module.declareLegacyNamespace();
 
+const Block = goog.requireType('Blockly.Block');
+const FieldDropdown = goog.require('Blockly.FieldDropdown');
+const Menu = goog.requireType('Blockly.Menu');
+const MenuItem = goog.requireType('Blockly.MenuItem');
+const Msg = goog.require('Blockly.Msg');
+const Size = goog.require('Blockly.utils.Size');
+const VariableModel = goog.require('Blockly.VariableModel');
+const Variables = goog.require('Blockly.Variables');
+const Xml = goog.require('Blockly.Xml');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const internalConstants = goog.require('Blockly.internalConstants');
+const {inherits} = goog.require('Blockly.utils.object');
+const {replaceMessageReferences} = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
-goog.require('Blockly.FieldDropdown');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.Msg');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.VariableModel');
-goog.require('Blockly.Variables');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Menu');
-goog.requireType('Blockly.MenuItem');
 
 
 /**
@@ -45,7 +44,7 @@ goog.requireType('Blockly.MenuItem');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.FieldDropdown}
+ * @extends {FieldDropdown}
  * @constructor
  */
 const FieldVariable = function(varName, opt_validator, opt_variableTypes,
@@ -58,7 +57,7 @@ const FieldVariable = function(varName, opt_validator, opt_variableTypes,
    * An array of options for a dropdown list,
    * or a function which generates these options.
    * @type {(!Array<!Array>|
-   *    !function(this:Blockly.FieldDropdown): !Array<!Array>)}
+   *    !function(this:FieldDropdown): !Array<!Array>)}
    * @protected
    */
   this.menuGenerator_ = FieldVariable.dropdownCreate;
@@ -73,11 +72,11 @@ const FieldVariable = function(varName, opt_validator, opt_variableTypes,
 
   /**
    * The size of the area rendered by the field.
-   * @type {Blockly.utils.Size}
+   * @type {Size}
    * @protected
    * @override
    */
-  this.size_ = new Blockly.utils.Size(0, 0);
+  this.size_ = new Size(0, 0);
 
   opt_config && this.configure_(opt_config);
   opt_validator && this.setValidator(opt_validator);
@@ -86,7 +85,7 @@ const FieldVariable = function(varName, opt_validator, opt_variableTypes,
     this.setTypes_(opt_variableTypes, opt_defaultType);
   }
 };
-Blockly.utils.object.inherits(FieldVariable, Blockly.FieldDropdown);
+inherits(FieldVariable, FieldDropdown);
 
 /**
  * Construct a FieldVariable from a JSON arg object,
@@ -98,7 +97,7 @@ Blockly.utils.object.inherits(FieldVariable, Blockly.FieldDropdown);
  * @nocollapse
  */
 FieldVariable.fromJson = function(options) {
-  const varName = Blockly.utils.replaceMessageReferences(options['variable']);
+  const varName = replaceMessageReferences(options['variable']);
   // `this` might be a subclass of FieldVariable if that class doesn't override
   // the static fromJson method.
   return new this(varName, undefined, undefined, undefined, options);
@@ -131,7 +130,7 @@ FieldVariable.prototype.initModel = function() {
   if (this.variable_) {
     return;  // Initialization already happened.
   }
-  const variable = Blockly.Variables.getOrCreateVariablePackage(
+  const variable = Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace, null,
       this.defaultVariableName, this.defaultType_);
 
@@ -161,7 +160,7 @@ FieldVariable.prototype.fromXml = function(fieldElement) {
   const variableType = fieldElement.getAttribute('variabletype') ||
       fieldElement.getAttribute('variableType') || '';
 
-  const variable = Blockly.Variables.getOrCreateVariablePackage(
+  const variable = Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace, id, variableName, variableType);
 
   // This should never happen :)
@@ -169,7 +168,7 @@ FieldVariable.prototype.fromXml = function(fieldElement) {
     throw Error('Serialized variable type with id \'' +
       variable.getId() + '\' had type ' + variable.type + ', and ' +
       'does not match variable field that references it: ' +
-      Blockly.Xml.domToText(fieldElement) + '.');
+      Xml.domToText(fieldElement) + '.');
   }
 
   this.setValue(variable.getId());
@@ -195,7 +194,7 @@ FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Attach this field to a block.
- * @param {!Blockly.Block} block The block containing this field.
+ * @param {!Block} block The block containing this field.
  */
 FieldVariable.prototype.setSourceBlock = function(block) {
   if (block.isShadow()) {
@@ -225,7 +224,7 @@ FieldVariable.prototype.getText = function() {
  * Get the variable model for the selected variable.
  * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
  * after the variable has been deleted).
- * @return {?Blockly.VariableModel} The selected variable, or null if none was
+ * @return {?VariableModel} The selected variable, or null if none was
  *     selected.
  * @package
  */
@@ -261,7 +260,7 @@ FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   const newId = /** @type {string} */ (opt_newValue);
-  const variable = Blockly.Variables.getVariable(
+  const variable = Variables.getVariable(
       this.sourceBlock_.workspace, newId);
   if (!variable) {
     console.warn('Variable id doesn\'t point to a real variable! ' +
@@ -286,7 +285,7 @@ FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
  * @protected
  */
 FieldVariable.prototype.doValueUpdate_ = function(newId) {
-  this.variable_ = Blockly.Variables.getVariable(
+  this.variable_ = Variables.getVariable(
       this.sourceBlock_.workspace, /** @type {string} */ (newId));
   FieldVariable.superClass_.doValueUpdate_.call(this, newId);
 };
@@ -410,7 +409,7 @@ FieldVariable.dropdownCreate = function() {
       variableModelList = variableModelList.concat(variables);
     }
   }
-  variableModelList.sort(Blockly.VariableModel.compareByName);
+  variableModelList.sort(VariableModel.compareByName);
 
   const options = [];
   for (let i = 0; i < variableModelList.length; i++) {
@@ -418,12 +417,12 @@ FieldVariable.dropdownCreate = function() {
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
   options.push([
-    Blockly.Msg['RENAME_VARIABLE'], Blockly.internalConstants.RENAME_VARIABLE_ID
+    Msg['RENAME_VARIABLE'], internalConstants.RENAME_VARIABLE_ID
   ]);
-  if (Blockly.Msg['DELETE_VARIABLE']) {
+  if (Msg['DELETE_VARIABLE']) {
     options.push([
-      Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
-      Blockly.internalConstants.DELETE_VARIABLE_ID
+      Msg['DELETE_VARIABLE'].replace('%1', name),
+      internalConstants.DELETE_VARIABLE_ID
     ]);
   }
 
@@ -434,20 +433,20 @@ FieldVariable.dropdownCreate = function() {
  * Handle the selection of an item in the variable dropdown menu.
  * Special case the 'Rename variable...' and 'Delete variable...' options.
  * In the rename case, prompt the user for a new name.
- * @param {!Blockly.Menu} menu The Menu component clicked.
- * @param {!Blockly.MenuItem} menuItem The MenuItem selected within menu.
+ * @param {!Menu} menu The Menu component clicked.
+ * @param {!MenuItem} menuItem The MenuItem selected within menu.
  * @protected
  */
 FieldVariable.prototype.onItemSelected_ = function(menu, menuItem) {
   const id = menuItem.getValue();
   // Handle special cases.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    if (id == Blockly.internalConstants.RENAME_VARIABLE_ID) {
+    if (id == internalConstants.RENAME_VARIABLE_ID) {
       // Rename variable.
-      Blockly.Variables.renameVariable(
+      Variables.renameVariable(
           this.sourceBlock_.workspace, this.variable_);
       return;
-    } else if (id == Blockly.internalConstants.DELETE_VARIABLE_ID) {
+    } else if (id == internalConstants.DELETE_VARIABLE_ID) {
       // Delete variable.
       this.sourceBlock_.workspace.deleteVariableById(this.variable_.getId());
       return;
@@ -467,6 +466,6 @@ FieldVariable.prototype.referencesVariables = function() {
   return true;
 };
 
-Blockly.fieldRegistry.register('field_variable', FieldVariable);
+fieldRegistry.register('field_variable', FieldVariable);
 
 exports = FieldVariable;

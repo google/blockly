@@ -58,12 +58,13 @@ exports.unregister = unregister;
  */
 const fromJson = function(options) {
   const fieldObject = /** @type {?IRegistrableField} */ (
-    registry.getObject(registry.Type.FIELD, options['type']));
+      registry.getObject(registry.Type.FIELD, options['type']));
   if (!fieldObject) {
-    console.warn('Blockly could not create a field of type ' + options['type'] +
-      '. The field is probably not being registered. This could be because' +
-      ' the file is not loaded, the field does not register itself (Issue' +
-      ' #1584), or the registration is not being reached.');
+    console.warn(
+        'Blockly could not create a field of type ' + options['type'] +
+        '. The field is probably not being registered. This could be because' +
+        ' the file is not loaded, the field does not register itself (Issue' +
+        ' #1584), or the registration is not being reached.');
     return null;
   }
   return fieldObject.fromJson(options);

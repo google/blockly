@@ -33,13 +33,14 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  *     also be defined.
  * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
  */
-const FieldImage = function(src, width, height,
-    opt_alt, opt_onClick, opt_flipRtl, opt_config) {
+const FieldImage = function(
+    src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {
   // Return early.
   if (!src) {
     throw Error('Src value of an image field is required');
@@ -48,12 +49,14 @@ const FieldImage = function(src, width, height,
   const imageHeight = Number(replaceMessageReferences(height));
   const imageWidth = Number(replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
-    throw Error('Height and width values of an image field must cast to' +
-      ' numbers.');
+    throw Error(
+        'Height and width values of an image field must cast to' +
+        ' numbers.');
   }
   if (imageHeight <= 0 || imageWidth <= 0) {
-    throw Error('Height and width values of an image field must be greater' +
-      ' than 0.');
+    throw Error(
+        'Height and width values of an image field must be greater' +
+        ' than 0.');
   }
 
   // Initialize configurable properties.
@@ -71,8 +74,7 @@ const FieldImage = function(src, width, height,
    */
   this.altText_ = '';
 
-  FieldImage.superClass_.constructor.call(
-      this, src, null, opt_config);
+  FieldImage.superClass_.constructor.call(this, src, null, opt_config);
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
@@ -86,8 +88,7 @@ const FieldImage = function(src, width, height,
    * @protected
    * @override
    */
-  this.size_ = new Size(imageWidth,
-      imageHeight + FieldImage.Y_PADDING);
+  this.size_ = new Size(imageWidth, imageHeight + FieldImage.Y_PADDING);
 
   /**
    * Store the image height, since it is different from the field height.
@@ -135,8 +136,9 @@ FieldImage.prototype.DEFAULT_VALUE = '';
 FieldImage.fromJson = function(options) {
   // `this` might be a subclass of FieldImage if that class doesn't override
   // the static fromJson method.
-  return new this(options['src'], options['width'], options['height'],
-      undefined, undefined, undefined, options);
+  return new this(
+      options['src'], options['width'], options['height'], undefined, undefined,
+      undefined, options);
 };
 
 /**
@@ -181,15 +183,14 @@ FieldImage.prototype.configure_ = function(config) {
  */
 FieldImage.prototype.initView = function() {
   this.imageElement_ = createSvgElement(
-      Svg.IMAGE,
-      {
+      Svg.IMAGE, {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
         'alt': this.altText_
       },
       this.fieldGroup_);
-  this.imageElement_.setAttributeNS(XLINK_NS,
-      'xlink:href', /** @type {string} */ (this.value_));
+  this.imageElement_.setAttributeNS(
+      XLINK_NS, 'xlink:href', /** @type {string} */ (this.value_));
 
   if (this.clickHandler_) {
     this.imageElement_.style.cursor = 'pointer';
@@ -225,8 +226,8 @@ FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
 FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
-    this.imageElement_.setAttributeNS(XLINK_NS,
-        'xlink:href', String(this.value_));
+    this.imageElement_.setAttributeNS(
+        XLINK_NS, 'xlink:href', String(this.value_));
   }
 };
 

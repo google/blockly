@@ -76,6 +76,9 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   }
 
   dom.startTextWidthCache();
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(false);
+  }
 
   if (state['variables']) {
     const variableStates = state['variables'];
@@ -91,6 +94,9 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
     }
   }
 
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(true);
+  }
   dom.stopTextWidthCache();
 
   Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));

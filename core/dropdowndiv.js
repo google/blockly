@@ -13,7 +13,8 @@
 
 'use strict';
 
-goog.provide('Blockly.DropDownDiv');
+goog.module('Blockly.DropDownDiv');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.common');
 goog.require('Blockly.utils.dom');
@@ -32,30 +33,27 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @package
  */
-Blockly.DropDownDiv = function() {
+const DropDownDiv = function() {
 };
 
 /**
  * Drop-downs will appear within the bounds of this element if possible.
- * Set in Blockly.DropDownDiv.setBoundsElement.
+ * Set in DropDownDiv.setBoundsElement.
  * @type {Element}
- * @private
  */
-Blockly.DropDownDiv.boundsElement_ = null;
+let boundsElementInternal = null;
 
 /**
  * The object currently using the drop-down.
  * @type {Object}
- * @private
  */
-Blockly.DropDownDiv.owner_ = null;
+let ownerInternal = null;
 
 /**
  * Whether the dropdown was positioned to a field or the source block.
  * @type {?boolean}
- * @private
  */
-Blockly.DropDownDiv.positionToField_ = null;
+let positionToField = null;
 
 /**
  * Arrow size in px. Should match the value in CSS
@@ -63,7 +61,7 @@ Blockly.DropDownDiv.positionToField_ = null;
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.ARROW_SIZE = 16;
+DropDownDiv.ARROW_SIZE = 16;
 
 /**
  * Drop-down border size in px. Should match the value in CSS (need to position
@@ -71,7 +69,7 @@ Blockly.DropDownDiv.ARROW_SIZE = 16;
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.BORDER_SIZE = 1;
+DropDownDiv.BORDER_SIZE = 1;
 
 /**
  * Amount the arrow must be kept away from the edges of the main drop-down div,
@@ -79,50 +77,64 @@ Blockly.DropDownDiv.BORDER_SIZE = 1;
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING = 12;
+DropDownDiv.ARROW_HORIZONTAL_PADDING = 12;
 
 /**
  * Amount drop-downs should be padded away from the source, in px.
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.PADDING_Y = 16;
+DropDownDiv.PADDING_Y = 16;
 
 /**
  * Length of animations in seconds.
  * @type {number}
  * @const
  */
-Blockly.DropDownDiv.ANIMATION_TIME = 0.25;
+DropDownDiv.ANIMATION_TIME = 0.25;
 
 /**
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  * @type {?number}
- * @private
  */
-Blockly.DropDownDiv.animateOutTimer_ = null;
+let animateOutTimer = null;
 
 /**
  * Callback for when the drop-down is hidden.
  * @type {?Function}
- * @private
  */
-Blockly.DropDownDiv.onHide_ = null;
+let onHide = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
  * @type {string}
- * @private
  */
-Blockly.DropDownDiv.rendererClassName_ = '';
+let rendererClassName = '';
 
 /**
  * A class name representing the current owner's workspace theme.
  * @type {string}
- * @private
  */
-Blockly.DropDownDiv.themeClassName_ = '';
+let themeClassName = '';
+
+/**
+ * The content element.
+ * @type {?Element}
+ */
+let divInternal = null;
+
+/**
+ * The content element.
+ * @type {!Element}
+ */
+let contentInternal;
+
+/**
+ * The arrow element.
+ * @type {!Element}
+ */
+let arrowInternal;
 
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
@@ -136,7 +148,7 @@ Blockly.DropDownDiv.themeClassName_ = '';
  *        height:number
  * }}
  */
-Blockly.DropDownDiv.BoundsInfo;
+DropDownDiv.BoundsInfo;
 
 /**
  * Dropdown position metrics.
@@ -151,53 +163,39 @@ Blockly.DropDownDiv.BoundsInfo;
  *        arrowVisible:boolean
  * }}
  */
-Blockly.DropDownDiv.PositionMetrics;
+DropDownDiv.PositionMetrics;
 
 /**
  * Create and insert the DOM element for this div.
  * @package
  */
-Blockly.DropDownDiv.createDom = function() {
-  if (Blockly.DropDownDiv.DIV_) {
+DropDownDiv.createDom = function() {
+  if (divInternal) {
     return;  // Already created.
   }
   const div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
   const container = Blockly.common.getParentContainer || document.body;
   container.appendChild(div);
-  /**
-   * The div element.
-   * @type {!Element}
-   * @private
-   */
-  Blockly.DropDownDiv.DIV_ = div;
+
+  divInternal = div;
 
   const content = document.createElement('div');
   content.className = 'blocklyDropDownContent';
   div.appendChild(content);
-  /**
-   * The content element.
-   * @type {!Element}
-   * @private
-   */
-  Blockly.DropDownDiv.content_ = content;
+  contentInternal = content;
 
   const arrow = document.createElement('div');
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
-  /**
-   * The arrow element.
-   * @type {!Element}
-   * @private
-   */
-  Blockly.DropDownDiv.arrow_ = arrow;
+  arrowInternal = arrow;
 
-  Blockly.DropDownDiv.DIV_.style.opacity = 0;
+  divInternal.style.opacity = 0;
 
   // Transition animation for transform: translate() and opacity.
-  Blockly.DropDownDiv.DIV_.style.transition = 'transform ' +
-    Blockly.DropDownDiv.ANIMATION_TIME + 's, ' +
-    'opacity ' + Blockly.DropDownDiv.ANIMATION_TIME + 's';
+  divInternal.style.transition = 'transform ' +
+    DropDownDiv.ANIMATION_TIME + 's, ' +
+    'opacity ' + DropDownDiv.ANIMATION_TIME + 's';
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
@@ -214,24 +212,24 @@ Blockly.DropDownDiv.createDom = function() {
  * within the box of this element if possible.
  * @param {Element} boundsElement Element to bind drop-down to.
  */
-Blockly.DropDownDiv.setBoundsElement = function(boundsElement) {
-  Blockly.DropDownDiv.boundsElement_ = boundsElement;
+DropDownDiv.setBoundsElement = function(boundsElement) {
+  boundsElementInternal = boundsElement;
 };
 
 /**
  * Provide the div for inserting content into the drop-down.
  * @return {!Element} Div to populate with content.
  */
-Blockly.DropDownDiv.getContentDiv = function() {
-  return Blockly.DropDownDiv.content_;
+DropDownDiv.getContentDiv = function() {
+  return contentInternal;
 };
 
 /**
  * Clear the content of the drop-down.
  */
-Blockly.DropDownDiv.clearContent = function() {
-  Blockly.DropDownDiv.content_.textContent = '';
-  Blockly.DropDownDiv.content_.style.width = '';
+DropDownDiv.clearContent = function() {
+  contentInternal.textContent = '';
+  contentInternal.style.width = '';
 };
 
 /**
@@ -239,9 +237,9 @@ Blockly.DropDownDiv.clearContent = function() {
  * @param {string} backgroundColour Any CSS colour for the background.
  * @param {string} borderColour Any CSS colour for the border.
  */
-Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
-  Blockly.DropDownDiv.DIV_.style.backgroundColor = backgroundColour;
-  Blockly.DropDownDiv.DIV_.style.borderColor = borderColour;
+DropDownDiv.setColour = function(backgroundColour, borderColour) {
+  divInternal.style.backgroundColor = backgroundColour;
+  divInternal.style.borderColor = borderColour;
 };
 
 /**
@@ -257,10 +255,10 @@ Blockly.DropDownDiv.setColour = function(backgroundColour, borderColour) {
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
-Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
+DropDownDiv.showPositionedByBlock = function(field, block,
     opt_onHide, opt_secondaryYOffset) {
-  return Blockly.DropDownDiv.showPositionedByRect_(
-      Blockly.DropDownDiv.getScaledBboxOfBlock_(block),
+  return showPositionedByRect(
+      getScaledBboxOfBlock(block),
       field, opt_onHide, opt_secondaryYOffset);
 };
 
@@ -276,11 +274,11 @@ Blockly.DropDownDiv.showPositionedByBlock = function(field, block,
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
-Blockly.DropDownDiv.showPositionedByField = function(field,
+DropDownDiv.showPositionedByField = function(field,
     opt_onHide, opt_secondaryYOffset) {
-  Blockly.DropDownDiv.positionToField_ = true;
-  return Blockly.DropDownDiv.showPositionedByRect_(
-      Blockly.DropDownDiv.getScaledBboxOfField_(field),
+  positionToField = true;
+  return showPositionedByRect(
+      getScaledBboxOfField(field),
       field, opt_onHide, opt_secondaryYOffset);
 };
 
@@ -288,9 +286,8 @@ Blockly.DropDownDiv.showPositionedByField = function(field,
  * Get the scaled bounding box of a block.
  * @param {!Blockly.BlockSvg} block The block.
  * @return {!Blockly.utils.Rect} The scaled bounding box of the block.
- * @private
  */
-Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
+const getScaledBboxOfBlock = function(block) {
   const blockSvg = block.getSvgRoot();
   const bBox = blockSvg.getBBox();
   const scale = block.workspace.scale;
@@ -305,9 +302,8 @@ Blockly.DropDownDiv.getScaledBboxOfBlock_ = function(block) {
  * Get the scaled bounding box of a field.
  * @param {!Blockly.Field} field The field.
  * @return {!Blockly.utils.Rect} The scaled bounding box of the field.
- * @private
  */
-Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
+const getScaledBboxOfField = function(field) {
   const bBox = field.getScaledBBox();
   return new Blockly.utils.Rect(
       bBox.top, bBox.bottom, bBox.left, bBox.right);
@@ -325,9 +321,8 @@ Blockly.DropDownDiv.getScaledBboxOfField_ = function(field) {
  * @param {number=} opt_secondaryYOffset Optional Y offset for above-block
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
- * @private
  */
-Blockly.DropDownDiv.showPositionedByRect_ = function(bBox, field,
+const showPositionedByRect = function(bBox, field,
     opt_onHide, opt_secondaryYOffset) {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
@@ -345,9 +340,9 @@ Blockly.DropDownDiv.showPositionedByRect_ = function(bBox, field,
     workspace = /** @type {!Blockly.WorkspaceSvg} */ (
       workspace.options.parentWorkspace);
   }
-  Blockly.DropDownDiv.setBoundsElement(
+  DropDownDiv.setBoundsElement(
       /** @type {Element} */ (workspace.getParentSvg().parentNode));
-  return Blockly.DropDownDiv.show(
+  return DropDownDiv.show(
       field, sourceBlock.RTL,
       primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
 };
@@ -373,21 +368,21 @@ Blockly.DropDownDiv.showPositionedByRect_ = function(bBox, field,
  * @return {boolean} True if the menu rendered at the primary origin point.
  * @package
  */
-Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
+DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
     secondaryX, secondaryY, opt_onHide) {
-  Blockly.DropDownDiv.owner_ = owner;
-  Blockly.DropDownDiv.onHide_ = opt_onHide || null;
+  ownerInternal = owner;
+  onHide = opt_onHide || null;
   // Set direction.
-  const div = Blockly.DropDownDiv.DIV_;
+  const div = divInternal;
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   const mainWorkspace =
-  /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
-  Blockly.DropDownDiv.rendererClassName_ =
+      /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
+  rendererClassName =
       mainWorkspace.getRenderer().getClassName();
-  Blockly.DropDownDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
-  Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.rendererClassName_);
-  Blockly.utils.dom.addClass(div, Blockly.DropDownDiv.themeClassName_);
+  themeClassName = mainWorkspace.getTheme().getClassName();
+  Blockly.utils.dom.addClass(div, rendererClassName);
+  Blockly.utils.dom.addClass(div, themeClassName);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -398,21 +393,20 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   // Using both `left`, `top` for the initial translation and then `translate`
   // for the animated transition to final X, Y is a workaround.
 
-  return Blockly.DropDownDiv.positionInternal_(
+  return positionInternal(
       primaryX, primaryY, secondaryX, secondaryY);
 };
 
 /**
  * Get sizing info about the bounding element.
- * @return {!Blockly.DropDownDiv.BoundsInfo} An object containing size
+ * @return {!DropDownDiv.BoundsInfo} An object containing size
  *     information about the bounding element (bounding box and width/height).
- * @private
  */
-Blockly.DropDownDiv.getBoundsInfo_ = function() {
+DropDownDiv.getBoundsInfo_ = function() {
   const boundPosition = Blockly.utils.style.getPageOffset(
-      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
+      /** @type {!Element} */ (boundsElementInternal));
   const boundSize = Blockly.utils.style.getSize(
-      /** @type {!Element} */ (Blockly.DropDownDiv.boundsElement_));
+      /** @type {!Element} */ (boundsElementInternal));
 
   return {
     left: boundPosition.x,
@@ -426,46 +420,45 @@ Blockly.DropDownDiv.getBoundsInfo_ = function() {
 
 /**
  * Helper to position the drop-down and the arrow, maintaining bounds.
- * See explanation of origin points in Blockly.DropDownDiv.show.
+ * See explanation of origin points in DropDownDiv.show.
  * @param {number} primaryX Desired origin point x, in absolute px.
  * @param {number} primaryY Desired origin point y, in absolute px.
  * @param {number} secondaryX Secondary/alternative origin point x,
  *     in absolute px.
  * @param {number} secondaryY Secondary/alternative origin point y,
  *     in absolute px.
- * @return {!Blockly.DropDownDiv.PositionMetrics} Various final metrics,
+ * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
- * @private
  */
-Blockly.DropDownDiv.getPositionMetrics_ = function(primaryX, primaryY,
+DropDownDiv.getPositionMetrics_ = function(primaryX, primaryY,
     secondaryX, secondaryY) {
-  const boundsInfo = Blockly.DropDownDiv.getBoundsInfo_();
+  const boundsInfo = DropDownDiv.getBoundsInfo_();
   const divSize = Blockly.utils.style.getSize(
-      /** @type {!Element} */ (Blockly.DropDownDiv.DIV_));
+      /** @type {!Element} */ (divInternal));
 
   // Can we fit in-bounds below the target?
   if (primaryY + divSize.height < boundsInfo.bottom) {
-    return Blockly.DropDownDiv.getPositionBelowMetrics_(
+    return getPositionBelowMetrics(
         primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit in-bounds above the target?
   if (secondaryY - divSize.height > boundsInfo.top) {
-    return Blockly.DropDownDiv.getPositionAboveMetrics_(
+    return getPositionAboveMetrics(
         secondaryX, secondaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) below?
   if (primaryY + divSize.height < document.documentElement.clientHeight) {
-    return Blockly.DropDownDiv.getPositionBelowMetrics_(
+    return getPositionBelowMetrics(
         primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) above?
   if (secondaryY - divSize.height > document.documentElement.clientTop) {
-    return Blockly.DropDownDiv.getPositionAboveMetrics_(
+    return getPositionAboveMetrics(
         secondaryX, secondaryY, boundsInfo, divSize);
   }
 
   // Last resort, render at top of page.
-  return Blockly.DropDownDiv.getPositionTopOfPageMetrics_(
+  return getPositionTopOfPageMetrics(
       primaryX, boundsInfo, divSize);
 };
 
@@ -473,23 +466,22 @@ Blockly.DropDownDiv.getPositionMetrics_ = function(primaryX, primaryY,
  * Get the metrics for positioning the div below the source.
  * @param {number} primaryX Desired origin point x, in absolute px.
  * @param {number} primaryY Desired origin point y, in absolute px.
- * @param {!Blockly.DropDownDiv.BoundsInfo} boundsInfo An object containing size
+ * @param {!DropDownDiv.BoundsInfo} boundsInfo An object containing size
  *     information about the bounding element (bounding box and width/height).
  * @param {!Blockly.utils.Size} divSize An object containing information about
  *     the size of the DropDownDiv (width & height).
- * @return {!Blockly.DropDownDiv.PositionMetrics} Various final metrics,
+ * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
- * @private
  */
-Blockly.DropDownDiv.getPositionBelowMetrics_ = function(
+const getPositionBelowMetrics = function(
     primaryX, primaryY, boundsInfo, divSize) {
 
-  const xCoords = Blockly.DropDownDiv.getPositionX(
+  const xCoords = DropDownDiv.getPositionX(
       primaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
-  const arrowY = -(Blockly.DropDownDiv.ARROW_SIZE / 2 +
-      Blockly.DropDownDiv.BORDER_SIZE);
-  const finalY = primaryY + Blockly.DropDownDiv.PADDING_Y;
+  const arrowY = -(DropDownDiv.ARROW_SIZE / 2 +
+      DropDownDiv.BORDER_SIZE);
+  const finalY = primaryY + DropDownDiv.PADDING_Y;
 
   return {
     initialX: xCoords.divX,
@@ -509,23 +501,22 @@ Blockly.DropDownDiv.getPositionBelowMetrics_ = function(
  *     in absolute px.
  * @param {number} secondaryY Secondary/alternative origin point y,
  *     in absolute px.
- * @param {!Blockly.DropDownDiv.BoundsInfo} boundsInfo An object containing size
+ * @param {!DropDownDiv.BoundsInfo} boundsInfo An object containing size
  *     information about the bounding element (bounding box and width/height).
  * @param {!Blockly.utils.Size} divSize An object containing information about
  *     the size of the DropDownDiv (width & height).
- * @return {!Blockly.DropDownDiv.PositionMetrics} Various final metrics,
+ * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
- * @private
  */
-Blockly.DropDownDiv.getPositionAboveMetrics_ = function(
+const getPositionAboveMetrics = function(
     secondaryX, secondaryY, boundsInfo, divSize) {
 
-  const xCoords = Blockly.DropDownDiv.getPositionX(
+  const xCoords = DropDownDiv.getPositionX(
       secondaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
-  const arrowY = divSize.height - (Blockly.DropDownDiv.BORDER_SIZE * 2) -
-      (Blockly.DropDownDiv.ARROW_SIZE / 2);
-  const finalY = secondaryY - divSize.height - Blockly.DropDownDiv.PADDING_Y;
+  const arrowY = divSize.height - (DropDownDiv.BORDER_SIZE * 2) -
+      (DropDownDiv.ARROW_SIZE / 2);
+  const finalY = secondaryY - divSize.height - DropDownDiv.PADDING_Y;
   const initialY = secondaryY - divSize.height;  // No padding on Y.
 
   return {
@@ -543,18 +534,17 @@ Blockly.DropDownDiv.getPositionAboveMetrics_ = function(
 /**
  * Get the metrics for positioning the div at the top of the page.
  * @param {number} sourceX Desired origin point x, in absolute px.
- * @param {!Blockly.DropDownDiv.BoundsInfo} boundsInfo An object containing size
+ * @param {!DropDownDiv.BoundsInfo} boundsInfo An object containing size
  *     information about the bounding element (bounding box and width/height).
  * @param {!Blockly.utils.Size} divSize An object containing information about
  *     the size of the DropDownDiv (width & height).
- * @return {!Blockly.DropDownDiv.PositionMetrics} Various final metrics,
+ * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
- * @private
  */
-Blockly.DropDownDiv.getPositionTopOfPageMetrics_ = function(
+const getPositionTopOfPageMetrics = function(
     sourceX, boundsInfo, divSize) {
 
-  const xCoords = Blockly.DropDownDiv.getPositionX(
+  const xCoords = DropDownDiv.getPositionX(
       sourceX, boundsInfo.left, boundsInfo.right, divSize.width);
 
   // No need to provide arrow-specific information because it won't be visible.
@@ -583,7 +573,7 @@ Blockly.DropDownDiv.getPositionTopOfPageMetrics_ = function(
  *    the x positions of the left side of the DropDownDiv and the arrow.
  * @package
  */
-Blockly.DropDownDiv.getPositionX = function(
+DropDownDiv.getPositionX = function(
     sourceX, boundsLeft, boundsRight, divWidth) {
   let arrowX, divX;
   arrowX = divX = sourceX;
@@ -594,15 +584,15 @@ Blockly.DropDownDiv.getPositionX = function(
   divX = Blockly.utils.math.clamp(boundsLeft, divX, boundsRight - divWidth);
 
   // Offset the arrow coord so that the arrow is centered.
-  arrowX -= Blockly.DropDownDiv.ARROW_SIZE / 2;
+  arrowX -= DropDownDiv.ARROW_SIZE / 2;
   // Convert the arrow position to be relative to the top left of the div.
   let relativeArrowX = arrowX - divX;
-  const horizPadding = Blockly.DropDownDiv.ARROW_HORIZONTAL_PADDING;
+  const horizPadding = DropDownDiv.ARROW_HORIZONTAL_PADDING;
   // Clamp the arrow position so that it stays attached to the dropdowndiv.
   relativeArrowX = Blockly.utils.math.clamp(
       horizPadding,
       relativeArrowX,
-      divWidth - horizPadding - Blockly.DropDownDiv.ARROW_SIZE);
+      divWidth - horizPadding - DropDownDiv.ARROW_SIZE);
 
   return {
     arrowX: relativeArrowX,
@@ -614,8 +604,8 @@ Blockly.DropDownDiv.getPositionX = function(
  * Is the container visible?
  * @return {boolean} True if visible.
  */
-Blockly.DropDownDiv.isVisible = function() {
-  return !!Blockly.DropDownDiv.owner_;
+DropDownDiv.isVisible = function() {
+  return !!ownerInternal;
 };
 
 /**
@@ -625,12 +615,12 @@ Blockly.DropDownDiv.isVisible = function() {
  *     without animating.
  * @return {boolean} True if hidden.
  */
-Blockly.DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
-  if (Blockly.DropDownDiv.owner_ === owner) {
+DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
+  if (ownerInternal === owner) {
     if (opt_withoutAnimation) {
-      Blockly.DropDownDiv.hideWithoutAnimation();
+      DropDownDiv.hideWithoutAnimation();
     } else {
-      Blockly.DropDownDiv.hide();
+      DropDownDiv.hide();
     }
     return true;
   }
@@ -640,37 +630,37 @@ Blockly.DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
 /**
  * Hide the menu, triggering animation.
  */
-Blockly.DropDownDiv.hide = function() {
+DropDownDiv.hide = function() {
   // Start the animation by setting the translation and fading out.
-  const div = Blockly.DropDownDiv.DIV_;
+  const div = divInternal;
   // Reset to (initialX, initialY) - i.e., no translation.
   div.style.transform = 'translate(0, 0)';
   div.style.opacity = 0;
   // Finish animation - reset all values to default.
-  Blockly.DropDownDiv.animateOutTimer_ =
+  animateOutTimer =
       setTimeout(function() {
-        Blockly.DropDownDiv.hideWithoutAnimation();
-      }, Blockly.DropDownDiv.ANIMATION_TIME * 1000);
-  if (Blockly.DropDownDiv.onHide_) {
-    Blockly.DropDownDiv.onHide_();
-    Blockly.DropDownDiv.onHide_ = null;
+        DropDownDiv.hideWithoutAnimation();
+      }, DropDownDiv.ANIMATION_TIME * 1000);
+  if (onHide) {
+    onHide();
+    onHide = null;
   }
 };
 
 /**
  * Hide the menu, without animation.
  */
-Blockly.DropDownDiv.hideWithoutAnimation = function() {
-  if (!Blockly.DropDownDiv.isVisible()) {
+DropDownDiv.hideWithoutAnimation = function() {
+  if (!DropDownDiv.isVisible()) {
     return;
   }
-  if (Blockly.DropDownDiv.animateOutTimer_) {
-    clearTimeout(Blockly.DropDownDiv.animateOutTimer_);
+  if (animateOutTimer) {
+    clearTimeout(animateOutTimer);
   }
 
   // Reset style properties in case this gets called directly
   // instead of hide() - see discussion on #2551.
-  const div = Blockly.DropDownDiv.DIV_;
+  const div = divInternal;
   div.style.transform = '';
   div.style.left = '';
   div.style.top = '';
@@ -679,20 +669,20 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
   div.style.backgroundColor = '';
   div.style.borderColor = '';
 
-  if (Blockly.DropDownDiv.onHide_) {
-    Blockly.DropDownDiv.onHide_();
-    Blockly.DropDownDiv.onHide_ = null;
+  if (onHide) {
+    onHide();
+    onHide = null;
   }
-  Blockly.DropDownDiv.clearContent();
-  Blockly.DropDownDiv.owner_ = null;
+  DropDownDiv.clearContent();
+  ownerInternal = null;
 
-  if (Blockly.DropDownDiv.rendererClassName_) {
-    Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.rendererClassName_);
-    Blockly.DropDownDiv.rendererClassName_ = '';
+  if (rendererClassName) {
+    Blockly.utils.dom.removeClass(div, rendererClassName);
+    rendererClassName = '';
   }
-  if (Blockly.DropDownDiv.themeClassName_) {
-    Blockly.utils.dom.removeClass(div, Blockly.DropDownDiv.themeClassName_);
-    Blockly.DropDownDiv.themeClassName_ = '';
+  if (themeClassName) {
+    Blockly.utils.dom.removeClass(div, themeClassName);
+    themeClassName = '';
   }
   (/** @type {!Blockly.WorkspaceSvg} */ (
     Blockly.common.getMainWorkspace())).markFocused();
@@ -707,23 +697,22 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
  * @param {number} secondaryY Secondary/alternative origin point y,
  *    in absolute px.
  * @return {boolean} True if the menu rendered at the primary origin point.
- * @private
  */
-Blockly.DropDownDiv.positionInternal_ = function(
+const positionInternal = function(
     primaryX, primaryY, secondaryX, secondaryY) {
-  const metrics = Blockly.DropDownDiv.getPositionMetrics_(primaryX, primaryY,
+  const metrics = getPositionMetrics(primaryX, primaryY,
       secondaryX, secondaryY);
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
-    Blockly.DropDownDiv.arrow_.style.display = '';
-    Blockly.DropDownDiv.arrow_.style.transform = 'translate(' +
+    arrowInternal.style.display = '';
+    arrowInternal.style.transform = 'translate(' +
         metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
-    Blockly.DropDownDiv.arrow_.setAttribute('class', metrics.arrowAtTop ?
+    arrowInternal.setAttribute('class', metrics.arrowAtTop ?
         'blocklyDropDownArrow blocklyArrowTop' :
         'blocklyDropDownArrow blocklyArrowBottom');
   } else {
-    Blockly.DropDownDiv.arrow_.style.display = 'none';
+    arrowInternal.style.display = 'none';
   }
 
   const initialX = Math.floor(metrics.initialX);
@@ -731,7 +720,7 @@ Blockly.DropDownDiv.positionInternal_ = function(
   const finalX = Math.floor(metrics.finalX);
   const finalY = Math.floor(metrics.finalY);
 
-  const div = Blockly.DropDownDiv.DIV_;
+  const div = divInternal;
   // First apply initial translation.
   div.style.left = initialX + 'px';
   div.style.top = initialY + 'px';
@@ -754,27 +743,29 @@ Blockly.DropDownDiv.positionInternal_ = function(
  * calculate the new position, it will just hide it instead.
  * @package
  */
-Blockly.DropDownDiv.repositionForWindowResize = function() {
+DropDownDiv.repositionForWindowResize = function() {
   // This condition mainly catches the dropdown div when it is being used as a
   // dropdown.  It is important not to close it in this case because on Android,
   // when a field is focused, the soft keyboard opens triggering a window resize
   // event and we want the dropdown div to stick around so users can type into
   // it.
-  if (Blockly.DropDownDiv.owner_) {
-    const field = /** @type {!Blockly.Field} */ (Blockly.DropDownDiv.owner_);
+  if (ownerInternal) {
+    const field = /** @type {!Blockly.Field} */ (ownerInternal);
     const block = /** @type {!Blockly.BlockSvg} */ (field.getSourceBlock());
-    const bBox = Blockly.DropDownDiv.positionToField_ ?
-        Blockly.DropDownDiv.getScaledBboxOfField_(field) :
-        Blockly.DropDownDiv.getScaledBboxOfBlock_(block);
+    const bBox = positionToField ?
+        getScaledBboxOfField(field) :
+        getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     const primaryY = bBox.bottom;
     // If we can't fit it, render above the entire parent block.
     const secondaryX = primaryX;
     const secondaryY = bBox.top;
-    Blockly.DropDownDiv.positionInternal_(
+    positionInternal(
         primaryX, primaryY, secondaryX, secondaryY);
   } else {
-    Blockly.DropDownDiv.hide();
+    DropDownDiv.hide();
   }
 };
+
+exports = DropDownDiv;

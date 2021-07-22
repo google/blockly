@@ -12,7 +12,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.fieldRegistry');
+goog.module('Blockly.fieldRegistry');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.registry');
 
@@ -31,17 +32,19 @@ goog.requireType('Blockly.IRegistrableField');
  *     registered, or the fieldClass is not an object containing a fromJson
  *     function.
  */
-Blockly.fieldRegistry.register = function(type, fieldClass) {
+const register = function(type, fieldClass) {
   Blockly.registry.register(Blockly.registry.Type.FIELD, type, fieldClass);
 };
+exports.register = register;
 
 /**
  * Unregisters the field registered with the given type.
  * @param {string} type The field type name as used in the JSON definition.
  */
-Blockly.fieldRegistry.unregister = function(type) {
+const unregister = function(type) {
   Blockly.registry.unregister(Blockly.registry.Type.FIELD, type);
 };
+exports.unregister = unregister;
 
 /**
  * Construct a Field from a JSON arg object.
@@ -51,9 +54,8 @@ Blockly.fieldRegistry.unregister = function(type) {
  *     to the field type.
  * @return {?Blockly.Field} The new field instance or null if a field wasn't
  *     found with the given type name
- * @package
  */
-Blockly.fieldRegistry.fromJson = function(options) {
+const fromJson = function(options) {
   const fieldObject = /** @type {?Blockly.IRegistrableField} */ (
     Blockly.registry.getObject(Blockly.registry.Type.FIELD, options['type']));
   if (!fieldObject) {
@@ -65,3 +67,5 @@ Blockly.fieldRegistry.fromJson = function(options) {
   }
   return fieldObject.fromJson(options);
 };
+/** @package */
+exports.fromJson = fromJson;

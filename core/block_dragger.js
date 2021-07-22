@@ -13,59 +13,58 @@
 goog.module('Blockly.BlockDragger');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockAnimations');
+const {disconnectUiEffect, disconnectUiStop} = goog.require('Blockly.blockAnimations');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
+const {BLOCK_DRAG, BLOCK_MOVE, fire, get, getGroup, setGroup} = goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.IBlockDragger');
-goog.require('Blockly.InsertionMarkerManager');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.IDragTarget');
-goog.requireType('Blockly.WorkspaceSvg');
+const IBlockDragger = goog.require('Blockly.IBlockDragger');
+const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+const {DEFAULT, Type, register} = goog.require('Blockly.registry');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {startTextWidthCache, stopTextWidthCache} = goog.require('Blockly.utils.dom');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
  * are being dragged by a mouse or touch.
- * @param {!Blockly.BlockSvg} block The block to drag.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag on.
+ * @param {!BlockSvg} block The block to drag.
+ * @param {!WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
- * @implements {Blockly.IBlockDragger}
+ * @implements {IBlockDragger}
  */
 const BlockDragger = function(block, workspace) {
   /**
    * The top block in the stack that is being dragged.
-   * @type {!Blockly.BlockSvg}
+   * @type {!BlockSvg}
    * @protected
    */
   this.draggingBlock_ = block;
 
   /**
    * The workspace on which the block is being dragged.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @protected
    */
   this.workspace_ = workspace;
 
   /**
    * Object that keeps track of connections on dragged blocks.
-   * @type {!Blockly.InsertionMarkerManager}
+   * @type {!InsertionMarkerManager}
    * @protected
    */
   this.draggedConnectionManager_ =
-      new Blockly.InsertionMarkerManager(this.draggingBlock_);
+      new InsertionMarkerManager(this.draggingBlock_);
 
   /**
    * Which drag area the mouse pointer is over, if any.
-   * @type {?Blockly.IDragTarget}
+   * @type {?IDragTarget}
    * @private
    */
   this.dragTarget_ = null;
@@ -80,7 +79,7 @@ const BlockDragger = function(block, workspace) {
   /**
    * The location of the top left corner of the dragging block at the beginning
    * of the drag in workspace coordinates.
-   * @type {!Blockly.utils.Coordinate}
+   * @type {!Coordinate}
    * @protected
    */
   this.startXY_ = this.draggingBlock_.getRelativeToSurfaceXY();
@@ -111,7 +110,7 @@ BlockDragger.prototype.dispose = function() {
  * Make a list of all of the icons (comment, warning, and mutator) that are
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
- * @param {!Blockly.BlockSvg} block The root block that is being dragged.
+ * @param {!BlockSvg} block The root block that is being dragged.
  * @return {!Array<!Object>} The list of all icons and their locations.
  */
 const initIconData = function(block) {
@@ -123,7 +122,7 @@ const initIconData = function(block) {
     const icons = descendant.getIcons();
     for (let j = 0; j < icons.length; j++) {
       const data = {
-        // Blockly.utils.Coordinate with x and y properties (workspace
+        // Coordinate with x and y properties (workspace
         // coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
@@ -137,7 +136,7 @@ const initIconData = function(block) {
 
 /**
  * Start dragging a block.  This includes moving it to the drag surface.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
@@ -145,8 +144,8 @@ const initIconData = function(block) {
  */
 BlockDragger.prototype.startDrag = function(
     currentDragDeltaXY, healStack) {
-  if (!Blockly.Events.getGroup()) {
-    Blockly.Events.setGroup(true);
+  if (!getGroup()) {
+    setGroup(true);
   }
   this.fireDragStartEvent_();
 
@@ -160,9 +159,9 @@ BlockDragger.prototype.startDrag = function(
 
   // During a drag there may be a lot of rerenders, but not field changes.
   // Turn the cache on so we don't do spurious remeasures during the drag.
-  Blockly.utils.dom.startTextWidthCache();
+  startTextWidthCache();
   this.workspace_.setResizesEnabled(false);
-  Blockly.blockAnimations.disconnectUiStop();
+  disconnectUiStop();
 
   if (this.shouldDisconnect_(healStack)) {
     this.disconnectBlock_(healStack, currentDragDeltaXY);
@@ -192,7 +191,7 @@ BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
  * Disconnects the block and moves it to a new location.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @protected
  */
@@ -200,10 +199,10 @@ BlockDragger.prototype.disconnectBlock_ = function(
     healStack, currentDragDeltaXY) {
   this.draggingBlock_.unplug(healStack);
   const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  const newLoc = Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.translate(newLoc.x, newLoc.y);
-  Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
+  disconnectUiEffect(this.draggingBlock_);
   this.draggedConnectionManager_.updateAvailableConnections();
 };
 
@@ -212,22 +211,22 @@ BlockDragger.prototype.disconnectBlock_ = function(
  * @protected
  */
 BlockDragger.prototype.fireDragStartEvent_ = function() {
-  const event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+  const event = new (get(BLOCK_DRAG))(
       this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
-  Blockly.Events.fire(event);
+  fire(event);
 };
 
 /**
  * Execute a step of block dragging, based on the given event.  Update the
  * display accordingly.
  * @param {!Event} e The most recent move event.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @public
  */
 BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  const newLoc = Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
 
@@ -254,7 +253,7 @@ BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
 /**
  * Finish a block drag and put the block back on the workspace.
  * @param {!Event} e The mouseup/touchend event.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
  * @public
  */
@@ -264,9 +263,9 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
 
-  Blockly.utils.dom.stopTextWidthCache();
+  stopTextWidthCache();
 
-  Blockly.blockAnimations.disconnectUiStop();
+  disconnectUiStop();
 
   const preventMove = !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
@@ -300,15 +299,15 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
 
-  Blockly.Events.setGroup(false);
+  setGroup(false);
 };
 
 /**
  * Calculates the drag delta and new location values after a block is dragged.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the start of the drag, in pixel units.
- * @return {{delta: !Blockly.utils.Coordinate, newLocation:
- *     !Blockly.utils.Coordinate}} New location after drag. delta is in
+ * @return {{delta: !Coordinate, newLocation:
+ *     !Coordinate}} New location after drag. delta is in
  *     workspace units. newLocation is the new coordinate where the block should
  *     end up.
  * @protected
@@ -318,7 +317,7 @@ BlockDragger.prototype.getNewLocationAfterDrag_ = function(
   const newValues = {};
   newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   newValues.newLocation =
-      Blockly.utils.Coordinate.sum(this.startXY_, newValues.delta);
+      Coordinate.sum(this.startXY_, newValues.delta);
   return newValues;
 };
 
@@ -342,7 +341,7 @@ BlockDragger.prototype.maybeDeleteBlock_ = function() {
 
 /**
  * Updates the necessary information to place a block at a certain location.
- * @param {!Blockly.utils.Coordinate} delta The change in location from where
+ * @param {!Coordinate} delta The change in location from where
  *     the block started the drag to where it ended the drag.
  * @protected
  */
@@ -363,9 +362,9 @@ BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
  * @protected
  */
 BlockDragger.prototype.fireDragEndEvent_ = function() {
-  const event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+  const event = new (get(BLOCK_DRAG))(
       this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
-  Blockly.Events.fire(event);
+  fire(event);
 };
 
 /**
@@ -397,10 +396,10 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
   const event =
-      new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this.draggingBlock_);
+      new (get(BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
-  Blockly.Events.fire(event);
+  fire(event);
 };
 
 /**
@@ -417,14 +416,14 @@ BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * correction for mutator workspaces.
  * This function does not consider differing origins.  It simply scales the
  * input's x and y values.
- * @param {!Blockly.utils.Coordinate} pixelCoord A coordinate with x and y
+ * @param {!Coordinate} pixelCoord A coordinate with x and y
  *     values in CSS pixel units.
- * @return {!Blockly.utils.Coordinate} The input coordinate divided by the
+ * @return {!Coordinate} The input coordinate divided by the
  *     workspace scale.
  * @protected
  */
 BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  const result = new Blockly.utils.Coordinate(
+  const result = new Coordinate(
       pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
@@ -440,7 +439,7 @@ BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
 
 /**
  * Move all of the icons connected to this drag.
- * @param {!Blockly.utils.Coordinate} dxy How far to move the icons from their
+ * @param {!Coordinate} dxy How far to move the icons from their
  *     original positions, in workspace units.
  * @protected
  */
@@ -448,14 +447,14 @@ BlockDragger.prototype.dragIcons_ = function(dxy) {
   // Moving icons moves their associated bubbles.
   for (let i = 0; i < this.dragIconData_.length; i++) {
     const data = this.dragIconData_[i];
-    data.icon.setIconLocation(Blockly.utils.Coordinate.sum(data.location, dxy));
+    data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
   }
 };
 
 /**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
- * @return {!Array<!Blockly.BlockSvg>} A possibly empty list of insertion
+ * @return {!Array<!BlockSvg>} A possibly empty list of insertion
  *     marker blocks.
  * @public
  */
@@ -468,8 +467,8 @@ BlockDragger.prototype.getInsertionMarkers = function() {
   return [];
 };
 
-Blockly.registry.register(
-    Blockly.registry.Type.BLOCK_DRAGGER, Blockly.registry.DEFAULT,
+register(
+    Type.BLOCK_DRAGGER, DEFAULT,
     BlockDragger);
 
 exports = BlockDragger;

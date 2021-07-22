@@ -15,8 +15,8 @@ goog.module('Blockly.FieldLabel');
 goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const dom = goog.require('Blockly.utils.dom');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const {inherits} = goog.require('Blockly.utils.object');
 const {replaceMessageReferences} = goog.require('Blockly.utils');
 

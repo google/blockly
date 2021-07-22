@@ -118,8 +118,8 @@ Menu.prototype.addChild = function(menuItem) {
  * @param {!Element} container Element upon which to append this menu.
  */
 Menu.prototype.render = function(container) {
-  const element = /** @type {!HTMLDivElement} */ (document.createElement(
-      'div'));
+  const element =
+      /** @type {!HTMLDivElement} */ (document.createElement('div'));
   // goog-menu is deprecated, use blocklyMenu.  May 2020.
   element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
@@ -134,16 +134,16 @@ Menu.prototype.render = function(container) {
   }
 
   // Add event handlers.
-  this.mouseOverHandler_ = conditionalBind(
-      element, 'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ = conditionalBind(
-      element, 'click', this, this.handleClick_, true);
+  this.mouseOverHandler_ =
+      conditionalBind(element, 'mouseover', this, this.handleMouseOver_, true);
+  this.clickHandler_ =
+      conditionalBind(element, 'click', this, this.handleClick_, true);
   this.mouseEnterHandler_ = conditionalBind(
       element, 'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = conditionalBind(
       element, 'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownHandler_ = conditionalBind(
-      element, 'keydown', this, this.handleKeyEvent_);
+  this.onKeyDownHandler_ =
+      conditionalBind(element, 'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
 };
@@ -164,7 +164,7 @@ Menu.prototype.getElement = function() {
 Menu.prototype.focus = function() {
   const el = this.getElement();
   if (el) {
-    el.focus({preventScroll:true});
+    el.focus({preventScroll: true});
     addClass(el, 'blocklyFocused');
   }
 };
@@ -274,8 +274,7 @@ Menu.prototype.setHighlighted = function(item) {
     scrollIntoContainerView(
         /** @type {!Element} */ (item.getElement()), el);
 
-    setState(el, State.ACTIVEDESCENDANT,
-        item.getId());
+    setState(el, State.ACTIVEDESCENDANT, item.getId());
   }
 };
 
@@ -464,7 +463,7 @@ Menu.prototype.handleKeyEvent_ = function(e) {
 Menu.prototype.getSize = function() {
   const menuDom = this.getElement();
   const menuSize = getSize(/** @type {!Element} */
-      (menuDom));
+                           (menuDom));
   // Recalculate height for the total content, not only box height.
   menuSize.height = menuDom.scrollHeight;
   return menuSize;

@@ -14,6 +14,7 @@ goog.module('Blockly.Menu');
 goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
 const MenuItem = goog.requireType('Blockly.MenuItem');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Size = goog.requireType('Blockly.utils.Size');

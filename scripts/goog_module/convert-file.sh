@@ -303,7 +303,6 @@ main() {
     verify-filepath "$1" "false"
     if [[ $? -eq 0 ]]; then
       filepath="$1"
-      echo '1'
       shift
     fi
 

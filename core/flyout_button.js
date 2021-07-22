@@ -126,7 +126,7 @@ Blockly.FlyoutButton.prototype.height = 0;
  * @return {!SVGElement} The button's SVG group.
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
-  var cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+  let cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
   if (this.cssClass_) {
     cssClass += ' ' + this.cssClass_;
   }
@@ -135,9 +135,10 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       Blockly.utils.Svg.G, {'class': cssClass},
       this.workspace_.getCanvas());
 
+  let shadow;
   if (!this.isLabel_) {
     // Shadow rectangle (light source does not mirror in RTL).
-    var shadow = Blockly.utils.dom.createSvgElement(
+    shadow = Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.RECT,
         {
           'class': 'blocklyFlyoutButtonShadow',
@@ -146,7 +147,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         this.svgGroup_);
   }
   // Background rectangle.
-  var rect = Blockly.utils.dom.createSvgElement(
+  const rect = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT,
       {
         'class': this.isLabel_ ?
@@ -155,7 +156,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       },
       this.svgGroup_);
 
-  var svgText = Blockly.utils.dom.createSvgElement(
+  const svgText = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.TEXT,
       {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
@@ -164,7 +165,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  var text = Blockly.utils.replaceMessageReferences(this.text_);
+  let text = Blockly.utils.replaceMessageReferences(this.text_);
   if (this.workspace_.RTL) {
     // Force text to be RTL by adding an RLM.
     text += '\u200F';
@@ -176,12 +177,12 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'flyoutForegroundColour', 'fill');
   }
 
-  var fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
-  var fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
-  var fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
+  const fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
+  const fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
+  const fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
   this.width = Blockly.utils.dom.getFastTextWidthWithSizeString(svgText,
       fontSize, fontWeight, fontFamily);
-  var fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
+  const fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
       fontWeight, fontFamily);
   this.height = fontMetrics.height;
 
@@ -286,7 +287,7 @@ Blockly.FlyoutButton.prototype.dispose = function() {
  * @private
  */
 Blockly.FlyoutButton.prototype.onMouseUp_ = function(e) {
-  var gesture = this.targetWorkspace_.getGesture(e);
+  const gesture = this.targetWorkspace_.getGesture(e);
   if (gesture) {
     gesture.cancel();
   }

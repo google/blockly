@@ -13,8 +13,6 @@
 goog.provide('Blockly.ASTNode');
 
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
 
 goog.requireType('Blockly.Block');
@@ -420,7 +418,7 @@ Blockly.ASTNode.prototype.findPrevForField_ = function() {
  */
 Blockly.ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
-  if (!(curLocation instanceof Blockly.Block)) {
+  if (curLocation.getSourceBlock) {
     curLocation = /** @type {!Blockly.IASTNodeLocationWithBlock} */ (
       curLocation).getSourceBlock();
   }

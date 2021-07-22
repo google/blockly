@@ -15,8 +15,6 @@ goog.provide('Blockly.zelos.Renderer');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.ConstantProvider');

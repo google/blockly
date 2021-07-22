@@ -13,12 +13,10 @@
 goog.provide('Blockly.FieldVariable');
 
 /** @suppress {extraRequire} */
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.fieldRegistry');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.object');
@@ -417,14 +415,14 @@ Blockly.FieldVariable.dropdownCreate = function() {
     // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
-  options.push([Blockly.Msg['RENAME_VARIABLE'], Blockly.RENAME_VARIABLE_ID]);
+  options.push([
+    Blockly.Msg['RENAME_VARIABLE'], Blockly.internalConstants.RENAME_VARIABLE_ID
+  ]);
   if (Blockly.Msg['DELETE_VARIABLE']) {
-    options.push(
-        [
-          Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
-          Blockly.DELETE_VARIABLE_ID
-        ]
-    );
+    options.push([
+      Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
+      Blockly.internalConstants.DELETE_VARIABLE_ID
+    ]);
   }
 
   return options;
@@ -442,12 +440,12 @@ Blockly.FieldVariable.prototype.onItemSelected_ = function(menu, menuItem) {
   var id = menuItem.getValue();
   // Handle special cases.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    if (id == Blockly.RENAME_VARIABLE_ID) {
+    if (id == Blockly.internalConstants.RENAME_VARIABLE_ID) {
       // Rename variable.
       Blockly.Variables.renameVariable(
           this.sourceBlock_.workspace, this.variable_);
       return;
-    } else if (id == Blockly.DELETE_VARIABLE_ID) {
+    } else if (id == Blockly.internalConstants.DELETE_VARIABLE_ID) {
       // Delete variable.
       this.sourceBlock_.workspace.deleteVariableById(this.variable_.getId());
       return;

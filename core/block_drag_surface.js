@@ -20,8 +20,8 @@ goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const {G, SVG} = goog.require('Blockly.utils.Svg');
-const {getRelativeXY} = goog.require('Blockly.utils');
 const {createSvgElement, HTML_NS, setCssTransform, SVG_NS, XLINK_NS} = goog.require('Blockly.utils.dom');
+const {getRelativeXY} = goog.require('Blockly.utils');
 
 
 /**

@@ -28,7 +28,6 @@ goog.module.declareLegacyNamespace();
  *     deprecation date.
  * @param {string=} opt_use The name of a function or property to use instead,
  *     if any.
- * @package
  */
 const warn = function(name, deprecationDate, deletionDate, opt_use) {
   let msg = name + ' was deprecated on ' + deprecationDate +
@@ -38,5 +37,5 @@ const warn = function(name, deprecationDate, deletionDate, opt_use) {
   }
   console.warn(msg);
 };
-
-exports = {warn};
+/** @package */
+exports.warn = warn;

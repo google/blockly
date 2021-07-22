@@ -15,12 +15,13 @@ goog.module('Blockly.ConnectionChecker');
 goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const registry = goog.require('Blockly.registry');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+const {OPPOSITE_TYPE} = goog.require('Blockly.internalConstants');
 
 
 /**
@@ -144,7 +145,7 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   }
   if (blockA == blockB) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (b.type != Blockly.OPPOSITE_TYPE[a.type]) {
+  } else if (b.type != OPPOSITE_TYPE[a.type]) {
     return Connection.REASON_WRONG_TYPE;
   } else if (blockA.workspace !== blockB.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;

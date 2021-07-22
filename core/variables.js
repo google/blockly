@@ -17,8 +17,7 @@
 goog.provide('Blockly.Variables');
 
 goog.require('Blockly.Blocks');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.xml');
@@ -31,9 +30,9 @@ goog.requireType('Blockly.Workspace');
 /**
  * Constant to separate variable names from procedures and generated functions
  * when running generators.
- * @deprecated Use Blockly.VARIABLE_CATEGORY_NAME
+ * @deprecated Use Blockly.internalConstants.VARIABLE_CATEGORY_NAME
  */
-Blockly.Variables.NAME_TYPE = Blockly.VARIABLE_CATEGORY_NAME;
+Blockly.Variables.NAME_TYPE = Blockly.internalConstants.VARIABLE_CATEGORY_NAME;
 
 /**
  * Find all user-created variables that are in use in the workspace.

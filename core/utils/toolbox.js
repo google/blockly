@@ -18,11 +18,11 @@ goog.module('Blockly.utils.toolbox');
 goog.module.declareLegacyNamespace();
 
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {textToDom} = goog.require('Blockly.Xml');
-
+/* eslint-disable-next-line no-unused-vars */
 const {CssConfig: CategoryCssConfig} = goog.requireType('Blockly.ToolboxCategory');
+/* eslint-disable-next-line no-unused-vars */
 const {CssConfig: SeparatorCssConfig} = goog.requireType('Blockly.ToolboxSeparator');
-
+const {textToDom} = goog.require('Blockly.Xml');
 
 /**
  * The information needed to create a block in the toolbox.
@@ -35,6 +35,7 @@ const {CssConfig: SeparatorCssConfig} = goog.requireType('Blockly.ToolboxSeparat
  *          }}
  */
 let BlockInfo;
+exports.BlockInfo = BlockInfo;
 
 /**
  * The information needed to create a separator in the toolbox.
@@ -46,6 +47,7 @@ let BlockInfo;
  *          }}
  */
 let SeparatorInfo;
+exports.SeparatorInfo = SeparatorInfo;
 
 /**
  * The information needed to create a button in the toolbox.
@@ -56,6 +58,7 @@ let SeparatorInfo;
  *          }}
  */
 let ButtonInfo;
+exports.ButtonInfo = ButtonInfo;
 
 /**
  * The information needed to create a label in the toolbox.
@@ -66,6 +69,7 @@ let ButtonInfo;
  *          }}
  */
 let LabelInfo;
+exports.LabelInfo = LabelInfo;
 
 /**
  * The information needed to create either a button or a label in the flyout.
@@ -73,6 +77,7 @@ let LabelInfo;
  *           LabelInfo}
  */
 let ButtonOrLabelInfo;
+exports.ButtonOrLabelInfo = ButtonOrLabelInfo;
 
 /**
  * The information needed to create a category in the toolbox.
@@ -88,6 +93,7 @@ let ButtonOrLabelInfo;
  *          }}
  */
 let StaticCategoryInfo;
+exports.StaticCategoryInfo = StaticCategoryInfo;
 
 /**
  * The information needed to create a custom category.
@@ -102,6 +108,7 @@ let StaticCategoryInfo;
  *          }}
  */
 let DynamicCategoryInfo;
+exports.DynamicCategoryInfo = DynamicCategoryInfo;
 
 /**
  * The information needed to create either a dynamic or static category.
@@ -109,6 +116,7 @@ let DynamicCategoryInfo;
  *           DynamicCategoryInfo}
  */
 let CategoryInfo;
+exports.CategoryInfo = CategoryInfo;
 
 /**
  * Any information that can be used to create an item in the toolbox.
@@ -116,6 +124,7 @@ let CategoryInfo;
  *           StaticCategoryInfo}
  */
 let ToolboxItemInfo;
+exports.ToolboxItemInfo = ToolboxItemInfo;
 
 /**
  * All the different types that can be displayed in a flyout.
@@ -126,6 +135,7 @@ let ToolboxItemInfo;
  *           DynamicCategoryInfo}
  */
 let FlyoutItemInfo;
+exports.FlyoutItemInfo = FlyoutItemInfo;
 
 /**
  * The JSON definition of a toolbox.
@@ -135,6 +145,7 @@ let FlyoutItemInfo;
  *          }}
  */
 let ToolboxInfo;
+exports.ToolboxInfo = ToolboxInfo;
 
 /**
  * An array holding flyout items.
@@ -143,6 +154,7 @@ let ToolboxInfo;
  *          }
  */
 let FlyoutItemInfoArray;
+exports.FlyoutItemInfoArray = FlyoutItemInfoArray;
 
 /**
  * All of the different types that can create a toolbox.
@@ -151,6 +163,7 @@ let FlyoutItemInfoArray;
  *           string}
  */
 let ToolboxDefinition;
+exports.ToolboxDefinition = ToolboxDefinition;
 
 /**
  * All of the different types that can be used to show items in a flyout.
@@ -160,6 +173,7 @@ let ToolboxDefinition;
  *           Array<!Node>}
  */
 let FlyoutDefinition;
+exports.FlyoutDefinition = FlyoutDefinition;
 
 /**
  * The name used to identify a toolbox that has category like items.
@@ -187,6 +201,7 @@ const Position = {
   LEFT: 2,
   RIGHT: 3
 };
+exports.Position = Position;
 
 /**
  * Converts the toolbox definition into toolbox JSON.
@@ -194,7 +209,6 @@ const Position = {
  *     of the toolbox in one of its many forms.
  * @return {?ToolboxInfo} Object holding information
  *     for creating a toolbox.
- * @package
  */
 const convertToolboxDefToJson = function(toolboxDef) {
   if (!toolboxDef) {
@@ -210,13 +224,14 @@ const convertToolboxDefToJson = function(toolboxDef) {
   validateToolbox(toolboxJson);
   return toolboxJson;
 };
+/** @package */
+exports.convertToolboxDefToJson = convertToolboxDefToJson;
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
  * @param {!ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @throws {Error} if the toolbox is not the correct format.
- * @private
  */
 const validateToolbox = function(toolboxJson) {
   const toolboxKind = toolboxJson['kind'];
@@ -241,7 +256,6 @@ const validateToolbox = function(toolboxJson) {
  * @param {?FlyoutDefinition} flyoutDef The definition of
  *    the flyout in one of its many forms.
  * @return {!FlyoutItemInfoArray} A list of flyout items.
- * @package
  */
 const convertFlyoutDefToJsonArray = function(flyoutDef) {
   if (!flyoutDef) {
@@ -260,13 +274,14 @@ const convertFlyoutDefToJsonArray = function(flyoutDef) {
 
   return xmlToJsonArray(/** @type {!Array<Node>|!NodeList} */ (flyoutDef));
 };
+/** @package */
+exports.convertFlyoutDefToJsonArray = convertFlyoutDefToJsonArray;
 
 /**
  * Whether or not the toolbox definition has categories.
  * @param {?ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @return {boolean} True if the toolbox has categories.
- * @package
  */
 const hasCategories = function(toolboxJson) {
   if (!toolboxJson) {
@@ -283,13 +298,14 @@ const hasCategories = function(toolboxJson) {
   });
   return !!categories.length;
 };
+/** @package */
+exports.hasCategories = hasCategories;
 
 /**
  * Whether or not the category is collapsible.
  * @param {!CategoryInfo} categoryInfo Object holing
  *    information for creating a category.
  * @return {boolean} True if the category has subcategories.
- * @package
  */
 const isCategoryCollapsible = function(categoryInfo) {
   if (!categoryInfo || !categoryInfo['contents']) {
@@ -301,6 +317,8 @@ const isCategoryCollapsible = function(categoryInfo) {
   });
   return !!categories.length;
 };
+/** @package */
+exports.isCategoryCollapsible = isCategoryCollapsible;
 
 /**
  * Parses the provided toolbox definition into a consistent format.
@@ -308,7 +326,6 @@ const isCategoryCollapsible = function(categoryInfo) {
  *     forms.
  * @return {!ToolboxInfo} Object holding information
  *     for creating a toolbox.
- * @private
  */
 const convertToToolboxJson = function(toolboxDef) {
   const contents = xmlToJsonArray(
@@ -327,7 +344,6 @@ const convertToToolboxJson = function(toolboxDef) {
  * @return {!FlyoutItemInfoArray|
  *          !Array<ToolboxItemInfo>} A list of objects in
  *          the toolbox.
- * @private
  */
 const xmlToJsonArray = function(toolboxDef) {
   const arr = [];
@@ -364,7 +380,6 @@ const xmlToJsonArray = function(toolboxDef) {
  * Adds the attributes on the node to the given object.
  * @param {!Node} node The node to copy the attributes from.
  * @param {!Object} obj The object to copy the attributes to.
- * @private
  */
 const addAttributes = function(node, obj) {
   for (let j = 0; j < node.attributes.length; j++) {
@@ -408,26 +423,4 @@ const parseToolboxTree = function(toolboxDef) {
   }
   return toolboxDef;
 };
-
-exports = {
-  BlockInfo,
-  SeparatorInfo,
-  ButtonInfo,
-  LabelInfo,
-  ButtonOrLabelInfo,
-  StaticCategoryInfo,
-  DynamicCategoryInfo,
-  CategoryInfo,
-  ToolboxItemInfo,
-  FlyoutItemInfo,
-  ToolboxInfo,
-  FlyoutItemInfoArray,
-  ToolboxDefinition,
-  FlyoutDefinition,
-  Position,
-  convertToolboxDefToJson,
-  convertFlyoutDefToJsonArray,
-  hasCategories,
-  isCategoryCollapsible,
-  parseToolboxTree
-};
+exports.parseToolboxTree = parseToolboxTree;

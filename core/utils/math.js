@@ -29,6 +29,7 @@ goog.module.declareLegacyNamespace();
 const toRadians = function(angleDegrees) {
   return angleDegrees * Math.PI / 180;
 };
+exports.toRadians = toRadians;
 
 /**
  * Converts radians to degrees.
@@ -39,6 +40,7 @@ const toRadians = function(angleDegrees) {
 const toDegrees = function(angleRadians) {
   return angleRadians * 180 / Math.PI;
 };
+exports.toDegrees = toDegrees;
 
 /**
  * Clamp the provided number between the lower bound and the upper bound.
@@ -55,9 +57,4 @@ const clamp = function(lowerBound, number, upperBound) {
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
-
-exports = {
-  toRadians,
-  toDegrees,
-  clamp
-};
+exports.clamp = clamp;

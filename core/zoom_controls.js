@@ -14,13 +14,12 @@ goog.provide('Blockly.ZoomControls');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ComponentManager');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.Css');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
 goog.require('Blockly.IPositionable');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Touch');
 goog.require('Blockly.uiPosition');
 goog.require('Blockly.utils');
@@ -337,17 +336,18 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
       },
       clip);
   var zoomoutSvg = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE,
-      {
-        'width': Blockly.SPRITE.width,
-        'height': Blockly.SPRITE.height,
+      Blockly.utils.Svg.IMAGE, {
+        'width': Blockly.internalConstants.SPRITE.width,
+        'height': Blockly.internalConstants.SPRITE.height,
         'x': -64,
         'y': -92,
         'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
       },
       this.zoomOutGroup_);
-  zoomoutSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
+  zoomoutSvg.setAttributeNS(
+      Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      this.workspace_.options.pathToMedia +
+          Blockly.internalConstants.SPRITE.url);
 
   // Attach listener.
   this.onZoomOutWrapper_ = Blockly.browserEvents.conditionalBind(
@@ -388,17 +388,18 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
       },
       clip);
   var zoominSvg = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE,
-      {
-        'width': Blockly.SPRITE.width,
-        'height': Blockly.SPRITE.height,
+      Blockly.utils.Svg.IMAGE, {
+        'width': Blockly.internalConstants.SPRITE.width,
+        'height': Blockly.internalConstants.SPRITE.height,
         'x': -32,
         'y': -92,
         'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
       },
       this.zoomInGroup_);
-  zoominSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
+  zoominSvg.setAttributeNS(
+      Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      this.workspace_.options.pathToMedia +
+          Blockly.internalConstants.SPRITE.url);
 
   // Attach listener.
   this.onZoomInWrapper_ = Blockly.browserEvents.conditionalBind(
@@ -456,16 +457,17 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
       },
       clip);
   var zoomresetSvg = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE,
-      {
-        'width': Blockly.SPRITE.width,
-        'height': Blockly.SPRITE.height,
+      Blockly.utils.Svg.IMAGE, {
+        'width': Blockly.internalConstants.SPRITE.width,
+        'height': Blockly.internalConstants.SPRITE.height,
         'y': -92,
         'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
       },
       this.zoomResetGroup_);
-  zoomresetSvg.setAttributeNS(Blockly.utils.dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
+  zoomresetSvg.setAttributeNS(
+      Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      this.workspace_.options.pathToMedia +
+          Blockly.internalConstants.SPRITE.url);
 
   // Attach event listeners.
   this.onZoomResetWrapper_ = Blockly.browserEvents.conditionalBind(

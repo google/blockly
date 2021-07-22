@@ -20,6 +20,7 @@ goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 goog.require('Blockly.Icon');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Options');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -444,7 +445,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
         Blockly.Events.setGroup(group);
         block.bumpNeighbours();
         Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY);
+      }, Blockly.internalConstants.BUMP_DELAY);
     }
 
     // Don't update the bubble until the drag has ended, to avoid moving blocks

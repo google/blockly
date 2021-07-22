@@ -44,7 +44,8 @@ goog.require('Blockly.Events.BlockChange');
  *    changes to the field's value. Takes in a string & returns a validated
  *    string, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
@@ -57,8 +58,8 @@ const FieldTextInput = function(opt_value, opt_validator, opt_config) {
    */
   this.spellcheck_ = true;
 
-  FieldTextInput.superClass_.constructor.call(this,
-      opt_value, opt_validator, opt_config);
+  FieldTextInput.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The HTML input element.
@@ -159,7 +160,7 @@ FieldTextInput.prototype.initView = function() {
     // Count the number of fields, excluding text fields
     for (let i = 0, input; (input = this.sourceBlock_.inputList[i]); i++) {
       for (let j = 0; (input.fieldRow[j]); j++) {
-        nFields ++;
+        nFields++;
       }
       if (input.connection) {
         nConnections++;
@@ -211,7 +212,8 @@ FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Events.isEnabled()) {
       Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
-          this.sourceBlock_, 'field', this.name || null, oldValue, this.value_));
+          this.sourceBlock_, 'field', this.name || null, oldValue,
+          this.value_));
     }
   }
 };
@@ -240,11 +242,11 @@ FieldTextInput.prototype.doValueUpdate_ = function(newValue) {
 FieldTextInput.prototype.applyColour = function() {
   if (this.sourceBlock_ && this.getConstants().FULL_BLOCK_FIELDS) {
     if (this.borderRect_) {
-      this.borderRect_.setAttribute('stroke',
-          this.sourceBlock_.style.colourTertiary);
+      this.borderRect_.setAttribute(
+          'stroke', this.sourceBlock_.style.colourTertiary);
     } else {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill',
-          this.getConstants().FIELD_BORDER_RECT_COLOUR);
+      this.sourceBlock_.pathObject.svgPath.setAttribute(
+          'fill', this.getConstants().FIELD_BORDER_RECT_COLOUR);
     }
   }
 };
@@ -260,15 +262,13 @@ FieldTextInput.prototype.render_ = function() {
   // doValueUpdate_ so that the code is more centralized.
   if (this.isBeingEdited_) {
     this.resizeEditor_();
-    const htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (!this.isTextValid_) {
       dom.addClass(htmlInput, 'blocklyInvalidInput');
-      aria.setState(htmlInput,
-          aria.State.INVALID, true);
+      aria.setState(htmlInput, aria.State.INVALID, true);
     } else {
       dom.removeClass(htmlInput, 'blocklyInvalidInput');
-      aria.setState(htmlInput,
-          aria.State.INVALID, false);
+      aria.setState(htmlInput, aria.State.INVALID, false);
     }
   }
 };
@@ -295,14 +295,11 @@ FieldTextInput.prototype.setSpellcheck = function(check) {
  *     focus.  Defaults to false.
  * @protected
  */
-FieldTextInput.prototype.showEditor_ = function(_opt_e,
-    opt_quietInput) {
-  this.workspace_ =
-    (/** @type {!BlockSvg} */ (this.sourceBlock_)).workspace;
+FieldTextInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
+  this.workspace_ = (/** @type {!BlockSvg} */ (this.sourceBlock_)).workspace;
   const quietInput = opt_quietInput || false;
-  if (!quietInput && (userAgent.MOBILE ||
-                      userAgent.ANDROID ||
-                      userAgent.IPAD)) {
+  if (!quietInput &&
+      (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
     this.showPromptEditor_();
   } else {
     this.showInlineEditor_(quietInput);
@@ -315,10 +312,9 @@ FieldTextInput.prototype.showEditor_ = function(_opt_e,
  * @private
  */
 FieldTextInput.prototype.showPromptEditor_ = function() {
-  blocklyPrompt(Msg['CHANGE_VALUE_TITLE'], this.getText(),
-      function(text) {
-        this.setValue(this.getValueFromEditorText_(text));
-      }.bind(this));
+  blocklyPrompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
+    this.setValue(this.getValueFromEditorText_(text));
+  }.bind(this));
 };
 
 /**
@@ -328,13 +324,12 @@ FieldTextInput.prototype.showPromptEditor_ = function() {
  * @private
  */
 FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
-  WidgetDiv.show(
-      this, this.sourceBlock_.RTL, this.widgetDispose_.bind(this));
+  WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_.bind(this));
   this.htmlInput_ = this.widgetCreate_();
   this.isBeingEdited_ = true;
 
   if (!quietInput) {
-    this.htmlInput_.focus({preventScroll:true});
+    this.htmlInput_.focus({preventScroll: true});
     this.htmlInput_.select();
   }
 };
@@ -350,16 +345,15 @@ FieldTextInput.prototype.widgetCreate_ = function() {
 
   dom.addClass(this.getClickTarget_(), 'editing');
 
-  const htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
+  const htmlInput =
+      /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   const scale = this.workspace_.getScale();
-  const fontSize =
-      (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
+  const fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  let borderRadius =
-      (FieldTextInput.BORDERRADIUS * scale) + 'px';
+  let borderRadius = (FieldTextInput.BORDERRADIUS * scale) + 'px';
 
   if (this.fullBlockClickTarget_) {
     const bBox = this.getScaledBBox();
@@ -368,14 +362,14 @@ FieldTextInput.prototype.widgetCreate_ = function() {
     borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
     // Pull stroke colour from the existing shadow block
     const strokeColour = this.sourceBlock_.getParent() ?
-      this.sourceBlock_.getParent().style.colourTertiary :
-      this.sourceBlock_.style.colourTertiary;
+        this.sourceBlock_.getParent().style.colourTertiary :
+        this.sourceBlock_.style.colourTertiary;
     htmlInput.style.border = (1 * scale) + 'px solid ' + strokeColour;
     div.style.borderRadius = borderRadius;
     div.style.transition = 'box-shadow 0.25s ease 0s';
     if (this.getConstants().FIELD_TEXTINPUT_BOX_SHADOW) {
-      div.style.boxShadow = 'rgba(255, 255, 255, 0.3) 0 0 0 ' +
-          (4 * scale) + 'px';
+      div.style.boxShadow =
+          'rgba(255, 255, 255, 0.3) 0 0 0 ' + (4 * scale) + 'px';
     }
   }
   htmlInput.style.borderRadius = borderRadius;
@@ -539,10 +533,10 @@ FieldTextInput.prototype.isTabNavigable = function() {
 };
 
 /**
- * Use the `getText_` developer hook to override the field's text representation.
- * When we're currently editing, return the current HTML value instead.
- * Otherwise, return null which tells the field to use the default behaviour
- * (which is a string cast of the field's value).
+ * Use the `getText_` developer hook to override the field's text
+ * representation. When we're currently editing, return the current HTML value
+ * instead. Otherwise, return null which tells the field to use the default
+ * behaviour (which is a string cast of the field's value).
  * @return {?string} The HTML value if we're editing, otherwise null.
  * @protected
  * @override

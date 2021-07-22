@@ -17,6 +17,7 @@ const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.require('Blockly.Workspace');
 const blocks = goog.require('Blockly.serialization.blocks');
+const dom = goog.require('Blockly.utils.dom');
 const variables = goog.require('Blockly.serialization.variables');
  
 
@@ -74,6 +75,8 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
     Events.setGroup(true);
   }
 
+  dom.startTextWidthCache();
+
   if (state['variables']) {
     const variableStates = state['variables'];
     for (let i = 0; i < variableStates.length; i++) {
@@ -87,6 +90,8 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
       blocks.load(blockStates[i], workspace, {recordUndo});
     }
   }
+
+  dom.stopTextWidthCache();
 
   Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));
 

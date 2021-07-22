@@ -77,8 +77,8 @@ const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
    * @private
    */
   this.callbackKey_ = json['callbackKey'] ||
-  /* Check the lower case version too to satisfy IE */
-                      json['callbackkey'];
+      /* Check the lower case version too to satisfy IE */
+      json['callbackkey'];
 
   /**
    * If specified, a CSS class to add to this button.
@@ -134,33 +134,33 @@ FlyoutButton.prototype.createDom = function() {
   }
 
   this.svgGroup_ = dom.createSvgElement(
-      Svg.G, {'class': cssClass},
-      this.workspace_.getCanvas());
+      Svg.G, {'class': cssClass}, this.workspace_.getCanvas());
 
   let shadow;
   if (!this.isLabel_) {
     // Shadow rectangle (light source does not mirror in RTL).
     shadow = dom.createSvgElement(
-        Svg.RECT,
-        {
+        Svg.RECT, {
           'class': 'blocklyFlyoutButtonShadow',
-          'rx': 4, 'ry': 4, 'x': 1, 'y': 1
+          'rx': 4,
+          'ry': 4,
+          'x': 1,
+          'y': 1
         },
         this.svgGroup_);
   }
   // Background rectangle.
   const rect = dom.createSvgElement(
-      Svg.RECT,
-      {
-        'class': this.isLabel_ ?
-            'blocklyFlyoutLabelBackground' : 'blocklyFlyoutButtonBackground',
-        'rx': 4, 'ry': 4
+      Svg.RECT, {
+        'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
+                                 'blocklyFlyoutButtonBackground',
+        'rx': 4,
+        'ry': 4
       },
       this.svgGroup_);
 
   const svgText = dom.createSvgElement(
-      Svg.TEXT,
-      {
+      Svg.TEXT, {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
         'y': 0,
@@ -175,17 +175,17 @@ FlyoutButton.prototype.createDom = function() {
   svgText.textContent = text;
   if (this.isLabel_) {
     this.svgText_ = svgText;
-    this.workspace_.getThemeManager().subscribe(this.svgText_,
-        'flyoutForegroundColour', 'fill');
+    this.workspace_.getThemeManager().subscribe(
+        this.svgText_, 'flyoutForegroundColour', 'fill');
   }
 
   const fontSize = style.getComputedStyle(svgText, 'fontSize');
   const fontWeight = style.getComputedStyle(svgText, 'fontWeight');
   const fontFamily = style.getComputedStyle(svgText, 'fontFamily');
-  this.width = dom.getFastTextWidthWithSizeString(svgText,
-      fontSize, fontWeight, fontFamily);
-  const fontMetrics = dom.measureFontMetrics(text, fontSize,
-      fontWeight, fontFamily);
+  this.width = dom.getFastTextWidthWithSizeString(
+      svgText, fontSize, fontWeight, fontFamily);
+  const fontMetrics =
+      dom.measureFontMetrics(text, fontSize, fontWeight, fontFamily);
   this.height = fontMetrics.height;
 
   if (!this.isLabel_) {
@@ -198,8 +198,8 @@ FlyoutButton.prototype.createDom = function() {
   rect.setAttribute('height', this.height);
 
   svgText.setAttribute('x', this.width / 2);
-  svgText.setAttribute('y', this.height / 2 - fontMetrics.height / 2 +
-      fontMetrics.baseline);
+  svgText.setAttribute(
+      'y', this.height / 2 - fontMetrics.height / 2 + fontMetrics.baseline);
 
   this.updateTransform_();
 
@@ -221,7 +221,8 @@ FlyoutButton.prototype.show = function() {
  * @private
  */
 FlyoutButton.prototype.updateTransform_ = function() {
-  this.svgGroup_.setAttribute('transform',
+  this.svgGroup_.setAttribute(
+      'transform',
       'translate(' + this.position_.x + ',' + this.position_.y + ')');
 };
 
@@ -296,8 +297,10 @@ FlyoutButton.prototype.onMouseUp_ = function(e) {
 
   if (this.isLabel_ && this.callbackKey_) {
     console.warn('Labels should not have callbacks. Label text: ' + this.text_);
-  } else if (!this.isLabel_ && !(this.callbackKey_ &&
-      this.targetWorkspace_.getButtonCallback(this.callbackKey_))) {
+  } else if (
+      !this.isLabel_ &&
+      !(this.callbackKey_ &&
+        this.targetWorkspace_.getButtonCallback(this.callbackKey_))) {
     console.warn('Buttons should have callbacks. Button text: ' + this.text_);
   } else if (!this.isLabel_) {
     this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this);
@@ -326,9 +329,7 @@ Css.register([
     'cursor: default;',
   '}',
 
-  '.blocklyFlyoutLabelBackground {',
-    'opacity: 0;',
-  '}',
+  '.blocklyFlyoutLabelBackground {', 'opacity: 0;', '}',
   /* eslint-enable indent */
 ]);
 

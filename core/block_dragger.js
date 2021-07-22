@@ -13,22 +13,22 @@
 goog.module('Blockly.BlockDragger');
 goog.module.declareLegacyNamespace();
 
-const {disconnectUiEffect, disconnectUiStop} = goog.require('Blockly.blockAnimations');
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const IBlockDragger = goog.require('Blockly.IBlockDragger');
+const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {BLOCK_DRAG, BLOCK_MOVE, fire, get, getGroup, setGroup} = goog.require('Blockly.Events');
+const {DEFAULT, Type, register} = goog.require('Blockly.registry');
+const {disconnectUiEffect, disconnectUiStop} = goog.require('Blockly.blockAnimations');
+const {startTextWidthCache, stopTextWidthCache} = goog.require('Blockly.utils.dom');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-const {BLOCK_DRAG, BLOCK_MOVE, fire, get, getGroup, setGroup} = goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
-const IBlockDragger = goog.require('Blockly.IBlockDragger');
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-const {DEFAULT, Type, register} = goog.require('Blockly.registry');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const {startTextWidthCache, stopTextWidthCache} = goog.require('Blockly.utils.dom');
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

@@ -69,6 +69,10 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
 
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
+  const existingGroup = Events.getGroup();
+  if (!existingGroup) {
+    Events.setGroup(true);
+  }
 
   if (state['variables']) {
     const variableStates = state['variables'];
@@ -86,6 +90,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
 
   Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));
 
+  Events.setGroup(existingGroup);
   Events.recordUndo = prevRecordUndo;
 };
 exports.load = load;

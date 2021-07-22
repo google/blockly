@@ -62,9 +62,14 @@ exports.save = save;
 const load = function(state, workspace, {recordUndo = false} = {}) {
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
+  const existingGroup = Events.getGroup();
+  if (!existingGroup) {
+    Events.setGroup(true);
+  }
 
   workspace.createVariable(state['name'], state['type'], state['id']);
 
+  Events.setGroup(existingGroup);
   Events.recordUndo = prevRecordUndo;
 };
 /** @package */

@@ -276,6 +276,10 @@ const saveConnection = function(connection) {
 const load = function(state, workspace, {recordUndo = false} = {}) {
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
+  const existingGroup = Events.getGroup();
+  if (!existingGroup) {
+    Events.setGroup(true);
+  }
 
   // We only want to fire an event for the top block.
   Events.disable();
@@ -285,6 +289,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   Events.enable();
   Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
 
+  Events.setGroup(existingGroup);
   Events.recordUndo = prevRecordUndo;
   
   // Adding connections to the connection db is expensive. This defers that

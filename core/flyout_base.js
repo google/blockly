@@ -242,7 +242,7 @@ Flyout.prototype.height_ = 0;
  * flyout. Setting it to 360 means that all drags create a new block.
  * @type {number}
  * @protected
-*/
+ */
 Flyout.prototype.dragAngleRange_ = 70;
 
 /**
@@ -264,11 +264,10 @@ Flyout.prototype.createDom = function(tagName) {
   */
   // Setting style to display:none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
-  this.svgGroup_ = dom.createSvgElement(tagName,
-      {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
+  this.svgGroup_ = dom.createSvgElement(
+      tagName, {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
   this.svgBackground_ = dom.createSvgElement(
-      Svg.PATH,
-      {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
+      Svg.PATH, {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
   this.workspace_.getThemeManager().subscribe(
       this.svgBackground_, 'flyoutBackgroundColour', 'fill');
@@ -453,8 +452,8 @@ Flyout.prototype.updateDisplay_ = function() {
  * @protected
  */
 Flyout.prototype.positionAt_ = function(width, height, x, y) {
-  this.svgGroup_.setAttribute("width", width);
-  this.svgGroup_.setAttribute("height", height);
+  this.svgGroup_.setAttribute('width', width);
+  this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
 
   if (this.svgGroup_.tagName == 'svg') {
@@ -464,7 +463,7 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
     // IE and Edge don't support CSS transforms on SVG elements so
     // it's important to set the transform on the SVG element itself
     const transform = 'translate(' + x + ',' + y + ')';
-    this.svgGroup_.setAttribute("transform", transform);
+    this.svgGroup_.setAttribute('transform', transform);
   }
 
   // Update the scrollbar (if one exists).
@@ -482,7 +481,6 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
     if (scrollbar.vScroll) {
       scrollbar.vScroll.setPosition(
           scrollbar.vScroll.position.x, scrollbar.vScroll.position.y);
-
     }
   }
 };
@@ -528,8 +526,8 @@ Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array, Node or NodeList into a a list of flyout items.
   const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
   const flyoutInfo =
-    /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
-      this.createFlyoutInfo_(parsedContent));
+      /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
+          this.createFlyoutInfo_(parsedContent));
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -577,14 +575,15 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   this.permanentlyDisabled_.length = 0;
   const defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
   for (let i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
-
     if (contentInfo['custom']) {
-      const customInfo = /** @type {!toolbox.DynamicCategoryInfo} */ (contentInfo);
+      const customInfo =
+          /** @type {!toolbox.DynamicCategoryInfo} */ (contentInfo);
       const categoryName = customInfo['custom'];
       const flyoutDef = this.getDynamicCategoryContents_(categoryName);
       const parsedDynamicContent = /** @type {!toolbox.FlyoutItemInfoArray} */
-        (toolbox.convertFlyoutDefToJsonArray(flyoutDef));
-      parsedContent.splice.apply(parsedContent, [i, 1].concat(parsedDynamicContent));
+          (toolbox.convertFlyoutDefToJsonArray(flyoutDef));
+      parsedContent.splice.apply(
+          parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
     }
 
@@ -595,7 +594,8 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
         const block = this.createBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
         // <block type="math_arithmetic" gap="8"></block>
-        const gap = parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
+        const gap =
+            parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? defaultGap : gap);
         contents.push({type: 'block', block: block});
         break;
@@ -634,15 +634,17 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
   // Look up the correct category generation function and call that to get a
   // valid XML list.
-  const fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-      categoryName);
+  const fnToApply =
+      this.workspace_.targetWorkspace.getToolboxCategoryCallback(categoryName);
   if (typeof fnToApply != 'function') {
-    throw TypeError('Couldn\'t find a callback function when opening' +
+    throw TypeError(
+        'Couldn\'t find a callback function when opening' +
         ' a toolbox category.');
   }
   const flyoutDef = fnToApply(this.workspace_.targetWorkspace);
   if (!Array.isArray(flyoutDef)) {
-    throw new TypeError('Result of toolbox category callback must be an array.');
+    throw new TypeError(
+        'Result of toolbox category callback must be an array.');
   }
   return flyoutDef;
 };
@@ -660,9 +662,9 @@ Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
-  const curButton = new FlyoutButton(this.workspace_,
-      /** @type {!WorkspaceSvg} */ (this.targetWorkspace), btnInfo,
-      isLabel);
+  const curButton = new FlyoutButton(
+      this.workspace_,
+      /** @type {!WorkspaceSvg} */ (this.targetWorkspace), btnInfo, isLabel);
   return curButton;
 };
 
@@ -674,8 +676,8 @@ Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * @protected
  */
 Flyout.prototype.createBlock_ = function(blockXml) {
-  const curBlock = /** @type {!BlockSvg} */ (
-    Xml.domToBlock(blockXml, this.workspace_));
+  const curBlock =
+      /** @type {!BlockSvg} */ (Xml.domToBlock(blockXml, this.workspace_));
   if (!curBlock.isEnabled()) {
     // Record blocks that were initially disabled.
     // Do not enable these blocks as a result of capacity filtering.
@@ -709,7 +711,8 @@ Flyout.prototype.getBlockXml_ = function(blockInfo) {
   }
 
   if (!blockElement) {
-    throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
+    throw Error(
+        'Error: Invalid block definition. Block definition must have blockxml or type.');
   }
   return blockElement;
 };
@@ -719,7 +722,8 @@ Flyout.prototype.getBlockXml_ = function(blockInfo) {
  * @param {!toolbox.SeparatorInfo} sepInfo The object holding
  *    information about a separator.
  * @param {!Array<number>} gaps The list gaps between items in the flyout.
- * @param {number} defaultGap The default gap between the button and next element.
+ * @param {number} defaultGap The default gap between the button and next
+ *     element.
  * @private
  */
 Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
@@ -782,12 +786,12 @@ Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
       rect, 'mousedown', null, this.blockMouseDown_(block)));
   this.listeners_.push(
       browserEvents.bind(root, 'mouseenter', block, block.addSelect));
-  this.listeners_.push(browserEvents.bind(
-      root, 'mouseleave', block, block.removeSelect));
+  this.listeners_.push(
+      browserEvents.bind(root, 'mouseleave', block, block.removeSelect));
   this.listeners_.push(
       browserEvents.bind(rect, 'mouseenter', block, block.addSelect));
-  this.listeners_.push(browserEvents.bind(
-      rect, 'mouseleave', block, block.removeSelect));
+  this.listeners_.push(
+      browserEvents.bind(rect, 'mouseleave', block, block.removeSelect));
 };
 
 /**
@@ -852,22 +856,20 @@ Flyout.prototype.createBlock = function(originalBlock) {
   // Close the flyout.
   hideChaff();
 
-  const newVariables = Variables.getAddedVariables(this.targetWorkspace,
-      variablesBeforeCreation);
+  const newVariables = Variables.getAddedVariables(
+      this.targetWorkspace, variablesBeforeCreation);
 
   if (Events.isEnabled()) {
     Events.setGroup(true);
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      Events.fire(
-          new (Events.get(Events.VAR_CREATE))(thisVariable));
+      Events.fire(new (Events.get(Events.VAR_CREATE))(thisVariable));
     }
 
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Events.fire(
-        new (Events.get(Events.BLOCK_CREATE))(newBlock));
+    Events.fire(new (Events.get(Events.BLOCK_CREATE))(newBlock));
   }
   if (this.autoClose) {
     this.hide();
@@ -914,14 +916,14 @@ Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
   const rect = dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'fill-opacity': 0,
         'x': x,
         'y': y,
         'height': blockHW.height,
         'width': blockHW.width
-      }, null);
+      },
+      null);
   rect.tooltip = block;
   Tooltip.bindMouseEvents(rect);
   // Add the rectangles under the blocks, so that the blocks' tooltips work.
@@ -959,8 +961,8 @@ Flyout.prototype.filterForCapacity_ = function() {
   const blocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = blocks[i]); i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
-      const enable = this.targetWorkspace
-          .isCapacityAvailable(utils.getBlockTypeCounts(block));
+      const enable = this.targetWorkspace.isCapacityAvailable(
+          utils.getBlockTypeCounts(block));
       while (block) {
         block.setEnabled(enable);
         block = block.getNextBlock();
@@ -988,8 +990,8 @@ Flyout.prototype.reflow = function() {
  * @package
  */
 Flyout.prototype.isScrollable = function() {
-  return this.workspace_.scrollbar ?
-      this.workspace_.scrollbar.isVisible() : false;
+  return this.workspace_.scrollbar ? this.workspace_.scrollbar.isVisible() :
+                                     false;
 };
 
 /**
@@ -1037,13 +1039,12 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
 
   // The position of the old block in pixels relative to the upper left corner
   // of the injection div.
-  const oldBlockOffsetPixels = Coordinate.sum(flyoutOffsetPixels,
-      oldBlockPos);
+  const oldBlockOffsetPixels = Coordinate.sum(flyoutOffsetPixels, oldBlockPos);
 
   // The position of the old block in pixels relative to the origin of the
   // main workspace.
-  const finalOffset = Coordinate.difference(oldBlockOffsetPixels,
-      mainOffsetPixels);
+  const finalOffset =
+      Coordinate.difference(oldBlockOffsetPixels, mainOffsetPixels);
   // The position of the old block in main workspace coordinates.
   finalOffset.scale(1 / targetWorkspace.scale);
 

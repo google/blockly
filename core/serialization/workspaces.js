@@ -41,8 +41,11 @@ const save = function(workspace) {
 
   const blockState = [];
   for (let block of workspace.getTopBlocks(false)) {
-    blockState.push(
-        blocks.save(block, {addCoordinates: true}));
+    const save =
+      blocks.save(block, {addCoordinates: true});
+    if (save) {
+      blockState.push(save);
+    }
   }
   if (blockState.length) {
     // This is an object to support adding language version later.

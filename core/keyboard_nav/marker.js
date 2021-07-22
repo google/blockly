@@ -38,7 +38,8 @@ const Marker = function() {
   this.curNode_ = null;
 
   /**
-   * The object in charge of drawing the visual representation of the current node.
+   * The object in charge of drawing the visual representation of the current
+   * node.
    * @type {MarkerSvg}
    * @private
    */

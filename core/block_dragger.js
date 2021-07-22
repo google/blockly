@@ -116,12 +116,13 @@ Blockly.BlockDragger.prototype.dispose = function() {
  */
 Blockly.BlockDragger.initIconData_ = function(block) {
   // Build a list of icons that need to be moved and where they started.
-  var dragIconData = [];
-  var descendants = block.getDescendants(false);
-  for (var i = 0, descendant; (descendant = descendants[i]); i++) {
-    var icons = descendant.getIcons();
-    for (var j = 0; j < icons.length; j++) {
-      var data = {
+  const dragIconData = [];
+  const descendants = block.getDescendants(false);
+
+  for (let i = 0, descendant; (descendant = descendants[i]); i++) {
+    const icons = descendant.getIcons();
+    for (let j = 0; j < icons.length; j++) {
+      const data = {
         // Blockly.utils.Coordinate with x and y properties (workspace
         // coordinates).
         location: icons[j].getIconLocation(),
@@ -198,8 +199,8 @@ Blockly.BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
 Blockly.BlockDragger.prototype.disconnectBlock_ = function(
     healStack, currentDragDeltaXY) {
   this.draggingBlock_.unplug(healStack);
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.translate(newLoc.x, newLoc.y);
   Blockly.blockAnimations.disconnectUiEffect(this.draggingBlock_);
@@ -211,7 +212,7 @@ Blockly.BlockDragger.prototype.disconnectBlock_ = function(
  * @protected
  */
 Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
-  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+  const event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
       this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
@@ -225,16 +226,16 @@ Blockly.BlockDragger.prototype.fireDragStartEvent_ = function() {
  * @public
  */
 Blockly.BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
-  var delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  var newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
+  const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
+  const newLoc = Blockly.utils.Coordinate.sum(this.startXY_, delta);
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
 
-  var oldDragTarget = this.dragTarget_;
+  const oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
 
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
-  var oldWouldDeleteBlock = this.wouldDeleteBlock_;
+  const oldWouldDeleteBlock = this.wouldDeleteBlock_;
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
   if (oldWouldDeleteBlock != this.wouldDeleteBlock_) {
     // Prevent unnecessary add/remove class calls.
@@ -267,12 +268,12 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   Blockly.blockAnimations.disconnectUiStop();
 
-  var preventMove = !!this.dragTarget_ &&
+  const preventMove = !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
   if (preventMove) {
     var newLoc = this.startXY_;
   } else {
-    var newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
+    const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
     var delta = newValues.delta;
     var newLoc = newValues.newLocation;
   }
@@ -282,7 +283,7 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     this.dragTarget_.onDrop(this.draggingBlock_);
   }
 
-  var deleted = this.maybeDeleteBlock_();
+  const deleted = this.maybeDeleteBlock_();
   if (!deleted) {
     // These are expensive and don't need to be done if we're deleting.
     this.draggingBlock_.setDragging(false);
@@ -314,7 +315,7 @@ Blockly.BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
  */
 Blockly.BlockDragger.prototype.getNewLocationAfterDrag_ = function(
     currentDragDeltaXY) {
-  var newValues = {};
+  const newValues = {};
   newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   newValues.newLocation =
       Blockly.utils.Coordinate.sum(this.startXY_, newValues.delta);
@@ -362,7 +363,7 @@ Blockly.BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
  * @protected
  */
 Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
-  var event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
+  const event = new (Blockly.Events.get(Blockly.Events.BLOCK_DRAG))(
       this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
   Blockly.Events.fire(event);
 };
@@ -375,11 +376,11 @@ Blockly.BlockDragger.prototype.fireDragEndEvent_ = function() {
  * @protected
  */
 Blockly.BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
-  var toolbox = this.workspace_.getToolbox();
+  const toolbox = this.workspace_.getToolbox();
 
   if (toolbox) {
-    var style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-                                                    'blocklyToolboxGrab';
+    const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
+        'blocklyToolboxGrab';
 
     if (isEnd && typeof toolbox.removeStyle == 'function') {
       toolbox.removeStyle(style);
@@ -395,7 +396,7 @@ Blockly.BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 Blockly.BlockDragger.prototype.fireMoveEvent_ = function() {
-  var event =
+  const event =
       new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
@@ -423,7 +424,7 @@ Blockly.BlockDragger.prototype.updateCursorDuringBlockDrag_ = function() {
  * @protected
  */
 Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
-  var result = new Blockly.utils.Coordinate(
+  const result = new Blockly.utils.Coordinate(
       pixelCoord.x / this.workspace_.scale,
       pixelCoord.y / this.workspace_.scale);
   if (this.workspace_.isMutator) {
@@ -431,7 +432,7 @@ Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
     // oddities in our rendering optimizations.  The actual scale is the same as
     // the scale on the parent workspace.
     // Fix that for dragging.
-    var mainScale = this.workspace_.options.parentWorkspace.scale;
+    const mainScale = this.workspace_.options.parentWorkspace.scale;
     result.scale(1 / mainScale);
   }
   return result;
@@ -445,8 +446,8 @@ Blockly.BlockDragger.prototype.pixelsToWorkspaceUnits_ = function(pixelCoord) {
  */
 Blockly.BlockDragger.prototype.dragIcons_ = function(dxy) {
   // Moving icons moves their associated bubbles.
-  for (var i = 0; i < this.dragIconData_.length; i++) {
-    var data = this.dragIconData_[i];
+  for (let i = 0; i < this.dragIconData_.length; i++) {
+    const data = this.dragIconData_[i];
     data.icon.setIconLocation(Blockly.utils.Coordinate.sum(data.location, dxy));
   }
 };

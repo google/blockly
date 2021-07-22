@@ -13,8 +13,6 @@
 goog.provide('Blockly.Input');
 
 goog.require('Blockly.Connection');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.fieldRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');

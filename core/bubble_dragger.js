@@ -13,21 +13,26 @@
 goog.module('Blockly.BubbleDragger');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
 const IBubble = goog.requireType('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
 const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+/* eslint-disable-next-line no-unused-vars */
 const IDragTarget = goog.requireType('Blockly.IDragTarget');
-const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
 /** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-/** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 
 
 /**

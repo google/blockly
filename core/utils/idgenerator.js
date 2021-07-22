@@ -23,7 +23,6 @@ goog.module.declareLegacyNamespace();
 /**
  * Next unique ID to use.
  * @type {number}
- * @private
  */
 let nextId = 0;
 
@@ -36,5 +35,4 @@ let nextId = 0;
 const getNextUniqueId = function() {
   return 'blockly-' + (nextId++).toString(36);
 };
-
-exports = {getNextUniqueId};
+exports.getNextUniqueId = getNextUniqueId;

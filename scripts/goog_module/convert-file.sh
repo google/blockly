@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #######################################
-# Logging functions
+# Logging functions.
 #######################################
 COLOR_NONE="\033[0m"
 GREEN="\033[0;32m"
@@ -20,17 +20,27 @@ warn() {
 err() {
   echo -e  "${RED}[ERROR]:${COLOR_NONE} $*" >&2
 }
+reenter_instructions() {
+  echo -e  "${ORANGE}$*${COLOR_NONE}" >&2
+}
+
 #######################################
 # Checks whether the provided filepath exists.
 # Arguments:
 #   The filepath to check for existence.
+#   Optional: Whether to log an error.
 #######################################
 verify-filepath() {
-  if [[ ! -f "$1" ]]; then
-    err "File $1 does not exist"
+  local filepath="$1"
+  local no_log="$2"
+  if [[ ! -f "${filepath}" ]]; then
+    if [[ -z "${no_log}" || "${no_log}" == 'true' ]]; then
+      err "File ${filepath} does not exist"
+    fi
     return 1
   fi
 }
+
 #######################################
 # Creates a commit with a message based on the specified step and file.
 # Arguments:
@@ -40,11 +50,11 @@ verify-filepath() {
 commit-step() {
   local step="$1"
   local filepath="$2"
-  if [ -z "${step}" ]; then
+  if [[ -z "${step}" ]]; then
     err "Missing argument (1-4)"
     return 1
   fi
-  if [ -z "${filepath}" ]; then
+  if [[ -z "${filepath}" ]]; then
     err "Missing argument filepath"
     return 1
   fi
@@ -78,6 +88,7 @@ commit-step() {
   git commit -m "${message}"
   success "created commit with message: \"${message}\""
 }
+
 #######################################
 # Runs step 2 of the automated conversion.
 # Arguments:
@@ -85,24 +96,9 @@ commit-step() {
 #######################################
 step2 () {
   local filepath="$1"
-  if [ -z "${filepath}" ]; then
-    err "Missing argument filepath"
-    return 1
-  fi
-
-  inf "Verifying single goog.provide declarations..."
-  local provide_count=$(grep -o 'goog.provide' ${filepath} | wc -l)
-  if [[ "${provide_count}" -gt "1" ]]; then
-    err "Cannot convert file with multiple provides. Please split the file first."
-    return 1
-  elif [[ "${provide_count}" -eq "0" ]]; then
-    err "Cannot convert file without a provide."
-    return 1
-  fi
 
   inf "Updating goog.provide declaration..."
   perl -pi -e 's/^goog\.provide(\([^\)]+\)\;)/goog\.module\1\ngoog.module.declareLegacyNamespace\(\)\;/g' "${filepath}"
-
 
   inf "Extracting module name..."
   local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
@@ -117,11 +113,9 @@ step2 () {
     inf "Found class \"${class_name}\" in file."
     inf "Updating class declaration..."
     perl -pi -e 's/^('"${module_name}"') =/const '"${class_name}"' =/g' "${filepath}"
-    inf 'Updating class properties...'
-    perl -pi -e 's/^'"${module_name}"'((\.\w+)+) =/'"${class_name}"'\1 =/g' "${filepath}"
 
     inf "Updating local references to class..."
-    perl -pi -e 's/'"${module_name}"'([^'\''])/'"${class_name}"'\1/g' "${filepath}"
+    perl -pi -e 's/'"${module_name}"'(?!['\''\w])/'"${class_name}"'/g' "${filepath}"
 
     inf "Appending class export to end of file..."
     echo "" >> "${filepath}"
@@ -140,20 +134,15 @@ step2 () {
   perl -pi -e 's/'"${module_name}"'\.([^ ]+)/\1/g' "${filepath}"
 
   npm run build:deps
-  success "Completed automation for step 3. Please manually review and add exports for non-private top-level functions."
+  success "Completed automation for step 2. Please manually review and add exports for non-private top-level functions."
 }
+
 #######################################
 # Runs step 3 of the automated conversion.
 # Arguments:
 #   The filepath of the file being converted.
 #######################################
 step3() {
-  local filepath="$1"
-  if [ -z "${filepath}" ]; then
-    err "Missing argument filepath"
-    return 1
-  fi
-
   inf "Extracting module name..."
   local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
   if [[ -z "${module_name}" ]]; then
@@ -162,10 +151,10 @@ step3() {
   fi
   inf "Extracted module name \"${module_name}\""
 
-  local requires=$(perl -nle'print $& while m{^goog.require(|Type)\('\''(.*)'\''\)}g' "${filepath}" | perl -pe 's/goog.require(|Type)\('\''(.*)'\''\)/\2/g')
+  local requires=$(perl -nle'print $& while m{(?:(?<=^goog.require\('\'')|(?<=^goog.requireType\('\''))[^'\'']+}g' "${filepath}")
 
   # Process each require
-  echo "${requires}" | while read -r require ; do
+  echo "${requires}" | while read -r require; do
     inf "Processing require \"${require}\""
     local usages=$(perl -nle'print $& while m{'"${require}"'(?!'\'')}g' "${filepath}" | wc -l)
 
@@ -179,31 +168,47 @@ step3() {
     # Detect requires overlap
     # (ex: Blockly.utils require and Blockly.utils.dom also in requires)
     local requires_overlap=$(echo "${requires}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
-    if [[ ! -z "${requires_overlap}" ]]; then
-      while read -r requires_overlap_prop ; do
+    if [[ -n "${requires_overlap}" ]]; then
+      while read -r requires_overlap_prop; do
         properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
       done <<<"${requires_overlap}"
     fi
     # Detect module name overlap
     # (ex: Blockly require and Blockly.ContextMenuItems module being converted)
     local module_overlap=$(echo "${module_name}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
-    if [[ ! -z "${module_overlap}" ]]; then
+    if [[ -n "${module_overlap}" ]]; then
       properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${module_overlap}"'//g')
     fi
     properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
 
-    if [[ "${direct_access_count}" -eq "0" && ! -z "${properties_accessed}" ]]; then
+    if [[ "${direct_access_count}" -eq "0" && -n "${properties_accessed}" ]]; then
       local deconstructed_comma=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')
-      inf "Deconstructing ${require} into \"{${deconstructed_comma}}\""
-
-      inf "Updating require declaration for ${require}..."
-      perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
-
-      for require_prop in $(echo "${properties_accessed}"); do
-        inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
-        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
+      local confirm=''
+      while true; do
+        read -p "Would you like to deconstruct ${require} into \"{${deconstructed_comma}}\"? (y/n): " yn </dev/tty
+        case $yn in
+          [Yy]* )
+            confirm='true'
+            break
+            ;;
+          [Nn]* )
+            confirm='false'
+            break
+            ;;
+          * ) reenter_instructions "Please type y or n \"${yn}\"";;
+        esac
       done
-      continue
+
+      if [[ "${confirm}" == 'true' ]]; then
+        inf "Deconstructing ${require} into \"{${deconstructed_comma}}\"..."
+        perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const \{'"${deconstructed_comma}"'\} = \1/' "${filepath}"
+
+        for require_prop in $(echo "${properties_accessed}"); do
+          inf "Updating references of ${require}.${require_prop} to ${require_prop}..."
+          perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_prop}"'\1/g' "${filepath}"
+        done
+        continue
+      fi
     fi
 
     local require_name=$(echo "${require}" | perl -pe 's/(\w+\.)+(\w+)/\2/g')
@@ -215,26 +220,24 @@ step3() {
   done
 
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
-  if [[ ! -z "${missing_require_lines}" ]]; then
-    err "Missing requires for: ${missing_requires} Please manually fix."
+  missing_requires=$(echo "${missing_requires}" | tr ' ' '\n' | sort -u)
+  if [[ -n "${missing_requires}" ]]; then
+    err "Missing requires for:\n${missing_requires}\nPlease manually fix."
   fi
 
   success "Completed automation for step 3. Please manually review and reorder requires."
 }
+
 #######################################
 # Runs step 4 of the automated conversion.
 # Arguments:
 #   The filepath of the file being converted.
 #######################################
 step4() {
-  local filepath="$1"
-  if [ -z ${filepath} ]; then
-    err "filepath is unset"
-    return 1
-  fi
   inf "Running clang-format"
   npx clang-format -i "${filepath}"
 }
+
 #######################################
 # Runs the specified step.
 # Arguments:
@@ -244,11 +247,11 @@ step4() {
 run-step() {
   local step="$1"
   local filepath="$2"
-  if [ -z "${step}" ]; then
+  if [[ -z "${step}" ]]; then
     err "Missing argument (1-4)"
     return 1
   fi
-  if [ -z "${filepath}" ]; then
+  if [[ -z "${filepath}" ]]; then
     err "Missing argument filepath"
     return 1
   fi
@@ -257,45 +260,60 @@ run-step() {
 
   case "${step}" in
     2)
-      step2 ${filepath}
+      step2 "${filepath}"
       ;;
     3)
-      step3 ${filepath}
+      step3 "${filepath}"
       ;;
     4)
-      step4 ${filepath}
+      step4 "${filepath}"
       ;;
     *)
-      err 'INVALID ARGUMENT'
+      err "INVALID ARGUMENT ${step}"
       return 1
       ;;
   esac
 }
+
 #######################################
 # Prints usage information.
 #######################################
-function help {
+help() {
   echo "Conversion steps:"
   echo " 1. Use IDE to convert var to let/const"
   echo " 2. Rewrite the goog.provide statement as goog.module and explicitly enumerate exports"
   echo " 3. Rewrite goog.requires statements and add missing requires (often skipped for simple files)"
   echo " 4. Run clang-format on the whole file"
   echo ""
-  echo "Usage: $0 [-h|-c <number>|-s <number>] <filepath>"
-  echo "  -h                      Display help"
-  echo "  -c <step> <filepath>    Create a commit for the specified step [2-4]"
-  echo "  -s <step> <filepath>    Run the specified step [1-4]"
+  echo "Usage: $0 [-h] [-c <step> <filepath>|-s <step> <filepath>]"
+  echo "  -h                    Display help and exit"
+  echo "  -c <step> <filepath>  Create a commit for the specified step [2-4]"
+  echo "  -s <step> <filepath>  Run the specified step [1-4]"
 }
 
-if [ "$1" = "" ]; then
-  help
-else
-  command="$1"
-  shift
-  case $command in
-    -h)         help $@;;
-    -c)         commit-step $@;;
-    -s)         run-step $@;;
-    *)          help;;
-  esac
-fi
+#######################################
+# Main entry point.
+#######################################
+main() {
+  if [ "$1" = "" ]; then
+    help
+  else
+    local filepath=""
+    # Support filepath as first argument.
+    verify-filepath "$1" "false"
+    if [[ $? -eq 0 ]]; then
+      filepath="$1"
+      shift
+    fi
+
+    local command="$1"
+    shift
+    case $command in
+      -c) commit-step "$@" "${filepath}" ;;
+      -s) run-step "$@" "${filepath}" ;;
+      *) err "INVALID ARGUMENT ${command}";;
+    esac
+  fi
+}
+
+main "$@"

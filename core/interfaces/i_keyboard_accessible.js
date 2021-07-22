@@ -14,6 +14,7 @@
 goog.module('Blockly.IKeyboardAccessible');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const {KeyboardShortcut} = goog.requireType('Blockly.ShortcutRegistry');
 
 

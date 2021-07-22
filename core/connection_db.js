@@ -15,8 +15,11 @@
 goog.module('Blockly.ConnectionDB');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.require('Blockly.RenderedConnection');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 /** @suppress {extraRequire} */

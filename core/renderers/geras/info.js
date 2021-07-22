@@ -19,8 +19,6 @@ goog.require('Blockly.blockRendering.InputRow');
 goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Types');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.geras.InlineInput');
 goog.require('Blockly.geras.StatementInput');
 goog.require('Blockly.inputTypes');

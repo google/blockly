@@ -13,9 +13,9 @@
 goog.module('Blockly.MenuItem');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.IdGenerator');
+const aria = goog.require('Blockly.utils.aria');
+const {addClass, removeClass} = goog.require('Blockly.utils.dom');
+const {getNextUniqueId} = goog.require('Blockly.utils.IdGenerator');
 
 
 /**
@@ -64,7 +64,7 @@ const MenuItem = function(content, opt_value) {
 
   /**
    * ARIA name for this menu.
-   * @type {?Blockly.utils.aria.Role}
+   * @type {?aria.Role}
    * @private
    */
   this.roleName_ = null;
@@ -105,7 +105,7 @@ const MenuItem = function(content, opt_value) {
  */
 MenuItem.prototype.createDom = function() {
   const element = document.createElement('div');
-  element.id = Blockly.utils.IdGenerator.getNextUniqueId();
+  element.id = getNextUniqueId();
   this.element_ = element;
 
   // Set class and style
@@ -135,11 +135,11 @@ MenuItem.prototype.createDom = function() {
 
   // Initialize ARIA role and state.
   if (this.roleName_) {
-    Blockly.utils.aria.setRole(element, this.roleName_);
+    aria.setRole(element, this.roleName_);
   }
-  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.SELECTED,
+  aria.setState(element, aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
-  Blockly.utils.aria.setState(element, Blockly.utils.aria.State.DISABLED,
+  aria.setState(element, aria.State.DISABLED,
       !this.enabled_);
 
   return element;
@@ -190,7 +190,7 @@ MenuItem.prototype.setRightToLeft = function(rtl) {
 
 /**
  * Set the menu item's accessibility role.
- * @param {!Blockly.utils.aria.Role} roleName Role name.
+ * @param {!aria.Role} roleName Role name.
  * @package
  */
 MenuItem.prototype.setRole = function(roleName) {
@@ -231,11 +231,11 @@ MenuItem.prototype.setHighlighted = function(highlight) {
     const name = 'blocklyMenuItemHighlight';
     const nameDep = 'goog-menuitem-highlight';
     if (highlight) {
-      Blockly.utils.dom.addClass(el, name);
-      Blockly.utils.dom.addClass(el, nameDep);
+      addClass(el, name);
+      addClass(el, nameDep);
     } else {
-      Blockly.utils.dom.removeClass(el, name);
-      Blockly.utils.dom.removeClass(el, nameDep);
+      removeClass(el, name);
+      removeClass(el, nameDep);
     }
   }
 };

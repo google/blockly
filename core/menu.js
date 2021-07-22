@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Menu');
+goog.module('Blockly.Menu');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils.aria');
@@ -27,7 +28,7 @@ goog.requireType('Blockly.utils.Size');
  * A basic menu class.
  * @constructor
  */
-Blockly.Menu = function() {
+const Menu = function() {
   /**
    * Array of menu items.
    * (Nulls are never in the array, but typing the array as nullable prevents
@@ -109,7 +110,7 @@ Blockly.Menu = function() {
  * Add a new menu item to the bottom of this menu.
  * @param {!Blockly.MenuItem} menuItem Menu item to append.
  */
-Blockly.Menu.prototype.addChild = function(menuItem) {
+Menu.prototype.addChild = function(menuItem) {
   this.menuItems_.push(menuItem);
 };
 
@@ -117,7 +118,7 @@ Blockly.Menu.prototype.addChild = function(menuItem) {
  * Creates the menu DOM.
  * @param {!Element} container Element upon which to append this menu.
  */
-Blockly.Menu.prototype.render = function(container) {
+Menu.prototype.render = function(container) {
   const element = /** @type {!HTMLDivElement} */ (document.createElement(
       'div'));
   // goog-menu is deprecated, use blocklyMenu.  May 2020.
@@ -153,7 +154,7 @@ Blockly.Menu.prototype.render = function(container) {
  * @return {?Element} The DOM element.
  * @package
  */
-Blockly.Menu.prototype.getElement = function() {
+Menu.prototype.getElement = function() {
   return this.element_;
 };
 
@@ -161,7 +162,7 @@ Blockly.Menu.prototype.getElement = function() {
  * Focus the menu element.
  * @package
  */
-Blockly.Menu.prototype.focus = function() {
+Menu.prototype.focus = function() {
   const el = this.getElement();
   if (el) {
     el.focus({preventScroll:true});
@@ -173,7 +174,7 @@ Blockly.Menu.prototype.focus = function() {
  * Blur the menu element.
  * @private
  */
-Blockly.Menu.prototype.blur_ = function() {
+Menu.prototype.blur_ = function() {
   const el = this.getElement();
   if (el) {
     el.blur();
@@ -186,14 +187,14 @@ Blockly.Menu.prototype.blur_ = function() {
  * @param {!Blockly.utils.aria.Role} roleName role name.
  * @package
  */
-Blockly.Menu.prototype.setRole = function(roleName) {
+Menu.prototype.setRole = function(roleName) {
   this.roleName_ = roleName;
 };
 
 /**
  * Dispose of this menu.
  */
-Blockly.Menu.prototype.dispose = function() {
+Menu.prototype.dispose = function() {
   // Remove event handlers.
   if (this.mouseOverHandler_) {
     Blockly.browserEvents.unbind(this.mouseOverHandler_);
@@ -232,7 +233,7 @@ Blockly.Menu.prototype.dispose = function() {
  * @return {?Blockly.MenuItem} Menu item for which the DOM element belongs to.
  * @private
  */
-Blockly.Menu.prototype.getMenuItem_ = function(elem) {
+Menu.prototype.getMenuItem_ = function(elem) {
   const menuElem = this.getElement();
   // Node might be the menu border (resulting in no associated menu item), or
   // a menu item's div, or some element within the menu item.
@@ -259,7 +260,7 @@ Blockly.Menu.prototype.getMenuItem_ = function(elem) {
  * @param {?Blockly.MenuItem} item Item to highlight, or null.
  * @package
  */
-Blockly.Menu.prototype.setHighlighted = function(item) {
+Menu.prototype.setHighlighted = function(item) {
   const currentHighlighted = this.highlightedItem_;
   if (currentHighlighted) {
     currentHighlighted.setHighlighted(false);
@@ -284,7 +285,7 @@ Blockly.Menu.prototype.setHighlighted = function(item) {
  * highlighted).
  * @package
  */
-Blockly.Menu.prototype.highlightNext = function() {
+Menu.prototype.highlightNext = function() {
   const index = this.menuItems_.indexOf(this.highlightedItem_);
   this.highlightHelper_(index, 1);
 };
@@ -294,7 +295,7 @@ Blockly.Menu.prototype.highlightNext = function() {
  * currently highlighted).
  * @package
  */
-Blockly.Menu.prototype.highlightPrevious = function() {
+Menu.prototype.highlightPrevious = function() {
   const index = this.menuItems_.indexOf(this.highlightedItem_);
   this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
 };
@@ -303,7 +304,7 @@ Blockly.Menu.prototype.highlightPrevious = function() {
  * Highlights the first highlightable item.
  * @private
  */
-Blockly.Menu.prototype.highlightFirst_ = function() {
+Menu.prototype.highlightFirst_ = function() {
   this.highlightHelper_(-1, 1);
 };
 
@@ -311,7 +312,7 @@ Blockly.Menu.prototype.highlightFirst_ = function() {
  * Highlights the last highlightable item.
  * @private
  */
-Blockly.Menu.prototype.highlightLast_ = function() {
+Menu.prototype.highlightLast_ = function() {
   this.highlightHelper_(this.menuItems_.length, -1);
 };
 
@@ -322,7 +323,7 @@ Blockly.Menu.prototype.highlightLast_ = function() {
  * @param {number} delta Step direction: 1 to go down, -1 to go up.
  * @private
  */
-Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
+Menu.prototype.highlightHelper_ = function(startIndex, delta) {
   let index = startIndex + delta;
   let menuItem;
   while ((menuItem = this.menuItems_[index])) {
@@ -341,7 +342,7 @@ Blockly.Menu.prototype.highlightHelper_ = function(startIndex, delta) {
  * @param {!Event} e Mouse event to handle.
  * @private
  */
-Blockly.Menu.prototype.handleMouseOver_ = function(e) {
+Menu.prototype.handleMouseOver_ = function(e) {
   const menuItem = this.getMenuItem_(/** @type {Element} */ (e.target));
 
   if (menuItem) {
@@ -360,7 +361,7 @@ Blockly.Menu.prototype.handleMouseOver_ = function(e) {
  * @param {!Event} e Click event to handle.
  * @private
  */
-Blockly.Menu.prototype.handleClick_ = function(e) {
+Menu.prototype.handleClick_ = function(e) {
   const oldCoords = this.openingCoords;
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
@@ -386,7 +387,7 @@ Blockly.Menu.prototype.handleClick_ = function(e) {
  * @param {!Event} _e Mouse event to handle.
  * @private
  */
-Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
+Menu.prototype.handleMouseEnter_ = function(_e) {
   this.focus();
 };
 
@@ -395,7 +396,7 @@ Blockly.Menu.prototype.handleMouseEnter_ = function(_e) {
  * @param {!Event} _e Mouse event to handle.
  * @private
  */
-Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
+Menu.prototype.handleMouseLeave_ = function(_e) {
   if (this.getElement()) {
     this.blur_();
     this.setHighlighted(null);
@@ -410,7 +411,7 @@ Blockly.Menu.prototype.handleMouseLeave_ = function(_e) {
  * @param {!Event} e Key event to handle.
  * @private
  */
-Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
+Menu.prototype.handleKeyEvent_ = function(e) {
   if (!this.menuItems_.length) {
     // Empty menu.
     return;
@@ -461,7 +462,7 @@ Blockly.Menu.prototype.handleKeyEvent_ = function(e) {
  * @return {!Blockly.utils.Size} Object with width and height properties.
  * @package
  */
-Blockly.Menu.prototype.getSize = function() {
+Menu.prototype.getSize = function() {
   const menuDom = this.getElement();
   const menuSize = Blockly.utils.style.getSize(/** @type {!Element} */
       (menuDom));
@@ -469,3 +470,5 @@ Blockly.Menu.prototype.getSize = function() {
   menuSize.height = menuDom.scrollHeight;
   return menuSize;
 };
+
+exports = Menu;

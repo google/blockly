@@ -17,8 +17,6 @@ goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 

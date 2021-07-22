@@ -13,8 +13,7 @@
 
 goog.provide('Blockly.WorkspaceAudio');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.userAgent');
@@ -135,7 +134,7 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
     // Don't play one sound on top of another.
     var now = new Date;
     if (this.lastSound_ != null &&
-        now - this.lastSound_ < Blockly.SOUND_LIMIT) {
+        now - this.lastSound_ < Blockly.internalConstants.SOUND_LIMIT) {
       return;
     }
     this.lastSound_ = now;

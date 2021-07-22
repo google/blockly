@@ -17,11 +17,10 @@
 goog.provide('Blockly.ContextMenu');
 
 goog.require('Blockly.browserEvents');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
 goog.require('Blockly.Msg');
@@ -195,11 +194,11 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
       // Move the new block next to the old block.
       var xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
-        xy.x -= Blockly.SNAP_RADIUS;
+        xy.x -= Blockly.internalConstants.SNAP_RADIUS;
       } else {
-        xy.x += Blockly.SNAP_RADIUS;
+        xy.x += Blockly.internalConstants.SNAP_RADIUS;
       }
-      xy.y += Blockly.SNAP_RADIUS * 2;
+      xy.y += Blockly.internalConstants.SNAP_RADIUS * 2;
       newBlock.moveBy(xy.x, xy.y);
     } finally {
       Blockly.Events.enable();

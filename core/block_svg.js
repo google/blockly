@@ -18,7 +18,6 @@ goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.ContextMenuRegistry');
@@ -31,6 +30,7 @@ goog.require('Blockly.IASTNodeLocationSvg');
 goog.require('Blockly.IBoundedElement');
 goog.require('Blockly.ICopyable');
 goog.require('Blockly.IDraggable');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
 goog.require('Blockly.TabNavigateCursor');
@@ -688,7 +688,7 @@ Blockly.BlockSvg.prototype.updateCollapsed_ = function() {
     icon.setVisible(false);
   }
 
-  var text = this.toString(Blockly.COLLAPSE_CHARS);
+  var text = this.toString(Blockly.internalConstants.COLLAPSE_CHARS);
   var field = this.getField(collapsedFieldName);
   if (field) {
     field.setValue(text);
@@ -1550,7 +1550,8 @@ Blockly.BlockSvg.prototype.bumpNeighbours = function() {
       connection.targetBlock().bumpNeighbours();
     }
 
-    var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
+    var neighbours =
+        connection.neighbours(Blockly.internalConstants.SNAP_RADIUS);
     for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
 
       // If both connections are connected, that's probably fine.  But if
@@ -1585,13 +1586,13 @@ Blockly.BlockSvg.prototype.scheduleSnapAndBump = function() {
     Blockly.Events.setGroup(group);
     block.snapToGrid();
     Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY / 2);
+  }, Blockly.internalConstants.BUMP_DELAY / 2);
 
   setTimeout(function() {
     Blockly.Events.setGroup(group);
     block.bumpNeighbours();
     Blockly.Events.setGroup(false);
-  }, Blockly.BUMP_DELAY);
+  }, Blockly.internalConstants.BUMP_DELAY);
 };
 
 /**

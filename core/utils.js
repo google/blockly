@@ -18,8 +18,7 @@
  */
 goog.provide('Blockly.utils');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
@@ -194,13 +193,13 @@ Blockly.utils.getScrollDeltaPixels = function(e) {
       };
     case 0x01:  // Line mode.
       return {
-        x: e.deltaX * Blockly.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * Blockly.LINE_MODE_MULTIPLIER
+        x: e.deltaX * Blockly.internalConstants.LINE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.internalConstants.LINE_MODE_MULTIPLIER
       };
     case 0x02:  // Page mode.
       return {
-        x: e.deltaX * Blockly.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * Blockly.PAGE_MODE_MULTIPLIER
+        x: e.deltaX * Blockly.internalConstants.PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * Blockly.internalConstants.PAGE_MODE_MULTIPLIER
       };
   }
 };
@@ -634,8 +633,9 @@ Blockly.utils.parseBlockColour = function(colour) {
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     return {
       hue: hue,
-      hex: Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-          Blockly.HSV_VALUE * 255)
+      hex: Blockly.utils.colour.hsvToHex(
+          hue, Blockly.internalConstants.HSV_SATURATION,
+          Blockly.internalConstants.HSV_VALUE * 255)
     };
   } else {
     var hex = Blockly.utils.colour.parse(dereferenced);

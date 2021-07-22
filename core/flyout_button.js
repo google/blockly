@@ -13,24 +13,25 @@
 goog.module('Blockly.FlyoutButton');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.Css');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.style');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.utils.toolbox');
-goog.requireType('Blockly.WorkspaceSvg');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Css = goog.require('Blockly.Css');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const style = goog.require('Blockly.utils.style');
+/* eslint-disable-next-line no-unused-vars */
+const toolbox = goog.requireType('Blockly.utils.toolbox');
+const {replaceMessageReferences} = goog.require('Blockly.utils');
 
 
 /**
  * Class for a button in the flyout.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
+ * @param {!WorkspaceSvg} workspace The workspace in which to place this
  *     button.
- * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {!Blockly.utils.toolbox.ButtonOrLabelInfo} json
+ * @param {!WorkspaceSvg} targetWorkspace The flyout's target workspace.
+ * @param {!toolbox.ButtonOrLabelInfo} json
  *    The JSON specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
@@ -40,13 +41,13 @@ const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
   // Labels behave the same as buttons, but are styled differently.
 
   /**
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
 
   /**
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.targetWorkspace_ = targetWorkspace;
@@ -58,10 +59,10 @@ const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
   this.text_ = json['text'];
 
   /**
-   * @type {!Blockly.utils.Coordinate}
+   * @type {!Coordinate}
    * @private
    */
-  this.position_ = new Blockly.utils.Coordinate(0, 0);
+  this.position_ = new Coordinate(0, 0);
 
   /**
    * Whether this button should be styled as a label.
@@ -88,14 +89,14 @@ const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
 
   /**
    * Mouse up event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * The JSON specifying the label / button.
-   * @type {!Blockly.utils.toolbox.ButtonOrLabelInfo}
+   * @type {!toolbox.ButtonOrLabelInfo}
    */
   this.info = json;
 };
@@ -132,15 +133,15 @@ FlyoutButton.prototype.createDom = function() {
     cssClass += ' ' + this.cssClass_;
   }
 
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.G, {'class': cssClass},
+  this.svgGroup_ = dom.createSvgElement(
+      Svg.G, {'class': cssClass},
       this.workspace_.getCanvas());
 
   let shadow;
   if (!this.isLabel_) {
     // Shadow rectangle (light source does not mirror in RTL).
-    shadow = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.RECT,
+    shadow = dom.createSvgElement(
+        Svg.RECT,
         {
           'class': 'blocklyFlyoutButtonShadow',
           'rx': 4, 'ry': 4, 'x': 1, 'y': 1
@@ -148,8 +149,8 @@ FlyoutButton.prototype.createDom = function() {
         this.svgGroup_);
   }
   // Background rectangle.
-  const rect = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
+  const rect = dom.createSvgElement(
+      Svg.RECT,
       {
         'class': this.isLabel_ ?
             'blocklyFlyoutLabelBackground' : 'blocklyFlyoutButtonBackground',
@@ -157,8 +158,8 @@ FlyoutButton.prototype.createDom = function() {
       },
       this.svgGroup_);
 
-  const svgText = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.TEXT,
+  const svgText = dom.createSvgElement(
+      Svg.TEXT,
       {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
@@ -166,7 +167,7 @@ FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  let text = Blockly.utils.replaceMessageReferences(this.text_);
+  let text = replaceMessageReferences(this.text_);
   if (this.workspace_.RTL) {
     // Force text to be RTL by adding an RLM.
     text += '\u200F';
@@ -178,12 +179,12 @@ FlyoutButton.prototype.createDom = function() {
         'flyoutForegroundColour', 'fill');
   }
 
-  const fontSize = Blockly.utils.style.getComputedStyle(svgText, 'fontSize');
-  const fontWeight = Blockly.utils.style.getComputedStyle(svgText, 'fontWeight');
-  const fontFamily = Blockly.utils.style.getComputedStyle(svgText, 'fontFamily');
-  this.width = Blockly.utils.dom.getFastTextWidthWithSizeString(svgText,
+  const fontSize = style.getComputedStyle(svgText, 'fontSize');
+  const fontWeight = style.getComputedStyle(svgText, 'fontWeight');
+  const fontFamily = style.getComputedStyle(svgText, 'fontFamily');
+  this.width = dom.getFastTextWidthWithSizeString(svgText,
       fontSize, fontWeight, fontFamily);
-  const fontMetrics = Blockly.utils.dom.measureFontMetrics(text, fontSize,
+  const fontMetrics = dom.measureFontMetrics(text, fontSize,
       fontWeight, fontFamily);
   this.height = fontMetrics.height;
 
@@ -202,7 +203,7 @@ FlyoutButton.prototype.createDom = function() {
 
   this.updateTransform_();
 
-  this.onMouseUpWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.onMouseUpWrapper_ = browserEvents.conditionalBind(
       this.svgGroup_, 'mouseup', this, this.onMouseUp_);
   return this.svgGroup_;
 };
@@ -244,7 +245,7 @@ FlyoutButton.prototype.isLabel = function() {
 
 /**
  * Location of the button.
- * @return {!Blockly.utils.Coordinate} x, y coordinates.
+ * @return {!Coordinate} x, y coordinates.
  * @package
  */
 FlyoutButton.prototype.getPosition = function() {
@@ -260,7 +261,7 @@ FlyoutButton.prototype.getButtonText = function() {
 
 /**
  * Get the button's target workspace.
- * @return {!Blockly.WorkspaceSvg} The target workspace of the flyout where this
+ * @return {!WorkspaceSvg} The target workspace of the flyout where this
  *     button resides.
  */
 FlyoutButton.prototype.getTargetWorkspace = function() {
@@ -272,10 +273,10 @@ FlyoutButton.prototype.getTargetWorkspace = function() {
  */
 FlyoutButton.prototype.dispose = function() {
   if (this.onMouseUpWrapper_) {
-    Blockly.browserEvents.unbind(this.onMouseUpWrapper_);
+    browserEvents.unbind(this.onMouseUpWrapper_);
   }
   if (this.svgGroup_) {
-    Blockly.utils.dom.removeNode(this.svgGroup_);
+    dom.removeNode(this.svgGroup_);
   }
   if (this.svgText_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgText_);
@@ -306,7 +307,7 @@ FlyoutButton.prototype.onMouseUp_ = function(e) {
 /**
  * CSS for buttons and labels.  See css.js for use.
  */
-Blockly.Css.register([
+Css.register([
   /* eslint-disable indent */
   '.blocklyFlyoutButton {',
     'fill: #888;',

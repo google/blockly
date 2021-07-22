@@ -14,7 +14,9 @@
 goog.module('Blockly.ISelectableToolboxItem');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.require('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
 const {FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
 
 

@@ -14,6 +14,7 @@
 goog.module('Blockly.IRegistrableField');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 
 

@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.IMetricsManager');
+goog.module('Blockly.IMetricsManager');
+goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.MetricsManager');
 goog.requireType('Blockly.utils.Metrics');
@@ -22,14 +23,14 @@ goog.requireType('Blockly.utils.Size');
  * Interface for a metrics manager.
  * @interface
  */
-Blockly.IMetricsManager = function() {};
+const IMetricsManager = function() {};
 
 /**
  * Returns whether the scroll area has fixed edges.
  * @return {boolean} Whether the scroll area has fixed edges.
  * @package
  */
-Blockly.IMetricsManager.prototype.hasFixedEdges;
+IMetricsManager.prototype.hasFixedEdges;
 
 /**
  * Returns the metrics for the scroll area of the workspace.
@@ -44,7 +45,7 @@ Blockly.IMetricsManager.prototype.hasFixedEdges;
  * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
  *    container
  */
-Blockly.IMetricsManager.prototype.getScrollMetrics;
+IMetricsManager.prototype.getScrollMetrics;
 
 /**
  * Gets the width and the height of the flyout on the workspace in pixel
@@ -55,7 +56,7 @@ Blockly.IMetricsManager.prototype.getScrollMetrics;
  *     flyout.
  * @public
  */
-Blockly.IMetricsManager.prototype.getFlyoutMetrics;
+IMetricsManager.prototype.getFlyoutMetrics;
 
 /**
  * Gets the width, height and position of the toolbox on the workspace in pixel
@@ -66,7 +67,7 @@ Blockly.IMetricsManager.prototype.getFlyoutMetrics;
  *     height and position of the toolbox.
  * @public
  */
-Blockly.IMetricsManager.prototype.getToolboxMetrics;
+IMetricsManager.prototype.getToolboxMetrics;
 
 /**
  * Gets the width and height of the workspace's parent SVG element in pixel
@@ -75,7 +76,7 @@ Blockly.IMetricsManager.prototype.getToolboxMetrics;
  *     SVG element.
  * @public
  */
-Blockly.IMetricsManager.prototype.getSvgMetrics;
+IMetricsManager.prototype.getSvgMetrics;
 
 /**
  * Gets the absolute left and absolute top in pixel coordinates.
@@ -84,7 +85,7 @@ Blockly.IMetricsManager.prototype.getSvgMetrics;
  *     the workspace.
  * @public
  */
-Blockly.IMetricsManager.prototype.getAbsoluteMetrics;
+IMetricsManager.prototype.getAbsoluteMetrics;
 
 /**
  * Gets the metrics for the visible workspace in either pixel or workspace
@@ -96,7 +97,7 @@ Blockly.IMetricsManager.prototype.getAbsoluteMetrics;
  *     coordinates.
  * @public
  */
-Blockly.IMetricsManager.prototype.getViewMetrics;
+IMetricsManager.prototype.getViewMetrics;
 
 /**
  * Gets content metrics in either pixel or workspace coordinates.
@@ -108,7 +109,7 @@ Blockly.IMetricsManager.prototype.getViewMetrics;
  *     metrics for the content container.
  * @public
  */
-Blockly.IMetricsManager.prototype.getContentMetrics;
+IMetricsManager.prototype.getContentMetrics;
 
 /**
  * Returns an object with all the metrics required to size scrollbars for a
@@ -142,4 +143,6 @@ Blockly.IMetricsManager.prototype.getContentMetrics;
  *     level workspace.
  * @public
  */
-Blockly.IMetricsManager.prototype.getMetrics;
+IMetricsManager.prototype.getMetrics;
+
+exports = IMetricsManager;

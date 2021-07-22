@@ -18,7 +18,7 @@ const MenuItem = goog.requireType('Blockly.MenuItem');
 const Size = goog.requireType('Blockly.utils.Size');
 const {addClass, hasClass, removeClass} = goog.require('Blockly.utils.dom');
 const {Data, conditionalBind, unbind} = goog.require('Blockly.browserEvents');
-const {DOWN, END, ENTER, HOME, PAGE_DOWN, PAGE_UP, SPACE, UP} = goog.require('Blockly.utils.KeyCodes');
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const {getSize, scrollIntoContainerView} = goog.require('Blockly.utils.style');
 const {Role, State, setRole, setState} = goog.require('Blockly.utils.aria');
 
@@ -421,28 +421,28 @@ Menu.prototype.handleKeyEvent_ = function(e) {
 
   const highlighted = this.highlightedItem_;
   switch (e.keyCode) {
-    case ENTER:
-    case SPACE:
+    case KeyCodes.ENTER:
+    case KeyCodes.SPACE:
       if (highlighted) {
         highlighted.performAction();
       }
       break;
 
-    case UP:
+    case KeyCodes.UP:
       this.highlightPrevious();
       break;
 
-    case DOWN:
+    case KeyCodes.DOWN:
       this.highlightNext();
       break;
 
-    case PAGE_UP:
-    case HOME:
+    case KeyCodes.PAGE_UP:
+    case KeyCodes.HOME:
       this.highlightFirst_();
       break;
 
-    case PAGE_DOWN:
-    case END:
+    case KeyCodes.PAGE_DOWN:
+    case KeyCodes.END:
       this.highlightLast_();
       break;
 

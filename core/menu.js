@@ -13,15 +13,14 @@
 goog.module('Blockly.Menu');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.KeyCodes');
-goog.require('Blockly.utils.style');
-
-goog.requireType('Blockly.MenuItem');
-goog.requireType('Blockly.utils.Size');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const MenuItem = goog.requireType('Blockly.MenuItem');
+const Size = goog.requireType('Blockly.utils.Size');
+const {addClass, hasClass, removeClass} = goog.require('Blockly.utils.dom');
+const {Data, conditionalBind, unbind} = goog.require('Blockly.browserEvents');
+const {DOWN, END, ENTER, HOME, PAGE_DOWN, PAGE_UP, SPACE, UP} = goog.require('Blockly.utils.KeyCodes');
+const {getSize, scrollIntoContainerView} = goog.require('Blockly.utils.style');
+const {Role, State, setRole, setState} = goog.require('Blockly.utils.aria');
 
 
 /**
@@ -33,7 +32,7 @@ const Menu = function() {
    * Array of menu items.
    * (Nulls are never in the array, but typing the array as nullable prevents
    * the compiler from objecting to .indexOf(null))
-   * @type {!Array<Blockly.MenuItem>}
+   * @type {!Array<MenuItem>}
    * @private
    */
   this.menuItems_ = [];
@@ -42,7 +41,7 @@ const Menu = function() {
    * Coordinates of the mousedown event that caused this menu to open. Used to
    * prevent the consequent mouseup event due to a simple click from activating
    * a menu item immediately.
-   * @type {?Blockly.utils.Coordinate}
+   * @type {?Coordinate}
    * @package
    */
   this.openingCoords = null;
@@ -50,42 +49,42 @@ const Menu = function() {
   /**
    * This is the element that we will listen to the real focus events on.
    * A value of null means no menu item is highlighted.
-   * @type {?Blockly.MenuItem}
+   * @type {?MenuItem}
    * @private
    */
   this.highlightedItem_ = null;
 
   /**
    * Mouse over event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.mouseOverHandler_ = null;
 
   /**
    * Click event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.clickHandler_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.mouseEnterHandler_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.mouseLeaveHandler_ = null;
 
   /**
    * Key down event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?Data}
    * @private
    */
   this.onKeyDownHandler_ = null;
@@ -99,7 +98,7 @@ const Menu = function() {
 
   /**
    * ARIA name for this menu.
-   * @type {?Blockly.utils.aria.Role}
+   * @type {?Role}
    * @private
    */
   this.roleName_ = null;
@@ -108,7 +107,7 @@ const Menu = function() {
 
 /**
  * Add a new menu item to the bottom of this menu.
- * @param {!Blockly.MenuItem} menuItem Menu item to append.
+ * @param {!MenuItem} menuItem Menu item to append.
  */
 Menu.prototype.addChild = function(menuItem) {
   this.menuItems_.push(menuItem);
@@ -125,7 +124,7 @@ Menu.prototype.render = function(container) {
   element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
   if (this.roleName_) {
-    Blockly.utils.aria.setRole(element, this.roleName_);
+    setRole(element, this.roleName_);
   }
   this.element_ = element;
 
@@ -135,15 +134,15 @@ Menu.prototype.render = function(container) {
   }
 
   // Add event handlers.
-  this.mouseOverHandler_ = Blockly.browserEvents.conditionalBind(
+  this.mouseOverHandler_ = conditionalBind(
       element, 'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ = Blockly.browserEvents.conditionalBind(
+  this.clickHandler_ = conditionalBind(
       element, 'click', this, this.handleClick_, true);
-  this.mouseEnterHandler_ = Blockly.browserEvents.conditionalBind(
+  this.mouseEnterHandler_ = conditionalBind(
       element, 'mouseenter', this, this.handleMouseEnter_, true);
-  this.mouseLeaveHandler_ = Blockly.browserEvents.conditionalBind(
+  this.mouseLeaveHandler_ = conditionalBind(
       element, 'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownHandler_ = Blockly.browserEvents.conditionalBind(
+  this.onKeyDownHandler_ = conditionalBind(
       element, 'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
@@ -166,7 +165,7 @@ Menu.prototype.focus = function() {
   const el = this.getElement();
   if (el) {
     el.focus({preventScroll:true});
-    Blockly.utils.dom.addClass(el, 'blocklyFocused');
+    addClass(el, 'blocklyFocused');
   }
 };
 
@@ -178,13 +177,13 @@ Menu.prototype.blur_ = function() {
   const el = this.getElement();
   if (el) {
     el.blur();
-    Blockly.utils.dom.removeClass(el, 'blocklyFocused');
+    removeClass(el, 'blocklyFocused');
   }
 };
 
 /**
  * Set the menu accessibility role.
- * @param {!Blockly.utils.aria.Role} roleName role name.
+ * @param {!Role} roleName role name.
  * @package
  */
 Menu.prototype.setRole = function(roleName) {
@@ -197,23 +196,23 @@ Menu.prototype.setRole = function(roleName) {
 Menu.prototype.dispose = function() {
   // Remove event handlers.
   if (this.mouseOverHandler_) {
-    Blockly.browserEvents.unbind(this.mouseOverHandler_);
+    unbind(this.mouseOverHandler_);
     this.mouseOverHandler_ = null;
   }
   if (this.clickHandler_) {
-    Blockly.browserEvents.unbind(this.clickHandler_);
+    unbind(this.clickHandler_);
     this.clickHandler_ = null;
   }
   if (this.mouseEnterHandler_) {
-    Blockly.browserEvents.unbind(this.mouseEnterHandler_);
+    unbind(this.mouseEnterHandler_);
     this.mouseEnterHandler_ = null;
   }
   if (this.mouseLeaveHandler_) {
-    Blockly.browserEvents.unbind(this.mouseLeaveHandler_);
+    unbind(this.mouseLeaveHandler_);
     this.mouseLeaveHandler_ = null;
   }
   if (this.onKeyDownHandler_) {
-    Blockly.browserEvents.unbind(this.onKeyDownHandler_);
+    unbind(this.onKeyDownHandler_);
     this.onKeyDownHandler_ = null;
   }
 
@@ -230,7 +229,7 @@ Menu.prototype.dispose = function() {
  * Returns the child menu item that owns the given DOM element,
  * or null if no such menu item is found.
  * @param {Element} elem DOM element whose owner is to be returned.
- * @return {?Blockly.MenuItem} Menu item for which the DOM element belongs to.
+ * @return {?MenuItem} Menu item for which the DOM element belongs to.
  * @private
  */
 Menu.prototype.getMenuItem_ = function(elem) {
@@ -240,7 +239,7 @@ Menu.prototype.getMenuItem_ = function(elem) {
   // Walk up parents until one meets either the menu's root element, or
   // a menu item's div.
   while (elem && elem != menuElem) {
-    if (Blockly.utils.dom.hasClass(elem, 'blocklyMenuItem')) {
+    if (hasClass(elem, 'blocklyMenuItem')) {
       // Having found a menu item's div, locate that menu item in this menu.
       for (let i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
         if (menuItem.getElement() == elem) {
@@ -257,7 +256,7 @@ Menu.prototype.getMenuItem_ = function(elem) {
 
 /**
  * Highlights the given menu item, or clears highlighting if null.
- * @param {?Blockly.MenuItem} item Item to highlight, or null.
+ * @param {?MenuItem} item Item to highlight, or null.
  * @package
  */
 Menu.prototype.setHighlighted = function(item) {
@@ -272,10 +271,10 @@ Menu.prototype.setHighlighted = function(item) {
     // Bring the highlighted item into view. This has no effect if the menu is
     // not scrollable.
     const el = /** @type {!Element} */ (this.getElement());
-    Blockly.utils.style.scrollIntoContainerView(
+    scrollIntoContainerView(
         /** @type {!Element} */ (item.getElement()), el);
 
-    Blockly.utils.aria.setState(el, Blockly.utils.aria.State.ACTIVEDESCENDANT,
+    setState(el, State.ACTIVEDESCENDANT,
         item.getId());
   }
 };
@@ -366,8 +365,8 @@ Menu.prototype.handleClick_ = function(e) {
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
   if (oldCoords && typeof e.clientX == 'number') {
-    const newCoords = new Blockly.utils.Coordinate(e.clientX, e.clientY);
-    if (Blockly.utils.Coordinate.distance(oldCoords, newCoords) < 1) {
+    const newCoords = new Coordinate(e.clientX, e.clientY);
+    if (Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent
       // click event. The coords haven't changed, meaning this was the same
       // opening event. Don't do the usual behavior because the menu just popped
@@ -423,28 +422,28 @@ Menu.prototype.handleKeyEvent_ = function(e) {
 
   const highlighted = this.highlightedItem_;
   switch (e.keyCode) {
-    case Blockly.utils.KeyCodes.ENTER:
-    case Blockly.utils.KeyCodes.SPACE:
+    case ENTER:
+    case SPACE:
       if (highlighted) {
         highlighted.performAction();
       }
       break;
 
-    case Blockly.utils.KeyCodes.UP:
+    case UP:
       this.highlightPrevious();
       break;
 
-    case Blockly.utils.KeyCodes.DOWN:
+    case DOWN:
       this.highlightNext();
       break;
 
-    case Blockly.utils.KeyCodes.PAGE_UP:
-    case Blockly.utils.KeyCodes.HOME:
+    case PAGE_UP:
+    case HOME:
       this.highlightFirst_();
       break;
 
-    case Blockly.utils.KeyCodes.PAGE_DOWN:
-    case Blockly.utils.KeyCodes.END:
+    case PAGE_DOWN:
+    case END:
       this.highlightLast_();
       break;
 
@@ -459,12 +458,12 @@ Menu.prototype.handleKeyEvent_ = function(e) {
 
 /**
  * Get the size of a rendered menu.
- * @return {!Blockly.utils.Size} Object with width and height properties.
+ * @return {!Size} Object with width and height properties.
  * @package
  */
 Menu.prototype.getSize = function() {
   const menuDom = this.getElement();
-  const menuSize = Blockly.utils.style.getSize(/** @type {!Element} */
+  const menuSize = getSize(/** @type {!Element} */
       (menuDom));
   // Recalculate height for the total content, not only box height.
   menuSize.height = menuDom.scrollHeight;

@@ -13,6 +13,7 @@
 goog.module('Blockly.serialization.workspaces');
 goog.module.declareLegacyNamespace();
  
+const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.require('Blockly.Workspace');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -58,23 +59,33 @@ exports.save = save;
  * @param {!Object<string, *>} state The state of the workspace to deserialize
  *     into the workspace.
  * @param {!Workspace} workspace The workspace to add the new state to.
+ * @param {{recordUndo: (boolean|undefined)}=} param1
+ *     recordUndo: If true, events triggered by this function will be undo-able
+ *       by the user. False by default.
  */
-const load = function(state, workspace) {
+const load = function(state, workspace, {recordUndo = false} = {}) {
   // TODO: Switch this to use plugin serialization system (once it is built).
   // TODO: Add something for clearing the state before deserializing.
+
+  const prevRecordUndo = Events.recordUndo;
+  Events.recordUndo = recordUndo;
 
   if (state['variables']) {
     const variableStates = state['variables'];
     for (let i = 0; i < variableStates.length; i++) {
-      variables.load(variableStates[i], workspace);
+      variables.load(variableStates[i], workspace, {recordUndo});
     }
   }
 
   if (state['blocks']) {
     const blockStates = state['blocks']['blocks'];
     for (let i = 0; i < blockStates.length; i++) {
-      blocks.load(blockStates[i], workspace);
+      blocks.load(blockStates[i], workspace, {recordUndo});
     }
   }
+
+  Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));
+
+  Events.recordUndo = prevRecordUndo;
 };
 exports.load = load;

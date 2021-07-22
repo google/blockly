@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('JSO Deserialization', function() {
+suite.only('JSO Deserialization', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -16,7 +16,7 @@ suite('JSO Deserialization', function() {
   });
 
   suite('Events', function() {
-    test.skip('Finished loading', function() {
+    test('Finished loading', function() {
       const state = {
         'blocks': {
           'blocks': [
@@ -51,7 +51,71 @@ suite('JSO Deserialization', function() {
         assertEventFired(
             this.eventsFireStub,
             Blockly.Events.VarCreate,
-            {'varName': 'test', 'varId': 'testId', 'varType': ''},
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': false
+            },
+            this.workspace.id);
+      });
+
+      test('Just var, directly', function() {
+        const state = {
+          'name': 'test',
+          'id': 'testId',
+        };
+        Blockly.serialization.variables.load(state, this.workspace);
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': false
+            },
+            this.workspace.id);
+      });
+
+      test('Just var, record undo', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
+            }
+          ]
+        };
+        Blockly.serialization.load(state, this.workspace, {recordUndo: true});
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': true
+            },
+            this.workspace.id);
+      });
+
+      test('Just var, directly, record undo', function() {
+        const state = {
+          'name': 'test',
+          'id': 'testId',
+        };
+        Blockly.serialization.variables
+            .load(state, this.workspace, {recordUndo: true});
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': true
+            },
             this.workspace.id);
       });
 
@@ -112,7 +176,62 @@ suite('JSO Deserialization', function() {
         assertEventFired(
             this.eventsFireStub,
             Blockly.Events.BlockCreate,
-            {},
+            {'recordUndo': false},
+            this.workspace.id,
+            'testId');
+      });
+
+      test('No children, directly', function() {
+        const state = {
+          'type': 'controls_if',
+          'id': 'testId',
+          'x': 42,
+          'y': 42
+        };
+        Blockly.serialization.blocks.load(state, this.workspace);
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.BlockCreate,
+            {'recordUndo': false},
+            this.workspace.id,
+            'testId');
+      });
+
+      test('No children, record undo', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'controls_if',
+                'id': 'testId',
+                'x': 42,
+                'y': 42
+              },
+            ]
+          }
+        };
+        Blockly.serialization.load(state, this.workspace, {'recordUndo': true});
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.BlockCreate,
+            {'recordUndo': true},
+            this.workspace.id,
+            'testId');
+      });
+
+      test('No children, directly, record undo', function() {
+        const state = {
+          'type': 'controls_if',
+          'id': 'testId',
+          'x': 42,
+          'y': 42
+        };
+        Blockly.serialization.blocks
+            .load(state, this.workspace, {'recordUndo': true});
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.BlockCreate,
+            {'recordUndo': true},
             this.workspace.id,
             'testId');
       });

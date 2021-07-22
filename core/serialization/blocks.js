@@ -13,6 +13,7 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
+<<<<<<< HEAD
 // eslint-disable-next-line no-unused-vars
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
@@ -21,6 +22,11 @@ const Connection = goog.requireType('Blockly.Connection');
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
+=======
+goog.require('Blockly.Xml');
+goog.require('Blockly.inputTypes');
+const Events = goog.require('Blockly.Events');
+>>>>>>> bdbbe5bd (Add parameter for recording undo.)
 
 
 // TODO: Remove this once lint is fixed.
@@ -262,17 +268,24 @@ const saveConnection = function(connection) {
  * Loads the block represented by the given state into the given workspace.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
+ * @param {{recordUndo: (boolean|undefined)}=} param1
+ *     recordUndo: If true, events triggered by this function will be undo-able
+ *       by the user. False by default.
  * @return {!Block} The block that was just loaded.
  */
-const load = function(state, workspace) {
+const load = function(state, workspace, {recordUndo = false} = {}) {
+  const prevRecordUndo = Events.recordUndo;
+  Events.recordUndo = recordUndo;
+
   // We only want to fire an event for the top block.
-  Blockly.Events.disable();
+  Events.disable();
 
   const block = loadInternal(state, workspace);
 
-  Blockly.Events.enable();
-  Blockly.Events.fire(
-      new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(block));
+  Events.enable();
+  Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
+
+  Events.recordUndo = prevRecordUndo;
   
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.

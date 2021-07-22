@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Flyout');
+goog.module('Blockly.Flyout');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
@@ -55,8 +56,8 @@ goog.requireType('Blockly.utils.Rect');
  * @implements {Blockly.IFlyout}
  * @extends {Blockly.DeleteArea}
  */
-Blockly.Flyout = function(workspaceOptions) {
-  Blockly.Flyout.superClass_.constructor.call(this);
+const Flyout = function(workspaceOptions) {
+  Flyout.superClass_.constructor.call(this);
   workspaceOptions.setMetrics = this.setMetrics_.bind(this);
 
   /**
@@ -149,41 +150,41 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 };
-Blockly.utils.object.inherits(Blockly.Flyout, Blockly.DeleteArea);
+Blockly.utils.object.inherits(Flyout, Blockly.DeleteArea);
 
 /**
  * Does the flyout automatically close when a block is created?
  * @type {boolean}
  */
-Blockly.Flyout.prototype.autoClose = true;
+Flyout.prototype.autoClose = true;
 
 /**
  * Whether the flyout is visible.
  * @type {boolean}
  * @private
  */
-Blockly.Flyout.prototype.isVisible_ = false;
+Flyout.prototype.isVisible_ = false;
 
 /**
  * Whether the workspace containing this flyout is visible.
  * @type {boolean}
  * @private
  */
-Blockly.Flyout.prototype.containerVisible_ = true;
+Flyout.prototype.containerVisible_ = true;
 
 /**
  * Corner radius of the flyout background.
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.CORNER_RADIUS = 8;
+Flyout.prototype.CORNER_RADIUS = 8;
 
 /**
  * Margin around the edges of the blocks in the flyout.
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
+Flyout.prototype.MARGIN = Flyout.prototype.CORNER_RADIUS;
 
 // TODO: Move GAP_X and GAP_Y to their appropriate files.
 
@@ -192,35 +193,35 @@ Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
  * element.
  * @const {number}
  */
-Blockly.Flyout.prototype.GAP_X = Blockly.Flyout.prototype.MARGIN * 3;
+Flyout.prototype.GAP_X = Flyout.prototype.MARGIN * 3;
 
 /**
  * Gap between items in vertical flyouts. Can be overridden with the "sep"
  * element.
  * @const {number}
  */
-Blockly.Flyout.prototype.GAP_Y = Blockly.Flyout.prototype.MARGIN * 3;
+Flyout.prototype.GAP_Y = Flyout.prototype.MARGIN * 3;
 
 /**
  * Top/bottom padding between scrollbar and edge of flyout background.
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
+Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
 
 /**
  * Width of flyout.
  * @type {number}
  * @protected
  */
-Blockly.Flyout.prototype.width_ = 0;
+Flyout.prototype.width_ = 0;
 
 /**
  * Height of flyout.
  * @type {number}
  * @protected
  */
-Blockly.Flyout.prototype.height_ = 0;
+Flyout.prototype.height_ = 0;
 
 /**
  * Range of a drag angle from a flyout considered "dragging toward workspace".
@@ -238,7 +239,7 @@ Blockly.Flyout.prototype.height_ = 0;
  * @type {number}
  * @protected
 */
-Blockly.Flyout.prototype.dragAngleRange_ = 70;
+Flyout.prototype.dragAngleRange_ = 70;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
@@ -250,7 +251,7 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  *     put the flyout in. This should be <svg> or <g>.
  * @return {!SVGElement} The flyout's SVG group.
  */
-Blockly.Flyout.prototype.createDom = function(tagName) {
+Flyout.prototype.createDom = function(tagName) {
   /*
   <svg | g>
     <path class="blocklyFlyoutBackground"/>
@@ -277,7 +278,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The workspace in which to
  *     create new blocks.
  */
-Blockly.Flyout.prototype.init = function(targetWorkspace) {
+Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
 
@@ -326,7 +327,7 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
  * Unlink from all DOM elements to prevent memory leaks.
  * @suppress {checkTypes}
  */
-Blockly.Flyout.prototype.dispose = function() {
+Flyout.prototype.dispose = function() {
   this.hide();
   this.workspace_.getComponentManager().removeComponent(this.id);
   Blockly.browserEvents.unbind(this.eventWrappers_);
@@ -352,7 +353,7 @@ Blockly.Flyout.prototype.dispose = function() {
  * Get the width of the flyout.
  * @return {number} The width of the flyout.
  */
-Blockly.Flyout.prototype.getWidth = function() {
+Flyout.prototype.getWidth = function() {
   return this.width_;
 };
 
@@ -360,7 +361,7 @@ Blockly.Flyout.prototype.getWidth = function() {
  * Get the height of the flyout.
  * @return {number} The width of the flyout.
  */
-Blockly.Flyout.prototype.getHeight = function() {
+Flyout.prototype.getHeight = function() {
   return this.height_;
 };
 
@@ -369,7 +370,7 @@ Blockly.Flyout.prototype.getHeight = function() {
  * this matches the target workspace scale, but this can be overridden.
  * @return {number} Flyout workspace scale.
  */
-Blockly.Flyout.prototype.getFlyoutScale = function() {
+Flyout.prototype.getFlyoutScale = function() {
   return this.targetWorkspace.scale;
 };
 
@@ -378,7 +379,7 @@ Blockly.Flyout.prototype.getFlyoutScale = function() {
  * @return {!Blockly.WorkspaceSvg} The workspace inside the flyout.
  * @package
  */
-Blockly.Flyout.prototype.getWorkspace = function() {
+Flyout.prototype.getWorkspace = function() {
   return this.workspace_;
 };
 
@@ -386,7 +387,7 @@ Blockly.Flyout.prototype.getWorkspace = function() {
  * Is the flyout visible?
  * @return {boolean} True if visible.
  */
-Blockly.Flyout.prototype.isVisible = function() {
+Flyout.prototype.isVisible = function() {
   return this.isVisible_;
 };
 
@@ -395,7 +396,7 @@ Blockly.Flyout.prototype.isVisible = function() {
  * that the flyout is shown. It could be hidden because its container is hidden.
  * @param {boolean} visible True if visible.
  */
-Blockly.Flyout.prototype.setVisible = function(visible) {
+Flyout.prototype.setVisible = function(visible) {
   const visibilityChanged = (visible != this.isVisible());
 
   this.isVisible_ = visible;
@@ -413,7 +414,7 @@ Blockly.Flyout.prototype.setVisible = function(visible) {
  * Set whether this flyout's container is visible.
  * @param {boolean} visible Whether the container is visible.
  */
-Blockly.Flyout.prototype.setContainerVisible = function(visible) {
+Flyout.prototype.setContainerVisible = function(visible) {
   const visibilityChanged = (visible != this.containerVisible_);
   this.containerVisible_ = visible;
   if (visibilityChanged) {
@@ -426,7 +427,7 @@ Blockly.Flyout.prototype.setContainerVisible = function(visible) {
  * be visible and whether its containing workspace is visible.
  * @private
  */
-Blockly.Flyout.prototype.updateDisplay_ = function() {
+Flyout.prototype.updateDisplay_ = function() {
   let show = true;
   if (!this.containerVisible_) {
     show = false;
@@ -447,7 +448,7 @@ Blockly.Flyout.prototype.updateDisplay_ = function() {
  * @param {number} y The computed y origin of the flyout's SVG group.
  * @protected
  */
-Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
+Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute("width", width);
   this.svgGroup_.setAttribute("height", height);
   this.workspace_.setCachedParentSvgSize(width, height);
@@ -485,7 +486,7 @@ Blockly.Flyout.prototype.positionAt_ = function(width, height, x, y) {
 /**
  * Hide and empty the flyout.
  */
-Blockly.Flyout.prototype.hide = function() {
+Flyout.prototype.hide = function() {
   if (!this.isVisible()) {
     return;
   }
@@ -509,7 +510,7 @@ Blockly.Flyout.prototype.hide = function() {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Blockly.Flyout.prototype.show = function(flyoutDef) {
+Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -566,7 +567,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
  *     and gaps needed to lay out the flyout.
  * @private
  */
-Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
+Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
   const contents = [];
   const gaps = [];
   this.permanentlyDisabled_.length = 0;
@@ -626,7 +627,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
  * @return {!Array<!Element>} The array of flyout items.
  * @private
  */
-Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
+Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
   // Look up the correct category generation function and call that to get a
   // valid XML list.
   const fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
@@ -651,7 +652,7 @@ Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  *    flyout.
  * @private
  */
-Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
+Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
   if (!Blockly.FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
@@ -668,7 +669,7 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * @return {!Blockly.BlockSvg} The block created from the blockXml.
  * @protected
  */
-Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
+Flyout.prototype.createBlock_ = function(blockXml) {
   const curBlock = /** @type {!Blockly.BlockSvg} */ (
     Blockly.Xml.domToBlock(blockXml, this.workspace_));
   if (!curBlock.isEnabled()) {
@@ -687,7 +688,7 @@ Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
  * @throws {Error} if the xml is not a valid block definition.
  * @private
  */
-Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+Flyout.prototype.getBlockXml_ = function(blockInfo) {
   let blockElement = null;
   const blockXml = blockInfo['blockxml'];
 
@@ -717,7 +718,7 @@ Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
  * @param {number} defaultGap The default gap between the button and next element.
  * @private
  */
-Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
+Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
   // Change the gap between two toolbox elements.
   // <sep gap="36"></sep>
   // The default gap is 24, can be set larger or smaller.
@@ -735,7 +736,7 @@ Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) 
  * Delete blocks, mats and buttons from a previous showing of the flyout.
  * @protected
  */
-Blockly.Flyout.prototype.clearOldBlocks_ = function() {
+Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
   const oldBlocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = oldBlocks[i]); i++) {
@@ -770,7 +771,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  *     as a mat for that block.
  * @protected
  */
-Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
+Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(Blockly.browserEvents.conditionalBind(
       root, 'mousedown', null, this.blockMouseDown_(block)));
   this.listeners_.push(Blockly.browserEvents.conditionalBind(
@@ -791,7 +792,7 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
  * @return {!Function} Function to call when block is clicked.
  * @private
  */
-Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
+Flyout.prototype.blockMouseDown_ = function(block) {
   const flyout = this;
   return function(e) {
     const gesture = flyout.targetWorkspace.getGesture(e);
@@ -807,7 +808,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Flyout.prototype.onMouseDown_ = function(e) {
+Flyout.prototype.onMouseDown_ = function(e) {
   const gesture = this.targetWorkspace.getGesture(e);
   if (gesture) {
     gesture.handleFlyoutStart(e, this);
@@ -822,7 +823,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  *    otherwise.
  * @package
  */
-Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
+Flyout.prototype.isBlockCreatable_ = function(block) {
   return block.isEnabled();
 };
 
@@ -833,7 +834,7 @@ Blockly.Flyout.prototype.isBlockCreatable_ = function(block) {
  * @throws {Error} if something went wrong with deserialization.
  * @package
  */
-Blockly.Flyout.prototype.createBlock = function(originalBlock) {
+Flyout.prototype.createBlock = function(originalBlock) {
   let newBlock = null;
   Blockly.Events.disable();
   const variablesBeforeCreation = this.targetWorkspace.getAllVariables();
@@ -880,7 +881,7 @@ Blockly.Flyout.prototype.createBlock = function(originalBlock) {
  * @param {number} y The y position of the cursor during this layout pass.
  * @protected
  */
-Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
+Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
   const buttonSvg = button.createDom();
   button.moveTo(x, y);
   button.show();
@@ -905,7 +906,7 @@ Blockly.Flyout.prototype.initFlyoutButton_ = function(button, x, y) {
  *     block.
  * @protected
  */
-Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
+Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
   // Create an invisible rectangle under the block to act as a button.  Just
   // using the block as a button is poor, since blocks have holes in them.
   const rect = Blockly.utils.dom.createSvgElement(
@@ -934,7 +935,7 @@ Blockly.Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
  * @param {!Blockly.BlockSvg} block The block the rectangle should be behind.
  * @protected
  */
-Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
+Flyout.prototype.moveRectToBlock_ = function(rect, block) {
   const blockHW = block.getHeightWidth();
   rect.setAttribute('width', blockHW.width);
   rect.setAttribute('height', blockHW.height);
@@ -950,7 +951,7 @@ Blockly.Flyout.prototype.moveRectToBlock_ = function(rect, block) {
  * the workspace, an "a + b" block that has two shadow blocks would be disabled.
  * @private
  */
-Blockly.Flyout.prototype.filterForCapacity_ = function() {
+Flyout.prototype.filterForCapacity_ = function() {
   const blocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = blocks[i]); i++) {
     if (this.permanentlyDisabled_.indexOf(block) == -1) {
@@ -967,7 +968,7 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
 /**
  * Reflow blocks and their mats.
  */
-Blockly.Flyout.prototype.reflow = function() {
+Flyout.prototype.reflow = function() {
   if (this.reflowWrapper_) {
     this.workspace_.removeChangeListener(this.reflowWrapper_);
   }
@@ -982,7 +983,7 @@ Blockly.Flyout.prototype.reflow = function() {
  *     dragging.
  * @package
  */
-Blockly.Flyout.prototype.isScrollable = function() {
+Flyout.prototype.isScrollable = function() {
   return this.workspace_.scrollbar ?
       this.workspace_.scrollbar.isVisible() : false;
 };
@@ -993,7 +994,7 @@ Blockly.Flyout.prototype.isScrollable = function() {
  * @return {!Blockly.BlockSvg} The new block in the main workspace.
  * @private
  */
-Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
+Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   const targetWorkspace = this.targetWorkspace;
   const svgRootOld = oldBlock.getSvgRoot();
   if (!svgRootOld) {
@@ -1051,13 +1052,13 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
  * relative to viewport.
  * @return {Blockly.utils.Rect} The component's bounding box.
  */
-Blockly.Flyout.prototype.getClientRect;
+Flyout.prototype.getClientRect;
 
 /**
  * Position the flyout.
  * @return {void}
  */
-Blockly.Flyout.prototype.position;
+Flyout.prototype.position;
 
 /**
  * Determine if a drag delta is toward the workspace, based on the position
@@ -1068,7 +1069,7 @@ Blockly.Flyout.prototype.position;
  * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
-Blockly.Flyout.prototype.isDragTowardWorkspace;
+Flyout.prototype.isDragTowardWorkspace;
 
 /**
  * Sets the translation of the flyout to match the scrollbars.
@@ -1077,7 +1078,7 @@ Blockly.Flyout.prototype.isDragTowardWorkspace;
  *     similar x property.
  * @protected
  */
-Blockly.Flyout.prototype.setMetrics_;
+Flyout.prototype.setMetrics_;
 
 /**
  * Lay out the blocks in the flyout.
@@ -1085,14 +1086,14 @@ Blockly.Flyout.prototype.setMetrics_;
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
-Blockly.Flyout.prototype.layout_;
+Flyout.prototype.layout_;
 
 /**
  * Scroll the flyout.
  * @param {!Event} e Mouse wheel scroll event.
  * @protected
  */
-Blockly.Flyout.prototype.wheel_;
+Flyout.prototype.wheel_;
 
 /**
  * Compute height of flyout.  Position mat under each block.
@@ -1100,16 +1101,18 @@ Blockly.Flyout.prototype.wheel_;
  * @return {void}
  * @protected
  */
-Blockly.Flyout.prototype.reflowInternal_;
+Flyout.prototype.reflowInternal_;
 
 /**
  * Calculates the x coordinate for the flyout position.
  * @return {number} X coordinate.
  */
-Blockly.Flyout.prototype.getX;
+Flyout.prototype.getX;
 
 /**
  * Calculates the y coordinate for the flyout position.
  * @return {number} Y coordinate.
  */
-Blockly.Flyout.prototype.getY;
+Flyout.prototype.getY;
+
+exports = Flyout;

@@ -142,8 +142,7 @@ const initIconData = function(block) {
  *     disconnecting.
  * @public
  */
-BlockDragger.prototype.startDrag = function(
-    currentDragDeltaXY, healStack) {
+BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
   if (!getGroup()) {
     setGroup(true);
   }
@@ -182,7 +181,7 @@ BlockDragger.prototype.startDrag = function(
  */
 BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
   return !!(
-    this.draggingBlock_.getParent() ||
+      this.draggingBlock_.getParent() ||
       (healStack && this.draggingBlock_.nextConnection &&
        this.draggingBlock_.nextConnection.targetBlock()));
 };
@@ -312,12 +311,10 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
  *     end up.
  * @protected
  */
-BlockDragger.prototype.getNewLocationAfterDrag_ = function(
-    currentDragDeltaXY) {
+BlockDragger.prototype.getNewLocationAfterDrag_ = function(currentDragDeltaXY) {
   const newValues = {};
   newValues.delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  newValues.newLocation =
-      Coordinate.sum(this.startXY_, newValues.delta);
+  newValues.newLocation = Coordinate.sum(this.startXY_, newValues.delta);
   return newValues;
 };
 
@@ -379,7 +376,7 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
 
   if (toolbox) {
     const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+                                                      'blocklyToolboxGrab';
 
     if (isEnd && typeof toolbox.removeStyle == 'function') {
       toolbox.removeStyle(style);
@@ -395,8 +392,7 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
-  const event =
-      new (get(BLOCK_MOVE))(this.draggingBlock_);
+  const event = new (get(BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   fire(event);
@@ -467,8 +463,6 @@ BlockDragger.prototype.getInsertionMarkers = function() {
   return [];
 };
 
-register(
-    Type.BLOCK_DRAGGER, DEFAULT,
-    BlockDragger);
+register(Type.BLOCK_DRAGGER, DEFAULT, BlockDragger);
 
 exports = BlockDragger;

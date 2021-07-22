@@ -103,7 +103,7 @@ Blockly.MenuItem = function(content, opt_value) {
  * @return {!Element} Completed DOM.
  */
 Blockly.MenuItem.prototype.createDom = function() {
-  var element = document.createElement('div');
+  const element = document.createElement('div');
   element.id = Blockly.utils.IdGenerator.getNextUniqueId();
   this.element_ = element;
 
@@ -116,16 +116,16 @@ Blockly.MenuItem.prototype.createDom = function() {
         'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
       (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
-  var content = document.createElement('div');
+  const content = document.createElement('div');
   content.className = 'blocklyMenuItemContent goog-menuitem-content';
   // Add a checkbox for checkable menu items.
   if (this.checkable_) {
-    var checkbox = document.createElement('div');
+    const checkbox = document.createElement('div');
     checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
     content.appendChild(checkbox);
   }
 
-  var contentDom = /** @type {!HTMLElement} */ (this.content_);
+  let contentDom = /** @type {!HTMLElement} */ (this.content_);
   if (typeof this.content_ == 'string') {
     contentDom = document.createTextNode(this.content_);
   }
@@ -223,12 +223,12 @@ Blockly.MenuItem.prototype.setChecked = function(checked) {
 Blockly.MenuItem.prototype.setHighlighted = function(highlight) {
   this.highlight_ = highlight;
 
-  var el = this.getElement();
+  const el = this.getElement();
   if (el && this.isEnabled()) {
     // goog-menuitem-highlight is deprecated, use blocklyMenuItemHighlight.
     // May 2020.
-    var name = 'blocklyMenuItemHighlight';
-    var nameDep = 'goog-menuitem-highlight';
+    const name = 'blocklyMenuItemHighlight';
+    const nameDep = 'goog-menuitem-highlight';
     if (highlight) {
       Blockly.utils.dom.addClass(el, name);
       Blockly.utils.dom.addClass(el, nameDep);

@@ -15,12 +15,12 @@ goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const MenuItem = goog.requireType('Blockly.MenuItem');
-const Size = goog.requireType('Blockly.utils.Size');
-const {addClass, hasClass, removeClass} = goog.require('Blockly.utils.dom');
-const {Data, conditionalBind, unbind} = goog.require('Blockly.browserEvents');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const {getSize, scrollIntoContainerView} = goog.require('Blockly.utils.style');
-const {Role, State, setRole, setState} = goog.require('Blockly.utils.aria');
+const Size = goog.requireType('Blockly.utils.Size');
+const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const style = goog.require('Blockly.utils.style');
 
 
 /**
@@ -56,35 +56,35 @@ const Menu = function() {
 
   /**
    * Mouse over event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.mouseOverHandler_ = null;
 
   /**
    * Click event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.clickHandler_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.mouseEnterHandler_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.mouseLeaveHandler_ = null;
 
   /**
    * Key down event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onKeyDownHandler_ = null;
@@ -98,7 +98,7 @@ const Menu = function() {
 
   /**
    * ARIA name for this menu.
-   * @type {?Role}
+   * @type {?aria.Role}
    * @private
    */
   this.roleName_ = null;
@@ -124,7 +124,7 @@ Menu.prototype.render = function(container) {
   element.className = 'blocklyMenu goog-menu blocklyNonSelectable';
   element.tabIndex = 0;
   if (this.roleName_) {
-    setRole(element, this.roleName_);
+    aria.setRole(element, this.roleName_);
   }
   this.element_ = element;
 
@@ -135,15 +135,15 @@ Menu.prototype.render = function(container) {
 
   // Add event handlers.
   this.mouseOverHandler_ =
-      conditionalBind(element, 'mouseover', this, this.handleMouseOver_, true);
+      browserEvents.conditionalBind(element, 'mouseover', this, this.handleMouseOver_, true);
   this.clickHandler_ =
-      conditionalBind(element, 'click', this, this.handleClick_, true);
-  this.mouseEnterHandler_ = conditionalBind(
+      browserEvents.conditionalBind(element, 'click', this, this.handleClick_, true);
+  this.mouseEnterHandler_ = browserEvents.conditionalBind(
       element, 'mouseenter', this, this.handleMouseEnter_, true);
-  this.mouseLeaveHandler_ = conditionalBind(
+  this.mouseLeaveHandler_ = browserEvents.conditionalBind(
       element, 'mouseleave', this, this.handleMouseLeave_, true);
   this.onKeyDownHandler_ =
-      conditionalBind(element, 'keydown', this, this.handleKeyEvent_);
+      browserEvents.conditionalBind(element, 'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
 };
@@ -165,7 +165,7 @@ Menu.prototype.focus = function() {
   const el = this.getElement();
   if (el) {
     el.focus({preventScroll: true});
-    addClass(el, 'blocklyFocused');
+    dom.addClass(el, 'blocklyFocused');
   }
 };
 
@@ -177,13 +177,13 @@ Menu.prototype.blur_ = function() {
   const el = this.getElement();
   if (el) {
     el.blur();
-    removeClass(el, 'blocklyFocused');
+    dom.removeClass(el, 'blocklyFocused');
   }
 };
 
 /**
  * Set the menu accessibility role.
- * @param {!Role} roleName role name.
+ * @param {!aria.Role} roleName role name.
  * @package
  */
 Menu.prototype.setRole = function(roleName) {
@@ -196,23 +196,23 @@ Menu.prototype.setRole = function(roleName) {
 Menu.prototype.dispose = function() {
   // Remove event handlers.
   if (this.mouseOverHandler_) {
-    unbind(this.mouseOverHandler_);
+    browserEvents.unbind(this.mouseOverHandler_);
     this.mouseOverHandler_ = null;
   }
   if (this.clickHandler_) {
-    unbind(this.clickHandler_);
+    browserEvents.unbind(this.clickHandler_);
     this.clickHandler_ = null;
   }
   if (this.mouseEnterHandler_) {
-    unbind(this.mouseEnterHandler_);
+    browserEvents.unbind(this.mouseEnterHandler_);
     this.mouseEnterHandler_ = null;
   }
   if (this.mouseLeaveHandler_) {
-    unbind(this.mouseLeaveHandler_);
+    browserEvents.unbind(this.mouseLeaveHandler_);
     this.mouseLeaveHandler_ = null;
   }
   if (this.onKeyDownHandler_) {
-    unbind(this.onKeyDownHandler_);
+    browserEvents.unbind(this.onKeyDownHandler_);
     this.onKeyDownHandler_ = null;
   }
 
@@ -239,7 +239,7 @@ Menu.prototype.getMenuItem_ = function(elem) {
   // Walk up parents until one meets either the menu's root element, or
   // a menu item's div.
   while (elem && elem != menuElem) {
-    if (hasClass(elem, 'blocklyMenuItem')) {
+    if (dom.hasClass(elem, 'blocklyMenuItem')) {
       // Having found a menu item's div, locate that menu item in this menu.
       for (let i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
         if (menuItem.getElement() == elem) {
@@ -271,10 +271,10 @@ Menu.prototype.setHighlighted = function(item) {
     // Bring the highlighted item into view. This has no effect if the menu is
     // not scrollable.
     const el = /** @type {!Element} */ (this.getElement());
-    scrollIntoContainerView(
+    style.scrollIntoContainerView(
         /** @type {!Element} */ (item.getElement()), el);
 
-    setState(el, State.ACTIVEDESCENDANT, item.getId());
+    aria.setState(el, aria.State.ACTIVEDESCENDANT, item.getId());
   }
 };
 
@@ -462,7 +462,7 @@ Menu.prototype.handleKeyEvent_ = function(e) {
  */
 Menu.prototype.getSize = function() {
   const menuDom = this.getElement();
-  const menuSize = getSize(/** @type {!Element} */
+  const menuSize = style.getSize(/** @type {!Element} */
                            (menuDom));
   // Recalculate height for the total content, not only box height.
   menuSize.height = menuDom.scrollHeight;

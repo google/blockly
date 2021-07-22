@@ -14,9 +14,9 @@
 goog.module('Blockly.IMetricsManager');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.MetricsManager');
-goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.utils.Size');
+const Metrics = goog.requireType('Blockly.utils.Metrics');
+const Size = goog.requireType('Blockly.utils.Size');
+const {AbsoluteMetrics, ContainerRegion, ToolboxMetrics} = goog.requireType('Blockly.MetricsManager');
 
 
 /**
@@ -36,13 +36,13 @@ IMetricsManager.prototype.hasFixedEdges;
  * Returns the metrics for the scroll area of the workspace.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ * @param {!ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
+ * @param {!ContainerRegion=} opt_contentMetrics The
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
- * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
+ * @return {!ContainerRegion} The metrics for the scroll
  *    container
  */
 IMetricsManager.prototype.getScrollMetrics;
@@ -52,7 +52,7 @@ IMetricsManager.prototype.getScrollMetrics;
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
  * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
- * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
+ * @return {!ToolboxMetrics} The width and height of the
  *     flyout.
  * @public
  */
@@ -63,7 +63,7 @@ IMetricsManager.prototype.getFlyoutMetrics;
  * coordinates. Returns 0 for the width and height if the workspace has a simple
  * toolbox instead of a category toolbox. To get the width and height of a
  * simple toolbox @see {@link getFlyoutMetrics}.
- * @return {!Blockly.MetricsManager.ToolboxMetrics} The object with the width,
+ * @return {!ToolboxMetrics} The object with the width,
  *     height and position of the toolbox.
  * @public
  */
@@ -72,7 +72,7 @@ IMetricsManager.prototype.getToolboxMetrics;
 /**
  * Gets the width and height of the workspace's parent SVG element in pixel
  * coordinates. This area includes the toolbox and the visible workspace area.
- * @return {!Blockly.utils.Size} The width and height of the workspace's parent
+ * @return {!Size} The width and height of the workspace's parent
  *     SVG element.
  * @public
  */
@@ -81,7 +81,7 @@ IMetricsManager.prototype.getSvgMetrics;
 /**
  * Gets the absolute left and absolute top in pixel coordinates.
  * This is where the visible workspace starts in relation to the SVG container.
- * @return {!Blockly.MetricsManager.AbsoluteMetrics} The absolute metrics for
+ * @return {!AbsoluteMetrics} The absolute metrics for
  *     the workspace.
  * @public
  */
@@ -92,7 +92,7 @@ IMetricsManager.prototype.getAbsoluteMetrics;
  * coordinates. The visible workspace does not include the toolbox or flyout.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
  *     workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
+ * @return {!ContainerRegion} The width, height, top and
  *     left of the viewport in either workspace coordinates or pixel
  *     coordinates.
  * @public
@@ -105,7 +105,7 @@ IMetricsManager.prototype.getViewMetrics;
  * workspace (workspace comments and blocks).
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The
+ * @return {!ContainerRegion} The
  *     metrics for the content container.
  * @public
  */
@@ -139,7 +139,7 @@ IMetricsManager.prototype.getContentMetrics;
  * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
  * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
  *     compare.
- * @return {!Blockly.utils.Metrics} Contains size and position metrics of a top
+ * @return {!Metrics} Contains size and position metrics of a top
  *     level workspace.
  * @public
  */

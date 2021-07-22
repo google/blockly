@@ -109,7 +109,7 @@ Blockly.FieldTextInput.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 Blockly.FieldTextInput.fromJson = function(options) {
-  var text = Blockly.utils.replaceMessageReferences(options['text']);
+  const text = Blockly.utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldTextInput if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);
@@ -150,12 +150,12 @@ Blockly.FieldTextInput.prototype.initView = function() {
   if (this.getConstants().FULL_BLOCK_FIELDS) {
     // Step one: figure out if this is the only field on this block.
     // Rendering is quite different in that case.
-    var nFields = 0;
-    var nConnections = 0;
+    let nFields = 0;
+    let nConnections = 0;
 
     // Count the number of fields, excluding text fields
-    for (var i = 0, input; (input = this.sourceBlock_.inputList[i]); i++) {
-      for (var j = 0; (input.fieldRow[j]); j++) {
+    for (let i = 0, input; (input = this.sourceBlock_.inputList[i]); i++) {
+      for (let j = 0; (input.fieldRow[j]); j++) {
         nFields ++;
       }
       if (input.connection) {
@@ -203,7 +203,7 @@ Blockly.FieldTextInput.prototype.doClassValidation_ = function(opt_newValue) {
 Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
   if (this.isBeingEdited_) {
     this.isTextValid_ = false;
-    var oldValue = this.value_;
+    const oldValue = this.value_;
     // Revert value when the text becomes invalid.
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
@@ -257,7 +257,7 @@ Blockly.FieldTextInput.prototype.render_ = function() {
   // doValueUpdate_ so that the code is more centralized.
   if (this.isBeingEdited_) {
     this.resizeEditor_();
-    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
     if (!this.isTextValid_) {
       Blockly.utils.dom.addClass(htmlInput, 'blocklyInvalidInput');
       Blockly.utils.aria.setState(htmlInput,
@@ -296,7 +296,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
     opt_quietInput) {
   this.workspace_ =
     (/** @type {!Blockly.BlockSvg} */ (this.sourceBlock_)).workspace;
-  var quietInput = opt_quietInput || false;
+  const quietInput = opt_quietInput || false;
   if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
                       Blockly.utils.userAgent.ANDROID ||
                       Blockly.utils.userAgent.IPAD)) {
@@ -343,28 +343,28 @@ Blockly.FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  */
 Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
   Blockly.Events.setGroup(true);
-  var div = Blockly.WidgetDiv.DIV;
+  const div = Blockly.WidgetDiv.DIV;
 
   Blockly.utils.dom.addClass(this.getClickTarget_(), 'editing');
 
-  var htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
+  const htmlInput = /** @type {HTMLInputElement} */ (document.createElement('input'));
   htmlInput.className = 'blocklyHtmlInput';
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var scale = this.workspace_.getScale();
-  var fontSize =
+  const scale = this.workspace_.getScale();
+  const fontSize =
       (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
-  var borderRadius =
+  let borderRadius =
       (Blockly.FieldTextInput.BORDERRADIUS * scale) + 'px';
 
   if (this.fullBlockClickTarget_) {
-    var bBox = this.getScaledBBox();
+    const bBox = this.getScaledBBox();
 
     // Override border radius.
     borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
     // Pull stroke colour from the existing shadow block
-    var strokeColour = this.sourceBlock_.getParent() ?
+    const strokeColour = this.sourceBlock_.getParent() ?
       this.sourceBlock_.getParent().style.colourTertiary :
       this.sourceBlock_.style.colourTertiary;
     htmlInput.style.border = (1 * scale) + 'px solid ' + strokeColour;
@@ -409,7 +409,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
 
   // Actual disposal.
   this.unbindInputEvents_();
-  var style = Blockly.WidgetDiv.DIV.style;
+  const style = Blockly.WidgetDiv.DIV.style;
   style.width = 'auto';
   style.height = 'auto';
   style.fontSize = '';
@@ -477,11 +477,11 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
  * @private
  */
 Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
-  var text = this.htmlInput_.value;
+  const text = this.htmlInput_.value;
   if (text !== this.htmlInput_.oldValue_) {
     this.htmlInput_.oldValue_ = text;
 
-    var value = this.getValueFromEditorText_(text);
+    const value = this.getValueFromEditorText_(text);
     this.setValue(value);
     this.forceRerender();
     this.resizeEditor_();
@@ -512,15 +512,15 @@ Blockly.FieldTextInput.prototype.setEditorValue_ = function(newValue) {
  * @protected
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
-  var div = Blockly.WidgetDiv.DIV;
-  var bBox = this.getScaledBBox();
+  const div = Blockly.WidgetDiv.DIV;
+  const bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';
 
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
-  var x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
-  var xy = new Blockly.utils.Coordinate(x, bBox.top);
+  const x = this.sourceBlock_.RTL ? bBox.right - div.offsetWidth : bBox.left;
+  const xy = new Blockly.utils.Coordinate(x, bBox.top);
 
   div.style.left = xy.x + 'px';
   div.style.top = xy.y + 'px';

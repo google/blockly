@@ -60,6 +60,7 @@ const parse = function(str) {
   }
   return null;
 };
+exports.parse = parse;
 
 /**
  * Converts a colour from RGB to hex representation.
@@ -75,6 +76,7 @@ const rgbToHex = function(r, g, b) {
   }
   return '#' + rgb.toString(16);
 };
+exports.rgbToHex = rgbToHex;
 
 /**
  * Converts a colour to RGB.
@@ -95,6 +97,7 @@ const hexToRgb = function(colour) {
 
   return [r, g, b];
 };
+exports.hexToRgb = hexToRgb;
 
 /**
  * Converts an HSV triplet to hex representation.
@@ -153,6 +156,7 @@ const hsvToHex = function(h, s, v) {
   }
   return rgbToHex(Math.floor(red), Math.floor(green), Math.floor(blue));
 };
+exports.hsvToHex = hsvToHex;
 
 /**
  * Blend two colours together, using the specified factor to indicate the
@@ -179,6 +183,7 @@ const blend = function(colour1, colour2, factor) {
   const b = Math.round(rgb2[2] + factor * (rgb1[2] - rgb2[2]));
   return rgbToHex(r, g, b);
 };
+exports.blend = blend;
 
 /**
  * A map that contains the 16 basic colour keywords as defined by W3C:
@@ -206,12 +211,4 @@ const names = {
   'white': '#ffffff',
   'yellow': '#ffff00'
 };
-
-exports = {
-  parse,
-  rgbToHex,
-  hexToRgb,
-  hsvToHex,
-  blend,
-  names
-};
+exports.names = names;

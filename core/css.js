@@ -39,6 +39,7 @@ const register = function(cssArray) {
   Array.prototype.push.apply(CONTENT, cssArray);
   cssArray.length = 0;  // Garbage collect provided CSS content.
 };
+exports.register = register;
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -72,6 +73,7 @@ const inject = function(hasCss, pathToMedia) {
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
 };
+exports.inject = inject;
 
 /**
  * Array making up the CSS content for Blockly.
@@ -553,9 +555,4 @@ const CONTENT = [
   margin-right: -24px;
 }`,
 ];
-
-exports = {
-  register,
-  inject,
-  CONTENT
-};
+exports.CONTENT = CONTENT;

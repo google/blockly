@@ -20,6 +20,7 @@
 goog.module('Blockly.Extensions');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const {checkMessageReferences, replaceMessageReferences, runAfterPageLoad} = goog.require('Blockly.utils');
 
@@ -29,6 +30,7 @@ const {checkMessageReferences, replaceMessageReferences, runAfterPageLoad} = goo
  * @private
  */
 const allExtensions = Object.create(null);
+exports.ALL_ = allExtensions;
 
 /**
  * Registers a new extension function. Extensions are functions that help
@@ -52,6 +54,7 @@ const register = function(name, initFn) {
   }
   allExtensions[name] = initFn;
 };
+exports.register = register;
 
 /**
  * Registers a new extension function that adds all key/value of mixinObj.
@@ -68,6 +71,7 @@ const registerMixin = function(name, mixinObj) {
     this.mixin(mixinObj);
   });
 };
+exports.registerMixin = registerMixin;
 
 /**
  * Registers a new extension function that adds a mutator to the block.
@@ -111,6 +115,7 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
     }
   });
 };
+exports.registerMutator = registerMutator;
 
 /**
  * Unregisters the extension registered with the given name.
@@ -124,6 +129,7 @@ const unregister = function(name) {
         'No extension mapping for name "' + name + '" found to unregister');
   }
 };
+exports.unregister = unregister;
 
 /**
  * Applies an extension method to a block. This should only be called during
@@ -161,6 +167,7 @@ const apply = function(name, block, isMutator) {
     }
   }
 };
+exports.apply = apply;
 
 /**
  * Check that the given value is a function.
@@ -366,6 +373,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   };
   return extensionFn;
 };
+exports.buildTooltipForDropdown = buildTooltipForDropdown;
 
 /**
  * Checks all options keys are present in the provided string lookup table.
@@ -425,6 +433,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   };
   return extensionFn;
 };
+exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
 
 /**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,
@@ -443,14 +452,3 @@ const extensionParentTooltip = function() {
   }.bind(this));
 };
 register('parent_tooltip_when_inline', extensionParentTooltip);
-
-exports = {
-  ALL_: allExtensions,
-  register,
-  registerMixin,
-  registerMutator,
-  unregister,
-  apply,
-  buildTooltipForDropdown,
-  buildTooltipWithFieldText
-};

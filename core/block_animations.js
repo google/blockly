@@ -13,9 +13,10 @@
 goog.module('Blockly.blockAnimations');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
-const dom = goog.require('Blockly.utils.dom');
 const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
 
 
 /**
@@ -34,7 +35,7 @@ let disconnectGroup = null;
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param {!BlockSvg} block The block being disposed of.
  */
-function disposeUiEffect(block) {
+const disposeUiEffect = function(block) {
   const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -49,7 +50,7 @@ function disposeUiEffect(block) {
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   disposeUiStep(clone, workspace.RTL, new Date, workspace.scale);
-}
+};
 /** @package */
 exports.disposeUiEffect = disposeUiEffect;
 
@@ -62,7 +63,7 @@ exports.disposeUiEffect = disposeUiEffect;
  * @param {!Date} start Date of animation's start.
  * @param {number} workspaceScale Scale of workspace.
  */
-function disposeUiStep(clone, rtl, start, workspaceScale) {
+const disposeUiStep = function(clone, rtl, start, workspaceScale) {
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
@@ -78,13 +79,13 @@ function disposeUiStep(clone, rtl, start, workspaceScale) {
             ' scale(' + scale + ')');
     setTimeout(disposeUiStep, 10, clone, rtl, start, workspaceScale);
   }
-}
+};
 
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
  * @param {!BlockSvg} block The block being connected.
  */
-function connectionUiEffect(block) {
+const connectionUiEffect = function(block) {
   const workspace = block.workspace;
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
@@ -113,7 +114,7 @@ function connectionUiEffect(block) {
       workspace.getParentSvg());
   // Start the animation.
   connectionUiStep(ripple, new Date, scale);
-}
+};
 /** @package */
 exports.connectionUiEffect = connectionUiEffect;
 
@@ -123,7 +124,7 @@ exports.connectionUiEffect = connectionUiEffect;
  * @param {!Date} start Date of animation's start.
  * @param {number} scale Scale of workspace.
  */
-function connectionUiStep(ripple, start, scale) {
+const connectionUiStep = function(ripple, start, scale) {
   const ms = new Date - start;
   const percent = ms / 150;
   if (percent > 1) {
@@ -133,13 +134,13 @@ function connectionUiStep(ripple, start, scale) {
     ripple.style.opacity = 1 - percent;
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
-}
+};
 
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
  * @param {!BlockSvg} block The block being disconnected.
  */
-function disconnectUiEffect(block) {
+const disconnectUiEffect = function(block) {
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
@@ -154,7 +155,7 @@ function disconnectUiEffect(block) {
   }
   // Start the animation.
   disconnectUiStep(block.getSvgRoot(), magnitude, new Date);
-}
+};
 /** @package */
 exports.disconnectUiEffect = disconnectUiEffect;
 
@@ -164,7 +165,7 @@ exports.disconnectUiEffect = disconnectUiEffect;
  * @param {number} magnitude Maximum degrees skew (reversed for RTL).
  * @param {!Date} start Date of animation's start.
  */
-function disconnectUiStep(group, magnitude, start) {
+const disconnectUiStep = function(group, magnitude, start) {
   const DURATION = 200;  // Milliseconds.
   const WIGGLES = 3;     // Half oscillations.
 
@@ -181,12 +182,12 @@ function disconnectUiStep(group, magnitude, start) {
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
   group.setAttribute('transform', group.translate_ + group.skew_);
-}
+};
 
 /**
  * Stop the disconnect UI animation immediately.
  */
-function disconnectUiStop() {
+const disconnectUiStop = function() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
     const group = disconnectGroup;
@@ -194,6 +195,6 @@ function disconnectUiStop() {
     group.setAttribute('transform', group.translate_);
     disconnectGroup = null;
   }
-}
+};
 /** @package */
 exports.disconnectUiStop = disconnectUiStop;

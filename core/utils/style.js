@@ -29,7 +29,7 @@ const Size = goog.require('Blockly.utils.Size');
  * @param {!Element} element Element to get size of.
  * @return {!Size} Object with width/height properties.
  */
-function getSize(element) {
+const getSize = function(element) {
   if (getStyle(element, 'display') != 'none') {
     return getSizeWithDisplay(element);
   }
@@ -52,7 +52,7 @@ function getSize(element) {
   style.visibility = originalVisibility;
 
   return new Size(offsetWidth, offsetHeight);
-}
+};
 exports.getSize = getSize;
 
 /**
@@ -60,11 +60,11 @@ exports.getSize = getSize;
  * @param {!Element} element Element to get size of.
  * @return {!Size} Object with width/height properties.
  */
-function getSizeWithDisplay(element) {
+const getSizeWithDisplay = function(element) {
   const offsetWidth = /** @type {!HTMLElement} */ (element).offsetWidth;
   const offsetHeight = /** @type {!HTMLElement} */ (element).offsetHeight;
   return new Size(offsetWidth, offsetHeight);
-}
+};
 
 /**
  * Cross-browser pseudo get computed style. It returns the computed style where
@@ -79,10 +79,10 @@ function getSizeWithDisplay(element) {
  * @param {string} style Property to get (must be camelCase, not CSS-style).
  * @return {string} Style value.
  */
-function getStyle(element, style) {
+const getStyle = function(element, style) {
   return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
       (element.style && element.style[style]);
-}
+};
 
 /**
  * Retrieves a computed style value of a node. It returns empty string if the
@@ -96,7 +96,7 @@ function getStyle(element, style) {
  * @param {string} property Property to get (camel-case).
  * @return {string} Style value.
  */
-function getComputedStyle(element, property) {
+const getComputedStyle = function(element, property) {
   if (document.defaultView && document.defaultView.getComputedStyle) {
     const styles = document.defaultView.getComputedStyle(element, null);
     if (styles) {
@@ -107,7 +107,7 @@ function getComputedStyle(element, property) {
   }
 
   return '';
-}
+};
 exports.getComputedStyle = getComputedStyle;
 
 /**
@@ -120,10 +120,10 @@ exports.getComputedStyle = getComputedStyle;
  * @param {string} style Property to get (camel-case).
  * @return {string} Style value.
  */
-function getCascadedStyle(element, style) {
+const getCascadedStyle = function(element, style) {
   return /** @type {string} */ (
       element.currentStyle ? element.currentStyle[style] : null);
-}
+};
 exports.getCascadedStyle = getCascadedStyle;
 
 /**
@@ -132,7 +132,7 @@ exports.getCascadedStyle = getCascadedStyle;
  * @param {!Element} el Element to get the page offset for.
  * @return {!Coordinate} The page offset.
  */
-function getPageOffset(el) {
+const getPageOffset = function(el) {
   const pos = new Coordinate(0, 0);
   const box = el.getBoundingClientRect();
   const documentElement = document.documentElement;
@@ -146,7 +146,7 @@ function getPageOffset(el) {
   pos.y = box.top + scrollCoord.y;
 
   return pos;
-}
+};
 exports.getPageOffset = getPageOffset;
 
 /**
@@ -154,13 +154,13 @@ exports.getPageOffset = getPageOffset;
  * Similar to Closure's goog.style.getViewportPageOffset
  * @return {!Coordinate} The page offset of the viewport.
  */
-function getViewportPageOffset() {
+const getViewportPageOffset = function() {
   const body = document.body;
   const documentElement = document.documentElement;
   const scrollLeft = body.scrollLeft || documentElement.scrollLeft;
   const scrollTop = body.scrollTop || documentElement.scrollTop;
   return new Coordinate(scrollLeft, scrollTop);
-}
+};
 exports.getViewportPageOffset = getViewportPageOffset;
 
 /**
@@ -175,9 +175,9 @@ exports.getViewportPageOffset = getViewportPageOffset;
  * @param {*} isShown True to render the element in its default style,
  *     false to disable rendering the element.
  */
-function setElementShown(el, isShown) {
+const setElementShown = function(el, isShown) {
   el.style.display = isShown ? '' : 'none';
-}
+};
 exports.setElementShown = setElementShown;
 
 /**
@@ -187,9 +187,9 @@ exports.setElementShown = setElementShown;
  * @param {!Element} el The element to test.
  * @return {boolean} True for right to left, false for left to right.
  */
-function isRightToLeft(el) {
+const isRightToLeft = function(el) {
   return 'rtl' == getStyle(el, 'direction');
-}
+};
 exports.isRightToLeft = isRightToLeft;
 
 /**
@@ -198,7 +198,7 @@ exports.isRightToLeft = isRightToLeft;
  * @param {!Element} element  The element to get the border widths for.
  * @return {!Object} The computed border widths.
  */
-function getBorderBox(element) {
+const getBorderBox = function(element) {
   const left = getComputedStyle(element, 'borderLeftWidth');
   const right = getComputedStyle(element, 'borderRightWidth');
   const top = getComputedStyle(element, 'borderTopWidth');
@@ -210,7 +210,7 @@ function getBorderBox(element) {
     bottom: parseFloat(bottom),
     left: parseFloat(left)
   };
-}
+};
 exports.getBorderBox = getBorderBox;
 
 /**
@@ -226,11 +226,11 @@ exports.getBorderBox = getBorderBox;
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
  */
-function scrollIntoContainerView(element, container, opt_center) {
+const scrollIntoContainerView = function(element, container, opt_center) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
-}
+};
 exports.scrollIntoContainerView = scrollIntoContainerView;
 
 /**
@@ -248,7 +248,7 @@ exports.scrollIntoContainerView = scrollIntoContainerView;
  * @return {!Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  */
-function getContainerOffsetToScrollInto(element, container, opt_center) {
+const getContainerOffsetToScrollInto = function(element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.
@@ -281,5 +281,5 @@ function getContainerOffsetToScrollInto(element, container, opt_center) {
     scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
   return new Coordinate(scrollLeft, scrollTop);
-}
+};
 exports.getContainerOffsetToScrollInto = getContainerOffsetToScrollInto;

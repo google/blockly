@@ -13,20 +13,15 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
-<<<<<<< HEAD
 // eslint-disable-next-line no-unused-vars
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
+const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
-=======
-goog.require('Blockly.Xml');
-goog.require('Blockly.inputTypes');
-const Events = goog.require('Blockly.Events');
->>>>>>> bdbbe5bd (Add parameter for recording undo.)
 
 
 // TODO: Remove this once lint is fixed.
@@ -294,7 +289,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
-  if (block instanceof Blockly.BlockSvg) {
+  if (workspace.rendered) {
     setTimeout(() => {
       if (!block.disposed) {
         block.setConnectionTracking(true);
@@ -331,7 +326,7 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
   loadFields(block, state);
   loadInputBlocks(block, state);
   loadNextBlocks(block, state);
-  initBlock(block);
+  initBlock(block, workspace.rendered);
   return block;
 };
 
@@ -471,16 +466,16 @@ const loadConnection = function(connection, connectionState) {
 /**
  * Initializes the give block, eg init the model, inits the svg, renders, etc.
  * @param {!Block} block The block to initialize.
+ * @param {boolean} rendered Whether the block is a rendered or headless block.
  */
-const initBlock = function(block) {
-  if (block instanceof Blockly.BlockSvg) {
+const initBlock = function(block, rendered) {
+  if (rendered) {
     // Adding connections to the connection db is expensive. This defers that
     // operation to decrease load time.
     block.setConnectionTracking(false);
 
     block.initSvg();
     block.render(false);
-    block.updateDisabled();
   } else {
     block.initModel();
   }

@@ -81,11 +81,7 @@ suite.only('JSO Deserialization', function() {
             this.workspace.id);
       });
 
-<<<<<<< HEAD
-      test('Only fire one event with var and var on block', function() {
-=======
       test('Automatic group', function() {
->>>>>>> 44418b3d (Add grouping of events)
         const state = {
           'variables': [
             {
@@ -114,19 +110,11 @@ suite.only('JSO Deserialization', function() {
       });
     });
 
-<<<<<<< HEAD
-    suite('Block create', function() {
-      test('Simple', function() {
-        const state = {
-          'blocks': {
-            'blocks': [
-=======
     suite('Var create', function() {
       suite('Top-level call', function() {
         test('Just var', function() {
           const state = {
             'variables': [
->>>>>>> 44418b3d (Add grouping of events)
               {
                 'name': 'test',
                 'id': 'testId',
@@ -154,18 +142,6 @@ suite.only('JSO Deserialization', function() {
                 'id': 'testId',
               }
             ]
-<<<<<<< HEAD
-          }
-        };
-        Blockly.serialization.workspaces.load(state, this.workspace);
-        assertEventFired(
-            this.eventsFireStub,
-            Blockly.Events.BlockCreate,
-            {'recordUndo': false},
-            this.workspace.id,
-            'testId');
-      });
-=======
           };
           Blockly.serialization.load(state, this.workspace, {recordUndo: true});
           assertEventFired(
@@ -179,7 +155,6 @@ suite.only('JSO Deserialization', function() {
               },
               this.workspace.id);
         });
->>>>>>> 44418b3d (Add grouping of events)
 
         test('Grouping', function() {
           const state = {
@@ -262,12 +237,6 @@ suite.only('JSO Deserialization', function() {
         });
       });
 
-<<<<<<< HEAD
-      test('Only fire event for top block', function() {
-        const state = {
-          'blocks': {
-            'blocks': [
-=======
       suite('Direct call', function() {
         test('Just var', function() {
           const state = {
@@ -278,7 +247,6 @@ suite.only('JSO Deserialization', function() {
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.VarCreate,
->>>>>>> 44418b3d (Add grouping of events)
               {
                 'varName': 'test',
                 'varId': 'testId',
@@ -446,25 +414,6 @@ suite.only('JSO Deserialization', function() {
                     }
                   }
                 },
-<<<<<<< HEAD
-                'next': {
-                  'block': {
-                    'type': 'controls_if',
-                    'id': 'id3'
-                  }
-                }
-              },
-            ]
-          }
-        };
-        Blockly.serialization.workspaces.load(state, this.workspace);
-        assertEventFired(
-            this.eventsFireStub,
-            Blockly.Events.BlockCreate,
-            {},
-            this.workspace.id,
-            'id1');
-=======
               ]
             }
           };
@@ -528,7 +477,6 @@ suite.only('JSO Deserialization', function() {
               this.workspace.id,
               'testId');
         });
->>>>>>> 44418b3d (Add grouping of events)
       });
     });
   });

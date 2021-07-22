@@ -150,8 +150,8 @@ ASTNode.createConnectionNode = function(connection) {
   const type = connection.type;
   if (type == connectionTypes.INPUT_VALUE) {
     return ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == connectionTypes.NEXT_STATEMENT &&
-      connection.getParentInput()) {
+  } else if (
+      type == connectionTypes.NEXT_STATEMENT && connection.getParentInput()) {
     return ASTNode.createInputNode(connection.getParentInput());
   } else if (type == connectionTypes.NEXT_STATEMENT) {
     return new ASTNode(ASTNode.types.NEXT, connection);
@@ -215,11 +215,8 @@ ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
   if (!wsCoordinate || !workspace) {
     return null;
   }
-  const params = {
-    wsCoordinate: wsCoordinate
-  };
-  return new ASTNode(
-      ASTNode.types.WORKSPACE, workspace, params);
+  const params = {wsCoordinate: wsCoordinate};
+  return new ASTNode(ASTNode.types.WORKSPACE, workspace, params);
 };
 
 /**
@@ -425,8 +422,8 @@ ASTNode.prototype.findPrevForField_ = function() {
 ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   var curLocation = this.getLocation();
   if (curLocation.getSourceBlock) {
-    curLocation = /** @type {!IASTNodeLocationWithBlock} */ (
-      curLocation).getSourceBlock();
+    curLocation = /** @type {!IASTNodeLocationWithBlock} */ (curLocation)
+                      .getSourceBlock();
   }
   if (!curLocation || !curLocation.workspace) {
     return null;
@@ -459,11 +456,10 @@ ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
 ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
   const topConnection = block.previousConnection || block.outputConnection;
   if (topConnection) {
-    return /** @type {!ASTNode} */ (ASTNode.createConnectionNode(
-        topConnection));
+    return /** @type {!ASTNode} */ (
+        ASTNode.createConnectionNode(topConnection));
   } else {
-    return /** @type {!ASTNode} */ (ASTNode.createBlockNode(
-        block));
+    return /** @type {!ASTNode} */ (ASTNode.createBlockNode(block));
   }
 };
 
@@ -535,8 +531,8 @@ ASTNode.prototype.getSourceBlock = function() {
   } else if (this.getType() === ASTNode.types.WORKSPACE) {
     return null;
   } else {
-    return /** @type {IASTNodeLocationWithBlock} */ (
-      this.getLocation()).getSourceBlock();
+    return /** @type {IASTNodeLocationWithBlock} */ (this.getLocation())
+        .getSourceBlock();
   }
 };
 
@@ -668,8 +664,8 @@ ASTNode.prototype.out = function() {
       block = /** @type {!Block} */ (this.location_);
       blockPos = block.getRelativeToSurfaceXY();
       // TODO: Make sure this is in the bounds of the workspace.
-      wsCoordinate = new Coordinate(
-          blockPos.x, blockPos.y + ASTNode.DEFAULT_OFFSET_Y);
+      wsCoordinate =
+          new Coordinate(blockPos.x, blockPos.y + ASTNode.DEFAULT_OFFSET_Y);
       return ASTNode.createWorkspaceNode(block.workspace, wsCoordinate);
 
     case ASTNode.types.OUTPUT:

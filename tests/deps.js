@@ -111,7 +111,7 @@ goog.addDependency('../../core/keyboard_nav/marker.js', ['Blockly.Marker'], [], 
 goog.addDependency('../../core/keyboard_nav/tab_navigate_cursor.js', ['Blockly.TabNavigateCursor'], ['Blockly.ASTNode', 'Blockly.BasicCursor', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/marker_manager.js', ['Blockly.MarkerManager'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/menu.js', ['Blockly.Menu'], ['Blockly.browserEvents', 'Blockly.utils.Coordinate', 'Blockly.utils.KeyCodes', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.style'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/menuitem.js', ['Blockly.MenuItem'], ['Blockly.utils.IdGenerator', 'Blockly.utils.aria', 'Blockly.utils.dom']);
+goog.addDependency('../../core/menuitem.js', ['Blockly.MenuItem'], ['Blockly.utils.IdGenerator', 'Blockly.utils.aria', 'Blockly.utils.dom'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/metrics_manager.js', ['Blockly.FlyoutMetricsManager', 'Blockly.MetricsManager'], ['Blockly.IMetricsManager', 'Blockly.registry', 'Blockly.utils.Size', 'Blockly.utils.toolbox'], {'lang': 'es5'});
 goog.addDependency('../../core/msg.js', ['Blockly.Msg'], ['Blockly.utils.global']);
 goog.addDependency('../../core/mutator.js', ['Blockly.Mutator'], ['Blockly.Bubble', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.BubbleOpen', 'Blockly.Icon', 'Blockly.Options', 'Blockly.WorkspaceSvg', 'Blockly.Xml', 'Blockly.internalConstants', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});

@@ -26,7 +26,8 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
  *    for a list of properties this parameter supports.
  * @extends {FieldLabel}
  * @constructor
@@ -36,8 +37,7 @@ const FieldLabelSerializable = function(opt_value, opt_class, opt_config) {
   FieldLabelSerializable.superClass_.constructor.call(
       this, opt_value, opt_class, opt_config);
 };
-inherits(FieldLabelSerializable,
-    FieldLabel);
+inherits(FieldLabelSerializable, FieldLabel);
 
 /**
  * Construct a FieldLabelSerializable from a JSON arg object,
@@ -68,7 +68,6 @@ FieldLabelSerializable.prototype.EDITABLE = false;
  */
 FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
-fieldRegistry.register(
-    'field_label_serializable', FieldLabelSerializable);
+fieldRegistry.register('field_label_serializable', FieldLabelSerializable);
 
 exports = FieldLabelSerializable;

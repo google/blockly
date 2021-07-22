@@ -42,13 +42,14 @@ goog.require('Blockly.Events.BlockChange');
  * @param {string=} opt_defaultType The type of variable to create if this
  *     field's value is not explicitly set.  Defaults to ''.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
+ *    See the [field creation documentation]{@link
+ *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
  *    for a list of properties this parameter supports.
  * @extends {FieldDropdown}
  * @constructor
  */
-const FieldVariable = function(varName, opt_validator, opt_variableTypes,
-    opt_defaultType, opt_config) {
+const FieldVariable = function(
+    varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {
   // The FieldDropdown constructor expects the field's initial value to be
   // the first entry in the menu generator, which it may or may not be.
   // Just do the relevant parts of the constructor.
@@ -131,8 +132,8 @@ FieldVariable.prototype.initModel = function() {
     return;  // Initialization already happened.
   }
   const variable = Variables.getOrCreateVariablePackage(
-      this.sourceBlock_.workspace, null,
-      this.defaultVariableName, this.defaultType_);
+      this.sourceBlock_.workspace, null, this.defaultVariableName,
+      this.defaultType_);
 
   // Don't call setValue because we don't want to cause a rerender.
   this.doValueUpdate_(variable.getId());
@@ -143,8 +144,8 @@ FieldVariable.prototype.initModel = function() {
  */
 FieldVariable.prototype.shouldAddBorderRect_ = function() {
   return FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
-    (!this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-        this.sourceBlock_.type != 'variables_get');
+      (!this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
+       this.sourceBlock_.type != 'variables_get');
 };
 
 /**
@@ -165,10 +166,11 @@ FieldVariable.prototype.fromXml = function(fieldElement) {
 
   // This should never happen :)
   if (variableType != null && variableType !== variable.type) {
-    throw Error('Serialized variable type with id \'' +
-      variable.getId() + '\' had type ' + variable.type + ', and ' +
-      'does not match variable field that references it: ' +
-      Xml.domToText(fieldElement) + '.');
+    throw Error(
+        'Serialized variable type with id \'' + variable.getId() +
+        '\' had type ' + variable.type + ', and ' +
+        'does not match variable field that references it: ' +
+        Xml.domToText(fieldElement) + '.');
   }
 
   this.setValue(variable.getId());
@@ -260,10 +262,10 @@ FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
     return null;
   }
   const newId = /** @type {string} */ (opt_newValue);
-  const variable = Variables.getVariable(
-      this.sourceBlock_.workspace, newId);
+  const variable = Variables.getVariable(this.sourceBlock_.workspace, newId);
   if (!variable) {
-    console.warn('Variable id doesn\'t point to a real variable! ' +
+    console.warn(
+        'Variable id doesn\'t point to a real variable! ' +
         'ID was ' + newId);
     return null;
   }
@@ -328,8 +330,8 @@ FieldVariable.prototype.getVariableTypes_ = function() {
   if (variableTypes.length == 0) {
     // Throw an error if variableTypes is an empty list.
     const name = this.getText();
-    throw Error('\'variableTypes\' of field variable ' +
-      name + ' was an empty list');
+    throw Error(
+        '\'variableTypes\' of field variable ' + name + ' was an empty list');
   }
   return variableTypes;
 };
@@ -344,8 +346,8 @@ FieldVariable.prototype.getVariableTypes_ = function() {
  *     field's value is not explicitly set.  Defaults to ''.
  * @private
  */
-FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
-    opt_defaultType) {
+FieldVariable.prototype.setTypes_ = function(
+    opt_variableTypes, opt_defaultType) {
   // If you expected that the default type would be the same as the only entry
   // in the variable types array, tell the Blockly team by commenting on #1499.
   const defaultType = opt_defaultType || '';
@@ -363,11 +365,13 @@ FieldVariable.prototype.setTypes_ = function(opt_variableTypes,
       }
     }
     if (!isInArray) {
-      throw Error('Invalid default type \'' + defaultType + '\' in ' +
+      throw Error(
+          'Invalid default type \'' + defaultType + '\' in ' +
           'the definition of a FieldVariable');
     }
   } else {
-    throw Error('\'variableTypes\' was not an array in the definition of ' +
+    throw Error(
+        '\'variableTypes\' was not an array in the definition of ' +
         'a FieldVariable');
   }
   // Only update the field once all checks pass.
@@ -393,7 +397,8 @@ FieldVariable.prototype.refreshVariableName = function() {
  */
 FieldVariable.dropdownCreate = function() {
   if (!this.variable_) {
-    throw Error('Tried to call dropdownCreate on a variable field with no' +
+    throw Error(
+        'Tried to call dropdownCreate on a variable field with no' +
         ' variable selected.');
   }
   const name = this.getText();
@@ -405,7 +410,7 @@ FieldVariable.dropdownCreate = function() {
     for (let i = 0; i < variableTypes.length; i++) {
       const variableType = variableTypes[i];
       const variables =
-        this.sourceBlock_.workspace.getVariablesOfType(variableType);
+          this.sourceBlock_.workspace.getVariablesOfType(variableType);
       variableModelList = variableModelList.concat(variables);
     }
   }
@@ -416,9 +421,7 @@ FieldVariable.dropdownCreate = function() {
     // Set the UUID as the internal representation of the variable.
     options[i] = [variableModelList[i].name, variableModelList[i].getId()];
   }
-  options.push([
-    Msg['RENAME_VARIABLE'], internalConstants.RENAME_VARIABLE_ID
-  ]);
+  options.push([Msg['RENAME_VARIABLE'], internalConstants.RENAME_VARIABLE_ID]);
   if (Msg['DELETE_VARIABLE']) {
     options.push([
       Msg['DELETE_VARIABLE'].replace('%1', name),
@@ -443,8 +446,7 @@ FieldVariable.prototype.onItemSelected_ = function(menu, menuItem) {
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     if (id == internalConstants.RENAME_VARIABLE_ID) {
       // Rename variable.
-      Variables.renameVariable(
-          this.sourceBlock_.workspace, this.variable_);
+      Variables.renameVariable(this.sourceBlock_.workspace, this.variable_);
       return;
     } else if (id == internalConstants.DELETE_VARIABLE_ID) {
       // Delete variable.

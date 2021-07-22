@@ -38,14 +38,15 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
  */
 const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
-  FieldMultilineInput.superClass_.constructor.call(this,
-      opt_value, opt_validator, opt_config);
+  FieldMultilineInput.superClass_.constructor.call(
+      this, opt_value, opt_validator, opt_config);
 
   /**
    * The SVG group element that will contain a text element for each text row
@@ -69,8 +70,7 @@ const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    */
   this.isOverflowedY_ = false;
 };
-inherits(FieldMultilineInput,
-    FieldTextInput);
+inherits(FieldMultilineInput, FieldTextInput);
 
 /**
  * @override
@@ -131,7 +131,8 @@ FieldMultilineInput.prototype.initView = function() {
   this.textGroup_ = dom.createSvgElement(
       Svg.G, {
         'class': 'blocklyEditableText',
-      }, this.fieldGroup_);
+      },
+      this.fieldGroup_);
 };
 
 /**
@@ -149,8 +150,8 @@ FieldMultilineInput.prototype.getDisplayText_ = function() {
   }
   const lines = textLines.split('\n');
   textLines = '';
-  const displayLinesNumber = this.isOverflowedY_ ? this.maxLines_
-      : lines.length;
+  const displayLinesNumber =
+      this.isOverflowedY_ ? this.maxLines_ : lines.length;
   for (let i = 0; i < displayLinesNumber; i++) {
     let text = lines[i];
     if (text.length > this.maxDisplayLength) {
@@ -211,13 +212,14 @@ FieldMultilineInput.prototype.render_ = function() {
           x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
           y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
           dy: this.getConstants().FIELD_TEXT_BASELINE
-        }, this.textGroup_);
+        },
+        this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
     y += lineHeight;
   }
 
   if (this.isBeingEdited_) {
-    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (this.isOverflowedY_) {
       dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
     } else {
@@ -236,15 +238,13 @@ FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
-    var htmlInput = /** @type {!HTMLElement} */(this.htmlInput_);
+    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (!this.isTextValid_) {
       dom.addClass(htmlInput, 'blocklyInvalidInput');
-      aria.setState(htmlInput,
-          aria.State.INVALID, true);
+      aria.setState(htmlInput, aria.State.INVALID, true);
     } else {
       dom.removeClass(htmlInput, 'blocklyInvalidInput');
-      aria.setState(htmlInput,
-          aria.State.INVALID, false);
+      aria.setState(htmlInput, aria.State.INVALID, false);
     }
   }
 };
@@ -281,7 +281,8 @@ FieldMultilineInput.prototype.updateSize_ = function() {
 
     for (var i = 0; i < actualEditorLines.length; i++) {
       if (actualEditorLines[i].length > this.maxDisplayLength) {
-        actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength);
+        actualEditorLines[i] =
+            actualEditorLines[i].substring(0, this.maxDisplayLength);
       }
       dummyTextElement.textContent = actualEditorLines[i];
       const lineWidth = dom.getFastTextWidth(
@@ -291,8 +292,8 @@ FieldMultilineInput.prototype.updateSize_ = function() {
       }
     }
 
-    const scrollbarWidth = this.htmlInput_.offsetWidth
-        - this.htmlInput_.clientWidth;
+    const scrollbarWidth =
+        this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
     totalWidth += scrollbarWidth;
   }
   if (this.borderRect_) {
@@ -318,7 +319,8 @@ FieldMultilineInput.prototype.updateSize_ = function() {
  * @override
  */
 FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
-  FieldMultilineInput.superClass_.showEditor_.call(this, _opt_e, opt_quietInput);
+  FieldMultilineInput.superClass_.showEditor_.call(
+      this, _opt_e, opt_quietInput);
   this.forceRerender();
 };
 
@@ -342,8 +344,8 @@ FieldMultilineInput.prototype.widgetCreate_ = function() {
   htmlInput.style.borderRadius = borderRadius;
   const paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
   const paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
-  htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
-      'px ' + paddingX + 'px';
+  htmlInput.style.padding =
+      paddingY + 'px ' + paddingX + 'px ' + paddingY + 'px ' + paddingX + 'px';
   const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
       this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
   htmlInput.style.lineHeight = (lineHeight * scale) + 'px';
@@ -371,7 +373,8 @@ FieldMultilineInput.prototype.widgetCreate_ = function() {
  *     before scrolling functionality is enabled.
  */
 FieldMultilineInput.prototype.setMaxLines = function(maxLines) {
-  if (typeof maxLines === 'number' && maxLines > 0 && maxLines !== this.maxLines_) {
+  if (typeof maxLines === 'number' && maxLines > 0 &&
+      maxLines !== this.maxLines_) {
     this.maxLines_ = maxLines;
     this.forceRerender();
   }
@@ -401,18 +404,16 @@ FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
  * CSS for multiline field.  See css.js for use.
  */
 Css.register([
-  /* eslint-disable indent */
-  '.blocklyHtmlTextAreaInput {',
-    'font-family: monospace;',
-    'resize: none;',
-    'overflow: hidden;',
-    'height: 100%;',
-    'text-align: left;',
-  '}',
-  '.blocklyHtmlTextAreaInputOverflowedY {',
-    'overflow-y: scroll;',
-  '}'
-  /* eslint-enable indent */
+  `.blocklyHtmlTextAreaInput {
+  font-family: monospace;
+  resize: none;
+  overflow: hidden;
+  height: 100%;
+  text-align: left;
+}`,
+  `.blocklyHtmlTextAreaInputOverflowedY {
+  overflow-y: scroll;
+}`
 ]);
 
 

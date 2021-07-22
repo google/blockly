@@ -113,8 +113,8 @@ MenuItem.prototype.createDom = function() {
   element.className = 'blocklyMenuItem goog-menuitem ' +
       (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
       (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-      (this.highlight_ ?
-        'blocklyMenuItemHighlight goog-menuitem-highlight ' : '') +
+      (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
+                         '') +
       (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
   const content = document.createElement('div');
@@ -137,10 +137,10 @@ MenuItem.prototype.createDom = function() {
   if (this.roleName_) {
     aria.setRole(element, this.roleName_);
   }
-  aria.setState(element, aria.State.SELECTED,
+  aria.setState(
+      element, aria.State.SELECTED,
       (this.checkable_ && this.checked_) || false);
-  aria.setState(element, aria.State.DISABLED,
-      !this.enabled_);
+  aria.setState(element, aria.State.DISABLED, !this.enabled_);
 
   return element;
 };

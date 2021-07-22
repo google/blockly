@@ -257,7 +257,7 @@ run-step() {
 #######################################
 # Prints usage information.
 #######################################
-help {
+help() {
   echo "Conversion steps:"
   echo " 1. Use IDE to convert var to let/const"
   echo " 2. Rewrite the goog.provide statement as goog.module and explicitly enumerate exports"
@@ -273,26 +273,26 @@ help {
 #######################################
 # Main entry point.
 #######################################
-main {
+main() {
   if [ "$1" = "" ]; then
-  help
-else
-  local filepath=""
-  # Support filepath as first argument.
-  verify-filepath "${filepath}" "false"
-  if [[ $? -eq 0 ]]; then
-    filepath="$1"
-    shift
-  fi
+    help
+  else
+    local filepath=""
+    # Support filepath as first argument.
+    verify-filepath "$1" "false"
+    if [[ $? -eq 0 ]]; then
+      filepath="$1"
+      shift
+    fi
 
-  local command="$1"
-  shift
-  case $command in
-    -c) commit-step "$@" "${filepath}" ;;
-    -s) run-step "$@" "${filepath}" ;;
-    *) err "INVALID ARGUMENT ${command}";;
-  esac
-fi
+    local command="$1"
+    shift
+    case $command in
+      -c) commit-step "$@" "${filepath}" ;;
+      -s) run-step "$@" "${filepath}" ;;
+      *) err "INVALID ARGUMENT ${command}";;
+    esac
+  fi
 }
 
 main "$@"

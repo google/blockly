@@ -14,9 +14,8 @@
 goog.module('Blockly.Marker');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.ASTNode');
-
-goog.requireType('Blockly.blockRendering.MarkerSvg');
+const ASTNode = goog.require('Blockly.ASTNode');
+const MarkerSvg = goog.requireType('Blockly.blockRendering.MarkerSvg');
 
 
 /**
@@ -33,14 +32,14 @@ const Marker = function() {
 
   /**
    * The current location of the marker.
-   * @type {Blockly.ASTNode}
+   * @type {ASTNode}
    * @private
    */
   this.curNode_ = null;
 
   /**
    * The object in charge of drawing the visual representation of the current node.
-   * @type {Blockly.blockRendering.MarkerSvg}
+   * @type {MarkerSvg}
    * @private
    */
   this.drawer_ = null;
@@ -54,7 +53,7 @@ const Marker = function() {
 
 /**
  * Sets the object in charge of drawing the marker.
- * @param {Blockly.blockRendering.MarkerSvg} drawer The object in charge of
+ * @param {MarkerSvg} drawer The object in charge of
  *     drawing the marker.
  */
 Marker.prototype.setDrawer = function(drawer) {
@@ -63,7 +62,7 @@ Marker.prototype.setDrawer = function(drawer) {
 
 /**
  * Get the current drawer for the marker.
- * @return {Blockly.blockRendering.MarkerSvg} The object in charge of drawing
+ * @return {MarkerSvg} The object in charge of drawing
  *     the marker.
  */
 Marker.prototype.getDrawer = function() {
@@ -72,7 +71,7 @@ Marker.prototype.getDrawer = function() {
 
 /**
  * Gets the current location of the marker.
- * @return {Blockly.ASTNode} The current field, connection, or block the marker
+ * @return {ASTNode} The current field, connection, or block the marker
  *     is on.
  */
 Marker.prototype.getCurNode = function() {
@@ -83,7 +82,7 @@ Marker.prototype.getCurNode = function() {
  * Set the location of the marker and call the update method.
  * Setting isStack to true will only work if the newLocation is the top most
  * output or previous connection on a stack.
- * @param {Blockly.ASTNode} newNode The new location of the marker.
+ * @param {ASTNode} newNode The new location of the marker.
  */
 Marker.prototype.setCurNode = function(newNode) {
   const oldNode = this.curNode_;

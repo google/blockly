@@ -27,7 +27,8 @@ const {replaceMessageReferences} = goog.require('Blockly.utils');
  *    string. Defaults to an empty string if null or undefined.
  * @param {string=} opt_class Optional CSS class for the field's text.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
@@ -40,8 +41,7 @@ const FieldLabel = function(opt_value, opt_class, opt_config) {
    */
   this.class_ = null;
 
-  FieldLabel.superClass_.constructor.call(
-      this, opt_value, null, opt_config);
+  FieldLabel.superClass_.constructor.call(this, opt_value, null, opt_config);
 
   if (!opt_config) {  // If the config was not passed use old configuration.
     this.class_ = opt_class || null;

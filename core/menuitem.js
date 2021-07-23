@@ -14,8 +14,8 @@ goog.module('Blockly.MenuItem');
 goog.module.declareLegacyNamespace();
 
 const aria = goog.require('Blockly.utils.aria');
-const {addClass, removeClass} = goog.require('Blockly.utils.dom');
-const {getNextUniqueId} = goog.require('Blockly.utils.IdGenerator');
+const dom = goog.require('Blockly.utils.dom');
+const idGenerator = goog.require('Blockly.utils.IdGenerator');
 
 
 /**
@@ -105,7 +105,7 @@ const MenuItem = function(content, opt_value) {
  */
 MenuItem.prototype.createDom = function() {
   const element = document.createElement('div');
-  element.id = getNextUniqueId();
+  element.id = idGenerator.getNextUniqueId();
   this.element_ = element;
 
   // Set class and style
@@ -231,11 +231,11 @@ MenuItem.prototype.setHighlighted = function(highlight) {
     const name = 'blocklyMenuItemHighlight';
     const nameDep = 'goog-menuitem-highlight';
     if (highlight) {
-      addClass(el, name);
-      addClass(el, nameDep);
+      dom.addClass(el, name);
+      dom.addClass(el, nameDep);
     } else {
-      removeClass(el, name);
-      removeClass(el, nameDep);
+      dom.removeClass(el, name);
+      dom.removeClass(el, nameDep);
     }
   }
 };

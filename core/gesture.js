@@ -266,8 +266,8 @@ Blockly.Gesture.prototype.dispose = function() {
  * @private
  */
 Blockly.Gesture.prototype.updateFromEvent_ = function(e) {
-  var currentXY = new Blockly.utils.Coordinate(e.clientX, e.clientY);
-  var changed = this.updateDragDelta_(currentXY);
+  const currentXY = new Blockly.utils.Coordinate(e.clientX, e.clientY);
+  const changed = this.updateDragDelta_(currentXY);
   // Exceeded the drag radius for the first time.
   if (changed) {
     this.updateIsDragging_();
@@ -290,11 +290,11 @@ Blockly.Gesture.prototype.updateDragDelta_ = function(currentXY) {
       /** @type {!Blockly.utils.Coordinate} */ (this.mouseDownXY_));
 
   if (!this.hasExceededDragRadius_) {
-    var currentDragDelta =
+    const currentDragDelta =
         Blockly.utils.Coordinate.magnitude(this.currentDragDeltaXY_);
 
     // The flyout has a different drag radius from the rest of Blockly.
-    var limitRadius = this.flyout_ ?
+    const limitRadius = this.flyout_ ?
         Blockly.internalConstants.FLYOUT_DRAG_RADIUS :
         Blockly.internalConstants.DRAG_RADIUS;
 
@@ -394,7 +394,7 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.updateIsDraggingWorkspace_ = function() {
-  var wsMovable = this.flyout_ ?
+  const wsMovable = this.flyout_ ?
       this.flyout_.isScrollable() :
       this.startWorkspace_ && this.startWorkspace_.isDraggable();
 
@@ -439,8 +439,9 @@ Blockly.Gesture.prototype.updateIsDragging_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.startDraggingBlock_ = function() {
-  var BlockDraggerClass = Blockly.registry.getClassFromOptions(
-      Blockly.registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
+  const BlockDraggerClass = Blockly.registry.getClassFromOptions(
+      Blockly.registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options,
+      true);
 
   this.blockDragger_ = new BlockDraggerClass(
       /** @type {!Blockly.BlockSvg} */ (this.targetBlock_),
@@ -747,12 +748,12 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
       if (!Blockly.Events.getGroup()) {
         Blockly.Events.setGroup(true);
       }
-      var newBlock = this.flyout_.createBlock(this.targetBlock_);
+      const newBlock = this.flyout_.createBlock(this.targetBlock_);
       newBlock.scheduleSnapAndBump();
     }
   } else {
     // Clicks events are on the start block, even if it was a shadow.
-    var event = new (Blockly.Events.get(Blockly.Events.CLICK))(
+    const event = new (Blockly.Events.get(Blockly.Events.CLICK))(
         this.startBlock_, this.startWorkspace_.id, 'block');
     Blockly.Events.fire(event);
   }
@@ -767,7 +768,7 @@ Blockly.Gesture.prototype.doBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.doWorkspaceClick_ = function(_e) {
-  var ws = this.creatorWorkspace_;
+  const ws = this.creatorWorkspace_;
   if (Blockly.selected) {
     Blockly.selected.unselect();
   }
@@ -888,7 +889,7 @@ Blockly.Gesture.prototype.setStartFlyout_ = function(flyout) {
  */
 Blockly.Gesture.prototype.isBubbleClick_ = function() {
   // A bubble click starts on a bubble and never escapes the drag radius.
-  var hasStartBubble = !!this.startBubble_;
+  const hasStartBubble = !!this.startBubble_;
   return hasStartBubble && !this.hasExceededDragRadius_;
 };
 
@@ -901,7 +902,7 @@ Blockly.Gesture.prototype.isBubbleClick_ = function() {
 Blockly.Gesture.prototype.isBlockClick_ = function() {
   // A block click starts on a block, never escapes the drag radius, and is not
   // a field click.
-  var hasStartBlock = !!this.startBlock_;
+  const hasStartBlock = !!this.startBlock_;
   return hasStartBlock && !this.hasExceededDragRadius_ && !this.isFieldClick_();
 };
 
@@ -912,7 +913,7 @@ Blockly.Gesture.prototype.isBlockClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isFieldClick_ = function() {
-  var fieldClickable =
+  const fieldClickable =
       this.startField_ ? this.startField_.isClickable() : false;
   return fieldClickable && !this.hasExceededDragRadius_ &&
       (!this.flyout_ || !this.flyout_.autoClose);
@@ -925,7 +926,7 @@ Blockly.Gesture.prototype.isFieldClick_ = function() {
  * @private
  */
 Blockly.Gesture.prototype.isWorkspaceClick_ = function() {
-  var onlyTouchedWorkspace =
+  const onlyTouchedWorkspace =
       !this.startBlock_ && !this.startBubble_ && !this.startField_;
   return onlyTouchedWorkspace && !this.hasExceededDragRadius_;
 };
@@ -991,8 +992,8 @@ Blockly.Gesture.prototype.getCurrentDragger = function() {
  * @return {boolean} True if gesture is occurring.
  */
 Blockly.Gesture.inProgress = function() {
-  var workspaces = Blockly.Workspace.getAll();
-  for (var i = 0, workspace; (workspace = workspaces[i]); i++) {
+  const workspaces = Blockly.Workspace.getAll();
+  for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
     if (workspace.currentGesture_) {
       return true;
     }

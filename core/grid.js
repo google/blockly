@@ -14,9 +14,9 @@
 goog.module('Blockly.Grid');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.userAgent');
+const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -176,7 +176,7 @@ Grid.prototype.moveTo = function(x, y) {
   this.gridPattern_.setAttribute('x', x);
   this.gridPattern_.setAttribute('y', y);
 
-  if (Blockly.utils.userAgent.IE || Blockly.utils.userAgent.EDGE) {
+  if (userAgent.IE || userAgent.EDGE) {
     // IE/Edge doesn't notice that the x/y offsets have changed.
     // Force an update.
     this.update(this.scale_);
@@ -198,26 +198,26 @@ Grid.createDom = function(rnd, gridOptions, defs) {
       <rect stroke="#888" />
     </pattern>
   */
-  const gridPattern = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATTERN,
+  const gridPattern = dom.createSvgElement(
+      Svg.PATTERN,
       {
         'id': 'blocklyGridPattern' + rnd,
         'patternUnits': 'userSpaceOnUse'
       }, defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.LINE,
+    dom.createSvgElement(
+        Svg.LINE,
         {'stroke': gridOptions['colour']}, gridPattern);
     if (gridOptions['length'] > 1) {
-      Blockly.utils.dom.createSvgElement(
-          Blockly.utils.Svg.LINE,
+      dom.createSvgElement(
+          Svg.LINE,
           {'stroke': gridOptions['colour']}, gridPattern);
     }
     // x1, y1, x1, x2 properties will be set later in update.
   } else {
     // Edge 16 doesn't handle empty patterns
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.LINE, {}, gridPattern);
+    dom.createSvgElement(
+        Svg.LINE, {}, gridPattern);
   }
   return gridPattern;
 };

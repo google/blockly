@@ -33,8 +33,8 @@ goog.module.declareLegacyNamespace();
  *     data: (string|undefined),
  * }}
  */
-// eslint-disable-next-line no-unused-vars
 var State;
+exports.State = State;
 
 /**
  * Returns the state of the given block as a plain JavaScript object.

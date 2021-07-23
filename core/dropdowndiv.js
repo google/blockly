@@ -36,8 +36,7 @@ const style = goog.require('Blockly.utils.style');
  * @constructor
  * @package
  */
-const DropDownDiv = function() {
-};
+const DropDownDiv = function() {};
 
 /**
  * Drop-downs will appear within the bounds of this element if possible.
@@ -196,9 +195,9 @@ DropDownDiv.createDom = function() {
   divInternal.style.opacity = 0;
 
   // Transition animation for transform: translate() and opacity.
-  divInternal.style.transition = 'transform ' +
-    DropDownDiv.ANIMATION_TIME + 's, ' +
-    'opacity ' + DropDownDiv.ANIMATION_TIME + 's';
+  divInternal.style.transition = 'transform ' + DropDownDiv.ANIMATION_TIME +
+      's, ' +
+      'opacity ' + DropDownDiv.ANIMATION_TIME + 's';
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
@@ -258,11 +257,10 @@ DropDownDiv.setColour = function(backgroundColour, borderColour) {
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
-DropDownDiv.showPositionedByBlock = function(field, block,
-    opt_onHide, opt_secondaryYOffset) {
+DropDownDiv.showPositionedByBlock = function(
+    field, block, opt_onHide, opt_secondaryYOffset) {
   return showPositionedByRect(
-      getScaledBboxOfBlock(block),
-      field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfBlock(block), field, opt_onHide, opt_secondaryYOffset);
 };
 
 /**
@@ -277,12 +275,11 @@ DropDownDiv.showPositionedByBlock = function(field, block,
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
-DropDownDiv.showPositionedByField = function(field,
-    opt_onHide, opt_secondaryYOffset) {
+DropDownDiv.showPositionedByField = function(
+    field, opt_onHide, opt_secondaryYOffset) {
   positionToField = true;
   return showPositionedByRect(
-      getScaledBboxOfField(field),
-      field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
 };
 
 /**
@@ -297,8 +294,7 @@ const getScaledBboxOfBlock = function(block) {
   const scaledHeight = bBox.height * scale;
   const scaledWidth = bBox.width * scale;
   const xy = style.getPageOffset(blockSvg);
-  return new Rect(
-      xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
+  return new Rect(xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
 };
 
 /**
@@ -308,8 +304,7 @@ const getScaledBboxOfBlock = function(block) {
  */
 const getScaledBboxOfField = function(field) {
   const bBox = field.getScaledBBox();
-  return new Rect(
-      bBox.top, bBox.bottom, bBox.left, bBox.right);
+  return new Rect(bBox.top, bBox.bottom, bBox.left, bBox.right);
 };
 
 /**
@@ -325,8 +320,8 @@ const getScaledBboxOfField = function(field) {
  *   positioning.
  * @return {boolean} True if the menu rendered below block; false if above.
  */
-const showPositionedByRect = function(bBox, field,
-    opt_onHide, opt_secondaryYOffset) {
+const showPositionedByRect = function(
+    bBox, field, opt_onHide, opt_secondaryYOffset) {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
   const primaryY = bBox.bottom;
@@ -340,14 +335,14 @@ const showPositionedByRect = function(bBox, field,
   // Set bounds to main workspace; show the drop-down.
   let workspace = sourceBlock.workspace;
   while (workspace.options.parentWorkspace) {
-    workspace = /** @type {!WorkspaceSvg} */ (
-      workspace.options.parentWorkspace);
+    workspace =
+        /** @type {!WorkspaceSvg} */ (workspace.options.parentWorkspace);
   }
   DropDownDiv.setBoundsElement(
       /** @type {Element} */ (workspace.getParentSvg().parentNode));
   return DropDownDiv.show(
-      field, sourceBlock.RTL,
-      primaryX, primaryY, secondaryX, secondaryY, opt_onHide);
+      field, sourceBlock.RTL, primaryX, primaryY, secondaryX, secondaryY,
+      opt_onHide);
 };
 
 /**
@@ -371,8 +366,8 @@ const showPositionedByRect = function(bBox, field,
  * @return {boolean} True if the menu rendered at the primary origin point.
  * @package
  */
-DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
-    secondaryX, secondaryY, opt_onHide) {
+DropDownDiv.show = function(
+    owner, rtl, primaryX, primaryY, secondaryX, secondaryY, opt_onHide) {
   ownerInternal = owner;
   onHide = opt_onHide || null;
   // Set direction.
@@ -381,8 +376,7 @@ DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
 
   const mainWorkspace =
       /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
-  rendererClassName =
-      mainWorkspace.getRenderer().getClassName();
+  rendererClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
   dom.addClass(div, rendererClassName);
   dom.addClass(div, themeClassName);
@@ -396,8 +390,7 @@ DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   // Using both `left`, `top` for the initial translation and then `translate`
   // for the animated transition to final X, Y is a workaround.
 
-  return positionInternal(
-      primaryX, primaryY, secondaryX, secondaryY);
+  return positionInternal(primaryX, primaryY, secondaryX, secondaryY);
 };
 
 /**
@@ -433,36 +426,31 @@ DropDownDiv.getBoundsInfo_ = function() {
  * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
  */
-DropDownDiv.getPositionMetrics_ = function(primaryX, primaryY,
-    secondaryX, secondaryY) {
+DropDownDiv.getPositionMetrics_ = function(
+    primaryX, primaryY, secondaryX, secondaryY) {
   const boundsInfo = DropDownDiv.getBoundsInfo_();
   const divSize = style.getSize(
       /** @type {!Element} */ (divInternal));
 
   // Can we fit in-bounds below the target?
   if (primaryY + divSize.height < boundsInfo.bottom) {
-    return getPositionBelowMetrics(
-        primaryX, primaryY, boundsInfo, divSize);
+    return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit in-bounds above the target?
   if (secondaryY - divSize.height > boundsInfo.top) {
-    return getPositionAboveMetrics(
-        secondaryX, secondaryY, boundsInfo, divSize);
+    return getPositionAboveMetrics(secondaryX, secondaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) below?
   if (primaryY + divSize.height < document.documentElement.clientHeight) {
-    return getPositionBelowMetrics(
-        primaryX, primaryY, boundsInfo, divSize);
+    return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
   }
   // Can we fit outside the workspace bounds (but inside the window) above?
   if (secondaryY - divSize.height > document.documentElement.clientTop) {
-    return getPositionAboveMetrics(
-        secondaryX, secondaryY, boundsInfo, divSize);
+    return getPositionAboveMetrics(secondaryX, secondaryY, boundsInfo, divSize);
   }
 
   // Last resort, render at top of page.
-  return getPositionTopOfPageMetrics(
-      primaryX, boundsInfo, divSize);
+  return getPositionTopOfPageMetrics(primaryX, boundsInfo, divSize);
 };
 
 /**
@@ -478,17 +466,15 @@ DropDownDiv.getPositionMetrics_ = function(primaryX, primaryY,
  */
 const getPositionBelowMetrics = function(
     primaryX, primaryY, boundsInfo, divSize) {
-
   const xCoords = DropDownDiv.getPositionX(
       primaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
-  const arrowY = -(DropDownDiv.ARROW_SIZE / 2 +
-      DropDownDiv.BORDER_SIZE);
+  const arrowY = -(DropDownDiv.ARROW_SIZE / 2 + DropDownDiv.BORDER_SIZE);
   const finalY = primaryY + DropDownDiv.PADDING_Y;
 
   return {
     initialX: xCoords.divX,
-    initialY : primaryY,
+    initialY: primaryY,
     finalX: xCoords.divX,  // X position remains constant during animation.
     finalY: finalY,
     arrowX: xCoords.arrowX,
@@ -513,7 +499,6 @@ const getPositionBelowMetrics = function(
  */
 const getPositionAboveMetrics = function(
     secondaryX, secondaryY, boundsInfo, divSize) {
-
   const xCoords = DropDownDiv.getPositionX(
       secondaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
@@ -524,7 +509,7 @@ const getPositionAboveMetrics = function(
 
   return {
     initialX: xCoords.divX,
-    initialY : initialY,
+    initialY: initialY,
     finalX: xCoords.divX,  // X position remains constant during animation.
     finalY: finalY,
     arrowX: xCoords.arrowX,
@@ -544,16 +529,14 @@ const getPositionAboveMetrics = function(
  * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
  */
-const getPositionTopOfPageMetrics = function(
-    sourceX, boundsInfo, divSize) {
-
+const getPositionTopOfPageMetrics = function(sourceX, boundsInfo, divSize) {
   const xCoords = DropDownDiv.getPositionX(
       sourceX, boundsInfo.left, boundsInfo.right, divSize.width);
 
   // No need to provide arrow-specific information because it won't be visible.
   return {
     initialX: xCoords.divX,
-    initialY : 0,
+    initialY: 0,
     finalX: xCoords.divX,  // X position remains constant during animation.
     finalY: 0,             // Y position remains constant during animation.
     arrowAtTop: null,
@@ -593,14 +576,10 @@ DropDownDiv.getPositionX = function(
   const horizPadding = DropDownDiv.ARROW_HORIZONTAL_PADDING;
   // Clamp the arrow position so that it stays attached to the dropdowndiv.
   relativeArrowX = math.clamp(
-      horizPadding,
-      relativeArrowX,
+      horizPadding, relativeArrowX,
       divWidth - horizPadding - DropDownDiv.ARROW_SIZE);
 
-  return {
-    arrowX: relativeArrowX,
-    divX: divX
-  };
+  return {arrowX: relativeArrowX, divX: divX};
 };
 
 /**
@@ -640,10 +619,9 @@ DropDownDiv.hide = function() {
   div.style.transform = 'translate(0, 0)';
   div.style.opacity = 0;
   // Finish animation - reset all values to default.
-  animateOutTimer =
-      setTimeout(function() {
-        DropDownDiv.hideWithoutAnimation();
-      }, DropDownDiv.ANIMATION_TIME * 1000);
+  animateOutTimer = setTimeout(function() {
+    DropDownDiv.hideWithoutAnimation();
+  }, DropDownDiv.ANIMATION_TIME * 1000);
   if (onHide) {
     onHide();
     onHide = null;
@@ -700,19 +678,19 @@ DropDownDiv.hideWithoutAnimation = function() {
  *    in absolute px.
  * @return {boolean} True if the menu rendered at the primary origin point.
  */
-const positionInternal = function(
-    primaryX, primaryY, secondaryX, secondaryY) {
-  const metrics = getPositionMetrics(primaryX, primaryY,
-      secondaryX, secondaryY);
+const positionInternal = function(primaryX, primaryY, secondaryX, secondaryY) {
+  const metrics =
+      getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
     arrowInternal.style.display = '';
-    arrowInternal.style.transform = 'translate(' +
-        metrics.arrowX + 'px,' + metrics.arrowY + 'px) rotate(45deg)';
-    arrowInternal.setAttribute('class', metrics.arrowAtTop ?
-        'blocklyDropDownArrow blocklyArrowTop' :
-        'blocklyDropDownArrow blocklyArrowBottom');
+    arrowInternal.style.transform = 'translate(' + metrics.arrowX + 'px,' +
+        metrics.arrowY + 'px) rotate(45deg)';
+    arrowInternal.setAttribute(
+        'class',
+        metrics.arrowAtTop ? 'blocklyDropDownArrow blocklyArrowTop' :
+                             'blocklyDropDownArrow blocklyArrowBottom');
   } else {
     arrowInternal.style.display = 'none';
   }
@@ -754,17 +732,15 @@ DropDownDiv.repositionForWindowResize = function() {
   if (ownerInternal) {
     const field = /** @type {!Field} */ (ownerInternal);
     const block = /** @type {!BlockSvg} */ (field.getSourceBlock());
-    const bBox = positionToField ?
-        getScaledBboxOfField(field) :
-        getScaledBboxOfBlock(block);
+    const bBox = positionToField ? getScaledBboxOfField(field) :
+                                   getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     const primaryY = bBox.bottom;
     // If we can't fit it, render above the entire parent block.
     const secondaryX = primaryX;
     const secondaryY = bBox.top;
-    positionInternal(
-        primaryX, primaryY, secondaryX, secondaryY);
+    positionInternal(primaryX, primaryY, secondaryX, secondaryY);
   } else {
     DropDownDiv.hide();
   }

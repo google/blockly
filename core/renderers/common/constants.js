@@ -403,10 +403,10 @@ const ConstantProvider = function() {
   /**
    * The defs tag that contains all filters and patterns for this Blockly
    * instance.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    * @private
    */
-  this.defs = null;
+  this.defs_ = null;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -985,7 +985,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
     ... filters go here ...
   </defs>
   */
-  this.defs = dom.createSvgElement(Svg.DEFS, {}, svg);
+  this.defs_ = dom.createSvgElement(Svg.DEFS, {}, svg);
   /*
     <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -1002,7 +1002,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
   */
   const embossFilter = dom.createSvgElement(
       Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
-      this.defs);
+      this.defs_);
   dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
@@ -1055,7 +1055,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'width': 10,
         'height': 10
       },
-      this.defs);
+      this.defs_);
   dom.createSvgElement(
       Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
   dom.createSvgElement(
@@ -1083,7 +1083,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           y: '-30%',
           x: '-40%'
         },
-        this.defs);
+        this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     const debugComponentTransfer = dom.createSvgElement(
         Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);

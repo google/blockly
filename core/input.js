@@ -205,7 +205,7 @@ Input.prototype.setVisible = function(visible) {
   }
   if (this.connection) {
     this.connection =
-      /** @type {!RenderedConnection} */ (this.connection);
+        /** @type {!RenderedConnection} */ (this.connection);
     // Has a connection.
     if (visible) {
       renderList = this.connection.startTrackingAll();

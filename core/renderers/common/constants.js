@@ -591,8 +591,8 @@ ConstantProvider.prototype.setTheme = function(theme) {
    */
   this.blockStyles = Object.create(null);
 
-  var blockStyles = theme.blockStyles;
-  for (var key in blockStyles) {
+  const blockStyles = theme.blockStyles;
+  for (const key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
 
@@ -631,7 +631,7 @@ ConstantProvider.prototype.setFontConstants_ = function(theme) {
       theme.fontStyle['size'] :
       this.FIELD_TEXT_FONTSIZE;
 
-  var fontMetrics = dom.measureFontMetrics(
+  const fontMetrics = dom.measureFontMetrics(
       'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
 
@@ -666,7 +666,7 @@ ConstantProvider.prototype.setComponentConstants_ = function(theme) {
  * @package
  */
 ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
-  var name = 'auto_' + colour;
+  const name = 'auto_' + colour;
   if (!this.blockStyles[name]) {
     this.blockStyles[name] = this.createBlockStyle_(colour);
   }
@@ -713,12 +713,12 @@ ConstantProvider.prototype.createBlockStyle_ = function(colour) {
  */
 ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
   // Make a new object with all of the same properties.
-  var valid = /** @type {!Theme.BlockStyle} */ ({});
+  const valid = /** @type {!Theme.BlockStyle} */ ({});
   if (blockStyle) {
     utils.object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  var parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');
+  const parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
       utils.parseBlockColour(valid['colourSecondary']).hex :
@@ -776,10 +776,10 @@ ConstantProvider.prototype.dispose = function() {
  * @package
  */
 ConstantProvider.prototype.makeJaggedTeeth = function() {
-  var height = this.JAGGED_TEETH_HEIGHT;
-  var width = this.JAGGED_TEETH_WIDTH;
+  const height = this.JAGGED_TEETH_HEIGHT;
+  const width = this.JAGGED_TEETH_WIDTH;
 
-  var mainPath = svgPaths.line([
+  const mainPath = svgPaths.line([
     svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
     svgPaths.point(width, height / 4)
   ]);
@@ -792,10 +792,10 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
  * @package
  */
 ConstantProvider.prototype.makeStartHat = function() {
-  var height = this.START_HAT_HEIGHT;
-  var width = this.START_HAT_WIDTH;
+  const height = this.START_HAT_HEIGHT;
+  const width = this.START_HAT_WIDTH;
 
-  var mainPath = svgPaths.curve('c', [
+  const mainPath = svgPaths.curve('c', [
     svgPaths.point(30, -height), svgPaths.point(70, -height),
     svgPaths.point(width, 0)
   ]);
@@ -808,8 +808,8 @@ ConstantProvider.prototype.makeStartHat = function() {
  * @package
  */
 ConstantProvider.prototype.makePuzzleTab = function() {
-  var width = this.TAB_WIDTH;
-  var height = this.TAB_HEIGHT;
+  const width = this.TAB_WIDTH;
+  const height = this.TAB_HEIGHT;
 
   // The main path for the puzzle tab is made out of a few curves (c and s).
   // Those curves are defined with relative positions.  The 'up' and 'down'
@@ -817,17 +817,17 @@ ConstantProvider.prototype.makePuzzleTab = function() {
   // are the signs to use to move the cursor in the direction that the path is
   // being drawn.
   function makeMainPath(up) {
-    var forward = up ? -1 : 1;
-    var back = -forward;
+    const forward = up ? -1 : 1;
+    const back = -forward;
 
-    var overlap = 2.5;
-    var halfHeight = height / 2;
-    var control1Y = halfHeight + overlap;
-    var control2Y = halfHeight + 0.5;
-    var control3Y = overlap;  // 2.5
+    const overlap = 2.5;
+    const halfHeight = height / 2;
+    const control1Y = halfHeight + overlap;
+    const control2Y = halfHeight + 0.5;
+    const control3Y = overlap;  // 2.5
 
-    var endPoint1 = svgPaths.point(-width, forward * halfHeight);
-    var endPoint2 = svgPaths.point(width, forward * halfHeight);
+    const endPoint1 = svgPaths.point(-width, forward * halfHeight);
+    const endPoint2 = svgPaths.point(width, forward * halfHeight);
 
     return svgPaths.curve(
                'c',
@@ -840,9 +840,9 @@ ConstantProvider.prototype.makePuzzleTab = function() {
   }
 
   // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
-  var pathUp = makeMainPath(true);
+  const pathUp = makeMainPath(true);
   // c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5
-  var pathDown = makeMainPath(false);
+  const pathDown = makeMainPath(false);
 
   return {
     type: this.SHAPES.PUZZLE,
@@ -859,10 +859,10 @@ ConstantProvider.prototype.makePuzzleTab = function() {
  * @package
  */
 ConstantProvider.prototype.makeNotch = function() {
-  var width = this.NOTCH_WIDTH;
-  var height = this.NOTCH_HEIGHT;
-  var innerWidth = 3;
-  var outerWidth = (width - innerWidth) / 2;
+  const width = this.NOTCH_WIDTH;
+  const height = this.NOTCH_HEIGHT;
+  const innerWidth = 3;
+  const outerWidth = (width - innerWidth) / 2;
   function makeMainPath(dir) {
     return svgPaths.line([
       svgPaths.point(dir * outerWidth, height),
@@ -870,8 +870,8 @@ ConstantProvider.prototype.makeNotch = function() {
       svgPaths.point(dir * outerWidth, -height)
     ]);
   }
-  var pathLeft = makeMainPath(1);
-  var pathRight = makeMainPath(-1);
+  const pathLeft = makeMainPath(1);
+  const pathRight = makeMainPath(-1);
 
   return {
     type: this.SHAPES.NOTCH,
@@ -888,12 +888,12 @@ ConstantProvider.prototype.makeNotch = function() {
  * @package
  */
 ConstantProvider.prototype.makeInsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
+  const radius = this.CORNER_RADIUS;
 
-  var innerTopLeftCorner =
+  const innerTopLeftCorner =
       svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
 
-  var innerBottomLeftCorner =
+  const innerBottomLeftCorner =
       svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
 
   return {
@@ -910,33 +910,33 @@ ConstantProvider.prototype.makeInsideCorners = function() {
  * @package
  */
 ConstantProvider.prototype.makeOutsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
+  const radius = this.CORNER_RADIUS;
   /**
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft = svgPaths.moveBy(0, radius) +
+  const topLeft = svgPaths.moveBy(0, radius) +
       svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, -radius));
 
   /**
    * SVG path for drawing the rounded top-right corner.
    * @const
    */
-  var topRight =
+  const topRight =
       svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
 
   /**
    * SVG path for drawing the rounded bottom-left corner.
    * @const
    */
-  var bottomLeft =
+  const bottomLeft =
       svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, -radius));
 
   /**
    * SVG path for drawing the rounded bottom-right corner.
    * @const
    */
-  var bottomRight =
+  const bottomRight =
       svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
 
   return {
@@ -1000,13 +1000,13 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
                    k1="0" k2="1" k3="1" k4="0" />
     </filter>
   */
-  var embossFilter = dom.createSvgElement(
+  const embossFilter = dom.createSvgElement(
       Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
       this.defs);
   dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
-  var feSpecularLighting = dom.createSvgElement(
+  const feSpecularLighting = dom.createSvgElement(
       Svg.FESPECULARLIGHTING, {
         'in': 'blur',
         'surfaceScale': 1,
@@ -1048,7 +1048,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
-  var disabledPattern = dom.createSvgElement(
+  const disabledPattern = dom.createSvgElement(
       Svg.PATTERN, {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
@@ -1075,7 +1075,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
 ConstantProvider.prototype.createDebugFilter = function() {
   // Only create the debug filter once.
   if (!this.debugFilter_) {
-    var debugFilter = dom.createSvgElement(
+    const debugFilter = dom.createSvgElement(
         Svg.FILTER, {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
@@ -1085,7 +1085,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
         },
         this.defs);
     // Set all gaussian blur pixels to 1 opacity before applying flood
-    var debugComponentTransfer = dom.createSvgElement(
+    const debugComponentTransfer = dom.createSvgElement(
         Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);
     dom.createSvgElement(
         Svg.FEFUNCA,
@@ -1116,21 +1116,21 @@ ConstantProvider.prototype.createDebugFilter = function() {
  * @protected
  */
 ConstantProvider.prototype.injectCSS_ = function(tagName, selector) {
-  var cssArray = this.getCSS_(selector);
-  var cssNodeId = 'blockly-renderer-style-' + tagName;
+  const cssArray = this.getCSS_(selector);
+  const cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
       /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
-  var text = cssArray.join('\n');
+  const text = cssArray.join('\n');
   if (this.cssNode_) {
     // Already injected, update if the theme changed.
     this.cssNode_.firstChild.textContent = text;
     return;
   }
   // Inject CSS tag at start of head.
-  var cssNode =
+  const cssNode =
       /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
-  var cssTextNode = document.createTextNode(text);
+  const cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
   this.cssNode_ = cssNode;

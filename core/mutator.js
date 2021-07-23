@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Mutator');
+goog.module('Blockly.Mutator');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Events');
@@ -45,37 +46,37 @@ goog.requireType('Blockly.Workspace');
  * @extends {Blockly.Icon}
  * @constructor
  */
-Blockly.Mutator = function(quarkNames) {
-  Blockly.Mutator.superClass_.constructor.call(this, null);
+const Mutator = function(quarkNames) {
+  Mutator.superClass_.constructor.call(this, null);
   this.quarkNames_ = quarkNames;
 };
-Blockly.utils.object.inherits(Blockly.Mutator, Blockly.Icon);
+Blockly.utils.object.inherits(Mutator, Blockly.Icon);
 
 /**
  * Workspace in the mutator's bubble.
  * @type {?Blockly.WorkspaceSvg}
  * @private
  */
-Blockly.Mutator.prototype.workspace_ = null;
+Mutator.prototype.workspace_ = null;
 
 /**
  * Width of workspace.
  * @private
  */
-Blockly.Mutator.prototype.workspaceWidth_ = 0;
+Mutator.prototype.workspaceWidth_ = 0;
 
 /**
  * Height of workspace.
  * @private
  */
-Blockly.Mutator.prototype.workspaceHeight_ = 0;
+Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.
  * @param {!Blockly.BlockSvg} block The block associated with this mutator.
  * @package
  */
-Blockly.Mutator.prototype.setBlock = function(block) {
+Mutator.prototype.setBlock = function(block) {
   this.block_ = block;
 };
 
@@ -85,7 +86,7 @@ Blockly.Mutator.prototype.setBlock = function(block) {
  *     bubble or null if the mutator isn't open.
  * @package
  */
-Blockly.Mutator.prototype.getWorkspace = function() {
+Mutator.prototype.getWorkspace = function() {
   return this.workspace_;
 };
 
@@ -94,7 +95,7 @@ Blockly.Mutator.prototype.getWorkspace = function() {
  * @param {!Element} group The icon group.
  * @protected
  */
-Blockly.Mutator.prototype.drawIcon_ = function(group) {
+Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
   Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT,
@@ -139,7 +140,7 @@ Blockly.Mutator.prototype.drawIcon_ = function(group) {
  * @protected
  * @override
  */
-Blockly.Mutator.prototype.iconClick_ = function(e) {
+Mutator.prototype.iconClick_ = function(e) {
   if (this.block_.isEditable()) {
     Blockly.Icon.prototype.iconClick_.call(this, e);
   }
@@ -150,7 +151,7 @@ Blockly.Mutator.prototype.iconClick_ = function(e) {
  * @return {!SVGElement} The top-level node of the editor.
  * @private
  */
-Blockly.Mutator.prototype.createEditor_ = function() {
+Mutator.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
   <svg>
     [Workspace]
@@ -219,8 +220,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
 /**
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
-Blockly.Mutator.prototype.updateEditable = function() {
-  Blockly.Mutator.superClass_.updateEditable.call(this);
+Mutator.prototype.updateEditable = function() {
+  Mutator.superClass_.updateEditable.call(this);
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
@@ -244,7 +245,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
  * Resize the bubble to match the size of the workspace.
  * @private
  */
-Blockly.Mutator.prototype.resizeBubble_ = function() {
+Mutator.prototype.resizeBubble_ = function() {
   const doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   const workspaceSize = this.workspace_.getCanvas().getBBox();
   let width = workspaceSize.width + workspaceSize.x;
@@ -287,7 +288,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
  * A method handler for when the bubble is moved.
  * @private
  */
-Blockly.Mutator.prototype.onBubbleMove_ = function() {
+Mutator.prototype.onBubbleMove_ = function() {
   if (this.workspace_) {
     this.workspace_.recordDragTargets();
   }
@@ -297,7 +298,7 @@ Blockly.Mutator.prototype.onBubbleMove_ = function() {
  * Show or hide the mutator bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
-Blockly.Mutator.prototype.setVisible = function(visible) {
+Mutator.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     // No change.
     return;
@@ -380,7 +381,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @param {!Blockly.Events.Abstract} e Custom data for event.
  * @private
  */
-Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
+Mutator.prototype.workspaceChanged_ = function(e) {
   if (e.isUiEvent ||
       (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
     return;
@@ -462,7 +463,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
 /**
  * Dispose of this mutator.
  */
-Blockly.Mutator.prototype.dispose = function() {
+Mutator.prototype.dispose = function() {
   this.block_.mutator = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
@@ -471,7 +472,7 @@ Blockly.Mutator.prototype.dispose = function() {
  * Update the styles on all blocks in the mutator.
  * @public
  */
-Blockly.Mutator.prototype.updateBlockStyle = function() {
+Mutator.prototype.updateBlockStyle = function() {
   const ws = this.workspace_;
 
   if (ws && ws.getAllBlocks(false)) {
@@ -497,7 +498,7 @@ Blockly.Mutator.prototype.updateBlockStyle = function() {
  * @param {string} inputName Name of input on parent block.
  * @return {boolean} True iff a reconnection was made, false otherwise.
  */
-Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
+Mutator.reconnect = function(connectionChild, block, inputName) {
   if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
     return false;  // No connection or block has been deleted.
   }
@@ -522,7 +523,7 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
  * @return {?Blockly.Workspace} The mutator's parent workspace or null.
  * @public
  */
-Blockly.Mutator.findParentWs = function(workspace) {
+Mutator.findParentWs = function(workspace) {
   let outerWs = null;
   if (workspace && workspace.options) {
     const parent = workspace.options.parentWorkspace;
@@ -538,3 +539,5 @@ Blockly.Mutator.findParentWs = function(workspace) {
   }
   return outerWs;
 };
+
+exports = Mutator;

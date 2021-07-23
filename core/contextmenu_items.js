@@ -14,7 +14,8 @@
  * @name Blockly.ContextMenuItems
  * @namespace
  */
-goog.provide('Blockly.ContextMenuItems');
+goog.module('Blockly.ContextMenuItems');
+goog.module.declareLegacyNamespace();
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
@@ -26,7 +27,7 @@ goog.requireType('Blockly.BlockSvg');
 
 
 /** Option to undo previous action. */
-Blockly.ContextMenuItems.registerUndo = function() {
+const registerUndo = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var undoOption = {
     displayText: function() {
@@ -49,7 +50,7 @@ Blockly.ContextMenuItems.registerUndo = function() {
 };
 
 /** Option to redo previous action. */
-Blockly.ContextMenuItems.registerRedo = function() {
+const registerRedo = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var redoOption = {
     displayText: function() { return Blockly.Msg['REDO']; },
@@ -70,7 +71,7 @@ Blockly.ContextMenuItems.registerRedo = function() {
 };
 
 /** Option to clean up blocks. */
-Blockly.ContextMenuItems.registerCleanup = function() {
+const registerCleanup = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var cleanOption = {
     displayText: function() {
@@ -101,7 +102,7 @@ Blockly.ContextMenuItems.registerCleanup = function() {
  * @param {!Array<Blockly.BlockSvg>} topBlocks Top blocks in the workspace.
  * @private
  */
-Blockly.ContextMenuItems.toggleOption_ = function(shouldCollapse, topBlocks) {
+const toggleOption_ = function(shouldCollapse, topBlocks) {
   var DELAY = 10;
   var ms = 0;
   for (var i = 0; i < topBlocks.length; i++) {
@@ -115,7 +116,7 @@ Blockly.ContextMenuItems.toggleOption_ = function(shouldCollapse, topBlocks) {
 };
 
 /** Option to collapse all blocks. */
-Blockly.ContextMenuItems.registerCollapse = function() {
+const registerCollapse = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var collapseOption = {
     displayText:  function() {
@@ -138,7 +139,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
       return 'hidden';
     },
     callback:  function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
-      Blockly.ContextMenuItems.toggleOption_(true, scope.workspace.getTopBlocks(true));
+      toggleOption_(true, scope.workspace.getTopBlocks(true));
     },
     scopeType:  Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id:  'collapseWorkspace',
@@ -148,7 +149,7 @@ Blockly.ContextMenuItems.registerCollapse = function() {
 };
 
 /** Option to expand all blocks. */
-Blockly.ContextMenuItems.registerExpand = function() {
+const registerExpand = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var expandOption = {
     displayText: function() {
@@ -171,7 +172,7 @@ Blockly.ContextMenuItems.registerExpand = function() {
       return 'hidden';
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
-      Blockly.ContextMenuItems.toggleOption_(false, scope.workspace.getTopBlocks(true));
+      toggleOption_(false, scope.workspace.getTopBlocks(true));
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'expandWorkspace',
@@ -187,14 +188,14 @@ Blockly.ContextMenuItems.registerExpand = function() {
  *    modifed in place with the given block and its descendants.
  * @private
  */
-Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
+const addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
     var children =  /* eslint-disable-next-line indent */
         /** @type {!Array<!Blockly.BlockSvg>} */ (block.getChildren(false));
     for (var i = 0; i < children.length; i++) {
-      Blockly.ContextMenuItems.addDeletableBlocks_(children[i], deleteList);
+      addDeletableBlocks_(children[i], deleteList);
     }
   }
 };
@@ -205,11 +206,11 @@ Blockly.ContextMenuItems.addDeletableBlocks_ = function(block, deleteList) {
  * @return {!Array<!Blockly.BlockSvg>} list of blocks to delete.
  * @private
  */
-Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
+const getDeletableBlocks_ = function(workspace) {
   var deleteList = [];
   var topBlocks = workspace.getTopBlocks(true);
   for (var i = 0; i < topBlocks.length; i++) {
-    Blockly.ContextMenuItems.addDeletableBlocks_(topBlocks[i], deleteList);
+    addDeletableBlocks_(topBlocks[i], deleteList);
   }
   return deleteList;
 };
@@ -219,23 +220,23 @@ Blockly.ContextMenuItems.getDeletableBlocks_ = function(workspace) {
  * @param {string} eventGroup event group ID with which all delete events should be associated.
  * @private
  */
-Blockly.ContextMenuItems.deleteNext_ = function(deleteList, eventGroup) {
+const deleteNext_ = function(deleteList, eventGroup) {
   var DELAY = 10;
   Blockly.Events.setGroup(eventGroup);
   var block = deleteList.shift();
   if (block) {
     if (block.workspace) {
       block.dispose(false, true);
-      setTimeout(Blockly.ContextMenuItems.deleteNext_, DELAY, deleteList, eventGroup);
+      setTimeout(deleteNext_, DELAY, deleteList, eventGroup);
     } else {
-      Blockly.ContextMenuItems.deleteNext_(deleteList, eventGroup);
+      deleteNext_(deleteList, eventGroup);
     }
   }
   Blockly.Events.setGroup(false);
 };
 
 /** Option to delete all blocks. */
-Blockly.ContextMenuItems.registerDeleteAll = function() {
+const registerDeleteAll = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var deleteOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -243,7 +244,7 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
         return;
       }
       var deletableBlocksLength =
-          Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace).length;
+          getDeletableBlocks_(scope.workspace).length;
       if (deletableBlocksLength == 1) {
         return Blockly.Msg['DELETE_BLOCK'];
       } else {
@@ -255,7 +256,7 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
         return;
       }
       var deletableBlocksLength =
-         Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace).length;
+         getDeletableBlocks_(scope.workspace).length;
       return deletableBlocksLength > 0 ? 'enabled' : 'disabled';
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -263,16 +264,16 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
         return;
       }
       scope.workspace.cancelCurrentGesture();
-      var deletableBlocks = Blockly.ContextMenuItems.getDeletableBlocks_(scope.workspace);
+      var deletableBlocks = getDeletableBlocks_(scope.workspace);
       var eventGroup = Blockly.utils.genUid();
       if (deletableBlocks.length < 2) {
-        Blockly.ContextMenuItems.deleteNext_(deletableBlocks, eventGroup);
+        deleteNext_(deletableBlocks, eventGroup);
       } else {
         Blockly.confirm(
             Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', deletableBlocks.length),
             function(ok) {
               if (ok) {
-                Blockly.ContextMenuItems.deleteNext_(deletableBlocks, eventGroup);
+                deleteNext_(deletableBlocks, eventGroup);
               }
             });
       }
@@ -288,17 +289,17 @@ Blockly.ContextMenuItems.registerDeleteAll = function() {
  * Registers all workspace-scoped context menu items.
  * @private
  */
-Blockly.ContextMenuItems.registerWorkspaceOptions_ = function() {
-  Blockly.ContextMenuItems.registerUndo();
-  Blockly.ContextMenuItems.registerRedo();
-  Blockly.ContextMenuItems.registerCleanup();
-  Blockly.ContextMenuItems.registerCollapse();
-  Blockly.ContextMenuItems.registerExpand();
-  Blockly.ContextMenuItems.registerDeleteAll();
+const registerWorkspaceOptions_ = function() {
+  registerUndo();
+  registerRedo();
+  registerCleanup();
+  registerCollapse();
+  registerExpand();
+  registerDeleteAll();
 };
 
 /** Option to duplicate a block. */
-Blockly.ContextMenuItems.registerDuplicate = function() {
+const registerDuplicate = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var duplicateOption = {
     displayText: function() {
@@ -327,7 +328,7 @@ Blockly.ContextMenuItems.registerDuplicate = function() {
 };
 
 /** Option to add or remove block-level comment. */
-Blockly.ContextMenuItems.registerComment = function() {
+const registerComment = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var commentOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -363,7 +364,7 @@ Blockly.ContextMenuItems.registerComment = function() {
 };
 
 /** Option to inline variables. */
-Blockly.ContextMenuItems.registerInline = function() {
+const registerInline = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var inlineOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -394,7 +395,7 @@ Blockly.ContextMenuItems.registerInline = function() {
 };
 
 /** Option to collapse or expand a block. */
-Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
+const registerCollapseExpandBlock = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var collapseExpandOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -419,7 +420,7 @@ Blockly.ContextMenuItems.registerCollapseExpandBlock = function() {
 };
 
 /** Option to disable or enable a block. */
-Blockly.ContextMenuItems.registerDisable = function() {
+const registerDisable = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var disableOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -455,7 +456,7 @@ Blockly.ContextMenuItems.registerDisable = function() {
 };
 
 /** Option to delete a block. */
-Blockly.ContextMenuItems.registerDelete = function() {
+const registerDelete = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var deleteOption = {
     displayText: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
@@ -491,7 +492,7 @@ Blockly.ContextMenuItems.registerDelete = function() {
 };
 
 /** Option to open help for a block. */
-Blockly.ContextMenuItems.registerHelp = function() {
+const registerHelp = function() {
   /** @type {!Blockly.ContextMenuRegistry.RegistryItem} */
   var helpOption = {
     displayText: function() {
@@ -520,14 +521,14 @@ Blockly.ContextMenuItems.registerHelp = function() {
  * Registers all block-scoped context menu items.
  * @private
  */
-Blockly.ContextMenuItems.registerBlockOptions_ = function() {
-  Blockly.ContextMenuItems.registerDuplicate();
-  Blockly.ContextMenuItems.registerComment();
-  Blockly.ContextMenuItems.registerInline();
-  Blockly.ContextMenuItems.registerCollapseExpandBlock();
-  Blockly.ContextMenuItems.registerDisable();
-  Blockly.ContextMenuItems.registerDelete();
-  Blockly.ContextMenuItems.registerHelp();
+const registerBlockOptions_ = function() {
+  registerDuplicate();
+  registerComment();
+  registerInline();
+  registerCollapseExpandBlock();
+  registerDisable();
+  registerDelete();
+  registerHelp();
 };
 
 /**
@@ -535,9 +536,9 @@ Blockly.ContextMenuItems.registerBlockOptions_ = function() {
  * ContextMenuRegistry.
  * @package
  */
-Blockly.ContextMenuItems.registerDefaultOptions = function() {
-  Blockly.ContextMenuItems.registerWorkspaceOptions_();
-  Blockly.ContextMenuItems.registerBlockOptions_();
+const registerDefaultOptions = function() {
+  registerWorkspaceOptions_();
+  registerBlockOptions_();
 };
 
-Blockly.ContextMenuItems.registerDefaultOptions();
+registerDefaultOptions();

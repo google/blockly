@@ -203,7 +203,7 @@ step3() {
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
   missing_requires=$(echo "${missing_requires}" | tr ' ' '\n' | sort -u)
   if [[ -n "${missing_requires}" ]]; then
-    local has_blockly_require=$(perl -nle'print $& while m{(?<!\w)Blockly(?![\.\w])}g' "${filepath}")
+    local has_blockly_require=$(perl -ne'm{(?<='\'')Blockly(?![\.\w])}g' "${filepath}")
     if [[ -n "${has_blockly_require}" ]]; then
       warn 'Blockly detected as a require.'
       warn "Potentially missing requires for:\n${missing_requires}\nPlease manually review."

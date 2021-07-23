@@ -42,7 +42,7 @@ async function runGeneratorsInBrowser() {
     capabilities: {
       browserName: 'chrome',
     },
-    logLevel: 'error',
+    logLevel: 'warn',
     services: ['selenium-standalone']
   };
   // Run in headless mode on Github Actions.

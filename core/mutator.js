@@ -104,8 +104,7 @@ Mutator.prototype.getWorkspace = function() {
 Mutator.prototype.drawIcon_ = function(group) {
   // Square with rounded corners.
   dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'blocklyIconShape',
         'rx': '4',
         'ry': '4',
@@ -115,28 +114,21 @@ Mutator.prototype.drawIcon_ = function(group) {
       group);
   // Gear teeth.
   dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'class': 'blocklyIconSymbol',
         'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
-             '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
-             '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
-             '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
-             '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
-             '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-             '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+            '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
+            '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
+            '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
+            '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
+            '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
+            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
       },
       group);
   // Axle hole.
   dom.createSvgElement(
       Svg.CIRCLE,
-      {
-        'class': 'blocklyIconShape',
-        'r': '2.7',
-        'cx': '8',
-        'cy': '8'
-      },
-      group);
+      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'}, group);
 };
 
 /**
@@ -164,9 +156,7 @@ Mutator.prototype.createEditor_ = function() {
   </svg>
   */
   this.svgDialog_ = dom.createSvgElement(
-      Svg.SVG,
-      {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH},
-      null);
+      Svg.SVG, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH}, null);
   // Convert the list of names into a list of XML objects for the flyout.
   let quarkXml;
   if (this.quarkNames_.length) {
@@ -192,13 +182,11 @@ Mutator.prototype.createEditor_ = function() {
         'renderer': this.block_.workspace.options.renderer,
         'rendererOverrides': this.block_.workspace.options.rendererOverrides
       }));
-  workspaceOptions.toolboxPosition = this.block_.RTL ?
-      toolbox.Position.RIGHT :
-      toolbox.Position.LEFT;
+  workspaceOptions.toolboxPosition =
+      this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
   const hasFlyout = !!quarkXml;
   if (hasFlyout) {
-    workspaceOptions.languageTree =
-        toolbox.convertToolboxDefToJson(quarkXml);
+    workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
   }
   this.workspace_ = new WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
@@ -208,8 +196,7 @@ Mutator.prototype.createEditor_ = function() {
   // a top level SVG. Instead of handling scale themselves, mutators
   // inherit scale from the parent workspace.
   // To fix this, scale needs to be applied at a different level in the DOM.
-  const flyoutSvg = hasFlyout ?
-      this.workspace_.addFlyout(Svg.G) : null;
+  const flyoutSvg = hasFlyout ? this.workspace_.addFlyout(Svg.G) : null;
   const background = this.workspace_.createDom('blocklyMutatorBackground');
 
   if (flyoutSvg) {
@@ -258,8 +245,8 @@ Mutator.prototype.resizeBubble_ = function() {
   let height = workspaceSize.height + doubleBorderWidth * 3;
   const flyout = this.workspace_.getFlyout();
   if (flyout) {
-    const flyoutScrollMetrics = flyout.getWorkspace().getMetricsManager()
-        .getScrollMetrics();
+    const flyoutScrollMetrics =
+        flyout.getWorkspace().getMetricsManager().getScrollMetrics();
     height = Math.max(height, flyoutScrollMetrics.height + 20);
     width += flyout.getWidth();
   }
@@ -309,8 +296,8 @@ Mutator.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
-  Events.fire(new (Events.get(Events.BUBBLE_OPEN))(
-      this.block_, visible, 'mutator'));
+  Events.fire(
+      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Bubble(
@@ -351,8 +338,7 @@ Mutator.prototype.setVisible = function(visible) {
     if (this.block_.saveConnections) {
       const thisMutator = this;
       const mutatorBlock =
-        /** @type {{saveConnections: function(!Block)}} */ (
-          this.block_);
+          /** @type {{saveConnections: function(!Block)}} */ (this.block_);
       mutatorBlock.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
         mutatorBlock.saveConnections(thisMutator.rootBlock_);
@@ -388,8 +374,7 @@ Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.isUiEvent ||
-      (e.type == Events.CHANGE && e.element == 'disabled')) {
+  if (e.isUiEvent || (e.type == Events.CHANGE && e.element == 'disabled')) {
     return;
   }
 

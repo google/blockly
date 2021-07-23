@@ -13,27 +13,28 @@
 goog.module('Blockly.Icon');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Bubble = goog.requireType('Blockly.Bubble');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Size = goog.require('Blockly.utils.Size');
+const Svg = goog.require('Blockly.utils.Svg');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const {getRelativeXY, isRightButton} = goog.require('Blockly.utils');
 
 
 /**
  * Class for an icon.
- * @param {Blockly.BlockSvg} block The block associated with this icon.
+ * @param {BlockSvg} block The block associated with this icon.
  * @constructor
  * @abstract
  */
 const Icon = function(block) {
   /**
    * The block this icon is attached to.
-   * @type {Blockly.BlockSvg}
+   * @type {BlockSvg}
    * @protected
    */
   this.block_ = block;
@@ -57,14 +58,14 @@ Icon.prototype.SIZE = 17;
 
 /**
  * Bubble UI (if visible).
- * @type {?Blockly.Bubble}
+ * @type {?Bubble}
  * @protected
  */
 Icon.prototype.bubble_ = null;
 
 /**
  * Absolute coordinate of icon's center.
- * @type {?Blockly.utils.Coordinate}
+ * @type {?Coordinate}
  * @protected
  */
 Icon.prototype.iconXY_ = null;
@@ -82,17 +83,17 @@ Icon.prototype.createIcon = function() {
     ...
   </g>
   */
-  this.iconGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.G,
+  this.iconGroup_ = dom.createSvgElement(
+      Svg.G,
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
-    Blockly.utils.dom.addClass(
+    dom.addClass(
         /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
 
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
-  Blockly.browserEvents.conditionalBind(
+  browserEvents.conditionalBind(
       this.iconGroup_, 'mouseup', this, this.iconClick_);
   this.updateEditable();
 };
@@ -102,7 +103,7 @@ Icon.prototype.createIcon = function() {
  */
 Icon.prototype.dispose = function() {
   // Dispose of and unlink the icon.
-  Blockly.utils.dom.removeNode(this.iconGroup_);
+  dom.removeNode(this.iconGroup_);
   this.iconGroup_ = null;
   // Dispose of and unlink the bubble.
   this.setVisible(false);
@@ -134,7 +135,7 @@ Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !Blockly.utils.isRightButton(e)) {
+  if (!this.block_.isInFlyout && !isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };
@@ -150,7 +151,7 @@ Icon.prototype.applyColour = function() {
 
 /**
  * Notification that the icon has moved.  Update the arrow accordingly.
- * @param {!Blockly.utils.Coordinate} xy Absolute location in workspace coordinates.
+ * @param {!Coordinate} xy Absolute location in workspace coordinates.
  */
 Icon.prototype.setIconLocation = function(xy) {
   this.iconXY_ = xy;
@@ -166,19 +167,19 @@ Icon.prototype.setIconLocation = function(xy) {
 Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   const blockXY = this.block_.getRelativeToSurfaceXY();
-  const iconXY = Blockly.utils.getRelativeXY(
+  const iconXY = getRelativeXY(
       /** @type {!SVGElement} */ (this.iconGroup_));
-  const newXY = new Blockly.utils.Coordinate(
+  const newXY = new Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,
       blockXY.y + iconXY.y + this.SIZE / 2);
-  if (!Blockly.utils.Coordinate.equals(this.getIconLocation(), newXY)) {
+  if (!Coordinate.equals(this.getIconLocation(), newXY)) {
     this.setIconLocation(newXY);
   }
 };
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {?Blockly.utils.Coordinate} Object with x and y properties in
+ * @return {?Coordinate} Object with x and y properties in
  *     workspace coordinates.
  */
 Icon.prototype.getIconLocation = function() {
@@ -189,11 +190,11 @@ Icon.prototype.getIconLocation = function() {
  * Get the size of the icon as used for rendering.
  * This differs from the actual size of the icon, because it bulges slightly
  * out of its row rather than increasing the height of its row.
- * @return {!Blockly.utils.Size} Height and width.
+ * @return {!Size} Height and width.
  */
 // TODO (#2562): Remove getCorrectedSize.
 Icon.prototype.getCorrectedSize = function() {
-  return new Blockly.utils.Size(
+  return new Size(
       Icon.prototype.SIZE, Icon.prototype.SIZE - 2);
 };
 

@@ -190,20 +190,26 @@ step3() {
       local comma_properties=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')
       inf "Detected references of ${require}: ${comma_properties}"
 
-      for require_prop in echo "${properties_accessed}"; do
+      for require_prop in $(echo "${properties_accessed}"); do
         inf "Updating references of ${require}.${require_prop} to ${require_name}.${require_prop}..."
-        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'([^'\''\w])/'"${require_name}"'\.'"${require_prop}"'\1/g' "${filepath}"
+        perl -pi -e 's/'"${require}"'\.'"${require_prop}"'(?!\w)/'"${require_name}"'\.'"${require_prop}"'/g' "${filepath}"
       done
     fi
 
     inf "Updating direct references of ${require} to ${require_name}..."
-    perl -pi -e 's/'"${require}"'([^'\''\w]\.)/'"${require_name}"'\1/g' "${filepath}"
+    perl -pi -e 's/'"${require}"'(?!['\''\w\.])/'"${require_name}"'/g' "${filepath}"
   done
 
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
   missing_requires=$(echo "${missing_requires}" | tr ' ' '\n' | sort -u)
   if [[ -n "${missing_requires}" ]]; then
-    err "Missing requires for:\n${missing_requires}\nPlease manually fix."
+    local has_blockly_require=$(perl -nle'print $& while m{(?<!\w)Blockly(?![\.\w])}g' "${filepath}")
+    if [[ -n "${has_blockly_require}" ]]; then
+      warn 'Blockly detected as a require.'
+      warn "Potentially missing requires for:\n${missing_requires}\nPlease manually review."
+    else
+      err "Missing requires for:\n${missing_requires}\nPlease manually fix."
+    fi
   fi
 
   success "Completed automation for step 3. Please manually review and reorder requires."

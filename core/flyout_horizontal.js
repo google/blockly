@@ -26,8 +26,6 @@ const registry = goog.require('Blockly.registry');
 const {Position} = goog.require('Blockly.utils.toolbox');
 const {getScrollDeltaPixels} = goog.require('Blockly.utils');
 const {inherits} = goog.require('Blockly.utils.object');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Block');
 
 
 /**

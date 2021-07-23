@@ -13,29 +13,33 @@
 goog.module('Blockly.Input');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Connection');
-goog.require('Blockly.fieldRegistry');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Connection = goog.require('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const Field = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const constants = goog.require('Blockly.constants');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const inputTypes = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
-goog.require('Blockly.inputTypes');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Field');
-goog.requireType('Blockly.RenderedConnection');
-
 
 /**
  * Class for an input with an optional field.
  * @param {number} type The type of the input.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.
- * @param {!Blockly.Block} block The block containing this input.
- * @param {Blockly.Connection} connection Optional connection for this input.
+ * @param {!Block} block The block containing this input.
+ * @param {Connection} connection Optional connection for this input.
  * @constructor
  */
 const Input = function(type, name, block, connection) {
-  if (type != Blockly.inputTypes.DUMMY && !name) {
+  if (type != inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
@@ -43,13 +47,13 @@ const Input = function(type, name, block, connection) {
   /** @type {string} */
   this.name = name;
   /**
-   * @type {!Blockly.Block}
+   * @type {!Block}
    * @private
    */
   this.sourceBlock_ = block;
-  /** @type {Blockly.Connection} */
+  /** @type {Connection} */
   this.connection = connection;
-  /** @type {!Array<!Blockly.Field>} */
+  /** @type {!Array<!Field>} */
   this.fieldRow = [];
 };
 
@@ -57,7 +61,7 @@ const Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Input.prototype.align = Blockly.constants.ALIGN.LEFT;
+Input.prototype.align = constants.ALIGN.LEFT;
 
 /**
  * Is the input visible?
@@ -68,7 +72,7 @@ Input.prototype.visible_ = true;
 
 /**
  * Get the source block for this input.
- * @return {?Blockly.Block} The source block, or null if there is none.
+ * @return {?Block} The source block, or null if there is none.
  */
 Input.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
@@ -77,7 +81,7 @@ Input.prototype.getSourceBlock = function() {
 /**
  * Add a field (or label from string), and all prefix and suffix fields, to the
  * end of the input's field row.
- * @param {string|!Blockly.Field} field Something to add as a field.
+ * @param {string|!Field} field Something to add as a field.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Input} The input being append to (to allow chaining).
@@ -91,7 +95,7 @@ Input.prototype.appendField = function(field, opt_name) {
  * Inserts a field (or label from string), and all prefix and suffix fields, at
  * the location of the input's field row.
  * @param {number} index The index at which to insert field.
- * @param {string|!Blockly.Field} field Something to add as a field.
+ * @param {string|!Field} field Something to add as a field.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {number} The index following the last inserted field.
@@ -108,7 +112,7 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
 
   // Generate a FieldLabel when given a plain text field.
   if (typeof field == 'string') {
-    field = /** @type {!Blockly.Field} **/ (Blockly.fieldRegistry.fromJson({
+    field = /** @type {!Field} **/ (fieldRegistry.fromJson({
       'type': 'field_label',
       'text': field,
     }));
@@ -135,7 +139,7 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
 
   if (this.sourceBlock_.rendered) {
-    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+    this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.
     this.sourceBlock_.bumpNeighbours();
@@ -157,7 +161,7 @@ Input.prototype.removeField = function(name, opt_quiet) {
       field.dispose();
       this.fieldRow.splice(i, 1);
       if (this.sourceBlock_.rendered) {
-        this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+        this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
         this.sourceBlock_.render();
         // Removing a field will cause the block to change shape.
         this.sourceBlock_.bumpNeighbours();
@@ -183,7 +187,7 @@ Input.prototype.isVisible = function() {
  * Sets whether this input is visible or not.
  * Should only be used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
- * @return {!Array<!Blockly.BlockSvg>} List of blocks to render.
+ * @return {!Array<!BlockSvg>} List of blocks to render.
  * @package
  */
 Input.prototype.setVisible = function(visible) {
@@ -201,7 +205,7 @@ Input.prototype.setVisible = function(visible) {
   }
   if (this.connection) {
     this.connection =
-      /** @type {!Blockly.RenderedConnection} */ (this.connection);
+      /** @type {!RenderedConnection} */ (this.connection);
     // Has a connection.
     if (visible) {
       renderList = this.connection.startTrackingAll();
@@ -242,14 +246,14 @@ Input.prototype.setCheck = function(check) {
 
 /**
  * Change the alignment of the connection's field(s).
- * @param {number} align One of the values of Blockly.constants.ALIGN.
+ * @param {number} align One of the values of constants.ALIGN.
  *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
  * @return {!Input} The input being modified (to allow chaining).
  */
 Input.prototype.setAlign = function(align) {
   this.align = align;
   if (this.sourceBlock_.rendered) {
-    this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+    this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
     this.sourceBlock_.render();
   }
   return this;

@@ -196,7 +196,7 @@ step3() {
       done
     fi
 
-    inf "Updating references of ${require} to ${require_name}..."
+    inf "Updating direct references of ${require} to ${require_name}..."
     perl -pi -e 's/'"${require}"'([^'\''\w]\.)/'"${require_name}"'\1/g' "${filepath}"
   done
 

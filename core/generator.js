@@ -197,7 +197,8 @@ Generator.prototype.blockToCode = function(block, opt_thisOnly) {
 
   const func = this[block.type];
   if (typeof func != 'function') {
-    throw Error('Language "' + this.name_ + '" does not know how to generate ' +
+    throw Error(
+        'Language "' + this.name_ + '" does not know how to generate ' +
         'code for block type "' + block.type + '".');
   }
   // First argument to func.call is the value of 'this' in the generator.
@@ -256,8 +257,8 @@ Generator.prototype.valueToCode = function(block, name, outerOrder) {
   let code = tuple[0];
   const innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
-    throw TypeError('Expecting valid order from value block: ' +
-        targetBlock.type);
+    throw TypeError(
+        'Expecting valid order from value block: ' + targetBlock.type);
   }
   if (!code) {
     return '';
@@ -312,7 +313,8 @@ Generator.prototype.statementToCode = function(block, name) {
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   if (typeof code != 'string') {
-    throw TypeError('Expecting code from statement block: ' +
+    throw TypeError(
+        'Expecting code from statement block: ' +
         (targetBlock && targetBlock.type));
   }
   if (code) {
@@ -332,16 +334,19 @@ Generator.prototype.statementToCode = function(block, name) {
  */
 Generator.prototype.addLoopTrap = function(branch, block) {
   if (this.INFINITE_LOOP_TRAP) {
-    branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
-        this.INDENT) + branch;
+    branch = this.prefixLines(
+                 this.injectId(this.INFINITE_LOOP_TRAP, block), this.INDENT) +
+        branch;
   }
   if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
-    branch = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block),
-        this.INDENT) + branch;
+    branch = this.prefixLines(
+                 this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) +
+        branch;
   }
   if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
-    branch = branch + this.prefixLines(this.injectId(this.STATEMENT_PREFIX,
-        block), this.INDENT);
+    branch = branch +
+        this.prefixLines(
+            this.injectId(this.STATEMENT_PREFIX, block), this.INDENT);
   }
   return branch;
 };
@@ -414,8 +419,7 @@ Object.defineProperty(Generator.prototype, 'variableDB_', {
    * @return {!Names|undefined} Name database.
    */
   get: function() {
-    deprecation.warn(
-        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+    deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     return this.nameDB_;
   },
   /**
@@ -425,8 +429,7 @@ Object.defineProperty(Generator.prototype, 'variableDB_', {
    * @param {!Names|undefined} nameDb New name database.
    */
   set: function(nameDb) {
-    deprecation.warn(
-        'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+    deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     this.nameDB_ = nameDb;
   }
 });

@@ -62,8 +62,8 @@ const Grid = function(pattern, options) {
    * @type {SVGElement}
    * @private
    */
-  this.line2_ = this.line1_ &&
-    (/** @type {SVGElement} */ (this.line1_.nextSibling));
+  this.line2_ =
+      this.line1_ && (/** @type {SVGElement} */ (this.line1_.nextSibling));
 
   /**
    * Whether blocks should snap to the grid.
@@ -154,8 +154,7 @@ Grid.prototype.update = function(scale) {
  * @param {number} y2 The new y end position of the line (in px).
  * @private
  */
-Grid.prototype.setLineAttributes_ = function(line, width,
-    x1, x2, y1, y2) {
+Grid.prototype.setLineAttributes_ = function(line, width, x1, x2, y1, y2) {
   if (line) {
     line.setAttribute('stroke-width', width);
     line.setAttribute('x1', x1);
@@ -200,24 +199,19 @@ Grid.createDom = function(rnd, gridOptions, defs) {
   */
   const gridPattern = dom.createSvgElement(
       Svg.PATTERN,
-      {
-        'id': 'blocklyGridPattern' + rnd,
-        'patternUnits': 'userSpaceOnUse'
-      }, defs);
+      {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
+      defs);
   if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
     dom.createSvgElement(
-        Svg.LINE,
-        {'stroke': gridOptions['colour']}, gridPattern);
+        Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
     if (gridOptions['length'] > 1) {
       dom.createSvgElement(
-          Svg.LINE,
-          {'stroke': gridOptions['colour']}, gridPattern);
+          Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
     }
     // x1, y1, x1, x2 properties will be set later in update.
   } else {
     // Edge 16 doesn't handle empty patterns
-    dom.createSvgElement(
-        Svg.LINE, {}, gridPattern);
+    dom.createSvgElement(Svg.LINE, {}, gridPattern);
   }
   return gridPattern;
 };

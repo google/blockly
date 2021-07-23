@@ -13,25 +13,33 @@
 goog.module('Blockly.blockRendering.RenderInfo');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
 const Field = goog.require('Blockly.blockRendering.Field');
 const Hat = goog.require('Blockly.blockRendering.Hat');
 const Icon = goog.require('Blockly.blockRendering.Icon');
 const InlineInput = goog.require('Blockly.blockRendering.InlineInput');
+/* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
 const InputRow = goog.require('Blockly.blockRendering.InputRow');
 const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
 const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
+/* eslint-disable-next-line no-unused-vars */
 const Measurable = goog.require('Blockly.blockRendering.Measurable');
 const NextConnection = goog.require('Blockly.blockRendering.NextConnection');
 const OutputConnection = goog.require('Blockly.blockRendering.OutputConnection');
 const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnection');
+/* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
 const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
 const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
+/* eslint-disable-next-line no-unused-vars */
 const Row = goog.require('Blockly.blockRendering.Row');
 const SpacerRow = goog.require('Blockly.blockRendering.SpacerRow');
 const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');

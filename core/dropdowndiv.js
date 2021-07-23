@@ -398,7 +398,7 @@ DropDownDiv.show = function(
  * @return {!DropDownDiv.BoundsInfo} An object containing size
  *     information about the bounding element (bounding box and width/height).
  */
-DropDownDiv.getBoundsInfo_ = function() {
+let getBoundsInfo = function() {
   const boundPosition = style.getPageOffset(
       /** @type {!Element} */ (boundsElementInternal));
   const boundSize = style.getSize(
@@ -426,9 +426,9 @@ DropDownDiv.getBoundsInfo_ = function() {
  * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
  */
-DropDownDiv.getPositionMetrics_ = function(
+const getPositionMetrics = function(
     primaryX, primaryY, secondaryX, secondaryY) {
-  const boundsInfo = DropDownDiv.getBoundsInfo_();
+  const boundsInfo = getBoundsInfo();
   const divSize = style.getSize(
       /** @type {!Element} */ (divInternal));
 
@@ -745,5 +745,11 @@ DropDownDiv.repositionForWindowResize = function() {
     DropDownDiv.hide();
   }
 };
-
 exports = DropDownDiv;
+
+exports.testOnly_setGetBoundsInfo = function(getBoundsInfoMock) {
+  goog.setTestOnly();
+  getBoundsInfo = getBoundsInfoMock;
+};
+
+exports.testOnly_getPositionMetrics = getPositionMetrics;

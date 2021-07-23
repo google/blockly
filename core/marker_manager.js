@@ -13,22 +13,24 @@
 goog.module('Blockly.MarkerManager');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Cursor');
-goog.require('Blockly.Marker');
-
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Cursor = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const Marker = goog.requireType('Blockly.Marker');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace for the marker manager.
+ * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
  * @package
  */
 const MarkerManager = function(workspace){
   /**
    * The cursor.
-   * @type {?Blockly.Cursor}
+   * @type {?Cursor}
    * @private
    */
   this.cursor_ = null;
@@ -42,14 +44,14 @@ const MarkerManager = function(workspace){
 
   /**
    * The map of markers for the workspace.
-   * @type {!Object<string, !Blockly.Marker>}
+   * @type {!Object<string, !Marker>}
    * @private
    */
   this.markers_ = Object.create(null);
 
   /**
    * The workspace this marker manager is associated with.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -65,7 +67,7 @@ MarkerManager.LOCAL_MARKER = 'local_marker_1';
 /**
  * Register the marker by adding it to the map of markers.
  * @param {string} id A unique identifier for the marker.
- * @param {!Blockly.Marker} marker The marker to register.
+ * @param {!Marker} marker The marker to register.
  */
 MarkerManager.prototype.registerMarker = function(id, marker) {
   if (this.markers_[id]) {
@@ -94,7 +96,7 @@ MarkerManager.prototype.unregisterMarker = function(id) {
 
 /**
  * Get the cursor for the workspace.
- * @return {?Blockly.Cursor} The cursor for this workspace.
+ * @return {?Cursor} The cursor for this workspace.
  */
 MarkerManager.prototype.getCursor = function() {
   return this.cursor_;
@@ -103,7 +105,7 @@ MarkerManager.prototype.getCursor = function() {
 /**
  * Get a single marker that corresponds to the given ID.
  * @param {string} id A unique identifier for the marker.
- * @return {?Blockly.Marker} The marker that corresponds to the given ID,
+ * @return {?Marker} The marker that corresponds to the given ID,
  *     or null if none exists.
  */
 MarkerManager.prototype.getMarker = function(id) {
@@ -112,7 +114,7 @@ MarkerManager.prototype.getMarker = function(id) {
 
 /**
  * Sets the cursor and initializes the drawer for use with keyboard navigation.
- * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
+ * @param {Cursor} cursor The cursor used to move around this workspace.
  */
 MarkerManager.prototype.setCursor = function(cursor) {
   if (this.cursor_ && this.cursor_.getDrawer()) {

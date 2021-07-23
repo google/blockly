@@ -240,7 +240,7 @@ suite('JSO', function() {
             return 'some extra state';
           };
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'extra-state', 'some extra state');
+          assertProperty(jso, 'extraState', 'some extra state');
         });
 
         test('Object', function() {
@@ -253,7 +253,7 @@ suite('JSO', function() {
             };
           };
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'extra-state', {
+          assertProperty(jso, 'extraState', {
             'extra1': 'state1',
             'extra2': 42,
             'extra3': true,
@@ -266,19 +266,7 @@ suite('JSO', function() {
             return ['state1', 42, true];
           };
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'extra-state', ['state1', 42, true]);
-        });
-
-        test('XML backwards compat', function() {
-          const block = this.workspace.newBlock('row_block');
-          block.mutationToDom = function() {
-            const container = Blockly.utils.xml.createElement('mutation');
-            container.setAttribute('extra1', 'state1');
-            return container;
-          };
-          const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(
-              jso, 'extra-state', '<mutation  extra1="state1"></mutation>');
+          assertProperty(jso, 'extraState', ['state1', 42, true]);
         });
       });
     });

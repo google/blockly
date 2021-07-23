@@ -129,12 +129,5 @@ const addExtraState = function(block, state) {
     if (extraState !== null) {
       state['extraState'] = extraState;
     }
-  } else if (block.mutationToDom) {  // Backwards compatibility.
-    const mutation = block.mutationToDom();
-    if (mutation !== null) {
-      state['extraState'] = Blockly.Xml.domToText(mutation)
-          .replace('xmlns="https://developers.google.com/blockly/xml"', '');
- 
-    }
   }
 };

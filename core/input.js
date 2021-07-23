@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Input');
+goog.module('Blockly.Input');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.fieldRegistry');
@@ -33,7 +34,7 @@ goog.requireType('Blockly.RenderedConnection');
  * @param {Blockly.Connection} connection Optional connection for this input.
  * @constructor
  */
-Blockly.Input = function(type, name, block, connection) {
+const Input = function(type, name, block, connection) {
   if (type != Blockly.inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
@@ -56,20 +57,20 @@ Blockly.Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Blockly.Input.prototype.align = Blockly.constants.ALIGN.LEFT;
+Input.prototype.align = Blockly.constants.ALIGN.LEFT;
 
 /**
  * Is the input visible?
  * @type {boolean}
  * @private
  */
-Blockly.Input.prototype.visible_ = true;
+Input.prototype.visible_ = true;
 
 /**
  * Get the source block for this input.
  * @return {?Blockly.Block} The source block, or null if there is none.
  */
-Blockly.Input.prototype.getSourceBlock = function() {
+Input.prototype.getSourceBlock = function() {
   return this.sourceBlock_;
 };
 
@@ -79,9 +80,9 @@ Blockly.Input.prototype.getSourceBlock = function() {
  * @param {string|!Blockly.Field} field Something to add as a field.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
- * @return {!Blockly.Input} The input being append to (to allow chaining).
+ * @return {!Input} The input being append to (to allow chaining).
  */
-Blockly.Input.prototype.appendField = function(field, opt_name) {
+Input.prototype.appendField = function(field, opt_name) {
   this.insertFieldAt(this.fieldRow.length, field, opt_name);
   return this;
 };
@@ -95,7 +96,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
  *     this field again.  Should be unique to the host block.
  * @return {number} The index following the last inserted field.
  */
-Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
+Input.prototype.insertFieldAt = function(index, field, opt_name) {
   if (index < 0 || index > this.fieldRow.length) {
     throw Error('index ' + index + ' out of bounds.');
   }
@@ -150,7 +151,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
  *     and opt_quiet is true.
  * @throws {Error} if the field is not present and opt_quiet is false.
  */
-Blockly.Input.prototype.removeField = function(name, opt_quiet) {
+Input.prototype.removeField = function(name, opt_quiet) {
   for (let i = 0, field; (field = this.fieldRow[i]); i++) {
     if (field.name === name) {
       field.dispose();
@@ -174,7 +175,7 @@ Blockly.Input.prototype.removeField = function(name, opt_quiet) {
  * Gets whether this input is visible or not.
  * @return {boolean} True if visible.
  */
-Blockly.Input.prototype.isVisible = function() {
+Input.prototype.isVisible = function() {
   return this.visible_;
 };
 
@@ -185,7 +186,7 @@ Blockly.Input.prototype.isVisible = function() {
  * @return {!Array<!Blockly.BlockSvg>} List of blocks to render.
  * @package
  */
-Blockly.Input.prototype.setVisible = function(visible) {
+Input.prototype.setVisible = function(visible) {
   // Note: Currently there are only unit tests for block.setCollapsed()
   // because this function is package. If this function goes back to being a
   // public API tests (lots of tests) should be added.
@@ -219,7 +220,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
  * Mark all fields on this input as dirty.
  * @package
  */
-Blockly.Input.prototype.markDirty = function() {
+Input.prototype.markDirty = function() {
   for (let y = 0, field; (field = this.fieldRow[y]); y++) {
     field.markDirty();
   }
@@ -229,9 +230,9 @@ Blockly.Input.prototype.markDirty = function() {
  * Change a connection's compatibility.
  * @param {string|Array<string>|null} check Compatible value type or
  *     list of value types.  Null if all types are compatible.
- * @return {!Blockly.Input} The input being modified (to allow chaining).
+ * @return {!Input} The input being modified (to allow chaining).
  */
-Blockly.Input.prototype.setCheck = function(check) {
+Input.prototype.setCheck = function(check) {
   if (!this.connection) {
     throw Error('This input does not have a connection.');
   }
@@ -243,9 +244,9 @@ Blockly.Input.prototype.setCheck = function(check) {
  * Change the alignment of the connection's field(s).
  * @param {number} align One of the values of Blockly.constants.ALIGN.
  *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
- * @return {!Blockly.Input} The input being modified (to allow chaining).
+ * @return {!Input} The input being modified (to allow chaining).
  */
-Blockly.Input.prototype.setAlign = function(align) {
+Input.prototype.setAlign = function(align) {
   this.align = align;
   if (this.sourceBlock_.rendered) {
     this.sourceBlock_ = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
@@ -257,9 +258,9 @@ Blockly.Input.prototype.setAlign = function(align) {
 /**
  * Changes the connection's shadow block.
  * @param {?Element} shadow DOM representation of a block or null.
- * @return {!Blockly.Input} The input being modified (to allow chaining).
+ * @return {!Input} The input being modified (to allow chaining).
  */
-Blockly.Input.prototype.setShadowDom = function(shadow) {
+Input.prototype.setShadowDom = function(shadow) {
   if (!this.connection) {
     throw Error('This input does not have a connection.');
   }
@@ -271,7 +272,7 @@ Blockly.Input.prototype.setShadowDom = function(shadow) {
  * Returns the XML representation of the connection's shadow block.
  * @return {?Element} Shadow DOM representation of a block or null.
  */
-Blockly.Input.prototype.getShadowDom = function() {
+Input.prototype.getShadowDom = function() {
   if (!this.connection) {
     throw Error('This input does not have a connection.');
   }
@@ -281,7 +282,7 @@ Blockly.Input.prototype.getShadowDom = function() {
 /**
  * Initialize the fields on this input.
  */
-Blockly.Input.prototype.init = function() {
+Input.prototype.init = function() {
   if (!this.sourceBlock_.workspace.rendered) {
     return;  // Headless blocks don't need fields initialized.
   }
@@ -294,7 +295,7 @@ Blockly.Input.prototype.init = function() {
  * Sever all links to this input.
  * @suppress {checkTypes}
  */
-Blockly.Input.prototype.dispose = function() {
+Input.prototype.dispose = function() {
   for (let i = 0, field; (field = this.fieldRow[i]); i++) {
     field.dispose();
   }
@@ -303,3 +304,5 @@ Blockly.Input.prototype.dispose = function() {
   }
   this.sourceBlock_ = null;
 };
+
+exports = Input;

@@ -83,9 +83,8 @@ Icon.prototype.createIcon = function() {
     ...
   </g>
   */
-  this.iconGroup_ = dom.createSvgElement(
-      Svg.G,
-      {'class': 'blocklyIconGroup'}, null);
+  this.iconGroup_ =
+      dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
     dom.addClass(
         /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
@@ -194,8 +193,7 @@ Icon.prototype.getIconLocation = function() {
  */
 // TODO (#2562): Remove getCorrectedSize.
 Icon.prototype.getCorrectedSize = function() {
-  return new Size(
-      Icon.prototype.SIZE, Icon.prototype.SIZE - 2);
+  return new Size(Icon.prototype.SIZE, Icon.prototype.SIZE - 2);
 };
 
 /**

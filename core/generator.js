@@ -14,12 +14,15 @@
 goog.module('Blockly.Generator');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Block');
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.utils.deprecation');
-
-goog.requireType('Blockly.Names');
-goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.require('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Names = goog.requireType('Blockly.Names');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const internalConstants = goog.require('Blockly.internalConstants');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const {getMainWorkspace} = goog.require('Blockly');
 
 
 /**
@@ -88,14 +91,14 @@ Generator.prototype.isInitialized = null;
 
 /**
  * Generate code for all blocks in the workspace to the specified language.
- * @param {!Blockly.Workspace=} workspace Workspace to generate code from.
+ * @param {!Workspace=} workspace Workspace to generate code from.
  * @return {string} Generated code.
  */
 Generator.prototype.workspaceToCode = function(workspace) {
   if (!workspace) {
     // Backwards compatibility from before there could be multiple workspaces.
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
-    workspace = Blockly.getMainWorkspace();
+    workspace = getMainWorkspace();
   }
   let code = [];
   this.init(workspace);
@@ -147,7 +150,7 @@ Generator.prototype.prefixLines = function(text, prefix) {
 
 /**
  * Recursively spider a tree of blocks, returning all their comments.
- * @param {!Blockly.Block} block The block from which to start spidering.
+ * @param {!Block} block The block from which to start spidering.
  * @return {string} Concatenated list of comments.
  */
 Generator.prototype.allNestedComments = function(block) {
@@ -169,7 +172,7 @@ Generator.prototype.allNestedComments = function(block) {
 /**
  * Generate code for the specified block (and attached blocks).
  * The generator must be initialized before calling this function.
- * @param {Blockly.Block} block The block to generate code for.
+ * @param {Block} block The block to generate code for.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string|!Array} For statement blocks, the generated code.
  *     For value blocks, an array containing the generated code and an
@@ -225,7 +228,7 @@ Generator.prototype.blockToCode = function(block, opt_thisOnly) {
 
 /**
  * Generate code representing the specified value input.
- * @param {!Blockly.Block} block The block containing the input.
+ * @param {!Block} block The block containing the input.
  * @param {string} name The name of the input.
  * @param {number} outerOrder The maximum binding strength (minimum order value)
  *     of any operators adjacent to "block".
@@ -299,7 +302,7 @@ Generator.prototype.valueToCode = function(block, name, outerOrder) {
  * statement input. Indent the code.
  * This is mainly used in generators. When trying to generate code to evaluate
  * look at using workspaceToCode or blockToCode.
- * @param {!Blockly.Block} block The block containing the input.
+ * @param {!Block} block The block containing the input.
  * @param {string} name The name of the input.
  * @return {string} Generated code or '' if no blocks are connected.
  */
@@ -324,7 +327,7 @@ Generator.prototype.statementToCode = function(block, name) {
  * statement executes), and a statement prefix to the end of the loop block
  * (right before the loop statement executes).
  * @param {string} branch Code for loop contents.
- * @param {!Blockly.Block} block Enclosing block.
+ * @param {!Block} block Enclosing block.
  * @return {string} Loop contents, with infinite loop trap added.
  */
 Generator.prototype.addLoopTrap = function(branch, block) {
@@ -347,7 +350,7 @@ Generator.prototype.addLoopTrap = function(branch, block) {
  * Inject a block ID into a message to replace '%1'.
  * Used for STATEMENT_PREFIX, STATEMENT_SUFFIX, and INFINITE_LOOP_TRAP.
  * @param {string} msg Code snippet with '%1'.
- * @param {!Blockly.Block} block Block which has an ID.
+ * @param {!Block} block Block which has an ID.
  * @return {string} Code snippet with ID.
  */
 Generator.prototype.injectId = function(msg, block) {
@@ -398,7 +401,7 @@ Generator.prototype.functionNames_;
 
 /**
  * A database of variable and procedure names.
- * @type {!Blockly.Names|undefined}
+ * @type {!Names|undefined}
  * @protected
  */
 Generator.prototype.nameDB_;
@@ -408,10 +411,10 @@ Object.defineProperty(Generator.prototype, 'variableDB_', {
    * Getter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @this {Generator}
-   * @return {!Blockly.Names|undefined} Name database.
+   * @return {!Names|undefined} Name database.
    */
   get: function() {
-    Blockly.utils.deprecation.warn(
+    deprecation.warn(
         'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     return this.nameDB_;
   },
@@ -419,10 +422,10 @@ Object.defineProperty(Generator.prototype, 'variableDB_', {
    * Setter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @this {Generator}
-   * @param {!Blockly.Names|undefined} nameDb New name database.
+   * @param {!Names|undefined} nameDb New name database.
    */
   set: function(nameDb) {
-    Blockly.utils.deprecation.warn(
+    deprecation.warn(
         'variableDB_', 'May 2021', 'May 2026', 'nameDB_');
     this.nameDB_ = nameDb;
   }
@@ -452,7 +455,7 @@ Object.defineProperty(Generator.prototype, 'variableDB_', {
 Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
     const functionName = this.nameDB_.getDistinctName(
-        desiredName, Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
+        desiredName, internalConstants.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     let codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
@@ -475,7 +478,7 @@ Generator.prototype.provideFunction_ = function(desiredName, code) {
  * Hook for code to run before code generation starts.
  * Subclasses may override this, e.g. to initialise the database of variable
  * names.
- * @param {!Blockly.Workspace} _workspace Workspace to generate code from.
+ * @param {!Workspace} _workspace Workspace to generate code from.
  */
 Generator.prototype.init = function(_workspace) {
   // Optionally override
@@ -493,7 +496,7 @@ Generator.prototype.init = function(_workspace) {
  * Subclasses may override this, e.g. to generate code for statements following
  * the block, or to handle comments for the specified block and any connected
  * value blocks.
- * @param {!Blockly.Block} _block The current block.
+ * @param {!Block} _block The current block.
  * @param {string} code The code created for this block.
  * @param {boolean=} _opt_thisOnly True to generate code for only this
  *     statement.

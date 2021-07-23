@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.MarkerManager');
+goog.module('Blockly.MarkerManager');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Cursor');
 goog.require('Blockly.Marker');
@@ -24,7 +25,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @package
  */
-Blockly.MarkerManager = function(workspace){
+const MarkerManager = function(workspace){
   /**
    * The cursor.
    * @type {?Blockly.Cursor}
@@ -59,14 +60,14 @@ Blockly.MarkerManager = function(workspace){
  * @type {string}
  * @const
  */
-Blockly.MarkerManager.LOCAL_MARKER = 'local_marker_1';
+MarkerManager.LOCAL_MARKER = 'local_marker_1';
 
 /**
  * Register the marker by adding it to the map of markers.
  * @param {string} id A unique identifier for the marker.
  * @param {!Blockly.Marker} marker The marker to register.
  */
-Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
+MarkerManager.prototype.registerMarker = function(id, marker) {
   if (this.markers_[id]) {
     this.unregisterMarker(id);
   }
@@ -80,7 +81,7 @@ Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
  * Unregister the marker by removing it from the map of markers.
  * @param {string} id The ID of the marker to unregister.
  */
-Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
+MarkerManager.prototype.unregisterMarker = function(id) {
   const marker = this.markers_[id];
   if (marker) {
     marker.dispose();
@@ -95,7 +96,7 @@ Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
  * Get the cursor for the workspace.
  * @return {?Blockly.Cursor} The cursor for this workspace.
  */
-Blockly.MarkerManager.prototype.getCursor = function() {
+MarkerManager.prototype.getCursor = function() {
   return this.cursor_;
 };
 
@@ -105,7 +106,7 @@ Blockly.MarkerManager.prototype.getCursor = function() {
  * @return {?Blockly.Marker} The marker that corresponds to the given ID,
  *     or null if none exists.
  */
-Blockly.MarkerManager.prototype.getMarker = function(id) {
+MarkerManager.prototype.getMarker = function(id) {
   return this.markers_[id] || null;
 };
 
@@ -113,7 +114,7 @@ Blockly.MarkerManager.prototype.getMarker = function(id) {
  * Sets the cursor and initializes the drawer for use with keyboard navigation.
  * @param {Blockly.Cursor} cursor The cursor used to move around this workspace.
  */
-Blockly.MarkerManager.prototype.setCursor = function(cursor) {
+MarkerManager.prototype.setCursor = function(cursor) {
   if (this.cursor_ && this.cursor_.getDrawer()) {
     this.cursor_.getDrawer().dispose();
   }
@@ -132,7 +133,7 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
  *     workspace SVG group.
  * @package
  */
-Blockly.MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
+MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
     this.cursorSvg_ = null;
     return;
@@ -148,7 +149,7 @@ Blockly.MarkerManager.prototype.setCursorSvg = function(cursorSvg) {
  *     workspace SVG group.
  * @package
  */
-Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
+MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
     this.markerSvg_ = null;
     return;
@@ -167,7 +168,7 @@ Blockly.MarkerManager.prototype.setMarkerSvg = function(markerSvg) {
  * Redraw the attached cursor SVG if needed.
  * @package
  */
-Blockly.MarkerManager.prototype.updateMarkers = function() {
+MarkerManager.prototype.updateMarkers = function() {
   if (this.workspace_.keyboardAccessibilityMode && this.cursorSvg_) {
     this.workspace_.getCursor().draw();
   }
@@ -179,7 +180,7 @@ Blockly.MarkerManager.prototype.updateMarkers = function() {
  * @suppress {checkTypes}
  * @package
  */
-Blockly.MarkerManager.prototype.dispose = function() {
+MarkerManager.prototype.dispose = function() {
   const markerIds = Object.keys(this.markers_);
   for (let i = 0, markerId; (markerId = markerIds[i]); i++) {
     this.unregisterMarker(markerId);
@@ -190,3 +191,5 @@ Blockly.MarkerManager.prototype.dispose = function() {
     this.cursor_ = null;
   }
 };
+
+exports = MarkerManager;

@@ -402,6 +402,14 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.randomIdentifier = String(Math.random()).substring(2);
 
   /**
+   * The defs tag that contains all filters and patterns for this Blockly
+   * instance.
+   * @type {SVGElement}
+   * @private
+   */
+  this.defs = null;
+
+  /**
    * The ID of the emboss filter, or the empty string if no filter is set.
    * @type {string}
    * @package
@@ -1023,7 +1031,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement(
+  this.defs = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.DEFS, {}, svg);
   /*
     <filter id="blocklyEmbossFilter837493">
@@ -1041,7 +1049,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   */
   var embossFilter = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FILTER,
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
+      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, this.defs);
   Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
@@ -1095,7 +1103,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
-      }, defs);
+      }, this.defs);
   Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT,
       {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
@@ -1105,42 +1113,46 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
 
-  if (Blockly.blockRendering.Debug) {
+  this.createDebugFilter();
+};
+
+/**
+ * Create a filter for highlighting the currently rendering block during
+ * render debugging.
+ * @private
+ */
+Blockly.blockRendering.ConstantProvider.prototype.createDebugFilter =
+    function() {
+  // Only create the debug filter once.
+  if (!this.debugFilter_) {
     var debugFilter = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FILTER,
-        {
+        Blockly.utils.Svg.FILTER, {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
           y: '-30%',
           x: '-40%'
         },
-        defs);
+        this.defs);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FECOMPONENTTRANSFER, {
-          'result': 'outBlur'
-        }, debugFilter);
+        Blockly.utils.Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'},
+        debugFilter);
     Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.FEFUNCA,
-        {
-          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
-        },
+        {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
         debugComponentTransfer);
     // Color the highlight
     Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.FEFLOOD,
-        {
-          'flood-color': '#ff0000',
-          'flood-opacity': 0.5,
-          'result': 'outColor'
-        },
+        {'flood-color': '#ff0000', 'flood-opacity': 0.5, 'result': 'outColor'},
         debugFilter);
     Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FECOMPOSITE,
-        {
-          'in': 'outColor', 'in2': 'outBlur',
-          'operator': 'in', 'result': 'outGlow'
+        Blockly.utils.Svg.FECOMPOSITE, {
+          'in': 'outColor',
+          'in2': 'outBlur',
+          'operator': 'in',
+          'result': 'outGlow'
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;

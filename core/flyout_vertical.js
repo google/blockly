@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.VerticalFlyout');
+goog.module('Blockly.VerticalFlyout');
+goog.module.declareLegacyNamespace();
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
@@ -37,16 +38,16 @@ goog.requireType('Blockly.utils.Coordinate');
  * @extends {Blockly.Flyout}
  * @constructor
  */
-Blockly.VerticalFlyout = function(workspaceOptions) {
-  Blockly.VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
+const VerticalFlyout = function(workspaceOptions) {
+  VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
-Blockly.utils.object.inherits(Blockly.VerticalFlyout, Blockly.Flyout);
+Blockly.utils.object.inherits(VerticalFlyout, Blockly.Flyout);
 
 /**
  * The name of the vertical flyout in the registry.
  * @type {string}
  */
-Blockly.VerticalFlyout.registryName = 'verticalFlyout';
+VerticalFlyout.registryName = 'verticalFlyout';
 
 /**
  * Sets the translation of the flyout to match the scrollbars.
@@ -55,7 +56,7 @@ Blockly.VerticalFlyout.registryName = 'verticalFlyout';
  *     similar x property.
  * @protected
  */
-Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
+VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
   if (!this.isVisible()) {
     return;
   }
@@ -77,7 +78,7 @@ Blockly.VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
  * Calculates the x coordinate for the flyout position.
  * @return {number} X coordinate.
  */
-Blockly.VerticalFlyout.prototype.getX = function() {
+VerticalFlyout.prototype.getX = function() {
   if (!this.isVisible()) {
     return 0;
   }
@@ -125,7 +126,7 @@ Blockly.VerticalFlyout.prototype.getX = function() {
  * Calculates the y coordinate for the flyout position.
  * @return {number} Y coordinate.
  */
-Blockly.VerticalFlyout.prototype.getY = function() {
+VerticalFlyout.prototype.getY = function() {
   // Y is always 0 since this is a vertical flyout.
   return 0;
 };
@@ -133,7 +134,7 @@ Blockly.VerticalFlyout.prototype.getY = function() {
 /**
  * Move the flyout to the edge of the workspace.
  */
-Blockly.VerticalFlyout.prototype.position = function() {
+VerticalFlyout.prototype.position = function() {
   if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }
@@ -161,7 +162,7 @@ Blockly.VerticalFlyout.prototype.position = function() {
  *     rounded corners.
  * @private
  */
-Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
+VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
   const atRight = this.toolboxPosition_ == Blockly.utils.toolbox.Position.RIGHT;
   const totalWidth = width + this.CORNER_RADIUS;
 
@@ -190,7 +191,7 @@ Blockly.VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
 /**
  * Scroll the flyout to the top.
  */
-Blockly.VerticalFlyout.prototype.scrollToStart = function() {
+VerticalFlyout.prototype.scrollToStart = function() {
   this.workspace_.scrollbar.setY(0);
 };
 
@@ -199,7 +200,7 @@ Blockly.VerticalFlyout.prototype.scrollToStart = function() {
  * @param {!Event} e Mouse wheel scroll event.
  * @protected
  */
-Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
+VerticalFlyout.prototype.wheel_ = function(e) {
   const scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
@@ -226,7 +227,7 @@ Blockly.VerticalFlyout.prototype.wheel_ = function(e) {
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
-Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
+VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   this.workspace_.scale = this.targetWorkspace.scale;
   const margin = this.MARGIN;
   const cursorX = this.RTL ? margin : margin + this.tabWidth_;
@@ -270,7 +271,7 @@ Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
-Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
+VerticalFlyout.prototype.isDragTowardWorkspace = function(
     currentDragDeltaXY) {
   const dx = currentDragDeltaXY.x;
   const dy = currentDragDeltaXY.y;
@@ -292,7 +293,7 @@ Blockly.VerticalFlyout.prototype.isDragTowardWorkspace = function(
  * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
-Blockly.VerticalFlyout.prototype.getClientRect = function() {
+VerticalFlyout.prototype.getClientRect = function() {
   if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
     // The bounding rectangle won't compute correctly if the flyout is closed
     // and auto-close flyouts aren't valid drag targets (or delete areas).
@@ -319,7 +320,7 @@ Blockly.VerticalFlyout.prototype.getClientRect = function() {
  * For RTL: Lay out the blocks and buttons to be right-aligned.
  * @protected
  */
-Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
+VerticalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.getFlyoutScale();
   let flyoutWidth = 0;
   const blocks = this.workspace_.getTopBlocks(false);
@@ -380,4 +381,6 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
 };
 
 Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
-    Blockly.registry.DEFAULT, Blockly.VerticalFlyout);
+    Blockly.registry.DEFAULT, VerticalFlyout);
+
+exports = VerticalFlyout;

@@ -151,7 +151,7 @@ Blockly.Input.prototype.insertFieldAt = function(index, field, opt_name) {
  * @throws {Error} if the field is not present and opt_quiet is false.
  */
 Blockly.Input.prototype.removeField = function(name, opt_quiet) {
-  for (var i = 0, field; (field = this.fieldRow[i]); i++) {
+  for (let i = 0, field; (field = this.fieldRow[i]); i++) {
     if (field.name === name) {
       field.dispose();
       this.fieldRow.splice(i, 1);
@@ -189,13 +189,13 @@ Blockly.Input.prototype.setVisible = function(visible) {
   // Note: Currently there are only unit tests for block.setCollapsed()
   // because this function is package. If this function goes back to being a
   // public API tests (lots of tests) should be added.
-  var renderList = [];
+  let renderList = [];
   if (this.visible_ == visible) {
     return renderList;
   }
   this.visible_ = visible;
 
-  for (var y = 0, field; (field = this.fieldRow[y]); y++) {
+  for (let y = 0, field; (field = this.fieldRow[y]); y++) {
     field.setVisible(visible);
   }
   if (this.connection) {
@@ -207,7 +207,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
     } else {
       this.connection.stopTrackingAll();
     }
-    var child = this.connection.targetBlock();
+    const child = this.connection.targetBlock();
     if (child) {
       child.getSvgRoot().style.display = visible ? 'block' : 'none';
     }
@@ -220,7 +220,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
  * @package
  */
 Blockly.Input.prototype.markDirty = function() {
-  for (var y = 0, field; (field = this.fieldRow[y]); y++) {
+  for (let y = 0, field; (field = this.fieldRow[y]); y++) {
     field.markDirty();
   }
 };
@@ -285,7 +285,7 @@ Blockly.Input.prototype.init = function() {
   if (!this.sourceBlock_.workspace.rendered) {
     return;  // Headless blocks don't need fields initialized.
   }
-  for (var i = 0; i < this.fieldRow.length; i++) {
+  for (let i = 0; i < this.fieldRow.length; i++) {
     this.fieldRow[i].init();
   }
 };
@@ -295,7 +295,7 @@ Blockly.Input.prototype.init = function() {
  * @suppress {checkTypes}
  */
 Blockly.Input.prototype.dispose = function() {
-  for (var i = 0, field; (field = this.fieldRow[i]); i++) {
+  for (let i = 0, field; (field = this.fieldRow[i]); i++) {
     field.dispose();
   }
   if (this.connection) {

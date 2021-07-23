@@ -63,10 +63,11 @@ HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
   if (typeof xyRatio.x == 'number') {
     this.workspace_.scrollX =
         -(scrollMetrics.left +
-            (scrollMetrics.width - viewMetrics.width) * xyRatio.x);
+          (scrollMetrics.width - viewMetrics.width) * xyRatio.x);
   }
 
-  this.workspace_.translate(this.workspace_.scrollX + absoluteMetrics.left,
+  this.workspace_.translate(
+      this.workspace_.scrollX + absoluteMetrics.left,
       this.workspace_.scrollY + absoluteMetrics.top);
 };
 
@@ -159,8 +160,7 @@ HorizontalFlyout.prototype.position = function() {
  *     rounded corners.
  * @private
  */
-HorizontalFlyout.prototype.setBackgroundPath_ = function(
-    width, height) {
+HorizontalFlyout.prototype.setBackgroundPath_ = function(width, height) {
   const atTop = this.toolboxPosition_ == Position.TOP;
   // Start at top left.
   const path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
@@ -171,20 +171,24 @@ HorizontalFlyout.prototype.setBackgroundPath_ = function(
     // Right.
     path.push('v', height);
     // Bottom.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('h', -width);
     // Left.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('z');
   } else {
     // Top.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('h', width);
     // Right.
-    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+    path.push(
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('v', height);
     // Bottom.
@@ -366,7 +370,8 @@ HorizontalFlyout.prototype.reflowInternal_ = function() {
       // is in the correct position relative to the new absolute edge (ie
       // toolbox edge).
       this.targetWorkspace.translate(
-          this.targetWorkspace.scrollX, this.targetWorkspace.scrollY + flyoutHeight);
+          this.targetWorkspace.scrollX,
+          this.targetWorkspace.scrollY + flyoutHeight);
     }
 
     // Record the height for workspace metrics and .position.
@@ -376,7 +381,8 @@ HorizontalFlyout.prototype.reflowInternal_ = function() {
   }
 };
 
-registry.register(registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
-    registry.DEFAULT, HorizontalFlyout);
+registry.register(
+    registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, registry.DEFAULT,
+    HorizontalFlyout);
 
 exports = HorizontalFlyout;

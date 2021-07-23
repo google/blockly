@@ -53,6 +53,7 @@ Icon.prototype.collapseHidden = true;
 
 /**
  * Height and width of icons.
+ * @const
  */
 Icon.prototype.SIZE = 17;
 

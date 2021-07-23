@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Grid');
+goog.module('Blockly.Grid');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
@@ -27,7 +28,7 @@ goog.require('Blockly.utils.userAgent');
  *     https://developers.google.com/blockly/guides/configure/web/grid
  * @constructor
  */
-Blockly.Grid = function(pattern, options) {
+const Grid = function(pattern, options) {
   /**
    * The grid's SVG pattern, created during injection.
    * @type {!SVGElement}
@@ -78,14 +79,14 @@ Blockly.Grid = function(pattern, options) {
  * @type {number}
  * @private
  */
-Blockly.Grid.prototype.scale_ = 1;
+Grid.prototype.scale_ = 1;
 
 /**
  * Dispose of this grid and unlink from the DOM.
  * @package
  * @suppress {checkTypes}
  */
-Blockly.Grid.prototype.dispose = function() {
+Grid.prototype.dispose = function() {
   this.gridPattern_ = null;
 };
 
@@ -94,7 +95,7 @@ Blockly.Grid.prototype.dispose = function() {
  * @return {boolean} True if blocks should snap, false otherwise.
  * @package
  */
-Blockly.Grid.prototype.shouldSnap = function() {
+Grid.prototype.shouldSnap = function() {
   return this.snapToGrid_;
 };
 
@@ -103,7 +104,7 @@ Blockly.Grid.prototype.shouldSnap = function() {
  * @return {number} The spacing of the grid points.
  * @package
  */
-Blockly.Grid.prototype.getSpacing = function() {
+Grid.prototype.getSpacing = function() {
   return this.spacing_;
 };
 
@@ -113,7 +114,7 @@ Blockly.Grid.prototype.getSpacing = function() {
  * @return {string} The pattern ID.
  * @package
  */
-Blockly.Grid.prototype.getPatternId = function() {
+Grid.prototype.getPatternId = function() {
   return this.gridPattern_.id;
 };
 
@@ -122,7 +123,7 @@ Blockly.Grid.prototype.getPatternId = function() {
  * @param {number} scale The new workspace scale.
  * @package
  */
-Blockly.Grid.prototype.update = function(scale) {
+Grid.prototype.update = function(scale) {
   this.scale_ = scale;
   // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
   const safeSpacing = (this.spacing_ * scale) || 100;
@@ -153,7 +154,7 @@ Blockly.Grid.prototype.update = function(scale) {
  * @param {number} y2 The new y end position of the line (in px).
  * @private
  */
-Blockly.Grid.prototype.setLineAttributes_ = function(line, width,
+Grid.prototype.setLineAttributes_ = function(line, width,
     x1, x2, y1, y2) {
   if (line) {
     line.setAttribute('stroke-width', width);
@@ -171,7 +172,7 @@ Blockly.Grid.prototype.setLineAttributes_ = function(line, width,
  * @param {number} y The new y position of the grid (in px).
  * @package
  */
-Blockly.Grid.prototype.moveTo = function(x, y) {
+Grid.prototype.moveTo = function(x, y) {
   this.gridPattern_.setAttribute('x', x);
   this.gridPattern_.setAttribute('y', y);
 
@@ -190,7 +191,7 @@ Blockly.Grid.prototype.moveTo = function(x, y) {
  * @return {!SVGElement} The SVG element for the grid pattern.
  * @package
  */
-Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
+Grid.createDom = function(rnd, gridOptions, defs) {
   /*
     <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
       <rect stroke="#888" />
@@ -220,3 +221,5 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
   }
   return gridPattern;
 };
+
+exports = Grid;

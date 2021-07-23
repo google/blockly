@@ -96,11 +96,11 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
     workspace = Blockly.getMainWorkspace();
   }
-  var code = [];
+  let code = [];
   this.init(workspace);
-  var blocks = workspace.getTopBlocks(true);
-  for (var i = 0, block; (block = blocks[i]); i++) {
-    var line = this.blockToCode(block);
+  const blocks = workspace.getTopBlocks(true);
+  for (let i = 0, block; (block = blocks[i]); i++) {
+    let line = this.blockToCode(block);
     if (Array.isArray(line)) {
       // Value blocks return tuples of code and operator order.
       // Top-level blocks don't care about operator order.
@@ -150,10 +150,10 @@ Blockly.Generator.prototype.prefixLines = function(text, prefix) {
  * @return {string} Concatenated list of comments.
  */
 Blockly.Generator.prototype.allNestedComments = function(block) {
-  var comments = [];
-  var blocks = block.getDescendants(true);
-  for (var i = 0; i < blocks.length; i++) {
-    var comment = blocks[i].getCommentText();
+  const comments = [];
+  const blocks = block.getDescendants(true);
+  for (let i = 0; i < blocks.length; i++) {
+    const comment = blocks[i].getCommentText();
     if (comment) {
       comments.push(comment);
     }
@@ -191,7 +191,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
     return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
   }
 
-  var func = this[block.type];
+  const func = this[block.type];
   if (typeof func != 'function') {
     throw Error('Language "' + this.name_ + '" does not know how to generate ' +
         'code for block type "' + block.type + '".');
@@ -200,7 +200,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current preferred method of accessing the block is through the second
   // argument to func.call, which becomes the first parameter to the generator.
-  var code = func.call(block, block);
+  let code = func.call(block, block);
   if (Array.isArray(code)) {
     // Value blocks return tuples of code and operator order.
     if (!block.outputConnection) {
@@ -235,11 +235,11 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
   if (isNaN(outerOrder)) {
     throw TypeError('Expecting valid order from block: ' + block.type);
   }
-  var targetBlock = block.getInputTargetBlock(name);
+  const targetBlock = block.getInputTargetBlock(name);
   if (!targetBlock) {
     return '';
   }
-  var tuple = this.blockToCode(targetBlock);
+  const tuple = this.blockToCode(targetBlock);
   if (tuple === '') {
     // Disabled block.
     return '';
@@ -249,8 +249,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
   if (!Array.isArray(tuple)) {
     throw TypeError('Expecting tuple from value block: ' + targetBlock.type);
   }
-  var code = tuple[0];
-  var innerOrder = tuple[1];
+  let code = tuple[0];
+  const innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
     throw TypeError('Expecting valid order from value block: ' +
         targetBlock.type);
@@ -260,9 +260,9 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
   }
 
   // Add parentheses if needed.
-  var parensNeeded = false;
-  var outerOrderClass = Math.floor(outerOrder);
-  var innerOrderClass = Math.floor(innerOrder);
+  let parensNeeded = false;
+  const outerOrderClass = Math.floor(outerOrder);
+  const innerOrderClass = Math.floor(innerOrder);
   if (outerOrderClass <= innerOrderClass) {
     if (outerOrderClass == innerOrderClass &&
         (outerOrderClass == 0 || outerOrderClass == 99)) {
@@ -276,7 +276,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
       // wrap the code in parentheses.
       parensNeeded = true;
       // Check for special exceptions.
-      for (var i = 0; i < this.ORDER_OVERRIDES.length; i++) {
+      for (let i = 0; i < this.ORDER_OVERRIDES.length; i++) {
         if (this.ORDER_OVERRIDES[i][0] == outerOrder &&
             this.ORDER_OVERRIDES[i][1] == innerOrder) {
           parensNeeded = false;
@@ -303,8 +303,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
  * @return {string} Generated code or '' if no blocks are connected.
  */
 Blockly.Generator.prototype.statementToCode = function(block, name) {
-  var targetBlock = block.getInputTargetBlock(name);
-  var code = this.blockToCode(targetBlock);
+  const targetBlock = block.getInputTargetBlock(name);
+  let code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   if (typeof code != 'string') {
@@ -350,7 +350,7 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
  * @return {string} Code snippet with ID.
  */
 Blockly.Generator.prototype.injectId = function(msg, block) {
-  var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  const id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   return msg.replace(/%1/g, '\'' + id + '\'');
 };
 
@@ -450,16 +450,16 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName = this.nameDB_.getDistinctName(
+    const functionName = this.nameDB_.getDistinctName(
         desiredName, Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
-    var codeText = code.join('\n').replace(
+    let codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
     // Change all '  ' indents into the desired indent.
     // To avoid an infinite loop of replacements, change all indents to '\0'
     // character first, then replace them all with the indent.
     // We are assuming that no provided functions contain a literal null char.
-    var oldCodeText;
+    let oldCodeText;
     while (oldCodeText != codeText) {
       oldCodeText = codeText;
       codeText = codeText.replace(/^(( {2})*) {2}/gm, '$1\0');

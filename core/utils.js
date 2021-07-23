@@ -16,7 +16,8 @@
  * @name Blockly.utils
  * @namespace
  */
-goog.provide('Blockly.utils');
+goog.module('Blockly.utils');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
@@ -37,18 +38,19 @@ goog.requireType('Blockly.WorkspaceSvg');
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */
-Blockly.utils.noEvent = function(e) {
+const noEvent = function(e) {
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
 };
+exports.noEvent = noEvent;
 
 /**
  * Is this event targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.
  */
-Blockly.utils.isTargetInput = function(e) {
+const isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
@@ -56,6 +58,7 @@ Blockly.utils.isTargetInput = function(e) {
          e.target.isContentEditable ||
          (e.target.dataset && e.target.dataset.isTextInput == 'true');
 };
+exports.isTargetInput = isTargetInput;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -63,7 +66,7 @@ Blockly.utils.isTargetInput = function(e) {
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
-Blockly.utils.getRelativeXY = function(element) {
+const getRelativeXY = function(element) {
   const xy = new Blockly.utils.Coordinate(0, 0);
   // First, check for x and y attributes.
   const x = element.getAttribute('x');
@@ -76,7 +79,7 @@ Blockly.utils.getRelativeXY = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   const transform = element.getAttribute('transform');
-  const r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEX_);
+  const r = transform && transform.match(getRelativeXY.XY_REGEX_);
   if (r) {
     xy.x += Number(r[1]);
     if (r[3]) {
@@ -88,7 +91,7 @@ Blockly.utils.getRelativeXY = function(element) {
   const style = element.getAttribute('style');
   if (style && style.indexOf('translate') > -1) {
     const styleComponents =
-        style.match(Blockly.utils.getRelativeXY.XY_STYLE_REGEX_);
+        style.match(getRelativeXY.XY_STYLE_REGEX_);
     if (styleComponents) {
       xy.x += Number(styleComponents[1]);
       if (styleComponents[3]) {
@@ -98,6 +101,7 @@ Blockly.utils.getRelativeXY = function(element) {
   }
   return xy;
 };
+exports.getRelativeXY = getRelativeXY;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -107,11 +111,11 @@ Blockly.utils.getRelativeXY = function(element) {
  *     undefined.
  * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
  */
-Blockly.utils.getInjectionDivXY_ = function(element) {
+const getInjectionDivXY = function(element) {
   let x = 0;
   let y = 0;
   while (element) {
-    const xy = Blockly.utils.getRelativeXY(element);
+    const xy = getRelativeXY(element);
     x = x + xy.x;
     y = y + xy.y;
     const classes = element.getAttribute('class') || '';
@@ -122,6 +126,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
   }
   return new Blockly.utils.Coordinate(x, y);
 };
+exports.getInjectionDivXY_ = getInjectionDivXY;
 
 /**
  * Static regex to pull the x,y values out of an SVG translate() directive.
@@ -132,7 +137,7 @@ Blockly.utils.getInjectionDivXY_ = function(element) {
  * @type {!RegExp}
  * @private
  */
-Blockly.utils.getRelativeXY.XY_REGEX_ =
+getRelativeXY.XY_REGEX_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 
 /**
@@ -142,7 +147,7 @@ Blockly.utils.getRelativeXY.XY_REGEX_ =
  * @type {!RegExp}
  * @private
  */
-Blockly.utils.getRelativeXY.XY_STYLE_REGEX_ =
+getRelativeXY.XY_STYLE_REGEX_ =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
@@ -150,7 +155,7 @@ Blockly.utils.getRelativeXY.XY_STYLE_REGEX_ =
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
  */
-Blockly.utils.isRightButton = function(e) {
+const isRightButton = function(e) {
   if (e.ctrlKey && Blockly.utils.userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
@@ -158,6 +163,7 @@ Blockly.utils.isRightButton = function(e) {
   }
   return e.button == 2;
 };
+exports.isRightButton = isRightButton;
 
 /**
  * Return the converted coordinates of the given mouse event.
@@ -167,7 +173,7 @@ Blockly.utils.isRightButton = function(e) {
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
  */
-Blockly.utils.mouseToSvg = function(e, svg, matrix) {
+const mouseToSvg = function(e, svg, matrix) {
   const svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;
@@ -177,6 +183,7 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
   }
   return svgPoint.matrixTransform(matrix);
 };
+exports.mouseToSvg = mouseToSvg;
 
 /**
  * Get the scroll delta of a mouse event in pixel units.
@@ -184,7 +191,7 @@ Blockly.utils.mouseToSvg = function(e, svg, matrix) {
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
  */
-Blockly.utils.getScrollDeltaPixels = function(e) {
+const getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {
     case 0x00:  // Pixel mode.
     default:
@@ -204,6 +211,7 @@ Blockly.utils.getScrollDeltaPixels = function(e) {
       };
   }
 };
+exports.getScrollDeltaPixels = getScrollDeltaPixels;
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
@@ -215,9 +223,10 @@ Blockly.utils.getScrollDeltaPixels = function(e) {
  *     interpolation tokens.
  * @return {!Array<string|number>} Array of strings and numbers.
  */
-Blockly.utils.tokenizeInterpolation = function(message) {
-  return Blockly.utils.tokenizeInterpolation_(message, true);
+const tokenizeInterpolation = function(message) {
+  return tokenizeInterpolation_(message, true);
 };
+exports.tokenizeInterpolation = tokenizeInterpolation;
 
 /**
  * Replaces string table references in a message, if the message is a string.
@@ -227,15 +236,16 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  *     string table references.
  * @return {string} String with message references replaced.
  */
-Blockly.utils.replaceMessageReferences = function(message) {
+const replaceMessageReferences = function(message) {
   if (typeof message != 'string') {
     return message;
   }
-  const interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
+  const interpolatedResult = tokenizeInterpolation_(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
+exports.replaceMessageReferences = replaceMessageReferences;
 
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
@@ -244,7 +254,7 @@ Blockly.utils.replaceMessageReferences = function(message) {
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
  */
-Blockly.utils.checkMessageReferences = function(message) {
+const checkMessageReferences = function(message) {
   let validSoFar = true;
 
   const msgTable = Blockly.Msg;
@@ -262,6 +272,7 @@ Blockly.utils.checkMessageReferences = function(message) {
 
   return validSoFar;
 };
+exports.checkMessageReferences = checkMessageReferences;
 
 /**
  * Internal implementation of the message reference and interpolation token
@@ -271,9 +282,8 @@ Blockly.utils.checkMessageReferences = function(message) {
  * @param {boolean} parseInterpolationTokens Option to parse numeric
  *     interpolation tokens (%1, %2, ...) when true.
  * @return {!Array<string|number>} Array of strings and numbers.
- * @private
  */
-Blockly.utils.tokenizeInterpolation_ = function(message,
+const tokenizeInterpolation_ = function(message,
     parseInterpolationTokens) {
   const tokens = [];
   const chars = message.split('');
@@ -349,7 +359,7 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
             if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,
-                  Blockly.utils.tokenizeInterpolation_(
+                  tokenizeInterpolation_(
                       rawValue, parseInterpolationTokens));
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
@@ -407,21 +417,22 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
  * @return {string} A globally unique ID string.
  * @deprecated Use Blockly.utils.idGenerator.genUid instead.
  */
-Blockly.utils.genUid = function() {
+const genUid = function() {
   Blockly.utils.deprecation.warn(
       'Blockly.utils.genUid', 'September 2021', 'September 2022',
       'Blockly.utils.idGenerator.genUid');
   return Blockly.utils.idGenerator.genUid();
 };
+exports.genUid = genUid;
 
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
  * @return {boolean} True if 3D transforms are supported.
  */
-Blockly.utils.is3dSupported = function() {
-  if (Blockly.utils.is3dSupported.cached_ !== undefined) {
-    return Blockly.utils.is3dSupported.cached_;
+const is3dSupported = function() {
+  if (is3dSupported.cached_ !== undefined) {
+    return is3dSupported.cached_;
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
@@ -460,18 +471,19 @@ Blockly.utils.is3dSupported = function() {
     }
   }
   document.body.removeChild(el);
-  Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
-  return Blockly.utils.is3dSupported.cached_;
+  is3dSupported.cached_ = has3d !== 'none';
+  return is3dSupported.cached_;
 };
+exports.is3dSupported = is3dSupported;
 
 /**
  * Calls a function after the page has loaded, possibly immediately.
  * @param {function()} fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  */
-Blockly.utils.runAfterPageLoad = function(fn) {
+const runAfterPageLoad = function(fn) {
   if (typeof document != 'object') {
-    throw Error('Blockly.utils.runAfterPageLoad() requires browser document.');
+    throw Error('runAfterPageLoad() requires browser document.');
   }
   if (document.readyState == 'complete') {
     fn();  // Page has already loaded. Call immediately.
@@ -485,15 +497,15 @@ Blockly.utils.runAfterPageLoad = function(fn) {
     }, 10);
   }
 };
+exports.runAfterPageLoad = runAfterPageLoad;
 
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
  * @return {!Blockly.utils.Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
- * @package
  */
-Blockly.utils.getViewportBBox = function() {
+const getViewportBBox = function() {
   // Pixels, in window coordinates.
   const scrollOffset = Blockly.utils.style.getViewportPageOffset();
   return new Blockly.utils.Rect(
@@ -503,6 +515,8 @@ Blockly.utils.getViewportBBox = function() {
       document.documentElement.clientWidth + scrollOffset.x
   );
 };
+/** @package */
+exports.getViewportBBox = getViewportBBox;
 
 /**
  * Removes the first occurrence of a particular value from an array.
@@ -510,9 +524,8 @@ Blockly.utils.getViewportBBox = function() {
  *     value.
  * @param {*} obj Object to remove.
  * @return {boolean} True if an element was removed.
- * @package
  */
-Blockly.utils.arrayRemove = function(arr, obj) {
+const arrayRemove = function(arr, obj) {
   const i = arr.indexOf(obj);
   if (i == -1) {
     return false;
@@ -520,13 +533,15 @@ Blockly.utils.arrayRemove = function(arr, obj) {
   arr.splice(i, 1);
   return true;
 };
+/** @package */
+exports.arrayRemove = arrayRemove;
 
 /**
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
  * @return {!Blockly.utils.Coordinate} Object with values 'x' and 'y'.
  */
-Blockly.utils.getDocumentScroll = function() {
+const getDocumentScroll = function() {
   const el = document.documentElement;
   const win = window;
   if (Blockly.utils.userAgent.IE && win.pageYOffset != el.scrollTop) {
@@ -538,6 +553,7 @@ Blockly.utils.getDocumentScroll = function() {
   return new Blockly.utils.Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 };
+exports.getDocumentScroll = getDocumentScroll;
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of
@@ -548,7 +564,7 @@ Blockly.utils.getDocumentScroll = function() {
  *    of the block).
  * @return {!Object} Map of types to type counts for descendants of the bock.
  */
-Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
+const getBlockTypeCounts = function(block, opt_stripFollowing) {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
   if (opt_stripFollowing) {
@@ -567,6 +583,7 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
   }
   return typeCountsMap;
 };
+exports.getBlockTypeCounts = getBlockTypeCounts;
 
 /**
  * Converts screen coordinates to workspace coordinates.
@@ -574,9 +591,8 @@ Blockly.utils.getBlockTypeCounts = function(block, opt_stripFollowing) {
  * @param {!Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
  * @return {!Blockly.utils.Coordinate} The workspace coordinates.
- * @package
  */
-Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
+const screenToWsCoordinates = function(ws, screenCoordinates) {
   const screenX = screenCoordinates.x;
   const screenY = screenCoordinates.y;
 
@@ -603,6 +619,8 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
+/** @package */
+exports.screenToWsCoordinates = screenToWsCoordinates;
 
 /**
  * Parse a block colour from a number or string, as provided in a block
@@ -613,9 +631,9 @@ Blockly.utils.screenToWsCoordinates = function(ws, screenCoordinates) {
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
  */
-Blockly.utils.parseBlockColour = function(colour) {
+const parseBlockColour = function(colour) {
   const dereferenced = (typeof colour == 'string') ?
-      Blockly.utils.replaceMessageReferences(colour) : colour;
+      replaceMessageReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
@@ -642,3 +660,4 @@ Blockly.utils.parseBlockColour = function(colour) {
     }
   }
 };
+exports.parseBlockColour = parseBlockColour;

@@ -125,14 +125,14 @@ Blockly.Grid.prototype.getPatternId = function() {
 Blockly.Grid.prototype.update = function(scale) {
   this.scale_ = scale;
   // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-  var safeSpacing = (this.spacing_ * scale) || 100;
+  const safeSpacing = (this.spacing_ * scale) || 100;
 
   this.gridPattern_.setAttribute('width', safeSpacing);
   this.gridPattern_.setAttribute('height', safeSpacing);
 
-  var half = Math.floor(this.spacing_ / 2) + 0.5;
-  var start = half - this.length_ / 2;
-  var end = half + this.length_ / 2;
+  let half = Math.floor(this.spacing_ / 2) + 0.5;
+  let start = half - this.length_ / 2;
+  let end = half + this.length_ / 2;
 
   half *= scale;
   start *= scale;
@@ -197,7 +197,7 @@ Blockly.Grid.createDom = function(rnd, gridOptions, defs) {
       <rect stroke="#888" />
     </pattern>
   */
-  var gridPattern = Blockly.utils.dom.createSvgElement(
+  const gridPattern = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.PATTERN,
       {
         'id': 'blocklyGridPattern' + rnd,

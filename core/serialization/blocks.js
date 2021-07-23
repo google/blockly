@@ -13,8 +13,6 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Xml');
-
 
 // TODO: Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -120,7 +118,7 @@ const addCoords = function(block, state) {
 /**
  * Adds any extra state the block may provide to the given state object.
  * @param {!Blockly.Block} block The block to serialize the extra state of.
- * @param {!Blockly.serialization.blocks.State} state The state object to append
+ * @param {!State} state The state object to append
  *     to.
  */
 const addExtraState = function(block, state) {

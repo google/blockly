@@ -28,8 +28,6 @@ const dom = goog.require('Blockly.utils.dom');
 const events = goog.require('Blockly.Events');
 const registry = goog.require('Blockly.registry');
 /** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');

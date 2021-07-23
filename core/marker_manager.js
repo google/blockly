@@ -81,7 +81,7 @@ Blockly.MarkerManager.prototype.registerMarker = function(id, marker) {
  * @param {string} id The ID of the marker to unregister.
  */
 Blockly.MarkerManager.prototype.unregisterMarker = function(id) {
-  var marker = this.markers_[id];
+  const marker = this.markers_[id];
   if (marker) {
     marker.dispose();
     delete this.markers_[id];
@@ -119,7 +119,7 @@ Blockly.MarkerManager.prototype.setCursor = function(cursor) {
   }
   this.cursor_ = cursor;
   if (this.cursor_) {
-    var drawer = this.workspace_.getRenderer()
+    const drawer = this.workspace_.getRenderer()
         .makeMarkerDrawer(this.workspace_, this.cursor_);
     this.cursor_.setDrawer(drawer);
     this.setCursorSvg(this.cursor_.getDrawer().createDom());
@@ -180,8 +180,8 @@ Blockly.MarkerManager.prototype.updateMarkers = function() {
  * @package
  */
 Blockly.MarkerManager.prototype.dispose = function() {
-  var markerIds = Object.keys(this.markers_);
-  for (var i = 0, markerId; (markerId = markerIds[i]); i++) {
+  const markerIds = Object.keys(this.markers_);
+  for (let i = 0, markerId; (markerId = markerIds[i]); i++) {
     this.unregisterMarker(markerId);
   }
   this.markers_ = null;

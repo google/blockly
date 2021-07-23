@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Generator');
+goog.module('Blockly.Generator');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Block');
 goog.require('Blockly.internalConstants');
@@ -26,7 +27,7 @@ goog.requireType('Blockly.Workspace');
  * @param {string} name Language name of this generator.
  * @constructor
  */
-Blockly.Generator = function(name) {
+const Generator = function(name) {
   this.name_ = name;
   this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
       new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
@@ -38,7 +39,7 @@ Blockly.Generator = function(name) {
  * E.g. '  checkTimeout(%1);\n'
  * @type {?string}
  */
-Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
+Generator.prototype.INFINITE_LOOP_TRAP = null;
 
 /**
  * Arbitrary code to inject before every statement.
@@ -46,7 +47,7 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
  * E.g. 'highlight(%1);\n'
  * @type {?string}
  */
-Blockly.Generator.prototype.STATEMENT_PREFIX = null;
+Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
  * Arbitrary code to inject after every statement.
@@ -54,27 +55,27 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
  * E.g. 'highlight(%1);\n'
  * @type {?string}
  */
-Blockly.Generator.prototype.STATEMENT_SUFFIX = null;
+Generator.prototype.STATEMENT_SUFFIX = null;
 
 /**
  * The method of indenting.  Defaults to two spaces, but language generators
  * may override this to increase indent or change to tabs.
  * @type {string}
  */
-Blockly.Generator.prototype.INDENT = '  ';
+Generator.prototype.INDENT = '  ';
 
 /**
  * Maximum length for a comment before wrapping.  Does not account for
  * indenting level.
  * @type {number}
  */
-Blockly.Generator.prototype.COMMENT_WRAP = 60;
+Generator.prototype.COMMENT_WRAP = 60;
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
  * @type {!Array<!Array<number>>}
  */
-Blockly.Generator.prototype.ORDER_OVERRIDES = [];
+Generator.prototype.ORDER_OVERRIDES = [];
 
 /**
  * Whether the init method has been called.
@@ -83,14 +84,14 @@ Blockly.Generator.prototype.ORDER_OVERRIDES = [];
  * initialized. If this flag is untouched, it will have no effect.
  * @type {?boolean}
  */
-Blockly.Generator.prototype.isInitialized = null;
+Generator.prototype.isInitialized = null;
 
 /**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {!Blockly.Workspace=} workspace Workspace to generate code from.
  * @return {string} Generated code.
  */
-Blockly.Generator.prototype.workspaceToCode = function(workspace) {
+Generator.prototype.workspaceToCode = function(workspace) {
   if (!workspace) {
     // Backwards compatibility from before there could be multiple workspaces.
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
@@ -140,7 +141,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
  * @param {string} prefix The common prefix.
  * @return {string} The prefixed lines of code.
  */
-Blockly.Generator.prototype.prefixLines = function(text, prefix) {
+Generator.prototype.prefixLines = function(text, prefix) {
   return prefix + text.replace(/(?!\n$)\n/g, '\n' + prefix);
 };
 
@@ -149,7 +150,7 @@ Blockly.Generator.prototype.prefixLines = function(text, prefix) {
  * @param {!Blockly.Block} block The block from which to start spidering.
  * @return {string} Concatenated list of comments.
  */
-Blockly.Generator.prototype.allNestedComments = function(block) {
+Generator.prototype.allNestedComments = function(block) {
   const comments = [];
   const blocks = block.getDescendants(true);
   for (let i = 0; i < blocks.length; i++) {
@@ -174,7 +175,7 @@ Blockly.Generator.prototype.allNestedComments = function(block) {
  *     For value blocks, an array containing the generated code and an
  *     operator order value.  Returns '' if block is null.
  */
-Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
+Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   if (this.isInitialized === false) {
     console.warn(
         'Generator init was not called before blockToCode was called.');
@@ -231,7 +232,7 @@ Blockly.Generator.prototype.blockToCode = function(block, opt_thisOnly) {
  * @return {string} Generated code or '' if no blocks are connected or the
  *     specified input does not exist.
  */
-Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
+Generator.prototype.valueToCode = function(block, name, outerOrder) {
   if (isNaN(outerOrder)) {
     throw TypeError('Expecting valid order from block: ' + block.type);
   }
@@ -302,7 +303,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
  * @param {string} name The name of the input.
  * @return {string} Generated code or '' if no blocks are connected.
  */
-Blockly.Generator.prototype.statementToCode = function(block, name) {
+Generator.prototype.statementToCode = function(block, name) {
   const targetBlock = block.getInputTargetBlock(name);
   let code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
@@ -326,7 +327,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
  * @param {!Blockly.Block} block Enclosing block.
  * @return {string} Loop contents, with infinite loop trap added.
  */
-Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
+Generator.prototype.addLoopTrap = function(branch, block) {
   if (this.INFINITE_LOOP_TRAP) {
     branch = this.prefixLines(this.injectId(this.INFINITE_LOOP_TRAP, block),
         this.INDENT) + branch;
@@ -349,7 +350,7 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, block) {
  * @param {!Blockly.Block} block Block which has an ID.
  * @return {string} Code snippet with ID.
  */
-Blockly.Generator.prototype.injectId = function(msg, block) {
+Generator.prototype.injectId = function(msg, block) {
   const id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
   return msg.replace(/%1/g, '\'' + id + '\'');
 };
@@ -359,33 +360,33 @@ Blockly.Generator.prototype.injectId = function(msg, block) {
  * @type {string}
  * @protected
  */
-Blockly.Generator.prototype.RESERVED_WORDS_ = '';
+Generator.prototype.RESERVED_WORDS_ = '';
 
 /**
  * Add one or more words to the list of reserved words for this language.
  * @param {string} words Comma-separated list of words to add to the list.
  *     No spaces.  Duplicates are ok.
  */
-Blockly.Generator.prototype.addReservedWords = function(words) {
+Generator.prototype.addReservedWords = function(words) {
   this.RESERVED_WORDS_ += words + ',';
 };
 
 /**
  * This is used as a placeholder in functions defined using
- * Blockly.Generator.provideFunction_.  It must not be legal code that could
+ * Generator.provideFunction_.  It must not be legal code that could
  * legitimately appear in a function definition (or comment), and it must
  * not confuse the regular expression parser.
  * @type {string}
  * @protected
  */
-Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
+Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
 
 /**
  * A dictionary of definitions to be printed before the code.
  * @type {!Object|undefined}
  * @protected
  */
-Blockly.Generator.prototype.definitions_;
+Generator.prototype.definitions_;
 
 /**
  * A dictionary mapping desired function names in definitions_ to actual
@@ -393,20 +394,20 @@ Blockly.Generator.prototype.definitions_;
  * @type {!Object|undefined}
  * @protected
  */
-Blockly.Generator.prototype.functionNames_;
+Generator.prototype.functionNames_;
 
 /**
  * A database of variable and procedure names.
  * @type {!Blockly.Names|undefined}
  * @protected
  */
-Blockly.Generator.prototype.nameDB_;
+Generator.prototype.nameDB_;
 
-Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
+Object.defineProperty(Generator.prototype, 'variableDB_', {
   /**
    * Getter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @this {Blockly.Generator}
+   * @this {Generator}
    * @return {!Blockly.Names|undefined} Name database.
    */
   get: function() {
@@ -417,7 +418,7 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
   /**
    * Setter.
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @this {Blockly.Generator}
+   * @this {Generator}
    * @param {!Blockly.Names|undefined} nameDb New name database.
    */
   set: function(nameDb) {
@@ -439,7 +440,7 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
  * "listRandom", not "random").  There is no danger of colliding with reserved
  * words, or user-defined variable or procedure names.
  *
- * The code gets output when Blockly.Generator.finish() is called.
+ * The code gets output when Generator.finish() is called.
  *
  * @param {string} desiredName The desired name of the function
  *     (e.g. mathIsPrime).
@@ -448,7 +449,7 @@ Object.defineProperty(Blockly.Generator.prototype, 'variableDB_', {
  *     from desiredName if the former has already been taken by the user.
  * @protected
  */
-Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
+Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
     const functionName = this.nameDB_.getDistinctName(
         desiredName, Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
@@ -476,7 +477,7 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
  * names.
  * @param {!Blockly.Workspace} _workspace Workspace to generate code from.
  */
-Blockly.Generator.prototype.init = function(_workspace) {
+Generator.prototype.init = function(_workspace) {
   // Optionally override
   // Create a dictionary of definitions to be printed before the code.
   this.definitions_ = Object.create(null);
@@ -499,7 +500,7 @@ Blockly.Generator.prototype.init = function(_workspace) {
  * @return {string} Code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
+Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
   // Optionally override
   return code;
 };
@@ -511,7 +512,7 @@ Blockly.Generator.prototype.scrub_ = function(_block, code, _opt_thisOnly) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Generator.prototype.finish = function(code) {
+Generator.prototype.finish = function(code) {
   // Optionally override
   // Clean up temporary data.
   delete this.definitions_;
@@ -527,7 +528,9 @@ Blockly.Generator.prototype.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Generator.prototype.scrubNakedValue = function(line) {
+Generator.prototype.scrubNakedValue = function(line) {
   // Optionally override
   return line;
 };
+
+exports = Generator;

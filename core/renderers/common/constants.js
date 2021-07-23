@@ -32,7 +32,6 @@ const utils = goog.require('Blockly.utils');
  * @package
  */
 const ConstantProvider = function() {
-
   /**
    * The size of an empty spacer.
    * @type {number}
@@ -215,10 +214,10 @@ const ConstantProvider = function() {
   this.EXTERNAL_VALUE_INPUT_PADDING = 2;
 
   /**
-   * The height of an empty statement input.  Note that in the old rendering this
-   * varies slightly depending on whether the block has external or inline inputs.
-   * In the new rendering this is consistent.  It seems unlikely that the old
-   * behaviour was intentional.
+   * The height of an empty statement input.  Note that in the old rendering
+   * this varies slightly depending on whether the block has external or inline
+   * inputs. In the new rendering this is consistent.  It seems unlikely that
+   * the old behaviour was intentional.
    * @type {number}
    */
   this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
@@ -304,8 +303,7 @@ const ConstantProvider = function() {
    * A field's text element's dominant baseline.
    * @type {boolean}
    */
-  this.FIELD_TEXT_BASELINE_CENTER =
-      !userAgent.IE && !userAgent.EDGE;
+  this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
 
   /**
    * A dropdown field's border rect height.
@@ -350,17 +348,17 @@ const ConstantProvider = function() {
    * @type {string}
    */
   this.FIELD_DROPDOWN_SVG_ARROW_DATAURI =
-    'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
-    'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
-    'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
-    'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
-    'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
-    'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
-    'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
-    'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
-    'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
-    'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
-    'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+      'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
+      'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
+      'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
+      'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
+      'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
+      'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
+      'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
+      'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
+      'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
+      'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
+      'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
 
   /**
    * Whether or not to show a box shadow around the widget div. This is only a
@@ -534,10 +532,7 @@ const ConstantProvider = function() {
    * Enum for connection shapes.
    * @enum {number}
    */
-  this.SHAPES = {
-    PUZZLE: 1,
-    NOTCH: 2
-  };
+  this.SHAPES = {PUZZLE: 1, NOTCH: 2};
 };
 
 /**
@@ -545,7 +540,6 @@ const ConstantProvider = function() {
  * @package
  */
 ConstantProvider.prototype.init = function() {
-
   /**
    * An object containing sizing and path information about collapsed block
    * indicators.
@@ -589,9 +583,7 @@ ConstantProvider.prototype.init = function() {
  * @param {!Theme} theme The current workspace theme.
  * @package
  */
-ConstantProvider.prototype.setTheme = function(
-    theme) {
-
+ConstantProvider.prototype.setTheme = function(theme) {
   /**
    * The block styles map.
    * @type {Object<string, !Theme.BlockStyle>}
@@ -612,36 +604,35 @@ ConstantProvider.prototype.setTheme = function(
  * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-ConstantProvider.prototype.setDynamicProperties_ =
-    function(theme) {
-    /* eslint-disable indent */
+ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
   this.setFontConstants_(theme);
   this.setComponentConstants_(theme);
 
-  this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
-      this.ADD_START_HATS;
-}; /* eslint-enable indent */
+  this.ADD_START_HATS =
+      theme.startHats != null ? theme.startHats : this.ADD_START_HATS;
+};
 
 /**
  * Set constants related to fonts.
  * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-ConstantProvider.prototype.setFontConstants_ = function(
-    theme) {
+ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
       theme.fontStyle && theme.fontStyle['family'] != undefined ?
-      theme.fontStyle['family'] : this.FIELD_TEXT_FONTFAMILY;
+      theme.fontStyle['family'] :
+      this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
       theme.fontStyle && theme.fontStyle['weight'] != undefined ?
-      theme.fontStyle['weight'] : this.FIELD_TEXT_FONTWEIGHT;
+      theme.fontStyle['weight'] :
+      this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
       theme.fontStyle && theme.fontStyle['size'] != undefined ?
-      theme.fontStyle['size'] : this.FIELD_TEXT_FONTSIZE;
+      theme.fontStyle['size'] :
+      this.FIELD_TEXT_FONTSIZE;
 
-  var fontMetrics = dom.measureFontMetrics('Hg',
-      this.FIELD_TEXT_FONTSIZE + 'pt',
-      this.FIELD_TEXT_FONTWEIGHT,
+  var fontMetrics = dom.measureFontMetrics(
+      'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
 
   this.FIELD_TEXT_HEIGHT = fontMetrics.height;
@@ -653,20 +644,18 @@ ConstantProvider.prototype.setFontConstants_ = function(
  * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-ConstantProvider.prototype.setComponentConstants_ =
-    function(theme) {
-    /* eslint-disable indent */
-  this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
-    this.CURSOR_COLOUR;
-  this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
-    this.MARKER_COLOUR;
+ConstantProvider.prototype.setComponentConstants_ = function(theme) {
+  this.CURSOR_COLOUR =
+      theme.getComponentStyle('cursorColour') || this.CURSOR_COLOUR;
+  this.MARKER_COLOUR =
+      theme.getComponentStyle('markerColour') || this.MARKER_COLOUR;
   this.INSERTION_MARKER_COLOUR =
-    theme.getComponentStyle('insertionMarkerColour') ||
-    this.INSERTION_MARKER_COLOUR;
+      theme.getComponentStyle('insertionMarkerColour') ||
+      this.INSERTION_MARKER_COLOUR;
   this.INSERTION_MARKER_OPACITY =
-    Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
-    this.INSERTION_MARKER_OPACITY;
-}; /* eslint-enable indent */
+      Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
+      this.INSERTION_MARKER_OPACITY;
+};
 
 /**
  * Get or create a block style based on a single colour value.  Generate a name
@@ -676,15 +665,13 @@ ConstantProvider.prototype.setComponentConstants_ =
  *     containing the style and an autogenerated name for that style.
  * @package
  */
-ConstantProvider.prototype.getBlockStyleForColour =
-    function(colour) {
-    /* eslint-disable indent */
+ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
   var name = 'auto_' + colour;
   if (!this.blockStyles[name]) {
     this.blockStyles[name] = this.createBlockStyle_(colour);
   }
   return {style: this.blockStyles[name], name: name};
-}; /* eslint-enable indent */
+};
 
 /**
  * Gets the BlockStyle for the given block style name.
@@ -692,12 +679,11 @@ ConstantProvider.prototype.getBlockStyleForColour =
  * @return {!Theme.BlockStyle} The named block style, or a default style
  *     if no style with the given name was found.
  */
-ConstantProvider.prototype.getBlockStyle = function(
-    blockStyleName) {
+ConstantProvider.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
       (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
-        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
-        this.createBlockStyle_('#000000'));
+           this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+           this.createBlockStyle_('#000000'));
 };
 
 /**
@@ -707,11 +693,8 @@ ConstantProvider.prototype.getBlockStyle = function(
  *     given colour.
  * @protected
  */
-ConstantProvider.prototype.createBlockStyle_ = function(
-    colour) {
-  return this.validatedBlockStyle_({
-    'colourPrimary': colour
-  });
+ConstantProvider.prototype.createBlockStyle_ = function(colour) {
+  return this.validatedBlockStyle_({'colourPrimary': colour});
 };
 
 /**
@@ -728,17 +711,14 @@ ConstantProvider.prototype.createBlockStyle_ = function(
  *     required properties populated.
  * @protected
  */
-ConstantProvider.prototype.validatedBlockStyle_ =
-    function(blockStyle) {
-    /* eslint-disable indent */
+ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
   // Make a new object with all of the same properties.
   var valid = /** @type {!Theme.BlockStyle} */ ({});
   if (blockStyle) {
     utils.object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  var parsedColour = utils.parseBlockColour(
-      valid['colourPrimary'] || '#000');
+  var parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
       utils.parseBlockColour(valid['colourSecondary']).hex :
@@ -749,30 +729,27 @@ ConstantProvider.prototype.validatedBlockStyle_ =
 
   valid.hat = valid['hat'] || '';
   return valid;
-}; /* eslint-enable indent */
+};
 
 /**
  * Generate a secondary colour from the passed in primary colour.
- * @param {string} colour Primary colour.
+ * @param {string} inputColour Primary colour.
  * @return {string} The generated secondary colour.
  * @protected
  */
-ConstantProvider.prototype.generateSecondaryColour_ =
-    function(inputColour) {
-    /* eslint-disable indent */
-    return colour.blend('#fff', inputColour, 0.6) || inputColour;
-}; /* eslint-enable indent */
+ConstantProvider.prototype.generateSecondaryColour_ = function(inputColour) {
+  return colour.blend('#fff', inputColour, 0.6) || inputColour;
+};
 
 /**
  * Generate a tertiary colour from the passed in primary colour.
- * @param {string} colour Primary colour.
+ * @param {string} inputColour Primary colour.
  * @return {string} The generated tertiary colour.
  * @protected
  */
 ConstantProvider.prototype.generateTertiaryColour_ = function(inputColour) {
-  /* eslint-disable indent */
   return colour.blend('#fff', inputColour, 0.3) || inputColour;
-}; /* eslint-enable indent */
+};
 
 
 /**
@@ -802,18 +779,11 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
   var height = this.JAGGED_TEETH_HEIGHT;
   var width = this.JAGGED_TEETH_WIDTH;
 
-  var mainPath =
-      svgPaths.line(
-          [
-            svgPaths.point(width, height / 4),
-            svgPaths.point(-width * 2, height / 2),
-            svgPaths.point(width, height / 4)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  var mainPath = svgPaths.line([
+    svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
+    svgPaths.point(width, height / 4)
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -825,18 +795,11 @@ ConstantProvider.prototype.makeStartHat = function() {
   var height = this.START_HAT_HEIGHT;
   var width = this.START_HAT_WIDTH;
 
-  var mainPath =
-      svgPaths.curve('c',
-          [
-            svgPaths.point(30, -height),
-            svgPaths.point(70, -height),
-            svgPaths.point(width, 0)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  var mainPath = svgPaths.curve('c', [
+    svgPaths.point(30, -height), svgPaths.point(70, -height),
+    svgPaths.point(width, 0)
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -866,17 +829,14 @@ ConstantProvider.prototype.makePuzzleTab = function() {
     var endPoint1 = svgPaths.point(-width, forward * halfHeight);
     var endPoint2 = svgPaths.point(width, forward * halfHeight);
 
-    return svgPaths.curve('c',
-        [
-          svgPaths.point(0, forward * control1Y),
-          svgPaths.point(-width, back * control2Y),
-          endPoint1
-        ]) +
-        svgPaths.curve('s',
-            [
-              svgPaths.point(width, back * control3Y),
-              endPoint2
-            ]);
+    return svgPaths.curve(
+               'c',
+               [
+                 svgPaths.point(0, forward * control1Y),
+                 svgPaths.point(-width, back * control2Y), endPoint1
+               ]) +
+        svgPaths.curve(
+            's', [svgPaths.point(width, back * control3Y), endPoint2]);
   }
 
   // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
@@ -904,12 +864,11 @@ ConstantProvider.prototype.makeNotch = function() {
   var innerWidth = 3;
   var outerWidth = (width - innerWidth) / 2;
   function makeMainPath(dir) {
-    return svgPaths.line(
-        [
-          svgPaths.point(dir * outerWidth, height),
-          svgPaths.point(dir * innerWidth, 0),
-          svgPaths.point(dir * outerWidth, -height)
-        ]);
+    return svgPaths.line([
+      svgPaths.point(dir * outerWidth, height),
+      svgPaths.point(dir * innerWidth, 0),
+      svgPaths.point(dir * outerWidth, -height)
+    ]);
   }
   var pathLeft = makeMainPath(1);
   var pathRight = makeMainPath(-1);
@@ -931,11 +890,11 @@ ConstantProvider.prototype.makeNotch = function() {
 ConstantProvider.prototype.makeInsideCorners = function() {
   var radius = this.CORNER_RADIUS;
 
-  var innerTopLeftCorner = svgPaths.arc('a', '0 0,0', radius,
-      svgPaths.point(-radius, radius));
+  var innerTopLeftCorner =
+      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
 
-  var innerBottomLeftCorner = svgPaths.arc('a', '0 0,0', radius,
-      svgPaths.point(radius, radius));
+  var innerBottomLeftCorner =
+      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
 
   return {
     width: radius,
@@ -956,32 +915,29 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft =
-      svgPaths.moveBy(0, radius) +
-      svgPaths.arc('a', '0 0,1', radius,
-          svgPaths.point(radius, -radius));
+  var topLeft = svgPaths.moveBy(0, radius) +
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, -radius));
 
   /**
    * SVG path for drawing the rounded top-right corner.
    * @const
    */
   var topRight =
-      svgPaths.arc('a', '0 0,1', radius,
-          svgPaths.point(radius, radius));
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
 
   /**
    * SVG path for drawing the rounded bottom-left corner.
    * @const
    */
-  var bottomLeft = svgPaths.arc('a', '0 0,1', radius,
-      svgPaths.point(-radius, -radius));
+  var bottomLeft =
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, -radius));
 
   /**
    * SVG path for drawing the rounded bottom-right corner.
    * @const
    */
-  var bottomRight = svgPaths.arc('a', '0 0,1', radius,
-      svgPaths.point(-radius, radius));
+  var bottomRight =
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
 
   return {
     topLeft: topLeft,
@@ -1000,8 +956,7 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
  * @return {!Object} The shape object for the connection.
  * @package
  */
-ConstantProvider.prototype.shapeFor = function(
-    connection) {
+ConstantProvider.prototype.shapeFor = function(connection) {
   switch (connection.type) {
     case connectionTypes.INPUT_VALUE:
     case connectionTypes.OUTPUT_VALUE:
@@ -1022,8 +977,7 @@ ConstantProvider.prototype.shapeFor = function(
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
-ConstantProvider.prototype.createDom = function(svg,
-    tagName, selector) {
+ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
   this.injectCSS_(tagName, selector);
 
   /*
@@ -1031,8 +985,7 @@ ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  this.defs = dom.createSvgElement(
-      Svg.DEFS, {}, svg);
+  this.defs = dom.createSvgElement(Svg.DEFS, {}, svg);
   /*
     <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -1048,14 +1001,13 @@ ConstantProvider.prototype.createDom = function(svg,
     </filter>
   */
   var embossFilter = dom.createSvgElement(
-      Svg.FILTER,
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, this.defs);
+      Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
+      this.defs);
   dom.createSvgElement(
       Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
   var feSpecularLighting = dom.createSvgElement(
-      Svg.FESPECULARLIGHTING,
-      {
+      Svg.FESPECULARLIGHTING, {
         'in': 'blur',
         'surfaceScale': 1,
         'specularConstant': 0.5,
@@ -1065,19 +1017,18 @@ ConstantProvider.prototype.createDom = function(svg,
       },
       embossFilter);
   dom.createSvgElement(
-      Svg.FEPOINTLIGHT,
-      {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
+      Svg.FEPOINTLIGHT, {'x': -5000, 'y': -10000, 'z': 20000},
+      feSpecularLighting);
   dom.createSvgElement(
-      Svg.FECOMPOSITE,
-      {
+      Svg.FECOMPOSITE, {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
         'result': 'specOut'
-      }, embossFilter);
+      },
+      embossFilter);
   dom.createSvgElement(
-      Svg.FECOMPOSITE,
-      {
+      Svg.FECOMPOSITE, {
         'in': 'SourceGraphic',
         'in2': 'specOut',
         'operator': 'arithmetic',
@@ -1085,7 +1036,8 @@ ConstantProvider.prototype.createDom = function(svg,
         'k2': 1,
         'k3': 1,
         'k4': 0
-      }, embossFilter);
+      },
+      embossFilter);
   this.embossFilterId = embossFilter.id;
   this.embossFilter_ = embossFilter;
 
@@ -1097,19 +1049,18 @@ ConstantProvider.prototype.createDom = function(svg,
     </pattern>
   */
   var disabledPattern = dom.createSvgElement(
-      Svg.PATTERN,
-      {
+      Svg.PATTERN, {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
         'height': 10
-      }, this.defs);
+      },
+      this.defs);
   dom.createSvgElement(
-      Svg.RECT,
-      {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
+      Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
   dom.createSvgElement(
-      Svg.PATH,
-      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
+      Svg.PATH, {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
+      disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
 
@@ -1121,8 +1072,7 @@ ConstantProvider.prototype.createDom = function(svg,
  * render debugging.
  * @private
  */
-ConstantProvider.prototype.createDebugFilter =
-    function() {
+ConstantProvider.prototype.createDebugFilter = function() {
   // Only create the debug filter once.
   if (!this.debugFilter_) {
     var debugFilter = dom.createSvgElement(
@@ -1136,8 +1086,7 @@ ConstantProvider.prototype.createDebugFilter =
         this.defs);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     var debugComponentTransfer = dom.createSvgElement(
-        Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'},
-        debugFilter);
+        Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);
     dom.createSvgElement(
         Svg.FEFUNCA,
         {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
@@ -1166,12 +1115,11 @@ ConstantProvider.prototype.createDebugFilter =
  * @param {string} selector The CSS selector to use.
  * @protected
  */
-ConstantProvider.prototype.injectCSS_ = function(
-    tagName, selector) {
+ConstantProvider.prototype.injectCSS_ = function(tagName, selector) {
   var cssArray = this.getCSS_(selector);
   var cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
-    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+      /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
   var text = cssArray.join('\n');
   if (this.cssNode_) {
     // Already injected, update if the theme changed.
@@ -1180,7 +1128,7 @@ ConstantProvider.prototype.injectCSS_ = function(
   }
   // Inject CSS tag at start of head.
   var cssNode =
-    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
+      /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
@@ -1197,6 +1145,7 @@ ConstantProvider.prototype.injectCSS_ = function(
 ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
+    /* clang-format off */
     // Text.
     selector + ' .blocklyText, ',
     selector + ' .blocklyFlyoutLabelText {',
@@ -1266,6 +1215,7 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
       'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
       'stroke: none;',
     '}',
+    /* clang-format on */
     /* eslint-enable indent */
   ];
 };

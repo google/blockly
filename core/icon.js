@@ -164,10 +164,10 @@ Blockly.Icon.prototype.setIconLocation = function(xy) {
  */
 Blockly.Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
-  var blockXY = this.block_.getRelativeToSurfaceXY();
-  var iconXY = Blockly.utils.getRelativeXY(
+  const blockXY = this.block_.getRelativeToSurfaceXY();
+  const iconXY = Blockly.utils.getRelativeXY(
       /** @type {!SVGElement} */ (this.iconGroup_));
-  var newXY = new Blockly.utils.Coordinate(
+  const newXY = new Blockly.utils.Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,
       blockXY.y + iconXY.y + this.SIZE / 2);
   if (!Blockly.utils.Coordinate.equals(this.getIconLocation(), newXY)) {

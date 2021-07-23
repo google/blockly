@@ -63,19 +63,19 @@ suite('JSO', function() {
           });
         });
 
-        suite('Disabled', function() {
-          test('True', function() {
+        suite('Enabled', function() {
+          test('False', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEnabled(false);
             const jso = Blockly.serialization.blocks.save(block);
-            assertProperty(jso, 'disabled', true);
+            assertProperty(jso, 'enabled', false);
           });
   
-          test('False', function() {
+          test('True', function() {
             const block = this.workspace.newBlock('row_block');
             block.setEnabled(true);
             const jso = Blockly.serialization.blocks.save(block);
-            assertNoProperty(jso, 'disabled');
+            assertNoProperty(jso, 'enabled');
           });
         });
 

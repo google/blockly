@@ -77,7 +77,7 @@ const addAttributes = function(block, state) {
     state['collapsed'] = true;
   }
   if (!block.isEnabled()) {
-    state['disabled'] = true;
+    state['enabled'] = false;
   }
   if (!block.isEditable()) {
     state['editable'] = false;

@@ -13,16 +13,20 @@
 goog.module('Blockly.BlockDragger');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
 const IBlockDragger = goog.require('Blockly.IBlockDragger');
+/* eslint-disable-next-line no-unused-vars */
 const IDragTarget = goog.requireType('Blockly.IDragTarget');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const {BLOCK_DRAG, BLOCK_MOVE, fire, get, getGroup, setGroup} = goog.require('Blockly.Events');
-const {DEFAULT, Type, register} = goog.require('Blockly.registry');
-const {disconnectUiEffect, disconnectUiStop} = goog.require('Blockly.blockAnimations');
-const {startTextWidthCache, stopTextWidthCache} = goog.require('Blockly.utils.dom');
+const blockAnimation = goog.require('Blockly.blockAnimations');
+const dom = goog.require('Blockly.utils.dom');
+const events = goog.require('Blockly.Events');
+const registry = goog.require('Blockly.registry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 /** @suppress {extraRequire} */
@@ -143,8 +147,8 @@ const initIconData = function(block) {
  * @public
  */
 BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
-  if (!getGroup()) {
-    setGroup(true);
+  if (!events.getGroup()) {
+    events.setGroup(true);
   }
   this.fireDragStartEvent_();
 
@@ -158,9 +162,9 @@ BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
 
   // During a drag there may be a lot of rerenders, but not field changes.
   // Turn the cache on so we don't do spurious remeasures during the drag.
-  startTextWidthCache();
+  dom.startTextWidthCache();
   this.workspace_.setResizesEnabled(false);
-  disconnectUiStop();
+  blockAnimation.disconnectUiStop();
 
   if (this.shouldDisconnect_(healStack)) {
     this.disconnectBlock_(healStack, currentDragDeltaXY);
@@ -201,7 +205,7 @@ BlockDragger.prototype.disconnectBlock_ = function(
   const newLoc = Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.translate(newLoc.x, newLoc.y);
-  disconnectUiEffect(this.draggingBlock_);
+  blockAnimation.disconnectUiEffect(this.draggingBlock_);
   this.draggedConnectionManager_.updateAvailableConnections();
 };
 
@@ -210,9 +214,9 @@ BlockDragger.prototype.disconnectBlock_ = function(
  * @protected
  */
 BlockDragger.prototype.fireDragStartEvent_ = function() {
-  const event = new (get(BLOCK_DRAG))(
+  const event = new (events.get(events.BLOCK_DRAG))(
       this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
-  fire(event);
+  events.fire(event);
 };
 
 /**
@@ -262,9 +266,9 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   this.dragIconData_ = [];
   this.fireDragEndEvent_();
 
-  stopTextWidthCache();
+  dom.stopTextWidthCache();
 
-  disconnectUiStop();
+  blockAnimation.disconnectUiStop();
 
   const preventMove = !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
@@ -298,7 +302,7 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
 
-  setGroup(false);
+  events.setGroup(false);
 };
 
 /**
@@ -359,9 +363,9 @@ BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
  * @protected
  */
 BlockDragger.prototype.fireDragEndEvent_ = function() {
-  const event = new (get(BLOCK_DRAG))(
+  const event = new (events.get(events.BLOCK_DRAG))(
       this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
-  fire(event);
+  events.fire(event);
 };
 
 /**
@@ -392,10 +396,10 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
-  const event = new (get(BLOCK_MOVE))(this.draggingBlock_);
+  const event = new (events.get(events.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
-  fire(event);
+  events.fire(event);
 };
 
 /**
@@ -463,6 +467,6 @@ BlockDragger.prototype.getInsertionMarkers = function() {
   return [];
 };
 
-register(Type.BLOCK_DRAGGER, DEFAULT, BlockDragger);
+registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);
 
 exports = BlockDragger;

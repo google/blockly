@@ -13,35 +13,36 @@
 goog.module('Blockly.VerticalFlyout');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const DropDownDiv = goog.require('Blockly.DropDownDiv');
+const Flyout = goog.require('Blockly.Flyout');
+/* eslint-disable-next-line no-unused-vars */
+const Options = goog.requireType('Blockly.Options');
+const Rect = goog.require('Blockly.utils.Rect');
+const Scrollbar = goog.require('Blockly.Scrollbar');
+const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const registry = goog.require('Blockly.registry');
+const {Position} = goog.require('Blockly.utils.toolbox');
+const {getScrollDeltaPixels} = goog.require('Blockly.utils');
+const {inherits} = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.Flyout');
-goog.require('Blockly.registry');
-goog.require('Blockly.Scrollbar');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Rect');
-goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.WidgetDiv');
-
-goog.requireType('Blockly.Options');
-goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
  * Class for a flyout.
- * @param {!Blockly.Options} workspaceOptions Dictionary of options for the
+ * @param {!Options} workspaceOptions Dictionary of options for the
  *     workspace.
- * @extends {Blockly.Flyout}
+ * @extends {Flyout}
  * @constructor
  */
 const VerticalFlyout = function(workspaceOptions) {
   VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
-Blockly.utils.object.inherits(VerticalFlyout, Blockly.Flyout);
+inherits(VerticalFlyout, Flyout);
 
 /**
  * The name of the vertical flyout in the registry.
@@ -92,14 +93,14 @@ VerticalFlyout.prototype.getX = function() {
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
-      if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
+      if (this.toolboxPosition_ == Position.LEFT) {
         x = toolboxMetrics.width;
       } else {
         x = viewMetrics.width - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
-      if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
+      if (this.toolboxPosition_ == Position.LEFT) {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
@@ -108,7 +109,7 @@ VerticalFlyout.prototype.getX = function() {
     }
     // Trashcan flyout is opposite the main flyout.
   } else {
-    if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
+    if (this.toolboxPosition_ == Position.LEFT) {
       x = 0;
     } else {
       // Because the anchor point of the flyout is on the left, but we want
@@ -163,7 +164,7 @@ VerticalFlyout.prototype.position = function() {
  * @private
  */
 VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  const atRight = this.toolboxPosition_ == Blockly.utils.toolbox.Position.RIGHT;
+  const atRight = this.toolboxPosition_ == Position.RIGHT;
   const totalWidth = width + this.CORNER_RADIUS;
 
   // Decide whether to start on the left or right.
@@ -201,7 +202,7 @@ VerticalFlyout.prototype.scrollToStart = function() {
  * @protected
  */
 VerticalFlyout.prototype.wheel_ = function(e) {
-  const scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
+  const scrollDelta = getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
     const metricsManager = this.workspace_.getMetricsManager();
@@ -211,8 +212,8 @@ VerticalFlyout.prototype.wheel_ = function(e) {
 
     this.workspace_.scrollbar.setY(pos);
     // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
-    Blockly.WidgetDiv.hide();
-    Blockly.DropDownDiv.hideWithoutAnimation();
+    WidgetDiv.hide();
+    DropDownDiv.hideWithoutAnimation();
   }
 
   // Don't scroll the page.
@@ -266,7 +267,7 @@ VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  * Determine if a drag delta is toward the workspace, based on the position
  * and orientation of the flyout. This is used in determineDragIntention_ to
  * determine if a new block should be created or if the flyout should scroll.
- * @param {!Blockly.utils.Coordinate} currentDragDeltaXY How far the pointer has
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at mouse down, in pixel units.
  * @return {boolean} True if the drag is toward the workspace.
  * @package
@@ -290,7 +291,7 @@ VerticalFlyout.prototype.isDragTowardWorkspace = function(
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ * @return {?Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
 VerticalFlyout.prototype.getClientRect = function() {
@@ -307,11 +308,11 @@ VerticalFlyout.prototype.getClientRect = function() {
   const BIG_NUM = 1000000000;
   const left = flyoutRect.left;
 
-  if (this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT) {
+  if (this.toolboxPosition_ == Position.LEFT) {
     const width = flyoutRect.width;
-    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
+    return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
-    return new Blockly.utils.Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
+    return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
   }
 };
 
@@ -336,7 +337,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
   }
   flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
   flyoutWidth *= this.workspace_.scale;
-  flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
+  flyoutWidth += Scrollbar.scrollbarThickness;
 
   if (this.width_ != flyoutWidth) {
     for (let i = 0, block; (block = blocks[i]); i++) {
@@ -364,7 +365,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
     }
 
     if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT &&
+        this.toolboxPosition_ == Position.LEFT &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie
@@ -380,7 +381,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
-    Blockly.registry.DEFAULT, VerticalFlyout);
+registry.register(registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+    registry.DEFAULT, VerticalFlyout);
 
 exports = VerticalFlyout;

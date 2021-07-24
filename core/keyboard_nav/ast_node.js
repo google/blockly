@@ -549,34 +549,34 @@ ASTNode.prototype.getSourceBlock = function() {
  *     block, or workspace. Or null if there is no node to the right.
  */
 ASTNode.prototype.next = function() {
-  let connection, block, nextConnection, targetConnection;
   switch (this.type_) {
     case ASTNode.types.STACK:
       return this.navigateBetweenStacks_(true);
 
-    case ASTNode.types.OUTPUT:
-      connection = /** @type {!Connection} */ (this.location_);
+    case ASTNode.types.OUTPUT: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return ASTNode.createBlockNode(connection.getSourceBlock());
-
+    }
     case ASTNode.types.FIELD:
       return this.findNextForField_();
 
     case ASTNode.types.INPUT:
       return this.findNextForInput_();
 
-    case ASTNode.types.BLOCK:
-      block = /** @type {!Block} */ (this.location_);
-      nextConnection = block.nextConnection;
+    case ASTNode.types.BLOCK: {
+      const block = /** @type {!Block} */ (this.location_);
+      const nextConnection = block.nextConnection;
       return ASTNode.createConnectionNode(nextConnection);
-
-    case ASTNode.types.PREVIOUS:
-      connection = /** @type {!Connection} */ (this.location_);
+    }
+    case ASTNode.types.PREVIOUS: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return ASTNode.createBlockNode(connection.getSourceBlock());
-
-    case ASTNode.types.NEXT:
-      connection = /** @type {!Connection} */ (this.location_);
-      targetConnection = connection.targetConnection;
+    }
+    case ASTNode.types.NEXT: {
+      const connection = /** @type {!Connection} */ (this.location_);
+      const targetConnection = connection.targetConnection;
       return ASTNode.createConnectionNode(targetConnection);
+    }
   }
 
   return null;
@@ -589,28 +589,28 @@ ASTNode.prototype.next = function() {
  * workspace, or block. Or null if there is nothing below this node.
  */
 ASTNode.prototype.in = function() {
-  let workspace, topBlocks, block, connection, targetConnection;
   switch (this.type_) {
-    case ASTNode.types.WORKSPACE:
-      workspace = /** @type {!Workspace} */ (this.location_);
-      topBlocks = workspace.getTopBlocks(true);
+    case ASTNode.types.WORKSPACE: {
+      const workspace = /** @type {!Workspace} */ (this.location_);
+      const topBlocks = workspace.getTopBlocks(true);
       if (topBlocks.length > 0) {
         return ASTNode.createStackNode(topBlocks[0]);
       }
       break;
-
-    case ASTNode.types.STACK:
-      block = /** @type {!Block} */ (this.location_);
+    }
+    case ASTNode.types.STACK: {
+      const block = /** @type {!Block} */ (this.location_);
       return this.findTopASTNodeForBlock_(block);
-
-    case ASTNode.types.BLOCK:
-      block = /** @type {!Block} */ (this.location_);
+    }
+    case ASTNode.types.BLOCK: {
+      const block = /** @type {!Block} */ (this.location_);
       return this.findFirstFieldOrInput_(block);
-
-    case ASTNode.types.INPUT:
-      connection = /** @type {!Connection} */ (this.location_);
-      targetConnection = connection.targetConnection;
+    }
+    case ASTNode.types.INPUT: {
+      const connection = /** @type {!Connection} */ (this.location_);
+      const targetConnection = connection.targetConnection;
       return ASTNode.createConnectionNode(targetConnection);
+    }
   }
 
   return null;
@@ -623,7 +623,6 @@ ASTNode.prototype.in = function() {
  * null.
  */
 ASTNode.prototype.prev = function() {
-  let block, topConnection, connection, targetConnection;
   switch (this.type_) {
     case ASTNode.types.STACK:
       return this.navigateBetweenStacks_(false);
@@ -637,22 +636,23 @@ ASTNode.prototype.prev = function() {
     case ASTNode.types.INPUT:
       return this.findPrevForInput_();
 
-    case ASTNode.types.BLOCK:
-      block = /** @type {!Block} */ (this.location_);
-      topConnection = block.previousConnection || block.outputConnection;
+    case ASTNode.types.BLOCK: {
+      const block = /** @type {!Block} */ (this.location_);
+      const topConnection = block.previousConnection || block.outputConnection;
       return ASTNode.createConnectionNode(topConnection);
-
-    case ASTNode.types.PREVIOUS:
-      connection = /** @type {!Connection} */ (this.location_);
-      targetConnection = connection.targetConnection;
+    }
+    case ASTNode.types.PREVIOUS: {
+      const connection = /** @type {!Connection} */ (this.location_);
+      const targetConnection = connection.targetConnection;
       if (targetConnection && !targetConnection.getParentInput()) {
         return ASTNode.createConnectionNode(targetConnection);
       }
       break;
-
-    case ASTNode.types.NEXT:
-      connection = /** @type {!Connection} */ (this.location_);
+    }
+    case ASTNode.types.NEXT: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return ASTNode.createBlockNode(connection.getSourceBlock());
+    }
   }
 
   return null;
@@ -665,43 +665,43 @@ ASTNode.prototype.prev = function() {
  *     workspace or block. Or null if we are at the workspace level.
  */
 ASTNode.prototype.out = function() {
-  let block, blockPos, wsCoordinate, connection, target, field;
   switch (this.type_) {
-    case ASTNode.types.STACK:
-      block = /** @type {!Block} */ (this.location_);
-      blockPos = block.getRelativeToSurfaceXY();
+    case ASTNode.types.STACK: {
+      const block = /** @type {!Block} */ (this.location_);
+      const blockPos = block.getRelativeToSurfaceXY();
       // TODO: Make sure this is in the bounds of the workspace.
-      wsCoordinate =
+      const wsCoordinate =
           new Coordinate(blockPos.x, blockPos.y + ASTNode.DEFAULT_OFFSET_Y);
       return ASTNode.createWorkspaceNode(block.workspace, wsCoordinate);
-
-    case ASTNode.types.OUTPUT:
-      connection = /** @type {!Connection} */ (this.location_);
-      target = connection.targetConnection;
+    }
+    case ASTNode.types.OUTPUT: {
+      const connection = /** @type {!Connection} */ (this.location_);
+      const target = connection.targetConnection;
       if (target) {
         return ASTNode.createConnectionNode(target);
       }
       return ASTNode.createStackNode(connection.getSourceBlock());
-
-    case ASTNode.types.FIELD:
-      field = /** @type {!Field} */ (this.location_);
+    }
+    case ASTNode.types.FIELD: {
+      const field = /** @type {!Field} */ (this.location_);
       return ASTNode.createBlockNode(field.getSourceBlock());
-
-    case ASTNode.types.INPUT:
-      connection = /** @type {!Connection} */ (this.location_);
+    }
+    case ASTNode.types.INPUT: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return ASTNode.createBlockNode(connection.getSourceBlock());
-
-    case ASTNode.types.BLOCK:
-      block = /** @type {!Block} */ (this.location_);
+    }
+    case ASTNode.types.BLOCK: {
+      const block = /** @type {!Block} */ (this.location_);
       return this.getOutAstNodeForBlock_(block);
-
-    case ASTNode.types.PREVIOUS:
-      connection = /** @type {!Connection} */ (this.location_);
+    }
+    case ASTNode.types.PREVIOUS: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return this.getOutAstNodeForBlock_(connection.getSourceBlock());
-
-    case ASTNode.types.NEXT:
-      connection = /** @type {!Connection} */ (this.location_);
+    }
+    case ASTNode.types.NEXT: {
+      const connection = /** @type {!Connection} */ (this.location_);
       return this.getOutAstNodeForBlock_(connection.getSourceBlock());
+    }
   }
 
   return null;

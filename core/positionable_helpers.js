@@ -10,62 +10,68 @@
  */
 'use strict';
 
-goog.provide('Blockly.uiPosition');
+goog.module('Blockly.uiPosition');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.MetricsManager');
+goog.requireType('Blockly.utils.Size');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Enum for vertical positioning.
  * @enum {number}
- * @package
  */
-Blockly.uiPosition.verticalPosition = {
+const verticalPosition = {
   TOP: 0,
   BOTTOM: 1
 };
+/** @package */
+exports.verticalPosition = verticalPosition;
 
 /**
  * Enum for horizontal positioning.
  * @enum {number}
- * @package
  */
-Blockly.uiPosition.horizontalPosition = {
+const horizontalPosition = {
   LEFT: 0,
   RIGHT: 1
 };
+/** @package */
+exports.horizontalPosition = horizontalPosition;
 
 /**
  * An object defining a horizontal and vertical positioning.
  * @typedef {{
- *   horizontal: !Blockly.uiPosition.horizontalPosition,
- *   vertical: !Blockly.uiPosition.verticalPosition
+ *   horizontal: !horizontalPosition,
+ *   vertical: !verticalPosition
  * }}
- * @package
  */
-Blockly.uiPosition.Position;
+let Position;
+/** @package */
+exports.Position = Position;
 
 /**
  * Enum for bump rules to use for dealing with collisions.
  * @enum {number}
- * @package
  */
-Blockly.uiPosition.bumpDirection = {
+const bumpDirection = {
   UP: 0,
   DOWN: 1
 };
+/** @package */
+exports.bumpDirection = bumpDirection;
 
 /**
  * Returns a rectangle representing reasonable position for where to place a UI
  * element of the specified size given the restraints and locations of the
  * scrollbars. This method does not take into account any already placed UI
  * elements.
- * @param {!Blockly.uiPosition.Position} position The starting
+ * @param {!Position} position The starting
  *    horizontal and vertical position.
  * @param {!Blockly.utils.Size} size the size of the UI element to get a start
  *    position for.
@@ -74,9 +80,8 @@ Blockly.uiPosition.bumpDirection = {
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace UI metrics.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @return {!Blockly.utils.Rect} The suggested start position.
- * @package
  */
-Blockly.uiPosition.getStartPositionRect = function(
+const getStartPositionRect = function(
     position, size, horizontalPadding,
     verticalPadding, metrics, workspace) {
   // Horizontal positioning.
@@ -84,7 +89,7 @@ Blockly.uiPosition.getStartPositionRect = function(
   const hasVerticalScrollbar =
       workspace.scrollbar && workspace.scrollbar.canScrollVertically();
   if (position.horizontal ===
-      Blockly.uiPosition.horizontalPosition.LEFT) {
+      horizontalPosition.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Blockly.Scrollbar.scrollbarThickness;
@@ -99,7 +104,7 @@ Blockly.uiPosition.getStartPositionRect = function(
   // Vertical positioning.
   let top = 0;
   if (position.vertical ===
-      Blockly.uiPosition.verticalPosition.TOP) {
+      verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
   } else {  // position.vertical == verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
@@ -112,6 +117,8 @@ Blockly.uiPosition.getStartPositionRect = function(
   return new Blockly.utils.Rect(
       top, top + size.height, left, left + size.width);
 };
+/** @package */
+exports.getStartPositionRect = getStartPositionRect;
 
 /**
  * Returns a corner position that is on the opposite side of the workspace from
@@ -120,26 +127,26 @@ Blockly.uiPosition.getStartPositionRect = function(
  * orientation, defaults to the right corner.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
  * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @return {!Blockly.uiPosition.Position} The suggested corner position.
+ * @return {!Position} The suggested corner position.
  * @package
  */
-Blockly.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
+const getCornerOppositeToolbox = function(workspace, metrics) {
   const leftCorner =
       metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.LEFT &&
       (!workspace.horizontalLayout || workspace.RTL);
   const topCorner =
       metrics.toolboxMetrics.position === Blockly.utils.toolbox.Position.BOTTOM;
-  const horizontalPosition = leftCorner ?
-      Blockly.uiPosition.horizontalPosition.LEFT :
-      Blockly.uiPosition.horizontalPosition.RIGHT;
-  const verticalPosition = topCorner ?
-      Blockly.uiPosition.verticalPosition.TOP :
-      Blockly.uiPosition.verticalPosition.BOTTOM;
+  const hPosition = leftCorner ?
+      horizontalPosition.LEFT : horizontalPosition.RIGHT;
+  const vPosition = topCorner ?
+      verticalPosition.TOP : verticalPosition.BOTTOM;
   return {
-    horizontal: horizontalPosition,
-    vertical: verticalPosition
+    horizontal: hPosition,
+    vertical: vPosition
   };
 };
+/** @package */
+exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
 
 /**
  * Returns a position Rect based on a starting position that is bumped
@@ -147,15 +154,14 @@ Blockly.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
  * method does not check that the bumped position is still within bounds.
  * @param {!Blockly.utils.Rect} startRect The starting position to use.
  * @param {number} margin The margin to use between elements when bumping.
- * @param {!Blockly.uiPosition.bumpDirection} bumpDirection The direction
- *    to bump if there is a collision with an existing UI element.
+ * @param {!bumpDirection} bumpDir The direction to bump if there is a collision
+ *    with an existing UI element.
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *    represent the positions of UI elements already placed.
  * @return {!Blockly.utils.Rect} The suggested position rectangle.
- * @package
  */
-Blockly.uiPosition.bumpPositionRect = function(
-    startRect, margin, bumpDirection, savedPositions) {
+const bumpPositionRect = function(
+    startRect, margin, bumpDir, savedPositions) {
   let top = startRect.top;
   const left = startRect.left;
   const width = startRect.right - startRect.left;
@@ -166,9 +172,9 @@ Blockly.uiPosition.bumpPositionRect = function(
   for (let i = 0; i < savedPositions.length; i++) {
     const otherEl = savedPositions[i];
     if (boundingRect.intersects(otherEl)) {
-      if (bumpDirection === Blockly.uiPosition.bumpDirection.UP) {
+      if (bumpDir === bumpDirection.UP) {
         top = otherEl.top - height - margin;
-      } else {  // bumpDirection == bumpDirection.DOWN
+      } else {  // bumpDir == bumpDirection.DOWN
         top = otherEl.bottom + margin;
       }
       // Recheck other savedPositions
@@ -179,3 +185,5 @@ Blockly.uiPosition.bumpPositionRect = function(
   }
   return boundingRect;
 };
+/** @package */
+exports.bumpPositionRect = bumpPositionRect;

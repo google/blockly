@@ -203,6 +203,7 @@ step3() {
   local missing_requires=$(perl -nle'print $& while m{(?<!'\'')Blockly(\.\w+)+}g' "${filepath}")
   missing_requires=$(echo "${missing_requires}" | tr ' ' '\n' | sort -u)
   if [[ -n "${missing_requires}" ]]; then
+    # Search for the string goog.require('Blockly') or goog.requireType('Blockly')
     local has_blockly_require=$(perl -ne'print m{goog\.(require|requireType)\('\''Blockly'\''\)}g' "${filepath}")
     if [[ -n "${has_blockly_require}" ]]; then
       warn 'Blockly detected as a require.'

@@ -299,13 +299,11 @@ Gesture.prototype.updateDragDelta_ = function(currentXY) {
       /** @type {!Coordinate} */ (this.mouseDownXY_));
 
   if (!this.hasExceededDragRadius_) {
-    const currentDragDelta =
-        Coordinate.magnitude(this.currentDragDeltaXY_);
+    const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
 
     // The flyout has a different drag radius from the rest of Blockly.
-    const limitRadius = this.flyout_ ?
-        internalConstants.FLYOUT_DRAG_RADIUS :
-        internalConstants.DRAG_RADIUS;
+    const limitRadius = this.flyout_ ? internalConstants.FLYOUT_DRAG_RADIUS :
+                                       internalConstants.DRAG_RADIUS;
 
     this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
     return this.hasExceededDragRadius_;
@@ -449,8 +447,7 @@ Gesture.prototype.updateIsDragging_ = function() {
  */
 Gesture.prototype.startDraggingBlock_ = function() {
   const BlockDraggerClass = registry.getClassFromOptions(
-      registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options,
-      true);
+      registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
 
   this.blockDragger_ = new BlockDraggerClass(
       /** @type {!BlockSvg} */ (this.targetBlock_),
@@ -548,8 +545,7 @@ Gesture.prototype.handleMove = function(e) {
   if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    this.blockDragger_.drag(
-        this.mostRecentEvent_, this.currentDragDeltaXY_);
+    this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingBubble_) {
     this.bubbleDragger_.dragBubble(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
@@ -616,8 +612,7 @@ Gesture.prototype.cancel = function() {
     this.bubbleDragger_.endBubbleDrag(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
-    this.blockDragger_.endDrag(
-        this.mostRecentEvent_, this.currentDragDeltaXY_);
+    this.blockDragger_.endDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
   }
@@ -671,8 +666,7 @@ Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  Events.fire(new (Events.get(Events.CLICK))(
-      null, ws.id, 'workspace'));
+  Events.fire(new (Events.get(Events.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**

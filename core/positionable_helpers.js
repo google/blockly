@@ -80,8 +80,8 @@ Blockly.uiPosition.getStartPositionRect = function(
     position, size, horizontalPadding,
     verticalPadding, metrics, workspace) {
   // Horizontal positioning.
-  var left = 0;
-  var hasVerticalScrollbar =
+  let left = 0;
+  const hasVerticalScrollbar =
       workspace.scrollbar && workspace.scrollbar.canScrollVertically();
   if (position.horizontal ===
       Blockly.uiPosition.horizontalPosition.LEFT) {
@@ -97,7 +97,7 @@ Blockly.uiPosition.getStartPositionRect = function(
     }
   }
   // Vertical positioning.
-  var top = 0;
+  let top = 0;
   if (position.vertical ===
       Blockly.uiPosition.verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
@@ -124,15 +124,15 @@ Blockly.uiPosition.getStartPositionRect = function(
  * @package
  */
 Blockly.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
-  var leftCorner =
+  const leftCorner =
       metrics.toolboxMetrics.position !== Blockly.utils.toolbox.Position.LEFT &&
       (!workspace.horizontalLayout || workspace.RTL);
-  var topCorner =
+  const topCorner =
       metrics.toolboxMetrics.position === Blockly.utils.toolbox.Position.BOTTOM;
-  var horizontalPosition = leftCorner ?
+  const horizontalPosition = leftCorner ?
       Blockly.uiPosition.horizontalPosition.LEFT :
       Blockly.uiPosition.horizontalPosition.RIGHT;
-  var verticalPosition = topCorner ?
+  const verticalPosition = topCorner ?
       Blockly.uiPosition.verticalPosition.TOP :
       Blockly.uiPosition.verticalPosition.BOTTOM;
   return {
@@ -156,14 +156,15 @@ Blockly.uiPosition.getCornerOppositeToolbox = function(workspace, metrics) {
  */
 Blockly.uiPosition.bumpPositionRect = function(
     startRect, margin, bumpDirection, savedPositions) {
-  var top = startRect.top;
-  var left = startRect.left;
-  var width = startRect.right - startRect.left;
-  var height = startRect.bottom - startRect.top;
+  let top = startRect.top;
+  const left = startRect.left;
+  const width = startRect.right - startRect.left;
+  const height = startRect.bottom - startRect.top;
 
   // Check for collision and bump if needed.
-  var boundingRect = startRect;
-  for (var i = 0, otherEl; (otherEl = savedPositions[i]); i++) {
+  let boundingRect = startRect;
+  for (let i = 0; i < savedPositions.length; i++) {
+    const otherEl = savedPositions[i];
     if (boundingRect.intersects(otherEl)) {
       if (bumpDirection === Blockly.uiPosition.bumpDirection.UP) {
         top = otherEl.top - height - margin;

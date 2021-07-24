@@ -310,11 +310,11 @@ ASTNode.prototype.findNextForInput_ = function() {
   const parentInput = location.getParentInput();
   const block = parentInput.getSourceBlock();
   const curIdx = block.inputList.indexOf(parentInput);
-  let i = curIdx + 1, input;
-  for (; (input = block.inputList[i]); i++) {
+  for (let i = curIdx + 1; i < block.inputList.length; i++) {
+    const input = block.inputList[i];
     const fieldRow = input.fieldRow;
-    let j = 0, field;
-    for (; (field = fieldRow[j]); j++) {
+    for (let j = 0; j < fieldRow.length; j++) {
+      const field = fieldRow[j];
       if (field.isClickable() || ASTNode.NAVIGATE_ALL_FIELDS) {
         return ASTNode.createFieldNode(field);
       }
@@ -340,8 +340,8 @@ ASTNode.prototype.findNextForField_ = function() {
   const block = location.getSourceBlock();
   const curIdx = block.inputList.indexOf(/** @type {!Input} */ (input));
   let fieldIdx = input.fieldRow.indexOf(location) + 1;
-  let i = curIdx, newInput;
-  for (; (newInput = block.inputList[i]); i++) {
+  for (let i = curIdx; i < block.inputList.length; i++) {
+    const newInput = block.inputList[i];
     const fieldRow = newInput.fieldRow;
     while (fieldIdx < fieldRow.length) {
       if (fieldRow[fieldIdx].isClickable() || ASTNode.NAVIGATE_ALL_FIELDS) {
@@ -370,14 +370,14 @@ ASTNode.prototype.findPrevForInput_ = function() {
   const parentInput = location.getParentInput();
   const block = parentInput.getSourceBlock();
   const curIdx = block.inputList.indexOf(parentInput);
-  let i = curIdx, input;
-  for (; (input = block.inputList[i]); i--) {
+  for (let i = curIdx; i >= 0; i--) {
+    const input = block.inputList[i];
     if (input.connection && input !== parentInput) {
       return ASTNode.createInputNode(input);
     }
     const fieldRow = input.fieldRow;
-    let j = fieldRow.length - 1, field;
-    for (; (field = fieldRow[j]); j--) {
+    for (let j = fieldRow.length - 1; j >= 0; j--) {
+      const field = fieldRow[j];
       if (field.isClickable() || ASTNode.NAVIGATE_ALL_FIELDS) {
         return ASTNode.createFieldNode(field);
       }
@@ -399,8 +399,8 @@ ASTNode.prototype.findPrevForField_ = function() {
   const curIdx = block.inputList.indexOf(
       /** @type {!Input} */ (parentInput));
   let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
-  let i = curIdx, input;
-  for (; (input = block.inputList[i]); i--) {
+  for (let i = curIdx; i >= 0; i--) {
+    const input = block.inputList[i];
     if (input.connection && input !== parentInput) {
       return ASTNode.createInputNode(input);
     }
@@ -437,8 +437,8 @@ ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   }
   const curRoot = curLocation.getRootBlock();
   const topBlocks = curRoot.workspace.getTopBlocks(true);
-  let i = 0, topBlock;
-  for (; (topBlock = topBlocks[i]); i++) {
+  for (let i = 0; i < topBlocks.length; i++) {
+    const topBlock = topBlocks[i];
     if (curRoot.id == topBlock.id) {
       const offset = forward ? 1 : -1;
       const resultIndex = i + offset;
@@ -509,11 +509,11 @@ ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
  */
 ASTNode.prototype.findFirstFieldOrInput_ = function(block) {
   const inputs = block.inputList;
-  let i = 0, input;
-  for (; (input = inputs[i]); i++) {
+  for (let i = 0; i < inputs.length; i++) {
+    const input = inputs[i];
     const fieldRow = input.fieldRow;
-    let j = 0, field;
-    for (; (field = fieldRow[j]); j++) {
+    for (let j = 0; j < fieldRow.length; j++) {
+      const field = fieldRow[j];
       if (field.isClickable() || ASTNode.NAVIGATE_ALL_FIELDS) {
         return ASTNode.createFieldNode(field);
       }

@@ -31,18 +31,18 @@ const utils = goog.require('Blockly.utils');
 const registerUndo = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const undoOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['UNDO'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (scope.workspace.getUndoStack().length > 0) {
         return 'enabled';
       }
       return 'disabled';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.workspace.undo(false);
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -57,18 +57,18 @@ exports.registerUndo = registerUndo;
 const registerRedo = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const redoOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['REDO'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (scope.workspace.getRedoStack().length > 0) {
         return 'enabled';
       }
       return 'disabled';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.workspace.undo(true);
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -83,11 +83,11 @@ exports.registerRedo = registerRedo;
 const registerCleanup = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const cleanOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['CLEAN_UP'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (scope.workspace.isMovable()) {
         if (scope.workspace.getTopBlocks(false).length > 1) {
           return 'enabled';
@@ -96,8 +96,8 @@ const registerCleanup = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.workspace.cleanUp();
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -131,11 +131,11 @@ const toggleOption_ = function(shouldCollapse, topBlocks) {
 const registerCollapse = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const collapseOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['COLLAPSE_ALL'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (scope.workspace.options.collapse) {
         const topBlocks = scope.workspace.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
@@ -151,10 +151,9 @@ const registerCollapse = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
-      toggleOption_(true,
-          scope.workspace.getTopBlocks(true));
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
+      toggleOption_(true, scope.workspace.getTopBlocks(true));
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'collapseWorkspace',
@@ -168,11 +167,11 @@ exports.registerCollapse = registerCollapse;
 const registerExpand = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const expandOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['EXPAND_ALL'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (scope.workspace.options.collapse) {
         const topBlocks = scope.workspace.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
@@ -188,10 +187,9 @@ const registerExpand = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
-      toggleOption_(false,
-          scope.workspace.getTopBlocks(true));
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
+      toggleOption_(false, scope.workspace.getTopBlocks(true));
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'expandWorkspace',
@@ -204,7 +202,8 @@ exports.registerExpand = registerExpand;
 /**
  * Adds a block and its children to a list of deletable blocks.
  * @param {!BlockSvg} block to delete.
- * @param {!Array<!BlockSvg>} deleteList list of blocks that can be deleted. This will be
+ * @param {!Array<!BlockSvg>} deleteList list of blocks that can be deleted.
+ *     This will be
  *    modifed in place with the given block and its descendants.
  * @private
  */
@@ -212,7 +211,7 @@ const addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    const children =  /* eslint-disable-next-line indent */
+    const children = /* eslint-disable-next-line indent */
         /** @type {!Array<!BlockSvg>} */ (block.getChildren(false));
     for (let i = 0; i < children.length; i++) {
       addDeletableBlocks_(children[i], deleteList);
@@ -235,9 +234,11 @@ const getDeletableBlocks_ = function(workspace) {
   return deleteList;
 };
 
-/** Deletes the given blocks. Used to delete all blocks in the workspace.
+/**
+ * Deletes the given blocks. Used to delete all blocks in the workspace.
  * @param {!Array<!BlockSvg>} deleteList list of blocks to delete.
- * @param {string} eventGroup event group ID with which all delete events should be associated.
+ * @param {string} eventGroup event group ID with which all delete events should
+ *     be associated.
  * @private
  */
 const deleteNext_ = function(deleteList, eventGroup) {
@@ -259,48 +260,43 @@ const deleteNext_ = function(deleteList, eventGroup) {
 const registerDeleteAll = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const deleteOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
       if (!scope.workspace) {
         return;
       }
-      const deletableBlocksLength =
-          getDeletableBlocks_(scope.workspace).length;
+      const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       if (deletableBlocksLength == 1) {
         return Msg['DELETE_BLOCK'];
       } else {
-        return Msg['DELETE_X_BLOCKS'].replace('%1',
-            String(deletableBlocksLength));
+        return Msg['DELETE_X_BLOCKS'].replace(
+            '%1', String(deletableBlocksLength));
       }
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (!scope.workspace) {
         return;
       }
-      const deletableBlocksLength =
-          getDeletableBlocks_(scope.workspace).length;
+      const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       return deletableBlocksLength > 0 ? 'enabled' : 'disabled';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       if (!scope.workspace) {
         return;
       }
       scope.workspace.cancelCurrentGesture();
-      const deletableBlocks = getDeletableBlocks_(
-          scope.workspace);
+      const deletableBlocks = getDeletableBlocks_(scope.workspace);
       const eventGroup = utils.genUid();
       if (deletableBlocks.length < 2) {
         deleteNext_(deletableBlocks, eventGroup);
       } else {
         Blockly.confirm(
-            Msg['DELETE_ALL_BLOCKS'].replace('%1',
-                deletableBlocks.length),
-            function (ok) {
+            Msg['DELETE_ALL_BLOCKS'].replace('%1', deletableBlocks.length),
+            function(ok) {
               if (ok) {
-                deleteNext_(deletableBlocks,
-                    eventGroup);
+                deleteNext_(deletableBlocks, eventGroup);
               }
             });
       }
@@ -330,11 +326,11 @@ const registerWorkspaceOptions_ = function() {
 const registerDuplicate = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const duplicateOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['DUPLICATE_BLOCK'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
       if (!block.isInFlyout && block.isDeletable() && block.isMovable()) {
         if (block.isDuplicatable()) {
@@ -344,8 +340,8 @@ const registerDuplicate = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       if (scope.block) {
         clipboard.duplicate(scope.block);
       }
@@ -362,8 +358,8 @@ exports.registerDuplicate = registerDuplicate;
 const registerComment = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const commentOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
       if (scope.block.getCommentIcon()) {
         // If there's already a comment,  option is to remove.
         return Msg['REMOVE_COMMENT'];
@@ -371,19 +367,19 @@ const registerComment = function() {
       // If there's no comment yet, option is to add.
       return Msg['ADD_COMMENT'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
       // IE doesn't support necessary features for comment editing.
-      if (!userAgent.IE && !block.isInFlyout
-          && block.workspace.options.comments &&
-          !block.isCollapsed() && block.isEditable()) {
+      if (!userAgent.IE && !block.isInFlyout &&
+          block.workspace.options.comments && !block.isCollapsed() &&
+          block.isEditable()) {
         return 'enabled';
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       const block = scope.block;
       if (block.getCommentIcon()) {
         block.setCommentText(null);
@@ -403,17 +399,18 @@ exports.registerComment = registerComment;
 const registerInline = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const inlineOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
-      return (scope.block.getInputsInline()) ?
-          Msg['EXTERNAL_INPUTS'] : Msg['INLINE_INPUTS'];
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
+      return (scope.block.getInputsInline()) ? Msg['EXTERNAL_INPUTS'] :
+                                               Msg['INLINE_INPUTS'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
       if (!block.isInFlyout && block.isMovable() && !block.isCollapsed()) {
         for (let i = 1; i < block.inputList.length; i++) {
-          // Only display this option if there are two value or dummy inputs next to each other.
+          // Only display this option if there are two value or dummy inputs
+          // next to each other.
           if (block.inputList[i - 1].type != inputTypes.STATEMENT &&
               block.inputList[i].type != inputTypes.STATEMENT) {
             return 'enabled';
@@ -422,8 +419,8 @@ const registerInline = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.block.setInputsInline(!scope.block.getInputsInline());
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
@@ -438,22 +435,22 @@ exports.registerInline = registerInline;
 const registerCollapseExpandBlock = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const collapseExpandOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
-      return scope.block.isCollapsed() ?
-          Msg['EXPAND_BLOCK'] : Msg['COLLAPSE_BLOCK'];
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
+      return scope.block.isCollapsed() ? Msg['EXPAND_BLOCK'] :
+                                         Msg['COLLAPSE_BLOCK'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
-      if (!block.isInFlyout && block.isMovable()
-          && block.workspace.options.collapse) {
+      if (!block.isInFlyout && block.isMovable() &&
+          block.workspace.options.collapse) {
         return 'enabled';
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.block.setCollapsed(!scope.block.isCollapsed());
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
@@ -468,16 +465,16 @@ exports.registerCollapseExpandBlock = registerCollapseExpandBlock;
 const registerDisable = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const disableOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
-      return (scope.block.isEnabled()) ?
-          Msg['DISABLE_BLOCK'] : Msg['ENABLE_BLOCK'];
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
+      return (scope.block.isEnabled()) ? Msg['DISABLE_BLOCK'] :
+                                         Msg['ENABLE_BLOCK'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
-      if (!block.isInFlyout && block.workspace.options.disable
-          && block.isEditable()) {
+      if (!block.isInFlyout && block.workspace.options.disable &&
+          block.isEditable()) {
         if (block.getInheritedDisabled()) {
           return 'disabled';
         }
@@ -485,8 +482,8 @@ const registerDisable = function() {
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       const block = scope.block;
       const group = Events.getGroup();
       if (!group) {
@@ -509,8 +506,8 @@ exports.registerDisable = registerDisable;
 const registerDelete = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const deleteOption = {
-    displayText: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    displayText: function(/** @type {!ContextMenuRegistry.Scope} */
+                          scope) {
       const block = scope.block;
       // Count the number of blocks that are nested in this block.
       let descendantCount = block.getDescendants(false).length;
@@ -519,18 +516,19 @@ const registerDelete = function() {
         // Blocks in the current stack would survive this block's deletion.
         descendantCount -= nextBlock.getDescendants(false).length;
       }
-      return (descendantCount == 1) ? Msg['DELETE_BLOCK'] :
+      return (descendantCount == 1) ?
+          Msg['DELETE_BLOCK'] :
           Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       if (!scope.block.isInFlyout && scope.block.isDeletable()) {
         return 'enabled';
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       Events.setGroup(true);
       if (scope.block) {
         Blockly.deleteBlock(scope.block);
@@ -549,21 +547,21 @@ exports.registerDelete = registerDelete;
 const registerHelp = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const helpOption = {
-    displayText: function () {
+    displayText: function() {
       return Msg['HELP'];
     },
-    preconditionFn: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
+                             scope) {
       const block = scope.block;
-      const url = (typeof block.helpUrl == 'function') ?
-          block.helpUrl() : block.helpUrl;
+      const url = (typeof block.helpUrl == 'function') ? block.helpUrl() :
+                                                         block.helpUrl;
       if (url) {
         return 'enabled';
       }
       return 'hidden';
     },
-    callback: function (/** @type {!ContextMenuRegistry.Scope} */
-        scope) {
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */
+                       scope) {
       scope.block.showHelp();
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
@@ -589,8 +587,8 @@ const registerBlockOptions_ = function() {
 };
 
 /**
- * Registers all default context menu items. This should be called once per instance of
- * ContextMenuRegistry.
+ * Registers all default context menu items. This should be called once per
+ * instance of ContextMenuRegistry.
  * @package
  */
 const registerDefaultOptions = function() {

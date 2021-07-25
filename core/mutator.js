@@ -379,7 +379,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @param {!Blockly.Events.Abstract} e Custom data for event.
  * @private
  */
-Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
+Blockly.Mutator.prototype.workspaceChanged_ = function(e = undefined) {
   if (e && (e.isUiEvent ||
       (e.type == Blockly.Events.CHANGE && e.element == 'disabled') ||
       e.type == Blockly.Events.CREATE)) {

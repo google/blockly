@@ -352,6 +352,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
+    // Update source block immediately when bubble is visible
+    this.workspaceChanged_();
     this.applyColour();
   } else {
     // Dispose of the bubble.
@@ -378,8 +380,9 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.isUiEvent ||
-      (e.type == Blockly.Events.CHANGE && e.element == 'disabled')) {
+  if (e && (e.isUiEvent ||
+      (e.type == Blockly.Events.CHANGE && e.element == 'disabled') ||
+      e.type == Blockly.Events.CREATE)) {
     return;
   }
 

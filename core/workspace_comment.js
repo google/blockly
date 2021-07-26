@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.WorkspaceComment');
+goog.module('Blockly.WorkspaceComment');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -25,6 +26,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.xml');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for a workspace comment.
@@ -36,7 +39,7 @@ goog.require('Blockly.utils.xml');
  *     create a new ID.
  * @constructor
  */
-Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
+const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
       opt_id : Blockly.utils.genUid();
@@ -106,14 +109,14 @@ Blockly.WorkspaceComment = function(workspace, content, height, width, opt_id) {
    */
   this.isComment = true;
 
-  Blockly.WorkspaceComment.fireCreateEvent(this);
+  WorkspaceComment.fireCreateEvent(this);
 };
 
 /**
  * Dispose of this comment.
  * @package
  */
-Blockly.WorkspaceComment.prototype.dispose = function() {
+WorkspaceComment.prototype.dispose = function() {
   if (!this.workspace) {
     // The comment has already been deleted.
     return;
@@ -137,7 +140,7 @@ Blockly.WorkspaceComment.prototype.dispose = function() {
  * @return {number} Comment height.
  * @package
  */
-Blockly.WorkspaceComment.prototype.getHeight = function() {
+WorkspaceComment.prototype.getHeight = function() {
   return this.height_;
 };
 
@@ -146,7 +149,7 @@ Blockly.WorkspaceComment.prototype.getHeight = function() {
  * @param {number} height Comment height.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setHeight = function(height) {
+WorkspaceComment.prototype.setHeight = function(height) {
   this.height_ = height;
 };
 
@@ -155,7 +158,7 @@ Blockly.WorkspaceComment.prototype.setHeight = function(height) {
  * @return {number} Comment width.
  * @package
  */
-Blockly.WorkspaceComment.prototype.getWidth = function() {
+WorkspaceComment.prototype.getWidth = function() {
   return this.width_;
 };
 
@@ -164,7 +167,7 @@ Blockly.WorkspaceComment.prototype.getWidth = function() {
  * @param {number} width comment width.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setWidth = function(width) {
+WorkspaceComment.prototype.setWidth = function(width) {
   this.width_ = width;
 };
 
@@ -174,7 +177,7 @@ Blockly.WorkspaceComment.prototype.setWidth = function(width) {
  *   This is not valid if the comment is currently being dragged.
  * @package
  */
-Blockly.WorkspaceComment.prototype.getXY = function() {
+WorkspaceComment.prototype.getXY = function() {
   return new Blockly.utils.Coordinate(this.xy_.x, this.xy_.y);
 };
 
@@ -184,7 +187,7 @@ Blockly.WorkspaceComment.prototype.getXY = function() {
  * @param {number} dy Vertical offset, in workspace units.
  * @package
  */
-Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
+WorkspaceComment.prototype.moveBy = function(dx, dy) {
   const event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
@@ -196,7 +199,7 @@ Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
  * @return {boolean} True if deletable.
  * @package
  */
-Blockly.WorkspaceComment.prototype.isDeletable = function() {
+WorkspaceComment.prototype.isDeletable = function() {
   return this.deletable_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
@@ -206,7 +209,7 @@ Blockly.WorkspaceComment.prototype.isDeletable = function() {
  * @param {boolean} deletable True if deletable.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setDeletable = function(deletable) {
+WorkspaceComment.prototype.setDeletable = function(deletable) {
   this.deletable_ = deletable;
 };
 
@@ -215,7 +218,7 @@ Blockly.WorkspaceComment.prototype.setDeletable = function(deletable) {
  * @return {boolean} True if movable.
  * @package
  */
-Blockly.WorkspaceComment.prototype.isMovable = function() {
+WorkspaceComment.prototype.isMovable = function() {
   return this.movable_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
@@ -225,7 +228,7 @@ Blockly.WorkspaceComment.prototype.isMovable = function() {
  * @param {boolean} movable True if movable.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setMovable = function(movable) {
+WorkspaceComment.prototype.setMovable = function(movable) {
   this.movable_ = movable;
 };
 
@@ -233,7 +236,7 @@ Blockly.WorkspaceComment.prototype.setMovable = function(movable) {
  * Get whether this comment is editable or not.
  * @return {boolean} True if editable.
  */
-Blockly.WorkspaceComment.prototype.isEditable = function() {
+WorkspaceComment.prototype.isEditable = function() {
   return this.editable_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
@@ -242,7 +245,7 @@ Blockly.WorkspaceComment.prototype.isEditable = function() {
  * Set whether this comment is editable or not.
  * @param {boolean} editable True if editable.
  */
-Blockly.WorkspaceComment.prototype.setEditable = function(editable) {
+WorkspaceComment.prototype.setEditable = function(editable) {
   this.editable_ = editable;
 };
 
@@ -251,7 +254,7 @@ Blockly.WorkspaceComment.prototype.setEditable = function(editable) {
  * @return {string} Comment text.
  * @package
  */
-Blockly.WorkspaceComment.prototype.getContent = function() {
+WorkspaceComment.prototype.getContent = function() {
   return this.content_;
 };
 
@@ -260,7 +263,7 @@ Blockly.WorkspaceComment.prototype.getContent = function() {
  * @param {string} content Comment content.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setContent = function(content) {
+WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
     Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.COMMENT_CHANGE))(
         this, this.content_, content));
@@ -274,7 +277,7 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
  * @return {!Element} Tree of XML elements.
  * @package
  */
-Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
+WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
   const element = this.toXml(opt_noId);
   element.setAttribute('x', Math.round(this.xy_.x));
   element.setAttribute('y', Math.round(this.xy_.y));
@@ -291,7 +294,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * @return {!Element} Tree of XML elements.
  * @package
  */
-Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
+WorkspaceComment.prototype.toXml = function(opt_noId) {
   const commentElement = Blockly.utils.xml.createElement('comment');
   if (!opt_noId) {
     commentElement.id = this.id;
@@ -302,10 +305,10 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
 
 /**
  * Fire a create event for the given workspace comment, if comments are enabled.
- * @param {!Blockly.WorkspaceComment} comment The comment that was just created.
+ * @param {!WorkspaceComment} comment The comment that was just created.
  * @package
  */
-Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
+WorkspaceComment.fireCreateEvent = function(comment) {
   if (Blockly.Events.isEnabled()) {
     const existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
@@ -326,13 +329,13 @@ Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
  * Decode an XML comment tag and create a comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
  * @param {!Blockly.Workspace} workspace The workspace.
- * @return {!Blockly.WorkspaceComment} The created workspace comment.
+ * @return {!WorkspaceComment} The created workspace comment.
  * @package
  */
-Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
-  const info = Blockly.WorkspaceComment.parseAttributes(xmlComment);
+WorkspaceComment.fromXml = function(xmlComment, workspace) {
+  const info = WorkspaceComment.parseAttributes(xmlComment);
 
-  const comment = new Blockly.WorkspaceComment(
+  const comment = new WorkspaceComment(
       workspace, info.content, info.h, info.w, info.id);
 
   const commentX = parseInt(xmlComment.getAttribute('x'), 10);
@@ -341,7 +344,7 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
     comment.moveBy(commentX, commentY);
   }
 
-  Blockly.WorkspaceComment.fireCreateEvent(comment);
+  WorkspaceComment.fireCreateEvent(comment);
   return comment;
 };
 
@@ -352,7 +355,7 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
  *     object containing the id, size, position, and comment string.
  * @package
  */
-Blockly.WorkspaceComment.parseAttributes = function(xml) {
+WorkspaceComment.parseAttributes = function(xml) {
   const xmlH = xml.getAttribute('h');
   const xmlW = xml.getAttribute('w');
 
@@ -377,3 +380,5 @@ Blockly.WorkspaceComment.parseAttributes = function(xml) {
     content: xml.textContent
   };
 };
+
+exports = WorkspaceComment;

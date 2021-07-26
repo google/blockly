@@ -25,7 +25,6 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
  * Class to manage the multiple markers and the cursor on a workspace.
  * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
- * @package
  */
 const MarkerManager = function(workspace) {
   /**
@@ -195,4 +194,5 @@ MarkerManager.prototype.dispose = function() {
   }
 };
 
+/** @package */
 exports = MarkerManager;

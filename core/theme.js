@@ -165,7 +165,7 @@ Blockly.Theme.prototype.setCategoryStyle = function(categoryStyleName,
  * @return {?string} The style value.
  */
 Blockly.Theme.prototype.getComponentStyle = function(componentName) {
-  var style = this.componentStyles[componentName];
+  const style = this.componentStyles[componentName];
   if (style && typeof style == 'string' &&
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
@@ -207,8 +207,8 @@ Blockly.Theme.prototype.setStartHats = function(startHats) {
  * @return {!Blockly.Theme} A new Blockly theme.
 */
 Blockly.Theme.defineTheme = function(name, themeObj) {
-  var theme = new Blockly.Theme(name);
-  var base = themeObj['base'];
+  const theme = new Blockly.Theme(name);
+  let base = themeObj['base'];
   if (base) {
     if (typeof base == "string") {
       base = Blockly.registry.getObject(Blockly.registry.Type.THEME, base);

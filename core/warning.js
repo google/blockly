@@ -13,24 +13,26 @@
 goog.module('Blockly.Warning');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Bubble');
-goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Bubble = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const Events = goog.require('Blockly.Events');
+const Icon = goog.require('Blockly.Icon');
+const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
-goog.require('Blockly.Icon');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
  * Class for a warning.
- * @param {!Blockly.Block} block The block associated with this warning.
- * @extends {Blockly.Icon}
+ * @param {!Block} block The block associated with this warning.
+ * @extends {Icon}
  * @constructor
  */
 const Warning = function(block) {
@@ -39,7 +41,7 @@ const Warning = function(block) {
   // The text_ object can contain multiple warnings.
   this.text_ = Object.create(null);
 };
-Blockly.utils.object.inherits(Warning, Blockly.Icon);
+object.inherits(Warning, Icon);
 
 /**
  * Does this icon get hidden when the block is collapsed.
@@ -53,8 +55,8 @@ Warning.prototype.collapseHidden = false;
  */
 Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  dom.createSvgElement(
+      Svg.PATH,
       {
         'class': 'blocklyIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
@@ -63,16 +65,16 @@ Warning.prototype.drawIcon_ = function(group) {
   // Can't use a real '!' text character since different browsers and operating
   // systems render it differently.
   // Body of exclamation point.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  dom.createSvgElement(
+      Svg.PATH,
       {
         'class': 'blocklyIconSymbol',
         'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
       },
       group);
   // Dot of exclamation point.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
+  dom.createSvgElement(
+      Svg.RECT,
       {
         'class': 'blocklyIconSymbol',
         'x': '7', 'y': '11', 'height': '2', 'width': '2'
@@ -88,7 +90,7 @@ Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BUBBLE_OPEN))(
+  Events.fire(new (Events.get(Events.BUBBLE_OPEN))(
       this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
@@ -102,10 +104,10 @@ Warning.prototype.setVisible = function(visible) {
  * @private
  */
 Warning.prototype.createBubble_ = function() {
-  this.paragraphElement_ = Blockly.Bubble.textToDom(this.getText());
-  this.bubble_ = Blockly.Bubble.createNonEditableBubble(
-      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
-      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
+  this.paragraphElement_ = Bubble.textToDom(this.getText());
+  this.bubble_ = Bubble.createNonEditableBubble(
+      this.paragraphElement_, /** @type {!BlockSvg} */ (this.block_),
+      /** @type {!Coordinate} */ (this.iconXY_));
   this.applyColour();
 };
 
@@ -158,7 +160,7 @@ Warning.prototype.getText = function() {
  */
 Warning.prototype.dispose = function() {
   this.block_.warning = null;
-  Blockly.Icon.prototype.dispose.call(this);
+  Icon.prototype.dispose.call(this);
 };
 
 exports = Warning;

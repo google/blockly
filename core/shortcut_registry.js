@@ -78,7 +78,7 @@ Blockly.ShortcutRegistry.KeyboardShortcut;
  */
 Blockly.ShortcutRegistry.prototype.register = function(
     shortcut, opt_allowOverrides) {
-  var registeredShortcut = this.registry_[shortcut.name];
+  const registeredShortcut = this.registry_[shortcut.name];
   if (registeredShortcut && !opt_allowOverrides) {
     throw new Error(
         'Shortcut with name "' + shortcut.name + '" already exists.');
@@ -94,7 +94,7 @@ Blockly.ShortcutRegistry.prototype.register = function(
  * @public
  */
 Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
-  var shortcut = this.registry_[shortcutName];
+  const shortcut = this.registry_[shortcutName];
 
   if (!shortcut) {
     console.warn(
@@ -123,7 +123,7 @@ Blockly.ShortcutRegistry.prototype.unregister = function(shortcutName) {
 Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
     keyCode, shortcutName, opt_allowCollision) {
   keyCode = String(keyCode);
-  var shortcutNames = this.keyMap_[keyCode];
+  const shortcutNames = this.keyMap_[keyCode];
   if (shortcutNames && !opt_allowCollision) {
     throw new Error(
         'Shortcut with name "' + shortcutName + '" collides with shortcuts ' +
@@ -149,7 +149,7 @@ Blockly.ShortcutRegistry.prototype.addKeyMapping = function(
  */
 Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
     keyCode, shortcutName, opt_quiet) {
-  var shortcutNames = this.keyMap_[keyCode];
+  const shortcutNames = this.keyMap_[keyCode];
 
   if (!shortcutNames && !opt_quiet) {
     console.warn(
@@ -158,7 +158,7 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
     return false;
   }
 
-  var shortcutIdx = shortcutNames.indexOf(shortcutName);
+  const shortcutIdx = shortcutNames.indexOf(shortcutName);
   if (shortcutIdx > -1) {
     shortcutNames.splice(shortcutIdx, 1);
     if (shortcutNames.length == 0) {
@@ -181,7 +181,7 @@ Blockly.ShortcutRegistry.prototype.removeKeyMapping = function(
  * @public
  */
 Blockly.ShortcutRegistry.prototype.removeAllKeyMappings = function(shortcutName) {
-  for (var keyCode in this.keyMap_) {
+  for (const keyCode in this.keyMap_) {
     this.removeKeyMapping(keyCode, shortcutName, true);
   }
 };
@@ -225,13 +225,13 @@ Blockly.ShortcutRegistry.prototype.getRegistry = function() {
  * @public
  */
 Blockly.ShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
-  var key = this.serializeKeyEvent_(e);
-  var shortcutNames = this.getShortcutNamesByKeyCode(key);
+  const key = this.serializeKeyEvent_(e);
+  const shortcutNames = this.getShortcutNamesByKeyCode(key);
   if (!shortcutNames) {
     return false;
   }
-  for (var i = 0, shortcutName; (shortcutName = shortcutNames[i]); i++) {
-    var shortcut = this.registry_[shortcutName];
+  for (let i = 0, shortcutName; (shortcutName = shortcutNames[i]); i++) {
+    const shortcut = this.registry_[shortcutName];
     if (!shortcut.preconditionFn || shortcut.preconditionFn(workspace)) {
       // If the key has been handled, stop processing shortcuts.
       if (shortcut.callback && shortcut.callback(workspace, e, shortcut)) {
@@ -264,10 +264,10 @@ Blockly.ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(
  */
 Blockly.ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(
     shortcutName) {
-  var keys = [];
-  for (var keyCode in this.keyMap_) {
-    var shortcuts = this.keyMap_[keyCode];
-    var shortcutIdx = shortcuts.indexOf(shortcutName);
+  const keys = [];
+  for (const keyCode in this.keyMap_) {
+    const shortcuts = this.keyMap_[keyCode];
+    const shortcutIdx = shortcuts.indexOf(shortcutName);
     if (shortcutIdx > -1) {
       keys.push(keyCode);
     }
@@ -282,8 +282,8 @@ Blockly.ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(
  * @private
  */
 Blockly.ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
-  var serializedKey = '';
-  for (var modifier in Blockly.ShortcutRegistry.modifierKeys) {
+  let serializedKey = '';
+  for (const modifier in Blockly.ShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {
       if (serializedKey != '') {
         serializedKey += '+';
@@ -307,9 +307,9 @@ Blockly.ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  */
 Blockly.ShortcutRegistry.prototype.checkModifiers_ = function(
     modifiers) {
-  var validModifiers = Blockly.utils.object.values(
+  const validModifiers = Blockly.utils.object.values(
       Blockly.ShortcutRegistry.modifierKeys);
-  for (var i = 0, modifier; (modifier = modifiers[i]); i++) {
+  for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw new Error(modifier + ' is not a valid modifier key.');
     }
@@ -327,12 +327,12 @@ Blockly.ShortcutRegistry.prototype.checkModifiers_ = function(
  */
 Blockly.ShortcutRegistry.prototype.createSerializedKey = function(
     keyCode, modifiers) {
-  var serializedKey = '';
+  let serializedKey = '';
 
   if (modifiers) {
     this.checkModifiers_(modifiers);
-    for (var modifier in Blockly.ShortcutRegistry.modifierKeys) {
-      var modifierKeyCode =
+    for (const modifier in Blockly.ShortcutRegistry.modifierKeys) {
+      const modifierKeyCode =
           Blockly.ShortcutRegistry.modifierKeys[modifier];
       if (modifiers.indexOf(modifierKeyCode) > -1) {
         if (serializedKey != '') {

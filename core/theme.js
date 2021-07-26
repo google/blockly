@@ -28,9 +28,8 @@ const registry = goog.require('Blockly.registry');
  *     component names to style value.
  * @constructor
  */
-const Theme = function(name, opt_blockStyles, opt_categoryStyles,
-    opt_componentStyles) {
-
+const Theme = function(
+    name, opt_blockStyles, opt_categoryStyles, opt_componentStyles) {
   /**
    * The theme name. This can be used to reference a specific theme in CSS.
    * @type {string}
@@ -57,7 +56,7 @@ const Theme = function(name, opt_blockStyles, opt_categoryStyles,
    * @package
    */
   this.componentStyles = opt_componentStyles ||
-    (/** @type {Theme.ComponentStyle} */ (Object.create(null)));
+      (/** @type {Theme.ComponentStyle} */ (Object.create(null)));
 
   /**
    * The font style.
@@ -143,7 +142,7 @@ Theme.prototype.getClassName = function() {
  * Overrides or adds a style to the blockStyles map.
  * @param {string} blockStyleName The name of the block style.
  * @param {Theme.BlockStyle} blockStyle The block style.
-*/
+ */
 Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
   this.blockStyles[blockStyleName] = blockStyle;
 };
@@ -152,9 +151,8 @@ Theme.prototype.setBlockStyle = function(blockStyleName, blockStyle) {
  * Overrides or adds a style to the categoryStyles map.
  * @param {string} categoryStyleName The name of the category style.
  * @param {Theme.CategoryStyle} categoryStyle The category style.
-*/
-Theme.prototype.setCategoryStyle = function(categoryStyleName,
-    categoryStyle) {
+ */
+Theme.prototype.setCategoryStyle = function(categoryStyleName, categoryStyle) {
   this.categoryStyles[categoryStyleName] = categoryStyle;
 };
 
@@ -177,16 +175,15 @@ Theme.prototype.getComponentStyle = function(componentName) {
  * Configure a specific Blockly UI component with a style value.
  * @param {string} componentName The name of the component.
  * @param {*} styleValue The style value.
-*/
-Theme.prototype.setComponentStyle = function(componentName,
-    styleValue) {
+ */
+Theme.prototype.setComponentStyle = function(componentName, styleValue) {
   this.componentStyles[componentName] = styleValue;
 };
 
 /**
  * Configure a theme's font style.
  * @param {Theme.FontStyle} fontStyle The font style.
-*/
+ */
 Theme.prototype.setFontStyle = function(fontStyle) {
   this.fontStyle = fontStyle;
 };
@@ -195,7 +192,7 @@ Theme.prototype.setFontStyle = function(fontStyle) {
  * Configure a theme's start hats.
  * @param {boolean} startHats True if the theme enables start hats, false
  *     otherwise.
-*/
+ */
 Theme.prototype.setStartHats = function(startHats) {
   this.startHats = startHats;
 };
@@ -205,12 +202,12 @@ Theme.prototype.setStartHats = function(startHats) {
  * @param {string} name The name of the theme.
  * @param {!Object} themeObj An object containing theme properties.
  * @return {!Theme} A new Blockly theme.
-*/
+ */
 Theme.defineTheme = function(name, themeObj) {
   const theme = new Theme(name);
   let base = themeObj['base'];
   if (base) {
-    if (typeof base == "string") {
+    if (typeof base == 'string') {
       base = registry.getObject(registry.Type.THEME, base);
     }
     if (base instanceof Theme) {
@@ -219,14 +216,10 @@ Theme.defineTheme = function(name, themeObj) {
     }
   }
 
-  object.deepMerge(theme.blockStyles,
-      themeObj['blockStyles']);
-  object.deepMerge(theme.categoryStyles,
-      themeObj['categoryStyles']);
-  object.deepMerge(theme.componentStyles,
-      themeObj['componentStyles']);
-  object.deepMerge(theme.fontStyle,
-      themeObj['fontStyle']);
+  object.deepMerge(theme.blockStyles, themeObj['blockStyles']);
+  object.deepMerge(theme.categoryStyles, themeObj['categoryStyles']);
+  object.deepMerge(theme.componentStyles, themeObj['componentStyles']);
+  object.deepMerge(theme.fontStyle, themeObj['fontStyle']);
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];
   }

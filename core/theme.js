@@ -12,9 +12,8 @@
 goog.module('Blockly.Theme');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.registry');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -76,7 +75,7 @@ const Theme = function(name, opt_blockStyles, opt_categoryStyles,
   this.startHats = null;
 
   // Register the theme by name.
-  Blockly.registry.register(Blockly.registry.Type.THEME, name, this);
+  registry.register(registry.Type.THEME, name, this);
 };
 
 /**
@@ -212,21 +211,21 @@ Theme.defineTheme = function(name, themeObj) {
   let base = themeObj['base'];
   if (base) {
     if (typeof base == "string") {
-      base = Blockly.registry.getObject(Blockly.registry.Type.THEME, base);
+      base = registry.getObject(registry.Type.THEME, base);
     }
     if (base instanceof Theme) {
-      Blockly.utils.object.deepMerge(theme, base);
+      object.deepMerge(theme, base);
       theme.name = name;
     }
   }
 
-  Blockly.utils.object.deepMerge(theme.blockStyles,
+  object.deepMerge(theme.blockStyles,
       themeObj['blockStyles']);
-  Blockly.utils.object.deepMerge(theme.categoryStyles,
+  object.deepMerge(theme.categoryStyles,
       themeObj['categoryStyles']);
-  Blockly.utils.object.deepMerge(theme.componentStyles,
+  object.deepMerge(theme.componentStyles,
       themeObj['componentStyles']);
-  Blockly.utils.object.deepMerge(theme.fontStyle,
+  object.deepMerge(theme.fontStyle,
       themeObj['fontStyle']);
   if (themeObj['startHats'] != null) {
     theme.startHats = themeObj['startHats'];

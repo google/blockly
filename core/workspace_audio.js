@@ -71,17 +71,18 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
   if (!filenames.length) {
     return;
   }
+  let audioTest;
   try {
-    var audioTest = new Blockly.utils.global['Audio']();
+    audioTest = new Blockly.utils.global['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
     return;
   }
-  var sound;
-  for (var i = 0; i < filenames.length; i++) {
-    var filename = filenames[i];
-    var ext = filename.match(/\.(\w+)$/);
+  let sound;
+  for (let i = 0; i < filenames.length; i++) {
+    const filename = filenames[i];
+    const ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
       sound = new Blockly.utils.global['Audio'](filename);
@@ -98,10 +99,10 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
  * @package
  */
 Blockly.WorkspaceAudio.prototype.preload = function() {
-  for (var name in this.SOUNDS_) {
-    var sound = this.SOUNDS_[name];
+  for (let name in this.SOUNDS_) {
+    const sound = this.SOUNDS_[name];
     sound.volume = 0.01;
-    var playPromise = sound.play();
+    const playPromise = sound.play();
     // Edge does not return a promise, so we need to check.
     if (playPromise !== undefined) {
       // If we don't wait for the play request to complete before calling pause()
@@ -129,16 +130,16 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
  * @param {number=} opt_volume Volume of sound (0-1).
  */
 Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
-  var sound = this.SOUNDS_[name];
+  const sound = this.SOUNDS_[name];
   if (sound) {
     // Don't play one sound on top of another.
-    var now = new Date;
+    const now = new Date;
     if (this.lastSound_ != null &&
         now - this.lastSound_ < Blockly.internalConstants.SOUND_LIMIT) {
       return;
     }
     this.lastSound_ = now;
-    var mySound;
+    let mySound;
     if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
       // Creating a new audio node causes lag in Android and iPad.  Android
       // refetches the file from the server, iPad uses a singleton audio

@@ -11,10 +11,10 @@
  */
 'use strict';
 
-goog.provide('Blockly.WorkspaceAudio');
+goog.module('Blockly.WorkspaceAudio');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.internalConstants');
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.userAgent');
 
@@ -27,7 +27,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *     this audio object belongs to, or null.
  * @constructor
  */
-Blockly.WorkspaceAudio = function(parentWorkspace) {
+const WorkspaceAudio = function(parentWorkspace) {
 
   /**
    * The parent of the workspace this object belongs to, or null.  May be
@@ -49,13 +49,13 @@ Blockly.WorkspaceAudio = function(parentWorkspace) {
  * @type {Date}
  * @private
  */
-Blockly.WorkspaceAudio.prototype.lastSound_ = null;
+WorkspaceAudio.prototype.lastSound_ = null;
 
 /**
  * Dispose of this audio manager.
  * @package
  */
-Blockly.WorkspaceAudio.prototype.dispose = function() {
+WorkspaceAudio.prototype.dispose = function() {
   this.parentWorkspace_ = null;
   this.SOUNDS_ = null;
 };
@@ -67,7 +67,7 @@ Blockly.WorkspaceAudio.prototype.dispose = function() {
  *   Filenames include path from Blockly's root.  File extensions matter.
  * @param {string} name Name of sound.
  */
-Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
+WorkspaceAudio.prototype.load = function(filenames, name) {
   if (!filenames.length) {
     return;
   }
@@ -98,7 +98,7 @@ Blockly.WorkspaceAudio.prototype.load = function(filenames, name) {
  * Preload all the audio files so that they play quickly when asked for.
  * @package
  */
-Blockly.WorkspaceAudio.prototype.preload = function() {
+WorkspaceAudio.prototype.preload = function() {
   for (let name in this.SOUNDS_) {
     const sound = this.SOUNDS_[name];
     sound.volume = 0.01;
@@ -129,7 +129,7 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
  * @param {string} name Name of sound.
  * @param {number=} opt_volume Volume of sound (0-1).
  */
-Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
+WorkspaceAudio.prototype.play = function(name, opt_volume) {
   const sound = this.SOUNDS_[name];
   if (sound) {
     // Don't play one sound on top of another.
@@ -155,3 +155,5 @@ Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
     this.parentWorkspace_.getAudioManager().play(name, opt_volume);
   }
 };
+
+exports = WorkspaceAudio;

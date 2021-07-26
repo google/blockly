@@ -184,10 +184,10 @@ exports.createDom = createDom;
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 const bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ = browserEvents.bind(
-      element, 'mouseover', null, onMouseOver);
-  element.mouseOutWrapper_ = browserEvents.bind(
-      element, 'mouseout', null, onMouseOut);
+  element.mouseOverWrapper_ =
+      browserEvents.bind(element, 'mouseover', null, onMouseOver);
+  element.mouseOutWrapper_ =
+      browserEvents.bind(element, 'mouseout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
@@ -222,8 +222,7 @@ const onMouseOver = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  const newElement = /** @type {Element} */ (getTargetObject(
-      e.currentTarget));
+  const newElement = /** @type {Element} */ (getTargetObject(e.currentTarget));
   if (element != newElement) {
     hide();
     poisonedElement = null;
@@ -282,8 +281,7 @@ const onMouseMove = function(e) {
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
     lastX = e.pageX;
     lastY = e.pageY;
-    showPid =
-        setTimeout(show, HOVER_MS);
+    showPid = setTimeout(show, HOVER_MS);
   }
 };
 
@@ -374,8 +372,7 @@ const show = function() {
   }
   let anchorY = lastY + OFFSET_Y;
 
-  if (anchorY + DIV.offsetHeight >
-      windowHeight + window.scrollY) {
+  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
     anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
   }
@@ -387,8 +384,7 @@ const show = function() {
         windowWidth + window.scrollX - 2 * MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowWidth - DIV.offsetWidth -
-          2 * MARGINS;
+      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
     }
   }
   DIV.style.top = anchorY + 'px';

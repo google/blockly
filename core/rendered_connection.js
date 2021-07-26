@@ -55,8 +55,7 @@ const RenderedConnection = function(source, type) {
    * @private
    */
   this.dbOpposite_ =
-      source.workspace
-          .connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
+      source.workspace.connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
 
   /**
    * Workspace units, (0, 0) is top left of block.
@@ -118,7 +117,7 @@ RenderedConnection.prototype.dispose = function() {
  */
 RenderedConnection.prototype.getSourceBlock = function() {
   return /** @type {!BlockSvg} */ (
-    RenderedConnection.superClass_.getSourceBlock.call(this));
+      RenderedConnection.superClass_.getSourceBlock.call(this));
 };
 
 /**
@@ -128,7 +127,7 @@ RenderedConnection.prototype.getSourceBlock = function() {
  */
 RenderedConnection.prototype.targetBlock = function() {
   return /** @type {BlockSvg} */ (
-    RenderedConnection.superClass_.targetBlock.call(this));
+      RenderedConnection.superClass_.targetBlock.call(this));
 };
 
 /**
@@ -177,13 +176,11 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   // Raise it to the top for extra visibility.
   const selected = Blockly.selected == rootBlock;
   selected || rootBlock.addSelect();
-  let dx =
-      (staticConnection.x + internalConstants.SNAP_RADIUS +
-       Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+  let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
+            Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
       this.x;
-  let dy =
-      (staticConnection.y + internalConstants.SNAP_RADIUS +
-       Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+  let dy = (staticConnection.y + internalConstants.SNAP_RADIUS +
+            Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
       this.y;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
@@ -191,8 +188,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   }
   if (rootBlock.RTL) {
     dx = (staticConnection.x - internalConstants.SNAP_RADIUS -
-          Math.floor(
-              Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+          Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
         this.x;
   }
   rootBlock.moveBy(dx, dy);
@@ -208,8 +204,7 @@ RenderedConnection.prototype.moveTo = function(x, y) {
   if (this.trackedState_ == RenderedConnection.TrackedState.WILL_TRACK) {
     this.db_.addConnection(this, y);
     this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-  } else if (this.trackedState_ == RenderedConnection
-      .TrackedState.TRACKED) {
+  } else if (this.trackedState_ == RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -233,8 +228,8 @@ RenderedConnection.prototype.moveBy = function(dx, dy) {
  *     corner of the block, in workspace coordinates.
  */
 RenderedConnection.prototype.moveToOffset = function(blockTL) {
-  this.moveTo(blockTL.x + this.offsetInBlock_.x,
-      blockTL.y + this.offsetInBlock_.y);
+  this.moveTo(
+      blockTL.x + this.offsetInBlock_.x, blockTL.y + this.offsetInBlock_.y);
 };
 
 /**
@@ -271,8 +266,8 @@ RenderedConnection.prototype.tighten = function() {
     }
     // Workspace coordinates.
     const xy = utils.getRelativeXY(svgRoot);
-    block.getSvgRoot().setAttribute('transform',
-        'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
+    block.getSvgRoot().setAttribute(
+        'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections(-dx, -dy);
   }
 };
@@ -304,24 +299,21 @@ RenderedConnection.prototype.highlight = function() {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = utils.svgPaths.moveBy(0, -yLen) +
-        utils.svgPaths.lineOnAxis('v', yLen) +
-        shape.pathDown +
+        utils.svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
         utils.svgPaths.lineOnAxis('v', yLen);
   } else {
     const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
     steps = utils.svgPaths.moveBy(-xLen, 0) +
-        utils.svgPaths.lineOnAxis('h', xLen) +
-        shape.pathLeft +
+        utils.svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
         utils.svgPaths.lineOnAxis('h', xLen);
   }
   const xy = this.sourceBlock_.getRelativeToSurfaceXY();
   const x = this.x - xy.x;
   const y = this.y - xy.y;
   Connection.highlightedPath_ = dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
         transform: 'translate(' + x + ',' + y + ')' +
@@ -344,10 +336,10 @@ RenderedConnection.prototype.unhighlight = function() {
  * @package
  */
 RenderedConnection.prototype.setTracking = function(doTracking) {
-  if ((doTracking && this.trackedState_ ==
-      RenderedConnection.TrackedState.TRACKED) ||
-      (!doTracking && this.trackedState_ ==
-      RenderedConnection.TrackedState.UNTRACKED)) {
+  if ((doTracking &&
+       this.trackedState_ == RenderedConnection.TrackedState.TRACKED) ||
+      (!doTracking &&
+       this.trackedState_ == RenderedConnection.TrackedState.UNTRACKED)) {
     return;
   }
   if (this.sourceBlock_.isInFlyout) {
@@ -442,19 +434,18 @@ RenderedConnection.prototype.startTrackingAll = function() {
  * @return {boolean} True if the connection is allowed, false otherwise.
  * @deprecated July 2020
  */
-RenderedConnection.prototype.isConnectionAllowed = function(candidate,
-    maxRadius) {
+RenderedConnection.prototype.isConnectionAllowed = function(
+    candidate, maxRadius) {
   deprecation.warn(
-      'RenderedConnection.prototype.isConnectionAllowed',
-      'July 2020',
+      'RenderedConnection.prototype.isConnectionAllowed', 'July 2020',
       'July 2021',
       'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
   if (this.distanceFrom(candidate) > maxRadius) {
     return false;
   }
 
-  return RenderedConnection.superClass_.isConnectionAllowed.call(this,
-      candidate);
+  return RenderedConnection.superClass_.isConnectionAllowed.call(
+      this, candidate);
 };
 
 /**
@@ -465,20 +456,19 @@ RenderedConnection.prototype.isConnectionAllowed = function(candidate,
  *     failed to connect to.
  * @package
  */
-RenderedConnection.prototype.onFailedConnect =
-    function(otherConnection) {
-      const block = this.getSourceBlock();
-      if (Events.recordUndo) {
-        const group = Events.getGroup();
-        setTimeout(function() {
-          if (!block.isDisposed() && !block.getParent()) {
-            Events.setGroup(group);
-            this.bumpAwayFrom(otherConnection);
-            Events.setGroup(false);
-          }
-        }.bind(this), internalConstants.BUMP_DELAY);
+RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
+  const block = this.getSourceBlock();
+  if (Events.recordUndo) {
+    const group = Events.getGroup();
+    setTimeout(function() {
+      if (!block.isDisposed() && !block.getParent()) {
+        Events.setGroup(group);
+        this.bumpAwayFrom(otherConnection);
+        Events.setGroup(false);
       }
-    };
+    }.bind(this), internalConstants.BUMP_DELAY);
+  }
+};
 
 
 /**
@@ -488,10 +478,10 @@ RenderedConnection.prototype.onFailedConnect =
  * @protected
  * @override
  */
-RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
-    childBlock) {
-  RenderedConnection.superClass_.disconnectInternal_.call(this,
-      parentBlock, childBlock);
+RenderedConnection.prototype.disconnectInternal_ = function(
+    parentBlock, childBlock) {
+  RenderedConnection.superClass_.disconnectInternal_.call(
+      this, parentBlock, childBlock);
   // Rerender the parent so that it may reflow.
   if (parentBlock.rendered) {
     parentBlock.render();
@@ -586,9 +576,10 @@ RenderedConnection.prototype.connect_ = function(childConnection) {
  */
 RenderedConnection.prototype.onCheckChanged_ = function() {
   // The new value type may not be compatible with the existing connection.
-  if (this.isConnected() && (!this.targetConnection ||
-      !this.getConnectionChecker().canConnect(
-          this, this.targetConnection, false))) {
+  if (this.isConnected() &&
+      (!this.targetConnection ||
+       !this.getConnectionChecker().canConnect(
+           this, this.targetConnection, false))) {
     const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.

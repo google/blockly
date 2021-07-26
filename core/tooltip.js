@@ -128,9 +128,9 @@ Blockly.Tooltip.DIV = null;
  * @return {string} The tooltip text of the element.
  */
 Blockly.Tooltip.getTooltipOfObject = function(object) {
-  var obj = Blockly.Tooltip.getTargetObject_(object);
+  const obj = Blockly.Tooltip.getTargetObject_(object);
   if (obj) {
-    var tooltip = obj.tooltip;
+    let tooltip = obj.tooltip;
     while (typeof tooltip == 'function') {
       tooltip = tooltip();
     }
@@ -171,7 +171,7 @@ Blockly.Tooltip.createDom = function() {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.Tooltip.DIV = document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  var container = Blockly.common.getParentContainer() || document.body;
+  const container = Blockly.common.getParentContainer() || document.body;
   container.appendChild(Blockly.Tooltip.DIV);
 };
 
@@ -217,7 +217,7 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = /** @type {Element} */ (Blockly.Tooltip.getTargetObject_(
+  const element = /** @type {Element} */ (Blockly.Tooltip.getTargetObject_(
       e.currentTarget));
   if (Blockly.Tooltip.element_ != element) {
     Blockly.Tooltip.hide();
@@ -268,8 +268,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (Blockly.Tooltip.visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var dx = Blockly.Tooltip.lastX_ - e.pageX;
-    var dy = Blockly.Tooltip.lastY_ - e.pageY;
+    const dx = Blockly.Tooltip.lastX_ - e.pageX;
+    const dy = Blockly.Tooltip.lastY_ - e.pageY;
     if (Math.sqrt(dx * dx + dy * dy) > Blockly.Tooltip.RADIUS_OK) {
       Blockly.Tooltip.hide();
     }
@@ -343,30 +343,30 @@ Blockly.Tooltip.show_ = function() {
   }
   // Erase all existing text.
   Blockly.Tooltip.DIV.textContent = '';
-  var tip = Blockly.Tooltip.getTooltipOfObject(Blockly.Tooltip.element_);
+  let tip = Blockly.Tooltip.getTooltipOfObject(Blockly.Tooltip.element_);
   tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
   // Create new text, line by line.
-  var lines = tip.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var div = document.createElement('div');
+  const lines = tip.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const div = document.createElement('div');
     div.appendChild(document.createTextNode(lines[i]));
     Blockly.Tooltip.DIV.appendChild(div);
   }
-  var rtl = /** @type {{RTL: boolean}} */ (Blockly.Tooltip.element_).RTL;
-  var windowWidth = document.documentElement.clientWidth;
-  var windowHeight = document.documentElement.clientHeight;
+  const rtl = /** @type {{RTL: boolean}} */ (Blockly.Tooltip.element_).RTL;
+  const windowWidth = document.documentElement.clientWidth;
+  const windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.
   Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.Tooltip.DIV.style.display = 'block';
   Blockly.Tooltip.visible = true;
   // Move the tooltip to just below the cursor.
-  var anchorX = Blockly.Tooltip.lastX_;
+  let anchorX = Blockly.Tooltip.lastX_;
   if (rtl) {
     anchorX -= Blockly.Tooltip.OFFSET_X + Blockly.Tooltip.DIV.offsetWidth;
   } else {
     anchorX += Blockly.Tooltip.OFFSET_X;
   }
-  var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
+  let anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
 
   if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
       windowHeight + window.scrollY) {

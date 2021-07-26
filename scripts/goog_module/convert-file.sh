@@ -18,9 +18,10 @@
 #   This command does an in-place search-and-replace. The global ("/g") modifier
 #   causes it to replace all occurrences, rather than only the first match.
 # 2.  perl -ne 'print m/regex/modifiers'
-#   This command returns the all regex matches. If the global ("/g") modifier is
-#   specified, then the capture group "()" is not necessary and it will return
-#   all matches, rather than only the first match.
+#   This command returns a string containing the regex match. The regex must
+#   contain a capture group "()", unless the global ("\g") modifier is
+#   specified. This will return the first match, unless the global modifier is
+#   specified, in which case, it will return all matches.
 # 3.  perl -nle 'print $& while m{regex}modifiers'
 #   Similar to (2), but returns regex matches separated by newlines.
 #   The "m{regex}modifiers" is equivalent to "m/regex/modifiers" syntax.

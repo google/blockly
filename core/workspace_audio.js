@@ -14,16 +14,16 @@
 goog.module('Blockly.WorkspaceAudio');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.utils.global');
-goog.require('Blockly.utils.userAgent');
-
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const global = goog.require('Blockly.utils.global');
+const internalConstants = goog.require('Blockly.internalConstants');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
  * Class for loading, storing, and playing audio for a workspace.
- * @param {Blockly.WorkspaceSvg} parentWorkspace The parent of the workspace
+ * @param {WorkspaceSvg} parentWorkspace The parent of the workspace
  *     this audio object belongs to, or null.
  * @constructor
  */
@@ -32,7 +32,7 @@ const WorkspaceAudio = function(parentWorkspace) {
   /**
    * The parent of the workspace this object belongs to, or null.  May be
    * checked for sounds that this object can't find.
-   * @type {Blockly.WorkspaceSvg}
+   * @type {WorkspaceSvg}
    * @private
    */
   this.parentWorkspace_ = parentWorkspace;
@@ -73,7 +73,7 @@ WorkspaceAudio.prototype.load = function(filenames, name) {
   }
   let audioTest;
   try {
-    audioTest = new Blockly.utils.global['Audio']();
+    audioTest = new global['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
@@ -85,7 +85,7 @@ WorkspaceAudio.prototype.load = function(filenames, name) {
     const ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new Blockly.utils.global['Audio'](filename);
+      sound = new global['Audio'](filename);
       break;
     }
   }
@@ -117,7 +117,7 @@ WorkspaceAudio.prototype.preload = function() {
 
     // iOS can only process one sound at a time.  Trying to load more than one
     // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.IPHONE) {
+    if (userAgent.IPAD || userAgent.IPHONE) {
       break;
     }
   }
@@ -135,12 +135,12 @@ WorkspaceAudio.prototype.play = function(name, opt_volume) {
     // Don't play one sound on top of another.
     const now = new Date;
     if (this.lastSound_ != null &&
-        now - this.lastSound_ < Blockly.internalConstants.SOUND_LIMIT) {
+        now - this.lastSound_ < internalConstants.SOUND_LIMIT) {
       return;
     }
     this.lastSound_ = now;
     let mySound;
-    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
+    if (userAgent.IPAD || userAgent.ANDROID) {
       // Creating a new audio node causes lag in Android and iPad.  Android
       // refetches the file from the server, iPad uses a singleton audio
       // node which must be deleted and recreated for each new audio tag.

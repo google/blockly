@@ -77,8 +77,7 @@ ShortcutRegistry.KeyboardShortcut;
  * @throws {Error} if a shortcut with the same name already exists.
  * @public
  */
-ShortcutRegistry.prototype.register = function(
-    shortcut, opt_allowOverrides) {
+ShortcutRegistry.prototype.register = function(shortcut, opt_allowOverrides) {
   const registeredShortcut = this.registry_[shortcut.name];
   if (registeredShortcut && !opt_allowOverrides) {
     throw new Error(
@@ -168,7 +167,8 @@ ShortcutRegistry.prototype.removeKeyMapping = function(
     return true;
   }
   if (!opt_quiet) {
-    console.warn('No keyboard shortcut with name "' + shortcutName +
+    console.warn(
+        'No keyboard shortcut with name "' + shortcutName +
         '" registered with key code "' + keyCode + '"');
   }
   return false;
@@ -176,9 +176,10 @@ ShortcutRegistry.prototype.removeKeyMapping = function(
 
 /**
  * Removes all the key mappings for a shortcut with the given name.
- * Useful when changing the default key mappings and the key codes registered to the shortcut are
- * unknown.
- * @param {string} shortcutName The name of the shortcut to remove from the key map.
+ * Useful when changing the default key mappings and the key codes registered to
+ * the shortcut are unknown.
+ * @param {string} shortcutName The name of the shortcut to remove from the key
+ *     map.
  * @public
  */
 ShortcutRegistry.prototype.removeAllKeyMappings = function(shortcutName) {
@@ -250,8 +251,7 @@ ShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
  *     given keyCode is used. Undefined if no shortcuts exist.
  * @public
  */
-ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(
-    keyCode) {
+ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(keyCode) {
   return this.keyMap_[keyCode] || [];
 };
 
@@ -263,8 +263,7 @@ ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(
  *     registered under.
  * @public
  */
-ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(
-    shortcutName) {
+ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(shortcutName) {
   const keys = [];
   for (const keyCode in this.keyMap_) {
     const shortcuts = this.keyMap_[keyCode];
@@ -306,10 +305,8 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  * @throws {Error} if the modifier is not in the valid modifiers list.
  * @private
  */
-ShortcutRegistry.prototype.checkModifiers_ = function(
-    modifiers) {
-  const validModifiers = object.values(
-      ShortcutRegistry.modifierKeys);
+ShortcutRegistry.prototype.checkModifiers_ = function(modifiers) {
+  const validModifiers = object.values(ShortcutRegistry.modifierKeys);
   for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw new Error(modifier + ' is not a valid modifier key.');
@@ -326,15 +323,13 @@ ShortcutRegistry.prototype.checkModifiers_ = function(
  * @return {string} The serialized key code for the given modifiers and key.
  * @public
  */
-ShortcutRegistry.prototype.createSerializedKey = function(
-    keyCode, modifiers) {
+ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
   let serializedKey = '';
 
   if (modifiers) {
     this.checkModifiers_(modifiers);
     for (const modifier in ShortcutRegistry.modifierKeys) {
-      const modifierKeyCode =
-          ShortcutRegistry.modifierKeys[modifier];
+      const modifierKeyCode = ShortcutRegistry.modifierKeys[modifier];
       if (modifiers.indexOf(modifierKeyCode) > -1) {
         if (serializedKey != '') {
           serializedKey += '+';

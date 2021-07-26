@@ -22,9 +22,9 @@
 goog.module('Blockly.Tooltip');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.common');
-goog.require('Blockly.utils.string');
+const blocklyString = goog.require('Blockly.utils.string');
+const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 
 
 /**
@@ -174,7 +174,7 @@ const createDom = function() {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   DIV = document.createElement('div');
   DIV.className = 'blocklyTooltipDiv';
-  const container = Blockly.common.getParentContainer() || document.body;
+  const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
 };
 exports.createDom = createDom;
@@ -184,9 +184,9 @@ exports.createDom = createDom;
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 const bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ = Blockly.browserEvents.bind(
+  element.mouseOverWrapper_ = browserEvents.bind(
       element, 'mouseover', null, onMouseOver);
-  element.mouseOutWrapper_ = Blockly.browserEvents.bind(
+  element.mouseOutWrapper_ = browserEvents.bind(
       element, 'mouseout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
@@ -204,8 +204,8 @@ const unbindMouseEvents = function(element) {
   if (!element) {
     return;
   }
-  Blockly.browserEvents.unbind(element.mouseOverWrapper_);
-  Blockly.browserEvents.unbind(element.mouseOutWrapper_);
+  browserEvents.unbind(element.mouseOverWrapper_);
+  browserEvents.unbind(element.mouseOutWrapper_);
   element.removeEventListener('mousemove', onMouseMove);
 };
 exports.unbindMouseEvents = unbindMouseEvents;
@@ -350,7 +350,7 @@ const show = function() {
   // Erase all existing text.
   DIV.textContent = '';
   let tip = getTooltipOfObject(element);
-  tip = Blockly.utils.string.wrap(tip, LIMIT);
+  tip = blocklyString.wrap(tip, LIMIT);
   // Create new text, line by line.
   const lines = tip.split('\n');
   for (let i = 0; i < lines.length; i++) {

@@ -56,8 +56,7 @@ Warning.prototype.collapseHidden = false;
 Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
   dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'class': 'blocklyIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
       },
@@ -66,18 +65,19 @@ Warning.prototype.drawIcon_ = function(group) {
   // systems render it differently.
   // Body of exclamation point.
   dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'class': 'blocklyIconSymbol',
         'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
       },
       group);
   // Dot of exclamation point.
   dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'blocklyIconSymbol',
-        'x': '7', 'y': '11', 'height': '2', 'width': '2'
+        'x': '7',
+        'y': '11',
+        'height': '2',
+        'width': '2'
       },
       group);
 };
@@ -90,8 +90,8 @@ Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Events.fire(new (Events.get(Events.BUBBLE_OPEN))(
-      this.block_, visible, 'warning'));
+  Events.fire(
+      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
   } else {

@@ -14,10 +14,10 @@
 goog.module('Blockly.ShortcutRegistry');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.KeyCodes');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Workspace');
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -47,22 +47,22 @@ const ShortcutRegistry = function() {
 
 /**
  * Enum of valid modifiers.
- * @enum {!Blockly.utils.KeyCodes<number>}
+ * @enum {!KeyCodes<number>}
  */
 ShortcutRegistry.modifierKeys = {
-  'Shift': Blockly.utils.KeyCodes.SHIFT,
-  'Control': Blockly.utils.KeyCodes.CTRL,
-  'Alt': Blockly.utils.KeyCodes.ALT,
-  'Meta': Blockly.utils.KeyCodes.META
+  'Shift': KeyCodes.SHIFT,
+  'Control': KeyCodes.CTRL,
+  'Alt': KeyCodes.ALT,
+  'Meta': KeyCodes.META
 };
 
 /**
  * A keyboard shortcut.
  * @typedef {{
- *    callback: ((function(!Blockly.Workspace, Event,
+ *    callback: ((function(!Workspace, Event,
  * !ShortcutRegistry.KeyboardShortcut):boolean)|undefined),
  *    name: string,
- *    preconditionFn: ((function(!Blockly.Workspace):boolean)|undefined),
+ *    preconditionFn: ((function(!Workspace):boolean)|undefined),
  *    metadata: (Object|undefined)
  * }}
  */
@@ -111,7 +111,7 @@ ShortcutRegistry.prototype.unregister = function(shortcutName) {
 
 /**
  * Adds a mapping between a keycode and a keyboard shortcut.
- * @param {string|Blockly.utils.KeyCodes} keyCode The key code for the keyboard
+ * @param {string|KeyCodes} keyCode The key code for the keyboard
  *     shortcut. If registering a key code with a modifier (ex: ctrl+c) use
  *     ShortcutRegistry.registry.createSerializedKey;
  * @param {string} shortcutName The name of the shortcut to execute when the
@@ -204,7 +204,7 @@ ShortcutRegistry.prototype.setKeyMap = function(keyMap) {
  * @public
  */
 ShortcutRegistry.prototype.getKeyMap = function() {
-  return Blockly.utils.object.deepMerge(Object.create(null), this.keyMap_);
+  return object.deepMerge(Object.create(null), this.keyMap_);
 };
 
 /**
@@ -214,12 +214,12 @@ ShortcutRegistry.prototype.getKeyMap = function() {
  * @public
  */
 ShortcutRegistry.prototype.getRegistry = function() {
-  return Blockly.utils.object.deepMerge(Object.create(null), this.registry_);
+  return object.deepMerge(Object.create(null), this.registry_);
 };
 
 /**
  * Handles key down events.
- * @param {!Blockly.Workspace} workspace The main workspace where the event was
+ * @param {!Workspace} workspace The main workspace where the event was
  *     captured.
  * @param {!Event} e The key down event.
  * @return {boolean} True if the event was handled, false otherwise.
@@ -308,7 +308,7 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  */
 ShortcutRegistry.prototype.checkModifiers_ = function(
     modifiers) {
-  const validModifiers = Blockly.utils.object.values(
+  const validModifiers = object.values(
       ShortcutRegistry.modifierKeys);
   for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {

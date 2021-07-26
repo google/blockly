@@ -23,7 +23,6 @@ const Workspace = goog.requireType('Blockly.Workspace');
  * @constructor
  */
 const Abstract = function() {
-
   /**
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {?boolean}
@@ -62,9 +61,7 @@ Abstract.prototype.isUiEvent = false;
  * @return {!Object} JSON representation.
  */
 Abstract.prototype.toJson = function() {
-  const json = {
-    'type': this.type
-  };
+  const json = {'type': this.type};
   if (this.group) {
     json['group'] = this.group;
   }
@@ -108,7 +105,8 @@ Abstract.prototype.getEventWorkspace_ = function() {
     workspace = Workspace.getById(this.workspaceId);
   }
   if (!workspace) {
-    throw Error('Workspace is null. Event must have been generated from real' +
+    throw Error(
+        'Workspace is null. Event must have been generated from real' +
         ' Blockly events.');
   }
   return workspace;

@@ -82,11 +82,11 @@ Blockly.ThemeManager.prototype.getTheme = function() {
  * @package
  */
 Blockly.ThemeManager.prototype.setTheme = function(theme) {
-  var prevTheme = this.theme_;
+  const prevTheme = this.theme_;
   this.theme_ = theme;
 
   // Set the theme name onto the injection div.
-  var injectionDiv = this.workspace_.getInjectionDiv();
+  const injectionDiv = this.workspace_.getInjectionDiv();
   if (injectionDiv) {
     if (prevTheme) {
       Blockly.utils.dom.removeClass(injectionDiv, prevTheme.getClassName());
@@ -95,17 +95,17 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
   }
 
   // Refresh all subscribed workspaces.
-  for (var i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
+  for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
     workspace.refreshTheme();
   }
 
   // Refresh all registered Blockly UI components.
-  for (var i = 0, keys = Object.keys(this.componentDB_),
+  for (let i = 0, keys = Object.keys(this.componentDB_),
     key; (key = keys[i]); i++) {
-    for (var j = 0, component; (component = this.componentDB_[key][j]); j++) {
-      var element = component.element;
-      var propertyName = component.propertyName;
-      var style = this.theme_ && this.theme_.getComponentStyle(key);
+    for (let j = 0, component; (component = this.componentDB_[key][j]); j++) {
+      const element = component.element;
+      const propertyName = component.propertyName;
+      const style = this.theme_ && this.theme_.getComponentStyle(key);
       element.style[propertyName] = style || '';
     }
   }
@@ -129,7 +129,7 @@ Blockly.ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @package
  */
 Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
-  var index = this.subscribedWorkspaces_.indexOf(workspace);
+  const index = this.subscribedWorkspaces_.indexOf(workspace);
   if (index < 0) {
     throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
   }
@@ -158,7 +158,7 @@ Blockly.ThemeManager.prototype.subscribe = function(element, componentName,
   });
 
   // Initialize the element with its corresponding theme style.
-  var style = this.theme_ && this.theme_.getComponentStyle(componentName);
+  const style = this.theme_ && this.theme_.getComponentStyle(componentName);
   element.style[propertyName] = style || '';
 };
 
@@ -172,10 +172,10 @@ Blockly.ThemeManager.prototype.unsubscribe = function(element) {
     return;
   }
   // Go through all component, and remove any references to this element.
-  var componentNames = Object.keys(this.componentDB_);
-  for (var c = 0, componentName; (componentName = componentNames[c]); c++) {
-    var elements = this.componentDB_[componentName];
-    for (var i = elements.length - 1; i >= 0; i--) {
+  const componentNames = Object.keys(this.componentDB_);
+  for (let c = 0, componentName; (componentName = componentNames[c]); c++) {
+    const elements = this.componentDB_[componentName];
+    for (let i = elements.length - 1; i >= 0; i--) {
       if (elements[i].element === element) {
         elements.splice(i, 1);
       }

@@ -83,8 +83,7 @@ Type.prototype.toString = function() {
 };
 
 /** @type {!Type<IConnectionChecker>} */
-Type.CONNECTION_CHECKER =
-    new Type('connectionChecker');
+Type.CONNECTION_CHECKER = new Type('connectionChecker');
 
 /** @type {!Type<Cursor>} */
 Type.CURSOR = new Type('cursor');
@@ -108,20 +107,16 @@ Type.THEME = new Type('theme');
 Type.TOOLBOX_ITEM = new Type('toolboxItem');
 
 /** @type {!Type<IFlyout>} */
-Type.FLYOUTS_VERTICAL_TOOLBOX =
-    new Type('flyoutsVerticalToolbox');
+Type.FLYOUTS_VERTICAL_TOOLBOX = new Type('flyoutsVerticalToolbox');
 
 /** @type {!Type<IFlyout>} */
-Type.FLYOUTS_HORIZONTAL_TOOLBOX =
-    new Type('flyoutsHorizontalToolbox');
+Type.FLYOUTS_HORIZONTAL_TOOLBOX = new Type('flyoutsHorizontalToolbox');
 
 /** @type {!Type<IMetricsManager>} */
-Type.METRICS_MANAGER =
-    new Type('metricsManager');
+Type.METRICS_MANAGER = new Type('metricsManager');
 
 /** @type {!Type<IBlockDragger>} */
-Type.BLOCK_DRAGGER =
-    new Type('blockDragger');
+Type.BLOCK_DRAGGER = new Type('blockDragger');
 
 /**
  * Registers a class based on a type and name.
@@ -137,8 +132,7 @@ Type.BLOCK_DRAGGER =
  * it's type.
  * @template T
  */
-const register = function(
-    type, name, registryItem, opt_allowOverrides) {
+const register = function(type, name, registryItem, opt_allowOverrides) {
   if ((!(type instanceof Type) && typeof type != 'string') ||
       String(type).trim() == '') {
     throw Error(
@@ -203,8 +197,9 @@ const unregister = function(type, name) {
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
-    console.warn('Unable to unregister [' + name + '][' + type + '] from the ' +
-      'registry.');
+    console.warn(
+        'Unable to unregister [' + name + '][' + type + '] from the ' +
+        'registry.');
     return;
   }
   delete typeMap[type][name];
@@ -230,8 +225,8 @@ const getItem = function(type, name, opt_throwIfMissing) {
   if (!typeRegistry || !typeRegistry[name]) {
     const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
     if (opt_throwIfMissing) {
-      throw new Error(msg + ' You must require or register a ' + type +
-        ' plugin.');
+      throw new Error(
+          msg + ' You must require or register a ' + type + ' plugin.');
     } else {
       console.warn(msg);
     }
@@ -274,7 +269,7 @@ exports.hasItem = hasItem;
  */
 const getClass = function(type, name, opt_throwIfMissing) {
   return /** @type {?function(new:T, ...?)} */ (
-    getItem(type, name, opt_throwIfMissing));
+      getItem(type, name, opt_throwIfMissing));
 };
 exports.getClass = getClass;
 
@@ -289,8 +284,7 @@ exports.getClass = getClass;
  * @template T
  */
 const getObject = function(type, name, opt_throwIfMissing) {
-  return /** @type {T} */ (
-    getItem(type, name, opt_throwIfMissing));
+  return /** @type {T} */ (getItem(type, name, opt_throwIfMissing));
 };
 exports.getObject = getObject;
 
@@ -305,8 +299,7 @@ exports.getObject = getObject;
  * @return {?function(new:T, ...?)} The class for the plugin.
  * @template T
  */
-const getClassFromOptions = function(type, options,
-    opt_throwIfMissing) {
+const getClassFromOptions = function(type, options, opt_throwIfMissing) {
   const typeName = type.toString();
   const plugin = options.plugins[typeName] || DEFAULT;
 

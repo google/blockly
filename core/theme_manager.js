@@ -12,7 +12,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.ThemeManager');
+goog.module('Blockly.ThemeManager');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Theme');
 
@@ -27,7 +28,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @package
  */
-Blockly.ThemeManager = function(workspace, theme) {
+const ThemeManager = function(workspace, theme) {
 
   /**
    * The main workspace.
@@ -52,7 +53,7 @@ Blockly.ThemeManager = function(workspace, theme) {
 
   /**
    * A map of subscribed UI components, keyed by component name.
-   * @type {!Object<string, !Array<!Blockly.ThemeManager.Component>>}
+   * @type {!Object<string, !Array<!ThemeManager.Component>>}
    * @private
    */
   this.componentDB_ = Object.create(null);
@@ -65,14 +66,14 @@ Blockly.ThemeManager = function(workspace, theme) {
   *            propertyName:string
   *          }}
   */
-Blockly.ThemeManager.Component;
+ThemeManager.Component;
 
 /**
  * Get the workspace theme.
  * @return {!Blockly.Theme} The workspace theme.
  * @package
  */
-Blockly.ThemeManager.prototype.getTheme = function() {
+ThemeManager.prototype.getTheme = function() {
   return this.theme_;
 };
 
@@ -81,7 +82,7 @@ Blockly.ThemeManager.prototype.getTheme = function() {
  * @param {!Blockly.Theme} theme The workspace theme.
  * @package
  */
-Blockly.ThemeManager.prototype.setTheme = function(theme) {
+ThemeManager.prototype.setTheme = function(theme) {
   const prevTheme = this.theme_;
   this.theme_ = theme;
 
@@ -119,7 +120,7 @@ Blockly.ThemeManager.prototype.setTheme = function(theme) {
  * @param {!Blockly.Workspace} workspace The workspace to subscribe.
  * @package
  */
-Blockly.ThemeManager.prototype.subscribeWorkspace = function(workspace) {
+ThemeManager.prototype.subscribeWorkspace = function(workspace) {
   this.subscribedWorkspaces_.push(workspace);
 };
 
@@ -128,7 +129,7 @@ Blockly.ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @param {!Blockly.Workspace} workspace The workspace to unsubscribe.
  * @package
  */
-Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
+ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
   const index = this.subscribedWorkspaces_.indexOf(workspace);
   if (index < 0) {
     throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
@@ -145,7 +146,7 @@ Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
  * @param {string} propertyName The inline style property name to update.
  * @package
  */
-Blockly.ThemeManager.prototype.subscribe = function(element, componentName,
+ThemeManager.prototype.subscribe = function(element, componentName,
     propertyName) {
   if (!this.componentDB_[componentName]) {
     this.componentDB_[componentName] = [];
@@ -167,7 +168,7 @@ Blockly.ThemeManager.prototype.subscribe = function(element, componentName,
  * @param {Element} element The element to unsubscribe.
  * @package
  */
-Blockly.ThemeManager.prototype.unsubscribe = function(element) {
+ThemeManager.prototype.unsubscribe = function(element) {
   if (!element) {
     return;
   }
@@ -192,9 +193,11 @@ Blockly.ThemeManager.prototype.unsubscribe = function(element) {
  * @package
  * @suppress {checkTypes}
  */
-Blockly.ThemeManager.prototype.dispose = function() {
+ThemeManager.prototype.dispose = function() {
   this.owner_ = null;
   this.theme_ = null;
   this.subscribedWorkspaces_ = null;
   this.componentDB_ = null;
 };
+
+exports = ThemeManager;

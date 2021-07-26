@@ -164,7 +164,7 @@ goog.addDependency('../../core/shortcut_registry.js', ['Blockly.ShortcutRegistry
 goog.addDependency('../../core/theme.js', ['Blockly.Theme'], ['Blockly.registry', 'Blockly.utils', 'Blockly.utils.object']);
 goog.addDependency('../../core/theme/classic.js', ['Blockly.Themes.Classic'], ['Blockly.Theme']);
 goog.addDependency('../../core/theme/zelos.js', ['Blockly.Themes.Zelos'], ['Blockly.Theme']);
-goog.addDependency('../../core/theme_manager.js', ['Blockly.ThemeManager'], ['Blockly.Theme']);
+goog.addDependency('../../core/theme_manager.js', ['Blockly.ThemeManager'], ['Blockly.Theme'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/toolbox/category.js', ['Blockly.ToolboxCategory'], ['Blockly.ISelectableToolboxItem', 'Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es5'});
 goog.addDependency('../../core/toolbox/collapsible_category.js', ['Blockly.CollapsibleToolboxCategory'], ['Blockly.ICollapsibleToolboxItem', 'Blockly.ToolboxCategory', 'Blockly.ToolboxItem', 'Blockly.ToolboxSeparator', 'Blockly.registry', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox']);
 goog.addDependency('../../core/toolbox/separator.js', ['Blockly.ToolboxSeparator'], ['Blockly.IToolboxItem', 'Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es5'});

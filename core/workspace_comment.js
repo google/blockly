@@ -41,8 +41,8 @@ goog.require('Blockly.Events.CommentMove');
  */
 const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
-  this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
-      opt_id : utils.genUid();
+  this.id =
+      (opt_id && !workspace.getCommentById(opt_id)) ? opt_id : utils.genUid();
 
   workspace.addTopComment(this);
 
@@ -123,8 +123,7 @@ WorkspaceComment.prototype.dispose = function() {
   }
 
   if (Events.isEnabled()) {
-    Events.fire(
-        new (Events.get(Events.COMMENT_DELETE))(this));
+    Events.fire(new (Events.get(Events.COMMENT_DELETE))(this));
   }
 
   // Remove from the list of top comments and the comment database.
@@ -219,8 +218,7 @@ WorkspaceComment.prototype.setDeletable = function(deletable) {
  * @package
  */
 WorkspaceComment.prototype.isMovable = function() {
-  return this.movable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -237,8 +235,7 @@ WorkspaceComment.prototype.setMovable = function(movable) {
  * @return {boolean} True if editable.
  */
 WorkspaceComment.prototype.isEditable = function() {
-  return this.editable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+  return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -265,8 +262,8 @@ WorkspaceComment.prototype.getContent = function() {
  */
 WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    Events.fire(new (Events.get(Events.COMMENT_CHANGE))(
-        this, this.content_, content));
+    Events.fire(
+        new (Events.get(Events.COMMENT_CHANGE))(this, this.content_, content));
     this.content_ = content;
   }
 };
@@ -315,8 +312,7 @@ WorkspaceComment.fireCreateEvent = function(comment) {
       Events.setGroup(true);
     }
     try {
-      Events.fire(
-          new (Events.get(Events.COMMENT_CREATE))(comment));
+      Events.fire(new (Events.get(Events.COMMENT_CREATE))(comment));
     } finally {
       if (!existingGroup) {
         Events.setGroup(false);
@@ -335,8 +331,8 @@ WorkspaceComment.fireCreateEvent = function(comment) {
 WorkspaceComment.fromXml = function(xmlComment, workspace) {
   const info = WorkspaceComment.parseAttributes(xmlComment);
 
-  const comment = new WorkspaceComment(
-      workspace, info.content, info.h, info.w, info.id);
+  const comment =
+      new WorkspaceComment(workspace, info.content, info.h, info.w, info.id);
 
   const commentX = parseInt(xmlComment.getAttribute('x'), 10);
   const commentY = parseInt(xmlComment.getAttribute('y'), 10);

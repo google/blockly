@@ -1,5 +1,39 @@
 #!/bin/bash
 
+# This file makes extensive use of perl for the purpose of extracting and
+# replacing string (regex) patterns in a way that is both GNU and macOS
+# compatible.
+#
+# Common perl flags used (also decribed at https://perldoc.perl.org/perlrun):
+#   -e : Used to execute perl programs on the command line
+#   -p : Assumes an input loop around script. Prints every processed line.
+#   -n : Assumes an input loop around script. Does not print every line.
+#   -i : Used for in-place editing. Used for commands for find/replace.
+#   -l[octnum] : Assigns the output record separator "$/" as an octal number. If
+#        octnum is not present, sets output record separator to the current
+#        value of the input record separator "$\".
+#
+# Common perl commands found:
+# 1.  perl -pi -e 's/regex/replacement/modifiers'
+#   This command does an in-place search-and-replace. The global ("/g") modifier
+#   causes it to replace all occurrences, rather than only the first match.
+# 2.  perl -ne 'print m/regex/modifiers'
+#   This command returns the all regex matches. If the global ("/g") modifier is
+#   specified, then the capture group "()" is not necessary and it will return
+#   all matches, rather than only the first match.
+# 3.  perl -nle 'print $& while m{regex}modifiers'
+#   Similar to (2), but returns regex matches separated by newlines.
+#   The "m{regex}modifiers" is equivalent to "m/regex/modifiers" syntax.
+#
+# Additional information on regex:
+# This script makes use of some advanced regex syntax such as "capture groups"
+# and "lookaround assertions".
+# Additionally, characters are escaped from regex with a backslash "\".
+# Single quotes need to be escaped in both regex and the string, resulting in
+# '\'' being used to represent a single quote character.
+# For a reference to syntax of regular expressions in Perl, see:
+# https://perldoc.perl.org/perire
+
 #######################################
 # Logging functions.
 #######################################
@@ -98,10 +132,10 @@ step2 () {
   local filepath="$1"
 
   inf "Updating goog.provide declaration..."
-  perl -pi -e 's/^goog\.provide(\([^\)]+\)\;)/goog\.module\1\ngoog.module.declareLegacyNamespace\(\)\;/g' "${filepath}"
+  perl -pi -e 's/^goog\.provide(\([^\)]+\)\;)/goog\.module\1\ngoog.module.declareLegacyNamespace\(\)\;/' "${filepath}"
 
   inf "Extracting module name..."
-  local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
+  local module_name=$(perl -ne 'print m/(?<=^goog\.module\('\'')([^'\'']+)/' "${filepath}")
   if [[ -z "${module_name}" ]]; then
     err "Could not extract module name"
     return 1
@@ -109,7 +143,7 @@ step2 () {
   inf "Extracted module name \"${module_name}\""
 
   if [[ $(grep "${module_name} = " "${filepath}") ]]; then
-    local class_name=$(echo "${module_name}" | perl -nle'print $& while m{(\w+)$}g')
+    local class_name=$(echo "${module_name}" | perl -ne 'print m/(\w+)$/')
     inf "Found class \"${class_name}\" in file."
     inf "Updating class declaration..."
     perl -pi -e 's/^('"${module_name}"') =/const '"${class_name}"' =/g' "${filepath}"
@@ -144,19 +178,19 @@ step2 () {
 #######################################
 step3() {
   inf "Extracting module name..."
-  local module_name=$(perl -nle'print $& while m{(?<=^goog\.module\('\'')([^'\'')]+)}g' "${filepath}")
+  local module_name=$(perl -ne 'print m/(?<=^goog\.module\('\'')([^'\'']+)/' "${filepath}")
   if [[ -z "${module_name}" ]]; then
     err "Could not extract module name"
     return 1
   fi
   inf "Extracted module name \"${module_name}\""
 
-  local requires=$(perl -nle'print $& while m{(?:(?<=^goog.require\('\'')|(?<=^goog.requireType\('\''))[^'\'']+}g' "${filepath}")
+  local requires=$(perl -nle 'print $& while m{(?:(?<=^goog.require\('\'')|(?<=^goog.requireType\('\''))[^'\'']+}g' "${filepath}")
 
   # Process each require
   echo "${requires}" | while read -r require; do
     inf "Processing require \"${require}\""
-    local usages=$(perl -nle'print $& while m{'"${require}"'(?!'\'')}g' "${filepath}" | wc -l)
+    local usages=$(perl -nle 'print $& while m{'"${require}"'(?!'\'')}g' "${filepath}" | wc -l)
 
     if [[ "${usages}" -eq "0" ]]; then
       warn "Unused require \"${require}\""
@@ -168,11 +202,12 @@ step3() {
     perl -pi -e 's/^(goog\.(require|requireType)\('\'"${require}"\''\);)/const '"${require_name}"' = \1/' "${filepath}"
 
     # Parse property access of module
-    local direct_access_count=$(perl -nle'print $& while m{'"${require}"'[^\.'\'']}g' "${filepath}" | wc -l)
-    local properties_accessed=$(perl -nle'print $& while m{(?<='"${require}"'\.)(?!prototype)\w+}g' "${filepath}" | tr ' ' '\n' | sort -u)
+    local direct_access_count=$(perl -nle 'print $& while m{'"${require}"'[^\.'\'']}g' "${filepath}" | wc -l)
+    local properties_accessed=$(perl -nle 'print $& while m{(?<='"${require}"'\.)(?!prototype)\w+}g' "${filepath}" | sort -u)
+
     # Detect requires overlap
     # (ex: Blockly.utils require and Blockly.utils.dom also in requires)
-    local requires_overlap=$(echo "${requires}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
+    local requires_overlap=$(echo "${requires}" | perl -nle 'print $& while m{(?<='"${require}"'\.)\w+}g')
     if [[ -n "${requires_overlap}" ]]; then
       while read -r requires_overlap_prop; do
         properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
@@ -180,7 +215,7 @@ step3() {
     fi
     # Detect module name overlap
     # (ex: Blockly require and Blockly.ContextMenuItems module being converted)
-    local module_overlap=$(echo "${module_name}" | perl -nle'print $& while m{(?<='"${require}"'\.)\w+}g')
+    local module_overlap=$(echo "${module_name}" | perl -nle 'print $& while m{(?<='"${require}"'\.)\w+}g')
     if [[ -n "${module_overlap}" ]]; then
       properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${module_overlap}"'//g')
     fi

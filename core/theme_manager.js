@@ -15,16 +15,19 @@
 goog.module('Blockly.ThemeManager');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Theme');
-
-goog.requireType('Blockly.Workspace');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const dom = goog.require('Blockly.utils.dom');
 
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
- * @param {!Blockly.WorkspaceSvg} workspace The main workspace.
- * @param {!Blockly.Theme} theme The workspace theme.
+ * @param {!WorkspaceSvg} workspace The main workspace.
+ * @param {!Theme} theme The workspace theme.
  * @constructor
  * @package
  */
@@ -32,21 +35,21 @@ const ThemeManager = function(workspace, theme) {
 
   /**
    * The main workspace.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
 
   /**
    * The Blockly theme to use.
-   * @type {!Blockly.Theme}
+   * @type {!Theme}
    * @private
    */
   this.theme_ = theme;
 
   /**
    * A list of workspaces that are subscribed to this theme.
-   * @type {!Array<Blockly.Workspace>}
+   * @type {!Array<Workspace>}
    * @private
    */
   this.subscribedWorkspaces_ = [];
@@ -70,7 +73,7 @@ ThemeManager.Component;
 
 /**
  * Get the workspace theme.
- * @return {!Blockly.Theme} The workspace theme.
+ * @return {!Theme} The workspace theme.
  * @package
  */
 ThemeManager.prototype.getTheme = function() {
@@ -79,7 +82,7 @@ ThemeManager.prototype.getTheme = function() {
 
 /**
  * Set the workspace theme, and refresh the workspace and all components.
- * @param {!Blockly.Theme} theme The workspace theme.
+ * @param {!Theme} theme The workspace theme.
  * @package
  */
 ThemeManager.prototype.setTheme = function(theme) {
@@ -90,9 +93,9 @@ ThemeManager.prototype.setTheme = function(theme) {
   const injectionDiv = this.workspace_.getInjectionDiv();
   if (injectionDiv) {
     if (prevTheme) {
-      Blockly.utils.dom.removeClass(injectionDiv, prevTheme.getClassName());
+      dom.removeClass(injectionDiv, prevTheme.getClassName());
     }
-    Blockly.utils.dom.addClass(injectionDiv, this.theme_.getClassName());
+    dom.addClass(injectionDiv, this.theme_.getClassName());
   }
 
   // Refresh all subscribed workspaces.
@@ -117,7 +120,7 @@ ThemeManager.prototype.setTheme = function(theme) {
 /**
  * Subscribe a workspace to changes to the selected theme.  If a new theme is
  * set, the workspace is called to refresh its blocks.
- * @param {!Blockly.Workspace} workspace The workspace to subscribe.
+ * @param {!Workspace} workspace The workspace to subscribe.
  * @package
  */
 ThemeManager.prototype.subscribeWorkspace = function(workspace) {
@@ -126,7 +129,7 @@ ThemeManager.prototype.subscribeWorkspace = function(workspace) {
 
 /**
  * Unsubscribe a workspace to changes to the selected theme.
- * @param {!Blockly.Workspace} workspace The workspace to unsubscribe.
+ * @param {!Workspace} workspace The workspace to unsubscribe.
  * @package
  */
 ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {

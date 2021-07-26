@@ -14,18 +14,30 @@
 goog.module('Blockly.registry');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.blockRendering.Renderer');
-goog.requireType('Blockly.Cursor');
-goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.Field');
-goog.requireType('Blockly.IBlockDragger');
-goog.requireType('Blockly.IConnectionChecker');
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IMetricsManager');
-goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.Options');
-goog.requireType('Blockly.Theme');
-goog.requireType('Blockly.ToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const Abstract = goog.requireType('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const Cursor = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const Field = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
+/* eslint-disable-next-line no-unused-vars */
+const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const IFlyout = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const IToolbox = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const Options = goog.requireType('Blockly.Options');
+/* eslint-disable-next-line no-unused-vars */
+const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
 
 
 /**
@@ -70,44 +82,44 @@ Type.prototype.toString = function() {
   return this.name_;
 };
 
-/** @type {!Type<Blockly.IConnectionChecker>} */
+/** @type {!Type<IConnectionChecker>} */
 Type.CONNECTION_CHECKER =
     new Type('connectionChecker');
 
-/** @type {!Type<Blockly.Cursor>} */
+/** @type {!Type<Cursor>} */
 Type.CURSOR = new Type('cursor');
 
-/** @type {!Type<Blockly.Events.Abstract>} */
+/** @type {!Type<Abstract>} */
 Type.EVENT = new Type('event');
 
-/** @type {!Type<Blockly.Field>} */
+/** @type {!Type<Field>} */
 Type.FIELD = new Type('field');
 
-/** @type {!Type<Blockly.blockRendering.Renderer>} */
+/** @type {!Type<Renderer>} */
 Type.RENDERER = new Type('renderer');
 
-/** @type {!Type<Blockly.IToolbox>} */
+/** @type {!Type<IToolbox>} */
 Type.TOOLBOX = new Type('toolbox');
 
-/** @type {!Type<Blockly.Theme>} */
+/** @type {!Type<Theme>} */
 Type.THEME = new Type('theme');
 
-/** @type {!Type<Blockly.ToolboxItem>} */
+/** @type {!Type<ToolboxItem>} */
 Type.TOOLBOX_ITEM = new Type('toolboxItem');
 
-/** @type {!Type<Blockly.IFlyout>} */
+/** @type {!Type<IFlyout>} */
 Type.FLYOUTS_VERTICAL_TOOLBOX =
     new Type('flyoutsVerticalToolbox');
 
-/** @type {!Type<Blockly.IFlyout>} */
+/** @type {!Type<IFlyout>} */
 Type.FLYOUTS_HORIZONTAL_TOOLBOX =
     new Type('flyoutsHorizontalToolbox');
 
-/** @type {!Type<Blockly.IMetricsManager>} */
+/** @type {!Type<IMetricsManager>} */
 Type.METRICS_MANAGER =
     new Type('metricsManager');
 
-/** @type {!Type<Blockly.IBlockDragger>} */
+/** @type {!Type<IBlockDragger>} */
 Type.BLOCK_DRAGGER =
     new Type('blockDragger');
 
@@ -286,7 +298,7 @@ exports.getObject = getObject;
  * Gets the class from Blockly options for the given type.
  * This is used for plugins that override a built in feature. (e.g. Toolbox)
  * @param {!Type<T>} type The type of the plugin.
- * @param {!Blockly.Options} options The option object to check for the given
+ * @param {!Options} options The option object to check for the given
  *     plugin.
  * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
  *     are unable to find the plugin.

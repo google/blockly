@@ -139,7 +139,7 @@ Blockly.registry.register = function(
   if (!registryItem) {
     throw Error('Can not register a null value');
   }
-  var typeRegistry = Blockly.registry.typeMap_[type];
+  let typeRegistry = Blockly.registry.typeMap_[type];
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
     typeRegistry = Blockly.registry.typeMap_[type] = Object.create(null);
@@ -184,7 +184,7 @@ Blockly.registry.validate_ = function(type, registryItem) {
 Blockly.registry.unregister = function(type, name) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
-  var typeRegistry = Blockly.registry.typeMap_[type];
+  const typeRegistry = Blockly.registry.typeMap_[type];
   if (!typeRegistry || !typeRegistry[name]) {
     console.warn('Unable to unregister [' + name + '][' + type + '] from the ' +
       'registry.');
@@ -208,9 +208,9 @@ Blockly.registry.unregister = function(type, name) {
 Blockly.registry.getItem_ = function(type, name, opt_throwIfMissing) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
-  var typeRegistry = Blockly.registry.typeMap_[type];
+  const typeRegistry = Blockly.registry.typeMap_[type];
   if (!typeRegistry || !typeRegistry[name]) {
-    var msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
+    const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
     if (opt_throwIfMissing) {
       throw new Error(msg + ' You must require or register a ' + type +
         ' plugin.');
@@ -235,7 +235,7 @@ Blockly.registry.getItem_ = function(type, name, opt_throwIfMissing) {
 Blockly.registry.hasItem = function(type, name) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
-  var typeRegistry = Blockly.registry.typeMap_[type];
+  const typeRegistry = Blockly.registry.typeMap_[type];
   if (!typeRegistry) {
     return false;
   }
@@ -286,8 +286,8 @@ Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {
  */
 Blockly.registry.getClassFromOptions = function(type, options,
     opt_throwIfMissing) {
-  var typeName = type.toString();
-  var plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
+  const typeName = type.toString();
+  const plugin = options.plugins[typeName] || Blockly.registry.DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
   if (typeof plugin == 'function') {

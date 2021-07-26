@@ -185,7 +185,7 @@ Blockly.WorkspaceComment.prototype.getXY = function() {
  * @package
  */
 Blockly.WorkspaceComment.prototype.moveBy = function(dx, dy) {
-  var event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(this);
+  const event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
@@ -275,7 +275,7 @@ Blockly.WorkspaceComment.prototype.setContent = function(content) {
  * @package
  */
 Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
-  var element = this.toXml(opt_noId);
+  const element = this.toXml(opt_noId);
   element.setAttribute('x', Math.round(this.xy_.x));
   element.setAttribute('y', Math.round(this.xy_.y));
   element.setAttribute('h', this.height_);
@@ -292,7 +292,7 @@ Blockly.WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
-  var commentElement = Blockly.utils.xml.createElement('comment');
+  const commentElement = Blockly.utils.xml.createElement('comment');
   if (!opt_noId) {
     commentElement.id = this.id;
   }
@@ -307,7 +307,7 @@ Blockly.WorkspaceComment.prototype.toXml = function(opt_noId) {
  */
 Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
   if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
+    const existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
@@ -330,13 +330,13 @@ Blockly.WorkspaceComment.fireCreateEvent = function(comment) {
  * @package
  */
 Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
-  var info = Blockly.WorkspaceComment.parseAttributes(xmlComment);
+  const info = Blockly.WorkspaceComment.parseAttributes(xmlComment);
 
-  var comment = new Blockly.WorkspaceComment(
+  const comment = new Blockly.WorkspaceComment(
       workspace, info.content, info.h, info.w, info.id);
 
-  var commentX = parseInt(xmlComment.getAttribute('x'), 10);
-  var commentY = parseInt(xmlComment.getAttribute('y'), 10);
+  const commentX = parseInt(xmlComment.getAttribute('x'), 10);
+  const commentY = parseInt(xmlComment.getAttribute('y'), 10);
   if (!isNaN(commentX) && !isNaN(commentY)) {
     comment.moveBy(commentX, commentY);
   }
@@ -353,8 +353,8 @@ Blockly.WorkspaceComment.fromXml = function(xmlComment, workspace) {
  * @package
  */
 Blockly.WorkspaceComment.parseAttributes = function(xml) {
-  var xmlH = xml.getAttribute('h');
-  var xmlW = xml.getAttribute('w');
+  const xmlH = xml.getAttribute('h');
+  const xmlW = xml.getAttribute('w');
 
   return {
     // @type {string}

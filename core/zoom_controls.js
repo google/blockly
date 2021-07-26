@@ -10,8 +10,10 @@
  */
 'use strict';
 
-goog.provide('Blockly.ZoomControls');
+goog.module('Blockly.ZoomControls');
+goog.module.declareLegacyNamespace();
 
+goog.require('Blockly');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.Css');
@@ -36,7 +38,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @implements {Blockly.IPositionable}
  */
-Blockly.ZoomControls = function(workspace) {
+const ZoomControls = function(workspace) {
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -102,7 +104,7 @@ Blockly.ZoomControls = function(workspace) {
  * @const
  * @private
  */
-Blockly.ZoomControls.prototype.WIDTH_ = 32;
+ZoomControls.prototype.WIDTH_ = 32;
 
 /**
  * Height of each zoom control.
@@ -110,7 +112,7 @@ Blockly.ZoomControls.prototype.WIDTH_ = 32;
  * @const
  * @private
  */
-Blockly.ZoomControls.prototype.HEIGHT_ = 32;
+ZoomControls.prototype.HEIGHT_ = 32;
 
 /**
  * Small spacing used between the zoom in and out control, in pixels.
@@ -118,7 +120,7 @@ Blockly.ZoomControls.prototype.HEIGHT_ = 32;
  * @const
  * @private
  */
-Blockly.ZoomControls.prototype.SMALL_SPACING_ = 2;
+ZoomControls.prototype.SMALL_SPACING_ = 2;
 
 /**
  * Large spacing used between the zoom in and reset control, in pixels.
@@ -126,7 +128,7 @@ Blockly.ZoomControls.prototype.SMALL_SPACING_ = 2;
  * @const
  * @private
  */
-Blockly.ZoomControls.prototype.LARGE_SPACING_ = 11;
+ZoomControls.prototype.LARGE_SPACING_ = 11;
 
 /**
  * Distance between zoom controls and bottom or top edge of workspace.
@@ -134,48 +136,48 @@ Blockly.ZoomControls.prototype.LARGE_SPACING_ = 11;
  * @const
  * @private
  */
-Blockly.ZoomControls.prototype.MARGIN_VERTICAL_ = 20;
+ZoomControls.prototype.MARGIN_VERTICAL_ = 20;
 
 /**
  * Distance between zoom controls and right or left edge of workspace.
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.MARGIN_HORIZONTAL_ = 20;
+ZoomControls.prototype.MARGIN_HORIZONTAL_ = 20;
 
 /**
  * The SVG group containing the zoom controls.
  * @type {SVGElement}
  * @private
  */
-Blockly.ZoomControls.prototype.svgGroup_ = null;
+ZoomControls.prototype.svgGroup_ = null;
 
 /**
  * Left coordinate of the zoom controls.
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.left_ = 0;
+ZoomControls.prototype.left_ = 0;
 
 /**
  * Top coordinate of the zoom controls.
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.top_ = 0;
+ZoomControls.prototype.top_ = 0;
 
 /**
  * Whether this has been initialized.
  * @type {boolean}
  * @private
  */
-Blockly.ZoomControls.prototype.initialized_ = false;
+ZoomControls.prototype.initialized_ = false;
 
 /**
  * Create the zoom controls.
  * @return {!SVGElement} The zoom controls SVG group.
  */
-Blockly.ZoomControls.prototype.createDom = function() {
+ZoomControls.prototype.createDom = function() {
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G, {}, null);
 
@@ -196,7 +198,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
 /**
  * Initializes the zoom controls.
  */
-Blockly.ZoomControls.prototype.init = function() {
+ZoomControls.prototype.init = function() {
   this.workspace_.getComponentManager().addComponent({
     component: this,
     weight: 2,
@@ -209,7 +211,7 @@ Blockly.ZoomControls.prototype.init = function() {
  * Disposes of this zoom controls.
  * Unlink from all DOM elements to prevent memory leaks.
  */
-Blockly.ZoomControls.prototype.dispose = function() {
+ZoomControls.prototype.dispose = function() {
   this.workspace_.getComponentManager().removeComponent('zoomControls');
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
@@ -231,7 +233,7 @@ Blockly.ZoomControls.prototype.dispose = function() {
  * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
-Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
+ZoomControls.prototype.getBoundingRectangle = function() {
   let height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
   if (this.zoomResetGroup_) {
     height += this.LARGE_SPACING_ + this.HEIGHT_;
@@ -250,7 +252,7 @@ Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
  * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
+ZoomControls.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
   if (!this.initialized_) {
     return;
@@ -309,7 +311,7 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
  *     instances on the same page.
  * @private
  */
-Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
+ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
   /* This markup will be generated and added to the .svgGroup_:
   <g class="blocklyZoom">
     <clipPath id="blocklyZoomoutClipPath837493">
@@ -361,7 +363,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
  *     instances on the same page.
  * @private
  */
-Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
+ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
   /* This markup will be generated and added to the .svgGroup_:
   <g class="blocklyZoom">
     <clipPath id="blocklyZoominClipPath837493">
@@ -414,7 +416,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
  * @param {!Event} e A mouse down event.
  * @private
  */
-Blockly.ZoomControls.prototype.zoom_ = function(amount, e) {
+ZoomControls.prototype.zoom_ = function(amount, e) {
   this.workspace_.markFocused();
   this.workspace_.zoomCenter(amount);
   this.fireZoomEvent_();
@@ -430,7 +432,7 @@ Blockly.ZoomControls.prototype.zoom_ = function(amount, e) {
  *     instances on the same page.
  * @private
  */
-Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
+ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
   /* This markup will be generated and added to the .svgGroup_:
   <g class="blocklyZoom">
     <clipPath id="blocklyZoomresetClipPath837493">
@@ -479,7 +481,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
  * @param {!Event} e A mouse down event.
  * @private
  */
-Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
+ZoomControls.prototype.resetZoom_ = function(e) {
   this.workspace_.markFocused();
 
   // zoom is passed amount and computes the new scale using the formula:
@@ -507,7 +509,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * Fires a zoom control UI event.
  * @private
  */
-Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {
+ZoomControls.prototype.fireZoomEvent_ = function() {
   const uiEvent = new (Blockly.Events.get(Blockly.Events.CLICK))(
       null, this.workspace_.id, 'zoom_controls');
   Blockly.Events.fire(uiEvent);
@@ -531,3 +533,5 @@ Blockly.Css.register([
   '}'
   /* eslint-enable indent */
 ]);
+
+exports = ZoomControls;

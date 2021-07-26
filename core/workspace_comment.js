@@ -13,7 +13,12 @@
 goog.module('Blockly.WorkspaceComment');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const utils = goog.require('Blockly.utils');
+const xml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentChange');
 /** @suppress {extraRequire} */
@@ -22,16 +27,11 @@ goog.require('Blockly.Events.CommentCreate');
 goog.require('Blockly.Events.CommentDelete');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentMove');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.xml');
-
-goog.requireType('Blockly.Workspace');
 
 
 /**
  * Class for a workspace comment.
- * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {!Workspace} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
  * @param {number} height Height of the comment.
  * @param {number} width Width of the comment.
@@ -42,17 +42,17 @@ goog.requireType('Blockly.Workspace');
 const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
-      opt_id : Blockly.utils.genUid();
+      opt_id : utils.genUid();
 
   workspace.addTopComment(this);
 
   /**
    * The comment's position in workspace units.  (0, 0) is at the workspace's
    * origin; scale does not change this value.
-   * @type {!Blockly.utils.Coordinate}
+   * @type {!Coordinate}
    * @protected
    */
-  this.xy_ = new Blockly.utils.Coordinate(0, 0);
+  this.xy_ = new Coordinate(0, 0);
 
   /**
    * The comment's height in workspace units.  Scale does not change this value.
@@ -69,7 +69,7 @@ const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   this.width_ = width;
 
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Workspace}
    */
   this.workspace = workspace;
 
@@ -122,9 +122,9 @@ WorkspaceComment.prototype.dispose = function() {
     return;
   }
 
-  if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(
-        new (Blockly.Events.get(Blockly.Events.COMMENT_DELETE))(this));
+  if (Events.isEnabled()) {
+    Events.fire(
+        new (Events.get(Events.COMMENT_DELETE))(this));
   }
 
   // Remove from the list of top comments and the comment database.
@@ -173,12 +173,12 @@ WorkspaceComment.prototype.setWidth = function(width) {
 
 /**
  * Get stored location.
- * @return {!Blockly.utils.Coordinate} The comment's stored location.
+ * @return {!Coordinate} The comment's stored location.
  *   This is not valid if the comment is currently being dragged.
  * @package
  */
 WorkspaceComment.prototype.getXY = function() {
-  return new Blockly.utils.Coordinate(this.xy_.x, this.xy_.y);
+  return new Coordinate(this.xy_.x, this.xy_.y);
 };
 
 /**
@@ -188,10 +188,10 @@ WorkspaceComment.prototype.getXY = function() {
  * @package
  */
 WorkspaceComment.prototype.moveBy = function(dx, dy) {
-  const event = new (Blockly.Events.get(Blockly.Events.COMMENT_MOVE))(this);
+  const event = new (Events.get(Events.COMMENT_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
-  Blockly.Events.fire(event);
+  Events.fire(event);
 };
 
 /**
@@ -265,7 +265,7 @@ WorkspaceComment.prototype.getContent = function() {
  */
 WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.COMMENT_CHANGE))(
+    Events.fire(new (Events.get(Events.COMMENT_CHANGE))(
         this, this.content_, content));
     this.content_ = content;
   }
@@ -295,7 +295,7 @@ WorkspaceComment.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 WorkspaceComment.prototype.toXml = function(opt_noId) {
-  const commentElement = Blockly.utils.xml.createElement('comment');
+  const commentElement = xml.createElement('comment');
   if (!opt_noId) {
     commentElement.id = this.id;
   }
@@ -309,17 +309,17 @@ WorkspaceComment.prototype.toXml = function(opt_noId) {
  * @package
  */
 WorkspaceComment.fireCreateEvent = function(comment) {
-  if (Blockly.Events.isEnabled()) {
-    const existingGroup = Blockly.Events.getGroup();
+  if (Events.isEnabled()) {
+    const existingGroup = Events.getGroup();
     if (!existingGroup) {
-      Blockly.Events.setGroup(true);
+      Events.setGroup(true);
     }
     try {
-      Blockly.Events.fire(
-          new (Blockly.Events.get(Blockly.Events.COMMENT_CREATE))(comment));
+      Events.fire(
+          new (Events.get(Events.COMMENT_CREATE))(comment));
     } finally {
       if (!existingGroup) {
-        Blockly.Events.setGroup(false);
+        Events.setGroup(false);
       }
     }
   }
@@ -328,7 +328,7 @@ WorkspaceComment.fireCreateEvent = function(comment) {
 /**
  * Decode an XML comment tag and create a comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
- * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Workspace} workspace The workspace.
  * @return {!WorkspaceComment} The created workspace comment.
  * @package
  */

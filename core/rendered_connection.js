@@ -135,8 +135,8 @@ Blockly.RenderedConnection.prototype.targetBlock = function() {
  * @return {number} The distance between connections, in workspace units.
  */
 Blockly.RenderedConnection.prototype.distanceFrom = function(otherConnection) {
-  var xDiff = this.x - otherConnection.x;
-  var yDiff = this.y - otherConnection.y;
+  const xDiff = this.x - otherConnection.x;
+  const yDiff = this.y - otherConnection.y;
   return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 };
 
@@ -153,12 +153,12 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     return;
   }
   // Move the root block.
-  var rootBlock = this.sourceBlock_.getRootBlock();
+  let rootBlock = this.sourceBlock_.getRootBlock();
   if (rootBlock.isInFlyout) {
     // Don't move blocks around in a flyout.
     return;
   }
-  var reverse = false;
+  let reverse = false;
   if (!rootBlock.isMovable()) {
     // Can't bump an uneditable block away.
     // Check to see if the other block is movable.
@@ -171,13 +171,13 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     reverse = true;
   }
   // Raise it to the top for extra visibility.
-  var selected = Blockly.selected == rootBlock;
+  const selected = Blockly.selected == rootBlock;
   selected || rootBlock.addSelect();
-  var dx =
+  let dx =
       (staticConnection.x + Blockly.internalConstants.SNAP_RADIUS +
        Math.floor(Math.random() * Blockly.internalConstants.BUMP_RANDOMNESS)) -
       this.x;
-  var dy =
+  let dy =
       (staticConnection.y + Blockly.internalConstants.SNAP_RADIUS +
        Math.floor(Math.random() * Blockly.internalConstants.BUMP_RANDOMNESS)) -
       this.y;
@@ -257,16 +257,16 @@ Blockly.RenderedConnection.prototype.getOffsetInBlock = function() {
  * @package
  */
 Blockly.RenderedConnection.prototype.tighten = function() {
-  var dx = this.targetConnection.x - this.x;
-  var dy = this.targetConnection.y - this.y;
+  const dx = this.targetConnection.x - this.x;
+  const dy = this.targetConnection.y - this.y;
   if (dx != 0 || dy != 0) {
-    var block = this.targetBlock();
-    var svgRoot = block.getSvgRoot();
+    const block = this.targetBlock();
+    const svgRoot = block.getSvgRoot();
     if (!svgRoot) {
       throw Error('block is not rendered.');
     }
     // Workspace coordinates.
-    var xy = Blockly.utils.getRelativeXY(svgRoot);
+    const xy = Blockly.utils.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute('transform',
         'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections(-dx, -dy);
@@ -291,20 +291,20 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dxy) {
  * Add highlighting around this connection.
  */
 Blockly.RenderedConnection.prototype.highlight = function() {
-  var steps;
-  var sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
-  var renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
-  var shape = renderConstants.shapeFor(this);
+  let steps;
+  const sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
+  const renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
+  const shape = renderConstants.shapeFor(this);
   if (this.type == Blockly.connectionTypes.INPUT_VALUE ||
       this.type == Blockly.connectionTypes.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
-    var yLen = renderConstants.TAB_OFFSET_FROM_TOP;
+    const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen) +
         shape.pathDown +
         Blockly.utils.svgPaths.lineOnAxis('v', yLen);
   } else {
-    var xLen =
+    const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
     steps = Blockly.utils.svgPaths.moveBy(-xLen, 0) +
@@ -312,9 +312,9 @@ Blockly.RenderedConnection.prototype.highlight = function() {
         shape.pathLeft +
         Blockly.utils.svgPaths.lineOnAxis('h', xLen);
   }
-  var xy = this.sourceBlock_.getRelativeToSurfaceXY();
-  var x = this.x - xy.x;
-  var y = this.y - xy.y;
+  const xy = this.sourceBlock_.getRelativeToSurfaceXY();
+  const x = this.x - xy.x;
+  const y = this.y - xy.y;
   Blockly.Connection.highlightedPath_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.PATH,
       {
@@ -372,17 +372,17 @@ Blockly.RenderedConnection.prototype.setTracking = function(doTracking) {
 Blockly.RenderedConnection.prototype.stopTrackingAll = function() {
   this.setTracking(false);
   if (this.targetConnection) {
-    var blocks = this.targetBlock().getDescendants(false);
-    for (var i = 0; i < blocks.length; i++) {
-      var block = blocks[i];
+    const blocks = this.targetBlock().getDescendants(false);
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
       // Stop tracking connections of all children.
-      var connections = block.getConnections_(true);
-      for (var j = 0; j < connections.length; j++) {
+      const connections = block.getConnections_(true);
+      for (let j = 0; j < connections.length; j++) {
         connections[j].setTracking(false);
       }
       // Close all bubbles of all children.
-      var icons = block.getIcons();
-      for (var j = 0; j < icons.length; j++) {
+      const icons = block.getIcons();
+      for (let j = 0; j < icons.length; j++) {
         icons[j].setVisible(false);
       }
     }
@@ -400,15 +400,15 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   // rendering takes place, since rendering requires knowing the dimensions
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
-  var renderList = [];
+  const renderList = [];
   if (this.type != Blockly.connectionTypes.INPUT_VALUE &&
       this.type != Blockly.connectionTypes.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
-  var block = this.targetBlock();
+  const block = this.targetBlock();
   if (block) {
-    var connections;
+    let connections;
     if (block.isCollapsed()) {
       // This block should only be partially revealed since it is collapsed.
       connections = [];
@@ -419,7 +419,7 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
       // Show all connections of this block.
       connections = block.getConnections_(true);
     }
-    for (var i = 0; i < connections.length; i++) {
+    for (let i = 0; i < connections.length; i++) {
       renderList.push.apply(renderList, connections[i].startTrackingAll());
     }
     if (!renderList.length) {
@@ -463,9 +463,9 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
  */
 Blockly.RenderedConnection.prototype.onFailedConnect =
     function(otherConnection) {
-      var block = this.getSourceBlock();
+      const block = this.getSourceBlock();
       if (Blockly.Events.recordUndo) {
-        var group = Blockly.Events.getGroup();
+        const group = Blockly.Events.getGroup();
         setTimeout(function() {
           if (!block.isDisposed() && !block.getParent()) {
             Blockly.Events.setGroup(group);
@@ -508,7 +508,7 @@ Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
  */
 Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
   Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
-  var blockShadow = this.targetBlock();
+  const blockShadow = this.targetBlock();
   if (!blockShadow) {
     // This connection must not have a shadowDom_.
     return;
@@ -516,7 +516,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
   blockShadow.initSvg();
   blockShadow.render(false);
 
-  var parentBlock = this.getSourceBlock();
+  const parentBlock = this.getSourceBlock();
   if (parentBlock.rendered) {
     parentBlock.render();
   }
@@ -543,11 +543,11 @@ Blockly.RenderedConnection.prototype.neighbours = function(maxLimit) {
 Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   Blockly.RenderedConnection.superClass_.connect_.call(this, childConnection);
 
-  var parentConnection = this;
-  var parentBlock = parentConnection.getSourceBlock();
-  var childBlock = childConnection.getSourceBlock();
-  var parentRendered = parentBlock.rendered;
-  var childRendered = childBlock.rendered;
+  const parentConnection = this;
+  const parentBlock = parentConnection.getSourceBlock();
+  const childBlock = childConnection.getSourceBlock();
+  const parentRendered = parentBlock.rendered;
+  const childRendered = childBlock.rendered;
 
   if (parentRendered) {
     parentBlock.updateDisabled();
@@ -569,9 +569,9 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   }
 
   // The input the child block is connected to (if any).
-  var parentInput = parentBlock.getInputWithBlock(childBlock);
+  const parentInput = parentBlock.getInputWithBlock(childBlock);
   if (parentInput) {
-    var visible = parentInput.isVisible();
+    const visible = parentInput.isVisible();
     childBlock.getSvgRoot().style.display = visible ? 'block' : 'none';
   }
 };
@@ -585,7 +585,7 @@ Blockly.RenderedConnection.prototype.onCheckChanged_ = function() {
   if (this.isConnected() && (!this.targetConnection ||
       !this.getConnectionChecker().canConnect(
           this, this.targetConnection, false))) {
-    var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
+    const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
     child.unplug();
     // Bump away.
     this.sourceBlock_.bumpNeighbours();

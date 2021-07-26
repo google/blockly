@@ -182,7 +182,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
-  var rnd = String(Math.random()).substring(2);
+  const rnd = String(Math.random()).substring(2);
   this.createZoomOutSvg_(rnd);
   this.createZoomInSvg_(rnd);
   if (this.workspace_.isMovable()) {
@@ -232,12 +232,12 @@ Blockly.ZoomControls.prototype.dispose = function() {
  *   bounding box should be ignored by other UI elements.
  */
 Blockly.ZoomControls.prototype.getBoundingRectangle = function() {
-  var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
+  let height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
   if (this.zoomResetGroup_) {
     height += this.LARGE_SPACING_ + this.HEIGHT_;
   }
-  var bottom = this.top_ + height;
-  var right = this.left_ + this.WIDTH_;
+  const bottom = this.top_ + height;
+  const right = this.left_ + this.WIDTH_;
   return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
 };
 
@@ -256,41 +256,41 @@ Blockly.ZoomControls.prototype.position = function(metrics, savedPositions) {
     return;
   }
 
-  var cornerPosition =
+  const cornerPosition =
       Blockly.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
-  var height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
+  let height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
   if (this.zoomResetGroup_) {
     height += this.LARGE_SPACING_ + this.HEIGHT_;
   }
-  var startRect = Blockly.uiPosition.getStartPositionRect(
+  const startRect = Blockly.uiPosition.getStartPositionRect(
       cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics,
       this.workspace_);
 
-  var verticalPosition = cornerPosition.vertical;
-  var bumpDirection =
+  const verticalPosition = cornerPosition.vertical;
+  const bumpDirection =
       verticalPosition === Blockly.uiPosition.verticalPosition.TOP ?
           Blockly.uiPosition.bumpDirection.DOWN :
           Blockly.uiPosition.bumpDirection.UP;
-  var positionRect = Blockly.uiPosition.bumpPositionRect(
+  const positionRect = Blockly.uiPosition.bumpPositionRect(
       startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
   if (verticalPosition === Blockly.uiPosition.verticalPosition.TOP) {
-    var zoomInTranslateY = this.SMALL_SPACING_ + this.HEIGHT_;
+    const zoomInTranslateY = this.SMALL_SPACING_ + this.HEIGHT_;
     this.zoomInGroup_.setAttribute('transform',
         'translate(0, ' + zoomInTranslateY + ')');
     if (this.zoomResetGroup_) {
-      var zoomResetTranslateY =
+      const zoomResetTranslateY =
           zoomInTranslateY + this.LARGE_SPACING_ + this.HEIGHT_;
       this.zoomResetGroup_.setAttribute('transform',
           'translate(0, ' + zoomResetTranslateY + ')');
     }
   } else {
-    var zoomInTranslateY = this.zoomResetGroup_ ?
+    const zoomInTranslateY = this.zoomResetGroup_ ?
         this.LARGE_SPACING_ + this.HEIGHT_ : 0;
     this.zoomInGroup_.setAttribute('transform',
         'translate(0, ' + zoomInTranslateY + ')');
-    var zoomOutTranslateY =
+    const zoomOutTranslateY =
         zoomInTranslateY + this.SMALL_SPACING_ + this.HEIGHT_;
     this.zoomOutGroup_.setAttribute('transform',
         'translate(0, ' + zoomOutTranslateY + ')');
@@ -322,7 +322,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
   this.zoomOutGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G,
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.dom.createSvgElement(
+  const clip = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CLIPPATH,
       {
         'id': 'blocklyZoomoutClipPath' + rnd
@@ -335,7 +335,7 @@ Blockly.ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
         'height': 32,
       },
       clip);
-  var zoomoutSvg = Blockly.utils.dom.createSvgElement(
+  const zoomoutSvg = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.IMAGE, {
         'width': Blockly.internalConstants.SPRITE.width,
         'height': Blockly.internalConstants.SPRITE.height,
@@ -374,7 +374,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
   this.zoomInGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G,
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.dom.createSvgElement(
+  const clip = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CLIPPATH,
       {
         'id': 'blocklyZoominClipPath' + rnd
@@ -387,7 +387,7 @@ Blockly.ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
         'height': 32,
       },
       clip);
-  var zoominSvg = Blockly.utils.dom.createSvgElement(
+  const zoominSvg = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.IMAGE, {
         'width': Blockly.internalConstants.SPRITE.width,
         'height': Blockly.internalConstants.SPRITE.height,
@@ -443,7 +443,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
   this.zoomResetGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G,
       {'class': 'blocklyZoom'}, this.svgGroup_);
-  var clip = Blockly.utils.dom.createSvgElement(
+  const clip = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CLIPPATH,
       {
         'id': 'blocklyZoomresetClipPath' + rnd
@@ -456,7 +456,7 @@ Blockly.ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
         'height': 32
       },
       clip);
-  var zoomresetSvg = Blockly.utils.dom.createSvgElement(
+  const zoomresetSvg = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.IMAGE, {
         'width': Blockly.internalConstants.SPRITE.width,
         'height': Blockly.internalConstants.SPRITE.height,
@@ -484,14 +484,14 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
 
   // zoom is passed amount and computes the new scale using the formula:
   // targetScale = currentScale * Math.pow(speed, amount)
-  var targetScale = this.workspace_.options.zoomOptions.startScale;
-  var currentScale = this.workspace_.scale;
-  var speed = this.workspace_.options.zoomOptions.scaleSpeed;
+  const targetScale = this.workspace_.options.zoomOptions.startScale;
+  const currentScale = this.workspace_.scale;
+  const speed = this.workspace_.options.zoomOptions.scaleSpeed;
   // To compute amount:
   // amount = log(speed, (targetScale / currentScale))
   // Math.log computes natural logarithm (ln), to change the base, use formula:
   // log(base, value) = ln(value) / ln(base)
-  var amount = Math.log(targetScale / currentScale) / Math.log(speed);
+  const amount = Math.log(targetScale / currentScale) / Math.log(speed);
   this.workspace_.beginCanvasTransition();
   this.workspace_.zoomCenter(amount);
   this.workspace_.scrollCenter();
@@ -508,7 +508,7 @@ Blockly.ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 Blockly.ZoomControls.prototype.fireZoomEvent_ = function() {
-  var uiEvent = new (Blockly.Events.get(Blockly.Events.CLICK))(
+  const uiEvent = new (Blockly.Events.get(Blockly.Events.CLICK))(
       null, this.workspace_.id, 'zoom_controls');
   Blockly.Events.fire(uiEvent);
 };

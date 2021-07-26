@@ -145,8 +145,8 @@ Blockly.Warning.prototype.setText = function(text, id) {
  * @return {string} All texts concatenated into one string.
  */
 Blockly.Warning.prototype.getText = function() {
-  var allWarnings = [];
-  for (var id in this.text_) {
+  const allWarnings = [];
+  for (let id in this.text_) {
     allWarnings.push(this.text_[id]);
   }
   return allWarnings.join('\n');

@@ -96,7 +96,7 @@ Blockly.ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    */
   this.cssConfig_ = this.makeDefaultCssConfig_();
 
-  var cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
+  const cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 
   /**
@@ -193,13 +193,14 @@ Blockly.ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
-  var contents = categoryDef['contents'];
+  const contents = categoryDef['contents'];
 
   if (categoryDef['custom']) {
     this.flyoutItems_ = categoryDef['custom'];
   } else if (contents) {
-    for (var i = 0, itemDef; (itemDef = contents[i]); i++) {
-      var flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+    for (let i = 0; i < contents.length; i++) {
+      const itemDef = contents[i];
+      const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
       this.flyoutItems_.push(flyoutItem);
     }
   }
@@ -256,7 +257,7 @@ Blockly.ToolboxCategory.prototype.createDom_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createContainer_ = function() {
-  var container = document.createElement('div');
+  const container = document.createElement('div');
   Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
   return container;
 };
@@ -268,9 +269,9 @@ Blockly.ToolboxCategory.prototype.createContainer_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
-  var rowDiv = document.createElement('div');
+  const rowDiv = document.createElement('div');
   Blockly.utils.dom.addClass(rowDiv, this.cssConfig_['row']);
-  var nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel();
+  let nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel();
   nestedPadding = nestedPadding.toString() + 'px';
   this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
       rowDiv.style.paddingLeft = nestedPadding;
@@ -284,7 +285,7 @@ Blockly.ToolboxCategory.prototype.createRowContainer_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function() {
-  var contentsContainer = document.createElement('div');
+  const contentsContainer = document.createElement('div');
   Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
   return contentsContainer;
 };
@@ -295,7 +296,7 @@ Blockly.ToolboxCategory.prototype.createRowContentsContainer_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
-  var toolboxIcon = document.createElement('span');
+  const toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
     Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
   }
@@ -312,7 +313,7 @@ Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.createLabelDom_ = function(name) {
-  var toolboxLabel = document.createElement('span');
+  const toolboxLabel = document.createElement('span');
   toolboxLabel.setAttribute('id', this.getId() + '.label');
   toolboxLabel.textContent = name;
   Blockly.utils.dom.addClass(toolboxLabel, this.cssConfig_['label']);
@@ -336,7 +337,7 @@ Blockly.ToolboxCategory.prototype.refreshTheme = function() {
  */
 Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
   if (colour) {
-    var border = Blockly.ToolboxCategory.borderWidth + 'px solid ' +
+    const border = Blockly.ToolboxCategory.borderWidth + 'px solid ' +
         (colour || '#ddd');
     if (this.workspace_.RTL) {
       this.rowDiv_.style.borderRight = border;
@@ -354,8 +355,9 @@ Blockly.ToolboxCategory.prototype.addColourBorder_ = function(colour) {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
-  var styleName = categoryDef['categorystyle'] || categoryDef['categoryStyle'];
-  var colour = categoryDef['colour'];
+  const styleName = categoryDef['categorystyle']
+      || categoryDef['categoryStyle'];
+  const colour = categoryDef['colour'];
 
   if (colour && styleName) {
     console.warn('Toolbox category "' + this.name_ +
@@ -376,9 +378,9 @@ Blockly.ToolboxCategory.prototype.getColour_ = function(categoryDef) {
  * @private
  */
 Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
-  var theme = this.workspace_.getTheme();
+  const theme = this.workspace_.getTheme();
   if (styleName && theme) {
-    var style = theme.categoryStyles[styleName];
+    const style = theme.categoryStyles[styleName];
     if (style && style.colour) {
       return this.parseColour_(style.colour);
     } else {
@@ -410,16 +412,16 @@ Blockly.ToolboxCategory.prototype.getClickTarget = function() {
 Blockly.ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
-  var colour = Blockly.utils.replaceMessageReferences(colourValue);
+  const colour = Blockly.utils.replaceMessageReferences(colourValue);
   if (colour == null || colour === '') {
     // No attribute. No colour.
     return '';
   } else {
-    var hue = Number(colour);
+    const hue = Number(colour);
     if (!isNaN(hue)) {
       return Blockly.hueToHex(hue);
     } else {
-      var hex = Blockly.utils.colour.parse(colour);
+      const hex = Blockly.utils.colour.parse(colour);
       if (hex) {
         return hex;
       } else {
@@ -503,7 +505,7 @@ Blockly.ToolboxCategory.prototype.isVisible = function() {
  * @protected
  */
 Blockly.ToolboxCategory.prototype.allAncestorsExpanded_ = function() {
-  var category = this;
+  let category = this;
   while (category.getParent()) {
     category = category.getParent();
     if (!category.isExpanded()) {
@@ -537,7 +539,7 @@ Blockly.ToolboxCategory.prototype.onClick = function(_e) {
  */
 Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   if (isSelected) {
-    var defaultColour = this.parseColour_(
+    const defaultColour = this.parseColour_(
         Blockly.ToolboxCategory.defaultBackgroundColour);
     this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
     Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_['selected']);

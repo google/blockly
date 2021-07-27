@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.CollapsibleToolboxCategory');
+goog.module('Blockly.CollapsibleToolboxCategory');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.ICollapsibleToolboxItem');
 goog.require('Blockly.registry');
@@ -37,7 +38,7 @@ goog.requireType('Blockly.IToolboxItem');
  * @extends {Blockly.ToolboxCategory}
  * @implements {Blockly.ICollapsibleToolboxItem}
  */
-Blockly.CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) {
+const CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   /**
    * Container for any child categories.
    * @type {?Element}
@@ -59,11 +60,11 @@ Blockly.CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) 
    */
   this.toolboxItems_ = [];
 
-  Blockly.CollapsibleToolboxCategory.superClass_.constructor.call(
+  CollapsibleToolboxCategory.superClass_.constructor.call(
       this, categoryDef, toolbox, opt_parent);
 };
 
-Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.ToolboxCategory);
+Blockly.utils.object.inherits(CollapsibleToolboxCategory, Blockly.ToolboxCategory);
 
 /**
  * All the CSS class names that are used to create a collapsible
@@ -80,19 +81,19 @@ Blockly.utils.object.inherits(Blockly.CollapsibleToolboxCategory, Blockly.Toolbo
  *            contents:?string
  *          }}
  */
-Blockly.CollapsibleToolboxCategory.CssConfig;
+CollapsibleToolboxCategory.CssConfig;
 
 /**
  * Name used for registering a collapsible toolbox category.
  * @const {string}
  */
-Blockly.CollapsibleToolboxCategory.registrationName = 'collapsibleCategory';
+CollapsibleToolboxCategory.registrationName = 'collapsibleCategory';
 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
-  const cssConfig = Blockly.CollapsibleToolboxCategory.superClass_.makeDefaultCssConfig_.call(
+CollapsibleToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
+  const cssConfig = CollapsibleToolboxCategory.superClass_.makeDefaultCssConfig_.call(
       this);
   cssConfig['contents'] = 'blocklyToolboxContents';
   return cssConfig;
@@ -101,7 +102,7 @@ Blockly.CollapsibleToolboxCategory.prototype.makeDefaultCssConfig_ = function() 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
+CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   const contents = categoryDef['contents'];
   let prevIsFlyoutItem = true;
 
@@ -132,7 +133,7 @@ Blockly.CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryD
  *     to create a toolbox item.
  * @private
  */
-Blockly.CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
+CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
   let registryName = itemDef['kind'];
   const categoryDef = /** @type {!Blockly.utils.toolbox.CategoryInfo} */ (itemDef);
 
@@ -140,7 +141,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemD
   // a diffferent name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       Blockly.utils.toolbox.isCategoryCollapsible(categoryDef)) {
-    registryName = Blockly.CollapsibleToolboxCategory.registrationName;
+    registryName = CollapsibleToolboxCategory.registrationName;
   }
   const ToolboxItemClass = Blockly.registry.getClass(
       Blockly.registry.Type.TOOLBOX_ITEM, registryName);
@@ -151,8 +152,8 @@ Blockly.CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemD
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.init = function() {
-  Blockly.CollapsibleToolboxCategory.superClass_.init.call(this);
+CollapsibleToolboxCategory.prototype.init = function() {
+  CollapsibleToolboxCategory.superClass_.init.call(this);
 
   this.setExpanded(this.toolboxItemDef_['expanded'] == 'true' ||
       this.toolboxItemDef_['expanded']);
@@ -161,8 +162,8 @@ Blockly.CollapsibleToolboxCategory.prototype.init = function() {
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.createDom_ = function() {
-  Blockly.CollapsibleToolboxCategory.superClass_.createDom_.call(this);
+CollapsibleToolboxCategory.prototype.createDom_ = function() {
+  CollapsibleToolboxCategory.superClass_.createDom_.call(this);
 
   const subCategories = this.getChildToolboxItems();
   this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
@@ -176,7 +177,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createDom_ = function() {
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
+CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
   const toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
     Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
@@ -193,7 +194,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
  * @return {!Element} The div holding all the subcategories.
  * @protected
  */
-Blockly.CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(subcategories) {
+CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(subcategories) {
   const contentsContainer = document.createElement('div');
   Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['contents']);
 
@@ -215,7 +216,7 @@ Blockly.CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
  * @param {boolean} isExpanded True to expand the category, false to close.
  * @public
  */
-Blockly.CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) {
+CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) {
   if (this.expanded_ == isExpanded) {
     return;
   }
@@ -236,7 +237,7 @@ Blockly.CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.setVisible_ = function(isVisible) {
+CollapsibleToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
   const childToolboxItems = this.getChildToolboxItems();
   for (let i = 0; i < childToolboxItems.length; i++) {
@@ -256,21 +257,21 @@ Blockly.CollapsibleToolboxCategory.prototype.setVisible_ = function(isVisible) {
  *     is collapsed.
  * @public
  */
-Blockly.CollapsibleToolboxCategory.prototype.isExpanded = function() {
+CollapsibleToolboxCategory.prototype.isExpanded = function() {
   return this.expanded_;
 };
 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.isCollapsible = function() {
+CollapsibleToolboxCategory.prototype.isCollapsible = function() {
   return true;
 };
 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.onClick = function(_e) {
+CollapsibleToolboxCategory.prototype.onClick = function(_e) {
   this.toggleExpanded();
 };
 
@@ -278,14 +279,14 @@ Blockly.CollapsibleToolboxCategory.prototype.onClick = function(_e) {
  * Toggles whether or not the category is expanded.
  * @public
  */
-Blockly.CollapsibleToolboxCategory.prototype.toggleExpanded = function() {
+CollapsibleToolboxCategory.prototype.toggleExpanded = function() {
   this.setExpanded(!this.expanded_);
 };
 
 /**
  * @override
  */
-Blockly.CollapsibleToolboxCategory.prototype.getDiv = function() {
+CollapsibleToolboxCategory.prototype.getDiv = function() {
   return this.htmlDiv_;
 };
 
@@ -293,10 +294,12 @@ Blockly.CollapsibleToolboxCategory.prototype.getDiv = function() {
  * Gets any children toolbox items. (ex. Gets the subcategories)
  * @return {!Array<!Blockly.IToolboxItem>} The child toolbox items.
  */
-Blockly.CollapsibleToolboxCategory.prototype.getChildToolboxItems = function() {
+CollapsibleToolboxCategory.prototype.getChildToolboxItems = function() {
   return this.toolboxItems_;
 };
 
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
-    Blockly.CollapsibleToolboxCategory.registrationName, Blockly.CollapsibleToolboxCategory);
+    CollapsibleToolboxCategory.registrationName, CollapsibleToolboxCategory);
+
+exports = CollapsibleToolboxCategory;

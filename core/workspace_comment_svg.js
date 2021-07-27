@@ -13,18 +13,23 @@
 goog.module('Blockly.WorkspaceCommentSvg');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const Blockly = goog.require('Blockly');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
-const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
-const IBubble = goog.requireType('Blockly.IBubble');
-const ICopyable = goog.requireType('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
+const IBoundedElement = goog.require('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const IBubble = goog.require('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
+const ICopyable = goog.require('Blockly.ICopyable');
 const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
+/* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');

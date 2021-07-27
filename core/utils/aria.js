@@ -69,6 +69,7 @@ const Role = {
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
   TREEITEM: 'treeitem'
 };
+exports.Role = Role;
 
 /**
  * ARIA states and properties.
@@ -134,6 +135,7 @@ const State = {
   // ARIA property for slider minimum value. Value: number.
   VALUEMIN: 'valuemin'
 };
+exports.State = State;
 
 /**
  * Sets the role of an element.
@@ -146,6 +148,7 @@ const State = {
 const setRole = function(element, roleName) {
   element.setAttribute(ROLE_ATTRIBUTE, roleName);
 };
+exports.setRole = setRole;
 
 /**
  * Sets the state or property of an element.
@@ -164,10 +167,4 @@ const setState = function(element, stateName, value) {
   const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, value);
 };
-
-exports = {
-  Role,
-  State,
-  setRole,
-  setState,
-};
+exports.setState = setState;

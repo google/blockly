@@ -14,32 +14,36 @@
 goog.module('Blockly.blockRendering.PathObject');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.IPathObject');
-goog.require('Blockly.Theme');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Connection = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+const dom = goog.require('Blockly.utils.dom');
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
- * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ * @param {!Theme.BlockStyle} style The style object to use for
  *     colouring.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
+ * @param {!ConstantProvider} constants The renderer's
  *     constants.
  * @constructor
- * @implements {Blockly.blockRendering.IPathObject}
+ * @implements {IPathObject}
  * @package
  */
 const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @type {!ConstantProvider}
    * @package
    */
   this.constants = constants;
@@ -51,13 +55,13 @@ const PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  this.svgPath = dom.createSvgElement(
+      Svg.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The style object to use when colouring block paths.
-   * @type {!Blockly.Theme.BlockStyle}
+   * @type {!Theme.BlockStyle}
    * @package
    */
   this.style = style;
@@ -136,7 +140,7 @@ PathObject.prototype.setMarkerSvg = function(markerSvg) {
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Blockly.Block} block The source block.
+ * @param {!Block} block The source block.
  * @package
  */
 PathObject.prototype.applyColour = function(block) {
@@ -149,7 +153,7 @@ PathObject.prototype.applyColour = function(block) {
 
 /**
  * Set the style.
- * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @param {!Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
 PathObject.prototype.setStyle = function(blockStyle) {
@@ -166,10 +170,10 @@ PathObject.prototype.setStyle = function(blockStyle) {
 PathObject.prototype.setClass_ = function(
     className, add) {
   if (add) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
+    dom.addClass(/** @type {!Element} */ (this.svgRoot),
         className);
   } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgRoot),
+    dom.removeClass(/** @type {!Element} */ (this.svgRoot),
         className);
   }
 };
@@ -272,7 +276,7 @@ PathObject.prototype.updateReplacementFade =
 /**
  * Add or remove styling that shows that if the dragging block is dropped, this
  * block will be connected to the input.
- * @param {Blockly.Connection} _conn The connection on the input to highlight.
+ * @param {Connection} _conn The connection on the input to highlight.
  * @param {boolean} _enable True if styling should be added.
  * @package
  */

@@ -98,7 +98,7 @@ WorkspaceAudio.prototype.load = function(filenames, name) {
  * @package
  */
 WorkspaceAudio.prototype.preload = function() {
-  for (let name in this.SOUNDS_) {
+  for (const name in this.SOUNDS_) {
     const sound = this.SOUNDS_[name];
     sound.volume = 0.01;
     const playPromise = sound.play();

@@ -92,8 +92,8 @@ CollapsibleToolboxCategory.registrationName = 'collapsibleCategory';
  * @override
  */
 CollapsibleToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
-  const cssConfig = CollapsibleToolboxCategory.superClass_.makeDefaultCssConfig_.call(
-      this);
+  const cssConfig =
+      CollapsibleToolboxCategory.superClass_.makeDefaultCssConfig_.call(this);
   cssConfig['contents'] = 'blocklyToolboxContents';
   return cssConfig;
 };
@@ -114,7 +114,7 @@ CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
       // decide where it goes based on the type of the previous item.
       if (!registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
           (itemDef['kind'].toLowerCase() == ToolboxSeparator.registrationName &&
-          prevIsFlyoutItem)) {
+           prevIsFlyoutItem)) {
         const flyoutItem = /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);
         prevIsFlyoutItem = true;
@@ -142,8 +142,8 @@ CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
       toolbox.isCategoryCollapsible(categoryDef)) {
     registryName = CollapsibleToolboxCategory.registrationName;
   }
-  const ToolboxItemClass = registry.getClass(
-      registry.Type.TOOLBOX_ITEM, registryName);
+  const ToolboxItemClass =
+      registry.getClass(registry.Type.TOOLBOX_ITEM, registryName);
   const toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
   this.toolboxItems_.push(toolboxItem);
 };
@@ -154,7 +154,8 @@ CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
 CollapsibleToolboxCategory.prototype.init = function() {
   CollapsibleToolboxCategory.superClass_.init.call(this);
 
-  this.setExpanded(this.toolboxItemDef_['expanded'] == 'true' ||
+  this.setExpanded(
+      this.toolboxItemDef_['expanded'] == 'true' ||
       this.toolboxItemDef_['expanded']);
 };
 
@@ -166,8 +167,7 @@ CollapsibleToolboxCategory.prototype.createDom_ = function() {
 
   const subCategories = this.getChildToolboxItems();
   this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
-  aria.setRole(this.subcategoriesDiv_,
-      aria.Role.GROUP);
+  aria.setRole(this.subcategoriesDiv_, aria.Role.GROUP);
   this.htmlDiv_.appendChild(this.subcategoriesDiv_);
 
   return this.htmlDiv_;
@@ -193,7 +193,8 @@ CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
  * @return {!Element} The div holding all the subcategories.
  * @protected
  */
-CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(subcategories) {
+CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
+    subcategories) {
   const contentsContainer = document.createElement('div');
   dom.addClass(contentsContainer, this.cssConfig_['contents']);
 
@@ -227,8 +228,8 @@ CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) {
     this.subcategoriesDiv_.style.display = 'none';
     this.closeIcon_(this.iconDom_);
   }
-  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      aria.State.EXPANDED, isExpanded);
+  aria.setState(
+      /** @type {!Element} */ (this.htmlDiv_), aria.State.EXPANDED, isExpanded);
 
   this.parentToolbox_.handleToolboxItemResize();
 };
@@ -298,7 +299,8 @@ CollapsibleToolboxCategory.prototype.getChildToolboxItems = function() {
 };
 
 
-registry.register(registry.Type.TOOLBOX_ITEM,
-    CollapsibleToolboxCategory.registrationName, CollapsibleToolboxCategory);
+registry.register(
+    registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
+    CollapsibleToolboxCategory);
 
 exports = CollapsibleToolboxCategory;

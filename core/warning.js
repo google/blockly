@@ -149,7 +149,7 @@ Warning.prototype.setText = function(text, id) {
  */
 Warning.prototype.getText = function() {
   const allWarnings = [];
-  for (let id in this.text_) {
+  for (const id in this.text_) {
     allWarnings.push(this.text_[id]);
   }
   return allWarnings.join('\n');

@@ -14,10 +14,13 @@
  * A mapping of block type names to block prototype objects.
  * @name Blockly.Blocks
  */
-goog.provide('Blockly.Blocks');
+goog.module('Blockly.Blocks');
+goog.module.declareLegacyNamespace();
 
 /**
  * A mapping of block type names to block prototype objects.
- * @type {!Object<string,Object>}
+ * @type {!Object<string,!Object>}
  */
-Blockly.Blocks = Object.create(null);
+const Blocks = Object.create(null);
+
+exports = Blocks;

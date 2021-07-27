@@ -12,11 +12,14 @@
 
 'use strict';
 
-goog.provide('Blockly.IRegistrable');
+goog.module('Blockly.IRegistrable');
+goog.module.declareLegacyNamespace();
 
 
 /**
  * The interface for a Blockly component that can be registered.
  * @interface
  */
-Blockly.IRegistrable = function() {};
+const IRegistrable = function() {};
+
+exports = IRegistrable;

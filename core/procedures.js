@@ -17,12 +17,11 @@
 goog.provide('Blockly.Procedures');
 
 goog.require('Blockly.Blocks');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Names');
 goog.require('Blockly.utils.xml');
@@ -37,9 +36,10 @@ goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Constant to separate procedure names from variables and generated functions
  * when running generators.
- * @deprecated Use Blockly.PROCEDURE_CATEGORY_NAME
+ * @deprecated Use Blockly.internalConstants.PROCEDURE_CATEGORY_NAME
  */
-Blockly.Procedures.NAME_TYPE = Blockly.PROCEDURE_CATEGORY_NAME;
+Blockly.Procedures.NAME_TYPE =
+    Blockly.internalConstants.PROCEDURE_CATEGORY_NAME;
 
 /**
  * The default argument for a procedures_mutatorarg block.

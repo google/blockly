@@ -1,0 +1,35 @@
+# For new pull requests against the goog_module branch, adds the 'type: cleanup'
+# label and sets the milestone to q3 2021 release.
+
+name: Tag module cleanup
+
+# Trigger on pull requests against goog_module branch only
+# Uses pull_request_target to get write permissions so that it can write labels.
+on: 
+  pull_request_target:
+    branches:
+      - goog_module
+
+jobs:
+  tag-module-cleanup:
+  
+    # Add the type: cleanup label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+        with:
+          script: |
+            // 2021 q3 release milestone.
+            // https://github.com/google/blockly/milestone/18
+            const milestoneNumber = 18;
+            // Note that pull requests are accessed through the issues API.
+            const issuesUpdateParams = { 
+              owner: context.repo.owner, 
+              repo: context.repo.repo, 
+              // Adds the milestone
+              milestone: milestoneNumber, 
+              issue_number: context.issue.number,
+              // Sets the labels
+              labels: ['type: cleanup']
+            }
+            await github.issues.update(issuesUpdateParams)

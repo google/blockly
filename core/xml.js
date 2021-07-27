@@ -15,9 +15,6 @@
  * @namespace
  */
 goog.provide('Blockly.Xml');
-
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
 goog.require('Blockly.Events');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils');

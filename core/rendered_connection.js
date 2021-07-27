@@ -14,8 +14,7 @@ goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.deprecation');
@@ -51,8 +50,9 @@ Blockly.RenderedConnection = function(source, type) {
    * @const {!Blockly.ConnectionDB}
    * @private
    */
-  this.dbOpposite_ = source.workspace
-      .connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+  this.dbOpposite_ =
+      source.workspace
+          .connectionDBList[Blockly.internalConstants.OPPOSITE_TYPE[type]];
 
   /**
    * Workspace units, (0, 0) is top left of block.
@@ -173,17 +173,23 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   // Raise it to the top for extra visibility.
   var selected = Blockly.selected == rootBlock;
   selected || rootBlock.addSelect();
-  var dx = (staticConnection.x + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
-  var dy = (staticConnection.y + Blockly.SNAP_RADIUS +
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.y;
+  var dx =
+      (staticConnection.x + Blockly.internalConstants.SNAP_RADIUS +
+       Math.floor(Math.random() * Blockly.internalConstants.BUMP_RANDOMNESS)) -
+      this.x;
+  var dy =
+      (staticConnection.y + Blockly.internalConstants.SNAP_RADIUS +
+       Math.floor(Math.random() * Blockly.internalConstants.BUMP_RANDOMNESS)) -
+      this.y;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
     dy = -dy;
   }
   if (rootBlock.RTL) {
-    dx = (staticConnection.x - Blockly.SNAP_RADIUS -
-      Math.floor(Math.random() * Blockly.BUMP_RANDOMNESS)) - this.x;
+    dx = (staticConnection.x - Blockly.internalConstants.SNAP_RADIUS -
+          Math.floor(
+              Math.random() * Blockly.internalConstants.BUMP_RANDOMNESS)) -
+        this.x;
   }
   rootBlock.moveBy(dx, dy);
   selected || rootBlock.removeSelect();
@@ -466,7 +472,7 @@ Blockly.RenderedConnection.prototype.onFailedConnect =
             this.bumpAwayFrom(otherConnection);
             Blockly.Events.setGroup(false);
           }
-        }.bind(this), Blockly.BUMP_DELAY);
+        }.bind(this), Blockly.internalConstants.BUMP_DELAY);
       }
     };
 

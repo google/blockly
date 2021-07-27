@@ -12,8 +12,7 @@
 
 goog.provide('Blockly.Names');
 
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
 
 goog.requireType('Blockly.VariableMap');
@@ -77,7 +76,7 @@ Blockly.Names.prototype.setVariableMap = function(map) {
 /**
  * Get the name for a user-defined variable, based on its ID.
  * This should only be used for variables of realm
- * Blockly.VARIABLE_CATEGORY_NAME.
+ * Blockly.internalConstants.VARIABLE_CATEGORY_NAME.
  * @param {string} id The ID to look up in the variable map.
  * @return {?string} The name of the referenced variable, or null if there was
  *     no variable map or the variable was not found in the map.
@@ -106,7 +105,8 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
 Blockly.Names.prototype.populateVariables = function(workspace) {
   var variables = Blockly.Variables.allUsedVarModels(workspace);
   for (var i = 0; i < variables.length; i++) {
-    this.getName(variables[i].getId(), Blockly.VARIABLE_CATEGORY_NAME);
+    this.getName(
+        variables[i].getId(), Blockly.internalConstants.VARIABLE_CATEGORY_NAME);
   }
 };
 
@@ -119,7 +119,8 @@ Blockly.Names.prototype.populateProcedures = function(workspace) {
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (var i = 0; i < procedures.length; i++) {
-    this.getName(procedures[i][0], Blockly.PROCEDURE_CATEGORY_NAME);
+    this.getName(
+        procedures[i][0], Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
   }
 };
 
@@ -133,7 +134,7 @@ Blockly.Names.prototype.populateProcedures = function(workspace) {
  */
 Blockly.Names.prototype.getName = function(nameOrId, realm) {
   var name = nameOrId;
-  if (realm == Blockly.VARIABLE_CATEGORY_NAME) {
+  if (realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME) {
     var varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
@@ -142,7 +143,7 @@ Blockly.Names.prototype.getName = function(nameOrId, realm) {
   }
   var normalizedName = name.toLowerCase();
 
-  var isVar = realm == Blockly.VARIABLE_CATEGORY_NAME ||
+  var isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
       realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
 
   var prefix = isVar ? this.variablePrefix_ : '';
@@ -189,7 +190,7 @@ Blockly.Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var isVar = realm == Blockly.VARIABLE_CATEGORY_NAME ||
+  var isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
       realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
   var prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;

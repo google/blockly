@@ -55,9 +55,8 @@ const PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = dom.createSvgElement(
-      Svg.PATH,
-      {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgPath =
+      dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The style object to use when colouring block paths.
@@ -167,14 +166,11 @@ PathObject.prototype.setStyle = function(blockStyle) {
  *     be removed.
  * @protected
  */
-PathObject.prototype.setClass_ = function(
-    className, add) {
+PathObject.prototype.setClass_ = function(className, add) {
   if (add) {
-    dom.addClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    dom.addClass(/** @type {!Element} */ (this.svgRoot), className);
   } else {
-    dom.removeClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    dom.removeClass(/** @type {!Element} */ (this.svgRoot), className);
   }
 };
 
@@ -184,11 +180,10 @@ PathObject.prototype.setClass_ = function(
  * @param {boolean} enable True if highlighted.
  * @package
  */
-PathObject.prototype.updateHighlighted = function(
-    enable) {
+PathObject.prototype.updateHighlighted = function(enable) {
   if (enable) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.embossFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
   } else {
     this.svgPath.setAttribute('filter', 'none');
   }
@@ -211,12 +206,11 @@ PathObject.prototype.updateShadow_ = function(shadow) {
  * @param {boolean} disabled True if disabled.
  * @protected
  */
-PathObject.prototype.updateDisabled_ = function(
-    disabled) {
+PathObject.prototype.updateDisabled_ = function(disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
-    this.svgPath.setAttribute('fill',
-        'url(#' + this.constants.disabledPatternId + ')');
+    this.svgPath.setAttribute(
+        'fill', 'url(#' + this.constants.disabledPatternId + ')');
   }
 };
 
@@ -235,8 +229,7 @@ PathObject.prototype.updateSelected = function(enable) {
  *     area, false otherwise.
  * @package
  */
-PathObject.prototype.updateDraggingDelete = function(
-    enable) {
+PathObject.prototype.updateDraggingDelete = function(enable) {
   this.setClass_('blocklyDraggingDelete', enable);
 };
 
@@ -246,8 +239,7 @@ PathObject.prototype.updateDraggingDelete = function(
  *     otherwise.
  * @package
  */
-PathObject.prototype.updateInsertionMarker = function(
-    enable) {
+PathObject.prototype.updateInsertionMarker = function(enable) {
   this.setClass_('blocklyInsertionMarker', enable);
 };
 
@@ -267,11 +259,9 @@ PathObject.prototype.updateMovable = function(enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-PathObject.prototype.updateReplacementFade =
-    function(enable) {
-    /* eslint-disable indent */
+PathObject.prototype.updateReplacementFade = function(enable) {
   this.setClass_('blocklyReplaceable', enable);
-}; /* eslint-enable indent */
+};
 
 /**
  * Add or remove styling that shows that if the dragging block is dropped, this
@@ -280,10 +270,8 @@ PathObject.prototype.updateReplacementFade =
  * @param {boolean} _enable True if styling should be added.
  * @package
  */
-PathObject.prototype.updateShapeForInputHighlight =
-    function(_conn, _enable) {
-    /* eslint-disable indent */
+PathObject.prototype.updateShapeForInputHighlight = function(_conn, _enable) {
   // NOP
-}; /* eslint-enable indent */
+};
 
 exports = PathObject;

@@ -41,7 +41,6 @@ goog.require('Blockly.Workspace');
 
 
 
-
 /**
  * Class for UI bubble.
  * @param {!WorkspaceSvg} workspace The workspace on which to draw the
@@ -253,8 +252,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
     [...content goes here...]
   </g>
   */
-  this.bubbleGroup_ =
-      dom.createSvgElement(Svg.G, {}, null);
+  this.bubbleGroup_ = dom.createSvgElement(Svg.G, {}, null);
   let filter = {
     'filter': 'url(#' +
         this.workspace_.getRenderer().getConstants().embossFilterId + ')'
@@ -264,10 +262,8 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
     // https://github.com/google/blockly/issues/99
     filter = {};
   }
-  const bubbleEmboss = dom.createSvgElement(
-      Svg.G, filter, this.bubbleGroup_);
-  this.bubbleArrow_ = dom.createSvgElement(
-      Svg.PATH, {}, bubbleEmboss);
+  const bubbleEmboss = dom.createSvgElement(Svg.G, filter, this.bubbleGroup_);
+  this.bubbleArrow_ = dom.createSvgElement(Svg.PATH, {}, bubbleEmboss);
   this.bubbleBack_ = dom.createSvgElement(
       Svg.RECT, {
         'class': 'blocklyDraggable',
@@ -485,8 +481,10 @@ Bubble.prototype.layoutBubble_ = function() {
   const endPosition = {x: bbox.width, y: optimalTop};
   const bottomPosition = {x: optimalLeft, y: bbox.height};
 
-  const closerPosition = bbox.width < bbox.height ? endPosition : bottomPosition;
-  const fartherPosition = bbox.width < bbox.height ? bottomPosition : endPosition;
+  const closerPosition =
+      bbox.width < bbox.height ? endPosition : bottomPosition;
+  const fartherPosition =
+      bbox.width < bbox.height ? bottomPosition : endPosition;
 
   const topPositionOverlap = this.getOverlap_(topPosition, viewMetrics);
   const startPositionOverlap = this.getOverlap_(startPosition, viewMetrics);
@@ -538,7 +536,10 @@ Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
     y: relativeMin.y + this.anchorXY_.y
   };
   // The position of the bottom-right corner of the bubble in workspace units.
-  const bubbleMax = {x: bubbleMin.x + this.width_, y: bubbleMin.y + this.height_};
+  const bubbleMax = {
+    x: bubbleMin.x + this.width_,
+    y: bubbleMin.y + this.height_
+  };
 
   // We could adjust these values to account for the scrollbars, but the
   // bubbles should have been adjusted to not collide with them anyway, so
@@ -799,10 +800,8 @@ Bubble.prototype.renderArrow_ = function() {
     if (swirlAngle > Math.PI * 2) {
       swirlAngle -= Math.PI * 2;
     }
-    const swirlRise =
-        Math.sin(swirlAngle) * hypotenuse / Bubble.ARROW_BEND;
-    const swirlRun =
-        Math.cos(swirlAngle) * hypotenuse / Bubble.ARROW_BEND;
+    const swirlRise = Math.sin(swirlAngle) * hypotenuse / Bubble.ARROW_BEND;
+    const swirlRun = Math.cos(swirlAngle) * hypotenuse / Bubble.ARROW_BEND;
 
     steps.push('M' + baseX1 + ',' + baseY1);
     steps.push(
@@ -905,8 +904,7 @@ Bubble.textToDom = function(text) {
   const lines = text.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const tspanElement = dom.createSvgElement(
-        Svg.TSPAN,
-        {'dy': '1em', 'x': Bubble.BORDER_WIDTH}, paragraph);
+        Svg.TSPAN, {'dy': '1em', 'x': Bubble.BORDER_WIDTH}, paragraph);
     const textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
@@ -922,8 +920,7 @@ Bubble.textToDom = function(text) {
  * @return {!Bubble} The non editable bubble.
  * @package
  */
-Bubble.createNonEditableBubble = function(
-    paragraphElement, block, iconXY) {
+Bubble.createNonEditableBubble = function(paragraphElement, block, iconXY) {
   const bubble = new Bubble(
       /** @type {!WorkspaceSvg} */ (block.workspace), paragraphElement,
       block.pathObject.svgPath,

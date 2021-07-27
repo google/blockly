@@ -14,7 +14,9 @@ goog.module('Blockly.CollapsibleToolboxCategory');
 goog.module.declareLegacyNamespace();
 
 const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
 const ToolboxItem = goog.require('Blockly.ToolboxItem');

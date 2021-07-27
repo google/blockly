@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.blockRendering.PathObject');
+goog.module('Blockly.blockRendering.PathObject');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.IPathObject');
@@ -35,7 +36,7 @@ goog.requireType('Blockly.Connection');
  * @implements {Blockly.blockRendering.IPathObject}
  * @package
  */
-Blockly.blockRendering.PathObject = function(root, style, constants) {
+const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
@@ -83,7 +84,7 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
+PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
 };
 
@@ -91,7 +92,7 @@ Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
  * Flip the SVG paths in RTL.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
+PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
 };
@@ -102,7 +103,7 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
  *     block SVG group.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
+PathObject.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
     this.cursorSvg = null;
     return;
@@ -118,7 +119,7 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
  *     block SVG group.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
+PathObject.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
     this.markerSvg = null;
     return;
@@ -138,7 +139,7 @@ Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
  * @param {!Blockly.Block} block The source block.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
+PathObject.prototype.applyColour = function(block) {
   this.svgPath.setAttribute('stroke', this.style.colourTertiary);
   this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
@@ -151,7 +152,7 @@ Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
  * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
+PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
 };
 
@@ -162,7 +163,7 @@ Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
  *     be removed.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.setClass_ = function(
+PathObject.prototype.setClass_ = function(
     className, add) {
   if (add) {
     Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
@@ -179,7 +180,7 @@ Blockly.blockRendering.PathObject.prototype.setClass_ = function(
  * @param {boolean} enable True if highlighted.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
+PathObject.prototype.updateHighlighted = function(
     enable) {
   if (enable) {
     this.svgPath.setAttribute('filter',
@@ -194,7 +195,7 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
  * @param {boolean} shadow True if the block is a shadow block.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateShadow_ = function(shadow) {
+PathObject.prototype.updateShadow_ = function(shadow) {
   if (shadow) {
     this.svgPath.setAttribute('stroke', 'none');
     this.svgPath.setAttribute('fill', this.style.colourSecondary);
@@ -206,7 +207,7 @@ Blockly.blockRendering.PathObject.prototype.updateShadow_ = function(shadow) {
  * @param {boolean} disabled True if disabled.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
+PathObject.prototype.updateDisabled_ = function(
     disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
@@ -220,7 +221,7 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
  * @param {boolean} enable True if selection is enabled, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
+PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
 };
 
@@ -230,7 +231,7 @@ Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
  *     area, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
+PathObject.prototype.updateDraggingDelete = function(
     enable) {
   this.setClass_('blocklyDraggingDelete', enable);
 };
@@ -241,7 +242,7 @@ Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
  *     otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
+PathObject.prototype.updateInsertionMarker = function(
     enable) {
   this.setClass_('blocklyInsertionMarker', enable);
 };
@@ -251,7 +252,7 @@ Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
  * @param {boolean} enable True if the block is movable, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
+PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
 
@@ -262,7 +263,7 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
+PathObject.prototype.updateReplacementFade =
     function(enable) {
     /* eslint-disable indent */
   this.setClass_('blocklyReplaceable', enable);
@@ -275,8 +276,10 @@ Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
  * @param {boolean} _enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateShapeForInputHighlight =
+PathObject.prototype.updateShapeForInputHighlight =
     function(_conn, _enable) {
     /* eslint-disable indent */
   // NOP
 }; /* eslint-enable indent */
+
+exports = PathObject;

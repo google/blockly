@@ -76,18 +76,17 @@ const WorkspaceCommentSvg = function(
    * @type {!SVGElement}
    * @private
    */
-  this.svgGroup_ = dom.createSvgElement(
-      Svg.G, {'class': 'blocklyComment'}, null);
+  this.svgGroup_ =
+      dom.createSvgElement(Svg.G, {'class': 'blocklyComment'}, null);
   this.svgGroup_.translate_ = '';
 
-  this.svgRect_ = dom.createSvgElement(
-      Svg.RECT, {
-        'class': 'blocklyCommentRect',
-        'x': 0,
-        'y': 0,
-        'rx': WorkspaceCommentSvg.BORDER_RADIUS,
-        'ry': WorkspaceCommentSvg.BORDER_RADIUS
-      });
+  this.svgRect_ = dom.createSvgElement(Svg.RECT, {
+    'class': 'blocklyCommentRect',
+    'x': 0,
+    'y': 0,
+    'rx': WorkspaceCommentSvg.BORDER_RADIUS,
+    'ry': WorkspaceCommentSvg.BORDER_RADIUS
+  });
   this.svgGroup_.appendChild(this.svgRect_);
 
   /**
@@ -103,16 +102,14 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ =
-      utils.is3dSupported() && !!workspace.blockDragSurface_;
+  this.useDragSurface_ = utils.is3dSupported() && !!workspace.blockDragSurface_;
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
 
   this.render();
 };
-object.inherits(
-    WorkspaceCommentSvg, WorkspaceComment);
+object.inherits(WorkspaceCommentSvg, WorkspaceComment);
 
 /**
  * The width and height to use to size a workspace comment when it is first
@@ -170,8 +167,7 @@ WorkspaceCommentSvg.prototype.dispose = function() {
   }
 
   if (Events.isEnabled()) {
-    Events.fire(
-        new (Events.get(Events.COMMENT_DELETE))(this));
+    Events.fire(new (Events.get(Events.COMMENT_DELETE))(this));
   }
 
   dom.removeNode(this.svgGroup_);
@@ -190,7 +186,8 @@ WorkspaceCommentSvg.prototype.dispose = function() {
  * Create and initialize the SVG representation of a workspace comment.
  * May be called more than once.
  *
- * @param {boolean=} opt_noSelect Text inside text area will be selected if false
+ * @param {boolean=} opt_noSelect Text inside text area will be selected if
+ *     false
  *
  * @package
  */
@@ -268,9 +265,8 @@ WorkspaceCommentSvg.prototype.select = function() {
       Events.enable();
     }
   }
-  const event = new (Events.get(Events.SELECTED))(oldId,
-      this.id,
-      this.workspace.id);
+  const event =
+      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
   Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -284,8 +280,8 @@ WorkspaceCommentSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  const event = new (Events.get(Events.SELECTED))(this.id, null,
-      this.workspace.id);
+  const event =
+      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
   Events.fire(event);
   Blockly.selected = null;
   this.removeSelect();
@@ -447,8 +443,7 @@ WorkspaceCommentSvg.prototype.moveOffDragSurface = function(newXY) {
  *     workspace coordinates.
  * @package
  */
-WorkspaceCommentSvg.prototype.moveDuringDrag = function(
-    dragSurface, newLoc) {
+WorkspaceCommentSvg.prototype.moveDuringDrag = function(dragSurface, newLoc) {
   if (dragSurface) {
     dragSurface.translateSurface(newLoc.x, newLoc.y);
   } else {
@@ -625,8 +620,7 @@ WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
  * @return {!WorkspaceCommentSvg} The created workspace comment.
  * @package
  */
-WorkspaceCommentSvg.fromXml = function(
-    xmlComment, workspace, opt_wsWidth) {
+WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
   Events.disable();
   let comment;
   try {
@@ -694,7 +688,7 @@ WorkspaceCommentSvg.prototype.toCopyData = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.getHeightWidth = function() {
-  return { width: this.getWidth(), height: this.getHeight() };
+  return {width: this.getWidth(), height: this.getHeight()};
 };
 
 /**
@@ -713,22 +707,15 @@ WorkspaceCommentSvg.prototype.render = function() {
   this.svgGroup_.appendChild(this.foreignObject_);
 
   this.svgHandleTarget_ = dom.createSvgElement(
-      Svg.RECT,
-      {
-        'class': 'blocklyCommentHandleTarget',
-        'x': 0,
-        'y': 0
-      });
+      Svg.RECT, {'class': 'blocklyCommentHandleTarget', 'x': 0, 'y': 0});
   this.svgGroup_.appendChild(this.svgHandleTarget_);
-  this.svgRectTarget_ = dom.createSvgElement(
-      Svg.RECT,
-      {
-        'class': 'blocklyCommentTarget',
-        'x': 0,
-        'y': 0,
-        'rx': WorkspaceCommentSvg.BORDER_RADIUS,
-        'ry': WorkspaceCommentSvg.BORDER_RADIUS
-      });
+  this.svgRectTarget_ = dom.createSvgElement(Svg.RECT, {
+    'class': 'blocklyCommentTarget',
+    'x': 0,
+    'y': 0,
+    'rx': WorkspaceCommentSvg.BORDER_RADIUS,
+    'ry': WorkspaceCommentSvg.BORDER_RADIUS
+  });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
   // Add the resize icon
@@ -767,17 +754,16 @@ WorkspaceCommentSvg.prototype.render = function() {
  */
 WorkspaceCommentSvg.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
-    <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164" height="164">
-      <body xmlns="http://www.w3.org/1999/xhtml" class="blocklyMinimalBody">
-        <textarea xmlns="http://www.w3.org/1999/xhtml"
+    <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164"
+    height="164"> <body xmlns="http://www.w3.org/1999/xhtml"
+    class="blocklyMinimalBody"> <textarea xmlns="http://www.w3.org/1999/xhtml"
             class="blocklyCommentTextarea"
             style="height: 164px; width: 164px;"></textarea>
       </body>
     </foreignObject>
   */
   this.foreignObject_ = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      {
+      Svg.FOREIGNOBJECT, {
         'x': 0,
         'y': WorkspaceCommentSvg.TOP_OFFSET,
         'class': 'blocklyCommentForeignObject'
@@ -786,8 +772,7 @@ WorkspaceCommentSvg.prototype.createEditor_ = function() {
   const body = document.createElementNS(dom.HTML_NS, 'body');
   body.setAttribute('xmlns', dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
-  const textarea = document.createElementNS(dom.HTML_NS,
-      'textarea');
+  const textarea = document.createElementNS(dom.HTML_NS, 'textarea');
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
   textarea.readOnly = !this.isEditable();
@@ -814,10 +799,7 @@ WorkspaceCommentSvg.prototype.createEditor_ = function() {
  */
 WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
   this.resizeGroup_ = dom.createSvgElement(
-      Svg.G,
-      {
-        'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
-      },
+      Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
       this.svgGroup_);
   const resizeSize = WorkspaceCommentSvg.RESIZE_SIZE;
   dom.createSvgElement(
@@ -825,19 +807,23 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
       {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
       this.resizeGroup_);
   dom.createSvgElement(
-      Svg.LINE,
-      {
+      Svg.LINE, {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize / 3
-      }, this.resizeGroup_);
+        'x1': resizeSize / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize / 3
+      },
+      this.resizeGroup_);
   dom.createSvgElement(
-      Svg.LINE,
-      {
+      Svg.LINE, {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3
-      }, this.resizeGroup_);
+        'x1': resizeSize * 2 / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize * 2 / 3
+      },
+      this.resizeGroup_);
 };
 
 /**
@@ -846,35 +832,28 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
  */
 WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
   this.deleteGroup_ = dom.createSvgElement(
-      Svg.G,
-      {
-        'class': 'blocklyCommentDeleteIcon'
-      },
-      this.svgGroup_);
+      Svg.G, {'class': 'blocklyCommentDeleteIcon'}, this.svgGroup_);
   this.deleteIconBorder_ = dom.createSvgElement(
       Svg.CIRCLE,
-      {
-        'class': 'blocklyDeleteIconShape',
-        'r': '7',
-        'cx': '7.5',
-        'cy': '7.5'
-      },
+      {'class': 'blocklyDeleteIconShape', 'r': '7', 'cx': '7.5', 'cy': '7.5'},
       this.deleteGroup_);
   // x icon.
   dom.createSvgElement(
-      Svg.LINE,
-      {
-        'x1': '5', 'y1': '10',
-        'x2': '10', 'y2': '5',
+      Svg.LINE, {
+        'x1': '5',
+        'y1': '10',
+        'x2': '10',
+        'y2': '5',
         'stroke': '#fff',
         'stroke-width': '2'
       },
       this.deleteGroup_);
   dom.createSvgElement(
-      Svg.LINE,
-      {
-        'x1': '5', 'y1': '5',
-        'x2': '10', 'y2': '10',
+      Svg.LINE, {
+        'x1': '5',
+        'y1': '5',
+        'x2': '10',
+        'y2': '10',
         'stroke': '#fff',
         'stroke-width': '2'
       },
@@ -894,8 +873,10 @@ WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  this.workspace.startDrag(e, new Coordinate(
-      this.workspace.RTL ? -this.width_ : this.width_, this.height_));
+  this.workspace.startDrag(
+      e,
+      new Coordinate(
+          this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
   this.onMouseUpWrapper_ = browserEvents.conditionalBind(
       document, 'mouseup', this, this.resizeMouseUp_);
@@ -1016,8 +997,7 @@ WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   this.svgRectTarget_.setAttribute('width', width);
   this.svgRectTarget_.setAttribute('height', height);
   this.svgHandleTarget_.setAttribute('width', width);
-  this.svgHandleTarget_.setAttribute('height',
-      WorkspaceCommentSvg.TOP_OFFSET);
+  this.svgHandleTarget_.setAttribute('height', WorkspaceCommentSvg.TOP_OFFSET);
   if (this.RTL) {
     this.svgRect_.setAttribute('transform', 'scale(-1 1)');
     this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
@@ -1027,17 +1007,22 @@ WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
   if (this.resizeGroup_) {
     if (this.RTL) {
       // Mirror the resize group.
-      this.resizeGroup_.setAttribute('transform', 'translate(' +
-          (-width + resizeSize) + ',' + (height - resizeSize) + ') scale(-1 1)');
-      this.deleteGroup_.setAttribute('transform', 'translate(' +
-          (-width + resizeSize) + ',' + (-resizeSize) + ') scale(-1 1)');
+      this.resizeGroup_.setAttribute(
+          'transform',
+          'translate(' + (-width + resizeSize) + ',' + (height - resizeSize) +
+              ') scale(-1 1)');
+      this.deleteGroup_.setAttribute(
+          'transform',
+          'translate(' + (-width + resizeSize) + ',' + (-resizeSize) +
+              ') scale(-1 1)');
     } else {
-      this.resizeGroup_.setAttribute('transform', 'translate(' +
-          (width - resizeSize) + ',' +
-          (height - resizeSize) + ')');
-      this.deleteGroup_.setAttribute('transform', 'translate(' +
-          (width - resizeSize) + ',' +
-          (-resizeSize) + ')');
+      this.resizeGroup_.setAttribute(
+          'transform',
+          'translate(' + (width - resizeSize) + ',' + (height - resizeSize) +
+              ')');
+      this.deleteGroup_.setAttribute(
+          'transform',
+          'translate(' + (width - resizeSize) + ',' + (-resizeSize) + ')');
     }
   }
 
@@ -1071,10 +1056,8 @@ WorkspaceCommentSvg.prototype.setFocus = function() {
     }
     comment.textarea_.focus();
     comment.addFocus();
-    dom.addClass(
-        comment.svgRectTarget_, 'blocklyCommentTargetFocused');
-    dom.addClass(
-        comment.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+    dom.addClass(comment.svgRectTarget_, 'blocklyCommentTargetFocused');
+    dom.addClass(comment.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
   }, 0);
 };
 
@@ -1093,8 +1076,7 @@ WorkspaceCommentSvg.prototype.blurFocus = function() {
 
     comment.textarea_.blur();
     comment.removeFocus();
-    dom.removeClass(
-        comment.svgRectTarget_, 'blocklyCommentTargetFocused');
+    dom.removeClass(comment.svgRectTarget_, 'blocklyCommentTargetFocused');
     dom.removeClass(
         comment.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
   }, 0);

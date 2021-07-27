@@ -4,11 +4,11 @@
 # replacing string (regex) patterns in a way that is both GNU and macOS
 # compatible.
 #
-# Common perl flags used (also decribed at https://perldoc.perl.org/perlrun):
+# Common perl flags used (also described at https://perldoc.perl.org/perlrun):
 #   -e : Used to execute perl programs on the command line
 #   -p : Assumes an input loop around script. Prints every processed line.
 #   -n : Assumes an input loop around script. Does not print every line.
-#   -i : Used for in-place editing. Used for commands for find/replace.
+#   -i : Used for in-place editing. Used in commands for find/replace.
 #   -l[octnum] : Assigns the output record separator "$/" as an octal number. If
 #        octnum is not present, sets output record separator to the current
 #        value of the input record separator "$\".
@@ -18,10 +18,11 @@
 #   This command does an in-place search-and-replace. The global ("/g") modifier
 #   causes it to replace all occurrences, rather than only the first match.
 # 2.  perl -ne 'print m/regex/modifiers'
-#   This command returns a string containing the regex match. The regex must
-#   contain a capture group "()", unless the global ("\g") modifier is
-#   specified. This will return the first match, unless the global modifier is
-#   specified, in which case, it will return all matches.
+#   This command returns a string containing the regex match (designated by the
+#   capture group "()" in the regex). This will return the first match, unless
+#   the global modifier is specified, in which case, it will return all matches.
+#   If this command is used without a capture group it returns true or false (in
+#   the form a truthy or falsey value)
 # 3.  perl -nle 'print $& while m{regex}modifiers'
 #   Similar to (2), but returns regex matches separated by newlines.
 #   The "m{regex}modifiers" is equivalent to "m/regex/modifiers" syntax.
@@ -33,7 +34,7 @@
 # Single quotes need to be escaped in both regex and the string, resulting in
 # '\'' being used to represent a single quote character.
 # For a reference to syntax of regular expressions in Perl, see:
-# https://perldoc.perl.org/perire
+# https://perldoc.perl.org/perlre
 
 #######################################
 # Logging functions.
@@ -240,7 +241,7 @@ step3() {
   missing_requires=$(echo "${missing_requires}" | tr ' ' '\n' | sort -u)
   if [[ -n "${missing_requires}" ]]; then
     # Search for the string goog.require('Blockly') or goog.requireType('Blockly')
-    local has_blockly_require=$(perl -ne'print m{goog\.(require|requireType)\('\''Blockly'\''\)}g' "${filepath}")
+    local has_blockly_require=$(perl -ne 'print m/goog\.(?:require|requireType)\('\''Blockly'\''\)/' "${filepath}")
     if [[ -n "${has_blockly_require}" ]]; then
       warn 'Blockly detected as a require.'
       warn "Potentially missing requires for:\n${missing_requires}\nPlease manually review."

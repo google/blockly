@@ -22,7 +22,7 @@
 #   capture group "()" in the regex). This will return the first match, unless
 #   the global modifier is specified, in which case, it will return all matches.
 #   If this command is used without a capture group it returns true or false (in
-#   the form a truthy or falsey value)
+#   the form a truthy or falsy value).
 # 3.  perl -nle 'print $& while m{regex}modifiers'
 #   Similar to (2), but returns regex matches separated by newlines.
 #   The "m{regex}modifiers" is equivalent to "m/regex/modifiers" syntax.

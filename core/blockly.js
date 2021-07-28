@@ -17,6 +17,7 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.clipboard');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
@@ -96,21 +97,21 @@ Blockly.draggingConnections = [];
  * @type {Element}
  * @private
  */
-Blockly.clipboardXml_ = null;
+Blockly.clipboardXml_ = Blockly.clipboard.xml;
 
 /**
  * Source of the local clipboard.
  * @type {Blockly.WorkspaceSvg}
  * @private
  */
-Blockly.clipboardSource_ = null;
+Blockly.clipboardSource_ = Blockly.clipboard.source;
 
 /**
  * Map of types to type counts for the clipboard object and descendants.
  * @type {Object}
  * @private
  */
-Blockly.clipboardTypeCounts_ = null;
+Blockly.clipboardTypeCounts_ = Blockly.clipboard.typeCounts;
 
 /**
  * Cached value for whether 3D is supported.
@@ -234,39 +235,14 @@ Blockly.deleteBlock = function(selected) {
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
  */
-Blockly.copy = function(toCopy) {
-  var data = toCopy.toCopyData();
-  if (data) {
-    Blockly.clipboardXml_ = data.xml;
-    Blockly.clipboardSource_ = data.source;
-    Blockly.clipboardTypeCounts_ = data.typeCounts;
-  }
-};
+Blockly.copy = Blockly.clipboard.copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
  */
-Blockly.paste = function() {
-  if (!Blockly.clipboardXml_) {
-    return false;
-  }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  var workspace = Blockly.clipboardSource_;
-  if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace;
-  }
-  if (Blockly.clipboardTypeCounts_ &&
-      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
-    Blockly.Events.setGroup(true);
-    workspace.paste(Blockly.clipboardXml_);
-    Blockly.Events.setGroup(false);
-    return true;
-  }
-  return false;
-};
+Blockly.paste = Blockly.clipboard.paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -274,19 +250,7 @@ Blockly.paste = function() {
  *     copied.
  * @package
  */
-Blockly.duplicate = function(toDuplicate) {
-  // Save the clipboard.
-  var clipboardXml = Blockly.clipboardXml_;
-  var clipboardSource = Blockly.clipboardSource_;
-
-  // Create a duplicate via a copy/paste operation.
-  Blockly.copy(toDuplicate);
-  toDuplicate.workspace.paste(Blockly.clipboardXml_);
-
-  // Restore the clipboard.
-  Blockly.clipboardXml_ = clipboardXml;
-  Blockly.clipboardSource_ = clipboardSource;
-};
+Blockly.duplicate = Blockly.clipboard.duplicate;
 
 /**
  * Cancel the native context menu, unless the focus is on an HTML input widget.

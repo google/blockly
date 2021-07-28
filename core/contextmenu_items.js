@@ -15,7 +15,7 @@
  * @namespace
  */
 goog.provide('Blockly.ContextMenuItems');
-
+goog.require('Blockly.clipboard');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenuRegistry');
@@ -316,7 +316,7 @@ Blockly.ContextMenuItems.registerDuplicate = function() {
     },
     callback: function(/** @type {!Blockly.ContextMenuRegistry.Scope} */ scope) {
       if (scope.block) {
-        Blockly.duplicate(scope.block);
+        Blockly.clipboard.duplicate(scope.block);
       }
     },
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,

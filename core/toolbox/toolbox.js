@@ -195,8 +195,8 @@ Blockly.Toolbox.prototype.onShortcut = function(_shortcut) {
  * @public
  */
 Blockly.Toolbox.prototype.init = function() {
-  var workspace = this.workspace_;
-  var svg = workspace.getParentSvg();
+  const workspace = this.workspace_;
+  const svg = workspace.getParentSvg();
 
   this.flyout_ = this.createFlyout_();
 
@@ -206,7 +206,7 @@ Blockly.Toolbox.prototype.init = function() {
   this.flyout_.init(workspace);
 
   this.render(this.toolboxDef_);
-  var themeManager = workspace.getThemeManager();
+  const themeManager = workspace.getThemeManager();
   themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
       'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
@@ -228,9 +228,9 @@ Blockly.Toolbox.prototype.init = function() {
  * @protected
  */
 Blockly.Toolbox.prototype.createDom_ = function(workspace) {
-  var svg = workspace.getParentSvg();
+  const svg = workspace.getParentSvg();
 
-  var container = this.createContainer_();
+  const container = this.createContainer_();
 
   this.contentsDiv_ = this.createContentsContainer_();
   this.contentsDiv_.tabIndex = 0;
@@ -249,7 +249,7 @@ Blockly.Toolbox.prototype.createDom_ = function(workspace) {
  * @protected
  */
 Blockly.Toolbox.prototype.createContainer_ = function() {
-  var toolboxContainer = document.createElement('div');
+  const toolboxContainer = document.createElement('div');
   toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
   Blockly.utils.dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
   Blockly.utils.dom.addClass(toolboxContainer, 'blocklyNonSelectable');
@@ -263,7 +263,7 @@ Blockly.Toolbox.prototype.createContainer_ = function() {
  * @protected
  */
 Blockly.Toolbox.prototype.createContentsContainer_ = function() {
-  var contentsContainer = document.createElement('div');
+  const contentsContainer = document.createElement('div');
   Blockly.utils.dom.addClass(contentsContainer, 'blocklyToolboxContents');
   if (this.isHorizontal()) {
     contentsContainer.style.flexDirection = 'row';
@@ -281,13 +281,13 @@ Blockly.Toolbox.prototype.createContentsContainer_ = function() {
 Blockly.Toolbox.prototype.attachEvents_ = function(container,
     contentsContainer) {
   // Clicking on toolbox closes popups.
-  var clickEvent = Blockly.browserEvents.conditionalBind(
+  const clickEvent = Blockly.browserEvents.conditionalBind(
       container, 'click', this, this.onClick_,
       /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
   this.boundEvents_.push(clickEvent);
 
-  var keyDownEvent = Blockly.browserEvents.conditionalBind(
+  const keyDownEvent = Blockly.browserEvents.conditionalBind(
       contentsContainer, 'keydown', this, this.onKeyDown_,
       /* opt_noCaptureIdentifier */ false,
       /* opt_noPreventDefault */ true);
@@ -304,10 +304,10 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
     // Close flyout.
     Blockly.hideChaff(false);
   } else {
-    var targetElement = e.target;
-    var itemId = targetElement.getAttribute('id');
+    const targetElement = e.target;
+    const itemId = targetElement.getAttribute('id');
     if (itemId) {
-      var item = this.getToolboxItemById(itemId);
+      const item = this.getToolboxItemById(itemId);
       if (item.isSelectable()) {
         this.setSelectedItem(item);
         item.onClick(e);
@@ -325,7 +325,7 @@ Blockly.Toolbox.prototype.onClick_ = function(e) {
  * @protected
  */
 Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
-  var handled = false;
+  let handled = false;
   switch (e.keyCode) {
     case Blockly.utils.KeyCodes.DOWN:
       handled = this.selectNext_();
@@ -342,7 +342,7 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
     case Blockly.utils.KeyCodes.ENTER:
     case Blockly.utils.KeyCodes.SPACE:
       if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
-        var collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
+        const collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
         collapsibleItem.toggleExpanded();
         handled = true;
       }
@@ -368,9 +368,9 @@ Blockly.Toolbox.prototype.onKeyDown_ = function(e) {
  * @protected
  */
 Blockly.Toolbox.prototype.createFlyout_ = function() {
-  var workspace = this.workspace_;
+  const workspace = this.workspace_;
   // TODO (#4247): Look into adding a makeFlyout method to Blockly Options.
-  var workspaceOptions = new Blockly.Options(
+  const workspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
         'parentWorkspace': workspace,
@@ -386,7 +386,7 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
   // Options takes in either 'end' or 'start'. This has already been parsed to
   // be either 0 or 1, so set it after.
   workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
-  var FlyoutClass = null;
+  let FlyoutClass = null;
   if (workspace.horizontalLayout) {
     FlyoutClass = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options,
@@ -407,8 +407,8 @@ Blockly.Toolbox.prototype.createFlyout_ = function() {
  */
 Blockly.Toolbox.prototype.render = function(toolboxDef) {
   this.toolboxDef_ = toolboxDef;
-  for (var i = 0; i < this.contents_.length; i++) {
-    var toolboxItem = this.contents_[i];
+  for (let i = 0; i < this.contents_.length; i++) {
+    const toolboxItem = this.contents_[i];
     if (toolboxItem) {
       toolboxItem.dispose();
     }
@@ -429,8 +429,9 @@ Blockly.Toolbox.prototype.render = function(toolboxDef) {
 Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
   // This is for performance reasons. By using document fragment we only have to
   // add to the DOM once.
-  var fragment = document.createDocumentFragment();
-  for (var i = 0, toolboxItemDef; (toolboxItemDef = toolboxDef[i]); i++) {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < toolboxDef.length; i++) {
+    const toolboxItemDef = toolboxDef[i];
     this.createToolboxItem_(toolboxItemDef, fragment);
   }
   this.contentsDiv_.appendChild(fragment);
@@ -445,7 +446,7 @@ Blockly.Toolbox.prototype.renderContents_ = function(toolboxDef) {
  * @private
  */
 Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment) {
-  var registryName = toolboxItemDef['kind'];
+  let registryName = toolboxItemDef['kind'];
 
   // Categories that are collapsible are created using a class registered under
   // a different name.
@@ -455,13 +456,13 @@ Blockly.Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment
     registryName = Blockly.CollapsibleToolboxCategory.registrationName;
   }
 
-  var ToolboxItemClass = Blockly.registry.getClass(
+  const ToolboxItemClass = Blockly.registry.getClass(
       Blockly.registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
   if (ToolboxItemClass) {
-    var toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
+    const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
     this.addToolboxItem_(toolboxItem);
     toolboxItem.init();
-    var toolboxItemDom = toolboxItem.getDiv();
+    const toolboxItemDom = toolboxItem.getDiv();
     if (toolboxItemDom) {
       fragment.appendChild(toolboxItemDom);
     }
@@ -482,9 +483,11 @@ Blockly.Toolbox.prototype.addToolboxItem_ = function(toolboxItem) {
   this.contents_.push(toolboxItem);
   this.contentMap_[toolboxItem.getId()] = toolboxItem;
   if (toolboxItem.isCollapsible()) {
-    var collapsibleItem = /** @type {Blockly.ICollapsibleToolboxItem} */
+    const collapsibleItem = /** @type {Blockly.ICollapsibleToolboxItem} */
         (toolboxItem);
-    for (var i = 0, child; (child = collapsibleItem.getChildToolboxItems()[i]); i++) {
+    const childToolboxItems = collapsibleItem.getChildToolboxItems();
+    for (let i = 0; i < childToolboxItems.length; i++) {
+      const child = childToolboxItems[i];
       this.addToolboxItem_(child);
     }
   }
@@ -531,13 +534,13 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
   // area are still deleted.  Must be smaller than Infinity, but larger than
   // the largest screen size.
-  var BIG_NUM = 10000000;
-  var toolboxRect = this.HtmlDiv.getBoundingClientRect();
+  const BIG_NUM = 10000000;
+  const toolboxRect = this.HtmlDiv.getBoundingClientRect();
 
-  var top = toolboxRect.top;
-  var bottom = top + toolboxRect.height;
-  var left = toolboxRect.left;
-  var right = left + toolboxRect.width;
+  const top = toolboxRect.top;
+  const bottom = top + toolboxRect.height;
+  const left = toolboxRect.left;
+  const right = left + toolboxRect.width;
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
@@ -567,7 +570,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
  */
 Blockly.Toolbox.prototype.wouldDelete = function(element, _couldConnect) {
   if (element instanceof Blockly.BlockSvg) {
-    var block = /** @type {Blockly.BlockSvg} */ (element);
+    const block = /** @type {Blockly.BlockSvg} */ (element);
     // Prefer dragging to the toolbox over connecting to other blocks.
     this.updateWouldDelete_(!block.getParent() && block.isDeletable());
   } else {
@@ -636,7 +639,7 @@ Blockly.Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
  * @protected
  */
 Blockly.Toolbox.prototype.updateCursorDeleteStyle_ = function(addStyle) {
-  var style = this.wouldDelete_ ? 'blocklyToolboxDelete' :
+  const style = this.wouldDelete_ ? 'blocklyToolboxDelete' :
       'blocklyToolboxGrab';
   if (addStyle) {
     this.addStyle(style);
@@ -728,8 +731,8 @@ Blockly.Toolbox.prototype.isHorizontal = function() {
  * @public
  */
 Blockly.Toolbox.prototype.position = function() {
-  var workspaceMetrics = this.workspace_.getMetrics();
-  var toolboxDiv = this.HtmlDiv;
+  const workspaceMetrics = this.workspace_.getMetrics();
+  const toolboxDiv = this.HtmlDiv;
   if (!toolboxDiv) {
     // Not initialized yet.
     return;
@@ -765,12 +768,12 @@ Blockly.Toolbox.prototype.position = function() {
 Blockly.Toolbox.prototype.handleToolboxItemResize = function() {
   // Reposition the workspace so that (0,0) is in the correct position relative
   // to the new absolute edge (ie toolbox edge).
-  var workspace = this.workspace_;
-  var rect = this.HtmlDiv.getBoundingClientRect();
-  var newX = this.toolboxPosition == Blockly.utils.toolbox.Position.LEFT ?
+  const workspace = this.workspace_;
+  const rect = this.HtmlDiv.getBoundingClientRect();
+  const newX = this.toolboxPosition == Blockly.utils.toolbox.Position.LEFT ?
       workspace.scrollX + rect.width :
       workspace.scrollX;
-  var newY = this.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
+  const newY = this.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
       workspace.scrollY + rect.height :
       workspace.scrollY;
   workspace.translate(newX, newY);
@@ -793,8 +796,8 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @package
  */
 Blockly.Toolbox.prototype.refreshTheme = function() {
-  for (var i = 0; i < this.contents_.length; i++) {
-    var child = this.contents_[i];
+  for (let i = 0; i < this.contents_.length; i++) {
+    const child = this.contents_[i];
     if (child.refreshTheme) {
       child.refreshTheme();
     }
@@ -849,7 +852,7 @@ Blockly.Toolbox.prototype.autoHide = function(onlyClosePopups) {
  * @public
  */
 Blockly.Toolbox.prototype.setSelectedItem = function(newItem) {
-  var oldItem = this.selectedItem_;
+  const oldItem = this.selectedItem_;
 
   if ((!newItem && !oldItem) || (newItem && !newItem.isSelectable())) {
     return;
@@ -934,7 +937,7 @@ Blockly.Toolbox.prototype.selectItem_ = function(oldItem, newItem) {
  */
 Blockly.Toolbox.prototype.selectItemByPosition = function(position) {
   if (position > -1 && position < this.contents_.length) {
-    var item = this.contents_[position];
+    const item = this.contents_[position];
     if (item.isSelectable()) {
       this.setSelectedItem(item);
     }
@@ -966,13 +969,13 @@ Blockly.Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
  * @private
  */
 Blockly.Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
-  var oldElement = oldItem && oldItem.getName();
-  var newElement = newItem && newItem.getName();
+  const oldElement = oldItem && oldItem.getName();
+  let newElement = newItem && newItem.getName();
   // In this case the toolbox closes, so the newElement should be null.
   if (oldItem == newItem) {
     newElement = null;
   }
-  var event = new (Blockly.Events.get(Blockly.Events.TOOLBOX_ITEM_SELECT))(
+  const event = new (Blockly.Events.get(Blockly.Events.TOOLBOX_ITEM_SELECT))(
       oldElement, newElement, this.workspace_.id);
   Blockly.Events.fire(event);
 };
@@ -988,7 +991,7 @@ Blockly.Toolbox.prototype.selectParent_ = function() {
   }
 
   if (this.selectedItem_.isCollapsible() && this.selectedItem_.isExpanded()) {
-    var collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
+    const collapsibleItem = /** @type {!Blockly.ICollapsibleToolboxItem} */ (this.selectedItem_);
     collapsibleItem.setExpanded(false);
     return true;
   } else if (this.selectedItem_.getParent() &&
@@ -1009,7 +1012,7 @@ Blockly.Toolbox.prototype.selectChild_ = function() {
   if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
     return false;
   }
-  var collapsibleItem = /** @type {Blockly.ICollapsibleToolboxItem} */
+  const collapsibleItem = /** @type {Blockly.ICollapsibleToolboxItem} */
       (this.selectedItem_);
   if (!collapsibleItem.isExpanded()) {
     collapsibleItem.setExpanded(true);
@@ -1030,9 +1033,9 @@ Blockly.Toolbox.prototype.selectNext_ = function() {
     return false;
   }
 
-  var nextItemIdx = this.contents_.indexOf(this.selectedItem_) + 1;
+  let nextItemIdx = this.contents_.indexOf(this.selectedItem_) + 1;
   if (nextItemIdx > -1 && nextItemIdx < this.contents_.length) {
-    var nextItem = this.contents_[nextItemIdx];
+    let nextItem = this.contents_[nextItemIdx];
     while (nextItem && !nextItem.isSelectable()) {
       nextItem = this.contents_[++nextItemIdx];
     }
@@ -1054,9 +1057,9 @@ Blockly.Toolbox.prototype.selectPrevious_ = function() {
     return false;
   }
 
-  var prevItemIdx = this.contents_.indexOf(this.selectedItem_) - 1;
+  let prevItemIdx = this.contents_.indexOf(this.selectedItem_) - 1;
   if (prevItemIdx > -1 && prevItemIdx < this.contents_.length) {
-    var prevItem = this.contents_[prevItemIdx];
+    let prevItem = this.contents_[prevItemIdx];
     while (prevItem && !prevItem.isSelectable()) {
       prevItem = this.contents_[--prevItemIdx];
     }
@@ -1075,12 +1078,12 @@ Blockly.Toolbox.prototype.selectPrevious_ = function() {
 Blockly.Toolbox.prototype.dispose = function() {
   this.workspace_.getComponentManager().removeComponent('toolbox');
   this.flyout_.dispose();
-  for (var i = 0; i < this.contents_.length; i++) {
-    var toolboxItem = this.contents_[i];
+  for (let i = 0; i < this.contents_.length; i++) {
+    const toolboxItem = this.contents_[i];
     toolboxItem.dispose();
   }
 
-  for (var j = 0; j < this.boundEvents_.length; j++) {
+  for (let j = 0; j < this.boundEvents_.length; j++) {
     Blockly.browserEvents.unbind(this.boundEvents_[j]);
   }
   this.boundEvents_ = [];

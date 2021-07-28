@@ -155,7 +155,7 @@ def main():
         outfile.write(constants_text)
 
       if not args.quiet:
-        print('Created {0}.'.format(outname))
+        print('Created {0}'.format(outname))
 
 
 if __name__ == '__main__':

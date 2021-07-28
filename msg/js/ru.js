@@ -5,7 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Добавить комментарий";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Невозможно удалить переменную '%1', поскольку она является частью определения функции '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Измените значение:";
-Blockly.Msg["CLEAN_UP"] = "Убрать блоки";
+Blockly.Msg["CLEAN_UP"] = "Очистить блоки";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Свёрнутые блоки содержат предупреждения.";
 Blockly.Msg["COLLAPSE_ALL"] = "Свернуть блоки";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Свернуть блок";

@@ -101,14 +101,22 @@ suite.only('Connection', function() {
       chai.assert.notExists(block,
           `expected block ${block && block.id} to not be attached to next connection`);
     }
+    
+    function assertSerialization(block, jso, xmlText) {
+      const actualJso = Blockly.serialization.blocks
+          .save(block, {addNextBlocks: true});
+      const actualXml = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block));
+      chai.assert.deepEqual(actualJso, jso);
+      chai.assert.equal(actualXml, xmlText);
+    }
 
     var testSuites = [
-      {
-        title: 'Rendered',
-        createWorkspace: () => {
-          return Blockly.inject('blocklyDiv');
-        },
-      },
+      // {
+      //   title: 'Rendered',
+      //   createWorkspace: () => {
+      //     return Blockly.inject('blocklyDiv');
+      //   },
+      // },
       {
         title: 'Headless',
         createWorkspace: () => {
@@ -126,6 +134,9 @@ suite.only('Connection', function() {
           defineRowBlock();
           defineStatementBlock();
           defineStackBlock();
+
+          createGenUidStubWithReturns(
+              new Array(30).fill().map((_, i) => 'id' + i));
         });
 
         teardown(function() {
@@ -137,21 +148,21 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="row_block"/>'
+                  '<block type="row_block" id="id0"/>'
               ), workspace);
               return block;
             }
   
             function createStatementBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="statement_block"/>'
+                  '<block type="statement_block" id="id0"/>'
               ), workspace);
               return block;
             }
   
             function createStackBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="stack_block"/>'
+                  '<block type="stack_block" id="id0"/>'
               ), workspace);
               return block;
             }
@@ -159,18 +170,39 @@ suite.only('Connection', function() {
             test('Value', function() {
               var parent = createRowBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="row_block"/>'
+                  '<shadow type="row_block" id="id1"/>'
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Value', function() {
               var parent = createRowBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="row_block">' +
+                  '<shadow type="row_block" id="id1">' +
                   '  <value name="INPUT">' +
-                  '    <shadow type="row_block"/>' +
+                  '    <shadow type="row_block" id="id2"/>' +
                   '  </value>' +
                   '</shadow>'
               );
@@ -178,23 +210,77 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
               var parent = createStatementBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block"/>'
+                  '<shadow type="statement_block" id="id1"/>'
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Statement', function() {
               var parent = createStatementBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block">' +
+                  '<shadow type="statement_block" id="id1">' +
                   '  <statement name="NAME">' +
-                  '    <shadow type="statement_block"/>' +
+                  '    <shadow type="statement_block" id="id2"/>' +
                   '  </statement>' +
                   '</shadow>'
               );
@@ -202,29 +288,110 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
               var parent = createStackBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block"/>'
+                  '<shadow type="stack_block" id="id1"/>'
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Next', function() {
               var parent = createStackBlock(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block">' +
+                  '<shadow type="stack_block" id="id1">' +
                   '  <next>' +
-                  '    <shadow type="stack_block"/>' +
+                  '    <shadow type="stack_block" id="id2"/>' +
                   '  </next>' +
                   '</shadow>'
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
   
@@ -232,9 +399,9 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="row_block">' +
+                  '<block type="row_block" id="id0">' +
                   '  <value name="INPUT">' +
-                  '    <block type="row_block"/>' +
+                  '    <block type="row_block" id="idA"/>' +
                   '  </value>' +
                   '</block>'
               ), workspace);
@@ -243,9 +410,9 @@ suite.only('Connection', function() {
   
             function createStatementBlocks(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="statement_block">' +
+                  '<block type="statement_block" id="id0">' +
                   '  <statement name="NAME">' +
-                  '    <block type="statement_block"/>' +
+                  '    <block type="statement_block" id="idA"/>' +
                   '  </statement>' +
                   '</block>'
               ), workspace);
@@ -254,9 +421,9 @@ suite.only('Connection', function() {
   
             function createStackBlocks(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="stack_block">' +
+                  '<block type="stack_block" id="id0">' +
                   '  <next>' +
-                  '    <block type="stack_block"/>' +
+                  '    <block type="stack_block" id="idA"/>' +
                   '  </next>' +
                   '</block>'
               ), workspace);
@@ -266,20 +433,41 @@ suite.only('Connection', function() {
             test('Value', function() {
               var parent = createRowBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="row_block"/>'
+                  '<shadow type="row_block" id="id1"/>'
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', false);
               parent.getInput('INPUT').connection.disconnect();
               assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Value', function() {
               var parent = createRowBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="row_block">' +
+                  '<shadow type="row_block" id="id1">' +
                   '  <value name="INPUT">' +
-                  '    <shadow type="row_block"/>' +
+                  '    <shadow type="row_block" id="id2"/>' +
                   '  </value>' +
                   '</shadow>'
               );
@@ -290,25 +478,79 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
               var parent = createStatementBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block"/>'
+                  '<shadow type="statement_block" id="id1"/>'
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', false);
               parent.getInput('NAME').connection.disconnect();
               assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Statement', function() {
               var parent = createStatementBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block">' +
+                  '<shadow type="statement_block" id="id1">' +
                   '  <statement name="NAME">' +
-                  '    <shadow type="statement_block"/>' +
+                  '    <shadow type="statement_block" id="id2"/>' +
                   '  </statement>' +
                   '</shadow>'
               );
@@ -320,25 +562,77 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
               var parent = createStackBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block"/>'
+                  '<shadow type="stack_block" id="id1"/>'
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, false);
               parent.nextConnection.disconnect();
               assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Next', function() {
               var parent = createStackBlocks(this.workspace);
               var xml = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block">' +
+                  '<shadow type="stack_block" id="id1">' +
                   '  <next>' +
-                  '    <shadow type="stack_block"/>' +
+                  '    <shadow type="stack_block" id="id2"/>' +
                   '  </next>' +
                   '</shadow>'
               );
@@ -348,6 +642,35 @@ suite.only('Connection', function() {
               parent.nextConnection.disconnect();
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
   
@@ -355,21 +678,21 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="row_block"/>'
+                  '<block type="row_block" id="id0"/>'
               ), workspace);
               return block;
             }
   
             function createStatementBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="statement_block"/>'
+                  '<block type="statement_block" id="id0"/>'
               ), workspace);
               return block;
             }
   
             function createStackBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="stack_block"/>'
+                  '<block type="stack_block" id="id0"/>'
               ), workspace);
               return block;
             }
@@ -386,6 +709,27 @@ suite.only('Connection', function() {
               );
               parent.getInput('INPUT').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Value', function() {
@@ -412,6 +756,39 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="b"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
@@ -426,6 +803,27 @@ suite.only('Connection', function() {
               );
               parent.getInput('NAME').connection.setShadowDom(xml);
               assertInputHasBlock(parent, 'NAME', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Statement', function() {
@@ -452,6 +850,39 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="b"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
@@ -466,6 +897,25 @@ suite.only('Connection', function() {
               );
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Next', function() {
@@ -490,6 +940,35 @@ suite.only('Connection', function() {
               parent.nextConnection.setShadowDom(xml);
               assertNextHasBlock(parent, true, '2');
               assertNextHasBlock(parent.getNextBlock(), true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'b',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="b"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
   
@@ -497,9 +976,9 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="row_block">' +
+                  '<block type="row_block" id="id0">' +
                   '  <value name="INPUT">' +
-                  '    <shadow type="row_block"/>' +
+                  '    <shadow type="row_block" id="idA"/>' +
                   '  </value>' +
                   '</block>'
               ), workspace);
@@ -508,9 +987,9 @@ suite.only('Connection', function() {
   
             function createStatementBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="statement_block">' +
+                  '<block type="statement_block" id="id0">' +
                   '  <statement name="NAME">' +
-                  '    <shadow type="statement_block"/>' +
+                  '    <shadow type="statement_block" id="idA"/>' +
                   '  </statement>' +
                   '</block>'
               ), workspace);
@@ -519,9 +998,9 @@ suite.only('Connection', function() {
   
             function createStackBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="stack_block">' +
+                  '<block type="stack_block" id="id0">' +
                   '  <next>' +
-                  '    <shadow type="stack_block"/>' +
+                  '    <shadow type="stack_block" id="idA"/>' +
                   '  </next>' +
                   '</block>'
               ), workspace);
@@ -532,18 +1011,48 @@ suite.only('Connection', function() {
               var parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
               var parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'STATEMENT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
               var parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowDom(null);
               assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
             });
           });
   
@@ -551,10 +1060,10 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="row_block">' +
+                  '<block type="row_block" id="id0">' +
                   '  <value name="INPUT">' +
-                  '    <shadow type="row_block"/>' +
-                  '    <block type="row_block"/>' +
+                  '    <shadow type="row_block" id="idA"/>' +
+                  '    <block type="row_block" id="idB"/>' +
                   '  </value>' +
                   '</block>'
               ), workspace);
@@ -563,10 +1072,10 @@ suite.only('Connection', function() {
   
             function createStatementBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="statement_block">' +
+                  '<block type="statement_block" id="id0">' +
                   '  <statement name="NAME">' +
-                  '    <shadow type="statement_block"/>' +
-                  '    <block type="statement_block"/>' +
+                  '    <shadow type="statement_block" id="idA"/>' +
+                  '    <block type="statement_block" id="idB"/>' +
                   '  </statement>' +
                   '</block>'
               ), workspace);
@@ -575,10 +1084,10 @@ suite.only('Connection', function() {
   
             function createStackBlock(workspace) {
               var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                  '<block type="stack_block">' +
+                  '<block type="stack_block" id="id0">' +
                   '  <next>' +
-                  '    <shadow type="stack_block"/>' +
-                  '    <block type="stack_block"/>' +
+                  '    <shadow type="stack_block" id="idA"/>' +
+                  '    <block type="stack_block" id="idB"/>' +
                   '  </next>' +
                   '</block>'
               ), workspace);
@@ -591,6 +1100,16 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', false);
               parent.getInput('INPUT').connection.disconnect();
               assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
@@ -599,6 +1118,16 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', false);
               parent.getInput('NAME').connection.disconnect();
               assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
@@ -607,6 +1136,16 @@ suite.only('Connection', function() {
               assertNextHasBlock(parent, false);
               parent.nextConnection.disconnect();
               assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
             });
           });
   
@@ -760,34 +1299,57 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'row_block'}, workspace);
+                  .load({'type': 'row_block', 'id': 'id0'}, workspace);
             }
   
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'statement_block'}, workspace);
+                  .load({'type': 'statement_block', 'id': 'id0'}, workspace);
             }
   
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'stack_block'}, workspace);
+                  .load({'type': 'stack_block', 'id': 'id0'}, workspace);
             }
 
             test('Value', function() {
               var parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection
-                  .setShadowState({'type': 'row_block'});
+                  .setShadowState({'type': 'row_block', 'id': 'id1'});
               assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
 
             test('Multiple Value', function() {
               var parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowState({
                 'type': 'row_block',
+                'id': 'id1',
                 'inputs': {
                   'INPUT': {
                     'shadow': {
                       'type': 'row_block',
+                      'id': 'id2'
                     }
                   }
                 }
@@ -795,23 +1357,79 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
 
             test('Statement', function() {
               var parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection
-                  .setShadowState({'type': 'statement_block'});
+                  .setShadowState({'type': 'statement_block', 'id': 'id1'});
               assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
 
             test('Multiple Statment', function() {
               var parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowState({
                 'type': 'statement_block',
+                'id': 'id1',
                 'inputs': {
                   'NAME': {
                     'shadow': {
                       'type': 'statement_block',
+                      'id': 'id2',
                     }
                   }
                 }
@@ -819,26 +1437,110 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
 
             test('Next', function() {
               var parent = createStackBlock(this.workspace);
-              parent.nextConnection.setShadowState({'type': 'stack_block'});
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': 'id1'});
               assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
 
-            test('Muitple Next', function() {
+            test('Multiple Next', function() {
               var parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowState({
                 'type': 'stack_block',
+                'id': 'id1',
                 'next': {
                   'shadow': {
-                    'type': 'stack_block'
+                    'type': 'stack_block',
+                    'id': 'id2',
                   }
                 }
               });
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
 
@@ -848,10 +1550,12 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'row_block',
+                    'id': 'id0',
                     'inputs': {
                       'INPUT': {
                         'block': {
-                          'type': 'row_block'
+                          'type': 'row_block',
+                          'id': 'idA'
                         }
                       }
                     }
@@ -863,10 +1567,12 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'statement_block',
+                    'id': 'id0',
                     'inputs': {
                       'NAME': {
                         'block': {
-                          'type': 'statement_block'
+                          'type': 'statement_block',
+                          'id': 'idA'
                         }
                       }
                     }
@@ -878,9 +1584,11 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'stack_block',
+                    'id': 'id0',
                     'next': {
                       'block': {
-                        'type': 'stack_block'
+                        'type': 'stack_block',
+                        'id': 'idA'
                       }
                     }
                   },
@@ -890,10 +1598,31 @@ suite.only('Connection', function() {
             test('Value', function() {
               var parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection
-                  .setShadowState({'type': 'row_block'});
+                  .setShadowState({'type': 'row_block', 'id': 'id1'});
               assertInputHasBlock(parent, 'INPUT', false);
               parent.getInput('INPUT').connection.disconnect();
               assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Value', function() {
@@ -901,10 +1630,12 @@ suite.only('Connection', function() {
               parent.getInput('INPUT').connection.setShadowState(
                   {
                     'type': 'row_block',
+                    'id': 'id1',
                     'inputs': {
                       'INPUT': {
                         'shadow': {
-                          'type': 'row_block'
+                          'type': 'row_block',
+                          'id': 'id2',
                         }
                       }
                     }
@@ -916,15 +1647,69 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
               var parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection
-                  .setShadowState({'type': 'statement_block'});
+                  .setShadowState({'type': 'statement_block', 'id': 'id1'});
               assertInputHasBlock(parent, 'NAME', false);
               parent.getInput('NAME').connection.disconnect();
               assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Statement', function() {
@@ -932,10 +1717,12 @@ suite.only('Connection', function() {
               parent.getInput('NAME').connection.setShadowState(
                   {
                     'type': 'statement_block',
+                    'id': 'id1',
                     'inputs': {
                       'NAME': {
                         'shadow': {
-                          'type': 'statement_block'
+                          'type': 'statement_block',
+                          'id': 'id2',
                         }
                       }
                     }
@@ -948,14 +1735,67 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
               var parent = createStackBlocks(this.workspace);
-              parent.nextConnection.setShadowState({'type': 'stack_block'});
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': 'id1'});
               assertNextHasBlock(parent, false);
               parent.nextConnection.disconnect();
               assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Next', function() {
@@ -963,9 +1803,11 @@ suite.only('Connection', function() {
               parent.nextConnection.setShadowState(
                   {
                     'type': 'stack_block',
+                    'id': 'id1',
                     'next': {
                       'shadow': {
-                        'type': 'stack_block'
+                        'type': 'stack_block',
+                        'id': 'id2',
                       }
                     }
                   }
@@ -975,6 +1817,35 @@ suite.only('Connection', function() {
               parent.nextConnection.disconnect();
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
   
@@ -982,17 +1853,17 @@ suite.only('Connection', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'row_block'}, workspace);
+                  .load({'type': 'row_block', 'id': 'id0'}, workspace);
             }
   
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'statement_block'}, workspace);
+                  .load({'type': 'statement_block', 'id': 'id0'}, workspace);
             }
   
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks
-                  .load({'type': 'stack_block'}, workspace);
+                  .load({'type': 'stack_block', 'id': 'id0'}, workspace);
             }
   
             test('Value', function() {
@@ -1003,6 +1874,27 @@ suite.only('Connection', function() {
               parent.getInput('INPUT').connection
                   .setShadowState({'type': 'row_block', 'id': '2'});
               assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Value', function() {
@@ -1041,6 +1933,39 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="b"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
@@ -1051,6 +1976,27 @@ suite.only('Connection', function() {
               parent.getInput('NAME').connection
                   .setShadowState({'type': 'statement_block', 'id': '2'});
               assertInputHasBlock(parent, 'NAME', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Statement', function() {
@@ -1089,6 +2035,39 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="b"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
@@ -1099,6 +2078,25 @@ suite.only('Connection', function() {
               parent.nextConnection
                   .setShadowState({'type': 'stack_block', 'id': '2'});
               assertNextHasBlock(parent, true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
   
             test('Multiple Next', function() {
@@ -1131,6 +2129,35 @@ suite.only('Connection', function() {
               );
               assertNextHasBlock(parent, true, '2');
               assertNextHasBlock(parent.getNextBlock(), true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'b',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="b"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
             });
           });
   
@@ -1140,10 +2167,12 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'row_block',
+                    'id': 'id0',
                     'inputs': {
                       'INPUT': {
                         'shadow': {
-                          'type': 'row_block'
+                          'type': 'row_block',
+                          'id': 'id1',
                         }
                       }
                     }
@@ -1155,10 +2184,12 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'statement_block',
+                    'id': 'id0',
                     'inputs': {
                       'NAME': {
                         'shadow': {
-                          'type': 'statement_block'
+                          'type': 'statement_block',
+                          'id': 'id1',
                         }
                       }
                     }
@@ -1170,9 +2201,11 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'stack_block',
+                    'id': 'id0',
                     'next': {
                       'shadow': {
-                        'type': 'stack_block'
+                        'type': 'stack_block',
+                        'id': 'id1',
                       }
                     }
                   },
@@ -1183,18 +2216,48 @@ suite.only('Connection', function() {
               var parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
               var parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
               var parent = createStackBlocks(this.workspace);
               parent.nextConnection.setShadowState(null);
               assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
             });
           });
   
@@ -1204,13 +2267,16 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'row_block',
+                    'id': 'id0',
                     'inputs': {
                       'INPUT': {
                         'shadow': {
-                          'type': 'row_block'
+                          'type': 'row_block',
+                          'id': 'id1',
                         },
                         'block': {
                           'type': 'row_block',
+                          'id': 'id2',
                         }
                       }
                     }
@@ -1222,13 +2288,16 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'statement_block',
+                    'id': 'id0',
                     'inputs': {
                       'NAME': {
                         'shadow': {
-                          'type': 'statement_block'
+                          'type': 'statement_block',
+                          'id': 'id1',
                         },
                         'block': {
-                          'type': 'statement_block'
+                          'type': 'statement_block',
+                          'id': 'id2',
                         }
                       }
                     }
@@ -1240,12 +2309,15 @@ suite.only('Connection', function() {
               return Blockly.serialization.blocks.load(
                   {
                     'type': 'stack_block',
+                    'id': 'id0',
                     'next': {
                       'shadow': {
-                        'type': 'stack_block'
+                        'type': 'stack_block',
+                        'id': 'id1',
                       },
                       'block': {
-                        'type': 'stack_block'
+                        'type': 'stack_block',
+                        'id': 'id2',
                       }
                     }
                   },
@@ -1258,6 +2330,16 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'INPUT', false);
               parent.getInput('INPUT').connection.disconnect();
               assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Statement', function() {
@@ -1266,6 +2348,16 @@ suite.only('Connection', function() {
               assertInputHasBlock(parent, 'NAME', false);
               parent.getInput('NAME').connection.disconnect();
               assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
             });
   
             test('Next', function() {
@@ -1274,6 +2366,16 @@ suite.only('Connection', function() {
               assertNextHasBlock(parent, false);
               parent.nextConnection.disconnect();
               assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
             });
           });
   

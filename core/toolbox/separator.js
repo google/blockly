@@ -45,7 +45,7 @@ Blockly.ToolboxSeparator = function(separatorDef, toolbox) {
     'container': 'blocklyTreeSeparator'
   };
 
-  var cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
+  const cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
   Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
 };
 Blockly.utils.object.inherits(Blockly.ToolboxSeparator, Blockly.ToolboxItem);
@@ -77,7 +77,7 @@ Blockly.ToolboxSeparator.prototype.init = function() {
  * @protected
  */
 Blockly.ToolboxSeparator.prototype.createDom_ = function() {
-  var container = document.createElement('div');
+  const container = document.createElement('div');
   Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
   this.htmlDiv_ = container;
   return container;

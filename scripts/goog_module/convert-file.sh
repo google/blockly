@@ -126,6 +126,59 @@ commit-step() {
 }
 
 #######################################
+# Extracts a list of properties that are accessed on the specified module name.
+# Excludes any matches
+# Arguments:
+#   The module name to find properties accessed for.
+#   The modules required by the specified module as a single string.
+#   The filepath to extract requires from.
+#   Optional: The top-level module.
+# Outputs:
+#   Writes list of properties to stdout as items separated by spaces.
+#######################################
+getPropertiesAccessed() {
+  local module_name="$1"
+  local requires="$2"
+  local filepath="$3"
+  local top_module_name="$4"
+  # Get any strings that follow "$module_name.", excluding matches for
+  # "$module_name.prototype" and remove list item duplicates (sort -u).
+  local properties_accessed=$(perl -nle 'print $& while m{(?<='"${module_name}"'\.)(?!prototype)\w+}g' "${filepath}" | sort -u)
+
+  # Get a list of any requires that are a child of $module_name.
+  # Ex: Blockly.utils.dom is a child of Blockly.utils, this would return "dom"
+  local requires_overlap=$(echo "${requires}" | perl -nle 'print $& while m{(?<='"${module_name}"'\.)\w+}g')
+  # Detect if there was any overlap.
+  if [[ -n "${requires_overlap}" ]]; then
+    while read -r requires_overlap_prop; do
+      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
+    done <<<"${requires_overlap}"
+  fi
+
+  # Fix formatting (remove extra whitespace) and delimit the list with spaces.
+  properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
+
+  echo "${properties_accessed}"
+}
+
+#######################################
+# Extracts a list of requires defined in the file in the form of a single string
+# of items separated by newlines.
+# Arguments:
+#   The filepath to extract requires from.
+# Outputs:
+#   Writes list of requires to stdout as items separated by newlines.
+#######################################
+getRequires() {
+  local filepath="$1"
+  # Extracts all strings that start with goog.require(' or goog.requireType('
+  # up until the ending single quote.
+  # Ex: "goog.require('Blockly.utils')" would extract "Blockly.utils"
+  local requires=$(perl -nle 'print $& while m{(?:(?<=^goog.require\('\'')|(?<=^goog.requireType\('\''))[^'\'']+}g' "${filepath}")
+  echo "${requires}"
+}
+
+#######################################
 # Runs step 2 of the automated conversion.
 # Arguments:
 #   The filepath of the file being converted.
@@ -166,8 +219,18 @@ step2 () {
   # No top level class.
   inf 'Updating top-level property declarations...'
   perl -pi -e 's/^'"${module_name}"'\.([^ ]+) =/const \1 =/g' "${filepath}"
+
+  # Extract specific properties accessed so that properties from requires that
+  # are children of the module aren't changed.
+  # Ex: The module Blockly.utils shouldn't update Blockly.utils.dom (since it is
+  # a require from another module.
+  local requires=$(getRequires "${filepath}")
+  local properties_accessed=$(getPropertiesAccessed "${module_name}" "${requires}" "${filepath}")
   inf "Updating local references to module..."
-  perl -pi -e 's/'"${module_name}"'\.([^ ]+)/\1/g' "${filepath}"
+  for property in $(echo "${properties_accessed}"); do
+    inf "Updating references of ${module_name}.${property} to ${property}..."
+    perl -pi -e 's/'"${module_name}"'\.'"${property}"'(?!\w)/'"${property}"'/g' "${filepath}"
+  done
 
   npm run build:deps
   success "Completed automation for step 2. Please manually review and add exports for non-private top-level functions."
@@ -187,7 +250,7 @@ step3() {
   fi
   inf "Extracted module name \"${module_name}\""
 
-  local requires=$(perl -nle 'print $& while m{(?:(?<=^goog.require\('\'')|(?<=^goog.requireType\('\''))[^'\'']+}g' "${filepath}")
+  local requires=$(getRequires "${filepath}")
 
   # Process each require
   echo "${requires}" | while read -r require; do
@@ -205,23 +268,17 @@ step3() {
 
     # Parse property access of module
     local direct_access_count=$(perl -nle 'print $& while m{'"${require}"'[^\.'\'']}g' "${filepath}" | wc -l)
-    local properties_accessed=$(perl -nle 'print $& while m{(?<='"${require}"'\.)(?!prototype)\w+}g' "${filepath}" | sort -u)
+    local properties_accessed=$(getPropertiesAccessed "${require}" "${requires}" "${filepath}")
 
-    # Detect requires overlap
-    # (ex: Blockly.utils require and Blockly.utils.dom also in requires)
-    local requires_overlap=$(echo "${requires}" | perl -nle 'print $& while m{(?<='"${require}"'\.)\w+}g')
-    if [[ -n "${requires_overlap}" ]]; then
-      while read -r requires_overlap_prop; do
-        properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
-      done <<<"${requires_overlap}"
-    fi
-    # Detect module name overlap
-    # (ex: Blockly require and Blockly.ContextMenuItems module being converted)
+    # Remove $module_name in case it is a child of $require.
+    # Ex: Blockly.utils.dom would be a child of Blockly, module_overlap would be
+    # "utils"
     local module_overlap=$(echo "${module_name}" | perl -nle 'print $& while m{(?<='"${require}"'\.)\w+}g')
     if [[ -n "${module_overlap}" ]]; then
       properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${module_overlap}"'//g')
+      # Trim any extra whitespace created.
+      properties_accessed=$(echo "${properties_accessed}" | xargs)
     fi
-    properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/\s+/ /g' | xargs)
 
     if [[ -n "${properties_accessed}" ]]; then
       local comma_properties=$(echo "${properties_accessed}" | perl -pe 's/\s+/, /g' | perl -pe 's/, $//')

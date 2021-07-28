@@ -35,17 +35,13 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * @implements {IToolboxItem}
  */
 const ToolboxSeparator = function(separatorDef, toolbox) {
-
-  ToolboxSeparator.superClass_.constructor.call(
-      this, separatorDef, toolbox);
+  ToolboxSeparator.superClass_.constructor.call(this, separatorDef, toolbox);
   /**
    * All the CSS class names that are used to create a separator.
    * @type {!ToolboxSeparator.CssConfig}
    * @protected
    */
-  this.cssConfig_ = {
-    'container': 'blocklyTreeSeparator'
-  };
+  this.cssConfig_ = {'container': 'blocklyTreeSeparator'};
 
   const cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
   object.mixin(this.cssConfig_, cssConfig);
@@ -103,25 +99,23 @@ ToolboxSeparator.prototype.dispose = function() {
  * CSS for Toolbox.  See css.js for use.
  */
 Css.register([
-  /* eslint-disable indent */
-  '.blocklyTreeSeparator {',
-    'border-bottom: solid #e5e5e5 1px;',
-    'height: 0;',
-    'margin: 5px 0;',
-  '}',
-
-  '.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {',
-    'border-right: solid #e5e5e5 1px;',
-    'border-bottom: none;',
-    'height: auto;',
-    'margin: 0 5px 0 5px;',
-    'padding: 5px 0;',
-    'width: 0;',
-  '}',
-  /* eslint-enable indent */
+  `.blocklyTreeSeparator {
+  border-bottom: solid #e5e5e5 1px;
+  height: 0;
+  margin: 5px 0;
+}`,
+  `.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
+  border-right: solid #e5e5e5 1px;
+  border-bottom: none;
+  height: auto;
+  margin: 0 5px 0 5px;
+  padding: 5px 0;
+  width: 0;
+}`,
 ]);
 
-registry.register(registry.Type.TOOLBOX_ITEM,
-    ToolboxSeparator.registrationName, ToolboxSeparator);
+registry.register(
+    registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
+    ToolboxSeparator);
 
 exports = ToolboxSeparator;

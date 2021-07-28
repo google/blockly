@@ -448,7 +448,7 @@ function buildLangfiles(done) {
   // Create output directory.
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
   fs.mkdirSync(outputDir, {recursive: true});
-  
+
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&

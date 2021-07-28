@@ -5,7 +5,7 @@
  */
 
 
-suite.only('Connection', function() {
+suite('Connection', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = sinon.createStubInstance(Blockly.Workspace);

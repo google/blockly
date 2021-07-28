@@ -14,26 +14,25 @@
 goog.module('Blockly.ToolboxSeparator');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Css');
-goog.require('Blockly.IToolboxItem');
-goog.require('Blockly.registry');
-goog.require('Blockly.ToolboxItem');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.utils.toolbox');
+const Css = goog.require('Blockly.Css');
+const IToolbox = goog.requireType('Blockly.IToolbox');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
+const ToolboxItem = goog.require('Blockly.ToolboxItem');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
- * @param {!Blockly.utils.toolbox.SeparatorInfo} separatorDef The information
+ * @param {!toolbox.SeparatorInfo} separatorDef The information
  *     needed to create a separator.
- * @param {!Blockly.IToolbox} toolbox The parent toolbox for the separator.
+ * @param {!IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
- * @extends {Blockly.ToolboxItem}
- * @implements {Blockly.IToolboxItem}
+ * @extends {ToolboxItem}
+ * @implements {IToolboxItem}
  */
 const ToolboxSeparator = function(separatorDef, toolbox) {
 
@@ -49,9 +48,9 @@ const ToolboxSeparator = function(separatorDef, toolbox) {
   };
 
   const cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
-  Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
+  object.mixin(this.cssConfig_, cssConfig);
 };
-Blockly.utils.object.inherits(ToolboxSeparator, Blockly.ToolboxItem);
+object.inherits(ToolboxSeparator, ToolboxItem);
 
 /**
  * All the CSS class names that are used to create a separator.
@@ -81,7 +80,7 @@ ToolboxSeparator.prototype.init = function() {
  */
 ToolboxSeparator.prototype.createDom_ = function() {
   const container = document.createElement('div');
-  Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
+  dom.addClass(container, this.cssConfig_['container']);
   this.htmlDiv_ = container;
   return container;
 };
@@ -97,13 +96,13 @@ ToolboxSeparator.prototype.getDiv = function() {
  * @override
  */
 ToolboxSeparator.prototype.dispose = function() {
-  Blockly.utils.dom.removeNode(this.htmlDiv_);
+  dom.removeNode(this.htmlDiv_);
 };
 
 /**
  * CSS for Toolbox.  See css.js for use.
  */
-Blockly.Css.register([
+Css.register([
   /* eslint-disable indent */
   '.blocklyTreeSeparator {',
     'border-bottom: solid #e5e5e5 1px;',
@@ -122,7 +121,7 @@ Blockly.Css.register([
   /* eslint-enable indent */
 ]);
 
-Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
+registry.register(registry.Type.TOOLBOX_ITEM,
     ToolboxSeparator.registrationName, ToolboxSeparator);
 
 exports = ToolboxSeparator;

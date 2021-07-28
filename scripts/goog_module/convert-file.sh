@@ -312,8 +312,8 @@ help() {
   echo ""
   echo "Usage: $0 [-h] [-c <step> <filepath>|-s <step> <filepath>]"
   echo "  -h                    Display help and exit"
-  echo "  -c <step> <filepath>  Create a commit for the specified step [2-4]"
-  echo "  -s <step> <filepath>  Run the specified step [1-4]"
+  echo "  -c <step> <filepath>  Create a commit for the specified step [1-4]"
+  echo "  -s <step> <filepath>  Run the specified step [2-4]"
 }
 
 #######################################

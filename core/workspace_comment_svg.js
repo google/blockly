@@ -47,6 +47,30 @@ goog.require('Blockly.Events.Selected');
 
 
 /**
+ * Size of the resize icon.
+ * @type {number}
+ * @const
+ * @private
+ */
+const RESIZE_SIZE = 8;
+
+/**
+ * Radius of the border around the comment.
+ * @type {number}
+ * @const
+ * @private
+ */
+const BORDER_RADIUS = 3;
+
+/**
+ * Offset from the foreignobject edge to the textarea edge.
+ * @type {number}
+ * @const
+ * @private
+ */
+const TEXTAREA_OFFSET = 2;
+
+/**
  * Class for a workspace comment's SVG representation.
  * @param {!Workspace} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
@@ -89,8 +113,8 @@ const WorkspaceCommentSvg = function(
     'class': 'blocklyCommentRect',
     'x': 0,
     'y': 0,
-    'rx': WorkspaceCommentSvg.BORDER_RADIUS,
-    'ry': WorkspaceCommentSvg.BORDER_RADIUS
+    'rx': BORDER_RADIUS,
+    'ry': BORDER_RADIUS
   });
   this.svgGroup_.appendChild(this.svgRect_);
 
@@ -123,30 +147,6 @@ object.inherits(WorkspaceCommentSvg, WorkspaceComment);
  * @package
  */
 WorkspaceCommentSvg.DEFAULT_SIZE = 100;
-
-/**
- * Size of the resize icon.
- * @type {number}
- * @const
- * @private
- */
-WorkspaceCommentSvg.RESIZE_SIZE = 8;
-
-/**
- * Radius of the border around the comment.
- * @type {number}
- * @const
- * @private
- */
-WorkspaceCommentSvg.BORDER_RADIUS = 3;
-
-/**
- * Offset from the foreignobject edge to the textarea edge.
- * @type {number}
- * @const
- * @private
- */
-WorkspaceCommentSvg.TEXTAREA_OFFSET = 2;
 
 /**
  * Offset from the top to make room for a top bar.
@@ -718,8 +718,8 @@ WorkspaceCommentSvg.prototype.render = function() {
     'class': 'blocklyCommentTarget',
     'x': 0,
     'y': 0,
-    'rx': WorkspaceCommentSvg.BORDER_RADIUS,
-    'ry': WorkspaceCommentSvg.BORDER_RADIUS
+    'rx': BORDER_RADIUS,
+    'ry': BORDER_RADIUS
   });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
@@ -806,27 +806,26 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
   this.resizeGroup_ = dom.createSvgElement(
       Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
       this.svgGroup_);
-  const resizeSize = WorkspaceCommentSvg.RESIZE_SIZE;
   dom.createSvgElement(
       Svg.POLYGON,
-      {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+      {'points': '0,x x,x x,0'.replace(/x/g, RESIZE_SIZE.toString())},
       this.resizeGroup_);
   dom.createSvgElement(
       Svg.LINE, {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize / 3,
-        'y1': resizeSize - 1,
-        'x2': resizeSize - 1,
-        'y2': resizeSize / 3
+        'x1': RESIZE_SIZE / 3,
+        'y1': RESIZE_SIZE - 1,
+        'x2': RESIZE_SIZE - 1,
+        'y2': RESIZE_SIZE / 3
       },
       this.resizeGroup_);
   dom.createSvgElement(
       Svg.LINE, {
         'class': 'blocklyResizeLine',
-        'x1': resizeSize * 2 / 3,
-        'y1': resizeSize - 1,
-        'x2': resizeSize - 1,
-        'y2': resizeSize * 2 / 3
+        'x1': RESIZE_SIZE * 2 / 3,
+        'y1': RESIZE_SIZE - 1,
+        'x2': RESIZE_SIZE - 1,
+        'y2': RESIZE_SIZE * 2 / 3
       },
       this.resizeGroup_);
 };
@@ -974,7 +973,7 @@ WorkspaceCommentSvg.prototype.resizeMouseMove_ = function(e) {
 WorkspaceCommentSvg.prototype.resizeComment_ = function() {
   const size = this.getHeightWidth();
   const topOffset = WorkspaceCommentSvg.TOP_OFFSET;
-  const textOffset = WorkspaceCommentSvg.TEXTAREA_OFFSET * 2;
+  const textOffset = TEXTAREA_OFFSET * 2;
 
   this.foreignObject_.setAttribute('width', size.width);
   this.foreignObject_.setAttribute('height', size.height - topOffset);
@@ -1008,26 +1007,25 @@ WorkspaceCommentSvg.prototype.setSize_ = function(width, height) {
     this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
   }
 
-  const resizeSize = WorkspaceCommentSvg.RESIZE_SIZE;
   if (this.resizeGroup_) {
     if (this.RTL) {
       // Mirror the resize group.
       this.resizeGroup_.setAttribute(
           'transform',
-          'translate(' + (-width + resizeSize) + ',' + (height - resizeSize) +
+          'translate(' + (-width + RESIZE_SIZE) + ',' + (height - RESIZE_SIZE) +
               ') scale(-1 1)');
       this.deleteGroup_.setAttribute(
           'transform',
-          'translate(' + (-width + resizeSize) + ',' + (-resizeSize) +
+          'translate(' + (-width + RESIZE_SIZE) + ',' + (-RESIZE_SIZE) +
               ') scale(-1 1)');
     } else {
       this.resizeGroup_.setAttribute(
           'transform',
-          'translate(' + (width - resizeSize) + ',' + (height - resizeSize) +
+          'translate(' + (width - RESIZE_SIZE) + ',' + (height - RESIZE_SIZE) +
               ')');
       this.deleteGroup_.setAttribute(
           'transform',
-          'translate(' + (width - resizeSize) + ',' + (-resizeSize) + ')');
+          'translate(' + (width - RESIZE_SIZE) + ',' + (-RESIZE_SIZE) + ')');
     }
   }
 

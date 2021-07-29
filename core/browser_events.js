@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.browserEvents');
+goog.module('Blockly.browserEvents');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.global');
@@ -18,11 +19,12 @@ goog.require('Blockly.utils.global');
 
 /**
  * Blockly opaque event data used to unbind events when using
- * `Blockly.browserEvents.bind` and
- * `Blockly.browserEvents.conditionalBind`.
+ * `bind` and
+ * `conditionalBind`.
  * @typedef {!Array<!Array>}
  */
-Blockly.browserEvents.Data;
+let Data;
+exports.Data = Data;
 
 /**
  * Bind an event handler that can be ignored if it is not part of the active
@@ -40,14 +42,14 @@ Blockly.browserEvents.Data;
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
+ * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @public
  */
-Blockly.browserEvents.conditionalBind = function(
+const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
-  const handled = false;
+  let handled = false;
   const wrapFunc = function (e) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
@@ -100,6 +102,7 @@ Blockly.browserEvents.conditionalBind = function(
   }
   return bindData;
 };
+exports.conditionalBind = conditionalBind;
 
 
 /**
@@ -111,11 +114,11 @@ Blockly.browserEvents.conditionalBind = function(
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
+ * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @public
  */
-Blockly.browserEvents.bind = function(node, name, thisObject, func) {
+const bind = function(node, name, thisObject, func) {
   const wrapFunc = function (e) {
     if (thisObject) {
       func.call(thisObject, e);
@@ -160,15 +163,16 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
   }
   return bindData;
 };
+exports.bind = bind;
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!Blockly.browserEvents.Data} bindData Opaque data from bindEvent_.
+ * @param {!Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
  * @public
  */
-Blockly.browserEvents.unbind = function(bindData) {
+const unbind = function(bindData) {
   let func;
   while (bindData.length) {
     const bindDatum = bindData.pop();
@@ -179,3 +183,4 @@ Blockly.browserEvents.unbind = function(bindData) {
   }
   return func;
 };
+exports.unbind = unbind;

@@ -14,7 +14,8 @@ goog.module('Blockly.ScrollbarPair');
 goog.module.declareLegacyNamespace();
 
 const Events = goog.require('Blockly.Events');
-const Metrics = goog.require('Blockly.utils.Metrics');
+/* eslint-disable-next-line no-unused-vars */
+const Metrics = goog.requireType('Blockly.utils.Metrics');
 const Scrollbar = goog.require('Blockly.Scrollbar');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */

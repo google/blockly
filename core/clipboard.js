@@ -26,7 +26,6 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
  * @private
  */
 let xml = null;
-exports.xml = xml;
 
 /**
  * Source of the local clipboard.
@@ -34,7 +33,6 @@ exports.xml = xml;
  * @private
  */
 let source = null;
-exports.source = source;
 
 /**
  * Map of types to type counts for the clipboard object and descendants.
@@ -42,12 +40,20 @@ exports.source = source;
  * @private
  */
 let typeCounts = null;
-exports.typeCounts = typeCounts;
+
+/**
+ * Get the current contents of the clipboard and associated metadata.
+ * @return {{xml: Element, source: WorkspaceSvg, typeCounts: Object}} An object
+ *     containing the clipboard contents and associated metadata.
+ */
+const getClipboardInfo = function() {
+  return {xml: xml, source: source, typeCounts: typeCounts};
+};
+exports.getClipboardInfo = getClipboardInfo;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
- * @package
  */
 const copy = function(toCopy) {
   var data = toCopy.toCopyData();
@@ -57,12 +63,12 @@ const copy = function(toCopy) {
     typeCounts = data.typeCounts;
   }
 };
+/** @package */
 exports.copy = copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
- * @package
  */
 const paste = function() {
   if (!xml) {
@@ -82,13 +88,13 @@ const paste = function() {
   }
   return false;
 };
+/** @package */
 exports.paste = paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
- *     copied.
- * @package
+ *     duplicated.
  */
 const duplicate = function(toDuplicate) {
   // Save the clipboard.
@@ -103,4 +109,5 @@ const duplicate = function(toDuplicate) {
   xml = oldXml;
   source = oldSource;
 };
+/** @package */
 exports.duplicate = duplicate;

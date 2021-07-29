@@ -93,25 +93,12 @@ Blockly.selected = null;
 Blockly.draggingConnections = [];
 
 /**
- * Contents of the local clipboard.
- * @type {Element}
- * @private
+ * Get the current contents of the clipboard and associated metadata.
+ * @return {{xml: Element, source: WorkspaceSvg, typeCounts: Object}} An object
+ *     containing the clipboard contents and associated metadata.
+ * @public
  */
-Blockly.clipboardXml_ = Blockly.clipboard.xml;
-
-/**
- * Source of the local clipboard.
- * @type {Blockly.WorkspaceSvg}
- * @private
- */
-Blockly.clipboardSource_ = Blockly.clipboard.source;
-
-/**
- * Map of types to type counts for the clipboard object and descendants.
- * @type {Object}
- * @private
- */
-Blockly.clipboardTypeCounts_ = Blockly.clipboard.typeCounts;
+Blockly.getClipboardInfo = Blockly.common.getClipboardInfo;
 
 /**
  * Cached value for whether 3D is supported.
@@ -137,9 +124,7 @@ Blockly.svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
-      'Blockly.svgSize',
-      'March 2021',
-      'March 2022',
+      'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
@@ -221,7 +206,8 @@ Blockly.deleteBlock = function(selected) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     if (selected.outputConnection) {
-      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      // Do not attempt to heal rows
+      // (https://github.com/google/blockly/issues/4832)
       selected.dispose(false, true);
     } else {
       selected.dispose(/* heal */ true, true);
@@ -366,9 +352,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
-        };
+        Blockly.Blocks[typename] = {init: Blockly.jsonInitFactory_(elem)};
       }
     }
   }

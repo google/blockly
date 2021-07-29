@@ -151,7 +151,7 @@ getPropertiesAccessed() {
   # Detect if there was any overlap.
   if [[ -n "${requires_overlap}" ]]; then
     while read -r requires_overlap_prop; do
-      # Replace any instances of $requires_overlap_prop. Includes regex
+      # Removes any instances of $requires_overlap_prop. Includes regex
       # lookarounds so that it does not simply match string contains.
       # Ex: if $requires_overlap is "Svg", then it would update the list
       # "isTargetInput mouseToSvg noEvent Svg" to

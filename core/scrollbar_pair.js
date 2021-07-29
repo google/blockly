@@ -47,18 +47,17 @@ const ScrollbarPair = function(
   const isPair = addHorizontal && addVertical;
 
   if (addHorizontal) {
-    this.hScroll = new Scrollbar(
-        workspace, true, isPair, opt_class, opt_margin);
+    this.hScroll =
+        new Scrollbar(workspace, true, isPair, opt_class, opt_margin);
   }
   if (addVertical) {
-    this.vScroll = new Scrollbar(
-        workspace, false, isPair, opt_class, opt_margin);
+    this.vScroll =
+        new Scrollbar(workspace, false, isPair, opt_class, opt_margin);
   }
 
   if (isPair) {
     this.corner_ = dom.createSvgElement(
-        Svg.RECT,
-        {
+        Svg.RECT, {
           'height': Scrollbar.scrollbarThickness,
           'width': Scrollbar.scrollbarThickness,
           'class': 'blocklyScrollbarBackground'

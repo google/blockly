@@ -56,8 +56,7 @@ const WorkspaceDragger = function(workspace) {
    * @type {!Coordinate}
    * @protected
    */
-  this.startScrollXY_ = new Coordinate(
-      workspace.scrollX, workspace.scrollY);
+  this.startScrollXY_ = new Coordinate(workspace.scrollX, workspace.scrollY);
 };
 
 /**

@@ -13,24 +13,27 @@
 goog.module('Blockly.ToolboxItem');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.IToolboxItem');
-
-goog.requireType('Blockly.ICollapsibleToolboxItem');
-goog.requireType('Blockly.IToolbox');
-goog.require('Blockly.utils.IdGenerator');
-goog.requireType('Blockly.utils.toolbox');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
+const IdGenerator = goog.require('Blockly.utils.IdGenerator');
+/* eslint-disable-next-line no-unused-vars */
+const IToolbox = goog.requireType('Blockly.IToolbox');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
 
 
 /**
  * Class for an item in the toolbox.
- * @param {!Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the
+ * @param {!toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the
  *     toolbox item.
- * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
- * @param {Blockly.ICollapsibleToolboxItem=} opt_parent The parent toolbox item
+ * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
+ * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
  *     or null if the category does not have a parent.
  * @constructor
- * @implements {Blockly.IToolboxItem}
+ * @implements {IToolboxItem}
  */
 const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
@@ -39,11 +42,11 @@ const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.id_ = toolboxItemDef['toolboxitemid'] || Blockly.utils.IdGenerator.getNextUniqueId();
+  this.id_ = toolboxItemDef['toolboxitemid'] || IdGenerator.getNextUniqueId();
 
   /**
    * The parent of the category.
-   * @type {?Blockly.ICollapsibleToolboxItem}
+   * @type {?ICollapsibleToolboxItem}
    * @protected
    */
   this.parent_ = opt_parent || null;
@@ -57,21 +60,21 @@ const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
   /**
    * The JSON definition of the toolbox item.
-   * @type {!Blockly.utils.toolbox.ToolboxItemInfo}
+   * @type {!toolbox.ToolboxItemInfo}
    * @protected
    */
   this.toolboxItemDef_ = toolboxItemDef;
 
   /**
    * The toolbox this category belongs to.
-   * @type {!Blockly.IToolbox}
+   * @type {!IToolbox}
    * @protected
    */
   this.parentToolbox_ = toolbox;
 
   /**
    * The workspace of the parent toolbox.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @protected
    */
   this.workspace_ = this.parentToolbox_.getWorkspace();
@@ -107,7 +110,7 @@ ToolboxItem.prototype.getId = function() {
 
 /**
  * Gets the parent if the toolbox item is nested.
- * @return {?Blockly.IToolboxItem} The parent toolbox item, or null if
+ * @return {?IToolboxItem} The parent toolbox item, or null if
  *     this toolbox item is not nested.
  * @public
  */

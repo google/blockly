@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.VariableModel');
+goog.module('Blockly.VariableModel');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -34,7 +35,7 @@ goog.requireType('Blockly.Workspace');
  * @see {Blockly.FieldVariable}
  * @constructor
  */
-Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
+const VariableModel = function(workspace, name, opt_type, opt_id) {
   /**
    * The workspace the variable is in.
    * @type {!Blockly.Workspace}
@@ -73,18 +74,20 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
 /**
  * @return {string} The ID for the variable.
  */
-Blockly.VariableModel.prototype.getId = function() {
+VariableModel.prototype.getId = function() {
   return this.id_;
 };
 
 /**
  * A custom compare function for the VariableModel objects.
- * @param {Blockly.VariableModel} var1 First variable to compare.
- * @param {Blockly.VariableModel} var2 Second variable to compare.
+ * @param {VariableModel} var1 First variable to compare.
+ * @param {VariableModel} var2 Second variable to compare.
  * @return {number} -1 if name of var1 is less than name of var2, 0 if equal,
  *     and 1 if greater.
  * @package
  */
-Blockly.VariableModel.compareByName = function(var1, var2) {
+VariableModel.compareByName = function(var1, var2) {
   return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
 };
+
+exports = VariableModel;

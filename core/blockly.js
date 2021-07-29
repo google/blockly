@@ -177,7 +177,7 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.mainWorkspace;
+  var mainWorkspace = Blockly.common.getMainWorkspace();
   if (!mainWorkspace) {
     return;
   }
@@ -256,7 +256,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.DropDownDiv.hideWithoutAnimation();
 
   var onlyClosePopups = !!opt_onlyClosePopups;
-  var workspace = Blockly.getMainWorkspace();
+  var workspace = Blockly.common.getMainWorkspace();
   var autoHideables = workspace.getComponentManager().getComponents(
       Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(function(autoHideable) {

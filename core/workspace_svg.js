@@ -15,6 +15,7 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.ContextMenu');
@@ -1953,7 +1954,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
   if (this.options.parentWorkspace) {
     this.options.parentWorkspace.markFocused();
   } else {
-    Blockly.mainWorkspace = this;
+    Blockly.common.setMainWorkspace(this);
     // We call e.preventDefault in many event handlers which means we
     // need to explicitly grab focus (e.g from a textarea) because
     // the browser will not do it for us.  How to do this is browser dependent.

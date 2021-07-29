@@ -115,7 +115,7 @@ const Gesture = function(e, creatorWorkspace) {
   /**
    * The workspace that the gesture started on.  There may be multiple
    * workspaces on a page; this is more accurate than using
-   * Blockly.getMainWorkspace().
+   * Blockly.common.getMainWorkspace().
    * @type {WorkspaceSvg}
    * @protected
    */

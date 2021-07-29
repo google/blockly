@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.WorkspaceDragger');
+goog.module('Blockly.WorkspaceDragger');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils.Coordinate');
 
@@ -26,7 +27,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to drag.
  * @constructor
  */
-Blockly.WorkspaceDragger = function(workspace) {
+const WorkspaceDragger = function(workspace) {
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -62,7 +63,7 @@ Blockly.WorkspaceDragger = function(workspace) {
  * @package
  * @suppress {checkTypes}
  */
-Blockly.WorkspaceDragger.prototype.dispose = function() {
+WorkspaceDragger.prototype.dispose = function() {
   this.workspace_ = null;
 };
 
@@ -70,7 +71,7 @@ Blockly.WorkspaceDragger.prototype.dispose = function() {
  * Start dragging the workspace.
  * @package
  */
-Blockly.WorkspaceDragger.prototype.startDrag = function() {
+WorkspaceDragger.prototype.startDrag = function() {
   if (Blockly.selected) {
     Blockly.selected.unselect();
   }
@@ -83,7 +84,7 @@ Blockly.WorkspaceDragger.prototype.startDrag = function() {
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
-Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
+WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
   // Make sure everything is up to date.
   this.drag(currentDragDeltaXY);
   this.workspace_.resetDragSurface();
@@ -95,7 +96,7 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  *     moved from the position at the start of the drag, in pixel coordinates.
  * @package
  */
-Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
+WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   const newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
 
   if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
@@ -108,3 +109,5 @@ Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
     throw new TypeError('Invalid state.');
   }
 };
+
+exports = WorkspaceDragger;

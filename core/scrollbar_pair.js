@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.ScrollbarPair');
+goog.module('Blockly.ScrollbarPair');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Scrollbar');
@@ -33,7 +34,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @param {number=} opt_margin The margin to apply to these scrollbars.
  * @constructor
  */
-Blockly.ScrollbarPair = function(
+const ScrollbarPair = function(
     workspace, addHorizontal, addVertical, opt_class, opt_margin) {
   /**
    * The workspace this scrollbar pair is bound to.
@@ -80,7 +81,7 @@ Blockly.ScrollbarPair = function(
  * Unlink from all DOM elements to prevent memory leaks.
  * @suppress {checkTypes}
  */
-Blockly.ScrollbarPair.prototype.dispose = function() {
+ScrollbarPair.prototype.dispose = function() {
   Blockly.utils.dom.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
@@ -99,7 +100,7 @@ Blockly.ScrollbarPair.prototype.dispose = function() {
  * Recalculate both of the scrollbars' locations and lengths.
  * Also reposition the corner rectangle.
  */
-Blockly.ScrollbarPair.prototype.resize = function() {
+ScrollbarPair.prototype.resize = function() {
   // Look up the host metrics once, and use for both scrollbars.
   const hostMetrics = this.workspace_.getMetrics();
   if (!hostMetrics) {
@@ -171,7 +172,7 @@ Blockly.ScrollbarPair.prototype.resize = function() {
  * Returns whether scrolling horizontally is enabled.
  * @return {boolean} True if horizontal scroll is enabled.
  */
-Blockly.ScrollbarPair.prototype.canScrollHorizontally = function() {
+ScrollbarPair.prototype.canScrollHorizontally = function() {
   return !!this.hScroll;
 };
 
@@ -179,7 +180,7 @@ Blockly.ScrollbarPair.prototype.canScrollHorizontally = function() {
  * Returns whether scrolling vertically is enabled.
  * @return {boolean} True if vertical scroll is enabled.
  */
-Blockly.ScrollbarPair.prototype.canScrollVertically = function() {
+ScrollbarPair.prototype.canScrollVertically = function() {
   return !!this.vScroll;
 };
 
@@ -192,7 +193,7 @@ Blockly.ScrollbarPair.prototype.canScrollVertically = function() {
  * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
  * @package
  */
-Blockly.ScrollbarPair.prototype.setOrigin = function(x, y) {
+ScrollbarPair.prototype.setOrigin = function(x, y) {
   if (this.hScroll) {
     this.hScroll.setOrigin(x, y);
   }
@@ -210,7 +211,7 @@ Blockly.ScrollbarPair.prototype.setOrigin = function(x, y) {
  * @param {boolean} updateMetrics Whether to update metrics on this set call.
  *    Defaults to true.
  */
-Blockly.ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
+ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
   // This function is equivalent to:
   //   this.hScroll.set(x);
   //   this.vScroll.set(y);
@@ -242,7 +243,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
  *    CSS pixels relative to its parents.
  * @param {number} x Horizontal scroll value.
  */
-Blockly.ScrollbarPair.prototype.setX = function(x) {
+ScrollbarPair.prototype.setX = function(x) {
   if (this.hScroll) {
     this.hScroll.set(x, true);
   }
@@ -253,7 +254,7 @@ Blockly.ScrollbarPair.prototype.setX = function(x) {
  *    CSS pixels relative to its parents.
  * @param {number} y Vertical scroll value.
  */
-Blockly.ScrollbarPair.prototype.setY = function(y) {
+ScrollbarPair.prototype.setY = function(y) {
   if (this.vScroll) {
     this.vScroll.set(y, true);
   }
@@ -263,7 +264,7 @@ Blockly.ScrollbarPair.prototype.setY = function(y) {
  * Set whether this scrollbar's container is visible.
  * @param {boolean} visible Whether the container is visible.
  */
-Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
+ScrollbarPair.prototype.setContainerVisible = function(visible) {
   if (this.hScroll) {
     this.hScroll.setContainerVisible(visible);
   }
@@ -277,7 +278,7 @@ Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
  * when they aren't needed.
  * @return {boolean} True if visible.
  */
-Blockly.ScrollbarPair.prototype.isVisible = function() {
+ScrollbarPair.prototype.isVisible = function() {
   let isVisible = false;
   if (this.hScroll) {
     isVisible = this.hScroll.isVisible();
@@ -294,7 +295,7 @@ Blockly.ScrollbarPair.prototype.isVisible = function() {
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  */
-Blockly.ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
+ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
   if (this.hScroll) {
     this.hScroll.resizeContentHorizontal(hostMetrics);
   }
@@ -309,7 +310,7 @@ Blockly.ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
  * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  */
-Blockly.ScrollbarPair.prototype.resizeView = function(hostMetrics) {
+ScrollbarPair.prototype.resizeView = function(hostMetrics) {
   if (this.hScroll) {
     this.hScroll.resizeViewHorizontal(hostMetrics);
   }
@@ -317,3 +318,5 @@ Blockly.ScrollbarPair.prototype.resizeView = function(hostMetrics) {
     this.vScroll.resizeViewVertical(hostMetrics);
   }
 };
+
+exports = ScrollbarPair;

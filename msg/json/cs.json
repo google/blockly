@@ -343,5 +343,7 @@
 	"PROCEDURES_CREATE_DO": "Vytvořit '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Je-li hodnota pravda, pak vrátí druhou hodnotu.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
-	"PROCEDURES_IFRETURN_WARNING": "Varování: Tento blok může být použit pouze uvnitř definici funkce."
+	"PROCEDURES_IFRETURN_WARNING": "Varování: Tento blok může být použit pouze uvnitř definici funkce.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Zrušit"
 }

@@ -204,5 +204,7 @@
 	"PROCEDURES_DEFRETURN_RETURN": "кире ҡайтарыу",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "инеү",
 	"PROCEDURES_MUTATORARG_TITLE": "инеү исеме:",
-	"PROCEDURES_CREATE_DO": "'%1' төҙөргә"
+	"PROCEDURES_CREATE_DO": "'%1' төҙөргә",
+	"DIALOG_OK": "Яҡшы",
+	"DIALOG_CANCEL": " Баш тартыу"
 }

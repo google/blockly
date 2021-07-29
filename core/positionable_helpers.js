@@ -81,14 +81,12 @@ exports.bumpDirection = bumpDirection;
  * @return {!Rect} The suggested start position.
  */
 const getStartPositionRect = function(
-    position, size, horizontalPadding,
-    verticalPadding, metrics, workspace) {
+    position, size, horizontalPadding, verticalPadding, metrics, workspace) {
   // Horizontal positioning.
   let left = 0;
   const hasVerticalScrollbar =
       workspace.scrollbar && workspace.scrollbar.canScrollVertically();
-  if (position.horizontal ===
-      horizontalPosition.LEFT) {
+  if (position.horizontal === horizontalPosition.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Scrollbar.scrollbarThickness;
@@ -102,8 +100,7 @@ const getStartPositionRect = function(
   }
   // Vertical positioning.
   let top = 0;
-  if (position.vertical ===
-      verticalPosition.TOP) {
+  if (position.vertical === verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
   } else {  // position.vertical == verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
@@ -113,8 +110,7 @@ const getStartPositionRect = function(
       top -= Scrollbar.scrollbarThickness;
     }
   }
-  return new Rect(
-      top, top + size.height, left, left + size.width);
+  return new Rect(top, top + size.height, left, left + size.width);
 };
 /** @package */
 exports.getStartPositionRect = getStartPositionRect;
@@ -133,16 +129,11 @@ const getCornerOppositeToolbox = function(workspace, metrics) {
   const leftCorner =
       metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
       (!workspace.horizontalLayout || workspace.RTL);
-  const topCorner =
-      metrics.toolboxMetrics.position === toolbox.Position.BOTTOM;
-  const hPosition = leftCorner ?
-      horizontalPosition.LEFT : horizontalPosition.RIGHT;
-  const vPosition = topCorner ?
-      verticalPosition.TOP : verticalPosition.BOTTOM;
-  return {
-    horizontal: hPosition,
-    vertical: vPosition
-  };
+  const topCorner = metrics.toolboxMetrics.position === toolbox.Position.BOTTOM;
+  const hPosition =
+      leftCorner ? horizontalPosition.LEFT : horizontalPosition.RIGHT;
+  const vPosition = topCorner ? verticalPosition.TOP : verticalPosition.BOTTOM;
+  return {horizontal: hPosition, vertical: vPosition};
 };
 /** @package */
 exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
@@ -159,8 +150,7 @@ exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
  *    represent the positions of UI elements already placed.
  * @return {!Rect} The suggested position rectangle.
  */
-const bumpPositionRect = function(
-    startRect, margin, bumpDir, savedPositions) {
+const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
   let top = startRect.top;
   const left = startRect.left;
   const width = startRect.right - startRect.left;
@@ -177,8 +167,7 @@ const bumpPositionRect = function(
         top = otherEl.bottom + margin;
       }
       // Recheck other savedPositions
-      boundingRect = new Rect(
-          top, top + height, left, left + width);
+      boundingRect = new Rect(top, top + height, left, left + width);
       i = -1;
     }
   }

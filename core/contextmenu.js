@@ -62,7 +62,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
     Blockly.ContextMenu.hide();
     return;
   }
-  var menu = Blockly.ContextMenu.populate_(options, rtl);
+  const menu = Blockly.ContextMenu.populate_(options, rtl);
   Blockly.ContextMenu.menu_ = menu;
 
   Blockly.ContextMenu.position_(menu, e, rtl);
@@ -85,17 +85,18 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
      enabled: true,
      callback: Blockly.MakeItSo}
   */
-  var menu = new Blockly.Menu();
+  const menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.MENU);
-  for (var i = 0, option; (option = options[i]); i++) {
-    var menuItem = new Blockly.MenuItem(option.text);
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    const menuItem = new Blockly.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menuItem.setRole(Blockly.utils.aria.Role.MENUITEM);
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      var actionHandler = function(_menuItem) {
-        var option = this;
+      const actionHandler = function (_menuItem) {
+        const option = this;
         Blockly.ContextMenu.hide();
         option.callback(option.scope);
       };
@@ -115,10 +116,10 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
  */
 Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   // Record windowSize and scrollOffset before adding menu.
-  var viewportBBox = Blockly.utils.getViewportBBox();
+  const viewportBBox = Blockly.utils.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
-  var anchorBBox = new Blockly.utils.Rect(
+  const anchorBBox = new Blockly.utils.Rect(
       e.clientY + viewportBBox.top,
       e.clientY + viewportBBox.top,
       e.clientX + viewportBBox.left,
@@ -126,7 +127,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
   );
 
   Blockly.ContextMenu.createWidget_(menu);
-  var menuSize = menu.getSize();
+  const menuSize = menu.getSize();
 
   if (rtl) {
     anchorBBox.left += menuSize.width;
@@ -148,9 +149,9 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
  * @private
  */
 Blockly.ContextMenu.createWidget_ = function(menu) {
-  var div = Blockly.WidgetDiv.DIV;
+  const div = Blockly.WidgetDiv.DIV;
   menu.render(div);
-  var menuDom = menu.getElement();
+  const menuDom = menu.getElement();
   Blockly.utils.dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
@@ -189,10 +190,11 @@ Blockly.ContextMenu.dispose = function() {
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
   return function() {
     Blockly.Events.disable();
+    let newBlock;
     try {
-      var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
+      newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
       // Move the new block next to the old block.
-      var xy = block.getRelativeToSurfaceXY();
+      const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
         xy.x -= Blockly.internalConstants.SNAP_RADIUS;
       } else {
@@ -221,10 +223,10 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
  * @package
  */
 Blockly.ContextMenu.commentDeleteOption = function(comment) {
-  var deleteOption = {
+  const deleteOption = {
     text: Blockly.Msg['REMOVE_COMMENT'],
     enabled: true,
-    callback: function() {
+    callback: function () {
       Blockly.Events.setGroup(true);
       comment.dispose(true, true);
       Blockly.Events.setGroup(false);
@@ -241,10 +243,10 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
  * @package
  */
 Blockly.ContextMenu.commentDuplicateOption = function(comment) {
-  var duplicateOption = {
+  const duplicateOption = {
     text: Blockly.Msg['DUPLICATE_COMMENT'],
     enabled: true,
-    callback: function() {
+    callback: function () {
       Blockly.duplicate(comment);
     }
   };
@@ -267,35 +269,35 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
-  var addWsComment = function() {
-    var comment = new Blockly.WorkspaceCommentSvg(
+  const addWsComment = function () {
+    const comment = new Blockly.WorkspaceCommentSvg(
         ws, Blockly.Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
 
-    var injectionDiv = ws.getInjectionDiv();
+    const injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they
     // are in pixels relative to the upper left corner of the visible browser
     // window.  These coordinates change when you scroll the browser window.
-    var boundingRect = injectionDiv.getBoundingClientRect();
+    const boundingRect = injectionDiv.getBoundingClientRect();
 
     // The client coordinates offset by the injection div's upper left corner.
-    var clientOffsetPixels = new Blockly.utils.Coordinate(
+    const clientOffsetPixels = new Blockly.utils.Coordinate(
         e.clientX - boundingRect.left, e.clientY - boundingRect.top);
 
     // The offset in pixels between the main workspace's origin and the upper
     // left corner of the injection div.
-    var mainOffsetPixels = ws.getOriginOffsetInPixels();
+    const mainOffsetPixels = ws.getOriginOffsetInPixels();
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    var finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
+    const finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
         mainOffsetPixels);
     // The position of the new comment in main workspace coordinates.
     finalOffset.scale(1 / ws.scale);
 
-    var commentX = finalOffset.x;
-    var commentY = finalOffset.y;
+    const commentX = finalOffset.x;
+    const commentY = finalOffset.y;
     comment.moveBy(commentX, commentY);
     if (ws.rendered) {
       comment.initSvg();
@@ -304,7 +306,7 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     }
   };
 
-  var wsCommentOption = {
+  const wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
     enabled: !Blockly.utils.userAgent.IE

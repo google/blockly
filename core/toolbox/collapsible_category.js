@@ -13,13 +13,13 @@
 goog.module('Blockly.CollapsibleToolboxCategory');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const ToolboxSeparator = goog.require('Blockly.ToolboxSeparator');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
@@ -56,7 +56,7 @@ const CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The child toolbox items for this category.
-   * @type {!Array<!ToolboxItem>}
+   * @type {!Array<!IToolboxItem>}
    * @protected
    */
   this.toolboxItems_ = [];
@@ -191,7 +191,7 @@ CollapsibleToolboxCategory.prototype.createIconDom_ = function() {
 
 /**
  * Create the DOM for all subcategories.
- * @param {!Array<!ToolboxItem>} subcategories The subcategories.
+ * @param {!Array<!IToolboxItem>} subcategories The subcategories.
  * @return {!Element} The div holding all the subcategories.
  * @protected
  */

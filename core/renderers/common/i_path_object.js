@@ -15,15 +15,15 @@
 goog.module('Blockly.blockRendering.IPathObject');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Theme');
+const Block = goog.requireType('Blockly.Block');
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const Theme = goog.requireType('Blockly.Theme');
 
 
 /**
  * An interface for a block's path object.
  * @param {!SVGElement} _root The root SVG element.
- * @param {!Blockly.blockRendering.ConstantProvider} _constants The renderer's
+ * @param {!ConstantProvider} _constants The renderer's
  *     constants.
  * @interface
  */
@@ -37,13 +37,13 @@ IPathObject.prototype.svgPath;
 
 /**
  * The renderer's constant provider.
- * @type {!Blockly.blockRendering.ConstantProvider}
+ * @type {!ConstantProvider}
  */
 IPathObject.prototype.constants;
 
 /**
  * The primary path of the block.
- * @type {!Blockly.Theme.BlockStyle}
+ * @type {!Theme.BlockStyle}
  */
 IPathObject.prototype.style;
 
@@ -71,14 +71,14 @@ IPathObject.prototype.setPath;
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Blockly.Block} block The source block.
+ * @param {!Block} block The source block.
  * @package
  */
 IPathObject.prototype.applyColour;
 
 /**
  * Update the style.
- * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @param {!Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
 IPathObject.prototype.setStyle;

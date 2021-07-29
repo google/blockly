@@ -50,7 +50,6 @@ goog.require('Blockly.Events.Selected');
  * Size of the resize icon.
  * @type {number}
  * @const
- * @private
  */
 const RESIZE_SIZE = 8;
 
@@ -58,7 +57,6 @@ const RESIZE_SIZE = 8;
  * Radius of the border around the comment.
  * @type {number}
  * @const
- * @private
  */
 const BORDER_RADIUS = 3;
 
@@ -66,7 +64,6 @@ const BORDER_RADIUS = 3;
  * Offset from the foreignobject edge to the textarea edge.
  * @type {number}
  * @const
- * @private
  */
 const TEXTAREA_OFFSET = 2;
 

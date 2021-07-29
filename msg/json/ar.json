@@ -370,5 +370,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "تحذير:هذه القطعة تستخدم فقط داخل تعريف دالة.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "قل شيئا...",
 	"WORKSPACE_ARIA_LABEL": "مساحة عمل بلوكلي",
-	"COLLAPSED_WARNINGS_WARNING": "الكتل المطوية تحتوي على تحذيرات."
+	"COLLAPSED_WARNINGS_WARNING": "الكتل المطوية تحتوي على تحذيرات.",
+	"DIALOG_OK": "موافق",
+	"DIALOG_CANCEL": "إلغاء"
 }

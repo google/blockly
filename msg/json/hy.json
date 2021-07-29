@@ -333,5 +333,7 @@
 	"PROCEDURES_CREATE_DO": "Ստեղծել '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Եթե արժեքը ճշմարիտ է, վերադարձնում է երկորդ արժեքը:",
 	"PROCEDURES_IFRETURN_WARNING": "Զգուշացում. Այս բլոկը կարող է օգտագործվել միայն ֆունկցիայի սահմանման ներսում:",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Մի բան ասա ․․․"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Մի բան ասա ․․․",
+	"DIALOG_OK": "Լավ",
+	"DIALOG_CANCEL": "Չեղարկել"
 }

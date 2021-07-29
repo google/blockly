@@ -380,5 +380,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Упозорење: Овај блок се може користити једино унутар дефиниције функције.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Кажите нешто…",
 	"WORKSPACE_ARIA_LABEL": "Блоклијев радни простор",
-	"COLLAPSED_WARNINGS_WARNING": "Срушени блокови садрже упозорења."
+	"COLLAPSED_WARNINGS_WARNING": "Срушени блокови садрже упозорења.",
+	"DIALOG_OK": "У реду",
+	"DIALOG_CANCEL": "Откажи"
 }

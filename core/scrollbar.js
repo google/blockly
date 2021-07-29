@@ -70,7 +70,8 @@ const Scrollbar = function(
    * @private
    */
   this.margin_ = (opt_margin !== undefined) ?
-      opt_margin : Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
+      opt_margin :
+      Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
   /**
    * Previously recorded metrics from the workspace.
    * @type {?Metrics}
@@ -207,10 +208,10 @@ Scrollbar.DEFAULT_SCROLLBAR_MARGIN = 0.5;
  * @private
  */
 Scrollbar.metricsAreEquivalent_ = function(first, second) {
-  return (first.viewWidth == second.viewWidth &&
+  return (
+      first.viewWidth == second.viewWidth &&
       first.viewHeight == second.viewHeight &&
-      first.viewLeft == second.viewLeft &&
-      first.viewTop == second.viewTop &&
+      first.viewLeft == second.viewLeft && first.viewTop == second.viewTop &&
       first.absoluteTop == second.absoluteTop &&
       first.absoluteLeft == second.absoluteLeft &&
       first.scrollWidth == second.scrollWidth &&
@@ -307,7 +308,8 @@ Scrollbar.prototype.setHandlePosition = function(newPosition) {
 Scrollbar.prototype.setScrollbarLength_ = function(newSize) {
   this.scrollbarLength_ = newSize;
   this.outerSvg_.setAttribute(this.lengthAttribute_, this.scrollbarLength_);
-  this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollbarLength_);
+  this.svgBackground_.setAttribute(
+      this.lengthAttribute_, this.scrollbarLength_);
 };
 
 /**
@@ -344,8 +346,8 @@ Scrollbar.prototype.resize = function(opt_metrics) {
     }
   }
 
-  if (this.oldHostMetrics_ && Scrollbar.metricsAreEquivalent_(
-      hostMetrics, this.oldHostMetrics_)) {
+  if (this.oldHostMetrics_ &&
+      Scrollbar.metricsAreEquivalent_(hostMetrics, this.oldHostMetrics_)) {
     return;
   }
 
@@ -407,8 +409,7 @@ Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   }
   this.setScrollbarLength_(Math.max(0, viewSize));
 
-  let xCoordinate =
-      hostMetrics.absoluteLeft + this.margin_;
+  let xCoordinate = hostMetrics.absoluteLeft + this.margin_;
   if (this.pair_ && this.workspace_.RTL) {
     xCoordinate += Scrollbar.scrollbarThickness;
   }
@@ -507,7 +508,7 @@ Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
   const xCoordinate = this.workspace_.RTL ?
       hostMetrics.absoluteLeft + this.margin_ :
       hostMetrics.absoluteLeft + hostMetrics.viewWidth -
-      Scrollbar.scrollbarThickness - this.margin_;
+          Scrollbar.scrollbarThickness - this.margin_;
 
   const yCoordinate = hostMetrics.absoluteTop + this.margin_;
   this.setPosition(xCoordinate, yCoordinate);
@@ -585,34 +586,24 @@ Scrollbar.prototype.createDom_ = function(opt_class) {
     </g>
   </svg>
   */
-  let className = 'blocklyScrollbar' +
-      (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  let className =
+      'blocklyScrollbar' + (this.horizontal_ ? 'Horizontal' : 'Vertical');
   if (opt_class) {
     className += ' ' + opt_class;
   }
-  this.outerSvg_ = dom.createSvgElement(
-      Svg.SVG, {'class': className}, null);
-  this.svgGroup_ = dom.createSvgElement(
-      Svg.G, {}, this.outerSvg_);
+  this.outerSvg_ = dom.createSvgElement(Svg.SVG, {'class': className}, null);
+  this.svgGroup_ = dom.createSvgElement(Svg.G, {}, this.outerSvg_);
   this.svgBackground_ = dom.createSvgElement(
-      Svg.RECT, {
-        'class': 'blocklyScrollbarBackground'
-      }, this.svgGroup_);
+      Svg.RECT, {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = dom.createSvgElement(
-      Svg.RECT,
-      {
-        'class': 'blocklyScrollbarHandle',
-        'rx': radius,
-        'ry': radius
-      },
+      Svg.RECT, {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarColour', 'fill');
   this.workspace_.getThemeManager().subscribe(
       this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
-  dom.insertAfter(this.outerSvg_,
-      this.workspace_.getParentSvg());
+  dom.insertAfter(this.outerSvg_, this.workspace_.getParentSvg());
 };
 
 /**
@@ -694,9 +685,8 @@ Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  const mouseXY = utils.mouseToSvg(e,
-      this.workspace_.getParentSvg(),
-      this.workspace_.getInverseScreenCTM());
+  const mouseXY = utils.mouseToSvg(
+      e, this.workspace_.getParentSvg(), this.workspace_.getInverseScreenCTM());
   const mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
   const handleXY = utils.getInjectionDivXY_(this.svgHandle_);

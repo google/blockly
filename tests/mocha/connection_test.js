@@ -111,12 +111,12 @@ suite('Connection', function() {
     }
 
     var testSuites = [
-      // {
-      //   title: 'Rendered',
-      //   createWorkspace: () => {
-      //     return Blockly.inject('blocklyDiv');
-      //   },
-      // },
+      {
+        title: 'Rendered',
+        createWorkspace: () => {
+          return Blockly.inject('blocklyDiv');
+        },
+      },
       {
         title: 'Headless',
         createWorkspace: () => {

@@ -44,7 +44,7 @@ Blockly.ScrollbarPair = function(
 
   addHorizontal = addHorizontal === undefined ? true : addHorizontal;
   addVertical = addVertical === undefined ? true : addVertical;
-  var isPair = addHorizontal && addVertical;
+  const isPair = addHorizontal && addVertical;
 
   if (addHorizontal) {
     this.hScroll = new Blockly.Scrollbar(
@@ -101,15 +101,15 @@ Blockly.ScrollbarPair.prototype.dispose = function() {
  */
 Blockly.ScrollbarPair.prototype.resize = function() {
   // Look up the host metrics once, and use for both scrollbars.
-  var hostMetrics = this.workspace_.getMetrics();
+  const hostMetrics = this.workspace_.getMetrics();
   if (!hostMetrics) {
     // Host element is likely not visible.
     return;
   }
 
   // Only change the scrollbars if there has been a change in metrics.
-  var resizeH = false;
-  var resizeV = false;
+  let resizeH = false;
+  let resizeV = false;
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
       this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
@@ -226,7 +226,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y, updateMetrics) {
 
   if (updateMetrics || updateMetrics === undefined) {
     // Update metrics.
-    var xyRatio = {};
+    const xyRatio = {};
     if (this.hScroll) {
       xyRatio.x = this.hScroll.getRatio_();
     }
@@ -278,7 +278,7 @@ Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
  * @return {boolean} True if visible.
  */
 Blockly.ScrollbarPair.prototype.isVisible = function() {
-  var isVisible = false;
+  let isVisible = false;
   if (this.hScroll) {
     isVisible = this.hScroll.isVisible();
   }

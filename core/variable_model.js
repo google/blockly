@@ -13,18 +13,18 @@
 goog.module('Blockly.VariableModel');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.utils');
-
-goog.requireType('Blockly.Workspace');
 
 
 /**
  * Class for a variable model.
  * Holds information for the variable including name, ID, and type.
- * @param {!Blockly.Workspace} workspace The variable's workspace.
+ * @param {!Workspace} workspace The variable's workspace.
  * @param {string} name The name of the variable.  This is the user-visible name
  *     (e.g. 'my var' or '私の変数'), not the generated name.
  * @param {string=} opt_type The type of the variable like 'int' or 'string'.
@@ -38,7 +38,7 @@ goog.requireType('Blockly.Workspace');
 const VariableModel = function(workspace, name, opt_type, opt_id) {
   /**
    * The workspace the variable is in.
-   * @type {!Blockly.Workspace}
+   * @type {!Workspace}
    */
   this.workspace = workspace;
 
@@ -65,9 +65,9 @@ const VariableModel = function(workspace, name, opt_type, opt_id) {
    * @type {string}
    * @private
    */
-  this.id_ = opt_id || Blockly.utils.genUid();
+  this.id_ = opt_id || utils.genUid();
 
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(
+  Events.fire(new (Events.get(Events.VAR_CREATE))(
       this));
 };
 

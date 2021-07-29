@@ -36,7 +36,6 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * @implements {IToolboxItem}
  */
 const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
-
   /**
    * The id for the category.
    * @type {string}
@@ -149,7 +148,6 @@ ToolboxItem.prototype.isCollapsible = function() {
  * Dispose of this toolbox item. No-op by default.
  * @public
  */
-ToolboxItem.prototype.dispose = function() {
-};
+ToolboxItem.prototype.dispose = function() {};
 
 exports = ToolboxItem;

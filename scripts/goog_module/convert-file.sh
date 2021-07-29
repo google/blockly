@@ -151,7 +151,12 @@ getPropertiesAccessed() {
   # Detect if there was any overlap.
   if [[ -n "${requires_overlap}" ]]; then
     while read -r requires_overlap_prop; do
-      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/'"${requires_overlap_prop}"'//g')
+      # Replace any instances of $requires_overlap_prop. Includes regex
+      # lookarounds so that it does not simply match string contains.
+      # Ex: if $requires_overlap is "Svg", then it would update the list
+      # "isTargetInput mouseToSvg noEvent Svg" to
+      # "isTargetInput mouseToSvg noEvent " (note that mouseToSvg is unchanged).
+      properties_accessed=$(echo "${properties_accessed}" | perl -pe 's/(?<!\w)'"${requires_overlap_prop}"'(?!\w)//g')
     done <<<"${requires_overlap}"
   fi
 

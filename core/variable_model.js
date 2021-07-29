@@ -67,8 +67,7 @@ const VariableModel = function(workspace, name, opt_type, opt_id) {
    */
   this.id_ = opt_id || utils.genUid();
 
-  Events.fire(new (Events.get(Events.VAR_CREATE))(
-      this));
+  Events.fire(new (Events.get(Events.VAR_CREATE))(this));
 };
 
 /**

@@ -22,29 +22,29 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Contents of the local clipboard.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 let xml = null;
 
 /**
  * Source of the local clipboard.
- * @type {WorkspaceSvg}
+ * @type {?WorkspaceSvg}
  * @private
  */
 let source = null;
 
 /**
  * Map of types to type counts for the clipboard object and descendants.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 let typeCounts = null;
 
 /**
  * Get the current contents of the clipboard and associated metadata.
- * @return {{xml: Element, source: WorkspaceSvg, typeCounts: Object}} An object
- *     containing the clipboard contents and associated metadata.
+ * @return {{xml: ?Element, source: ?WorkspaceSvg, typeCounts: ?Object}} An
+ *     object containing the clipboard contents and associated metadata.
  */
 const getClipboardInfo = function() {
   return {xml: xml, source: source, typeCounts: typeCounts};

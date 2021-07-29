@@ -94,11 +94,11 @@ Blockly.draggingConnections = [];
 
 /**
  * Get the current contents of the clipboard and associated metadata.
- * @return {{xml: Element, source: WorkspaceSvg, typeCounts: Object}} An object
- *     containing the clipboard contents and associated metadata.
+ * @return {{xml: ?Element, source: ?Blockly.WorkspaceSvg, typeCounts: ?Object}}
+ *     An object containing the clipboard contents and associated metadata.
  * @public
  */
-Blockly.getClipboardInfo = Blockly.common.getClipboardInfo;
+Blockly.getClipboardInfo = Blockly.clipboard.getClipboardInfo;
 
 /**
  * Cached value for whether 3D is supported.

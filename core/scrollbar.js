@@ -17,7 +17,8 @@ goog.module.declareLegacyNamespace();
 // goog.require('Blockly');
 const Touch = goog.require('Blockly.Touch');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Metrics = goog.require('Blockly.utils.Metrics');
+/* eslint-disable-next-line no-unused-vars */
+const Metrics = goog.requireType('Blockly.utils.Metrics');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');

@@ -16,13 +16,13 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-const common = goog.require('Blockly.common');
 /* eslint-disable-next-line no-unused-vars */
 const Names = goog.requireType('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const internalConstants = goog.require('Blockly.internalConstants');
+const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
+const internalConstants = goog.require('Blockly.internalConstants');
 
 
 /**

@@ -364,5 +364,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "אזהרה: קוביה זו עשויה לשמש רק בתוך הגדרה של פונקציה.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה...",
 	"WORKSPACE_ARIA_LABEL": "סביבת העבודה בלוקלי",
-	"COLLAPSED_WARNINGS_WARNING": "קוביות מצומצמות מכילות אזהרות."
+	"COLLAPSED_WARNINGS_WARNING": "קוביות מצומצמות מכילות אזהרות.",
+	"DIALOG_OK": "אישור",
+	"DIALOG_CANCEL": "ביטול"
 }

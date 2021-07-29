@@ -369,5 +369,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Попередження: цей блок може використовуватися лише в межах визначення функції.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Скажіть щось...",
 	"WORKSPACE_ARIA_LABEL": "Робоча область Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Звернуті блоки містять попередження."
+	"COLLAPSED_WARNINGS_WARNING": "Звернуті блоки містять попередження.",
+	"DIALOG_OK": "Гаразд",
+	"DIALOG_CANCEL": "Скасувати"
 }

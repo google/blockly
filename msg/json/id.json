@@ -354,5 +354,7 @@
 	"PROCEDURES_CREATE_DO": "Buat '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jika nilai yang benar, kemudian kembalikan nilai kedua.",
 	"PROCEDURES_IFRETURN_WARNING": "Peringatan: Blok ini dapat digunakan hanya dalam definisi fungsi.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ucapkan sesuatu..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ucapkan sesuatu...",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Batal"
 }

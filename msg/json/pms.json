@@ -348,5 +348,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Atension: Ës blòch a podria esse dovrà mach an na definission ëd fonsion.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dì cheicòs...",
 	"WORKSPACE_ARIA_LABEL": "Spassi ëd travaj ëd Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Ij blòch sarà a conten-o dj'avertense."
+	"COLLAPSED_WARNINGS_WARNING": "Ij blòch sarà a conten-o dj'avertense.",
+	"DIALOG_OK": "Va bin",
+	"DIALOG_CANCEL": "Anulé"
 }

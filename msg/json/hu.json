@@ -359,5 +359,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Figyelem: Ez a blokk csak függvénydefiníción belül használható.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Mondj valamit...",
 	"WORKSPACE_ARIA_LABEL": "Blockly munkaterület",
-	"COLLAPSED_WARNINGS_WARNING": "Az összecsukott blokk figyelmeztetéseket tartalmaz."
+	"COLLAPSED_WARNINGS_WARNING": "Az összecsukott blokk figyelmeztetéseket tartalmaz.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Mégse"
 }

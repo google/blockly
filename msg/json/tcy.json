@@ -324,5 +324,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "ದೆರ್ತ್ ತೋಜುನ ಕಾರ್ಯೊದ ವ್ಯಾಕ್ಯಾನೊ",
 	"PROCEDURES_CREATE_DO": " '%1'ನ್ ಉಂಡುಮಲ್ಪುಲೆ",
 	"PROCEDURES_IFRETURN_TOOLTIP": "ಮೌಲ್ಯೊ ಸತ್ಯೊ ಆಂಡ, ರಡ್ಡನೆ ಮೌಲ್ಯೊನು ಪಿರಕೊರು.",
-	"PROCEDURES_IFRETURN_WARNING": "ಎಚ್ಚರಿಕೆ: ಒಂಜಿ ಕಾರ್ಯ ವ್ಯಾಕ್ಯಾನೊದುಲಯಿ ಮಾತ್ರ ಈ ತಡೆನ್ ಗಲಸೊಲಿ."
+	"PROCEDURES_IFRETURN_WARNING": "ಎಚ್ಚರಿಕೆ: ಒಂಜಿ ಕಾರ್ಯ ವ್ಯಾಕ್ಯಾನೊದುಲಯಿ ಮಾತ್ರ ಈ ತಡೆನ್ ಗಲಸೊಲಿ.",
+	"DIALOG_OK": "ಅವು",
+	"DIALOG_CANCEL": "ಉಂತಾಲೆ"
 }

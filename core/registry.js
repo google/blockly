@@ -137,7 +137,7 @@ const register = function(type, name, registryItem, opt_allowOverrides) {
       String(type).trim() == '') {
     throw Error(
         'Invalid type "' + type + '". The type must be a' +
-        ' non-empty string or a Type.');
+        ' non-empty string or a Blockly.registry.Type.');
   }
   type = String(type).toLowerCase();
 

@@ -96,7 +96,7 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  * @package
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
-  var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
+  const newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
 
   if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
     this.workspace_.scroll(newXY.x, newXY.y);

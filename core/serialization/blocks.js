@@ -23,7 +23,6 @@ const {MissingBlockType, MissingConnection, BadConnectionCheck} =
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
-const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 
 
@@ -266,15 +265,14 @@ const saveNextBlocks = function(block, state) {
  *     shadow block, or any connected real block.
  */
 const saveConnection = function(connection) {
-  const shadow = connection.getShadowDom();
+  const shadow = connection.getShadowState();
   const child = connection.targetBlock();
   if (!shadow && !child) {
     return null;
   }
   var state = Object.create(null);
   if (shadow) {
-    state['shadow'] = Xml.domToText(shadow)
-        .replace('xmlns="https://developers.google.com/blockly/xml"', '');
+    state['shadow'] = shadow;
   }
   if (child && !child.isShadow()) {
     state['block'] = save(child);
@@ -542,7 +540,7 @@ const loadNextBlocks = function(block, state) {
  */
 const loadConnection = function(connection, connectionState) {
   if (connectionState['shadow']) {
-    connection.setShadowDom(Blockly.Xml.textToDom(connectionState['shadow']));
+    connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
     loadInternal(

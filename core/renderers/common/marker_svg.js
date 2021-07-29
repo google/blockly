@@ -85,7 +85,7 @@ const MarkerSvg = function(workspace, constants, marker) {
   this.currentMarkerSvg = null;
 
   const defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
-      this.constants_.MARKER_COLOUR;
+                                          this.constants_.MARKER_COLOUR;
 
   /**
    * The colour of the marker.
@@ -144,14 +144,10 @@ MarkerSvg.prototype.isCursor = function() {
  * @package
  */
 MarkerSvg.prototype.createDom = function() {
-  const className = this.isCursor() ?
-      MarkerSvg.CURSOR_CLASS :
-      MarkerSvg.MARKER_CLASS;
+  const className =
+      this.isCursor() ? MarkerSvg.CURSOR_CLASS : MarkerSvg.MARKER_CLASS;
 
-  this.svgGroup_ = dom.createSvgElement(
-      Svg.G, {
-        'class': className
-      }, null);
+  this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': className}, null);
 
   this.createDomInternal_();
   return this.svgGroup_;
@@ -192,7 +188,7 @@ MarkerSvg.prototype.draw = function(oldNode, curNode) {
   this.constants_ = this.workspace_.getRenderer().getConstants();
 
   const defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
-      this.constants_.MARKER_COLOUR;
+                                          this.constants_.MARKER_COLOUR;
   this.colour_ = this.marker_.colour || defaultColour;
   this.applyColour_(curNode);
 
@@ -246,13 +242,11 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
  * @param {!ASTNode} curNode The node to draw the marker for.
  * @private
  */
-MarkerSvg.prototype.showWithBlockPrevOutput_ = function(
-    curNode) {
+MarkerSvg.prototype.showWithBlockPrevOutput_ = function(curNode) {
   const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
   const width = block.width;
   const height = block.height;
-  const markerHeight = height
-      * MarkerSvg.HEIGHT_MULTIPLIER;
+  const markerHeight = height * MarkerSvg.HEIGHT_MULTIPLIER;
   const markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {
@@ -282,8 +276,7 @@ MarkerSvg.prototype.showWithBlock_ = function(curNode) {
  * @param {!ASTNode} curNode The node to draw the marker for.
  * @protected
  */
-MarkerSvg.prototype.showWithPrevious_ = function(
-    curNode) {
+MarkerSvg.prototype.showWithPrevious_ = function(curNode) {
   this.showWithBlockPrevOutput_(curNode);
 };
 
@@ -302,8 +295,7 @@ MarkerSvg.prototype.showWithOutput_ = function(curNode) {
  * @param {!ASTNode} curNode The node to draw the marker for.
  * @protected
  */
-MarkerSvg.prototype.showWithCoordinates_ = function(
-    curNode) {
+MarkerSvg.prototype.showWithCoordinates_ = function(curNode) {
   const wsCoordinate = curNode.getWsCoordinate();
   let x = wsCoordinate.x;
   const y = wsCoordinate.y;
@@ -388,7 +380,8 @@ MarkerSvg.prototype.showWithStack_ = function(curNode) {
   const width = heightWidth.width + this.constants_.CURSOR_STACK_PADDING;
   const height = heightWidth.height + this.constants_.CURSOR_STACK_PADDING;
 
-  // Shift the rectangle slightly to upper left so padding is equal on all sides.
+  // Shift the rectangle slightly to upper left so padding is equal on all
+  // sides.
   const xPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
   const yPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
 
@@ -426,8 +419,7 @@ MarkerSvg.prototype.showCurrent_ = function() {
  */
 MarkerSvg.prototype.positionBlock_ = function(
     width, markerOffset, markerHeight) {
-  const markerPath = svgPaths.moveBy(-markerOffset, markerHeight)
-      +
+  const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
       svgPaths.lineOnAxis('V', -markerOffset) +
       svgPaths.lineOnAxis('H', width + markerOffset * 2) +
       svgPaths.lineOnAxis('V', markerHeight);
@@ -445,18 +437,18 @@ MarkerSvg.prototype.positionBlock_ = function(
  *     marker around.
  * @protected
  */
-MarkerSvg.prototype.positionInput_ = function(
-    connection) {
+MarkerSvg.prototype.positionInput_ = function(connection) {
   const x = connection.getOffsetInBlock().x;
   const y = connection.getOffsetInBlock().y;
 
-  const path = svgPaths.moveTo(0, 0) +
-      this.constants_.shapeFor(connection).pathDown;
+  const path =
+      svgPaths.moveTo(0, 0) + this.constants_.shapeFor(connection).pathDown;
 
   this.markerInput_.setAttribute('d', path);
-  this.markerInput_.setAttribute('transform',
+  this.markerInput_.setAttribute(
+      'transform',
       'translate(' + x + ',' + y + ')' +
-      (this.workspace_.RTL ? ' scale(-1 1)' : ''));
+          (this.workspace_.RTL ? ' scale(-1 1)' : ''));
   this.currentMarkerSvg = this.markerInput_;
 };
 
@@ -468,8 +460,7 @@ MarkerSvg.prototype.positionInput_ = function(
  * @param {number} width The new width, in workspace units.
  * @protected
  */
-MarkerSvg.prototype.positionLine_ = function(
-    x, y, width) {
+MarkerSvg.prototype.positionLine_ = function(x, y, width) {
   this.markerSvgLine_.setAttribute('x', x);
   this.markerSvgLine_.setAttribute('y', y);
   this.markerSvgLine_.setAttribute('width', width);
@@ -484,15 +475,11 @@ MarkerSvg.prototype.positionLine_ = function(
  * @param {!Object} connectionShape The shape object for the connection.
  * @protected
  */
-MarkerSvg.prototype.positionOutput_ = function(
-    width, height, connectionShape) {
+MarkerSvg.prototype.positionOutput_ = function(width, height, connectionShape) {
   const markerPath = svgPaths.moveBy(width, 0) +
-      svgPaths.lineOnAxis(
-          'h', -(width - connectionShape.width)) +
-      svgPaths.lineOnAxis(
-          'v', this.constants_.TAB_OFFSET_FROM_TOP) +
-      connectionShape.pathDown +
-      svgPaths.lineOnAxis('V', height) +
+      svgPaths.lineOnAxis('h', -(width - connectionShape.width)) +
+      svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
+      connectionShape.pathDown + svgPaths.lineOnAxis('V', height) +
       svgPaths.lineOnAxis('H', width);
   this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
@@ -513,14 +500,11 @@ MarkerSvg.prototype.positionOutput_ = function(
  */
 MarkerSvg.prototype.positionPrevious_ = function(
     width, markerOffset, markerHeight, connectionShape) {
-  const markerPath = svgPaths.moveBy(-markerOffset, markerHeight)
-      +
+  const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
       svgPaths.lineOnAxis('V', -markerOffset) +
-      svgPaths.lineOnAxis(
-          'H', this.constants_.NOTCH_OFFSET_LEFT) +
+      svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
       connectionShape.pathLeft +
-      svgPaths.lineOnAxis(
-          'H', width + markerOffset * 2) +
+      svgPaths.lineOnAxis('H', width + markerOffset * 2) +
       svgPaths.lineOnAxis('V', markerHeight);
   this.markerBlock_.setAttribute('d', markerPath);
   if (this.workspace_.RTL) {
@@ -538,8 +522,7 @@ MarkerSvg.prototype.positionPrevious_ = function(
  * @param {number} height The new height, in workspace units.
  * @protected
  */
-MarkerSvg.prototype.positionRect_ = function(
-    x, y, width, height) {
+MarkerSvg.prototype.positionRect_ = function(x, y, width, height) {
   this.markerSvgRect_.setAttribute('x', x);
   this.markerSvgRect_.setAttribute('y', y);
   this.markerSvgRect_.setAttribute('width', width);
@@ -573,8 +556,7 @@ MarkerSvg.prototype.hide = function() {
  * @param {!ASTNode} curNode The new node the marker is currently on.
  * @private
  */
-MarkerSvg.prototype.fireMarkerEvent_ = function(
-    oldNode, curNode) {
+MarkerSvg.prototype.fireMarkerEvent_ = function(oldNode, curNode) {
   const curBlock = curNode.getSourceBlock();
   const event = new (Events.get(Events.MARKER_MOVE))(
       curBlock, this.isCursor(), oldNode, curNode);
@@ -607,23 +589,23 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   <g>
     <rect width="100" height="5">
       <animate attributeType="XML" attributeName="fill" dur="1s"
-        values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
+        values="transparent;transparent;#fff;transparent"
+  repeatCount="indefinite" />
     </rect>
   </g>
   */
 
   this.markerSvg_ = dom.createSvgElement(
-      Svg.G,
-      {
+      Svg.G, {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT
-      }, this.svgGroup_);
+      },
+      this.svgGroup_);
 
   // A horizontal line used to represent a workspace coordinate or next
   // connection.
   this.markerSvgLine_ = dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
         'style': 'display: none'
@@ -632,28 +614,22 @@ MarkerSvg.prototype.createDomInternal_ = function() {
 
   // A filled in rectangle used to represent a stack.
   this.markerSvgRect_ = dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'blocklyVerticalMarker',
-        'rx': 10, 'ry': 10,
+        'rx': 10,
+        'ry': 10,
         'style': 'display: none'
       },
       this.markerSvg_);
 
   // A filled in puzzle piece used to represent an input value.
   this.markerInput_ = dom.createSvgElement(
-      Svg.PATH,
-      {
-        'transform': '',
-        'style': 'display: none'
-      },
-      this.markerSvg_);
+      Svg.PATH, {'transform': '', 'style': 'display: none'}, this.markerSvg_);
 
   // A path used to represent a previous connection and a block, an output
   // connection and a block, or a block.
   this.markerBlock_ = dom.createSvgElement(
-      Svg.PATH,
-      {
+      Svg.PATH, {
         'transform': '',
         'style': 'display: none',
         'fill': 'none',
@@ -664,16 +640,10 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   // Markers and stack markers don't blink.
   if (this.isCursor()) {
     const blinkProperties = this.getBlinkProperties_();
-    dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerSvgLine_);
-    dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerInput_);
+    dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerSvgLine_);
+    dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerInput_);
     blinkProperties['attributeName'] = 'stroke';
-    dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerBlock_);
+    dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerBlock_);
   }
 
   return this.markerSvg_;

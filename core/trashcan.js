@@ -80,7 +80,7 @@ Blockly.Trashcan = function(workspace) {
     return;
   }
   // Create flyout options.
-  var flyoutWorkspaceOptions = new Blockly.Options(
+  const flyoutWorkspaceOptions = new Blockly.Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
         'scrollbars': true,
@@ -98,7 +98,7 @@ Blockly.Trashcan = function(workspace) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
         Blockly.utils.toolbox.Position.BOTTOM : Blockly.utils.toolbox.Position.TOP;
-    var HorizontalFlyout = Blockly.registry.getClassFromOptions(
+    const HorizontalFlyout = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
         this.workspace_.options, true);
     this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
@@ -106,7 +106,7 @@ Blockly.Trashcan = function(workspace) {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ?
         Blockly.utils.toolbox.Position.LEFT : Blockly.utils.toolbox.Position.RIGHT;
-    var VerticalFlyout = Blockly.registry.getClassFromOptions(
+    const VerticalFlyout = Blockly.registry.getClassFromOptions(
         Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         this.workspace_.options, true);
     this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
@@ -300,8 +300,8 @@ Blockly.Trashcan.prototype.createDom = function() {
   this.svgGroup_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.G,
       {'class': 'blocklyTrash'}, null);
-  var clip;
-  var rnd = String(Math.random()).substring(2);
+  let clip;
+  const rnd = String(Math.random()).substring(2);
   clip = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
@@ -314,7 +314,7 @@ Blockly.Trashcan.prototype.createDom = function() {
         'y': this.LID_HEIGHT_
       },
       clip);
-  var body = Blockly.utils.dom.createSvgElement(
+  const body = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.IMAGE, {
         'width': Blockly.internalConstants.SPRITE.width,
         'x': -this.SPRITE_LEFT_,
@@ -427,7 +427,7 @@ Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-  var xml = this.contents_.map(Blockly.Xml.textToDom);
+  const xml = this.contents_.map(Blockly.Xml.textToDom);
   this.flyout.show(xml);
   this.fireUiEvent_(true);
 };
@@ -483,20 +483,20 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
     return;
   }
 
-  var cornerPosition =
+  const cornerPosition =
       Blockly.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
-  var height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
-  var startRect = Blockly.uiPosition.getStartPositionRect(
+  const height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  const startRect = Blockly.uiPosition.getStartPositionRect(
       cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
 
-  var verticalPosition = cornerPosition.vertical;
-  var bumpDirection =
+  const verticalPosition = cornerPosition.vertical;
+  const bumpDirection =
       verticalPosition === Blockly.uiPosition.verticalPosition.TOP ?
           Blockly.uiPosition.bumpDirection.DOWN :
           Blockly.uiPosition.bumpDirection.UP;
-  var positionRect = Blockly.uiPosition.bumpPositionRect(
+  const positionRect = Blockly.uiPosition.bumpPositionRect(
       startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
   this.top_ = positionRect.top;
@@ -512,8 +512,8 @@ Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
  *   bounding box should be ignored by other UI elements.
  */
 Blockly.Trashcan.prototype.getBoundingRectangle = function() {
-  var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
-  var right = this.left_ + this.WIDTH_;
+  const bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  const right = this.left_ + this.WIDTH_;
   return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
 };
 
@@ -528,12 +528,12 @@ Blockly.Trashcan.prototype.getClientRect = function() {
     return null;
   }
 
-  var trashRect = this.svgGroup_.getBoundingClientRect();
-  var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
-  var bottom = top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ +
+  const trashRect = this.svgGroup_.getBoundingClientRect();
+  const top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;
+  const bottom = top + this.LID_HEIGHT_ + this.BODY_HEIGHT_ +
       2 * this.MARGIN_HOTSPOT_;
-  var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
-  var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
+  const left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
+  const right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   return new Blockly.utils.Rect(top, bottom, left, right);
 };
 
@@ -588,18 +588,18 @@ Blockly.Trashcan.prototype.setLidOpen = function(state) {
  * @private
  */
 Blockly.Trashcan.prototype.animateLid_ = function() {
-  var frames = Blockly.Trashcan.ANIMATION_FRAMES_;
+  const frames = Blockly.Trashcan.ANIMATION_FRAMES_;
 
-  var delta = 1 / (frames + 1);
+  const delta = 1 / (frames + 1);
   this.lidOpen_ += this.isLidOpen ? delta : -delta;
   this.lidOpen_ = Math.min(Math.max(this.lidOpen_, this.minOpenness_), 1);
 
   this.setLidAngle_(this.lidOpen_ * Blockly.Trashcan.MAX_LID_ANGLE_);
 
-  var minOpacity = Blockly.Trashcan.OPACITY_MIN_;
-  var maxOpacity = Blockly.Trashcan.OPACITY_MAX_;
+  const minOpacity = Blockly.Trashcan.OPACITY_MIN_;
+  const maxOpacity = Blockly.Trashcan.OPACITY_MAX_;
   // Linear interpolation between min and max.
-  var opacity = minOpacity + this.lidOpen_ * (maxOpacity - minOpacity);
+  const opacity = minOpacity + this.lidOpen_ * (maxOpacity - minOpacity);
   this.svgGroup_.style.opacity = opacity;
 
   if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
@@ -614,7 +614,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
-  var openAtRight =
+  const openAtRight =
       this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
@@ -661,7 +661,7 @@ Blockly.Trashcan.prototype.click = function() {
  * @private
  */
 Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  var uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
+  const uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
       trashcanOpen,this.workspace_.id);
   Blockly.Events.fire(uiEvent);
 };
@@ -710,7 +710,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
   // Must check that the tagName exists since oldXml can be a DocumentFragment.
   if (event.type == Blockly.Events.BLOCK_DELETE && event.oldXml.tagName &&
       event.oldXml.tagName.toLowerCase() != 'shadow') {
-    var cleanedXML = this.cleanBlockXML_(event.oldXml);
+    const cleanedXML = this.cleanBlockXML_(event.oldXml);
     if (this.contents_.indexOf(cleanedXML) != -1) {
       return;
     }
@@ -734,8 +734,8 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
  * @private
  */
 Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
-  var xmlBlock = xml.cloneNode(true);
-  var node = xmlBlock;
+  const xmlBlock = xml.cloneNode(true);
+  let node = xmlBlock;
   while (node) {
     // Things like text inside tags are still treated as nodes, but they
     // don't have attributes (or the removeAttribute function) so we can
@@ -753,7 +753,7 @@ Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
     }
 
     // Try to go down the tree
-    var nextNode = node.firstChild || node.nextSibling;
+    let nextNode = node.firstChild || node.nextSibling;
     // If we can't go down, try to go back up the tree.
     if (!nextNode) {
       nextNode = node.parentNode;

@@ -13,19 +13,18 @@
 goog.module('Blockly.ScrollbarPair');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Scrollbar');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Metrics');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.WorkspaceSvg');
+const Events = goog.require('Blockly.Events');
+const Metrics = goog.require('Blockly.utils.Metrics');
+const Scrollbar = goog.require('Blockly.Scrollbar');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const dom = goog.require('Blockly.utils.dom');
 
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
- * @param {!Blockly.WorkspaceSvg} workspace Workspace to bind the scrollbars to.
+ * @param {!WorkspaceSvg} workspace Workspace to bind the scrollbars to.
  * @param {boolean=} addHorizontal Whether to add a horizontal scrollbar.
  *    Defaults to true.
  * @param {boolean=} addVertical Whether to add a vertical scrollbar. Defaults
@@ -38,7 +37,7 @@ const ScrollbarPair = function(
     workspace, addHorizontal, addVertical, opt_class, opt_margin) {
   /**
    * The workspace this scrollbar pair is bound to.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -48,29 +47,29 @@ const ScrollbarPair = function(
   const isPair = addHorizontal && addVertical;
 
   if (addHorizontal) {
-    this.hScroll = new Blockly.Scrollbar(
+    this.hScroll = new Scrollbar(
         workspace, true, isPair, opt_class, opt_margin);
   }
   if (addVertical) {
-    this.vScroll = new Blockly.Scrollbar(
+    this.vScroll = new Scrollbar(
         workspace, false, isPair, opt_class, opt_margin);
   }
 
   if (isPair) {
-    this.corner_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.RECT,
+    this.corner_ = dom.createSvgElement(
+        Svg.RECT,
         {
-          'height': Blockly.Scrollbar.scrollbarThickness,
-          'width': Blockly.Scrollbar.scrollbarThickness,
+          'height': Scrollbar.scrollbarThickness,
+          'width': Scrollbar.scrollbarThickness,
           'class': 'blocklyScrollbarBackground'
         },
         null);
-    Blockly.utils.dom.insertAfter(this.corner_, workspace.getBubbleCanvas());
+    dom.insertAfter(this.corner_, workspace.getBubbleCanvas());
   }
 
   /**
    * Previously recorded metrics from the workspace.
-   * @type {?Blockly.utils.Metrics}
+   * @type {?Metrics}
    * @private
    */
   this.oldHostMetrics_ = null;
@@ -82,7 +81,7 @@ const ScrollbarPair = function(
  * @suppress {checkTypes}
  */
 ScrollbarPair.prototype.dispose = function() {
-  Blockly.utils.dom.removeNode(this.corner_);
+  dom.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
   this.oldHostMetrics_ = null;
@@ -137,7 +136,7 @@ ScrollbarPair.prototype.resize = function() {
 
   if (resizeH || resizeV) {
     try {
-      Blockly.Events.disable();
+      Events.disable();
       if (this.hScroll && resizeH) {
         this.hScroll.resize(hostMetrics);
       }
@@ -145,7 +144,7 @@ ScrollbarPair.prototype.resize = function() {
         this.vScroll.resize(hostMetrics);
       }
     } finally {
-      Blockly.Events.enable();
+      Events.enable();
     }
     this.workspace_.maybeFireViewportChangeEvent();
   }
@@ -292,7 +291,7 @@ ScrollbarPair.prototype.isVisible = function() {
 /**
  * Recalculates the scrollbars' locations within their path and length.
  * This should be called when the contents of the workspace have changed.
- * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ * @param {!Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  */
 ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
@@ -307,7 +306,7 @@ ScrollbarPair.prototype.resizeContent = function(hostMetrics) {
 /**
  * Recalculates the scrollbars' locations on the screen and path length.
  * This should be called when the layout or size of the window has changed.
- * @param {!Blockly.utils.Metrics} hostMetrics A data structure describing all
+ * @param {!Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
  */
 ScrollbarPair.prototype.resizeView = function(hostMetrics) {

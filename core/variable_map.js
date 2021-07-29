@@ -109,10 +109,9 @@ VariableMap.prototype.renameVariableById = function(id, newName) {
  *     workspace.
  * @private
  */
-VariableMap.prototype.renameVariableAndUses_ = function(variable,
-    newName, blocks) {
-  Events.fire(new (Events.get(Events.VAR_RENAME))(
-      variable, newName));
+VariableMap.prototype.renameVariableAndUses_ = function(
+    variable, newName, blocks) {
+  Events.fire(new (Events.get(Events.VAR_RENAME))(variable, newName));
   variable.name = newName;
   for (let i = 0; i < blocks.length; i++) {
     blocks[i].updateVarName(variable);
@@ -132,8 +131,8 @@ VariableMap.prototype.renameVariableAndUses_ = function(variable,
  *     workspace.
  * @private
  */
-VariableMap.prototype.renameVariableWithConflict_ = function(variable,
-    newName, conflictVar, blocks) {
+VariableMap.prototype.renameVariableWithConflict_ = function(
+    variable, newName, conflictVar, blocks) {
   const type = variable.type;
   const oldCase = conflictVar.name;
 
@@ -149,13 +148,11 @@ VariableMap.prototype.renameVariableWithConflict_ = function(variable,
   }
 
   // Finally delete the original variable, which is now unreferenced.
-  Events.fire(new (Events.get(Events.VAR_DELETE))(
-      variable));
+  Events.fire(new (Events.get(Events.VAR_DELETE))(variable));
   // And remove it from the list.
   const variableList = this.getVariablesOfType(type);
   const variableIndex = variableList.indexOf(variable);
   this.variableMap_[type].splice(variableIndex, 1);
-
 };
 
 /* End functions for renaming variables. */
@@ -171,12 +168,12 @@ VariableMap.prototype.renameVariableWithConflict_ = function(variable,
  *     a UUID.
  * @return {!VariableModel} The newly created variable.
  */
-VariableMap.prototype.createVariable = function(name,
-    opt_type, opt_id) {
+VariableMap.prototype.createVariable = function(name, opt_type, opt_id) {
   let variable = this.getVariable(name, opt_type);
   if (variable) {
     if (opt_id && variable.getId() != opt_id) {
-      throw Error('Variable "' + name + '" is already in use and its id is "' +
+      throw Error(
+          'Variable "' + name + '" is already in use and its id is "' +
           variable.getId() + '" which conflicts with the passed in ' +
           'id, "' + opt_id + '".');
     }
@@ -212,8 +209,7 @@ VariableMap.prototype.deleteVariable = function(variable) {
   for (let i = 0, tempVar; (tempVar = variableList[i]); i++) {
     if (tempVar.getId() == variable.getId()) {
       variableList.splice(i, 1);
-      Events.fire(new (Events.get(Events.VAR_DELETE))(
-          variable));
+      Events.fire(new (Events.get(Events.VAR_DELETE))(variable));
       return;
     }
   }
@@ -232,11 +228,11 @@ VariableMap.prototype.deleteVariableById = function(id) {
     const uses = this.getVariableUsesById(id);
     for (let i = 0, block; (block = uses[i]); i++) {
       if (block.type == 'procedures_defnoreturn' ||
-        block.type == 'procedures_defreturn') {
+          block.type == 'procedures_defreturn') {
         const procedureName = block.getFieldValue('NAME');
-        const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE'].
-            replace('%1', variableName).
-            replace('%2', procedureName);
+        const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
+                               .replace('%1', variableName)
+                               .replace('%2', procedureName);
         Blockly.alert(deleteText);
         return;
       }
@@ -245,21 +241,20 @@ VariableMap.prototype.deleteVariableById = function(id) {
     const map = this;
     if (uses.length > 1) {
       // Confirm before deleting multiple blocks.
-      const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION'].
-          replace('%1', String(uses.length)).
-          replace('%2', variableName);
-      Blockly.confirm(confirmText,
-          function(ok) {
-            if (ok && variable) {
-              map.deleteVariableInternal(variable, uses);
-            }
-          });
+      const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
+                              .replace('%1', String(uses.length))
+                              .replace('%2', variableName);
+      Blockly.confirm(confirmText, function(ok) {
+        if (ok && variable) {
+          map.deleteVariableInternal(variable, uses);
+        }
+      });
     } else {
       // No confirmation necessary for a single block.
       map.deleteVariableInternal(variable, uses);
     }
   } else {
-    console.warn("Can't delete non-existent variable: " + id);
+    console.warn('Can\'t delete non-existent variable: ' + id);
   }
 };
 
@@ -270,8 +265,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
  * @param {!Array<!Block>} uses An array of uses of the variable.
  * @package
  */
-VariableMap.prototype.deleteVariableInternal = function(variable,
-    uses) {
+VariableMap.prototype.deleteVariableInternal = function(variable, uses) {
   const existingGroup = Events.getGroup();
   if (!existingGroup) {
     Events.setGroup(true);
@@ -359,8 +353,7 @@ VariableMap.prototype.getVariableTypes = function(ws) {
   const variableMap = {};
   object.mixin(variableMap, this.variableMap_);
   if (ws && ws.getPotentialVariableMap()) {
-    object.mixin(variableMap,
-        ws.getPotentialVariableMap().variableMap_);
+    object.mixin(variableMap, ws.getPotentialVariableMap().variableMap_);
   }
   const types = Object.keys(variableMap);
   let hasEmpty = false;

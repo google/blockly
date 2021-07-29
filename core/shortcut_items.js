@@ -42,12 +42,12 @@ Blockly.ShortcutItems.names = {
 /** Keyboard shortcut to hide chaff on escape. */
 Blockly.ShortcutItems.registerEscape = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var escapeAction = {
+  const escapeAction = {
     name: Blockly.ShortcutItems.names.ESCAPE,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly;
     },
-    callback: function() {
+    callback: function () {
       Blockly.hideChaff();
       return true;
     }
@@ -60,14 +60,14 @@ Blockly.ShortcutItems.registerEscape = function() {
 /** Keyboard shortcut to delete a block on delete or backspace */
 Blockly.ShortcutItems.registerDelete = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var deleteShortcut = {
+  const deleteShortcut = {
     name: Blockly.ShortcutItems.names.DELETE,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly &&
           Blockly.selected &&
           Blockly.selected.isDeletable();
     },
-    callback: function(workspace, e) {
+    callback: function (workspace, e) {
       // Delete or backspace.
       // Stop the browser from going back to the previous page.
       // Do this first to prevent an error in the delete code from resulting in
@@ -91,16 +91,16 @@ Blockly.ShortcutItems.registerDelete = function() {
 /** Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c. */
 Blockly.ShortcutItems.registerCopy = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var copyShortcut = {
+  const copyShortcut = {
     name: Blockly.ShortcutItems.names.COPY,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly &&
-        !Blockly.Gesture.inProgress() &&
-        Blockly.selected &&
-        Blockly.selected.isDeletable() &&
-        Blockly.selected.isMovable();
+          !Blockly.Gesture.inProgress() &&
+          Blockly.selected &&
+          Blockly.selected.isDeletable() &&
+          Blockly.selected.isMovable();
     },
-    callback: function(workspace, e) {
+    callback: function (workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
@@ -111,15 +111,15 @@ Blockly.ShortcutItems.registerCopy = function() {
   };
   Blockly.ShortcutRegistry.registry.register(copyShortcut);
 
-  var ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name);
 
-  var altC = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const altC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name);
 
-  var metaC = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const metaC = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name);
 };
@@ -127,15 +127,15 @@ Blockly.ShortcutItems.registerCopy = function() {
 /** Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x. */
 Blockly.ShortcutItems.registerCut = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var cutShortcut = {
+  const cutShortcut = {
     name: Blockly.ShortcutItems.names.CUT,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly &&
-        !Blockly.Gesture.inProgress() &&
-        Blockly.selected &&
-        Blockly.selected.isDeletable() &&
-        Blockly.selected.isMovable() &&
-        !Blockly.selected.workspace.isFlyout;
+          !Blockly.Gesture.inProgress() &&
+          Blockly.selected &&
+          Blockly.selected.isDeletable() &&
+          Blockly.selected.isMovable() &&
+          !Blockly.selected.workspace.isFlyout;
     },
     callback: function() {
       Blockly.clipboard.copy(/** @type {!Blockly.ICopyable} */ (Blockly.selected));
@@ -146,15 +146,15 @@ Blockly.ShortcutItems.registerCut = function() {
 
   Blockly.ShortcutRegistry.registry.register(cutShortcut);
 
-  var ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlX, cutShortcut.name);
 
-  var altX = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const altX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altX, cutShortcut.name);
 
-  var metaX = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const metaX = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.X, [Blockly.utils.KeyCodes.META]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(metaX, cutShortcut.name);
 };
@@ -162,9 +162,9 @@ Blockly.ShortcutItems.registerCut = function() {
 /** Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v. */
 Blockly.ShortcutItems.registerPaste = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var pasteShortcut = {
+  const pasteShortcut = {
     name: Blockly.ShortcutItems.names.PASTE,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly && !Blockly.Gesture.inProgress();
     },
     callback: function() {
@@ -174,15 +174,15 @@ Blockly.ShortcutItems.registerPaste = function() {
 
   Blockly.ShortcutRegistry.registry.register(pasteShortcut);
 
-  var ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlV, pasteShortcut.name);
 
-  var altV = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const altV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altV, pasteShortcut.name);
 
-  var metaV = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const metaV = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.V, [Blockly.utils.KeyCodes.META]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(metaV, pasteShortcut.name);
 };
@@ -190,13 +190,13 @@ Blockly.ShortcutItems.registerPaste = function() {
 /** Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z. */
 Blockly.ShortcutItems.registerUndo = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var undoShortcut = {
+  const undoShortcut = {
     name: Blockly.ShortcutItems.names.UNDO,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !workspace.options.readOnly &&
-        !Blockly.Gesture.inProgress();
+          !Blockly.Gesture.inProgress();
     },
-    callback: function(workspace) {
+    callback: function (workspace) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       workspace.undo(false);
@@ -205,15 +205,15 @@ Blockly.ShortcutItems.registerUndo = function() {
   };
   Blockly.ShortcutRegistry.registry.register(undoShortcut);
 
-  var ctrlZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlZ, undoShortcut.name);
 
-  var altZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const altZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altZ, undoShortcut.name);
 
-  var metaZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const metaZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(metaZ, undoShortcut.name);
 };
@@ -221,12 +221,12 @@ Blockly.ShortcutItems.registerUndo = function() {
 /** Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z, or alt+shift+z. */
 Blockly.ShortcutItems.registerRedo = function() {
   /** @type {!Blockly.ShortcutRegistry.KeyboardShortcut} */
-  var redoShortcut = {
+  const redoShortcut = {
     name: Blockly.ShortcutItems.names.REDO,
-    preconditionFn: function(workspace) {
+    preconditionFn: function (workspace) {
       return !Blockly.Gesture.inProgress() && !workspace.options.readOnly;
     },
-    callback: function(workspace) {
+    callback: function (workspace) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       workspace.undo(true);
@@ -235,25 +235,25 @@ Blockly.ShortcutItems.registerRedo = function() {
   };
   Blockly.ShortcutRegistry.registry.register(redoShortcut);
 
-  var ctrlShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(
       ctrlShiftZ, redoShortcut.name);
 
-  var altShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const altShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.ALT]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(altShiftZ, redoShortcut.name);
 
-  var metaShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const metaShiftZ = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Z,
       [Blockly.utils.KeyCodes.SHIFT, Blockly.utils.KeyCodes.META]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(
       metaShiftZ, redoShortcut.name);
 
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
-  var ctrlY = Blockly.ShortcutRegistry.registry.createSerializedKey(
+  const ctrlY = Blockly.ShortcutRegistry.registry.createSerializedKey(
       Blockly.utils.KeyCodes.Y, [Blockly.utils.KeyCodes.CTRL]);
   Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlY, redoShortcut.name);
 };

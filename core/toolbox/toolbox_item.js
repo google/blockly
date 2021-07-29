@@ -10,12 +10,14 @@
  */
 'use strict';
 
-goog.provide('Blockly.ToolboxItem');
+goog.module('Blockly.ToolboxItem');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.IToolboxItem');
 
 goog.requireType('Blockly.ICollapsibleToolboxItem');
 goog.requireType('Blockly.IToolbox');
+goog.require('Blockly.utils.IdGenerator');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -30,7 +32,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @implements {Blockly.IToolboxItem}
  */
-Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
+const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
   /**
    * The id for the category.
@@ -81,7 +83,7 @@ Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
  * on the info object.
  * @public
  */
-Blockly.ToolboxItem.prototype.init = function() {
+ToolboxItem.prototype.init = function() {
   // No-op by default.
 };
 
@@ -90,7 +92,7 @@ Blockly.ToolboxItem.prototype.init = function() {
  * @return {?Element} The div for the toolbox item.
  * @public
  */
-Blockly.ToolboxItem.prototype.getDiv = function() {
+ToolboxItem.prototype.getDiv = function() {
   return null;
 };
 
@@ -99,7 +101,7 @@ Blockly.ToolboxItem.prototype.getDiv = function() {
  * @return {string} The ID for the toolbox item.
  * @public
  */
-Blockly.ToolboxItem.prototype.getId = function() {
+ToolboxItem.prototype.getId = function() {
   return this.id_;
 };
 
@@ -109,7 +111,7 @@ Blockly.ToolboxItem.prototype.getId = function() {
  *     this toolbox item is not nested.
  * @public
  */
-Blockly.ToolboxItem.prototype.getParent = function() {
+ToolboxItem.prototype.getParent = function() {
   return null;
 };
 
@@ -118,7 +120,7 @@ Blockly.ToolboxItem.prototype.getParent = function() {
  * @return {number} The nested level of the category.
  * @package
  */
-Blockly.ToolboxItem.prototype.getLevel = function() {
+ToolboxItem.prototype.getLevel = function() {
   return this.level_;
 };
 
@@ -127,7 +129,7 @@ Blockly.ToolboxItem.prototype.getLevel = function() {
  * @return {boolean} True if the toolbox item can be selected.
  * @public
  */
-Blockly.ToolboxItem.prototype.isSelectable = function() {
+ToolboxItem.prototype.isSelectable = function() {
   return false;
 };
 
@@ -136,7 +138,7 @@ Blockly.ToolboxItem.prototype.isSelectable = function() {
  * @return {boolean} True if the toolbox item is collapsible.
  * @public
  */
-Blockly.ToolboxItem.prototype.isCollapsible = function() {
+ToolboxItem.prototype.isCollapsible = function() {
   return false;
 };
 
@@ -144,5 +146,7 @@ Blockly.ToolboxItem.prototype.isCollapsible = function() {
  * Dispose of this toolbox item. No-op by default.
  * @public
  */
-Blockly.ToolboxItem.prototype.dispose = function() {
+ToolboxItem.prototype.dispose = function() {
 };
+
+exports = ToolboxItem;

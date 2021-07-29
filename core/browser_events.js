@@ -47,13 +47,14 @@ Blockly.browserEvents.Data;
 Blockly.browserEvents.conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
+  const handled = false;
+  const wrapFunc = function (e) {
+    const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; (event = events[i]); i++) {
+    const events = Blockly.Touch.splitEventByTouches(e);
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
       if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
         continue;
       }
@@ -67,10 +68,11 @@ Blockly.browserEvents.conditionalBind = function(
     }
   };
 
-  var bindData = [];
+  const bindData = [];
   if (Blockly.utils.global['PointerEvent'] &&
       (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+    for (let i = 0; i < Blockly.Touch.TOUCH_MAP[name].length; i++) {
+      const type = Blockly.Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -80,16 +82,17 @@ Blockly.browserEvents.conditionalBind = function(
 
     // Add equivalent touch event.
     if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
+      const touchWrapFunc = function (e) {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
-        var preventDef = !opt_noPreventDefault;
+        const preventDef = !opt_noPreventDefault;
         if (handled && preventDef) {
           e.preventDefault();
         }
       };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+      for (let i = 0; i < Blockly.Touch.TOUCH_MAP[name].length; i++) {
+        const type = Blockly.Touch.TOUCH_MAP[name][i];
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }
@@ -113,7 +116,7 @@ Blockly.browserEvents.conditionalBind = function(
  * @public
  */
 Blockly.browserEvents.bind = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
+  const wrapFunc = function (e) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
@@ -121,10 +124,11 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
     }
   };
 
-  var bindData = [];
+  const bindData = [];
   if (Blockly.utils.global['PointerEvent'] &&
       (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+    for (let i = 0; i < Blockly.Touch.TOUCH_MAP[name].length; i++) {
+      const type = Blockly.Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -134,11 +138,11 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
 
     // Add equivalent touch event.
     if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
+      const touchWrapFunc = function (e) {
         // Punt on multitouch events.
         if (e.changedTouches && e.changedTouches.length == 1) {
           // Map the touch event's properties to the event.
-          var touchPoint = e.changedTouches[0];
+          const touchPoint = e.changedTouches[0];
           e.clientX = touchPoint.clientX;
           e.clientY = touchPoint.clientY;
         }
@@ -147,7 +151,8 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
         // Stop the browser from scrolling/zooming the page.
         e.preventDefault();
       };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+      for (let i = 0; i < Blockly.Touch.TOUCH_MAP[name].length; i++) {
+        const type = Blockly.Touch.TOUCH_MAP[name][i];
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }
@@ -164,11 +169,12 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
  * @public
  */
 Blockly.browserEvents.unbind = function(bindData) {
+  let func;
   while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
+    const bindDatum = bindData.pop();
+    const node = bindDatum[0];
+    const name = bindDatum[1];
+    func = bindDatum[2];
     node.removeEventListener(name, func, false);
   }
   return func;

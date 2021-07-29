@@ -50,7 +50,7 @@ const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
   let handled = false;
-  const wrapFunc = function (e) {
+  const wrapFunc = function(e) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
@@ -71,8 +71,7 @@ const conditionalBind = function(
   };
 
   const bindData = [];
-  if (global['PointerEvent'] &&
-      (name in Touch.TOUCH_MAP)) {
+  if (global['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -84,7 +83,7 @@ const conditionalBind = function(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = function (e) {
+      const touchWrapFunc = function(e) {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
@@ -119,7 +118,7 @@ exports.conditionalBind = conditionalBind;
  * @public
  */
 const bind = function(node, name, thisObject, func) {
-  const wrapFunc = function (e) {
+  const wrapFunc = function(e) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
@@ -128,8 +127,7 @@ const bind = function(node, name, thisObject, func) {
   };
 
   const bindData = [];
-  if (global['PointerEvent'] &&
-      (name in Touch.TOUCH_MAP)) {
+  if (global['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -141,7 +139,7 @@ const bind = function(node, name, thisObject, func) {
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = function (e) {
+      const touchWrapFunc = function(e) {
         // Punt on multitouch events.
         if (e.changedTouches && e.changedTouches.length == 1) {
           // Map the touch event's properties to the event.

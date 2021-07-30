@@ -57,7 +57,6 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Workspace');
 
@@ -93,13 +92,6 @@ Object.defineProperty(Blockly, 'mainWorkspace', {
  * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
-
-/**
- * All of the connections on blocks that are currently being dragged.
- * @type {!Array<!Blockly.Connection>}
- * @package
- */
-Blockly.draggingConnections = [];
 
 /**
  * Returns the dimensions of the specified SVG image.

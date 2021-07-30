@@ -17,6 +17,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.common');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.ContextMenu');
@@ -824,12 +825,13 @@ Blockly.BlockSvg.prototype.setDragging = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    Blockly.draggingConnections =
-        Blockly.draggingConnections.concat(this.getConnections_(true));
+    var newList =
+        Blockly.common.getDraggingConnections().concat(this.getConnections_(true));
+    Blockly.common.setDraggingConnections(newList);
     Blockly.utils.dom.addClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   } else {
-    Blockly.draggingConnections = [];
+    Blockly.common.setDraggingConnections([]);
     Blockly.utils.dom.removeClass(
         /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
   }

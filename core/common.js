@@ -15,6 +15,8 @@ goog.module('Blockly.common');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
+const Connection = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 
 
@@ -54,7 +56,7 @@ let parentContainer;
 /**
  * Get the container element in which to render the WidgetDiv, DropDownDiv and\
  * Tooltip.
- * @return {?Element}
+ * @return {?Element} The parent container.
  */
 const getParentContainer = function() {
   return parentContainer;
@@ -72,3 +74,30 @@ const setParentContainer = function(newParent) {
   parentContainer = newParent;
 };
 exports.setParentContainer = setParentContainer;
+
+/**
+ * All of the connections on blocks that are currently being dragged.
+ * @type {!Array.<!Connection>}
+ */
+let draggingConnections = [];
+
+/**
+ * Get the list of dragging connections.
+ * @returns {!Array.<!Connection>} The list of connections on blocks that are
+ *     currently being dragged.
+ */
+const getDraggingConnections = function() {
+  return draggingConnections;
+};
+/** @package **/
+exports.getDraggingConnections = getDraggingConnections;
+
+/**
+ * Set the list of dragging connections.
+ * @param {!Array.<!Connection>} connectionList The new list of connections on
+ *     blocks that are currently being dragged.
+ */
+const setDraggingConnections = function(connectionList) {
+  draggingConnections = connectionList;
+};
+exports.setDraggingConnections = setDraggingConnections;

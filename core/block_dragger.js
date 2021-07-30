@@ -24,6 +24,7 @@ const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimation = goog.require('Blockly.blockAnimations');
+const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const events = goog.require('Blockly.Events');
 const registry = goog.require('Blockly.registry');
@@ -332,7 +333,7 @@ BlockDragger.prototype.maybeDeleteBlock_ = function() {
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
-    Blockly.draggingConnections = [];
+    common.setDraggingConnections([]);
     return true;
   }
   return false;

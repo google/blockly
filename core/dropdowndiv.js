@@ -39,25 +39,6 @@ const style = goog.require('Blockly.utils.style');
 const DropDownDiv = function() {};
 
 /**
- * Drop-downs will appear within the bounds of this element if possible.
- * Set in DropDownDiv.setBoundsElement.
- * @type {Element}
- */
-let boundsElementInternal = null;
-
-/**
- * The object currently using the drop-down.
- * @type {Object}
- */
-let ownerInternal = null;
-
-/**
- * Whether the dropdown was positioned to a field or the source block.
- * @type {?boolean}
- */
-let positionToField = null;
-
-/**
  * Arrow size in px. Should match the value in CSS
  * (need to position pre-render).
  * @type {number}
@@ -99,44 +80,73 @@ DropDownDiv.ANIMATION_TIME = 0.25;
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  * @type {?number}
+ * @private
  */
-let animateOutTimer = null;
+DropDownDiv.animateOutTimer_ = null;
 
 /**
  * Callback for when the drop-down is hidden.
  * @type {?Function}
+ * @private
  */
-let onHide = null;
+DropDownDiv.onHide_ = null;
 
 /**
  * A class name representing the current owner's workspace renderer.
  * @type {string}
+ * @private
  */
-let rendererClassName = '';
+DropDownDiv.rendererClassName_ = '';
 
 /**
  * A class name representing the current owner's workspace theme.
  * @type {string}
+ * @private
  */
-let themeClassName = '';
-
-/**
- * The content element.
- * @type {?Element}
- */
-let divInternal = null;
+DropDownDiv.themeClassName_ = '';
 
 /**
  * The content element.
  * @type {!Element}
+ * @private
  */
-let contentInternal;
+DropDownDiv.DIV_;
+
+/**
+ * The content element.
+ * @type {!Element}
+ * @private
+ */
+DropDownDiv.content_;
 
 /**
  * The arrow element.
  * @type {!Element}
+ * @private
  */
-let arrowInternal;
+DropDownDiv.arrow_;
+
+/**
+ * Drop-downs will appear within the bounds of this element if possible.
+ * Set in DropDownDiv.setBoundsElement.
+ * @type {Element}
+ * @private
+ */
+DropDownDiv.boundsElement_ = null;
+
+/**
+ * The object currently using the drop-down.
+ * @type {Object}
+ * @private
+ */
+DropDownDiv.owner_ = null;
+
+/**
+ * Whether the dropdown was positioned to a field or the source block.
+ * @type {?boolean}
+ * @private
+ */
+DropDownDiv.positionToField_ = null;
 
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
@@ -172,40 +182,40 @@ DropDownDiv.PositionMetrics;
  * @package
  */
 DropDownDiv.createDom = function() {
-  if (divInternal) {
+  if (DropDownDiv.DIV_) {
     return;  // Already created.
   }
-  const div = document.createElement('div');
-  div.className = 'blocklyDropDownDiv';
-  const container = common.getParentContainer || document.body;
-  container.appendChild(div);
+  const containerDiv = document.createElement('div');
+  containerDiv.className = 'blocklyDropDownDiv';
+  const parentDiv = Blockly.parentContainer || document.body;
+  parentDiv.appendChild(containerDiv);
 
-  divInternal = div;
+  DropDownDiv.DIV_ = containerDiv;
 
   const content = document.createElement('div');
   content.className = 'blocklyDropDownContent';
-  div.appendChild(content);
-  contentInternal = content;
+  DropDownDiv.DIV_.appendChild(content);
+  DropDownDiv.content_ = content;
 
   const arrow = document.createElement('div');
   arrow.className = 'blocklyDropDownArrow';
-  div.appendChild(arrow);
-  arrowInternal = arrow;
+  DropDownDiv.DIV_.appendChild(arrow);
+  DropDownDiv.arrow_ = arrow;
 
-  divInternal.style.opacity = 0;
+  DropDownDiv.DIV_.style.opacity = 0;
 
   // Transition animation for transform: translate() and opacity.
-  divInternal.style.transition = 'transform ' + DropDownDiv.ANIMATION_TIME +
+  DropDownDiv.DIV_.style.transition = 'transform ' + DropDownDiv.ANIMATION_TIME +
       's, ' +
       'opacity ' + DropDownDiv.ANIMATION_TIME + 's';
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
-  div.addEventListener('focusin', function() {
-    dom.addClass(div, 'blocklyFocused');
+  DropDownDiv.DIV_.addEventListener('focusin', function() {
+    dom.addClass(DropDownDiv.DIV_, 'blocklyFocused');
   });
-  div.addEventListener('focusout', function() {
-    dom.removeClass(div, 'blocklyFocused');
+  DropDownDiv.DIV_.addEventListener('focusout', function() {
+    dom.removeClass(DropDownDiv.DIV_, 'blocklyFocused');
   });
 };
 
@@ -215,7 +225,7 @@ DropDownDiv.createDom = function() {
  * @param {Element} boundsElement Element to bind drop-down to.
  */
 DropDownDiv.setBoundsElement = function(boundsElement) {
-  boundsElementInternal = boundsElement;
+  DropDownDiv.boundsElement_ = boundsElement;
 };
 
 /**
@@ -223,15 +233,15 @@ DropDownDiv.setBoundsElement = function(boundsElement) {
  * @return {!Element} Div to populate with content.
  */
 DropDownDiv.getContentDiv = function() {
-  return contentInternal;
+  return DropDownDiv.content_;
 };
 
 /**
  * Clear the content of the drop-down.
  */
 DropDownDiv.clearContent = function() {
-  contentInternal.textContent = '';
-  contentInternal.style.width = '';
+  DropDownDiv.content_.textContent = '';
+  DropDownDiv.content_.style.width = '';
 };
 
 /**
@@ -240,8 +250,8 @@ DropDownDiv.clearContent = function() {
  * @param {string} borderColour Any CSS colour for the border.
  */
 DropDownDiv.setColour = function(backgroundColour, borderColour) {
-  divInternal.style.backgroundColor = backgroundColour;
-  divInternal.style.borderColor = borderColour;
+  DropDownDiv.DIV_.style.backgroundColor = backgroundColour;
+  DropDownDiv.DIV_.style.borderColor = borderColour;
 };
 
 /**
@@ -277,7 +287,7 @@ DropDownDiv.showPositionedByBlock = function(
  */
 DropDownDiv.showPositionedByField = function(
     field, opt_onHide, opt_secondaryYOffset) {
-  positionToField = true;
+  DropDownDiv.positionToField_ = true;
   return showPositionedByRect(
       getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
 };
@@ -368,18 +378,18 @@ const showPositionedByRect = function(
  */
 DropDownDiv.show = function(
     owner, rtl, primaryX, primaryY, secondaryX, secondaryY, opt_onHide) {
-  ownerInternal = owner;
-  onHide = opt_onHide || null;
+  DropDownDiv.owner_ = owner;
+  DropDownDiv.onHide_ = opt_onHide || null;
   // Set direction.
-  const div = divInternal;
+  const div = DropDownDiv.DIV_;
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   const mainWorkspace =
-      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
-  rendererClassName = mainWorkspace.getRenderer().getClassName();
-  themeClassName = mainWorkspace.getTheme().getClassName();
-  dom.addClass(div, rendererClassName);
-  dom.addClass(div, themeClassName);
+      /** @type {!WorkspaceSvg} */ (Blockly.getMainWorkspace());
+  DropDownDiv.rendererClassName_ = mainWorkspace.getRenderer().getClassName();
+  DropDownDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
+  dom.addClass(div, DropDownDiv.rendererClassName_);
+  dom.addClass(div, DropDownDiv.themeClassName_);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -400,9 +410,9 @@ DropDownDiv.show = function(
  */
 let getBoundsInfo = function() {
   const boundPosition = style.getPageOffset(
-      /** @type {!Element} */ (boundsElementInternal));
+      /** @type {!Element} */ (DropDownDiv.boundsElement_));
   const boundSize = style.getSize(
-      /** @type {!Element} */ (boundsElementInternal));
+      /** @type {!Element} */ (DropDownDiv.boundsElement_));
 
   return {
     left: boundPosition.x,
@@ -430,7 +440,7 @@ const getPositionMetrics = function(
     primaryX, primaryY, secondaryX, secondaryY) {
   const boundsInfo = getBoundsInfo();
   const divSize = style.getSize(
-      /** @type {!Element} */ (divInternal));
+      /** @type {!Element} */ (DropDownDiv.DIV_));
 
   // Can we fit in-bounds below the target?
   if (primaryY + divSize.height < boundsInfo.bottom) {
@@ -587,7 +597,7 @@ DropDownDiv.getPositionX = function(
  * @return {boolean} True if visible.
  */
 DropDownDiv.isVisible = function() {
-  return !!ownerInternal;
+  return !!DropDownDiv.owner_;
 };
 
 /**
@@ -598,7 +608,7 @@ DropDownDiv.isVisible = function() {
  * @return {boolean} True if hidden.
  */
 DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
-  if (ownerInternal === owner) {
+  if (DropDownDiv.owner_ === owner) {
     if (opt_withoutAnimation) {
       DropDownDiv.hideWithoutAnimation();
     } else {
@@ -614,17 +624,16 @@ DropDownDiv.hideIfOwner = function(owner, opt_withoutAnimation) {
  */
 DropDownDiv.hide = function() {
   // Start the animation by setting the translation and fading out.
-  const div = divInternal;
   // Reset to (initialX, initialY) - i.e., no translation.
-  div.style.transform = 'translate(0, 0)';
-  div.style.opacity = 0;
+  DropDownDiv.DIV_.style.transform = 'translate(0, 0)';
+  DropDownDiv.DIV_.style.opacity = 0;
   // Finish animation - reset all values to default.
-  animateOutTimer = setTimeout(function() {
+  DropDownDiv.animateOutTimer_ = setTimeout(function() {
     DropDownDiv.hideWithoutAnimation();
   }, DropDownDiv.ANIMATION_TIME * 1000);
-  if (onHide) {
-    onHide();
-    onHide = null;
+  if (DropDownDiv.onHide_) {
+    DropDownDiv.onHide_();
+    DropDownDiv.onHide_ = null;
   }
 };
 
@@ -635,13 +644,13 @@ DropDownDiv.hideWithoutAnimation = function() {
   if (!DropDownDiv.isVisible()) {
     return;
   }
-  if (animateOutTimer) {
-    clearTimeout(animateOutTimer);
+  if (DropDownDiv.animateOutTimer_) {
+    clearTimeout(DropDownDiv.animateOutTimer_);
   }
 
   // Reset style properties in case this gets called directly
   // instead of hide() - see discussion on #2551.
-  const div = divInternal;
+  const div = DropDownDiv.DIV_;
   div.style.transform = '';
   div.style.left = '';
   div.style.top = '';
@@ -650,20 +659,20 @@ DropDownDiv.hideWithoutAnimation = function() {
   div.style.backgroundColor = '';
   div.style.borderColor = '';
 
-  if (onHide) {
-    onHide();
-    onHide = null;
+  if (DropDownDiv.onHide_) {
+    DropDownDiv.onHide_();
+    DropDownDiv.onHide_ = null;
   }
   DropDownDiv.clearContent();
-  ownerInternal = null;
+  DropDownDiv.owner_ = null;
 
-  if (rendererClassName) {
-    dom.removeClass(div, rendererClassName);
-    rendererClassName = '';
+  if (DropDownDiv.rendererClassName_) {
+    dom.removeClass(div, DropDownDiv.rendererClassName_);
+    DropDownDiv.rendererClassName_ = '';
   }
-  if (themeClassName) {
-    dom.removeClass(div, themeClassName);
-    themeClassName = '';
+  if (DropDownDiv.themeClassName_) {
+    dom.removeClass(div, DropDownDiv.themeClassName_);
+    DropDownDiv.themeClassName_ = '';
   }
   (/** @type {!WorkspaceSvg} */ (common.getMainWorkspace())).markFocused();
 };
@@ -684,15 +693,15 @@ const positionInternal = function(primaryX, primaryY, secondaryX, secondaryY) {
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
-    arrowInternal.style.display = '';
-    arrowInternal.style.transform = 'translate(' + metrics.arrowX + 'px,' +
+    DropDownDiv.arrow_.style.display = '';
+    DropDownDiv.arrow_.style.transform = 'translate(' + metrics.arrowX + 'px,' +
         metrics.arrowY + 'px) rotate(45deg)';
-    arrowInternal.setAttribute(
+    DropDownDiv.arrow_.setAttribute(
         'class',
         metrics.arrowAtTop ? 'blocklyDropDownArrow blocklyArrowTop' :
                              'blocklyDropDownArrow blocklyArrowBottom');
   } else {
-    arrowInternal.style.display = 'none';
+    DropDownDiv.arrow_.style.display = 'none';
   }
 
   const initialX = Math.floor(metrics.initialX);
@@ -700,7 +709,7 @@ const positionInternal = function(primaryX, primaryY, secondaryX, secondaryY) {
   const finalX = Math.floor(metrics.finalX);
   const finalY = Math.floor(metrics.finalY);
 
-  const div = divInternal;
+  const div = DropDownDiv.DIV_;
   // First apply initial translation.
   div.style.left = initialX + 'px';
   div.style.top = initialY + 'px';
@@ -729,10 +738,10 @@ DropDownDiv.repositionForWindowResize = function() {
   // when a field is focused, the soft keyboard opens triggering a window resize
   // event and we want the dropdown div to stick around so users can type into
   // it.
-  if (ownerInternal) {
-    const field = /** @type {!Field} */ (ownerInternal);
+  if (DropDownDiv.owner_) {
+    const field = /** @type {!Field} */ (DropDownDiv.owner_);
     const block = /** @type {!BlockSvg} */ (field.getSourceBlock());
-    const bBox = positionToField ? getScaledBboxOfField(field) :
+    const bBox = DropDownDiv.positionToField_ ? getScaledBboxOfField(field) :
                                    getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
@@ -752,4 +761,7 @@ exports.testOnly_setGetBoundsInfo = function(getBoundsInfoMock) {
   getBoundsInfo = getBoundsInfoMock;
 };
 
-exports.testOnly_getPositionMetrics = getPositionMetrics;
+exports.testOnly_getPositionMetrics = function (...args) {
+  goog.setTestOnly();
+  return getPositionMetrics(...args);
+}

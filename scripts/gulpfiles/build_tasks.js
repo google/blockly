@@ -341,8 +341,8 @@ function buildDeps(done) {
     closurePath,
     'core',
     'blocks',
-      'generators',
-      'tests/mocha'
+    'generators',
+    'tests/mocha'
   ];
   const args = roots.map(root => `--root '${root}' `).join('');
   execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});

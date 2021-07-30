@@ -61,28 +61,19 @@ suite('JSO', function() {
         });
       });
 
-      suite('Disabled', function() {
-        test('True', function() {
+      suite('Enabled', function() {
+        test('False', function() {
           const block = this.workspace.newBlock('row_block');
           block.setEnabled(false);
           const jso = Blockly.serialization.blocks.save(block);
-          assertProperty(jso, 'disabled', true);
+          assertProperty(jso, 'enabled', false);
         });
 
-        suite('Enabled', function() {
-          test('False', function() {
-            const block = this.workspace.newBlock('row_block');
-            block.setEnabled(false);
-            const jso = Blockly.serialization.blocks.save(block);
-            assertProperty(jso, 'enabled', false);
-          });
-  
-          test('True', function() {
-            const block = this.workspace.newBlock('row_block');
-            block.setEnabled(true);
-            const jso = Blockly.serialization.blocks.save(block);
-            assertNoProperty(jso, 'enabled');
-          });
+        test('True', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.setEnabled(true);
+          const jso = Blockly.serialization.blocks.save(block);
+          assertNoProperty(jso, 'enabled');
         });
       });
 
@@ -247,7 +238,7 @@ suite('JSO', function() {
           return 'some extra state';
         };
         const jso = Blockly.serialization.blocks.save(block);
-        assertProperty(jso, 'extra-state', 'some extra state');
+        assertProperty(jso, 'extraState', 'some extra state');
       });
 
       test('Object', function() {
@@ -345,15 +336,6 @@ suite('JSO', function() {
         block.getInput('INPUT').appendField(new ArrayStateField(''), 'FIELD');
         const jso = Blockly.serialization.blocks.save(block);
         assertProperty(jso, 'fields', {'FIELD': ['state1', 42, true]});
-      });
-
-      test('XML backwards compatibility', function() {
-        const block = this.workspace.newBlock('row_block');
-        const field = new XmlStateField('');
-        field.setValue('test');
-        block.getInput('INPUT').appendField(field, 'FIELD');
-        const jso = Blockly.serialization.blocks.save(block);
-        assertProperty(jso, 'fields', {'FIELD': '<field >test</field>'});
       });
     });
   });

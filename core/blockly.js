@@ -18,6 +18,7 @@ goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.clipboard');
+goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
@@ -72,12 +73,15 @@ goog.requireType('Blockly.Workspace');
  */
 Blockly.VERSION = 'uncompiled';
 
-/**
- * The main workspace most recently used.
- * Set by Blockly.WorkspaceSvg.prototype.markFocused
- * @type {Blockly.Workspace}
- */
-Blockly.mainWorkspace = null;
+// Add a getter and setter pair for Blockly.mainWorkspace, for legacy reasons.
+Object.defineProperty(Blockly, 'mainWorkspace', {
+  set: function(x) {
+    Blockly.common.setMainWorkspace(x);
+  },
+  get: function() {
+    return Blockly.common.getMainWorkspace();
+  }
+});
 
 /**
  * Currently selected block.
@@ -173,7 +177,7 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.mainWorkspace;
+  var mainWorkspace = Blockly.common.getMainWorkspace();
   if (!mainWorkspace) {
     return;
   }
@@ -252,7 +256,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.DropDownDiv.hideWithoutAnimation();
 
   var onlyClosePopups = !!opt_onlyClosePopups;
-  var workspace = Blockly.getMainWorkspace();
+  var workspace = Blockly.common.getMainWorkspace();
   var autoHideables = workspace.getComponentManager().getComponents(
       Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(function(autoHideable) {
@@ -266,9 +270,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
  * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
  */
-Blockly.getMainWorkspace = function() {
-  return /** @type {!Blockly.Workspace} */ (Blockly.mainWorkspace);
-};
+Blockly.getMainWorkspace = Blockly.common.getMainWorkspace;
 
 /**
  * Wrapper to window.alert() that app developers may override to

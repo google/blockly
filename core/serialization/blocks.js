@@ -71,8 +71,7 @@ exports.save = save;
  * Adds attributes to the given state object based on the state of the block.
  * Eg collapsed, disabled, editable, etc.
  * @param {!Blockly.Block} block The block to base the attributes on.
- * @param {!State} state The state object to append
- *     to.
+ * @param {!State} state The state object to append to.
  */
 const addAttributes = function(block, state) {
   if (block.isCollapsed()) {
@@ -105,8 +104,7 @@ const addAttributes = function(block, state) {
 /**
  * Adds the coordinates of the given block to the given state object.
  * @param {!Blockly.Block} block The block to base the coordinates on
- * @param {!State} state The state object to append
- *     to
+ * @param {!State} state The state object to append to
  */
 const addCoords = function(block, state) {
   const workspace = block.workspace;
@@ -118,8 +116,7 @@ const addCoords = function(block, state) {
 /**
  * Adds any extra state the block may provide to the given state object.
  * @param {!Blockly.Block} block The block to serialize the extra state of.
- * @param {!State} state The state object to append
- *     to.
+ * @param {!State} state The state object to append to.
  */
 const addExtraState = function(block, state) {
   if (block.saveExtraState) {

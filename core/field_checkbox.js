@@ -107,7 +107,7 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldCheckbox.prototype.saveState = function() {
-  return this.value_;
+  return /** @type{boolean} */ (this.value_);
 };
 
 /**

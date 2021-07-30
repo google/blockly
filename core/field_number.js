@@ -124,7 +124,7 @@ Blockly.FieldNumber.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldNumber.prototype.saveState = function() {
-  return this.value_;
+  return /** @type{number} */ (this.value_);
 };
 
 /**

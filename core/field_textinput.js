@@ -180,7 +180,7 @@ Blockly.FieldTextInput.prototype.initView = function() {
 
 /**
  * Saves this field's value.
- * @return {string} The text value held by this field.
+ * @return {*} The text value held by this field.
  * @override
  * @package
  */

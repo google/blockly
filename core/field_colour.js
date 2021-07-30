@@ -192,7 +192,7 @@ Blockly.FieldColour.prototype.initView = function() {
  * @package
  */
 Blockly.FieldColour.prototype.saveState = function() {
-  return this.value_;
+  return /** @type{string} */ (this.value_);
 };
 
 /**

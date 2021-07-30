@@ -261,7 +261,7 @@ Blockly.FieldAngle.prototype.initView = function() {
  * @package
  */
 Blockly.FieldAngle.prototype.saveState = function() {
-  return this.value_;
+  return /** @type{number} */ (this.value_);
 };
 
 /**

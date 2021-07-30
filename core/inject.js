@@ -45,8 +45,6 @@ goog.requireType('Blockly.BlockSvg');
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
-  Blockly.checkBlockColourConstants();
-
   if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);

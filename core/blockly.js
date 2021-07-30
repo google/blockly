@@ -76,9 +76,14 @@ Blockly.VERSION = 'uncompiled';
 // Add a getter and setter pair for Blockly.mainWorkspace, for legacy reasons.
 Object.defineProperty(Blockly, 'mainWorkspace', {
   set: function(x) {
+    Blockly.utils.deprecation.warn(
+        'Blockly.mainWorkspace', 'September 2021', 'September 2022');
     Blockly.common.setMainWorkspace(x);
   },
   get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.mainWorkspace', 'September 2021', 'September 2022',
+        'Blockly.getMainWorkspace()');
     return Blockly.common.getMainWorkspace();
   }
 });
@@ -95,13 +100,6 @@ Blockly.selected = null;
  * @package
  */
 Blockly.draggingConnections = [];
-
-/**
- * Cached value for whether 3D is supported.
- * @type {?boolean}
- * @private
- */
-Blockly.cache3dSupported_ = null;
 
 /**
  * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
@@ -370,78 +368,6 @@ Blockly.hueToHex = function(hue) {
   return Blockly.utils.colour.hsvToHex(
       hue, Blockly.internalConstants.HSV_SATURATION,
       Blockly.internalConstants.HSV_VALUE * 255);
-};
-
-/**
- * Checks old colour constants are not overwritten by the host application.
- * If a constant is overwritten, it prints a console warning directing the
- * developer to use the equivalent Msg constant.
- * @package
- */
-Blockly.checkBlockColourConstants = function() {
-  Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], 210);
-  Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], 120);
-  Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Blocks', 'math', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Constants', 'Math', 'HUE'], 230);
-  Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], 160);
-  Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], 260);
-  Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], 20);
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], 330);
-  // Blockly.Blocks.variables_dynamic.HUE never existed.
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], 310);
-  Blockly.checkBlockColourConstant_(
-      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], undefined);
-  // Blockly.Constants.Procedures.HUE never existed.
-};
-
-/**
- * Checks for a constant in the Blockly namespace, verifying it is undefined or
- * has the old/original value. Prints a warning if this is not true.
- * @param {string} msgName The Msg constant identifier.
- * @param {!Array<string>} blocklyNamePath The name parts of the tested
- *     constant.
- * @param {number|undefined} expectedValue The expected value of the constant.
- * @private
- */
-Blockly.checkBlockColourConstant_ = function(
-    msgName, blocklyNamePath, expectedValue) {
-  var namePath = 'Blockly';
-  var value = Blockly;
-  for (var i = 0; i < blocklyNamePath.length; ++i) {
-    namePath += '.' + blocklyNamePath[i];
-    if (value) {
-      value = value[blocklyNamePath[i]];
-    }
-  }
-
-  if (value && value !== expectedValue) {
-    var warningPattern = (expectedValue === undefined) ?
-        '%1 has been removed. Use Blockly.Msg["%2"].' :
-        '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
-    var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
-    console.warn(warning);
-  }
 };
 
 /**

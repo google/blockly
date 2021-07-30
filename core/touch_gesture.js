@@ -238,10 +238,8 @@ TouchGesture.prototype.handleTouchStart = function(e) {
   const pointers = Object.keys(this.cachedPoints_);
   // If two pointers are down, store info
   if (pointers.length == 2) {
-    const point0 = /** @type {!Coordinate} */ (
-      this.cachedPoints_[pointers[0]]);
-    const point1 = /** @type {!Coordinate} */ (
-      this.cachedPoints_[pointers[1]]);
+    const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
+    const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
     this.startDistance_ = Coordinate.distance(point0, point1);
     this.isMultiTouch_ = true;
     e.preventDefault();
@@ -268,17 +266,15 @@ TouchGesture.prototype.handleTouchMove = function(e) {
 };
 
 /**
-* Handle pinch zoom gesture.
-* @param {!Event} e A touch move, or pointer move event.
-* @private
-*/
+ * Handle pinch zoom gesture.
+ * @param {!Event} e A touch move, or pointer move event.
+ * @private
+ */
 TouchGesture.prototype.handlePinch_ = function(e) {
   const pointers = Object.keys(this.cachedPoints_);
   // Calculate the distance between the two pointers
-  const point0 = /** @type {!Coordinate} */ (
-    this.cachedPoints_[pointers[0]]);
-  const point1 = /** @type {!Coordinate} */ (
-    this.cachedPoints_[pointers[1]]);
+  const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
+  const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
   const moveDistance = Coordinate.distance(point0, point1);
   const scale = moveDistance / this.startDistance_;
 
@@ -325,8 +321,7 @@ TouchGesture.prototype.getTouchPoint = function(e) {
   }
   return new Coordinate(
       (e.pageX ? e.pageX : e.changedTouches[0].pageX),
-      (e.pageY ? e.pageY : e.changedTouches[0].pageY)
-  );
+      (e.pageY ? e.pageY : e.changedTouches[0].pageY));
 };
 
 exports = TouchGesture;

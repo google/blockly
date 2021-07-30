@@ -59,22 +59,22 @@ WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   }
 
   /**
-  * Dom structure when the workspace is being dragged. If there is no drag in
-  * progress, the SVG is empty and display: none.
-  * <svg class="blocklyWsDragSurface" style=transform:translate3d(...)>
-  *   <g class="blocklyBlockCanvas"></g>
-  *   <g class="blocklyBubbleCanvas">/g>
-  * </svg>
-  */
+   * Dom structure when the workspace is being dragged. If there is no drag in
+   * progress, the SVG is empty and display: none.
+   * <svg class="blocklyWsDragSurface" style=transform:translate3d(...)>
+   *   <g class="blocklyBlockCanvas"></g>
+   *   <g class="blocklyBubbleCanvas">/g>
+   * </svg>
+   */
   this.SVG_ = dom.createSvgElement(
-      Svg.SVG,
-      {
+      Svg.SVG, {
         'xmlns': dom.SVG_NS,
         'xmlns:html': dom.HTML_NS,
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
-      }, null);
+      },
+      null);
   this.container_.appendChild(this.SVG_);
 };
 
@@ -117,7 +117,8 @@ WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  */
 WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
-    throw Error('Couldn\'t clear and hide the drag surface: missing ' +
+    throw Error(
+        'Couldn\'t clear and hide the drag surface: missing ' +
         'new surface.');
   }
   const blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
@@ -125,7 +126,8 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!blockCanvas || !bubbleCanvas ||
       !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
-    throw Error('Couldn\'t clear and hide the drag surface. ' +
+    throw Error(
+        'Couldn\'t clear and hide the drag surface. ' +
         'A node was missing.');
   }
 

@@ -106,18 +106,19 @@ const Trashcan = function(workspace) {
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition == toolbox.Position.TOP ?
-        toolbox.Position.BOTTOM : toolbox.Position.TOP;
+        toolbox.Position.BOTTOM :
+        toolbox.Position.TOP;
     const HorizontalFlyout = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
-        this.workspace_.options, true);
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.workspace_.options,
+        true);
     this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-      this.workspace_.toolboxPosition == toolbox.Position.RIGHT ?
-        toolbox.Position.LEFT : toolbox.Position.RIGHT;
+        this.workspace_.toolboxPosition == toolbox.Position.RIGHT ?
+        toolbox.Position.LEFT :
+        toolbox.Position.RIGHT;
     const VerticalFlyout = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
-        this.workspace_.options, true);
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace_.options, true);
     this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
@@ -278,23 +279,13 @@ Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = dom.createSvgElement(
-      Svg.G,
-      {'class': 'blocklyTrash'}, null);
+  this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyTrash'}, null);
   let clip;
   const rnd = String(Math.random()).substring(2);
   clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyTrashBodyClipPath' + rnd},
-      this.svgGroup_);
+      Svg.CLIPPATH, {'id': 'blocklyTrashBodyClipPath' + rnd}, this.svgGroup_);
   dom.createSvgElement(
-      Svg.RECT,
-      {
-        'width': WIDTH,
-        'height': BODY_HEIGHT,
-        'y': LID_HEIGHT
-      },
-      clip);
+      Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT}, clip);
   const body = dom.createSvgElement(
       Svg.IMAGE, {
         'width': internalConstants.SPRITE.width,
@@ -306,16 +297,11 @@ Trashcan.prototype.createDom = function() {
       this.svgGroup_);
   body.setAttributeNS(
       dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia +
-          internalConstants.SPRITE.url);
+      this.workspace_.options.pathToMedia + internalConstants.SPRITE.url);
 
   clip = dom.createSvgElement(
-      Svg.CLIPPATH,
-      {'id': 'blocklyTrashLidClipPath' + rnd},
-      this.svgGroup_);
-  dom.createSvgElement(
-      Svg.RECT,
-      {'width': WIDTH, 'height': LID_HEIGHT}, clip);
+      Svg.CLIPPATH, {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup_);
+  dom.createSvgElement(Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
   this.svgLid_ = dom.createSvgElement(
       Svg.IMAGE, {
         'width': internalConstants.SPRITE.width,
@@ -327,8 +313,7 @@ Trashcan.prototype.createDom = function() {
       this.svgGroup_);
   this.svgLid_.setAttributeNS(
       dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia +
-          internalConstants.SPRITE.url);
+      this.workspace_.options.pathToMedia + internalConstants.SPRITE.url);
 
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
@@ -350,8 +335,7 @@ Trashcan.prototype.createDom = function() {
 Trashcan.prototype.init = function() {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     dom.insertAfter(
-        this.flyout.createDom(Svg.SVG),
-        this.workspace_.getParentSvg());
+        this.flyout.createDom(Svg.SVG), this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
   this.workspace_.getComponentManager().addComponent({
@@ -469,21 +453,20 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 
   const height = BODY_HEIGHT + LID_HEIGHT;
   const startRect = uiPosition.getStartPositionRect(
-      cornerPosition, new utils.Size(WIDTH, height),
-      MARGIN_HORIZONTAL, MARGIN_VERTICAL, metrics, this.workspace_);
+      cornerPosition, new utils.Size(WIDTH, height), MARGIN_HORIZONTAL,
+      MARGIN_VERTICAL, metrics, this.workspace_);
 
   const verticalPosition = cornerPosition.vertical;
-  const bumpDirection =
-      verticalPosition === uiPosition.verticalPosition.TOP ?
-          uiPosition.bumpDirection.DOWN :
-          uiPosition.bumpDirection.UP;
+  const bumpDirection = verticalPosition === uiPosition.verticalPosition.TOP ?
+      uiPosition.bumpDirection.DOWN :
+      uiPosition.bumpDirection.UP;
   const positionRect = uiPosition.bumpPositionRect(
       startRect, MARGIN_VERTICAL, bumpDirection, savedPositions);
 
   this.top_ = positionRect.top;
   this.left_ = positionRect.left;
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.left_ + ',' + this.top_ + ')');
+  this.svgGroup_.setAttribute(
+      'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
@@ -511,8 +494,7 @@ Trashcan.prototype.getClientRect = function() {
 
   const trashRect = this.svgGroup_.getBoundingClientRect();
   const top = trashRect.top + SPRITE_TOP - MARGIN_HOTSPOT;
-  const bottom = top + LID_HEIGHT + BODY_HEIGHT +
-      2 * MARGIN_HOTSPOT;
+  const bottom = top + LID_HEIGHT + BODY_HEIGHT + 2 * MARGIN_HOTSPOT;
   const left = trashRect.left + SPRITE_LEFT - MARGIN_HOTSPOT;
   const right = left + WIDTH + 2 * MARGIN_HOTSPOT;
   return new Rect(top, bottom, left, right);
@@ -582,8 +564,8 @@ Trashcan.prototype.animateLid_ = function() {
   this.svgGroup_.style.opacity = opacity;
 
   if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
-    this.lidTask_ = setTimeout(this.animateLid_.bind(this),
-        ANIMATION_LENGTH / frames);
+    this.lidTask_ =
+        setTimeout(this.animateLid_.bind(this), ANIMATION_LENGTH / frames);
   }
 };
 
@@ -596,10 +578,10 @@ Trashcan.prototype.setLidAngle_ = function(lidAngle) {
   const openAtRight =
       this.workspace_.toolboxPosition == toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
-  this.svgLid_.setAttribute('transform', 'rotate(' +
-      (openAtRight ? -lidAngle : lidAngle) + ',' +
-      (openAtRight ? 4 : WIDTH - 4) + ',' +
-      (LID_HEIGHT - 2) + ')');
+  this.svgLid_.setAttribute(
+      'transform',
+      'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
+          (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
 };
 
 /**
@@ -640,8 +622,8 @@ Trashcan.prototype.click = function() {
  * @private
  */
 Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  const uiEvent = new (Events.get(Events.TRASHCAN_OPEN))(
-      trashcanOpen,this.workspace_.id);
+  const uiEvent =
+      new (Events.get(Events.TRASHCAN_OPEN))(trashcanOpen, this.workspace_.id);
   Events.fire(uiEvent);
 };
 
@@ -695,7 +677,7 @@ Trashcan.prototype.onDelete_ = function(event) {
     }
     this.contents_.unshift(cleanedXML);
     while (this.contents_.length >
-        this.workspace_.options.maxTrashcanContents) {
+           this.workspace_.options.maxTrashcanContents) {
       this.contents_.pop();
     }
 

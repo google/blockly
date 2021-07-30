@@ -16,6 +16,7 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const BasicCursor = goog.require('Blockly.BasicCursor');
+/* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const {inherits} = goog.require('Blockly.utils.object');
 

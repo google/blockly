@@ -13,9 +13,12 @@
 goog.module('Blockly.FieldVariable');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
+/* eslint-disable-next-line no-unused-vars */
 const Menu = goog.requireType('Blockly.Menu');
+/* eslint-disable-next-line no-unused-vars */
 const MenuItem = goog.requireType('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
 const Size = goog.require('Blockly.utils.Size');

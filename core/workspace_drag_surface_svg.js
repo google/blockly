@@ -89,8 +89,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
 Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being moved on the drag surface.
-  var fixedX = x.toFixed(0);
-  var fixedY = y.toFixed(0);
+  const fixedX = x.toFixed(0);
+  const fixedY = y.toFixed(0);
 
   this.SVG_.style.display = 'block';
   Blockly.utils.dom.setCssTransform(
@@ -119,8 +119,8 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
     throw Error('Couldn\'t clear and hide the drag surface: missing ' +
         'new surface.');
   }
-  var blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
-  var bubbleCanvas = /** @type {!Element} */ (this.SVG_.childNodes[1]);
+  const blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
+  const bubbleCanvas = /** @type {!Element} */ (this.SVG_.childNodes[1]);
   if (!blockCanvas || !bubbleCanvas ||
       !Blockly.utils.dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !Blockly.utils.dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {

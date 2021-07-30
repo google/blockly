@@ -19,8 +19,7 @@ const global = goog.require('Blockly.utils.global');
 
 /**
  * Blockly opaque event data used to unbind events when using
- * `bind` and
- * `conditionalBind`.
+ * `bind` and `conditionalBind`.
  * @typedef {!Array<!Array>}
  */
 let Data;
@@ -44,7 +43,6 @@ exports.Data = Data;
  *     provided.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @public
  */
 const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
@@ -115,7 +113,6 @@ exports.conditionalBind = conditionalBind;
  * @param {!Function} func Function to call when event is triggered.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @public
  */
 const bind = function(node, name, thisObject, func) {
   const wrapFunc = function(e) {
@@ -168,7 +165,6 @@ exports.bind = bind;
  * @param {!Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
- * @public
  */
 const unbind = function(bindData) {
   let func;

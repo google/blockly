@@ -67,7 +67,7 @@ Blockly.WidgetDiv.createDom = function() {
    */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  var container = Blockly.common.getParentContainer() || document.body;
+  const container = Blockly.common.getParentContainer() || document.body;
   container.appendChild(Blockly.WidgetDiv.DIV);
 };
 
@@ -82,10 +82,10 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
-  var div = Blockly.WidgetDiv.DIV;
+  const div = Blockly.WidgetDiv.DIV;
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
-  var mainWorkspace =
+  const mainWorkspace =
     /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
   Blockly.WidgetDiv.rendererClassName_ =
       mainWorkspace.getRenderer().getClassName();
@@ -103,7 +103,7 @@ Blockly.WidgetDiv.hide = function() {
   }
   Blockly.WidgetDiv.owner_ = null;
 
-  var div = Blockly.WidgetDiv.DIV;
+  const div = Blockly.WidgetDiv.DIV;
   div.style.display = 'none';
   div.style.left = '';
   div.style.top = '';
@@ -173,8 +173,8 @@ Blockly.WidgetDiv.positionInternal_ = function(x, y, height) {
  */
 Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
     widgetSize, rtl) {
-  var y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
-  var x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
+  const y = Blockly.WidgetDiv.calculateY_(viewportBBox, anchorBBox, widgetSize);
+  const x = Blockly.WidgetDiv.calculateX_(viewportBBox, anchorBBox, widgetSize,
       rtl);
 
   if (y < 0) {
@@ -202,15 +202,15 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
     rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
-    var widgetLeft = anchorBBox.right - widgetSize.width;
+    const widgetLeft = anchorBBox.right - widgetSize.width;
     // Don't go offscreen left.
-    var x = Math.max(widgetLeft, viewportBBox.left);
+    const x = Math.max(widgetLeft, viewportBBox.left);
     // But really don't go offscreen right:
     return Math.min(x, viewportBBox.right - widgetSize.width);
   } else {
     // Try to align the left side of the field and the left side of widget.
     // Don't go offscreen right.
-    var x = Math.min(anchorBBox.left, viewportBBox.right - widgetSize.width);
+    const x = Math.min(anchorBBox.left, viewportBBox.right - widgetSize.width);
     // But left is more important, because that's where the text is.
     return Math.max(x, viewportBBox.left);
   }

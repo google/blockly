@@ -14,6 +14,7 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.common');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -77,12 +78,12 @@ Blockly.inject = function(container, opt_options) {
   Blockly.init_(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks correct.
-  Blockly.mainWorkspace = workspace;
+  Blockly.common.setMainWorkspace(workspace);
 
   Blockly.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
-    Blockly.mainWorkspace = workspace;
+    Blockly.common.setMainWorkspace(workspace);
   });
 
   return workspace;
@@ -439,7 +440,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
           window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(/** @type {!Blockly.WorkspaceSvg} */
-                (Blockly.getMainWorkspace()));
+                (Blockly.common.getMainWorkspace()));
           });
     }
   }

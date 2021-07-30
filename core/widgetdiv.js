@@ -18,6 +18,7 @@
  */
 goog.provide('Blockly.WidgetDiv');
 
+goog.require('Blockly.common');
 goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.utils.Rect');
@@ -85,7 +86,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   var mainWorkspace =
-    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
+    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
   Blockly.WidgetDiv.rendererClassName_ =
       mainWorkspace.getRenderer().getClassName();
   Blockly.WidgetDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
@@ -119,7 +120,7 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.WidgetDiv.themeClassName_ = '';
   }
   (/** @type {!Blockly.WorkspaceSvg} */ (
-    Blockly.getMainWorkspace())).markFocused();
+    Blockly.common.getMainWorkspace())).markFocused();
 };
 
 /**

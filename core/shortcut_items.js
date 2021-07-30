@@ -16,6 +16,7 @@
  */
 goog.provide('Blockly.ShortcutItems');
 
+goog.require('Blockly.clipboard');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.ShortcutRegistry');
 goog.require('Blockly.utils.KeyCodes');
@@ -104,7 +105,7 @@ Blockly.ShortcutItems.registerCopy = function() {
       // an error due to the lack of a selection.
       e.preventDefault();
       Blockly.hideChaff();
-      Blockly.copy(/** @type {!Blockly.ICopyable} */ (Blockly.selected));
+      Blockly.clipboard.copy(/** @type {!Blockly.ICopyable} */ (Blockly.selected));
       return true;
     }
   };
@@ -137,7 +138,7 @@ Blockly.ShortcutItems.registerCut = function() {
         !Blockly.selected.workspace.isFlyout;
     },
     callback: function() {
-      Blockly.copy(/** @type {!Blockly.ICopyable} */ (Blockly.selected));
+      Blockly.clipboard.copy(/** @type {!Blockly.ICopyable} */ (Blockly.selected));
       Blockly.deleteBlock(/** @type {!Blockly.BlockSvg} */ (Blockly.selected));
       return true;
     }
@@ -167,7 +168,7 @@ Blockly.ShortcutItems.registerPaste = function() {
       return !workspace.options.readOnly && !Blockly.Gesture.inProgress();
     },
     callback: function() {
-      return Blockly.paste();
+      return Blockly.clipboard.paste();
     }
   };
 

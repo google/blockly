@@ -41,8 +41,8 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  * @return {!Array<!Element>} Array of XML elements.
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
-  var xmlList = [];
-  var button = document.createElement('button');
+  let xmlList = [];
+  let button = document.createElement('button');
   button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
   xmlList.push(button);
@@ -63,7 +63,7 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
       Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour);
 
 
-  var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+  const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
   xmlList = xmlList.concat(blockList);
   return xmlList;
 };
@@ -74,13 +74,13 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
  * @return {!Array<!Element>} Array of XML block elements.
  */
 Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
-  var variableModelList = workspace.getAllVariables();
+  const variableModelList = workspace.getAllVariables();
 
-  var xmlList = [];
+  const xmlList = [];
   if (variableModelList.length > 0) {
     if (Blockly.Blocks['variables_set_dynamic']) {
-      var firstVariable = variableModelList[variableModelList.length - 1];
-      var block = Blockly.utils.xml.createElement('block');
+      const firstVariable = variableModelList[variableModelList.length - 1];
+      const block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
       block.setAttribute('gap', 24);
       block.appendChild(
@@ -89,8 +89,8 @@ Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
     }
     if (Blockly.Blocks['variables_get_dynamic']) {
       variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
-        var block = Blockly.utils.xml.createElement('block');
+      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
+        const block = Blockly.utils.xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
         block.setAttribute('gap', 8);
         block.appendChild(Blockly.Variables.generateVariableFieldDom(variable));

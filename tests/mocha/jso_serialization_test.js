@@ -37,7 +37,7 @@ suite('JSO', function() {
     suite('Save Single Block', function() {
 
       function assertProperty(obj, property, value) {
-        chai.assert.equal(obj[property], value);
+        chai.assert.deepEqual(obj[property], value);
       }
 
       function assertNoProperty(obj, property) {
@@ -234,6 +234,44 @@ suite('JSO', function() {
               Blockly.serialization.blocks.save(block, {addCoordinates: true});
           assertProperty(jso, 'x', 0);
           assertProperty(jso, 'y', 0);
+        });
+      });
+
+      // Mutators.
+      suite('Extra state', function() {
+        test('Simple value', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.saveExtraState = function() {
+            return 'some extra state';
+          };
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(jso, 'extraState', 'some extra state');
+        });
+
+        test('Object', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.saveExtraState = function() {
+            return {
+              'extra1': 'state1',
+              'extra2': 42,
+              'extra3': true,
+            };
+          };
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(jso, 'extraState', {
+            'extra1': 'state1',
+            'extra2': 42,
+            'extra3': true,
+          });
+        });
+
+        test('Array', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.saveExtraState = function() {
+            return ['state1', 42, true];
+          };
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(jso, 'extraState', ['state1', 42, true]);
         });
       });
     });

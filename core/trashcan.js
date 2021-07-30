@@ -13,45 +13,53 @@
 goog.module('Blockly.Trashcan');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.ComponentManager');
-goog.require('Blockly.DeleteArea');
-goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Abstract = goog.requireType('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const Blockly = goog.requireType('Blockly');
+const ComponentManager = goog.require('Blockly.ComponentManager');
+const DeleteArea = goog.require('Blockly.DeleteArea');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const IAutoHideable = goog.require('Blockly.IAutoHideable');
+/* eslint-disable-next-line no-unused-vars */
+const IDraggable = goog.requireType('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const IFlyout = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const IPositionable = goog.require('Blockly.IPositionable');
+/* eslint-disable-next-line no-unused-vars */
+const MetricsManager = goog.requireType('Blockly.MetricsManager');
+const Options = goog.require('Blockly.Options');
+const Rect = goog.require('Blockly.utils.Rect');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const Xml = goog.require('Blockly.Xml');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const internalConstants = goog.require('Blockly.internalConstants');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const uiPosition = goog.require('Blockly.uiPosition');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
-goog.require('Blockly.IAutoHideable');
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.IPositionable');
-goog.require('Blockly.Options');
-goog.require('Blockly.registry');
-goog.require('Blockly.uiPosition');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Rect');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.IDraggable');
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.utils.Rect');
-goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class for a trash can.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
+ * @param {!WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
- * @implements {Blockly.IAutoHideable}
- * @implements {Blockly.IPositionable}
- * @extends {Blockly.DeleteArea}
+ * @implements {IAutoHideable}
+ * @implements {IPositionable}
+ * @extends {DeleteArea}
  */
 const Trashcan = function(workspace) {
   Trashcan.superClass_.constructor.call(this);
   /**
    * The workspace the trashcan sits in.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -72,7 +80,7 @@ const Trashcan = function(workspace) {
 
   /**
    * The trashcan flyout.
-   * @type {Blockly.IFlyout}
+   * @type {IFlyout}
    * @package
    */
   this.flyout = null;
@@ -81,7 +89,7 @@ const Trashcan = function(workspace) {
     return;
   }
   // Create flyout options.
-  const flyoutWorkspaceOptions = new Blockly.Options(
+  const flyoutWorkspaceOptions = new Options(
       /** @type {!Blockly.BlocklyOptions} */
       ({
         'scrollbars': true,
@@ -97,24 +105,24 @@ const Trashcan = function(workspace) {
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
-        Blockly.utils.toolbox.Position.BOTTOM : Blockly.utils.toolbox.Position.TOP;
-    const HorizontalFlyout = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
+        this.workspace_.toolboxPosition == toolbox.Position.TOP ?
+        toolbox.Position.BOTTOM : toolbox.Position.TOP;
+    const HorizontalFlyout = registry.getClassFromOptions(
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
         this.workspace_.options, true);
     this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ?
-        Blockly.utils.toolbox.Position.LEFT : Blockly.utils.toolbox.Position.RIGHT;
-    const VerticalFlyout = Blockly.registry.getClassFromOptions(
-        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+      this.workspace_.toolboxPosition == toolbox.Position.RIGHT ?
+        toolbox.Position.LEFT : toolbox.Position.RIGHT;
+    const VerticalFlyout = registry.getClassFromOptions(
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
         this.workspace_.options, true);
     this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
-Blockly.utils.object.inherits(Trashcan, Blockly.DeleteArea);
+utils.object.inherits(Trashcan, DeleteArea);
 
 /**
  * Width of both the trash can and lid images.
@@ -270,68 +278,68 @@ Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.G,
+  this.svgGroup_ = dom.createSvgElement(
+      Svg.G,
       {'class': 'blocklyTrash'}, null);
   let clip;
   const rnd = String(Math.random()).substring(2);
-  clip = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.CLIPPATH,
+  clip = dom.createSvgElement(
+      Svg.CLIPPATH,
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
+  dom.createSvgElement(
+      Svg.RECT,
       {
         'width': WIDTH,
         'height': BODY_HEIGHT,
         'y': LID_HEIGHT
       },
       clip);
-  const body = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE, {
-        'width': Blockly.internalConstants.SPRITE.width,
+  const body = dom.createSvgElement(
+      Svg.IMAGE, {
+        'width': internalConstants.SPRITE.width,
         'x': -SPRITE_LEFT,
-        'height': Blockly.internalConstants.SPRITE.height,
+        'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
       },
       this.svgGroup_);
   body.setAttributeNS(
-      Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia +
-          Blockly.internalConstants.SPRITE.url);
+          internalConstants.SPRITE.url);
 
-  clip = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.CLIPPATH,
+  clip = dom.createSvgElement(
+      Svg.CLIPPATH,
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
+  dom.createSvgElement(
+      Svg.RECT,
       {'width': WIDTH, 'height': LID_HEIGHT}, clip);
-  this.svgLid_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.IMAGE, {
-        'width': Blockly.internalConstants.SPRITE.width,
+  this.svgLid_ = dom.createSvgElement(
+      Svg.IMAGE, {
+        'width': internalConstants.SPRITE.width,
         'x': -SPRITE_LEFT,
-        'height': Blockly.internalConstants.SPRITE.height,
+        'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
       },
       this.svgGroup_);
   this.svgLid_.setAttributeNS(
-      Blockly.utils.dom.XLINK_NS, 'xlink:href',
+      dom.XLINK_NS, 'xlink:href',
       this.workspace_.options.pathToMedia +
-          Blockly.internalConstants.SPRITE.url);
+          internalConstants.SPRITE.url);
 
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
   // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
   // See #4303
-  Blockly.browserEvents.bind(
+  browserEvents.bind(
       this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
-  Blockly.browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
+  browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
   // Bind to body instead of this.svgGroup_ so that we don't get lid jitters
-  Blockly.browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
-  Blockly.browserEvents.bind(body, 'mouseout', this, this.mouseOut_);
+  browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
+  browserEvents.bind(body, 'mouseout', this, this.mouseOut_);
   this.animateLid_();
   return this.svgGroup_;
 };
@@ -341,8 +349,8 @@ Trashcan.prototype.createDom = function() {
  */
 Trashcan.prototype.init = function() {
   if (this.workspace_.options.maxTrashcanContents > 0) {
-    Blockly.utils.dom.insertAfter(
-        this.flyout.createDom(Blockly.utils.Svg.SVG),
+    dom.insertAfter(
+        this.flyout.createDom(Svg.SVG),
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
@@ -350,10 +358,10 @@ Trashcan.prototype.init = function() {
     component: this,
     weight: 1,
     capabilities: [
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
-      Blockly.ComponentManager.Capability.DELETE_AREA,
-      Blockly.ComponentManager.Capability.DRAG_TARGET,
-      Blockly.ComponentManager.Capability.POSITIONABLE
+      ComponentManager.Capability.AUTOHIDEABLE,
+      ComponentManager.Capability.DELETE_AREA,
+      ComponentManager.Capability.DRAG_TARGET,
+      ComponentManager.Capability.POSITIONABLE
     ]
   });
   this.initialized_ = true;
@@ -368,7 +376,7 @@ Trashcan.prototype.init = function() {
 Trashcan.prototype.dispose = function() {
   this.workspace_.getComponentManager().removeComponent('trashcan');
   if (this.svgGroup_) {
-    Blockly.utils.dom.removeNode(this.svgGroup_);
+    dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
   this.svgLid_ = null;
@@ -400,7 +408,7 @@ Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-  const xml = this.contents_.map(Blockly.Xml.textToDom);
+  const xml = this.contents_.map(Xml.textToDom);
   this.flyout.show(xml);
   this.fireUiEvent_(true);
 };
@@ -446,8 +454,8 @@ Trashcan.prototype.emptyContents = function() {
  * Positions the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
- * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
 Trashcan.prototype.position = function(metrics, savedPositions) {
@@ -457,19 +465,19 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
   }
 
   const cornerPosition =
-      Blockly.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
+      uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
   const height = BODY_HEIGHT + LID_HEIGHT;
-  const startRect = Blockly.uiPosition.getStartPositionRect(
-      cornerPosition, new Blockly.utils.Size(WIDTH, height),
+  const startRect = uiPosition.getStartPositionRect(
+      cornerPosition, new utils.Size(WIDTH, height),
       MARGIN_HORIZONTAL, MARGIN_VERTICAL, metrics, this.workspace_);
 
   const verticalPosition = cornerPosition.vertical;
   const bumpDirection =
-      verticalPosition === Blockly.uiPosition.verticalPosition.TOP ?
-          Blockly.uiPosition.bumpDirection.DOWN :
-          Blockly.uiPosition.bumpDirection.UP;
-  const positionRect = Blockly.uiPosition.bumpPositionRect(
+      verticalPosition === uiPosition.verticalPosition.TOP ?
+          uiPosition.bumpDirection.DOWN :
+          uiPosition.bumpDirection.UP;
+  const positionRect = uiPosition.bumpPositionRect(
       startRect, MARGIN_VERTICAL, bumpDirection, savedPositions);
 
   this.top_ = positionRect.top;
@@ -481,19 +489,19 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ * @return {?Rect} The UI elements’s bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
 Trashcan.prototype.getBoundingRectangle = function() {
   const bottom = this.top_ + BODY_HEIGHT + LID_HEIGHT;
   const right = this.left_ + WIDTH;
-  return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
+  return new Rect(this.top_, bottom, this.left_, right);
 };
 
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ * @return {?Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
 Trashcan.prototype.getClientRect = function() {
@@ -507,13 +515,13 @@ Trashcan.prototype.getClientRect = function() {
       2 * MARGIN_HOTSPOT;
   const left = trashRect.left + SPRITE_LEFT - MARGIN_HOTSPOT;
   const right = left + WIDTH + 2 * MARGIN_HOTSPOT;
-  return new Blockly.utils.Rect(top, bottom, left, right);
+  return new Rect(top, bottom, left, right);
 };
 
 /**
  * Handles when a cursor with a block or bubble is dragged over this drag
  * target.
- * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ * @param {!IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  * @override
  */
@@ -523,7 +531,7 @@ Trashcan.prototype.onDragOver = function(_dragElement) {
 
 /**
  * Handles when a cursor with a block or bubble exits this drag target.
- * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ * @param {!IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  * @override
  */
@@ -534,7 +542,7 @@ Trashcan.prototype.onDragExit = function(_dragElement) {
 /**
  * Handles when a block or bubble is dropped on this component.
  * Should not handle delete here.
- * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ * @param {!IDraggable} _dragElement The block or bubble currently being
  *   dragged.
  * @override
  */
@@ -586,7 +594,7 @@ Trashcan.prototype.animateLid_ = function() {
  */
 Trashcan.prototype.setLidAngle_ = function(lidAngle) {
   const openAtRight =
-      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ||
+      this.workspace_.toolboxPosition == toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
       (openAtRight ? -lidAngle : lidAngle) + ',' +
@@ -632,9 +640,9 @@ Trashcan.prototype.click = function() {
  * @private
  */
 Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  const uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
+  const uiEvent = new (Events.get(Events.TRASHCAN_OPEN))(
       trashcanOpen,this.workspace_.id);
-  Blockly.Events.fire(uiEvent);
+  Events.fire(uiEvent);
 };
 
 /**
@@ -671,7 +679,7 @@ Trashcan.prototype.mouseOut_ = function() {
 
 /**
  * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content array.
- * @param {!Blockly.Events.Abstract} event Workspace event.
+ * @param {!Abstract} event Workspace event.
  * @private
  */
 Trashcan.prototype.onDelete_ = function(event) {
@@ -679,7 +687,7 @@ Trashcan.prototype.onDelete_ = function(event) {
     return;
   }
   // Must check that the tagName exists since oldXml can be a DocumentFragment.
-  if (event.type == Blockly.Events.BLOCK_DELETE && event.oldXml.tagName &&
+  if (event.type == Events.BLOCK_DELETE && event.oldXml.tagName &&
       event.oldXml.tagName.toLowerCase() != 'shadow') {
     const cleanedXML = this.cleanBlockXML_(event.oldXml);
     if (this.contents_.indexOf(cleanedXML) != -1) {
@@ -741,7 +749,7 @@ Trashcan.prototype.cleanBlockXML_ = function(xml) {
     }
     node = nextNode;
   }
-  return Blockly.Xml.domToText(xmlBlock);
+  return Xml.domToText(xmlBlock);
 };
 
 exports = Trashcan;

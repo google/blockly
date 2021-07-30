@@ -379,19 +379,3 @@ Blockly.Options.parseThemeOptions_ = function(options) {
   return Blockly.Theme.defineTheme(theme.name ||
       ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
 };
-
-/**
- * Parse the provided toolbox tree into a consistent DOM format.
- * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
- *    of same.
- * @return {?Node} DOM tree of blocks, or null.
- * @deprecated Use Blockly.utils.toolbox.parseToolboxTree. (2020 September 28)
- */
-Blockly.Options.parseToolboxTree = function(toolboxDef) {
-  Blockly.utils.deprecation.warn(
-      'Blockly.Options.parseToolboxTree',
-      'September 2020',
-      'September 2021',
-      'Blockly.utils.toolbox.parseToolboxTree');
-  return Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
-};

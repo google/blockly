@@ -126,7 +126,6 @@ exports.getStartPositionRect = getStartPositionRect;
  * @param {!WorkspaceSvg} workspace The workspace.
  * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
  * @return {!Position} The suggested corner position.
- * @package
  */
 const getCornerOppositeToolbox = function(workspace, metrics) {
   const leftCorner =

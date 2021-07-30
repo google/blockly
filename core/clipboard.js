@@ -24,16 +24,6 @@ const ICopyable = goog.requireType('Blockly.ICopyable');
 let copyData = null;
 
 /**
- * Get the current contents of the clipboard and associated metadata.
- * @return {?ICopyable.CopyData} An
- *     object containing the clipboard contents and associated metadata.
- */
-const getClipboardInfo = function() {
-  return copyData;
-};
-exports.getClipboardInfo = getClipboardInfo;
-
-/**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
  */

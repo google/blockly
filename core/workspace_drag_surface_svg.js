@@ -17,11 +17,11 @@
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -66,12 +66,12 @@ WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   *   <g class="blocklyBubbleCanvas">/g>
   * </svg>
   */
-  this.SVG_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.SVG,
+  this.SVG_ = dom.createSvgElement(
+      Svg.SVG,
       {
-        'xmlns': Blockly.utils.dom.SVG_NS,
-        'xmlns:html': Blockly.utils.dom.HTML_NS,
-        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyWsDragSurface blocklyOverflowVisible'
       }, null);
@@ -94,18 +94,18 @@ WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   const fixedY = y.toFixed(0);
 
   this.SVG_.style.display = 'block';
-  Blockly.utils.dom.setCssTransform(
+  dom.setCssTransform(
       this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
 };
 
 /**
  * Reports the surface translation in scaled workspace coordinates.
  * Use this when finishing a drag to return blocks to the correct position.
- * @return {!Blockly.utils.Coordinate} Current translation of the surface
+ * @return {!Coordinate} Current translation of the surface
  * @package
  */
 WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  return Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  return utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
 };
 
 /**
@@ -123,8 +123,8 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   const blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
   const bubbleCanvas = /** @type {!Element} */ (this.SVG_.childNodes[1]);
   if (!blockCanvas || !bubbleCanvas ||
-      !Blockly.utils.dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
-      !Blockly.utils.dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
+      !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
+      !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
     throw Error('Couldn\'t clear and hide the drag surface. ' +
         'A node was missing.');
   }
@@ -132,19 +132,19 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   // If there is a previous sibling, put the blockCanvas back right afterwards,
   // otherwise insert it as the first child node in newSurface.
   if (this.previousSibling_ != null) {
-    Blockly.utils.dom.insertAfter(blockCanvas, this.previousSibling_);
+    dom.insertAfter(blockCanvas, this.previousSibling_);
   } else {
     newSurface.insertBefore(blockCanvas, newSurface.firstChild);
   }
 
   // Reattach the bubble canvas after the blockCanvas.
-  Blockly.utils.dom.insertAfter(bubbleCanvas, blockCanvas);
+  dom.insertAfter(bubbleCanvas, blockCanvas);
   // Hide the drag surface.
   this.SVG_.style.display = 'none';
   if (this.SVG_.childNodes.length) {
     throw Error('Drag surface was not cleared.');
   }
-  Blockly.utils.dom.setCssTransform(this.SVG_, '');
+  dom.setCssTransform(this.SVG_, '');
   this.previousSibling_ = null;
 };
 

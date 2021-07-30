@@ -16,38 +16,20 @@ goog.module.declareLegacyNamespace();
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-
 
 /**
- * Contents of the local clipboard.
- * @type {?Element}
- * @private
+ * Metadata about the object that is currently on the clipboard.
+ * @type {?ICopyable.CopyData}
  */
-let xml = null;
-
-/**
- * Source of the local clipboard.
- * @type {?WorkspaceSvg}
- * @private
- */
-let source = null;
-
-/**
- * Map of types to type counts for the clipboard object and descendants.
- * @type {?Object}
- * @private
- */
-let typeCounts = null;
+let copyData = null;
 
 /**
  * Get the current contents of the clipboard and associated metadata.
- * @return {{xml: ?Element, source: ?WorkspaceSvg, typeCounts: ?Object}} An
+ * @return {?ICopyable.CopyData} An
  *     object containing the clipboard contents and associated metadata.
  */
 const getClipboardInfo = function() {
-  return {xml: xml, source: source, typeCounts: typeCounts};
+  return copyData;
 };
 exports.getClipboardInfo = getClipboardInfo;
 
@@ -56,12 +38,7 @@ exports.getClipboardInfo = getClipboardInfo;
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
  */
 const copy = function(toCopy) {
-  var data = toCopy.toCopyData();
-  if (data) {
-    xml = data.xml;
-    source = data.source;
-    typeCounts = data.typeCounts;
-  }
+  copyData = toCopy.toCopyData();
 };
 /** @package */
 exports.copy = copy;
@@ -71,18 +48,19 @@ exports.copy = copy;
  * @return {boolean} True if the paste was successful, false otherwise.
  */
 const paste = function() {
-  if (!xml) {
+  if (!copyData.xml) {
     return false;
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
-  var workspace = source;
+  var workspace = copyData.source;
   if (workspace.isFlyout) {
     workspace = workspace.targetWorkspace;
   }
-  if (typeCounts && workspace.isCapacityAvailable(typeCounts)) {
+  if (copyData.typeCounts &&
+      workspace.isCapacityAvailable(copyData.typeCounts)) {
     Events.setGroup(true);
-    workspace.paste(xml);
+    workspace.paste(copyData.xml);
     Events.setGroup(false);
     return true;
   }
@@ -98,16 +76,15 @@ exports.paste = paste;
  */
 const duplicate = function(toDuplicate) {
   // Save the clipboard.
-  const oldXml = xml;
-  const oldSource = source;
+  const oldCopyData = copyData;
 
   // Create a duplicate via a copy/paste operation.
   copy(toDuplicate);
-  toDuplicate.workspace.paste(xml);
+  // copy() replaced the value of copyData.
+  toDuplicate.workspace.paste(copyData.xml);
 
   // Restore the clipboard.
-  xml = oldXml;
-  source = oldSource;
+  copyData = oldCopyData;
 };
 /** @package */
 exports.duplicate = duplicate;

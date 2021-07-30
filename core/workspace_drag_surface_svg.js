@@ -14,7 +14,8 @@
 
 'use strict';
 
-goog.provide('Blockly.WorkspaceDragSurfaceSvg');
+goog.module('Blockly.WorkspaceDragSurfaceSvg');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
@@ -30,29 +31,29 @@ goog.requireType('Blockly.utils.Coordinate');
  * @param {!Element} container Containing element.
  * @constructor
  */
-Blockly.WorkspaceDragSurfaceSvg = function(container) {
+const WorkspaceDragSurfaceSvg = function(container) {
   this.container_ = container;
   this.createDom();
 };
 
 /**
- * The SVG drag surface. Set once by Blockly.WorkspaceDragSurfaceSvg.createDom.
+ * The SVG drag surface. Set once by WorkspaceDragSurfaceSvg.createDom.
  * @type {SVGElement}
  * @private
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
+WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
 
 /**
  * Containing HTML element; parent of the workspace and the drag surface.
  * @type {Element}
  * @private
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.container_ = null;
+WorkspaceDragSurfaceSvg.prototype.container_ = null;
 
 /**
  * Create the drag surface and inject it into the container.
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
+WorkspaceDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
@@ -86,7 +87,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.createDom = function() {
  * @param {number} y Y translation for the entire surface
  * @package
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
+WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   // This is a work-around to prevent a the blocks from rendering
   // fuzzy while they are being moved on the drag surface.
   const fixedX = x.toFixed(0);
@@ -103,7 +104,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @return {!Blockly.utils.Coordinate} Current translation of the surface
  * @package
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
+WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
   return Blockly.utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
 };
 
@@ -114,7 +115,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  *     into.
  * @package
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
+WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
     throw Error('Couldn\'t clear and hide the drag surface: missing ' +
         'new surface.');
@@ -160,7 +161,7 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  * @param {number} scale The scale of the workspace being dragged.
  * @package
  */
-Blockly.WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
+WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
     blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
   if (this.SVG_.childNodes.length) {
     throw Error('Already dragging a block.');
@@ -176,3 +177,5 @@ Blockly.WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
   this.SVG_.appendChild(bubbleCanvas);
   this.SVG_.style.display = 'block';
 };
+
+exports = WorkspaceDragSurfaceSvg;

@@ -17,6 +17,7 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.clipboard');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
@@ -92,27 +93,6 @@ Blockly.selected = null;
 Blockly.draggingConnections = [];
 
 /**
- * Contents of the local clipboard.
- * @type {Element}
- * @private
- */
-Blockly.clipboardXml_ = null;
-
-/**
- * Source of the local clipboard.
- * @type {Blockly.WorkspaceSvg}
- * @private
- */
-Blockly.clipboardSource_ = null;
-
-/**
- * Map of types to type counts for the clipboard object and descendants.
- * @type {Object}
- * @private
- */
-Blockly.clipboardTypeCounts_ = null;
-
-/**
  * Cached value for whether 3D is supported.
  * @type {?boolean}
  * @private
@@ -136,9 +116,7 @@ Blockly.svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
-      'Blockly.svgSize',
-      'March 2021',
-      'March 2022',
+      'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
@@ -220,7 +198,8 @@ Blockly.deleteBlock = function(selected) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     if (selected.outputConnection) {
-      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      // Do not attempt to heal rows
+      // (https://github.com/google/blockly/issues/4832)
       selected.dispose(false, true);
     } else {
       selected.dispose(/* heal */ true, true);
@@ -234,39 +213,14 @@ Blockly.deleteBlock = function(selected) {
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
  */
-Blockly.copy = function(toCopy) {
-  var data = toCopy.toCopyData();
-  if (data) {
-    Blockly.clipboardXml_ = data.xml;
-    Blockly.clipboardSource_ = data.source;
-    Blockly.clipboardTypeCounts_ = data.typeCounts;
-  }
-};
+Blockly.copy = Blockly.clipboard.copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
  */
-Blockly.paste = function() {
-  if (!Blockly.clipboardXml_) {
-    return false;
-  }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  var workspace = Blockly.clipboardSource_;
-  if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace;
-  }
-  if (Blockly.clipboardTypeCounts_ &&
-      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
-    Blockly.Events.setGroup(true);
-    workspace.paste(Blockly.clipboardXml_);
-    Blockly.Events.setGroup(false);
-    return true;
-  }
-  return false;
-};
+Blockly.paste = Blockly.clipboard.paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -274,19 +228,7 @@ Blockly.paste = function() {
  *     copied.
  * @package
  */
-Blockly.duplicate = function(toDuplicate) {
-  // Save the clipboard.
-  var clipboardXml = Blockly.clipboardXml_;
-  var clipboardSource = Blockly.clipboardSource_;
-
-  // Create a duplicate via a copy/paste operation.
-  Blockly.copy(toDuplicate);
-  toDuplicate.workspace.paste(Blockly.clipboardXml_);
-
-  // Restore the clipboard.
-  Blockly.clipboardXml_ = clipboardXml;
-  Blockly.clipboardSource_ = clipboardSource;
-};
+Blockly.duplicate = Blockly.clipboard.duplicate;
 
 /**
  * Cancel the native context menu, unless the focus is on an HTML input widget.
@@ -402,9 +344,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
-        };
+        Blockly.Blocks[typename] = {init: Blockly.jsonInitFactory_(elem)};
       }
     }
   }

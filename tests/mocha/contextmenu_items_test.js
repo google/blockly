@@ -17,11 +17,11 @@ suite('Context Menu Items', function() {
     Blockly.ContextMenuItems.registerDefaultOptions();
     this.registry = Blockly.ContextMenuRegistry.registry;
   });
-  
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-  
+
   suite('Workspace Items', function() {
     setup(function() {
       this.scope = {workspace: this.workspace};
@@ -328,12 +328,12 @@ suite('Context Menu Items', function() {
       });
 
       test('Calls duplicate', function() {
-        var stub = sinon.stub(Blockly, 'duplicate');
+        var spy = sinon.spy(Blockly.clipboard, 'duplicate');
 
         this.duplicateOption.callback(this.scope);
 
-        sinon.assert.calledOnce(stub);
-        sinon.assert.calledWith(stub, this.block);
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, this.block);
       });
 
       test('Has correct label', function() {

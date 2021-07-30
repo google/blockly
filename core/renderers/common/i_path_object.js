@@ -19,6 +19,7 @@ goog.module.declareLegacyNamespace();
 const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 
 

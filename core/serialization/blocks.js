@@ -13,6 +13,9 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
+// eslint-disable-next-line no-unused-vars
+const Block = goog.requireType('Blockly.Block');
+
 
 // TODO: Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
@@ -31,7 +34,8 @@ goog.module.declareLegacyNamespace();
  *     movable: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
- *     extra-state: *
+ *     extra-state: *,
+ *     fields: (Object<string, *>|undefined),
  * }}
  */
 var State;
@@ -39,7 +43,7 @@ exports.State = State;
 
 /**
  * Returns the state of the given block as a plain JavaScript object.
- * @param {!Blockly.Block} block The block to serialize.
+ * @param {!Block} block The block to serialize.
  * @param {{addCoordinates: (boolean|undefined)}=} param1
  *     addCoordinates: If true the coordinates of the block are added to the
  *       serialized state. False by default.
@@ -62,6 +66,7 @@ const save = function(block, {addCoordinates = false} = {}) {
   }
   addAttributes(block, state);
   addExtraState(block, state);
+  addFields(block, state);
 
   return state;
 };
@@ -70,7 +75,7 @@ exports.save = save;
 /**
  * Adds attributes to the given state object based on the state of the block.
  * Eg collapsed, disabled, editable, etc.
- * @param {!Blockly.Block} block The block to base the attributes on.
+ * @param {!Block} block The block to base the attributes on.
  * @param {!State} state The state object to append to.
  */
 const addAttributes = function(block, state) {
@@ -103,7 +108,7 @@ const addAttributes = function(block, state) {
 
 /**
  * Adds the coordinates of the given block to the given state object.
- * @param {!Blockly.Block} block The block to base the coordinates on
+ * @param {!Block} block The block to base the coordinates on
  * @param {!State} state The state object to append to
  */
 const addCoords = function(block, state) {
@@ -115,7 +120,7 @@ const addCoords = function(block, state) {
 
 /**
  * Adds any extra state the block may provide to the given state object.
- * @param {!Blockly.Block} block The block to serialize the extra state of.
+ * @param {!Block} block The block to serialize the extra state of.
  * @param {!State} state The state object to append to.
  */
 const addExtraState = function(block, state) {
@@ -124,5 +129,28 @@ const addExtraState = function(block, state) {
     if (extraState !== null) {
       state['extraState'] = extraState;
     }
+  }
+};
+
+/**
+ * Adds the state of all of the fields on the block to the given state object.
+ * @param {!Block} block The block to serialize the field state of.
+ * @param {!State} state The state object to append to.
+ */
+const addFields = function(block, state) {
+  let hasFieldState = false;
+  let fields = Object.create(null);
+  for (let i = 0; i < block.inputList.length; i++) {
+    const input = block.inputList[i];
+    for (let j = 0; j < input.fieldRow.length; j++) {
+      const field = input.fieldRow[j];
+      if (field.isSerializable()) {
+        hasFieldState = true;
+        fields[field.name] = field.saveState();
+      }
+    }
+  }
+  if (hasFieldState) {
+    state['fields'] = fields;
   }
 };

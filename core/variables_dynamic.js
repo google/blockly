@@ -24,20 +24,20 @@ const xml = goog.require('Blockly.utils.xml');
 
 
 const onCreateVariableButtonClick_String = function(button) {
-  Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'String');
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'String');
 };
 exports.onCreateVariableButtonClick_String = onCreateVariableButtonClick_String;
 
 const onCreateVariableButtonClick_Number = function(button) {
-  Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'Number');
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'Number');
 };
 exports.onCreateVariableButtonClick_Number = onCreateVariableButtonClick_Number;
 
 const onCreateVariableButtonClick_Colour = function(button) {
-  Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'Colour');
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'Colour');
 };
 exports.onCreateVariableButtonClick_Colour = onCreateVariableButtonClick_Colour;
 
@@ -62,12 +62,12 @@ const flyoutCategory = function(workspace) {
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
   xmlList.push(button);
 
-  workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
-      onCreateVariableButtonClick_String);
-  workspace.registerButtonCallback('CREATE_VARIABLE_NUMBER',
-      onCreateVariableButtonClick_Number);
-  workspace.registerButtonCallback('CREATE_VARIABLE_COLOUR',
-      onCreateVariableButtonClick_Colour);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_STRING', onCreateVariableButtonClick_String);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_NUMBER', onCreateVariableButtonClick_Number);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_COLOUR', onCreateVariableButtonClick_Colour);
 
 
   const blockList = flyoutCategoryBlocks(workspace);
@@ -91,8 +91,7 @@ const flyoutCategoryBlocks = function(workspace) {
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
       block.setAttribute('gap', 24);
-      block.appendChild(
-          Variables.generateVariableFieldDom(firstVariable));
+      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
     if (Blocks['variables_get_dynamic']) {

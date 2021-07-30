@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview The class extends Blockly.Gesture to support pinch to zoom
+ * @fileoverview The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
  * @author samelh@microsoft.com (Sam El-Husseini)
  */
@@ -14,14 +14,14 @@
 goog.module('Blockly.TouchGesture');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.Gesture');
-goog.require('Blockly.Touch');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.WorkspaceSvg');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Gesture = goog.require('Blockly.Gesture');
+const Touch = goog.require('Blockly.Touch');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const browserEvents = goog.require('Blockly.browserEvents');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 
 
 /*
@@ -32,9 +32,9 @@ goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Class for one gesture.
  * @param {!Event} e The event that kicked off this gesture.
- * @param {!Blockly.WorkspaceSvg} creatorWorkspace The workspace that created
+ * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
  *     this gesture and has a reference to it.
- * @extends {Blockly.Gesture}
+ * @extends {Gesture}
  * @constructor
  */
 const TouchGesture = function(e, creatorWorkspace) {
@@ -49,7 +49,7 @@ const TouchGesture = function(e, creatorWorkspace) {
 
   /**
    * A map of cached points used for tracking multi-touch gestures.
-   * @type {!Object<number|string, Blockly.utils.Coordinate>}
+   * @type {!Object<number|string, Coordinate>}
    * @private
    */
   this.cachedPoints_ = Object.create(null);
@@ -75,7 +75,7 @@ const TouchGesture = function(e, creatorWorkspace) {
    * A handle to use to unbind the second touch start or pointer down listener
    * at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onStartWrapper_ = null;
@@ -87,7 +87,7 @@ const TouchGesture = function(e, creatorWorkspace) {
    */
   this.isPinchZoomEnabled_ = null;
 };
-Blockly.utils.object.inherits(TouchGesture, Blockly.Gesture);
+object.inherits(TouchGesture, Gesture);
 
 /**
  * A multiplier used to convert the gesture scale to a zoom in delta.
@@ -111,7 +111,7 @@ TouchGesture.prototype.doStart = function(e) {
   this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
       this.startWorkspace_.options.zoomOptions.pinch;
   TouchGesture.superClass_.doStart.call(this, e);
-  if (!this.isEnding_ && Blockly.Touch.isTouchEvent(e)) {
+  if (!this.isEnding_ && Touch.isTouchEvent(e)) {
     this.handleTouchStart(e);
   }
 };
@@ -126,13 +126,13 @@ TouchGesture.prototype.doStart = function(e) {
  * @package
  */
 TouchGesture.prototype.bindMouseEvents = function(e) {
-  this.onStartWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.onStartWrapper_ = browserEvents.conditionalBind(
       document, 'mousedown', null, this.handleStart.bind(this),
       /* opt_noCaptureIdentifier */ true);
-  this.onMoveWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.onMoveWrapper_ = browserEvents.conditionalBind(
       document, 'mousemove', null, this.handleMove.bind(this),
       /* opt_noCaptureIdentifier */ true);
-  this.onUpWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.onUpWrapper_ = browserEvents.conditionalBind(
       document, 'mouseup', null, this.handleUp.bind(this),
       /* opt_noCaptureIdentifier */ true);
 
@@ -150,7 +150,7 @@ TouchGesture.prototype.handleStart = function(e) {
     // A drag has already started, so this can no longer be a pinch-zoom.
     return;
   }
-  if (Blockly.Touch.isTouchEvent(e)) {
+  if (Touch.isTouchEvent(e)) {
     this.handleTouchStart(e);
 
     if (this.isMultiTouch()) {
@@ -167,13 +167,13 @@ TouchGesture.prototype.handleStart = function(e) {
 TouchGesture.prototype.handleMove = function(e) {
   if (this.isDragging()) {
     // We are in the middle of a drag, only handle the relevant events
-    if (Blockly.Touch.shouldHandleEvent(e)) {
+    if (Touch.shouldHandleEvent(e)) {
       TouchGesture.superClass_.handleMove.call(this, e);
     }
     return;
   }
   if (this.isMultiTouch()) {
-    if (Blockly.Touch.isTouchEvent(e)) {
+    if (Touch.isTouchEvent(e)) {
       this.handleTouchMove(e);
     }
     Blockly.Touch.longStop();
@@ -188,11 +188,11 @@ TouchGesture.prototype.handleMove = function(e) {
  * @package
  */
 TouchGesture.prototype.handleUp = function(e) {
-  if (Blockly.Touch.isTouchEvent(e) && !this.isDragging()) {
+  if (Touch.isTouchEvent(e) && !this.isDragging()) {
     this.handleTouchEnd(e);
   }
   if (!this.isMultiTouch() || this.isDragging()) {
-    if (!Blockly.Touch.shouldHandleEvent(e)) {
+    if (!Touch.shouldHandleEvent(e)) {
       return;
     }
     TouchGesture.superClass_.handleUp.call(this, e);
@@ -221,7 +221,7 @@ TouchGesture.prototype.dispose = function() {
   TouchGesture.superClass_.dispose.call(this);
 
   if (this.onStartWrapper_) {
-    Blockly.browserEvents.unbind(this.onStartWrapper_);
+    browserEvents.unbind(this.onStartWrapper_);
   }
 };
 
@@ -232,17 +232,17 @@ TouchGesture.prototype.dispose = function() {
  * @package
  */
 TouchGesture.prototype.handleTouchStart = function(e) {
-  const pointerId = Blockly.Touch.getTouchIdentifierFromEvent(e);
+  const pointerId = Touch.getTouchIdentifierFromEvent(e);
   // store the pointerId in the current list of pointers
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
   const pointers = Object.keys(this.cachedPoints_);
   // If two pointers are down, store info
   if (pointers.length == 2) {
-    const point0 = /** @type {!Blockly.utils.Coordinate} */ (
+    const point0 = /** @type {!Coordinate} */ (
       this.cachedPoints_[pointers[0]]);
-    const point1 = /** @type {!Blockly.utils.Coordinate} */ (
+    const point1 = /** @type {!Coordinate} */ (
       this.cachedPoints_[pointers[1]]);
-    this.startDistance_ = Blockly.utils.Coordinate.distance(point0, point1);
+    this.startDistance_ = Coordinate.distance(point0, point1);
     this.isMultiTouch_ = true;
     e.preventDefault();
   }
@@ -255,7 +255,7 @@ TouchGesture.prototype.handleTouchStart = function(e) {
  * @package
  */
 TouchGesture.prototype.handleTouchMove = function(e) {
-  const pointerId = Blockly.Touch.getTouchIdentifierFromEvent(e);
+  const pointerId = Touch.getTouchIdentifierFromEvent(e);
   // Update the cache
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
 
@@ -275,11 +275,11 @@ TouchGesture.prototype.handleTouchMove = function(e) {
 TouchGesture.prototype.handlePinch_ = function(e) {
   const pointers = Object.keys(this.cachedPoints_);
   // Calculate the distance between the two pointers
-  const point0 = /** @type {!Blockly.utils.Coordinate} */ (
+  const point0 = /** @type {!Coordinate} */ (
     this.cachedPoints_[pointers[0]]);
-  const point1 = /** @type {!Blockly.utils.Coordinate} */ (
+  const point1 = /** @type {!Coordinate} */ (
     this.cachedPoints_[pointers[1]]);
-  const moveDistance = Blockly.utils.Coordinate.distance(point0, point1);
+  const moveDistance = Coordinate.distance(point0, point1);
   const scale = moveDistance / this.startDistance_;
 
   if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
@@ -288,7 +288,7 @@ TouchGesture.prototype.handlePinch_ = function(e) {
         gestureScale * TouchGesture.ZOOM_IN_MULTIPLIER :
         gestureScale * TouchGesture.ZOOM_OUT_MULTIPLIER;
     const workspace = this.startWorkspace_;
-    const position = Blockly.utils.mouseToSvg(
+    const position = utils.mouseToSvg(
         e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
     workspace.zoom(position.x, position.y, delta);
   }
@@ -303,7 +303,7 @@ TouchGesture.prototype.handlePinch_ = function(e) {
  * @package
  */
 TouchGesture.prototype.handleTouchEnd = function(e) {
-  const pointerId = Blockly.Touch.getTouchIdentifierFromEvent(e);
+  const pointerId = Touch.getTouchIdentifierFromEvent(e);
   if (this.cachedPoints_[pointerId]) {
     delete this.cachedPoints_[pointerId];
   }
@@ -316,14 +316,14 @@ TouchGesture.prototype.handleTouchEnd = function(e) {
 /**
  * Helper function returning the current touch point coordinate.
  * @param {!Event} e A touch or pointer event.
- * @return {?Blockly.utils.Coordinate} The current touch point coordinate
+ * @return {?Coordinate} The current touch point coordinate
  * @package
  */
 TouchGesture.prototype.getTouchPoint = function(e) {
   if (!this.startWorkspace_) {
     return null;
   }
-  return new Blockly.utils.Coordinate(
+  return new Coordinate(
       (e.pageX ? e.pageX : e.changedTouches[0].pageX),
       (e.pageY ? e.pageY : e.changedTouches[0].pageY)
   );

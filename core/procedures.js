@@ -64,13 +64,15 @@ exports.ProcedureBlock = ProcedureBlock;
  *     list, and return value boolean.
  */
 const allProcedures = function(root) {
-  const proceduresNoReturn = root.getBlocksByType('procedures_defnoreturn', false)
-      .map(function(block) {
+  const proceduresNoReturn =
+      root.getBlocksByType('procedures_defnoreturn', false)
+          .map(function(block) {
+            return /** @type {!ProcedureBlock} */ (block).getProcedureDef();
+          });
+  const proceduresReturn =
+      root.getBlocksByType('procedures_defreturn', false).map(function(block) {
         return /** @type {!ProcedureBlock} */ (block).getProcedureDef();
       });
-  const proceduresReturn = root.getBlocksByType('procedures_defreturn', false).map(function(block) {
-    return /** @type {!ProcedureBlock} */ (block).getProcedureDef();
-  });
   proceduresNoReturn.sort(procTupleComparator);
   proceduresReturn.sort(procTupleComparator);
   return [proceduresNoReturn, proceduresReturn];
@@ -144,8 +146,7 @@ const isNameUsed = function(name, workspace, opt_exclude) {
       continue;
     }
     if (blocks[i].getProcedureDef) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (
-        blocks[i]);
+      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
       const procName = procedureBlock.getProcedureDef();
       if (Names.equals(procName[0], name)) {
         return true;
@@ -166,7 +167,8 @@ const rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  const legalName = findLegalName(name,
+  const legalName = findLegalName(
+      name,
       /** @type {!Block} */ (this.getSourceBlock()));
   const oldName = this.getValue();
   if (oldName != name && oldName != legalName) {
@@ -174,8 +176,7 @@ const rename = function(name) {
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
       if (blocks[i].renameProcedure) {
-        const procedureBlock = /** @type {!ProcedureBlock} */ (
-          blocks[i]);
+        const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
         procedureBlock.renameProcedure(
             /** @type {string} */ (oldName), legalName);
       }
@@ -201,8 +202,8 @@ const flyoutCategory = function(workspace) {
     block.setAttribute('gap', 16);
     const nameField = xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(xml.createTextNode(
-        Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+    nameField.appendChild(
+        xml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -215,8 +216,8 @@ const flyoutCategory = function(workspace) {
     block.setAttribute('gap', 16);
     const nameField = xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(xml.createTextNode(
-        Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+    nameField.appendChild(
+        xml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -281,8 +282,8 @@ const updateMutatorFlyout = function(workspace) {
   argBlock.setAttribute('type', 'procedures_mutatorarg');
   const nameField = xml.createElement('field');
   nameField.setAttribute('name', 'NAME');
-  const argValue = Variables.generateUniqueNameFromOptions(
-      DEFAULT_ARG, usedNames);
+  const argValue =
+      Variables.generateUniqueNameFromOptions(DEFAULT_ARG, usedNames);
   const fieldContent = xml.createTextNode(argValue);
 
   nameField.appendChild(fieldContent);
@@ -299,12 +300,11 @@ const updateMutatorFlyout = function(workspace) {
  */
 const mutatorOpenListener = function(e) {
   if (!(e.type == Events.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
-      e.isOpen)) {
+        e.isOpen)) {
     return;
   }
   const workspaceId = /** @type {string} */ (e.workspaceId);
-  const block = Workspace.getById(workspaceId)
-      .getBlockById(e.blockId);
+  const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
   const type = block.type;
   if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
     return;
@@ -322,8 +322,7 @@ exports.mutatorOpenListener = mutatorOpenListener;
  * @param {!Abstract} e The event that triggered this listener.
  */
 const mutatorChangeListener = function(e) {
-  if (e.type != Events.BLOCK_CREATE &&
-      e.type != Events.BLOCK_DELETE &&
+  if (e.type != Events.BLOCK_CREATE && e.type != Events.BLOCK_DELETE &&
       e.type != Events.BLOCK_CHANGE) {
     return;
   }
@@ -345,8 +344,7 @@ const getCallers = function(name, workspace) {
   // Iterate through every block and check the name.
   for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureCall) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (
-        blocks[i]);
+      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
       const procName = procedureBlock.getProcedureCall();
       // Procedure name may be null if the block is only half-built.
       if (procName && Names.equals(procName, name)) {
@@ -365,8 +363,7 @@ exports.getCallers = getCallers;
  */
 const mutateCallers = function(defBlock) {
   const oldRecordUndo = Events.recordUndo;
-  const procedureBlock = /** @type {!ProcedureBlock} */ (
-    defBlock);
+  const procedureBlock = /** @type {!ProcedureBlock} */ (defBlock);
   const name = procedureBlock.getProcedureDef()[0];
   const xmlElement = defBlock.mutationToDom(true);
   const callers = getCallers(name, defBlock.workspace);
@@ -402,8 +399,7 @@ const getDefinition = function(name, workspace) {
   const blocks = workspace.getAllBlocks(false);
   for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (
-        blocks[i]);
+      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
       const tuple = procedureBlock.getProcedureDef();
       if (tuple && Names.equals(tuple[0], name)) {
         return blocks[i];  // Can't use procedureBlock var due to type check.

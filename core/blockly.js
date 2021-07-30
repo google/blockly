@@ -102,13 +102,6 @@ Blockly.selected = null;
 Blockly.draggingConnections = [];
 
 /**
- * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
- * @type {?Element}
- * @package
- */
-Blockly.parentContainer = null;
-
-/**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.
@@ -377,9 +370,7 @@ Blockly.hueToHex = function(hue) {
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
  */
-Blockly.setParentContainer = function(container) {
-  Blockly.parentContainer = container;
-};
+Blockly.setParentContainer = Blockly.common.setParentContainer;
 
 /** Aliases. */
 

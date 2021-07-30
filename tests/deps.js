@@ -172,8 +172,13 @@ goog.addDependency('../../core/toolbox/category.js', ['Blockly.ToolboxCategory']
 goog.addDependency('../../core/toolbox/collapsible_category.js', ['Blockly.CollapsibleToolboxCategory'], ['Blockly.ICollapsibleToolboxItem', 'Blockly.ToolboxCategory', 'Blockly.ToolboxSeparator', 'Blockly.registry', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/toolbox/separator.js', ['Blockly.ToolboxSeparator'], ['Blockly.Css', 'Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils.dom', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/toolbox/toolbox.js', ['Blockly.Toolbox'], ['Blockly.BlockSvg', 'Blockly.CollapsibleToolboxCategory', 'Blockly.ComponentManager', 'Blockly.Css', 'Blockly.DeleteArea', 'Blockly.Events', 'Blockly.Events.ToolboxItemSelect', 'Blockly.IAutoHideable', 'Blockly.IKeyboardAccessible', 'Blockly.IStyleable', 'Blockly.IToolbox', 'Blockly.Options', 'Blockly.Touch', 'Blockly.browserEvents', 'Blockly.constants', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.toolbox'], {'lang': 'es5'});
+<<<<<<< HEAD
 goog.addDependency('../../core/toolbox/toolbox_item.js', ['Blockly.ToolboxItem'], ['Blockly.IToolboxItem', 'Blockly.utils.IdGenerator'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/tooltip.js', ['Blockly.Tooltip'], ['Blockly.browserEvents', 'Blockly.utils.string']);
+=======
+goog.addDependency('../../core/toolbox/toolbox_item.js', ['Blockly.ToolboxItem'], ['Blockly.IToolboxItem']);
+goog.addDependency('../../core/tooltip.js', ['Blockly.Tooltip'], ['Blockly.browserEvents', 'Blockly.common', 'Blockly.utils.string']);
+>>>>>>> c62fba04 (Move set/getParentContainer into common)
 goog.addDependency('../../core/touch.js', ['Blockly.Touch'], ['Blockly.internalConstants', 'Blockly.utils', 'Blockly.utils.global', 'Blockly.utils.string']);
 goog.addDependency('../../core/touch_gesture.js', ['Blockly.TouchGesture'], ['Blockly.Gesture', 'Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.object']);
 goog.addDependency('../../core/trashcan.js', ['Blockly.Trashcan'], ['Blockly.ComponentManager', 'Blockly.DeleteArea', 'Blockly.Events', 'Blockly.Events.TrashcanOpen', 'Blockly.IAutoHideable', 'Blockly.IPositionable', 'Blockly.Options', 'Blockly.Xml', 'Blockly.browserEvents', 'Blockly.internalConstants', 'Blockly.registry', 'Blockly.uiPosition', 'Blockly.utils', 'Blockly.utils.Rect', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.toolbox'], {'lang': 'es6', 'module': 'goog'});

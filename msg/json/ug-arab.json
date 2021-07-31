@@ -139,5 +139,7 @@
 	"LISTS_SORT_ORDER_DESCENDING": "تۆۋەنگە",
 	"LISTS_SORT_TYPE_NUMERIC": "سان بويىچە تىزىل",
 	"LISTS_SORT_TYPE_TEXT": " ھەرپ بويىچە تىزىل",
-	"LISTS_SORT_TYPE_IGNORECASE": "ھەرب بويىچە تىزىل، چوڭ كىچىك يېزىلىش ھېساپ قىلىنمايدۇ"
+	"LISTS_SORT_TYPE_IGNORECASE": "ھەرب بويىچە تىزىل، چوڭ كىچىك يېزىلىش ھېساپ قىلىنمايدۇ",
+	"DIALOG_OK": "ماقۇل",
+	"DIALOG_CANCEL": "ۋاز كەچ"
 }

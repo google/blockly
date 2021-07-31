@@ -104,5 +104,7 @@
 	"LISTS_INLIST": "u listi",
 	"LISTS_GET_INDEX_FIRST": "prvi",
 	"LISTS_GET_INDEX_LAST": "posljednji",
-	"LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "Vraća prvu stavku liste"
+	"LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "Vraća prvu stavku liste",
+	"DIALOG_OK": "U redu",
+	"DIALOG_CANCEL": "Odustani"
 }

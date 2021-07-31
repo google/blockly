@@ -90,5 +90,6 @@
 	"MATH_IS_WHOLE": "ნთელი რე",
 	"MATH_IS_POSITIVE": "დადებითი რე",
 	"MATH_IS_NEGATIVE": "უარყოფითი რე",
-	"LISTS_ISEMPTY_TITLE": "%1 ცარიელი რე"
+	"LISTS_ISEMPTY_TITLE": "%1 ცარიელი რე",
+	"DIALOG_CANCEL": "გოუქვაფა"
 }

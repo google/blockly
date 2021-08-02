@@ -74,7 +74,6 @@ Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.CLICK,
-    Click);
+registry.register(registry.Type.EVENT, Events.CLICK, Click);
 
 exports = Click;

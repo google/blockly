@@ -58,7 +58,7 @@ Blockly.Events.Selected.prototype.type = Blockly.Events.SELECTED;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.Selected.prototype.toJson = function() {
-  var json = Blockly.Events.Selected.superClass_.toJson.call(this);
+  const json = Blockly.Events.Selected.superClass_.toJson.call(this);
   json['oldElementId'] = this.oldElementId;
   json['newElementId'] = this.newElementId;
   return json;

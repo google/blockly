@@ -13,10 +13,10 @@
 goog.module('Blockly.Events.ThemeChange');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -24,7 +24,7 @@ goog.require('Blockly.utils.object');
  * @param {string=} opt_themeName The theme name. Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    event. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const ThemeChange = function(opt_themeName, opt_workspaceId) {
@@ -36,13 +36,13 @@ const ThemeChange = function(opt_themeName, opt_workspaceId) {
    */
   this.themeName = opt_themeName;
 };
-Blockly.utils.object.inherits(ThemeChange, Blockly.Events.UiBase);
+object.inherits(ThemeChange, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-ThemeChange.prototype.type = Blockly.Events.THEME_CHANGE;
+ThemeChange.prototype.type = Events.THEME_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -63,7 +63,7 @@ ThemeChange.prototype.fromJson = function(json) {
   this.themeName = json['themeName'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.THEME_CHANGE, ThemeChange);
+registry.register(registry.Type.EVENT,
+    Events.THEME_CHANGE, ThemeChange);
 
 exports = ThemeChange;

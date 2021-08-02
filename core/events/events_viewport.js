@@ -34,8 +34,8 @@ const registry = goog.require('Blockly.registry');
  * @extends {UiBase}
  * @constructor
  */
-const ViewportChange = function(opt_top, opt_left, opt_scale,
-    opt_workspaceId, opt_oldScale) {
+const ViewportChange = function(
+    opt_top, opt_left, opt_scale, opt_workspaceId, opt_oldScale) {
   ViewportChange.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
@@ -64,8 +64,7 @@ const ViewportChange = function(opt_top, opt_left, opt_scale,
    */
   this.oldScale = opt_oldScale;
 };
-object.inherits(ViewportChange,
-    UiBase);
+object.inherits(ViewportChange, UiBase);
 
 /**
  * Type of this event.
@@ -98,7 +97,6 @@ ViewportChange.prototype.fromJson = function(json) {
   this.oldScale = json['oldScale'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.VIEWPORT_CHANGE, ViewportChange);
+registry.register(registry.Type.EVENT, Events.VIEWPORT_CHANGE, ViewportChange);
 
 exports = ViewportChange;

@@ -13,35 +13,36 @@
 goog.module('Blockly.Events.MarkerMove');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.ASTNode');
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Workspace');
+const ASTNode = goog.require('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a marker move event.
- * @param {?Blockly.Block=} opt_block The affected block. Null if current node
+ * @param {?Block=} opt_block The affected block. Null if current node
  *    is of type workspace. Undefined for a blank event.
  * @param {boolean=} isCursor Whether this is a cursor event. Undefined for a
  *    blank event.
- * @param {?Blockly.ASTNode=} opt_oldNode The old node the marker used to be on.
+ * @param {?ASTNode=} opt_oldNode The old node the marker used to be on.
  *    Undefined for a blank event.
- * @param {!Blockly.ASTNode=} opt_newNode The new node the marker is now on.
+ * @param {!ASTNode=} opt_newNode The new node the marker is now on.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const MarkerMove = function(opt_block, isCursor, opt_oldNode,
     opt_newNode) {
   let workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  if (opt_newNode && opt_newNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
+  if (opt_newNode && opt_newNode.getType() == ASTNode.types.WORKSPACE) {
     workspaceId =
-        (/** @type {!Blockly.Workspace} */ (opt_newNode.getLocation())).id;
+        (/** @type {!Workspace} */ (opt_newNode.getLocation())).id;
   }
   MarkerMove.superClass_.constructor.call(this, workspaceId);
 
@@ -53,13 +54,13 @@ const MarkerMove = function(opt_block, isCursor, opt_oldNode,
 
   /**
    * The old node the marker used to be on.
-   * @type {?Blockly.ASTNode|undefined}
+   * @type {?ASTNode|undefined}
    */
   this.oldNode = opt_oldNode;
 
   /**
    * The new node the  marker is now on.
-   * @type {Blockly.ASTNode|undefined}
+   * @type {ASTNode|undefined}
    */
   this.newNode = opt_newNode;
 
@@ -69,13 +70,13 @@ const MarkerMove = function(opt_block, isCursor, opt_oldNode,
    */
   this.isCursor = isCursor;
 };
-Blockly.utils.object.inherits(MarkerMove, Blockly.Events.UiBase);
+object.inherits(MarkerMove, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
+MarkerMove.prototype.type = Events.MARKER_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -102,7 +103,7 @@ MarkerMove.prototype.fromJson = function(json) {
   this.newNode = json['newNode'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.MARKER_MOVE, MarkerMove);
+registry.register(registry.Type.EVENT,
+    Events.MARKER_MOVE, MarkerMove);
 
 exports = MarkerMove;

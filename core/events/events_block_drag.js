@@ -32,7 +32,7 @@ goog.requireType('Blockly.Block');
  * @constructor
  */
 Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  const workspaceId = opt_block ? opt_block.workspace.id : undefined;
   Blockly.Events.BlockDrag.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
@@ -61,7 +61,7 @@ Blockly.Events.BlockDrag.prototype.type = Blockly.Events.BLOCK_DRAG;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockDrag.prototype.toJson = function() {
-  var json = Blockly.Events.BlockDrag.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockDrag.superClass_.toJson.call(this);
   json['isStart'] = this.isStart;
   json['blockId'] = this.blockId;
   json['blocks'] = this.blocks;

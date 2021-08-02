@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.ViewportChange');
+goog.module('Blockly.Events.ViewportChange');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -33,9 +34,9 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
+const ViewportChange = function(opt_top, opt_left, opt_scale,
     opt_workspaceId, opt_oldScale) {
-  Blockly.Events.ViewportChange.superClass_.constructor.call(this, opt_workspaceId);
+  ViewportChange.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * Top-edge of the visible portion of the workspace, relative to the workspace
@@ -63,21 +64,21 @@ Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
    */
   this.oldScale = opt_oldScale;
 };
-Blockly.utils.object.inherits(Blockly.Events.ViewportChange,
+Blockly.utils.object.inherits(ViewportChange,
     Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.ViewportChange.prototype.type = Blockly.Events.VIEWPORT_CHANGE;
+ViewportChange.prototype.type = Blockly.Events.VIEWPORT_CHANGE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.ViewportChange.prototype.toJson = function() {
-  const json = Blockly.Events.ViewportChange.superClass_.toJson.call(this);
+ViewportChange.prototype.toJson = function() {
+  const json = ViewportChange.superClass_.toJson.call(this);
   json['viewTop'] = this.viewTop;
   json['viewLeft'] = this.viewLeft;
   json['scale'] = this.scale;
@@ -89,8 +90,8 @@ Blockly.Events.ViewportChange.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.ViewportChange.prototype.fromJson = function(json) {
-  Blockly.Events.ViewportChange.superClass_.fromJson.call(this, json);
+ViewportChange.prototype.fromJson = function(json) {
+  ViewportChange.superClass_.fromJson.call(this, json);
   this.viewTop = json['viewTop'];
   this.viewLeft = json['viewLeft'];
   this.scale = json['scale'];
@@ -98,4 +99,6 @@ Blockly.Events.ViewportChange.prototype.fromJson = function(json) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VIEWPORT_CHANGE, Blockly.Events.ViewportChange);
+    Blockly.Events.VIEWPORT_CHANGE, ViewportChange);
+
+exports = ViewportChange;

@@ -44,7 +44,7 @@ goog.addDependency('../../core/events/events_selected.js', ['Blockly.Events.Sele
 goog.addDependency('../../core/events/events_theme_change.js', ['Blockly.Events.ThemeChange'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/events_toolbox_item_select.js', ['Blockly.Events.ToolboxItemSelect'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/events_trashcan_open.js', ['Blockly.Events.TrashcanOpen'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
-goog.addDependency('../../core/events/events_viewport.js', ['Blockly.Events.ViewportChange'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
+goog.addDependency('../../core/events/events_viewport.js', ['Blockly.Events.ViewportChange'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/ui_events.js', ['Blockly.Events.Ui', 'Blockly.Events.UiBase'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/variable_events.js', ['Blockly.Events.VarBase', 'Blockly.Events.VarCreate', 'Blockly.Events.VarDelete', 'Blockly.Events.VarRename'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/workspace_events.js', ['Blockly.Events.FinishedLoading'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es5'});

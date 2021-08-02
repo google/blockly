@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.TrashcanOpen');
+goog.module('Blockly.Events.TrashcanOpen');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -27,8 +28,8 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
-  Blockly.Events.TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
+const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
+  TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * Whether the trashcan flyout is opening (false if closing).
@@ -36,20 +37,20 @@ Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
    */
   this.isOpen = opt_isOpen;
 };
-Blockly.utils.object.inherits(Blockly.Events.TrashcanOpen, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(TrashcanOpen, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.TrashcanOpen.prototype.type = Blockly.Events.TRASHCAN_OPEN;
+TrashcanOpen.prototype.type = Blockly.Events.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.TrashcanOpen.prototype.toJson = function() {
-  const json = Blockly.Events.TrashcanOpen.superClass_.toJson.call(this);
+TrashcanOpen.prototype.toJson = function() {
+  const json = TrashcanOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   return json;
 };
@@ -58,10 +59,12 @@ Blockly.Events.TrashcanOpen.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.TrashcanOpen.prototype.fromJson = function(json) {
-  Blockly.Events.TrashcanOpen.superClass_.fromJson.call(this, json);
+TrashcanOpen.prototype.fromJson = function(json) {
+  TrashcanOpen.superClass_.fromJson.call(this, json);
   this.isOpen = json['isOpen'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TRASHCAN_OPEN, Blockly.Events.TrashcanOpen);
+    Blockly.Events.TRASHCAN_OPEN, TrashcanOpen);
+
+exports = TrashcanOpen;

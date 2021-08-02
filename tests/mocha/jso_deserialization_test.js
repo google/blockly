@@ -676,4 +676,72 @@ suite('JSO Deserialization', function() {
       });
     });
   });
+
+  test('Priority', function() {
+    const blocksSerializer = Blockly.registry.getClass(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks');
+    const variablesSerializer = Blockly.registry.getClass(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'variables');
+
+    Blockly.registry.unregister(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks');
+    Blockly.registry.unregister(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'variables');
+
+    const calls = [];
+
+    const first = {
+      priority: 100,
+      save: () => null,
+      load: () => calls.push('first-load'),
+      clear: () => calls.push('first-clear'),
+    };
+    const second = {
+      priority: 0,
+      save: () => null,
+      load: () => calls.push('second-load'),
+      clear: () => calls.push('second-clear'),
+    };
+    const third = {
+      priority: -10,
+      save: () => null,
+      load: () => calls.push('third-load'),
+      clear: () => calls.push('third-clear'),
+    };
+
+    Blockly.registry.register(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'third', third);
+    Blockly.registry.register(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'first', first);
+    Blockly.registry.register(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'second', second);
+
+    Blockly.serialization.load(
+        {'first': {}, 'third': {}, 'second': {}}, this.workspace);
+    
+    Blockly.registry.unregister(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'first');
+    Blockly.registry.unregister(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'second');
+    Blockly.registry.unregister(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'third');
+
+    Blockly.registry.register(
+        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks', blocksSerializer);
+    Blockly.registry.register(
+        Blockly.registry.Type.PLUGIN_SERIALIZER,
+        'variables',
+        variablesSerializer);
+
+    chai.assert.deepEqual(
+        calls,
+        [
+          'third-clear',
+          'second-clear',
+          'first-clear',
+          'first-load',
+          'second-load',
+          'third-load'
+        ]);
+  });
 });

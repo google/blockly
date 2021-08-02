@@ -80,7 +80,6 @@ BlockDrag.prototype.fromJson = function(json) {
   this.blocks = json['blocks'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.BLOCK_DRAG, BlockDrag);
+registry.register(registry.Type.EVENT, Events.BLOCK_DRAG, BlockDrag);
 
 exports = BlockDrag;

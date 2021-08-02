@@ -59,7 +59,7 @@ Blockly.Events.ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SE
  * @return {!Object} JSON representation.
  */
 Blockly.Events.ToolboxItemSelect.prototype.toJson = function() {
-  var json = Blockly.Events.ToolboxItemSelect.superClass_.toJson.call(this);
+  const json = Blockly.Events.ToolboxItemSelect.superClass_.toJson.call(this);
   json['oldItem'] = this.oldItem;
   json['newItem'] = this.newItem;
   return json;

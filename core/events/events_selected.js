@@ -30,8 +30,7 @@ const registry = goog.require('Blockly.registry');
  * @extends {UiBase}
  * @constructor
  */
-const Selected = function(opt_oldElementId, opt_newElementId,
-    opt_workspaceId) {
+const Selected = function(opt_oldElementId, opt_newElementId, opt_workspaceId) {
   Selected.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
@@ -75,7 +74,6 @@ Selected.prototype.fromJson = function(json) {
   this.newElementId = json['newElementId'];
 };
 
-registry.register(registry.Type.EVENT, Events.SELECTED,
-    Selected);
+registry.register(registry.Type.EVENT, Events.SELECTED, Selected);
 
 exports = Selected;

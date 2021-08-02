@@ -23,6 +23,7 @@ goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
 
 goog.requireType('Blockly.Block');
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.ConnectionDB');
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IConnectionChecker');

@@ -57,6 +57,7 @@ goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.FlyoutButton');

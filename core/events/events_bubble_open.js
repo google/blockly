@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BubbleOpen');
+goog.module('Blockly.Events.BubbleOpen');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -31,9 +32,9 @@ goog.requireType('Blockly.BlockSvg');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
+const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.BubbleOpen.superClass_.constructor.call(this, workspaceId);
+  BubbleOpen.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
   /**
@@ -48,20 +49,20 @@ Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
    */
   this.bubbleType = opt_bubbleType;
 };
-Blockly.utils.object.inherits(Blockly.Events.BubbleOpen, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(BubbleOpen, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
+BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BubbleOpen.prototype.toJson = function() {
-  const json = Blockly.Events.BubbleOpen.superClass_.toJson.call(this);
+BubbleOpen.prototype.toJson = function() {
+  const json = BubbleOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   json['bubbleType'] = this.bubbleType;
   json['blockId'] = this.blockId;
@@ -72,12 +73,14 @@ Blockly.Events.BubbleOpen.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BubbleOpen.prototype.fromJson = function(json) {
-  Blockly.Events.BubbleOpen.superClass_.fromJson.call(this, json);
+BubbleOpen.prototype.fromJson = function(json) {
+  BubbleOpen.superClass_.fromJson.call(this, json);
   this.isOpen = json['isOpen'];
   this.bubbleType = json['bubbleType'];
   this.blockId = json['blockId'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BUBBLE_OPEN, Blockly.Events.BubbleOpen);
+    Blockly.Events.BUBBLE_OPEN, BubbleOpen);
+
+exports = BubbleOpen;

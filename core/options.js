@@ -31,57 +31,57 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  */
 Blockly.Options = function(options) {
-  var readOnly = !!options['readOnly'];
-  if (readOnly) {
-    var toolboxJsonDef = null;
-    var hasCategories = false;
-    var hasTrashcan = false;
-    var hasCollapse = false;
-    var hasComments = false;
-    var hasDisable = false;
-    var hasSounds = false;
-  } else {
-    var toolboxJsonDef = Blockly.utils.toolbox.convertToolboxDefToJson(options['toolbox']);
-    var hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
-    var hasTrashcan = options['trashcan'];
+  let toolboxJsonDef = null;
+  let hasCategories = false;
+  let hasTrashcan = false;
+  let hasCollapse = false;
+  let hasComments = false;
+  let hasDisable = false;
+  let hasSounds = false;
+  const readOnly = !!options['readOnly'];
+  if (!readOnly) {
+    toolboxJsonDef = Blockly.utils.toolbox.convertToolboxDefToJson(options['toolbox']);
+    hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
+    hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
     }
-    var maxTrashcanContents = options['maxTrashcanContents'];
-    if (hasTrashcan) {
-      if (maxTrashcanContents === undefined) {
-        maxTrashcanContents = 32;
-      }
-    } else {
-      maxTrashcanContents = 0;
-    }
-    var hasCollapse = options['collapse'];
+    hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
     }
-    var hasComments = options['comments'];
+    hasComments = options['comments'];
     if (hasComments === undefined) {
       hasComments = hasCategories;
     }
-    var hasDisable = options['disable'];
+    hasDisable = options['disable'];
     if (hasDisable === undefined) {
       hasDisable = hasCategories;
     }
-    var hasSounds = options['sounds'];
+    hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
     }
   }
-  var rtl = !!options['rtl'];
-  var horizontalLayout = options['horizontalLayout'];
+
+  let maxTrashcanContents = options['maxTrashcanContents'];
+  if (hasTrashcan) {
+    if (maxTrashcanContents === undefined) {
+      maxTrashcanContents = 32;
+    }
+  } else {
+    maxTrashcanContents = 0;
+  }
+  const rtl = !!options['rtl'];
+  let horizontalLayout = options['horizontalLayout'];
   if (horizontalLayout === undefined) {
     horizontalLayout = false;
   }
-  var toolboxAtStart = options['toolboxPosition'];
+  let toolboxAtStart = options['toolboxPosition'];
   toolboxAtStart = toolboxAtStart !== 'end';
 
   /** @type {!Blockly.utils.toolbox.Position} */
-  var toolboxPosition;
+  let toolboxPosition;
   if (horizontalLayout) {
     toolboxPosition = toolboxAtStart ?
         Blockly.utils.toolbox.Position.TOP : Blockly.utils.toolbox.Position.BOTTOM;
@@ -90,25 +90,26 @@ Blockly.Options = function(options) {
         Blockly.utils.toolbox.Position.RIGHT : Blockly.utils.toolbox.Position.LEFT;
   }
 
-  var hasCss = options['css'];
+  let hasCss = options['css'];
   if (hasCss === undefined) {
     hasCss = true;
   }
-  var pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
+  let pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
   if (options['media']) {
     pathToMedia = options['media'];
   } else if (options['path']) {
     // 'path' is a deprecated option which has been replaced by 'media'.
     pathToMedia = options['path'] + 'media/';
   }
+  let oneBasedIndex;
   if (options['oneBasedIndex'] === undefined) {
-    var oneBasedIndex = true;
+    oneBasedIndex = true;
   } else {
-    var oneBasedIndex = !!options['oneBasedIndex'];
+    oneBasedIndex = !!options['oneBasedIndex'];
   }
-  var renderer = options['renderer'] || 'geras';
+  const renderer = options['renderer'] || 'geras';
 
-  var plugins = options['plugins'] || {};
+  const plugins = options['plugins'] || {};
 
   /** @type {boolean} */
   this.RTL = rtl;
@@ -248,8 +249,8 @@ Blockly.Options.prototype.getMetrics;
  * @private
  */
 Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
-  var move = options['move'] || {};
-  var moveOptions = {};
+  const move = options['move'] || {};
+  const moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
   } else if (typeof move['scrollbars'] == 'object') {
@@ -295,8 +296,8 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
  * @private
  */
 Blockly.Options.parseZoomOptions_ = function(options) {
-  var zoom = options['zoom'] || {};
-  var zoomOptions = {};
+  const zoom = options['zoom'] || {};
+  const zoomOptions = {};
   if (zoom['controls'] === undefined) {
     zoomOptions.controls = false;
   } else {
@@ -344,8 +345,8 @@ Blockly.Options.parseZoomOptions_ = function(options) {
  * @private
  */
 Blockly.Options.parseGridOptions_ = function(options) {
-  var grid = options['grid'] || {};
-  var gridOptions = {};
+  const grid = options['grid'] || {};
+  const gridOptions = {};
   gridOptions.spacing = Number(grid['spacing']) || 0;
   gridOptions.colour = grid['colour'] || '#888';
   gridOptions.length =
@@ -362,7 +363,7 @@ Blockly.Options.parseGridOptions_ = function(options) {
  * @private
  */
 Blockly.Options.parseThemeOptions_ = function(options) {
-  var theme = options['theme'] || Blockly.Themes.Classic;
+  const theme = options['theme'] || Blockly.Themes.Classic;
   if (typeof theme == 'string') {
     return /** @type {!Blockly.Theme} */ (
       Blockly.registry.getObject(Blockly.registry.Type.THEME, theme));

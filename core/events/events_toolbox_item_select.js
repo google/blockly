@@ -13,10 +13,10 @@
 goog.module('Blockly.Events.ToolboxItemSelect');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -27,7 +27,7 @@ goog.require('Blockly.utils.object');
  *    a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const ToolboxItemSelect = function(opt_oldItem, opt_newItem,
@@ -47,13 +47,13 @@ const ToolboxItemSelect = function(opt_oldItem, opt_newItem,
    */
   this.newItem = opt_newItem;
 };
-Blockly.utils.object.inherits(ToolboxItemSelect, Blockly.Events.UiBase);
+object.inherits(ToolboxItemSelect, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SELECT;
+ToolboxItemSelect.prototype.type = Events.TOOLBOX_ITEM_SELECT;
 
 /**
  * Encode the event as JSON.
@@ -76,7 +76,7 @@ ToolboxItemSelect.prototype.fromJson = function(json) {
   this.newItem = json['newItem'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+registry.register(registry.Type.EVENT,
+    Events.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
 exports = ToolboxItemSelect;

@@ -49,7 +49,7 @@ Blockly.Events.TrashcanOpen.prototype.type = Blockly.Events.TRASHCAN_OPEN;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.TrashcanOpen.prototype.toJson = function() {
-  var json = Blockly.Events.TrashcanOpen.superClass_.toJson.call(this);
+  const json = Blockly.Events.TrashcanOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   return json;
 };

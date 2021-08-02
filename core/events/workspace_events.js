@@ -32,7 +32,6 @@ const registry = goog.require('Blockly.registry');
  * @constructor
  */
 const FinishedLoading = function(opt_workspace) {
-
   /**
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
@@ -56,8 +55,7 @@ const FinishedLoading = function(opt_workspace) {
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-object.inherits(FinishedLoading,
-    Abstract);
+object.inherits(FinishedLoading, Abstract);
 
 /**
  * Type of this event.
@@ -92,7 +90,7 @@ FinishedLoading.prototype.fromJson = function(json) {
   this.group = json['group'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.FINISHED_LOADING, FinishedLoading);
+registry.register(
+    registry.Type.EVENT, Events.FINISHED_LOADING, FinishedLoading);
 
 exports = FinishedLoading;

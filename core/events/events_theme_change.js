@@ -63,7 +63,6 @@ ThemeChange.prototype.fromJson = function(json) {
   this.themeName = json['themeName'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.THEME_CHANGE, ThemeChange);
+registry.register(registry.Type.EVENT, Events.THEME_CHANGE, ThemeChange);
 
 exports = ThemeChange;

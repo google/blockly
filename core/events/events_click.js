@@ -13,24 +13,23 @@
 goog.module('Blockly.Events.Click');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
-
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 /**
  * Class for a click event.
- * @param {?Blockly.Block=} opt_block The affected block. Null for click events
+ * @param {?Block=} opt_block The affected block. Null for click events
  *    that do not have an associated block (i.e. workspace click). Undefined
  *    for a blank event.
  * @param {?string=} opt_workspaceId The workspace identifier for this event.
  *    Not used if block is passed. Undefined for a blank event.
  * @param {string=} opt_targetType The type of element targeted by this click
  *    event. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const Click = function(opt_block, opt_workspaceId, opt_targetType) {
@@ -44,13 +43,13 @@ const Click = function(opt_block, opt_workspaceId, opt_targetType) {
    */
   this.targetType = opt_targetType;
 };
-Blockly.utils.object.inherits(Click, Blockly.Events.UiBase);
+object.inherits(Click, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Click.prototype.type = Blockly.Events.CLICK;
+Click.prototype.type = Events.CLICK;
 
 /**
  * Encode the event as JSON.
@@ -75,7 +74,7 @@ Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
+registry.register(registry.Type.EVENT, Events.CLICK,
     Click);
 
 exports = Click;

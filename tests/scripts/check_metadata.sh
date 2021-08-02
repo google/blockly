@@ -25,7 +25,7 @@ readonly BUILD_DIR='build'
 # Q4 2020	4.20201217.0	653624
 # Q1 2021	5.20210325.0	653957
 # Q2 2021	6.20210701.0	664497
-# Q3 2021	6.20210701.0	731695
+# Q3 2021	6.20210701.0	731695 (mid-quarter goog.module conversion change)
 readonly BLOCKLY_SIZE_EXPECTED=731695
 
 # Size of blocks_compressed.js
@@ -51,7 +51,7 @@ readonly BLOCKS_SIZE_EXPECTED=76669
 # Q4 2020	4.20201217.0	138115
 # Q1 2021	5.20210325.0	136118
 # Q2 2021	6.20210701.0	142112
-# Q3 2021	6.20210701.0	147476
+# Q3 2021	6.20210701.0	147476 (mid-quarter goog.module conversion change)
 readonly BLOCKLY_GZ_SIZE_EXPECTED=147476
 
 # Size of blocks_compressed.js.gz

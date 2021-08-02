@@ -41,6 +41,25 @@ goog.require('Blockly.Events.MarkerMove');
 
 
 /**
+ * The name of the CSS class for a cursor.
+ * @const {string}
+ */
+const CURSOR_CLASS = 'blocklyCursor';
+
+/**
+ * The name of the CSS class for a marker.
+ * @const {string}
+ */
+const MARKER_CLASS = 'blocklyMarker';
+
+/**
+ * What we multiply the height by to get the height of the marker.
+ * Only used for the block and block connections.
+ * @const {number}
+ */
+const HEIGHT_MULTIPLIER = 3 / 4;
+
+/**
  * Class for a marker.
  * @param {!WorkspaceSvg} workspace The workspace the marker belongs to.
  * @param {!ConstantProvider} constants The constants for
@@ -95,25 +114,6 @@ const MarkerSvg = function(workspace, constants, marker) {
 };
 
 /**
- * The name of the CSS class for a cursor.
- * @const {string}
- */
-MarkerSvg.CURSOR_CLASS = 'blocklyCursor';
-
-/**
- * The name of the CSS class for a marker.
- * @const {string}
- */
-MarkerSvg.MARKER_CLASS = 'blocklyMarker';
-
-/**
- * What we multiply the height by to get the height of the marker.
- * Only used for the block and block connections.
- * @const {number}
- */
-MarkerSvg.HEIGHT_MULTIPLIER = 3 / 4;
-
-/**
  * Return the root node of the SVG or null if none exists.
  * @return {SVGElement} The root SVG node.
  */
@@ -145,7 +145,7 @@ MarkerSvg.prototype.isCursor = function() {
  */
 MarkerSvg.prototype.createDom = function() {
   const className =
-      this.isCursor() ? MarkerSvg.CURSOR_CLASS : MarkerSvg.MARKER_CLASS;
+      this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
 
   this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': className}, null);
 
@@ -246,7 +246,7 @@ MarkerSvg.prototype.showWithBlockPrevOutput_ = function(curNode) {
   const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
   const width = block.width;
   const height = block.height;
-  const markerHeight = height * MarkerSvg.HEIGHT_MULTIPLIER;
+  const markerHeight = height * HEIGHT_MULTIPLIER;
   const markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {

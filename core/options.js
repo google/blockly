@@ -13,22 +13,24 @@
 goog.module('Blockly.Options');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.registry');
-goog.require('Blockly.Theme');
-goog.require('Blockly.Themes.Classic');
-goog.require('Blockly.utils.deprecation');
-goog.require('Blockly.utils.IdGenerator');
-goog.require('Blockly.utils.toolbox');
-
-goog.requireType('Blockly.BlocklyOptions');
-goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
+const Classic = goog.require('Blockly.Themes.Classic');
+const IdGenerator = goog.require('Blockly.utils.IdGenerator');
+/* eslint-disable-next-line no-unused-vars */
+const Metrics = goog.requireType('Blockly.utils.Metrics');
+const Theme = goog.require('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
 
 
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
- * @param {!Blockly.BlocklyOptions} options Dictionary of options.
+ * @param {!BlocklyOptions} options Dictionary of options.
  *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
@@ -42,8 +44,8 @@ const Options = function(options) {
   let hasSounds = false;
   const readOnly = !!options['readOnly'];
   if (!readOnly) {
-    toolboxJsonDef = Blockly.utils.toolbox.convertToolboxDefToJson(options['toolbox']);
-    hasCategories = Blockly.utils.toolbox.hasCategories(toolboxJsonDef);
+    toolboxJsonDef = toolbox.convertToolboxDefToJson(options['toolbox']);
+    hasCategories = toolbox.hasCategories(toolboxJsonDef);
     hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -82,14 +84,14 @@ const Options = function(options) {
   let toolboxAtStart = options['toolboxPosition'];
   toolboxAtStart = toolboxAtStart !== 'end';
 
-  /** @type {!Blockly.utils.toolbox.Position} */
+  /** @type {!toolbox.Position} */
   let toolboxPosition;
   if (horizontalLayout) {
     toolboxPosition = toolboxAtStart ?
-        Blockly.utils.toolbox.Position.TOP : Blockly.utils.toolbox.Position.BOTTOM;
+        toolbox.Position.TOP : toolbox.Position.BOTTOM;
   } else {
     toolboxPosition = (toolboxAtStart == rtl) ?
-        Blockly.utils.toolbox.Position.RIGHT : Blockly.utils.toolbox.Position.LEFT;
+        toolbox.Position.RIGHT : toolbox.Position.LEFT;
   }
 
   let hasCss = options['css'];
@@ -147,15 +149,15 @@ const Options = function(options) {
   this.hasCss = hasCss;
   /** @type {boolean} */
   this.horizontalLayout = horizontalLayout;
-  /** @type {?Blockly.utils.toolbox.ToolboxInfo} */
+  /** @type {?toolbox.ToolboxInfo} */
   this.languageTree = toolboxJsonDef;
   /** @type {!Options.GridOptions} */
   this.gridOptions = Options.parseGridOptions_(options);
   /** @type {!Options.ZoomOptions} */
   this.zoomOptions = Options.parseZoomOptions_(options);
-  /** @type {!Blockly.utils.toolbox.Position} */
+  /** @type {!toolbox.Position} */
   this.toolboxPosition = toolboxPosition;
-  /** @type {!Blockly.Theme} */
+  /** @type {!Theme} */
   this.theme = Options.parseThemeOptions_(options);
   /** @type {string} */
   this.renderer = renderer;
@@ -173,7 +175,7 @@ const Options = function(options) {
    * The parent of the current workspace, or null if there is no parent
    * workspace.  We can assert that this is of type WorkspaceSvg as opposed to
    * Workspace as this is only used in a rendered workspace.
-   * @type {Blockly.WorkspaceSvg}
+   * @type {WorkspaceSvg}
    */
   this.parentWorkspace = options['parentWorkspace'];
 
@@ -238,7 +240,7 @@ Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
- * @return {!Blockly.utils.Metrics} Contains size and position metrics.
+ * @return {!Metrics} Contains size and position metrics.
  */
 Options.prototype.getMetrics;
 
@@ -361,19 +363,19 @@ Options.parseGridOptions_ = function(options) {
  * Parse the user-specified theme options, using the classic theme as a default.
  *   https://developers.google.com/blockly/guides/configure/web/themes
  * @param {!Object} options Dictionary of options.
- * @return {!Blockly.Theme} A Blockly Theme.
+ * @return {!Theme} A Blockly Theme.
  * @private
  */
 Options.parseThemeOptions_ = function(options) {
-  const theme = options['theme'] || Blockly.Themes.Classic;
+  const theme = options['theme'] || Classic;
   if (typeof theme == 'string') {
-    return /** @type {!Blockly.Theme} */ (
-      Blockly.registry.getObject(Blockly.registry.Type.THEME, theme));
-  } else if (theme instanceof Blockly.Theme) {
-    return /** @type {!Blockly.Theme} */ (theme);
+    return /** @type {!Theme} */ (
+      registry.getObject(registry.Type.THEME, theme));
+  } else if (theme instanceof Theme) {
+    return /** @type {!Theme} */ (theme);
   }
-  return Blockly.Theme.defineTheme(theme.name ||
-      ('builtin' + Blockly.utils.IdGenerator.getNextUniqueId()), theme);
+  return Theme.defineTheme(theme.name ||
+      ('builtin' + IdGenerator.getNextUniqueId()), theme);
 };
 
 /**
@@ -381,15 +383,15 @@ Options.parseThemeOptions_ = function(options) {
  * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
  *    of same.
  * @return {?Node} DOM tree of blocks, or null.
- * @deprecated Use Blockly.utils.toolbox.parseToolboxTree. (2020 September 28)
+ * @deprecated Use toolbox.parseToolboxTree. (2020 September 28)
  */
 Options.parseToolboxTree = function(toolboxDef) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Options.parseToolboxTree',
       'September 2020',
       'September 2021',
-      'Blockly.utils.toolbox.parseToolboxTree');
-  return Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
+      'toolbox.parseToolboxTree');
+  return toolbox.parseToolboxTree(toolboxDef);
 };
 
 exports = Options;

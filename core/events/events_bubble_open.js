@@ -32,7 +32,7 @@ goog.requireType('Blockly.BlockSvg');
  * @constructor
  */
 Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  const workspaceId = opt_block ? opt_block.workspace.id : undefined;
   Blockly.Events.BubbleOpen.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
@@ -61,7 +61,7 @@ Blockly.Events.BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BubbleOpen.prototype.toJson = function() {
-  var json = Blockly.Events.BubbleOpen.superClass_.toJson.call(this);
+  const json = Blockly.Events.BubbleOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   json['bubbleType'] = this.bubbleType;
   json['blockId'] = this.blockId;

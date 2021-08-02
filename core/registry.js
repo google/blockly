@@ -25,6 +25,7 @@ goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
+goog.requireType('Blockly.serialization.PluginSerializer');
 
 
 /**
@@ -106,6 +107,10 @@ Blockly.registry.Type.METRICS_MANAGER =
 Blockly.registry.Type.BLOCK_DRAGGER =
     new Blockly.registry.Type('blockDragger');
 
+/** @type {!Blockly.registry.Type<Blockly.serialization.PluginSerializer>} */
+Blockly.registry.Type.PLUGIN_SERIALIZER =
+    new Blockly.registry.Type('pluginSerializer');
+
 /**
  * Registers a class based on a type and name.
  * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.
@@ -117,7 +122,7 @@ Blockly.registry.Type.BLOCK_DRAGGER =
  *     an already registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
- * it's type.
+ *     it's type.
  * @template T
  */
 Blockly.registry.register = function(
@@ -271,6 +276,31 @@ Blockly.registry.getClass = function(type, name, opt_throwIfMissing) {
 Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {
   return /** @type {T} */ (
     Blockly.registry.getItem_(type, name, opt_throwIfMissing));
+};
+
+/**
+ * Returns a map of items registered with the given type.
+ * @param {string|!Blocklly.registry.Type<T>} type The type of the plugin.
+ *     (e.g. Category)
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the object.
+ * @return {?Object<string, ?T|?function(new:T, ...?)>} A map of objects with
+ *     the given type, or null if none exists.
+ * @template T
+ */
+Blockly.registry.getAllItems = function(type, opt_throwIfMissing) {
+  type = String(type).toLowerCase();
+  var typeRegistry = Blockly.registry.typeMap_[type];
+  if (!typeRegistry) {
+    var msg = `Unable to find [${type}] in the registry.`;
+    if (opt_throwIfMissing) {
+      throw new Error(`${msg} You must require or register a ${type} plugin.`);
+    } else {
+      console.warn(msg);
+    }
+    return null;
+  }
+  return typeRegistry;
 };
 
 /**

@@ -16,9 +16,8 @@ goog.module.declareLegacyNamespace();
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.require('Blockly.Workspace');
-const blocks = goog.require('Blockly.serialization.blocks');
 const dom = goog.require('Blockly.utils.dom');
-const variables = goog.require('Blockly.serialization.variables');
+const registry = goog.require('Blockly.registry');
  
 
 /**
@@ -28,31 +27,13 @@ const variables = goog.require('Blockly.serialization.variables');
  */
 const save = function(workspace) {
   const state = Object.create(null);
-
-  // TODO: Switch this to use plugin serialization system (once it is built).
-  const variableStates = [];
-  const vars = workspace.getAllVariables();
-  for (let i = 0; i < vars.length; i++) {
-    variableStates.push(variables.save(vars[i]));
-  }
-  if (variableStates.length) {
-    state['variables'] = variableStates;
-  }
-
-  const blockStates = [];
-  for (let block of workspace.getTopBlocks(false)) {
-    const blockState = blocks.save(block, {addCoordinates: true});
-    if (blockState) {
-      blockStates.push(blockState);
+  const serializerMap = registry.getAllItems(registry.Type.PLUGIN_SERIALIZER);
+  for (const key in serializerMap) {
+    const save = serializerMap[key].save(workspace);
+    if (save) {
+      state[key] = save;
     }
   }
-  if (blockStates.length) {
-    // This is an object to support adding language version later.
-    state['blocks'] = {
-      'blocks': blockStates
-    };
-  }
-
   return state;
 };
 exports.save = save;
@@ -67,8 +48,12 @@ exports.save = save;
  *       by the user. False by default.
  */
 const load = function(state, workspace, {recordUndo = false} = {}) {
-  // TODO: Switch this to use plugin serialization system (once it is built).
-  // TODO: Add something for clearing the state before deserializing.
+  const deserializers =
+      Object.entries(
+          registry.getAllItems(registry.Type.PLUGIN_SERIALIZER))
+          .sort(
+              ([, {priority: priorityA}], [, {priority: priorityB}]) =>
+                priorityB - priorityA);
 
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
@@ -81,18 +66,18 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(false);
   }
-
-  if (state['variables']) {
-    const variableStates = state['variables'];
-    for (let i = 0; i < variableStates.length; i++) {
-      variables.load(variableStates[i], workspace, {recordUndo});
-    }
+  
+  // We want to trigger clearing in reverse priority order so plugins don't end
+  // up missing dependencies.
+  for (const [, deserializer] of deserializers.reverse()) {
+    deserializer.clear(workspace);
   }
 
-  if (state['blocks']) {
-    const blockStates = state['blocks']['blocks'];
-    for (let i = 0; i < blockStates.length; i++) {
-      blocks.load(blockStates[i], workspace, {recordUndo});
+  // reverse() is destructive.
+  for (const [name, deserializer] of deserializers.reverse()) {
+    const pluginState = state[name];
+    if (pluginState) {
+      deserializer.load(state[name], workspace);
     }
   }
 

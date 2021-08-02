@@ -19,10 +19,22 @@ const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
+<<<<<<< HEAD
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
+=======
+const {MissingBlockType, MissingConnection, BadConnectionCheck} =
+    goog.require('Blockly.serialization.exceptions');
+// eslint-disable-next-line no-unused-vars
+const PluginSerializer = goog.requireType('PluginSerializer');
+// eslint-disable-next-line no-unused-vars
+const Workspace = goog.requireType('Blockly.Workspace');
+const Size = goog.require('Blockly.utils.Size');
+>>>>>>> 154ead17 (Add plugin hooks for serialization)
 const inputTypes = goog.require('Blockly.inputTypes');
+const priorities = goog.require('Blockly.serialization.priorities');
+const registry = goog.require('Blockly.registry');
 
 
 // TODO: Remove this once lint is fixed.
@@ -577,3 +589,71 @@ const initBlock = function(block, rendered) {
     block.initModel();
   }
 };
+
+/**
+ * Plugin serializer for saving and loading block state.
+ * @implements {PluginSerializer}
+ */
+class BlockSerializer {
+  constructor() {
+    /**
+     * The priority for deserializing blocks.
+     * @type {number}
+     */
+    this.priority = priorities.BLOCKS;
+  }
+
+  /**
+   * Serializes the blocks of the given workspace.
+   * @param {!Workspace} workspace The workspace to save the blocks of.
+   * @return {?{languageVersion: number, blocks:!Array<!State>}} The state of
+   *     the workspace's blocks, or null if there are no blocks.
+   */
+  save(workspace) {
+    const blockState = [];
+    for (const block of workspace.getTopBlocks()) {
+      // TODO: JavaScript class semantics make this call confusing. Any way to
+      //    make this clearly not recursive?
+      const state = save(block, {addCoordinates: true, addNextBlocks: true});
+      if (state) {
+        blockState.push(state);
+      }
+    }
+    if (blockState.length) {
+      return {
+        'languageVersion': 0, // Currently unused.
+        'blocks': blockState
+      };
+    }
+    return null;
+  }
+
+  /**
+   * Deserializes the blocks defined by the given state into the given
+   * workspace.
+   * @param {{languageVersion: number, blocks:!Array<!State>}} state The state
+   *     of the blocks to deserialize.
+   * @param {!Workspace} workspace The workspace to deserialize into.
+   */
+  load(state, workspace) {
+    const blockStates = state['blocks'];
+    for (const state of blockStates) {
+      load(state, workspace, {recordUndo: Events.recordUndo});
+    }
+  }
+
+  /**
+   * Disposes of any blocks that exist on the workspace.
+   * @param {!Workspace} workspace The workspace to clear the blocks of.
+   */
+  clear(workspace) {
+    // Cannot use workspace.clear() because that also removes variables.
+    const blocks = workspace.getTopBlocks();
+    for (const block of blocks) {
+      block.dispose(false);
+    }
+  }
+}
+
+registry.register(
+    registry.Type.PLUGIN_SERIALIZER, 'blocks', new BlockSerializer());

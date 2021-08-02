@@ -10,16 +10,18 @@
  */
 'use strict';
 
-goog.provide('Blockly.Options');
+goog.module('Blockly.Options');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.registry');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
+goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.IdGenerator');
-goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.BlocklyOptions');
+goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -30,7 +32,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
-Blockly.Options = function(options) {
+const Options = function(options) {
   let toolboxJsonDef = null;
   let hasCategories = false;
   let hasTrashcan = false;
@@ -131,8 +133,8 @@ Blockly.Options = function(options) {
   this.pathToMedia = pathToMedia;
   /** @type {boolean} */
   this.hasCategories = hasCategories;
-  /** @type {!Blockly.Options.MoveOptions} */
-  this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
+  /** @type {!Options.MoveOptions} */
+  this.moveOptions = Options.parseMoveOptions_(options, hasCategories);
   /** @deprecated  January 2019 */
   this.hasScrollbars = !!this.moveOptions.scrollbars;
   /** @type {boolean} */
@@ -147,14 +149,14 @@ Blockly.Options = function(options) {
   this.horizontalLayout = horizontalLayout;
   /** @type {?Blockly.utils.toolbox.ToolboxInfo} */
   this.languageTree = toolboxJsonDef;
-  /** @type {!Blockly.Options.GridOptions} */
-  this.gridOptions = Blockly.Options.parseGridOptions_(options);
-  /** @type {!Blockly.Options.ZoomOptions} */
-  this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  /** @type {!Options.GridOptions} */
+  this.gridOptions = Options.parseGridOptions_(options);
+  /** @type {!Options.ZoomOptions} */
+  this.zoomOptions = Options.parseZoomOptions_(options);
   /** @type {!Blockly.utils.toolbox.Position} */
   this.toolboxPosition = toolboxPosition;
   /** @type {!Blockly.Theme} */
-  this.theme = Blockly.Options.parseThemeOptions_(options);
+  this.theme = Options.parseThemeOptions_(options);
   /** @type {string} */
   this.renderer = renderer;
   /** @type {?Object} */
@@ -191,17 +193,17 @@ Blockly.Options = function(options) {
  *     spacing: number
  * }}
  */
-Blockly.Options.GridOptions;
+Options.GridOptions;
 
 /**
  * Move Options.
  * @typedef {{
  *     drag: boolean,
- *     scrollbars: (boolean | !Blockly.Options.ScrollbarOptions),
+ *     scrollbars: (boolean | !Options.ScrollbarOptions),
  *     wheel: boolean
  * }}
  */
-Blockly.Options.MoveOptions;
+Options.MoveOptions;
 
 /**
  * Scrollbar Options.
@@ -210,7 +212,7 @@ Blockly.Options.MoveOptions;
  *     vertical: boolean
  * }}
  */
-Blockly.Options.ScrollbarOptions;
+Options.ScrollbarOptions;
 
 /**
  * Zoom Options.
@@ -224,7 +226,7 @@ Blockly.Options.ScrollbarOptions;
  *     wheel: boolean
  * }}
  */
-Blockly.Options.ZoomOptions;
+Options.ZoomOptions;
 
 /**
  * If set, sets the translation of the workspace to match the scrollbars.
@@ -232,23 +234,23 @@ Blockly.Options.ZoomOptions;
  *     is a float between 0 and 1 specifying the degree of scrolling.
  * @return {void}
  */
-Blockly.Options.prototype.setMetrics;
+Options.prototype.setMetrics;
 
 /**
  * Return an object with the metrics required to size the workspace.
  * @return {!Blockly.utils.Metrics} Contains size and position metrics.
  */
-Blockly.Options.prototype.getMetrics;
+Options.prototype.getMetrics;
 
 /**
  * Parse the user-specified move options, using reasonable defaults where
  *    behaviour is unspecified.
  * @param {!Object} options Dictionary of options.
  * @param {boolean} hasCategories Whether the workspace has categories or not.
- * @return {!Blockly.Options.MoveOptions} Normalized move options.
+ * @return {!Options.MoveOptions} Normalized move options.
  * @private
  */
-Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
+Options.parseMoveOptions_ = function(options, hasCategories) {
   const move = options['move'] || {};
   const moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
@@ -292,10 +294,10 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
  * behaviour is unspecified.  See zoom documentation:
  *   https://developers.google.com/blockly/guides/configure/web/zoom
  * @param {!Object} options Dictionary of options.
- * @return {!Blockly.Options.ZoomOptions} Normalized zoom options.
+ * @return {!Options.ZoomOptions} Normalized zoom options.
  * @private
  */
-Blockly.Options.parseZoomOptions_ = function(options) {
+Options.parseZoomOptions_ = function(options) {
   const zoom = options['zoom'] || {};
   const zoomOptions = {};
   if (zoom['controls'] === undefined) {
@@ -341,10 +343,10 @@ Blockly.Options.parseZoomOptions_ = function(options) {
  * behaviour is unspecified. See grid documentation:
  *   https://developers.google.com/blockly/guides/configure/web/grid
  * @param {!Object} options Dictionary of options.
- * @return {!Blockly.Options.GridOptions} Normalized grid options.
+ * @return {!Options.GridOptions} Normalized grid options.
  * @private
  */
-Blockly.Options.parseGridOptions_ = function(options) {
+Options.parseGridOptions_ = function(options) {
   const grid = options['grid'] || {};
   const gridOptions = {};
   gridOptions.spacing = Number(grid['spacing']) || 0;
@@ -362,7 +364,7 @@ Blockly.Options.parseGridOptions_ = function(options) {
  * @return {!Blockly.Theme} A Blockly Theme.
  * @private
  */
-Blockly.Options.parseThemeOptions_ = function(options) {
+Options.parseThemeOptions_ = function(options) {
   const theme = options['theme'] || Blockly.Themes.Classic;
   if (typeof theme == 'string') {
     return /** @type {!Blockly.Theme} */ (
@@ -381,11 +383,13 @@ Blockly.Options.parseThemeOptions_ = function(options) {
  * @return {?Node} DOM tree of blocks, or null.
  * @deprecated Use Blockly.utils.toolbox.parseToolboxTree. (2020 September 28)
  */
-Blockly.Options.parseToolboxTree = function(toolboxDef) {
+Options.parseToolboxTree = function(toolboxDef) {
   Blockly.utils.deprecation.warn(
-      'Blockly.Options.parseToolboxTree',
+      'Options.parseToolboxTree',
       'September 2020',
       'September 2021',
       'Blockly.utils.toolbox.parseToolboxTree');
   return Blockly.utils.toolbox.parseToolboxTree(toolboxDef);
 };
+
+exports = Options;

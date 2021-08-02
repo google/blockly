@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.ToolboxItemSelect');
+goog.module('Blockly.Events.ToolboxItemSelect');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -29,9 +30,9 @@ goog.require('Blockly.utils.object');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.ToolboxItemSelect = function(opt_oldItem, opt_newItem,
+const ToolboxItemSelect = function(opt_oldItem, opt_newItem,
     opt_workspaceId) {
-  Blockly.Events.ToolboxItemSelect.superClass_.constructor.call(
+  ToolboxItemSelect.superClass_.constructor.call(
       this, opt_workspaceId);
 
   /**
@@ -46,20 +47,20 @@ Blockly.Events.ToolboxItemSelect = function(opt_oldItem, opt_newItem,
    */
   this.newItem = opt_newItem;
 };
-Blockly.utils.object.inherits(Blockly.Events.ToolboxItemSelect, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(ToolboxItemSelect, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SELECT;
+ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SELECT;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.ToolboxItemSelect.prototype.toJson = function() {
-  const json = Blockly.Events.ToolboxItemSelect.superClass_.toJson.call(this);
+ToolboxItemSelect.prototype.toJson = function() {
+  const json = ToolboxItemSelect.superClass_.toJson.call(this);
   json['oldItem'] = this.oldItem;
   json['newItem'] = this.newItem;
   return json;
@@ -69,11 +70,13 @@ Blockly.Events.ToolboxItemSelect.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.ToolboxItemSelect.prototype.fromJson = function(json) {
-  Blockly.Events.ToolboxItemSelect.superClass_.fromJson.call(this, json);
+ToolboxItemSelect.prototype.fromJson = function(json) {
+  ToolboxItemSelect.superClass_.fromJson.call(this, json);
   this.oldItem = json['oldItem'];
   this.newItem = json['newItem'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TOOLBOX_ITEM_SELECT, Blockly.Events.ToolboxItemSelect);
+    Blockly.Events.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+
+exports = ToolboxItemSelect;

@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.MarkerMove');
+goog.module('Blockly.Events.MarkerMove');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -35,14 +36,14 @@ goog.requireType('Blockly.Workspace');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
+const MarkerMove = function(opt_block, isCursor, opt_oldNode,
     opt_newNode) {
   let workspaceId = opt_block ? opt_block.workspace.id : undefined;
   if (opt_newNode && opt_newNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     workspaceId =
         (/** @type {!Blockly.Workspace} */ (opt_newNode.getLocation())).id;
   }
-  Blockly.Events.MarkerMove.superClass_.constructor.call(this, workspaceId);
+  MarkerMove.superClass_.constructor.call(this, workspaceId);
 
   /**
    * The workspace identifier for this event.
@@ -68,20 +69,20 @@ Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
    */
   this.isCursor = isCursor;
 };
-Blockly.utils.object.inherits(Blockly.Events.MarkerMove, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(MarkerMove, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
+MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.MarkerMove.prototype.toJson = function() {
-  const json = Blockly.Events.MarkerMove.superClass_.toJson.call(this);
+MarkerMove.prototype.toJson = function() {
+  const json = MarkerMove.superClass_.toJson.call(this);
   json['isCursor'] = this.isCursor;
   json['blockId'] = this.blockId;
   json['oldNode'] = this.oldNode;
@@ -93,8 +94,8 @@ Blockly.Events.MarkerMove.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.MarkerMove.prototype.fromJson = function(json) {
-  Blockly.Events.MarkerMove.superClass_.fromJson.call(this, json);
+MarkerMove.prototype.fromJson = function(json) {
+  MarkerMove.superClass_.fromJson.call(this, json);
   this.isCursor = json['isCursor'];
   this.blockId = json['blockId'];
   this.oldNode = json['oldNode'];
@@ -102,4 +103,6 @@ Blockly.Events.MarkerMove.prototype.fromJson = function(json) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.MARKER_MOVE, Blockly.Events.MarkerMove);
+    Blockly.Events.MARKER_MOVE, MarkerMove);
+
+exports = MarkerMove;

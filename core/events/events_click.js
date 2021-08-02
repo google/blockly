@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.Click');
+goog.module('Blockly.Events.Click');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -32,9 +33,9 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_targetType) {
+const Click = function(opt_block, opt_workspaceId, opt_targetType) {
   const workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
-  Blockly.Events.Click.superClass_.constructor.call(this, workspaceId);
+  Click.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
   /**
@@ -43,20 +44,20 @@ Blockly.Events.Click = function(opt_block, opt_workspaceId, opt_targetType) {
    */
   this.targetType = opt_targetType;
 };
-Blockly.utils.object.inherits(Blockly.Events.Click, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(Click, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.Click.prototype.type = Blockly.Events.CLICK;
+Click.prototype.type = Blockly.Events.CLICK;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Click.prototype.toJson = function() {
-  const json = Blockly.Events.Click.superClass_.toJson.call(this);
+Click.prototype.toJson = function() {
+  const json = Click.superClass_.toJson.call(this);
   json['targetType'] = this.targetType;
   if (this.blockId) {
     json['blockId'] = this.blockId;
@@ -68,11 +69,13 @@ Blockly.Events.Click.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Click.prototype.fromJson = function(json) {
-  Blockly.Events.Click.superClass_.fromJson.call(this, json);
+Click.prototype.fromJson = function(json) {
+  Click.superClass_.fromJson.call(this, json);
   this.targetType = json['targetType'];
   this.blockId = json['blockId'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CLICK,
-    Blockly.Events.Click);
+    Click);
+
+exports = Click;

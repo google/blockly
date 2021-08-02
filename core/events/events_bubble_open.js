@@ -13,23 +13,24 @@
 goog.module('Blockly.Events.BubbleOpen');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a bubble open event.
- * @param {Blockly.BlockSvg} opt_block The associated block. Undefined for a
+ * @param {BlockSvg} opt_block The associated block. Undefined for a
  *    blank event.
  * @param {boolean=} opt_isOpen Whether the bubble is opening (false if
  *    closing). Undefined for a blank event.
- * @param {string=} opt_bubbleType The type of bubble. One of 'mutator', 'comment'
+ * @param {string=} opt_bubbleType The type of bubble. One of 'mutator',
+ *     'comment'
  *    or 'warning'. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
@@ -49,13 +50,13 @@ const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
    */
   this.bubbleType = opt_bubbleType;
 };
-Blockly.utils.object.inherits(BubbleOpen, Blockly.Events.UiBase);
+object.inherits(BubbleOpen, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
+BubbleOpen.prototype.type = Events.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -80,7 +81,6 @@ BubbleOpen.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BUBBLE_OPEN, BubbleOpen);
+registry.register(registry.Type.EVENT, Events.BUBBLE_OPEN, BubbleOpen);
 
 exports = BubbleOpen;

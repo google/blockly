@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockDrag');
+goog.module('Blockly.Events.BlockDrag');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -31,9 +32,9 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
-Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
+const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.BlockDrag.superClass_.constructor.call(this, workspaceId);
+  BlockDrag.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
   /**
@@ -48,20 +49,20 @@ Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
    */
   this.blocks = opt_blocks;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockDrag, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(BlockDrag, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockDrag.prototype.type = Blockly.Events.BLOCK_DRAG;
+BlockDrag.prototype.type = Blockly.Events.BLOCK_DRAG;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockDrag.prototype.toJson = function() {
-  const json = Blockly.Events.BlockDrag.superClass_.toJson.call(this);
+BlockDrag.prototype.toJson = function() {
+  const json = BlockDrag.superClass_.toJson.call(this);
   json['isStart'] = this.isStart;
   json['blockId'] = this.blockId;
   json['blocks'] = this.blocks;
@@ -72,12 +73,14 @@ Blockly.Events.BlockDrag.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockDrag.prototype.fromJson = function(json) {
-  Blockly.Events.BlockDrag.superClass_.fromJson.call(this, json);
+BlockDrag.prototype.fromJson = function(json) {
+  BlockDrag.superClass_.fromJson.call(this, json);
   this.isStart = json['isStart'];
   this.blockId = json['blockId'];
   this.blocks = json['blocks'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BLOCK_DRAG, Blockly.Events.BlockDrag);
+    Blockly.Events.BLOCK_DRAG, BlockDrag);
+
+exports = BlockDrag;

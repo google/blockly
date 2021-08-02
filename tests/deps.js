@@ -36,7 +36,7 @@ goog.addDependency('../../core/dropdowndiv.js', ['Blockly.DropDownDiv'], ['Block
 goog.addDependency('../../core/events/block_events.js', ['Blockly.Events.BlockBase', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.Change', 'Blockly.Events.Create', 'Blockly.Events.Delete', 'Blockly.Events.Move'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.registry', 'Blockly.utils.Coordinate', 'Blockly.utils.object', 'Blockly.utils.xml']);
 goog.addDependency('../../core/events/events.js', ['Blockly.Events'], ['Blockly.registry', 'Blockly.utils']);
 goog.addDependency('../../core/events/events_abstract.js', ['Blockly.Events.Abstract'], ['Blockly.Events']);
-goog.addDependency('../../core/events/events_block_drag.js', ['Blockly.Events.BlockDrag'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
+goog.addDependency('../../core/events/events_block_drag.js', ['Blockly.Events.BlockDrag'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_bubble_open.js', ['Blockly.Events.BubbleOpen'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/events_click.js', ['Blockly.Events.Click'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
 goog.addDependency('../../core/events/events_marker_move.js', ['Blockly.Events.MarkerMove'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);

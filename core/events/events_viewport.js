@@ -77,7 +77,7 @@ Blockly.Events.ViewportChange.prototype.type = Blockly.Events.VIEWPORT_CHANGE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.ViewportChange.prototype.toJson = function() {
-  var json = Blockly.Events.ViewportChange.superClass_.toJson.call(this);
+  const json = Blockly.Events.ViewportChange.superClass_.toJson.call(this);
   json['viewTop'] = this.viewTop;
   json['viewLeft'] = this.viewLeft;
   json['scale'] = this.scale;

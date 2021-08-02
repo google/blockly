@@ -30,10 +30,8 @@ const registry = goog.require('Blockly.registry');
  * @extends {UiBase}
  * @constructor
  */
-const ToolboxItemSelect = function(opt_oldItem, opt_newItem,
-    opt_workspaceId) {
-  ToolboxItemSelect.superClass_.constructor.call(
-      this, opt_workspaceId);
+const ToolboxItemSelect = function(opt_oldItem, opt_newItem, opt_workspaceId) {
+  ToolboxItemSelect.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * The previously selected toolbox item.
@@ -76,7 +74,7 @@ ToolboxItemSelect.prototype.fromJson = function(json) {
   this.newItem = json['newItem'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+registry.register(
+    registry.Type.EVENT, Events.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
 exports = ToolboxItemSelect;

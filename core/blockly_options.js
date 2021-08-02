@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.BlocklyOptions');
+goog.module('Blockly.BlocklyOptions');
+goog.module.declareLegacyNamespace();
 
 /**
  * Blockly options.
@@ -18,4 +19,6 @@ goog.provide('Blockly.BlocklyOptions');
  * `typings/parts/blockly-interfaces.d.ts`.
  * @interface
  */
-Blockly.BlocklyOptions = function() {};
+const BlocklyOptions = function() {};
+
+exports = BlocklyOptions;

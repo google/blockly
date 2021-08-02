@@ -69,7 +69,7 @@ Blockly.Events.FinishedLoading.prototype.type = Blockly.Events.FINISHED_LOADING;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.FinishedLoading.prototype.toJson = function() {
-  var json = {
+  const json = {
     'type': this.type,
   };
   if (this.group) {

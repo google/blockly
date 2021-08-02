@@ -780,7 +780,7 @@ Blockly.BlockSvg.prototype.showContextMenu = function(e) {
 
   if (menuOptions && menuOptions.length) {
     Blockly.ContextMenu.show(e, menuOptions, this.RTL);
-    Blockly.ContextMenu.currentBlock = this;
+    Blockly.ContextMenu.setCurrentBlock(this);
   }
 };
 
@@ -921,7 +921,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
     this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
-  if (Blockly.ContextMenu.currentBlock == this) {
+  if (Blockly.ContextMenu.getCurrentBlock() == this) {
     Blockly.ContextMenu.hide();
   }
 

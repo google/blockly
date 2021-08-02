@@ -14,8 +14,11 @@
  * @name Blockly.ContextMenu
  * @namespace
  */
-goog.provide('Blockly.ContextMenu');
+goog.module('Blockly.ContextMenu');
+goog.module.declareLegacyNamespace();
 
+// TODO(#5073): Add Blockly require after fixing circular dependency.
+// goog.require('Blockly');
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -39,16 +42,39 @@ goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Which block is the context menu attached to?
- * @type {Blockly.Block}
+ * @type {?Blockly.Block}
  */
-Blockly.ContextMenu.currentBlock = null;
+let currentBlock = null;
+
+/**
+ * Gets the block the context menu is currently attached to.
+ * @return {?Blockly.Block} The block the context menu is attached to.
+ */
+const getCurrentBlock = function() {
+  return currentBlock;
+};
+exports.getCurrentBlock = getCurrentBlock;
+
+/**
+ * Sets the block the context menu is currently attached to.
+ * @param {?Blockly.Block} block The block the context menu is attached to.
+ */
+const setCurrentBlock = function(block) {
+  currentBlock = block;
+};
+exports.setCurrentBlock = setCurrentBlock;
+
+// Ad JS accessors for backwards compatibility.
+Object.defineProperty(exports, 'currentBlock', {
+  get: getCurrentBlock,
+  set: setCurrentBlock,
+});
 
 /**
  * Menu object.
  * @type {Blockly.Menu}
- * @private
  */
-Blockly.ContextMenu.menu_ = null;
+let menu_ = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
@@ -56,21 +82,22 @@ Blockly.ContextMenu.menu_ = null;
  * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  */
-Blockly.ContextMenu.show = function(e, options, rtl) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, Blockly.ContextMenu.dispose);
+const show = function(e, options, rtl) {
+  Blockly.WidgetDiv.show(exports, rtl, dispose);
   if (!options.length) {
-    Blockly.ContextMenu.hide();
+    hide();
     return;
   }
-  const menu = Blockly.ContextMenu.populate_(options, rtl);
-  Blockly.ContextMenu.menu_ = menu;
+  const menu = populate_(options, rtl);
+  menu_ = menu;
 
-  Blockly.ContextMenu.position_(menu, e, rtl);
+  position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
   setTimeout(function() {menu.focus();}, 1);
-  Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
+  currentBlock = null;  // May be set by Blockly.Block.
 };
+exports.show = show;
 
 /**
  * Create the context menu object and populate it with the given options.
@@ -79,7 +106,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
  * @return {!Blockly.Menu} The menu that will be shown on right click.
  * @private
  */
-Blockly.ContextMenu.populate_ = function(options, rtl) {
+const populate_ = function(options, rtl) {
   /* Here's what one option object looks like:
     {text: 'Make It So',
      enabled: true,
@@ -97,7 +124,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
     if (option.enabled) {
       const actionHandler = function (_menuItem) {
         const option = this;
-        Blockly.ContextMenu.hide();
+        hide();
         option.callback(option.scope);
       };
       menuItem.onAction(actionHandler, option);
@@ -114,7 +141,7 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
  * @param {boolean} rtl True if RTL, false if LTR.
  * @private
  */
-Blockly.ContextMenu.position_ = function(menu, e, rtl) {
+const position_ = function(menu, e, rtl) {
   // Record windowSize and scrollOffset before adding menu.
   const viewportBBox = Blockly.utils.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
@@ -126,7 +153,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
       e.clientX + viewportBBox.left
   );
 
-  Blockly.ContextMenu.createWidget_(menu);
+  createWidget_(menu);
   const menuSize = menu.getSize();
 
   if (rtl) {
@@ -148,7 +175,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
  * @param {!Blockly.Menu} menu The menu to add to the widget div.
  * @private
  */
-Blockly.ContextMenu.createWidget_ = function(menu) {
+const createWidget_ = function(menu) {
   const div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   const menuDom = menu.getElement();
@@ -165,20 +192,22 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
 /**
  * Hide the context menu.
  */
-Blockly.ContextMenu.hide = function() {
-  Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
-  Blockly.ContextMenu.currentBlock = null;
+const hide = function() {
+  Blockly.WidgetDiv.hideIfOwner(exports);
+  currentBlock = null;
 };
+exports.hide = hide;
 
 /**
  * Dispose of the menu.
  */
-Blockly.ContextMenu.dispose = function() {
-  if (Blockly.ContextMenu.menu_) {
-    Blockly.ContextMenu.menu_.dispose();
-    Blockly.ContextMenu.menu_ = null;
+const dispose = function() {
+  if (menu_) {
+    menu_.dispose();
+    menu_ = null;
   }
 };
+exports.dispose = dispose;
 
 /**
  * Create a callback function that creates and configures a block,
@@ -187,7 +216,7 @@ Blockly.ContextMenu.dispose = function() {
  * @param {!Element} xml XML representation of new block.
  * @return {!Function} Function that creates a block.
  */
-Blockly.ContextMenu.callbackFactory = function(block, xml) {
+const callbackFactory = function(block, xml) {
   return function() {
     Blockly.Events.disable();
     let newBlock;
@@ -212,6 +241,7 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     newBlock.select();
   };
 };
+exports.callbackFactory = callbackFactory;
 
 // Helper functions for creating context menu options.
 
@@ -220,9 +250,8 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
  * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
- * @package
  */
-Blockly.ContextMenu.commentDeleteOption = function(comment) {
+const commentDeleteOption = function(comment) {
   const deleteOption = {
     text: Blockly.Msg['REMOVE_COMMENT'],
     enabled: true,
@@ -234,15 +263,16 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
   };
   return deleteOption;
 };
+/** @package */
+exports.commentDeleteOption = commentDeleteOption;
 
 /**
  * Make a context menu option for duplicating the current workspace comment.
  * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
- * @package
  */
-Blockly.ContextMenu.commentDuplicateOption = function(comment) {
+const commentDuplicateOption = function(comment) {
   const duplicateOption = {
     text: Blockly.Msg['DUPLICATE_COMMENT'],
     enabled: true,
@@ -252,6 +282,8 @@ Blockly.ContextMenu.commentDuplicateOption = function(comment) {
   };
   return duplicateOption;
 };
+/** @package */
+exports.commentDuplicateOption = commentDuplicateOption;
 
 /**
  * Make a context menu option for adding a comment on the workspace.
@@ -263,7 +295,7 @@ Blockly.ContextMenu.commentDuplicateOption = function(comment) {
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  */
-Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
+const workspaceCommentOption = function(ws, e) {
   if (!Blockly.WorkspaceCommentSvg) {
     throw Error('Missing require for Blockly.WorkspaceCommentSvg');
   }
@@ -317,3 +349,5 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
   };
   return wsCommentOption;
 };
+/** @package */
+exports.workspaceCommentOption = workspaceCommentOption;

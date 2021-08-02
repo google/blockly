@@ -48,7 +48,7 @@ Blockly.Events.ThemeChange.prototype.type = Blockly.Events.THEME_CHANGE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.ThemeChange.prototype.toJson = function() {
-  var json = Blockly.Events.ThemeChange.superClass_.toJson.call(this);
+  const json = Blockly.Events.ThemeChange.superClass_.toJson.call(this);
   json['themeName'] = this.themeName;
   return json;
 };

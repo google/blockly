@@ -13,10 +13,10 @@
 goog.module('Blockly.Events.TrashcanOpen');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -25,7 +25,7 @@ goog.require('Blockly.utils.object');
  *    opening). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
@@ -37,13 +37,13 @@ const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
    */
   this.isOpen = opt_isOpen;
 };
-Blockly.utils.object.inherits(TrashcanOpen, Blockly.Events.UiBase);
+object.inherits(TrashcanOpen, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-TrashcanOpen.prototype.type = Blockly.Events.TRASHCAN_OPEN;
+TrashcanOpen.prototype.type = Events.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -64,7 +64,7 @@ TrashcanOpen.prototype.fromJson = function(json) {
   this.isOpen = json['isOpen'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TRASHCAN_OPEN, TrashcanOpen);
+registry.register(registry.Type.EVENT,
+    Events.TRASHCAN_OPEN, TrashcanOpen);
 
 exports = TrashcanOpen;

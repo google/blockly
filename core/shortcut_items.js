@@ -44,17 +44,16 @@ const registerEscape = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const escapeAction = {
     name: names.ESCAPE,
-    preconditionFn: function (workspace) {
+    preconditionFn: function(workspace) {
       return !workspace.options.readOnly;
     },
-    callback: function () {
+    callback: function() {
       Blockly.hideChaff();
       return true;
     }
   };
   ShortcutRegistry.registry.register(escapeAction);
-  ShortcutRegistry.registry.addKeyMapping(
-      KeyCodes.ESC, escapeAction.name);
+  ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
 };
 exports.registerEscape = registerEscape;
 
@@ -63,12 +62,11 @@ const registerDelete = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const deleteShortcut = {
     name: names.DELETE,
-    preconditionFn: function (workspace) {
-      return !workspace.options.readOnly &&
-          Blockly.selected &&
+    preconditionFn: function(workspace) {
+      return !workspace.options.readOnly && Blockly.selected &&
           Blockly.selected.isDeletable();
     },
-    callback: function (workspace, e) {
+    callback: function(workspace, e) {
       // Delete or backspace.
       // Stop the browser from going back to the previous page.
       // Do this first to prevent an error in the delete code from resulting in
@@ -83,8 +81,7 @@ const registerDelete = function() {
     }
   };
   ShortcutRegistry.registry.register(deleteShortcut);
-  ShortcutRegistry.registry.addKeyMapping(
-      KeyCodes.DELETE, deleteShortcut.name);
+  ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name);
   ShortcutRegistry.registry.addKeyMapping(
       KeyCodes.BACKSPACE, deleteShortcut.name);
 };
@@ -95,14 +92,12 @@ const registerCopy = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const copyShortcut = {
     name: names.COPY,
-    preconditionFn: function (workspace) {
-      return !workspace.options.readOnly &&
-          !Gesture.inProgress() &&
-          Blockly.selected &&
-          Blockly.selected.isDeletable() &&
+    preconditionFn: function(workspace) {
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
+          Blockly.selected && Blockly.selected.isDeletable() &&
           Blockly.selected.isMovable();
     },
-    callback: function (workspace, e) {
+    callback: function(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
@@ -117,8 +112,8 @@ const registerCopy = function() {
       KeyCodes.C, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name);
 
-  const altC = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.C, [KeyCodes.ALT]);
+  const altC =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.ALT]);
   ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name);
 
   const metaC = ShortcutRegistry.registry.createSerializedKey(
@@ -132,13 +127,10 @@ const registerCut = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const cutShortcut = {
     name: names.CUT,
-    preconditionFn: function (workspace) {
-      return !workspace.options.readOnly &&
-          !Gesture.inProgress() &&
-          Blockly.selected &&
-          Blockly.selected.isDeletable() &&
-          Blockly.selected.isMovable() &&
-          !Blockly.selected.workspace.isFlyout;
+    preconditionFn: function(workspace) {
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
+          Blockly.selected && Blockly.selected.isDeletable() &&
+          Blockly.selected.isMovable() && !Blockly.selected.workspace.isFlyout;
     },
     callback: function() {
       clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
@@ -153,8 +145,8 @@ const registerCut = function() {
       KeyCodes.X, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlX, cutShortcut.name);
 
-  const altX = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.X, [KeyCodes.ALT]);
+  const altX =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [KeyCodes.ALT]);
   ShortcutRegistry.registry.addKeyMapping(altX, cutShortcut.name);
 
   const metaX = ShortcutRegistry.registry.createSerializedKey(
@@ -168,7 +160,7 @@ const registerPaste = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const pasteShortcut = {
     name: names.PASTE,
-    preconditionFn: function (workspace) {
+    preconditionFn: function(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress();
     },
     callback: function() {
@@ -182,8 +174,8 @@ const registerPaste = function() {
       KeyCodes.V, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlV, pasteShortcut.name);
 
-  const altV = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.V, [KeyCodes.ALT]);
+  const altV =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [KeyCodes.ALT]);
   ShortcutRegistry.registry.addKeyMapping(altV, pasteShortcut.name);
 
   const metaV = ShortcutRegistry.registry.createSerializedKey(
@@ -197,11 +189,10 @@ const registerUndo = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const undoShortcut = {
     name: names.UNDO,
-    preconditionFn: function (workspace) {
-      return !workspace.options.readOnly &&
-          !Gesture.inProgress();
+    preconditionFn: function(workspace) {
+      return !workspace.options.readOnly && !Gesture.inProgress();
     },
-    callback: function (workspace) {
+    callback: function(workspace) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       workspace.undo(false);
@@ -214,8 +205,8 @@ const registerUndo = function() {
       KeyCodes.Z, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlZ, undoShortcut.name);
 
-  const altZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.ALT]);
+  const altZ =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [KeyCodes.ALT]);
   ShortcutRegistry.registry.addKeyMapping(altZ, undoShortcut.name);
 
   const metaZ = ShortcutRegistry.registry.createSerializedKey(
@@ -224,15 +215,18 @@ const registerUndo = function() {
 };
 exports.registerUndo = registerUndo;
 
-/** Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z, or alt+shift+z. */
+/**
+ * Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z,
+ * or alt+shift+z.
+ */
 const registerRedo = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const redoShortcut = {
     name: names.REDO,
-    preconditionFn: function (workspace) {
+    preconditionFn: function(workspace) {
       return !Gesture.inProgress() && !workspace.options.readOnly;
     },
-    callback: function (workspace) {
+    callback: function(workspace) {
       // 'z' for undo 'Z' is for redo.
       Blockly.hideChaff();
       workspace.undo(true);
@@ -242,21 +236,16 @@ const registerRedo = function() {
   ShortcutRegistry.registry.register(redoShortcut);
 
   const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z,
-      [KeyCodes.SHIFT, KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(
-      ctrlShiftZ, redoShortcut.name);
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.CTRL]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlShiftZ, redoShortcut.name);
 
   const altShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z,
-      [KeyCodes.SHIFT, KeyCodes.ALT]);
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.ALT]);
   ShortcutRegistry.registry.addKeyMapping(altShiftZ, redoShortcut.name);
 
   const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z,
-      [KeyCodes.SHIFT, KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(
-      metaShiftZ, redoShortcut.name);
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.META]);
+  ShortcutRegistry.registry.addKeyMapping(metaShiftZ, redoShortcut.name);
 
   // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
   const ctrlY = ShortcutRegistry.registry.createSerializedKey(
@@ -266,8 +255,8 @@ const registerRedo = function() {
 exports.registerRedo = registerRedo;
 
 /**
- * Registers all default keyboard shortcut item. This should be called once per instance of
- * KeyboardShortcutRegistry.
+ * Registers all default keyboard shortcut item. This should be called once per
+ * instance of KeyboardShortcutRegistry.
  */
 const registerDefaultShortcuts = function() {
   registerEscape();

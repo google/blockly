@@ -19,9 +19,9 @@ const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
-const Blockly = goog.requireType('Blockly');
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
@@ -170,7 +170,7 @@ Mutator.prototype.createEditor_ = function() {
     quarkXml = null;
   }
   const workspaceOptions = new Options(
-      /** @type {!Blockly.BlocklyOptions} */
+      /** @type {!BlocklyOptions} */
       ({
         // If you want to enable disabling, also remove the
         // event filter from workspaceChanged_ .

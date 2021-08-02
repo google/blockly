@@ -19,6 +19,7 @@ goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
 
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -179,14 +180,6 @@ Blockly.Options = function(options) {
    */
   this.plugins = plugins;
 };
-
-/**
- * Blockly options.
- * This interface is further described in
- * `typings/parts/blockly-interfaces.d.ts`.
- * @interface
- */
-Blockly.BlocklyOptions = function() {};
 
 /**
  * Grid Options.

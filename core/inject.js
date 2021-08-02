@@ -34,6 +34,7 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WidgetDiv');
 
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.BlockSvg');
 
 

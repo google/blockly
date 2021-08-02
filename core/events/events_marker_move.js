@@ -37,7 +37,7 @@ goog.requireType('Blockly.Workspace');
  */
 Blockly.Events.MarkerMove = function(opt_block, isCursor, opt_oldNode,
     opt_newNode) {
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  let workspaceId = opt_block ? opt_block.workspace.id : undefined;
   if (opt_newNode && opt_newNode.getType() == Blockly.ASTNode.types.WORKSPACE) {
     workspaceId =
         (/** @type {!Blockly.Workspace} */ (opt_newNode.getLocation())).id;
@@ -81,7 +81,7 @@ Blockly.Events.MarkerMove.prototype.type = Blockly.Events.MARKER_MOVE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.MarkerMove.prototype.toJson = function() {
-  var json = Blockly.Events.MarkerMove.superClass_.toJson.call(this);
+  const json = Blockly.Events.MarkerMove.superClass_.toJson.call(this);
   json['isCursor'] = this.isCursor;
   json['blockId'] = this.blockId;
   json['oldNode'] = this.oldNode;

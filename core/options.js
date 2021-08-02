@@ -31,7 +31,8 @@ const toolbox = goog.require('Blockly.utils.toolbox');
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
  * @param {!BlocklyOptions} options Dictionary of options.
- *     Specification: https://developers.google.com/blockly/guides/get-started/web#configuration
+ *     Specification:
+ * https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
  */
 const Options = function(options) {
@@ -87,11 +88,11 @@ const Options = function(options) {
   /** @type {!toolbox.Position} */
   let toolboxPosition;
   if (horizontalLayout) {
-    toolboxPosition = toolboxAtStart ?
-        toolbox.Position.TOP : toolbox.Position.BOTTOM;
+    toolboxPosition =
+        toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
   } else {
-    toolboxPosition = (toolboxAtStart == rtl) ?
-        toolbox.Position.RIGHT : toolbox.Position.LEFT;
+    toolboxPosition = (toolboxAtStart == rtl) ? toolbox.Position.RIGHT :
+                                                toolbox.Position.LEFT;
   }
 
   let hasCss = options['css'];
@@ -266,7 +267,8 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
     // !!moveOptions.scrollbars.
     if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
       moveOptions.scrollbars = true;
-    } else if (!moveOptions.scrollbars.horizontal &&
+    } else if (
+        !moveOptions.scrollbars.horizontal &&
         !moveOptions.scrollbars.vertical) {
       moveOptions.scrollbars = false;
     }
@@ -370,12 +372,12 @@ Options.parseThemeOptions_ = function(options) {
   const theme = options['theme'] || Classic;
   if (typeof theme == 'string') {
     return /** @type {!Theme} */ (
-      registry.getObject(registry.Type.THEME, theme));
+        registry.getObject(registry.Type.THEME, theme));
   } else if (theme instanceof Theme) {
     return /** @type {!Theme} */ (theme);
   }
-  return Theme.defineTheme(theme.name ||
-      ('builtin' + IdGenerator.getNextUniqueId()), theme);
+  return Theme.defineTheme(
+      theme.name || ('builtin' + IdGenerator.getNextUniqueId()), theme);
 };
 
 /**
@@ -387,9 +389,7 @@ Options.parseThemeOptions_ = function(options) {
  */
 Options.parseToolboxTree = function(toolboxDef) {
   deprecation.warn(
-      'Options.parseToolboxTree',
-      'September 2020',
-      'September 2021',
+      'Options.parseToolboxTree', 'September 2020', 'September 2021',
       'toolbox.parseToolboxTree');
   return toolbox.parseToolboxTree(toolboxDef);
 };

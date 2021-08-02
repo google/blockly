@@ -251,13 +251,13 @@ Blockly.Events.fire = function(event) {
  * @private
  */
 Blockly.Events.fireNow_ = function() {
-  var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
+  const queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
   Blockly.Events.FIRE_QUEUE_.length = 0;
-  for (var i = 0, event; (event = queue[i]); i++) {
+  for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.workspaceId) {
       continue;
     }
-    var workspace = Blockly.Workspace.getById(event.workspaceId);
+    const workspace = Blockly.Workspace.getById(event.workspaceId);
     if (workspace) {
       workspace.fireChangeListener(event);
     }
@@ -271,22 +271,22 @@ Blockly.Events.fireNow_ = function() {
  * @return {!Array<!Blockly.Events.Abstract>} Array of filtered events.
  */
 Blockly.Events.filter = function(queueIn, forward) {
-  var queue = queueIn.slice();  // Shallow copy of queue.
+  let queue = queueIn.slice();  // Shallow copy of queue.
   if (!forward) {
     // Undo is merged in reverse order.
     queue.reverse();
   }
-  var mergedQueue = [];
-  var hash = Object.create(null);
+  const mergedQueue = [];
+  const hash = Object.create(null);
   // Merge duplicates.
-  for (var i = 0, event; (event = queue[i]); i++) {
+  for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
-      var eventType = event.isUiEvent ? Blockly.Events.UI : event.type;
-      var key = [eventType, event.blockId, event.workspaceId].join(' ');
+      const eventType = event.isUiEvent ? Blockly.Events.UI : event.type;
+      const key = [eventType, event.blockId, event.workspaceId].join(' ');
 
-      var lastEntry = hash[key];
-      var lastEvent = lastEntry ? lastEntry.event : null;
+      const lastEntry = hash[key];
+      const lastEvent = lastEntry ? lastEntry.event : null;
       if (!lastEntry) {
         // Each item in the hash table has the event and the index of that event
         // in the input array.  This lets us make sure we only merge adjacent
@@ -330,7 +330,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (var i = 1, event; (event = queue[i]); i++) {
+  for (let i = 1, event; (event = queue[i]); i++) {
     if (event.type == Blockly.Events.CHANGE &&
         event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
@@ -344,7 +344,7 @@ Blockly.Events.filter = function(queueIn, forward) {
  * in the undo stack.  Called by Blockly.Workspace.clearUndo.
  */
 Blockly.Events.clearPendingUndo = function() {
-  for (var i = 0, event; (event = Blockly.Events.FIRE_QUEUE_[i]); i++) {
+  for (let i = 0, event; (event = Blockly.Events.FIRE_QUEUE_[i]); i++) {
     event.recordUndo = false;
   }
 };
@@ -400,9 +400,9 @@ Blockly.Events.setGroup = function(state) {
  * @package
  */
 Blockly.Events.getDescendantIds = function(block) {
-  var ids = [];
-  var descendants = block.getDescendants(false);
-  for (var i = 0, descendant; (descendant = descendants[i]); i++) {
+  const ids = [];
+  const descendants = block.getDescendants(false);
+  for (let i = 0, descendant; (descendant = descendants[i]); i++) {
     ids[i] = descendant.id;
   }
   return ids;
@@ -416,11 +416,11 @@ Blockly.Events.getDescendantIds = function(block) {
  * @throws {Error} if an event type is not found in the registry.
  */
 Blockly.Events.fromJson = function(json, workspace) {
-  var eventClass = Blockly.Events.get(json.type);
+  const eventClass = Blockly.Events.get(json.type);
   if (!eventClass) {
     throw Error('Unknown event type.');
   }
-  var event = new eventClass();
+  const event = new eventClass();
   event.fromJson(json);
   event.workspaceId = workspace.id;
   return event;
@@ -449,17 +449,17 @@ Blockly.Events.disableOrphans = function(event) {
     if (!event.workspaceId) {
       return;
     }
-    var workspace = Blockly.Workspace.getById(event.workspaceId);
-    var block = workspace.getBlockById(event.blockId);
+    const workspace = Blockly.Workspace.getById(event.workspaceId);
+    let block = workspace.getBlockById(event.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.
-      var initialUndoFlag = Blockly.Events.recordUndo;
+      const initialUndoFlag = Blockly.Events.recordUndo;
       try {
         Blockly.Events.recordUndo = false;
-        var parent = block.getParent();
+        const parent = block.getParent();
         if (parent && parent.isEnabled()) {
-          var children = block.getDescendants(false);
-          for (var i = 0, child; (child = children[i]); i++) {
+          const children = block.getDescendants(false);
+          for (let i = 0, child; (child = children[i]); i++) {
             child.setEnabled(true);
           }
         } else if ((block.outputConnection || block.previousConnection) &&

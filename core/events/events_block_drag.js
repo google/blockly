@@ -13,23 +13,23 @@
 goog.module('Blockly.Events.BlockDrag');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a block drag event.
- * @param {!Blockly.Block=} opt_block The top block in the stack that is being
+ * @param {!Block=} opt_block The top block in the stack that is being
  *    dragged. Undefined for a blank event.
  * @param {boolean=} opt_isStart Whether this is the start of a block drag.
  *    Undefined for a blank event.
- * @param {!Array<!Blockly.Block>=} opt_blocks The blocks affected by this
+ * @param {!Array<!Block>=} opt_blocks The blocks affected by this
  *    drag. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
 const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
@@ -45,17 +45,17 @@ const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
 
   /**
    * The blocks affected by this drag event.
-   * @type {!Array<!Blockly.Block>|undefined}
+   * @type {!Array<!Block>|undefined}
    */
   this.blocks = opt_blocks;
 };
-Blockly.utils.object.inherits(BlockDrag, Blockly.Events.UiBase);
+object.inherits(BlockDrag, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockDrag.prototype.type = Blockly.Events.BLOCK_DRAG;
+BlockDrag.prototype.type = Events.BLOCK_DRAG;
 
 /**
  * Encode the event as JSON.
@@ -80,7 +80,7 @@ BlockDrag.prototype.fromJson = function(json) {
   this.blocks = json['blocks'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BLOCK_DRAG, BlockDrag);
+registry.register(registry.Type.EVENT,
+    Events.BLOCK_DRAG, BlockDrag);
 
 exports = BlockDrag;

@@ -64,7 +64,6 @@ TrashcanOpen.prototype.fromJson = function(json) {
   this.isOpen = json['isOpen'];
 };
 
-registry.register(registry.Type.EVENT,
-    Events.TRASHCAN_OPEN, TrashcanOpen);
+registry.register(registry.Type.EVENT, Events.TRASHCAN_OPEN, TrashcanOpen);
 
 exports = TrashcanOpen;

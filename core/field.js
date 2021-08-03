@@ -33,8 +33,8 @@ const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBloc
 const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
 /* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
-const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
+const IRegistrable = goog.require('Blockly.IRegistrable');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */

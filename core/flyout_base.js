@@ -38,7 +38,7 @@ const dom = goog.require('Blockly.utils.dom');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
-const {hideChaff} = goog.require('Blockly');
+const Blockly = goog.require('Blockly');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 /** @suppress {extraRequire} */
@@ -854,7 +854,7 @@ Flyout.prototype.createBlock = function(originalBlock) {
   }
 
   // Close the flyout.
-  hideChaff();
+  Blockly.hideChaff();
 
   const newVariables = Variables.getAddedVariables(
       this.targetWorkspace, variablesBeforeCreation);

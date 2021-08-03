@@ -25,8 +25,8 @@ const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {inherits} = goog.require('Blockly.utils.object');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -70,7 +70,7 @@ const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
    */
   this.isOverflowedY_ = false;
 };
-inherits(FieldMultilineInput, FieldTextInput);
+object.inherits(FieldMultilineInput, FieldTextInput);
 
 /**
  * @override
@@ -89,7 +89,7 @@ FieldMultilineInput.prototype.configure_ = function(config) {
  * @nocollapse
  */
 FieldMultilineInput.fromJson = function(options) {
-  const text = replaceMessageReferences(options['text']);
+  const text = utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);

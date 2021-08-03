@@ -46,11 +46,11 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {addClass, createSvgElement, getFastTextWidth, removeClass, removeNode} = goog.require('Blockly.utils.dom');
+const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {conditionalBind, unbind, Data} = goog.require('Blockly.browserEvents');
-const {getPageOffset} = goog.require('Blockly.utils.style');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const browserEvents = goog.require('Blockly.browserEvents');
+const style = goog.require('Blockly.utils.style');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -150,7 +150,7 @@ const Field = function(value, opt_validator, opt_config) {
 
   /**
    * Mouse down event listener data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.mouseDownWrapper_ = null;
@@ -281,7 +281,7 @@ Field.prototype.SERIALIZABLE = false;
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
-    tooltip = replaceMessageReferences(config['tooltip']);
+    tooltip = utils.replaceMessageReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 
@@ -331,7 +331,7 @@ Field.prototype.init = function() {
     // Field has already been initialized once.
     return;
   }
-  this.fieldGroup_ = createSvgElement(Svg.G, {}, null);
+  this.fieldGroup_ = dom.createSvgElement(Svg.G, {}, null);
   if (!this.isVisible()) {
     this.fieldGroup_.style.display = 'none';
   }
@@ -367,7 +367,7 @@ Field.prototype.initModel = function() {};
  * @protected
  */
 Field.prototype.createBorderRect_ = function() {
-  this.borderRect_ = createSvgElement(
+  this.borderRect_ = dom.createSvgElement(
       Svg.RECT, {
         'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
         'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
@@ -387,7 +387,7 @@ Field.prototype.createBorderRect_ = function() {
  * @protected
  */
 Field.prototype.createTextElement_ = function() {
-  this.textElement_ = createSvgElement(
+  this.textElement_ = dom.createSvgElement(
       Svg.TEXT, {
         'class': 'blocklyText',
       },
@@ -406,7 +406,7 @@ Field.prototype.createTextElement_ = function() {
  */
 Field.prototype.bindEvents_ = function() {
   Tooltip.bindMouseEvents(this.getClickTarget_());
-  this.mouseDownWrapper_ = conditionalBind(
+  this.mouseDownWrapper_ = browserEvents.conditionalBind(
       this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
 };
 
@@ -443,10 +443,10 @@ Field.prototype.dispose = function() {
   Tooltip.unbindMouseEvents(this.getClickTarget_());
 
   if (this.mouseDownWrapper_) {
-    unbind(this.mouseDownWrapper_);
+    browserEvents.unbind(this.mouseDownWrapper_);
   }
 
-  removeNode(this.fieldGroup_);
+  dom.removeNode(this.fieldGroup_);
 
   this.disposed = true;
 };
@@ -460,12 +460,12 @@ Field.prototype.updateEditable = function() {
     return;
   }
   if (this.enabled_ && this.sourceBlock_.isEditable()) {
-    addClass(group, 'blocklyEditableText');
-    removeClass(group, 'blocklyNonEditableText');
+    dom.addClass(group, 'blocklyEditableText');
+    dom.removeClass(group, 'blocklyNonEditableText');
     group.style.cursor = this.CURSOR;
   } else {
-    addClass(group, 'blocklyNonEditableText');
-    removeClass(group, 'blocklyEditableText');
+    dom.addClass(group, 'blocklyNonEditableText');
+    dom.removeClass(group, 'blocklyEditableText');
     group.style.cursor = '';
   }
 };
@@ -643,7 +643,7 @@ Field.prototype.updateSize_ = function(opt_margin) {
 
   let contentWidth = 0;
   if (this.textElement_) {
-    contentWidth = getFastTextWidth(
+    contentWidth = dom.getFastTextWidth(
         this.textElement_, constants.FIELD_TEXT_FONTSIZE,
         constants.FIELD_TEXT_FONTWEIGHT, constants.FIELD_TEXT_FONTFAMILY);
     totalWidth += contentWidth;
@@ -760,7 +760,7 @@ Field.prototype.getScaledBBox = function() {
     }
   } else {
     const bBox = this.borderRect_.getBoundingClientRect();
-    xy = getPageOffset(this.borderRect_);
+    xy = style.getPageOffset(this.borderRect_);
     scaledWidth = bBox.width;
     scaledHeight = bBox.height;
   }
@@ -1020,7 +1020,7 @@ Field.prototype.getClickTarget_ = function() {
  * @protected
  */
 Field.prototype.getAbsoluteXY_ = function() {
-  return getPageOffset(
+  return style.getPageOffset(
       /** @type {!SVGRectElement} */ (this.getClickTarget_()));
 };
 

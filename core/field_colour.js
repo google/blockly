@@ -22,10 +22,10 @@ const Size = goog.require('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const colour = goog.require('Blockly.utils.colour');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {addClass, removeClass} = goog.require('Blockly.utils.dom');
+const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {conditionalBind, unbind, Data} = goog.require('Blockly.browserEvents');
-const {inherits} = goog.require('Blockly.utils.object');
+const browserEvents = goog.require('Blockly.browserEvents');
+const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -65,40 +65,40 @@ const FieldColour = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Mouse click event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onClickWrapper_ = null;
 
   /**
    * Mouse move event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onMouseMoveWrapper_ = null;
 
   /**
    * Mouse enter event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onMouseEnterWrapper_ = null;
 
   /**
    * Mouse leave event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onMouseLeaveWrapper_ = null;
 
   /**
    * Key down event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onKeyDownWrapper_ = null;
 };
-inherits(FieldColour, Field);
+object.inherits(FieldColour, Field);
 
 /**
  * Construct a FieldColour from a JSON arg object.
@@ -472,7 +472,7 @@ FieldColour.prototype.onMouseLeave_ = function() {
   this.picker_.blur();
   const highlighted = this.getHighlighted_();
   if (highlighted) {
-    removeClass(highlighted, 'blocklyColourHighlighted');
+    dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
 };
 
@@ -503,10 +503,10 @@ FieldColour.prototype.setHighlightedCell_ = function(cell, index) {
   // Unhighlight the current item.
   const highlighted = this.getHighlighted_();
   if (highlighted) {
-    removeClass(highlighted, 'blocklyColourHighlighted');
+    dom.removeClass(highlighted, 'blocklyColourHighlighted');
   }
   // Highlight new item.
-  addClass(cell, 'blocklyColourHighlighted');
+  dom.addClass(cell, 'blocklyColourHighlighted');
   // Set new highlighted index.
   this.highlightedIndex_ = index;
 
@@ -560,15 +560,15 @@ FieldColour.prototype.dropdownCreate_ = function() {
 
   // Configure event handler on the table to listen for any event in a cell.
   this.onClickWrapper_ =
-      conditionalBind(table, 'click', this, this.onClick_, true);
-  this.onMouseMoveWrapper_ =
-      conditionalBind(table, 'mousemove', this, this.onMouseMove_, true);
-  this.onMouseEnterWrapper_ =
-      conditionalBind(table, 'mouseenter', this, this.onMouseEnter_, true);
-  this.onMouseLeaveWrapper_ =
-      conditionalBind(table, 'mouseleave', this, this.onMouseLeave_, true);
+      browserEvents.conditionalBind(table, 'click', this, this.onClick_, true);
+  this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
+      table, 'mousemove', this, this.onMouseMove_, true);
+  this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
+      table, 'mouseenter', this, this.onMouseEnter_, true);
+  this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
+      table, 'mouseleave', this, this.onMouseLeave_, true);
   this.onKeyDownWrapper_ =
-      conditionalBind(table, 'keydown', this, this.onKeyDown_);
+      browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
 
   this.picker_ = table;
 };
@@ -579,23 +579,23 @@ FieldColour.prototype.dropdownCreate_ = function() {
  */
 FieldColour.prototype.dropdownDispose_ = function() {
   if (this.onClickWrapper_) {
-    unbind(this.onClickWrapper_);
+    browserEvents.unbind(this.onClickWrapper_);
     this.onClickWrapper_ = null;
   }
   if (this.onMouseMoveWrapper_) {
-    unbind(this.onMouseMoveWrapper_);
+    browserEvents.unbind(this.onMouseMoveWrapper_);
     this.onMouseMoveWrapper_ = null;
   }
   if (this.onMouseEnterWrapper_) {
-    unbind(this.onMouseEnterWrapper_);
+    browserEvents.unbind(this.onMouseEnterWrapper_);
     this.onMouseEnterWrapper_ = null;
   }
   if (this.onMouseLeaveWrapper_) {
-    unbind(this.onMouseLeaveWrapper_);
+    browserEvents.unbind(this.onMouseLeaveWrapper_);
     this.onMouseLeaveWrapper_ = null;
   }
   if (this.onKeyDownWrapper_) {
-    unbind(this.onKeyDownWrapper_);
+    browserEvents.unbind(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
   this.picker_ = null;
@@ -608,32 +608,32 @@ FieldColour.prototype.dropdownDispose_ = function() {
 Css.register([
   /* eslint-disable indent */
   '.blocklyColourTable {',
-    'border-collapse: collapse;',
-    'display: block;',
-    'outline: none;',
-    'padding: 1px;',
+  'border-collapse: collapse;',
+  'display: block;',
+  'outline: none;',
+  'padding: 1px;',
   '}',
 
   '.blocklyColourTable>tr>td {',
-    'border: .5px solid #888;',
-    'box-sizing: border-box;',
-    'cursor: pointer;',
-    'display: inline-block;',
-    'height: 20px;',
-    'padding: 0;',
-    'width: 20px;',
+  'border: .5px solid #888;',
+  'box-sizing: border-box;',
+  'cursor: pointer;',
+  'display: inline-block;',
+  'height: 20px;',
+  'padding: 0;',
+  'width: 20px;',
   '}',
 
   '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
-    'border-color: #eee;',
-    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
-    'position: relative;',
+  'border-color: #eee;',
+  'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
+  'position: relative;',
   '}',
 
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border-color: #eee !important;',
-    'outline: 1px solid #333;',
-    'position: relative;',
+  'border-color: #eee !important;',
+  'outline: 1px solid #333;',
+  'position: relative;',
   '}'
   /* eslint-enable indent */
 ]);

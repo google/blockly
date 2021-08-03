@@ -22,12 +22,12 @@ const Menu = goog.require('Blockly.Menu');
 const MenuItem = goog.require('Blockly.MenuItem');
 const Svg = goog.require('Blockly.utils.Svg');
 const aria = goog.require('Blockly.utils.aria');
+const utilsString = goog.require('Blockly.utils.string');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {commonWordPrefix, commonWordSuffix, shortestStringLength} = goog.require('Blockly.utils.string');
-const {inherits} = goog.require('Blockly.utils.object');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -130,7 +130,7 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    */
   this.svgArrow_ = null;
 };
-inherits(FieldDropdown, Field);
+object.inherits(FieldDropdown, Field);
 
 /**
  * Dropdown image properties.
@@ -405,10 +405,10 @@ FieldDropdown.prototype.trimOptions_ = function() {
   for (let i = 0; i < options.length; i++) {
     const label = options[i][0];
     if (typeof label == 'string') {
-      options[i][0] = replaceMessageReferences(label);
+      options[i][0] = utils.replaceMessageReferences(label);
     } else {
       if (label.alt != null) {
-        options[i][0].alt = replaceMessageReferences(label.alt);
+        options[i][0].alt = utils.replaceMessageReferences(label.alt);
       }
       hasImages = true;
     }
@@ -420,9 +420,9 @@ FieldDropdown.prototype.trimOptions_ = function() {
   for (let i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  const shortest = shortestStringLength(strings);
-  const prefixLength = commonWordPrefix(strings, shortest);
-  const suffixLength = commonWordSuffix(strings, shortest);
+  const shortest = utilsString.shortestStringLength(strings);
+  const prefixLength = utilsString.commonWordPrefix(strings, shortest);
+  const suffixLength = utilsString.commonWordSuffix(strings, shortest);
   if (!prefixLength && !suffixLength) {
     return;
   }

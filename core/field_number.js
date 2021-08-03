@@ -15,8 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const FieldTextInput = goog.require('Blockly.FieldTextInput');
 const aria = goog.require('Blockly.utils.aria');
-const {inherits} = goog.require('Blockly.utils.object');
-const {register} = goog.require('Blockly.fieldRegistry');
+const object = goog.require('Blockly.utils.object');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
 
 
 /**
@@ -74,7 +74,7 @@ const FieldNumber = function(
     this.setConstraints(opt_min, opt_max, opt_precision);
   }
 };
-inherits(FieldNumber, FieldTextInput);
+object.inherits(FieldNumber, FieldTextInput);
 
 /**
  * The default value for this field.
@@ -313,6 +313,6 @@ FieldNumber.prototype.widgetCreate_ = function() {
   return htmlInput;
 };
 
-register('field_number', FieldNumber);
+fieldRegistry.register('field_number', FieldNumber);
 
 exports = FieldNumber;

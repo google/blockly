@@ -23,7 +23,7 @@ const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -167,7 +167,7 @@ FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  let text = replaceMessageReferences(this.text_);
+  let text = utils.replaceMessageReferences(this.text_);
   if (this.workspace_.RTL) {
     // Force text to be RTL by adding an RLM.
     text += '\u200F';
@@ -312,22 +312,13 @@ FlyoutButton.prototype.onMouseUp_ = function(e) {
  */
 Css.register([
   /* eslint-disable indent */
-  '.blocklyFlyoutButton {',
-    'fill: #888;',
-    'cursor: default;',
-  '}',
+  '.blocklyFlyoutButton {', 'fill: #888;', 'cursor: default;', '}',
 
-  '.blocklyFlyoutButtonShadow {',
-    'fill: #666;',
-  '}',
+  '.blocklyFlyoutButtonShadow {', 'fill: #666;', '}',
 
-  '.blocklyFlyoutButton:hover {',
-    'fill: #aaa;',
-  '}',
+  '.blocklyFlyoutButton:hover {', 'fill: #aaa;', '}',
 
-  '.blocklyFlyoutLabel {',
-    'cursor: default;',
-  '}',
+  '.blocklyFlyoutLabel {', 'cursor: default;', '}',
 
   '.blocklyFlyoutLabelBackground {', 'opacity: 0;', '}',
   /* eslint-enable indent */

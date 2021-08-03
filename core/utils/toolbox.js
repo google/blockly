@@ -22,7 +22,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const {CssConfig: CategoryCssConfig} = goog.requireType('Blockly.ToolboxCategory');
 /* eslint-disable-next-line no-unused-vars */
 const {CssConfig: SeparatorCssConfig} = goog.requireType('Blockly.ToolboxSeparator');
-const {textToDom} = goog.require('Blockly.Xml');
+const Xml = goog.require('Blockly.Xml');
 
 /**
  * The information needed to create a block in the toolbox.
@@ -413,7 +413,7 @@ const parseToolboxTree = function(toolboxDef) {
       }
     }
     if (typeof toolboxDef == 'string') {
-      toolboxDef = textToDom(toolboxDef);
+      toolboxDef = Xml.textToDom(toolboxDef);
       if (toolboxDef.nodeName.toLowerCase() != 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }

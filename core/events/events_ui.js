@@ -14,23 +14,23 @@
 goog.module('Blockly.Events.Ui');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a UI event.
- * @param {?Blockly.Block=} opt_block The affected block.  Null for UI events
+ * @param {?Block=} opt_block The affected block.  Null for UI events
  *     that do not have an associated block.  Undefined for a blank event.
  * @param {string=} opt_element One of 'selected', 'comment', 'mutatorOpen',
  *     etc.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
  */
@@ -44,13 +44,13 @@ const Ui = function(opt_block, opt_element, opt_oldValue,
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-Blockly.utils.object.inherits(Ui, Blockly.Events.UiBase);
+object.inherits(Ui, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Ui.prototype.type = Blockly.Events.UI;
+Ui.prototype.type = Events.UI;
 
 /**
  * Encode the event as JSON.
@@ -79,6 +79,6 @@ Ui.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.UI,
+registry.register(registry.Type.EVENT, Events.UI,
     Ui);
 exports = Ui;

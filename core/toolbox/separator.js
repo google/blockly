@@ -17,7 +17,6 @@ goog.module.declareLegacyNamespace();
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
-const IToolboxItem = goog.require('Blockly.IToolboxItem');
 const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
@@ -34,7 +33,6 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * @param {!IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
  * @extends {ToolboxItem}
- * @implements {IToolboxItem}
  */
 const ToolboxSeparator = function(separatorDef, toolbox) {
   ToolboxSeparator.superClass_.constructor.call(this, separatorDef, toolbox);

@@ -47,7 +47,7 @@ Blockly.geras.Drawer.prototype.draw = function() {
   this.drawOutline_();
   this.drawInternals_();
 
-  var pathObject =
+  const pathObject =
     /** @type {!Blockly.geras.PathObject} */ (this.block_.pathObject);
   pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
   pathObject.setHighlightPath(this.highlighter_.getPath());
@@ -142,11 +142,11 @@ Blockly.geras.Drawer.prototype.drawInlineInput_ = function(input) {
  * @override
  */
 Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) {
-  var yPos = input.centerline - input.height / 2;
+  const yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connectionModel) {
     // xPos already contains info about startX
-    var connX = input.xPos + input.connectionWidth +
+    let connX = input.xPos + input.connectionWidth +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
@@ -161,9 +161,9 @@ Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) 
  * @override
  */
 Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row) {
-  var input = row.getLastInput();
+  const input = row.getLastInput();
   if (input.connectionModel) {
-    var connX = row.xPos + row.statementEdge + input.notchOffset;
+    let connX = row.xPos + row.statementEdge + input.notchOffset;
     if (this.info_.RTL) {
       connX *= -1;
     } else {
@@ -178,9 +178,9 @@ Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row)
  * @override
  */
 Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) {
-  var input = row.getLastInput();
+  const input = row.getLastInput();
   if (input.connectionModel) {
-    var connX = row.xPos + row.width +
+    let connX = row.xPos + row.width +
         this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
@@ -193,12 +193,12 @@ Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) 
  * @override
  */
 Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
-  var bottomRow = this.info_.bottomRow;
+  const bottomRow = this.info_.bottomRow;
 
   if (bottomRow.connection) {
-    var connInfo = bottomRow.connection;
-    var x = connInfo.xPos;  // Already contains info about startX.
-    var connX = (this.info_.RTL ? -x : x) +
+    const connInfo = bottomRow.connection;
+    const x = connInfo.xPos;  // Already contains info about startX.
+    const connX = (this.info_.RTL ? -x : x) +
         (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(
         connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);

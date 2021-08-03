@@ -11,10 +11,10 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.Abstract');
+goog.module('Blockly.Events.Abstract');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
-
 goog.requireType('Blockly.Workspace');
 
 
@@ -22,7 +22,7 @@ goog.requireType('Blockly.Workspace');
  * Abstract class for an event.
  * @constructor
  */
-Blockly.Events.Abstract = function() {
+const Abstract = function() {
 
   /**
    * Whether or not the event is blank (to be populated by fromJson).
@@ -55,13 +55,13 @@ Blockly.Events.Abstract = function() {
  * Whether or not the event is a UI event.
  * @type {boolean}
  */
-Blockly.Events.Abstract.prototype.isUiEvent = false;
+Abstract.prototype.isUiEvent = false;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Abstract.prototype.toJson = function() {
+Abstract.prototype.toJson = function() {
   const json = {
     'type': this.type
   };
@@ -75,7 +75,7 @@ Blockly.Events.Abstract.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Abstract.prototype.fromJson = function(json) {
+Abstract.prototype.fromJson = function(json) {
   this.isBlank = false;
   this.group = json['group'];
 };
@@ -84,7 +84,7 @@ Blockly.Events.Abstract.prototype.fromJson = function(json) {
  * Does this event record any change of state?
  * @return {boolean} True if null, false if something changed.
  */
-Blockly.Events.Abstract.prototype.isNull = function() {
+Abstract.prototype.isNull = function() {
   return false;
 };
 
@@ -92,7 +92,7 @@ Blockly.Events.Abstract.prototype.isNull = function() {
  * Run an event.
  * @param {boolean} _forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.Abstract.prototype.run = function(_forward) {
+Abstract.prototype.run = function(_forward) {
   // Defined by subclasses.
 };
 
@@ -102,10 +102,10 @@ Blockly.Events.Abstract.prototype.run = function(_forward) {
  * @throws {Error} if workspace is null.
  * @protected
  */
-Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
+Abstract.prototype.getEventWorkspace_ = function() {
   let workspace;
   if (this.workspaceId) {
-    workspace = Blockly.Workspace.getById(this.workspaceId);
+    workspace = goog.module.get('Blockly.Workspace').getById(this.workspaceId);
   }
   if (!workspace) {
     throw Error('Workspace is null. Event must have been generated from real' +
@@ -113,3 +113,5 @@ Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
   }
   return workspace;
 };
+
+exports = Abstract;

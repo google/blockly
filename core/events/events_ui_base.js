@@ -14,8 +14,8 @@
 goog.module('Blockly.Events.UiBase');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.utils.object');
+const Abstract = goog.require('Blockly.Events.Abstract');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -26,7 +26,7 @@ goog.require('Blockly.utils.object');
  * UI events do not undo or redo.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Abstract}
  * @constructor
  */
 const UiBase = function(opt_workspaceId) {
@@ -47,7 +47,7 @@ const UiBase = function(opt_workspaceId) {
   // UI events do not undo or redo.
   this.recordUndo = false;
 };
-Blockly.utils.object.inherits(UiBase, Blockly.Events.Abstract);
+object.inherits(UiBase, Abstract);
 
 /**
  * Whether or not the event is a UI event.

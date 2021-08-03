@@ -20,7 +20,6 @@ const IdGenerator = goog.require('Blockly.utils.IdGenerator');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Size = goog.require('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
-/* eslint-disable-next-line no-unused-vars */
 const browserEvents = goog.require('Blockly.browserEvents');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
@@ -608,32 +607,32 @@ FieldColour.prototype.dropdownDispose_ = function() {
 Css.register([
   /* eslint-disable indent */
   '.blocklyColourTable {',
-  'border-collapse: collapse;',
-  'display: block;',
-  'outline: none;',
-  'padding: 1px;',
+    'border-collapse: collapse;',
+    'display: block;',
+    'outline: none;',
+    'padding: 1px;',
   '}',
 
   '.blocklyColourTable>tr>td {',
-  'border: .5px solid #888;',
-  'box-sizing: border-box;',
-  'cursor: pointer;',
-  'display: inline-block;',
-  'height: 20px;',
-  'padding: 0;',
-  'width: 20px;',
+    'border: .5px solid #888;',
+    'box-sizing: border-box;',
+    'cursor: pointer;',
+    'display: inline-block;',
+    'height: 20px;',
+    'padding: 0;',
+    'width: 20px;',
   '}',
 
   '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
-  'border-color: #eee;',
-  'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
-  'position: relative;',
+    'border-color: #eee;',
+    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
+    'position: relative;',
   '}',
 
   '.blocklyColourSelected, .blocklyColourSelected:hover {',
-  'border-color: #eee !important;',
-  'outline: 1px solid #333;',
-  'position: relative;',
+    'border-color: #eee !important;',
+    'outline: 1px solid #333;',
+    'position: relative;',
   '}'
   /* eslint-enable indent */
 ]);

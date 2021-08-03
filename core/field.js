@@ -46,7 +46,6 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
-/* eslint-disable-next-line no-unused-vars */
 const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');

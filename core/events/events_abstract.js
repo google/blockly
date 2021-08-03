@@ -62,7 +62,7 @@ Blockly.Events.Abstract.prototype.isUiEvent = false;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.Abstract.prototype.toJson = function() {
-  var json = {
+  const json = {
     'type': this.type
   };
   if (this.group) {
@@ -103,8 +103,9 @@ Blockly.Events.Abstract.prototype.run = function(_forward) {
  * @protected
  */
 Blockly.Events.Abstract.prototype.getEventWorkspace_ = function() {
+  let workspace;
   if (this.workspaceId) {
-    var workspace = Blockly.Workspace.getById(this.workspaceId);
+    workspace = Blockly.Workspace.getById(this.workspaceId);
   }
   if (!workspace) {
     throw Error('Workspace is null. Event must have been generated from real' +

@@ -49,8 +49,8 @@ goog.addDependency('../../core/events/events_selected.js', ['Blockly.Events.Sele
 goog.addDependency('../../core/events/events_theme_change.js', ['Blockly.Events.ThemeChange'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_toolbox_item_select.js', ['Blockly.Events.ToolboxItemSelect'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_trashcan_open.js', ['Blockly.Events.TrashcanOpen'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/events/events_ui.js', ['Blockly.Events.Ui'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object']);
-goog.addDependency('../../core/events/events_ui_base.js', ['Blockly.Events.UiBase'], ['Blockly.Events', 'Blockly.Events.Abstract', 'Blockly.utils.object']);
+goog.addDependency('../../core/events/events_ui.js', ['Blockly.Events.Ui'], ['Blockly.Events', 'Blockly.Events.UiBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/events/events_ui_base.js', ['Blockly.Events.UiBase'], ['Blockly.Events.Abstract', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_var_base.js', ['Blockly.Events.VarBase'], ['Blockly.Events.Abstract', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_var_create.js', ['Blockly.Events.VarCreate'], ['Blockly.Events', 'Blockly.Events.VarBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_var_delete.js', ['Blockly.Events.VarDelete'], ['Blockly.Events', 'Blockly.Events.VarBase', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});

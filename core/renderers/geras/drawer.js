@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.Drawer');
+goog.module('Blockly.geras.Drawer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.geras.Highlighter');
@@ -31,18 +32,18 @@ goog.requireType('Blockly.geras.PathObject');
  * @constructor
  * @extends {Blockly.blockRendering.Drawer}
  */
-Blockly.geras.Drawer = function(block, info) {
-  Blockly.geras.Drawer.superClass_.constructor.call(this, block, info);
+const Drawer = function(block, info) {
+  Drawer.superClass_.constructor.call(this, block, info);
   // Unlike Thrasos, Geras has highlights and drop shadows.
   this.highlighter_ = new Blockly.geras.Highlighter(info);
 };
-Blockly.utils.object.inherits(Blockly.geras.Drawer,
+Blockly.utils.object.inherits(Drawer,
     Blockly.blockRendering.Drawer);
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.draw = function() {
+Drawer.prototype.draw = function() {
   this.hideHiddenIcons_();
   this.drawOutline_();
   this.drawInternals_();
@@ -63,44 +64,44 @@ Blockly.geras.Drawer.prototype.draw = function() {
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawTop_ = function() {
+Drawer.prototype.drawTop_ = function() {
   this.highlighter_.drawTopCorner(this.info_.topRow);
   this.highlighter_.drawRightSideRow(this.info_.topRow);
 
-  Blockly.geras.Drawer.superClass_.drawTop_.call(this);
+  Drawer.superClass_.drawTop_.call(this);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawJaggedEdge_ = function(row) {
+Drawer.prototype.drawJaggedEdge_ = function(row) {
   this.highlighter_.drawJaggedEdge_(row);
 
-  Blockly.geras.Drawer.superClass_.drawJaggedEdge_.call(this, row);
+  Drawer.superClass_.drawJaggedEdge_.call(this, row);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawValueInput_ = function(row) {
+Drawer.prototype.drawValueInput_ = function(row) {
   this.highlighter_.drawValueInput(row);
 
-  Blockly.geras.Drawer.superClass_.drawValueInput_.call(this, row);
+  Drawer.superClass_.drawValueInput_.call(this, row);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawStatementInput_ = function(row) {
+Drawer.prototype.drawStatementInput_ = function(row) {
   this.highlighter_.drawStatementInput(row);
 
-  Blockly.geras.Drawer.superClass_.drawStatementInput_.call(this, row);
+  Drawer.superClass_.drawStatementInput_.call(this, row);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawRightSideRow_ = function(row) {
+Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
 
   this.outlinePath_ +=
@@ -111,10 +112,10 @@ Blockly.geras.Drawer.prototype.drawRightSideRow_ = function(row) {
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawBottom_ = function() {
+Drawer.prototype.drawBottom_ = function() {
   this.highlighter_.drawBottomRow(this.info_.bottomRow);
 
-  Blockly.geras.Drawer.superClass_.drawBottom_.call(this);
+  Drawer.superClass_.drawBottom_.call(this);
 };
 
 /**
@@ -123,25 +124,25 @@ Blockly.geras.Drawer.prototype.drawBottom_ = function() {
  * @protected
  * @override
  */
-Blockly.geras.Drawer.prototype.drawLeft_ = function() {
+Drawer.prototype.drawLeft_ = function() {
   this.highlighter_.drawLeft();
 
-  Blockly.geras.Drawer.superClass_.drawLeft_.call(this);
+  Drawer.superClass_.drawLeft_.call(this);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.drawInlineInput_ = function(input) {
+Drawer.prototype.drawInlineInput_ = function(input) {
   this.highlighter_.drawInlineInput(input);
 
-  Blockly.geras.Drawer.superClass_.drawInlineInput_.call(this, input);
+  Drawer.superClass_.drawInlineInput_.call(this, input);
 };
 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) {
+Drawer.prototype.positionInlineInputConnection_ = function(input) {
   const yPos = input.centerline - input.height / 2;
   // Move the connection.
   if (input.connectionModel) {
@@ -160,7 +161,7 @@ Blockly.geras.Drawer.prototype.positionInlineInputConnection_ = function(input) 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row) {
+Drawer.prototype.positionStatementInputConnection_ = function(row) {
   const input = row.getLastInput();
   if (input.connectionModel) {
     let connX = row.xPos + row.statementEdge + input.notchOffset;
@@ -177,7 +178,7 @@ Blockly.geras.Drawer.prototype.positionStatementInputConnection_ = function(row)
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) {
+Drawer.prototype.positionExternalValueConnection_ = function(row) {
   const input = row.getLastInput();
   if (input.connectionModel) {
     let connX = row.xPos + row.width +
@@ -192,7 +193,7 @@ Blockly.geras.Drawer.prototype.positionExternalValueConnection_ = function(row) 
 /**
  * @override
  */
-Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
+Drawer.prototype.positionNextConnection_ = function() {
   const bottomRow = this.info_.bottomRow;
 
   if (bottomRow.connection) {
@@ -204,3 +205,5 @@ Blockly.geras.Drawer.prototype.positionNextConnection_ = function() {
         connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);
   }
 };
+
+exports = Drawer;

@@ -11,13 +11,11 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.UiBase');
+goog.module('Blockly.Events.UiBase');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
 
 
 /**
@@ -31,8 +29,8 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.UiBase = function(opt_workspaceId) {
-  Blockly.Events.UiBase.superClass_.constructor.call(this);
+const UiBase = function(opt_workspaceId) {
+  UiBase.superClass_.constructor.call(this);
 
   /**
    * Whether or not the event is blank (to be populated by fromJson).
@@ -49,10 +47,12 @@ Blockly.Events.UiBase = function(opt_workspaceId) {
   // UI events do not undo or redo.
   this.recordUndo = false;
 };
-Blockly.utils.object.inherits(Blockly.Events.UiBase, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(UiBase, Blockly.Events.Abstract);
 
 /**
  * Whether or not the event is a UI event.
  * @type {boolean}
  */
-Blockly.Events.UiBase.prototype.isUiEvent = true;
+UiBase.prototype.isUiEvent = true;
+
+exports = UiBase;

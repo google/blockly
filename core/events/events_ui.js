@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.Ui');
+goog.module('Blockly.Events.Ui');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.UiBase');
@@ -33,30 +34,30 @@ goog.requireType('Blockly.Block');
  * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
  */
-Blockly.Events.Ui = function(opt_block, opt_element, opt_oldValue,
+const Ui = function(opt_block, opt_element, opt_oldValue,
     opt_newValue) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.Ui.superClass_.constructor.call(this, workspaceId);
+  Ui.superClass_.constructor.call(this, workspaceId);
 
   this.blockId = opt_block ? opt_block.id : null;
   this.element = typeof opt_element == 'undefined' ? '' : opt_element;
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-Blockly.utils.object.inherits(Blockly.Events.Ui, Blockly.Events.UiBase);
+Blockly.utils.object.inherits(Ui, Blockly.Events.UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
+Ui.prototype.type = Blockly.Events.UI;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Ui.prototype.toJson = function() {
-  const json = Blockly.Events.Ui.superClass_.toJson.call(this);
+Ui.prototype.toJson = function() {
+  const json = Ui.superClass_.toJson.call(this);
   json['element'] = this.element;
   if (this.newValue !== undefined) {
     json['newValue'] = this.newValue;
@@ -71,12 +72,13 @@ Blockly.Events.Ui.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Ui.prototype.fromJson = function(json) {
-  Blockly.Events.Ui.superClass_.fromJson.call(this, json);
+Ui.prototype.fromJson = function(json) {
+  Ui.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.newValue = json['newValue'];
   this.blockId = json['blockId'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.UI,
-    Blockly.Events.Ui);
+    Ui);
+exports = Ui;

@@ -237,9 +237,9 @@ InsertionMarkerManager.prototype.applyConnections = function() {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
       const inferiorConnection = this.localConnection_.isSuperior() ?
-          this.closestConnection_ : this.localConnection_;
-      blockAnimations.connectionUiEffect(
-          inferiorConnection.getSourceBlock());
+          this.closestConnection_ :
+          this.localConnection_;
+      blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock_.getRootBlock();
       rootBlock.bringToFront();
@@ -260,8 +260,8 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 
   this.wouldDeleteBlock_ = this.shouldDelete_(candidate, dragTarget);
 
-  const shouldUpdate = this.wouldDeleteBlock_ ||
-      this.shouldUpdatePreviews_(candidate, dxy);
+  const shouldUpdate =
+      this.wouldDeleteBlock_ || this.shouldUpdatePreviews_(candidate, dxy);
 
   if (shouldUpdate) {
     // Don't fire events for insertion marker creation or movement.
@@ -304,15 +304,15 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
       }
       const resultInput = result.inputList[i];
       if (!resultInput) {
-        throw new Error(InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
-            .replace('%1', 'an input'));
+        throw new Error(InsertionMarkerManager.DUPLICATE_BLOCK_ERROR.replace(
+            '%1', 'an input'));
       }
       for (let j = 0; j < sourceInput.fieldRow.length; j++) {
         const sourceField = sourceInput.fieldRow[j];
         const resultField = resultInput.fieldRow[j];
         if (!resultField) {
-          throw new Error(InsertionMarkerManager.DUPLICATE_BLOCK_ERROR
-              .replace('%1', 'a field'));
+          throw new Error(InsertionMarkerManager.DUPLICATE_BLOCK_ERROR.replace(
+              '%1', 'a field'));
         }
         resultField.setValue(sourceField.getValue());
       }
@@ -391,20 +391,22 @@ InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
       // Slightly prefer the existing preview over a new preview.
       return !(
           candidateClosest &&
-          radius > curDistance -
-                  internalConstants.CURRENT_CONNECTION_PREFERENCE);
+          radius >
+              curDistance - internalConstants.CURRENT_CONNECTION_PREFERENCE);
     } else if (!this.localConnection_ && !this.closestConnection_) {
-    // We weren't showing a preview before, but we should now.
+      // We weren't showing a preview before, but we should now.
       return true;
     } else {
-      console.error('Only one of localConnection_ and closestConnection_ was set.');
+      console.error(
+          'Only one of localConnection_ and closestConnection_ was set.');
     }
   } else {  // No connection found.
     // Only need to update if we were showing a preview before.
     return !!(this.localConnection_ && this.closestConnection_);
   }
 
-  console.error('Returning true from shouldUpdatePreviews, but it\'s not clear why.');
+  console.error(
+      'Returning true from shouldUpdatePreviews, but it\'s not clear why.');
   return true;
 };
 
@@ -431,11 +433,7 @@ InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
       radius = neighbour.radius;
     }
   }
-  return {
-    closest: candidateClosest,
-    local: candidateLocal,
-    radius: radius
-  };
+  return {closest: candidateClosest, local: candidateLocal, radius: radius};
 };
 
 /**
@@ -447,10 +445,10 @@ InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
 InsertionMarkerManager.prototype.getStartRadius_ = function() {
   // If there is already a connection highlighted,
   // increase the radius we check for making new connections.
-  // Why? When a connection is highlighted, blocks move around when the insertion
-  // marker is created, which could cause the connection became out of range.
-  // By increasing radiusConnection when a connection already exists,
-  // we never "lose" the connection from the offset.
+  // Why? When a connection is highlighted, blocks move around when the
+  // insertion marker is created, which could cause the connection became out of
+  // range. By increasing radiusConnection when a connection already exists, we
+  // never "lose" the connection from the offset.
   if (this.closestConnection_ && this.localConnection_) {
     return internalConstants.CONNECTING_SNAP_RADIUS;
   }
@@ -471,11 +469,11 @@ InsertionMarkerManager.prototype.shouldDelete_ = function(
     candidate, dragTarget) {
   if (dragTarget) {
     const componentManager = this.workspace_.getComponentManager();
-    const isDeleteArea = componentManager.hasCapability(dragTarget.id,
-        ComponentManager.Capability.DELETE_AREA);
+    const isDeleteArea = componentManager.hasCapability(
+        dragTarget.id, ComponentManager.Capability.DELETE_AREA);
     if (isDeleteArea) {
       return (
-        /** @type {!IDeleteArea} */ (dragTarget))
+                 /** @type {!IDeleteArea} */ (dragTarget))
           .wouldDelete(this.topBlock_, candidate && !!candidate.closest);
     }
   }
@@ -568,8 +566,10 @@ InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate) {
     const closestChanged = this.closestConnection_ != candidate.closest;
     const localChanged = this.localConnection_ != candidate.local;
 
-    // Also hide if we had a preview before but now we're going to delete instead.
-    if (hadPreview && (closestChanged || localChanged || this.wouldDeleteBlock_)) {
+    // Also hide if we had a preview before but now we're going to delete
+    // instead.
+    if (hadPreview &&
+        (closestChanged || localChanged || this.wouldDeleteBlock_)) {
       this.hidePreview_();
     }
   }
@@ -587,8 +587,8 @@ InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate) {
  */
 InsertionMarkerManager.prototype.hidePreview_ = function() {
   if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
-      this.workspace_.getRenderer()
-          .shouldHighlightConnection(this.closestConnection_)) {
+      this.workspace_.getRenderer().shouldHighlightConnection(
+          this.closestConnection_)) {
     this.closestConnection_.unhighlight();
   }
   if (this.fadedBlock_) {
@@ -614,7 +614,8 @@ InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   const imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);
 
   if (imConn == this.markerConnection_) {
-    throw Error('Made it to showInsertionMarker_ even though the marker isn\'t ' +
+    throw Error(
+        'Made it to showInsertionMarker_ even though the marker isn\'t ' +
         'changing');
   }
 
@@ -656,8 +657,7 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   const isFirstInStatementStack =
       (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
 
-  const isFirstInOutputStack =
-      imConn.type == connectionTypes.INPUT_VALUE &&
+  const isFirstInOutputStack = imConn.type == connectionTypes.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -665,8 +665,8 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
     imConn.targetBlock().unplug(false);
   }
   // Inside of a C-block, first statement connection.
-  else if (imConn.type == connectionTypes.NEXT_STATEMENT &&
-      imConn != markerNext) {
+  else if (
+      imConn.type == connectionTypes.NEXT_STATEMENT && imConn != markerNext) {
     const innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 
@@ -682,7 +682,8 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   }
 
   if (imConn.targetConnection) {
-    throw Error('markerConnection_ still connected at the end of ' +
+    throw Error(
+        'markerConnection_ still connected at the end of ' +
         'disconnectInsertionMarker');
   }
 

@@ -22,10 +22,10 @@ const Options = goog.requireType('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
 const Scrollbar = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const {Position} = goog.require('Blockly.utils.toolbox');
-const {getScrollDeltaPixels} = goog.require('Blockly.utils');
-const {inherits} = goog.require('Blockly.utils.object');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
@@ -42,7 +42,7 @@ goog.require('Blockly.constants');
 const VerticalFlyout = function(workspaceOptions) {
   VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
-inherits(VerticalFlyout, Flyout);
+object.inherits(VerticalFlyout, Flyout);
 
 /**
  * The name of the vertical flyout in the registry.
@@ -94,14 +94,14 @@ VerticalFlyout.prototype.getX = function() {
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
-      if (this.toolboxPosition_ == Position.LEFT) {
+      if (this.toolboxPosition_ == toolbox.Position.LEFT) {
         x = toolboxMetrics.width;
       } else {
         x = viewMetrics.width - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
-      if (this.toolboxPosition_ == Position.LEFT) {
+      if (this.toolboxPosition_ == toolbox.Position.LEFT) {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
@@ -110,7 +110,7 @@ VerticalFlyout.prototype.getX = function() {
     }
     // Trashcan flyout is opposite the main flyout.
   } else {
-    if (this.toolboxPosition_ == Position.LEFT) {
+    if (this.toolboxPosition_ == toolbox.Position.LEFT) {
       x = 0;
     } else {
       // Because the anchor point of the flyout is on the left, but we want
@@ -165,7 +165,7 @@ VerticalFlyout.prototype.position = function() {
  * @private
  */
 VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  const atRight = this.toolboxPosition_ == Position.RIGHT;
+  const atRight = this.toolboxPosition_ == toolbox.Position.RIGHT;
   const totalWidth = width + this.CORNER_RADIUS;
 
   // Decide whether to start on the left or right.
@@ -201,7 +201,7 @@ VerticalFlyout.prototype.scrollToStart = function() {
  * @protected
  */
 VerticalFlyout.prototype.wheel_ = function(e) {
-  const scrollDelta = getScrollDeltaPixels(e);
+  const scrollDelta = utils.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
     const metricsManager = this.workspace_.getMetricsManager();
@@ -306,7 +306,7 @@ VerticalFlyout.prototype.getClientRect = function() {
   const BIG_NUM = 1000000000;
   const left = flyoutRect.left;
 
-  if (this.toolboxPosition_ == Position.LEFT) {
+  if (this.toolboxPosition_ == toolbox.Position.LEFT) {
     const width = flyoutRect.width;
     return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
@@ -315,7 +315,7 @@ VerticalFlyout.prototype.getClientRect = function() {
 };
 
 /**
- * Compute width of flyout.  Position mat under each block.
+ * Compute width of flyout.  toolbox.Position mat under each block.
  * For RTL: Lay out the blocks and buttons to be right-aligned.
  * @protected
  */
@@ -363,7 +363,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
     }
 
     if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == Position.LEFT &&
+        this.toolboxPosition_ == toolbox.Position.LEFT &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie

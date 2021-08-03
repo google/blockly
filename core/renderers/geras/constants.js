@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.ConstantProvider');
+goog.module('Blockly.geras.ConstantProvider');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.object');
@@ -23,8 +24,8 @@ goog.require('Blockly.utils.object');
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}
  */
-Blockly.geras.ConstantProvider = function() {
-  Blockly.geras.ConstantProvider.superClass_.constructor.call(this);
+const ConstantProvider = function() {
+  ConstantProvider.superClass_.constructor.call(this);
 
   /**
    * @override
@@ -47,15 +48,15 @@ Blockly.geras.ConstantProvider = function() {
    */
   this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 };
-Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
+Blockly.utils.object.inherits(ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 
 /**
  * @override
  */
-Blockly.geras.ConstantProvider.prototype.getCSS_ = function(selector) {
-  return Blockly.geras.ConstantProvider.superClass_.getCSS_.call(this, selector)
+ConstantProvider.prototype.getCSS_ = function(selector) {
+  return ConstantProvider.superClass_.getCSS_.call(this, selector)
       .concat([
         /* eslint-disable indent */
         // Insertion marker.
@@ -67,3 +68,5 @@ Blockly.geras.ConstantProvider.prototype.getCSS_ = function(selector) {
         /* eslint-enable indent */
       ]);
 };
+
+exports = ConstantProvider;

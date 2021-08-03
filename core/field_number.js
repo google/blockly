@@ -15,8 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const FieldTextInput = goog.require('Blockly.FieldTextInput');
 const aria = goog.require('Blockly.utils.aria');
-const object = goog.require('Blockly.utils.object');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const object = goog.require('Blockly.utils.object');
 
 
 /**

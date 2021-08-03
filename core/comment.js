@@ -20,6 +20,7 @@ const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,12 +28,11 @@ const Size = goog.requireType('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
-const Css = goog.require('Blockly.Css');
+const userAgent = goog.require('Blockly.utils.userAgent');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */

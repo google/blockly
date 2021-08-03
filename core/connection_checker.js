@@ -20,8 +20,8 @@ const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const connectionTypes = goog.require('Blockly.connectionTypes');
-const registry = goog.require('Blockly.registry');
 const internalConstants = goog.require('Blockly.internalConstants');
+const registry = goog.require('Blockly.registry');
 
 
 /**

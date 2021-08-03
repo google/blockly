@@ -16,8 +16,8 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Marker = goog.require('Blockly.Marker');
-const registry = goog.require('Blockly.registry');
 const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**

@@ -17,9 +17,9 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const Size = goog.requireType('Blockly.utils.Size');
 
 
 /**

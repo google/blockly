@@ -22,10 +22,10 @@ const Options = goog.requireType('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
 const Scrollbar = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
-const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */

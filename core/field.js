@@ -32,9 +32,9 @@ const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBloc
 /* eslint-disable-next-line no-unused-vars */
 const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
 /* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
 const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
@@ -45,11 +45,11 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const userAgent = goog.require('Blockly.utils.userAgent');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');

@@ -73,6 +73,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "nextStatement": null,
     "style": "logic_blocks",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
+    "suppressPrefixSuffix": true,
     "mutator": "controls_if_mutator",
     "extensions": ["controls_if_tooltip"]
   },
@@ -106,6 +107,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": "logic_blocks",
     "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
+    "suppressPrefixSuffix": true,
     "extensions": ["controls_if_tooltip"]
   },
   // Block for comparison operator.
@@ -294,12 +296,6 @@ Blockly.Extensions.register('logic_op_tooltip',
 Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   elseifCount_: 0,
   elseCount_: 0,
-
-  /**
-   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
-   * code.  These will be handled manually in this block's generators.
-   */
-  suppressPrefixSuffix: true,
 
   /**
    * Create XML to represent the number of else-if and else inputs.

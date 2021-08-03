@@ -34,8 +34,7 @@ const registry = goog.require('Blockly.registry');
  * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
  */
-const Ui = function(opt_block, opt_element, opt_oldValue,
-    opt_newValue) {
+const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
   Ui.superClass_.constructor.call(this, workspaceId);
 
@@ -79,6 +78,5 @@ Ui.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.UI,
-    Ui);
+registry.register(registry.Type.EVENT, Events.UI, Ui);
 exports = Ui;

@@ -14,15 +14,15 @@
 goog.module('Blockly.geras.ConstantProvider');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.utils.object');
+const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
  * @constructor
  * @package
- * @extends {Blockly.blockRendering.ConstantProvider}
+ * @extends {BaseConstantProvider}
  */
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);
@@ -48,8 +48,8 @@ const ConstantProvider = function() {
    */
   this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 };
-Blockly.utils.object.inherits(ConstantProvider,
-    Blockly.blockRendering.ConstantProvider);
+object.inherits(ConstantProvider,
+  BaseConstantProvider);
 
 
 /**

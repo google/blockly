@@ -14,7 +14,9 @@
 goog.module('Blockly.IConnectionChecker');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 
 

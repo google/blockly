@@ -14,8 +14,11 @@
 goog.module('Blockly.IPositionable');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
 const IComponent = goog.require('Blockly.IComponent');
+/* eslint-disable-next-line no-unused-vars */
 const Rect = goog.requireType('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
 const {UiMetrics} = goog.requireType('Blockly.MetricsManager');
 
 

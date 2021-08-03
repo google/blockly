@@ -17,6 +17,8 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.clipboard');
+goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
@@ -35,6 +37,7 @@ goog.require('Blockly.Events.VarCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.inject');
 goog.require('Blockly.inputTypes');
+goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
@@ -70,12 +73,15 @@ goog.requireType('Blockly.Workspace');
  */
 Blockly.VERSION = 'uncompiled';
 
-/**
- * The main workspace most recently used.
- * Set by Blockly.WorkspaceSvg.prototype.markFocused
- * @type {Blockly.Workspace}
- */
-Blockly.mainWorkspace = null;
+// Add a getter and setter pair for Blockly.mainWorkspace, for legacy reasons.
+Object.defineProperty(Blockly, 'mainWorkspace', {
+  set: function(x) {
+    Blockly.common.setMainWorkspace(x);
+  },
+  get: function() {
+    return Blockly.common.getMainWorkspace();
+  }
+});
 
 /**
  * Currently selected block.
@@ -89,27 +95,6 @@ Blockly.selected = null;
  * @package
  */
 Blockly.draggingConnections = [];
-
-/**
- * Contents of the local clipboard.
- * @type {Element}
- * @private
- */
-Blockly.clipboardXml_ = null;
-
-/**
- * Source of the local clipboard.
- * @type {Blockly.WorkspaceSvg}
- * @private
- */
-Blockly.clipboardSource_ = null;
-
-/**
- * Map of types to type counts for the clipboard object and descendants.
- * @type {Object}
- * @private
- */
-Blockly.clipboardTypeCounts_ = null;
 
 /**
  * Cached value for whether 3D is supported.
@@ -135,9 +120,7 @@ Blockly.svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
-      'Blockly.svgSize',
-      'March 2021',
-      'March 2022',
+      'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
@@ -194,7 +177,7 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.mainWorkspace;
+  var mainWorkspace = Blockly.common.getMainWorkspace();
   if (!mainWorkspace) {
     return;
   }
@@ -219,7 +202,8 @@ Blockly.deleteBlock = function(selected) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     if (selected.outputConnection) {
-      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      // Do not attempt to heal rows
+      // (https://github.com/google/blockly/issues/4832)
       selected.dispose(false, true);
     } else {
       selected.dispose(/* heal */ true, true);
@@ -233,39 +217,14 @@ Blockly.deleteBlock = function(selected) {
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
  */
-Blockly.copy = function(toCopy) {
-  var data = toCopy.toCopyData();
-  if (data) {
-    Blockly.clipboardXml_ = data.xml;
-    Blockly.clipboardSource_ = data.source;
-    Blockly.clipboardTypeCounts_ = data.typeCounts;
-  }
-};
+Blockly.copy = Blockly.clipboard.copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
  */
-Blockly.paste = function() {
-  if (!Blockly.clipboardXml_) {
-    return false;
-  }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  var workspace = Blockly.clipboardSource_;
-  if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace;
-  }
-  if (Blockly.clipboardTypeCounts_ &&
-      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
-    Blockly.Events.setGroup(true);
-    workspace.paste(Blockly.clipboardXml_);
-    Blockly.Events.setGroup(false);
-    return true;
-  }
-  return false;
-};
+Blockly.paste = Blockly.clipboard.paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -273,19 +232,7 @@ Blockly.paste = function() {
  *     copied.
  * @package
  */
-Blockly.duplicate = function(toDuplicate) {
-  // Save the clipboard.
-  var clipboardXml = Blockly.clipboardXml_;
-  var clipboardSource = Blockly.clipboardSource_;
-
-  // Create a duplicate via a copy/paste operation.
-  Blockly.copy(toDuplicate);
-  toDuplicate.workspace.paste(Blockly.clipboardXml_);
-
-  // Restore the clipboard.
-  Blockly.clipboardXml_ = clipboardXml;
-  Blockly.clipboardSource_ = clipboardSource;
-};
+Blockly.duplicate = Blockly.clipboard.duplicate;
 
 /**
  * Cancel the native context menu, unless the focus is on an HTML input widget.
@@ -309,7 +256,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.DropDownDiv.hideWithoutAnimation();
 
   var onlyClosePopups = !!opt_onlyClosePopups;
-  var workspace = Blockly.getMainWorkspace();
+  var workspace = Blockly.common.getMainWorkspace();
   var autoHideables = workspace.getComponentManager().getComponents(
       Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(function(autoHideable) {
@@ -323,9 +270,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
  * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
  */
-Blockly.getMainWorkspace = function() {
-  return /** @type {!Blockly.Workspace} */ (Blockly.mainWorkspace);
-};
+Blockly.getMainWorkspace = Blockly.common.getMainWorkspace;
 
 /**
  * Wrapper to window.alert() that app developers may override to
@@ -401,9 +346,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
-        };
+        Blockly.Blocks[typename] = {init: Blockly.jsonInitFactory_(elem)};
       }
     }
   }
@@ -424,8 +367,9 @@ Blockly.isNumber = function(str) {
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
+  return Blockly.utils.colour.hsvToHex(
+      hue, Blockly.internalConstants.HSV_SATURATION,
+      Blockly.internalConstants.HSV_VALUE * 255);
 };
 
 /**
@@ -596,3 +540,38 @@ Blockly.TOOLBOX_AT_LEFT = Blockly.utils.toolbox.Position.LEFT;
  * @see Blockly.utils.toolbox.Position.RIGHT
  */
 Blockly.TOOLBOX_AT_RIGHT = Blockly.utils.toolbox.Position.RIGHT;
+
+// Aliases to allow external code to access these values for legacy reasons.
+Blockly.LINE_MODE_MULTIPLIER = Blockly.internalConstants.LINE_MODE_MULTIPLIER;
+Blockly.PAGE_MODE_MULTIPLIER = Blockly.internalConstants.PAGE_MODE_MULTIPLIER;
+Blockly.DRAG_RADIUS = Blockly.internalConstants.DRAG_RADIUS;
+Blockly.FLYOUT_DRAG_RADIUS = Blockly.internalConstants.FLYOUT_DRAG_RADIUS;
+Blockly.SNAP_RADIUS = Blockly.internalConstants.SNAP_RADIUS;
+Blockly.CONNECTING_SNAP_RADIUS =
+    Blockly.internalConstants.CONNECTING_SNAP_RADIUS;
+Blockly.CURRENT_CONNECTION_PREFERENCE =
+    Blockly.internalConstants.CURRENT_CONNECTION_PREFERENCE;
+Blockly.BUMP_DELAY = Blockly.internalConstants.BUMP_DELAY;
+Blockly.BUMP_RANDOMNESS = Blockly.internalConstants.BUMP_RANDOMNESS;
+Blockly.COLLAPSE_CHARS = Blockly.internalConstants.COLLAPSE_CHARS;
+Blockly.LONGPRESS = Blockly.internalConstants.LONGPRESS;
+Blockly.SOUND_LIMIT = Blockly.internalConstants.SOUND_LIMIT;
+Blockly.DRAG_STACK = Blockly.internalConstants.DRAG_STACK;
+Blockly.HSV_SATURATION = Blockly.internalConstants.HSV_SATURATION;
+Blockly.HSV_VALUE = Blockly.internalConstants.HSV_VALUE;
+Blockly.SPRITE = Blockly.internalConstants.SPRITE;
+Blockly.DRAG_NONE = Blockly.internalConstants.DRAG_NONE;
+Blockly.DRAG_STICKY = Blockly.internalConstants.DRAG_STICKY;
+Blockly.DRAG_BEGIN = Blockly.internalConstants.DRAG_BEGIN;
+Blockly.DRAG_FREE = Blockly.internalConstants.DRAG_FREE;
+Blockly.OPPOSITE_TYPE = Blockly.internalConstants.OPPOSITE_TYPE;
+Blockly.VARIABLE_CATEGORY_NAME =
+    Blockly.internalConstants.VARIABLE_CATEGORY_NAME;
+Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME =
+    Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
+Blockly.PROCEDURE_CATEGORY_NAME =
+    Blockly.internalConstants.PROCEDURE_CATEGORY_NAME;
+Blockly.RENAME_VARIABLE_ID = Blockly.internalConstants.RENAME_VARIABLE_ID;
+Blockly.DELETE_VARIABLE_ID = Blockly.internalConstants.DELETE_VARIABLE_ID;
+Blockly.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+Blockly.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;

@@ -14,7 +14,8 @@
 goog.module('Blockly.IKeyboardAccessible');
 goog.module.declareLegacyNamespace();
 
-const {KeyboardShortcut} = goog.requireType('Blockly.ShortcutRegistry');
+/* eslint-disable-next-line no-unused-vars */
+const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -25,7 +26,8 @@ const IKeyboardAccessible = function() {};
 
 /**
  * Handles the given keyboard shortcut.
- * @param {!KeyboardShortcut} shortcut The shortcut to be handled.
+ * @param {!ShortcutRegistry.KeyboardShortcut} shortcut The shortcut to be
+ *     handled.
  * @return {boolean} True if the shortcut has been handled, false otherwise.
  */
 IKeyboardAccessible.prototype.onShortcut;

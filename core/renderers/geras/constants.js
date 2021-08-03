@@ -48,25 +48,23 @@ const ConstantProvider = function() {
    */
   this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 };
-object.inherits(ConstantProvider,
-  BaseConstantProvider);
+object.inherits(ConstantProvider, BaseConstantProvider);
 
 
 /**
  * @override
  */
 ConstantProvider.prototype.getCSS_ = function(selector) {
-  return ConstantProvider.superClass_.getCSS_.call(this, selector)
-      .concat([
-        /* eslint-disable indent */
-        // Insertion marker.
-        selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-        selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-          'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-          'stroke: none;',
-        '}',
-        /* eslint-enable indent */
-      ]);
+  return ConstantProvider.superClass_.getCSS_.call(this, selector).concat([
+    /* eslint-disable indent */
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+    selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+      'stroke: none;',
+    '}',
+    /* eslint-enable indent */
+  ]);
 };
 
 exports = ConstantProvider;

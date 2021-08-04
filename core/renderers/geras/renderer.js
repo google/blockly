@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.Renderer');
+goog.module('Blockly.geras.Renderer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
@@ -34,8 +35,8 @@ goog.requireType('Blockly.Theme');
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.geras.Renderer = function(name) {
-  Blockly.geras.Renderer.superClass_.constructor.call(this, name);
+const Renderer = function(name) {
+  Renderer.superClass_.constructor.call(this, name);
 
   /**
    * The renderer's highlight constant provider.
@@ -44,7 +45,7 @@ Blockly.geras.Renderer = function(name) {
    */
   this.highlightConstants_ = null;
 };
-Blockly.utils.object.inherits(Blockly.geras.Renderer,
+Blockly.utils.object.inherits(Renderer,
     Blockly.blockRendering.Renderer);
 
 /**
@@ -53,9 +54,9 @@ Blockly.utils.object.inherits(Blockly.geras.Renderer,
  * @package
  * @override
  */
-Blockly.geras.Renderer.prototype.init = function(theme,
+Renderer.prototype.init = function(theme,
     opt_rendererOverrides) {
-  Blockly.geras.Renderer.superClass_.init.call(this, theme,
+  Renderer.superClass_.init.call(this, theme,
       opt_rendererOverrides);
   this.highlightConstants_ = this.makeHighlightConstants_();
   this.highlightConstants_.init();
@@ -64,15 +65,15 @@ Blockly.geras.Renderer.prototype.init = function(theme,
 /**
  * @override
  */
-Blockly.geras.Renderer.prototype.refreshDom = function(svg, theme) {
-  Blockly.geras.Renderer.superClass_.refreshDom.call(this, svg, theme);
+Renderer.prototype.refreshDom = function(svg, theme) {
+  Renderer.superClass_.refreshDom.call(this, svg, theme);
   this.getHighlightConstants().init();
 };
 
 /**
  * @override
  */
-Blockly.geras.Renderer.prototype.makeConstants_ = function() {
+Renderer.prototype.makeConstants_ = function() {
   return new Blockly.geras.ConstantProvider();
 };
 
@@ -83,7 +84,7 @@ Blockly.geras.Renderer.prototype.makeConstants_ = function() {
  * @protected
  * @override
  */
-Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
+Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.geras.RenderInfo(this, block);
 };
 
@@ -96,7 +97,7 @@ Blockly.geras.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @protected
  * @override
  */
-Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
+Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.geras.Drawer(block,
       /** @type {!Blockly.geras.RenderInfo} */ (info));
 };
@@ -110,7 +111,7 @@ Blockly.geras.Renderer.prototype.makeDrawer_ = function(block, info) {
  * @package
  * @override
  */
-Blockly.geras.Renderer.prototype.makePathObject = function(root, style) {
+Renderer.prototype.makePathObject = function(root, style) {
   return new Blockly.geras.PathObject(root, style,
       /** @type {!Blockly.geras.ConstantProvider} */ (this.getConstants()));
 };
@@ -121,7 +122,7 @@ Blockly.geras.Renderer.prototype.makePathObject = function(root, style) {
  *     provider.
  * @protected
  */
-Blockly.geras.Renderer.prototype.makeHighlightConstants_ = function() {
+Renderer.prototype.makeHighlightConstants_ = function() {
   return new Blockly.geras.HighlightConstantProvider(
       /** @type {!Blockly.blockRendering.ConstantProvider} */
       (this.getConstants()));
@@ -134,10 +135,12 @@ Blockly.geras.Renderer.prototype.makeHighlightConstants_ = function() {
  *     provider.
  * @package
  */
-Blockly.geras.Renderer.prototype.getHighlightConstants = function() {
+Renderer.prototype.getHighlightConstants = function() {
   return (
     /** @type {!Blockly.geras.HighlightConstantProvider} */
     (this.highlightConstants_));
 };
 
-Blockly.blockRendering.register('geras', Blockly.geras.Renderer);
+Blockly.blockRendering.register('geras', Renderer);
+
+exports = Renderer;

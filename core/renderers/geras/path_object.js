@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.geras.PathObject');
+goog.module('Blockly.geras.PathObject');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.geras.ConstantProvider');
@@ -33,7 +34,7 @@ goog.require('Blockly.utils.Svg');
  * @extends {Blockly.blockRendering.PathObject}
  * @package
  */
-Blockly.geras.PathObject = function(root, style, constants) {
+const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.geras.ConstantProvider}
@@ -87,13 +88,13 @@ Blockly.geras.PathObject = function(root, style, constants) {
    */
   this.style = style;
 };
-Blockly.utils.object.inherits(Blockly.geras.PathObject,
+Blockly.utils.object.inherits(PathObject,
     Blockly.blockRendering.PathObject);
 
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.setPath = function(mainPath) {
+PathObject.prototype.setPath = function(mainPath) {
   this.svgPath.setAttribute('d', mainPath);
   this.svgPathDark.setAttribute('d', mainPath);
 };
@@ -103,14 +104,14 @@ Blockly.geras.PathObject.prototype.setPath = function(mainPath) {
  * @param {string} highlightPath The highlight path.
  * @package
  */
-Blockly.geras.PathObject.prototype.setHighlightPath = function(highlightPath) {
+PathObject.prototype.setHighlightPath = function(highlightPath) {
   this.svgPathLight.setAttribute('d', highlightPath);
 };
 
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.flipRTL = function() {
+PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
   this.svgPathLight.setAttribute('transform', 'scale(-1 1)');
@@ -120,13 +121,13 @@ Blockly.geras.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.applyColour = function(block) {
+PathObject.prototype.applyColour = function(block) {
   this.svgPathLight.style.display = '';
   this.svgPathDark.style.display = '';
   this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
   this.svgPathDark.setAttribute('fill', this.colourDark);
 
-  Blockly.geras.PathObject.superClass_.applyColour.call(this, block);
+  PathObject.superClass_.applyColour.call(this, block);
 
   this.svgPath.setAttribute('stroke', 'none');
 };
@@ -134,7 +135,7 @@ Blockly.geras.PathObject.prototype.applyColour = function(block) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
+PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
   this.colourDark =
       Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2) ||
@@ -144,7 +145,7 @@ Blockly.geras.PathObject.prototype.setStyle = function(blockStyle) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
+PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
     this.svgPath.setAttribute('filter',
         'url(#' + this.constants.embossFilterId + ')');
@@ -158,7 +159,7 @@ Blockly.geras.PathObject.prototype.updateHighlighted = function(highlighted) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.updateShadow_ = function(shadow) {
+PathObject.prototype.updateShadow_ = function(shadow) {
   if (shadow) {
     this.svgPathLight.style.display = 'none';
     this.svgPathDark.setAttribute('fill', this.style.colourSecondary);
@@ -170,9 +171,11 @@ Blockly.geras.PathObject.prototype.updateShadow_ = function(shadow) {
 /**
  * @override
  */
-Blockly.geras.PathObject.prototype.updateDisabled_ = function(disabled) {
-  Blockly.geras.PathObject.superClass_.updateDisabled_.call(this, disabled);
+PathObject.prototype.updateDisabled_ = function(disabled) {
+  PathObject.superClass_.updateDisabled_.call(this, disabled);
   if (disabled) {
     this.svgPath.setAttribute('stroke', 'none');
   }
 };
+
+exports = PathObject;

@@ -63,7 +63,7 @@ Blockly.geras.RenderInfo.prototype.getRenderer = function() {
 Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
   Blockly.geras.RenderInfo.superClass_.populateBottomRow_.call(this);
 
-  var followsStatement = this.block_.inputList.length &&
+  const followsStatement = this.block_.inputList.length &&
       this.block_.inputList[this.block_.inputList.length - 1].type ==
           Blockly.inputTypes.STATEMENT;
 
@@ -112,14 +112,14 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
  * @override
  */
 Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
-  var hasExternalInputs = false;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  let hasExternalInputs = false;
+  for (let i = 0, row; (row = this.rows[i]); i++) {
     if (row.hasExternalInput) {
       hasExternalInputs = true;
     }
   }
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    var oldElems = row.elements;
+  for (let i = 0, row; (row = this.rows[i]); i++) {
+    const oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
     if (row.startsWithElemSpacer()) {
@@ -130,15 +130,15 @@ Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
     if (!oldElems.length) {
       continue;
     }
-    for (var e = 0; e < oldElems.length - 1; e++) {
+    for (let e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
-      var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
+      const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
       row.elements.push(
           new Blockly.blockRendering.InRowSpacer(this.constants_, spacing));
     }
     row.elements.push(oldElems[oldElems.length - 1]);
     if (row.endsWithElemSpacer()) {
-      var spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
+      let spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
       if (hasExternalInputs && row.hasDummyInput) {
         spacing += this.constants_.TAB_WIDTH;
       }
@@ -264,7 +264,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
+      const offset = (this.RTL ? 1 : -1) *
           this.constants_.DARK_PATH_OFFSET / 2;
       return next.notchOffset + offset;
     }
@@ -277,7 +277,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     } else if (Blockly.blockRendering.Types.isNextConnection(next)) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      var offset = (this.RTL ? 1 : -1) *
+      const offset = (this.RTL ? 1 : -1) *
           this.constants_.DARK_PATH_OFFSET / 2;
       return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
     }
@@ -339,7 +339,7 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return row.yPos + elem.height / 2;
   }
   if (Blockly.blockRendering.Types.isBottomRow(row)) {
-    var baseline = row.yPos + row.height - row.descenderHeight;
+    const baseline = row.yPos + row.height - row.descenderHeight;
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
       return baseline + elem.height / 2;
     }
@@ -352,7 +352,7 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return row.capline + elem.height / 2;
   }
 
-  var result = row.yPos;
+  let result = row.yPos;
   if (Blockly.blockRendering.Types.isField(elem) ||
       Blockly.blockRendering.Types.isIcon(elem)) {
     result += (elem.height / 2);
@@ -379,9 +379,9 @@ Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
 
   // Walk backgrounds through rows on the block, keeping track of the right
   // input edge.
-  var nextRightEdge = 0;
-  var prevInput = null;
-  for (var i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
+  let nextRightEdge = 0;
+  let prevInput = null;
+  for (let i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
     row.nextRightEdge = nextRightEdge;
     if (Blockly.blockRendering.Types.isInputRow(row)) {
       if (row.hasStatement) {
@@ -398,17 +398,17 @@ Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
   }
   // Walk down each row from the top, comparing the prev and next right input
   // edges and setting the desired width to the max of the two.
-  var prevRightEdge = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  let prevRightEdge = 0;
+  for (let i = 0, row; (row = this.rows[i]); i++) {
     if (row.hasStatement) {
       prevRightEdge = this.getDesiredRowWidth_(row);
     } else if (Blockly.blockRendering.Types.isSpacer(row)) {
       // Set the spacer row to the max of the prev or next input width.
       row.width = Math.max(prevRightEdge, row.nextRightEdge);
     } else {
-      var currentWidth = row.width;
-      var desiredWidth = Math.max(prevRightEdge, row.nextRightEdge);
-      var missingSpace = desiredWidth - currentWidth;
+      const currentWidth = row.width;
+      const desiredWidth = Math.max(prevRightEdge, row.nextRightEdge);
+      const missingSpace = desiredWidth - currentWidth;
       if (missingSpace > 0) {
         this.addAlignmentPadding_(row, missingSpace);
       }
@@ -437,9 +437,9 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
-  var widestRowWithConnectedBlocks = 0;
-  var yCursor = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  let widestRowWithConnectedBlocks = 0;
+  let yCursor = 0;
+  for (let i = 0, row; (row = this.rows[i]); i++) {
     row.yPos = yCursor;
     row.xPos = this.startX;
     yCursor += row.height;
@@ -447,11 +447,11 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
-    var heightWithoutHat = yCursor - this.topRow.ascenderHeight;
+    const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
     if (row == this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
-      var diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
+      const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
       this.bottomRow.height += diff;
       yCursor += diff;
     }

@@ -30,8 +30,8 @@ Blockly.Names = function(reservedWords, opt_variablePrefix) {
   this.variablePrefix_ = opt_variablePrefix || '';
   this.reservedDict_ = Object.create(null);
   if (reservedWords) {
-    var splitWords = reservedWords.split(',');
-    for (var i = 0; i < splitWords.length; i++) {
+    const splitWords = reservedWords.split(',');
+    for (let i = 0; i < splitWords.length; i++) {
       this.reservedDict_[splitWords[i]] = true;
     }
   }
@@ -91,7 +91,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
         'workspace.getVariableMap());');
     return null;
   }
-  var variable = this.variableMap_.getVariableById(id);
+  const variable = this.variableMap_.getVariableById(id);
   if (variable) {
     return variable.name;
   }
@@ -103,8 +103,8 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * @param {!Blockly.Workspace} workspace Workspace to generate variables from.
  */
 Blockly.Names.prototype.populateVariables = function(workspace) {
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0; i < variables.length; i++) {
+  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
     this.getName(
         variables[i].getId(), Blockly.internalConstants.VARIABLE_CATEGORY_NAME);
   }
@@ -115,10 +115,10 @@ Blockly.Names.prototype.populateVariables = function(workspace) {
  * @param {!Blockly.Workspace} workspace Workspace to generate procedures from.
  */
 Blockly.Names.prototype.populateProcedures = function(workspace) {
-  var procedures = Blockly.Procedures.allProcedures(workspace);
+  let procedures = Blockly.Procedures.allProcedures(workspace);
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
-  for (var i = 0; i < procedures.length; i++) {
+  for (let i = 0; i < procedures.length; i++) {
     this.getName(
         procedures[i][0], Blockly.internalConstants.PROCEDURE_CATEGORY_NAME);
   }
@@ -133,28 +133,28 @@ Blockly.Names.prototype.populateProcedures = function(workspace) {
  * @return {string} An entity name that is legal in the exported language.
  */
 Blockly.Names.prototype.getName = function(nameOrId, realm) {
-  var name = nameOrId;
+  let name = nameOrId;
   if (realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME) {
-    var varName = this.getNameForUserVariable_(nameOrId);
+    const varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
       name = varName;
     }
   }
-  var normalizedName = name.toLowerCase();
+  const normalizedName = name.toLowerCase();
 
-  var isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
+  const isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
       realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
 
-  var prefix = isVar ? this.variablePrefix_ : '';
+  const prefix = isVar ? this.variablePrefix_ : '';
   if (!(realm in this.db_)) {
     this.db_[realm] = Object.create(null);
   }
-  var realmDb = this.db_[realm];
+  const realmDb = this.db_[realm];
   if (normalizedName in realmDb) {
     return prefix + realmDb[normalizedName];
   }
-  var safeName = this.getDistinctName(name, realm);
+  const safeName = this.getDistinctName(name, realm);
   realmDb[normalizedName] = safeName.substr(prefix.length);
   return safeName;
 };
@@ -166,7 +166,7 @@ Blockly.Names.prototype.getName = function(nameOrId, realm) {
  * @return {!Array<string>} A list of Blockly entity names (no constraints).
  */
 Blockly.Names.prototype.getUserNames = function(realm) {
-  var realmDb = this.db_[realm] || {};
+  const realmDb = this.db_[realm] || {};
   return Object.keys(realmDb);
 };
 
@@ -181,8 +181,8 @@ Blockly.Names.prototype.getUserNames = function(realm) {
  * @return {string} An entity name that is legal in the exported language.
  */
 Blockly.Names.prototype.getDistinctName = function(name, realm) {
-  var safeName = this.safeName_(name);
-  var i = '';
+  let safeName = this.safeName_(name);
+  let i = '';
   while (this.dbReverse_[safeName + i] ||
          (safeName + i) in this.reservedDict_) {
     // Collision with existing name.  Create a unique name.
@@ -190,9 +190,9 @@ Blockly.Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
+  const isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
       realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
-  var prefix = isVar ? this.variablePrefix_ : '';
+  const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;
 };
 

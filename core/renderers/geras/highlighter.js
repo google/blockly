@@ -73,8 +73,7 @@ const Highlighter = function(info) {
   this.puzzleTabPaths_ = this.highlightConstants_.PUZZLE_TAB;
   this.notchPaths_ = this.highlightConstants_.NOTCH;
   this.startPaths_ = this.highlightConstants_.START_HAT;
-  this.jaggedTeethPaths_ =
-      this.highlightConstants_.JAGGED_TEETH;
+  this.jaggedTeethPaths_ = this.highlightConstants_.JAGGED_TEETH;
 };
 
 /**
@@ -101,8 +100,8 @@ Highlighter.prototype.drawTopCorner = function(row) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.
-      this.steps_ += svgPaths.lineOnAxis('H',
-          elem.xPos + elem.width - this.highlightOffset_);
+      this.steps_ += svgPaths.lineOnAxis(
+          'H', elem.xPos + elem.width - this.highlightOffset_);
     }
   }
 
@@ -114,8 +113,8 @@ Highlighter.prototype.drawJaggedEdge_ = function(row) {
   if (this.info_.RTL) {
     const remainder =
         row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
-    this.steps_ += this.jaggedTeethPaths_.pathLeft +
-        svgPaths.lineOnAxis('v', remainder);
+    this.steps_ +=
+        this.jaggedTeethPaths_.pathLeft + svgPaths.lineOnAxis('v', remainder);
   }
 };
 
@@ -130,8 +129,7 @@ Highlighter.prototype.drawValueInput = function(row) {
         this.puzzleTabPaths_.pathDown(this.RTL_) +
         svgPaths.lineOnAxis('v', belowTabHeight);
   } else {
-    this.steps_ +=
-        svgPaths.moveTo(input.xPos + input.width, row.yPos) +
+    this.steps_ += svgPaths.moveTo(input.xPos + input.width, row.yPos) +
         this.puzzleTabPaths_.pathDown(this.RTL_);
   }
 };
@@ -140,16 +138,14 @@ Highlighter.prototype.drawStatementInput = function(row) {
   const input = row.getLastInput();
   if (this.RTL_) {
     const innerHeight = row.height - (2 * this.insideCornerPaths_.height);
-    this.steps_ +=
-        svgPaths.moveTo(input.xPos, row.yPos) +
+    this.steps_ += svgPaths.moveTo(input.xPos, row.yPos) +
         this.insideCornerPaths_.pathTop(this.RTL_) +
         svgPaths.lineOnAxis('v', innerHeight) +
         this.insideCornerPaths_.pathBottom(this.RTL_) +
         svgPaths.lineTo(
             row.width - input.xPos - this.insideCornerPaths_.width, 0);
   } else {
-    this.steps_ +=
-        svgPaths.moveTo(input.xPos, row.yPos + row.height) +
+    this.steps_ += svgPaths.moveTo(input.xPos, row.yPos + row.height) +
         this.insideCornerPaths_.pathBottom(this.RTL_) +
         svgPaths.lineTo(
             row.width - input.xPos - this.insideCornerPaths_.width, 0);
@@ -164,8 +160,8 @@ Highlighter.prototype.drawRightSideRow = function(row) {
   if (this.RTL_) {
     this.steps_ += svgPaths.lineOnAxis('H', rightEdge);
     if (row.height > this.highlightOffset_) {
-      this.steps_ += svgPaths.lineOnAxis('V',
-          row.yPos + row.height - this.highlightOffset_);
+      this.steps_ += svgPaths.lineOnAxis(
+          'V', row.yPos + row.height - this.highlightOffset_);
     }
   }
 };
@@ -243,7 +239,6 @@ Highlighter.prototype.drawInlineInput = function(input) {
         // Bottom.
         svgPaths.lineOnAxis('h', bottomHighlightWidth);
   } else {
-
     this.inlineSteps_ +=
         // Go to top right corner.
         svgPaths.moveTo(input.xPos + input.width + offset, startY) +

@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.Highlighter');
+goog.module('Blockly.geras.Highlighter');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
@@ -38,7 +39,7 @@ goog.requireType('Blockly.geras.RenderInfo');
  * @package
  * @constructor
  */
-Blockly.geras.Highlighter = function(info) {
+const Highlighter = function(info) {
   this.info_ = info;
   this.steps_ = '';
   this.inlineSteps_ = '';
@@ -78,11 +79,11 @@ Blockly.geras.Highlighter = function(info) {
  * @return {string} The steps for the highlight path.
  * @package
  */
-Blockly.geras.Highlighter.prototype.getPath = function() {
+Highlighter.prototype.getPath = function() {
   return this.steps_ + '\n' + this.inlineSteps_;
 };
 
-Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {
+Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_ += Blockly.utils.svgPaths.moveBy(row.xPos, this.info_.startY);
   for (let i = 0, elem; (elem = row.elements[i]); i++) {
     if (Blockly.blockRendering.Types.isLeftSquareCorner(elem)) {
@@ -106,7 +107,7 @@ Blockly.geras.Highlighter.prototype.drawTopCorner = function(row) {
   this.steps_ += Blockly.utils.svgPaths.lineOnAxis('H', right);
 };
 
-Blockly.geras.Highlighter.prototype.drawJaggedEdge_ = function(row) {
+Highlighter.prototype.drawJaggedEdge_ = function(row) {
   if (this.info_.RTL) {
     const remainder =
         row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
@@ -115,7 +116,7 @@ Blockly.geras.Highlighter.prototype.drawJaggedEdge_ = function(row) {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawValueInput = function(row) {
+Highlighter.prototype.drawValueInput = function(row) {
   const input = row.getLastInput();
   if (this.RTL_) {
     const belowTabHeight = row.height - input.connectionHeight;
@@ -132,7 +133,7 @@ Blockly.geras.Highlighter.prototype.drawValueInput = function(row) {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
+Highlighter.prototype.drawStatementInput = function(row) {
   const input = row.getLastInput();
   if (this.RTL_) {
     const innerHeight = row.height - (2 * this.insideCornerPaths_.height);
@@ -152,7 +153,7 @@ Blockly.geras.Highlighter.prototype.drawStatementInput = function(row) {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
+Highlighter.prototype.drawRightSideRow = function(row) {
   const rightEdge = row.xPos + row.width - this.highlightOffset_;
   if (row.followsStatement) {
     this.steps_ += Blockly.utils.svgPaths.lineOnAxis('H', rightEdge);
@@ -166,7 +167,7 @@ Blockly.geras.Highlighter.prototype.drawRightSideRow = function(row) {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
+Highlighter.prototype.drawBottomRow = function(row) {
   // Highlight the vertical edge of the bottom row on the input side.
   // Highlighting is always from the top left, both in LTR and RTL.
   if (this.RTL_) {
@@ -185,7 +186,7 @@ Blockly.geras.Highlighter.prototype.drawBottomRow = function(row) {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawLeft = function() {
+Highlighter.prototype.drawLeft = function() {
   const outputConnection = this.info_.outputConnection;
   if (outputConnection) {
     const tabBottom =
@@ -213,7 +214,7 @@ Blockly.geras.Highlighter.prototype.drawLeft = function() {
   }
 };
 
-Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
+Highlighter.prototype.drawInlineInput = function(input) {
   const offset = this.highlightOffset_;
 
   // Relative to the block's left.
@@ -252,3 +253,5 @@ Blockly.geras.Highlighter.prototype.drawInlineInput = function(input) {
         this.puzzleTabPaths_.pathDown(this.RTL_);
   }
 };
+
+exports = Highlighter;

@@ -17,16 +17,21 @@
 goog.module('Blockly.Events');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.registry');
-goog.require('Blockly.utils');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const Abstract = goog.requireType('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
 const BlockCreate = goog.requireType('Blockly.Events.BlockCreate');
+/* eslint-disable-next-line no-unused-vars */
 const BlockMove = goog.requireType('Blockly.Events.BlockMove');
+/* eslint-disable-next-line no-unused-vars */
 const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
+/* eslint-disable-next-line no-unused-vars */
 const CommentMove = goog.requireType('Blockly.Events.CommentMove');
+let Workspace = goog.forwardDeclare('Blockly.Workspace');
+const registry = goog.require('Blockly.registry');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -290,7 +295,7 @@ exports.FIRE_QUEUE_ = FIRE_QUEUE;
 
 /**
  * Create a custom event and fire it.
- * @param {!Blockly.Events.Abstract} event Custom data for event.
+ * @param {!Abstract} event Custom data for event.
  */
 const fire = function(event) {
   if (!isEnabled()) {
@@ -314,7 +319,8 @@ const fireNow = function() {
     if (!event.workspaceId) {
       continue;
     }
-    const workspace = Blockly.Workspace.getById(event.workspaceId);
+    Workspace = goog.module.get('Blockly.Workspace');
+    const workspace = Workspace.getById(event.workspaceId);
     if (workspace) {
       workspace.fireChangeListener(event);
     }
@@ -325,9 +331,9 @@ exports.fireNow_ = fireNow;
 
 /**
  * Filter the queued events and merge duplicates.
- * @param {!Array<!Blockly.Events.Abstract>} queueIn Array of events.
+ * @param {!Array<!Abstract>} queueIn Array of events.
  * @param {boolean} forward True if forward (redo), false if backward (undo).
- * @return {!Array<!Blockly.Events.Abstract>} Array of filtered events.
+ * @return {!Array<!Abstract>} Array of filtered events.
  */
 const filter = function(queueIn, forward) {
   let queue = queueIn.slice();  // Shallow copy of queue.
@@ -401,7 +407,7 @@ exports.filter = filter;
 
 /**
  * Modify pending undo events so that when they are fired they don't land
- * in the undo stack.  Called by Blockly.Workspace.clearUndo.
+ * in the undo stack.  Called by Workspace.clearUndo.
  */
 const clearPendingUndo = function() {
   for (let i = 0, event; (event = FIRE_QUEUE[i]); i++) {
@@ -452,7 +458,7 @@ exports.getGroup = getGroup;
  */
 const setGroup = function(state) {
   if (typeof state == 'boolean') {
-    group = state ? Blockly.utils.genUid() : '';
+    group = state ? utils.genUid() : '';
   } else {
     group = state;
   }
@@ -461,7 +467,7 @@ exports.setGroup = setGroup;
 
 /**
  * Compute a list of the IDs of the specified block and all its descendants.
- * @param {!Blockly.Block} block The root block.
+ * @param {!Block} block The root block.
  * @return {!Array<string>} List of block IDs.
  */
 const getDescendantIds = function(block) {
@@ -478,8 +484,8 @@ exports.getDescendantIds = getDescendantIds;
 /**
  * Decode the JSON into an event.
  * @param {!Object} json JSON representation.
- * @param {!Blockly.Workspace} workspace Target workspace for event.
- * @return {!Blockly.Events.Abstract} The event represented by the JSON.
+ * @param {!Workspace} workspace Target workspace for event.
+ * @return {!Abstract} The event represented by the JSON.
  * @throws {Error} if an event type is not found in the registry.
  */
 const fromJson = function(json, workspace) {
@@ -497,11 +503,11 @@ exports.fromJson = fromJson;
 /**
  * Gets the class for a specific event type from the registry.
  * @param {string} eventType The type of the event to get.
- * @return {?function(new:Blockly.Events.Abstract, ...?)} The event class with
+ * @return {?function(new:Abstract, ...?)} The event class with
  *     the given type or null if none exists.
  */
 const get = function(eventType) {
-  return Blockly.registry.getClass(Blockly.registry.Type.EVENT, eventType);
+  return registry.getClass(registry.Type.EVENT, eventType);
 };
 exports.get = get;
 
@@ -510,7 +516,7 @@ exports.get = get;
  * Use this on applications where all blocks should be connected to a top block.
  * Recommend setting the 'disable' option to 'false' in the config so that
  * users don't try to re-enable disabled orphan blocks.
- * @param {!Blockly.Events.Abstract} event Custom data for event.
+ * @param {!Abstract} event Custom data for event.
  */
 const disableOrphans = function(event) {
   if (event.type == MOVE ||
@@ -518,7 +524,8 @@ const disableOrphans = function(event) {
     if (!event.workspaceId) {
       return;
     }
-    const workspace = Blockly.Workspace.getById(event.workspaceId);
+    Workspace = goog.module.get('Blockly.Workspace');
+    const workspace = Workspace.getById(event.workspaceId);
     let block = workspace.getBlockById(event.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.

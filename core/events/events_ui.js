@@ -79,4 +79,5 @@ Ui.prototype.fromJson = function(json) {
 };
 
 registry.register(registry.Type.EVENT, Events.UI, Ui);
+
 exports = Ui;

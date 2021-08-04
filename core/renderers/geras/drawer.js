@@ -40,8 +40,7 @@ const Drawer = function(block, info) {
   // Unlike Thrasos, Geras has highlights and drop shadows.
   this.highlighter_ = new Highlighter(info);
 };
-object.inherits(Drawer,
-    BaseDrawer);
+object.inherits(Drawer, BaseDrawer);
 
 /**
  * @override
@@ -52,7 +51,7 @@ Drawer.prototype.draw = function() {
   this.drawInternals_();
 
   const pathObject =
-    /** @type {!PathObject} */ (this.block_.pathObject);
+      /** @type {!PathObject} */ (this.block_.pathObject);
   pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
   pathObject.setHighlightPath(this.highlighter_.getPath());
   if (this.info_.RTL) {
@@ -107,8 +106,7 @@ Drawer.prototype.drawStatementInput_ = function(row) {
 Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
 
-  this.outlinePath_ +=
-      svgPaths.lineOnAxis('H', row.xPos + row.width) +
+  this.outlinePath_ += svgPaths.lineOnAxis('H', row.xPos + row.width) +
       svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
@@ -150,14 +148,14 @@ Drawer.prototype.positionInlineInputConnection_ = function(input) {
   // Move the connection.
   if (input.connectionModel) {
     // xPos already contains info about startX
-    let connX = input.xPos + input.connectionWidth +
-        this.constants_.DARK_PATH_OFFSET;
+    let connX =
+        input.xPos + input.connectionWidth + this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
     input.connectionModel.setOffsetInBlock(
-        connX, yPos + input.connectionOffsetY +
-        this.constants_.DARK_PATH_OFFSET);
+        connX,
+        yPos + input.connectionOffsetY + this.constants_.DARK_PATH_OFFSET);
   }
 };
 
@@ -173,8 +171,8 @@ Drawer.prototype.positionStatementInputConnection_ = function(row) {
     } else {
       connX += this.constants_.DARK_PATH_OFFSET;
     }
-    input.connectionModel.setOffsetInBlock(connX,
-        row.yPos + this.constants_.DARK_PATH_OFFSET);
+    input.connectionModel.setOffsetInBlock(
+        connX, row.yPos + this.constants_.DARK_PATH_OFFSET);
   }
 };
 
@@ -184,8 +182,7 @@ Drawer.prototype.positionStatementInputConnection_ = function(row) {
 Drawer.prototype.positionExternalValueConnection_ = function(row) {
   const input = row.getLastInput();
   if (input.connectionModel) {
-    let connX = row.xPos + row.width +
-        this.constants_.DARK_PATH_OFFSET;
+    let connX = row.xPos + row.width + this.constants_.DARK_PATH_OFFSET;
     if (this.info_.RTL) {
       connX *= -1;
     }
@@ -202,8 +199,8 @@ Drawer.prototype.positionNextConnection_ = function() {
   if (bottomRow.connection) {
     const connInfo = bottomRow.connection;
     const x = connInfo.xPos;  // Already contains info about startX.
-    const connX = (this.info_.RTL ? -x : x) +
-        (this.constants_.DARK_PATH_OFFSET / 2);
+    const connX =
+        (this.info_.RTL ? -x : x) + (this.constants_.DARK_PATH_OFFSET / 2);
     connInfo.connectionModel.setOffsetInBlock(
         connX, bottomRow.baseline + this.constants_.DARK_PATH_OFFSET);
   }

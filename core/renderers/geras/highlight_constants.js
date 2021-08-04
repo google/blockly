@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.HighlightConstantProvider');
+goog.module('Blockly.geras.HighlightConstantProvider');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.svgPaths');
@@ -26,7 +27,7 @@ goog.require('Blockly.utils.svgPaths');
  * @constructor
  * @package
  */
-Blockly.geras.HighlightConstantProvider = function(constants) {
+const HighlightConstantProvider = function(constants) {
   /**
    * The renderer's constant provider.
    * @type {!Blockly.blockRendering.ConstantProvider}
@@ -52,7 +53,7 @@ Blockly.geras.HighlightConstantProvider = function(constants) {
  * Initialize shape objects based on the constants set in the constructor.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.init = function() {
+HighlightConstantProvider.prototype.init = function() {
 
   /**
    * An object containing sizing and path information about inside corner
@@ -101,7 +102,7 @@ Blockly.geras.HighlightConstantProvider.prototype.init = function() {
  *     inside corner highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() {
+HighlightConstantProvider.prototype.makeInsideCorner = function() {
   const radius = this.constantProvider.CORNER_RADIUS;
   const offset = this.OFFSET;
 
@@ -147,7 +148,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makeInsideCorner = function() 
  *     outside corner highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeOutsideCorner = function() {
+HighlightConstantProvider.prototype.makeOutsideCorner = function() {
   const radius = this.constantProvider.CORNER_RADIUS;
   const offset = this.OFFSET;
 
@@ -197,7 +198,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makeOutsideCorner = function()
  *     puzzle tab highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makePuzzleTab = function() {
+HighlightConstantProvider.prototype.makePuzzleTab = function() {
   const width = this.constantProvider.TAB_WIDTH;
   const height = this.constantProvider.TAB_HEIGHT;
 
@@ -251,7 +252,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makePuzzleTab = function() {
  *     notch highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeNotch = function() {
+HighlightConstantProvider.prototype.makeNotch = function() {
   // This is only for the previous connection.
   const pathLeft =
       Blockly.utils.svgPaths.lineOnAxis(
@@ -267,7 +268,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makeNotch = function() {
  *     collapsed block edge highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
+HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
   const pathLeft =
       Blockly.utils.svgPaths.lineTo(5.1, 2.6) +
       Blockly.utils.svgPaths.moveBy(-10.2, 6.8) +
@@ -284,7 +285,7 @@ Blockly.geras.HighlightConstantProvider.prototype.makeJaggedTeeth = function() {
  *     start highlights.
  * @package
  */
-Blockly.geras.HighlightConstantProvider.prototype.makeStartHat = function() {
+HighlightConstantProvider.prototype.makeStartHat = function() {
   const hatHeight = this.constantProvider.START_HAT.height;
   const pathRtl =
       Blockly.utils.svgPaths.moveBy(25, -8.7) +
@@ -309,3 +310,5 @@ Blockly.geras.HighlightConstantProvider.prototype.makeStartHat = function() {
     }
   };
 };
+
+exports = HighlightConstantProvider;

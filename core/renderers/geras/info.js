@@ -48,8 +48,7 @@ const object = goog.require('Blockly.utils.object');
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-object.inherits(RenderInfo,
-  BaseRenderInfo);
+object.inherits(RenderInfo, BaseRenderInfo);
 
 /**
  * Get the block renderer in use.
@@ -78,7 +77,6 @@ RenderInfo.prototype.populateBottomRow_ = function() {
     this.bottomRow.minHeight =
         this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
   }
-
 };
 
 /**
@@ -87,22 +85,19 @@ RenderInfo.prototype.populateBottomRow_ = function() {
 RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == inputTypes.VALUE) {
-    activeRow.elements.push(
-        new InlineInput(this.constants_, input));
+    activeRow.elements.push(new InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
   } else if (input.type == inputTypes.STATEMENT) {
-    activeRow.elements.push(
-        new StatementInput(this.constants_, input));
+    activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
   } else if (input.type == inputTypes.VALUE) {
-    activeRow.elements.push(
-        new ExternalValueInput(this.constants_, input));
+    activeRow.elements.push(new ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
   } else if (input.type == inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
-    activeRow.minHeight = Math.max(activeRow.minHeight,
-        this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+    activeRow.minHeight =
+        Math.max(activeRow.minHeight, this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
   // Ignore row alignment if inline.
@@ -136,8 +131,7 @@ RenderInfo.prototype.addElemSpacing_ = function() {
     for (let e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
       const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
-      row.elements.push(
-          new InRowSpacer(this.constants_, spacing));
+      row.elements.push(new InRowSpacer(this.constants_, spacing));
     }
     row.elements.push(oldElems[oldElems.length - 1]);
     if (row.endsWithElemSpacer()) {
@@ -146,8 +140,7 @@ RenderInfo.prototype.addElemSpacing_ = function() {
         spacing += this.constants_.TAB_WIDTH;
       }
       // There's a spacer after the last element in the row.
-      row.elements.push(new InRowSpacer(
-          this.constants_, spacing));
+      row.elements.push(new InRowSpacer(this.constants_, spacing));
     }
   }
 };
@@ -174,11 +167,9 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and the end of the row or a statement input.
-  if (!Types.isInput(prev) && (!next ||
-      Types.isStatementInput(next))) {
+  if (!Types.isInput(prev) && (!next || Types.isStatementInput(next))) {
     // Between an editable field and the end of the row.
-    if (Types.isField(prev) &&
-        (/** @type {Field} */ (prev)).isEditable) {
+    if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Padding at the end of an icon-only row to make the block shape clearer.
@@ -216,11 +207,9 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and an input.
-  if (!Types.isInput(prev) &&
-      next && Types.isInput(next)) {
+  if (!Types.isInput(prev) && next && Types.isInput(next)) {
     // Between an editable field and an input.
-    if (Types.isField(prev) &&
-        (/** @type {Field} */ (prev)).isEditable) {
+    if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
       if (Types.isInlineInput(next)) {
         return this.constants_.SMALL_PADDING;
       } else if (Types.isExternalInput(next)) {
@@ -239,14 +228,12 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between an icon and an icon or field.
-  if (Types.isIcon(prev) &&
-      next && !Types.isInput(next)) {
+  if (Types.isIcon(prev) && next && !Types.isInput(next)) {
     return this.constants_.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
-  if (Types.isInlineInput(prev) &&
-      next && Types.isField(next)) {
+  if (Types.isInlineInput(prev) && next && Types.isField(next)) {
     // Editable field after inline input.
     if ((/** @type {Field} */ (next)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
@@ -267,8 +254,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     } else if (Types.isNextConnection(next)) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      const offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
+      const offset = (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
       return next.notchOffset + offset;
     }
   }
@@ -280,17 +266,15 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
     } else if (Types.isNextConnection(next)) {
       // Next connections are shifted slightly to the left (in both LTR and RTL)
       // to make the dark path under the previous connection show through.
-      const offset = (this.RTL ? 1 : -1) *
-          this.constants_.DARK_PATH_OFFSET / 2;
+      const offset = (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
       return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
     }
   }
 
   // Spacing between two fields of the same editability.
-  if (Types.isField(prev) &&
-      next && Types.isField(next) &&
+  if (Types.isField(prev) && next && Types.isField(next) &&
       ((/** @type {Field} */ (prev)).isEditable ==
-          (/** @type {Field} */ (next)).isEditable)) {
+       (/** @type {Field} */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
 
@@ -307,13 +291,11 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
  */
 RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height.
-  if (Types.isTopRow(prev) &&
-      Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if (Types.isTopRow(prev) ||
-      Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) || Types.isBottomRow(next)) {
     return this.constants_.NO_PADDING;
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
@@ -356,8 +338,7 @@ RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   }
 
   let result = row.yPos;
-  if (Types.isField(elem) ||
-      Types.isIcon(elem)) {
+  if (Types.isField(elem) || Types.isIcon(elem)) {
     result += (elem.height / 2);
     if ((row.hasInlineInput || row.hasStatement) &&
         elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
@@ -423,14 +404,12 @@ RenderInfo.prototype.alignRowElements_ = function() {
 /**
  * @override
  */
-RenderInfo.prototype.getDesiredRowWidth_ = function(
-    row) {
+RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
   // Limit the width of a statement row when a block is inline.
   if (this.isInline && row.hasStatement) {
     return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH + this.startX;
   }
-  return RenderInfo.superClass_.getDesiredRowWidth_.call(this,
-      row);
+  return RenderInfo.superClass_.getDesiredRowWidth_.call(this, row);
 };
 
 /**
@@ -463,17 +442,17 @@ RenderInfo.prototype.finalize_ = function() {
   if (this.outputConnection && this.block_.nextConnection &&
       this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks,
-            this.block_.nextConnection.targetBlock().getHeightWidth().width -
+    widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width -
             this.constants_.DARK_PATH_OFFSET);
   }
 
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 
   // The dark (lowlight) adds to the size of the block in both x and y.
-  this.widthWithChildren = widestRowWithConnectedBlocks +
-      this.startX + this.constants_.DARK_PATH_OFFSET;
+  this.widthWithChildren = widestRowWithConnectedBlocks + this.startX +
+      this.constants_.DARK_PATH_OFFSET;
   this.width += this.constants_.DARK_PATH_OFFSET;
   this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;

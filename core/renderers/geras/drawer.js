@@ -13,32 +13,35 @@
 goog.module('Blockly.geras.Drawer');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.geras.Highlighter');
-goog.require('Blockly.geras.RenderInfo');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.svgPaths');
-
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.geras.PathObject');
+const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const Highlighter = goog.require('Blockly.geras.Highlighter');
+/* eslint-disable-next-line no-unused-vars */
+const PathObject = goog.requireType('Blockly.geras.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
+const blockRendering = goog.require('Blockly.blockRendering');
+const object = goog.require('Blockly.utils.object');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
 
 
 /**
  * An object that draws a block based on the given rendering information.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.geras.RenderInfo} info An object containing all
+ * @param {!BlockSvg} block The block to render.
+ * @param {!RenderInfo} info An object containing all
  *   information needed to render this block.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Drawer}
+ * @extends {BaseDrawer}
  */
 const Drawer = function(block, info) {
   Drawer.superClass_.constructor.call(this, block, info);
   // Unlike Thrasos, Geras has highlights and drop shadows.
-  this.highlighter_ = new Blockly.geras.Highlighter(info);
+  this.highlighter_ = new Highlighter(info);
 };
-Blockly.utils.object.inherits(Drawer,
-    Blockly.blockRendering.Drawer);
+object.inherits(Drawer,
+    BaseDrawer);
 
 /**
  * @override
@@ -49,13 +52,13 @@ Drawer.prototype.draw = function() {
   this.drawInternals_();
 
   const pathObject =
-    /** @type {!Blockly.geras.PathObject} */ (this.block_.pathObject);
+    /** @type {!PathObject} */ (this.block_.pathObject);
   pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
   pathObject.setHighlightPath(this.highlighter_.getPath());
   if (this.info_.RTL) {
     pathObject.flipRTL();
   }
-  if (Blockly.blockRendering.useDebugger) {
+  if (blockRendering.useDebugger) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();
@@ -105,8 +108,8 @@ Drawer.prototype.drawRightSideRow_ = function(row) {
   this.highlighter_.drawRightSideRow(row);
 
   this.outlinePath_ +=
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width) +
-      Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+      svgPaths.lineOnAxis('H', row.xPos + row.width) +
+      svgPaths.lineOnAxis('V', row.yPos + row.height);
 };
 
 /**

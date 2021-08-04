@@ -90,7 +90,8 @@ Names.prototype.setVariableMap = function(map) {
  */
 Names.prototype.getNameForUserVariable_ = function(id) {
   if (!this.variableMap_) {
-    console.warn('Deprecated call to Names.prototype.getName without ' +
+    console.warn(
+        'Deprecated call to Names.prototype.getName without ' +
         'defining a variable map. To fix, add the following code in your ' +
         'generator\'s init() function:\n' +
         'Blockly.YourGeneratorName.nameDB_.setVariableMap(' +
@@ -121,12 +122,12 @@ Names.prototype.populateVariables = function(workspace) {
  * @param {!Workspace} workspace Workspace to generate procedures from.
  */
 Names.prototype.populateProcedures = function(workspace) {
-  let procedures = goog.module.get('Blockly.Procedures').allProcedures(workspace);
+  let procedures =
+      goog.module.get('Blockly.Procedures').allProcedures(workspace);
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {
-    this.getName(
-        procedures[i][0], internalConstants.PROCEDURE_CATEGORY_NAME);
+    this.getName(procedures[i][0], internalConstants.PROCEDURE_CATEGORY_NAME);
   }
 };
 

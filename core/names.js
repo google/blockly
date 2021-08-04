@@ -10,12 +10,17 @@
  */
 'use strict';
 
-goog.provide('Blockly.Names');
+goog.module('Blockly.Names');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.internalConstants');
 goog.require('Blockly.Msg');
+goog.require('Blockly.Variables');
 
+/** @suppress {extraRequire} */
+goog.requireType('Blockly.Procedures');
 goog.requireType('Blockly.VariableMap');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -26,7 +31,7 @@ goog.requireType('Blockly.VariableMap');
  *     before all variable names (but not procedure names).
  * @constructor
  */
-Blockly.Names = function(reservedWords, opt_variablePrefix) {
+const Names = function(reservedWords, opt_variablePrefix) {
   this.variablePrefix_ = opt_variablePrefix || '';
   this.reservedDict_ = Object.create(null);
   if (reservedWords) {
@@ -45,7 +50,7 @@ Blockly.Names = function(reservedWords, opt_variablePrefix) {
  * will never be shown to the user in the workspace or stored in the variable
  * map.
  */
-Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
+Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 
 /**
  * When JavaScript (or most other languages) is generated, variable 'foo' and
@@ -59,7 +64,7 @@ Blockly.Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
 /**
  * Empty the database and start from scratch.  The reserved words are kept.
  */
-Blockly.Names.prototype.reset = function() {
+Names.prototype.reset = function() {
   this.db_ = Object.create(null);
   this.dbReverse_ = Object.create(null);
   this.variableMap_ = null;
@@ -69,7 +74,7 @@ Blockly.Names.prototype.reset = function() {
  * Set the variable map that maps from variable name to variable object.
  * @param {!Blockly.VariableMap} map The map to track.
  */
-Blockly.Names.prototype.setVariableMap = function(map) {
+Names.prototype.setVariableMap = function(map) {
   this.variableMap_ = map;
 };
 
@@ -82,9 +87,9 @@ Blockly.Names.prototype.setVariableMap = function(map) {
  *     no variable map or the variable was not found in the map.
  * @private
  */
-Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
+Names.prototype.getNameForUserVariable_ = function(id) {
   if (!this.variableMap_) {
-    console.warn('Deprecated call to Blockly.Names.prototype.getName without ' +
+    console.warn('Deprecated call to Names.prototype.getName without ' +
         'defining a variable map. To fix, add the following code in your ' +
         'generator\'s init() function:\n' +
         'Blockly.YourGeneratorName.nameDB_.setVariableMap(' +
@@ -102,7 +107,7 @@ Blockly.Names.prototype.getNameForUserVariable_ = function(id) {
  * Generate names for user variables, but only ones that are being used.
  * @param {!Blockly.Workspace} workspace Workspace to generate variables from.
  */
-Blockly.Names.prototype.populateVariables = function(workspace) {
+Names.prototype.populateVariables = function(workspace) {
   const variables = Blockly.Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
     this.getName(
@@ -114,8 +119,8 @@ Blockly.Names.prototype.populateVariables = function(workspace) {
  * Generate names for procedures.
  * @param {!Blockly.Workspace} workspace Workspace to generate procedures from.
  */
-Blockly.Names.prototype.populateProcedures = function(workspace) {
-  let procedures = Blockly.Procedures.allProcedures(workspace);
+Names.prototype.populateProcedures = function(workspace) {
+  let procedures = goog.module.get('Blockly.Procedures').allProcedures(workspace);
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {
@@ -132,7 +137,7 @@ Blockly.Names.prototype.populateProcedures = function(workspace) {
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {string} An entity name that is legal in the exported language.
  */
-Blockly.Names.prototype.getName = function(nameOrId, realm) {
+Names.prototype.getName = function(nameOrId, realm) {
   let name = nameOrId;
   if (realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME) {
     const varName = this.getNameForUserVariable_(nameOrId);
@@ -144,7 +149,7 @@ Blockly.Names.prototype.getName = function(nameOrId, realm) {
   const normalizedName = name.toLowerCase();
 
   const isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+      realm == Names.DEVELOPER_VARIABLE_TYPE;
 
   const prefix = isVar ? this.variablePrefix_ : '';
   if (!(realm in this.db_)) {
@@ -165,7 +170,7 @@ Blockly.Names.prototype.getName = function(nameOrId, realm) {
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {!Array<string>} A list of Blockly entity names (no constraints).
  */
-Blockly.Names.prototype.getUserNames = function(realm) {
+Names.prototype.getUserNames = function(realm) {
   const realmDb = this.db_[realm] || {};
   return Object.keys(realmDb);
 };
@@ -180,7 +185,7 @@ Blockly.Names.prototype.getUserNames = function(realm) {
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {string} An entity name that is legal in the exported language.
  */
-Blockly.Names.prototype.getDistinctName = function(name, realm) {
+Names.prototype.getDistinctName = function(name, realm) {
   let safeName = this.safeName_(name);
   let i = '';
   while (this.dbReverse_[safeName + i] ||
@@ -191,7 +196,7 @@ Blockly.Names.prototype.getDistinctName = function(name, realm) {
   safeName += i;
   this.dbReverse_[safeName] = true;
   const isVar = realm == Blockly.internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm == Blockly.Names.DEVELOPER_VARIABLE_TYPE;
+      realm == Names.DEVELOPER_VARIABLE_TYPE;
   const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;
 };
@@ -204,7 +209,7 @@ Blockly.Names.prototype.getDistinctName = function(name, realm) {
  * @return {string} Safe entity name.
  * @private
  */
-Blockly.Names.prototype.safeName_ = function(name) {
+Names.prototype.safeName_ = function(name) {
   if (!name) {
     name = Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
   } else {
@@ -227,7 +232,9 @@ Blockly.Names.prototype.safeName_ = function(name) {
  * @param {string} name2 Second name.
  * @return {boolean} True if names are the same.
  */
-Blockly.Names.equals = function(name1, name2) {
+Names.equals = function(name1, name2) {
   // name1.localeCompare(name2) is slower.
   return name1.toLowerCase() == name2.toLowerCase();
 };
+
+exports = Names;

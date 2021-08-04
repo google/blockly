@@ -14,30 +14,32 @@
 goog.module('Blockly.geras.PathObject');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.PathObject');
-goog.require('Blockly.geras.ConstantProvider');
-goog.require('Blockly.Theme');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
+const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.geras.ConstantProvider');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+const colour = goog.require('Blockly.utils.colour');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
- * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ * @param {!Theme.BlockStyle} style The style object to use for
  *     colouring.
- * @param {!Blockly.geras.ConstantProvider} constants The renderer's constants.
+ * @param {!ConstantProvider} constants The renderer's constants.
  * @constructor
- * @extends {Blockly.blockRendering.PathObject}
+ * @extends {BasePathObject}
  * @package
  */
 const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.geras.ConstantProvider}
+   * @type {!ConstantProvider}
    */
   this.constants = constants;
 
@@ -51,8 +53,8 @@ const PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathDark = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  this.svgPathDark = dom.createSvgElement(
+      Svg.PATH,
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
 
@@ -61,8 +63,8 @@ const PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  this.svgPath = dom.createSvgElement(
+      Svg.PATH,
       {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
@@ -70,8 +72,8 @@ const PathObject = function(root, style, constants) {
    * @type {SVGElement}
    * @package
    */
-  this.svgPathLight = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
+  this.svgPathLight = dom.createSvgElement(
+      Svg.PATH,
       {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
@@ -83,13 +85,13 @@ const PathObject = function(root, style, constants) {
 
   /**
    * The style object to use when colouring block paths.
-   * @type {!Blockly.Theme.BlockStyle}
+   * @type {!Theme.BlockStyle}
    * @package
    */
   this.style = style;
 };
-Blockly.utils.object.inherits(PathObject,
-    Blockly.blockRendering.PathObject);
+object.inherits(PathObject,
+    BasePathObject);
 
 /**
  * @override
@@ -138,7 +140,7 @@ PathObject.prototype.applyColour = function(block) {
 PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
   this.colourDark =
-      Blockly.utils.colour.blend('#000', this.style.colourPrimary, 0.2) ||
+      colour.blend('#000', this.style.colourPrimary, 0.2) ||
       this.colourDark;
 };
 

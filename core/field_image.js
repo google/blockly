@@ -16,10 +16,10 @@ goog.module.declareLegacyNamespace();
 const Field = goog.require('Blockly.Field');
 const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {createSvgElement, XLINK_NS} = goog.require('Blockly.utils.dom');
-const {inherits} = goog.require('Blockly.utils.object');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -45,9 +45,9 @@ const FieldImage = function(
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-  src = replaceMessageReferences(src);
-  const imageHeight = Number(replaceMessageReferences(height));
-  const imageWidth = Number(replaceMessageReferences(width));
+  src = utils.replaceMessageReferences(src);
+  const imageHeight = Number(utils.replaceMessageReferences(height));
+  const imageWidth = Number(utils.replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error(
         'Height and width values of an image field must cast to' +
@@ -78,7 +78,7 @@ const FieldImage = function(
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = replaceMessageReferences(opt_alt) || '';
+    this.altText_ = utils.replaceMessageReferences(opt_alt) || '';
   }
 
   // Initialize other properties.
@@ -115,7 +115,7 @@ const FieldImage = function(
    */
   this.imageElement_ = null;
 };
-inherits(FieldImage, Field);
+object.inherits(FieldImage, Field);
 
 /**
  * The default value for this field.
@@ -174,7 +174,7 @@ FieldImage.prototype.isDirty_ = false;
 FieldImage.prototype.configure_ = function(config) {
   FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
-  this.altText_ = replaceMessageReferences(config['alt']) || '';
+  this.altText_ = utils.replaceMessageReferences(config['alt']) || '';
 };
 
 /**
@@ -182,7 +182,7 @@ FieldImage.prototype.configure_ = function(config) {
  * @package
  */
 FieldImage.prototype.initView = function() {
-  this.imageElement_ = createSvgElement(
+  this.imageElement_ = dom.createSvgElement(
       Svg.IMAGE, {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
@@ -190,7 +190,7 @@ FieldImage.prototype.initView = function() {
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(
-      XLINK_NS, 'xlink:href', /** @type {string} */ (this.value_));
+      dom.XLINK_NS, 'xlink:href', /** @type {string} */ (this.value_));
 
   if (this.clickHandler_) {
     this.imageElement_.style.cursor = 'pointer';
@@ -227,7 +227,7 @@ FieldImage.prototype.doValueUpdate_ = function(newValue) {
   this.value_ = newValue;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS(
-        XLINK_NS, 'xlink:href', String(this.value_));
+        dom.XLINK_NS, 'xlink:href', String(this.value_));
   }
 };
 

@@ -17,9 +17,9 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const IComponent = goog.require('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
+const MetricsManager = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const {UiMetrics} = goog.requireType('Blockly.MetricsManager');
+const Rect = goog.requireType('Blockly.utils.Rect');
 
 
 /**
@@ -31,7 +31,7 @@ const IPositionable = function() {};
 
 /**
  * Positions the element. Called when the window is resized.
- * @param {!UiMetrics} metrics The workspace metrics.
+ * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
  * @param {!Array<!Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */

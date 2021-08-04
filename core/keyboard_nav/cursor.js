@@ -16,8 +16,8 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Marker = goog.require('Blockly.Marker');
-const {DEFAULT, register, Type} = goog.require('Blockly.registry');
-const {inherits} = goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -34,7 +34,7 @@ const Cursor = function() {
    */
   this.type = 'cursor';
 };
-inherits(Cursor, Marker);
+object.inherits(Cursor, Marker);
 
 /**
  * Find the next connection, field, or block.
@@ -134,6 +134,6 @@ Cursor.prototype.out = function() {
   return newNode;
 };
 
-register(Type.CURSOR, DEFAULT, Cursor);
+registry.register(registry.Type.CURSOR, registry.DEFAULT, Cursor);
 
 exports = Cursor;

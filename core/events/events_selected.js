@@ -10,12 +10,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.Selected');
+goog.module('Blockly.Events.Selected');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -26,12 +27,11 @@ goog.require('Blockly.utils.object');
  *    element currently selected (deselect). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Null if no element previously selected. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
-Blockly.Events.Selected = function(opt_oldElementId, opt_newElementId,
-    opt_workspaceId) {
-  Blockly.Events.Selected.superClass_.constructor.call(this, opt_workspaceId);
+const Selected = function(opt_oldElementId, opt_newElementId, opt_workspaceId) {
+  Selected.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * The id of the last selected element.
@@ -45,20 +45,20 @@ Blockly.Events.Selected = function(opt_oldElementId, opt_newElementId,
    */
   this.newElementId = opt_newElementId;
 };
-Blockly.utils.object.inherits(Blockly.Events.Selected, Blockly.Events.UiBase);
+object.inherits(Selected, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.Selected.prototype.type = Blockly.Events.SELECTED;
+Selected.prototype.type = Events.SELECTED;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Selected.prototype.toJson = function() {
-  var json = Blockly.Events.Selected.superClass_.toJson.call(this);
+Selected.prototype.toJson = function() {
+  const json = Selected.superClass_.toJson.call(this);
   json['oldElementId'] = this.oldElementId;
   json['newElementId'] = this.newElementId;
   return json;
@@ -68,11 +68,12 @@ Blockly.Events.Selected.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.Selected.prototype.fromJson = function(json) {
-  Blockly.Events.Selected.superClass_.fromJson.call(this, json);
+Selected.prototype.fromJson = function(json) {
+  Selected.superClass_.fromJson.call(this, json);
   this.oldElementId = json['oldElementId'];
   this.newElementId = json['newElementId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.SELECTED,
-    Blockly.Events.Selected);
+registry.register(registry.Type.EVENT, Events.SELECTED, Selected);
+
+exports = Selected;

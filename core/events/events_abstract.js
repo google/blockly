@@ -14,8 +14,9 @@
 goog.module('Blockly.Events.Abstract');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.requireType('Blockly.Workspace');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -42,13 +43,13 @@ const Abstract = function() {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.getGroup();
+  this.group = Events.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = Blockly.Events.recordUndo;
+  this.recordUndo = Events.recordUndo;
 };
 
 /**
@@ -98,7 +99,7 @@ Abstract.prototype.run = function(_forward) {
 
 /**
  * Get workspace the event belongs to.
- * @return {!Blockly.Workspace} The workspace the event belongs to.
+ * @return {!Workspace} The workspace the event belongs to.
  * @throws {Error} if workspace is null.
  * @protected
  */

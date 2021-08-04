@@ -91,7 +91,9 @@ const show = function(e, options, rtl) {
   position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
-  setTimeout(function() {menu.focus();}, 1);
+  setTimeout(function() {
+    menu.focus();
+  }, 1);
   currentBlock = null;  // May be set by Blockly.Block.
 };
 exports.show = show;
@@ -119,7 +121,7 @@ const populate_ = function(options, rtl) {
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      const actionHandler = function (_menuItem) {
+      const actionHandler = function(_menuItem) {
         const option = this;
         hide();
         option.callback(option.scope);
@@ -144,11 +146,8 @@ const position_ = function(menu, e, rtl) {
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
   const anchorBBox = new Rect(
-      e.clientY + viewportBBox.top,
-      e.clientY + viewportBBox.top,
-      e.clientX + viewportBBox.left,
-      e.clientX + viewportBBox.left
-  );
+      e.clientY + viewportBBox.top, e.clientY + viewportBBox.top,
+      e.clientX + viewportBBox.left, e.clientX + viewportBBox.left);
 
   createWidget_(menu);
   const menuSize = menu.getSize();
@@ -232,8 +231,7 @@ const callbackFactory = function(block, xml) {
       Events.enable();
     }
     if (Events.isEnabled() && !newBlock.isShadow()) {
-      Events.fire(
-          new (Events.get(Events.BLOCK_CREATE))(newBlock));
+      Events.fire(new (Events.get(Events.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };
@@ -252,7 +250,7 @@ const commentDeleteOption = function(comment) {
   const deleteOption = {
     text: Msg['REMOVE_COMMENT'],
     enabled: true,
-    callback: function () {
+    callback: function() {
       Events.setGroup(true);
       comment.dispose(true, true);
       Events.setGroup(false);
@@ -273,7 +271,7 @@ const commentDuplicateOption = function(comment) {
   const duplicateOption = {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
-    callback: function () {
+    callback: function() {
       Blockly.duplicate(comment);
     }
   };
@@ -298,7 +296,7 @@ const workspaceCommentOption = function(ws, e) {
   }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
-  const addWsComment = function () {
+  const addWsComment = function() {
     const comment = new Blockly.WorkspaceCommentSvg(
         ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
         Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
@@ -320,8 +318,8 @@ const workspaceCommentOption = function(ws, e) {
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    const finalOffset = Coordinate.difference(clientOffsetPixels,
-        mainOffsetPixels);
+    const finalOffset =
+        Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
     // The position of the new comment in main workspace coordinates.
     finalOffset.scale(1 / ws.scale);
 

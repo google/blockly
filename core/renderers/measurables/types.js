@@ -25,31 +25,31 @@ const Row = goog.requireType('Blockly.blockRendering.Row');
  * @enum {number}
  */
 const Types = {
-  NONE: 0,                      // None
-  FIELD: 1 << 0,                // Field.
-  HAT: 1 << 1,                  // Hat.
-  ICON: 1 << 2,                 // Icon.
-  SPACER: 1 << 3,               // Spacer.
-  BETWEEN_ROW_SPACER: 1 << 4,   // Between Row Spacer.
-  IN_ROW_SPACER: 1 << 5,        // In Row Spacer.
-  EXTERNAL_VALUE_INPUT: 1 << 6, // External Value Input.
-  INPUT: 1 << 7,                // Input.
-  INLINE_INPUT: 1 << 8,         // Inline Input.
-  STATEMENT_INPUT: 1 << 9,      // Statement Input.
-  CONNECTION: 1 << 10,          // Connection.
-  PREVIOUS_CONNECTION: 1 << 11, // Previous Connection.
-  NEXT_CONNECTION: 1 << 12,     // Next Connection.
-  OUTPUT_CONNECTION: 1 << 13,   // Output Connection.
-  CORNER: 1 << 14,              // Corner.
-  LEFT_SQUARE_CORNER: 1 << 15,  // Square Corner.
-  LEFT_ROUND_CORNER: 1 << 16,   // Round Corner.
-  RIGHT_SQUARE_CORNER: 1 << 17, // Right Square Corner.
-  RIGHT_ROUND_CORNER: 1 << 18,  // Right Round Corner.
-  JAGGED_EDGE: 1 << 19,         // Jagged Edge.
-  ROW: 1 << 20,                 // Row.
-  TOP_ROW: 1 << 21,             // Top Row.
-  BOTTOM_ROW: 1 << 22,          // Bottom Row.
-  INPUT_ROW: 1 << 23            // Input Row.
+  NONE: 0,                       // None
+  FIELD: 1 << 0,                 // Field.
+  HAT: 1 << 1,                   // Hat.
+  ICON: 1 << 2,                  // Icon.
+  SPACER: 1 << 3,                // Spacer.
+  BETWEEN_ROW_SPACER: 1 << 4,    // Between Row Spacer.
+  IN_ROW_SPACER: 1 << 5,         // In Row Spacer.
+  EXTERNAL_VALUE_INPUT: 1 << 6,  // External Value Input.
+  INPUT: 1 << 7,                 // Input.
+  INLINE_INPUT: 1 << 8,          // Inline Input.
+  STATEMENT_INPUT: 1 << 9,       // Statement Input.
+  CONNECTION: 1 << 10,           // Connection.
+  PREVIOUS_CONNECTION: 1 << 11,  // Previous Connection.
+  NEXT_CONNECTION: 1 << 12,      // Next Connection.
+  OUTPUT_CONNECTION: 1 << 13,    // Output Connection.
+  CORNER: 1 << 14,               // Corner.
+  LEFT_SQUARE_CORNER: 1 << 15,   // Square Corner.
+  LEFT_ROUND_CORNER: 1 << 16,    // Round Corner.
+  RIGHT_SQUARE_CORNER: 1 << 17,  // Right Square Corner.
+  RIGHT_ROUND_CORNER: 1 << 18,   // Right Round Corner.
+  JAGGED_EDGE: 1 << 19,          // Jagged Edge.
+  ROW: 1 << 20,                  // Row.
+  TOP_ROW: 1 << 21,              // Top Row.
+  BOTTOM_ROW: 1 << 22,           // Bottom Row.
+  INPUT_ROW: 1 << 23             // Input Row.
 };
 
 /**
@@ -58,9 +58,7 @@ const Types = {
  * @const
  * @package
  */
-Types.LEFT_CORNER =
-    Types.LEFT_SQUARE_CORNER |
-    Types.LEFT_ROUND_CORNER;
+Types.LEFT_CORNER = Types.LEFT_SQUARE_CORNER | Types.LEFT_ROUND_CORNER;
 
 /**
  * A Right Corner Union Type.
@@ -68,9 +66,7 @@ Types.LEFT_CORNER =
  * @const
  * @package
  */
-Types.RIGHT_CORNER =
-    Types.RIGHT_SQUARE_CORNER |
-    Types.RIGHT_ROUND_CORNER;
+Types.RIGHT_CORNER = Types.RIGHT_SQUARE_CORNER | Types.RIGHT_ROUND_CORNER;
 
 /**
  * Next flag value to use for custom rendering element types.
@@ -90,8 +86,7 @@ Types.nextTypeValue_ = 1 << 24;
  */
 Types.getType = function(type) {
   if (!Object.prototype.hasOwnProperty.call(Types, type)) {
-    Types[type] =
-      Types.nextTypeValue_;
+    Types[type] = Types.nextTypeValue_;
     Types.nextTypeValue_ <<= 1;
   }
   return Types[type];
@@ -222,8 +217,7 @@ Types.isNextConnection = function(elem) {
  * @package
  */
 Types.isPreviousOrNextConnection = function(elem) {
-  return elem.type & (Types.PREVIOUS_CONNECTION |
-      Types.NEXT_CONNECTION);
+  return elem.type & (Types.PREVIOUS_CONNECTION | Types.NEXT_CONNECTION);
 };
 
 /**
@@ -340,8 +334,7 @@ Types.isBottomRow = function(row) {
  * @package
  */
 Types.isTopOrBottomRow = function(row) {
-  return row.type & (Types.TOP_ROW |
-      Types.BOTTOM_ROW);
+  return row.type & (Types.TOP_ROW | Types.BOTTOM_ROW);
 };
 
 /**

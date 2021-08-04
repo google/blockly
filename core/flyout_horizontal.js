@@ -22,10 +22,10 @@ const Options = goog.requireType('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
 const Scrollbar = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const {Position} = goog.require('Blockly.utils.toolbox');
-const {getScrollDeltaPixels} = goog.require('Blockly.utils');
-const {inherits} = goog.require('Blockly.utils.object');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -39,7 +39,7 @@ const HorizontalFlyout = function(workspaceOptions) {
   HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);
   this.horizontalLayout = true;
 };
-inherits(HorizontalFlyout, Flyout);
+object.inherits(HorizontalFlyout, Flyout);
 
 /**
  * Sets the translation of the flyout to match the scrollbars.
@@ -92,7 +92,7 @@ HorizontalFlyout.prototype.getY = function() {
   const toolboxMetrics = metricsManager.getToolboxMetrics();
 
   let y = 0;
-  const atTop = this.toolboxPosition_ == Position.TOP;
+  const atTop = this.toolboxPosition_ == toolbox.Position.TOP;
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
   if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
     // If there is a category toolbox.
@@ -159,7 +159,7 @@ HorizontalFlyout.prototype.position = function() {
  * @private
  */
 HorizontalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  const atTop = this.toolboxPosition_ == Position.TOP;
+  const atTop = this.toolboxPosition_ == toolbox.Position.TOP;
   // Start at top left.
   const path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
@@ -210,7 +210,7 @@ HorizontalFlyout.prototype.scrollToStart = function() {
  * @protected
  */
 HorizontalFlyout.prototype.wheel_ = function(e) {
-  const scrollDelta = getScrollDeltaPixels(e);
+  const scrollDelta = utils.getScrollDeltaPixels(e);
   const delta = scrollDelta.x || scrollDelta.y;
 
   if (delta) {
@@ -326,7 +326,7 @@ HorizontalFlyout.prototype.getClientRect = function() {
   const BIG_NUM = 1000000000;
   const top = flyoutRect.top;
 
-  if (this.toolboxPosition_ == Position.TOP) {
+  if (this.toolboxPosition_ == toolbox.Position.TOP) {
     const height = flyoutRect.height;
     return new Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
   } else {  // Bottom.
@@ -335,7 +335,7 @@ HorizontalFlyout.prototype.getClientRect = function() {
 };
 
 /**
- * Compute height of flyout.  Position mat under each block.
+ * Compute height of flyout.  toolbox.Position mat under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @protected
  */
@@ -362,7 +362,7 @@ HorizontalFlyout.prototype.reflowInternal_ = function() {
     }
 
     if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == Position.TOP &&
+        this.toolboxPosition_ == toolbox.Position.TOP &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie

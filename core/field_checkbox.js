@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {inherits} = goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -48,7 +48,7 @@ const FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   FieldCheckbox.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 };
-inherits(FieldCheckbox, Field);
+object.inherits(FieldCheckbox, Field);
 
 /**
  * The default value for this field.

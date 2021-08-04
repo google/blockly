@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.blockRendering.Types');
+goog.module('Blockly.blockRendering.Types');
+goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.blockRendering.Measurable');
 goog.requireType('Blockly.blockRendering.Row');
@@ -21,7 +22,7 @@ goog.requireType('Blockly.blockRendering.Row');
  * Types of rendering elements.
  * @enum {number}
  */
-Blockly.blockRendering.Types = {
+const Types = {
   NONE: 0,                      // None
   FIELD: 1 << 0,                // Field.
   HAT: 1 << 1,                  // Hat.
@@ -55,9 +56,9 @@ Blockly.blockRendering.Types = {
  * @const
  * @package
  */
-Blockly.blockRendering.Types.LEFT_CORNER =
-    Blockly.blockRendering.Types.LEFT_SQUARE_CORNER |
-    Blockly.blockRendering.Types.LEFT_ROUND_CORNER;
+Types.LEFT_CORNER =
+    Types.LEFT_SQUARE_CORNER |
+    Types.LEFT_ROUND_CORNER;
 
 /**
  * A Right Corner Union Type.
@@ -65,19 +66,19 @@ Blockly.blockRendering.Types.LEFT_CORNER =
  * @const
  * @package
  */
-Blockly.blockRendering.Types.RIGHT_CORNER =
-    Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER |
-    Blockly.blockRendering.Types.RIGHT_ROUND_CORNER;
+Types.RIGHT_CORNER =
+    Types.RIGHT_SQUARE_CORNER |
+    Types.RIGHT_ROUND_CORNER;
 
 /**
  * Next flag value to use for custom rendering element types.
  * This must be updated to reflect the next enum flag value
  * to use if additional elements are added to
- * `Blockly.blockRendering.Types`.
+ * `Types`.
  * @type {number}
  * @private
  */
-Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
+Types.nextTypeValue_ = 1 << 24;
 
 /**
  * Get the enum flag value of an existing type or register a new type.
@@ -85,13 +86,13 @@ Blockly.blockRendering.Types.nextTypeValue_ = 1 << 24;
  * @return {!number} The enum flag value associated with that type.
  * @package
  */
-Blockly.blockRendering.Types.getType = function(type) {
-  if (!Object.prototype.hasOwnProperty.call(Blockly.blockRendering.Types, type)) {
-    Blockly.blockRendering.Types[type] =
-      Blockly.blockRendering.Types.nextTypeValue_;
-    Blockly.blockRendering.Types.nextTypeValue_ <<= 1;
+Types.getType = function(type) {
+  if (!Object.prototype.hasOwnProperty.call(Types, type)) {
+    Types[type] =
+      Types.nextTypeValue_;
+    Types.nextTypeValue_ <<= 1;
   }
-  return Blockly.blockRendering.Types[type];
+  return Types[type];
 };
 
 /**
@@ -100,8 +101,8 @@ Blockly.blockRendering.Types.getType = function(type) {
  * @return {number} 1 if the object stores information about a field.
  * @package
  */
-Blockly.blockRendering.Types.isField = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.FIELD;
+Types.isField = function(elem) {
+  return elem.type & Types.FIELD;
 };
 
 /**
@@ -110,8 +111,8 @@ Blockly.blockRendering.Types.isField = function(elem) {
  * @return {number} 1 if the object stores information about a hat.
  * @package
  */
-Blockly.blockRendering.Types.isHat = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.HAT;
+Types.isHat = function(elem) {
+  return elem.type & Types.HAT;
 };
 
 /**
@@ -120,8 +121,8 @@ Blockly.blockRendering.Types.isHat = function(elem) {
  * @return {number} 1 if the object stores information about an icon.
  * @package
  */
-Blockly.blockRendering.Types.isIcon = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.ICON;
+Types.isIcon = function(elem) {
+  return elem.type & Types.ICON;
 };
 
 /**
@@ -131,8 +132,8 @@ Blockly.blockRendering.Types.isIcon = function(elem) {
  * @return {number} 1 if the object stores information about a spacer.
  * @package
  */
-Blockly.blockRendering.Types.isSpacer = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.SPACER;
+Types.isSpacer = function(elem) {
+  return elem.type & Types.SPACER;
 };
 
 /**
@@ -142,8 +143,8 @@ Blockly.blockRendering.Types.isSpacer = function(elem) {
  *   in-row spacer.
  * @package
  */
-Blockly.blockRendering.Types.isInRowSpacer = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.IN_ROW_SPACER;
+Types.isInRowSpacer = function(elem) {
+  return elem.type & Types.IN_ROW_SPACER;
 };
 
 /**
@@ -152,8 +153,8 @@ Blockly.blockRendering.Types.isInRowSpacer = function(elem) {
  * @return {number} 1 if the object stores information about an input.
  * @package
  */
-Blockly.blockRendering.Types.isInput = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.INPUT;
+Types.isInput = function(elem) {
+  return elem.type & Types.INPUT;
 };
 
 /**
@@ -163,8 +164,8 @@ Blockly.blockRendering.Types.isInput = function(elem) {
  *   external input.
  * @package
  */
-Blockly.blockRendering.Types.isExternalInput = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
+Types.isExternalInput = function(elem) {
+  return elem.type & Types.EXTERNAL_VALUE_INPUT;
 };
 
 /**
@@ -174,8 +175,8 @@ Blockly.blockRendering.Types.isExternalInput = function(elem) {
  *   inline input.
  * @package
  */
-Blockly.blockRendering.Types.isInlineInput = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.INLINE_INPUT;
+Types.isInlineInput = function(elem) {
+  return elem.type & Types.INLINE_INPUT;
 };
 
 /**
@@ -185,8 +186,8 @@ Blockly.blockRendering.Types.isInlineInput = function(elem) {
  *   statement input.
  * @package
  */
-Blockly.blockRendering.Types.isStatementInput = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.STATEMENT_INPUT;
+Types.isStatementInput = function(elem) {
+  return elem.type & Types.STATEMENT_INPUT;
 };
 
 /**
@@ -196,8 +197,8 @@ Blockly.blockRendering.Types.isStatementInput = function(elem) {
  *   previous connection.
  * @package
  */
-Blockly.blockRendering.Types.isPreviousConnection = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
+Types.isPreviousConnection = function(elem) {
+  return elem.type & Types.PREVIOUS_CONNECTION;
 };
 
 /**
@@ -207,8 +208,8 @@ Blockly.blockRendering.Types.isPreviousConnection = function(elem) {
  *   next connection.
  * @package
  */
-Blockly.blockRendering.Types.isNextConnection = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.NEXT_CONNECTION;
+Types.isNextConnection = function(elem) {
+  return elem.type & Types.NEXT_CONNECTION;
 };
 
 /**
@@ -218,9 +219,9 @@ Blockly.blockRendering.Types.isNextConnection = function(elem) {
  *   next connection.
  * @package
  */
-Blockly.blockRendering.Types.isPreviousOrNextConnection = function(elem) {
-  return elem.type & (Blockly.blockRendering.Types.PREVIOUS_CONNECTION |
-      Blockly.blockRendering.Types.NEXT_CONNECTION);
+Types.isPreviousOrNextConnection = function(elem) {
+  return elem.type & (Types.PREVIOUS_CONNECTION |
+      Types.NEXT_CONNECTION);
 };
 
 /**
@@ -230,8 +231,8 @@ Blockly.blockRendering.Types.isPreviousOrNextConnection = function(elem) {
  *   left round corner.
  * @package
  */
-Blockly.blockRendering.Types.isLeftRoundedCorner = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.LEFT_ROUND_CORNER;
+Types.isLeftRoundedCorner = function(elem) {
+  return elem.type & Types.LEFT_ROUND_CORNER;
 };
 
 /**
@@ -241,8 +242,8 @@ Blockly.blockRendering.Types.isLeftRoundedCorner = function(elem) {
  *   right round corner.
  * @package
  */
-Blockly.blockRendering.Types.isRightRoundedCorner = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.RIGHT_ROUND_CORNER;
+Types.isRightRoundedCorner = function(elem) {
+  return elem.type & Types.RIGHT_ROUND_CORNER;
 };
 
 /**
@@ -252,8 +253,8 @@ Blockly.blockRendering.Types.isRightRoundedCorner = function(elem) {
  *   left square corner.
  * @package
  */
-Blockly.blockRendering.Types.isLeftSquareCorner = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.LEFT_SQUARE_CORNER;
+Types.isLeftSquareCorner = function(elem) {
+  return elem.type & Types.LEFT_SQUARE_CORNER;
 };
 
 /**
@@ -263,8 +264,8 @@ Blockly.blockRendering.Types.isLeftSquareCorner = function(elem) {
  *   right square corner.
  * @package
  */
-Blockly.blockRendering.Types.isRightSquareCorner = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.RIGHT_SQUARE_CORNER;
+Types.isRightSquareCorner = function(elem) {
+  return elem.type & Types.RIGHT_SQUARE_CORNER;
 };
 
 /**
@@ -274,8 +275,8 @@ Blockly.blockRendering.Types.isRightSquareCorner = function(elem) {
  *   corner.
  * @package
  */
-Blockly.blockRendering.Types.isCorner = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.CORNER;
+Types.isCorner = function(elem) {
+  return elem.type & Types.CORNER;
 };
 
 /**
@@ -284,8 +285,8 @@ Blockly.blockRendering.Types.isCorner = function(elem) {
  * @return {number} 1 if the object stores information about a jagged edge.
  * @package
  */
-Blockly.blockRendering.Types.isJaggedEdge = function(elem) {
-  return elem.type & Blockly.blockRendering.Types.JAGGED_EDGE;
+Types.isJaggedEdge = function(elem) {
+  return elem.type & Types.JAGGED_EDGE;
 };
 
 /**
@@ -294,8 +295,8 @@ Blockly.blockRendering.Types.isJaggedEdge = function(elem) {
  * @return {number} 1 if the object stores information about a row.
  * @package
  */
-Blockly.blockRendering.Types.isRow = function(row) {
-  return row.type & Blockly.blockRendering.Types.ROW;
+Types.isRow = function(row) {
+  return row.type & Types.ROW;
 };
 
 /**
@@ -305,8 +306,8 @@ Blockly.blockRendering.Types.isRow = function(row) {
  *   between-row spacer.
  * @package
  */
-Blockly.blockRendering.Types.isBetweenRowSpacer = function(row) {
-  return row.type & Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
+Types.isBetweenRowSpacer = function(row) {
+  return row.type & Types.BETWEEN_ROW_SPACER;
 };
 
 /**
@@ -315,8 +316,8 @@ Blockly.blockRendering.Types.isBetweenRowSpacer = function(row) {
  * @return {number} 1 if the object stores information about a top row.
  * @package
  */
-Blockly.blockRendering.Types.isTopRow = function(row) {
-  return row.type & Blockly.blockRendering.Types.TOP_ROW;
+Types.isTopRow = function(row) {
+  return row.type & Types.TOP_ROW;
 };
 
 /**
@@ -325,8 +326,8 @@ Blockly.blockRendering.Types.isTopRow = function(row) {
  * @return {number} 1 if the object stores information about a bottom row.
  * @package
  */
-Blockly.blockRendering.Types.isBottomRow = function(row) {
-  return row.type & Blockly.blockRendering.Types.BOTTOM_ROW;
+Types.isBottomRow = function(row) {
+  return row.type & Types.BOTTOM_ROW;
 };
 
 /**
@@ -336,9 +337,9 @@ Blockly.blockRendering.Types.isBottomRow = function(row) {
  *   bottom row.
  * @package
  */
-Blockly.blockRendering.Types.isTopOrBottomRow = function(row) {
-  return row.type & (Blockly.blockRendering.Types.TOP_ROW |
-      Blockly.blockRendering.Types.BOTTOM_ROW);
+Types.isTopOrBottomRow = function(row) {
+  return row.type & (Types.TOP_ROW |
+      Types.BOTTOM_ROW);
 };
 
 /**
@@ -347,6 +348,8 @@ Blockly.blockRendering.Types.isTopOrBottomRow = function(row) {
  * @return {number} 1 if the object stores information about an input row.
  * @package
  */
-Blockly.blockRendering.Types.isInputRow = function(row) {
-  return row.type & Blockly.blockRendering.Types.INPUT_ROW;
+Types.isInputRow = function(row) {
+  return row.type & Types.INPUT_ROW;
 };
+
+exports = Types;

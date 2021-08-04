@@ -48,8 +48,7 @@ const Renderer = function(name) {
    */
   this.highlightConstants_ = null;
 };
-object.inherits(Renderer,
-    BaseRenderer);
+object.inherits(Renderer, BaseRenderer);
 
 /**
  * Initialize the renderer.  Geras has a highlight provider in addition to
@@ -57,10 +56,8 @@ object.inherits(Renderer,
  * @package
  * @override
  */
-Renderer.prototype.init = function(theme,
-    opt_rendererOverrides) {
-  Renderer.superClass_.init.call(this, theme,
-      opt_rendererOverrides);
+Renderer.prototype.init = function(theme, opt_rendererOverrides) {
+  Renderer.superClass_.init.call(this, theme, opt_rendererOverrides);
   this.highlightConstants_ = this.makeHighlightConstants_();
   this.highlightConstants_.init();
 };
@@ -101,7 +98,8 @@ Renderer.prototype.makeRenderInfo_ = function(block) {
  * @override
  */
 Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Drawer(block,
+  return new Drawer(
+      block,
       /** @type {!RenderInfo} */ (info));
 };
 
@@ -115,7 +113,8 @@ Renderer.prototype.makeDrawer_ = function(block, info) {
  * @override
  */
 Renderer.prototype.makePathObject = function(root, style) {
-  return new PathObject(root, style,
+  return new PathObject(
+      root, style,
       /** @type {!ConstantProvider} */ (this.getConstants()));
 };
 
@@ -140,8 +139,8 @@ Renderer.prototype.makeHighlightConstants_ = function() {
  */
 Renderer.prototype.getHighlightConstants = function() {
   return (
-    /** @type {!HighlightConstantProvider} */
-    (this.highlightConstants_));
+      /** @type {!HighlightConstantProvider} */
+      (this.highlightConstants_));
 };
 
 blockRendering.register('geras', Renderer);

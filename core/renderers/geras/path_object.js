@@ -54,8 +54,7 @@ const PathObject = function(root, style, constants) {
    * @package
    */
   this.svgPathDark = dom.createSvgElement(
-      Svg.PATH,
-      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
+      Svg.PATH, {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgRoot);
 
   /**
@@ -63,9 +62,8 @@ const PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = dom.createSvgElement(
-      Svg.PATH,
-      {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgPath =
+      dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The light path of the block.
@@ -73,8 +71,7 @@ const PathObject = function(root, style, constants) {
    * @package
    */
   this.svgPathLight = dom.createSvgElement(
-      Svg.PATH,
-      {'class': 'blocklyPathLight'}, this.svgRoot);
+      Svg.PATH, {'class': 'blocklyPathLight'}, this.svgRoot);
 
   /**
    * The colour of the dark path on the block in '#RRGGBB' format.
@@ -90,8 +87,7 @@ const PathObject = function(root, style, constants) {
    */
   this.style = style;
 };
-object.inherits(PathObject,
-    BasePathObject);
+object.inherits(PathObject, BasePathObject);
 
 /**
  * @override
@@ -140,8 +136,7 @@ PathObject.prototype.applyColour = function(block) {
 PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
   this.colourDark =
-      colour.blend('#000', this.style.colourPrimary, 0.2) ||
-      this.colourDark;
+      colour.blend('#000', this.style.colourPrimary, 0.2) || this.colourDark;
 };
 
 /**
@@ -149,8 +144,8 @@ PathObject.prototype.setStyle = function(blockStyle) {
  */
 PathObject.prototype.updateHighlighted = function(highlighted) {
   if (highlighted) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.embossFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
     this.svgPathLight.style.display = 'none';
   } else {
     this.svgPath.setAttribute('filter', 'none');

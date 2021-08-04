@@ -69,7 +69,7 @@ let disabled = 0;
 
 
 Object.defineProperty(exports, 'disabled_', {
-  get: function(){
+  get: function() {
     return disabled;
   },
   set: function(newValue) {
@@ -278,12 +278,7 @@ exports.BumpEvent = BumpEvent;
  * appear connected.
  * @const
  */
-const BUMP_EVENTS = [
-  BLOCK_CREATE,
-  BLOCK_MOVE,
-  COMMENT_CREATE,
-  COMMENT_MOVE
-];
+const BUMP_EVENTS = [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
 exports.BUMP_EVENTS = BUMP_EVENTS;
 
 /**
@@ -356,17 +351,16 @@ const filter = function(queueIn, forward) {
         // Each item in the hash table has the event and the index of that event
         // in the input array.  This lets us make sure we only merge adjacent
         // move events.
-        hash[key] = { event: event, index: i};
+        hash[key] = {event: event, index: i};
         mergedQueue.push(event);
-      } else if (event.type == MOVE &&
-          lastEntry.index == i - 1) {
+      } else if (event.type == MOVE && lastEntry.index == i - 1) {
         // Merge move events.
         lastEvent.newParentId = event.newParentId;
         lastEvent.newInputName = event.newInputName;
         lastEvent.newCoordinate = event.newCoordinate;
         lastEntry.index = i;
-      } else if (event.type == CHANGE &&
-          event.element == lastEvent.element &&
+      } else if (
+          event.type == CHANGE && event.element == lastEvent.element &&
           event.name == lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
@@ -376,8 +370,7 @@ const filter = function(queueIn, forward) {
         lastEvent.viewLeft = event.viewLeft;
         lastEvent.scale = event.scale;
         lastEvent.oldScale = event.oldScale;
-      } else if (event.type == CLICK &&
-          lastEvent.type == BUBBLE_OPEN) {
+      } else if (event.type == CLICK && lastEvent.type == BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
@@ -388,7 +381,9 @@ const filter = function(queueIn, forward) {
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function(e) { return !e.isNull(); });
+  queue = mergedQueue.filter(function(e) {
+    return !e.isNull();
+  });
   if (!forward) {
     // Restore undo order.
     queue.reverse();
@@ -396,8 +391,7 @@ const filter = function(queueIn, forward) {
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
   for (let i = 1, event; (event = queue[i]); i++) {
-    if (event.type == CHANGE &&
-        event.element == 'mutation') {
+    if (event.type == CHANGE && event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
     }
   }
@@ -519,8 +513,7 @@ exports.get = get;
  * @param {!Abstract} event Custom data for event.
  */
 const disableOrphans = function(event) {
-  if (event.type == MOVE ||
-      event.type == CREATE) {
+  if (event.type == MOVE || event.type == CREATE) {
     if (!event.workspaceId) {
       return;
     }
@@ -538,8 +531,9 @@ const disableOrphans = function(event) {
           for (let i = 0, child; (child = children[i]); i++) {
             child.setEnabled(true);
           }
-        } else if ((block.outputConnection || block.previousConnection) &&
-                  !workspace.isDragging()) {
+        } else if (
+            (block.outputConnection || block.previousConnection) &&
+            !workspace.isDragging()) {
           do {
             block.setEnabled(false);
             block = block.getNextBlock();

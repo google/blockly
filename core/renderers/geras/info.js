@@ -11,8 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras');
-goog.provide('Blockly.geras.RenderInfo');
+goog.module('Blockly.geras.RenderInfo');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ExternalValueInput');
 goog.require('Blockly.blockRendering.InputRow');
@@ -42,10 +42,10 @@ goog.requireType('Blockly.geras.Renderer');
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.geras.RenderInfo = function(renderer, block) {
-  Blockly.geras.RenderInfo.superClass_.constructor.call(this, renderer, block);
+const RenderInfo = function(renderer, block) {
+  RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
+Blockly.utils.object.inherits(RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
 /**
@@ -53,15 +53,15 @@ Blockly.utils.object.inherits(Blockly.geras.RenderInfo,
  * @return {!Blockly.geras.Renderer} The block renderer in use.
  * @package
  */
-Blockly.geras.RenderInfo.prototype.getRenderer = function() {
+RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.geras.Renderer} */ (this.renderer_);
 };
 
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
-  Blockly.geras.RenderInfo.superClass_.populateBottomRow_.call(this);
+RenderInfo.prototype.populateBottomRow_ = function() {
+  RenderInfo.superClass_.populateBottomRow_.call(this);
 
   const followsStatement = this.block_.inputList.length &&
       this.block_.inputList[this.block_.inputList.length - 1].type ==
@@ -81,7 +81,7 @@ Blockly.geras.RenderInfo.prototype.populateBottomRow_ = function() {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
   if (this.isInline && input.type == Blockly.inputTypes.VALUE) {
     activeRow.elements.push(
@@ -111,7 +111,7 @@ Blockly.geras.RenderInfo.prototype.addInput_ = function(input, activeRow) {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
+RenderInfo.prototype.addElemSpacing_ = function() {
   let hasExternalInputs = false;
   for (let i = 0, row; (row = this.rows[i]); i++) {
     if (row.hasExternalInput) {
@@ -152,7 +152,7 @@ Blockly.geras.RenderInfo.prototype.addElemSpacing_ = function() {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next && Blockly.blockRendering.Types.isField(next) &&
@@ -302,7 +302,7 @@ Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
+RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height.
   if (Blockly.blockRendering.Types.isTopRow(prev) &&
       Blockly.blockRendering.Types.isBottomRow(next)) {
@@ -334,7 +334,7 @@ Blockly.geras.RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (Blockly.blockRendering.Types.isSpacer(elem)) {
     return row.yPos + elem.height / 2;
   }
@@ -371,9 +371,9 @@ Blockly.geras.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
+RenderInfo.prototype.alignRowElements_ = function() {
   if (!this.isInline) {
-    Blockly.geras.RenderInfo.superClass_.alignRowElements_.call(this);
+    RenderInfo.superClass_.alignRowElements_.call(this);
     return;
   }
 
@@ -420,20 +420,20 @@ Blockly.geras.RenderInfo.prototype.alignRowElements_ = function() {
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.getDesiredRowWidth_ = function(
+RenderInfo.prototype.getDesiredRowWidth_ = function(
     row) {
   // Limit the width of a statement row when a block is inline.
   if (this.isInline && row.hasStatement) {
     return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH + this.startX;
   }
-  return Blockly.geras.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+  return RenderInfo.superClass_.getDesiredRowWidth_.call(this,
       row);
 };
 
 /**
  * @override
  */
-Blockly.geras.RenderInfo.prototype.finalize_ = function() {
+RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
@@ -475,3 +475,5 @@ Blockly.geras.RenderInfo.prototype.finalize_ = function() {
   this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
   this.startY = this.topRow.capline;
 };
+
+exports = RenderInfo;

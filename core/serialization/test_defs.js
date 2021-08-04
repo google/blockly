@@ -5,8 +5,14 @@ Blockly.Blocks['test1'] = {
   mutationToDom: function() {
 
   },
+  saveExtraState: function() {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  },
   domToMutation: function(mutation) {
 
+  },
+  loadExtraState: function(state) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   },
 }
 
@@ -15,8 +21,14 @@ Blockly.Blocks['test3'] = {
   'mutationToDom': function() {
 
   },
+  'saveExtraState': function() {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  },
   'domToMutation': function(mutation) {
 
+  },
+  'loadExtraState': function(state) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   },
 };
 
@@ -25,8 +37,14 @@ Blockly.Blocks['test3'] = {
        'mutationToDom': function() {
 
        },
+       'saveExtraState': function() {
+         return Blockly.Xml.domToText(this.mutationToDom());
+       },
        'domToMutation': function(mutation) {
 
+       },
+       'loadExtraState': function(state) {
+         return this.domToMutation(Blockly.Xml.textToDom(state));
        },
      };
 
@@ -35,8 +53,14 @@ const mutator = {
   mutationToDom: function() {
 
   },
+  saveExtraState: function() {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  },
   domToMutation: function(mutation) {
 
+  },
+  loadExtraState: function(state) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   },
 };
 
@@ -45,8 +69,14 @@ const mutator2 = {
   'mutationToDom': function() {
 
   },
+  'saveExtraState': function() {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  },
   'domToMutation': function(mutation) {
 
+  },
+  'loadExtraState': function(state) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   },
 };
 
@@ -57,9 +87,15 @@ class Es6Class {
   mutationToDom() {
 
   }
+  saveExtraState() {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  }
 
   domToMutation(mutation) {
 
+  }
+  loadExtraState(state) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   }
 }
 
@@ -68,9 +104,15 @@ class TypeScriptClass {
   mutationToDom(): Element {
 
   }
+  saveExtraState(): string {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  }
 
   domToMutation(el: Element) {
 
+  }
+  loadExtraState(state: string) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   }
 }
 
@@ -79,8 +121,14 @@ Blockly.Blocks['typescript_obj_literal']: Whatever = {
   mutationToDom: function(this: Whatever): Element {
 
   },
+  saveExtraState: function(this: Whatever): string {
+    return Blockly.Xml.domToText(this.mutationToDom());
+  },
   domToMutation: function(this: Whatever, el: Element): {
 
+  }
+  loadExtraState: function(this: Whatever, state: string) {
+    return this.domToMutation(Blockly.Xml.textToDom(state));
   }
 }
 
@@ -88,9 +136,17 @@ Blockly.Blocks['typescript_obj_literal']: Whatever = {
 Blockly.CustomField.prototype.toXml = function(fieldElement) {
 
 };
+Blockly.CustomField.prototype.saveState = function() {
+  var elem = Blockly.utils.xml.createElement("field");
+  elem.setAttribute("name", this.name || '');
+  return Blockly.Xml.domToText(this.toXml(elem));
+};
 
 Blockly.CustomField.prototype.fromXml = function(fieldElement) {
 
+};
+Blockly.CustomField.prototype.loadState = function(state) {
+  this.fromXml(Blockly.Xml.textToDom(state));
 };
 
 // Class based field def
@@ -100,9 +156,17 @@ class CustomField extends Field {
   toXml(fieldElement) {
 
   }
+  saveState() {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    return Blockly.Xml.domToText(this.toXml(elem));
+  }
 
   fromXml(fieldElement) {
 
+  }
+  loadState(state) {
+    this.fromXml(Blockly.Xml.textToDom(state));
   }
 }
 
@@ -113,9 +177,17 @@ class CustomField extends Field {
   toXml(fieldElement: Element): Element {
 
   }
+  saveState(): string {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    return Blockly.Xml.domToText(this.toXml(elem));
+  }
 
   fromXml(fieldElement: Element) {
 
+  }
+  loadState(state: string) {
+    this.fromXml(Blockly.Xml.textToDom(state));
   }
 }
 

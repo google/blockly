@@ -11,7 +11,8 @@
 
 'use strict';
 
-goog.provide('Blockly.blockRendering.Measurable');
+goog.module('Blockly.blockRendering.Measurable');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Types');
 
@@ -27,7 +28,7 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @package
  * @constructor
  */
-Blockly.blockRendering.Measurable = function(constants) {
+const Measurable = function(constants) {
   this.width = 0;
   this.height = 0;
   this.type = Blockly.blockRendering.Types.NONE;
@@ -44,3 +45,5 @@ Blockly.blockRendering.Measurable = function(constants) {
 
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
+
+exports = Measurable;

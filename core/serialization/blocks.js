@@ -33,37 +33,140 @@ const registry = goog.require('Blockly.serialization.registry');
 /* eslint-disable no-use-before-define */
 
 /**
- * Represents the state of a connection.
- * @typedef {{
- *   shadow: (!State|undefined),
- *   block: (!State|undefined)
- * }}
+ * Defines the state of a connection.
+ * @record
  */
-var ConnectionState;
+class ConnectionState {
+  constructor() {
+    /**
+     * The state of the shadow block attached to this connection, if any.
+     * @type {(!State|undefined)}
+     */
+    this.shadow;
+
+    /**
+     * The state of the real block attached to this connection, if any.
+     * @type {(!State|undefined)}
+     */
+    this.block;
+  }
+}
 exports.ConnectionState = ConnectionState;
 
 /**
- * Represents the state of a given block.
- * @typedef {{
- *     type: string,
- *     id: string,
- *     x: (number|undefined),
- *     y: (number|undefined),
- *     collapsed: (boolean|undefined),
- *     disabled: (boolean|undefined),
- *     editable: (boolean|undefined),
- *     deletable: (boolean|undefined),
- *     movable: (boolean|undefined),
- *     inline: (boolean|undefined),
- *     data: (string|undefined),
- *     extra-state: *,
- *     icons: (!Object<string, *>|undefined),
- *     fields: (!Object<string, *>|undefined),
- *     inputs: (!Object<string, !ConnectionState>|undefined),
- *     next: (!ConnectionState|undefined)
- * }}
+ * Defines the state of a block.
+ * @record
  */
-var State;
+class State {
+  constructor() {
+    /**
+     * The type of the block, eg "controls_if".
+     * @type {string}
+     */
+    this.type;
+
+    /**
+     * The id of the block.
+     * @type {string}
+     */
+    this.id;
+
+    /**
+     * The position of the block along the x axis.
+     * @type {(number|undefined)}
+     */
+    this.x;
+
+    /**
+     * The position of the block along the y axis.
+     * @type {(number|undefined)}
+     */
+    this.y;
+
+    /**
+     * Whether the block so collapsed or not. True if it is collapsed, undefined
+     * if not.
+     * @type {(boolean|undefined)}
+     */
+    this.collapsed;
+
+    /**
+     * Whether the block is enabled or not. Undefined if it is enabled, false
+     * if it is not.
+     * @type {(boolean|undefined)}
+     */
+    this.enabled;
+
+    /**
+     * Whether the block is editable or not. Undefined if it is editable, false
+     * if it is not.
+     * @type {(boolean|undefined)}
+     */
+    this.editable;
+
+    /**
+     * Whether the block is deletable or not. Undefined if it is deletable,
+     * false if it is not.
+     * @type {(boolean|undefined)}
+     */
+    this.deletable;
+
+    /**
+     * Whether the block is movable or not. Undefined if it is movable, false
+     * if it is not.
+     * @type {(boolean|undefined)}
+     */
+    this.movable;
+
+    /**
+     * Whether the block is inline or not. True if it is inlined, false if it
+     * is not. Undefined if the inlined state matches the block's default
+     * inlined state (depends on the particular block).
+     * @type {(boolean|undefined)}
+     */
+    this.inline;
+
+    /**
+     * An extra string that gets round-tripped through serialiation. Often used
+     * for associating blocks with external assets.
+     * @type {(string|undefined)}
+     */
+    this.data;
+
+    /**
+     * The extra state associated with the block.
+     * In the past this was called a "mutation".
+     * @type {(*|undefined)}
+     */
+    this.extraState;
+
+    /**
+     * The state of the icons attached to this block.
+     * @type {(!Object<string, *>|undfined)}
+     */
+    this.icons;
+
+    /**
+     * The state of the fields attached to this block.
+     * @type {(!Objec<string, *>|undefined)}
+     */
+    this.fields;
+
+    /**
+     * The state of the blocks and shadow blocks attached to the inputs of this
+     * block. Includes both value inputs and statement inputs.
+     * @type {(!Object<string, !ConnectionState>|undefined)}
+     */
+    this.inputs;
+
+    /**
+     * The state of the block and/or shadow block attached to the next input
+     * of this block, if one exists.
+     * @type {(!ConnectionState|undefined)}
+     */
+    this.next;
+  }
+}
 exports.State = State;
 
 /**

@@ -25,14 +25,30 @@ const registry = goog.require('Blockly.serialization.registry');
 
 
 /**
- * Represents the state of a given variable.
- * @typedef {{
- *   name: string,
- *   id: string,
- *   type: (string|undefined),
- * }}
+ * Defines the state of a variable.
+ * @record
  */
-var State;
+class State {
+  constructor() {
+    /**
+     * The name of this variable.
+     * @type {string}
+     */
+    this.name;
+
+    /**
+     * The ID of this variable.
+     * @type {string}
+     */
+    this.id;
+
+    /**
+     * The type of this variable, if it does not have the default type ''.
+     * @type {(string|undefined)}
+     */
+    this.type;
+  }
+}
 exports.State = State;
 
 /**

@@ -118,8 +118,7 @@ WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   if (!newSurface) {
     throw Error(
-        'Couldn\'t clear and hide the drag surface: missing ' +
-        'new surface.');
+        'Couldn\'t clear and hide the drag surface: missing new surface.');
   }
   const blockCanvas = /** @type {!Element} */ (this.SVG_.childNodes[0]);
   const bubbleCanvas = /** @type {!Element} */ (this.SVG_.childNodes[1]);
@@ -127,8 +126,7 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
       !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
       !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
     throw Error(
-        'Couldn\'t clear and hide the drag surface. ' +
-        'A node was missing.');
+        'Couldn\'t clear and hide the drag surface. A node was missing.');
   }
 
   // If there is a previous sibling, put the blockCanvas back right afterwards,

@@ -42,8 +42,7 @@ const BlockBase = function(opt_block) {
    */
   this.workspaceId = this.isBlank ? '' : opt_block.workspace.id;
 };
-object.inherits(BlockBase,
-    Abstract);
+object.inherits(BlockBase, Abstract);
 
 /**
  * Encode the event as JSON.

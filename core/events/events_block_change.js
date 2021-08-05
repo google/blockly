@@ -32,8 +32,8 @@ const registry = goog.require('Blockly.registry');
  * @extends {Events.BlockBase}
  * @constructor
  */
-const BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
-    opt_newValue) {
+const BlockChange = function(
+    opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
   BlockChange.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
@@ -94,7 +94,7 @@ BlockChange.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't change non-existent block: " + this.blockId);
+    console.warn('Can\'t change non-existent block: ' + this.blockId);
     return;
   }
   if (block.mutator) {
@@ -108,7 +108,7 @@ BlockChange.prototype.run = function(forward) {
       if (field) {
         field.setValue(value);
       } else {
-        console.warn("Can't set non-existent field: " + this.name);
+        console.warn('Can\'t set non-existent field: ' + this.name);
       }
       break;
     }
@@ -132,11 +132,10 @@ BlockChange.prototype.run = function(forward) {
       }
       if (block.domToMutation) {
         const dom = Xml.textToDom(/** @type {string} */
-            (value) || '<mutation/>');
+                                  (value) || '<mutation/>');
         block.domToMutation(dom);
       }
-      Events.fire(new BlockChange(
-          block, 'mutation', null, oldMutation, value));
+      Events.fire(new BlockChange(block, 'mutation', null, oldMutation, value));
       break;
     }
     default:
@@ -144,7 +143,6 @@ BlockChange.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.CHANGE,
-    BlockChange);
+registry.register(registry.Type.EVENT, Events.CHANGE, BlockChange);
 
 exports = BlockChange;

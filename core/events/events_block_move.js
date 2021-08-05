@@ -85,8 +85,7 @@ BlockMove.prototype.fromJson = function(json) {
   this.newInputName = json['newInputName'];
   if (json['newCoordinate']) {
     const xy = json['newCoordinate'].split(',');
-    this.newCoordinate =
-        new Coordinate(Number(xy[0]), Number(xy[1]));
+    this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -144,7 +143,7 @@ BlockMove.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const block = workspace.getBlockById(this.blockId);
   if (!block) {
-    console.warn("Can't move non-existent block: " + this.blockId);
+    console.warn('Can\'t move non-existent block: ' + this.blockId);
     return;
   }
   const parentId = forward ? this.newParentId : this.oldParentId;
@@ -154,7 +153,7 @@ BlockMove.prototype.run = function(forward) {
   if (parentId) {
     parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
-      console.warn("Can't connect to non-existent block: " + parentId);
+      console.warn('Can\'t connect to non-existent block: ' + parentId);
       return;
     }
   }
@@ -179,12 +178,11 @@ BlockMove.prototype.run = function(forward) {
     if (parentConnection) {
       blockConnection.connect(parentConnection);
     } else {
-      console.warn("Can't connect to non-existent input: " + inputName);
+      console.warn('Can\'t connect to non-existent input: ' + inputName);
     }
   }
 };
 
-registry.register(registry.Type.EVENT, Events.MOVE,
-    BlockMove);
+registry.register(registry.Type.EVENT, Events.MOVE, BlockMove);
 
 exports = BlockMove;

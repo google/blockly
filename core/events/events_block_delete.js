@@ -99,7 +99,7 @@ BlockDelete.prototype.run = function(forward) {
         block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't delete non-existent block: " + id);
+        console.warn('Can\'t delete non-existent block: ' + id);
       }
     }
   } else {
@@ -109,7 +109,6 @@ BlockDelete.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.DELETE,
-    BlockDelete);
+registry.register(registry.Type.EVENT, Events.DELETE, BlockDelete);
 
 exports = BlockDelete;

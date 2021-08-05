@@ -240,7 +240,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.getDraggingConnections().indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 
@@ -264,7 +264,7 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.getDraggingConnections().indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 

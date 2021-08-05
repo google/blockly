@@ -77,27 +77,6 @@ exports.setParentContainer = setParentContainer;
 
 /**
  * All of the connections on blocks that are currently being dragged.
- * @type {!Array.<!Connection>}
+ * @type {!Array<!Connection>}
  */
-let draggingConnections = [];
-
-/**
- * Get the list of dragging connections.
- * @returns {!Array.<!Connection>} The list of connections on blocks that are
- *     currently being dragged.
- */
-const getDraggingConnections = function() {
-  return draggingConnections;
-};
-/** @package **/
-exports.getDraggingConnections = getDraggingConnections;
-
-/**
- * Set the list of dragging connections.
- * @param {!Array.<!Connection>} connectionList The new list of connections on
- *     blocks that are currently being dragged.
- */
-const setDraggingConnections = function(connectionList) {
-  draggingConnections = connectionList;
-};
-exports.setDraggingConnections = setDraggingConnections;
+exports.draggingConnections = [];

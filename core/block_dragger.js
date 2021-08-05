@@ -333,7 +333,7 @@ BlockDragger.prototype.maybeDeleteBlock_ = function() {
     // Fire a move event, so we know where to go back to for an undo.
     this.fireMoveEvent_();
     this.draggingBlock_.dispose(false, true);
-    common.setDraggingConnections([]);
+    common.draggingConnections.length = 0;
     return true;
   }
   return false;

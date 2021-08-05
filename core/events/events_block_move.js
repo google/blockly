@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Classes for a block move event.
+ * @fileoverview Class for a block move event.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';

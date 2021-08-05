@@ -13,21 +13,21 @@
 goog.module('Blockly.Events.BlockMove');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.connectionTypes');
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Events = goog.require('Blockly.Events');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a block move event.  Created before the move.
- * @param {!Blockly.Block=} opt_block The moved block.  Undefined for a blank
+ * @param {!Block=} opt_block The moved block.  Undefined for a blank
  *     event.
- * @extends {Blockly.Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
  */
 const BlockMove = function(opt_block) {
@@ -45,13 +45,13 @@ const BlockMove = function(opt_block) {
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
 };
-Blockly.utils.object.inherits(BlockMove, Blockly.Events.BlockBase);
+object.inherits(BlockMove, BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockMove.prototype.type = Blockly.Events.BLOCK_MOVE;
+BlockMove.prototype.type = Events.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -86,7 +86,7 @@ BlockMove.prototype.fromJson = function(json) {
   if (json['newCoordinate']) {
     const xy = json['newCoordinate'].split(',');
     this.newCoordinate =
-        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+        new Coordinate(Number(xy[0]), Number(xy[1]));
   }
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -133,7 +133,7 @@ BlockMove.prototype.currentLocation_ = function() {
 BlockMove.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&
       this.oldInputName == this.newInputName &&
-      Blockly.utils.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+      Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
 
 /**
@@ -173,7 +173,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == connectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {
@@ -184,7 +184,7 @@ BlockMove.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
+registry.register(registry.Type.EVENT, Events.MOVE,
     BlockMove);
 
 exports = BlockMove;

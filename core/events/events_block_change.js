@@ -13,23 +13,23 @@
 goog.module('Blockly.Events.BlockChange');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Events = goog.require('Blockly.Events');
+const Xml = goog.require('Blockly.Xml');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a block change event.
- * @param {!Blockly.Block=} opt_block The changed block.  Undefined for a blank
+ * @param {!Block=} opt_block The changed block.  Undefined for a blank
  *     event.
  * @param {string=} opt_element One of 'field', 'comment', 'disabled', etc.
  * @param {?string=} opt_name Name of input or field affected, or null.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Blockly.Events.BlockBase}
+ * @extends {Events.BlockBase}
  * @constructor
  */
 const BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
@@ -43,13 +43,13 @@ const BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-Blockly.utils.object.inherits(BlockChange, Blockly.Events.BlockBase);
+object.inherits(BlockChange, Events.BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockChange.prototype.type = Blockly.Events.BLOCK_CHANGE;
+BlockChange.prototype.type = Events.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -128,14 +128,14 @@ BlockChange.prototype.run = function(forward) {
       let oldMutation = '';
       if (block.mutationToDom) {
         const oldMutationDom = block.mutationToDom();
-        oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+        oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        const dom = Blockly.Xml.textToDom(/** @type {string} */
+        const dom = Xml.textToDom(/** @type {string} */
             (value) || '<mutation/>');
         block.domToMutation(dom);
       }
-      Blockly.Events.fire(new BlockChange(
+      Events.fire(new BlockChange(
           block, 'mutation', null, oldMutation, value));
       break;
     }
@@ -144,7 +144,7 @@ BlockChange.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
+registry.register(registry.Type.EVENT, Events.CHANGE,
     BlockChange);
 
 exports = BlockChange;

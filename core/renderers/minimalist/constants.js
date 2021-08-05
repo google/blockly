@@ -26,7 +26,6 @@ const object = goog.require('Blockly.utils.object');
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);
 };
-object.inherits(ConstantProvider,
-    BaseConstantProvider);
+object.inherits(ConstantProvider, BaseConstantProvider);
 
 exports = ConstantProvider;

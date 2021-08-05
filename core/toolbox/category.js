@@ -13,31 +13,33 @@
 goog.module('Blockly.ToolboxCategory');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly');
-goog.require('Blockly.Css');
-goog.require('Blockly.ISelectableToolboxItem');
-goog.require('Blockly.registry');
-goog.require('Blockly.ToolboxItem');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.toolbox');
-
-goog.requireType('Blockly.ICollapsibleToolboxItem');
-goog.requireType('Blockly.IToolbox');
+const Blockly = goog.require('Blockly');
+const Css = goog.require('Blockly.Css');
+/* eslint-disable-next-line no-unused-vars */
+const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const IToolbox = goog.requireType('Blockly.IToolbox');
+const ToolboxItem = goog.require('Blockly.ToolboxItem');
+const aria = goog.require('Blockly.utils.aria');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const utils = goog.require('Blockly.utils');
 
 
 /**
  * Class for a category in a toolbox.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
+ * @param {!toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category in the toolbox.
- * @param {!Blockly.IToolbox} toolbox The parent toolbox for the category.
- * @param {Blockly.ICollapsibleToolboxItem=} opt_parent The parent category or null if
+ * @param {!IToolbox} toolbox The parent toolbox for the category.
+ * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
  *     the category does not have a parent.
  * @constructor
- * @extends {Blockly.ToolboxItem}
- * @implements {Blockly.ISelectableToolboxItem}
+ * @extends {ToolboxItem}
+ * @implements {ISelectableToolboxItem}
  */
 const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   ToolboxCategory.superClass_.constructor.call(
@@ -48,7 +50,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.name_ = Blockly.utils.replaceMessageReferences(categoryDef['name']);
+  this.name_ = utils.replaceMessageReferences(categoryDef['name']);
 
   /**
    * The colour of the category.
@@ -100,7 +102,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.cssConfig_ = this.makeDefaultCssConfig_();
 
   const cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
-  Blockly.utils.object.mixin(this.cssConfig_, cssConfig);
+  object.mixin(this.cssConfig_, cssConfig);
 
   /**
    * True if the category is meant to be hidden, false otherwise.
@@ -118,7 +120,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!Blockly.utils.toolbox.FlyoutItemInfoArray}
+   * @type {string|!toolbox.FlyoutItemInfoArray}
    * @protected
    */
   this.flyoutItems_ = [];
@@ -126,7 +128,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   this.parseContents_(categoryDef);
 };
 
-Blockly.utils.object.inherits(ToolboxCategory, Blockly.ToolboxItem);
+object.inherits(ToolboxCategory, ToolboxItem);
 
 /**
  * All the CSS class names that are used to create a category.
@@ -191,7 +193,7 @@ ToolboxCategory.prototype.makeDefaultCssConfig_ = function() {
 /**
  * Parses the contents array depending on if the category is a dynamic category,
  * or if its contents are meant to be shown in the flyout.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The information needed
+ * @param {!toolbox.CategoryInfo} categoryDef The information needed
  *     to create a category.
  * @protected
  */
@@ -226,11 +228,11 @@ ToolboxCategory.prototype.init = function() {
  */
 ToolboxCategory.prototype.createDom_ = function() {
   this.htmlDiv_ = this.createContainer_();
-  Blockly.utils.aria.setRole(this.htmlDiv_, Blockly.utils.aria.Role.TREEITEM);
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      Blockly.utils.aria.State.SELECTED,false);
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      Blockly.utils.aria.State.LEVEL, this.level_);
+  aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
+  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      aria.State.SELECTED,false);
+  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      aria.State.LEVEL, this.level_);
 
   this.rowDiv_ = this.createRowContainer_();
   this.rowDiv_.style.pointerEvents = 'auto';
@@ -241,13 +243,13 @@ ToolboxCategory.prototype.createDom_ = function() {
   this.rowDiv_.appendChild(this.rowContents_);
 
   this.iconDom_ = this.createIconDom_();
-  Blockly.utils.aria.setRole(this.iconDom_, Blockly.utils.aria.Role.PRESENTATION);
+  aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
   this.rowContents_.appendChild(this.iconDom_);
 
   this.labelDom_ = this.createLabelDom_(this.name_);
   this.rowContents_.appendChild(this.labelDom_);
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      Blockly.utils.aria.State.LABELLEDBY, this.labelDom_.getAttribute('id'));
+  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      aria.State.LABELLEDBY, this.labelDom_.getAttribute('id'));
 
   this.addColourBorder_(this.colour_);
 
@@ -261,7 +263,7 @@ ToolboxCategory.prototype.createDom_ = function() {
  */
 ToolboxCategory.prototype.createContainer_ = function() {
   const container = document.createElement('div');
-  Blockly.utils.dom.addClass(container, this.cssConfig_['container']);
+  dom.addClass(container, this.cssConfig_['container']);
   return container;
 };
 
@@ -273,7 +275,7 @@ ToolboxCategory.prototype.createContainer_ = function() {
  */
 ToolboxCategory.prototype.createRowContainer_ = function() {
   const rowDiv = document.createElement('div');
-  Blockly.utils.dom.addClass(rowDiv, this.cssConfig_['row']);
+  dom.addClass(rowDiv, this.cssConfig_['row']);
   let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
   nestedPadding = nestedPadding.toString() + 'px';
   this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
@@ -289,7 +291,7 @@ ToolboxCategory.prototype.createRowContainer_ = function() {
  */
 ToolboxCategory.prototype.createRowContentsContainer_ = function() {
   const contentsContainer = document.createElement('div');
-  Blockly.utils.dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
+  dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
   return contentsContainer;
 };
 
@@ -301,7 +303,7 @@ ToolboxCategory.prototype.createRowContentsContainer_ = function() {
 ToolboxCategory.prototype.createIconDom_ = function() {
   const toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
-    Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
+    dom.addClass(toolboxIcon, this.cssConfig_['icon']);
   }
 
   toolboxIcon.style.display = 'inline-block';
@@ -319,7 +321,7 @@ ToolboxCategory.prototype.createLabelDom_ = function(name) {
   const toolboxLabel = document.createElement('span');
   toolboxLabel.setAttribute('id', this.getId() + '.label');
   toolboxLabel.textContent = name;
-  Blockly.utils.dom.addClass(toolboxLabel, this.cssConfig_['label']);
+  dom.addClass(toolboxLabel, this.cssConfig_['label']);
   return toolboxLabel;
 };
 
@@ -328,7 +330,7 @@ ToolboxCategory.prototype.createLabelDom_ = function(name) {
  * @public
  */
 ToolboxCategory.prototype.refreshTheme = function() {
-  this.colour_ = this.getColour_(/** @type {Blockly.utils.toolbox.CategoryInfo} **/
+  this.colour_ = this.getColour_(/** @type {toolbox.CategoryInfo} **/
       (this.toolboxItemDef_));
   this.addColourBorder_(this.colour_);
 };
@@ -352,7 +354,7 @@ ToolboxCategory.prototype.addColourBorder_ = function(colour) {
 
 /**
  * Gets either the colour or the style for a category.
- * @param {!Blockly.utils.toolbox.CategoryInfo} categoryDef The object holding
+ * @param {!toolbox.CategoryInfo} categoryDef The object holding
  *    information on the category.
  * @return {string} The hex colour for the category.
  * @protected
@@ -415,7 +417,7 @@ ToolboxCategory.prototype.getClickTarget = function() {
 ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
-  const colour = Blockly.utils.replaceMessageReferences(colourValue);
+  const colour = utils.replaceMessageReferences(colourValue);
   if (colour == null || colour === '') {
     // No attribute. No colour.
     return '';
@@ -424,7 +426,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
     if (!isNaN(hue)) {
       return Blockly.hueToHex(hue);
     } else {
-      const hex = Blockly.utils.colour.parse(colour);
+      const hex = utils.colour.parse(colour);
       if (hex) {
         return hex;
       } else {
@@ -445,8 +447,8 @@ ToolboxCategory.prototype.openIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['closedicon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['openicon']);
+  dom.removeClasses(iconDiv, this.cssConfig_['closedicon']);
+  dom.addClass(iconDiv, this.cssConfig_['openicon']);
 };
 
 /**
@@ -458,8 +460,8 @@ ToolboxCategory.prototype.closeIcon_ = function(iconDiv) {
   if (!iconDiv) {
     return;
   }
-  Blockly.utils.dom.removeClasses(iconDiv, this.cssConfig_['openicon']);
-  Blockly.utils.dom.addClass(iconDiv, this.cssConfig_['closedicon']);
+  dom.removeClasses(iconDiv, this.cssConfig_['openicon']);
+  dom.addClass(iconDiv, this.cssConfig_['closedicon']);
 };
 
 /**
@@ -545,13 +547,13 @@ ToolboxCategory.prototype.setSelected = function(isSelected) {
     const defaultColour = this.parseColour_(
         ToolboxCategory.defaultBackgroundColour);
     this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
-    Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_['selected']);
+    dom.addClass(this.rowDiv_, this.cssConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';
-    Blockly.utils.dom.removeClass(this.rowDiv_, this.cssConfig_['selected']);
+    dom.removeClass(this.rowDiv_, this.cssConfig_['selected']);
   }
-  Blockly.utils.aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      Blockly.utils.aria.State.SELECTED, isSelected);
+  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
+      aria.State.SELECTED, isSelected);
 };
 
 /**
@@ -591,7 +593,7 @@ ToolboxCategory.prototype.getDiv = function() {
 /**
  * Gets the contents of the category. These are items that are meant to be
  * displayed in the flyout.
- * @return {!Blockly.utils.toolbox.FlyoutItemInfoArray|string} The definition
+ * @return {!toolbox.FlyoutItemInfoArray|string} The definition
  *     of items to be displayed in the flyout.
  * @public
  */
@@ -603,7 +605,7 @@ ToolboxCategory.prototype.getContents = function() {
  * Updates the contents to be displayed in the flyout.
  * If the flyout is open when the contents are updated, refreshSelection on the
  * toolbox must also be called.
- * @param {!Blockly.utils.toolbox.FlyoutDefinition|string} contents The contents
+ * @param {!toolbox.FlyoutDefinition|string} contents The contents
  *     to be displayed in the flyout. A string can be supplied to create a
  *     dynamic category.
  * @public
@@ -617,23 +619,23 @@ ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
     // Removes old custom field when contents is updated.
     delete this.toolboxItemDef_['custom'];
     this.toolboxItemDef_['contents'] =
-        Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents);
+        toolbox.convertFlyoutDefToJsonArray(contents);
   }
   this.parseContents_(
-      /** @type {Blockly.utils.toolbox.CategoryInfo} */ (this.toolboxItemDef_));
+      /** @type {toolbox.CategoryInfo} */ (this.toolboxItemDef_));
 };
 
 /**
  * @override
  */
 ToolboxCategory.prototype.dispose = function() {
-  Blockly.utils.dom.removeNode(this.htmlDiv_);
+  dom.removeNode(this.htmlDiv_);
 };
 
 /**
  * CSS for Toolbox.  See css.js for use.
  */
-Blockly.Css.register([
+Css.register([
   /* eslint-disable indent */
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: rgba(255, 255, 255, 0.2);',
@@ -709,7 +711,7 @@ Blockly.Css.register([
   /* eslint-enable indent */
 ]);
 
-Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM,
+registry.register(registry.Type.TOOLBOX_ITEM,
     ToolboxCategory.registrationName, ToolboxCategory);
 
 exports = ToolboxCategory;

@@ -205,7 +205,8 @@ ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
   } else if (contents) {
     for (let i = 0; i < contents.length; i++) {
       const itemDef = contents[i];
-      const flyoutItem = /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+      const flyoutItem =
+          /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
       this.flyoutItems_.push(flyoutItem);
     }
   }
@@ -229,10 +230,10 @@ ToolboxCategory.prototype.init = function() {
 ToolboxCategory.prototype.createDom_ = function() {
   this.htmlDiv_ = this.createContainer_();
   aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
-  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      aria.State.SELECTED,false);
-  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      aria.State.LEVEL, this.level_);
+  aria.setState(
+      /** @type {!Element} */ (this.htmlDiv_), aria.State.SELECTED, false);
+  aria.setState(
+      /** @type {!Element} */ (this.htmlDiv_), aria.State.LEVEL, this.level_);
 
   this.rowDiv_ = this.createRowContainer_();
   this.rowDiv_.style.pointerEvents = 'auto';
@@ -248,8 +249,9 @@ ToolboxCategory.prototype.createDom_ = function() {
 
   this.labelDom_ = this.createLabelDom_(this.name_);
   this.rowContents_.appendChild(this.labelDom_);
-  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      aria.State.LABELLEDBY, this.labelDom_.getAttribute('id'));
+  aria.setState(
+      /** @type {!Element} */ (this.htmlDiv_), aria.State.LABELLEDBY,
+      this.labelDom_.getAttribute('id'));
 
   this.addColourBorder_(this.colour_);
 
@@ -279,7 +281,7 @@ ToolboxCategory.prototype.createRowContainer_ = function() {
   let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
   nestedPadding = nestedPadding.toString() + 'px';
   this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
-      rowDiv.style.paddingLeft = nestedPadding;
+                        rowDiv.style.paddingLeft = nestedPadding;
   return rowDiv;
 };
 
@@ -331,7 +333,7 @@ ToolboxCategory.prototype.createLabelDom_ = function(name) {
  */
 ToolboxCategory.prototype.refreshTheme = function() {
   this.colour_ = this.getColour_(/** @type {toolbox.CategoryInfo} **/
-      (this.toolboxItemDef_));
+                                 (this.toolboxItemDef_));
   this.addColourBorder_(this.colour_);
 };
 
@@ -342,8 +344,8 @@ ToolboxCategory.prototype.refreshTheme = function() {
  */
 ToolboxCategory.prototype.addColourBorder_ = function(colour) {
   if (colour) {
-    const border = ToolboxCategory.borderWidth + 'px solid ' +
-        (colour || '#ddd');
+    const border =
+        ToolboxCategory.borderWidth + 'px solid ' + (colour || '#ddd');
     if (this.workspace_.RTL) {
       this.rowDiv_.style.borderRight = border;
     } else {
@@ -360,12 +362,13 @@ ToolboxCategory.prototype.addColourBorder_ = function(colour) {
  * @protected
  */
 ToolboxCategory.prototype.getColour_ = function(categoryDef) {
-  const styleName = categoryDef['categorystyle']
-      || categoryDef['categoryStyle'];
+  const styleName =
+      categoryDef['categorystyle'] || categoryDef['categoryStyle'];
   const colour = categoryDef['colour'];
 
   if (colour && styleName) {
-    console.warn('Toolbox category "' + this.name_ +
+    console.warn(
+        'Toolbox category "' + this.name_ +
         '" must not have both a style and a colour');
   } else if (styleName) {
     return this.getColourfromStyle_(styleName);
@@ -389,8 +392,8 @@ ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
     if (style && style.colour) {
       return this.parseColour_(style.colour);
     } else {
-      console.warn('Style "' + styleName +
-          '" must exist and contain a colour value');
+      console.warn(
+          'Style "' + styleName + '" must exist and contain a colour value');
     }
   }
   return '';
@@ -404,7 +407,7 @@ ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
  * @public
  */
 ToolboxCategory.prototype.getClickTarget = function() {
-  return /** @type {!Element} */(this.rowDiv_);
+  return /** @type {!Element} */ (this.rowDiv_);
 };
 
 /**
@@ -430,7 +433,8 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
       if (hex) {
         return hex;
       } else {
-        console.warn('Toolbox category "' + this.name_ +
+        console.warn(
+            'Toolbox category "' + this.name_ +
             '" has unrecognized colour attribute: ' + colour);
         return '';
       }
@@ -496,7 +500,8 @@ ToolboxCategory.prototype.show = function() {
 
 /**
  * Whether the category is visible.
- * A category is only visible if all of its ancestors are expanded and isHidden_ is false.
+ * A category is only visible if all of its ancestors are expanded and isHidden_
+ * is false.
  * @return {boolean} True if the category is visible, false otherwise.
  * @public
  */
@@ -505,7 +510,8 @@ ToolboxCategory.prototype.isVisible = function() {
 };
 
 /**
- * Whether all ancestors of a category (parent and parent's parent, etc.) are expanded.
+ * Whether all ancestors of a category (parent and parent's parent, etc.) are
+ * expanded.
  * @return {boolean} True only if every ancestor is expanded
  * @protected
  */
@@ -544,16 +550,16 @@ ToolboxCategory.prototype.onClick = function(_e) {
  */
 ToolboxCategory.prototype.setSelected = function(isSelected) {
   if (isSelected) {
-    const defaultColour = this.parseColour_(
-        ToolboxCategory.defaultBackgroundColour);
+    const defaultColour =
+        this.parseColour_(ToolboxCategory.defaultBackgroundColour);
     this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
     dom.addClass(this.rowDiv_, this.cssConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';
     dom.removeClass(this.rowDiv_, this.cssConfig_['selected']);
   }
-  aria.setState(/** @type {!Element} */ (this.htmlDiv_),
-      aria.State.SELECTED, isSelected);
+  aria.setState(
+      /** @type {!Element} */ (this.htmlDiv_), aria.State.SELECTED, isSelected);
 };
 
 /**
@@ -564,7 +570,7 @@ ToolboxCategory.prototype.setDisabled = function(isDisabled) {
   this.isDisabled_ = isDisabled;
   this.getDiv().setAttribute('disabled', isDisabled);
   isDisabled ? this.getDiv().setAttribute('disabled', 'true') :
-      this.getDiv().removeAttribute('disabled');
+               this.getDiv().removeAttribute('disabled');
 };
 
 /**
@@ -636,82 +642,81 @@ ToolboxCategory.prototype.dispose = function() {
  * CSS for Toolbox.  See css.js for use.
  */
 Css.register([
-  /* eslint-disable indent */
-  '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
-    'background-color: rgba(255, 255, 255, 0.2);',
-  '}',
+  `.blocklyTreeRow:not(.blocklyTreeSelected):hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}`,
 
-  '.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 5px 1px 0;',
-  '}',
+  `.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+  margin: 1px 5px 1px 0;
+}`,
 
-  '.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {',
-    'margin: 1px 0 1px 5px;',
-  '}',
+  `.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+  margin: 1px 0 1px 5px;
+}`,
 
-  '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
-    'padding-right: 8px;',
-    'white-space: nowrap;',
-  '}',
+  `.blocklyTreeRow {
+  height: 22px;
+  line-height: 22px;
+  margin-bottom: 3px;
+  padding-right: 8px;
+  white-space: nowrap;
+}`,
 
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'margin-left: 8px;',
-    'padding-right: 0',
-  '}',
+  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+  margin-left: 8px;
+  padding-right: 0;
+}`,
 
-  '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
-    'vertical-align: middle;',
-    'visibility: hidden;',
-    'width: 16px;',
-  '}',
+  `.blocklyTreeIcon {',
+  background-image: url(<<<PATH>>>/sprites.png);
+  height: 16px;
+  vertical-align: middle;
+  visibility: hidden;
+  width: 16px;
+}`,
 
-  '.blocklyTreeIconClosed {',
-    'background-position: -32px -1px;',
-  '}',
+  `.blocklyTreeIconClosed {
+  background-position: -32px -1px;
+}`,
 
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {',
-    'background-position: 0 -1px;',
-  '}',
+  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
+  background-position: 0 -1px;
+}`,
 
-  '.blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: -32px -17px;',
-  '}',
+  `.blocklyTreeSelected>.blocklyTreeIconClosed {
+  background-position: -32px -17px;
+}`,
 
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {',
-    'background-position: 0 -17px;',
-  '}',
+  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
+  background-position: 0 -17px;
+}`,
 
-  '.blocklyTreeIconOpen {',
-    'background-position: -16px -1px;',
-  '}',
+  `.blocklyTreeIconOpen {
+  background-position: -16px -1px;
+}`,
 
-  '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    'background-position: -16px -17px;',
-  '}',
+  `.blocklyTreeSelected>.blocklyTreeIconOpen {
+  background-position: -16px -17px;
+}`,
 
-  '.blocklyTreeLabel {',
-    'cursor: default;',
-    'font: 16px sans-serif;',
-    'padding: 0 3px;',
-    'vertical-align: middle;',
-  '}',
+  `.blocklyTreeLabel {
+  cursor: default;
+  font: 16px sans-serif;
+  padding: 0 3px;
+  vertical-align: middle;
+}`,
 
-  '.blocklyToolboxDelete .blocklyTreeLabel {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
+  `.blocklyToolboxDelete .blocklyTreeLabel {
+  cursor: url("<<<PATH>>>/handdelete.cur"), auto;
+}`,
 
-  '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
-  '}'
-  /* eslint-enable indent */
+  `.blocklyTreeSelected .blocklyTreeLabel {
+  color: #fff;
+}`
 ]);
 
-registry.register(registry.Type.TOOLBOX_ITEM,
-    ToolboxCategory.registrationName, ToolboxCategory);
+registry.register(
+    registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,
+    ToolboxCategory);
 
 exports = ToolboxCategory;

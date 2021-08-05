@@ -13,6 +13,7 @@
 goog.module('Blockly.BlocklyOptions');
 goog.module.declareLegacyNamespace();
 
+
 /**
  * Blockly options.
  * This interface is further described in

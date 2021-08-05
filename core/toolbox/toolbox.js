@@ -18,7 +18,8 @@ const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const BlockSvg = goog.require('Blockly.BlockSvg');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
 const ComponentManager = goog.require('Blockly.ComponentManager');
-const Css = goog.require('Blockly.Css');const DeleteArea = goog.require('Blockly.DeleteArea');
+const Css = goog.require('Blockly.Css');
+const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
 const IAutoHideable = goog.require('Blockly.IAutoHideable');
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
@@ -180,7 +181,8 @@ utils.object.inherits(Toolbox, DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.
- * @param {!ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be handled.
+ * @param {!ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be
+ *     handled.
  * @return {boolean} True if the shortcut has been handled, false otherwise.
  * @public
  */
@@ -205,8 +207,8 @@ Toolbox.prototype.init = function() {
 
   this.render(this.toolboxDef_);
   const themeManager = workspace.getThemeManager();
-  themeManager.subscribe(this.HtmlDiv, 'toolboxBackgroundColour',
-      'background-color');
+  themeManager.subscribe(
+      this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
   themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
   this.workspace_.getComponentManager().addComponent({
     component: this,
@@ -276,8 +278,7 @@ Toolbox.prototype.createContentsContainer_ = function() {
  *     of the toolbox.
  * @protected
  */
-Toolbox.prototype.attachEvents_ = function(container,
-    contentsContainer) {
+Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
   // Clicking on toolbox closes popups.
   const clickEvent = browserEvents.conditionalBind(
       container, 'click', this, this.onClick_,
@@ -340,7 +341,8 @@ Toolbox.prototype.onKeyDown_ = function(e) {
     case utils.KeyCodes.ENTER:
     case utils.KeyCodes.SPACE:
       if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
-        const collapsibleItem = /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
+        const collapsibleItem =
+            /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
         collapsibleItem.toggleExpanded();
         handled = true;
       }
@@ -387,12 +389,10 @@ Toolbox.prototype.createFlyout_ = function() {
   let FlyoutClass = null;
   if (workspace.horizontalLayout) {
     FlyoutClass = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options,
-        true);
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options, true);
   } else {
     FlyoutClass = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options,
-        true);
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options, true);
   }
   return new FlyoutClass(workspaceOptions);
 };
@@ -450,12 +450,12 @@ Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment) {
   // a different name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       toolbox.isCategoryCollapsible(
-      /** @type {!toolbox.CategoryInfo} */(toolboxItemDef))) {
+          /** @type {!toolbox.CategoryInfo} */ (toolboxItemDef))) {
     registryName = CollapsibleToolboxCategory.registrationName;
   }
 
-  const ToolboxItemClass = registry.getClass(
-      registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
+  const ToolboxItemClass =
+      registry.getClass(registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
   if (ToolboxItemClass) {
     const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
     this.addToolboxItem_(toolboxItem);
@@ -637,8 +637,8 @@ Toolbox.prototype.updateWouldDelete_ = function(wouldDelete) {
  * @protected
  */
 Toolbox.prototype.updateCursorDeleteStyle_ = function(addStyle) {
-  const style = this.wouldDelete_ ? 'blocklyToolboxDelete' :
-      'blocklyToolboxGrab';
+  const style =
+      this.wouldDelete_ ? 'blocklyToolboxDelete' : 'blocklyToolboxGrab';
   if (addStyle) {
     this.addStyle(style);
   } else {
@@ -908,8 +908,9 @@ Toolbox.prototype.deselectItem_ = function(item) {
   this.selectedItem_ = null;
   this.previouslySelectedItem_ = item;
   item.setSelected(false);
-  aria.setState(/** @type {!Element} */ (this.contentsDiv_),
-      aria.State.ACTIVEDESCENDANT, '');
+  aria.setState(
+      /** @type {!Element} */ (this.contentsDiv_), aria.State.ACTIVEDESCENDANT,
+      '');
 };
 
 /**
@@ -924,8 +925,9 @@ Toolbox.prototype.selectItem_ = function(oldItem, newItem) {
   this.selectedItem_ = newItem;
   this.previouslySelectedItem_ = oldItem;
   newItem.setSelected(true);
-  aria.setState(/** @type {!Element} */ (this.contentsDiv_),
-      aria.State.ACTIVEDESCENDANT, newItem.getId());
+  aria.setState(
+      /** @type {!Element} */ (this.contentsDiv_), aria.State.ACTIVEDESCENDANT,
+      newItem.getId());
 };
 
 /**
@@ -944,7 +946,8 @@ Toolbox.prototype.selectItemByPosition = function(position) {
 
 /**
  * Decides whether to hide or show the flyout depending on the selected item.
- * @param {?ISelectableToolboxItem} oldItem The previously selected toolbox item.
+ * @param {?ISelectableToolboxItem} oldItem The previously selected toolbox
+ *     item.
  * @param {?ISelectableToolboxItem} newItem The newly selected toolbox item.
  * @protected
  */
@@ -989,10 +992,12 @@ Toolbox.prototype.selectParent_ = function() {
   }
 
   if (this.selectedItem_.isCollapsible() && this.selectedItem_.isExpanded()) {
-    const collapsibleItem = /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
+    const collapsibleItem =
+        /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
     collapsibleItem.setExpanded(false);
     return true;
-  } else if (this.selectedItem_.getParent() &&
+  } else if (
+      this.selectedItem_.getParent() &&
       this.selectedItem_.getParent().isSelectable()) {
     this.setSelectedItem(this.selectedItem_.getParent());
     return true;
@@ -1096,40 +1101,26 @@ Toolbox.prototype.dispose = function() {
  */
 Css.register([
   /* eslint-disable indent */
-  '.blocklyToolboxDelete {',
-    'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
+  '.blocklyToolboxDelete {', 'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
 
-  '.blocklyToolboxGrab {',
-    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
-    'cursor: grabbing;',
-    'cursor: -webkit-grabbing;',
-  '}',
+  '.blocklyToolboxGrab {', 'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+  'cursor: grabbing;', 'cursor: -webkit-grabbing;', '}',
 
   /* Category tree in Toolbox. */
-  '.blocklyToolboxDiv {',
-    'background-color: #ddd;',
-    'overflow-x: visible;',
-    'overflow-y: auto;',
-    'padding: 4px 0 4px 0;',
-    'position: absolute;',
-    'z-index: 70;', /* so blocks go under toolbox when dragging */
-    '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+  '.blocklyToolboxDiv {', 'background-color: #ddd;', 'overflow-x: visible;',
+  'overflow-y: auto;', 'padding: 4px 0 4px 0;', 'position: absolute;',
+  'z-index: 70;', /* so blocks go under toolbox when dragging */
+  '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
   '}',
 
-  '.blocklyToolboxContents {',
-    'display: flex;',
-    'flex-wrap: wrap;',
-    'flex-direction: column;',
-  '}',
+  '.blocklyToolboxContents {', 'display: flex;', 'flex-wrap: wrap;',
+  'flex-direction: column;', '}',
 
-  '.blocklyToolboxContents:focus {',
-    'outline: none;',
-  '}',
+  '.blocklyToolboxContents:focus {', 'outline: none;', '}',
   /* eslint-enable indent */
 ]);
 
-registry.register(registry.Type.TOOLBOX,
-    registry.DEFAULT, Toolbox);
+registry.register(registry.Type.TOOLBOX, registry.DEFAULT, Toolbox);
 
 exports = Toolbox;

@@ -100,13 +100,12 @@ BlockCreate.prototype.run = function(forward) {
         block.dispose(false);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
-        console.warn("Can't uncreate non-existent block: " + id);
+        console.warn('Can\'t uncreate non-existent block: ' + id);
       }
     }
   }
 };
 
-registry.register(registry.Type.EVENT, Events.CREATE,
-    BlockCreate);
+registry.register(registry.Type.EVENT, Events.CREATE, BlockCreate);
 
 exports = BlockCreate;

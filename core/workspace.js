@@ -29,6 +29,7 @@ goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IConnectionChecker');
 goog.requireType('Blockly.utils.toolbox');
 goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -369,7 +370,7 @@ Blockly.Workspace.prototype.clear = function() {
       this.topBlocks_[0].dispose(false);
     }
     while (this.topComments_.length) {
-      this.topComments_[this.topComments_.length - 1].dispose(false);
+      this.topComments_[this.topComments_.length - 1].dispose();
     }
     if (!existingGroup) {
       Blockly.Events.setGroup(false);

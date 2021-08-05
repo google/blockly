@@ -15,6 +15,7 @@
 			"Silovan",
 			"SimondR",
 			"Teretalexev",
+			"Thothsum",
 			"Vlad5250"
 		]
 	},
@@ -30,7 +31,7 @@
 	"DELETE_BLOCK": "Удалить блок",
 	"DELETE_X_BLOCKS": "Удалить %1 блоков",
 	"DELETE_ALL_BLOCKS": "Удалить все блоки (%1)?",
-	"CLEAN_UP": "Убрать блоки",
+	"CLEAN_UP": "Очистить блоки",
 	"COLLAPSE_BLOCK": "Свернуть блок",
 	"COLLAPSE_ALL": "Свернуть блоки",
 	"EXPAND_BLOCK": "Развернуть блок",

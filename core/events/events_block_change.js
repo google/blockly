@@ -10,9 +10,11 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockChange');
+goog.module('Blockly.Events.BlockChange');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.Xml');
 
@@ -30,9 +32,9 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
+const BlockChange = function(opt_block, opt_element, opt_name, opt_oldValue,
     opt_newValue) {
-  Blockly.Events.BlockChange.superClass_.constructor.call(this, opt_block);
+  BlockChange.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -41,20 +43,20 @@ Blockly.Events.BlockChange = function(opt_block, opt_element, opt_name, opt_oldV
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockChange, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(BlockChange, Blockly.Events.BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockChange.prototype.type = Blockly.Events.BLOCK_CHANGE;
+BlockChange.prototype.type = Blockly.Events.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockChange.prototype.toJson = function() {
-  const json = Blockly.Events.BlockChange.superClass_.toJson.call(this);
+BlockChange.prototype.toJson = function() {
+  const json = BlockChange.superClass_.toJson.call(this);
   json['element'] = this.element;
   if (this.name) {
     json['name'] = this.name;
@@ -68,8 +70,8 @@ Blockly.Events.BlockChange.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockChange.prototype.fromJson = function(json) {
-  Blockly.Events.BlockChange.superClass_.fromJson.call(this, json);
+BlockChange.prototype.fromJson = function(json) {
+  BlockChange.superClass_.fromJson.call(this, json);
   this.element = json['element'];
   this.name = json['name'];
   this.oldValue = json['oldValue'];
@@ -80,7 +82,7 @@ Blockly.Events.BlockChange.prototype.fromJson = function(json) {
  * Does this event record any change of state?
  * @return {boolean} False if something changed.
  */
-Blockly.Events.BlockChange.prototype.isNull = function() {
+BlockChange.prototype.isNull = function() {
   return this.oldValue == this.newValue;
 };
 
@@ -88,7 +90,7 @@ Blockly.Events.BlockChange.prototype.isNull = function() {
  * Run a change event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.BlockChange.prototype.run = function(forward) {
+BlockChange.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const block = workspace.getBlockById(this.blockId);
   if (!block) {
@@ -133,7 +135,7 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
             (value) || '<mutation/>');
         block.domToMutation(dom);
       }
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new BlockChange(
           block, 'mutation', null, oldMutation, value));
       break;
     }
@@ -143,4 +145,6 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CHANGE,
-    Blockly.Events.BlockChange);
+    BlockChange);
+
+exports = BlockChange;

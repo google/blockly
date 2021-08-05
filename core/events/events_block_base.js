@@ -10,11 +10,10 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockBase');
+goog.module('Blockly.Events.BlockBase');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.Events.BlockBase');
 goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.Block');
@@ -27,8 +26,8 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.BlockBase = function(opt_block) {
-  Blockly.Events.BlockBase.superClass_.constructor.call(this);
+const BlockBase = function(opt_block) {
+  BlockBase.superClass_.constructor.call(this);
   this.isBlank = typeof opt_block == 'undefined';
 
   /**
@@ -43,15 +42,15 @@ Blockly.Events.BlockBase = function(opt_block) {
    */
   this.workspaceId = this.isBlank ? '' : opt_block.workspace.id;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockBase,
+Blockly.utils.object.inherits(BlockBase,
     Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockBase.prototype.toJson = function() {
-  const json = Blockly.Events.BlockBase.superClass_.toJson.call(this);
+BlockBase.prototype.toJson = function() {
+  const json = BlockBase.superClass_.toJson.call(this);
   json['blockId'] = this.blockId;
   return json;
 };
@@ -60,7 +59,9 @@ Blockly.Events.BlockBase.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockBase.prototype.fromJson = function(json) {
-  Blockly.Events.BlockBase.superClass_.fromJson.call(this, json);
+BlockBase.prototype.fromJson = function(json) {
+  BlockBase.superClass_.fromJson.call(this, json);
   this.blockId = json['blockId'];
 };
+
+exports = BlockBase;

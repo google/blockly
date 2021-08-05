@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockMove');
+goog.module('Blockly.Events.BlockMove');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.Events');
@@ -29,8 +30,8 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.BlockMove = function(opt_block) {
-  Blockly.Events.BlockMove.superClass_.constructor.call(this, opt_block);
+const BlockMove = function(opt_block) {
+  BlockMove.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -44,20 +45,20 @@ Blockly.Events.BlockMove = function(opt_block) {
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockMove, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(BlockMove, Blockly.Events.BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockMove.prototype.type = Blockly.Events.BLOCK_MOVE;
+BlockMove.prototype.type = Blockly.Events.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockMove.prototype.toJson = function() {
-  const json = Blockly.Events.BlockMove.superClass_.toJson.call(this);
+BlockMove.prototype.toJson = function() {
+  const json = BlockMove.superClass_.toJson.call(this);
   if (this.newParentId) {
     json['newParentId'] = this.newParentId;
   }
@@ -78,8 +79,8 @@ Blockly.Events.BlockMove.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockMove.prototype.fromJson = function(json) {
-  Blockly.Events.BlockMove.superClass_.fromJson.call(this, json);
+BlockMove.prototype.fromJson = function(json) {
+  BlockMove.superClass_.fromJson.call(this, json);
   this.newParentId = json['newParentId'];
   this.newInputName = json['newInputName'];
   if (json['newCoordinate']) {
@@ -95,7 +96,7 @@ Blockly.Events.BlockMove.prototype.fromJson = function(json) {
 /**
  * Record the block's new location.  Called after the move.
  */
-Blockly.Events.BlockMove.prototype.recordNew = function() {
+BlockMove.prototype.recordNew = function() {
   const location = this.currentLocation_();
   this.newParentId = location.parentId;
   this.newInputName = location.inputName;
@@ -108,7 +109,7 @@ Blockly.Events.BlockMove.prototype.recordNew = function() {
  * @return {!Object} Collection of location info.
  * @private
  */
-Blockly.Events.BlockMove.prototype.currentLocation_ = function() {
+BlockMove.prototype.currentLocation_ = function() {
   const workspace = this.getEventWorkspace_();
   const block = workspace.getBlockById(this.blockId);
   const location = {};
@@ -129,7 +130,7 @@ Blockly.Events.BlockMove.prototype.currentLocation_ = function() {
  * Does this event record any change of state?
  * @return {boolean} False if something changed.
  */
-Blockly.Events.BlockMove.prototype.isNull = function() {
+BlockMove.prototype.isNull = function() {
   return this.oldParentId == this.newParentId &&
       this.oldInputName == this.newInputName &&
       Blockly.utils.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
@@ -139,7 +140,7 @@ Blockly.Events.BlockMove.prototype.isNull = function() {
  * Run a move event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.BlockMove.prototype.run = function(forward) {
+BlockMove.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const block = workspace.getBlockById(this.blockId);
   if (!block) {
@@ -184,4 +185,6 @@ Blockly.Events.BlockMove.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.MOVE,
-    Blockly.Events.BlockMove);
+    BlockMove);
+
+exports = BlockMove;

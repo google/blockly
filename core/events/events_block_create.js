@@ -10,10 +10,12 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockCreate');
+goog.module('Blockly.Events.BlockCreate');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockBase');
+goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.Xml');
@@ -28,8 +30,8 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.BlockCreate = function(opt_block) {
-  Blockly.Events.BlockCreate.superClass_.constructor.call(this, opt_block);
+const BlockCreate = function(opt_block) {
+  BlockCreate.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -45,20 +47,20 @@ Blockly.Events.BlockCreate = function(opt_block) {
   }
   this.ids = Blockly.Events.getDescendantIds(opt_block);
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockCreate, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(BlockCreate, Blockly.Events.BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockCreate.prototype.type = Blockly.Events.BLOCK_CREATE;
+BlockCreate.prototype.type = Blockly.Events.BLOCK_CREATE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockCreate.prototype.toJson = function() {
-  const json = Blockly.Events.BlockCreate.superClass_.toJson.call(this);
+BlockCreate.prototype.toJson = function() {
+  const json = BlockCreate.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
@@ -71,8 +73,8 @@ Blockly.Events.BlockCreate.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockCreate.prototype.fromJson = function(json) {
-  Blockly.Events.BlockCreate.superClass_.fromJson.call(this, json);
+BlockCreate.prototype.fromJson = function(json) {
+  BlockCreate.superClass_.fromJson.call(this, json);
   this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
   if (json['recordUndo'] !== undefined) {
@@ -84,7 +86,7 @@ Blockly.Events.BlockCreate.prototype.fromJson = function(json) {
  * Run a creation event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.BlockCreate.prototype.run = function(forward) {
+BlockCreate.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
     const xml = Blockly.utils.xml.createElement('xml');
@@ -105,4 +107,6 @@ Blockly.Events.BlockCreate.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CREATE,
-    Blockly.Events.BlockCreate);
+    BlockCreate);
+
+exports = BlockCreate;

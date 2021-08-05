@@ -62,7 +62,7 @@ Blockly.Events.BlockDelete.prototype.type = Blockly.Events.BLOCK_DELETE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockDelete.prototype.toJson = function() {
-  var json = Blockly.Events.BlockDelete.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockDelete.superClass_.toJson.call(this);
   json['oldXml'] = Blockly.Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
@@ -89,10 +89,11 @@ Blockly.Events.BlockDelete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.BlockDelete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  const workspace = this.getEventWorkspace_();
   if (forward) {
-    for (var i = 0, id; (id = this.ids[i]); i++) {
-      var block = workspace.getBlockById(id);
+    for (let i = 0; i < this.ids.length; i++) {
+      const id = this.ids[i];
+      const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
       } else if (id == this.blockId) {
@@ -101,7 +102,7 @@ Blockly.Events.BlockDelete.prototype.run = function(forward) {
       }
     }
   } else {
-    var xml = Blockly.utils.xml.createElement('xml');
+    const xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }

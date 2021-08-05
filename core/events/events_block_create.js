@@ -58,7 +58,7 @@ Blockly.Events.BlockCreate.prototype.type = Blockly.Events.BLOCK_CREATE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockCreate.prototype.toJson = function() {
-  var json = Blockly.Events.BlockCreate.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockCreate.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
@@ -85,14 +85,15 @@ Blockly.Events.BlockCreate.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.BlockCreate.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  const workspace = this.getEventWorkspace_();
   if (forward) {
-    var xml = Blockly.utils.xml.createElement('xml');
+    const xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
-    for (var i = 0, id; (id = this.ids[i]); i++) {
-      var block = workspace.getBlockById(id);
+    for (let i = 0; i < this.ids.length; i++) {
+      const id = this.ids[i];
+      const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
       } else if (id == this.blockId) {

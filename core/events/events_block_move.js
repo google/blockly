@@ -39,7 +39,7 @@ Blockly.Events.BlockMove = function(opt_block) {
     this.recordUndo = false;
   }
 
-  var location = this.currentLocation_();
+  const location = this.currentLocation_();
   this.oldParentId = location.parentId;
   this.oldInputName = location.inputName;
   this.oldCoordinate = location.coordinate;
@@ -57,7 +57,7 @@ Blockly.Events.BlockMove.prototype.type = Blockly.Events.BLOCK_MOVE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockMove.prototype.toJson = function() {
-  var json = Blockly.Events.BlockMove.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockMove.superClass_.toJson.call(this);
   if (this.newParentId) {
     json['newParentId'] = this.newParentId;
   }
@@ -83,7 +83,7 @@ Blockly.Events.BlockMove.prototype.fromJson = function(json) {
   this.newParentId = json['newParentId'];
   this.newInputName = json['newInputName'];
   if (json['newCoordinate']) {
-    var xy = json['newCoordinate'].split(',');
+    const xy = json['newCoordinate'].split(',');
     this.newCoordinate =
         new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
@@ -96,7 +96,7 @@ Blockly.Events.BlockMove.prototype.fromJson = function(json) {
  * Record the block's new location.  Called after the move.
  */
 Blockly.Events.BlockMove.prototype.recordNew = function() {
-  var location = this.currentLocation_();
+  const location = this.currentLocation_();
   this.newParentId = location.parentId;
   this.newInputName = location.inputName;
   this.newCoordinate = location.coordinate;
@@ -109,13 +109,13 @@ Blockly.Events.BlockMove.prototype.recordNew = function() {
  * @private
  */
 Blockly.Events.BlockMove.prototype.currentLocation_ = function() {
-  var workspace = this.getEventWorkspace_();
-  var block = workspace.getBlockById(this.blockId);
-  var location = {};
-  var parent = block.getParent();
+  const workspace = this.getEventWorkspace_();
+  const block = workspace.getBlockById(this.blockId);
+  const location = {};
+  const parent = block.getParent();
   if (parent) {
     location.parentId = parent.id;
-    var input = parent.getInputWithBlock(block);
+    const input = parent.getInputWithBlock(block);
     if (input) {
       location.inputName = input.name;
     }
@@ -140,16 +140,16 @@ Blockly.Events.BlockMove.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.BlockMove.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
-  var block = workspace.getBlockById(this.blockId);
+  const workspace = this.getEventWorkspace_();
+  const block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't move non-existent block: " + this.blockId);
     return;
   }
-  var parentId = forward ? this.newParentId : this.oldParentId;
-  var inputName = forward ? this.newInputName : this.oldInputName;
-  var coordinate = forward ? this.newCoordinate : this.oldCoordinate;
-  var parentBlock = null;
+  const parentId = forward ? this.newParentId : this.oldParentId;
+  const inputName = forward ? this.newInputName : this.oldInputName;
+  const coordinate = forward ? this.newCoordinate : this.oldCoordinate;
+  let parentBlock;
   if (parentId) {
     parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
@@ -161,14 +161,14 @@ Blockly.Events.BlockMove.prototype.run = function(forward) {
     block.unplug();
   }
   if (coordinate) {
-    var xy = block.getRelativeToSurfaceXY();
+    const xy = block.getRelativeToSurfaceXY();
     block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y);
   } else {
-    var blockConnection = block.outputConnection || block.previousConnection;
-    var parentConnection;
-    var connectionType = blockConnection.type;
+    const blockConnection = block.outputConnection || block.previousConnection;
+    let parentConnection;
+    const connectionType = blockConnection.type;
     if (inputName) {
-      var input = parentBlock.getInput(inputName);
+      const input = parentBlock.getInput(inputName);
       if (input) {
         parentConnection = input.connection;
       }

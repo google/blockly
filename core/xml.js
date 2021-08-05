@@ -28,6 +28,8 @@ goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.Field');
 goog.requireType('Blockly.VariableModel');
 goog.requireType('Blockly.Workspace');
+goog.requireType('Blockly.WorkspaceComment');
+goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -440,19 +442,23 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name == 'comment') {
         if (workspace.rendered) {
-          if (!Blockly.WorkspaceCommentSvg) {
+          const WorkspaceCommentSvg =
+              goog.module.get('Blockly.WorkspaceCommentSvg');
+          if (!WorkspaceCommentSvg) {
             console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
                 'ignoring workspace comment.');
           } else {
-            Blockly.WorkspaceCommentSvg.fromXml(
-                xmlChildElement, workspace, width);
+            WorkspaceCommentSvg.fromXml(
+                xmlChildElement,
+                /** @type {!Blockly.WorkspaceSvg} */ (workspace), width);
           }
         } else {
-          if (!Blockly.WorkspaceComment) {
+          const WorkspaceComment = goog.module.get('Blockly.WorkspaceComment');
+          if (!WorkspaceComment) {
             console.warn('Missing require for Blockly.WorkspaceComment, ' +
                 'ignoring workspace comment.');
           } else {
-            Blockly.WorkspaceComment.fromXml(xmlChildElement, workspace);
+            WorkspaceComment.fromXml(xmlChildElement, workspace);
           }
         }
       } else if (name == 'variables') {

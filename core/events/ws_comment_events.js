@@ -24,6 +24,8 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.WorkspaceComment');
+
 
 /**
  * Abstract class for a comment event.
@@ -232,7 +234,7 @@ Blockly.Events.CommentCreateDeleteHelper = function(event, create) {
   } else {
     var comment = workspace.getCommentById(event.commentId);
     if (comment) {
-      comment.dispose(false, false);
+      comment.dispose();
     } else {
       // Only complain about root-level block.
       console.warn("Can't uncreate non-existent comment: " + event.commentId);

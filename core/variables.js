@@ -83,12 +83,11 @@ const allDeveloperVariables = function(workspace) {
       // August 2018: getDeveloperVars() was deprecated and renamed
       // getDeveloperVariables().
       getDeveloperVariables = block.getDeveloperVars;
-      if (!ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[
-          block.type]) {
-        console.warn('Function getDeveloperVars() deprecated. Use ' +
+      if (!ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type]) {
+        console.warn(
+            'Function getDeveloperVars() deprecated. Use ' +
             'getDeveloperVariables() (block type \'' + block.type + '\')');
-        ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[
-            block.type] = true;
+        ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type] = true;
       }
     }
     if (getDeveloperVariables) {
@@ -144,16 +143,14 @@ const flyoutCategoryBlocks = function(workspace) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'variables_set');
       block.setAttribute('gap', Blocks['math_change'] ? 8 : 24);
-      block.appendChild(
-          generateVariableFieldDom(mostRecentVariable));
+      block.appendChild(generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
     if (Blocks['math_change']) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'math_change');
       block.setAttribute('gap', Blocks['variables_get'] ? 20 : 8);
-      block.appendChild(
-          generateVariableFieldDom(mostRecentVariable));
+      block.appendChild(generateVariableFieldDom(mostRecentVariable));
       const value = Xml.textToDom(
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
@@ -192,9 +189,7 @@ exports.VAR_LETTER_OPTIONS = VAR_LETTER_OPTIONS;
  */
 const generateUniqueName = function(workspace) {
   return generateUniqueNameFromOptions(
-      VAR_LETTER_OPTIONS.charAt(0),
-      workspace.getAllVariableNames()
-  );
+      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 };
 exports.generateUniqueName = generateUniqueName;
 
@@ -262,39 +257,34 @@ const createVariableButtonHandler = function(
   const type = opt_type || '';
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(defaultName) {
-    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName,
-        function(text) {
-          if (text) {
-            const existing =
-                nameUsedWithAnyType(text, workspace);
-            if (existing) {
-              let msg;
-              if (existing.type == type) {
-                msg = Msg['VARIABLE_ALREADY_EXISTS'].replace(
-                    '%1', existing.name);
-              } else {
-                msg =
-                    Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
-                msg = msg.replace('%1', existing.name).replace('%2', existing.type);
-              }
-              Blockly.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(text);  // Recurse
-                  });
-            } else {
-              // No conflict
-              workspace.createVariable(text, type);
-              if (opt_callback) {
-                opt_callback(text);
-              }
-            }
+    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
+      if (text) {
+        const existing = nameUsedWithAnyType(text, workspace);
+        if (existing) {
+          let msg;
+          if (existing.type == type) {
+            msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
           } else {
-            // User canceled prompt.
-            if (opt_callback) {
-              opt_callback(null);
-            }
+            msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
+            msg = msg.replace('%1', existing.name).replace('%2', existing.type);
           }
-        });
+          Blockly.alert(msg, function() {
+            promptAndCheckWithAlert(text);  // Recurse
+          });
+        } else {
+          // No conflict
+          workspace.createVariable(text, type);
+          if (opt_callback) {
+            opt_callback(text);
+          }
+        }
+      } else {
+        // User canceled prompt.
+        if (opt_callback) {
+          opt_callback(null);
+        }
+      }
+    });
   };
   promptAndCheckWithAlert('');
 };
@@ -316,32 +306,30 @@ const renameVariable = function(workspace, variable, opt_callback) {
   const promptAndCheckWithAlert = function(defaultName) {
     const promptText =
         Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
-    promptName(promptText, defaultName,
-        function(newName) {
-          if (newName) {
-            const existing = nameUsedWithOtherType(newName,
-                variable.type, workspace);
-            if (existing) {
-              const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-                  .replace('%1', existing.name)
-                  .replace('%2', existing.type);
-              Blockly.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(newName);  // Recurse
-                  });
-            } else {
-              workspace.renameVariableById(variable.getId(), newName);
-              if (opt_callback) {
-                opt_callback(newName);
-              }
-            }
-          } else {
-            // User canceled prompt.
-            if (opt_callback) {
-              opt_callback(null);
-            }
+    promptName(promptText, defaultName, function(newName) {
+      if (newName) {
+        const existing =
+            nameUsedWithOtherType(newName, variable.type, workspace);
+        if (existing) {
+          const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
+                          .replace('%1', existing.name)
+                          .replace('%2', existing.type);
+          Blockly.alert(msg, function() {
+            promptAndCheckWithAlert(newName);  // Recurse
+          });
+        } else {
+          workspace.renameVariableById(variable.getId(), newName);
+          if (opt_callback) {
+            opt_callback(newName);
           }
-        });
+        }
+      } else {
+        // User canceled prompt.
+        if (opt_callback) {
+          opt_callback(null);
+        }
+      }
+    });
   };
   promptAndCheckWithAlert('');
 };
@@ -360,8 +348,7 @@ const promptName = function(promptText, defaultText, callback) {
     // Beyond this, all names are legal.
     if (newVar) {
       newVar = newVar.replace(/[\s\xa0]+/g, ' ').trim();
-      if (newVar == Msg['RENAME_VARIABLE'] ||
-          newVar == Msg['NEW_VARIABLE']) {
+      if (newVar == Msg['RENAME_VARIABLE'] || newVar == Msg['NEW_VARIABLE']) {
         // Ok, not ALL names are legal...
         newVar = null;
       }
@@ -446,13 +433,10 @@ exports.generateVariableFieldDom = generateVariableFieldDom;
  * @return {!VariableModel} The variable corresponding to the given ID
  *     or name + type combination.
  */
-const getOrCreateVariablePackage = function(workspace, id, opt_name,
-    opt_type) {
-  let variable = getVariable(workspace, id, opt_name,
-      opt_type);
+const getOrCreateVariablePackage = function(workspace, id, opt_name, opt_type) {
+  let variable = getVariable(workspace, id, opt_name, opt_type);
   if (!variable) {
-    variable = createVariable(workspace, id, opt_name,
-        opt_type);
+    variable = createVariable(workspace, id, opt_name, opt_type);
   }
   return variable;
 };
@@ -512,8 +496,7 @@ exports.getVariable = getVariable;
  * @return {!VariableModel} The variable corresponding to the given ID
  *     or name + type combination.
  */
-const createVariable = function(workspace, id, opt_name,
-    opt_type) {
+const createVariable = function(workspace, id, opt_name, opt_type) {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {

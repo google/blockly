@@ -87,8 +87,8 @@ exports.variablesToDom = variablesToDom;
  * Encode a block subtree as XML with XY coordinates.
  * @param {!Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element|!DocumentFragment} Tree of XML elements or an empty document
- *     fragment if the block was an insertion marker.
+ * @return {!Element|!DocumentFragment} Tree of XML elements or an empty
+ *     document fragment if the block was an insertion marker.
  */
 const blockToDomWithXY = function(block, opt_noId) {
   if (block.isInsertionMarker()) {  // Skip over insertion markers.
@@ -106,8 +106,8 @@ const blockToDomWithXY = function(block, opt_noId) {
 
   const element = blockToDom(block, opt_noId);
   const xy = block.getRelativeToSurfaceXY();
-  element.setAttribute('x',
-      Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute(
+      'x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
   element.setAttribute('y', Math.round(xy.y));
   return element;
 };
@@ -154,8 +154,8 @@ const allFieldsToDom_ = function(block, element) {
  * Encode a block subtree as XML.
  * @param {!Block} block The root block to encode.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
- * @return {!Element|!DocumentFragment} Tree of XML elements or an empty document
- *     fragment if the block was an insertion marker.
+ * @return {!Element|!DocumentFragment} Tree of XML elements or an empty
+ *     document fragment if the block was an insertion marker.
  */
 const blockToDom = function(block, opt_noId) {
   // Skip over insertion markers.
@@ -169,8 +169,7 @@ const blockToDom = function(block, opt_noId) {
     }
   }
 
-  const element =
-      utilsXml.createElement(block.isShadow() ? 'shadow' : 'block');
+  const element = utilsXml.createElement(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   if (!opt_noId) {
     // It's important to use setAttribute here otherwise IE11 won't serialize
@@ -415,8 +414,9 @@ const domToWorkspace = function(xml, workspace) {
     /** @suppress {checkTypes} */
     xml = workspace;
     workspace = swap;
-    console.warn('Deprecated call to domToWorkspace, ' +
-                 'swap the arguments.');
+    console.warn(
+        'Deprecated call to domToWorkspace, ' +
+        'swap the arguments.');
   }
 
   let width;  // Not used in LTR.
@@ -440,17 +440,18 @@ const domToWorkspace = function(xml, workspace) {
       const xmlChild = xml.childNodes[i];
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = /** @type {!Element} */ (xmlChild);
-      if (name == 'block' ||
-          (name == 'shadow' && !Events.recordUndo)) {
+      if (name == 'block' || (name == 'shadow' && !Events.recordUndo)) {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
         const block = domToBlock(xmlChildElement, workspace);
         newBlockIds.push(block.id);
         const blockX = xmlChildElement.hasAttribute('x') ?
-            parseInt(xmlChildElement.getAttribute('x'), 10) : 10;
+            parseInt(xmlChildElement.getAttribute('x'), 10) :
+            10;
         const blockY = xmlChildElement.hasAttribute('y') ?
-            parseInt(xmlChildElement.getAttribute('y'), 10) : 10;
+            parseInt(xmlChildElement.getAttribute('y'), 10) :
+            10;
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
@@ -462,7 +463,8 @@ const domToWorkspace = function(xml, workspace) {
           const WorkspaceCommentSvg =
               goog.module.get('Blockly.WorkspaceCommentSvg');
           if (!WorkspaceCommentSvg) {
-            console.warn('Missing require for Blockly.WorkspaceCommentSvg, ' +
+            console.warn(
+                'Missing require for Blockly.WorkspaceCommentSvg, ' +
                 'ignoring workspace comment.');
           } else {
             WorkspaceCommentSvg.fromXml(
@@ -472,7 +474,8 @@ const domToWorkspace = function(xml, workspace) {
         } else {
           const WorkspaceComment = goog.module.get('Blockly.WorkspaceComment');
           if (!WorkspaceComment) {
-            console.warn('Missing require for Blockly.WorkspaceComment, ' +
+            console.warn(
+                'Missing require for Blockly.WorkspaceComment, ' +
                 'ignoring workspace comment.');
           } else {
             WorkspaceComment.fromXml(xmlChildElement, workspace);
@@ -482,7 +485,8 @@ const domToWorkspace = function(xml, workspace) {
         if (variablesFirst) {
           domToVariables(xmlChildElement, workspace);
         } else {
-          throw Error('\'variables\' tag must exist once before block and ' +
+          throw Error(
+              '\'variables\' tag must exist once before block and ' +
               'shadow tag elements in the workspace XML, but it was found in ' +
               'another location.');
         }
@@ -499,8 +503,7 @@ const domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
-  Events.fire(new (Events.get(Events.FINISHED_LOADING))(
-      workspace));
+  Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));
   return newBlockIds;
 };
 exports.domToWorkspace = domToWorkspace;
@@ -522,14 +525,14 @@ const appendDomToWorkspace = function(xml, workspace) {
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
   if (bbox && bbox.top != bbox.bottom) {  // check if any previous block
-    let offsetY = 0;  // offset to add to y of the new block
+    let offsetY = 0;                      // offset to add to y of the new block
     let offsetX = 0;
-    const farY = bbox.bottom;  // bottom position
+    const farY = bbox.bottom;                             // bottom position
     const topX = workspace.RTL ? bbox.right : bbox.left;  // x of bounding box
     // Check position of the new blocks.
-    let newLeftX = Infinity;  // x of top left corner
+    let newLeftX = Infinity;    // x of top left corner
     let newRightX = -Infinity;  // x of top right corner
-    let newY = Infinity;  // y of top corner
+    let newY = Infinity;        // y of top corner
     const ySeparation = 10;
     for (let i = 0; i < newBlockIds.length; i++) {
       const blockXY =
@@ -569,8 +572,9 @@ const domToBlock = function(xmlBlock, workspace) {
     /** @suppress {checkTypes} */
     xmlBlock = /** @type {!Element} */ (workspace);
     workspace = swap;
-    console.warn('Deprecated call to domToBlock, ' +
-                 'swap the arguments.');
+    console.warn(
+        'Deprecated call to domToBlock, ' +
+        'swap the arguments.');
   }
   // Create top-level block.
   Events.disable();
@@ -610,18 +614,17 @@ const domToBlock = function(xmlBlock, workspace) {
     Events.enable();
   }
   if (Events.isEnabled()) {
-    const newVariables = goog.module.get('Blockly.Variables').getAddedVariables(workspace,
-        variablesBeforeCreation);
+    const newVariables =
+        goog.module.get('Blockly.Variables')
+            .getAddedVariables(workspace, variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      Events.fire(new (Events.get(Events.VAR_CREATE))(
-          thisVariable));
+      Events.fire(new (Events.get(Events.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Events.fire(new (Events.get(Events.CREATE))(
-        topBlock));
+    Events.fire(new (Events.get(Events.CREATE))(topBlock));
   }
   return topBlock;
 };
@@ -669,10 +672,8 @@ let childNodeTagMap;  // eslint-disable-line no-unused-vars
  *    node.
  */
 const mapSupportedXmlTags_ = function(xmlBlock) {
-  const childNodeMap = {
-    mutation: [], comment: [], data: [], field: [], input: [],
-    next: []
-  };
+  const childNodeMap =
+      {mutation: [], comment: [], data: [], field: [], input: [], next: []};
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
     const xmlChild = xmlBlock.childNodes[i];
     if (xmlChild.nodeType == dom.NodeType.TEXT_NODE) {
@@ -685,7 +686,8 @@ const mapSupportedXmlTags_ = function(xmlBlock) {
         break;
       case 'comment':
         if (!goog.module.get('Blockly.Comment')) {
-          console.warn('Missing require for Comment, ' +
+          console.warn(
+              'Missing require for Comment, ' +
               'ignoring block comment.');
           break;
         }
@@ -825,14 +827,15 @@ const findChildBlocks_ = function(xmlNode) {
  * @param {string} prototypeName The prototype name of the block.
  * @private
  */
-const applyInputTagNodes_ = function(xmlChildren, workspace, block,
-    prototypeName) {
+const applyInputTagNodes_ = function(
+    xmlChildren, workspace, block, prototypeName) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const nodeName = xmlChild.getAttribute('name');
     const input = block.getInput(nodeName);
     if (!input) {
-      console.warn('Ignoring non-existent input ' + nodeName + ' in block ' +
+      console.warn(
+          'Ignoring non-existent input ' + nodeName + ' in block ' +
           prototypeName);
       break;
     }
@@ -841,8 +844,8 @@ const applyInputTagNodes_ = function(xmlChildren, workspace, block,
       if (!input.connection) {
         throw TypeError('Input connection does not exist.');
       }
-      domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, input.connection, false);
+      domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace, input.connection, false);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
     if (childBlockInfo.childShadowElement) {
@@ -872,8 +875,8 @@ const applyNextTagNodes_ = function(xmlChildren, workspace, block) {
         throw TypeError('Next statement is already connected.');
       }
       // Create child block.
-      domToBlockHeadless_(childBlockInfo.childBlockElement,
-          workspace, block.nextConnection,
+      domToBlockHeadless_(
+          childBlockInfo.childBlockElement, workspace, block.nextConnection,
           true);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
@@ -891,13 +894,14 @@ const applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  * @param {!Workspace} workspace The workspace.
  * @param {!Connection=} parentConnection The parent connection to
  *    to connect this block to after instantiating.
- * @param {boolean=} connectedToParentNext Whether the provided parent connection
+ * @param {boolean=} connectedToParentNext Whether the provided parent
+ *     connection
  *    is a next connection, rather than output or statement.
  * @return {!Block} The root block created.
  * @private
  */
-const domToBlockHeadless_ = function(xmlBlock, workspace,
-    parentConnection, connectedToParentNext) {
+const domToBlockHeadless_ = function(
+    xmlBlock, workspace, parentConnection, connectedToParentNext) {
   let block = null;
   const prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
@@ -920,8 +924,7 @@ const domToBlockHeadless_ = function(xmlBlock, workspace,
       if (block.previousConnection) {
         parentConnection.connect(block.previousConnection);
       } else {
-        throw TypeError(
-            'Next block does not have previous statement.');
+        throw TypeError('Next block does not have previous statement.');
       }
     } else {
       if (block.outputConnection) {
@@ -936,8 +939,7 @@ const domToBlockHeadless_ = function(xmlBlock, workspace,
   }
 
   applyFieldTagNodes_(xmlChildNameMap.field, block);
-  applyInputTagNodes_(
-      xmlChildNameMap.input, workspace, block, prototypeName);
+  applyInputTagNodes_(xmlChildNameMap.input, workspace, block, prototypeName);
   applyNextTagNodes_(xmlChildNameMap.next, workspace, block);
 
   if (shouldCallInitSvg) {
@@ -997,8 +999,8 @@ const domToBlockHeadless_ = function(xmlBlock, workspace,
 const domToField_ = function(block, fieldName, xml) {
   const field = block.getField(fieldName);
   if (!field) {
-    console.warn('Ignoring non-existent field ' + fieldName + ' in block ' +
-        block.type);
+    console.warn(
+        'Ignoring non-existent field ' + fieldName + ' in block ' + block.type);
     return;
   }
   field.fromXml(xml);

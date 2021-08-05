@@ -157,11 +157,10 @@ suite('Dropdown Fields', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
       defineRowBlock();
+
       
-      this.assertValue = (value) => {
+      this.assertValue = (value, field) => {
         const block = this.workspace.newBlock('row_block');
-        const field = new Blockly.FieldDropdown(
-            [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
         field.setValue(value);
         block.getInput('INPUT').appendField(field, 'DROPDOWN');
         const jso = Blockly.serialization.blocks.save(block);
@@ -174,7 +173,15 @@ suite('Dropdown Fields', function() {
     });
 
     test('Simple', function() {
-      this.assertValue('C');
+      const field = new Blockly.FieldDropdown(
+          [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
+      this.assertValue('C', field);
+    });
+
+    test('Dynamic', function() {
+      const field = new Blockly.FieldDropdown(
+          () => [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
+      this.assertValue('C', field);
     });
   });
 });

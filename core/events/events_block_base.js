@@ -51,7 +51,7 @@ Blockly.utils.object.inherits(Blockly.Events.BlockBase,
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockBase.prototype.toJson = function() {
-  var json = Blockly.Events.BlockBase.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockBase.superClass_.toJson.call(this);
   json['blockId'] = this.blockId;
   return json;
 };

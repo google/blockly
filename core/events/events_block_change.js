@@ -54,7 +54,7 @@ Blockly.Events.BlockChange.prototype.type = Blockly.Events.BLOCK_CHANGE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.BlockChange.prototype.toJson = function() {
-  var json = Blockly.Events.BlockChange.superClass_.toJson.call(this);
+  const json = Blockly.Events.BlockChange.superClass_.toJson.call(this);
   json['element'] = this.element;
   if (this.name) {
     json['name'] = this.name;
@@ -89,8 +89,8 @@ Blockly.Events.BlockChange.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.BlockChange.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
-  var block = workspace.getBlockById(this.blockId);
+  const workspace = this.getEventWorkspace_();
+  const block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't change non-existent block: " + this.blockId);
     return;
@@ -99,16 +99,17 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
     // Close the mutator (if open) since we don't want to update it.
     block.mutator.setVisible(false);
   }
-  var value = forward ? this.newValue : this.oldValue;
+  const value = forward ? this.newValue : this.oldValue;
   switch (this.element) {
-    case 'field':
-      var field = block.getField(this.name);
+    case 'field': {
+      const field = block.getField(this.name);
       if (field) {
         field.setValue(value);
       } else {
         console.warn("Can't set non-existent field: " + this.name);
       }
       break;
+    }
     case 'comment':
       block.setCommentText(/** @type {string} */ (value) || null);
       break;
@@ -121,19 +122,21 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
     case 'inline':
       block.setInputsInline(!!value);
       break;
-    case 'mutation':
-      var oldMutation = '';
+    case 'mutation': {
+      let oldMutation = '';
       if (block.mutationToDom) {
-        var oldMutationDom = block.mutationToDom();
+        const oldMutationDom = block.mutationToDom();
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
-        var dom = Blockly.Xml.textToDom(/** @type {string} */ (value) || '<mutation/>');
+        const dom = Blockly.Xml.textToDom(/** @type {string} */
+            (value) || '<mutation/>');
         block.domToMutation(dom);
       }
       Blockly.Events.fire(new Blockly.Events.BlockChange(
           block, 'mutation', null, oldMutation, value));
       break;
+    }
     default:
       console.warn('Unknown change type: ' + this.element);
   }

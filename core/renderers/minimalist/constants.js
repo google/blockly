@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist.ConstantProvider');
+goog.module('Blockly.minimalist.ConstantProvider');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.utils.object');
@@ -22,8 +23,10 @@ goog.require('Blockly.utils.object');
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}
  */
-Blockly.minimalist.ConstantProvider = function() {
-  Blockly.minimalist.ConstantProvider.superClass_.constructor.call(this);
+const ConstantProvider = function() {
+  ConstantProvider.superClass_.constructor.call(this);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.ConstantProvider,
+Blockly.utils.object.inherits(ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
+
+exports = ConstantProvider;

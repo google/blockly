@@ -13,17 +13,17 @@
 goog.module('Blockly.Events.BlockBase');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
+const Abstract = goog.require('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * Abstract class for a block event.
- * @param {!Blockly.Block=} opt_block The block this event corresponds to.
+ * @param {!Block=} opt_block The block this event corresponds to.
  *     Undefined for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Abstract}
  * @constructor
  */
 const BlockBase = function(opt_block) {
@@ -42,8 +42,8 @@ const BlockBase = function(opt_block) {
    */
   this.workspaceId = this.isBlank ? '' : opt_block.workspace.id;
 };
-Blockly.utils.object.inherits(BlockBase,
-    Blockly.Events.Abstract);
+object.inherits(BlockBase,
+    Abstract);
 
 /**
  * Encode the event as JSON.

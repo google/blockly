@@ -13,21 +13,21 @@
 goog.module('Blockly.Events.BlockDelete');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.xml');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
+const Events = goog.require('Blockly.Events');
+const Xml = goog.require('Blockly.Xml');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const xml = goog.require('Blockly.utils.xml');
 
 
 /**
  * Class for a block deletion event.
- * @param {!Blockly.Block=} opt_block The deleted block.  Undefined for a blank
+ * @param {!Block=} opt_block The deleted block.  Undefined for a blank
  *     event.
- * @extends {Blockly.Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
  */
 const BlockDelete = function(opt_block) {
@@ -44,19 +44,19 @@ const BlockDelete = function(opt_block) {
   }
 
   if (opt_block.workspace.rendered) {
-    this.oldXml = Blockly.Xml.blockToDomWithXY(opt_block);
+    this.oldXml = Xml.blockToDomWithXY(opt_block);
   } else {
-    this.oldXml = Blockly.Xml.blockToDom(opt_block);
+    this.oldXml = Xml.blockToDom(opt_block);
   }
-  this.ids = Blockly.Events.getDescendantIds(opt_block);
+  this.ids = Events.getDescendantIds(opt_block);
 };
-Blockly.utils.object.inherits(BlockDelete, Blockly.Events.BlockBase);
+object.inherits(BlockDelete, BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockDelete.prototype.type = Blockly.Events.BLOCK_DELETE;
+BlockDelete.prototype.type = Events.BLOCK_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -64,7 +64,7 @@ BlockDelete.prototype.type = Blockly.Events.BLOCK_DELETE;
  */
 BlockDelete.prototype.toJson = function() {
   const json = BlockDelete.superClass_.toJson.call(this);
-  json['oldXml'] = Blockly.Xml.domToText(this.oldXml);
+  json['oldXml'] = Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
@@ -78,7 +78,7 @@ BlockDelete.prototype.toJson = function() {
  */
 BlockDelete.prototype.fromJson = function(json) {
   BlockDelete.superClass_.fromJson.call(this, json);
-  this.oldXml = Blockly.Xml.textToDom(json['oldXml']);
+  this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -103,13 +103,13 @@ BlockDelete.prototype.run = function(forward) {
       }
     }
   } else {
-    const xml = Blockly.utils.xml.createElement('xml');
-    xml.appendChild(this.oldXml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    const xmlEl = xml.createElement('xml');
+    xmlEl.appendChild(this.oldXml);
+    Xml.domToWorkspace(xmlEl, workspace);
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.DELETE,
+registry.register(registry.Type.EVENT, Events.DELETE,
     BlockDelete);
 
 exports = BlockDelete;

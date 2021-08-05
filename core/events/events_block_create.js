@@ -13,21 +13,21 @@
 goog.module('Blockly.Events.BlockCreate');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.xml');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
+const Events = goog.require('Blockly.Events');
+const Xml = goog.require('Blockly.Xml');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const xml = goog.require('Blockly.utils.xml');
 
 
 /**
  * Class for a block creation event.
- * @param {!Blockly.Block=} opt_block The created block.  Undefined for a blank
+ * @param {!Block=} opt_block The created block.  Undefined for a blank
  *     event.
- * @extends {Blockly.Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
  */
 const BlockCreate = function(opt_block) {
@@ -41,19 +41,19 @@ const BlockCreate = function(opt_block) {
   }
 
   if (opt_block.workspace.rendered) {
-    this.xml = Blockly.Xml.blockToDomWithXY(opt_block);
+    this.xml = Xml.blockToDomWithXY(opt_block);
   } else {
-    this.xml = Blockly.Xml.blockToDom(opt_block);
+    this.xml = Xml.blockToDom(opt_block);
   }
-  this.ids = Blockly.Events.getDescendantIds(opt_block);
+  this.ids = Events.getDescendantIds(opt_block);
 };
-Blockly.utils.object.inherits(BlockCreate, Blockly.Events.BlockBase);
+object.inherits(BlockCreate, BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockCreate.prototype.type = Blockly.Events.BLOCK_CREATE;
+BlockCreate.prototype.type = Events.BLOCK_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -61,7 +61,7 @@ BlockCreate.prototype.type = Blockly.Events.BLOCK_CREATE;
  */
 BlockCreate.prototype.toJson = function() {
   const json = BlockCreate.superClass_.toJson.call(this);
-  json['xml'] = Blockly.Xml.domToText(this.xml);
+  json['xml'] = Xml.domToText(this.xml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
@@ -75,7 +75,7 @@ BlockCreate.prototype.toJson = function() {
  */
 BlockCreate.prototype.fromJson = function(json) {
   BlockCreate.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom(json['xml']);
+  this.xml = Xml.textToDom(json['xml']);
   this.ids = json['ids'];
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -89,9 +89,9 @@ BlockCreate.prototype.fromJson = function(json) {
 BlockCreate.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
-    const xml = Blockly.utils.xml.createElement('xml');
-    xml.appendChild(this.xml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    const xmlEl = xml.createElement('xml');
+    xmlEl.appendChild(this.xml);
+    Xml.domToWorkspace(xmlEl, workspace);
   } else {
     for (let i = 0; i < this.ids.length; i++) {
       const id = this.ids[i];
@@ -106,7 +106,7 @@ BlockCreate.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.CREATE,
+registry.register(registry.Type.EVENT, Events.CREATE,
     BlockCreate);
 
 exports = BlockCreate;

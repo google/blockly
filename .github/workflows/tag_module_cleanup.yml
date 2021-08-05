@@ -5,14 +5,14 @@ name: Tag module cleanup
 
 # Trigger on pull requests against goog_module branch only
 # Uses pull_request_target to get write permissions so that it can write labels.
-on: 
+on:
   pull_request_target:
     branches:
       - goog_module
 
 jobs:
   tag-module-cleanup:
-  
+
     # Add the type: cleanup label
     runs-on: ubuntu-latest
     steps:
@@ -23,13 +23,22 @@ jobs:
             // https://github.com/google/blockly/milestone/18
             const milestoneNumber = 18;
             // Note that pull requests are accessed through the issues API.
-            const issuesUpdateParams = { 
-              owner: context.repo.owner, 
-              repo: context.repo.repo, 
+
+            const issueGetParams = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            }
+
+            const issueInfo = await github.issues.get(issueGetParams)
+
+            const issuesUpdateParams = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               // Adds the milestone
-              milestone: milestoneNumber, 
+              milestone: milestoneNumber,
               issue_number: context.issue.number,
               // Sets the labels
-              labels: ['type: cleanup']
+              labels: [...issueInfo.labels, 'type: cleanup']
             }
             await github.issues.update(issuesUpdateParams)

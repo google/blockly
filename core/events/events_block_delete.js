@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockDelete');
+goog.module('Blockly.Events.BlockDelete');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.BlockBase');
@@ -29,8 +30,8 @@ goog.requireType('Blockly.Block');
  * @extends {Blockly.Events.BlockBase}
  * @constructor
  */
-Blockly.Events.BlockDelete = function(opt_block) {
-  Blockly.Events.BlockDelete.superClass_.constructor.call(this, opt_block);
+const BlockDelete = function(opt_block) {
+  BlockDelete.superClass_.constructor.call(this, opt_block);
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -49,20 +50,20 @@ Blockly.Events.BlockDelete = function(opt_block) {
   }
   this.ids = Blockly.Events.getDescendantIds(opt_block);
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockDelete, Blockly.Events.BlockBase);
+Blockly.utils.object.inherits(BlockDelete, Blockly.Events.BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockDelete.prototype.type = Blockly.Events.BLOCK_DELETE;
+BlockDelete.prototype.type = Blockly.Events.BLOCK_DELETE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockDelete.prototype.toJson = function() {
-  const json = Blockly.Events.BlockDelete.superClass_.toJson.call(this);
+BlockDelete.prototype.toJson = function() {
+  const json = BlockDelete.superClass_.toJson.call(this);
   json['oldXml'] = Blockly.Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
   if (!this.recordUndo) {
@@ -75,8 +76,8 @@ Blockly.Events.BlockDelete.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockDelete.prototype.fromJson = function(json) {
-  Blockly.Events.BlockDelete.superClass_.fromJson.call(this, json);
+BlockDelete.prototype.fromJson = function(json) {
+  BlockDelete.superClass_.fromJson.call(this, json);
   this.oldXml = Blockly.Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   if (json['recordUndo'] !== undefined) {
@@ -88,7 +89,7 @@ Blockly.Events.BlockDelete.prototype.fromJson = function(json) {
  * Run a deletion event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.BlockDelete.prototype.run = function(forward) {
+BlockDelete.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
     for (let i = 0; i < this.ids.length; i++) {
@@ -109,4 +110,6 @@ Blockly.Events.BlockDelete.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT, Blockly.Events.DELETE,
-    Blockly.Events.BlockDelete);
+    BlockDelete);
+
+exports = BlockDelete;

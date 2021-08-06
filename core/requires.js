@@ -84,3 +84,4 @@ goog.require('Blockly.zelos.Renderer');
 goog.require('Blockly.Themes.Classic');
 
 goog.require('Blockly.serialization.blocks');
+goog.require('Blockly.serialization.variables');

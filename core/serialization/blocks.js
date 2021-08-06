@@ -252,7 +252,7 @@ const saveConnection = function(connection) {
     state['shadow'] = Xml.domToText(shadow)
         .replace('xmlns="https://developers.google.com/blockly/xml"', '');
   }
-  if (child) {
+  if (child && !child.isShadow()) {
     state['block'] = save(child);
   }
   return state;
@@ -263,8 +263,165 @@ const saveConnection = function(connection) {
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
  */
-// eslint-disable-next-line no-unused-vars
 const load = function(state, workspace) {
-  // Temporarily NOP while connecting things together.
+  loadInternal(state, workspace);
+};
+
+/**
+ * Loads the block represented by the given state into the given workspace.
+ * This is defined internally so that the extra optional parameter doesn't
+ * clutter our external API.
+ * @param {!State} state The state of a block to deserialize into the workspace.
+ * @param {!Workspace} workspace The workspace to add the block to.
+ * @param {!Connection} parentConnection The optional parent connection to
+ *     attach the block to.
+ */
+const loadInternal = function(state, workspace, parentConnection = undefined) {
+  const block = workspace.newBlock(state['type'], state['id']);
+  loadCoords(block, state);
+  loadAttributes(block, state);
+  loadExtraState(block, state);
+  if (parentConnection &&
+      (block.outputConnection || block.previousConnection)) {
+    parentConnection.connect(
+        /** @type {!Connection} */
+        (block.outputConnection || block.previousConnection));
+  }
+  // loadIcons(block, state);
+  loadFields(block, state);
+  loadInputBlocks(block, state);
+  loadNextBlocks(block, state);
+};
+
+/**
+ * Applies any coordinate information available on the state object to the
+ * block.
+ * @param {!Block} block The block to set the position of.
+ * @param {!State} state The state object to reference.
+ */
+const loadCoords = function(block, state) {
+  const x = state['x'] === undefined ? 10 : state['x'];
+  const y = state['y'] === undefined ? 10 : state['y'];
+  block.moveBy(x, y);
+};
+
+/**
+ * Applies any attribute information available on the state object to the block.
+ * @param {!Block} block The block to set the attributes of.
+ * @param {!State} state The state object to reference.
+ */
+const loadAttributes = function(block, state) {
+  if (state['collapsed']) {
+    block.setCollapsed(true);
+  }
+  if (state['enabled'] === false) {
+    block.setEnabled(false);
+  }
+  if (state['editable'] === false) {
+    block.setEditable(false);
+  }
+  if (state['deletable'] === false) {
+    block.setDeletable(false);
+  }
+  if (state['movable'] === false) {
+    block.setMovable(false);
+  }
+  if (state['inline'] !== undefined) {
+    block.setInputsInline(state['inline']);
+  }
+  if (state['data'] !== undefined) {
+    block.data = state['data'];
+  }
+};
+
+/**
+ * Applies any extra state information available on the state object to the
+ * block.
+ * @param {!Block} block The block to set the extra state of.
+ * @param {!State} state The state object to reference.
+ */
+const loadExtraState = function(block, state) {
+  if (!state['extraState']) {
+    return;
+  }
+  block.loadExtraState(state['extraState']);
+};
+
+/**
+ * Applies any field information available on the state object to the block.
+ * @param {!Block} block The block to set the field state of.
+ * @param {!State} state The state object to reference.
+ */
+const loadFields = function(block, state) {
+  if (!state['fields']) {
+    return;
+  }
+  const keys = Object.keys(state['fields']);
+  for (let i = 0; i < keys.length; i++) {
+    const fieldName = keys[i];
+    const fieldState = state['fields'][fieldName];
+    const field = block.getField(fieldName);
+    if (!field) {
+      console.warn(
+          `Ignoring non-existant field ${fieldName} in block ${block.type}`);
+      continue;
+    }
+    field.loadState(fieldState);
+  }
+};
+
+/**
+ * Creates any child blocks (attached to inputs) defined by the given state
+ * and attaches them to the given block.
+ * @param {!Block} block The block to attach input blocks to.
+ * @param {!State} state The state object to reference.
+ */
+const loadInputBlocks = function(block, state) {
+  if (!state['inputs']) {
+    return;
+  }
+  const keys = Object.keys(state['inputs']);
+  for (let i = 0; i < keys.length; i++) {
+    const inputName = keys[i];
+    const input = block.getInput(inputName);
+    if (input && input.connection) {
+      loadConnection(input.connection, state['inputs'][inputName]);
+    }
+  }
+};
+
+/**
+ * Creates any next blocks defined by the given state and attaches them to the
+ * given block.
+ * @param {!Block} block The block to attach next blocks to.
+ * @param {!State} state The state object to reference.
+ */
+const loadNextBlocks = function(block, state) {
+  if (!state['next']) {
+    return;
+  }
+  if (block.nextConnection) {
+    loadConnection(block.nextConnection, state['next']);
+  }
+};
+
+/**
+ * Applies the state defined by connectionState to the given connection, ie
+ * assigns shadows and attaches child blocks.
+ * @param {!Connection} connection The connection to serialize the
+ *     connected blocks of.
+ * @param {!ConnectionState} connectionState The object containing the state of
+ *     any connected shadow block, or any connected real block.
+ */
+const loadConnection = function(connection, connectionState) {
+  if (connectionState['shadow']) {
+    connection.setShadowDom(Blockly.Xml.textToDom(connectionState['shadow']));
+  }
+  if (connectionState['block']) {
+    loadInternal(
+        connectionState['block'],
+        connection.getSourceBlock().workspace,
+        connection);
+  }
 };
 exports.load = load;

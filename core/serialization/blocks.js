@@ -15,10 +15,24 @@ goog.module.declareLegacyNamespace();
 
 // eslint-disable-next-line no-unused-vars
 const Block = goog.requireType('Blockly.Block');
+// eslint-disable-next-line no-unused-vars
+const Connection = goog.requireType('Blockly.Connection');
+const Xml = goog.require('Blockly.Xml');
+const inputTypes = goog.require('Blockly.inputTypes');
 
 
 // TODO: Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
+
+/**
+ * Represents the state of a connection.
+ * @typedef {{
+ *   shadow: (!State|undefined),
+ *   block: (!State|undefined)
+ * }}
+ */
+var ConnectionState;
+exports.ConnectionState = ConnectionState;
 
 /**
  * Represents the state of a given block.
@@ -35,7 +49,9 @@ const Block = goog.requireType('Blockly.Block');
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: *,
- *     fields: (Object<string, *>|undefined),
+ *     fields: (!Object<string, *>|undefined),
+ *     inputs: (!Object<string, !ConnectionState>|undefined),
+ *     next: (!ConnectionState|undefined)
  * }}
  */
 var State;
@@ -44,14 +60,27 @@ exports.State = State;
 /**
  * Returns the state of the given block as a plain JavaScript object.
  * @param {!Block} block The block to serialize.
- * @param {{addCoordinates: (boolean|undefined)}=} param1
- *     addCoordinates: If true the coordinates of the block are added to the
+ * @param {{addCoordinates: (boolean|undefined), addInputBlocks:
+ *     (boolean|undefined), addNextBlocks: (boolean|undefined)}=} param1
+ *     addCoordinates: If true, the coordinates of the block are added to the
  *       serialized state. False by default.
+ *     addinputBlocks: If true, children of the block which are connected to
+ *       inputs will be serialized. True by default.
+ *     addNextBlocks: If true, children of the block which are connected to the
+ *       block's next connection (if it exists) will be serialized.
+ *       True by default.
  * @return {?State} The serialized state of the
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
  */
-const save = function(block, {addCoordinates = false} = {}) {
+const save = function(
+    block,
+    {
+      addCoordinates = false,
+      addInputBlocks = true,
+      addNextBlocks = true
+    } = {}
+) {
   if (block.isInsertionMarker()) {
     return null;
   }
@@ -62,11 +91,17 @@ const save = function(block, {addCoordinates = false} = {}) {
   };
 
   if (addCoordinates) {
-    addCoords(block, state);
+    saveCoords(block, state);
   }
-  addAttributes(block, state);
-  addExtraState(block, state);
-  addFields(block, state);
+  saveAttributes(block, state);
+  saveExtraState(block, state);
+  saveFields(block, state);
+  if (addInputBlocks) {
+    saveInputBlocks(block, state);
+  }
+  if (addNextBlocks) {
+    saveNextBlocks(block, state);
+  }
 
   return state;
 };
@@ -78,7 +113,7 @@ exports.save = save;
  * @param {!Block} block The block to base the attributes on.
  * @param {!State} state The state object to append to.
  */
-const addAttributes = function(block, state) {
+const saveAttributes = function(block, state) {
   if (block.isCollapsed()) {
     state['collapsed'] = true;
   }
@@ -111,7 +146,7 @@ const addAttributes = function(block, state) {
  * @param {!Block} block The block to base the coordinates on
  * @param {!State} state The state object to append to
  */
-const addCoords = function(block, state) {
+const saveCoords = function(block, state) {
   const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
@@ -123,7 +158,7 @@ const addCoords = function(block, state) {
  * @param {!Block} block The block to serialize the extra state of.
  * @param {!State} state The state object to append to.
  */
-const addExtraState = function(block, state) {
+const saveExtraState = function(block, state) {
   if (block.saveExtraState) {
     const extraState = block.saveExtraState();
     if (extraState !== null) {
@@ -137,7 +172,7 @@ const addExtraState = function(block, state) {
  * @param {!Block} block The block to serialize the field state of.
  * @param {!State} state The state object to append to.
  */
-const addFields = function(block, state) {
+const saveFields = function(block, state) {
   let hasFieldState = false;
   let fields = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -153,4 +188,70 @@ const addFields = function(block, state) {
   if (hasFieldState) {
     state['fields'] = fields;
   }
+};
+
+/**
+ * Adds the state of all of the child blocks of the given block (which are
+ * connected to inputs) to the given state object.
+ * @param {!Block} block The block to serialize the input blocks of.
+ * @param {!State} state The state object to append to.
+ */
+const saveInputBlocks = function(block, state) {
+  const inputs = Object.create(null);
+  for (let i = 0; i < block.inputList.length; i++) {
+    const input = block.inputList[i];
+    if (input.type === inputTypes.DUMMY) {
+      continue;
+    }
+    const connectionState =
+        saveConnection(/** @type {!Connection} */ (input.connection));
+    if (connectionState) {
+      inputs[input.name] = connectionState;
+    }
+  }
+
+  if (Object.keys(inputs).length) {
+    state['inputs'] = inputs;
+  }
+};
+
+/**
+ * Adds the state of all of the next blocks of the given block to the given
+ * state object.
+ * @param {!Block} block The block to serialize the next blocks of.
+ * @param {!State} state The state object to append to.
+ */
+const saveNextBlocks = function(block, state) {
+  if (!block.nextConnection) {
+    return;
+  }
+  const connectionState = saveConnection(block.nextConnection);
+  if (connectionState) {
+    state['next'] = connectionState;
+  }
+};
+
+/**
+ * Returns the state of the given connection (ie the state of any connected
+ * shadow or real blocks).
+ * @param {!Connection} connection The connection to serialize the connected
+ *     blocks of.
+ * @return {?ConnectionState} An object containing the state of any connected
+ *     shadow block, or any connected real block.
+ */
+const saveConnection = function(connection) {
+  const shadow = connection.getShadowDom();
+  const child = connection.targetBlock();
+  if (!shadow && !child) {
+    return null;
+  }
+  var state = Object.create(null);
+  if (shadow) {
+    state['shadow'] = Xml.domToText(shadow)
+        .replace('xmlns="https://developers.google.com/blockly/xml"', '');
+  }
+  if (child) {
+    state['block'] = save(child);
+  }
+  return state;
 };

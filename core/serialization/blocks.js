@@ -68,7 +68,7 @@ exports.State = State;
  *       inputs will be serialized. True by default.
  *     addNextBlocks: If true, children of the block which are connected to the
  *       block's next connection (if it exists) will be serialized.
- *       False by default.
+ *       True by default.
  * @return {?State} The serialized state of the
  *     block, or null if the block could not be serialied (eg it was an
  *     insertion marker).
@@ -215,7 +215,7 @@ const saveInputBlocks = function(block, state) {
 };
 
 /**
- * Adds the state of all off the next blocks of the given block to the given
+ * Adds the state of all of the next blocks of the given block to the given
  * state object.
  * @param {!Block} block The block to serialize the next blocks of.
  * @param {!State} state The state object to append to.
@@ -250,7 +250,7 @@ const saveConnection = function(connection) {
         .replace('xmlns="https://developers.google.com/blockly/xml"', '');
   }
   if (child) {
-    state['block'] = save(child, {addNextBlocks: true});
+    state['block'] = save(child);
   }
   return state;
 };

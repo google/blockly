@@ -101,6 +101,26 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
 };
 
 /**
+ * Saves this field's value.
+ * @return {boolean} The boolean value held by this field.
+ * @override
+ * @package
+ */
+Blockly.FieldCheckbox.prototype.saveState = function() {
+  return /** @type {boolean} */ (this.getValueBoolean());
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the checkbox field.
+ * @override
+ * @package
+ */
+Blockly.FieldCheckbox.prototype.loadState = function(state) {
+  this.setValue(state);
+};
+
+/**
  * Create the block UI for this checkbox.
  * @package
  */

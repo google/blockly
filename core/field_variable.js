@@ -195,6 +195,28 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 };
 
 /**
+ * Saves this field's value.
+ * @return {string} The id of the variable referenced by this field.
+ * @override
+ * @package
+ */
+Blockly.FieldVariable.prototype.saveState = function() {
+  // Make sure the variable is initialized.
+  this.initModel();
+  return this.variable_.getId();
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} id The id of the variable to assign to this variable field.
+ * @override
+ * @package
+ */
+Blockly.FieldVariable.prototype.loadState = function(id) {
+  this.setValue(id);
+};
+
+/**
  * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.
  */

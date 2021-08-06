@@ -310,4 +310,35 @@ suite('Angle Fields', function() {
       });
     });
   });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldAngle(value);
+        block.getInput('INPUT').appendField(field, 'ANGLE');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'ANGLE': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue(90);
+    });
+
+    test('Max precision', function() {
+      this.assertValue(1.000000000000001);
+    });
+
+    test('Smallest number', function() {
+      this.assertValue(5e-324);
+    });
+  });
 });

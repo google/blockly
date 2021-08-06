@@ -377,4 +377,33 @@ suite('Variable Fields', function() {
       chai.assert.equal(this.variableField.getValue(), 'id2');
     });
   });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      createGenUidStubWithReturns(new Array(10).fill().map((_, i) => 'id' + i));
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Untyped', function() {
+      const block = this.workspace.newBlock('row_block');
+      const field = new Blockly.FieldVariable('x');
+      block.getInput('INPUT').appendField(field, 'VAR');
+      const jso = Blockly.serialization.blocks.save(block);
+      chai.assert.deepEqual(jso['fields'], {'VAR': 'id2'});
+    });
+
+    test('Typed', function() {
+      const block = this.workspace.newBlock('row_block');
+      const field =
+          new Blockly.FieldVariable('x', undefined, undefined, ['String']);
+      block.getInput('INPUT').appendField(field, 'VAR');
+      const jso = Blockly.serialization.blocks.save(block);
+      chai.assert.deepEqual(jso['fields'], {'VAR': 'id2'});
+    });
+  });
 });

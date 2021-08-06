@@ -343,5 +343,295 @@ suite('JSO', function() {
         assertProperty(jso, 'fields', {'FIELD': ['state1', 42, true]});
       });
     });
+
+    suite('Connected blocks', function() {
+      setup(function() {
+        this.assertInput = function(jso, name, value) {
+          chai.assert.deepInclude(jso['inputs'][name], value);
+        };
+
+        this.createBlockWithChild = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          const childBlock = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.connect(
+              childBlock.outputConnection || childBlock.previousConnection);
+          return block;
+        };
+
+        this.createBlockWithShadow = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="' + blockType + '" id="test"></block>'));
+          return block;
+        };
+
+        this.createBlockWithShadowAndChild = function(blockType, inputName) {
+          const block = this.workspace.newBlock(blockType);
+          const childBlock = this.workspace.newBlock(blockType);
+          block.getInput(inputName).connection.connect(
+              childBlock.outputConnection || childBlock.previousConnection);
+          block.getInput(inputName).connection.setShadowDom(
+              Blockly.Xml.textToDom(
+                  '<block type="' + blockType + '" id="test"></block>'));
+          return block;
+        };
+  
+        this.assertChild = function(blockType, inputName) {
+          const block = this.createBlockWithChild(blockType, inputName);
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso, inputName, {'block': { 'type': blockType, 'id': 'id2'}});
+        };
+  
+        this.assertShadow = function(blockType, inputName) {
+          const block = this.createBlockWithShadow(blockType, inputName);
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso, inputName, {'shadow': { 'type': blockType, 'id': 'test'}});
+        };
+  
+        this.assertOverwrittenShadow = function(blockType, inputName) {
+          const block =
+              this.createBlockWithShadowAndChild(blockType, inputName);
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso,
+              inputName,
+              {
+                'block': {
+                  'type': blockType,
+                  'id': 'id2'
+                },
+                'shadow': {
+                  'type': blockType,
+                  'id': 'test'
+                }
+              });
+        };
+
+        this.assertNoChild = function(blockType, inputName) {
+          const block = this.createBlockWithChild(blockType, inputName);
+          const jso =
+              Blockly.serialization.blocks.save(block, {addInputBlocks: false});
+          chai.assert.isUndefined(jso['inputs']);
+        };
+  
+        this.assertNoShadow = function(blockType, inputName) {
+          const block = this.createBlockWithShadow(blockType, inputName);
+          const jso =
+              Blockly.serialization.blocks.save(block, {addInputBlocks: false});
+          chai.assert.isUndefined(jso['inputs']);
+        };
+  
+        this.assertNoOverwrittenShadow = function(blockType, inputName) {
+          const block =
+              this.createBlockWithShadowAndChild(blockType, inputName);
+          const jso =
+              Blockly.serialization.blocks.save(block, {addInputBlocks: false});
+          chai.assert.isUndefined(jso['inputs']);
+        };
+      });
+
+      suite('Value', function() {
+        suite('With serialization', function() {
+          test('Child', function() {
+            this.assertChild('row_block', 'INPUT');
+          });
+  
+          test.skip('Shadow', function() {
+            this.assertShadow('row_block', 'INPUT');
+          });
+  
+          test.skip('Overwritten shadow', function() {
+            this.assertOverwrittenShadow('row_block', 'INPUT');
+          });
+        });
+
+        suite('Without serialization', function() {
+          test('Child', function() {
+            this.assertNoChild('row_block', 'INPUT');
+          });
+  
+          test('Shadow', function() {
+            this.assertNoShadow('row_block', 'INPUT');
+          });
+  
+          test('Overwritten shadow', function() {
+            this.assertNoOverwrittenShadow('row_block', 'INPUT');
+          });
+        });
+      });
+
+      suite('Statement', function() {
+        suite('With serialization', function() {
+          test('Child', function() {
+            this.assertChild('statement_block', 'NAME');
+          });
+  
+          test.skip('Shadow', function() {
+            this.assertShadow('statement_block', 'NAME');
+          });
+  
+          test.skip('Overwritten shadow', function() {
+            this.assertOverwrittenShadow('statement_block', 'NAME');
+          });
+
+          test('Child with next blocks', function() {
+            const block = this.workspace.newBlock('statement_block');
+            const childBlock = this.workspace.newBlock('stack_block');
+            const grandChildBlock = this.workspace.newBlock('stack_block');
+            block.getInput('NAME').connection
+                .connect(childBlock.previousConnection);
+            childBlock.nextConnection
+                .connect(grandChildBlock.previousConnection);
+            const jso = Blockly.serialization.blocks.save(block);
+            this.assertInput(
+                jso,
+                'NAME',
+                {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'id2',
+                    'next': {
+                      'block': {
+                        'type': 'stack_block',
+                        'id': 'id4'
+                      }
+                    }
+                  }
+                }
+            );
+          });
+        });
+
+        suite('Without serialization', function() {
+          test('Child', function() {
+            this.assertNoChild('statement_block', 'NAME');
+          });
+  
+          test('Shadow', function() {
+            this.assertNoShadow('statement_block', 'NAME');
+          });
+  
+          test('Overwritten shadow', function() {
+            this.assertNoOverwrittenShadow('statement_block', 'NAME');
+          });
+        });
+      });
+
+      suite('Next', function() {
+        setup(function() {
+          this.createNextWithChild = function() {
+            const block = this.workspace.newBlock('stack_block');
+            const childBlock = this.workspace.newBlock('stack_block');
+            block.nextConnection.connect(childBlock.previousConnection);
+            return block;
+          };
+
+          this.createNextWithShadow = function() {
+            const block = this.workspace.newBlock('stack_block');
+            block.nextConnection.setShadowDom(
+                Blockly.Xml.textToDom(
+                    '<block type="stack_block" id="test"></block>'));
+            return block;
+          };
+
+          this.createNextWithShadowAndChild = function() {
+            const block = this.workspace.newBlock('stack_block');
+            const childBlock = this.workspace.newBlock('stack_block');
+            block.nextConnection.connect(childBlock.previousConnection);
+            block.nextConnection.setShadowDom(
+                Blockly.Xml.textToDom(
+                    '<block type="stack_block" id="test"></block>'));
+            return block;
+          };
+        });
+
+        suite('With serialization', function() {
+          test('Child', function() {
+            const block = this.createNextWithChild();
+            const jso =
+                Blockly.serialization.blocks.save(block);
+            chai.assert.deepInclude(
+                jso['next'], {'block': { 'type': 'stack_block', 'id': 'id2'}});
+          });
+  
+          test.skip('Shadow', function() {
+            const block = this.createNextWithShadow();
+            const jso = Blockly.serialization.blocks.save(block);
+            chai.assert.deepInclude(
+                jso['next'], {'shadow': { 'type': 'stack_block', 'id': 'test'}});
+          });
+  
+          test.skip('Overwritten shadow', function() {
+            const block = this.createNextWithShadowAndChild();
+            const jso = Blockly.serialization.blocks.save(block);
+            chai.assert.deepInclude(
+                jso['next'],
+                {
+                  'block': {
+                    'type': 'stack_block',
+                    'id': 'id2'
+                  },
+                  'shadow': {
+                    'type': 'stack_block',
+                    'id': 'test'
+                  }
+                });
+          });
+
+          test('Next block with inputs', function() {
+            const block = this.workspace.newBlock('stack_block');
+            const childBlock = this.workspace.newBlock('statement_block');
+            const grandChildBlock = this.workspace.newBlock('stack_block');
+            block.nextConnection.connect(childBlock.previousConnection);
+            childBlock.getInput('NAME').connection
+                .connect(grandChildBlock.previousConnection);
+            const jso = Blockly.serialization.blocks.save(block);
+            chai.assert.deepInclude(
+                jso['next'],
+                {
+                  'block': {
+                    'type': 'statement_block',
+                    'id': 'id2',
+                    'inputs': {
+                      'NAME': {
+                        'block': {
+                          'type': 'stack_block',
+                          'id': 'id4'
+                        }
+                      }
+                    }
+                  }
+                }
+            );
+          });
+        });
+
+        suite('Without serialization', function() {
+          test('Child', function() {
+            const block = this.createNextWithChild();
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
+            chai.assert.isUndefined(jso['next']);
+          });
+  
+          test('Shadow', function() {
+            const block = this.createNextWithShadow();
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
+            chai.assert.isUndefined(jso['next']);
+          });
+
+          test('Overwritten shadow', function() {
+            const block = this.createNextWithShadowAndChild();
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
+            chai.assert.isUndefined(jso['next']);
+          });
+        });
+      });
+    });
   });
 });

@@ -348,16 +348,17 @@ const loadExtraState = function(block, state) {
 };
 
 /**
- * Applies any extra state information available on the state object to the
- * block.
- * @param {!Block} block The block to set the extra state of.
+ * Applies any field information available on the state object to the block.
+ * @param {!Block} block The block to set the field state of.
  * @param {!State} state The state object to reference.
  */
 const loadFields = function(block, state) {
   if (!state['fields']) {
     return;
   }
-  for (const fieldName of Object.keys(state['fields'])) {
+  const keys = Object.keys(state['fields']);
+  for (let i = 0; i < keys.length; i++) {
+    const fieldName = keys[i];
     const fieldState = state['fields'][fieldName];
     const field = block.getField(fieldName);
     if (!field) {
@@ -379,7 +380,9 @@ const loadInputBlocks = function(block, state) {
   if (!state['inputs']) {
     return;
   }
-  for (const inputName of Object.keys(state['inputs'])) {
+  const keys = Object.keys(state['inputs']);
+  for (let i = 0; i < keys.length; i++) {
+    const inputName = keys[i];
     const input = block.getInput(inputName);
     if (input && input.connection) {
       loadConnection(input.connection, state['inputs'][inputName]);

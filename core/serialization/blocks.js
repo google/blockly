@@ -15,6 +15,8 @@ goog.module.declareLegacyNamespace();
 
 // eslint-disable-next-line no-unused-vars
 const Block = goog.requireType('Blockly.Block');
+// eslint-disable-next-line no-unused-vars
+const Connection = goog.requireType('Blockly.Connection');
 const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 
@@ -191,9 +193,8 @@ const saveFields = function(block, state) {
 /**
  * Adds the state of all of the child blocks of the given block (which are
  * connected to inputs) to the given state object.
- * @param {!Blockly.Block} block The block to serialize the input blocks of.
- * @param {!Blockly.serialization.blocks.State} state The state object to append
- *     to.
+ * @param {!Block} block The block to serialize the input blocks of.
+ * @param {!State} state The state object to append to.
  */
 const saveInputBlocks = function(block, state) {
   const inputs = Object.create(null);
@@ -216,9 +217,8 @@ const saveInputBlocks = function(block, state) {
 /**
  * Adds the state of all off the next blocks of the given block to the given
  * state object.
- * @param {!Blockly.Block} block The block to serialize the next blocks of.
- * @param {!Blockly.serialization.blocks.State} state The state object to append
- *     to.
+ * @param {!Block} block The block to serialize the next blocks of.
+ * @param {!State} state The state object to append to.
  */
 const saveNextBlocks = function(block, state) {
   if (!block.nextConnection) {
@@ -233,11 +233,10 @@ const saveNextBlocks = function(block, state) {
 /**
  * Returns the state of the given connection (ie the state of any connected
  * shadow or real blocks).
- * @param {!Blockly.Connection} connection The connection to serialize the
- *     connected blocks of.
- * @return {{shadow: ?Blockly.serialization.blocks.State,
- *     block: ?Blockly.serialization.blocks.State}} An object containing the
- *     state of any connected shadow block, or any connected real block.
+ * @param {!Connection} connection The connection to serialize the connected
+ *     blocks of.
+ * @return {?ConnectionState} An object containing the state of any connected
+ *     shadow block, or any connected real block.
  */
 const saveConnection = function(connection) {
   const shadow = connection.getShadowDom();
@@ -255,5 +254,3 @@ const saveConnection = function(connection) {
   }
   return state;
 };
-
-exports = {save};

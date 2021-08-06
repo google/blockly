@@ -269,22 +269,23 @@ const load = function(state, workspace) {
 
 /**
  * Loads the block represented by the given state into the given workspace.
- * This is defined internally so that the extra optionnal parameter doesn'tmess
+ * This is defined internally so that the extra optional parameter doesn't
  * clutter our external API.
- * @param {!Blockly.serializatio.blocks.State} state The state of a block
- *     to deserialize into the workspace.
- * @param {!Blockly.Workspace} workspace The workspace to add the block to.
- * @param {!Blockly.Connection} parentConnection The optional parent connection
- *     to attach this block to.
+ * @param {!State} state The state of a block to deserialize into the workspace.
+ * @param {!Workspace} workspace The workspace to add the block to.
+ * @param {!Connection} parentConnection The optional parent connection to
+ *     attach the block to.
  */
 const loadInternal = function(state, workspace, parentConnection = undefined) {
   const block = workspace.newBlock(state['type'], state['id']);
   loadCoords(block, state);
   loadAttributes(block, state);
   loadExtraState(block, state);
-  if (parentConnection) {
-    parentConnection
-        .connect(block.outputConnection || block.previousConnection);
+  if (parentConnection &&
+      (block.outputConnection || block.previousConnection)) {
+    parentConnection.connect(
+        /** @type {!Connection} */
+        (block.outputConnection || block.previousConnection));
   }
   // loadIcons(block, state);
   loadFields(block, state);
@@ -295,9 +296,8 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
 /**
  * Applies any coordinate information available on the state object to the
  * block.
- * @param {!Blockly.Block} block The block to set the position of.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to set the position of.
+ * @param {!State} state The state object to reference.
  */
 const loadCoords = function(block, state) {
   const x = state['x'] === undefined ? 10 : state['x'];
@@ -307,15 +307,14 @@ const loadCoords = function(block, state) {
 
 /**
  * Applies any attribute information available on the state object to the block.
- * @param {!Blockly.Block} block The block to set the attributes of.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to set the attributes of.
+ * @param {!State} state The state object to reference.
  */
 const loadAttributes = function(block, state) {
   if (state['collapsed']) {
     block.setCollapsed(true);
   }
-  if (state['disabled']) {
+  if (state['enabled'] === false) {
     block.setEnabled(false);
   }
   if (state['editable'] === false) {
@@ -338,33 +337,27 @@ const loadAttributes = function(block, state) {
 /**
  * Applies any extra state information available on the state object to the
  * block.
- * @param {!Blockly.Block} block The block to set the extra state of.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to set the extra state of.
+ * @param {!State} state The state object to reference.
  */
 const loadExtraState = function(block, state) {
   if (!state['extraState']) {
     return;
   }
-  if (/<mutation.*>.*<\/mutation>/.test(state['extraState'])) {
-    block.domToMutation(Blockly.Xml.textToDom(state['extraState']));
-  } else {
-    block.loadExtraState(state['extraState']);
-  }
+  block.loadExtraState(state['extraState']);
 };
 
 /**
  * Applies any extra state information available on the state object to the
  * block.
- * @param {!Blockly.Block} block The block to set the extra state of.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to set the extra state of.
+ * @param {!State} state The state object to reference.
  */
 const loadFields = function(block, state) {
   if (!state['fields']) {
     return;
   }
-  for (let fieldName of Object.keys(state['fields'])) {
+  for (const fieldName of Object.keys(state['fields'])) {
     const fieldState = state['fields'][fieldName];
     const field = block.getField(fieldName);
     if (!field) {
@@ -379,43 +372,43 @@ const loadFields = function(block, state) {
 /**
  * Creates any child blocks (attached to inputs) defined by the given state
  * and attaches them to the given block.
- * @param {!Blockly.Block} block The block to attach input blocks to.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to attach input blocks to.
+ * @param {!State} state The state object to reference.
  */
 const loadInputBlocks = function(block, state) {
   if (!state['inputs']) {
     return;
   }
-  for (let inputName of Object.keys(state['inputs'])) {
-    loadConnection(
-        block.getInput(inputName).connection, state['inputs'][inputName]);
+  for (const inputName of Object.keys(state['inputs'])) {
+    const input = block.getInput(inputName);
+    if (input && input.connection) {
+      loadConnection(input.connection, state['inputs'][inputName]);
+    }
   }
 };
 
 /**
  * Creates any next blocks defined by the given state and attaches them to the
  * given block.
- * @param {!Blockly.Block} block The block to attach next blocks to.
- * @param {!Blockly.serialization.blocks.State} state The state object to
- *     reference.
+ * @param {!Block} block The block to attach next blocks to.
+ * @param {!State} state The state object to reference.
  */
 const loadNextBlocks = function(block, state) {
   if (!state['next']) {
     return;
   }
-  loadConnection(block.nextConnection, state['next']);
+  if (block.nextConnection) {
+    loadConnection(block.nextConnection, state['next']);
+  }
 };
 
 /**
  * Applies the state defined by connectionState to the given connection, ie
  * assigns shadows and attaches child blocks.
- * @param {!Blockly.Connection} connection The connection to serialize the
+ * @param {!Connection} connection The connection to serialize the
  *     connected blocks of.
- * @param {{shadow: ?Blockly.serialization.blocks.State,
- *     block: ?Blockly.serialization.blocks.State}} connectionState The object
- *     containing the state of any connected shadow block, or any connected real
- *     block.
+ * @param {!ConnectionState} connectionState The object containing the state of
+ *     any connected shadow block, or any connected real block.
  */
 const loadConnection = function(connection, connectionState) {
   if (connectionState['shadow']) {

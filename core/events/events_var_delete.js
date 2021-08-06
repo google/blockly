@@ -49,7 +49,7 @@ Blockly.Events.VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.VarDelete.prototype.toJson = function() {
-  var json = Blockly.Events.VarDelete.superClass_.toJson.call(this);
+  const json = Blockly.Events.VarDelete.superClass_.toJson.call(this);
   json['varType'] = this.varType;
   json['varName'] = this.varName;
   return json;
@@ -70,7 +70,7 @@ Blockly.Events.VarDelete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarDelete.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  const workspace = this.getEventWorkspace_();
   if (forward) {
     workspace.deleteVariableById(this.varId);
   } else {

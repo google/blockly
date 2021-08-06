@@ -49,7 +49,7 @@ Blockly.utils.object.inherits(Blockly.Events.VarBase, Blockly.Events.Abstract);
  * @return {!Object} JSON representation.
  */
 Blockly.Events.VarBase.prototype.toJson = function() {
-  var json = Blockly.Events.VarBase.superClass_.toJson.call(this);
+  const json = Blockly.Events.VarBase.superClass_.toJson.call(this);
   json['varId'] = this.varId;
   return json;
 };

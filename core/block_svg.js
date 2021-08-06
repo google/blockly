@@ -15,7 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Block = goog.require('Blockly.Block');
-const Comment = goog.require('Blockly.Comment');
+/* eslint-disable-next-line no-unused-vars */
+const Comment = goog.requireType('Blockly.Comment');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
@@ -52,7 +53,8 @@ const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
-const Warning = goog.require('Blockly.Warning');
+/* eslint-disable-next-line no-unused-vars */
+const Warning = goog.requireType('Blockly.Warning');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
@@ -1034,6 +1036,7 @@ BlockSvg.prototype.getCommentIcon = function() {
  * @param {?string} text The text, or null to delete.
  */
 BlockSvg.prototype.setCommentText = function(text) {
+  const Comment = goog.module.get('Blockly.Comment');
   if (!Comment) {
     throw Error('Missing require for Blockly.Comment');
   }
@@ -1071,6 +1074,7 @@ BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 BlockSvg.prototype.setWarningText = function(text, opt_id) {
+  const Warning = goog.module.get('Blockly.Warning');
   if (!Warning) {
     throw Error('Missing require for Blockly.Warning');
   }

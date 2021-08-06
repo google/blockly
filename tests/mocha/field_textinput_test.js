@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldTextInput');
 
-const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Text Input Fields', function() {
@@ -218,6 +218,29 @@ suite('Text Input Fields', function() {
         field.setSpellcheck(false);
         chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldTextInput(value);
+        block.getInput('INPUT').appendField(field, 'TEXT');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'TEXT': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('test text');
     });
   });
 });

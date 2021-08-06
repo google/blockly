@@ -123,6 +123,26 @@ FieldMultilineInput.prototype.fromXml = function(fieldElement) {
 };
 
 /**
+ * Saves this field's value.
+ * @return {string} The text value held by this field.
+ * @override
+ * @package
+ */
+FieldMultilineInput.prototype.saveState = function() {
+  return /** @type {string} */ (this.getValue());
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the multiline input field.
+ * @override
+ * @package
+ */
+FieldMultilineInput.prototype.loadState = function(state) {
+  this.setValue(state);
+};
+
+/**
  * Create the block UI for this field.
  * @package
  */

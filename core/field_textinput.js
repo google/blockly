@@ -183,6 +183,26 @@ FieldTextInput.prototype.initView = function() {
 };
 
 /**
+ * Saves this field's value.
+ * @return {*} The text value held by this field.
+ * @override
+ * @package
+ */
+FieldTextInput.prototype.saveState = function() {
+  return this.getValue();
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the text input field.
+ * @override
+ * @package
+ */
+FieldTextInput.prototype.loadState = function(state) {
+  this.setValue(state);
+};
+
+/**
  * Ensure that the input value casts to a valid string.
  * @param {*=} opt_newValue The input value.
  * @return {*} A valid string, or null if invalid.

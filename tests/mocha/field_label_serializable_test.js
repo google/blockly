@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldLabelSerialization');
 
-const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Label Serializable Fields', function() {
@@ -184,6 +184,29 @@ suite('Label Serializable Fields', function() {
         chai.assert.isFalse(Blockly.utils.dom.hasClass(
             field.textElement_, 'testClass'));
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldLabelSerializable(value);
+        block.getInput('INPUT').appendField(field, 'LABEL');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'LABEL': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('test label');
     });
   });
 });

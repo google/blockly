@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldDropdown');
 
-const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Dropdown Fields', function() {
@@ -155,6 +155,38 @@ suite('Dropdown Fields', function() {
         this.dropdownField.setValue('1B');
         testHelpers.assertFieldValue(this.dropdownField, '1B', '1b');
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+
+      
+      this.assertValue = (value, field) => {
+        const block = this.workspace.newBlock('row_block');
+        field.setValue(value);
+        block.getInput('INPUT').appendField(field, 'DROPDOWN');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'DROPDOWN': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      const field = new Blockly.FieldDropdown(
+          [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
+      this.assertValue('C', field);
+    });
+
+    test('Dynamic', function() {
+      const field = new Blockly.FieldDropdown(
+          () => [['apple', 'A'], ['ball', 'B'], ['carrot', 'C']]);
+      this.assertValue('C', field);
     });
   });
 });

@@ -1730,14 +1730,16 @@ Serializer.testSuites = [
 ];
 
 var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
+  const workspaces = Blockly.serialization.workspaces;
 
   const createTestFunction = function(test) {
     return function() {
       Blockly.Xml.domToWorkspace(
           Blockly.Xml.textToDom(test.xml), this.workspace);
       if (serializer && deserializer) {
-        // TODO: Add support for custom serializeers and deserializers.
-        //    Will be added once we have the JSO format working.
+        const save = serializer(workspaces.save(this.workspace));
+        this.workspace.clear();
+        workspaces.load(deserializer(save), this.workspace);
       }
       var newXml = Blockly.Xml.workspaceToDom(this.workspace);
       chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
@@ -1770,3 +1772,5 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 };
 
 runSerializerTestSuite(null, null, Serializer);
+Serializer.skip = true;
+runSerializerTestSuite(state => state, state => state, Serializer);

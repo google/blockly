@@ -547,7 +547,7 @@ const testDeps = {generateUniqueName};
 
 /**
  * Exports functions to allow them to be mocked by unit tests.
- * @return {!Array<!Function>} An array of functions to be mocked.
+ * @return {!Object<!string,!Function>} An array of functions to be mocked.
  */
 const getTestDeps = function() {
   goog.setTestOnly();

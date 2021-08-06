@@ -17,6 +17,8 @@ goog.module.declareLegacyNamespace();
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
+// eslint-disable-next-line no-unused-vars
+const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 
@@ -255,3 +257,14 @@ const saveConnection = function(connection) {
   }
   return state;
 };
+
+/**
+ * Loads the block represented by the given state into the given workspace.
+ * @param {!State} state The state of a block to deserialize into the workspace.
+ * @param {!Workspace} workspace The workspace to add the block to.
+ */
+// eslint-disable-next-line no-unused-vars
+const load = function(state, workspace) {
+  // Temporarily NOP while connecting things together.
+};
+exports.load = load;

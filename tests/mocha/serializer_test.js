@@ -1264,7 +1264,7 @@ Serializer.Connections.OverwrittenShadow.Row = new SerializerTestCase('Row',
     '</shadow>' +
     '</value>' +
     '</shadow>' +
-    '<block type="logic_boolean" id="id3*****************">' +
+    '<block type="logic_boolean" id="id4*****************">' +
     '<field name="BOOL">TRUE</field>' +
     '</block>' +
     '</value>' +
@@ -1280,7 +1280,7 @@ Serializer.Connections.OverwrittenShadow.Nested = new SerializerTestCase(
     '<shadow type="text_print" id="id3*****************"></shadow>' +
     '</statement>' +
     '</shadow>' +
-    '<block type="text_print" id="id3*****************"></block>' +
+    '<block type="text_print" id="id4*****************"></block>' +
     '</statement>' +
     '</block>' +
     '</xml>');
@@ -1288,10 +1288,10 @@ Serializer.Connections.OverwrittenShadow.Stack = new SerializerTestCase('Stack',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="text_print" id="id******************" x="42" y="42">' +
     '<next>' +
-    '<block type="text_print" id="id3*****************"></block>' +
-    '<shadow type="text_print" id="id2*****************">' +
+    '<block type="text_print" id="id2*****************"></block>' +
+    '<shadow type="text_print" id="id3*****************">' +
     '<next>' +
-    '<shadow type="text_print" id="id3*****************"></shadow>' +
+    '<shadow type="text_print" id="id4*****************"></shadow>' +
     '</next>' +
     '</shadow>' +
     '</next>' +
@@ -1772,5 +1772,6 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 };
 
 runSerializerTestSuite(null, null, Serializer);
-Serializer.skip = true;
+Serializer.Icons.skip = true;
+Serializer.Mutations.skip = true;
 runSerializerTestSuite(state => state, state => state, Serializer);

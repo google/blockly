@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.VarDelete');
+goog.module('Blockly.Events.VarDelete');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.VarBase');
@@ -27,8 +28,8 @@ goog.requireType('Blockly.VariableModel');
  * @extends {Blockly.Events.VarBase}
  * @constructor
  */
-Blockly.Events.VarDelete = function(opt_variable) {
-  Blockly.Events.VarDelete.superClass_.constructor.call(this, opt_variable);
+const VarDelete = function(opt_variable) {
+  VarDelete.superClass_.constructor.call(this, opt_variable);
   if (!opt_variable) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -36,20 +37,20 @@ Blockly.Events.VarDelete = function(opt_variable) {
   this.varType = opt_variable.type;
   this.varName = opt_variable.name;
 };
-Blockly.utils.object.inherits(Blockly.Events.VarDelete, Blockly.Events.VarBase);
+Blockly.utils.object.inherits(VarDelete, Blockly.Events.VarBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
+VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.VarDelete.prototype.toJson = function() {
-  const json = Blockly.Events.VarDelete.superClass_.toJson.call(this);
+VarDelete.prototype.toJson = function() {
+  const json = VarDelete.superClass_.toJson.call(this);
   json['varType'] = this.varType;
   json['varName'] = this.varName;
   return json;
@@ -59,8 +60,8 @@ Blockly.Events.VarDelete.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.VarDelete.prototype.fromJson = function(json) {
-  Blockly.Events.VarDelete.superClass_.fromJson.call(this, json);
+VarDelete.prototype.fromJson = function(json) {
+  VarDelete.superClass_.fromJson.call(this, json);
   this.varType = json['varType'];
   this.varName = json['varName'];
 };
@@ -69,7 +70,7 @@ Blockly.Events.VarDelete.prototype.fromJson = function(json) {
  * Run a variable deletion event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
-Blockly.Events.VarDelete.prototype.run = function(forward) {
+VarDelete.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
     workspace.deleteVariableById(this.varId);
@@ -79,4 +80,6 @@ Blockly.Events.VarDelete.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_DELETE, Blockly.Events.VarDelete);
+    Blockly.Events.VAR_DELETE, VarDelete);
+
+exports = VarDelete;

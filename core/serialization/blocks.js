@@ -28,7 +28,7 @@ const inputTypes = goog.require('Blockly.inputTypes');
  * Represents the state of a connection.
  * @typedef {{
  *   shadow: (!State|undefined),
- *   block: {!State|undefined}
+ *   block: (!State|undefined)
  * }}
  */
 var ConnectionState;
@@ -203,7 +203,8 @@ const saveInputBlocks = function(block, state) {
     if (input.type === inputTypes.DUMMY) {
       continue;
     }
-    const connectionState = saveConnection(input.connection);
+    const connectionState =
+        saveConnection(/** @type {!Connection} */ (input.connection));
     if (connectionState) {
       inputs[input.name] = connectionState;
     }

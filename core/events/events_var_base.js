@@ -10,9 +10,9 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.VarBase');
+goog.module('Blockly.Events.VarBase');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.utils.object');
 
@@ -26,8 +26,8 @@ goog.requireType('Blockly.VariableModel');
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.VarBase = function(opt_variable) {
-  Blockly.Events.VarBase.superClass_.constructor.call(this);
+const VarBase = function(opt_variable) {
+  VarBase.superClass_.constructor.call(this);
   this.isBlank = typeof opt_variable == 'undefined';
 
   /**
@@ -42,14 +42,14 @@ Blockly.Events.VarBase = function(opt_variable) {
    */
   this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
 };
-Blockly.utils.object.inherits(Blockly.Events.VarBase, Blockly.Events.Abstract);
+Blockly.utils.object.inherits(VarBase, Blockly.Events.Abstract);
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.VarBase.prototype.toJson = function() {
-  const json = Blockly.Events.VarBase.superClass_.toJson.call(this);
+VarBase.prototype.toJson = function() {
+  const json = VarBase.superClass_.toJson.call(this);
   json['varId'] = this.varId;
   return json;
 };
@@ -58,7 +58,9 @@ Blockly.Events.VarBase.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.VarBase.prototype.fromJson = function(json) {
-  Blockly.Events.VarBase.superClass_.toJson.call(this);
+VarBase.prototype.fromJson = function(json) {
+  VarBase.superClass_.toJson.call(this);
   this.varId = json['varId'];
 };
+
+exports = VarBase;

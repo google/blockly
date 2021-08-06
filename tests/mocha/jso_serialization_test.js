@@ -26,15 +26,16 @@ suite('JSO', function() {
     sharedTestTeardown.call(this);
   });
 
+  function assertProperty(obj, property, value) {
+    chai.assert.deepEqual(obj[property], value);
+  }
+
+  function assertNoProperty(obj, property) {
+    assertProperty(obj, property, undefined);
+  }
+
+
   suite('Blocks', function() {
-    function assertProperty(obj, property, value) {
-      chai.assert.deepEqual(obj[property], value);
-    }
-
-    function assertNoProperty(obj, property) {
-      assertProperty(obj, property, undefined);
-    }
-
     test('Null on insertionMarkers', function() {
       const block = this.workspace.newBlock('row_block');
       block.setInsertionMarker(true);
@@ -632,6 +633,25 @@ suite('JSO', function() {
           });
         });
       });
+    });
+  });
+
+  suite('Variables', function() {
+    test('Without type', function() {
+      const variable = this.workspace.createVariable('testVar', '', 'testId');
+      const jso = Blockly.serialization.variables.save(variable);
+      assertProperty(jso, 'name', 'testVar');
+      assertProperty(jso, 'id', 'testId');
+      assertNoProperty(jso, 'type');
+    });
+
+    test('With type', function() {
+      const variable = this.workspace
+          .createVariable('testVar', 'testType', 'testId');
+      const jso = Blockly.serialization.variables.save(variable);
+      assertProperty(jso, 'name', 'testVar');
+      assertProperty(jso, 'id', 'testId');
+      assertProperty(jso, 'type', 'testType');
     });
   });
 });

@@ -13,13 +13,37 @@
 goog.module('Blockly.Block');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.ASTNode');
-goog.require('Blockly.Blocks');
-goog.require('Blockly.Connection');
-goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const Abstract = goog.requireType('Blockly.Events.Abstract');
+const ASTNode = goog.require('Blockly.ASTNode');
+const Blocks = goog.require('Blockly.Blocks');
+/* eslint-disable-next-line no-unused-vars */
+const Comment = goog.requireType('Blockly.Comment');
+const Connection = goog.require('Blockly.Connection');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Events = goog.require('Blockly.Events');
+const Extensions = goog.require('Blockly.Extensions');
+/* eslint-disable-next-line no-unused-vars */
+const Field = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+/* eslint-disable-next-line no-unused-vars */
+const IDeletable = goog.require('Blockly.IDeletable');
+const Input = goog.require('Blockly.Input');
+/* eslint-disable-next-line no-unused-vars */
+const Mutator = goog.requireType('Blockly.Mutator');
+const Size = goog.require('Blockly.utils.Size');
+const Tooltip = goog.require('Blockly.Tooltip');
+/* eslint-disable-next-line no-unused-vars */
+const VariableModel = goog.requireType('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const constants = goog.require('Blockly.constants');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const inputTypes = goog.require('Blockly.inputTypes');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -28,43 +52,25 @@ goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.BlockDelete');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
-goog.require('Blockly.Extensions');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.IASTNodeLocation');
-goog.require('Blockly.IDeletable');
-goog.require('Blockly.Input');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.Tooltip');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.Workspace');
-
-goog.requireType('Blockly.Comment');
-goog.requireType('Blockly.Events.Abstract');
-goog.requireType('Blockly.Field');
-goog.requireType('Blockly.Mutator');
-goog.requireType('Blockly.utils.Size');
-goog.requireType('Blockly.VariableModel');
 
 
 /**
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {!Workspace} workspace The block's workspace.
  * @param {!string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
- * @implements {Blockly.IASTNodeLocation}
- * @implements {Blockly.IDeletable}
+ * @implements {IASTNodeLocation}
+ * @implements {IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
  */
 const Block = function(workspace, prototypeName, opt_id) {
-  if (Blockly.Generator &&
-      typeof Blockly.Generator.prototype[prototypeName] != 'undefined') {
+  const Generator = goog.module.get('Blockly.Generator');
+  if (Generator &&
+      typeof Generator.prototype[prototypeName] != 'undefined') {
     // Occluding Generator class members is not allowed.
     throw Error('Block prototypeName "' + prototypeName +
         '" conflicts with Blockly.Generator members.');
@@ -72,15 +78,15 @@ const Block = function(workspace, prototypeName, opt_id) {
 
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
-      opt_id : Blockly.utils.genUid();
+      opt_id : utils.genUid();
   workspace.setBlockById(this.id, this);
-  /** @type {Blockly.Connection} */
+  /** @type {Connection} */
   this.outputConnection = null;
-  /** @type {Blockly.Connection} */
+  /** @type {Connection} */
   this.nextConnection = null;
-  /** @type {Blockly.Connection} */
+  /** @type {Connection} */
   this.previousConnection = null;
-  /** @type {!Array<!Blockly.Input>} */
+  /** @type {!Array<!Input>} */
   this.inputList = [];
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
@@ -89,13 +95,13 @@ const Block = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.disabled = false;
-  /** @type {!Blockly.Tooltip.TipInfo} */
+  /** @type {!Tooltip.TipInfo} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
 
   /**
-   * @type {Blockly.Block}
+   * @type {Block}
    * @protected
    */
   this.parentBlock_ = null;
@@ -144,7 +150,7 @@ const Block = function(workspace, prototypeName, opt_id) {
 
   /**
    * A string representing the comment attached to this block.
-   * @type {string|Blockly.Comment}
+   * @type {string|Comment}
    * @deprecated August 2019. Use getCommentText instead.
    */
   this.comment = null;
@@ -157,18 +163,18 @@ const Block = function(workspace, prototypeName, opt_id) {
   this.commentModel = {
     text: null,
     pinned: false,
-    size: new Blockly.utils.Size(160, 80)
+    size: new Size(160, 80)
   };
 
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
    * origin; scale does not change this value.
-   * @type {!Blockly.utils.Coordinate}
+   * @type {!Coordinate}
    * @private
    */
-  this.xy_ = new Blockly.utils.Coordinate(0, 0);
+  this.xy_ = new Coordinate(0, 0);
 
-  /** @type {!Blockly.Workspace} */
+  /** @type {!Workspace} */
   this.workspace = workspace;
   /** @type {boolean} */
   this.isInFlyout = workspace.isFlyout;
@@ -205,11 +211,11 @@ const Block = function(workspace, prototypeName, opt_id) {
   if (prototypeName) {
     /** @type {string} */
     this.type = prototypeName;
-    const prototype = Blockly.Blocks[prototypeName];
+    const prototype = Blocks[prototypeName];
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }
-    Blockly.utils.object.mixin(this, prototype);
+    object.mixin(this, prototype);
   }
 
   workspace.addTopBlock(this);
@@ -218,32 +224,32 @@ const Block = function(workspace, prototypeName, opt_id) {
   // All events fired should be part of the same group.
   // Any events fired during init should not be undoable,
   // so that block creation is atomic.
-  const existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Events.getGroup();
   if (!existingGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
-  const initialUndoFlag = Blockly.Events.recordUndo;
+  const initialUndoFlag = Events.recordUndo;
 
   try {
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      Blockly.Events.recordUndo = false;
+      Events.recordUndo = false;
       this.init();
-      Blockly.Events.recordUndo = initialUndoFlag;
+      Events.recordUndo = initialUndoFlag;
     }
 
     // Fire a create event.
-    if (Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(
+    if (Events.isEnabled()) {
+      Events.fire(new (Events.get(Events.BLOCK_CREATE))(
           this));
     }
 
   } finally {
     if (!existingGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
     // In case init threw, recordUndo flag should still be reset.
-    Blockly.Events.recordUndo = initialUndoFlag;
+    Events.recordUndo = initialUndoFlag;
   }
 
   // Record initial inline state.
@@ -260,7 +266,7 @@ const Block = function(workspace, prototypeName, opt_id) {
  * @typedef {{
  *            text:?string,
  *            pinned:boolean,
- *            size:Blockly.utils.Size
+ *            size:Size
  *          }}
  */
 Block.CommentModel;
@@ -269,13 +275,13 @@ Block.CommentModel;
  * The language-neutral ID given to the collapsed input.
  * @const {string}
  */
-Block.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
+Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 
 /**
  * The language-neutral ID given to the collapsed field.
  * @const {string}
  */
-Block.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
+Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
 /**
  * Optional text data that round-trips between blocks and XML.
@@ -323,7 +329,7 @@ Block.prototype.init;
  * An optional callback method to use whenever the block's parent workspace
  * changes. This is usually only called from the constructor, the block type
  * initializer function, or an extension initializer function.
- * @type {?function(Blockly.Events.Abstract)}
+ * @type {?function(Abstract)}
  */
 Block.prototype.onchange;
 
@@ -374,11 +380,11 @@ Block.prototype.dispose = function(healStack) {
   }
 
   this.unplug(healStack);
-  if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_DELETE))(
+  if (Events.isEnabled()) {
+    Events.fire(new (Events.get(Events.BLOCK_DELETE))(
         this));
   }
-  Blockly.Events.disable();
+  Events.disable();
 
   try {
     // This block is now at the top of the workspace.
@@ -415,7 +421,7 @@ Block.prototype.dispose = function(healStack) {
       connection.dispose();
     }
   } finally {
-    Blockly.Events.enable();
+    Events.enable();
     this.disposed = true;
   }
 };
@@ -501,7 +507,7 @@ Block.prototype.unplugFromRow_ = function(opt_healStack) {
  * Since only one block can be displaced and attached to the insertion marker
  * this should only ever return one connection.
  *
- * @return {?Blockly.Connection} The connection on the value input, or null.
+ * @return {?Connection} The connection on the value input, or null.
  * @private
  */
 Block.prototype.getOnlyValueConnection_ = function() {
@@ -509,7 +515,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
     if (thisConnection &&
-        thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
+        thisConnection.type == connectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -552,7 +558,7 @@ Block.prototype.unplugFromStack_ = function(opt_healStack) {
 /**
  * Returns all connections originating from this block.
  * @param {boolean} _all If true, return all connections even hidden ones.
- * @return {!Array<!Blockly.Connection>} Array of connections.
+ * @return {!Array<!Connection>} Array of connections.
  * @package
  */
 Block.prototype.getConnections_ = function(_all) {
@@ -579,7 +585,7 @@ Block.prototype.getConnections_ = function(_all) {
  * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
  *     block will be returned. If false, this will follow shadows to find the
  *     last connection.
- * @return {?Blockly.Connection} The last next connection on the stack, or null.
+ * @return {?Connection} The last next connection on the stack, or null.
  * @package
  */
 Block.prototype.lastConnectionInStack = function(ignoreShadows) {
@@ -606,7 +612,7 @@ Block.prototype.bumpNeighbours = function() {
  * Return the parent block or null if this block is at the top level. The parent
  * block is either the block connected to the previous connection (for a statement
  * block) or the block connected to the output connection (for a value block).
- * @return {?Blockly.Block} The block (if any) that holds the current block.
+ * @return {?Block} The block (if any) that holds the current block.
  */
 Block.prototype.getParent = function() {
   return this.parentBlock_;
@@ -614,8 +620,8 @@ Block.prototype.getParent = function() {
 
 /**
  * Return the input that connects to the specified block.
- * @param {!Blockly.Block} block A block connected to an input on this block.
- * @return {?Blockly.Input} The input (if any) that connects to the specified
+ * @param {!Block} block A block connected to an input on this block.
+ * @return {?Input} The input (if any) that connects to the specified
  *     block.
  */
 Block.prototype.getInputWithBlock = function(block) {
@@ -631,7 +637,7 @@ Block.prototype.getInputWithBlock = function(block) {
  * Return the parent block that surrounds the current block, or null if this
  * block has no surrounding block.  A parent block might just be the previous
  * statement, whereas the surrounding block is an if statement, while loop, etc.
- * @return {?Blockly.Block} The block (if any) that surrounds the current block.
+ * @return {?Block} The block (if any) that surrounds the current block.
  */
 Block.prototype.getSurroundParent = function() {
   let block = this;
@@ -650,7 +656,7 @@ Block.prototype.getSurroundParent = function() {
 
 /**
  * Return the next statement block directly connected to this block.
- * @return {?Blockly.Block} The next statement block or null.
+ * @return {?Block} The next statement block or null.
  */
 Block.prototype.getNextBlock = function() {
   return this.nextConnection && this.nextConnection.targetBlock();
@@ -658,7 +664,7 @@ Block.prototype.getNextBlock = function() {
 
 /**
  * Returns the block connected to the previous connection.
- * @return {?Blockly.Block} The previous statement block or null.
+ * @return {?Block} The previous statement block or null.
  */
 Block.prototype.getPreviousBlock = function() {
   return this.previousConnection && this.previousConnection.targetBlock();
@@ -667,13 +673,13 @@ Block.prototype.getPreviousBlock = function() {
 /**
  * Return the connection on the first statement input on this block, or null if
  * there are none.
- * @return {?Blockly.Connection} The first statement connection or null.
+ * @return {?Connection} The first statement connection or null.
  * @package
  */
 Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+        input.connection.type == connectionTypes.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -683,7 +689,7 @@ Block.prototype.getFirstStatementConnection = function() {
 /**
  * Return the top-most block in this block's tree.
  * This will return itself if this block is at the top level.
- * @return {!Blockly.Block} The root block.
+ * @return {!Block} The root block.
  */
 Block.prototype.getRootBlock = function() {
   let rootBlock;
@@ -699,7 +705,7 @@ Block.prototype.getRootBlock = function() {
  * Walk up from the given block up through the stack of blocks to find
  * the top block of the sub stack. If we are nested in a statement input only
  * find the top-most nested block. Do not go all the way to the root block.
- * @return {!Blockly.Block} The top block in a stack.
+ * @return {!Block} The top block in a stack.
  * @package
  */
 Block.prototype.getTopStackBlock = function() {
@@ -717,7 +723,7 @@ Block.prototype.getTopStackBlock = function() {
  * Excludes any connection on an output tab or any preceding statement.
  * Blocks are optionally sorted by position; top to bottom.
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array<!Blockly.Block>} Array of blocks.
+ * @return {!Array<!Block>} Array of blocks.
  */
 Block.prototype.getChildren = function(ordered) {
   if (!ordered) {
@@ -741,7 +747,7 @@ Block.prototype.getChildren = function(ordered) {
 
 /**
  * Set parent of this block to be a new block or null.
- * @param {Blockly.Block} newParent New parent block.
+ * @param {Block} newParent New parent block.
  * @package
  */
 Block.prototype.setParent = function(newParent) {
@@ -765,7 +771,7 @@ Block.prototype.setParent = function(newParent) {
 
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    Blockly.utils.arrayRemove(this.parentBlock_.childBlocks_, this);
+    utils.arrayRemove(this.parentBlock_.childBlocks_, this);
 
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.
@@ -791,7 +797,7 @@ Block.prototype.setParent = function(newParent) {
  * Excludes any connection on an output tab or any preceding statements.
  * Blocks are optionally sorted by position; top to bottom.
  * @param {boolean} ordered Sort the list if true.
- * @return {!Array<!Blockly.Block>} Flattened array of blocks.
+ * @return {!Array<!Block>} Flattened array of blocks.
  */
 Block.prototype.getDescendants = function(ordered) {
   const blocks = [this];
@@ -848,7 +854,7 @@ Block.prototype.isDuplicatable = function() {
     return true;
   }
   return this.workspace.isCapacityAvailable(
-      Blockly.utils.getBlockTypeCounts(this, true));
+      utils.getBlockTypeCounts(this, true));
 };
 
 /**
@@ -919,9 +925,9 @@ Block.prototype.isDisposed = function() {
  * Find the connection on this block that corresponds to the given connection
  * on the other block.
  * Used to match connections between a block and its insertion marker.
- * @param {!Blockly.Block} otherBlock The other block to match against.
- * @param {!Blockly.Connection} conn The other connection to match.
- * @return {?Blockly.Connection} The matching connection on this block, or null.
+ * @param {!Block} otherBlock The other block to match against.
+ * @param {!Connection} conn The other connection to match.
+ * @return {?Connection} The matching connection on this block, or null.
  * @package
  */
 Block.prototype.getMatchingConnection = function(otherBlock, conn) {
@@ -949,7 +955,7 @@ Block.prototype.setHelpUrl = function(url) {
 
 /**
  * Sets the tooltip for this block.
- * @param {!Blockly.Tooltip.TipInfo} newTip The text for the tooltip, a function
+ * @param {!Tooltip.TipInfo} newTip The text for the tooltip, a function
  *     that returns the text for the tooltip, or a parent object whose tooltip
  *     will be used. To not display a tooltip pass the empty string.
  */
@@ -962,7 +968,7 @@ Block.prototype.setTooltip = function(newTip) {
  * @return {!string} The tooltip text for this block.
  */
 Block.prototype.getTooltip = function() {
-  return Blockly.Tooltip.getTooltipOfObject(this);
+  return Tooltip.getTooltipOfObject(this);
 };
 
 /**
@@ -995,7 +1001,7 @@ Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Block.prototype.setColour = function(colour) {
-  const parsed = Blockly.utils.parseBlockColour(colour);
+  const parsed = utils.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
 };
@@ -1013,7 +1019,7 @@ Block.prototype.setStyle = function(blockStyleName) {
  * changes, replacing any prior onchange handler. This is usually only called
  * from the constructor, the block type initializer function, or an extension
  * initializer function.
- * @param {function(Blockly.Events.Abstract)} onchangeFn The callback to call
+ * @param {function(Abstract)} onchangeFn The callback to call
  *     when the block's workspace changes.
  * @throws {Error} if onchangeFn is not falsey and not a function.
  */
@@ -1034,7 +1040,7 @@ Block.prototype.setOnChange = function(onchangeFn) {
 /**
  * Returns the named field from a block.
  * @param {string} name The name of the field.
- * @return {?Blockly.Field} Named field, or null if field does not exist.
+ * @return {?Field} Named field, or null if field does not exist.
  */
 Block.prototype.getField = function(name) {
   if (typeof name !== 'string') {
@@ -1071,7 +1077,7 @@ Block.prototype.getVars = function() {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array<!Blockly.VariableModel>} List of variable models.
+ * @return {!Array<!VariableModel>} List of variable models.
  * @package
  */
 Block.prototype.getVarModels = function() {
@@ -1095,7 +1101,7 @@ Block.prototype.getVarModels = function() {
 /**
  * Notification that a variable is renaming but keeping the same ID.  If the
  * variable is in use on this block, rerender to show the new name.
- * @param {!Blockly.VariableModel} variable The variable being renamed.
+ * @param {!VariableModel} variable The variable being renamed.
  * @package
  */
 Block.prototype.updateVarName = function(variable) {
@@ -1170,7 +1176,7 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(Blockly.connectionTypes.PREVIOUS_STATEMENT);
+          this.makeConnection_(connectionTypes.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1198,7 +1204,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     }
     if (!this.nextConnection) {
       this.nextConnection =
-          this.makeConnection_(Blockly.connectionTypes.NEXT_STATEMENT);
+          this.makeConnection_(connectionTypes.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1231,7 +1237,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
             'connection.');
       }
       this.outputConnection =
-          this.makeConnection_(Blockly.connectionTypes.OUTPUT_VALUE);
+          this.makeConnection_(connectionTypes.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1251,7 +1257,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
  */
 Block.prototype.setInputsInline = function(newBoolean) {
   if (this.inputsInline != newBoolean) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
   }
@@ -1268,15 +1274,15 @@ Block.prototype.getInputsInline = function() {
   }
   // Not defined explicitly.  Figure out what would look best.
   for (let i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == Blockly.inputTypes.DUMMY &&
-        this.inputList[i].type == Blockly.inputTypes.DUMMY) {
+    if (this.inputList[i - 1].type == inputTypes.DUMMY &&
+        this.inputList[i].type == inputTypes.DUMMY) {
       // Two dummy inputs in a row.  Don't inline them.
       return false;
     }
   }
   for (let i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == Blockly.inputTypes.VALUE &&
-        this.inputList[i].type == Blockly.inputTypes.DUMMY) {
+    if (this.inputList[i - 1].type == inputTypes.VALUE &&
+        this.inputList[i].type == inputTypes.DUMMY) {
       // Dummy input after a value input.  Inline them.
       return true;
     }
@@ -1314,7 +1320,7 @@ Block.prototype.isEnabled = function() {
  */
 Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
         this, 'disabled', null, this.disabled, !enabled));
     this.disabled = !enabled;
   }
@@ -1351,7 +1357,7 @@ Block.prototype.isCollapsed = function() {
  */
 Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
   }
@@ -1369,15 +1375,15 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   const emptyFieldPlaceholder = opt_emptyToken || '?';
 
   // Temporarily set flag to navigate to all fields.
-  const prevNavigateFields = Blockly.ASTNode.NAVIGATE_ALL_FIELDS;
-  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = true;
+  const prevNavigateFields = ASTNode.NAVIGATE_ALL_FIELDS;
+  ASTNode.NAVIGATE_ALL_FIELDS = true;
 
-  let node = Blockly.ASTNode.createBlockNode(this);
+  let node = ASTNode.createBlockNode(this);
   const rootNode = node;
 
   /**
    * Whether or not to add parentheses around an input.
-   * @param {!Blockly.Connection} connection The connection.
+   * @param {!Connection} connection The connection.
    * @return {boolean} True if we should add parentheses around the input.
    */
   function shouldAddParentheses(connection) {
@@ -1402,8 +1408,8 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   // Traverse the AST building up our text string.
   while (node) {
     switch (node.getType()) {
-      case Blockly.ASTNode.types.INPUT: {
-        const connection = /** @type {!Blockly.Connection} */ (node.getLocation());
+      case ASTNode.types.INPUT: {
+        const connection = /** @type {!Connection} */ (node.getLocation());
         if (!node.in()) {
           text.push(emptyFieldPlaceholder);
         } else if (shouldAddParentheses(connection)) {
@@ -1411,9 +1417,9 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         }
         break;
       }
-      case Blockly.ASTNode.types.FIELD: {
-        const field = /** @type {Blockly.Field} */ (node.getLocation());
-        if (field.name != Blockly.constants.COLLAPSED_FIELD_NAME) {
+      case ASTNode.types.FIELD: {
+        const field = /** @type {Field} */ (node.getLocation());
+        if (field.name != constants.COLLAPSED_FIELD_NAME) {
           text.push(field.getText());
         }
         break;
@@ -1430,9 +1436,9 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         node = node.out();
         checkRoot();
         // If we hit an input on the way up, possibly close out parentheses.
-        if (node && node.getType() == Blockly.ASTNode.types.INPUT &&
+        if (node && node.getType() == ASTNode.types.INPUT &&
             shouldAddParentheses(
-                /** @type {!Blockly.Connection} */ (node.getLocation()))) {
+                /** @type {!Connection} */ (node.getLocation()))) {
           text.push(')');
         }
       }
@@ -1443,7 +1449,7 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   }
 
   // Restore state of NAVIGATE_ALL_FIELDS.
-  Blockly.ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
+  ASTNode.NAVIGATE_ALL_FIELDS = prevNavigateFields;
 
   // Run through our text array and simplify expression to remove parentheses
   // around single field blocks.
@@ -1475,30 +1481,30 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
  * Shortcut for appending a value input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @return {!Blockly.Input} The input object created.
+ * @return {!Input} The input object created.
  */
 Block.prototype.appendValueInput = function(name) {
-  return this.appendInput_(Blockly.inputTypes.VALUE, name);
+  return this.appendInput_(inputTypes.VALUE, name);
 };
 
 /**
  * Shortcut for appending a statement input row.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @return {!Blockly.Input} The input object created.
+ * @return {!Input} The input object created.
  */
 Block.prototype.appendStatementInput = function(name) {
-  return this.appendInput_(Blockly.inputTypes.STATEMENT, name);
+  return this.appendInput_(inputTypes.STATEMENT, name);
 };
 
 /**
  * Shortcut for appending a dummy input row.
  * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this input again.  Should be unique to this block.
- * @return {!Blockly.Input} The input object created.
+ * @return {!Input} The input object created.
  */
 Block.prototype.appendDummyInput = function(opt_name) {
-  return this.appendInput_(Blockly.inputTypes.DUMMY, opt_name || '');
+  return this.appendInput_(inputTypes.DUMMY, opt_name || '');
 };
 
 /**
@@ -1557,7 +1563,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['tooltip'] !== undefined) {
     const rawValue = json['tooltip'];
-    const localizedText = Blockly.utils.replaceMessageReferences(rawValue);
+    const localizedText = utils.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
@@ -1566,7 +1572,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
-    const localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
+    const localizedValue = utils.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
   if (typeof json['extensions'] == 'string') {
@@ -1579,13 +1585,13 @@ Block.prototype.jsonInit = function(json) {
 
   // Add the mutator to the block.
   if (json['mutator'] !== undefined) {
-    Blockly.Extensions.apply(json['mutator'], this, true);
+    Extensions.apply(json['mutator'], this, true);
   }
 
   const extensionNames = json['extensions'];
   if (Array.isArray(extensionNames)) {
     for (let j = 0; j < extensionNames.length; ++j) {
-      Blockly.Extensions.apply(extensionNames[j], this, false);
+      Extensions.apply(extensionNames[j], this, false);
     }
   }
 };
@@ -1651,7 +1657,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
           JSON.stringify(overwrites));
     }
   }
-  Blockly.utils.object.mixin(this, mixinObj);
+  object.mixin(this, mixinObj);
 };
 
 /**
@@ -1666,7 +1672,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  */
 Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
     warningPrefix) {
-  const tokens = Blockly.utils.tokenizeInterpolation(message);
+  const tokens = utils.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 
@@ -1773,12 +1779,12 @@ Block.prototype.interpolateArguments_ =
  * the 'alt' property of the JSON definition (if it exists).
  * @param {{alt:(string|undefined)}} element The element to try to turn into a
  *     field.
- * @return {?Blockly.Field} The field defined by the JSON, or null if one
+ * @return {?Field} The field defined by the JSON, or null if one
  *     couldn't be created.
  * @private
  */
 Block.prototype.fieldFromJson_ = function(element) {
-  const field = Blockly.fieldRegistry.fromJson(element);
+  const field = fieldRegistry.fromJson(element);
   if (!field && element['alt']) {
     if (typeof element['alt'] == 'string') {
       const json = this.stringToFieldJson_(element['alt']);
@@ -1795,16 +1801,16 @@ Block.prototype.fieldFromJson_ = function(element) {
  * @param {!Object} element The JSON to turn into an input.
  * @param {string} warningPrefix The prefix to add to warnings to help the
  *     developer debug.
- * @return {?Blockly.Input} The input that has been created, or null if one
+ * @return {?Input} The input that has been created, or null if one
  *     could not be created for some reason (should never happen).
  * @private
  */
 Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   const alignmentLookup = {
-    'LEFT': Blockly.constants.ALIGN.LEFT,
-    'RIGHT': Blockly.constants.ALIGN.RIGHT,
-    'CENTRE': Blockly.constants.ALIGN.CENTRE,
-    'CENTER': Blockly.constants.ALIGN.CENTRE
+    'LEFT': constants.ALIGN.LEFT,
+    'RIGHT': constants.ALIGN.RIGHT,
+    'CENTRE': constants.ALIGN.CENTRE,
+    'CENTER': constants.ALIGN.CENTRE
   };
 
   let input = null;
@@ -1875,19 +1881,19 @@ Block.prototype.stringToFieldJson_ = function(str) {
  * @param {number} type One of Blockly.inputTypes.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
- * @return {!Blockly.Input} The input object created.
+ * @return {!Input} The input object created.
  * @protected
  */
 Block.prototype.appendInput_ = function(type, name) {
   let connection = null;
-  if (type == Blockly.inputTypes.VALUE ||
-      type == Blockly.inputTypes.STATEMENT) {
+  if (type == inputTypes.VALUE ||
+      type == inputTypes.STATEMENT) {
     connection = this.makeConnection_(type);
   }
-  if (type == Blockly.inputTypes.STATEMENT) {
+  if (type == inputTypes.STATEMENT) {
     this.statementInputCount++;
   }
-  const input = new Blockly.Input(type, name, this, connection);
+  const input = new Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
   return input;
@@ -1965,7 +1971,7 @@ Block.prototype.moveNumberedInputBefore = function(
 Block.prototype.removeInput = function(name, opt_quiet) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.name == name) {
-      if (input.type == Blockly.inputTypes.STATEMENT) {
+      if (input.type == inputTypes.STATEMENT) {
         this.statementInputCount--;
       }
       input.dispose();
@@ -1982,7 +1988,7 @@ Block.prototype.removeInput = function(name, opt_quiet) {
 /**
  * Fetches the named input object.
  * @param {string} name The name of the input.
- * @return {?Blockly.Input} The input object, or null if input does not exist.
+ * @return {?Input} The input object, or null if input does not exist.
  */
 Block.prototype.getInput = function(name) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
@@ -1997,7 +2003,7 @@ Block.prototype.getInput = function(name) {
 /**
  * Fetches the block attached to the named input.
  * @param {string} name The name of the input.
- * @return {?Blockly.Block} The attached value block, or null if the input is
+ * @return {?Block} The attached value block, or null if the input is
  *     either disconnected or if the input does not exist.
  */
 Block.prototype.getInputTargetBlock = function(name) {
@@ -2021,7 +2027,7 @@ Block.prototype.setCommentText = function(text) {
   if (this.commentModel.text == text) {
     return;
   }
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+  Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
       this, 'comment', null, this.commentModel.text, text));
   this.commentModel.text = text;
   this.comment = text;  // For backwards compatibility.
@@ -2039,7 +2045,7 @@ Block.prototype.setWarningText = function(_text, _opt_id) {
 
 /**
  * Give this block a mutator dialog.
- * @param {Blockly.Mutator} _mutator A mutator dialog instance or null to
+ * @param {Mutator} _mutator A mutator dialog instance or null to
  *     remove.
  */
 Block.prototype.setMutator = function(_mutator) {
@@ -2049,7 +2055,7 @@ Block.prototype.setMutator = function(_mutator) {
 /**
  * Return the coordinates of the top-left corner of this block relative to the
  * drawing surface's origin (0,0), in workspace units.
- * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Object with .x and .y properties.
  */
 Block.prototype.getRelativeToSurfaceXY = function() {
   return this.xy_;
@@ -2064,20 +2070,20 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = new (Blockly.Events.get(Blockly.Events.BLOCK_MOVE))(this);
+  const event = new (Events.get(Events.BLOCK_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
-  Blockly.Events.fire(event);
+  Events.fire(event);
 };
 
 /**
  * Create a connection of the specified type.
  * @param {number} type The type of the connection to create.
- * @return {!Blockly.Connection} A new connection of the specified type.
+ * @return {!Connection} A new connection of the specified type.
  * @protected
  */
 Block.prototype.makeConnection_ = function(type) {
-  return new Blockly.Connection(this, type);
+  return new Connection(this, type);
 };
 
 /**
@@ -2122,7 +2128,7 @@ Block.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
  *
  * Intended to on be used in console logs and errors. If you need a string that
  * uses the user's native language (including block text, field values, and
- * child blocks), use [toString()]{@link Blockly.Block#toString}.
+ * child blocks), use [toString()]{@link Block#toString}.
  * @return {string} The description.
  */
 Block.prototype.toDevString = function() {

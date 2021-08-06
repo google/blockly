@@ -69,16 +69,16 @@ goog.require('Blockly.Events.BlockMove');
  */
 const Block = function(workspace, prototypeName, opt_id) {
   const Generator = goog.module.get('Blockly.Generator');
-  if (Generator &&
-      typeof Generator.prototype[prototypeName] != 'undefined') {
+  if (Generator && typeof Generator.prototype[prototypeName] != 'undefined') {
     // Occluding Generator class members is not allowed.
-    throw Error('Block prototypeName "' + prototypeName +
+    throw Error(
+        'Block prototypeName "' + prototypeName +
         '" conflicts with Blockly.Generator members.');
   }
 
   /** @type {string} */
-  this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
-      opt_id : utils.genUid();
+  this.id =
+      (opt_id && !workspace.getBlockById(opt_id)) ? opt_id : utils.genUid();
   workspace.setBlockById(this.id, this);
   /** @type {Connection} */
   this.outputConnection = null;
@@ -160,11 +160,7 @@ const Block = function(workspace, prototypeName, opt_id) {
    * @type {!Block.CommentModel}
    * @package
    */
-  this.commentModel = {
-    text: null,
-    pinned: false,
-    size: new Size(160, 80)
-  };
+  this.commentModel = {text: null, pinned: false, size: new Size(160, 80)};
 
   /**
    * The block's position in workspace units.  (0, 0) is at the workspace's
@@ -240,8 +236,7 @@ const Block = function(workspace, prototypeName, opt_id) {
 
     // Fire a create event.
     if (Events.isEnabled()) {
-      Events.fire(new (Events.get(Events.BLOCK_CREATE))(
-          this));
+      Events.fire(new (Events.get(Events.BLOCK_CREATE))(this));
     }
 
   } finally {
@@ -381,8 +376,7 @@ Block.prototype.dispose = function(healStack) {
 
   this.unplug(healStack);
   if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.BLOCK_DELETE))(
-        this));
+    Events.fire(new (Events.get(Events.BLOCK_DELETE))(this));
   }
   Events.disable();
 
@@ -480,8 +474,7 @@ Block.prototype.unplugFromRow_ = function(opt_healStack) {
   }
 
   const thisConnection = this.getOnlyValueConnection_();
-  if (!thisConnection ||
-      !thisConnection.isConnected() ||
+  if (!thisConnection || !thisConnection.isConnected() ||
       thisConnection.targetBlock().isShadow()) {
     // Too many or too few possible connections on this block, or there's
     // nothing on the other side of this connection.
@@ -493,7 +486,7 @@ Block.prototype.unplugFromRow_ = function(opt_healStack) {
   childConnection.disconnect();
   // Connect child to the parent if possible, otherwise bump away.
   if (this.workspace.connectionChecker.canConnect(
-      childConnection, parentConnection, false)) {
+          childConnection, parentConnection, false)) {
     parentConnection.connect(childConnection);
   } else {
     childConnection.onFailedConnect(parentConnection);
@@ -514,8 +507,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
-    if (thisConnection &&
-        thisConnection.type == connectionTypes.INPUT_VALUE &&
+    if (thisConnection && thisConnection.type == connectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -610,8 +602,9 @@ Block.prototype.bumpNeighbours = function() {
 
 /**
  * Return the parent block or null if this block is at the top level. The parent
- * block is either the block connected to the previous connection (for a statement
- * block) or the block connected to the output connection (for a value block).
+ * block is either the block connected to the previous connection (for a
+ * statement block) or the block connected to the output connection (for a value
+ * block).
  * @return {?Block} The block (if any) that holds the current block.
  */
 Block.prototype.getParent = function() {
@@ -765,7 +758,8 @@ Block.prototype.setParent = function(newParent) {
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');
   } else if (isConnected && !newParent) {
-    throw Error('Cannot set parent to null while block is still connected to' +
+    throw Error(
+        'Cannot set parent to null while block is still connected to' +
         ' superior block.');
   }
 
@@ -934,7 +928,7 @@ Block.prototype.getMatchingConnection = function(otherBlock, conn) {
   const connections = this.getConnections_(true);
   const otherConnections = otherBlock.getConnections_(true);
   if (connections.length != otherConnections.length) {
-    throw Error("Connection lists did not match in length.");
+    throw Error('Connection lists did not match in length.');
   }
   for (let i = 0; i < otherConnections.length; i++) {
     if (otherConnections[i] == conn) {
@@ -1044,10 +1038,11 @@ Block.prototype.setOnChange = function(onchangeFn) {
  */
 Block.prototype.getField = function(name) {
   if (typeof name !== 'string') {
-    throw TypeError('Block.prototype.getField expects a string ' +
-      'with the field name but received ' +
-      (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
-      ' instead');
+    throw TypeError(
+        'Block.prototype.getField expects a string ' +
+        'with the field name but received ' +
+        (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
+        ' instead');
   }
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
@@ -1107,8 +1102,7 @@ Block.prototype.getVarModels = function() {
 Block.prototype.updateVarName = function(variable) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.referencesVariables() &&
-          variable.getId() == field.getValue()) {
+      if (field.referencesVariables() && variable.getId() == field.getValue()) {
         field.refreshVariableName();
       }
     }
@@ -1125,8 +1119,7 @@ Block.prototype.updateVarName = function(variable) {
 Block.prototype.renameVarById = function(oldId, newId) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.referencesVariables() &&
-          oldId == field.getValue()) {
+      if (field.referencesVariables() && oldId == field.getValue()) {
         field.setValue(newId);
       }
     }
@@ -1172,7 +1165,8 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
     }
     if (!this.previousConnection) {
       if (this.outputConnection) {
-        throw Error('Remove output connection prior to adding previous ' +
+        throw Error(
+            'Remove output connection prior to adding previous ' +
             'connection.');
       }
       this.previousConnection =
@@ -1182,7 +1176,8 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   } else {
     if (this.previousConnection) {
       if (this.previousConnection.isConnected()) {
-        throw Error('Must disconnect previous statement before removing ' +
+        throw Error(
+            'Must disconnect previous statement before removing ' +
             'connection.');
       }
       this.previousConnection.dispose();
@@ -1210,7 +1205,8 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   } else {
     if (this.nextConnection) {
       if (this.nextConnection.isConnected()) {
-        throw Error('Must disconnect next statement before removing ' +
+        throw Error(
+            'Must disconnect next statement before removing ' +
             'connection.');
       }
       this.nextConnection.dispose();
@@ -1233,7 +1229,8 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
     }
     if (!this.outputConnection) {
       if (this.previousConnection) {
-        throw Error('Remove previous connection prior to adding output ' +
+        throw Error(
+            'Remove previous connection prior to adding output ' +
             'connection.');
       }
       this.outputConnection =
@@ -1391,8 +1388,8 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
     if (!checks && connection.targetConnection) {
       checks = connection.targetConnection.getCheck();
     }
-    return !!checks && (checks.indexOf('Boolean') != -1 ||
-        checks.indexOf('Number') != -1);
+    return !!checks &&
+        (checks.indexOf('Boolean') != -1 || checks.indexOf('Number') != -1);
   }
 
   /**
@@ -1517,7 +1514,8 @@ Block.prototype.jsonInit = function(json) {
 
   // Validate inputs.
   if (json['output'] && json['previousStatement']) {
-    throw Error(warningPrefix +
+    throw Error(
+        warningPrefix +
         'Must not have both an output and a previousStatement.');
   }
 
@@ -1540,8 +1538,9 @@ Block.prototype.jsonInit = function(json) {
   // Interpolate the message blocks.
   let i = 0;
   while (json['message' + i] !== undefined) {
-    this.interpolate_(json['message' + i], json['args' + i] || [],
-        json['lastDummyAlign' + i], warningPrefix);
+    this.interpolate_(
+        json['message' + i], json['args' + i] || [], json['lastDummyAlign' + i],
+        warningPrefix);
     i++;
   }
 
@@ -1653,8 +1652,8 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
       }
     }
     if (overwrites.length) {
-      throw Error('Mixin will overwrite block members: ' +
-          JSON.stringify(overwrites));
+      throw Error(
+          'Mixin will overwrite block members: ' + JSON.stringify(overwrites));
     }
   }
   object.mixin(this, mixinObj);
@@ -1670,8 +1669,8 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  * @param {string} warningPrefix Warning prefix string identifying block.
  * @private
  */
-Block.prototype.interpolate_ = function(message, args, lastDummyAlign,
-    warningPrefix) {
+Block.prototype.interpolate_ = function(
+    message, args, lastDummyAlign, warningPrefix) {
   const tokens = utils.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
@@ -1715,18 +1714,21 @@ Block.prototype.validateTokens_ = function(tokens, argsCount) {
       continue;
     }
     if (token < 1 || token > argsCount) {
-      throw Error('Block "' + this.type + '": ' +
+      throw Error(
+          'Block "' + this.type + '": ' +
           'Message index %' + token + ' out of range.');
     }
     if (visitedArgsHash[token]) {
-      throw Error('Block "' + this.type + '": ' +
+      throw Error(
+          'Block "' + this.type + '": ' +
           'Message index %' + token + ' duplicated.');
     }
     visitedArgsHash[token] = true;
     visitedArgsCount++;
   }
   if (visitedArgsCount != argsCount) {
-    throw Error('Block "' + this.type + '": ' +
+    throw Error(
+        'Block "' + this.type + '": ' +
         'Message does not reference all ' + argsCount + ' arg(s).');
   }
 };
@@ -1743,35 +1745,34 @@ Block.prototype.validateTokens_ = function(tokens, argsCount) {
  *     to the block.
  * @private
  */
-Block.prototype.interpolateArguments_ =
-    function(tokens, args, lastDummyAlign) {
-      const elements = [];
-      for (let i = 0; i < tokens.length; i++) {
-        let element = tokens[i];
-        if (typeof element == 'number') {
-          element = args[element - 1];
-        }
-        // Args can be strings, which is why this isn't elseif.
-        if (typeof element == 'string') {
-          element = this.stringToFieldJson_(element);
-          if (!element) {
-            continue;
-          }
-        }
-        elements.push(element);
+Block.prototype.interpolateArguments_ = function(tokens, args, lastDummyAlign) {
+  const elements = [];
+  for (let i = 0; i < tokens.length; i++) {
+    let element = tokens[i];
+    if (typeof element == 'number') {
+      element = args[element - 1];
+    }
+    // Args can be strings, which is why this isn't elseif.
+    if (typeof element == 'string') {
+      element = this.stringToFieldJson_(element);
+      if (!element) {
+        continue;
       }
+    }
+    elements.push(element);
+  }
 
-      const length = elements.length;
-      if (length && !this.isInputKeyword_(elements[length - 1]['type'])) {
-        const dummyInput = {'type': 'input_dummy'};
-        if (lastDummyAlign) {
-          dummyInput['align'] = lastDummyAlign;
-        }
-        elements.push(dummyInput);
-      }
+  const length = elements.length;
+  if (length && !this.isInputKeyword_(elements[length - 1]['type'])) {
+    const dummyInput = {'type': 'input_dummy'};
+    if (lastDummyAlign) {
+      dummyInput['align'] = lastDummyAlign;
+    }
+    elements.push(dummyInput);
+  }
 
-      return elements;
-    };
+  return elements;
+};
 
 /**
  * Creates a field from the JSON definition of a field. If a field with the
@@ -1836,8 +1837,7 @@ Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   if (element['align']) {
     const alignment = alignmentLookup[element['align'].toUpperCase()];
     if (alignment === undefined) {
-      console.warn(warningPrefix + 'Illegal align value: ',
-          element['align']);
+      console.warn(warningPrefix + 'Illegal align value: ', element['align']);
     } else {
       input.setAlign(alignment);
     }
@@ -1853,8 +1853,7 @@ Block.prototype.inputFromJson_ = function(element, warningPrefix) {
  * @private
  */
 Block.prototype.isInputKeyword_ = function(str) {
-  return str == 'input_value' ||
-      str == 'input_statement' ||
+  return str == 'input_value' || str == 'input_statement' ||
       str == 'input_dummy';
 };
 
@@ -1886,8 +1885,7 @@ Block.prototype.stringToFieldJson_ = function(str) {
  */
 Block.prototype.appendInput_ = function(type, name) {
   let connection = null;
-  if (type == inputTypes.VALUE ||
-      type == inputTypes.STATEMENT) {
+  if (type == inputTypes.VALUE || type == inputTypes.STATEMENT) {
     connection = this.makeConnection_(type);
   }
   if (type == inputTypes.STATEMENT) {
@@ -1939,8 +1937,7 @@ Block.prototype.moveInputBefore = function(name, refName) {
  * @param {number} inputIndex Index of the input to move.
  * @param {number} refIndex Index of input that should be after the moved input.
  */
-Block.prototype.moveNumberedInputBefore = function(
-    inputIndex, refIndex) {
+Block.prototype.moveNumberedInputBefore = function(inputIndex, refIndex) {
   // Validate arguments.
   if (inputIndex == refIndex) {
     throw Error('Can\'t move input to itself.');
@@ -1965,7 +1962,8 @@ Block.prototype.moveNumberedInputBefore = function(
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent an error if input is not present.
- * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
+ * @return {boolean} True if operation succeeds, false if input is not present
+ *     and opt_quiet is true
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */
 Block.prototype.removeInput = function(name, opt_quiet) {

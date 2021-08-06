@@ -545,7 +545,12 @@ exports.getAddedVariables = getAddedVariables;
 
 const testDeps = {generateUniqueName};
 
+/**
+ * Exports functions to allow them to be mocked by unit tests.
+ * @return {!Array<!Function>} An array of functions to be mocked.
+ */
 const getTestDeps = function() {
+  goog.setTestOnly();
   return testDeps;
 };
 exports.getTestDeps = getTestDeps;

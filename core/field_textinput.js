@@ -185,7 +185,7 @@ Blockly.FieldTextInput.prototype.initView = function() {
  * @package
  */
 Blockly.FieldTextInput.prototype.saveState = function() {
-  return this.value_;
+  return this.getValue();
 };
 
 /**

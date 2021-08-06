@@ -74,7 +74,7 @@ Blockly.FieldLabelSerializable.prototype.SERIALIZABLE = true;
  * @package
  */
 Blockly.FieldLabelSerializable.prototype.saveState = function() {
-  return /** @type{string} */ (this.value_);
+  return /** @type {string} */ (this.getValue());
 };
 
 /**

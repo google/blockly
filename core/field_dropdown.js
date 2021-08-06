@@ -175,7 +175,7 @@ Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldDropdown.prototype.saveState = function() {
-  return /** @type{string} */ (this.value_);
+  return /** @type {string} */ (this.getValue());
 };
 
 /**

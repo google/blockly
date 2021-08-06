@@ -128,7 +128,7 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.saveState = function() {
-  return /** @type{string} */ (this.value_);
+  return /** @type {string} */ (this.getValue());
 };
 
 /**

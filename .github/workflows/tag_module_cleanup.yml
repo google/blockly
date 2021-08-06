@@ -30,10 +30,9 @@ jobs:
               // https://github.com/google/blockly/milestone/18
               milestone: 18
             })
-            
-            //await github.issues.addLabels({
-            //  owner: context.repo.owner,
-            //  repo: context.repo.repo,
-            //  issue_number: context.issue.number,
-            //  labels: ['type: cleanup']
-            //})
+            await github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['type: cleanup']
+            })

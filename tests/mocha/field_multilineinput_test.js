@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldMultiline');
 
-const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Multiline Input Fields', function() {
@@ -157,5 +157,32 @@ suite('Multiline Input Fields', function() {
         ]},
     ];
     testHelpers.runCodeGenerationTestSuites(testSuites);
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldMultilineInput(value);
+        block.getInput('INPUT').appendField(field, 'MULTILINE');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'MULTILINE': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Single line', function() {
+      this.assertValue('this is a single line');
+    });
+
+    test('Multiple lines', function() {
+      this.assertValue('this\nis\n  multiple\n    lines');
+    });
   });
 });

@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldColour');
 
-const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Colour Fields', function() {
@@ -280,6 +280,33 @@ suite('Colour Fields', function() {
         field.setColumns(3);
         assertColumns(field, 3);
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldColour(value);
+        block.getInput('INPUT').appendField(field, 'COLOUR');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'COLOUR': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Three char', function() {
+      this.assertValue('#001122');
+    });
+
+    test('Six char', function() {
+      this.assertValue('#012345');
     });
   });
 });

@@ -280,9 +280,17 @@ Serializer.Fields.Dropdown.NotDefault = new SerializerTestCase('NotDefault',
     '<field name="FIELDNAME">ITEM32</field>' +
     '</block>' +
     '</xml>');
+Serializer.Fields.Dropdown.Dynamic = new SerializerTestCase(
+    'Dynamic',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="test_dropdowns_dynamic_random" id="id******************" x="42" y="42">' +
+    '<field name="OPTIONS">0</field>' +
+    '</block>' +
+    '</xml>');
 Serializer.Fields.Dropdown.testCases = [
   Serializer.Fields.Dropdown.Default,
   Serializer.Fields.Dropdown.NotDefault,
+  Serializer.Fields.Dropdown.Dynamic,
 ];
 
 

@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldNumber');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Number Fields', function() {
@@ -335,6 +335,45 @@ suite('Number Fields', function() {
             });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldNumber(value);
+        block.getInput('INPUT').appendField(field, 'NUMBER');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'NUMBER': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue(10);
+    });
+
+    test('Max precision small', function() {
+      this.assertValue(1.000000000000001);
+    });
+
+    test('Max precision large', function() {
+      this.assertValue(1000000000000001);
+    });
+
+    test('Smallest', function() {
+      this.assertValue(5e-324);
+    });
+
+    test('Largest', function() {
+      this.assertValue(1.7976931348623157e+308);
     });
   });
 });

@@ -181,4 +181,27 @@ suite('Label Serializable Fields', function() {
       });
     });
   });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldLabelSerializable(value);
+        block.getInput('INPUT').appendField(field, 'LABEL');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'LABEL': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('test label');
+    });
+  });
 });

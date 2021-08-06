@@ -241,8 +241,6 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
   }
 };
 
-
-
 /**
  * Create the block UI for this field.
  * @package
@@ -254,6 +252,26 @@ Blockly.FieldAngle.prototype.initView = function() {
       Blockly.utils.Svg.TSPAN, {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
   this.textElement_.appendChild(this.symbol_);
+};
+
+/**
+ * Saves this field's value.
+ * @return {number} The angle value held by this field.
+ * @override
+ * @package
+ */
+Blockly.FieldAngle.prototype.saveState = function() {
+  return /** @type {number} */ (this.getValue());
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the angle field.
+ * @override
+ * @package
+ */
+Blockly.FieldAngle.prototype.loadState = function(state) {
+  this.setValue(state);
 };
 
 /**

@@ -1963,7 +1963,7 @@ Block.prototype.moveNumberedInputBefore = function(inputIndex, refIndex) {
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent an error if input is not present.
  * @return {boolean} True if operation succeeds, false if input is not present
- *     and opt_quiet is true
+ *     and opt_quiet is true.
  * @throws {Error} if the input is not present and opt_quiet is not true.
  */
 Block.prototype.removeInput = function(name, opt_quiet) {

@@ -78,7 +78,7 @@ const save = function(
     {
       addCoordinates = false,
       addInputBlocks = true,
-      addNextBlocks = false
+      addNextBlocks = true
     } = {}
 ) {
   if (block.isInsertionMarker()) {

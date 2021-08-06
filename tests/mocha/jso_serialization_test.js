@@ -339,7 +339,7 @@ suite('JSO', function() {
       });
     });
 
-    suite.only('Connected blocks', function() {
+    suite('Connected blocks', function() {
       setup(function() {
         this.assertInput = function(jso, name, value) {
           chai.assert.deepInclude(jso['inputs'][name], value);
@@ -547,23 +547,21 @@ suite('JSO', function() {
           test('Child', function() {
             const block = this.createNextWithChild();
             const jso =
-                Blockly.serialization.blocks.save(block, {addNextBlocks: true});
+                Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'block': { 'type': 'stack_block', 'id': 'id2'}});
           });
   
           test.skip('Shadow', function() {
             const block = this.createNextWithShadow();
-            const jso =
-                Blockly.serialization.blocks.save(block, {addNextBlocks: true});
+            const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'shadow': { 'type': 'stack_block', 'id': 'test'}});
           });
   
           test.skip('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
-            const jso =
-                Blockly.serialization.blocks.save(block, {addNextBlocks: true});
+            const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'],
                 {
@@ -585,8 +583,7 @@ suite('JSO', function() {
             block.nextConnection.connect(childBlock.previousConnection);
             childBlock.getInput('NAME').connection
                 .connect(grandChildBlock.previousConnection);
-            const jso =
-                Blockly.serialization.blocks.save(block, {addNextBlocks: true});
+            const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'],
                 {
@@ -610,19 +607,22 @@ suite('JSO', function() {
         suite('Without serialization', function() {
           test('Child', function() {
             const block = this.createNextWithChild();
-            const jso = Blockly.serialization.blocks.save(block);
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
             chai.assert.isUndefined(jso['next']);
           });
   
           test('Shadow', function() {
             const block = this.createNextWithShadow();
-            const jso = Blockly.serialization.blocks.save(block);
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
             chai.assert.isUndefined(jso['next']);
           });
 
           test('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
-            const jso = Blockly.serialization.blocks.save(block);
+            const jso = Blockly.serialization.blocks.save(
+                block, {addNextBlocks: false});
             chai.assert.isUndefined(jso['next']);
           });
         });

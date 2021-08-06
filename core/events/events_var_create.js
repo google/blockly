@@ -49,7 +49,7 @@ Blockly.Events.VarCreate.prototype.type = Blockly.Events.VAR_CREATE;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.VarCreate.prototype.toJson = function() {
-  var json = Blockly.Events.VarCreate.superClass_.toJson.call(this);
+  const json = Blockly.Events.VarCreate.superClass_.toJson.call(this);
   json['varType'] = this.varType;
   json['varName'] = this.varName;
   return json;
@@ -70,7 +70,7 @@ Blockly.Events.VarCreate.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarCreate.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  const workspace = this.getEventWorkspace_();
   if (forward) {
     workspace.createVariable(this.varName, this.varType, this.varId);
   } else {

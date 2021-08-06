@@ -50,7 +50,7 @@ Blockly.Events.VarRename.prototype.type = Blockly.Events.VAR_RENAME;
  * @return {!Object} JSON representation.
  */
 Blockly.Events.VarRename.prototype.toJson = function() {
-  var json = Blockly.Events.VarRename.superClass_.toJson.call(this);
+  const json = Blockly.Events.VarRename.superClass_.toJson.call(this);
   json['oldName'] = this.oldName;
   json['newName'] = this.newName;
   return json;
@@ -71,7 +71,7 @@ Blockly.Events.VarRename.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.VarRename.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
+  const workspace = this.getEventWorkspace_();
   if (forward) {
     workspace.renameVariableById(this.varId, this.newName);
   } else {

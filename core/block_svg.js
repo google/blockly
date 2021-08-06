@@ -96,8 +96,7 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {!SVGGElement}
    * @private
    */
-  this.svgGroup_ = dom.createSvgElement(
-      Svg.G, {}, null);
+  this.svgGroup_ = dom.createSvgElement(Svg.G, {}, null);
   this.svgGroup_.translate_ = '';
 
   /**
@@ -111,8 +110,8 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {IPathObject}
    * @package
    */
-  this.pathObject = workspace.getRenderer().makePathObject(
-      this.svgGroup_, this.style);
+  this.pathObject =
+      workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
 
   /** @type {boolean} */
   this.rendered = false;
@@ -147,8 +146,7 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
   const svgPath = this.pathObject.svgPath;
   svgPath.tooltip = this;
   Tooltip.bindMouseEvents(svgPath);
-  BlockSvg.superClass_.constructor.call(this,
-      workspace, prototypeName, opt_id);
+  BlockSvg.superClass_.constructor.call(this, workspace, prototypeName, opt_id);
 
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
@@ -249,8 +247,7 @@ BlockSvg.prototype.initSvg = function() {
   this.pathObject.updateMovable(this.isMovable());
   const svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
-    browserEvents.conditionalBind(
-        svg, 'mousedown', this, this.onMouseDown_);
+    browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
   }
   this.eventsInit_ = true;
 
@@ -282,9 +279,7 @@ BlockSvg.prototype.getColourTertiary = function() {
  */
 BlockSvg.prototype.getColourShadow = function() {
   deprecation.warn(
-      'BlockSvg.prototype.getColourShadow',
-      'January 2020',
-      'January 2021',
+      'BlockSvg.prototype.getColourShadow', 'January 2020', 'January 2021',
       'style.colourSecondary');
   return this.getColourSecondary();
 };
@@ -300,16 +295,10 @@ BlockSvg.prototype.getColourShadow = function() {
  */
 BlockSvg.prototype.getColourBorder = function() {
   deprecation.warn(
-      'BlockSvg.prototype.getColourBorder',
-      'January 2020',
-      'January 2021',
+      'BlockSvg.prototype.getColourBorder', 'January 2020', 'January 2021',
       'style.colourTertiary');
   const colourTertiary = this.getColourTertiary();
-  return {
-    colourBorder: colourTertiary,
-    colourLight: null,
-    colourDark: null
-  };
+  return {colourBorder: colourTertiary, colourLight: null, colourDark: null};
 };
 
 /**
@@ -336,8 +325,8 @@ BlockSvg.prototype.select = function() {
       Events.enable();
     }
   }
-  const event = new (Events.get(Events.SELECTED))(oldId, this.id,
-      this.workspace.id);
+  const event =
+      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
   Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
@@ -351,8 +340,8 @@ BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  const event = new (Events.get(Events.SELECTED))(this.id, null,
-      this.workspace.id);
+  const event =
+      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   Events.fire(event);
   Blockly.selected = null;
@@ -458,7 +447,8 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   let y = 0;
 
   const dragSurfaceGroup = this.useDragSurface_ ?
-      this.workspace.getBlockDragSurface().getGroup() : null;
+      this.workspace.getBlockDragSurface().getGroup() :
+      null;
 
   let element = this.getSvgRoot();
   if (element) {
@@ -478,7 +468,7 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
       }
       element = /** @type {!SVGElement} */ (element.parentNode);
     } while (element && element != this.workspace.getCanvas() &&
-        element != dragSurfaceGroup);
+             element != dragSurfaceGroup);
   }
   return new Coordinate(x, y);
 };
@@ -514,8 +504,7 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
  * @param {number} y The y coordinate of the translation in workspace units.
  */
 BlockSvg.prototype.translate = function(x, y) {
-  this.getSvgRoot().setAttribute('transform',
-      'translate(' + x + ',' + y + ')');
+  this.getSvgRoot().setAttribute('transform', 'translate(' + x + ',' + y + ')');
 };
 
 /**
@@ -581,8 +570,8 @@ BlockSvg.prototype.moveDuringDrag = function(newLoc) {
     this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
   } else {
     this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
-    this.svgGroup_.setAttribute('transform',
-        this.svgGroup_.translate_ + this.svgGroup_.skew_);
+    this.svgGroup_.setAttribute(
+        'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }
 };
 
@@ -644,8 +633,7 @@ BlockSvg.prototype.getBoundingRectangle = function() {
     left = blockXY.x;
     right = blockXY.x + blockBounds.width;
   }
-  return new Rect(
-      blockXY.y, blockXY.y + blockBounds.height, left, right);
+  return new Rect(blockXY.y, blockXY.y + blockBounds.height, left, right);
 };
 
 /**
@@ -653,9 +641,9 @@ BlockSvg.prototype.getBoundingRectangle = function() {
  * A dirty field is a field that needs to be re-rendered.
  */
 BlockSvg.prototype.markDirty = function() {
-  this.pathObject.constants =
-    (/** @type {!WorkspaceSvg} */ (this.workspace))
-        .getRenderer().getConstants();
+  this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
+                                  .getRenderer()
+                                  .getConstants();
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -762,7 +750,8 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
  * @package
  */
 BlockSvg.prototype.showHelp = function() {
-  const url = (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
+  const url =
+      (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
     window.open(url);
   }
@@ -899,8 +888,8 @@ BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
   }
   this.isInsertionMarker_ = insertionMarker;
   if (this.isInsertionMarker_) {
-    this.setColour(this.workspace.getRenderer().getConstants().
-        INSERTION_MARKER_COLOUR);
+    this.setColour(
+        this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
     this.pathObject.updateInsertionMarker(true);
   }
 };
@@ -1130,8 +1119,8 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
       parent = parent.getSurroundParent();
     }
     if (collapsedParent) {
-      collapsedParent.setWarningText(Msg['COLLAPSED_WARNINGS_WARNING'],
-          BlockSvg.COLLAPSED_WARNING_ID);
+      collapsedParent.setWarningText(
+          Msg['COLLAPSED_WARNINGS_WARNING'], BlockSvg.COLLAPSED_WARNING_ID);
     }
 
     if (!this.warning) {
@@ -1251,8 +1240,9 @@ BlockSvg.prototype.getColour = function() {
  */
 BlockSvg.prototype.setColour = function(colour) {
   BlockSvg.superClass_.setColour.call(this, colour);
-  const styleObj = this.workspace.getRenderer().getConstants()
-      .getBlockStyleForColour(this.colour_);
+  const styleObj =
+      this.workspace.getRenderer().getConstants().getBlockStyleForColour(
+          this.colour_);
 
   this.pathObject.setStyle(styleObj.style);
   this.style = styleObj.style;
@@ -1267,8 +1257,8 @@ BlockSvg.prototype.setColour = function(colour) {
  * @throws {Error} if the block style does not exist.
  */
 BlockSvg.prototype.setStyle = function(blockStyleName) {
-  const blockStyle = this.workspace.getRenderer()
-      .getConstants().getBlockStyle(blockStyleName);
+  const blockStyle =
+      this.workspace.getRenderer().getConstants().getBlockStyle(blockStyleName);
   this.styleName_ = blockStyleName;
 
   if (blockStyle) {
@@ -1311,10 +1301,8 @@ BlockSvg.prototype.bringToFront = function() {
  * @param {(string|Array<string>|null)=} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
  */
-BlockSvg.prototype.setPreviousStatement = function(newBoolean,
-    opt_check) {
-  BlockSvg.superClass_.setPreviousStatement.call(this, newBoolean,
-      opt_check);
+BlockSvg.prototype.setPreviousStatement = function(newBoolean, opt_check) {
+  BlockSvg.superClass_.setPreviousStatement.call(this, newBoolean, opt_check);
 
   if (this.rendered) {
     this.render();
@@ -1329,8 +1317,7 @@ BlockSvg.prototype.setPreviousStatement = function(newBoolean,
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 BlockSvg.prototype.setNextStatement = function(newBoolean, opt_check) {
-  BlockSvg.superClass_.setNextStatement.call(this, newBoolean,
-      opt_check);
+  BlockSvg.superClass_.setNextStatement.call(this, newBoolean, opt_check);
 
   if (this.rendered) {
     this.render();
@@ -1371,7 +1358,8 @@ BlockSvg.prototype.setInputsInline = function(newBoolean) {
  * Remove an input from this block.
  * @param {string} name The name of the input.
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
- * @return {boolean} True if operation succeeds, false if input is not present and opt_quiet is true
+ * @return {boolean} True if operation succeeds, false if input is not present
+ *     and opt_quiet is true
  * @throws {Error} if the input is not present and
  *     opt_quiet is not true.
  */
@@ -1392,10 +1380,8 @@ BlockSvg.prototype.removeInput = function(name, opt_quiet) {
  * @param {number} inputIndex Index of the input to move.
  * @param {number} refIndex Index of input that should be after the moved input.
  */
-BlockSvg.prototype.moveNumberedInputBefore = function(
-    inputIndex, refIndex) {
-  BlockSvg.superClass_.moveNumberedInputBefore.call(this, inputIndex,
-      refIndex);
+BlockSvg.prototype.moveNumberedInputBefore = function(inputIndex, refIndex) {
+  BlockSvg.superClass_.moveNumberedInputBefore.call(this, inputIndex, refIndex);
 
   if (this.rendered) {
     this.render();
@@ -1512,8 +1498,7 @@ BlockSvg.prototype.getConnections_ = function(all) {
  */
 BlockSvg.prototype.lastConnectionInStack = function(ignoreShadows) {
   return /** @type {RenderedConnection} */ (
-    BlockSvg.superClass_
-        .lastConnectionInStack.call(this, ignoreShadows));
+      BlockSvg.superClass_.lastConnectionInStack.call(this, ignoreShadows));
 };
 
 /**
@@ -1529,8 +1514,7 @@ BlockSvg.prototype.lastConnectionInStack = function(ignoreShadows) {
  */
 BlockSvg.prototype.getMatchingConnection = function(otherBlock, conn) {
   return /** @type {RenderedConnection} */ (
-    BlockSvg.superClass_.getMatchingConnection.call(this,
-        otherBlock, conn));
+      BlockSvg.superClass_.getMatchingConnection.call(this, otherBlock, conn));
 };
 
 /**
@@ -1561,22 +1545,18 @@ BlockSvg.prototype.bumpNeighbours = function() {
   // Loop through every connection on this block.
   const myConnections = this.getConnections_(false);
   for (let i = 0, connection; (connection = myConnections[i]); i++) {
-
     // Spider down from this block bumping all sub-blocks.
     if (connection.isConnected() && connection.isSuperior()) {
       connection.targetBlock().bumpNeighbours();
     }
 
-    const neighbours =
-        connection.neighbours(internalConstants.SNAP_RADIUS);
+    const neighbours = connection.neighbours(internalConstants.SNAP_RADIUS);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
-
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
       if (!connection.isConnected() || !otherConnection.isConnected()) {
         // Only bump blocks if they are from different tree structures.
         if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
-
           // Always bump the inferior block.
           if (connection.isSuperior()) {
             otherConnection.bumpAwayFrom(connection);
@@ -1622,8 +1602,8 @@ BlockSvg.prototype.scheduleSnapAndBump = function() {
  *     should stay stationary as this block is positioned.
  * @package
  */
-BlockSvg.prototype.positionNearConnection = function(sourceConnection,
-    targetConnection) {
+BlockSvg.prototype.positionNearConnection = function(
+    sourceConnection, targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
   if (sourceConnection.type == connectionTypes.NEXT_STATEMENT ||
@@ -1641,8 +1621,7 @@ BlockSvg.prototype.positionNearConnection = function(sourceConnection,
  * @override
  */
 BlockSvg.prototype.getParent = function() {
-  return /** @type {!BlockSvg} */ (
-    BlockSvg.superClass_.getParent.call(this));
+  return /** @type {!BlockSvg} */ (BlockSvg.superClass_.getParent.call(this));
 };
 
 /**
@@ -1653,7 +1632,7 @@ BlockSvg.prototype.getParent = function() {
  */
 BlockSvg.prototype.getRootBlock = function() {
   return /** @type {!BlockSvg} */ (
-    BlockSvg.superClass_.getRootBlock.call(this));
+      BlockSvg.superClass_.getRootBlock.call(this));
 };
 
 /**

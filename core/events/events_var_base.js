@@ -13,17 +13,17 @@
 goog.module('Blockly.Events.VarBase');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.VariableModel');
+const Abstract = goog.require('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const VariableModel = goog.requireType('Blockly.VariableModel');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * Abstract class for a variable event.
- * @param {!Blockly.VariableModel=} opt_variable The variable this event
+ * @param {!VariableModel=} opt_variable The variable this event
  *     corresponds to.  Undefined for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {Abstract}
  * @constructor
  */
 const VarBase = function(opt_variable) {
@@ -42,7 +42,7 @@ const VarBase = function(opt_variable) {
    */
   this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
 };
-Blockly.utils.object.inherits(VarBase, Blockly.Events.Abstract);
+object.inherits(VarBase, Abstract);
 
 /**
  * Encode the event as JSON.

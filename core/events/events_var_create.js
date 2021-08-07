@@ -13,19 +13,19 @@
 goog.module('Blockly.Events.VarCreate');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.VarBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.VariableModel');
+const Events = goog.require('Blockly.Events');
+const VarBase = goog.require('Blockly.Events.VarBase');
+/* eslint-disable-next-line no-unused-vars */
+const VariableModel = goog.requireType('Blockly.VariableModel');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a variable creation event.
- * @param {!Blockly.VariableModel=} opt_variable The created variable. Undefined
+ * @param {!VariableModel=} opt_variable The created variable. Undefined
  *     for a blank event.
- * @extends {Blockly.Events.VarBase}
+ * @extends {VarBase}
  * @constructor
  */
 const VarCreate = function(opt_variable) {
@@ -37,13 +37,13 @@ const VarCreate = function(opt_variable) {
   this.varType = opt_variable.type;
   this.varName = opt_variable.name;
 };
-Blockly.utils.object.inherits(VarCreate, Blockly.Events.VarBase);
+object.inherits(VarCreate, VarBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-VarCreate.prototype.type = Blockly.Events.VAR_CREATE;
+VarCreate.prototype.type = Events.VAR_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -79,7 +79,7 @@ VarCreate.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_CREATE, VarCreate);
+registry.register(registry.Type.EVENT,
+    Events.VAR_CREATE, VarCreate);
 
 exports = VarCreate;

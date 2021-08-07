@@ -13,19 +13,19 @@
 goog.module('Blockly.Events.VarDelete');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.VarBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.VariableModel');
+const Events = goog.require('Blockly.Events');
+const VarBase = goog.require('Blockly.Events.VarBase');
+/* eslint-disable-next-line no-unused-vars */
+const VariableModel = goog.requireType('Blockly.VariableModel');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a variable deletion event.
- * @param {!Blockly.VariableModel=} opt_variable The deleted variable. Undefined
+ * @param {!VariableModel=} opt_variable The deleted variable. Undefined
  *     for a blank event.
- * @extends {Blockly.Events.VarBase}
+ * @extends {VarBase}
  * @constructor
  */
 const VarDelete = function(opt_variable) {
@@ -37,13 +37,13 @@ const VarDelete = function(opt_variable) {
   this.varType = opt_variable.type;
   this.varName = opt_variable.name;
 };
-Blockly.utils.object.inherits(VarDelete, Blockly.Events.VarBase);
+object.inherits(VarDelete, VarBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-VarDelete.prototype.type = Blockly.Events.VAR_DELETE;
+VarDelete.prototype.type = Events.VAR_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -79,7 +79,7 @@ VarDelete.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_DELETE, VarDelete);
+registry.register(registry.Type.EVENT,
+    Events.VAR_DELETE, VarDelete);
 
 exports = VarDelete;

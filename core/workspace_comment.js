@@ -104,6 +104,7 @@ const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   this.content_ = content;
 
   /**
+   * Whether this comment has been disposed.
    * @protected
    * @type {boolean}
    */

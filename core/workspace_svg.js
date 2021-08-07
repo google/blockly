@@ -71,8 +71,8 @@ goog.requireType('Blockly.ScrollbarPair');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Trashcan');
 goog.requireType('Blockly.VariableModel');
-goog.requireType('Blockly.WorkspaceCommentSvg');
 goog.requireType('Blockly.WorkspaceComment');
+goog.requireType('Blockly.WorkspaceCommentSvg');
 goog.requireType('Blockly.ZoomControls');
 
 

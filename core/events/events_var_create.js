@@ -79,7 +79,6 @@ VarCreate.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT,
-    Events.VAR_CREATE, VarCreate);
+registry.register(registry.Type.EVENT, Events.VAR_CREATE, VarCreate);
 
 exports = VarCreate;

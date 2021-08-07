@@ -79,7 +79,6 @@ VarDelete.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT,
-    Events.VAR_DELETE, VarDelete);
+registry.register(registry.Type.EVENT, Events.VAR_DELETE, VarDelete);
 
 exports = VarDelete;

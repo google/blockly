@@ -80,7 +80,6 @@ VarRename.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT,
-    Events.VAR_RENAME, VarRename);
+registry.register(registry.Type.EVENT, Events.VAR_RENAME, VarRename);
 
 exports = VarRename;

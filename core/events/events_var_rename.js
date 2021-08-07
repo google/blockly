@@ -13,20 +13,20 @@
 goog.module('Blockly.Events.VarRename');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.VarBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.VariableModel');
+const Events = goog.require('Blockly.Events');
+const VarBase = goog.require('Blockly.Events.VarBase');
+/* eslint-disable-next-line no-unused-vars */
+const VariableModel = goog.requireType('Blockly.VariableModel');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a variable rename event.
- * @param {!Blockly.VariableModel=} opt_variable The renamed variable. Undefined
+ * @param {!VariableModel=} opt_variable The renamed variable. Undefined
  *     for a blank event.
  * @param {string=} newName The new name the variable will be changed to.
- * @extends {Blockly.Events.VarBase}
+ * @extends {VarBase}
  * @constructor
  */
 const VarRename = function(opt_variable, newName) {
@@ -38,13 +38,13 @@ const VarRename = function(opt_variable, newName) {
   this.oldName = opt_variable.name;
   this.newName = typeof newName == 'undefined' ? '' : newName;
 };
-Blockly.utils.object.inherits(VarRename, Blockly.Events.VarBase);
+object.inherits(VarRename, VarBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-VarRename.prototype.type = Blockly.Events.VAR_RENAME;
+VarRename.prototype.type = Events.VAR_RENAME;
 
 /**
  * Encode the event as JSON.
@@ -80,7 +80,7 @@ VarRename.prototype.run = function(forward) {
   }
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.VAR_RENAME, VarRename);
+registry.register(registry.Type.EVENT,
+    Events.VAR_RENAME, VarRename);
 
 exports = VarRename;

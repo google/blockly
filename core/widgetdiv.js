@@ -53,10 +53,10 @@ let rendererClassName = '';
  */
 let themeClassName = '';
 
-  /**
-   * The HTML container for popup overlays (e.g. editor widgets).
-   * @type {!Element}
-   */
+/**
+ * The HTML container for popup overlays (e.g. editor widgets).
+ * @type {!Element}
+ */
 let DIV;
 exports.DIV = DIV;
 
@@ -98,9 +98,8 @@ const show = function(newOwner, rtl, newDispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   const mainWorkspace =
-    /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
-  rendererClassName =
-      mainWorkspace.getRenderer().getClassName();
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
+  rendererClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
   dom.addClass(div, rendererClassName);
   dom.addClass(div, themeClassName);
@@ -132,8 +131,7 @@ const hide = function() {
     dom.removeClass(div, themeClassName);
     themeClassName = '';
   }
-  (/** @type {!WorkspaceSvg} */ (
-    common.getMainWorkspace())).markFocused();
+  (/** @type {!WorkspaceSvg} */ (common.getMainWorkspace())).markFocused();
 };
 exports.hide = hide;
 
@@ -185,11 +183,9 @@ const positionInternal = function(x, y, height) {
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
  */
-const positionWithAnchor = function(viewportBBox, anchorBBox,
-    widgetSize, rtl) {
+const positionWithAnchor = function(viewportBBox, anchorBBox, widgetSize, rtl) {
   const y = calculateY(viewportBBox, anchorBBox, widgetSize);
-  const x = calculateX(viewportBBox, anchorBBox, widgetSize,
-      rtl);
+  const x = calculateX(viewportBBox, anchorBBox, widgetSize, rtl);
 
   if (y < 0) {
     positionInternal(x, 0, widgetSize.height + y);
@@ -213,8 +209,7 @@ exports.positionWithAnchor = positionWithAnchor;
  * @return {number} A valid x-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  */
-const calculateX = function(viewportBBox, anchorBBox, widgetSize,
-    rtl) {
+const calculateX = function(viewportBBox, anchorBBox, widgetSize, rtl) {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
     const widgetLeft = anchorBBox.right - widgetSize.width;

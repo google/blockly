@@ -51,7 +51,6 @@ const object = goog.require('Blockly.utils.object');
  * @implements {IRegistrable}
  */
 const Renderer = function(name) {
-
   /**
    * The renderer name.
    * @type {string}
@@ -89,8 +88,7 @@ Renderer.prototype.getClassName = function() {
  * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Renderer.prototype.init = function(theme,
-    opt_rendererOverrides) {
+Renderer.prototype.init = function(theme, opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
   if (opt_rendererOverrides) {
     this.overrides = opt_rendererOverrides;
@@ -107,7 +105,8 @@ Renderer.prototype.init = function(theme,
  * @package
  */
 Renderer.prototype.createDom = function(svg, theme) {
-  this.constants_.createDom(svg, this.name + '-' + theme.name,
+  this.constants_.createDom(
+      svg, this.name + '-' + theme.name,
       '.' + this.getClassName() + '.' + theme.getClassName());
 };
 
@@ -195,8 +194,7 @@ Renderer.prototype.makeDebugger_ = function() {
  *     the marker.
  * @package
  */
-Renderer.prototype.makeMarkerDrawer = function(
-    workspace, marker) {
+Renderer.prototype.makeMarkerDrawer = function(workspace, marker) {
   return new MarkerSvg(workspace, this.getConstants(), marker);
 };
 
@@ -208,11 +206,9 @@ Renderer.prototype.makeMarkerDrawer = function(
  * @return {!IPathObject} The renderer path object.
  * @package
  */
-Renderer.prototype.makePathObject = function(root,
-    style) {
-  return new PathObject(root, style,
-      /** @type {!ConstantProvider} */ (this.constants_));
-
+Renderer.prototype.makePathObject = function(root, style) {
+  return new PathObject(
+      root, style, /** @type {!ConstantProvider} */ (this.constants_));
 };
 
 /**
@@ -222,9 +218,7 @@ Renderer.prototype.makePathObject = function(root,
  * @package
  */
 Renderer.prototype.getConstants = function() {
-  return (
-    /** @type {!ConstantProvider} */
-    (this.constants_));
+  return /** @type {!ConstantProvider} */ (this.constants_);
 };
 
 /**
@@ -234,34 +228,33 @@ Renderer.prototype.getConstants = function() {
  * @return {boolean} True if we should highlight the connection.
  * @package
  */
-Renderer.prototype.shouldHighlightConnection =
-    function(_conn) {
-    /* eslint-disable indent */
+Renderer.prototype.shouldHighlightConnection = function(_conn) {
   return true;
-}; /* eslint-enable indent */
+};
 
 /**
  * Checks if an orphaned block can connect to the "end" of the topBlock's
  * block-clump. If the clump is a row the end is the last input. If the clump
  * is a stack, the end is the last next connection. If the clump is neither,
  * then this returns false.
- * @param {!BlockSvg} topBlock The top block of the block clump we want to try and
- *     connect to.
+ * @param {!BlockSvg} topBlock The top block of the block clump we want to try
+ *     and connect to.
  * @param {!BlockSvg} orphanBlock The orphan block that wants to find
  *     a home.
  * @param {number} localType The type of the connection being dragged.
  * @return {boolean} Whether there is a home for the orphan or not.
  * @package
  */
-Renderer.prototype.orphanCanConnectAtEnd =
-    function(topBlock, orphanBlock, localType) {
-      const orphanConnection = (
-          localType === connectionTypes.OUTPUT_VALUE ?
-              orphanBlock.outputConnection : orphanBlock.previousConnection);
-      return !!Connection.getConnectionForOrphanedConnection(
-          /** @type {!Block} **/ (topBlock),
-          /** @type {!Connection} **/ (orphanConnection));
-    };
+Renderer.prototype.orphanCanConnectAtEnd = function(
+    topBlock, orphanBlock, localType) {
+  const orphanConnection =
+      (localType === connectionTypes.OUTPUT_VALUE ?
+           orphanBlock.outputConnection :
+           orphanBlock.previousConnection);
+  return !!Connection.getConnectionForOrphanedConnection(
+      /** @type {!Block} **/ (topBlock),
+      /** @type {!Connection} **/ (orphanConnection));
+};
 
 /**
  * Chooses a connection preview method based on the available connection, the
@@ -281,8 +274,7 @@ Renderer.prototype.getConnectionPreviewMethod = function(
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,
-            /** @type {!BlockSvg} */ (closest.targetBlock()),
-            local.type)) {
+            /** @type {!BlockSvg} */ (closest.targetBlock()), local.type)) {
       return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
     }
     return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;

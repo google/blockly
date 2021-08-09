@@ -13,8 +13,8 @@
 goog.module('Blockly.Events.FinishedLoading');
 goog.module.declareLegacyNamespace();
 
-const Abstract = goog.require('Blockly.Events.Abstract');
 const Events = goog.require('Blockly.Events');
+const EventsAbstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const object = goog.require('Blockly.utils.object');
@@ -28,7 +28,7 @@ const registry = goog.require('Blockly.registry');
  * Finished loading events do not record undo or redo.
  * @param {!Workspace=} opt_workspace The workspace that has finished
  *    loading.  Undefined for a blank event.
- * @extends {Abstract}
+ * @extends {EventsAbstract}
  * @constructor
  */
 const FinishedLoading = function(opt_workspace) {
@@ -55,7 +55,7 @@ const FinishedLoading = function(opt_workspace) {
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-object.inherits(FinishedLoading, Abstract);
+object.inherits(FinishedLoading, EventsAbstract);
 
 /**
  * Type of this event.

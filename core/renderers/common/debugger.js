@@ -78,7 +78,8 @@ Blockly.blockRendering.Debug.config = {
  * @package
  */
 Blockly.blockRendering.Debug.prototype.clearElems = function() {
-  for (var i = 0, elem; (elem = this.debugElements_[i]); i++) {
+  for (let i = 0; i < this.debugElements_.length; i++) {
+    const elem = this.debugElements_[i];
     Blockly.utils.dom.removeNode(elem);
   }
 
@@ -97,8 +98,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
     return;
   }
 
-  var height = Math.abs(row.height);
-  var isNegativeSpacing = row.height < 0;
+  const height = Math.abs(row.height);
+  const isNegativeSpacing = row.height < 0;
   if (isNegativeSpacing) {
     cursorY -= height;
   }
@@ -131,13 +132,13 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
     return;
   }
 
-  var width = Math.abs(elem.width);
-  var isNegativeSpacing = elem.width < 0;
-  var xPos = isNegativeSpacing ? elem.xPos - width : elem.xPos;
+  const width = Math.abs(elem.width);
+  const isNegativeSpacing = elem.width < 0;
+  let xPos = isNegativeSpacing ? elem.xPos - width : elem.xPos;
   if (isRtl) {
     xPos = -(xPos + width);
   }
-  var yPos = elem.centerline - elem.height / 2;
+  const yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT,
       {
@@ -162,11 +163,11 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  */
 Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
   if (Blockly.blockRendering.Debug.config.elems) {
-    var xPos = elem.xPos;
+    let xPos = elem.xPos;
     if (isRtl) {
       xPos = -(xPos + elem.width);
     }
-    var yPos = elem.centerline - elem.height / 2;
+    const yPos = elem.centerline - elem.height / 2;
     this.debugElements_.push(Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.RECT,
         {
@@ -183,7 +184,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
     if (Blockly.blockRendering.Types.isField(elem) &&
         elem.field instanceof Blockly.FieldLabel) {
-      var baseline = this.constants_.FIELD_TEXT_BASELINE;
+      const baseline = this.constants_.FIELD_TEXT_BASELINE;
       this.debugElements_.push(Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.RECT,
           {
@@ -221,9 +222,9 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
     return;
   }
 
-  var colour;
-  var size;
-  var fill;
+  let colour;
+  let size;
+  let fill;
   if (conn.type == Blockly.connectionTypes.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
@@ -309,8 +310,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @package
  */
 Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
-  for (var i = 0, l = row.elements.length; i < l; i++) {
-    var elem = row.elements[i];
+  for (let i = 0; i < row.elements.length; i++) {
+    const elem = row.elements[i];
     if (!elem) {
       console.warn('A row has an undefined or null element.', row, elem);
       continue;
@@ -337,8 +338,8 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
     return;
   }
   // Bounding box without children.
-  var xPos = info.RTL ? -info.width : 0;
-  var yPos = 0;
+  let xPos = info.RTL ? -info.width : 0;
+  const yPos = 0;
   this.debugElements_.push(Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.RECT,
       {
@@ -387,8 +388,9 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
 
   this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
-  var cursorY = 0;
-  for (var i = 0, row; (row = info.rows[i]); i++) {
+  let cursorY = 0;
+  for (let i = 0; i < info.rows.length; i++) {
+    const row = info.rows[i];
     if (Blockly.blockRendering.Types.isBetweenRowSpacer(row)) {
       this.drawSpacerRow(row, cursorY, info.RTL);
     } else {

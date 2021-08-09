@@ -10,26 +10,28 @@
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.Renderer');
+goog.module('Blockly.blockRendering.Renderer');
+goog.module.declareLegacyNamespace();
 
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
-goog.requireType('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
+goog.require('Blockly.Connection');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.InsertionMarkerManager');
-goog.requireType('Blockly.IRegistrable');
+goog.require('Blockly.utils.object');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.blockRendering.Debug');
+goog.requireType('Blockly.blockRendering.IPathObject');
+goog.requireType('Blockly.IRegistrable');
 goog.requireType('Blockly.Marker');
 goog.requireType('Blockly.RenderedConnection');
 goog.requireType('Blockly.Theme');
-goog.requireType('Blockly.utils.object');
 goog.requireType('Blockly.WorkspaceSvg');
 
 
@@ -40,7 +42,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @implements {Blockly.IRegistrable}
  */
-Blockly.blockRendering.Renderer = function(name) {
+const Renderer = function(name) {
 
   /**
    * The renderer name.
@@ -69,7 +71,7 @@ Blockly.blockRendering.Renderer = function(name) {
  * @return {string} The CSS class name.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.getClassName = function() {
+Renderer.prototype.getClassName = function() {
   return this.name + '-renderer';
 };
 
@@ -79,7 +81,7 @@ Blockly.blockRendering.Renderer.prototype.getClassName = function() {
  * @param {Object=} opt_rendererOverrides Rendering constant overrides.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.init = function(theme,
+Renderer.prototype.init = function(theme,
     opt_rendererOverrides) {
   this.constants_ = this.makeConstants_();
   if (opt_rendererOverrides) {
@@ -96,7 +98,7 @@ Blockly.blockRendering.Renderer.prototype.init = function(theme,
  * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
+Renderer.prototype.createDom = function(svg, theme) {
   this.constants_.createDom(svg, this.name + '-' + theme.name,
       '.' + this.getClassName() + '.' + theme.getClassName());
 };
@@ -107,7 +109,7 @@ Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
  * @param {!Blockly.Theme} theme The workspace theme object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
+Renderer.prototype.refreshDom = function(svg, theme) {
   const previousConstants = this.getConstants();
   previousConstants.dispose();
   this.constants_ = this.makeConstants_();
@@ -126,7 +128,7 @@ Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
  * Delete all DOM elements that this renderer and its constants created.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.dispose = function() {
+Renderer.prototype.dispose = function() {
   if (this.constants_) {
     this.constants_.dispose();
   }
@@ -137,7 +139,7 @@ Blockly.blockRendering.Renderer.prototype.dispose = function() {
  * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeConstants_ = function() {
+Renderer.prototype.makeConstants_ = function() {
   return new Blockly.blockRendering.ConstantProvider();
 };
 
@@ -147,7 +149,7 @@ Blockly.blockRendering.Renderer.prototype.makeConstants_ = function() {
  * @return {!Blockly.blockRendering.RenderInfo} The render info object.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeRenderInfo_ = function(block) {
+Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.blockRendering.RenderInfo(this, block);
 };
 
@@ -159,7 +161,7 @@ Blockly.blockRendering.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @return {!Blockly.blockRendering.Drawer} The drawer.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
+Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.blockRendering.Drawer(block, info);
 };
 
@@ -169,11 +171,12 @@ Blockly.blockRendering.Renderer.prototype.makeDrawer_ = function(block, info) {
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @protected
  */
-Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
-  if (!Blockly.blockRendering.Debug) {
+Renderer.prototype.makeDebugger_ = function() {
+  const Debug = goog.module.get('Blockly.blockRendering.Debug');
+  if (!Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
-  return new Blockly.blockRendering.Debug(this.getConstants());
+  return new Debug(this.getConstants());
 };
 
 /**
@@ -184,7 +187,7 @@ Blockly.blockRendering.Renderer.prototype.makeDebugger_ = function() {
  *     the marker.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
+Renderer.prototype.makeMarkerDrawer = function(
     workspace, marker) {
   return new Blockly.blockRendering.MarkerSvg(workspace, this.getConstants(), marker);
 };
@@ -197,7 +200,7 @@ Blockly.blockRendering.Renderer.prototype.makeMarkerDrawer = function(
  * @return {!Blockly.blockRendering.IPathObject} The renderer path object.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
+Renderer.prototype.makePathObject = function(root,
     style) {
   return new Blockly.blockRendering.PathObject(root, style,
       /** @type {!Blockly.blockRendering.ConstantProvider} */ (this.constants_));
@@ -210,7 +213,7 @@ Blockly.blockRendering.Renderer.prototype.makePathObject = function(root,
  * @return {!Blockly.blockRendering.ConstantProvider} The constant provider.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.getConstants = function() {
+Renderer.prototype.getConstants = function() {
   return (
     /** @type {!Blockly.blockRendering.ConstantProvider} */
     (this.constants_));
@@ -223,7 +226,7 @@ Blockly.blockRendering.Renderer.prototype.getConstants = function() {
  * @return {boolean} True if we should highlight the connection.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
+Renderer.prototype.shouldHighlightConnection =
     function(_conn) {
     /* eslint-disable indent */
   return true;
@@ -242,7 +245,7 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  * @return {boolean} Whether there is a home for the orphan or not.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
+Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
       const orphanConnection = (
           localType === Blockly.connectionTypes.OUTPUT_VALUE ?
@@ -263,7 +266,7 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
  *     to display.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
+Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
   if (local.type == Blockly.connectionTypes.OUTPUT_VALUE ||
       local.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
@@ -285,7 +288,7 @@ Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
  * @param {!Blockly.BlockSvg} block The block to render.
  * @package
  */
-Blockly.blockRendering.Renderer.prototype.render = function(block) {
+Renderer.prototype.render = function(block) {
   if (Blockly.blockRendering.isDebuggerEnabled() && !block.renderingDebugger) {
     block.renderingDebugger = this.makeDebugger_();
   }
@@ -293,3 +296,5 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   info.measure();
   this.makeDrawer_(block, info).draw();
 };
+
+exports = Renderer;

@@ -53,7 +53,7 @@ Blockly.Workspace = function(opt_options) {
   /** @type {Blockly.utils.toolbox.Position} */
   this.toolboxPosition = this.options.toolboxPosition;
 
-  var connectionCheckerClass = Blockly.registry.getClassFromOptions(
+  const connectionCheckerClass = Blockly.registry.getClassFromOptions(
       Blockly.registry.Type.CONNECTION_CHECKER, this.options, true);
   /**
    * An object that encapsulates logic for safety, type, and dragging checks.
@@ -182,8 +182,8 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  * @private
  */
 Blockly.Workspace.prototype.sortObjects_ = function(a, b) {
-  var aXY = a.getRelativeToSurfaceXY();
-  var bXY = b.getRelativeToSurfaceXY();
+  const aXY = a.getRelativeToSurfaceXY();
+  const bXY = b.getRelativeToSurfaceXY();
   return (aXY.y + Blockly.Workspace.prototype.sortObjects_.offset * aXY.x) -
       (bXY.y + Blockly.Workspace.prototype.sortObjects_.offset * bXY.x);
 };
@@ -214,7 +214,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  */
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
-  var blocks = [].concat(this.topBlocks_);
+  const blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
         Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -260,7 +260,7 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
   if (!this.typedBlocksDB_[type]) {
     return [];
   }
-  var blocks = this.typedBlocksDB_[type].slice(0);
+  const blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
         Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -313,7 +313,7 @@ Blockly.Workspace.prototype.removeTopComment = function(comment) {
  */
 Blockly.Workspace.prototype.getTopComments = function(ordered) {
   // Copy the topComments_ list.
-  var comments = [].concat(this.topComments_);
+  const comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
     this.sortObjects_.offset =
         Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -332,24 +332,25 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
  * @return {!Array<!Blockly.Block>} Array of blocks.
  */
 Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
+  let blocks;
   if (ordered) {
     // Slow, but ordered.
-    var topBlocks = this.getTopBlocks(true);
-    var blocks = [];
-    for (var i = 0; i < topBlocks.length; i++) {
+    const topBlocks = this.getTopBlocks(true);
+    blocks = [];
+    for (let i = 0; i < topBlocks.length; i++) {
       blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
     }
   } else {
     // Fast, but in no particular order.
-    var blocks = this.getTopBlocks(false);
-    for (var i = 0; i < blocks.length; i++) {
+    blocks = this.getTopBlocks(false);
+    for (let i = 0; i < blocks.length; i++) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
   }
 
   // Insertion markers exist on the workspace for rendering reasons, but aren't
   // "real" blocks from a developer perspective.
-  var filtered = blocks.filter(function(block) {
+  const filtered = blocks.filter(function (block) {
     return !block.isInsertionMarker();
   });
 
@@ -362,7 +363,7 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
 Blockly.Workspace.prototype.clear = function() {
   this.isClearing = true;
   try {
-    var existingGroup = Blockly.Events.getGroup();
+    const existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
@@ -533,7 +534,7 @@ Blockly.Workspace.prototype.remainingCapacityOfType = function(type) {
     return Infinity;
   }
 
-  var maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
+  const maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
       this.options.maxInstances[type] : Infinity;
 
   return maxInstanceOfType - this.getBlocksByType(type, false).length;
@@ -553,8 +554,8 @@ Blockly.Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
   if (!this.hasBlockLimits()) {
     return true;
   }
-  var copyableBlocksCount = 0;
-  for (var type in typeCountsMap) {
+  let copyableBlocksCount = 0;
+  for (const type in typeCountsMap) {
     if (typeCountsMap[type] > this.remainingCapacityOfType(type)) {
       return false;
     }
@@ -598,26 +599,28 @@ Blockly.Workspace.prototype.getRedoStack = function() {
  * @param {boolean} redo False if undo, true if redo.
  */
 Blockly.Workspace.prototype.undo = function(redo) {
-  var inputStack = redo ? this.redoStack_ : this.undoStack_;
-  var outputStack = redo ? this.undoStack_ : this.redoStack_;
-  var inputEvent = inputStack.pop();
+  const inputStack = redo ? this.redoStack_ : this.undoStack_;
+  const outputStack = redo ? this.undoStack_ : this.redoStack_;
+  const inputEvent = inputStack.pop();
   if (!inputEvent) {
     return;
   }
-  var events = [inputEvent];
+  let events = [inputEvent];
   // Do another undo/redo if the next one is of the same group.
   while (inputStack.length && inputEvent.group &&
       inputEvent.group == inputStack[inputStack.length - 1].group) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.
-  for (var i = 0, event; (event = events[i]); i++) {
+  for (let i = 0; i < events.length; i++) {
+    const event = events[i];
     outputStack.push(event);
   }
   events = Blockly.Events.filter(events, redo);
   Blockly.Events.recordUndo = false;
   try {
-    for (var i = 0, event; (event = events[i]); i++) {
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
       event.run(redo);
     }
   } finally {
@@ -668,7 +671,8 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
       this.undoStack_.shift();
     }
   }
-  for (var i = 0, func; (func = this.listeners_[i]); i++) {
+  for (let i = 0; i < this.listeners_.length; i++) {
+    const func = this.listeners_[i];
     func(event);
   }
 };
@@ -721,8 +725,9 @@ Blockly.Workspace.prototype.getCommentById = function(id) {
  */
 Blockly.Workspace.prototype.allInputsFilled = function(
     opt_shadowBlocksAreFilled) {
-  var blocks = this.getTopBlocks(false);
-  for (var i = 0, block; (block = blocks[i]); i++) {
+  const blocks = this.getTopBlocks(false);
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i];
     if (!block.allInputsFilled(opt_shadowBlocksAreFilled)) {
       return false;
     }
@@ -786,8 +791,8 @@ Blockly.Workspace.getById = function(id) {
  * @return {!Array<!Blockly.Workspace>} Array of workspaces.
  */
 Blockly.Workspace.getAll = function() {
-  var workspaces = [];
-  for (var workspaceId in Blockly.Workspace.WorkspaceDB_) {
+  const workspaces = [];
+  for (const workspaceId in Blockly.Workspace.WorkspaceDB_) {
     workspaces.push(Blockly.Workspace.WorkspaceDB_[workspaceId]);
   }
   return workspaces;

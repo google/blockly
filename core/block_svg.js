@@ -16,14 +16,14 @@ goog.module.declareLegacyNamespace();
 const ASTNode = goog.require('Blockly.ASTNode');
 const Block = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
+/* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Debug = goog.requireType('Blockly.blockRendering.Debug');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -225,7 +225,7 @@ BlockSvg.prototype.customContextMenu;
 
 /**
  * An property used internally to reference the block's rendering debugger.
- * @type {?Debug}
+ * @type {?BlockRenderingDebug}
  * @package
  */
 BlockSvg.prototype.renderingDebugger;
@@ -609,11 +609,11 @@ BlockSvg.prototype.snapToGrid = function() {
   const spacing = grid.getSpacing();
   const half = spacing / 2;
   const xy = this.getRelativeToSurfaceXY();
-  let dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;
-  let dy = Math.round((xy.y - half) / spacing) * spacing + half - xy.y;
-  dx = Math.round(dx);
-  dy = Math.round(dy);
-  if (dx != 0 || dy != 0) {
+  const dx =
+      Math.round(Math.round((xy.x - half) / spacing) * spacing + half - xy.x);
+  const dy =
+      Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
+  if (dx || dy) {
     this.moveBy(dx, dy);
   }
 };
@@ -627,7 +627,8 @@ BlockSvg.prototype.snapToGrid = function() {
 BlockSvg.prototype.getBoundingRectangle = function() {
   const blockXY = this.getRelativeToSurfaceXY();
   const blockBounds = this.getHeightWidth();
-  let left, right;
+  let left;
+  let right;
   if (this.RTL) {
     left = blockXY.x - blockBounds.width;
     right = blockXY.x;
@@ -644,8 +645,8 @@ BlockSvg.prototype.getBoundingRectangle = function() {
  */
 BlockSvg.prototype.markDirty = function() {
   this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
-                                  .getRenderer()
-                                  .getConstants();
+      .getRenderer()
+      .getConstants();
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -1086,7 +1087,7 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
   const id = opt_id || '';
   if (!id) {
     // Kill all previous pending processes, this edit supersedes them all.
-    for (const n in this.warningTextDb_) {
+    for (const n of Object.keys(this.warningTextDb_)) {
       clearTimeout(this.warningTextDb_[n]);
       delete this.warningTextDb_[n];
     }
@@ -1228,7 +1229,7 @@ BlockSvg.prototype.setDeleteStyle = function(enable) {
 };
 
 
-// Overrides of functions on Block that take into account whether the
+// Overrides of functions on Blockly.Block that take into account whether the
 // block has been rendered.
 /**
  * Get the colour of a block.
@@ -1364,8 +1365,7 @@ BlockSvg.prototype.setInputsInline = function(newBoolean) {
  * @param {boolean=} opt_quiet True to prevent error if input is not present.
  * @return {boolean} True if operation succeeds, false if input is not present
  *     and opt_quiet is true
- * @throws {Error} if the input is not present and
- *     opt_quiet is not true.
+ * @throws {Error} if the input is not present and opt_quiet is not true.
  */
 BlockSvg.prototype.removeInput = function(name, opt_quiet) {
   const removed = BlockSvg.superClass_.removeInput.call(this, name, opt_quiet);

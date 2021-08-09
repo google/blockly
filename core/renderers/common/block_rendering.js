@@ -10,17 +10,14 @@
  */
 'use strict';
 
-/**
- * The top level namespace for block rendering.
- * @namespace Blockly.blockRendering
- */
 goog.module('Blockly.blockRendering');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.registry');
-
-goog.requireType('Blockly.blockRendering.Renderer');
-goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -47,7 +44,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * @throws {Error} if a renderer with the same name has already been registered.
  */
 const register = function(name, rendererClass) {
-  Blockly.registry.register(Blockly.registry.Type.RENDERER, name,
+  registry.register(registry.Type.RENDERER, name,
       rendererClass);
 };
 exports.register = register;
@@ -57,7 +54,7 @@ exports.register = register;
  * @param {string} name The name of the renderer.
  */
 const unregister = function(name) {
-  Blockly.registry.unregister(Blockly.registry.Type.RENDERER, name);
+  registry.unregister(registry.Type.RENDERER, name);
 };
 exports.unregister = unregister;
 
@@ -84,16 +81,16 @@ exports.stopDebugger = stopDebugger;
 /**
  * Initialize anything needed for rendering (constants, etc).
  * @param {!string} name Name of the renderer to initialize.
- * @param {!Blockly.Theme} theme The workspace theme object.
+ * @param {!Theme} theme The workspace theme object.
  * @param {Object=} opt_rendererOverrides Rendering constant overrides.
- * @return {!Blockly.blockRendering.Renderer} The new instance of a renderer.
+ * @return {!Renderer} The new instance of a renderer.
  *     Already initialized.
  * @package
  */
 
 const init = function(name, theme, opt_rendererOverrides) {
-  const rendererClass = Blockly.registry.getClass(
-      Blockly.registry.Type.RENDERER, name);
+  const rendererClass = registry.getClass(
+      registry.Type.RENDERER, name);
   const renderer = new rendererClass(name);
   renderer.init(theme, opt_rendererOverrides);
   return renderer;

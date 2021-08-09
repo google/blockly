@@ -52,8 +52,8 @@ const Workspace = function(opt_options) {
   this.id = utils.genUid();
   Workspace.WorkspaceDB_[this.id] = this;
   /** @type {!Options} */
-  this.options = opt_options ||
-      new Options(/** @type {!BlocklyOptions} */ ({}));
+  this.options =
+      opt_options || new Options(/** @type {!BlocklyOptions} */ ({}));
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;
   /** @type {boolean} */
@@ -224,8 +224,7 @@ Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   const blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
-    this.sortObjects_.offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+    this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -250,8 +249,8 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type]
-      .indexOf(block), 1);
+  this.typedBlocksDB_[block.type].splice(
+      this.typedBlocksDB_[block.type].indexOf(block), 1);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -270,8 +269,7 @@ Workspace.prototype.getBlocksByType = function(type, ordered) {
   }
   const blocks = this.typedBlocksDB_[type].slice(0);
   if (ordered && blocks.length > 1) {
-    this.sortObjects_.offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+    this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -291,7 +289,8 @@ Workspace.prototype.addTopComment = function(comment) {
   // Note: If the comment database starts to hold block comments, this may need
   // to move to a separate function.
   if (this.commentDB_[comment.id]) {
-    console.warn('Overriding an existing comment on this workspace, with id "' +
+    console.warn(
+        'Overriding an existing comment on this workspace, with id "' +
         comment.id + '"');
   }
   this.commentDB_[comment.id] = comment;
@@ -304,7 +303,8 @@ Workspace.prototype.addTopComment = function(comment) {
  */
 Workspace.prototype.removeTopComment = function(comment) {
   if (!utils.arrayRemove(this.topComments_, comment)) {
-    throw Error('Comment not present in workspace\'s list of top-most ' +
+    throw Error(
+        'Comment not present in workspace\'s list of top-most ' +
         'comments.');
   }
   // Note: If the comment database starts to hold block comments, this may need
@@ -323,8 +323,7 @@ Workspace.prototype.getTopComments = function(ordered) {
   // Copy the topComments_ list.
   const comments = [].concat(this.topComments_);
   if (ordered && comments.length > 1) {
-    this.sortObjects_.offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+    this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
     if (this.RTL) {
       this.sortObjects_.offset *= -1;
     }
@@ -358,7 +357,7 @@ Workspace.prototype.getAllBlocks = function(ordered) {
 
   // Insertion markers exist on the workspace for rendering reasons, but aren't
   // "real" blocks from a developer perspective.
-  const filtered = blocks.filter(function (block) {
+  const filtered = blocks.filter(function(block) {
     return !block.isInsertionMarker();
   });
 
@@ -544,7 +543,8 @@ Workspace.prototype.remainingCapacityOfType = function(type) {
   }
 
   const maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
-      this.options.maxInstances[type] : Infinity;
+      this.options.maxInstances[type] :
+      Infinity;
 
   return maxInstanceOfType - this.getBlocksByType(type, false).length;
 };
@@ -617,7 +617,7 @@ Workspace.prototype.undo = function(redo) {
   let events = [inputEvent];
   // Do another undo/redo if the next one is of the same group.
   while (inputStack.length && inputEvent.group &&
-      inputEvent.group == inputStack[inputStack.length - 1].group) {
+         inputEvent.group == inputStack[inputStack.length - 1].group) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.
@@ -732,8 +732,7 @@ Workspace.prototype.getCommentById = function(id) {
  *     whether shadow blocks are counted as filled. Defaults to true.
  * @return {boolean} True if all inputs are filled, false otherwise.
  */
-Workspace.prototype.allInputsFilled = function(
-    opt_shadowBlocksAreFilled) {
+Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
   const blocks = this.getTopBlocks(false);
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];

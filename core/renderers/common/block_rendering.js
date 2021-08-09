@@ -23,7 +23,6 @@ const registry = goog.require('Blockly.registry');
 /**
  * Whether or not the debugger is turned on.
  * @type {boolean}
- * @package
  */
 let useDebugger = false;
 /**
@@ -86,7 +85,6 @@ exports.stopDebugger = stopDebugger;
  *     Already initialized.
  * @package
  */
-
 const init = function(name, theme, opt_rendererOverrides) {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);
   const renderer = new rendererClass(name);

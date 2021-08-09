@@ -108,7 +108,7 @@ Blockly.blockRendering.Renderer.prototype.createDom = function(svg, theme) {
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.refreshDom = function(svg, theme) {
-  var previousConstants = this.getConstants();
+  const previousConstants = this.getConstants();
   previousConstants.dispose();
   this.constants_ = this.makeConstants_();
   if (this.overrides) {
@@ -244,8 +244,9 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  */
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
-      var orphanConnection = localType === Blockly.connectionTypes.OUTPUT_VALUE ?
-          orphanBlock.outputConnection : orphanBlock.previousConnection;
+      const orphanConnection = (
+          localType === Blockly.connectionTypes.OUTPUT_VALUE ?
+              orphanBlock.outputConnection : orphanBlock.previousConnection);
       return !!Blockly.Connection.getConnectionForOrphanedConnection(
           /** @type {!Blockly.Block} **/ (topBlock),
           /** @type {!Blockly.Connection} **/ (orphanConnection));
@@ -288,7 +289,7 @@ Blockly.blockRendering.Renderer.prototype.render = function(block) {
   if (Blockly.blockRendering.isDebuggerEnabled() && !block.renderingDebugger) {
     block.renderingDebugger = this.makeDebugger_();
   }
-  var info = this.makeRenderInfo_(block);
+  const info = this.makeRenderInfo_(block);
   info.measure();
   this.makeDrawer_(block, info).draw();
 };

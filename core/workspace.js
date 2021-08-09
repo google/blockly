@@ -41,6 +41,12 @@ goog.require('Blockly.ConnectionChecker');
 
 
 /**
+ * Database of all workspaces.
+ * @private
+ */
+const WorkspaceDB_ = Object.create(null);
+
+/**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
  * @param {!Options=} opt_options Dictionary of options.
@@ -50,7 +56,7 @@ goog.require('Blockly.ConnectionChecker');
 const Workspace = function(opt_options) {
   /** @type {string} */
   this.id = utils.genUid();
-  Workspace.WorkspaceDB_[this.id] = this;
+  WorkspaceDB_[this.id] = this;
   /** @type {!Options} */
   this.options =
       opt_options || new Options(/** @type {!BlocklyOptions} */ ({}));
@@ -167,7 +173,7 @@ Workspace.prototype.dispose = function() {
   this.listeners_.length = 0;
   this.clear();
   // Remove from workspace database.
-  delete Workspace.WorkspaceDB_[this.id];
+  delete WorkspaceDB_[this.id];
 };
 
 /**
@@ -778,20 +784,13 @@ Workspace.prototype.setVariableMap = function(variableMap) {
   this.variableMap_ = variableMap;
 };
 
-
-/**
- * Database of all workspaces.
- * @private
- */
-Workspace.WorkspaceDB_ = Object.create(null);
-
 /**
  * Find the workspace with the specified ID.
  * @param {string} id ID of workspace to find.
  * @return {?Workspace} The sought after workspace or null if not found.
  */
 Workspace.getById = function(id) {
-  return Workspace.WorkspaceDB_[id] || null;
+  return WorkspaceDB_[id] || null;
 };
 
 /**
@@ -800,8 +799,8 @@ Workspace.getById = function(id) {
  */
 Workspace.getAll = function() {
   const workspaces = [];
-  for (const workspaceId in Workspace.WorkspaceDB_) {
-    workspaces.push(Workspace.WorkspaceDB_[workspaceId]);
+  for (const workspaceId in WorkspaceDB_) {
+    workspaces.push(WorkspaceDB_[workspaceId]);
   }
   return workspaces;
 };

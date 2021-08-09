@@ -19,12 +19,14 @@
 goog.module('Blockly.WidgetDiv');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.common');
-goog.require('Blockly.utils.dom');
-
-goog.requireType('Blockly.utils.Rect');
-goog.requireType('Blockly.utils.Size');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Rect = goog.requireType('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const Size = goog.requireType('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const common = goog.require('Blockly.common');
+const dom = goog.require('Blockly.utils.dom');
 
 
 /**
@@ -76,7 +78,7 @@ const createDom = function() {
 
   DIV = document.createElement('div');
   DIV.className = 'blocklyWidgetDiv';
-  const container = Blockly.common.getParentContainer() || document.body;
+  const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
 };
 exports.createDom = createDom;
@@ -96,12 +98,12 @@ const show = function(newOwner, rtl, newDispose) {
   div.style.direction = rtl ? 'rtl' : 'ltr';
   div.style.display = 'block';
   const mainWorkspace =
-    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
+    /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   rendererClassName =
       mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  Blockly.utils.dom.addClass(div, rendererClassName);
-  Blockly.utils.dom.addClass(div, themeClassName);
+  dom.addClass(div, rendererClassName);
+  dom.addClass(div, themeClassName);
 };
 exports.show = show;
 
@@ -123,15 +125,15 @@ const hide = function() {
   div.textContent = '';
 
   if (rendererClassName) {
-    Blockly.utils.dom.removeClass(div, rendererClassName);
+    dom.removeClass(div, rendererClassName);
     rendererClassName = '';
   }
   if (themeClassName) {
-    Blockly.utils.dom.removeClass(div, themeClassName);
+    dom.removeClass(div, themeClassName);
     themeClassName = '';
   }
-  (/** @type {!Blockly.WorkspaceSvg} */ (
-    Blockly.common.getMainWorkspace())).markFocused();
+  (/** @type {!WorkspaceSvg} */ (
+    common.getMainWorkspace())).markFocused();
 };
 exports.hide = hide;
 
@@ -174,11 +176,11 @@ const positionInternal = function(x, y, height) {
  * The widget should be placed adjacent to but not overlapping the anchor
  * rectangle.  The preferred position is directly below and aligned to the left
  * (LTR) or right (RTL) side of the anchor.
- * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ * @param {!Rect} viewportBBox The bounding rectangle of the
  *     current viewport, in window coordinates.
- * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
+ * @param {!Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Blockly.utils.Size} widgetSize The size of the widget that is inside
+ * @param {!Size} widgetSize The size of the widget that is inside
  *     the widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
@@ -201,11 +203,11 @@ exports.positionWithAnchor = positionWithAnchor;
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
- * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ * @param {!Rect} viewportBBox The bounding rectangle of the
  *     current viewport, in window coordinates.
- * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
+ * @param {!Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ * @param {!Size} widgetSize The dimensions of the widget inside
  *     the widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
@@ -232,11 +234,11 @@ const calculateX = function(viewportBBox, anchorBBox, widgetSize,
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
- * @param {!Blockly.utils.Rect} viewportBBox The bounding rectangle of the
+ * @param {!Rect} viewportBBox The bounding rectangle of the
  *     current viewport, in window coordinates.
- * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
+ * @param {!Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {!Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ * @param {!Size} widgetSize The dimensions of the widget inside
  *     the widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.

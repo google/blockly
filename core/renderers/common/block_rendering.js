@@ -75,9 +75,9 @@ Blockly.blockRendering.stopDebugger = function() {
  */
 
 Blockly.blockRendering.init = function(name, theme, opt_rendererOverrides) {
-  var rendererClass = Blockly.registry.getClass(
+  const rendererClass = Blockly.registry.getClass(
       Blockly.registry.Type.RENDERER, name);
-  var renderer = new rendererClass(name);
+  const renderer = new rendererClass(name);
   renderer.init(theme, opt_rendererOverrides);
   return renderer;
 };

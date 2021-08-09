@@ -10,18 +10,20 @@
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.Debug');
+goog.module('Blockly.blockRendering.Debug');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.connectionTypes');
+goog.require('Blockly.FieldLabel');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.blockRendering.ConstantProvider');
 goog.requireType('Blockly.blockRendering.InRowSpacer');
+goog.requireType('Blockly.blockRendering.Measurable');
+goog.requireType('Blockly.blockRendering.RenderInfo');
+goog.requireType('Blockly.blockRendering.Row');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.RenderedConnection');
 
@@ -33,7 +35,7 @@ goog.requireType('Blockly.RenderedConnection');
  * @package
  * @constructor
  */
-Blockly.blockRendering.Debug = function(constants) {
+const Debug = function(constants) {
   /**
    * An array of SVG elements that have been created by this object.
    * @type {Array<!SVGElement>}
@@ -62,7 +64,7 @@ Blockly.blockRendering.Debug = function(constants) {
  * rendering of specific rendering components.
  * @type {!Object<string, boolean>}
  */
-Blockly.blockRendering.Debug.config = {
+Debug.config = {
   rowSpacers: true,
   elemSpacers: true,
   rows: true,
@@ -77,7 +79,7 @@ Blockly.blockRendering.Debug.config = {
  * Remove all elements the this object created on the last pass.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.clearElems = function() {
+Debug.prototype.clearElems = function() {
   for (let i = 0; i < this.debugElements_.length; i++) {
     const elem = this.debugElements_[i];
     Blockly.utils.dom.removeNode(elem);
@@ -93,8 +95,8 @@ Blockly.blockRendering.Debug.prototype.clearElems = function() {
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
-  if (!Blockly.blockRendering.Debug.config.rowSpacers) {
+Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
+  if (!Debug.config.rowSpacers) {
     return;
   }
 
@@ -127,8 +129,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerRow = function(row, cursorY, is
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
-  if (!Blockly.blockRendering.Debug.config.elemSpacers) {
+Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
+  if (!Debug.config.elemSpacers) {
     return;
   }
 
@@ -161,8 +163,8 @@ Blockly.blockRendering.Debug.prototype.drawSpacerElem = function(elem, rowHeight
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) {
-  if (Blockly.blockRendering.Debug.config.elems) {
+Debug.prototype.drawRenderedElem = function(elem, isRtl) {
+  if (Debug.config.elems) {
     let xPos = elem.xPos;
     if (isRtl) {
       xPos = -(xPos + elem.width);
@@ -203,7 +205,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
 
 
   if (Blockly.blockRendering.Types.isInput(elem) &&
-      Blockly.blockRendering.Debug.config.connections) {
+      Debug.config.connections) {
     this.drawConnection(elem.connectionModel);
   }
 };
@@ -217,8 +219,8 @@ Blockly.blockRendering.Debug.prototype.drawRenderedElem = function(elem, isRtl) 
  *     is a debug module.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
-  if (!Blockly.blockRendering.Debug.config.connections) {
+Debug.prototype.drawConnection = function(conn) {
+  if (!Debug.config.connections) {
     return;
   }
 
@@ -262,8 +264,8 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
-  if (!Blockly.blockRendering.Debug.config.rows) {
+Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
+  if (!Debug.config.rows) {
     return;
   }
   this.debugElements_.push(Blockly.utils.dom.createSvgElement(
@@ -284,7 +286,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
     return;
   }
 
-  if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
+  if (Debug.config.connectedBlockBounds) {
     this.debugElements_.push(Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.RECT,
         {
@@ -309,7 +311,7 @@ Blockly.blockRendering.Debug.prototype.drawRenderedRow = function(row, cursorY, 
  * @param {boolean} isRtl Whether the block is rendered RTL.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
+Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
   for (let i = 0; i < row.elements.length; i++) {
     const elem = row.elements[i];
     if (!elem) {
@@ -333,8 +335,8 @@ Blockly.blockRendering.Debug.prototype.drawRowWithElements = function(row, curso
  *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
-  if (!Blockly.blockRendering.Debug.config.blockBounds) {
+Debug.prototype.drawBoundingBox = function(info) {
+  if (!Debug.config.blockBounds) {
     return;
   }
   // Bounding box without children.
@@ -355,7 +357,7 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
       },
       this.svgRoot_));
 
-  if (Blockly.blockRendering.Debug.config.connectedBlockBounds) {
+  if (Debug.config.connectedBlockBounds) {
     // Bounding box with children.
     xPos = info.RTL ? -info.widthWithChildren : 0;
     this.debugElements_.push(Blockly.utils.dom.createSvgElement(
@@ -382,7 +384,7 @@ Blockly.blockRendering.Debug.prototype.drawBoundingBox = function(info) {
  *     the block to debug.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
+Debug.prototype.drawDebug = function(block, info) {
   this.clearElems();
   this.svgRoot_ = block.getSvgRoot();
 
@@ -423,8 +425,8 @@ Blockly.blockRendering.Debug.prototype.drawDebug = function(block, info) {
  * @param {!SVGElement} svgPath The block's SVG path.
  * @package
  */
-Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {
-  if (!Blockly.blockRendering.Debug.config.render) {
+Debug.prototype.drawRender = function(svgPath) {
+  if (!Debug.config.render) {
     return;
   }
   svgPath.setAttribute('filter',
@@ -433,3 +435,5 @@ Blockly.blockRendering.Debug.prototype.drawRender = function(svgPath) {
     svgPath.setAttribute('filter', '');
   }, 100);
 };
+
+exports = Debug;

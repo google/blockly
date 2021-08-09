@@ -57,6 +57,7 @@ goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockDragSurfaceSvg');
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.blockRendering.Renderer');
 goog.requireType('Blockly.Cursor');
 goog.requireType('Blockly.FlyoutButton');
@@ -70,6 +71,8 @@ goog.requireType('Blockly.ScrollbarPair');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.Trashcan');
 goog.requireType('Blockly.VariableModel');
+goog.requireType('Blockly.WorkspaceComment');
+goog.requireType('Blockly.WorkspaceCommentSvg');
 goog.requireType('Blockly.ZoomControls');
 
 
@@ -1564,7 +1567,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
   Blockly.Events.disable();
   try {
-    var comment = Blockly.WorkspaceCommentSvg.fromXml(xmlComment, this);
+    var comment = goog.module.get('Blockly.WorkspaceCommentSvg').fromXml(xmlComment, this);
     // Move the duplicate to original position.
     var commentX = parseInt(xmlComment.getAttribute('x'), 10);
     var commentY = parseInt(xmlComment.getAttribute('y'), 10);
@@ -1583,7 +1586,7 @@ Blockly.WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled()) {
-    Blockly.WorkspaceComment.fireCreateEvent(comment);
+    goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
   }
   comment.select();
 };

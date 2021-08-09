@@ -44,8 +44,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * @throws {Error} if a renderer with the same name has already been registered.
  */
 const register = function(name, rendererClass) {
-  registry.register(registry.Type.RENDERER, name,
-      rendererClass);
+  registry.register(registry.Type.RENDERER, name, rendererClass);
 };
 exports.register = register;
 
@@ -89,8 +88,7 @@ exports.stopDebugger = stopDebugger;
  */
 
 const init = function(name, theme, opt_rendererOverrides) {
-  const rendererClass = registry.getClass(
-      registry.Type.RENDERER, name);
+  const rendererClass = registry.getClass(registry.Type.RENDERER, name);
   const renderer = new rendererClass(name);
   renderer.init(theme, opt_rendererOverrides);
   return renderer;

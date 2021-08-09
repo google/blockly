@@ -28,6 +28,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
  * singleton. You should not create a new instance, and only access this class
  * from ContextMenuRegistry.registry.
  * @constructor
+ * @private
  */
 const ContextMenuRegistry = function() {
   // Singleton instance should be registered once.

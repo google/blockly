@@ -37,7 +37,6 @@ const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnecti
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
-/* eslint-disable-next-line no-unused-vars */
 const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
 /* eslint-disable-next-line no-unused-vars */
 const Row = goog.requireType('Blockly.blockRendering.Row');

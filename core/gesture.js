@@ -31,7 +31,6 @@ const IBubble = goog.requireType('Blockly.IBubble');
 const IFlyout = goog.requireType('Blockly.IFlyout');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');

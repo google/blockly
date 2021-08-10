@@ -51,8 +51,10 @@ async function runGeneratorsInBrowser() {
       args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--allow-file-access-from-files']
     };
   } else {
+    // --disable-gpu is needed to prevent Chrome from hanging on Linux with
+    // NVIDIA drivers older than v295.20.    
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--allow-file-access-from-files']
+      args: ['--allow-file-access-from-files', '--disable-gpu']
     };
   }
 

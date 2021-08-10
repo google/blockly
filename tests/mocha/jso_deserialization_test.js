@@ -55,7 +55,7 @@ suite('JSO Deserialization', function() {
             this.workspace.id);
       });
 
-      test('Var with block', function() {
+      test('Only fire one event with var and var on block', function() {
         const state = {
           'variables': [
             {
@@ -95,7 +95,7 @@ suite('JSO Deserialization', function() {
     });
 
     suite('Block create', function() {
-      test('No children', function() {
+      test('Simple', function() {
         const state = {
           'blocks': {
             'blocks': [
@@ -117,7 +117,7 @@ suite('JSO Deserialization', function() {
             'testId');
       });
 
-      test('with children', function() {
+      test('Only fire event for top block', function() {
         const state = {
           'blocks': {
             'blocks': [

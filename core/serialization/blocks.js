@@ -294,7 +294,7 @@ exports.load = load;
  * clutter our external API.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
- * @param {!Connection} parentConnection The optional parent connection to
+ * @param {!Connection=} parentConnection The optional parent connection to
  *     attach the block to.
  * @return {!Block} The block that was just loaded.
  */
@@ -449,7 +449,7 @@ const loadConnection = function(connection, connectionState) {
   }
 };
 
-// TODO (#5146): Remove this from the serialization system.
+// TODO(#5146): Remove this from the serialization system.
 /**
  * Initializes the give block, eg init the model, inits the svg, renders, etc.
  * @param {!Block} block The block to initialize.

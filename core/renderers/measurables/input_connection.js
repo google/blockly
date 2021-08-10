@@ -12,29 +12,30 @@
 goog.module('Blockly.blockRendering.InputConnection');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Connection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+const Connection = goog.require('Blockly.blockRendering.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The input to measure and store information for.
+ * @param {!Input} input The input to measure and store information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Connection}
+ * @extends {Connection}
  */
 const InputConnection = function(constants, input) {
   InputConnection.superClass_.constructor.call(this,
       constants, input.connection);
 
-  this.type |= Blockly.blockRendering.Types.INPUT;
+  this.type |= Types.INPUT;
   this.input = input;
   this.align = input.align;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
@@ -52,7 +53,7 @@ const InputConnection = function(constants, input) {
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };
-Blockly.utils.object.inherits(InputConnection,
-    Blockly.blockRendering.Connection);
+object.inherits(InputConnection,
+    Connection);
 
 exports = InputConnection;

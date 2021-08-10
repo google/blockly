@@ -13,29 +13,30 @@
 goog.module('Blockly.blockRendering.ExternalValueInput');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.InputConnection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space an external value input
  * takes up during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The external value input to measure and store
+ * @param {!Input} input The external value input to measure and store
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
+ * @extends {InputConnection}
  */
 const ExternalValueInput = function(constants, input) {
   ExternalValueInput.superClass_.constructor.call(this,
       constants, input);
-  this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
+  this.type |= Types.EXTERNAL_VALUE_INPUT;
   if (!this.connectedBlock) {
     this.height = this.shape.height;
   } else {
@@ -50,7 +51,7 @@ const ExternalValueInput = function(constants, input) {
   this.connectionHeight = this.shape.height;
   this.connectionWidth = this.shape.width;
 };
-Blockly.utils.object.inherits(ExternalValueInput,
-    Blockly.blockRendering.InputConnection);
+object.inherits(ExternalValueInput,
+    InputConnection);
 
 exports = ExternalValueInput;

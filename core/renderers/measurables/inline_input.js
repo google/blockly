@@ -13,29 +13,30 @@
 goog.module('Blockly.blockRendering.InlineInput');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.InputConnection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space an inline input takes up
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The inline input to measure and store
+ * @param {!Input} input The inline input to measure and store
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
+ * @extends {InputConnection}
  */
 const InlineInput = function(constants, input) {
   InlineInput.superClass_.constructor.call(this,
       constants, input);
-  this.type |= Blockly.blockRendering.Types.INLINE_INPUT;
+  this.type |= Types.INLINE_INPUT;
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
@@ -60,7 +61,7 @@ const InlineInput = function(constants, input) {
   this.connectionOffsetX = this.isDynamicShape ?
       this.shape.connectionOffsetX(this.connectionWidth) : 0;
 };
-Blockly.utils.object.inherits(InlineInput,
-    Blockly.blockRendering.InputConnection);
+object.inherits(InlineInput,
+    InputConnection);
 
 exports = InlineInput;

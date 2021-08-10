@@ -13,29 +13,30 @@
 goog.module('Blockly.blockRendering.StatementInput');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.InputConnection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The statement input to measure and store
+ * @param {!Input} input The statement input to measure and store
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InputConnection}
+ * @extends {InputConnection}
  */
 const StatementInput = function(constants, input) {
   StatementInput.superClass_.constructor.call(this,
       constants, input);
-  this.type |= Blockly.blockRendering.Types.STATEMENT_INPUT;
+  this.type |= Types.STATEMENT_INPUT;
 
   if (!this.connectedBlock) {
     this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
@@ -47,7 +48,7 @@ const StatementInput = function(constants, input) {
   }
   this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
-Blockly.utils.object.inherits(StatementInput,
-    Blockly.blockRendering.InputConnection);
+object.inherits(StatementInput,
+    InputConnection);
 
 exports = StatementInput;

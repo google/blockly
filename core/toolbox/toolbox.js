@@ -22,6 +22,7 @@ const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
 const IAutoHideable = goog.require('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
@@ -29,10 +30,13 @@ const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxIte
 const IDraggable = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
 const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
 /* eslint-disable-next-line no-unused-vars */
 const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
 const IStyleable = goog.require('Blockly.IStyleable');
+/* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.require('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');

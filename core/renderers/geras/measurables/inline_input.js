@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.InlineInput');
+goog.module('Blockly.geras.InlineInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InlineInput');
 goog.require('Blockly.utils.object');
@@ -31,8 +32,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.InlineInput}
  */
-Blockly.geras.InlineInput = function(constants, input) {
-  Blockly.geras.InlineInput.superClass_.constructor.call(
+const InlineInput = function(constants, input) {
+  InlineInput.superClass_.constructor.call(
       this, constants, input);
 
   if (this.connectedBlock) {
@@ -42,5 +43,7 @@ Blockly.geras.InlineInput = function(constants, input) {
     this.height += this.constants_.DARK_PATH_OFFSET;
   }
 };
-Blockly.utils.object.inherits(Blockly.geras.InlineInput,
+Blockly.utils.object.inherits(InlineInput,
     Blockly.blockRendering.InlineInput);
+
+exports = InlineInput;

@@ -262,10 +262,31 @@ const saveConnection = function(connection) {
  * Loads the block represented by the given state into the given workspace.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
+ * @return {!Block} The block that was just loaded.
  */
 const load = function(state, workspace) {
-  loadInternal(state, workspace);
+  // We only want to fire an event for the top block.
+  Blockly.Events.disable();
+
+  const block = loadInternal(state, workspace);
+
+  Blockly.Events.enable();
+  Blockly.Events.fire(
+      new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(block));
+  
+  // Adding connections to the connection db is expensive. This defers that
+  // operation to decrease load time.
+  if (block instanceof Blockly.BlockSvg) {
+    setTimeout(() => {
+      if (!block.disposed) {
+        block.setConnectionTracking(true);
+      }
+    }, 1);
+  }
+
+  return block;
 };
+exports.load = load;
 
 /**
  * Loads the block represented by the given state into the given workspace.
@@ -273,8 +294,9 @@ const load = function(state, workspace) {
  * clutter our external API.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
- * @param {!Connection} parentConnection The optional parent connection to
+ * @param {!Connection=} parentConnection The optional parent connection to
  *     attach the block to.
+ * @return {!Block} The block that was just loaded.
  */
 const loadInternal = function(state, workspace, parentConnection = undefined) {
   const block = workspace.newBlock(state['type'], state['id']);
@@ -291,6 +313,8 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
   loadFields(block, state);
   loadInputBlocks(block, state);
   loadNextBlocks(block, state);
+  initBlock(block);
+  return block;
 };
 
 /**
@@ -424,4 +448,22 @@ const loadConnection = function(connection, connectionState) {
         connection);
   }
 };
-exports.load = load;
+
+// TODO(#5146): Remove this from the serialization system.
+/**
+ * Initializes the give block, eg init the model, inits the svg, renders, etc.
+ * @param {!Block} block The block to initialize.
+ */
+const initBlock = function(block) {
+  if (block instanceof Blockly.BlockSvg) {
+    // Adding connections to the connection db is expensive. This defers that
+    // operation to decrease load time.
+    block.setConnectionTracking(false);
+
+    block.initSvg();
+    block.render(false);
+    block.updateDisabled();
+  } else {
+    block.initModel();
+  }
+};

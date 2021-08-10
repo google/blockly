@@ -9,7 +9,7 @@ goog.module('Blockly.test.jsoSerialization');
 const {defineStackBlock, defineRowBlock, defineStatementBlock, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
-suite('JSO', function() {
+suite('JSO Serialization', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();

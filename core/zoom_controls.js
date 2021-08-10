@@ -17,7 +17,7 @@ const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.require('Blockly.IPositionable');
+const IPositionable = goog.requireType('Blockly.IPositionable');
 const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');

@@ -26,7 +26,7 @@ const Events = goog.require('Blockly.Events');
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.require('Blockly.IFlyout');
+const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const Options = goog.requireType('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');

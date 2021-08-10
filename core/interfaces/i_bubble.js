@@ -19,9 +19,9 @@ const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IContextMenu = goog.require('Blockly.IContextMenu');
+const IContextMenu = goog.requireType('Blockly.IContextMenu');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.require('Blockly.IDraggable');
+const IDraggable = goog.requireType('Blockly.IDraggable');
 
 
 /**

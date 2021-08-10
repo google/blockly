@@ -15,13 +15,13 @@ goog.provide('Blockly.blockRendering.Renderer');
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Debug');
 goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.blockRendering.IPathObject');
+goog.requireType('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.InsertionMarkerManager');
-goog.require('Blockly.IRegistrable');
+goog.requireType('Blockly.IRegistrable');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');

@@ -21,11 +21,11 @@ const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
+const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.require('Blockly.IBubble');
+const IBubble = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.require('Blockly.ICopyable');
+const ICopyable = goog.requireType('Blockly.ICopyable');
 const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');

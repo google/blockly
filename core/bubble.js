@@ -13,7 +13,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.browserEvents');
-goog.require('Blockly.IBubble');
+goog.requireType('Blockly.IBubble');
 goog.require('Blockly.Scrollbar');
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');

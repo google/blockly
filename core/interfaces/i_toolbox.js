@@ -17,7 +17,7 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
+const IRegistrable = goog.requireType('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */

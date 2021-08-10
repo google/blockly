@@ -422,7 +422,7 @@ Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
   this.SELECTED_GLOW_COLOUR =
       theme.getComponentStyle('selectedGlowColour') ||
       this.SELECTED_GLOW_COLOUR;
-  var selectedGlowSize =
+  const selectedGlowSize =
       Number(theme.getComponentStyle('selectedGlowSize'));
   this.SELECTED_GLOW_SIZE =
       selectedGlowSize && !isNaN(selectedGlowSize) ?
@@ -430,7 +430,7 @@ Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
   this.REPLACEMENT_GLOW_COLOUR =
       theme.getComponentStyle('replacementGlowColour') ||
       this.REPLACEMENT_GLOW_COLOUR;
-  var replacementGlowSize =
+  const replacementGlowSize =
       Number(theme.getComponentStyle('replacementGlowSize'));
   this.REPLACEMENT_GLOW_SIZE =
       replacementGlowSize && !isNaN(replacementGlowSize) ?
@@ -454,10 +454,10 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
-  var height = this.START_HAT_HEIGHT;
-  var width = this.START_HAT_WIDTH;
+  const height = this.START_HAT_HEIGHT;
+  const width = this.START_HAT_WIDTH;
 
-  var mainPath =
+  const mainPath =
       Blockly.utils.svgPaths.curve('c',
           [
             Blockly.utils.svgPaths.point(25, -height),
@@ -478,7 +478,7 @@ Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
-  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+  const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
   // The main path for the hexagonal connection shape is made out of two lines.
   // The lines are defined with relative positions and require the block height.
@@ -486,11 +486,11 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
   // flips.  The 'left' and 'right' versions of the path are also the same, but
   // the X sign flips.
   function makeMainPath(height, up, right) {
-    var halfHeight = height / 2;
-    var width = halfHeight > maxWidth ? maxWidth : halfHeight;
-    var forward = up ? -1 : 1;
-    var direction = right ? -1 : 1;
-    var dy = forward * height / 2;
+    const halfHeight = height / 2;
+    const width = halfHeight > maxWidth ? maxWidth : halfHeight;
+    const forward = up ? -1 : 1;
+    const direction = right ? -1 : 1;
+    const dy = forward * height / 2;
     return Blockly.utils.svgPaths.lineTo(-direction * width, dy) +
         Blockly.utils.svgPaths.lineTo(direction * width, dy);
   }
@@ -499,7 +499,7 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
     type: this.SHAPES.HEXAGONAL,
     isDynamic: true,
     width: function(height) {
-      var halfHeight = height / 2;
+      const halfHeight = height / 2;
       return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
@@ -533,8 +533,8 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
-  var maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
-  var maxHeight = maxWidth * 2;
+  const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+  const maxHeight = maxWidth * 2;
 
   // The main path for the rounded connection shape is made out of two arcs and
   // a line that joins them.  The arcs are defined with relative positions.
@@ -545,9 +545,10 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
   // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
   // which moves the arc at negative angles.
   function makeMainPath(blockHeight, up, right) {
-    var remainingHeight = blockHeight > maxHeight ? blockHeight - maxHeight : 0;
-    var height = blockHeight > maxHeight ? maxHeight : blockHeight;
-    var radius = height / 2;
+    const remainingHeight = blockHeight > maxHeight ? blockHeight - maxHeight
+        : 0;
+    const height = blockHeight > maxHeight ? maxHeight : blockHeight;
+    const radius = height / 2;
     return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
         Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
       Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
@@ -559,7 +560,7 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
     type: this.SHAPES.ROUND,
     isDynamic: true,
     width: function(height) {
-      var halfHeight = height / 2;
+      const halfHeight = height / 2;
       return halfHeight > maxWidth ? maxWidth : halfHeight;
     },
     height: function(height) {
@@ -593,7 +594,7 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
  * @package
  */
 Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
-  var radius = this.CORNER_RADIUS;
+  const radius = this.CORNER_RADIUS;
 
   // The main path for the squared connection shape is made out of two corners
   // and a single line in-between (a and v). These are defined in relative
@@ -602,7 +603,7 @@ Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
   // flips.  The 'up' and 'down' versions of the path determine where the corner
   // point is placed and in-turn the direction of the corners.
   function makeMainPath(height, up, right) {
-    var innerHeight = height - radius * 2;
+    const innerHeight = height - radius * 2;
     return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
         Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
       Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
@@ -645,14 +646,15 @@ Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
  */
 Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     connection) {
-  var checks = connection.getCheck();
+  let checks = connection.getCheck();
   if (!checks && connection.targetConnection) {
     checks = connection.targetConnection.getCheck();
   }
+  let outputShape;
   switch (connection.type) {
     case Blockly.connectionTypes.INPUT_VALUE:
     case Blockly.connectionTypes.OUTPUT_VALUE:
-      var outputShape = connection.getSourceBlock().getOutputShape();
+      outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
       if (outputShape != null) {
         switch (outputShape) {
@@ -684,14 +686,14 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
-  var width = this.NOTCH_WIDTH;
-  var height = this.NOTCH_HEIGHT;
+  const width = this.NOTCH_WIDTH;
+  const height = this.NOTCH_HEIGHT;
 
-  var innerWidth = width / 3;
-  var curveWidth = innerWidth / 3;
+  const innerWidth = width / 3;
+  const curveWidth = innerWidth / 3;
 
-  var halfHeight = height / 2;
-  var quarterHeight = halfHeight / 2;
+  const halfHeight = height / 2;
+  const quarterHeight = halfHeight / 2;
 
   function makeMainPath(dir) {
     return (
@@ -739,8 +741,8 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
     );
   }
 
-  var pathLeft = makeMainPath(1);
-  var pathRight = makeMainPath(-1);
+  const pathLeft = makeMainPath(1);
+  const pathRight = makeMainPath(-1);
 
   return {
     type: this.SHAPES.NOTCH,
@@ -755,18 +757,19 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
  * @override
  */
 Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
+  const radius = this.CORNER_RADIUS;
 
-  var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+  const innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
       Blockly.utils.svgPaths.point(-radius, radius));
 
-  var innerTopRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+  const innerTopRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
       Blockly.utils.svgPaths.point(-radius, radius));
 
-  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
+  const innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
       Blockly.utils.svgPaths.point(radius, radius));
 
-  var innerBottomRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
+  const innerBottomRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1',
+      radius,
       Blockly.utils.svgPaths.point(radius, radius));
 
   return {
@@ -809,11 +812,11 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement(
+  const defs = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.DEFS, {}, svg);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  var selectedGlowFilter = Blockly.utils.dom.createSvgElement(
+  const selectedGlowFilter = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FILTER,
       {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
@@ -831,7 +834,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
+  const selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FECOMPONENTTRANSFER, {
         'result': 'outBlur'
       }, selectedGlowFilter);
@@ -862,7 +865,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  var replacementGlowFilter = Blockly.utils.dom.createSvgElement(
+  const replacementGlowFilter = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FILTER,
       {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
@@ -880,7 +883,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
       },
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  var replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
+  const replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.FECOMPONENTTRANSFER, {
         'result': 'outBlur'
       }, replacementGlowFilter);

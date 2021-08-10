@@ -34,8 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {BaseInlineInput}
  */
 const InlineInput = function(constants, input) {
-  InlineInput.superClass_.constructor.call(
-      this, constants, input);
+  InlineInput.superClass_.constructor.call(this, constants, input);
 
   if (this.connectedBlock) {
     // We allow the dark path to show on the parent block so that the child

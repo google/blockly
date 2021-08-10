@@ -14,6 +14,7 @@ goog.module('Blockly.Toolbox');
 goog.module.declareLegacyNamespace();
 
 const Blockly = goog.require('Blockly');
+/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const BlockSvg = goog.require('Blockly.BlockSvg');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
@@ -22,18 +23,25 @@ const Css = goog.require('Blockly.Css');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
 const IAutoHideable = goog.require('Blockly.IAutoHideable');
+/* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
+/* eslint-disable-next-line no-unused-vars */
 const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
 const IStyleable = goog.require('Blockly.IStyleable');
 const IToolbox = goog.require('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 const Options = goog.require('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
 const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
 const Touch = goog.require('Blockly.Touch');
+/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');

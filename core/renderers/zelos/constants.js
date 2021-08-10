@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.zelos.ConstantProvider');
+goog.module('Blockly.zelos.ConstantProvider');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.connectionTypes');
@@ -28,8 +29,8 @@ goog.require('Blockly.utils.svgPaths');
  * @package
  * @extends {Blockly.blockRendering.ConstantProvider}
  */
-Blockly.zelos.ConstantProvider = function() {
-  Blockly.zelos.ConstantProvider.superClass_.constructor.call(this);
+const ConstantProvider = function() {
+  ConstantProvider.superClass_.constructor.call(this);
 
   this.GRID_UNIT = 4;
 
@@ -383,14 +384,14 @@ Blockly.zelos.ConstantProvider = function() {
    */
   this.replacementGlowFilter_ = null;
 };
-Blockly.utils.object.inherits(Blockly.zelos.ConstantProvider,
+Blockly.utils.object.inherits(ConstantProvider,
     Blockly.blockRendering.ConstantProvider);
 
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
-  Blockly.zelos.ConstantProvider.superClass_.setFontConstants_.call(this,
+ConstantProvider.prototype.setFontConstants_ = function(theme) {
+  ConstantProvider.superClass_.setFontConstants_.call(this,
       theme);
 
   this.FIELD_BORDER_RECT_HEIGHT = this.FIELD_TEXT_HEIGHT +
@@ -401,8 +402,8 @@ Blockly.zelos.ConstantProvider.prototype.setFontConstants_ = function(theme) {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.init = function() {
-  Blockly.zelos.ConstantProvider.superClass_.init.call(this);
+ConstantProvider.prototype.init = function() {
+  ConstantProvider.superClass_.init.call(this);
   this.HEXAGONAL = this.makeHexagonal();
   this.ROUNDED = this.makeRounded();
   this.SQUARED = this.makeSquared();
@@ -414,9 +415,9 @@ Blockly.zelos.ConstantProvider.prototype.init = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
+ConstantProvider.prototype.setDynamicProperties_ = function(
     theme) {
-  Blockly.zelos.ConstantProvider.superClass_.setDynamicProperties_.call(this,
+  ConstantProvider.superClass_.setDynamicProperties_.call(this,
       theme);
 
   this.SELECTED_GLOW_COLOUR =
@@ -440,8 +441,8 @@ Blockly.zelos.ConstantProvider.prototype.setDynamicProperties_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.dispose = function() {
-  Blockly.zelos.ConstantProvider.superClass_.dispose.call(this);
+ConstantProvider.prototype.dispose = function() {
+  ConstantProvider.superClass_.dispose.call(this);
   if (this.selectedGlowFilter_) {
     Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
   }
@@ -453,7 +454,7 @@ Blockly.zelos.ConstantProvider.prototype.dispose = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
+ConstantProvider.prototype.makeStartHat = function() {
   const height = this.START_HAT_HEIGHT;
   const width = this.START_HAT_WIDTH;
 
@@ -477,7 +478,7 @@ Blockly.zelos.ConstantProvider.prototype.makeStartHat = function() {
  *     a hexagonal shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
+ConstantProvider.prototype.makeHexagonal = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
   // The main path for the hexagonal connection shape is made out of two lines.
@@ -532,7 +533,7 @@ Blockly.zelos.ConstantProvider.prototype.makeHexagonal = function() {
  *     a rounded shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
+ConstantProvider.prototype.makeRounded = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
   const maxHeight = maxWidth * 2;
 
@@ -593,7 +594,7 @@ Blockly.zelos.ConstantProvider.prototype.makeRounded = function() {
  *     a squared shape for connections.
  * @package
  */
-Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
+ConstantProvider.prototype.makeSquared = function() {
   const radius = this.CORNER_RADIUS;
 
   // The main path for the squared connection shape is made out of two corners
@@ -644,7 +645,7 @@ Blockly.zelos.ConstantProvider.prototype.makeSquared = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
+ConstantProvider.prototype.shapeFor = function(
     connection) {
   let checks = connection.getCheck();
   if (!checks && connection.targetConnection) {
@@ -685,7 +686,7 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
+ConstantProvider.prototype.makeNotch = function() {
   const width = this.NOTCH_WIDTH;
   const height = this.NOTCH_HEIGHT;
 
@@ -756,7 +757,7 @@ Blockly.zelos.ConstantProvider.prototype.makeNotch = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
+ConstantProvider.prototype.makeInsideCorners = function() {
   const radius = this.CORNER_RADIUS;
 
   const innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
@@ -787,7 +788,7 @@ Blockly.zelos.ConstantProvider.prototype.makeInsideCorners = function() {
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.generateSecondaryColour_ = function(
+ConstantProvider.prototype.generateSecondaryColour_ = function(
     colour) {
   return Blockly.utils.colour.blend('#000', colour, 0.15) || colour;
 };
@@ -795,7 +796,7 @@ Blockly.zelos.ConstantProvider.prototype.generateSecondaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
+ConstantProvider.prototype.generateTertiaryColour_ = function(
     colour) {
   return Blockly.utils.colour.blend('#000', colour, 0.25) || colour;
 };
@@ -803,9 +804,9 @@ Blockly.zelos.ConstantProvider.prototype.generateTertiaryColour_ = function(
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
+ConstantProvider.prototype.createDom = function(svg,
     tagName, selector) {
-  Blockly.zelos.ConstantProvider.superClass_.createDom.call(this, svg,
+  ConstantProvider.superClass_.createDom.call(this, svg,
       tagName, selector);
   /*
   <defs>
@@ -923,7 +924,7 @@ Blockly.zelos.ConstantProvider.prototype.createDom = function(svg,
 /**
  * @override
  */
-Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
+ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
     // Text.
@@ -1005,3 +1006,5 @@ Blockly.zelos.ConstantProvider.prototype.getCSS_ = function(selector) {
     /* eslint-enable indent */
   ];
 };
+
+exports = ConstantProvider;

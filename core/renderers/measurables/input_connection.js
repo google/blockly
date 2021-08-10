@@ -32,14 +32,15 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Connection}
  */
 const InputConnection = function(constants, input) {
-  InputConnection.superClass_.constructor.call(this,
-      constants, input.connection);
+  InputConnection.superClass_.constructor.call(
+      this, constants, input.connection);
 
   this.type |= Types.INPUT;
   this.input = input;
   this.align = input.align;
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() : null;
+      input.connection.targetBlock() :
+      null;
 
   if (this.connectedBlock) {
     const bBox = this.connectedBlock.getHeightWidth();
@@ -53,7 +54,6 @@ const InputConnection = function(constants, input) {
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };
-object.inherits(InputConnection,
-    Connection);
+object.inherits(InputConnection, Connection);
 
 exports = InputConnection;

@@ -14,7 +14,7 @@ goog.module('Blockly.Flyout');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.require('Blockly.Block');
+const Block = goog.requireType('Blockly.Block');
 const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');

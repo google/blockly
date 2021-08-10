@@ -26,7 +26,7 @@ const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
 const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
-const Row = goog.require('Blockly.blockRendering.Row');
+const Row = goog.requireType('Blockly.blockRendering.Row');
 const Types = goog.require('Blockly.blockRendering.Types');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 

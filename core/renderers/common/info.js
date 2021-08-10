@@ -29,7 +29,7 @@ const InputRow = goog.require('Blockly.blockRendering.InputRow');
 const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
 const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
 /* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
+const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
 const NextConnection = goog.require('Blockly.blockRendering.NextConnection');
 const OutputConnection = goog.require('Blockly.blockRendering.OutputConnection');
 const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnection');
@@ -40,7 +40,7 @@ const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
 /* eslint-disable-next-line no-unused-vars */
-const Row = goog.require('Blockly.blockRendering.Row');
+const Row = goog.requireType('Blockly.blockRendering.Row');
 const SpacerRow = goog.require('Blockly.blockRendering.SpacerRow');
 const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');
 const StatementInput = goog.require('Blockly.blockRendering.StatementInput');

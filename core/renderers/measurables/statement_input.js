@@ -34,8 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {InputConnection}
  */
 const StatementInput = function(constants, input) {
-  StatementInput.superClass_.constructor.call(this,
-      constants, input);
+  StatementInput.superClass_.constructor.call(this, constants, input);
   this.type |= Types.STATEMENT_INPUT;
 
   if (!this.connectedBlock) {
@@ -48,7 +47,6 @@ const StatementInput = function(constants, input) {
   }
   this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
-object.inherits(StatementInput,
-    InputConnection);
+object.inherits(StatementInput, InputConnection);
 
 exports = StatementInput;

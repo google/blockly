@@ -34,8 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {InputConnection}
  */
 const InlineInput = function(constants, input) {
-  InlineInput.superClass_.constructor.call(this,
-      constants, input);
+  InlineInput.superClass_.constructor.call(this, constants, input);
   this.type |= Types.INLINE_INPUT;
 
   if (!this.connectedBlock) {
@@ -48,10 +47,10 @@ const InlineInput = function(constants, input) {
     this.height = this.connectedBlockHeight;
   }
 
-  this.connectionHeight = !this.isDynamicShape ? this.shape.height :
-      this.shape.height(this.height);
-  this.connectionWidth = !this.isDynamicShape ? this.shape.width :
-      this.shape.width(this.height);
+  this.connectionHeight =
+      !this.isDynamicShape ? this.shape.height : this.shape.height(this.height);
+  this.connectionWidth =
+      !this.isDynamicShape ? this.shape.width : this.shape.width(this.height);
   if (!this.connectedBlock) {
     this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
   }
@@ -59,9 +58,9 @@ const InlineInput = function(constants, input) {
       this.shape.connectionOffsetY(this.connectionHeight) :
       this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionOffsetX = this.isDynamicShape ?
-      this.shape.connectionOffsetX(this.connectionWidth) : 0;
+      this.shape.connectionOffsetX(this.connectionWidth) :
+      0;
 };
-object.inherits(InlineInput,
-    InputConnection);
+object.inherits(InlineInput, InputConnection);
 
 exports = InlineInput;

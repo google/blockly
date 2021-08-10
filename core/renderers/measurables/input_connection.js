@@ -40,7 +40,7 @@ Blockly.blockRendering.InputConnection = function(constants, input) {
       input.connection.targetBlock() : null;
 
   if (this.connectedBlock) {
-    var bBox = this.connectedBlock.getHeightWidth();
+    const bBox = this.connectedBlock.getHeightWidth();
     this.connectedBlockWidth = bBox.width;
     this.connectedBlockHeight = bBox.height;
   } else {

@@ -174,7 +174,7 @@ const position_ = function(menu, e, rtl) {
  * @private
  */
 const createWidget_ = function(menu) {
-  const div = WidgetDiv.DIV;
+  const div = WidgetDiv.getDiv();
   menu.render(div);
   const menuDom = menu.getElement();
   dom.addClass(

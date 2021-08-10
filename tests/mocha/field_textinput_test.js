@@ -168,7 +168,7 @@ suite('Text Input Fields', function() {
           };
           field.clickTarget_ = document.createElement('div');
           Blockly.mainWorkspace = workspace;
-          Blockly.WidgetDiv.DIV = document.createElement('div');
+          Blockly.WidgetDiv.setDiv(document.createElement('div'));
           this.stub = sinon.stub(field, 'resizeEditor_');
         };
 

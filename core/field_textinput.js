@@ -341,7 +341,7 @@ FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  */
 FieldTextInput.prototype.widgetCreate_ = function() {
   Events.setGroup(true);
-  const div = WidgetDiv.DIV;
+  const div = WidgetDiv.getDiv();
 
   dom.addClass(this.getClickTarget_(), 'editing');
 
@@ -406,7 +406,7 @@ FieldTextInput.prototype.widgetDispose_ = function() {
 
   // Actual disposal.
   this.unbindInputEvents_();
-  const style = WidgetDiv.DIV.style;
+  const style = WidgetDiv.getDiv().style;
   style.width = 'auto';
   style.height = 'auto';
   style.fontSize = '';
@@ -509,7 +509,7 @@ FieldTextInput.prototype.setEditorValue_ = function(newValue) {
  * @protected
  */
 FieldTextInput.prototype.resizeEditor_ = function() {
-  const div = WidgetDiv.DIV;
+  const div = WidgetDiv.getDiv();
   const bBox = this.getScaledBBox();
   div.style.width = bBox.right - bBox.left + 'px';
   div.style.height = bBox.bottom - bBox.top + 'px';

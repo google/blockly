@@ -26,6 +26,7 @@ const Size = goog.requireType('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 
 
@@ -58,12 +59,32 @@ let themeClassName = '';
  * @type {!Element}
  */
 let DIV;
+/** @deprecated September 2021 */
 exports.DIV = DIV;
+
+const getDiv = function() {
+  return DIV;
+};
+exports.getDiv = getDiv;
+
+const setDiv = function(newDiv) {
+  DIV = newDiv;
+};
+exports.setDiv = setDiv;
 
 Object.defineProperties(exports, {
   DIV: {
     get: function() {
-      return DIV;
+      deprecation.warn(
+        'Blockly.WidgetDiv.DIV', 'September 2021', 'September 22',
+        'Blockly.WidgetDiv.getDiv()');
+      return getDiv();
+    },
+    set: function(newDiv) {
+      deprecation.warn(
+        'Blockly.WidgetDiv.DIV', 'September 2021', 'September 22',
+        'Blockly.WidgetDiv.setDiv()');
+      setDiv(newDiv);
     },
   }
 });

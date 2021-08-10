@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('JSO Deserialization', function() {
+suite('JSO Deserialization', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -73,7 +73,7 @@ suite.only('JSO Deserialization', function() {
           }
         };
         Blockly.Events.setGroup('my group');
-        Blockly.serialization.load(state, this.workspace);
+        Blockly.serialization.workspaces.load(state, this.workspace);
         assertEventFired(
             this.eventsFireStub,
             Blockly.Events.FinishedLoading,
@@ -121,7 +121,7 @@ suite.only('JSO Deserialization', function() {
               }
             ]
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.VarCreate,
@@ -143,7 +143,7 @@ suite.only('JSO Deserialization', function() {
               }
             ]
           };
-          Blockly.serialization.load(state, this.workspace, {recordUndo: true});
+          Blockly.serialization.workspaces.load(state, this.workspace, {recordUndo: true});
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.VarCreate,
@@ -166,7 +166,7 @@ suite.only('JSO Deserialization', function() {
             ]
           };
           Blockly.Events.setGroup('my group');
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.VarCreate,
@@ -192,7 +192,7 @@ suite.only('JSO Deserialization', function() {
               }
             ]
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
           chai.assert.isTrue(calls.every(call => call.args[0].group == group));
@@ -220,7 +220,7 @@ suite.only('JSO Deserialization', function() {
               ]
             }
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const count = calls.reduce((acc, call) => {
             if (call.args[0] instanceof Blockly.Events.VarCreate) {
@@ -311,7 +311,7 @@ suite.only('JSO Deserialization', function() {
               ]
             }
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -333,7 +333,7 @@ suite.only('JSO Deserialization', function() {
               ]
             }
           };
-          Blockly.serialization.load(state, this.workspace, {'recordUndo': true});
+          Blockly.serialization.workspaces.load(state, this.workspace, {'recordUndo': true});
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -356,7 +356,7 @@ suite.only('JSO Deserialization', function() {
             }
           };
           Blockly.Events.setGroup('my group');
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -384,7 +384,7 @@ suite.only('JSO Deserialization', function() {
               ]
             }
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
           chai.assert.isTrue(calls.every(call => call.args[0].group == group));
@@ -417,7 +417,7 @@ suite.only('JSO Deserialization', function() {
               ]
             }
           };
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,

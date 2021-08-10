@@ -145,7 +145,7 @@ function start() {
   }
   taChange();
   if (autoimport) {
-    fromXml();
+    load();
   }
 }
 
@@ -203,7 +203,7 @@ function initToolbox(workspace) {
   }
 }
 
-function toXml() {
+function saveXml() {
   var output = document.getElementById('importExport');
   var xml = Blockly.Xml.workspaceToDom(workspace);
   output.value = Blockly.Xml.domToPrettyText(xml);
@@ -212,13 +212,28 @@ function toXml() {
   taChange();
 }
 
-function fromXml() {
+function saveJson() {
+  var output = document.getElementById('importExport');
+  var state = Blockly.serialization.workspaces.save(workspace);
+  output.value = JSON.stringify(state, null, 2);
+  output.focus();
+  output.select();
+  taChange();
+}
+
+function load() {
   var input = document.getElementById('importExport');
   if (!input.value) {
     return;
   }
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  var valid = saveIsValid(input.value);
+  if (valid.json) {
+    var state = JSON.parse(input.value);
+    Blockly.serialization.workspaces.load(state, workspace);
+  } else if (valid.xml) {
+    var xml = Blockly.Xml.textToDom(input.value);
+    Blockly.Xml.domToWorkspace(xml, workspace);
+  }
   taChange();
 }
 
@@ -228,20 +243,34 @@ function toCode(lang) {
   taChange();
 }
 
-// Disable the "Import from XML" button if the XML is invalid.
+// Disable the "Load" button if the save state is invalid.
 // Preserve text between page reloads.
 function taChange() {
   var textarea = document.getElementById('importExport');
   if (sessionStorage) {
     sessionStorage.setItem('textarea', textarea.value);
   }
-  var valid = true;
+  var valid = saveIsValid(textarea.value);
+  document.getElementById('import').disabled = !valid.json && !valid.xml;
+}
+
+function saveIsValid(save) {
+  var validJson = true;
   try {
-    Blockly.Xml.textToDom(textarea.value);
+    JSON.parse(save);
   } catch (e) {
-    valid = false;
+    validJson = false;
   }
-  document.getElementById('import').disabled = !valid;
+  var validXml = true
+  try {
+    Blockly.Xml.textToDom(save);
+  } catch (e) {
+    validXml = false;
+  }
+  return {
+    json: validJson,
+    xml: validXml
+  }
 }
 
 function logEvents(state) {
@@ -422,18 +451,14 @@ var spaghettiXml = [
     </select>
   </form>
   <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <input type="button" value="Save JSON" onclick="saveJson()">
+    <input type="button" value="Save XML" onclick="saveXml()">
+    <input type="button" value="Load" onclick="load()" id="import">
     <br>
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
     <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
     <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
     <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"

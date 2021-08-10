@@ -113,8 +113,7 @@ Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
   }
 
   this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'rowSpacerRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': cursorY,
@@ -148,8 +147,7 @@ Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
   }
   const yPos = elem.centerline - elem.height / 2;
   this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'elemSpacerRect blockRenderDebug',
         'x': xPos,
         'y': yPos,
@@ -177,8 +175,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
     }
     const yPos = elem.centerline - elem.height / 2;
     this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT,
-        {
+        Svg.RECT, {
           'class': 'rowRenderingRect blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -190,12 +187,10 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
         },
         this.svgRoot_));
 
-    if (Types.isField(elem) &&
-        elem.field instanceof FieldLabel) {
+    if (Types.isField(elem) && elem.field instanceof FieldLabel) {
       const baseline = this.constants_.FIELD_TEXT_BASELINE;
       this.debugElements_.push(dom.createSvgElement(
-          Svg.RECT,
-          {
+          Svg.RECT, {
             'class': 'rowRenderingRect blockRenderDebug',
             'x': xPos,
             'y': yPos + baseline,
@@ -210,8 +205,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
   }
 
 
-  if (Types.isInput(elem) &&
-      Debug.config.connections) {
+  if (Types.isInput(elem) && Debug.config.connections) {
     this.drawConnection(elem.connectionModel);
   }
 };
@@ -251,8 +245,7 @@ Debug.prototype.drawConnection = function(conn) {
     fill = colour;
   }
   this.debugElements_.push(dom.createSvgElement(
-      Svg.CIRCLE,
-      {
+      Svg.CIRCLE, {
         'class': 'blockRenderDebug',
         'cx': conn.offsetInBlock_.x,
         'cy': conn.offsetInBlock_.y,
@@ -275,8 +268,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
     return;
   }
   this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'elemRenderingRect blockRenderDebug',
         'x': isRtl ? -(row.xPos + row.width) : row.xPos,
         'y': row.yPos,
@@ -294,8 +286,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
 
   if (Debug.config.connectedBlockBounds) {
     this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT,
-        {
+        Svg.RECT, {
           'class': 'connectedBlockWidth blockRenderDebug',
           'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
           'y': row.yPos,
@@ -326,8 +317,7 @@ Debug.prototype.drawRowWithElements = function(row, cursorY, isRtl) {
     }
     if (Types.isSpacer(elem)) {
       this.drawSpacerElem(
-          /** @type {!InRowSpacer} */ (elem),
-          row.height, isRtl);
+          /** @type {!InRowSpacer} */ (elem), row.height, isRtl);
     } else {
       this.drawRenderedElem(elem, isRtl);
     }
@@ -349,8 +339,7 @@ Debug.prototype.drawBoundingBox = function(info) {
   let xPos = info.RTL ? -info.width : 0;
   const yPos = 0;
   this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT,
-      {
+      Svg.RECT, {
         'class': 'blockBoundingBox blockRenderDebug',
         'x': xPos,
         'y': yPos,
@@ -367,8 +356,7 @@ Debug.prototype.drawBoundingBox = function(info) {
     // Bounding box with children.
     xPos = info.RTL ? -info.widthWithChildren : 0;
     this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT,
-        {
+        Svg.RECT, {
           'class': 'blockRenderDebug',
           'x': xPos,
           'y': yPos,
@@ -435,8 +423,7 @@ Debug.prototype.drawRender = function(svgPath) {
   if (!Debug.config.render) {
     return;
   }
-  svgPath.setAttribute('filter',
-      'url(#' + this.constants_.debugFilterId + ')');
+  svgPath.setAttribute('filter', 'url(#' + this.constants_.debugFilterId + ')');
   setTimeout(function() {
     svgPath.setAttribute('filter', '');
   }, 100);

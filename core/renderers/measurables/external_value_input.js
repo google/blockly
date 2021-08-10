@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.ExternalValueInput');
+goog.module('Blockly.blockRendering.ExternalValueInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.Types');
@@ -31,8 +32,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.ExternalValueInput = function(constants, input) {
-  Blockly.blockRendering.ExternalValueInput.superClass_.constructor.call(this,
+const ExternalValueInput = function(constants, input) {
+  ExternalValueInput.superClass_.constructor.call(this,
       constants, input);
   this.type |= Blockly.blockRendering.Types.EXTERNAL_VALUE_INPUT;
   if (!this.connectedBlock) {
@@ -49,5 +50,7 @@ Blockly.blockRendering.ExternalValueInput = function(constants, input) {
   this.connectionHeight = this.shape.height;
   this.connectionWidth = this.shape.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.ExternalValueInput,
+Blockly.utils.object.inherits(ExternalValueInput,
     Blockly.blockRendering.InputConnection);
+
+exports = ExternalValueInput;

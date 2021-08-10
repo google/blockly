@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.InlineInput');
+goog.module('Blockly.blockRendering.InlineInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.Types');
@@ -31,8 +32,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.InlineInput = function(constants, input) {
-  Blockly.blockRendering.InlineInput.superClass_.constructor.call(this,
+const InlineInput = function(constants, input) {
+  InlineInput.superClass_.constructor.call(this,
       constants, input);
   this.type |= Blockly.blockRendering.Types.INLINE_INPUT;
 
@@ -59,5 +60,7 @@ Blockly.blockRendering.InlineInput = function(constants, input) {
   this.connectionOffsetX = this.isDynamicShape ?
       this.shape.connectionOffsetX(this.connectionWidth) : 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InlineInput,
+Blockly.utils.object.inherits(InlineInput,
     Blockly.blockRendering.InputConnection);
+
+exports = InlineInput;

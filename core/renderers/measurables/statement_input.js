@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.StatementInput');
+goog.module('Blockly.blockRendering.StatementInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InputConnection');
 goog.require('Blockly.blockRendering.Types');
@@ -31,8 +32,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.InputConnection}
  */
-Blockly.blockRendering.StatementInput = function(constants, input) {
-  Blockly.blockRendering.StatementInput.superClass_.constructor.call(this,
+const StatementInput = function(constants, input) {
+  StatementInput.superClass_.constructor.call(this,
       constants, input);
   this.type |= Blockly.blockRendering.Types.STATEMENT_INPUT;
 
@@ -46,5 +47,7 @@ Blockly.blockRendering.StatementInput = function(constants, input) {
   }
   this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.StatementInput,
+Blockly.utils.object.inherits(StatementInput,
     Blockly.blockRendering.InputConnection);
+
+exports = StatementInput;

@@ -9,7 +9,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.InputConnection');
+goog.module('Blockly.blockRendering.InputConnection');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Types');
@@ -29,8 +30,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.InputConnection = function(constants, input) {
-  Blockly.blockRendering.InputConnection.superClass_.constructor.call(this,
+const InputConnection = function(constants, input) {
+  InputConnection.superClass_.constructor.call(this,
       constants, input.connection);
 
   this.type |= Blockly.blockRendering.Types.INPUT;
@@ -51,5 +52,7 @@ Blockly.blockRendering.InputConnection = function(constants, input) {
   this.connectionOffsetX = 0;
   this.connectionOffsetY = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InputConnection,
+Blockly.utils.object.inherits(InputConnection,
     Blockly.blockRendering.Connection);
+
+exports = InputConnection;

@@ -11,7 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.geras.StatementInput');
+goog.module('Blockly.geras.StatementInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.utils.object');
@@ -31,8 +32,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.StatementInput}
  */
-Blockly.geras.StatementInput = function(constants, input) {
-  Blockly.geras.StatementInput.superClass_.constructor.call(
+const StatementInput = function(constants, input) {
+  StatementInput.superClass_.constructor.call(
       this, constants, input);
 
   if (this.connectedBlock) {
@@ -41,5 +42,7 @@ Blockly.geras.StatementInput = function(constants, input) {
     this.height += this.constants_.DARK_PATH_OFFSET;
   }
 };
-Blockly.utils.object.inherits(Blockly.geras.StatementInput,
+Blockly.utils.object.inherits(StatementInput,
     Blockly.blockRendering.StatementInput);
+
+exports = StatementInput;

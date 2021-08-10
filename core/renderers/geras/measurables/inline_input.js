@@ -14,23 +14,24 @@
 goog.module('Blockly.geras.InlineInput');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.InlineInput');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+const BaseInlineInput = goog.require('Blockly.blockRendering.InlineInput');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space an inline input takes up
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The inline input to measure and store
+ * @param {!Input} input The inline input to measure and store
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.InlineInput}
+ * @extends {BaseInlineInput}
  */
 const InlineInput = function(constants, input) {
   InlineInput.superClass_.constructor.call(
@@ -43,7 +44,6 @@ const InlineInput = function(constants, input) {
     this.height += this.constants_.DARK_PATH_OFFSET;
   }
 };
-Blockly.utils.object.inherits(InlineInput,
-    Blockly.blockRendering.InlineInput);
+object.inherits(InlineInput, BaseInlineInput);
 
 exports = InlineInput;

@@ -34,8 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {BaseStatementInput}
  */
 const StatementInput = function(constants, input) {
-  StatementInput.superClass_.constructor.call(
-      this, constants, input);
+  StatementInput.superClass_.constructor.call(this, constants, input);
 
   if (this.connectedBlock) {
     // We allow the dark path to show on the parent block so that the child

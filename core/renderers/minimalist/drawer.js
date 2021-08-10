@@ -9,11 +9,14 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist.Drawer');
+goog.module('Blockly.minimalist.Drawer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.minimalist.RenderInfo');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.minimalist.RenderInfo');
 
 
 /**
@@ -25,8 +28,10 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Drawer}
  */
-Blockly.minimalist.Drawer = function(block, info) {
-  Blockly.minimalist.Drawer.superClass_.constructor.call(this, block, info);
+const Drawer = function(block, info) {
+  Drawer.superClass_.constructor.call(this, block, info);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.Drawer,
+Blockly.utils.object.inherits(Drawer,
     Blockly.blockRendering.Drawer);
+
+exports = Drawer;

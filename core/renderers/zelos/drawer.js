@@ -10,16 +10,18 @@
  */
 'use strict';
 
-goog.provide('Blockly.zelos.Drawer');
+goog.module('Blockly.zelos.Drawer');
+goog.module.declareLegacyNamespace();
 
+goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Drawer');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.svgPaths');
-goog.require('Blockly.zelos.RenderInfo');
 
 goog.requireType('Blockly.blockRendering.Row');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.zelos.PathObject');
+goog.requireType('Blockly.zelos.RenderInfo');
 
 
 /**
@@ -31,17 +33,17 @@ goog.requireType('Blockly.zelos.PathObject');
  * @constructor
  * @extends {Blockly.blockRendering.Drawer}
  */
-Blockly.zelos.Drawer = function(block, info) {
-  Blockly.zelos.Drawer.superClass_.constructor.call(this, block, info);
+const Drawer = function(block, info) {
+  Drawer.superClass_.constructor.call(this, block, info);
 };
-Blockly.utils.object.inherits(Blockly.zelos.Drawer,
+Blockly.utils.object.inherits(Drawer,
     Blockly.blockRendering.Drawer);
 
 
 /**
  * @override
  */
-Blockly.zelos.Drawer.prototype.draw = function() {
+Drawer.prototype.draw = function() {
   const pathObject =
       /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
   pathObject.beginDrawing();
@@ -68,7 +70,7 @@ Blockly.zelos.Drawer.prototype.draw = function() {
 /**
  * @override
  */
-Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
+Drawer.prototype.drawOutline_ = function() {
   if (this.info_.outputConnection &&
       this.info_.outputConnection.isDynamicShape &&
       !this.info_.hasStatementInput &&
@@ -78,19 +80,19 @@ Blockly.zelos.Drawer.prototype.drawOutline_ = function() {
     this.drawFlatBottom_();
     this.drawLeftDynamicConnection_();
   } else {
-    Blockly.zelos.Drawer.superClass_.drawOutline_.call(this);
+    Drawer.superClass_.drawOutline_.call(this);
   }
 };
 
 /**
  * @override
  */
-Blockly.zelos.Drawer.prototype.drawLeft_ = function() {
+Drawer.prototype.drawLeft_ = function() {
   if (this.info_.outputConnection &&
       this.info_.outputConnection.isDynamicShape) {
     this.drawLeftDynamicConnection_();
   } else {
-    Blockly.zelos.Drawer.superClass_.drawLeft_.call(this);
+    Drawer.superClass_.drawLeft_.call(this);
   }
 };
 
@@ -101,7 +103,7 @@ Blockly.zelos.Drawer.prototype.drawLeft_ = function() {
  *     side of.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
+Drawer.prototype.drawRightSideRow_ = function(row) {
   if (row.height <= 0) {
     return;
   }
@@ -127,7 +129,7 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
  * Add steps to draw the right side of an output with a dynamic connection.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawRightDynamicConnection_ = function() {
+Drawer.prototype.drawRightDynamicConnection_ = function() {
   this.outlinePath_ += this.info_.outputConnection.shape.pathRightDown(
       this.info_.outputConnection.height);
 };
@@ -136,7 +138,7 @@ Blockly.zelos.Drawer.prototype.drawRightDynamicConnection_ = function() {
  * Add steps to draw the left side of an output with a dynamic connection.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawLeftDynamicConnection_ = function() {
+Drawer.prototype.drawLeftDynamicConnection_ = function() {
   this.positionOutputConnection_();
 
   this.outlinePath_ += this.info_.outputConnection.shape.pathUp(
@@ -151,7 +153,7 @@ Blockly.zelos.Drawer.prototype.drawLeftDynamicConnection_ = function() {
  * Add steps to draw a flat top row.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawFlatTop_ = function() {
+Drawer.prototype.drawFlatTop_ = function() {
   const topRow = this.info_.topRow;
   this.positionPreviousConnection_();
 
@@ -165,7 +167,7 @@ Blockly.zelos.Drawer.prototype.drawFlatTop_ = function() {
  * Add steps to draw a flat bottom row.
  * @protected
  */
-Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
+Drawer.prototype.drawFlatBottom_ = function() {
   const bottomRow = this.info_.bottomRow;
   this.positionNextConnection_();
 
@@ -178,7 +180,7 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 /**
  * @override
  */
-Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
+Drawer.prototype.drawInlineInput_ = function(input) {
   this.positionInlineInputConnection_(input);
 
   const inputName = input.input.name;
@@ -204,7 +206,7 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
 /**
  * @override
  */
-Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
+Drawer.prototype.drawStatementInput_ = function(row) {
   const input = row.getLastInput();
   // Where to start drawing the notch, which is on the right side in LTR.
   const x = input.xPos + input.notchOffset + input.shape.width;
@@ -232,3 +234,5 @@ Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
 
   this.positionStatementInputConnection_(row);
 };
+
+exports = Drawer;

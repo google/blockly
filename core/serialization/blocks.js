@@ -386,8 +386,8 @@ const loadExtraState = function(block, state) {
 
 /**
  * Attempts to connect the block to the parent connection, if it exists.
- * @param {?Connection} parentConnection The parent connnection to try to
- *     connect the block to.
+ * @param {(!Connection|undefined)} parentConnection The parent connnection to
+ *     try to connect the block to.
  * @param {!Block} child The block to try to conecnt to the parent.
  * @param {!State} state The state which defines the given block
  */
@@ -420,7 +420,7 @@ const tryToConnectParent = function(parentConnection, child, state) {
                 childConnection, parentConnection, false),
             childConnection,
             parentConnection),
-        parentConnection.type == inputTypes.value ?
+        parentConnection.type == inputTypes.VALUE ?
             'output connection' : 'previous connection',
         child,
         state);

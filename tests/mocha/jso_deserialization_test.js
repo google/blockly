@@ -515,7 +515,6 @@ suite('JSO Deserialization', function() {
             ]
           }
         };
-        console.log(Blockly.serialization);
         this.assertThrows(
             state, Blockly.serialization.exceptions.MissingConnection);
       });

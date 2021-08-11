@@ -30,27 +30,27 @@ const save = function(workspace) {
   const state = Object.create(null);
 
   // TODO: Switch this to use plugin serialization system (once it is built).
-  const variableState = [];
+  const variableStates = [];
   const vars = workspace.getAllVariables();
   for (let i = 0; i < vars.length; i++) {
-    variableState.push(variables.save(vars[i]));
+    variableStates.push(variables.save(vars[i]));
   }
-  if (variableState.length) {
-    state['variables'] = variableState;
+  if (variableStates.length) {
+    state['variables'] = variableStates;
   }
 
-  const blockState = [];
+  const blockStates = [];
   for (let block of workspace.getTopBlocks(false)) {
-    const save =
+    const blockState =
       blocks.save(block, {addCoordinates: true});
-    if (save) {
-      blockState.push(save);
+    if (blockState) {
+      blockStates.push(blockState);
     }
   }
-  if (blockState.length) {
+  if (blockStates.length) {
     // This is an object to support adding language version later.
     state['blocks'] = {
-      'blocks': blockState
+      'blocks': blockStates
     };
   }
 

@@ -72,9 +72,8 @@ exports.State = State;
  *     addNextBlocks: If true, children of the block which are connected to the
  *       block's next connection (if it exists) will be serialized.
  *       True by default.
- * @return {?State} The serialized state of the
- *     block, or null if the block could not be serialied (eg it was an
- *     insertion marker).
+ * @return {?State} The serialized state of the block, or null if the block
+ *     could not be serialied (eg it was an insertion marker).
  */
 const save = function(
     block,

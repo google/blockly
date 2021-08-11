@@ -13,6 +13,7 @@
 goog.module('Blockly.serialization.variables');
 goog.module.declareLegacyNamespace();
 
+const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const VariableModel = goog.requireType('Blockly.VariableModel');
 // eslint-disable-next-line no-unused-vars
@@ -54,9 +55,22 @@ exports.save = save;
  * @param {!State} state The state of a variable to deserialize into the
  *     workspace.
  * @param {!Workspace} workspace The workspace to add the variable to.
+ * @param {{recordUndo: (boolean|undefined)}=} param1
+ *     recordUndo: If true, events triggered by this function will be undo-able
+ *       by the user. False by default.
  */
-const load = function(state, workspace) {
+const load = function(state, workspace, {recordUndo = false} = {}) {
+  const prevRecordUndo = Events.getRecordUndo();
+  Events.setRecordUndo(recordUndo);
+  const existingGroup = Events.getGroup();
+  if (!existingGroup) {
+    Events.setGroup(true);
+  }
+
   workspace.createVariable(state['name'], state['type'], state['id']);
+
+  Events.setGroup(existingGroup);
+  Events.setRecordUndo(prevRecordUndo);
 };
 /** @package */
 exports.load = load;

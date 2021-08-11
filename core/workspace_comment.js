@@ -57,14 +57,14 @@ const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /**
    * The comment's height in workspace units.  Scale does not change this value.
    * @type {number}
-   * @private
+   * @protected
    */
   this.height_ = height;
 
   /**
    * The comment's width in workspace units.  Scale does not change this value.
    * @type {number}
-   * @private
+   * @protected
    */
   this.width_ = width;
 
@@ -104,6 +104,13 @@ const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   this.content_ = content;
 
   /**
+   * Whether this comment has been disposed.
+   * @protected
+   * @type {boolean}
+   */
+  this.disposed_ = false;
+
+  /**
    * @package
    * @type {boolean}
    */
@@ -117,8 +124,7 @@ const WorkspaceComment = function(workspace, content, height, width, opt_id) {
  * @package
  */
 WorkspaceComment.prototype.dispose = function() {
-  if (!this.workspace) {
-    // The comment has already been deleted.
+  if (this.disposed_) {
     return;
   }
 
@@ -128,7 +134,7 @@ WorkspaceComment.prototype.dispose = function() {
 
   // Remove from the list of top comments and the comment database.
   this.workspace.removeTopComment(this);
-  this.workspace = null;
+  this.disposed_ = true;
 };
 
 // Height, width, x, and y are all stored on even non-rendered comments, to

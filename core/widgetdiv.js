@@ -67,7 +67,7 @@ Blockly.WidgetDiv.createDom = function() {
    */
   Blockly.WidgetDiv.DIV = document.createElement('div');
   Blockly.WidgetDiv.DIV.className = 'blocklyWidgetDiv';
-  var container = Blockly.parentContainer || document.body;
+  var container = Blockly.common.getParentContainer() || document.body;
   container.appendChild(Blockly.WidgetDiv.DIV);
 };
 

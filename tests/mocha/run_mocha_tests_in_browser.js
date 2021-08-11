@@ -24,7 +24,8 @@ async function runMochaTestsInBrowser() {
     },
     services: [
       ['selenium-standalone']
-    ]
+    ],
+    logLevel: 'warn'
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
@@ -35,8 +36,11 @@ async function runMochaTestsInBrowser() {
       ]
     };
   } else {
+    // --disable-gpu is needed to prevent Chrome from hanging on Linux with
+    // NVIDIA drivers older than v295.20. See 
+    // https://github.com/google/blockly/issues/5345 for details.
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--allow-file-access-from-files']
+      args: ['--allow-file-access-from-files', '--disable-gpu']
     };
   }
 

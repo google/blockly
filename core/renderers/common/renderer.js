@@ -285,7 +285,7 @@ Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
  * @package
  */
 Blockly.blockRendering.Renderer.prototype.render = function(block) {
-  if (Blockly.blockRendering.useDebugger && !block.renderingDebugger) {
+  if (Blockly.blockRendering.isDebuggerEnabled() && !block.renderingDebugger) {
     block.renderingDebugger = this.makeDebugger_();
   }
   var info = this.makeRenderInfo_(block);

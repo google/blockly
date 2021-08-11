@@ -17,12 +17,12 @@
 goog.module('Blockly.utils.toolbox');
 goog.module.declareLegacyNamespace();
 
+/* eslint-disable-next-line no-unused-vars */
+const ToolboxCategory = goog.requireType('Blockly.ToolboxCategory');
+/* eslint-disable-next-line no-unused-vars */
+const ToolboxSeparator = goog.requireType('Blockly.ToolboxSeparator');
+const Xml = goog.require('Blockly.Xml');
 const userAgent = goog.require('Blockly.utils.userAgent');
-/* eslint-disable-next-line no-unused-vars */
-const {CssConfig: CategoryCssConfig} = goog.requireType('Blockly.ToolboxCategory');
-/* eslint-disable-next-line no-unused-vars */
-const {CssConfig: SeparatorCssConfig} = goog.requireType('Blockly.ToolboxSeparator');
-const {textToDom} = goog.require('Blockly.Xml');
 
 /**
  * The information needed to create a block in the toolbox.
@@ -43,7 +43,7 @@ exports.BlockInfo = BlockInfo;
  *            kind:string,
  *            id:(string|undefined),
  *            gap:(number|undefined),
- *            cssconfig:(!SeparatorCssConfig|undefined)
+ *            cssconfig:(!ToolboxSeparator.CssConfig|undefined)
  *          }}
  */
 let SeparatorInfo;
@@ -88,7 +88,7 @@ exports.ButtonOrLabelInfo = ButtonOrLabelInfo;
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
- *            cssconfig:(!CategoryCssConfig|undefined),
+ *            cssconfig:(!ToolboxCategory.CssConfig|undefined),
  *            hidden:(string|undefined)
  *          }}
  */
@@ -103,7 +103,7 @@ exports.StaticCategoryInfo = StaticCategoryInfo;
  *            id:(string|undefined),
  *            categorystyle:(string|undefined),
  *            colour:(string|undefined),
- *            cssconfig:(!CategoryCssConfig|undefined),
+ *            cssconfig:(!ToolboxCategory.CssConfig|undefined),
  *            hidden:(string|undefined)
  *          }}
  */
@@ -413,7 +413,7 @@ const parseToolboxTree = function(toolboxDef) {
       }
     }
     if (typeof toolboxDef == 'string') {
-      toolboxDef = textToDom(toolboxDef);
+      toolboxDef = Xml.textToDom(toolboxDef);
       if (toolboxDef.nodeName.toLowerCase() != 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }

@@ -42,8 +42,8 @@ Blockly.utils.object.inherits(Blockly.zelos.Drawer,
  * @override
  */
 Blockly.zelos.Drawer.prototype.draw = function() {
-  var pathObject =
-    /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
+  const pathObject =
+      /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
   pathObject.beginDrawing();
   this.hideHiddenIcons_();
   this.drawOutline_();
@@ -106,8 +106,8 @@ Blockly.zelos.Drawer.prototype.drawRightSideRow_ = function(row) {
     return;
   }
   if (row.precedesStatement || row.followsStatement) {
-    var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
-    var remainingHeight = row.height -
+    const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
+    const remainingHeight = row.height -
         (row.precedesStatement ? cornerHeight : 0);
     this.outlinePath_ +=
         (row.followsStatement ?
@@ -152,7 +152,7 @@ Blockly.zelos.Drawer.prototype.drawLeftDynamicConnection_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawFlatTop_ = function() {
-  var topRow = this.info_.topRow;
+  const topRow = this.info_.topRow;
   this.positionPreviousConnection_();
 
   this.outlinePath_ +=
@@ -166,7 +166,7 @@ Blockly.zelos.Drawer.prototype.drawFlatTop_ = function() {
  * @protected
  */
 Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
-  var bottomRow = this.info_.bottomRow;
+  const bottomRow = this.info_.bottomRow;
   this.positionNextConnection_();
 
   this.outlinePath_ +=
@@ -181,18 +181,18 @@ Blockly.zelos.Drawer.prototype.drawFlatBottom_ = function() {
 Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
   this.positionInlineInputConnection_(input);
 
-  var inputName = input.input.name;
+  const inputName = input.input.name;
   if (input.connectedBlock || this.info_.isInsertionMarker) {
     return;
   }
 
-  var width = input.width - (input.connectionWidth * 2);
-  var height = input.height;
-  var yPos = input.centerline - height / 2;
+  const width = input.width - (input.connectionWidth * 2);
+  const height = input.height;
+  const yPos = input.centerline - height / 2;
 
-  var connectionRight = input.xPos + input.connectionWidth;
+  const connectionRight = input.xPos + input.connectionWidth;
 
-  var outlinePath = Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
+  const outlinePath = Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
       Blockly.utils.svgPaths.lineOnAxis('h', width) +
       input.shape.pathRightDown(input.height) +
       Blockly.utils.svgPaths.lineOnAxis('h', -width) +
@@ -205,24 +205,24 @@ Blockly.zelos.Drawer.prototype.drawInlineInput_ = function(input) {
  * @override
  */
 Blockly.zelos.Drawer.prototype.drawStatementInput_ = function(row) {
-  var input = row.getLastInput();
+  const input = row.getLastInput();
   // Where to start drawing the notch, which is on the right side in LTR.
-  var x = input.xPos + input.notchOffset + input.shape.width;
+  const x = input.xPos + input.notchOffset + input.shape.width;
 
-  var innerTopLeftCorner =
+  const innerTopLeftCorner =
       input.shape.pathRight +
       Blockly.utils.svgPaths.lineOnAxis('h',
           -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
-  var innerHeight =
+  const innerHeight =
       row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
-  var innerBottomLeftCorner =
-    this.constants_.INSIDE_CORNERS.pathBottom +
-    Blockly.utils.svgPaths.lineOnAxis('h',
-        (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-    (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
+  const innerBottomLeftCorner =
+      this.constants_.INSIDE_CORNERS.pathBottom +
+      Blockly.utils.svgPaths.lineOnAxis('h',
+          (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
 
   this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +

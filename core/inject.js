@@ -14,6 +14,7 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.common');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
@@ -33,7 +34,9 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WidgetDiv');
 
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -44,8 +47,6 @@ goog.requireType('Blockly.BlockSvg');
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
-  Blockly.checkBlockColourConstants();
-
   if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);
@@ -77,12 +78,12 @@ Blockly.inject = function(container, opt_options) {
   Blockly.init_(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks correct.
-  Blockly.mainWorkspace = workspace;
+  Blockly.common.setMainWorkspace(workspace);
 
   Blockly.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
-    Blockly.mainWorkspace = workspace;
+    Blockly.common.setMainWorkspace(workspace);
   });
 
   return workspace;
@@ -215,7 +216,9 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
       break;
     case Blockly.Events.COMMENT_CREATE:
     case Blockly.Events.COMMENT_MOVE:
-      object = workspace.getCommentById(e.commentId);
+      object = (
+          /** @type {?Blockly.WorkspaceCommentSvg} */
+          (workspace.getCommentById(e.commentId)));
       break;
   }
   return object;
@@ -439,7 +442,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
           window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(/** @type {!Blockly.WorkspaceSvg} */
-                (Blockly.getMainWorkspace()));
+                (Blockly.common.getMainWorkspace()));
           });
     }
   }

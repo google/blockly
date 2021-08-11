@@ -15,6 +15,7 @@
 
 goog.provide('Blockly.DropDownDiv');
 
+goog.require('Blockly.common');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Rect');
@@ -162,7 +163,7 @@ Blockly.DropDownDiv.createDom = function() {
   }
   var div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
-  var container = Blockly.parentContainer || document.body;
+  var container = Blockly.common.getParentContainer() || document.body;
   container.appendChild(div);
   /**
    * The div element.
@@ -381,7 +382,7 @@ Blockly.DropDownDiv.show = function(owner, rtl, primaryX, primaryY,
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   var mainWorkspace =
-    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.getMainWorkspace());
+    /** @type {!Blockly.WorkspaceSvg} */ (Blockly.common.getMainWorkspace());
   Blockly.DropDownDiv.rendererClassName_ =
       mainWorkspace.getRenderer().getClassName();
   Blockly.DropDownDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
@@ -694,7 +695,7 @@ Blockly.DropDownDiv.hideWithoutAnimation = function() {
     Blockly.DropDownDiv.themeClassName_ = '';
   }
   (/** @type {!Blockly.WorkspaceSvg} */ (
-    Blockly.getMainWorkspace())).markFocused();
+    Blockly.common.getMainWorkspace())).markFocused();
 };
 
 /**

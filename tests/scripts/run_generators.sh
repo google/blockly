@@ -18,7 +18,7 @@ check_result() {
   if [ -f $tmp_filename ]; then
     local golden_filename="${GOLDEN_DIR}generated.$suffix"
     if [ -f $golden_filename ]; then
-      if cmp --silent $tmp_filename $golden_filename; then
+      if cmp $tmp_filename $golden_filename; then
         echo -e "$SUCCESS_PREFIX $suffix: $tmp_filename matches $golden_filename"
       else
         echo -e "$FAILURE_PREFIX $suffix: $tmp_filename does not match $golden_filename"

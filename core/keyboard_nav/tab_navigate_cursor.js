@@ -18,7 +18,7 @@ const ASTNode = goog.require('Blockly.ASTNode');
 const BasicCursor = goog.require('Blockly.BasicCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
-const {inherits} = goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -29,7 +29,7 @@ const {inherits} = goog.require('Blockly.utils.object');
 const TabNavigateCursor = function() {
   TabNavigateCursor.superClass_.constructor.call(this);
 };
-inherits(TabNavigateCursor, BasicCursor);
+object.inherits(TabNavigateCursor, BasicCursor);
 
 /**
  * Skip all nodes except for tab navigable fields.

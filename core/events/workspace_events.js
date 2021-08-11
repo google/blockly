@@ -10,14 +10,15 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.FinishedLoading');
+goog.module('Blockly.Events.FinishedLoading');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Workspace');
+const Events = goog.require('Blockly.Events');
+const EventsAbstract = goog.require('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -25,13 +26,12 @@ goog.requireType('Blockly.Workspace');
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- * @param {!Blockly.Workspace=} opt_workspace The workspace that has finished
+ * @param {!Workspace=} opt_workspace The workspace that has finished
  *    loading.  Undefined for a blank event.
- * @extends {Blockly.Events.Abstract}
+ * @extends {EventsAbstract}
  * @constructor
  */
-Blockly.Events.FinishedLoading = function(opt_workspace) {
-
+const FinishedLoading = function(opt_workspace) {
   /**
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
@@ -50,26 +50,25 @@ Blockly.Events.FinishedLoading = function(opt_workspace) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Blockly.Events.getGroup();
+  this.group = Events.getGroup();
 
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-Blockly.utils.object.inherits(Blockly.Events.FinishedLoading,
-    Blockly.Events.Abstract);
+object.inherits(FinishedLoading, EventsAbstract);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.FinishedLoading.prototype.type = Blockly.Events.FINISHED_LOADING;
+FinishedLoading.prototype.type = Events.FINISHED_LOADING;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.FinishedLoading.prototype.toJson = function() {
-  var json = {
+FinishedLoading.prototype.toJson = function() {
+  const json = {
     'type': this.type,
   };
   if (this.group) {
@@ -85,11 +84,13 @@ Blockly.Events.FinishedLoading.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.FinishedLoading.prototype.fromJson = function(json) {
+FinishedLoading.prototype.fromJson = function(json) {
   this.isBlank = false;
   this.workspaceId = json['workspaceId'];
   this.group = json['group'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.FINISHED_LOADING, Blockly.Events.FinishedLoading);
+registry.register(
+    registry.Type.EVENT, Events.FINISHED_LOADING, FinishedLoading);
+
+exports = FinishedLoading;

@@ -32,7 +32,7 @@ const Workspace = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
-const xml = goog.require('Blockly.utils.xml');
+const utilsXml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -197,13 +197,13 @@ const flyoutCategory = function(workspace) {
     // <block type="procedures_defnoreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
-    const block = xml.createElement('block');
+    const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defnoreturn');
     block.setAttribute('gap', 16);
-    const nameField = xml.createElement('field');
+    const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-        xml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -211,19 +211,19 @@ const flyoutCategory = function(workspace) {
     // <block type="procedures_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
-    const block = xml.createElement('block');
+    const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defreturn');
     block.setAttribute('gap', 16);
-    const nameField = xml.createElement('field');
+    const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-        xml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
   if (Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
-    const block = xml.createElement('block');
+    const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');
     block.setAttribute('gap', 16);
     xmlList.push(block);
@@ -242,14 +242,14 @@ const flyoutCategory = function(workspace) {
       //     <arg name="x"></arg>
       //   </mutation>
       // </block>
-      const block = xml.createElement('block');
+      const block = utilsXml.createElement('block');
       block.setAttribute('type', templateName);
       block.setAttribute('gap', 16);
-      const mutation = xml.createElement('mutation');
+      const mutation = utilsXml.createElement('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
       for (let j = 0; j < args.length; j++) {
-        const arg = xml.createElement('arg');
+        const arg = utilsXml.createElement('arg');
         arg.setAttribute('name', args[j]);
         mutation.appendChild(arg);
       }
@@ -277,14 +277,14 @@ const updateMutatorFlyout = function(workspace) {
     usedNames.push(block.getFieldValue('NAME'));
   }
 
-  const xmlElement = xml.createElement('xml');
-  const argBlock = xml.createElement('block');
+  const xmlElement = utilsXml.createElement('xml');
+  const argBlock = utilsXml.createElement('block');
   argBlock.setAttribute('type', 'procedures_mutatorarg');
-  const nameField = xml.createElement('field');
+  const nameField = utilsXml.createElement('field');
   nameField.setAttribute('name', 'NAME');
   const argValue =
       Variables.generateUniqueNameFromOptions(DEFAULT_ARG, usedNames);
-  const fieldContent = xml.createTextNode(argValue);
+  const fieldContent = utilsXml.createTextNode(argValue);
 
   nameField.appendChild(fieldContent);
   argBlock.appendChild(nameField);

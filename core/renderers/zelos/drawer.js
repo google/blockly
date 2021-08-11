@@ -13,31 +13,33 @@
 goog.module('Blockly.zelos.Drawer');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.svgPaths');
-
-goog.requireType('Blockly.blockRendering.Row');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.zelos.PathObject');
-goog.requireType('Blockly.zelos.RenderInfo');
+const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const PathObject = goog.requireType('Blockly.zelos.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const RenderInfo = goog.requireType('Blockly.zelos.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const Row = goog.requireType('Blockly.blockRendering.Row');
+const blockRendering = goog.require('Blockly.blockRendering');
+const object = goog.require('Blockly.utils.object');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
 
 
 /**
  * An object that draws a block based on the given rendering information.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.zelos.RenderInfo} info An object containing all
+ * @param {!BlockSvg} block The block to render.
+ * @param {!RenderInfo} info An object containing all
  *   information needed to render this block.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Drawer}
+ * @extends {BaseDrawer}
  */
 const Drawer = function(block, info) {
   Drawer.superClass_.constructor.call(this, block, info);
 };
-Blockly.utils.object.inherits(Drawer,
-    Blockly.blockRendering.Drawer);
+object.inherits(Drawer, BaseDrawer);
 
 
 /**
@@ -45,7 +47,7 @@ Blockly.utils.object.inherits(Drawer,
  */
 Drawer.prototype.draw = function() {
   const pathObject =
-      /** @type {!Blockly.zelos.PathObject} */ (this.block_.pathObject);
+      /** @type {!PathObject} */ (this.block_.pathObject);
   pathObject.beginDrawing();
   this.hideHiddenIcons_();
   this.drawOutline_();
@@ -55,7 +57,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     pathObject.flipRTL();
   }
-  if (Blockly.blockRendering.isDebuggerEnabled()) {
+  if (blockRendering.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();
@@ -99,7 +101,7 @@ Drawer.prototype.drawLeft_ = function() {
 /**
  * Add steps for the right side of a row that does not have value or
  * statement input connections.
- * @param {!Blockly.blockRendering.Row} row The row to draw the
+ * @param {!Row} row The row to draw the
  *     side of.
  * @protected
  */
@@ -115,13 +117,13 @@ Drawer.prototype.drawRightSideRow_ = function(row) {
         (row.followsStatement ?
             this.constants_.INSIDE_CORNERS.pathBottomRight : '') +
         (remainingHeight > 0 ?
-            Blockly.utils.svgPaths
+            svgPaths
                 .lineOnAxis('V', row.yPos + remainingHeight) : '') +
         (row.precedesStatement ?
             this.constants_.INSIDE_CORNERS.pathTopRight : '');
   } else {
     this.outlinePath_ +=
-        Blockly.utils.svgPaths.lineOnAxis('V', row.yPos + row.height);
+        svgPaths.lineOnAxis('V', row.yPos + row.height);
   }
 };
 
@@ -158,9 +160,9 @@ Drawer.prototype.drawFlatTop_ = function() {
   this.positionPreviousConnection_();
 
   this.outlinePath_ +=
-      Blockly.utils.svgPaths.moveBy(topRow.xPos, this.info_.startY);
+      svgPaths.moveBy(topRow.xPos, this.info_.startY);
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', topRow.width);
+  this.outlinePath_ += svgPaths.lineOnAxis('h', topRow.width);
 };
 
 /**
@@ -172,9 +174,9 @@ Drawer.prototype.drawFlatBottom_ = function() {
   this.positionNextConnection_();
 
   this.outlinePath_ +=
-    Blockly.utils.svgPaths.lineOnAxis('V', bottomRow.baseline);
+    svgPaths.lineOnAxis('V', bottomRow.baseline);
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('h', -bottomRow.width);
+  this.outlinePath_ += svgPaths.lineOnAxis('h', -bottomRow.width);
 };
 
 /**
@@ -194,10 +196,10 @@ Drawer.prototype.drawInlineInput_ = function(input) {
 
   const connectionRight = input.xPos + input.connectionWidth;
 
-  const outlinePath = Blockly.utils.svgPaths.moveTo(connectionRight, yPos) +
-      Blockly.utils.svgPaths.lineOnAxis('h', width) +
+  const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
+      svgPaths.lineOnAxis('h', width) +
       input.shape.pathRightDown(input.height) +
-      Blockly.utils.svgPaths.lineOnAxis('h', -width) +
+      svgPaths.lineOnAxis('h', -width) +
       input.shape.pathUp(input.height) +
       'z';
   this.block_.pathObject.setOutlinePath(inputName, outlinePath);
@@ -213,7 +215,7 @@ Drawer.prototype.drawStatementInput_ = function(row) {
 
   const innerTopLeftCorner =
       input.shape.pathRight +
-      Blockly.utils.svgPaths.lineOnAxis('h',
+      svgPaths.lineOnAxis('h',
           -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
@@ -222,15 +224,15 @@ Drawer.prototype.drawStatementInput_ = function(row) {
 
   const innerBottomLeftCorner =
       this.constants_.INSIDE_CORNERS.pathBottom +
-      Blockly.utils.svgPaths.lineOnAxis('h',
+      svgPaths.lineOnAxis('h',
           (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
 
-  this.outlinePath_ += Blockly.utils.svgPaths.lineOnAxis('H', x) +
+  this.outlinePath_ += svgPaths.lineOnAxis('H', x) +
       innerTopLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('v', innerHeight) +
+      svgPaths.lineOnAxis('v', innerHeight) +
       innerBottomLeftCorner +
-      Blockly.utils.svgPaths.lineOnAxis('H', row.xPos + row.width);
+      svgPaths.lineOnAxis('H', row.xPos + row.width);
 
   this.positionStatementInputConnection_(row);
 };

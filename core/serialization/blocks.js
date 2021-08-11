@@ -17,6 +17,7 @@ goog.module.declareLegacyNamespace();
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
+const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
@@ -71,9 +72,8 @@ exports.State = State;
  *     addNextBlocks: If true, children of the block which are connected to the
  *       block's next connection (if it exists) will be serialized.
  *       True by default.
- * @return {?State} The serialized state of the
- *     block, or null if the block could not be serialied (eg it was an
- *     insertion marker).
+ * @return {?State} The serialized state of the block, or null if the block
+ *     could not be serialied (eg it was an insertion marker).
  */
 const save = function(
     block,
@@ -262,21 +262,33 @@ const saveConnection = function(connection) {
  * Loads the block represented by the given state into the given workspace.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
+ * @param {{recordUndo: (boolean|undefined)}=} param1
+ *     recordUndo: If true, events triggered by this function will be undo-able
+ *       by the user. False by default.
  * @return {!Block} The block that was just loaded.
  */
-const load = function(state, workspace) {
+const load = function(state, workspace, {recordUndo = false} = {}) {
+  const prevRecordUndo = Events.getRecordUndo();
+  Events.setRecordUndo(recordUndo);
+  const existingGroup = Events.getGroup();
+  if (!existingGroup) {
+    Events.setGroup(true);
+  }
+
   // We only want to fire an event for the top block.
-  Blockly.Events.disable();
+  Events.disable();
 
   const block = loadInternal(state, workspace);
 
-  Blockly.Events.enable();
-  Blockly.Events.fire(
-      new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(block));
+  Events.enable();
+  Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
+
+  Events.setGroup(existingGroup);
+  Events.setRecordUndo(prevRecordUndo);
   
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
-  if (block instanceof Blockly.BlockSvg) {
+  if (workspace.rendered) {
     setTimeout(() => {
       if (!block.disposed) {
         block.setConnectionTracking(true);
@@ -313,7 +325,7 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
   loadFields(block, state);
   loadInputBlocks(block, state);
   loadNextBlocks(block, state);
-  initBlock(block);
+  initBlock(block, workspace.rendered);
   return block;
 };
 
@@ -453,16 +465,16 @@ const loadConnection = function(connection, connectionState) {
 /**
  * Initializes the give block, eg init the model, inits the svg, renders, etc.
  * @param {!Block} block The block to initialize.
+ * @param {boolean} rendered Whether the block is a rendered or headless block.
  */
-const initBlock = function(block) {
-  if (block instanceof Blockly.BlockSvg) {
+const initBlock = function(block, rendered) {
+  if (rendered) {
     // Adding connections to the connection db is expensive. This defers that
     // operation to decrease load time.
     block.setConnectionTracking(false);
 
     block.initSvg();
     block.render(false);
-    block.updateDisabled();
   } else {
     block.initModel();
   }

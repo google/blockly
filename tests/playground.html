@@ -379,6 +379,74 @@ var spaghettiXml = [
   '    <next></next>',
   '  </block>'].join('\n');
 
+  function jsoSpaghetti(n) {
+    var str = spaghettiJs;
+    for (var i = 0; i < n; i++) {
+      str = str.replace(/{}/g, `{"block":${spaghettiJs}}`);
+    }
+    var obj = {
+      'blocks': {
+        'blocks': [
+          JSON.parse(str)
+        ]
+      }
+    };
+    console.time('Spaghetti serialization');
+    Blockly.serialization.load(obj, workspace);
+    console.timeEnd('Spaghetti serialization');
+  }
+  var spaghettiJs = JSON.stringify({
+    'type': 'controls_if',
+    'inputs': {
+      'IF0': {
+        'block': {
+          'type': 'logic_compare',
+          'fields': {
+            'OP': 'EQ',
+          },
+          'inputs': {
+            'A': {
+              'block': {
+                'type': 'math_arithmetic',
+                'fields': {
+                  'OP': 'MULTIPLY',
+                },
+                'inputs': {
+                  'A': {
+                    'block': {
+                      'type': 'math_number',
+                      'fields': {
+                        'NUM': 6
+                      }
+                    }
+                  },
+                  'B': {
+                    'block': {
+                      'type': 'math_number',
+                      'fields': {
+                        'NUM': 7
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            'B': {
+              'block': {
+                'type': 'math_number',
+                'fields': {
+                  'NUM': 42
+                }
+              }
+            }
+          }
+        }
+      },
+      'DO0': { }
+    },
+    'next': { }
+  });
+
 </script>
 
 <style>
@@ -469,6 +537,7 @@ var spaghettiXml = [
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="JS Spaghetti!" onclick="jsoSpaghetti(8)">
   </p>
   <ul class="playgroundToggleOptions">
     <li>

@@ -11,7 +11,6 @@ suite('JSO Deserialization', function() {
   });
 
   teardown(function() {
-    workspaceTeardown.call(this, this.workspace);
     sharedTestTeardown.call(this);
   });
 

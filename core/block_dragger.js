@@ -17,7 +17,7 @@ goog.module.declareLegacyNamespace();
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.require('Blockly.IBlockDragger');
+const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
 /* eslint-disable-next-line no-unused-vars */
 const IDragTarget = goog.requireType('Blockly.IDragTarget');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');

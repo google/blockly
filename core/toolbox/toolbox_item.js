@@ -19,7 +19,7 @@ const IdGenerator = goog.require('Blockly.utils.IdGenerator');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.require('Blockly.IToolboxItem');
+const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */

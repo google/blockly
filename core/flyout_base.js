@@ -14,7 +14,7 @@ goog.module('Blockly.Flyout');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.require('Blockly.Block');
+const Block = goog.requireType('Blockly.Block');
 const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
@@ -26,7 +26,7 @@ const Events = goog.require('Blockly.Events');
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.require('Blockly.IFlyout');
+const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const Options = goog.requireType('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');

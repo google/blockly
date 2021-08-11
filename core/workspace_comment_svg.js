@@ -30,7 +30,7 @@ const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -69,7 +69,7 @@ const TEXTAREA_OFFSET = 2;
 
 /**
  * Class for a workspace comment's SVG representation.
- * @param {!Workspace} workspace The block's workspace.
+ * @param {!WorkspaceSvg} workspace The block's workspace.
  * @param {string} content The content of this workspace comment.
  * @param {number} height Height of the comment.
  * @param {number} width Width of the comment.
@@ -83,6 +83,11 @@ const TEXTAREA_OFFSET = 2;
  */
 const WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {
+  /**
+   * @type {!WorkspaceSvg}
+   */
+  this.workspace;
+
   /**
    * Mouse up event data.
    * @type {?browserEvents.Data}
@@ -128,7 +133,7 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = utils.is3dSupported() && !!workspace.blockDragSurface_;
+  this.useDragSurface_ = utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
@@ -158,8 +163,7 @@ WorkspaceCommentSvg.TOP_OFFSET = 10;
  * @package
  */
 WorkspaceCommentSvg.prototype.dispose = function() {
-  if (!this.workspace) {
-    // The comment has already been deleted.
+  if (this.disposed_) {
     return;
   }
   // If this comment is being dragged, unlink the mouse events.
@@ -173,9 +177,6 @@ WorkspaceCommentSvg.prototype.dispose = function() {
   }
 
   dom.removeNode(this.svgGroup_);
-  // Sever JavaScript to DOM connections.
-  this.svgGroup_ = null;
-  this.svgRect_ = null;
   // Dispose of any rendered components
   this.disposeInternal_();
 
@@ -343,21 +344,21 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   let y = 0;
 
   const dragSurfaceGroup =
-      this.useDragSurface_ ? this.workspace.blockDragSurface_.getGroup() : null;
+      this.useDragSurface_ ? this.workspace.getBlockDragSurface().getGroup() : null;
 
   let element = this.getSvgRoot();
   if (element) {
     do {
       // Loop through this comment and every parent.
-      const xy = utils.getRelativeXY(element);
+      const xy = utils.getRelativeXY(/** @type {!Element} */ (element));
       x += xy.x;
       y += xy.y;
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.blockDragSurface_.getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
         const surfaceTranslation =
-            this.workspace.blockDragSurface_.getSurfaceTranslation();
+            this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
@@ -414,26 +415,9 @@ WorkspaceCommentSvg.prototype.moveToDragSurface = function() {
   // This is in workspace coordinates.
   const xy = this.getRelativeToSurfaceXY();
   this.clearTransformAttributes_();
-  this.workspace.blockDragSurface_.translateSurface(xy.x, xy.y);
+  this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y);
   // Execute the move on the top-level SVG component
-  this.workspace.blockDragSurface_.setBlocksAndShow(this.getSvgRoot());
-};
-
-/**
- * Move this comment back to the workspace block canvas.
- * Generally should be called at the same time as setDragging(false).
- * Does nothing if useDragSurface_ is false.
- * @param {!Coordinate} newXY The position the comment should take
- *     on on the workspace canvas, in workspace coordinates.
- * @private
- */
-WorkspaceCommentSvg.prototype.moveOffDragSurface = function(newXY) {
-  if (!this.useDragSurface_) {
-    return;
-  }
-  // Translate to current position, turning off 3d.
-  this.translate(newXY.x, newXY.y);
-  this.workspace.blockDragSurface_.clearAndHide(this.workspace.getCanvas());
+  this.workspace.getBlockDragSurface().setBlocksAndShow(this.getSvgRoot());
 };
 
 /**
@@ -616,7 +600,7 @@ WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
 /**
  * Decode an XML comment tag and create a rendered comment on the workspace.
  * @param {!Element} xmlComment XML comment element.
- * @param {!Workspace} workspace The workspace.
+ * @param {!WorkspaceSvg} workspace The workspace.
  * @param {number=} opt_wsWidth The width of the workspace, which is used to
  *     position comments correctly in RTL.
  * @return {!WorkspaceCommentSvg} The created workspace comment.
@@ -632,7 +616,7 @@ WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
         workspace, info.content, info.h, info.w, info.id);
     if (workspace.rendered) {
       comment.initSvg(true);
-      comment.render(false);
+      comment.render();
     }
     // Position the comment correctly, taking into account the width of a
     // rendered RTL workspace.
@@ -647,9 +631,10 @@ WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
   } finally {
     Events.enable();
   }
-  WorkspaceComment.fireCreateEvent(comment);
 
-  return comment;
+  WorkspaceComment.fireCreateEvent(
+      /** @type {!WorkspaceCommentSvg} */ (comment));
+  return (/** @type {!WorkspaceCommentSvg} */ (comment));
 };
 
 /**
@@ -921,7 +906,7 @@ WorkspaceCommentSvg.prototype.deleteMouseOut_ = function(_e) {
  */
 WorkspaceCommentSvg.prototype.deleteMouseUp_ = function(e) {
   // Delete this comment.
-  this.dispose(true, true);
+  this.dispose();
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
 };
@@ -943,10 +928,10 @@ WorkspaceCommentSvg.prototype.unbindDragEvents_ = function() {
 
 /**
  * Handle a mouse-up event while dragging a comment's border or resize handle.
- * @param {!Event} e Mouse up event.
+ * @param {!Event} _e Mouse up event.
  * @private
  */
-WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(/* e */) {
+WorkspaceCommentSvg.prototype.resizeMouseUp_ = function(_e) {
   Touch.clearTouchIdentifier();
   this.unbindDragEvents_();
 };

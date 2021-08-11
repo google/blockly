@@ -34,7 +34,9 @@ goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WidgetDiv');
 
+goog.requireType('Blockly.BlocklyOptions');
 goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -45,8 +47,6 @@ goog.requireType('Blockly.BlockSvg');
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
-  Blockly.checkBlockColourConstants();
-
   if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);
@@ -216,7 +216,9 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
       break;
     case Blockly.Events.COMMENT_CREATE:
     case Blockly.Events.COMMENT_MOVE:
-      object = workspace.getCommentById(e.commentId);
+      object = (
+          /** @type {?Blockly.WorkspaceCommentSvg} */
+          (workspace.getCommentById(e.commentId)));
       break;
   }
   return object;

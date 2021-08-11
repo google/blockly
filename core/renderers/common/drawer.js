@@ -73,7 +73,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     this.block_.pathObject.flipRTL();
   }
-  if (Blockly.blockRendering.useDebugger) {
+  if (Blockly.blockRendering.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();

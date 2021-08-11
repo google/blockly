@@ -23,6 +23,7 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const utils = goog.require('Blockly.utils');
+goog.requireType('Blockly.Mutator');
 
 
 /**
@@ -102,10 +103,11 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   // Sanity checks passed.
   register(name, function() {
     if (hasMutatorDialog) {
-      if (!Blockly.Mutator) {
+      const Mutator = goog.module.get('Blockly.Mutator');
+      if (!Mutator) {
         throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
       }
-      this.setMutator(new Blockly.Mutator(opt_blockList || []));
+      this.setMutator(new Mutator(opt_blockList || []));
     }
     // Mixin the object.
     this.mixin(mixinObj);

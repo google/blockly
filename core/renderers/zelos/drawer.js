@@ -111,19 +111,18 @@ Drawer.prototype.drawRightSideRow_ = function(row) {
   }
   if (row.precedesStatement || row.followsStatement) {
     const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
-    const remainingHeight = row.height -
-        (row.precedesStatement ? cornerHeight : 0);
+    const remainingHeight =
+        row.height - (row.precedesStatement ? cornerHeight : 0);
     this.outlinePath_ +=
-        (row.followsStatement ?
-            this.constants_.INSIDE_CORNERS.pathBottomRight : '') +
+        (row.followsStatement ? this.constants_.INSIDE_CORNERS.pathBottomRight :
+                                '') +
         (remainingHeight > 0 ?
-            svgPaths
-                .lineOnAxis('V', row.yPos + remainingHeight) : '') +
-        (row.precedesStatement ?
-            this.constants_.INSIDE_CORNERS.pathTopRight : '');
+             svgPaths.lineOnAxis('V', row.yPos + remainingHeight) :
+             '') +
+        (row.precedesStatement ? this.constants_.INSIDE_CORNERS.pathTopRight :
+                                 '');
   } else {
-    this.outlinePath_ +=
-        svgPaths.lineOnAxis('V', row.yPos + row.height);
+    this.outlinePath_ += svgPaths.lineOnAxis('V', row.yPos + row.height);
   }
 };
 
@@ -159,8 +158,7 @@ Drawer.prototype.drawFlatTop_ = function() {
   const topRow = this.info_.topRow;
   this.positionPreviousConnection_();
 
-  this.outlinePath_ +=
-      svgPaths.moveBy(topRow.xPos, this.info_.startY);
+  this.outlinePath_ += svgPaths.moveBy(topRow.xPos, this.info_.startY);
 
   this.outlinePath_ += svgPaths.lineOnAxis('h', topRow.width);
 };
@@ -173,8 +171,7 @@ Drawer.prototype.drawFlatBottom_ = function() {
   const bottomRow = this.info_.bottomRow;
   this.positionNextConnection_();
 
-  this.outlinePath_ +=
-    svgPaths.lineOnAxis('V', bottomRow.baseline);
+  this.outlinePath_ += svgPaths.lineOnAxis('V', bottomRow.baseline);
 
   this.outlinePath_ += svgPaths.lineOnAxis('h', -bottomRow.width);
 };
@@ -199,9 +196,7 @@ Drawer.prototype.drawInlineInput_ = function(input) {
   const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
       svgPaths.lineOnAxis('h', width) +
       input.shape.pathRightDown(input.height) +
-      svgPaths.lineOnAxis('h', -width) +
-      input.shape.pathUp(input.height) +
-      'z';
+      svgPaths.lineOnAxis('h', -width) + input.shape.pathUp(input.height) + 'z';
   this.block_.pathObject.setOutlinePath(inputName, outlinePath);
 };
 
@@ -213,25 +208,20 @@ Drawer.prototype.drawStatementInput_ = function(row) {
   // Where to start drawing the notch, which is on the right side in LTR.
   const x = input.xPos + input.notchOffset + input.shape.width;
 
-  const innerTopLeftCorner =
-      input.shape.pathRight +
-      svgPaths.lineOnAxis('h',
-          -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+  const innerTopLeftCorner = input.shape.pathRight +
+      svgPaths.lineOnAxis(
+          'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       this.constants_.INSIDE_CORNERS.pathTop;
 
-  const innerHeight =
-      row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+  const innerHeight = row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
-  const innerBottomLeftCorner =
-      this.constants_.INSIDE_CORNERS.pathBottom +
-      svgPaths.lineOnAxis('h',
-          (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+  const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
+      svgPaths.lineOnAxis(
+          'h', (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
       (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
 
-  this.outlinePath_ += svgPaths.lineOnAxis('H', x) +
-      innerTopLeftCorner +
-      svgPaths.lineOnAxis('v', innerHeight) +
-      innerBottomLeftCorner +
+  this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
+      svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
       svgPaths.lineOnAxis('H', row.xPos + row.width);
 
   this.positionStatementInputConnection_(row);

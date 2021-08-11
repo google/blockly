@@ -19,9 +19,10 @@ const Connection = goog.require('Blockly.Connection');
 const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
+const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
-const {OPPOSITE_TYPE} = goog.require('Blockly.internalConstants');
 
 
 /**
@@ -145,7 +146,7 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   }
   if (blockA == blockB) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (b.type != OPPOSITE_TYPE[a.type]) {
+  } else if (b.type != internalConstants.OPPOSITE_TYPE[a.type]) {
     return Connection.REASON_WRONG_TYPE;
   } else if (blockA.workspace !== blockB.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;
@@ -239,7 +240,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 
@@ -263,7 +264,7 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (Blockly.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) != -1) {
     return false;
   }
 

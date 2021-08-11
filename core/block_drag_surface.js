@@ -8,8 +8,9 @@
  * @fileoverview A class that manages a surface for dragging blocks.  When a
  * block drag is started, we move the block (and children) to a separate DOM
  * element that we move around using translate3d. At the end of the drag, the
- * blocks are put back in into the SVG they came from. This helps performance by
- * avoiding repainting the entire SVG on every mouse move while dragging blocks.
+ * blocks are put back in into the SVG they came from. This helps
+ * performance by avoiding repainting the entire SVG on every mouse move
+ * while dragging blocks.
  * @author picklesrus
  */
 
@@ -19,9 +20,9 @@ goog.module('Blockly.BlockDragSurfaceSvg');
 goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const {G, SVG} = goog.require('Blockly.utils.Svg');
-const {createSvgElement, HTML_NS, setCssTransform, SVG_NS, XLINK_NS} = goog.require('Blockly.utils.dom');
-const {getRelativeXY} = goog.require('Blockly.utils');
+const Svg = goog.require('Blockly.utils.Svg');
+const dom = goog.require('Blockly.utils.dom');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -94,16 +95,16 @@ BlockDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
-  this.SVG_ = createSvgElement(
-      SVG, {
-        'xmlns': SVG_NS,
-        'xmlns:html': HTML_NS,
-        'xmlns:xlink': XLINK_NS,
+  this.SVG_ = dom.createSvgElement(
+      Svg.SVG, {
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklyBlockDragSurface'
       },
       this.container_);
-  this.dragGroup_ = createSvgElement(G, {}, this.SVG_);
+  this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.SVG_);
 };
 
 /**
@@ -157,7 +158,7 @@ BlockDragSurfaceSvg.prototype.translateSurfaceInternal_ = function() {
   y = y.toFixed(0);
   this.SVG_.style.display = 'block';
 
-  setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+  dom.setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
 };
 
 /**
@@ -191,7 +192,7 @@ BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @return {!Coordinate} Current translation of the surface.
  */
 BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  const xy = getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  const xy = utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
   return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
 };
 

@@ -16,8 +16,8 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Cursor = goog.require('Blockly.Cursor');
-const {register, Type} = goog.require('Blockly.registry');
-const {inherits} = goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -30,7 +30,7 @@ const {inherits} = goog.require('Blockly.utils.object');
 const BasicCursor = function() {
   BasicCursor.superClass_.constructor.call(this);
 };
-inherits(BasicCursor, Cursor);
+object.inherits(BasicCursor, Cursor);
 
 /**
  * Name used for registering a basic cursor.
@@ -214,6 +214,7 @@ BasicCursor.prototype.getRightMostChild_ = function(node) {
   return this.getRightMostChild_(newNode);
 };
 
-register(Type.CURSOR, BasicCursor.registrationName, BasicCursor);
+registry.register(
+    registry.Type.CURSOR, BasicCursor.registrationName, BasicCursor);
 
 exports = BasicCursor;

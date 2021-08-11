@@ -17,7 +17,7 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.require('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const {FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
+const toolbox = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -37,7 +37,7 @@ ISelectableToolboxItem.prototype.getName;
 /**
  * Gets the contents of the toolbox item. These are items that are meant to be
  * displayed in the flyout.
- * @return {!FlyoutItemInfoArray|string} The definition
+ * @return {!toolbox.FlyoutItemInfoArray|string} The definition
  *     of items to be displayed in the flyout.
  * @public
  */

@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Blockly = goog.requireType('Blockly');
+const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
@@ -90,7 +90,7 @@ const Trashcan = function(workspace) {
   }
   // Create flyout options.
   const flyoutWorkspaceOptions = new Options(
-      /** @type {!Blockly.BlocklyOptions} */
+      /** @type {!BlocklyOptions} */
       ({
         'scrollbars': true,
         'parentWorkspace': this.workspace_,

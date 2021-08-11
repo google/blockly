@@ -464,7 +464,7 @@ suite('JSO Deserialization', function() {
     setup(function() {
       this.assertThrows = function(state, error) {
         chai.assert.throws(() => {
-          Blockly.serialization.load(state, this.workspace);
+          Blockly.serialization.workspaces.load(state, this.workspace);
         }, error);
       };
     });
@@ -607,7 +607,7 @@ suite('JSO Deserialization', function() {
           'blocks': {
             'blocks': [
               {
-                'type': 'logic_compare',
+                'type': 'logic_operation',
                 'inputs': {
                   'A': {
                     'block': {

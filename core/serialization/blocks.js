@@ -420,7 +420,8 @@ const tryToConnectParent = function(parentConnection, child, state) {
                 childConnection, parentConnection, false),
             childConnection,
             parentConnection),
-        childConnection,
+        parentConnection.type == inputTypes.value ?
+            'output connection' : 'previous connection',
         child,
         state);
   }

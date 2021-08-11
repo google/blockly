@@ -62,15 +62,23 @@ let DIV;
 /** @deprecated September 2021 */
 exports.DIV = DIV;
 
+/**
+ * Returns the HTML container for editor widgets.
+ * @return {!Element} The editor widget container.
+ */
 const getDiv = function() {
   return DIV;
 };
 exports.getDiv = getDiv;
 
-const setDiv = function(newDiv) {
+/**
+ * Allows unit tests to reset the div.
+ * @param {?Element} newDiv The new value for the DIV field.
+ */
+const testOnly_setDiv = function(newDiv) {
   DIV = newDiv;
 };
-exports.setDiv = setDiv;
+exports.testOnly_setDiv = testOnly_setDiv;
 
 Object.defineProperties(exports, {
   DIV: {
@@ -79,13 +87,7 @@ Object.defineProperties(exports, {
         'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
         'Blockly.WidgetDiv.getDiv()');
       return getDiv();
-    },
-    set: function(newDiv) {
-      deprecation.warn(
-        'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-        'Blockly.WidgetDiv.setDiv()');
-      setDiv(newDiv);
-    },
+    }
   }
 });
 

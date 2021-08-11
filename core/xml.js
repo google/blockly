@@ -118,9 +118,8 @@ exports.blockToDomWithXY = blockToDomWithXY;
  * @param {!Field} field The field to encode.
  * @return {?Element} XML element, or null if the field did not need to be
  *     serialized.
- * @private
  */
-const fieldToDom_ = function(field) {
+const fieldToDom = function(field) {
   if (field.isSerializable()) {
     const container = utilsXml.createElement('field');
     container.setAttribute('name', field.name || '');
@@ -135,14 +134,13 @@ const fieldToDom_ = function(field) {
  * @param {!Block} block A block with fields to be encoded.
  * @param {!Element} element The XML element to which the field DOM should be
  *     attached.
- * @private
  */
-const allFieldsToDom_ = function(block, element) {
+const allFieldsToDom = function(block, element) {
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
     for (let j = 0; j < input.fieldRow.length; j++) {
       const field = input.fieldRow[j];
-      const fieldDom = fieldToDom_(field);
+      const fieldDom = fieldToDom(field);
       if (fieldDom) {
         element.appendChild(fieldDom);
       }
@@ -184,7 +182,7 @@ const blockToDom = function(block, opt_noId) {
     }
   }
 
-  allFieldsToDom_(block, element);
+  allFieldsToDom(block, element);
 
   const commentText = block.getCommentText();
   if (commentText) {
@@ -221,7 +219,7 @@ const blockToDom = function(block, opt_noId) {
       }
       const shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(cloneShadow_(shadow, opt_noId));
+        container.appendChild(cloneShadow(shadow, opt_noId));
       }
       if (childBlock) {
         const elem = blockToDom(childBlock, opt_noId);
@@ -268,7 +266,7 @@ const blockToDom = function(block, opt_noId) {
   }
   const shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(cloneShadow_(shadow, opt_noId));
+    container.appendChild(cloneShadow(shadow, opt_noId));
   }
 
   return element;
@@ -280,9 +278,8 @@ exports.blockToDom = blockToDom;
  * @param {!Element} shadow A tree of XML elements.
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element} A tree of XML elements.
- * @private
  */
-const cloneShadow_ = function(shadow, opt_noId) {
+const cloneShadow = function(shadow, opt_noId) {
   shadow = shadow.cloneNode(true);
   // Walk the tree looking for whitespace.  Don't prune whitespace in a tag.
   let node = shadow;
@@ -581,7 +578,7 @@ const domToBlock = function(xmlBlock, workspace) {
   const variablesBeforeCreation = workspace.getAllVariables();
   let topBlock;
   try {
-    topBlock = domToBlockHeadless_(xmlBlock, workspace);
+    topBlock = domToBlockHeadless(xmlBlock, workspace);
     // Generate list of all blocks.
     const blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
@@ -671,7 +668,7 @@ let childNodeTagMap;  // eslint-disable-line no-unused-vars
  * @return {!childNodeTagMap} The childNode map from nodeName to
  *    node.
  */
-const mapSupportedXmlTags_ = function(xmlBlock) {
+const mapSupportedXmlTags = function(xmlBlock) {
   const childNodeMap =
       {mutation: [], comment: [], data: [], field: [], input: [], next: []};
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
@@ -723,9 +720,8 @@ const mapSupportedXmlTags_ = function(xmlBlock) {
  * @param {!Block} block The block to apply the child nodes on.
  * @return {boolean} True if mutation may have added some elements that need
  *    initialization (requiring initSvg call).
- * @private
  */
-const applyMutationTagNodes_ = function(xmlChildren, block) {
+const applyMutationTagNodes = function(xmlChildren, block) {
   let shouldCallInitSvg = false;
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
@@ -745,9 +741,8 @@ const applyMutationTagNodes_ = function(xmlChildren, block) {
  * Applies comment tag child nodes to the given block.
  * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Block} block The block to apply the child nodes on.
- * @private
  */
-const applyCommentTagNodes_ = function(xmlChildren, block) {
+const applyCommentTagNodes = function(xmlChildren, block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const text = xmlChild.textContent;
@@ -773,9 +768,8 @@ const applyCommentTagNodes_ = function(xmlChildren, block) {
  * Applies data tag child nodes to the given block.
  * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Block} block The block to apply the child nodes on.
- * @private
  */
-const applyDataTagNodes_ = function(xmlChildren, block) {
+const applyDataTagNodes = function(xmlChildren, block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     block.data = xmlChild.textContent;
@@ -786,13 +780,12 @@ const applyDataTagNodes_ = function(xmlChildren, block) {
  * Applies field tag child nodes to the given block.
  * @param {!Array<!Element>} xmlChildren Child nodes.
  * @param {!Block} block The block to apply the child nodes on.
- * @private
  */
-const applyFieldTagNodes_ = function(xmlChildren, block) {
+const applyFieldTagNodes = function(xmlChildren, block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const nodeName = xmlChild.getAttribute('name');
-    domToField_(block, nodeName, xmlChild);
+    domToField(block, nodeName, xmlChild);
   }
 };
 
@@ -801,9 +794,8 @@ const applyFieldTagNodes_ = function(xmlChildren, block) {
  * @param {!Element} xmlNode The XML node to extract child block info from.
  * @return {{childBlockElement: ?Element, childShadowElement: ?Element}} Any
  *    found child block.
- * @private
  */
-const findChildBlocks_ = function(xmlNode) {
+const findChildBlocks = function(xmlNode) {
   const childBlockInfo = {childBlockElement: null, childShadowElement: null};
   for (let i = 0; i < xmlNode.childNodes.length; i++) {
     const xmlChild = xmlNode.childNodes[i];
@@ -825,9 +817,8 @@ const findChildBlocks_ = function(xmlNode) {
  *    block.
  * @param {!Block} block The block to apply the child nodes on.
  * @param {string} prototypeName The prototype name of the block.
- * @private
  */
-const applyInputTagNodes_ = function(
+const applyInputTagNodes = function(
     xmlChildren, workspace, block, prototypeName) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
@@ -839,12 +830,12 @@ const applyInputTagNodes_ = function(
           prototypeName);
       break;
     }
-    const childBlockInfo = findChildBlocks_(xmlChild);
+    const childBlockInfo = findChildBlocks(xmlChild);
     if (childBlockInfo.childBlockElement) {
       if (!input.connection) {
         throw TypeError('Input connection does not exist.');
       }
-      domToBlockHeadless_(
+      domToBlockHeadless(
           childBlockInfo.childBlockElement, workspace, input.connection, false);
     }
     // Set shadow after so we don't create a shadow we delete immediately.
@@ -860,12 +851,11 @@ const applyInputTagNodes_ = function(
  * @param {!Workspace} workspace The workspace containing the given
  *    block.
  * @param {!Block} block The block to apply the child nodes on.
- * @private
  */
-const applyNextTagNodes_ = function(xmlChildren, workspace, block) {
+const applyNextTagNodes = function(xmlChildren, workspace, block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
-    const childBlockInfo = findChildBlocks_(xmlChild);
+    const childBlockInfo = findChildBlocks(xmlChild);
     if (childBlockInfo.childBlockElement) {
       if (!block.nextConnection) {
         throw TypeError('Next statement does not exist.');
@@ -875,7 +865,7 @@ const applyNextTagNodes_ = function(xmlChildren, workspace, block) {
         throw TypeError('Next statement is already connected.');
       }
       // Create child block.
-      domToBlockHeadless_(
+      domToBlockHeadless(
           childBlockInfo.childBlockElement, workspace, block.nextConnection,
           true);
     }
@@ -898,9 +888,8 @@ const applyNextTagNodes_ = function(xmlChildren, workspace, block) {
  *     connection
  *    is a next connection, rather than output or statement.
  * @return {!Block} The root block created.
- * @private
  */
-const domToBlockHeadless_ = function(
+const domToBlockHeadless = function(
     xmlBlock, workspace, parentConnection, connectedToParentNext) {
   let block = null;
   const prototypeName = xmlBlock.getAttribute('type');
@@ -911,12 +900,12 @@ const domToBlockHeadless_ = function(
   block = workspace.newBlock(prototypeName, id);
 
   // Preprocess childNodes so tags can be processed in a consistent order.
-  const xmlChildNameMap = mapSupportedXmlTags_(xmlBlock);
+  const xmlChildNameMap = mapSupportedXmlTags(xmlBlock);
 
   const shouldCallInitSvg =
-      applyMutationTagNodes_(xmlChildNameMap.mutation, block);
-  applyCommentTagNodes_(xmlChildNameMap.comment, block);
-  applyDataTagNodes_(xmlChildNameMap.data, block);
+      applyMutationTagNodes(xmlChildNameMap.mutation, block);
+  applyCommentTagNodes(xmlChildNameMap.comment, block);
+  applyDataTagNodes(xmlChildNameMap.data, block);
 
   // Connect parent after processing mutation and before setting fields.
   if (parentConnection) {
@@ -938,9 +927,9 @@ const domToBlockHeadless_ = function(
     }
   }
 
-  applyFieldTagNodes_(xmlChildNameMap.field, block);
-  applyInputTagNodes_(xmlChildNameMap.input, workspace, block, prototypeName);
-  applyNextTagNodes_(xmlChildNameMap.next, workspace, block);
+  applyFieldTagNodes(xmlChildNameMap.field, block);
+  applyInputTagNodes(xmlChildNameMap.input, workspace, block, prototypeName);
+  applyNextTagNodes(xmlChildNameMap.next, workspace, block);
 
   if (shouldCallInitSvg) {
     // InitSvg needs to be called after variable fields are loaded.
@@ -994,9 +983,8 @@ const domToBlockHeadless_ = function(
  * @param {!Block} block The block that is currently being deserialized.
  * @param {string} fieldName The name of the field on the block.
  * @param {!Element} xml The field tag to decode.
- * @private
  */
-const domToField_ = function(block, fieldName, xml) {
+const domToField = function(block, fieldName, xml) {
   const field = block.getField(fieldName);
   if (!field) {
     console.warn(

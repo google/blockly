@@ -16,28 +16,7 @@ suite('JSO Deserialization', function() {
   });
 
   suite('Events', function() {
-    test('Finished loading', function() {
-      const state = {
-        'blocks': {
-          'blocks': [
-            {
-              'type': 'controls_if',
-              'id': 'testId',
-              'x': 42,
-              'y': 42
-            },
-          ]
-        }
-      };
-      Blockly.serialization.workspaces.load(state, this.workspace);
-      assertEventFired(
-          this.eventsFireStub,
-          Blockly.Events.FinishedLoading,
-          {},
-          this.workspace.id);
-    });
-
-    suite('Var create', function() {
+    suite('Finished loading', function() {
       test('Just var', function() {
         const state = {
           'blocks': {

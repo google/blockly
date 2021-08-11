@@ -14,20 +14,20 @@
 goog.module('Blockly.zelos.ConstantProvider');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.connectionTypes');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.svgPaths');
+const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
+const Svg = goog.require('Blockly.utils.Svg');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
+const utilsColour = goog.require('Blockly.utils.colour');
 
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
  * @constructor
  * @package
- * @extends {Blockly.blockRendering.ConstantProvider}
+ * @extends {BaseConstantProvider}
  */
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);
@@ -384,8 +384,7 @@ const ConstantProvider = function() {
    */
   this.replacementGlowFilter_ = null;
 };
-Blockly.utils.object.inherits(ConstantProvider,
-    Blockly.blockRendering.ConstantProvider);
+object.inherits(ConstantProvider, BaseConstantProvider);
 
 /**
  * @override
@@ -444,10 +443,10 @@ ConstantProvider.prototype.setDynamicProperties_ = function(
 ConstantProvider.prototype.dispose = function() {
   ConstantProvider.superClass_.dispose.call(this);
   if (this.selectedGlowFilter_) {
-    Blockly.utils.dom.removeNode(this.selectedGlowFilter_);
+    dom.removeNode(this.selectedGlowFilter_);
   }
   if (this.replacementGlowFilter_) {
-    Blockly.utils.dom.removeNode(this.replacementGlowFilter_);
+    dom.removeNode(this.replacementGlowFilter_);
   }
 };
 
@@ -459,11 +458,11 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath =
-      Blockly.utils.svgPaths.curve('c',
+      svgPaths.curve('c',
           [
-            Blockly.utils.svgPaths.point(25, -height),
-            Blockly.utils.svgPaths.point(71, -height),
-            Blockly.utils.svgPaths.point(width, 0)
+            svgPaths.point(25, -height),
+            svgPaths.point(71, -height),
+            svgPaths.point(width, 0)
           ]);
   return {
     height: height,
@@ -492,8 +491,8 @@ ConstantProvider.prototype.makeHexagonal = function() {
     const forward = up ? -1 : 1;
     const direction = right ? -1 : 1;
     const dy = forward * height / 2;
-    return Blockly.utils.svgPaths.lineTo(-direction * width, dy) +
-        Blockly.utils.svgPaths.lineTo(direction * width, dy);
+    return svgPaths.lineTo(-direction * width, dy) +
+        svgPaths.lineTo(direction * width, dy);
   }
 
   return {
@@ -550,11 +549,11 @@ ConstantProvider.prototype.makeRounded = function() {
         : 0;
     const height = blockHeight > maxHeight ? maxHeight : blockHeight;
     const radius = height / 2;
-    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
-      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+    return svgPaths.arc('a', '0 0,1', radius,
+        svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
+      svgPaths.arc('a', '0 0,1', radius,
+          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
   }
 
   return {
@@ -605,11 +604,11 @@ ConstantProvider.prototype.makeSquared = function() {
   // point is placed and in-turn the direction of the corners.
   function makeMainPath(height, up, right) {
     const innerHeight = height - radius * 2;
-    return Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-        Blockly.utils.svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
-      Blockly.utils.svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+    return svgPaths.arc('a', '0 0,1', radius,
+        svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+      svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
+      svgPaths.arc('a', '0 0,1', radius,
+          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
   }
 
   return {
@@ -653,8 +652,8 @@ ConstantProvider.prototype.shapeFor = function(
   }
   let outputShape;
   switch (connection.type) {
-    case Blockly.connectionTypes.INPUT_VALUE:
-    case Blockly.connectionTypes.OUTPUT_VALUE:
+    case connectionTypes.INPUT_VALUE:
+    case connectionTypes.OUTPUT_VALUE:
       outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
       if (outputShape != null) {
@@ -675,8 +674,8 @@ ConstantProvider.prototype.shapeFor = function(
         return this.ROUNDED;
       }
       return this.ROUNDED;
-    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
-    case Blockly.connectionTypes.NEXT_STATEMENT:
+    case connectionTypes.PREVIOUS_STATEMENT:
+    case connectionTypes.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown type');
@@ -698,45 +697,45 @@ ConstantProvider.prototype.makeNotch = function() {
 
   function makeMainPath(dir) {
     return (
-      Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+      svgPaths.curve('c', [
+        svgPaths.point(dir * curveWidth / 2,
             0),
-        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4,
+        svgPaths.point(dir * curveWidth * 3 / 4,
             quarterHeight / 2),
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+        svgPaths.point(dir * curveWidth,
             quarterHeight)
       ]) +
-      Blockly.utils.svgPaths.line([
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+      svgPaths.line([
+        svgPaths.point(dir * curveWidth,
             halfHeight)
       ]) +
-      Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 4,
+      svgPaths.curve('c', [
+        svgPaths.point(dir * curveWidth / 4,
             quarterHeight / 2),
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+        svgPaths.point(dir * curveWidth / 2,
             quarterHeight),
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+        svgPaths.point(dir * curveWidth,
             quarterHeight)
       ]) +
-      Blockly.utils.svgPaths.lineOnAxis('h', dir * innerWidth) +
-      Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+      svgPaths.lineOnAxis('h', dir * innerWidth) +
+      svgPaths.curve('c', [
+        svgPaths.point(dir * curveWidth / 2,
             0),
-        Blockly.utils.svgPaths.point(dir * curveWidth * 3 / 4,
+        svgPaths.point(dir * curveWidth * 3 / 4,
             -(quarterHeight / 2)),
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+        svgPaths.point(dir * curveWidth,
             -quarterHeight)
       ]) +
-      Blockly.utils.svgPaths.line([
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+      svgPaths.line([
+        svgPaths.point(dir * curveWidth,
             -halfHeight)
       ]) +
-      Blockly.utils.svgPaths.curve('c', [
-        Blockly.utils.svgPaths.point(dir * curveWidth / 4,
+      svgPaths.curve('c', [
+        svgPaths.point(dir * curveWidth / 4,
             -(quarterHeight / 2)),
-        Blockly.utils.svgPaths.point(dir * curveWidth / 2,
+        svgPaths.point(dir * curveWidth / 2,
             -quarterHeight),
-        Blockly.utils.svgPaths.point(dir * curveWidth,
+        svgPaths.point(dir * curveWidth,
             -quarterHeight)
       ])
     );
@@ -760,18 +759,18 @@ ConstantProvider.prototype.makeNotch = function() {
 ConstantProvider.prototype.makeInsideCorners = function() {
   const radius = this.CORNER_RADIUS;
 
-  const innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  const innerTopLeftCorner = svgPaths.arc('a', '0 0,0', radius,
+      svgPaths.point(-radius, radius));
 
-  const innerTopRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  const innerTopRightCorner = svgPaths.arc('a', '0 0,1', radius,
+      svgPaths.point(-radius, radius));
 
-  const innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(radius, radius));
+  const innerBottomLeftCorner = svgPaths.arc('a', '0 0,0', radius,
+      svgPaths.point(radius, radius));
 
-  const innerBottomRightCorner = Blockly.utils.svgPaths.arc('a', '0 0,1',
+  const innerBottomRightCorner = svgPaths.arc('a', '0 0,1',
       radius,
-      Blockly.utils.svgPaths.point(radius, radius));
+      svgPaths.point(radius, radius));
 
   return {
     width: radius,
@@ -788,24 +787,21 @@ ConstantProvider.prototype.makeInsideCorners = function() {
 /**
  * @override
  */
-ConstantProvider.prototype.generateSecondaryColour_ = function(
-    colour) {
-  return Blockly.utils.colour.blend('#000', colour, 0.15) || colour;
+ConstantProvider.prototype.generateSecondaryColour_ = function(colour) {
+  return utilsColour.blend('#000', colour, 0.15) || colour;
 };
 
 /**
  * @override
  */
-ConstantProvider.prototype.generateTertiaryColour_ = function(
-    colour) {
-  return Blockly.utils.colour.blend('#000', colour, 0.25) || colour;
+ConstantProvider.prototype.generateTertiaryColour_ = function(colour) {
+  return utilsColour.blend('#000', colour, 0.25) || colour;
 };
 
 /**
  * @override
  */
-ConstantProvider.prototype.createDom = function(svg,
-    tagName, selector) {
+ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
   ConstantProvider.superClass_.createDom.call(this, svg,
       tagName, selector);
   /*
@@ -813,12 +809,12 @@ ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  const defs = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.DEFS, {}, svg);
+  const defs = dom.createSvgElement(
+      Svg.DEFS, {}, svg);
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  const selectedGlowFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FILTER,
+  const selectedGlowFilter = dom.createSvgElement(
+      Svg.FILTER,
       {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -827,35 +823,35 @@ ConstantProvider.prototype.createDom = function(svg,
         x: '-40%'
       },
       defs);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEGAUSSIANBLUR,
+  dom.createSvgElement(
+      Svg.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.SELECTED_GLOW_SIZE
       },
       selectedGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  const selectedComponentTransfer = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPONENTTRANSFER, {
+  const selectedComponentTransfer = dom.createSvgElement(
+      Svg.FECOMPONENTTRANSFER, {
         'result': 'outBlur'
       }, selectedGlowFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEFUNCA,
+  dom.createSvgElement(
+      Svg.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       selectedComponentTransfer);
   // Color the highlight
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEFLOOD,
+  dom.createSvgElement(
+      Svg.FEFLOOD,
       {
         'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
       selectedGlowFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPOSITE,
+  dom.createSvgElement(
+      Svg.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
@@ -866,8 +862,8 @@ ConstantProvider.prototype.createDom = function(svg,
 
   // Using a dilate distorts the block shape.
   // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
-  const replacementGlowFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FILTER,
+  const replacementGlowFilter = dom.createSvgElement(
+      Svg.FILTER,
       {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
@@ -876,42 +872,42 @@ ConstantProvider.prototype.createDom = function(svg,
         x: '-40%'
       },
       defs);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEGAUSSIANBLUR,
+  dom.createSvgElement(
+      Svg.FEGAUSSIANBLUR,
       {
         'in': 'SourceGraphic',
         'stdDeviation': this.REPLACEMENT_GLOW_SIZE
       },
       replacementGlowFilter);
   // Set all gaussian blur pixels to 1 opacity before applying flood
-  const replacementComponentTransfer = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPONENTTRANSFER, {
+  const replacementComponentTransfer = dom.createSvgElement(
+      Svg.FECOMPONENTTRANSFER, {
         'result': 'outBlur'
       }, replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEFUNCA,
+  dom.createSvgElement(
+      Svg.FEFUNCA,
       {
         'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
       },
       replacementComponentTransfer);
   // Color the highlight
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEFLOOD,
+  dom.createSvgElement(
+      Svg.FEFLOOD,
       {
         'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
         'result': 'outColor'
       },
       replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPOSITE,
+  dom.createSvgElement(
+      Svg.FECOMPOSITE,
       {
         'in': 'outColor', 'in2': 'outBlur',
         'operator': 'in', 'result': 'outGlow'
       },
       replacementGlowFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPOSITE,
+  dom.createSvgElement(
+      Svg.FECOMPOSITE,
       {
         'in': 'SourceGraphic', 'in2': 'outGlow',
         'operator': 'over',

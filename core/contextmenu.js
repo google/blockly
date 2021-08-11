@@ -33,6 +33,8 @@ const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 
@@ -242,7 +244,7 @@ exports.callbackFactory = callbackFactory;
 
 /**
  * Make a context menu option for deleting the current workspace comment.
- * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
+ * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  */
@@ -252,7 +254,7 @@ const commentDeleteOption = function(comment) {
     enabled: true,
     callback: function() {
       Events.setGroup(true);
-      comment.dispose(true, true);
+      comment.dispose();
       Events.setGroup(false);
     }
   };
@@ -263,7 +265,7 @@ exports.commentDeleteOption = commentDeleteOption;
 
 /**
  * Make a context menu option for duplicating the current workspace comment.
- * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
+ * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  */
@@ -291,16 +293,17 @@ exports.commentDuplicateOption = commentDuplicateOption;
  *     comments are not bundled in.
  */
 const workspaceCommentOption = function(ws, e) {
-  if (!Blockly.WorkspaceCommentSvg) {
+  const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');
+  if (!WorkspaceCommentSvg) {
     throw Error('Missing require for Blockly.WorkspaceCommentSvg');
   }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
   const addWsComment = function() {
-    const comment = new Blockly.WorkspaceCommentSvg(
+    const comment = new WorkspaceCommentSvg(
         ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
-        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
-        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
+        WorkspaceCommentSvg.DEFAULT_SIZE,
+        WorkspaceCommentSvg.DEFAULT_SIZE);
 
     const injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they

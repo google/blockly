@@ -22,7 +22,8 @@ const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
-const FlyoutButton = goog.require('Blockly.FlyoutButton');
+/* eslint-disable-next-line no-unused-vars */
+const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.require('Blockly.IFlyout');
@@ -659,6 +660,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  * @private
  */
 Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
+  const FlyoutButton = goog.module.get('Blockly.FlyoutButton');
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }

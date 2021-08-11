@@ -10,7 +10,7 @@ suite("Trashcan", function() {
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString + '</xml>');
     xml = xml.children[0];
-    var event = new Blockly.Events.Delete();
+    var event = new Blockly.Events.BlockDelete();
     event.oldXml = xml;
     event.workspaceId = workspace.id;
     Blockly.Events.fire(event);

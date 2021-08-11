@@ -22,6 +22,7 @@
 goog.provide('Blockly.Tooltip');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.common');
 goog.require('Blockly.utils.string');
 
 
@@ -170,7 +171,7 @@ Blockly.Tooltip.createDom = function() {
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.Tooltip.DIV = document.createElement('div');
   Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  var container = Blockly.parentContainer || document.body;
+  var container = Blockly.common.getParentContainer() || document.body;
   container.appendChild(Blockly.Tooltip.DIV);
 };
 

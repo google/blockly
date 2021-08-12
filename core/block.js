@@ -1327,9 +1327,10 @@ Blockly.Block.prototype.isEnabled = function() {
  */
 Blockly.Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
-        this, 'disabled', null, this.disabled, !enabled));
+    const oldValue = this.disabled;
     this.disabled = !enabled;
+    Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
+        this, 'disabled', null, oldValue, !enabled));
   }
 };
 

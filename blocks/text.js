@@ -261,6 +261,7 @@ Blockly.Blocks['text_getSubstring'] = {
   },
   /**
    * Create XML to represent whether there are 'AT' inputs.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -274,6 +275,7 @@ Blockly.Blocks['text_getSubstring'] = {
   },
   /**
    * Parse XML to restore the 'AT' inputs.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -283,6 +285,12 @@ Blockly.Blocks['text_getSubstring'] = {
     this.updateAt_(1, isAt1);
     this.updateAt_(2, isAt2);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Create or delete an input for a numeric index.
    * This block has two such inputs, independent of each other.
@@ -441,6 +449,7 @@ Blockly.Blocks['text_prompt_ext'] = {
   },
   /**
    * Create XML to represent the output type.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -451,12 +460,18 @@ Blockly.Blocks['text_prompt_ext'] = {
   },
   /**
    * Parse XML to restore the output type.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('type'));
-  }
+  },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };
 
 Blockly.Blocks['text_prompt'] = {
@@ -678,6 +693,7 @@ Blockly.Constants.Text.TEXT_QUOTES_EXTENSION = function() {
 Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
   /**
    * Create XML to represent number of text inputs.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -688,11 +704,29 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
   },
   /**
    * Parse XML to restore the text inputs.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{itemCount: number}} The state of this block, ie the item count.
+   */
+  saveExtraState: function() {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the item count.
+   */
+  loadExtraState: function(state) {
+    this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
   /**
@@ -829,6 +863,7 @@ Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
 Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
   /**
    * Create XML to represent whether there is an 'AT' input.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -839,6 +874,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
   },
   /**
    * Parse XML to restore the 'AT' input.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -848,6 +884,12 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
     var isAt = (xmlElement.getAttribute('at') != 'false');
     this.updateAt_(isAt);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Create or delete an input for the numeric index.
    * @param {boolean} isAt True if the input should exist.

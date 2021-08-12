@@ -41,8 +41,7 @@ const save = function(workspace) {
 
   const blockStates = [];
   for (let block of workspace.getTopBlocks(false)) {
-    const blockState =
-      blocks.save(block, {addCoordinates: true});
+    const blockState = blocks.save(block, {addCoordinates: true});
     if (blockState) {
       blockStates.push(blockState);
     }

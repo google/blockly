@@ -42,8 +42,7 @@ const object = goog.require('Blockly.utils.object');
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-object.inherits(RenderInfo,
-    BaseRenderInfo);
+object.inherits(RenderInfo, BaseRenderInfo);
 
 /**
  * Get the block renderer in use.
@@ -79,8 +78,7 @@ RenderInfo.prototype.addElemSpacing_ = function() {
     for (let e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
       const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
-      row.elements.push(
-          new InRowSpacer(this.constants_, spacing));
+      row.elements.push(new InRowSpacer(this.constants_, spacing));
     }
     row.elements.push(oldElems[oldElems.length - 1]);
     if (row.endsWithElemSpacer()) {
@@ -89,8 +87,7 @@ RenderInfo.prototype.addElemSpacing_ = function() {
         spacing += this.constants_.TAB_WIDTH;
       }
       // There's a spacer after the last element in the row.
-      row.elements.push(new InRowSpacer(
-          this.constants_, spacing));
+      row.elements.push(new InRowSpacer(this.constants_, spacing));
     }
   }
 };
@@ -119,8 +116,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   // Spacing between a non-input and the end of the row.
   if (!Types.isInput(prev) && !next) {
     // Between an editable field and the end of the row.
-    if (Types.isField(prev) &&
-        (/** @type {Field} */ (prev)).isEditable) {
+    if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
     }
     // Padding at the end of an icon-only row to make the block shape clearer.
@@ -158,11 +154,9 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between a non-input and an input.
-  if (!Types.isInput(prev) &&
-      next && Types.isInput(next)) {
+  if (!Types.isInput(prev) && next && Types.isInput(next)) {
     // Between an editable field and an input.
-    if (Types.isField(prev) &&
-        (/** @type {Field} */ (prev)).isEditable) {
+    if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
       if (Types.isInlineInput(next)) {
         return this.constants_.SMALL_PADDING;
       } else if (Types.isExternalInput(next)) {
@@ -181,14 +175,12 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between an icon and an icon or field.
-  if (Types.isIcon(prev) &&
-      next && !Types.isInput(next)) {
+  if (Types.isIcon(prev) && next && !Types.isInput(next)) {
     return this.constants_.LARGE_PADDING;
   }
 
   // Spacing between an inline input and a field.
-  if (Types.isInlineInput(prev) &&
-      next && Types.isField(next)) {
+  if (Types.isInlineInput(prev) && next && Types.isField(next)) {
     // Editable field after inline input.
     if ((/** @type {Field} */ (next)).isEditable) {
       return this.constants_.MEDIUM_PADDING;
@@ -204,8 +196,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
       return this.constants_.NO_PADDING;
     }
     // Spacing between a square corner and a previous or next connection
-    if (Types.isPreviousConnection(next) ||
-        Types.isNextConnection(next)) {
+    if (Types.isPreviousConnection(next) || Types.isNextConnection(next)) {
       return next.notchOffset;
     }
   }
@@ -216,10 +207,9 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
 
   // Spacing between two fields of the same editability.
-  if (Types.isField(prev) &&
-      next && Types.isField(next) &&
+  if (Types.isField(prev) && next && Types.isField(next) &&
       ((/** @type {Field} */ (prev)).isEditable ==
-          (/** @type {Field} */ (next)).isEditable)) {
+       (/** @type {Field} */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
 
@@ -234,16 +224,13 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-RenderInfo.prototype.getSpacerRowHeight_ = function(
-    prev, next) {
+RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height.
-  if (Types.isTopRow(prev) &&
-      Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if (Types.isTopRow(prev) ||
-      Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) || Types.isBottomRow(next)) {
     return this.constants_.NO_PADDING;
   }
   if (prev.hasExternalInput && next.hasExternalInput) {
@@ -284,8 +271,7 @@ RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 
   let result = row.yPos;
   if (Types.isField(elem) && row.hasStatement) {
-    const offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
-        elem.height / 2;
+    const offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y + elem.height / 2;
     result += offset;
   } else {
     result += (row.height / 2);
@@ -324,9 +310,9 @@ RenderInfo.prototype.finalize_ = function() {
   if (this.outputConnection && this.block_.nextConnection &&
       this.block_.nextConnection.isConnected()) {
     // Include width of connected block in value to stack width measurement.
-    widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks,
-            this.block_.nextConnection.targetBlock().getHeightWidth().width);
+    widestRowWithConnectedBlocks = Math.max(
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width);
   }
 
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;

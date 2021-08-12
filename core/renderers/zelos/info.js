@@ -11,13 +11,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.zelos');
-goog.provide('Blockly.zelos.RenderInfo');
+goog.module('Blockly.zelos.RenderInfo');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InRowSpacer');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Types');
+goog.require('Blockly.constants');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldTextInput');
@@ -27,6 +27,7 @@ goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.TopRow');
 
+goog.requireType('Blockly.blockRendering.Measurable');
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.zelos.ConstantProvider');
 goog.requireType('Blockly.zelos.Renderer');
@@ -45,8 +46,8 @@ goog.requireType('Blockly.zelos.Renderer');
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.zelos.RenderInfo = function(renderer, block) {
-  Blockly.zelos.RenderInfo.superClass_.constructor.call(this, renderer, block);
+const RenderInfo = function(renderer, block) {
+  RenderInfo.superClass_.constructor.call(this, renderer, block);
 
   /**
    * An object with rendering information about the top row of the block.
@@ -87,7 +88,7 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
   this.rightSide = this.outputConnection ?
       new Blockly.zelos.RightConnectionShape(this.constants_) : null;
 };
-Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
+Blockly.utils.object.inherits(RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
 /**
@@ -95,14 +96,14 @@ Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
  * @return {!Blockly.zelos.Renderer} The block renderer in use.
  * @package
  */
-Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
+RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.zelos.Renderer} */ (this.renderer_);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.measure = function() {
+RenderInfo.prototype.measure = function() {
   // Modifying parent measure method to add `adjustXPosition_`.
   this.createRows_();
   this.addElemSpacing_();
@@ -116,7 +117,7 @@ Blockly.zelos.RenderInfo.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
+RenderInfo.prototype.shouldStartNewRow_ = function(input,
     lastInput) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
@@ -140,19 +141,19 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
+RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
   if (row.hasStatement) {
     const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
     return this.width - this.startX - rightCornerWidth;
   }
-  return Blockly.zelos.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
+  return RenderInfo.superClass_.getDesiredRowWidth_.call(this,
       row);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
@@ -185,7 +186,7 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
+RenderInfo.prototype.getSpacerRowHeight_ = function(
     prev, next) {
   // If we have an empty block add a spacer to increase the height.
   if (Blockly.blockRendering.Types.isTopRow(prev) &&
@@ -229,7 +230,7 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
+RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
   const width = this.width - this.startX;
   if ((Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) ||
       (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement)) {
@@ -241,7 +242,7 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem) &&
       !Blockly.blockRendering.Types.isStatementInput(elem)) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
@@ -253,14 +254,14 @@ Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
       return row.yPos + connectedBlock.height / 2;
     }
   }
-  return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
+  return RenderInfo.superClass_.getElemCenterline_.call(this,
       row, elem);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // If we have two dummy inputs on the same row, one aligned left and the other
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
@@ -269,13 +270,13 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
       input.align == Blockly.constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   }
-  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
+  RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
+RenderInfo.prototype.addAlignmentPadding_ = function(row,
     missingSpace) {
   if (row.rightAlignedDummyInput) {
     let alignmentDivider;
@@ -295,7 +296,7 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       return;
     }
   }
-  Blockly.zelos.RenderInfo.superClass_.addAlignmentPadding_.call(this, row,
+  RenderInfo.superClass_.addAlignmentPadding_.call(this, row,
       missingSpace);
 };
 
@@ -305,7 +306,7 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
  * called.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
+RenderInfo.prototype.adjustXPosition_ = function() {
   const notchTotalWidth = this.constants_.NOTCH_OFFSET_LEFT +
       this.constants_.NOTCH_WIDTH;
   let minXPos = notchTotalWidth;
@@ -357,7 +358,7 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
  * output connection.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
+RenderInfo.prototype.finalizeOutputConnection_ = function() {
   // Dynamic output connections depend on the height of the block.
   if (!this.outputConnection || !this.outputConnection.isDynamicShape) {
     return;
@@ -407,7 +408,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * spacers.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
+RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
   if (!this.outputConnection || this.hasStatementInput ||
       this.bottomRow.hasNextConnection) {
     return;
@@ -462,7 +463,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
  * @return {number} The amount of spacing to reduce the first or last spacer.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
+RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   if (!elem) {
     return 0;
   }
@@ -522,7 +523,7 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
  * row's inline inputs.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
+RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
   if (this.outputConnection) {
     return;
   }
@@ -579,13 +580,15 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+RenderInfo.prototype.finalize_ = function() {
   this.finalizeOutputConnection_();
   this.finalizeHorizontalAlignment_();
   this.finalizeVerticalAlignment_();
-  Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
+  RenderInfo.superClass_.finalize_.call(this);
 
   if (this.rightSide) {
     this.widthWithChildren += this.rightSide.width;
   }
 };
+
+exports = RenderInfo;

@@ -35,10 +35,8 @@ const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
-
 /** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
-
 
 
 /**

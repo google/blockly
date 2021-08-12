@@ -29,7 +29,9 @@ const BlockMove = goog.requireType('Blockly.Events.BlockMove');
 const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
 const CommentMove = goog.requireType('Blockly.Events.CommentMove');
-let Workspace = goog.forwardDeclare('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const registry = goog.require('Blockly.registry');
 const utils = goog.require('Blockly.utils');
 
@@ -45,35 +47,58 @@ let group = '';
  * @type {boolean}
  */
 let recordUndo = true;
+/** @deprecated September 2021 */
+exports.recordUndo = recordUndo;
 
+/**
+ * Sets whether events should be added to the undo stack.
+ * @param {boolean} newValue True if events should be added to the undo stack.
+ */
 const setRecordUndo = function(newValue) {
   recordUndo = newValue;
 };
 exports.setRecordUndo = setRecordUndo;
 
+/**
+ * Returns whether or not events will be added to the undo stack.
+ * @returns {boolean} True if events will be added to the undo stack.
+ */
 const getRecordUndo = function() {
   return recordUndo;
 };
 exports.getRecordUndo = getRecordUndo;
 
-Object.defineProperty(exports, 'recordUndo', {
-  get: getRecordUndo,
-  set: setRecordUndo,
-});
+Object.defineProperties(exports, {
+  recordUndo: {
+    get: function() {
+      deprecation.warn(
+        'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+        'Blockly.Events.getRecordUndo()');
+      return getRecordUndo();
+    },
+    set: function(record) {
+      deprecation.warn(
+        'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+        'Blockly.Events.setRecordUndo()');
+      setRecordUndo(record);
+    },
+  }
+ });
 
 /**
  * Allow change events to be created and fired.
  * @type {number}
  */
 let disabled = 0;
+/** @private */
+exports.disabled_ = disabled;
 
 
-Object.defineProperty(exports, 'disabled_', {
-  get: function() {
-    return disabled;
-  },
-  set: function(newValue) {
-    disabled = newValue;
+Object.defineProperties(exports, {
+  disabled_: {
+    set: function(newValue) {
+      disabled = newValue;
+    },
   },
 });
 
@@ -314,10 +339,10 @@ const fireNow = function() {
     if (!event.workspaceId) {
       continue;
     }
-    Workspace = goog.module.get('Blockly.Workspace');
-    const workspace = Workspace.getById(event.workspaceId);
-    if (workspace) {
-      workspace.fireChangeListener(event);
+    const Workspace = goog.module.get('Blockly.Workspace');
+    const eventWorkspace = Workspace.getById(event.workspaceId);
+    if (eventWorkspace) {
+      eventWorkspace.fireChangeListener(event);
     }
   }
 };
@@ -517,9 +542,9 @@ const disableOrphans = function(event) {
     if (!event.workspaceId) {
       return;
     }
-    Workspace = goog.module.get('Blockly.Workspace');
-    const workspace = Workspace.getById(event.workspaceId);
-    let block = workspace.getBlockById(event.blockId);
+    const Workspace = goog.module.get('Blockly.Workspace');
+    const eventWorkspace = Workspace.getById(event.workspaceId);
+    let block = eventWorkspace.getBlockById(event.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.
       const initialUndoFlag = recordUndo;
@@ -533,7 +558,7 @@ const disableOrphans = function(event) {
           }
         } else if (
             (block.outputConnection || block.previousConnection) &&
-            !workspace.isDragging()) {
+            !eventWorkspace.isDragging()) {
           do {
             block.setEnabled(false);
             block = block.getNextBlock();

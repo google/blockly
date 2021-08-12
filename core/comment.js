@@ -20,6 +20,7 @@ const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,12 +28,10 @@ const Size = goog.requireType('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
-/* eslint-disable-next-line no-unused-vars */
-const {conditionalBind, Data, unbind} = goog.require('Blockly.browserEvents');
-const {createSvgElement, HTML_NS} = goog.require('Blockly.utils.dom');
-const {inherits} = goog.require('Blockly.utils.object');
-const {register} = goog.require('Blockly.Css');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -70,35 +69,35 @@ const Comment = function(block) {
 
   /**
    * Mouse up event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onMouseUpWrapper_ = null;
 
   /**
    * Wheel event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onWheelWrapper_ = null;
 
   /**
    * Change event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onChangeWrapper_ = null;
 
   /**
    * Input event data.
-   * @type {?Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.onInputWrapper_ = null;
 
   this.createIcon();
 };
-inherits(Comment, Icon);
+object.inherits(Comment, Icon);
 
 /**
  * Draw the comment icon.
@@ -107,13 +106,13 @@ inherits(Comment, Icon);
  */
 Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  createSvgElement(
+  dom.createSvgElement(
       Svg.CIRCLE, {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
       group);
   // Can't use a real '?' text character since different browsers and operating
   // systems render it differently.
   // Body of question mark.
-  createSvgElement(
+  dom.createSvgElement(
       Svg.PATH, {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
@@ -122,7 +121,7 @@ Comment.prototype.drawIcon_ = function(group) {
       },
       group);
   // Dot of question mark.
-  createSvgElement(
+  dom.createSvgElement(
       Svg.RECT, {
         'class': 'blocklyIconSymbol',
         'x': '6.8',
@@ -151,15 +150,15 @@ Comment.prototype.createEditor_ = function() {
    * For non-editable mode see Warning.textToDom_.
    */
 
-  this.foreignObject_ = createSvgElement(
+  this.foreignObject_ = dom.createSvgElement(
       Svg.FOREIGNOBJECT, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH},
       null);
 
-  const body = document.createElementNS(HTML_NS, 'body');
-  body.setAttribute('xmlns', HTML_NS);
+  const body = document.createElementNS(dom.HTML_NS, 'body');
+  body.setAttribute('xmlns', dom.HTML_NS);
   body.className = 'blocklyMinimalBody';
 
-  this.textarea_ = document.createElementNS(HTML_NS, 'textarea');
+  this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea');
   const textarea = this.textarea_;
   textarea.className = 'blocklyCommentTextarea';
   textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
@@ -172,23 +171,25 @@ Comment.prototype.createEditor_ = function() {
   // Ideally this would be hooked to the focus event for the comment.
   // However doing so in Firefox swallows the cursor for unknown reasons.
   // So this is hooked to mouseup instead.  No big deal.
-  this.onMouseUpWrapper_ =
-      conditionalBind(textarea, 'mouseup', this, this.startEdit_, true, true);
+  this.onMouseUpWrapper_ = browserEvents.conditionalBind(
+      textarea, 'mouseup', this, this.startEdit_, true, true);
   // Don't zoom with mousewheel.
-  this.onWheelWrapper_ = conditionalBind(textarea, 'wheel', this, function(e) {
-    e.stopPropagation();
-  });
+  this.onWheelWrapper_ =
+      browserEvents.conditionalBind(textarea, 'wheel', this, function(e) {
+        e.stopPropagation();
+      });
   this.onChangeWrapper_ =
-      conditionalBind(textarea, 'change', this, function(_e) {
+      browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
           Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
         }
       });
-  this.onInputWrapper_ = conditionalBind(textarea, 'input', this, function(_e) {
-    this.model_.text = textarea.value;
-  });
+  this.onInputWrapper_ =
+      browserEvents.conditionalBind(textarea, 'input', this, function(_e) {
+        this.model_.text = textarea.value;
+      });
 
   setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -307,19 +308,19 @@ Comment.prototype.createNonEditableBubble_ = function() {
  */
 Comment.prototype.disposeBubble_ = function() {
   if (this.onMouseUpWrapper_) {
-    unbind(this.onMouseUpWrapper_);
+    browserEvents.unbind(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
   }
   if (this.onWheelWrapper_) {
-    unbind(this.onWheelWrapper_);
+    browserEvents.unbind(this.onWheelWrapper_);
     this.onWheelWrapper_ = null;
   }
   if (this.onChangeWrapper_) {
-    unbind(this.onChangeWrapper_);
+    browserEvents.unbind(this.onChangeWrapper_);
     this.onChangeWrapper_ = null;
   }
   if (this.onInputWrapper_) {
-    unbind(this.onInputWrapper_);
+    browserEvents.unbind(this.onInputWrapper_);
     this.onInputWrapper_ = null;
   }
   this.bubble_.dispose();
@@ -397,7 +398,7 @@ Comment.prototype.dispose = function() {
 /**
  * CSS for block comment.  See css.js for use.
  */
-register([
+Css.register([
   /* eslint-disable indent */
   '.blocklyCommentTextarea {', 'background-color: #fef49c;', 'border: 0;',
   'outline: 0;', 'margin: 0;', 'padding: 3px;', 'resize: none;',

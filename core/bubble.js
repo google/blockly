@@ -21,7 +21,7 @@ const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.require('Blockly.IBubble');
+const IBubble = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Scrollbar = goog.require('Blockly.Scrollbar');

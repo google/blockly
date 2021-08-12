@@ -13,11 +13,11 @@
 goog.module('Blockly.ZoomControls');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
-const IPositionable = goog.require('Blockly.IPositionable');
+/* eslint-disable-next-line no-unused-vars */
+const IPositionable = goog.requireType('Blockly.IPositionable');
 const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
@@ -54,7 +54,7 @@ const ZoomControls = function(workspace) {
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom reset
-   *    button. Opaque data returned from Blockly.bindEventWithChecks_.
+   *    button. Opaque data returned from browserEvents.conditionalBind.
    * @type {?browserEvents.Data}
    * @private
    */
@@ -62,7 +62,7 @@ const ZoomControls = function(workspace) {
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom in button.
-   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * Opaque data returned from browserEvents.conditionalBind.
    * @type {?browserEvents.Data}
    * @private
    */
@@ -70,7 +70,7 @@ const ZoomControls = function(workspace) {
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom out button.
-   * Opaque data returned from Blockly.bindEventWithChecks_.
+   * Opaque data returned from browserEvents.conditionalBind.
    * @type {?browserEvents.Data}
    * @private
    */

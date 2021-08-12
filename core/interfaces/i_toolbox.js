@@ -17,13 +17,13 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
+const IRegistrable = goog.requireType('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
-const {ToolboxInfo} = goog.requireType('Blockly.utils.toolbox');
+const toolbox = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -41,7 +41,7 @@ IToolbox.prototype.init;
 
 /**
  * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!ToolboxInfo} toolboxDef Object holding information
+ * @param {!toolbox.ToolboxInfo} toolboxDef Object holding information
  *     for creating a toolbox.
  */
 IToolbox.prototype.render;

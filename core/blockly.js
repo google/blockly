@@ -17,6 +17,8 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.clipboard');
+goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
@@ -55,7 +57,6 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Connection');
 goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Workspace');
 
@@ -71,60 +72,26 @@ goog.requireType('Blockly.Workspace');
  */
 Blockly.VERSION = 'uncompiled';
 
-/**
- * The main workspace most recently used.
- * Set by Blockly.WorkspaceSvg.prototype.markFocused
- * @type {Blockly.Workspace}
- */
-Blockly.mainWorkspace = null;
+// Add a getter and setter pair for Blockly.mainWorkspace, for legacy reasons.
+Object.defineProperty(Blockly, 'mainWorkspace', {
+  set: function(x) {
+    Blockly.utils.deprecation.warn(
+        'Blockly.mainWorkspace', 'September 2021', 'September 2022');
+    Blockly.common.setMainWorkspace(x);
+  },
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.mainWorkspace', 'September 2021', 'September 2022',
+        'Blockly.getMainWorkspace()');
+    return Blockly.common.getMainWorkspace();
+  }
+});
 
 /**
  * Currently selected block.
  * @type {?Blockly.ICopyable}
  */
 Blockly.selected = null;
-
-/**
- * All of the connections on blocks that are currently being dragged.
- * @type {!Array<!Blockly.Connection>}
- * @package
- */
-Blockly.draggingConnections = [];
-
-/**
- * Contents of the local clipboard.
- * @type {Element}
- * @private
- */
-Blockly.clipboardXml_ = null;
-
-/**
- * Source of the local clipboard.
- * @type {Blockly.WorkspaceSvg}
- * @private
- */
-Blockly.clipboardSource_ = null;
-
-/**
- * Map of types to type counts for the clipboard object and descendants.
- * @type {Object}
- * @private
- */
-Blockly.clipboardTypeCounts_ = null;
-
-/**
- * Cached value for whether 3D is supported.
- * @type {?boolean}
- * @private
- */
-Blockly.cache3dSupported_ = null;
-
-/**
- * Container element to render the WidgetDiv, DropDownDiv and Tooltip.
- * @type {?Element}
- * @package
- */
-Blockly.parentContainer = null;
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -136,9 +103,7 @@ Blockly.svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
   Blockly.utils.deprecation.warn(
-      'Blockly.svgSize',
-      'March 2021',
-      'March 2022',
+      'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
   return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
@@ -195,7 +160,7 @@ Blockly.svgResize = function(workspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.mainWorkspace;
+  var mainWorkspace = Blockly.common.getMainWorkspace();
   if (!mainWorkspace) {
     return;
   }
@@ -220,7 +185,8 @@ Blockly.deleteBlock = function(selected) {
     Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     if (selected.outputConnection) {
-      // Do not attempt to heal rows (https://github.com/google/blockly/issues/4832)
+      // Do not attempt to heal rows
+      // (https://github.com/google/blockly/issues/4832)
       selected.dispose(false, true);
     } else {
       selected.dispose(/* heal */ true, true);
@@ -234,39 +200,14 @@ Blockly.deleteBlock = function(selected) {
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
  */
-Blockly.copy = function(toCopy) {
-  var data = toCopy.toCopyData();
-  if (data) {
-    Blockly.clipboardXml_ = data.xml;
-    Blockly.clipboardSource_ = data.source;
-    Blockly.clipboardTypeCounts_ = data.typeCounts;
-  }
-};
+Blockly.copy = Blockly.clipboard.copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
  */
-Blockly.paste = function() {
-  if (!Blockly.clipboardXml_) {
-    return false;
-  }
-  // Pasting always pastes to the main workspace, even if the copy
-  // started in a flyout workspace.
-  var workspace = Blockly.clipboardSource_;
-  if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace;
-  }
-  if (Blockly.clipboardTypeCounts_ &&
-      workspace.isCapacityAvailable(Blockly.clipboardTypeCounts_)) {
-    Blockly.Events.setGroup(true);
-    workspace.paste(Blockly.clipboardXml_);
-    Blockly.Events.setGroup(false);
-    return true;
-  }
-  return false;
-};
+Blockly.paste = Blockly.clipboard.paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -274,19 +215,7 @@ Blockly.paste = function() {
  *     copied.
  * @package
  */
-Blockly.duplicate = function(toDuplicate) {
-  // Save the clipboard.
-  var clipboardXml = Blockly.clipboardXml_;
-  var clipboardSource = Blockly.clipboardSource_;
-
-  // Create a duplicate via a copy/paste operation.
-  Blockly.copy(toDuplicate);
-  toDuplicate.workspace.paste(Blockly.clipboardXml_);
-
-  // Restore the clipboard.
-  Blockly.clipboardXml_ = clipboardXml;
-  Blockly.clipboardSource_ = clipboardSource;
-};
+Blockly.duplicate = Blockly.clipboard.duplicate;
 
 /**
  * Cancel the native context menu, unless the focus is on an HTML input widget.
@@ -310,7 +239,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
   Blockly.DropDownDiv.hideWithoutAnimation();
 
   var onlyClosePopups = !!opt_onlyClosePopups;
-  var workspace = Blockly.getMainWorkspace();
+  var workspace = Blockly.common.getMainWorkspace();
   var autoHideables = workspace.getComponentManager().getComponents(
       Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(function(autoHideable) {
@@ -324,9 +253,7 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
  * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
  */
-Blockly.getMainWorkspace = function() {
-  return /** @type {!Blockly.Workspace} */ (Blockly.mainWorkspace);
-};
+Blockly.getMainWorkspace = Blockly.common.getMainWorkspace;
 
 /**
  * Wrapper to window.alert() that app developers may override to
@@ -402,9 +329,7 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {
-          init: Blockly.jsonInitFactory_(elem)
-        };
+        Blockly.Blocks[typename] = {init: Blockly.jsonInitFactory_(elem)};
       }
     }
   }
@@ -431,87 +356,13 @@ Blockly.hueToHex = function(hue) {
 };
 
 /**
- * Checks old colour constants are not overwritten by the host application.
- * If a constant is overwritten, it prints a console warning directing the
- * developer to use the equivalent Msg constant.
- * @package
- */
-Blockly.checkBlockColourConstants = function() {
-  Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Blocks', 'logic', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LOGIC_HUE', ['Constants', 'Logic', 'HUE'], 210);
-  Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Blocks', 'loops', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LOOPS_HUE', ['Constants', 'Loops', 'HUE'], 120);
-  Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Blocks', 'math', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'MATH_HUE', ['Constants', 'Math', 'HUE'], 230);
-  Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Blocks', 'texts', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'TEXTS_HUE', ['Constants', 'Text', 'HUE'], 160);
-  Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Blocks', 'lists', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'LISTS_HUE', ['Constants', 'Lists', 'HUE'], 260);
-  Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Blocks', 'colour', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'COLOUR_HUE', ['Constants', 'Colour', 'HUE'], 20);
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Blocks', 'variables', 'HUE'], undefined);
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_HUE', ['Constants', 'Variables', 'HUE'], 330);
-  // Blockly.Blocks.variables_dynamic.HUE never existed.
-  Blockly.checkBlockColourConstant_(
-      'VARIABLES_DYNAMIC_HUE', ['Constants', 'VariablesDynamic', 'HUE'], 310);
-  Blockly.checkBlockColourConstant_(
-      'PROCEDURES_HUE', ['Blocks', 'procedures', 'HUE'], undefined);
-  // Blockly.Constants.Procedures.HUE never existed.
-};
-
-/**
- * Checks for a constant in the Blockly namespace, verifying it is undefined or
- * has the old/original value. Prints a warning if this is not true.
- * @param {string} msgName The Msg constant identifier.
- * @param {!Array<string>} blocklyNamePath The name parts of the tested
- *     constant.
- * @param {number|undefined} expectedValue The expected value of the constant.
- * @private
- */
-Blockly.checkBlockColourConstant_ = function(
-    msgName, blocklyNamePath, expectedValue) {
-  var namePath = 'Blockly';
-  var value = Blockly;
-  for (var i = 0; i < blocklyNamePath.length; ++i) {
-    namePath += '.' + blocklyNamePath[i];
-    if (value) {
-      value = value[blocklyNamePath[i]];
-    }
-  }
-
-  if (value && value !== expectedValue) {
-    var warningPattern = (expectedValue === undefined) ?
-        '%1 has been removed. Use Blockly.Msg["%2"].' :
-        '%1 is deprecated and unused. Override Blockly.Msg["%2"].';
-    var warning = warningPattern.replace('%1', namePath).replace('%2', msgName);
-    console.warn(warning);
-  }
-};
-
-/**
  * Set the parent container.  This is the container element that the WidgetDiv,
  * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
  */
-Blockly.setParentContainer = function(container) {
-  Blockly.parentContainer = container;
-};
+Blockly.setParentContainer = Blockly.common.setParentContainer;
 
 /** Aliases. */
 

@@ -15,7 +15,7 @@ goog.module('Blockly.IASTNodeLocationSvg');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
 
 
 /**

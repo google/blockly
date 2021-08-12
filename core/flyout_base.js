@@ -14,17 +14,19 @@ goog.module('Blockly.Flyout');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.require('Blockly.Block');
+const Block = goog.requireType('Blockly.Block');
+const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 const Events = goog.require('Blockly.Events');
-const FlyoutButton = goog.require('Blockly.FlyoutButton');
+/* eslint-disable-next-line no-unused-vars */
+const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.require('Blockly.IFlyout');
+const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const Options = goog.requireType('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
@@ -38,7 +40,6 @@ const dom = goog.require('Blockly.utils.dom');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
-const {hideChaff} = goog.require('Blockly');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 /** @suppress {extraRequire} */
@@ -659,6 +660,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  * @private
  */
 Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
+  const FlyoutButton = goog.module.get('Blockly.FlyoutButton');
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
@@ -854,7 +856,7 @@ Flyout.prototype.createBlock = function(originalBlock) {
   }
 
   // Close the flyout.
-  hideChaff();
+  Blockly.hideChaff();
 
   const newVariables = Variables.getAddedVariables(
       this.targetWorkspace, variablesBeforeCreation);

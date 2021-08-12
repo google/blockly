@@ -90,7 +90,6 @@ var JSCOMP_ERROR = [
   // 'strictMissingProperties',
   'strictModuleDepCheck',
   // 'strictPrimitiveOperators',
-  // 'stricterMissingRequire',
   'suspiciousCode',
   'typeInvalidation',
   'undefinedNames',

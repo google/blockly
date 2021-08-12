@@ -17,8 +17,8 @@ goog.module.declareLegacyNamespace();
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {inherits} = goog.require('Blockly.utils.object');
-const {replaceMessageReferences} = goog.require('Blockly.utils');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -47,7 +47,7 @@ const FieldLabel = function(opt_value, opt_class, opt_config) {
     this.class_ = opt_class || null;
   }
 };
-inherits(FieldLabel, Field);
+object.inherits(FieldLabel, Field);
 
 /**
  * The default value for this field.
@@ -65,7 +65,7 @@ FieldLabel.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldLabel.fromJson = function(options) {
-  const text = replaceMessageReferences(options['text']);
+  const text = utils.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabel if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);

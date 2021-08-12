@@ -13,7 +13,7 @@
 goog.provide('Blockly.FlyoutMetricsManager');
 goog.provide('Blockly.MetricsManager');
 
-goog.require('Blockly.IMetricsManager');
+goog.requireType('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.toolbox');

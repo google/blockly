@@ -19,13 +19,13 @@ const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
+const IRegistrable = goog.requireType('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const Svg = goog.requireType('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
-const {FlyoutDefinition} = goog.requireType('Blockly.utils.toolbox');
+const toolbox = goog.requireType('Blockly.utils.toolbox');
 
 
 /**
@@ -142,7 +142,7 @@ IFlyout.prototype.hide;
 
 /**
  * Show and populate the flyout.
- * @param {!FlyoutDefinition|string} flyoutDef Contents to
+ * @param {!toolbox.FlyoutDefinition|string} flyoutDef Contents to
  *     display in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */

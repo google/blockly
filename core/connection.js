@@ -17,7 +17,7 @@ goog.module.declareLegacyNamespace();
 const Block = goog.requireType('Blockly.Block');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
+const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */

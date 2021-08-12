@@ -56,14 +56,17 @@ Blockly.thrasos.RenderInfo.prototype.getRenderer = function() {
  * @override
  */
 Blockly.thrasos.RenderInfo.prototype.addElemSpacing_ = function() {
-  var hasExternalInputs = false;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  let hasExternalInputs = false;
+  for (let i = 0; i < this.rows.length; i++) {
+    const row = this.rows[i];
     if (row.hasExternalInput) {
       hasExternalInputs = true;
+      break;
     }
   }
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    var oldElems = row.elements;
+  for (let i = 0; i < this.rows.length; i++) {
+    const row = this.rows[i];
+    const oldElems = row.elements;
     row.elements = [];
     // No spacing needed before the corner on the top row or the bottom row.
     if (row.startsWithElemSpacer()) {
@@ -71,15 +74,15 @@ Blockly.thrasos.RenderInfo.prototype.addElemSpacing_ = function() {
       row.elements.push(new Blockly.blockRendering.InRowSpacer(
           this.constants_, this.getInRowSpacing_(null, oldElems[0])));
     }
-    for (var e = 0; e < oldElems.length - 1; e++) {
+    for (let e = 0; e < oldElems.length - 1; e++) {
       row.elements.push(oldElems[e]);
-      var spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
+      const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
       row.elements.push(
           new Blockly.blockRendering.InRowSpacer(this.constants_, spacing));
     }
     row.elements.push(oldElems[oldElems.length - 1]);
     if (row.endsWithElemSpacer()) {
-      var spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
+      let spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
       if (hasExternalInputs && row.hasDummyInput) {
         spacing += this.constants_.TAB_WIDTH;
       }
@@ -264,7 +267,7 @@ Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return row.yPos + elem.height / 2;
   }
   if (Blockly.blockRendering.Types.isBottomRow(row)) {
-    var baseline = row.yPos + row.height - row.descenderHeight;
+    const baseline = row.yPos + row.height - row.descenderHeight;
     if (Blockly.blockRendering.Types.isNextConnection(elem)) {
       return baseline + elem.height / 2;
     }
@@ -277,9 +280,9 @@ Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return row.capline + elem.height / 2;
   }
 
-  var result = row.yPos;
+  let result = row.yPos;
   if (Blockly.blockRendering.Types.isField(elem) && row.hasStatement) {
-    var offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
+    const offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y +
         elem.height / 2;
     result += offset;
   } else {
@@ -295,9 +298,10 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
-  var widestRowWithConnectedBlocks = 0;
-  var yCursor = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  let widestRowWithConnectedBlocks = 0;
+  let yCursor = 0;
+  for (let i = 0; i < this.rows.length; i++) {
+    const row = this.rows[i];
     row.yPos = yCursor;
     row.xPos = this.startX;
     yCursor += row.height;
@@ -305,11 +309,11 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
     widestRowWithConnectedBlocks =
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
-    var heightWithoutHat = yCursor - this.topRow.ascenderHeight;
+    const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
     if (row == this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
-      var diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
+      const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
       this.bottomRow.height += diff;
       yCursor += diff;
     }

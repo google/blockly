@@ -187,11 +187,10 @@ exports.VAR_LETTER_OPTIONS = VAR_LETTER_OPTIONS;
  * @param {!Workspace} workspace The workspace to be unique in.
  * @return {string} New variable name.
  */
-const generateUniqueName = function(workspace) {
+exports.generateUniqueName = function(workspace) {
   return generateUniqueNameFromOptions(
       VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 };
-exports.generateUniqueName = generateUniqueName;
 
 /**
  * Returns a unique name that is not present in the usedNames array. This
@@ -501,7 +500,7 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
     const ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
-    opt_name = testDeps.generateUniqueName(ws);
+    opt_name = exports.generateUniqueName(ws);
   }
 
   // Create a potential variable if in the flyout.
@@ -542,15 +541,3 @@ const getAddedVariables = function(workspace, originalVariables) {
 };
 /** @package */
 exports.getAddedVariables = getAddedVariables;
-
-const testDeps = {generateUniqueName};
-
-/**
- * Exports functions to allow them to be mocked by unit tests.
- * @return {!Object<!string,!Function>} An array of functions to be mocked.
- */
-const getTestDeps = function() {
-  goog.setTestOnly();
-  return testDeps;
-};
-exports.getTestDeps = getTestDeps;

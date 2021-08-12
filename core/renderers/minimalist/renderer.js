@@ -34,8 +34,7 @@ const object = goog.require('Blockly.utils.object');
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);
 };
-object.inherits(Renderer,
-    BaseRenderer);
+object.inherits(Renderer, BaseRenderer);
 
 /**
  * Create a new instance of the renderer's constant provider.
@@ -68,8 +67,7 @@ Renderer.prototype.makeRenderInfo_ = function(block) {
  * @override
  */
 Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Drawer(block,
-      /** @type {!RenderInfo} */ (info));
+  return new Drawer(block, /** @type {!RenderInfo} */ (info));
 };
 
 blockRendering.register('minimalist', Renderer);

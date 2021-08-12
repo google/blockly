@@ -41,11 +41,9 @@ const object = goog.require('Blockly.utils.object');
  * @extends {BaseMarkerSvg}
  */
 const MarkerSvg = function(workspace, constants, marker) {
-  MarkerSvg.superClass_.constructor.call(
-      this, workspace, constants, marker);
+  MarkerSvg.superClass_.constructor.call(this, workspace, constants, marker);
 };
-object.inherits(MarkerSvg,
-    BaseMarkerSvg);
+object.inherits(MarkerSvg, BaseMarkerSvg);
 
 /**
  * Position and display the marker for an input or an output connection.
@@ -120,7 +118,8 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   <g>
     <rect width="100" height="5">
       <animate attributeType="XML" attributeName="fill" dur="1s"
-        values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
+        values="transparent;transparent;#fff;transparent"
+  repeatCount="indefinite" />
     </rect>
   </g>
   */
@@ -138,9 +137,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
     const blinkProperties = this.getBlinkProperties_();
-    dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerCircle_);
+    dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerCircle_);
   }
 
   return this.markerSvg_;

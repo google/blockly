@@ -10,10 +10,12 @@
  */
 'use strict';
 
-goog.provide('Blockly.zelos.MarkerSvg');
+goog.module('Blockly.zelos.MarkerSvg');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 
 goog.requireType('Blockly.ASTNode');
@@ -33,11 +35,11 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @constructor
  * @extends {Blockly.blockRendering.MarkerSvg}
  */
-Blockly.zelos.MarkerSvg = function(workspace, constants, marker) {
-  Blockly.zelos.MarkerSvg.superClass_.constructor.call(
+const MarkerSvg = function(workspace, constants, marker) {
+  MarkerSvg.superClass_.constructor.call(
       this, workspace, constants, marker);
 };
-Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
+Blockly.utils.object.inherits(MarkerSvg,
     Blockly.blockRendering.MarkerSvg);
 
 /**
@@ -45,7 +47,7 @@ Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
  * @param {!Blockly.ASTNode} curNode The node to draw the marker for.
  * @private
  */
-Blockly.zelos.MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
+MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
   const block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
   const connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
   const offsetInBlock = connection.getOffsetInBlock();
@@ -58,14 +60,14 @@ Blockly.zelos.MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.showWithOutput_ = function(curNode) {
+MarkerSvg.prototype.showWithOutput_ = function(curNode) {
   this.showWithInputOutput_(curNode);
 };
 
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
+MarkerSvg.prototype.showWithInput_ = function(curNode) {
   this.showWithInputOutput_(curNode);
 };
 
@@ -73,7 +75,7 @@ Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
  * Draw a rectangle around the block.
  * @param {!Blockly.ASTNode} curNode The current node of the marker.
  */
-Blockly.zelos.MarkerSvg.prototype.showWithBlock_ = function(curNode) {
+MarkerSvg.prototype.showWithBlock_ = function(curNode) {
   const block = /** @type {!Blockly.BlockSvg} */ (curNode.getLocation());
 
   // Gets the height and width of entire stack.
@@ -91,7 +93,7 @@ Blockly.zelos.MarkerSvg.prototype.showWithBlock_ = function(curNode) {
  * @param {number} y The y position of the circle.
  * @private
  */
-Blockly.zelos.MarkerSvg.prototype.positionCircle_ = function(x, y) {
+MarkerSvg.prototype.positionCircle_ = function(x, y) {
   this.markerCircle_.setAttribute('cx', x);
   this.markerCircle_.setAttribute('cy', y);
   this.currentMarkerSvg = this.markerCircle_;
@@ -100,15 +102,15 @@ Blockly.zelos.MarkerSvg.prototype.positionCircle_ = function(x, y) {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.hide = function() {
-  Blockly.zelos.MarkerSvg.superClass_.hide.call(this);
+MarkerSvg.prototype.hide = function() {
+  MarkerSvg.superClass_.hide.call(this);
   this.markerCircle_.style.display = 'none';
 };
 
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
+MarkerSvg.prototype.createDomInternal_ = function() {
   /* This markup will be generated and added to the .svgGroup_:
   <g>
     <rect width="100" height="5">
@@ -118,7 +120,7 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
   </g>
   */
 
-  Blockly.zelos.MarkerSvg.superClass_.createDomInternal_.call(this);
+  MarkerSvg.superClass_.createDomInternal_.call(this);
 
   this.markerCircle_ = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.CIRCLE, {
@@ -142,8 +144,8 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 /**
  * @override
  */
-Blockly.zelos.MarkerSvg.prototype.applyColour_ = function(curNode) {
-  Blockly.zelos.MarkerSvg.superClass_.applyColour_.call(this, curNode);
+MarkerSvg.prototype.applyColour_ = function(curNode) {
+  MarkerSvg.superClass_.applyColour_.call(this, curNode);
 
   this.markerCircle_.setAttribute('fill', this.colour_);
   this.markerCircle_.setAttribute('stroke', this.colour_);
@@ -153,3 +155,5 @@ Blockly.zelos.MarkerSvg.prototype.applyColour_ = function(curNode) {
     this.markerCircle_.firstChild.setAttribute('values', values);
   }
 };
+
+exports = MarkerSvg;

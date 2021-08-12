@@ -12,12 +12,16 @@
 goog.module('Blockly.minimalist.Renderer');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.Renderer');
-goog.require('Blockly.minimalist.ConstantProvider');
-goog.require('Blockly.minimalist.Drawer');
-goog.require('Blockly.minimalist.RenderInfo');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
+const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const ConstantProvider = goog.require('Blockly.minimalist.ConstantProvider');
+const Drawer = goog.require('Blockly.minimalist.Drawer');
+const RenderInfo = goog.require('Blockly.minimalist.RenderInfo');
+const blockRendering = goog.require('Blockly.blockRendering');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -25,49 +29,49 @@ goog.require('Blockly.utils.object');
  * @param {string} name The renderer name.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Renderer}
+ * @extends {BaseRenderer}
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Renderer,
-    Blockly.blockRendering.Renderer);
+object.inherits(Renderer,
+    BaseRenderer);
 
 /**
  * Create a new instance of the renderer's constant provider.
- * @return {!Blockly.minimalist.ConstantProvider} The constant provider.
+ * @return {!ConstantProvider} The constant provider.
  * @protected
  * @override
  */
 Renderer.prototype.makeConstants_ = function() {
-  return new Blockly.minimalist.ConstantProvider();
+  return new ConstantProvider();
 };
 
 /**
  * Create a new instance of the renderer's render info object.
- * @param {!Blockly.BlockSvg} block The block to measure.
- * @return {!Blockly.minimalist.RenderInfo} The render info object.
+ * @param {!BlockSvg} block The block to measure.
+ * @return {!RenderInfo} The render info object.
  * @protected
  * @override
  */
 Renderer.prototype.makeRenderInfo_ = function(block) {
-  return new Blockly.minimalist.RenderInfo(this, block);
+  return new RenderInfo(this, block);
 };
 
 /**
  * Create a new instance of the renderer's drawer.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
+ * @param {!BlockSvg} block The block to render.
+ * @param {!BaseRenderInfo} info An object containing all
  *   information needed to render this block.
- * @return {!Blockly.minimalist.Drawer} The drawer.
+ * @return {!Drawer} The drawer.
  * @protected
  * @override
  */
 Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.minimalist.Drawer(block,
-      /** @type {!Blockly.minimalist.RenderInfo} */ (info));
+  return new Drawer(block,
+      /** @type {!RenderInfo} */ (info));
 };
 
-Blockly.blockRendering.register('minimalist', Renderer);
+blockRendering.register('minimalist', Renderer);
 
 exports = Renderer;

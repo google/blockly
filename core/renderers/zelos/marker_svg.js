@@ -46,9 +46,9 @@ Blockly.utils.object.inherits(Blockly.zelos.MarkerSvg,
  * @private
  */
 Blockly.zelos.MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
-  var block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
-  var connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
-  var offsetInBlock = connection.getOffsetInBlock();
+  const block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
+  const connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
+  const offsetInBlock = connection.getOffsetInBlock();
 
   this.positionCircle_(offsetInBlock.x, offsetInBlock.y);
   this.setParent_(block);
@@ -74,10 +74,10 @@ Blockly.zelos.MarkerSvg.prototype.showWithInput_ = function(curNode) {
  * @param {!Blockly.ASTNode} curNode The current node of the marker.
  */
 Blockly.zelos.MarkerSvg.prototype.showWithBlock_ = function(curNode) {
-  var block = /** @type {!Blockly.BlockSvg} */ (curNode.getLocation());
+  const block = /** @type {!Blockly.BlockSvg} */ (curNode.getLocation());
 
   // Gets the height and width of entire stack.
-  var heightWidth = block.getHeightWidth();
+  const heightWidth = block.getHeightWidth();
 
   // Add padding so that being on a stack looks different than being on a block.
   this.positionRect_(0, 0, heightWidth.width, heightWidth.height);
@@ -130,7 +130,7 @@ Blockly.zelos.MarkerSvg.prototype.createDomInternal_ = function() {
 
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
-    var blinkProperties = this.getBlinkProperties_();
+    const blinkProperties = this.getBlinkProperties_();
     Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.ANIMATE, blinkProperties,
         this.markerCircle_);
@@ -149,7 +149,7 @@ Blockly.zelos.MarkerSvg.prototype.applyColour_ = function(curNode) {
   this.markerCircle_.setAttribute('stroke', this.colour_);
 
   if (this.isCursor()) {
-    var values = this.colour_ + ';transparent;transparent;';
+    const values = this.colour_ + ';transparent;transparent;';
     this.markerCircle_.firstChild.setAttribute('values', values);
   }
 };

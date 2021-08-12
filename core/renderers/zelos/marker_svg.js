@@ -13,43 +13,48 @@
 goog.module('Blockly.zelos.MarkerSvg');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.MarkerSvg');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.ASTNode');
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.Connection');
-goog.requireType('Blockly.Marker');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const ASTNode = goog.requireType('Blockly.ASTNode');
+const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Connection = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Marker = goog.requireType('Blockly.Marker');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * Class to draw a marker.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace the marker belongs to.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The constants for
+ * @param {!WorkspaceSvg} workspace The workspace the marker belongs to.
+ * @param {!ConstantProvider} constants The constants for
  *     the renderer.
- * @param {!Blockly.Marker} marker The marker to draw.
+ * @param {!Marker} marker The marker to draw.
  * @constructor
- * @extends {Blockly.blockRendering.MarkerSvg}
+ * @extends {BaseMarkerSvg}
  */
 const MarkerSvg = function(workspace, constants, marker) {
   MarkerSvg.superClass_.constructor.call(
       this, workspace, constants, marker);
 };
-Blockly.utils.object.inherits(MarkerSvg,
-    Blockly.blockRendering.MarkerSvg);
+object.inherits(MarkerSvg,
+    BaseMarkerSvg);
 
 /**
  * Position and display the marker for an input or an output connection.
- * @param {!Blockly.ASTNode} curNode The node to draw the marker for.
+ * @param {!ASTNode} curNode The node to draw the marker for.
  * @private
  */
 MarkerSvg.prototype.showWithInputOutput_ = function(curNode) {
-  const block = /** @type {!Blockly.BlockSvg} */ (curNode.getSourceBlock());
-  const connection = /** @type {!Blockly.Connection} */ (curNode.getLocation());
+  const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
+  const connection = /** @type {!Connection} */ (curNode.getLocation());
   const offsetInBlock = connection.getOffsetInBlock();
 
   this.positionCircle_(offsetInBlock.x, offsetInBlock.y);
@@ -73,10 +78,10 @@ MarkerSvg.prototype.showWithInput_ = function(curNode) {
 
 /**
  * Draw a rectangle around the block.
- * @param {!Blockly.ASTNode} curNode The current node of the marker.
+ * @param {!ASTNode} curNode The current node of the marker.
  */
 MarkerSvg.prototype.showWithBlock_ = function(curNode) {
-  const block = /** @type {!Blockly.BlockSvg} */ (curNode.getLocation());
+  const block = /** @type {!BlockSvg} */ (curNode.getLocation());
 
   // Gets the height and width of entire stack.
   const heightWidth = block.getHeightWidth();
@@ -122,8 +127,8 @@ MarkerSvg.prototype.createDomInternal_ = function() {
 
   MarkerSvg.superClass_.createDomInternal_.call(this);
 
-  this.markerCircle_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.CIRCLE, {
+  this.markerCircle_ = dom.createSvgElement(
+      Svg.CIRCLE, {
         'r': this.constants_.CURSOR_RADIUS,
         'style': 'display: none',
         'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
@@ -133,8 +138,8 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   // Markers and stack cursors don't blink.
   if (this.isCursor()) {
     const blinkProperties = this.getBlinkProperties_();
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.ANIMATE, blinkProperties,
+    dom.createSvgElement(
+        Svg.ANIMATE, blinkProperties,
         this.markerCircle_);
   }
 

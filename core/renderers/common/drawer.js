@@ -26,7 +26,7 @@ const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
 const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
-const Row = goog.require('Blockly.blockRendering.Row');
+const Row = goog.requireType('Blockly.blockRendering.Row');
 const Types = goog.require('Blockly.blockRendering.Types');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 
@@ -73,7 +73,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     this.block_.pathObject.flipRTL();
   }
-  if (Blockly.blockRendering.useDebugger) {
+  if (Blockly.blockRendering.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();

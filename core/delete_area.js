@@ -18,10 +18,10 @@ goog.module.declareLegacyNamespace();
 const BlockSvg = goog.require('Blockly.BlockSvg');
 const DragTarget = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.require('Blockly.IDeleteArea');
+const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
-const {inherits} = goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
 
 /**
  * Abstract class for a component that can delete a block or bubble that is
@@ -42,7 +42,7 @@ const DeleteArea = function() {
    */
   this.wouldDelete_ = false;
 };
-inherits(DeleteArea, DragTarget);
+object.inherits(DeleteArea, DragTarget);
 
 /**
  * Returns whether the provided block or bubble would be deleted if dropped on

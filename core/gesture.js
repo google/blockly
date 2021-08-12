@@ -20,8 +20,8 @@ goog.module.declareLegacyNamespace();
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
 const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
@@ -31,8 +31,8 @@ const IBubble = goog.requireType('Blockly.IBubble');
 const IFlyout = goog.requireType('Blockly.IFlyout');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.require('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
@@ -113,7 +113,7 @@ const Gesture = function(e, creatorWorkspace) {
   /**
    * The workspace that the gesture started on.  There may be multiple
    * workspaces on a page; this is more accurate than using
-   * Blockly.getMainWorkspace().
+   * Blockly.common.getMainWorkspace().
    * @type {WorkspaceSvg}
    * @protected
    */

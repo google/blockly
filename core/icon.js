@@ -22,7 +22,7 @@ const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
-const {getRelativeXY, isRightButton} = goog.require('Blockly.utils');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -135,7 +135,7 @@ Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !isRightButton(e)) {
+  if (!this.block_.isInFlyout && !utils.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };
@@ -167,7 +167,7 @@ Icon.prototype.setIconLocation = function(xy) {
 Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   const blockXY = this.block_.getRelativeToSurfaceXY();
-  const iconXY = getRelativeXY(
+  const iconXY = utils.getRelativeXY(
       /** @type {!SVGElement} */ (this.iconGroup_));
   const newXY = new Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,

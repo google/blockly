@@ -10,12 +10,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.ThemeChange');
+goog.module('Blockly.Events.ThemeChange');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const Events = goog.require('Blockly.Events');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
@@ -23,11 +24,11 @@ goog.require('Blockly.utils.object');
  * @param {string=} opt_themeName The theme name. Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    event. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
  */
-Blockly.Events.ThemeChange = function(opt_themeName, opt_workspaceId) {
-  Blockly.Events.ThemeChange.superClass_.constructor.call(this, opt_workspaceId);
+const ThemeChange = function(opt_themeName, opt_workspaceId) {
+  ThemeChange.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * The theme name.
@@ -35,20 +36,20 @@ Blockly.Events.ThemeChange = function(opt_themeName, opt_workspaceId) {
    */
   this.themeName = opt_themeName;
 };
-Blockly.utils.object.inherits(Blockly.Events.ThemeChange, Blockly.Events.UiBase);
+object.inherits(ThemeChange, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.ThemeChange.prototype.type = Blockly.Events.THEME_CHANGE;
+ThemeChange.prototype.type = Events.THEME_CHANGE;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.ThemeChange.prototype.toJson = function() {
-  var json = Blockly.Events.ThemeChange.superClass_.toJson.call(this);
+ThemeChange.prototype.toJson = function() {
+  const json = ThemeChange.superClass_.toJson.call(this);
   json['themeName'] = this.themeName;
   return json;
 };
@@ -57,10 +58,11 @@ Blockly.Events.ThemeChange.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.ThemeChange.prototype.fromJson = function(json) {
-  Blockly.Events.ThemeChange.superClass_.fromJson.call(this, json);
+ThemeChange.prototype.fromJson = function(json) {
+  ThemeChange.superClass_.fromJson.call(this, json);
   this.themeName = json['themeName'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.THEME_CHANGE, Blockly.Events.ThemeChange);
+registry.register(registry.Type.EVENT, Events.THEME_CHANGE, ThemeChange);
+
+exports = ThemeChange;

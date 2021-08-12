@@ -183,7 +183,6 @@ suite('Text Input Fields', function() {
         if (this.stub) {
           this.stub.restore();
         }
-        Blockly.WidgetDiv.testOnly_setDiv(null);
       });
       test('Default', function() {
         var field = new Blockly.FieldTextInput('test');

@@ -56,7 +56,7 @@ let themeClassName = '';
 
 /**
  * The HTML container for popup overlays (e.g. editor widgets).
- * @type {!Element}
+ * @type {?Element}
  */
 let DIV;
 /** @deprecated September 2021 */
@@ -64,7 +64,7 @@ exports.DIV = DIV;
 
 /**
  * Returns the HTML container for editor widgets.
- * @return {!Element} The editor widget container.
+ * @return {?Element} The editor widget container.
  */
 const getDiv = function() {
   return DIV;

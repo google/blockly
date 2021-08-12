@@ -30,6 +30,7 @@ goog.module.declareLegacyNamespace();
 const startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) == 0;
 };
+exports.startsWith = startsWith;
 
 /**
  * Given an array of strings, return the length of the shortest one.
@@ -46,6 +47,7 @@ const shortestStringLength = function(array) {
       })
       .length;
 };
+exports.shortestStringLength = shortestStringLength;
 
 /**
  * Given an array of strings, return the length of the common prefix.
@@ -81,6 +83,7 @@ const commonWordPrefix = function(array, opt_shortest) {
   }
   return max;
 };
+exports.commonWordPrefix = commonWordPrefix;
 
 /**
  * Given an array of strings, return the length of the common suffix.
@@ -116,6 +119,7 @@ const commonWordSuffix = function(array, opt_shortest) {
   }
   return max;
 };
+exports.commonWordSuffix = commonWordSuffix;
 
 /**
  * Wrap text to the specified width.
@@ -130,13 +134,13 @@ const wrap = function(text, limit) {
   }
   return lines.join('\n');
 };
+exports.wrap = wrap;
 
 /**
  * Wrap single line of text to the specified width.
  * @param {string} text Text to wrap.
  * @param {number} limit Width to wrap each line.
  * @return {string} Wrapped text.
- * @private
  */
 const wrapLine = function(text, limit) {
   if (text.length <= limit) {
@@ -187,7 +191,6 @@ const wrapLine = function(text, limit) {
  * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @param {number} limit Width to wrap each line.
  * @return {number} Larger the better.
- * @private
  */
 const wrapScore = function(words, wordBreaks, limit) {
   // If this function becomes a performance liability, add caching.
@@ -240,7 +243,6 @@ const wrapScore = function(words, wordBreaks, limit) {
  * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @param {number} limit Width to wrap each line.
  * @return {!Array<boolean>} New array of optimal line breaks.
- * @private
  */
 const wrapMutate = function(words, wordBreaks, limit) {
   let bestScore = wrapScore(words, wordBreaks, limit);
@@ -272,7 +274,6 @@ const wrapMutate = function(words, wordBreaks, limit) {
  * @param {!Array<string>} words Array of each word.
  * @param {!Array<boolean>} wordBreaks Array of line breaks.
  * @return {string} Plain text.
- * @private
  */
 const wrapToText = function(words, wordBreaks) {
   const text = [];
@@ -283,12 +284,4 @@ const wrapToText = function(words, wordBreaks) {
     }
   }
   return text.join('');
-};
-
-exports = {
-  startsWith,
-  shortestStringLength,
-  commonWordPrefix,
-  commonWordSuffix,
-  wrap,
 };

@@ -64,7 +64,8 @@ const commonWordPrefix = function(array, opt_shortest) {
   }
   let wordPrefix = 0;
   const max = opt_shortest || shortestStringLength(array);
-  for (var len = 0; len < max; len++) {
+  let len;
+  for (len = 0; len < max; len++) {
     const letter = array[0][len];
     for (let i = 1; i < array.length; i++) {
       if (letter != array[i][len]) {
@@ -100,7 +101,8 @@ const commonWordSuffix = function(array, opt_shortest) {
   }
   let wordPrefix = 0;
   const max = opt_shortest || shortestStringLength(array);
-  for (var len = 0; len < max; len++) {
+  let len;
+  for (len = 0; len < max; len++) {
     const letter = array[0].substr(-len - 1, 1);
     for (let i = 1; i < array.length; i++) {
       if (letter != array[i].substr(-len - 1, 1)) {

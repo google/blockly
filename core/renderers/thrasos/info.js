@@ -11,8 +11,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.thrasos');
-goog.provide('Blockly.thrasos.RenderInfo');
+goog.module('Blockly.thrasos.RenderInfo');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.InRowSpacer');
 goog.require('Blockly.blockRendering.RenderInfo');
@@ -37,10 +37,10 @@ goog.requireType('Blockly.thrasos.Renderer');
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.thrasos.RenderInfo = function(renderer, block) {
-  Blockly.thrasos.RenderInfo.superClass_.constructor.call(this, renderer, block);
+const RenderInfo = function(renderer, block) {
+  RenderInfo.superClass_.constructor.call(this, renderer, block);
 };
-Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
+Blockly.utils.object.inherits(RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
 /**
@@ -48,14 +48,14 @@ Blockly.utils.object.inherits(Blockly.thrasos.RenderInfo,
  * @return {!Blockly.thrasos.Renderer} The block renderer in use.
  * @package
  */
-Blockly.thrasos.RenderInfo.prototype.getRenderer = function() {
+RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.thrasos.Renderer} */ (this.renderer_);
 };
 
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.addElemSpacing_ = function() {
+RenderInfo.prototype.addElemSpacing_ = function() {
   let hasExternalInputs = false;
   for (let i = 0; i < this.rows.length; i++) {
     const row = this.rows[i];
@@ -96,7 +96,7 @@ Blockly.thrasos.RenderInfo.prototype.addElemSpacing_ = function() {
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev) {
     // Between an editable field and the beginning of the row.
     if (next && Blockly.blockRendering.Types.isField(next) &&
@@ -232,7 +232,7 @@ Blockly.thrasos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.getSpacerRowHeight_ = function(
+RenderInfo.prototype.getSpacerRowHeight_ = function(
     prev, next) {
   // If we have an empty block add a spacer to increase the height.
   if (Blockly.blockRendering.Types.isTopRow(prev) &&
@@ -262,7 +262,7 @@ Blockly.thrasos.RenderInfo.prototype.getSpacerRowHeight_ = function(
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
   if (Blockly.blockRendering.Types.isSpacer(elem)) {
     return row.yPos + elem.height / 2;
   }
@@ -294,7 +294,7 @@ Blockly.thrasos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
 /**
  * @override
  */
-Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
+RenderInfo.prototype.finalize_ = function() {
   // Performance note: this could be combined with the draw pass, if the time
   // that this takes is excessive.  But it shouldn't be, because it only
   // accesses and sets properties that already exist on the objects.
@@ -333,3 +333,5 @@ Blockly.thrasos.RenderInfo.prototype.finalize_ = function() {
   this.height = yCursor;
   this.startY = this.topRow.capline;
 };
+
+exports = RenderInfo;

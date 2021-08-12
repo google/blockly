@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.thrasos.Renderer');
+goog.module('Blockly.thrasos.Renderer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
@@ -27,10 +28,10 @@ goog.requireType('Blockly.BlockSvg');
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.thrasos.Renderer = function(name) {
-  Blockly.thrasos.Renderer.superClass_.constructor.call(this, name);
+const Renderer = function(name) {
+  Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
+Blockly.utils.object.inherits(Renderer,
     Blockly.blockRendering.Renderer);
 
 /**
@@ -40,9 +41,11 @@ Blockly.utils.object.inherits(Blockly.thrasos.Renderer,
  * @protected
  * @override
  */
-Blockly.thrasos.Renderer.prototype.makeRenderInfo_ = function(block) {
+Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.thrasos.RenderInfo(this, block);
 };
 
 
-Blockly.blockRendering.register('thrasos', Blockly.thrasos.Renderer);
+Blockly.blockRendering.register('thrasos', Renderer);
+
+exports = Renderer;

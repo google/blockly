@@ -1334,9 +1334,10 @@ Block.prototype.isEnabled = function() {
  */
 Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
-        this, 'disabled', null, this.disabled, !enabled));
+    const oldValue = this.disabled;
     this.disabled = !enabled;
+    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+        this, 'disabled', null, oldValue, !enabled));
   }
 };
 

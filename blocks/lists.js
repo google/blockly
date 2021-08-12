@@ -131,6 +131,7 @@ Blockly.Blocks['lists_create_with'] = {
   },
   /**
    * Create XML to represent list inputs.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -141,11 +142,29 @@ Blockly.Blocks['lists_create_with'] = {
   },
   /**
    * Parse XML to restore the list inputs.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{itemCount: number}} The state of this block, ie the item count.
+   */
+  saveExtraState: function() {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the item count.
+   */
+  loadExtraState: function(state) {
+    this.itemCount_ = state['itemCount'];
     this.updateShape_();
   },
   /**
@@ -424,6 +443,12 @@ Blockly.Blocks['lists_getIndex'] = {
     var isAt = (xmlElement.getAttribute('at') != 'false');
     this.updateAt_(isAt);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Switch between a value block and a statement block.
    * @param {boolean} newStatement True if the block should be a statement.
@@ -584,6 +609,12 @@ Blockly.Blocks['lists_setIndex'] = {
     var isAt = (xmlElement.getAttribute('at') != 'false');
     this.updateAt_(isAt);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Create or delete an input for the numeric index.
    * @param {boolean} isAt True if the input should exist.
@@ -684,6 +715,12 @@ Blockly.Blocks['lists_getSublist'] = {
     this.updateAt_(1, isAt1);
     this.updateAt_(2, isAt2);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Create or delete an input for a numeric index.
    * This block has two such inputs, independent of each other.
@@ -857,5 +894,10 @@ Blockly.Blocks['lists_split'] = {
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('mode'));
-  }
+  },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };

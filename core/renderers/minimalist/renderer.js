@@ -9,7 +9,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist.Renderer');
+goog.module('Blockly.minimalist.Renderer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
@@ -26,10 +27,10 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Renderer}
  */
-Blockly.minimalist.Renderer = function(name) {
-  Blockly.minimalist.Renderer.superClass_.constructor.call(this, name);
+const Renderer = function(name) {
+  Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
+Blockly.utils.object.inherits(Renderer,
     Blockly.blockRendering.Renderer);
 
 /**
@@ -38,7 +39,7 @@ Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
  * @protected
  * @override
  */
-Blockly.minimalist.Renderer.prototype.makeConstants_ = function() {
+Renderer.prototype.makeConstants_ = function() {
   return new Blockly.minimalist.ConstantProvider();
 };
 
@@ -49,7 +50,7 @@ Blockly.minimalist.Renderer.prototype.makeConstants_ = function() {
  * @protected
  * @override
  */
-Blockly.minimalist.Renderer.prototype.makeRenderInfo_ = function(block) {
+Renderer.prototype.makeRenderInfo_ = function(block) {
   return new Blockly.minimalist.RenderInfo(this, block);
 };
 
@@ -62,9 +63,11 @@ Blockly.minimalist.Renderer.prototype.makeRenderInfo_ = function(block) {
  * @protected
  * @override
  */
-Blockly.minimalist.Renderer.prototype.makeDrawer_ = function(block, info) {
+Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Blockly.minimalist.Drawer(block,
       /** @type {!Blockly.minimalist.RenderInfo} */ (info));
 };
 
-Blockly.blockRendering.register('minimalist', Blockly.minimalist.Renderer);
+Blockly.blockRendering.register('minimalist', Renderer);
+
+exports = Renderer;

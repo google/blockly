@@ -1313,6 +1313,30 @@ Serializer.Connections.testSuites = [
 ];
 
 Serializer.Mutations = new SerializerTestSuite('Mutations');
+Serializer.Mutations.ListGetIndex = new SerializerTestCase('ListGetIndex',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_getIndex" id="id" x="42" y="42">' +
+    '<mutation statement="true" at="false"></mutation>' +
+    '<field name="MODE">REMOVE</field>' +
+    '<field name="WHERE">LAST</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListSetIndex = new SerializerTestCase('ListSetIndex',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_setIndex" id="id" x="42" y="42">' +
+    '<mutation at="false"></mutation>' +
+    '<field name="MODE">SET</field>' +
+    '<field name="WHERE">LAST</field>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.ListGetSublist = new SerializerTestCase('ListGetSublist',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="lists_getSublist" id="id" x="42" y="42">' +
+    '<mutation at1="false" at2="false"></mutation>' +
+    '<field name="WHERE1">FIRST</field>' +
+    '<field name="WHERE2">LAST</field>' +
+    '</block>' +
+    '</xml>');
 Serializer.Mutations.MathNumberProperty = new SerializerTestCase(
     'MathNumberProperty',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -1371,6 +1395,9 @@ Serializer.Mutations.TextPrompt = new SerializerTestCase(
     '</block>' +
     '</xml>');
 Serializer.Mutations.testCases = [
+  Serializer.Mutations.ListGetIndex,
+  Serializer.Mutations.ListSetIndex,
+  Serializer.Mutations.ListGetSublist,
   Serializer.Mutations.MathNumberProperty,
   Serializer.Mutations.MathOnList,
   Serializer.Mutations.TextJoin,
@@ -1621,10 +1648,45 @@ Serializer.Mutations.Procedure.NoStatements = new SerializerTestCase(
     '<field name="NAME">do something</field>' +
     '</block>' +
     '</xml>');
+Serializer.Mutations.Procedure.IfReturn = new SerializerTestCase(
+    'IfReturn',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<block type="procedures_defnoreturn" id="id" x="42" y="42">' +
+    '<field name="NAME">do something</field>' +
+    '<statement name="STACK">' +
+    '<block type="procedures_ifreturn" id="id2">' +
+    '<mutation value="0"></mutation>' +
+    '</block>' +
+    '</statement>' +
+    '</block>' +
+    '</xml>');
+Serializer.Mutations.Procedure.Caller = new SerializerTestCase(
+    'Caller',
+    '<xml xmlns="https://developers.google.com/blockly/xml">' +
+    '<variables>' +
+    '<variable id="aaaaaaaaaaaaaaaaaaaa">x</variable>' +
+    '<variable id="bbbbbbbbbbbbbbbbbbbb">y</variable>' +
+    '</variables>' +
+    '<block type="procedures_defreturn" id="id2*****************" x="42" y="42">' +
+    '<mutation>' +
+    '<arg name="x" varid="aaaaaaaaaaaaaaaaaaaa"></arg>' +
+    '<arg name="y" varid="bbbbbbbbbbbbbbbbbbbb"></arg>' +
+    '</mutation>' +
+    '<field name="NAME">do something</field>' +
+    '</block>' +
+    '<block type="procedures_callreturn" id="id******************" x="52" y="52">' +
+    '<mutation name="do something">' +
+    '<arg name="x"></arg>' +
+    '<arg name="y"></arg>' +
+    '</mutation>' +
+    '</block>' +
+    '</xml>');
 Serializer.Mutations.Procedure.testCases = [
   Serializer.Mutations.Procedure.NoMutation,
   Serializer.Mutations.Procedure.Variables,
   Serializer.Mutations.Procedure.NoStatements,
+  Serializer.Mutations.Procedure.IfReturn,
+  Serializer.Mutations.Procedure.Caller,
 ];
 
 Serializer.Mutations.Procedure.Names = new SerializerTestSuite('Names');
@@ -1773,5 +1835,4 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 
 runSerializerTestSuite(null, null, Serializer);
 Serializer.Icons.skip = true;
-Serializer.Mutations.skip = true;
 runSerializerTestSuite(state => state, state => state, Serializer);

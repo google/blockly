@@ -154,7 +154,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return {{params: (!Array<{name: string, id: string}>|undefined),
+   * @return {?{params: (!Array<{name: string, id: string}>|undefined),
    *     hasStatements: (boolean|undefined)}} The state of this block, eg the
    *     parameters and statements.
    */
@@ -198,7 +198,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
     this.updateParams_();
     Blockly.Procedures.mutateCallers(this);
-    this.setStatements_(state['hasStatements'] === undefined ? true : false);
+    this.setStatements_(state['hasStatements'] === false ? false : true);
   },
   /**
    * Populate the mutator's dialog with this block's components.
@@ -863,8 +863,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return {{itemCount: number}} The state of this block, ie the params and
-   *     procedure name.
+   * @return {{name: string, params:(!Array<string>|undefined)}} The state of
+   *     this block, ie the params and procedure name.
    */
   saveExtraState: function() {
     var state = Object.create(null);

@@ -333,7 +333,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Returns the state of this block as a JSON serializable object.
-   * @return {{elseIfCount: (number|undefined), haseElse: (boolean|undefined)}}
+   * @return {?{elseIfCount: (number|undefined), haseElse: (boolean|undefined)}}
    *     The state of this block, ie the else if count and else state.
    */
   saveExtraState: function() {

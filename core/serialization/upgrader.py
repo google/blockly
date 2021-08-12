@@ -6,13 +6,10 @@
 
 
 """Upgrades blocks and fields to be compatible with JSO serialization.
-
 This is a command line script that walks over all of the files in a given
 directory, and adds default implementations of JSO serialization hooks if it
 detects existing XML hooks.
-
   Typical usage examples:
-
   python upgrader.py         : Walks over the files in the pwd
   python upgrader.py ./dir   : Walks over all of the files in the dir directory
 """
@@ -124,7 +121,6 @@ from_xml_pattern = regex.compile(
 
 def insert_block_save(contents: str, match: Match) -> str:
   """Inserts a default implementation of saveExtraState after the match.
-
   Args:
     contents:
       A string containing the contents of the file being modified.
@@ -161,7 +157,7 @@ def add_block_saves(contents:str) -> str:
   Args:
     contents:
       A string containing the contents of the file being modified.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -180,7 +176,7 @@ def insert_block_load(contents: str, match: Match) -> str:
       A string containing the contents of the file being modified.
     match:
       The regex match object for the domToMutation function.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -206,7 +202,7 @@ def insert_block_load(contents: str, match: Match) -> str:
   return (
     f'{contents[0:index]}'
     f'\n{pre}loadExtraState{suf}{{'
-    f'\n{indent}  return this.domToMutation(Blockly.Xml.textToDom(state));'
+    f'\n{indent}  this.domToMutation(Blockly.Xml.textToDom(state));'
     f'\n{indent}}}{comma}'
     f'{contents[index:len(contents)]}')
 
@@ -220,7 +216,7 @@ def add_block_loads(contents:str) -> str:
   Args:
     contents:
       A string containing the contents of the file being modified.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -239,7 +235,7 @@ def insert_field_save(contents:str, match: Match) -> str:
       A string containing the contents of the file being modified.
     match:
       The regex match object for the toXml function.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -275,7 +271,7 @@ def add_field_saves(contents:str) -> str:
   Args:
     contents:
       A string containing the contents of the file being modified.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -294,7 +290,7 @@ def insert_field_load(contents: str, match: Match) -> str:
       A string containing the contents of the file being modified.
     match:
       The regex match object for the fromXml function.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -328,7 +324,7 @@ def add_field_loads(contents: str) -> str:
   Args:
     contents:
       A string containing the contents of the file being modified.
-    
+
   Returns:
     A string containing the modified contents of the file.
   """
@@ -343,7 +339,7 @@ path = sys.argv[1] if len(sys.argv) > 1 else './'
 
 files = []
 for (dir_path, dir_names, file_names) in walk(path):
-  files.extend(file_names)
+  files.extend([f'{dir_path}/{name}' for name in file_names])
 
 for file_name in files:
   with open(file_name, 'r+') as f:

@@ -114,15 +114,16 @@ MarkerSvg.prototype.hide = function() {
  * @override
  */
 MarkerSvg.prototype.createDomInternal_ = function() {
+  /* clang-format off */
   /* This markup will be generated and added to the .svgGroup_:
   <g>
     <rect width="100" height="5">
       <animate attributeType="XML" attributeName="fill" dur="1s"
-        values="transparent;transparent;#fff;transparent"
-  repeatCount="indefinite" />
+        values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
     </rect>
   </g>
   */
+  /* clang-format on */
 
   MarkerSvg.superClass_.createDomInternal_.call(this);
 

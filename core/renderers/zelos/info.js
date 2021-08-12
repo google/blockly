@@ -88,8 +88,8 @@ const RenderInfo = function(renderer, block) {
    * An object with rendering information about the right connection shape.
    * @type {RightConnectionShape}
    */
-  this.rightSide = this.outputConnection ?
-      new RightConnectionShape(this.constants_) : null;
+  this.rightSide =
+      this.outputConnection ? new RightConnectionShape(this.constants_) : null;
 };
 object.inherits(RenderInfo, BaseRenderInfo);
 
@@ -119,8 +119,7 @@ RenderInfo.prototype.measure = function() {
 /**
  * @override
  */
-RenderInfo.prototype.shouldStartNewRow_ = function(input,
-    lastInput) {
+RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
   if (!lastInput) {
@@ -132,8 +131,7 @@ RenderInfo.prototype.shouldStartNewRow_ = function(input,
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == inputTypes.VALUE ||
-      input.type == inputTypes.DUMMY) {
+  if (input.type == inputTypes.VALUE || input.type == inputTypes.DUMMY) {
     return !this.isInline || this.isMultiRow;
   }
   return false;
@@ -148,8 +146,7 @@ RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
     const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
     return this.width - this.startX - rightCornerWidth;
   }
-  return RenderInfo.superClass_.getDesiredRowWidth_.call(this,
-      row);
+  return RenderInfo.superClass_.getDesiredRowWidth_.call(this, row);
 };
 
 /**
@@ -172,14 +169,12 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
   // Spacing between a rounded corner and a previous or next connection.
   if (prev && Types.isLeftRoundedCorner(prev) && next) {
-    if (Types.isPreviousConnection(next) ||
-      Types.isNextConnection(next)) {
+    if (Types.isPreviousConnection(next) || Types.isNextConnection(next)) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
   }
   // Spacing between a square corner and a hat.
-  if (prev && Types.isLeftSquareCorner(prev) && next &&
-      Types.isHat(next)) {
+  if (prev && Types.isLeftSquareCorner(prev) && next && Types.isHat(next)) {
     return this.constants_.NO_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;
@@ -188,41 +183,41 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-RenderInfo.prototype.getSpacerRowHeight_ = function(
-    prev, next) {
+RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height.
-  if (Types.isTopRow(prev) &&
-      Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  const followsStatement =
-      Types.isInputRow(prev) && prev.hasStatement;
-  const precedesStatement =
-      Types.isInputRow(next) && next.hasStatement;
+  const followsStatement = Types.isInputRow(prev) && prev.hasStatement;
+  const precedesStatement = Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
     const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
     const height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
     return precedesStatement && followsStatement ?
-        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) :
+        height;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if ((Types.isTopRow(prev))) {
+  if (Types.isTopRow(prev)) {
     if (!prev.hasPreviousConnection &&
         (!this.outputConnection || this.hasStatementInput)) {
-      return Math.abs(this.constants_.NOTCH_HEIGHT -
-          this.constants_.CORNER_RADIUS);
+      return Math.abs(
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
-  if ((Types.isBottomRow(next))) {
+  if (Types.isBottomRow(next)) {
     if (!this.outputConnection) {
-      const topHeight = Math.max(this.topRow.minHeight,
-          Math.max(this.constants_.NOTCH_HEIGHT,
-              this.constants_.CORNER_RADIUS)) - this.constants_.CORNER_RADIUS;
+      const topHeight = Math.max(
+                            this.topRow.minHeight,
+                            Math.max(
+                                this.constants_.NOTCH_HEIGHT,
+                                this.constants_.CORNER_RADIUS)) -
+          this.constants_.CORNER_RADIUS;
       return topHeight;
     } else if (!next.hasNextConnection && this.hasStatementInput) {
-      return Math.abs(this.constants_.NOTCH_HEIGHT -
-          this.constants_.CORNER_RADIUS);
+      return Math.abs(
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
@@ -256,8 +251,7 @@ RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
       return row.yPos + connectedBlock.height / 2;
     }
   }
-  return RenderInfo.superClass_.getElemCenterline_.call(this,
-      row, elem);
+  return RenderInfo.superClass_.getElemCenterline_.call(this, row, elem);
 };
 
 /**
@@ -278,8 +272,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
 /**
  * @override
  */
-RenderInfo.prototype.addAlignmentPadding_ = function(row,
-    missingSpace) {
+RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   if (row.rightAlignedDummyInput) {
     let alignmentDivider;
     for (let i = 0; i < row.elements.length; i++) {
@@ -288,7 +281,7 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row,
         alignmentDivider = elem;
       }
       if (Types.isField(elem) &&
-        elem.parentInput == row.rightAlignedDummyInput) {
+          elem.parentInput == row.rightAlignedDummyInput) {
         break;
       }
     }
@@ -298,8 +291,7 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row,
       return;
     }
   }
-  RenderInfo.superClass_.addAlignmentPadding_.call(this, row,
-      missingSpace);
+  RenderInfo.superClass_.addAlignmentPadding_.call(this, row, missingSpace);
 };
 
 /**
@@ -309,8 +301,8 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row,
  * @protected
  */
 RenderInfo.prototype.adjustXPosition_ = function() {
-  const notchTotalWidth = this.constants_.NOTCH_OFFSET_LEFT +
-      this.constants_.NOTCH_WIDTH;
+  const notchTotalWidth =
+      this.constants_.NOTCH_OFFSET_LEFT + this.constants_.NOTCH_WIDTH;
   let minXPos = notchTotalWidth;
   // Run through every input row on the block and only apply bump logic to the
   // first input row (if the block has prev connection) and every input row that
@@ -320,16 +312,18 @@ RenderInfo.prototype.adjustXPosition_ = function() {
     const row = this.rows[i];
     const nextSpacer = this.rows[i + 1];
 
-    const hasPrevNotch = i == 2 ?
-        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
+    const hasPrevNotch = i == 2 ? !!this.topRow.hasPreviousConnection :
+                                  !!prevSpacer.followsStatement;
     const hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
+        !!this.bottomRow.hasNextConnection :
+        !!nextSpacer.precedesStatement;
 
     if (Types.isInputRow(row) && row.hasStatement) {
       row.measure();
       minXPos = row.width - row.getLastInput().width + notchTotalWidth;
-    } else if (hasPrevNotch && (i == 2 || hasNextNotch) &&
-        Types.isInputRow(row) && !row.hasStatement) {
+    } else if (
+        hasPrevNotch && (i == 2 || hasNextNotch) && Types.isInputRow(row) &&
+        !row.hasStatement) {
       let xCursor = row.xPos;
       let prevInRowSpacer = null;
       for (let j = 0; i < row.elements.length; j++) {
@@ -337,12 +331,11 @@ RenderInfo.prototype.adjustXPosition_ = function() {
         if (Types.isSpacer(elem)) {
           prevInRowSpacer = elem;
         }
-        if (prevInRowSpacer && (Types.isField(elem) ||
-            Types.isInput(elem))) {
+        if (prevInRowSpacer && (Types.isField(elem) || Types.isInput(elem))) {
           if (xCursor < minXPos &&
               !(Types.isField(elem) &&
-              (elem.field instanceof FieldLabel ||
-              elem.field instanceof FieldImage))) {
+                (elem.field instanceof FieldLabel ||
+                 elem.field instanceof FieldImage))) {
             const difference = minXPos - xCursor;
             prevInRowSpacer.width += difference;
           }
@@ -376,7 +369,8 @@ RenderInfo.prototype.finalizeOutputConnection_ = function() {
 
   // Adjust the height of the output connection.
   const blockHeight = this.bottomRow.hasNextConnection ?
-      this.height - this.bottomRow.descenderHeight : this.height;
+      this.height - this.bottomRow.descenderHeight :
+      this.height;
   const connectionHeight = this.outputConnection.shape.height(blockHeight);
   const connectionWidth = this.outputConnection.shape.width(blockHeight);
 
@@ -426,8 +420,8 @@ RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
     let leftNegPadding = this.getNegativeSpacing_(firstElem);
     let rightNegPadding = this.getNegativeSpacing_(lastElem);
     totalNegativeSpacing = leftNegPadding + rightNegPadding;
-    const minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
-        this.outputConnection.width * 2;
+    const minBlockWidth =
+        this.constants_.MIN_BLOCK_WIDTH + this.outputConnection.width * 2;
     if (this.width - totalNegativeSpacing < minBlockWidth) {
       // Maintain a minimum block width, split negative spacing between left
       // and right edge.
@@ -436,10 +430,8 @@ RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
       rightNegPadding = totalNegativeSpacing / 2;
     }
     // Add a negative spacer on the start and end of the block.
-    row.elements.unshift(new InRowSpacer(this.constants_,
-        -leftNegPadding));
-    row.elements.push(new InRowSpacer(this.constants_,
-        -rightNegPadding));
+    row.elements.unshift(new InRowSpacer(this.constants_, -leftNegPadding));
+    row.elements.push(new InRowSpacer(this.constants_, -rightNegPadding));
   }
   if (totalNegativeSpacing) {
     this.width -= totalNegativeSpacing;
@@ -480,8 +472,8 @@ RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
         const maxWidth = this.constants_.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
         const width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
         const topPadding = this.constants_.SMALL_PADDING;
-        const roundPadding = width *
-            (1 - Math.sin(Math.acos((width - topPadding) / width)));
+        const roundPadding =
+            width * (1 - Math.sin(Math.acos((width - topPadding) / width)));
         return connectionWidth - roundPadding;
       }
       default:
@@ -499,8 +491,7 @@ RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
       return 0;
     }
     // Special case for hexagonal output.
-    if (outerShape == constants.SHAPES.HEXAGONAL &&
-        outerShape != innerShape) {
+    if (outerShape == constants.SHAPES.HEXAGONAL && outerShape != innerShape) {
       return 0;
     }
     return connectionWidth -
@@ -537,15 +528,16 @@ RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
     const nextSpacer = this.rows[i + 1];
 
     const firstRow = i == 2;
-    const hasPrevNotch = firstRow ?
-        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
+    const hasPrevNotch = firstRow ? !!this.topRow.hasPreviousConnection :
+                                    !!prevSpacer.followsStatement;
     const hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
+        !!this.bottomRow.hasNextConnection :
+        !!nextSpacer.precedesStatement;
 
     if (hasPrevNotch) {
       const hasSingleTextOrImageField = row.elements.length == 3 &&
           (row.elements[1].field instanceof FieldLabel ||
-              row.elements[1].field instanceof FieldImage);
+           row.elements[1].field instanceof FieldImage);
       if (!firstRow && hasSingleTextOrImageField) {
         // Remove some padding if we have a single image or text field.
         prevSpacer.height -= this.constants_.SMALL_PADDING;
@@ -557,13 +549,13 @@ RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
       } else if (hasNextNotch) {
         // Determine if the input row has non-shadow connected blocks.
         let hasNonShadowConnectedBlocks = false;
-        const MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
+        const minVerticalTightNestingHeight = 40;
         for (let j = 0; j < row.elements.length; j++) {
           const elem = row.elements[j];
-          if (Types.isInlineInput(elem) &&
-              elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+          if (Types.isInlineInput(elem) && elem.connectedBlock &&
+              !elem.connectedBlock.isShadow() &&
               elem.connectedBlock.getHeightWidth().height >=
-                  MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
+                  minVerticalTightNestingHeight) {
             hasNonShadowConnectedBlocks = true;
             break;
           }

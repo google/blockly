@@ -9,8 +9,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist');
-goog.provide('Blockly.minimalist.RenderInfo');
+goog.module('Blockly.minimalist.RenderInfo');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils.object');
 
@@ -28,11 +28,11 @@ goog.require('Blockly.utils.object');
  * @package
  * @extends {Blockly.blockRendering.RenderInfo}
  */
-Blockly.minimalist.RenderInfo = function(renderer, block) {
+const RenderInfo = function(renderer, block) {
   Blockly.minimalist.RenderInfo.superClass_.constructor.call(this, renderer, block);
 
 };
-Blockly.utils.object.inherits(Blockly.minimalist.RenderInfo,
+Blockly.utils.object.inherits(RenderInfo,
     Blockly.blockRendering.RenderInfo);
 
 /**
@@ -40,6 +40,8 @@ Blockly.utils.object.inherits(Blockly.minimalist.RenderInfo,
  * @return {!Blockly.minimalist.Renderer} The block renderer in use.
  * @package
  */
-Blockly.minimalist.RenderInfo.prototype.getRenderer = function() {
+RenderInfo.prototype.getRenderer = function() {
   return /** @type {!Blockly.minimalist.Renderer} */ (this.renderer_);
 };
+
+exports = RenderInfo;

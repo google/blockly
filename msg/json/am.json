@@ -25,6 +25,7 @@
 	"HELP": "እገዛ",
 	"UNDO": "ይቀልብሱ",
 	"REDO": "ከእንደገና",
+	"IOS_ERROR": "ስህተት",
 	"DIALOG_OK": "እሺ",
 	"DIALOG_CANCEL": "ይቅር"
 }

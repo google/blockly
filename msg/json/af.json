@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Qmeades"
+			"Qmeades",
+			"Winstonza"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -29,5 +30,5 @@
 	"VARIABLE_ALREADY_EXISTS": "'n Veranderlike met die naam '%1' bestaan reeds.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'n Veranderlike met die naam '%1' bestaan reeds vir 'n ander tipe veranderlike: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Wissig %1 gebruike van die '%2' veranderlike?",
-	"DIALOG_OK": "OK"
+	"DIALOG_OK": "Oukei"
 }

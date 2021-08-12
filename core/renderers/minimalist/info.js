@@ -35,10 +35,8 @@ const object = goog.require('Blockly.utils.object');
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);
-
 };
-object.inherits(RenderInfo,
-    BaseRenderInfo);
+object.inherits(RenderInfo, BaseRenderInfo);
 
 /**
  * Get the block renderer in use.

@@ -95,6 +95,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Create XML to represent the argument inputs.
+   * Backwards compatible serialization implementation.
    * @param {boolean=} opt_paramIds If true include the IDs of the parameter
    *     quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
    * @return {!Element} XML storage element.
@@ -124,6 +125,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Parse XML to restore the argument inputs.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -149,6 +151,54 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Show or hide the statement input.
     this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {?{params: (!Array<{name: string, id: string}>|undefined),
+   *     hasStatements: (boolean|undefined)}} The state of this block, eg the
+   *     parameters and statements.
+   */
+  saveExtraState: function() {
+    if (!this.argumentVarModels_.length && this.hasStatements_) {
+      return null;
+    }
+    var state = Object.create(null);
+    if (this.argumentVarModels_.length) {
+      state['params'] = [];
+      for (var i = 0; i < this.argumentVarModels_.length; i++) {
+        state['params'].push({
+          // We don't need to serialize the name, but just in case we decide
+          // to separate params from variables.
+          'name': this.argumentVarModels_[i].name,
+          'id': this.argumentVarModels_[i].getId()
+        });
+      }
+    }
+    if (!this.hasStatements_) {
+      state['hasStatements'] = false;
+    }
+    return state;
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, eg the parameters and
+   *     statements.
+   */
+  loadExtraState: function(state) {
+    this.arguments_ = [];
+    this.argumentVarModels_ = [];
+    if (state['params']) {
+      for (var i = 0; i < state['params'].length; i++) {
+        var param = state['params'][i];
+        var variable = Blockly.Variables.getOrCreateVariablePackage(
+            this.workspace, param['id'], param['name'], '');
+        this.arguments_.push(variable.name);
+        this.argumentVarModels_.push(variable);
+      }
+    }
+    this.updateParams_();
+    Blockly.Procedures.mutateCallers(this);
+    this.setStatements_(state['hasStatements'] === false ? false : true);
   },
   /**
    * Populate the mutator's dialog with this block's components.
@@ -436,6 +486,8 @@ Blockly.Blocks['procedures_defreturn'] = {
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
   mutationToDom: Blockly.Blocks['procedures_defnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
+  saveExtraState: Blockly.Blocks['procedures_defnoreturn'].saveExtraState,
+  loadExtraState: Blockly.Blocks['procedures_defnoreturn'].loadExtraState,
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
   compose: Blockly.Blocks['procedures_defnoreturn'].compose,
   /**
@@ -776,6 +828,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Create XML to represent the (non-editable) name and arguments.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -791,6 +844,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   },
   /**
    * Parse XML to restore the (non-editable) name and parameters.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -806,6 +860,34 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       }
     }
     this.setProcedureParameters_(args, paramIds);
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{name: string, params:(!Array<string>|undefined)}} The state of
+   *     this block, ie the params and procedure name.
+   */
+  saveExtraState: function() {
+    var state = Object.create(null);
+    state['name'] = this.getProcedureCall();
+    if (this.arguments_.length) {
+      state['params'] = this.arguments_;
+    }
+    return state;
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the params and
+   *     procedure name.
+   */
+  loadExtraState: function(state) {
+    this.renameProcedure(this.getProcedureCall(), state['name']);
+    const params = state['params'];
+    if (params) {
+      const ids = [];
+      ids.length = params.length;
+      ids.fill(null);
+      this.setProcedureParameters_(params, ids);
+    }
   },
   /**
    * Return all variables referenced by this block.
@@ -975,6 +1057,8 @@ Blockly.Blocks['procedures_callreturn'] = {
   updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
+  saveExtraState: Blockly.Blocks['procedures_callnoreturn'].saveExtraState,
+  loadExtraState: Blockly.Blocks['procedures_callnoreturn'].loadExtraState,
   getVars: Blockly.Blocks['procedures_callnoreturn'].getVars,
   getVarModels: Blockly.Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
@@ -1026,6 +1110,12 @@ Blockly.Blocks['procedures_ifreturn'] = {
           .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
     }
   },
+
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this block is already encoded in the
+  // block's position in the workspace.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
@@ -1033,7 +1123,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * @this {Blockly.Block}
    */
   onchange: function(_e) {
-    if (!this.workspace.isDragging || this.workspace.isDragging()) {
+    if (this.workspace.isDragging && this.workspace.isDragging()) {
       return;  // Don't change state at the start of a drag.
     }
     var legal = false;

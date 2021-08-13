@@ -276,6 +276,10 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.elements.push(
         new Blockly.zelos.StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
+
+    if (activeRow.align == null) {
+      activeRow.align = input.align;
+    }
     return;
   }
   Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);

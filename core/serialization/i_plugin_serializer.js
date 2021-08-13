@@ -11,7 +11,7 @@
 
 'use strict';
 
-goog.module('Blockly.serialization.PluginSerializer');
+goog.module('Blockly.serialization.IPluginSerializer');
 goog.module.declareLegacyNamespace();
 
 // eslint-disable-next-line no-unused-vars
@@ -22,7 +22,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
  * Serializes and deserializes a plugin.
  * @record
  */
-class PluginSerializer {
+class IPluginSerializer {
   constructor() {
     /**
      * A priority value used to determine the order of deserializing plugins.
@@ -67,4 +67,4 @@ class PluginSerializer {
   /* eslint-enable no-unused-vars */
 }
 
-exports = {PluginSerializer};
+exports.IPluginSerializer = IPluginSerializer;

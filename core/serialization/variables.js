@@ -15,7 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const PluginSerializer = goog.requireType('PluginSerializer');
+const IPluginSerializer =
+    goog.requireType('Blockly.serialization.IPluginSerializer');
 // eslint-disable-next-line no-unused-vars
 const VariableModel = goog.requireType('Blockly.VariableModel');
 // eslint-disable-next-line no-unused-vars
@@ -81,7 +82,7 @@ exports.load = load;
 
 /**
  * Plugin serializer for saving and loading variable state.
- * @implements {PluginSerializer}
+ * @implements {IPluginSerializer}
  */
 class VariableSerializer {
   constructor() {

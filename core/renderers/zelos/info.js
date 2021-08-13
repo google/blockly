@@ -28,6 +28,7 @@ goog.require('Blockly.utils.object');
 goog.require('Blockly.zelos.BottomRow');
 goog.require('Blockly.zelos.RightConnectionShape');
 goog.require('Blockly.zelos.TopRow');
+goog.require('Blockly.zelos.StatementInput');
 
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.zelos.ConstantProvider');
@@ -270,6 +271,12 @@ Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
       activeRow.align == Blockly.constants.ALIGN.LEFT &&
       input.align == Blockly.constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
+  } else if (input.type == Blockly.inputTypes.STATEMENT) {
+    // Handle statements without next connections correctly.
+    activeRow.elements.push(
+        new Blockly.zelos.StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+    return;
   }
   Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };

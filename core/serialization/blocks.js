@@ -19,19 +19,12 @@ const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
-<<<<<<< HEAD
+// eslint-disable-next-line no-unused-vars
+const IPluginSerializer =
+    goog.requireType('Blockly.serialization.IPluginSerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
-=======
-const {MissingBlockType, MissingConnection, BadConnectionCheck} =
-    goog.require('Blockly.serialization.exceptions');
-// eslint-disable-next-line no-unused-vars
-const PluginSerializer = goog.requireType('PluginSerializer');
-// eslint-disable-next-line no-unused-vars
-const Workspace = goog.requireType('Blockly.Workspace');
-const Size = goog.require('Blockly.utils.Size');
->>>>>>> 154ead17 (Add plugin hooks for serialization)
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const registry = goog.require('Blockly.registry');
@@ -592,7 +585,7 @@ const initBlock = function(block, rendered) {
 
 /**
  * Plugin serializer for saving and loading block state.
- * @implements {PluginSerializer}
+ * @implements {IPluginSerializer}
  */
 class BlockSerializer {
   constructor() {

@@ -13,12 +13,12 @@
 goog.module('Blockly.thrasos.Renderer');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.Renderer');
-goog.require('Blockly.thrasos.RenderInfo');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.BlockSvg');
+const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+const RenderInfo = goog.require('Blockly.thrasos.RenderInfo');
+const blockRendering = goog.require('Blockly.blockRendering');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -26,26 +26,25 @@ goog.requireType('Blockly.BlockSvg');
  * @param {string} name The renderer name.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Renderer}
+ * @extends {BaseRenderer}
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);
 };
-Blockly.utils.object.inherits(Renderer,
-    Blockly.blockRendering.Renderer);
+object.inherits(Renderer, BaseRenderer);
 
 /**
  * Create a new instance of the renderer's render info object.
- * @param {!Blockly.BlockSvg} block The block to measure.
- * @return {!Blockly.thrasos.RenderInfo} The render info object.
+ * @param {!BlockSvg} block The block to measure.
+ * @return {!RenderInfo} The render info object.
  * @protected
  * @override
  */
 Renderer.prototype.makeRenderInfo_ = function(block) {
-  return new Blockly.thrasos.RenderInfo(this, block);
+  return new RenderInfo(this, block);
 };
 
 
-Blockly.blockRendering.register('thrasos', Renderer);
+blockRendering.register('thrasos', Renderer);
 
 exports = Renderer;

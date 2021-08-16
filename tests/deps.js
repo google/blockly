@@ -159,7 +159,7 @@ goog.addDependency('../../core/renderers/measurables/statement_input.js', ['Bloc
 goog.addDependency('../../core/renderers/measurables/types.js', ['Blockly.blockRendering.Types'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/renderers/minimalist/constants.js', ['Blockly.minimalist.ConstantProvider'], ['Blockly.blockRendering.ConstantProvider', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/renderers/minimalist/drawer.js', ['Blockly.minimalist.Drawer'], ['Blockly.blockRendering.Drawer', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/renderers/minimalist/info.js', ['Blockly.minimalist', 'Blockly.minimalist.RenderInfo'], ['Blockly.utils.object']);
+goog.addDependency('../../core/renderers/minimalist/info.js', ['Blockly.minimalist.RenderInfo'], ['Blockly.blockRendering.RenderInfo', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/renderers/minimalist/renderer.js', ['Blockly.minimalist.Renderer'], ['Blockly.blockRendering', 'Blockly.blockRendering.Renderer', 'Blockly.minimalist.ConstantProvider', 'Blockly.minimalist.Drawer', 'Blockly.minimalist.RenderInfo', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/renderers/thrasos/info.js', ['Blockly.thrasos', 'Blockly.thrasos.RenderInfo'], ['Blockly.blockRendering.InRowSpacer', 'Blockly.blockRendering.RenderInfo', 'Blockly.blockRendering.Types', 'Blockly.utils.object']);
 goog.addDependency('../../core/renderers/thrasos/renderer.js', ['Blockly.thrasos.Renderer'], ['Blockly.blockRendering', 'Blockly.blockRendering.Renderer', 'Blockly.thrasos.RenderInfo', 'Blockly.utils.object']);

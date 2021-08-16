@@ -35,9 +35,7 @@ const Hat = function(constants) {
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
   this.ascenderHeight = this.height;
-
 };
-object.inherits(Hat,
-    Measurable);
+object.inherits(Hat, Measurable);
 
 exports = Hat;

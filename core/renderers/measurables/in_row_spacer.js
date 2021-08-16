@@ -18,7 +18,7 @@ const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvid
 const Measurable = goog.require('Blockly.blockRendering.Measurable');
 const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
- 
+
 
 /**
  * An object containing information about a spacer between two elements on a
@@ -31,14 +31,11 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Measurable}
  */
 const InRowSpacer = function(constants, width) {
-  InRowSpacer.superClass_.constructor.call(this,
-      constants);
-  this.type |= Types.SPACER |
-      Types.IN_ROW_SPACER;
+  InRowSpacer.superClass_.constructor.call(this, constants);
+  this.type |= Types.SPACER | Types.IN_ROW_SPACER;
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
-object.inherits(InRowSpacer,
-    Measurable);
+object.inherits(InRowSpacer, Measurable);
 
 exports = InRowSpacer;

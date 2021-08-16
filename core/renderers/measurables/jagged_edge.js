@@ -30,13 +30,11 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Measurable}
  */
 const JaggedEdge = function(constants) {
-  JaggedEdge.superClass_.constructor.call(
-      this, constants);
+  JaggedEdge.superClass_.constructor.call(this, constants);
   this.type |= Types.JAGGED_EDGE;
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
-object.inherits(JaggedEdge,
-    Measurable);
+object.inherits(JaggedEdge, Measurable);
 
 exports = JaggedEdge;

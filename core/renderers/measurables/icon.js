@@ -42,7 +42,6 @@ const Icon = function(constants, icon) {
   this.height = size.height;
   this.width = size.width;
 };
-object.inherits(Icon,
-    Measurable);
+object.inherits(Icon, Measurable);
 
 exports = Icon;

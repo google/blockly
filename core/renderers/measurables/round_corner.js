@@ -18,7 +18,7 @@ const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvid
 const Measurable = goog.require('Blockly.blockRendering.Measurable');
 const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
- 
+
 
 /**
  * An object containing information about the space a rounded corner takes up
@@ -31,19 +31,16 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Measurable}
  */
 const RoundCorner = function(constants, opt_position) {
-  RoundCorner.superClass_.constructor.call(this,
-      constants);
-  this.type = ((!opt_position || opt_position == 'left') ?
-      Types.LEFT_ROUND_CORNER :
-      Types.RIGHT_ROUND_CORNER) |
-          Types.CORNER;
+  RoundCorner.superClass_.constructor.call(this, constants);
+  this.type =
+      ((!opt_position || opt_position == 'left') ? Types.LEFT_ROUND_CORNER :
+                                                   Types.RIGHT_ROUND_CORNER) |
+      Types.CORNER;
   this.width = this.constants_.CORNER_RADIUS;
   // The rounded corner extends into the next row by 4 so we only take the
   // height that is aligned with this row.
   this.height = this.constants_.CORNER_RADIUS / 2;
-
 };
-object.inherits(RoundCorner,
-    Measurable);
+object.inherits(RoundCorner, Measurable);
 
 exports = RoundCorner;

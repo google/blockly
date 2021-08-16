@@ -47,7 +47,6 @@ const Field = function(constants, field, parentInput) {
   this.width = size.width;
   this.parentInput = parentInput;
 };
-object.inherits(Field,
-    Measurable);
+object.inherits(Field, Measurable);
 
 exports = Field;

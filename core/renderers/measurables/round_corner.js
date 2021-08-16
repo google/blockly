@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.RoundCorner');
+goog.module('Blockly.blockRendering.RoundCorner');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -29,8 +30,8 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.RoundCorner = function(constants, opt_position) {
-  Blockly.blockRendering.RoundCorner.superClass_.constructor.call(this,
+const RoundCorner = function(constants, opt_position) {
+  RoundCorner.superClass_.constructor.call(this,
       constants);
   this.type = ((!opt_position || opt_position == 'left') ?
       Blockly.blockRendering.Types.LEFT_ROUND_CORNER :
@@ -42,5 +43,7 @@ Blockly.blockRendering.RoundCorner = function(constants, opt_position) {
   this.height = this.constants_.CORNER_RADIUS / 2;
 
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.RoundCorner,
+Blockly.utils.object.inherits(RoundCorner,
     Blockly.blockRendering.Measurable);
+
+exports = RoundCorner;

@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.JaggedEdge');
+goog.module('Blockly.blockRendering.JaggedEdge');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -28,12 +29,14 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.JaggedEdge = function(constants) {
-  Blockly.blockRendering.JaggedEdge.superClass_.constructor.call(
+const JaggedEdge = function(constants) {
+  JaggedEdge.superClass_.constructor.call(
       this, constants);
   this.type |= Blockly.blockRendering.Types.JAGGED_EDGE;
   this.height = this.constants_.JAGGED_TEETH.height;
   this.width = this.constants_.JAGGED_TEETH.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.JaggedEdge,
+Blockly.utils.object.inherits(JaggedEdge,
     Blockly.blockRendering.Measurable);
+
+exports = JaggedEdge;

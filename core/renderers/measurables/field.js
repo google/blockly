@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.Field');
+goog.module('Blockly.blockRendering.Field');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -32,8 +33,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Field = function(constants, field, parentInput) {
-  Blockly.blockRendering.Field.superClass_.constructor.call(this, constants);
+const Field = function(constants, field, parentInput) {
+  Field.superClass_.constructor.call(this, constants);
   this.field = field;
   this.isEditable = field.EDITABLE;
   this.flipRtl = field.getFlipRtl();
@@ -44,5 +45,7 @@ Blockly.blockRendering.Field = function(constants, field, parentInput) {
   this.width = size.width;
   this.parentInput = parentInput;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Field,
+Blockly.utils.object.inherits(Field,
     Blockly.blockRendering.Measurable);
+
+exports = Field;

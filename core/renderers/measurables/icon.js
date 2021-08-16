@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.Icon');
+goog.module('Blockly.blockRendering.Icon');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -30,8 +31,8 @@ goog.requireType('Blockly.Icon');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Icon = function(constants, icon) {
-  Blockly.blockRendering.Icon.superClass_.constructor.call(this, constants);
+const Icon = function(constants, icon) {
+  Icon.superClass_.constructor.call(this, constants);
   this.icon = icon;
   this.isVisible = icon.isVisible();
   this.type |= Blockly.blockRendering.Types.ICON;
@@ -40,5 +41,7 @@ Blockly.blockRendering.Icon = function(constants, icon) {
   this.height = size.height;
   this.width = size.width;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Icon,
+Blockly.utils.object.inherits(Icon,
     Blockly.blockRendering.Measurable);
+
+exports = Icon;

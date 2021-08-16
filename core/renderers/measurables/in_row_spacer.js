@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.InRowSpacer');
+goog.module('Blockly.blockRendering.InRowSpacer');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -29,13 +30,15 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.InRowSpacer = function(constants, width) {
-  Blockly.blockRendering.InRowSpacer.superClass_.constructor.call(this,
+const InRowSpacer = function(constants, width) {
+  InRowSpacer.superClass_.constructor.call(this,
       constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.IN_ROW_SPACER;
   this.width = width;
   this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InRowSpacer,
+Blockly.utils.object.inherits(InRowSpacer,
     Blockly.blockRendering.Measurable);
+
+exports = InRowSpacer;

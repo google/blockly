@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.SquareCorner');
+goog.module('Blockly.blockRendering.SquareCorner');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -29,8 +30,8 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.SquareCorner = function(constants, opt_position) {
-  Blockly.blockRendering.SquareCorner.superClass_.constructor.call(this,
+const SquareCorner = function(constants, opt_position) {
+  SquareCorner.superClass_.constructor.call(this,
       constants);
   this.type = ((!opt_position || opt_position == 'left') ?
       Blockly.blockRendering.Types.LEFT_SQUARE_CORNER :
@@ -40,5 +41,7 @@ Blockly.blockRendering.SquareCorner = function(constants, opt_position) {
   this.width = this.constants_.NO_PADDING;
 
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.SquareCorner,
+Blockly.utils.object.inherits(SquareCorner,
     Blockly.blockRendering.Measurable);
+
+exports = SquareCorner;

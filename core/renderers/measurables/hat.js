@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.Hat');
+goog.module('Blockly.blockRendering.Hat');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -28,13 +29,15 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Hat = function(constants) {
-  Blockly.blockRendering.Hat.superClass_.constructor.call(this, constants);
+const Hat = function(constants) {
+  Hat.superClass_.constructor.call(this, constants);
   this.type |= Blockly.blockRendering.Types.HAT;
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
   this.ascenderHeight = this.height;
 
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Hat,
+Blockly.utils.object.inherits(Hat,
     Blockly.blockRendering.Measurable);
+
+exports = Hat;

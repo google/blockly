@@ -13,20 +13,20 @@
 goog.module('Blockly.Events.CommentCreate');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.CommentBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.WorkspaceComment');
+const CommentBase = goog.require('Blockly.Events.CommentBase');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const Xml = goog.require('Blockly.Xml');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
 * Class for a comment creation event.
-* @param {!Blockly.WorkspaceComment=} opt_comment The created comment.
+* @param {!WorkspaceComment=} opt_comment The created comment.
 *     Undefined for a blank event.
-* @extends {Blockly.Events.CommentBase}
+* @extends {CommentBase}
 * @constructor
 */
 const CommentCreate = function(opt_comment) {
@@ -37,14 +37,14 @@ const CommentCreate = function(opt_comment) {
 
   this.xml = opt_comment.toXmlWithXY();
 };
-Blockly.utils.object.inherits(CommentCreate,
-    Blockly.Events.CommentBase);
+object.inherits(CommentCreate,
+    CommentBase);
 
 /**
 * Type of this event.
 * @type {string}
 */
-CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
+CommentCreate.prototype.type = Events.COMMENT_CREATE;
 
 /**
 * Encode the event as JSON.
@@ -53,7 +53,7 @@ CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
 // TODO (#1266): "Full" and "minimal" serialization.
 CommentCreate.prototype.toJson = function() {
   const json = CommentCreate.superClass_.toJson.call(this);
-  json['xml'] = Blockly.Xml.domToText(this.xml);
+  json['xml'] = Xml.domToText(this.xml);
   return json;
 };
 
@@ -63,7 +63,7 @@ CommentCreate.prototype.toJson = function() {
 */
 CommentCreate.prototype.fromJson = function(json) {
   CommentCreate.superClass_.fromJson.call(this, json);
-  this.xml = Blockly.Xml.textToDom(json['xml']);
+  this.xml = Xml.textToDom(json['xml']);
 };
 
 /**
@@ -71,11 +71,11 @@ CommentCreate.prototype.fromJson = function(json) {
 * @param {boolean} forward True if run forward, false if run backward (undo).
 */
 CommentCreate.prototype.run = function(forward) {
-  Blockly.Events.CommentBase.CommentCreateDeleteHelper(this, forward);
+  CommentBase.CommentCreateDeleteHelper(this, forward);
 };
 
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.COMMENT_CREATE, CommentCreate);
+registry.register(registry.Type.EVENT,
+    Events.COMMENT_CREATE, CommentCreate);
 
 exports = CommentCreate;

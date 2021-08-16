@@ -13,21 +13,21 @@
 goog.module('Blockly.Events.CommentChange');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.CommentBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.WorkspaceComment');
+const CommentBase = goog.require('Blockly.Events.CommentBase');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
 
 /**
 * Class for a comment change event.
-* @param {!Blockly.WorkspaceComment=} opt_comment The comment that is being
+* @param {!WorkspaceComment=} opt_comment The comment that is being
 *     changed.  Undefined for a blank event.
 * @param {string=} opt_oldContents Previous contents of the comment.
 * @param {string=} opt_newContents New contents of the comment.
-* @extends {Blockly.Events.CommentBase}
+* @extends {CommentBase}
 * @constructor
 */
 const CommentChange = function(opt_comment, opt_oldContents,
@@ -42,14 +42,14 @@ const CommentChange = function(opt_comment, opt_oldContents,
   this.newContents_ = typeof opt_newContents == 'undefined' ? '' :
       opt_newContents;
 };
-Blockly.utils.object.inherits(CommentChange,
-    Blockly.Events.CommentBase);
+object.inherits(CommentChange,
+    CommentBase);
 
 /**
 * Type of this event.
 * @type {string}
 */
-CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
+CommentChange.prototype.type = Events.COMMENT_CHANGE;
 
 /**
 * Encode the event as JSON.
@@ -96,7 +96,7 @@ CommentChange.prototype.run = function(forward) {
   comment.setContent(contents);
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.COMMENT_CHANGE, CommentChange);
+registry.register(registry.Type.EVENT,
+    Events.COMMENT_CHANGE, CommentChange);
 
 exports = CommentChange;

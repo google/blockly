@@ -13,19 +13,20 @@
 goog.module('Blockly.Events.CommentMove');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.CommentBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.object');
+const CommentBase = goog.require('Blockly.Events.CommentBase');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 
-goog.requireType('Blockly.WorkspaceComment');
 
 /**
 * Class for a comment move event.  Created before the move.
-* @param {!Blockly.WorkspaceComment=} opt_comment The comment that is being
+* @param {!WorkspaceComment=} opt_comment The comment that is being
 *     moved.  Undefined for a blank event.
-* @extends {Blockly.Events.CommentBase}
+* @extends {CommentBase}
 * @constructor
 */
 const CommentMove = function(opt_comment) {
@@ -37,24 +38,24 @@ const CommentMove = function(opt_comment) {
   /**
   * The comment that is being moved.  Will be cleared after recording the new
   * location.
-  * @type {Blockly.WorkspaceComment}
+  * @type {WorkspaceComment}
   */
   this.comment_ = opt_comment;
 
   /**
   * The location before the move, in workspace coordinates.
-  * @type {!Blockly.utils.Coordinate}
+  * @type {!Coordinate}
   */
   this.oldCoordinate_ = opt_comment.getXY();
 
   /**
   * The location after the move, in workspace coordinates.
-  * @type {Blockly.utils.Coordinate}
+  * @type {Coordinate}
   */
   this.newCoordinate_ = null;
 };
-Blockly.utils.object.inherits(CommentMove,
-    Blockly.Events.CommentBase);
+object.inherits(CommentMove,
+    CommentBase);
 
 /**
 * Record the comment's new location.  Called after the move.  Can only be
@@ -73,12 +74,12 @@ CommentMove.prototype.recordNew = function() {
 * Type of this event.
 * @type {string}
 */
-CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
+CommentMove.prototype.type = Events.COMMENT_MOVE;
 
 /**
 * Override the location before the move.  Use this if you don't create the
 * event until the end of the move, but you know the original location.
-* @param {!Blockly.utils.Coordinate} xy The location before the move,
+* @param {!Coordinate} xy The location before the move,
 *     in workspace coordinates.
 */
 CommentMove.prototype.setOldCoordinate = function(xy) {
@@ -113,12 +114,12 @@ CommentMove.prototype.fromJson = function(json) {
   if (json['oldCoordinate']) {
     const xy = json['oldCoordinate'].split(',');
     this.oldCoordinate_ =
-        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+        new Coordinate(Number(xy[0]), Number(xy[1]));
   }
   if (json['newCoordinate']) {
     const xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =
-        new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
+        new Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
@@ -127,7 +128,7 @@ CommentMove.prototype.fromJson = function(json) {
 * @return {boolean} False if something changed.
 */
 CommentMove.prototype.isNull = function() {
-  return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
+  return Coordinate.equals(this.oldCoordinate_,
       this.newCoordinate_);
 };
 
@@ -149,7 +150,7 @@ CommentMove.prototype.run = function(forward) {
   comment.moveBy(target.x - current.x, target.y - current.y);
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.COMMENT_MOVE, CommentMove);
+registry.register(registry.Type.EVENT,
+    Events.COMMENT_MOVE, CommentMove);
 
 exports = CommentMove;

@@ -13,20 +13,20 @@
 goog.module('Blockly.Events.CommentBase');
 goog.module.declareLegacyNamespace();
  
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.Abstract');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.xml');
-goog.require('Blockly.Xml');
- 
-goog.requireType('Blockly.WorkspaceComment');
+const AbstractEvents = goog.require('Blockly.Events.Abstract');
+const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const Xml = goog.require('Blockly.Xml');
+const object = goog.require('Blockly.utils.object');
+const utilsXml = goog.require('Blockly.utils.xml');
 
 
 /**
 * Abstract class for a comment event.
-* @param {!Blockly.WorkspaceComment=} opt_comment The comment this event
+* @param {!WorkspaceComment=} opt_comment The comment this event
 *     corresponds to.  Undefined for a blank event.
-* @extends {Blockly.Events.Abstract}
+* @extends {AbstractEvents}
 * @constructor
 */
 const CommentBase = function(opt_comment) {
@@ -55,16 +55,16 @@ const CommentBase = function(opt_comment) {
   * perspective, and should be undone together.
   * @type {string}
   */
-  this.group = Blockly.Events.getGroup();
+  this.group = Events.getGroup();
 
   /**
   * Sets whether the event should be added to the undo stack.
   * @type {boolean}
   */
-  this.recordUndo = Blockly.Events.recordUndo;
+  this.recordUndo = Events.recordUndo;
 };
-Blockly.utils.object.inherits(CommentBase,
-    Blockly.Events.Abstract);
+object.inherits(CommentBase,
+    AbstractEvents);
  
 /**
  * Encode the event as JSON.
@@ -89,16 +89,16 @@ CommentBase.prototype.fromJson = function(json) {
 
 /**
 * Helper function for Comment[Create|Delete]
-* @param {!Blockly.Events.CommentCreate|!Blockly.Events.CommentDelete} event
+* @param {!Events.CommentCreate|!Events.CommentDelete} event
 *     The event to run.
 * @param {boolean} create if True then Create, if False then Delete
 */
 CommentBase.CommentCreateDeleteHelper = function(event, create) {
   const workspace = event.getEventWorkspace_();
   if (create) {
-    const xml = Blockly.utils.xml.createElement('xml');
-    xml.appendChild(event.xml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    const xmlElement = utilsXml.createElement('xml');
+    xmlElement.appendChild(event.xml);
+    Xml.domToWorkspace(xmlElement, workspace);
   } else {
     const comment = workspace.getCommentById(event.commentId);
     if (comment) {

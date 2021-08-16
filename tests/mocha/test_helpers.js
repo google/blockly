@@ -240,6 +240,8 @@ function sharedTestTeardown() {
     for (let i = 0; i < messages.length; i++) {
       delete Blockly.Msg[messages[i]];
     }
+
+    Blockly.WidgetDiv.testOnly_setDiv(null);
   }
 }
 

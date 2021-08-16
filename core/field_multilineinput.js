@@ -330,7 +330,7 @@ FieldMultilineInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
  * @protected
  */
 FieldMultilineInput.prototype.widgetCreate_ = function() {
-  const div = WidgetDiv.DIV;
+  const div = WidgetDiv.getDiv();
   const scale = this.workspace_.getScale();
 
   const htmlInput =

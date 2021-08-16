@@ -39,7 +39,7 @@ Blockly.blockRendering.Field = function(constants, field, parentInput) {
   this.flipRtl = field.getFlipRtl();
   this.type |= Blockly.blockRendering.Types.FIELD;
 
-  var size = this.field.getSize();
+  const size = this.field.getSize();
   this.height = size.height;
   this.width = size.width;
   this.parentInput = parentInput;

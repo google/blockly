@@ -36,7 +36,7 @@ Blockly.blockRendering.Icon = function(constants, icon) {
   this.isVisible = icon.isVisible();
   this.type |= Blockly.blockRendering.Types.ICON;
 
-  var size = icon.getCorrectedSize();
+  const size = icon.getCorrectedSize();
   this.height = size.height;
   this.width = size.width;
 };

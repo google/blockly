@@ -12,7 +12,7 @@
 
 goog.module('Blockly.Events.CommentBase');
 goog.module.declareLegacyNamespace();
- 
+
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
@@ -23,49 +23,47 @@ const utilsXml = goog.require('Blockly.utils.xml');
 
 
 /**
-* Abstract class for a comment event.
-* @param {!WorkspaceComment=} opt_comment The comment this event
-*     corresponds to.  Undefined for a blank event.
-* @extends {AbstractEvents}
-* @constructor
-*/
+ * Abstract class for a comment event.
+ * @param {!WorkspaceComment=} opt_comment The comment this event
+ *     corresponds to.  Undefined for a blank event.
+ * @extends {AbstractEvents}
+ * @constructor
+ */
 const CommentBase = function(opt_comment) {
-
   /**
-  * Whether or not an event is blank.
-  * @type {boolean}
-  */
+   * Whether or not an event is blank.
+   * @type {boolean}
+   */
   this.isBlank = typeof opt_comment == 'undefined';
 
   /**
-  * The ID of the comment this event pertains to.
-  * @type {string}
-  */
+   * The ID of the comment this event pertains to.
+   * @type {string}
+   */
   this.commentId = this.isBlank ? '' : opt_comment.id;
 
   /**
-  * The workspace identifier for this event.
-  * @type {string}
-  */
+   * The workspace identifier for this event.
+   * @type {string}
+   */
   this.workspaceId = this.isBlank ? '' : opt_comment.workspace.id;
 
   /**
-  * The event group id for the group this event belongs to. Groups define
-  * events that should be treated as an single action from the user's
-  * perspective, and should be undone together.
-  * @type {string}
-  */
+   * The event group id for the group this event belongs to. Groups define
+   * events that should be treated as an single action from the user's
+   * perspective, and should be undone together.
+   * @type {string}
+   */
   this.group = Events.getGroup();
 
   /**
-  * Sets whether the event should be added to the undo stack.
-  * @type {boolean}
-  */
+   * Sets whether the event should be added to the undo stack.
+   * @type {boolean}
+   */
   this.recordUndo = Events.recordUndo;
 };
-object.inherits(CommentBase,
-    AbstractEvents);
- 
+object.inherits(CommentBase, AbstractEvents);
+
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
@@ -77,7 +75,7 @@ CommentBase.prototype.toJson = function() {
   }
   return json;
 };
- 
+
 /**
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
@@ -88,11 +86,11 @@ CommentBase.prototype.fromJson = function(json) {
 };
 
 /**
-* Helper function for Comment[Create|Delete]
-* @param {!Events.CommentCreate|!Events.CommentDelete} event
-*     The event to run.
-* @param {boolean} create if True then Create, if False then Delete
-*/
+ * Helper function for Comment[Create|Delete]
+ * @param {!Events.CommentCreate|!Events.CommentDelete} event
+ *     The event to run.
+ * @param {boolean} create if True then Create, if False then Delete
+ */
 CommentBase.CommentCreateDeleteHelper = function(event, create) {
   const workspace = event.getEventWorkspace_();
   if (create) {
@@ -105,7 +103,7 @@ CommentBase.CommentCreateDeleteHelper = function(event, create) {
       comment.dispose();
     } else {
       // Only complain about root-level block.
-      console.warn("Can't uncreate non-existent comment: " + event.commentId);
+      console.warn('Can\'t uncreate non-existent comment: ' + event.commentId);
     }
   }
 };

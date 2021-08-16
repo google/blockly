@@ -23,12 +23,12 @@ const registry = goog.require('Blockly.registry');
 
 
 /**
-* Class for a comment move event.  Created before the move.
-* @param {!WorkspaceComment=} opt_comment The comment that is being
-*     moved.  Undefined for a blank event.
-* @extends {CommentBase}
-* @constructor
-*/
+ * Class for a comment move event.  Created before the move.
+ * @param {!WorkspaceComment=} opt_comment The comment that is being
+ *     moved.  Undefined for a blank event.
+ * @extends {CommentBase}
+ * @constructor
+ */
 const CommentMove = function(opt_comment) {
   CommentMove.superClass_.constructor.call(this, opt_comment);
   if (!opt_comment) {
@@ -36,34 +36,34 @@ const CommentMove = function(opt_comment) {
   }
 
   /**
-  * The comment that is being moved.  Will be cleared after recording the new
-  * location.
-  * @type {WorkspaceComment}
-  */
+   * The comment that is being moved.  Will be cleared after recording the new
+   * location.
+   * @type {WorkspaceComment}
+   */
   this.comment_ = opt_comment;
 
   /**
-  * The location before the move, in workspace coordinates.
-  * @type {!Coordinate}
-  */
+   * The location before the move, in workspace coordinates.
+   * @type {!Coordinate}
+   */
   this.oldCoordinate_ = opt_comment.getXY();
 
   /**
-  * The location after the move, in workspace coordinates.
-  * @type {Coordinate}
-  */
+   * The location after the move, in workspace coordinates.
+   * @type {Coordinate}
+   */
   this.newCoordinate_ = null;
 };
-object.inherits(CommentMove,
-    CommentBase);
+object.inherits(CommentMove, CommentBase);
 
 /**
-* Record the comment's new location.  Called after the move.  Can only be
-* called once.
-*/
+ * Record the comment's new location.  Called after the move.  Can only be
+ * called once.
+ */
 CommentMove.prototype.recordNew = function() {
   if (!this.comment_) {
-    throw Error('Tried to record the new position of a comment on the ' +
+    throw Error(
+        'Tried to record the new position of a comment on the ' +
         'same event twice.');
   }
   this.newCoordinate_ = this.comment_.getXY();
@@ -71,25 +71,25 @@ CommentMove.prototype.recordNew = function() {
 };
 
 /**
-* Type of this event.
-* @type {string}
-*/
+ * Type of this event.
+ * @type {string}
+ */
 CommentMove.prototype.type = Events.COMMENT_MOVE;
 
 /**
-* Override the location before the move.  Use this if you don't create the
-* event until the end of the move, but you know the original location.
-* @param {!Coordinate} xy The location before the move,
-*     in workspace coordinates.
-*/
+ * Override the location before the move.  Use this if you don't create the
+ * event until the end of the move, but you know the original location.
+ * @param {!Coordinate} xy The location before the move,
+ *     in workspace coordinates.
+ */
 CommentMove.prototype.setOldCoordinate = function(xy) {
   this.oldCoordinate_ = xy;
 };
 
 /**
-* Encode the event as JSON.
-* @return {!Object} JSON representation.
-*/
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
 // TODO (#1266): "Full" and "minimal" serialization.
 CommentMove.prototype.toJson = function() {
   const json = CommentMove.superClass_.toJson.call(this);
@@ -105,37 +105,34 @@ CommentMove.prototype.toJson = function() {
 };
 
 /**
-* Decode the JSON event.
-* @param {!Object} json JSON representation.
-*/
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
 CommentMove.prototype.fromJson = function(json) {
   CommentMove.superClass_.fromJson.call(this, json);
 
   if (json['oldCoordinate']) {
     const xy = json['oldCoordinate'].split(',');
-    this.oldCoordinate_ =
-        new Coordinate(Number(xy[0]), Number(xy[1]));
+    this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
   if (json['newCoordinate']) {
     const xy = json['newCoordinate'].split(',');
-    this.newCoordinate_ =
-        new Coordinate(Number(xy[0]), Number(xy[1]));
+    this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
 };
 
 /**
-* Does this event record any change of state?
-* @return {boolean} False if something changed.
-*/
+ * Does this event record any change of state?
+ * @return {boolean} False if something changed.
+ */
 CommentMove.prototype.isNull = function() {
-  return Coordinate.equals(this.oldCoordinate_,
-      this.newCoordinate_);
+  return Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
 };
 
 /**
-* Run a move event.
-* @param {boolean} forward True if run forward, false if run backward (undo).
-*/
+ * Run a move event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
 CommentMove.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const comment = workspace.getCommentById(this.commentId);
@@ -150,7 +147,6 @@ CommentMove.prototype.run = function(forward) {
   comment.moveBy(target.x - current.x, target.y - current.y);
 };
 
-registry.register(registry.Type.EVENT,
-    Events.COMMENT_MOVE, CommentMove);
+registry.register(registry.Type.EVENT, Events.COMMENT_MOVE, CommentMove);
 
 exports = CommentMove;

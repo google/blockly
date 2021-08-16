@@ -30,6 +30,7 @@
         "defineRowBlock": true,
         "defineStackBlock": true,
         "defineStatementBlock": true,
+        "defineMutatorBlocks": true,
         "dispatchPointerEvent": true,
         "createFireChangeListenerSpy": true,
         "createGenUidStubWithReturns": true,

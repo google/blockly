@@ -193,7 +193,8 @@ Blockly.Events.BlockChange.prototype.run = function(forward) {
       block.setInputsInline(!!value);
       break;
     case 'mutation':
-      var oldState = this.getExtraBlockState_(block);
+      var oldState = this.getExtraBlockState_(
+          /** @type {!Blockly.BlockSvg} */ (block));
       if (block.loadExtraState) {
         block.loadExtraState(JSON.parse(/** @type {string} */ (value) || '{}'));
       } else if (block.domToMutation) {

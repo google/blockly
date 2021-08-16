@@ -413,7 +413,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
     Blockly.Events.setGroup(true);
-    var block = this.block_;
+    var block = /** @type {!Blockly.BlockSvg} */ (this.block_);
     var oldExtraState = this.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.

@@ -856,11 +856,11 @@ Blockly.Field.prototype.setValue = function(newValue) {
     return;
   }
 
+  this.doValueUpdate_(newValue);
   if (source && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
         source, 'field', this.name || null, oldValue, newValue));
   }
-  this.doValueUpdate_(newValue);
   if (this.isDirty_) {
     this.forceRerender();
   }

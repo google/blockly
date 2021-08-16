@@ -414,8 +414,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   if (this.rootBlock_.workspace == this.workspace_) {
     Blockly.Events.setGroup(true);
     var block = this.block_;
-    var oldMutationDom = block.mutationToDom();
-    var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+    var oldExtraState = this.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.
     var savedRendered = block.rendered;
@@ -433,11 +432,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       block.render();
     }
 
-    var newMutationDom = block.mutationToDom();
-    var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
-    if (oldMutation != newMutation) {
+    var newExtraState = this.getExtraBlockState_(block);
+    if (oldExtraState != newExtraState) {
       Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
-          block, 'mutation', null, oldMutation, newMutation));
+          block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
@@ -454,6 +452,23 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
     }
     Blockly.Events.setGroup(false);
   }
+};
+
+/**
+ * Returns the extra state of the given block (either as XML or a JSO, depending
+ * on the block's definition).
+ * @param {!Blockly.BlockSvg} block The block to get the extra state of.
+ * @return {string} A strigified version of the extra state of the given block.
+ */
+Blockly.Mutator.prototype.getExtraBlockState_ = function(block) {
+  if (block.saveExtraState) {
+    var state = block.saveExtraState();
+    return state ? JSON.stringify(state) : '';
+  } else if (block.mutationToDom) {
+    var state = block.mutationToDom();
+    return state ? Blockly.Xml.domToText(state) : '';
+  }
+  return '';
 };
 
 /**

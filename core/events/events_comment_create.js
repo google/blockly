@@ -51,7 +51,7 @@ Blockly.Events.CommentCreate.prototype.type = Blockly.Events.COMMENT_CREATE;
 */
 // TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentCreate.prototype.toJson = function() {
-  var json = Blockly.Events.CommentCreate.superClass_.toJson.call(this);
+  const json = Blockly.Events.CommentCreate.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   return json;
 };

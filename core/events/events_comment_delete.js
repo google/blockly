@@ -50,7 +50,7 @@ Blockly.Events.CommentDelete.prototype.type = Blockly.Events.COMMENT_DELETE;
 */
 // TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentDelete.prototype.toJson = function() {
-  var json = Blockly.Events.CommentDelete.superClass_.toJson.call(this);
+  const json = Blockly.Events.CommentDelete.superClass_.toJson.call(this);
   return json;
 };
 

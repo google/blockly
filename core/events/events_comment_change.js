@@ -55,7 +55,7 @@ Blockly.Events.CommentChange.prototype.type = Blockly.Events.COMMENT_CHANGE;
 * @return {!Object} JSON representation.
 */
 Blockly.Events.CommentChange.prototype.toJson = function() {
-  var json = Blockly.Events.CommentChange.superClass_.toJson.call(this);
+  const json = Blockly.Events.CommentChange.superClass_.toJson.call(this);
   json['oldContents'] = this.oldContents_;
   json['newContents'] = this.newContents_;
   return json;
@@ -84,13 +84,13 @@ Blockly.Events.CommentChange.prototype.isNull = function() {
 * @param {boolean} forward True if run forward, false if run backward (undo).
 */
 Blockly.Events.CommentChange.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
-  var comment = workspace.getCommentById(this.commentId);
+  const workspace = this.getEventWorkspace_();
+  const comment = workspace.getCommentById(this.commentId);
   if (!comment) {
     console.warn('Can\'t change non-existent comment: ' + this.commentId);
     return;
   }
-  var contents = forward ? this.newContents_ : this.oldContents_;
+  const contents = forward ? this.newContents_ : this.oldContents_;
 
   comment.setContent(contents);
 };

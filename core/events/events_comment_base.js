@@ -70,7 +70,7 @@ Blockly.utils.object.inherits(Blockly.Events.CommentBase,
  * @return {!Object} JSON representation.
  */
 Blockly.Events.CommentBase.prototype.toJson = function() {
-  var json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
+  const json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
   if (this.commentId) {
     json['commentId'] = this.commentId;
   }
@@ -93,13 +93,13 @@ Blockly.Events.CommentBase.prototype.fromJson = function(json) {
 * @param {boolean} create if True then Create, if False then Delete
 */
 Blockly.Events.CommentBase.CommentCreateDeleteHelper = function(event, create) {
-  var workspace = event.getEventWorkspace_();
+  const workspace = event.getEventWorkspace_();
   if (create) {
-    var xml = Blockly.utils.xml.createElement('xml');
+    const xml = Blockly.utils.xml.createElement('xml');
     xml.appendChild(event.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
-    var comment = workspace.getCommentById(event.commentId);
+    const comment = workspace.getCommentById(event.commentId);
     if (comment) {
       comment.dispose();
     } else {

@@ -90,7 +90,7 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
 */
 // TODO (#1266): "Full" and "minimal" serialization.
 Blockly.Events.CommentMove.prototype.toJson = function() {
-  var json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
+  const json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
   if (this.oldCoordinate_) {
     json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
         Math.round(this.oldCoordinate_.y);
@@ -110,12 +110,12 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
   Blockly.Events.CommentMove.superClass_.fromJson.call(this, json);
 
   if (json['oldCoordinate']) {
-    var xy = json['oldCoordinate'].split(',');
+    const xy = json['oldCoordinate'].split(',');
     this.oldCoordinate_ =
         new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
   if (json['newCoordinate']) {
-    var xy = json['newCoordinate'].split(',');
+    const xy = json['newCoordinate'].split(',');
     this.newCoordinate_ =
         new Blockly.utils.Coordinate(Number(xy[0]), Number(xy[1]));
   }
@@ -135,16 +135,16 @@ Blockly.Events.CommentMove.prototype.isNull = function() {
 * @param {boolean} forward True if run forward, false if run backward (undo).
 */
 Blockly.Events.CommentMove.prototype.run = function(forward) {
-  var workspace = this.getEventWorkspace_();
-  var comment = workspace.getCommentById(this.commentId);
+  const workspace = this.getEventWorkspace_();
+  const comment = workspace.getCommentById(this.commentId);
   if (!comment) {
     console.warn('Can\'t move non-existent comment: ' + this.commentId);
     return;
   }
 
-  var target = forward ? this.newCoordinate_ : this.oldCoordinate_;
+  const target = forward ? this.newCoordinate_ : this.oldCoordinate_;
   // TODO: Check if the comment is being dragged, and give up if so.
-  var current = comment.getXY();
+  const current = comment.getXY();
   comment.moveBy(target.x - current.x, target.y - current.y);
 };
 

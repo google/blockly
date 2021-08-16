@@ -13,39 +13,41 @@
 goog.module('Blockly.blockRendering.Field');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const BlocklyField = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const Measurable = goog.require('Blockly.blockRendering.Measurable');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Field');
-goog.requireType('Blockly.Input');
- 
 
 /**
  * An object containing information about the space a field takes up during
  * rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Field} field The field to measure and store information for.
- * @param {!Blockly.Input} parentInput The parent input for the field.
+ * @param {!BlocklyField} field The field to measure and store information for.
+ * @param {!Input} parentInput The parent input for the field.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Measurable}
+ * @extends {Measurable}
  */
 const Field = function(constants, field, parentInput) {
   Field.superClass_.constructor.call(this, constants);
   this.field = field;
   this.isEditable = field.EDITABLE;
   this.flipRtl = field.getFlipRtl();
-  this.type |= Blockly.blockRendering.Types.FIELD;
+  this.type |= Types.FIELD;
 
   const size = this.field.getSize();
   this.height = size.height;
   this.width = size.width;
   this.parentInput = parentInput;
 };
-Blockly.utils.object.inherits(Field,
-    Blockly.blockRendering.Measurable);
+object.inherits(Field,
+    Measurable);
 
 exports = Field;

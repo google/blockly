@@ -5,6 +5,7 @@
  */
 
 goog.require('Blockly.WorkspaceComment');
+goog.module.get('Blockly.Events.CommentCreate');
 
 suite('Events', function() {
   setup(function() {
@@ -484,21 +485,25 @@ suite('Events', function() {
     ];
     var workspaceCommentEventTestCases = [
       {title: 'Comment change', class: Blockly.Events.CommentChange,
+        classModule: 'Blockly.Events.CommentChange',
         getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
         getExpectedJson: (thisObj) => ({type: 'comment_change',
           commentId: thisObj.comment.id, oldContents: 'bar',
           newContents: 'foo'})},
       {title: 'Comment create', class: Blockly.Events.CommentCreate,
+        classModule: 'Blockly.Events.CommentCreate',
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_create',
           commentId: thisObj.comment.id,
           xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
       {title: 'Comment delete', class: Blockly.Events.CommentDelete,
+        classModule: 'Blockly.Events.CommentDelete',
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_delete',
           commentId: thisObj.comment.id})},
       // TODO(#4577) Test serialization of move event coordinate properties.
       {title: 'Comment move', class: Blockly.Events.CommentMove,
+        classModule: 'Blockly.Events.CommentMove',
         getArgs: (thisObj) => [thisObj.comment],
         getExpectedJson: (thisObj) => ({type: 'comment_move',
           commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
@@ -538,8 +543,12 @@ suite('Events', function() {
         suite('fromJson', function() {
           testSuite.testCases.forEach((testCase) => {
             test(testCase.title, function() {
-              var event = new testCase.class(...testCase.getArgs(this));
-              var event2 = new testCase.class();
+              // Some classes that are optional requires need to be dynamically
+              // loaded via goog.module.get.
+              const testClass = testCase.classModule ?
+                  goog.module.get(testCase.classModule) : testCase.class;
+              var event = new testClass(...testCase.getArgs(this));
+              var event2 = new testClass();
               var json = event.toJson();
               event2.fromJson(json);
 
@@ -552,7 +561,11 @@ suite('Events', function() {
           testSuite.testCases.forEach((testCase) => {
             if (testCase.getExpectedJson) {
               test(testCase.title, function() {
-                var event = new testCase.class(...testCase.getArgs(this));
+                // Some classes that are optional requires need to be dynamically
+                // loaded via goog.module.get.
+                const testClass = testCase.classModule ?
+                    goog.module.get(testCase.classModule) : testCase.class;
+                var event = new testClass(...testCase.getArgs(this));
                 var json = event.toJson();
                 var expectedJson = testCase.getExpectedJson(this);
 

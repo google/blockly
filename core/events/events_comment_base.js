@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.CommentBase');
+goog.module('Blockly.Events.CommentBase');
+goog.module.declareLegacyNamespace();
  
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -28,7 +29,7 @@ goog.requireType('Blockly.WorkspaceComment');
 * @extends {Blockly.Events.Abstract}
 * @constructor
 */
-Blockly.Events.CommentBase = function(opt_comment) {
+const CommentBase = function(opt_comment) {
 
   /**
   * Whether or not an event is blank.
@@ -62,15 +63,15 @@ Blockly.Events.CommentBase = function(opt_comment) {
   */
   this.recordUndo = Blockly.Events.recordUndo;
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentBase,
+Blockly.utils.object.inherits(CommentBase,
     Blockly.Events.Abstract);
  
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.CommentBase.prototype.toJson = function() {
-  const json = Blockly.Events.CommentBase.superClass_.toJson.call(this);
+CommentBase.prototype.toJson = function() {
+  const json = CommentBase.superClass_.toJson.call(this);
   if (this.commentId) {
     json['commentId'] = this.commentId;
   }
@@ -81,8 +82,8 @@ Blockly.Events.CommentBase.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.CommentBase.prototype.fromJson = function(json) {
-  Blockly.Events.CommentBase.superClass_.fromJson.call(this, json);
+CommentBase.prototype.fromJson = function(json) {
+  CommentBase.superClass_.fromJson.call(this, json);
   this.commentId = json['commentId'];
 };
 
@@ -92,7 +93,7 @@ Blockly.Events.CommentBase.prototype.fromJson = function(json) {
 *     The event to run.
 * @param {boolean} create if True then Create, if False then Delete
 */
-Blockly.Events.CommentBase.CommentCreateDeleteHelper = function(event, create) {
+CommentBase.CommentCreateDeleteHelper = function(event, create) {
   const workspace = event.getEventWorkspace_();
   if (create) {
     const xml = Blockly.utils.xml.createElement('xml');
@@ -108,3 +109,5 @@ Blockly.Events.CommentBase.CommentCreateDeleteHelper = function(event, create) {
     }
   }
 };
+
+exports = CommentBase;

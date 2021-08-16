@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Events.CommentMove');
+goog.module('Blockly.Events.CommentMove');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.CommentBase');
@@ -27,8 +28,8 @@ goog.requireType('Blockly.WorkspaceComment');
 * @extends {Blockly.Events.CommentBase}
 * @constructor
 */
-Blockly.Events.CommentMove = function(opt_comment) {
-  Blockly.Events.CommentMove.superClass_.constructor.call(this, opt_comment);
+const CommentMove = function(opt_comment) {
+  CommentMove.superClass_.constructor.call(this, opt_comment);
   if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -52,14 +53,14 @@ Blockly.Events.CommentMove = function(opt_comment) {
   */
   this.newCoordinate_ = null;
 };
-Blockly.utils.object.inherits(Blockly.Events.CommentMove,
+Blockly.utils.object.inherits(CommentMove,
     Blockly.Events.CommentBase);
 
 /**
 * Record the comment's new location.  Called after the move.  Can only be
 * called once.
 */
-Blockly.Events.CommentMove.prototype.recordNew = function() {
+CommentMove.prototype.recordNew = function() {
   if (!this.comment_) {
     throw Error('Tried to record the new position of a comment on the ' +
         'same event twice.');
@@ -72,7 +73,7 @@ Blockly.Events.CommentMove.prototype.recordNew = function() {
 * Type of this event.
 * @type {string}
 */
-Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
+CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 
 /**
 * Override the location before the move.  Use this if you don't create the
@@ -80,7 +81,7 @@ Blockly.Events.CommentMove.prototype.type = Blockly.Events.COMMENT_MOVE;
 * @param {!Blockly.utils.Coordinate} xy The location before the move,
 *     in workspace coordinates.
 */
-Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
+CommentMove.prototype.setOldCoordinate = function(xy) {
   this.oldCoordinate_ = xy;
 };
 
@@ -89,8 +90,8 @@ Blockly.Events.CommentMove.prototype.setOldCoordinate = function(xy) {
 * @return {!Object} JSON representation.
 */
 // TODO (#1266): "Full" and "minimal" serialization.
-Blockly.Events.CommentMove.prototype.toJson = function() {
-  const json = Blockly.Events.CommentMove.superClass_.toJson.call(this);
+CommentMove.prototype.toJson = function() {
+  const json = CommentMove.superClass_.toJson.call(this);
   if (this.oldCoordinate_) {
     json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
         Math.round(this.oldCoordinate_.y);
@@ -106,8 +107,8 @@ Blockly.Events.CommentMove.prototype.toJson = function() {
 * Decode the JSON event.
 * @param {!Object} json JSON representation.
 */
-Blockly.Events.CommentMove.prototype.fromJson = function(json) {
-  Blockly.Events.CommentMove.superClass_.fromJson.call(this, json);
+CommentMove.prototype.fromJson = function(json) {
+  CommentMove.superClass_.fromJson.call(this, json);
 
   if (json['oldCoordinate']) {
     const xy = json['oldCoordinate'].split(',');
@@ -125,7 +126,7 @@ Blockly.Events.CommentMove.prototype.fromJson = function(json) {
 * Does this event record any change of state?
 * @return {boolean} False if something changed.
 */
-Blockly.Events.CommentMove.prototype.isNull = function() {
+CommentMove.prototype.isNull = function() {
   return Blockly.utils.Coordinate.equals(this.oldCoordinate_,
       this.newCoordinate_);
 };
@@ -134,7 +135,7 @@ Blockly.Events.CommentMove.prototype.isNull = function() {
 * Run a move event.
 * @param {boolean} forward True if run forward, false if run backward (undo).
 */
-Blockly.Events.CommentMove.prototype.run = function(forward) {
+CommentMove.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   const comment = workspace.getCommentById(this.commentId);
   if (!comment) {
@@ -149,4 +150,6 @@ Blockly.Events.CommentMove.prototype.run = function(forward) {
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.COMMENT_MOVE, Blockly.Events.CommentMove);
+    Blockly.Events.COMMENT_MOVE, CommentMove);
+
+exports = CommentMove;

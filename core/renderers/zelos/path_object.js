@@ -98,7 +98,7 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
   }
 
   // Apply colour to outlines.
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
   }
 };
@@ -109,7 +109,7 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
 Blockly.zelos.PathObject.prototype.flipRTL = function() {
   Blockly.zelos.PathObject.superClass_.flipRTL.call(this);
   // Mirror each input outline path.
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
   }
 };
@@ -155,8 +155,8 @@ Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
  */
 Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
     conn, enable) {
-  var name = conn.getParentInput().name;
-  var outlinePath = this.getOutlinePath_(name);
+  const name = conn.getParentInput().name;
+  const outlinePath = this.getOutlinePath_(name);
   if (!outlinePath) {
     return;
   }
@@ -174,7 +174,7 @@ Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
  */
 Blockly.zelos.PathObject.prototype.beginDrawing = function() {
   this.remainingOutlines_ = Object.create(null);
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     // The value set here isn't used anywhere, we are just using the
     // object as a Set data structure.
     this.remainingOutlines_[key] = 1;
@@ -189,7 +189,7 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
   // Go through all remaining outlines that were not used this draw pass, and
   // remove them.
   if (this.remainingOutlines_) {
-    for (var key in this.remainingOutlines_) {
+    for (const key in this.remainingOutlines_) {
       this.removeOutlinePath_(key);
     }
   }
@@ -204,7 +204,7 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
  * @package
  */
 Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
-  var outline = this.getOutlinePath_(name);
+  const outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
   outline.setAttribute('fill', this.style.colourTertiary);
 };

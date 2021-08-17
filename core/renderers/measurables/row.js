@@ -27,7 +27,7 @@ goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  */
-Blockly.blockRendering.Row = function(constants) {
+const Row = function(constants) {
   /**
    * The type of this rendering object.
    * @package
@@ -153,7 +153,7 @@ Blockly.blockRendering.Row = function(constants) {
  * @package
  */
 // TODO: Consider moving this to InputRow, if possible.
-Blockly.blockRendering.Row.prototype.getLastInput = function() {
+Row.prototype.getLastInput = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (Blockly.blockRendering.Types.isInput(elem)) {
       return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
@@ -166,7 +166,7 @@ Blockly.blockRendering.Row.prototype.getLastInput = function() {
  * Inspect all subcomponents and populate all size properties on the row.
  * @package
  */
-Blockly.blockRendering.Row.prototype.measure = function() {
+Row.prototype.measure = function() {
   throw Error('Unexpected attempt to measure a base Row.');
 };
 
@@ -175,7 +175,7 @@ Blockly.blockRendering.Row.prototype.measure = function() {
  * @return {boolean} Whether the row should start with a spacer.
  * @package
  */
-Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
+Row.prototype.startsWithElemSpacer = function() {
   return true;
 };
 
@@ -184,7 +184,7 @@ Blockly.blockRendering.Row.prototype.startsWithElemSpacer = function() {
  * @return {boolean} Whether the row should end with a spacer.
  * @package
  */
-Blockly.blockRendering.Row.prototype.endsWithElemSpacer = function() {
+Row.prototype.endsWithElemSpacer = function() {
   return true;
 };
 
@@ -194,7 +194,7 @@ Blockly.blockRendering.Row.prototype.endsWithElemSpacer = function() {
  *   this row.
  * @package
  */
-Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
+Row.prototype.getFirstSpacer = function() {
   for (var i = 0, elem; (elem = this.elements[i]); i++) {
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
@@ -209,7 +209,7 @@ Blockly.blockRendering.Row.prototype.getFirstSpacer = function() {
  *   this row.
  * @package
  */
-Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
+Row.prototype.getLastSpacer = function() {
   for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
@@ -217,3 +217,5 @@ Blockly.blockRendering.Row.prototype.getLastSpacer = function() {
   }
   return null;
 };
+
+exports = Row;

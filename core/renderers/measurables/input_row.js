@@ -27,8 +27,8 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.InputRow = function(constants) {
-  Blockly.blockRendering.InputRow.superClass_.constructor.call(this, constants);
+const InputRow = function(constants) {
+  InputRow.superClass_.constructor.call(this, constants);
   this.type |= Blockly.blockRendering.Types.INPUT_ROW;
 
   /**
@@ -38,14 +38,14 @@ Blockly.blockRendering.InputRow = function(constants) {
    */
   this.connectedBlockWidths = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.InputRow,
+Blockly.utils.object.inherits(InputRow,
     Blockly.blockRendering.Row);
 
 /**
  * Inspect all subcomponents and populate all size properties on the row.
  * @package
  */
-Blockly.blockRendering.InputRow.prototype.measure = function() {
+InputRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
   var connectedBlockWidths = 0;
@@ -71,6 +71,8 @@ Blockly.blockRendering.InputRow.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.blockRendering.InputRow.prototype.endsWithElemSpacer = function() {
+InputRow.prototype.endsWithElemSpacer = function() {
   return !this.hasExternalInput && !this.hasStatement;
 };
+
+exports = InputRow;

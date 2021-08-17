@@ -14,7 +14,7 @@ goog.module.declareLegacyNamespace();
 
 goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.PreviousConnection');
+goog.requireType('Blockly.blockRendering.PreviousConnection');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
@@ -33,8 +33,8 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.TopRow = function(constants) {
-  Blockly.blockRendering.TopRow.superClass_.constructor.call(this, constants);
+const TopRow = function(constants) {
+  TopRow.superClass_.constructor.call(this, constants);
 
   this.type |= Blockly.blockRendering.Types.TOP_ROW;
 
@@ -66,7 +66,7 @@ Blockly.blockRendering.TopRow = function(constants) {
    */
   this.connection = null;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
+Blockly.utils.object.inherits(TopRow,
     Blockly.blockRendering.Row);
 
 /**
@@ -74,7 +74,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.TopRow,
  * @param {!Blockly.BlockSvg} block The block whose top row this represents.
  * @return {boolean} Whether or not the top row has a left square corner.
  */
-Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
+TopRow.prototype.hasLeftSquareCorner = function(block) {
   var hasHat = (block.hat ?
       block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
@@ -89,7 +89,7 @@ Blockly.blockRendering.TopRow.prototype.hasLeftSquareCorner = function(block) {
  * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
  * @return {boolean} Whether or not the top row has a right square corner.
  */
-Blockly.blockRendering.TopRow.prototype.hasRightSquareCorner = function(
+TopRow.prototype.hasRightSquareCorner = function(
     _block) {
   return true;
 };
@@ -97,7 +97,7 @@ Blockly.blockRendering.TopRow.prototype.hasRightSquareCorner = function(
 /**
  * @override
  */
-Blockly.blockRendering.TopRow.prototype.measure = function() {
+TopRow.prototype.measure = function() {
   var height = 0;
   var width = 0;
   var ascenderHeight = 0;
@@ -121,13 +121,15 @@ Blockly.blockRendering.TopRow.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.blockRendering.TopRow.prototype.startsWithElemSpacer = function() {
+TopRow.prototype.startsWithElemSpacer = function() {
   return false;
 };
 
 /**
  * @override
  */
-Blockly.blockRendering.TopRow.prototype.endsWithElemSpacer = function() {
+TopRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
+
+exports = TopRow;

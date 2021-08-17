@@ -13,23 +13,24 @@
 goog.module('Blockly.zelos.StatementInput');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.StatementInput');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+const BaseStatementInput = goog.require('Blockly.blockRendering.StatementInput');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const Input = goog.requireType('Blockly.Input');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.Input} input The statement input to measure and store
+ * @param {!Input} input The statement input to measure and store
  *     information for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.StatementInput}
+ * @extends {BaseStatementInput}
  */
 const StatementInput = function(constants, input) {
   StatementInput.superClass_.constructor.call(this,
@@ -47,7 +48,7 @@ const StatementInput = function(constants, input) {
     }
   }
 };
-Blockly.utils.object.inherits(StatementInput,
-    Blockly.blockRendering.StatementInput);
+object.inherits(StatementInput,
+    BaseStatementInput);
 
 exports = StatementInput;

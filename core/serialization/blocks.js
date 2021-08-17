@@ -174,6 +174,11 @@ const saveExtraState = function(block, state) {
   }
 };
 
+/**
+ * Adds the state of all of the icons on the block to the given state object.
+ * @param {!Block} block The block to serialize the icon state of.
+ * @param {!State} state The state object to append to.
+ */
 const saveIcons = function(block, state) {
   // TODO(#2105): Remove this logic and put it in the icon.
   if (block.getCommentText()) {

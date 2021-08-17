@@ -13,11 +13,11 @@
 goog.module('Blockly.Touch');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.utils.global');
-goog.require('Blockly.utils.string');
-
-goog.requireType('Blockly.Gesture');
+/* eslint-disable-next-line no-unused-vars */
+const Gesture = goog.requireType('Blockly.Gesture');
+const internalConstants = goog.require('Blockly.internalConstants');
+const utilsGlobal = goog.require('Blockly.utils.global');
+const utilsString = goog.require('Blockly.utils.string');
 
 
 /**
@@ -26,13 +26,13 @@ goog.requireType('Blockly.Gesture');
  * @const
  */
 const TOUCH_ENABLED =
-    ('ontouchstart' in Blockly.utils.global ||
-     !!(Blockly.utils.global['document'] && document.documentElement &&
+    ('ontouchstart' in utilsGlobal ||
+     !!(utilsGlobal['document'] && document.documentElement &&
         'ontouchstart' in document.documentElement) ||
      // IE10 uses non-standard touch events, so it has a different check.
-     !!(Blockly.utils.global['navigator'] &&
-        (Blockly.utils.global['navigator']['maxTouchPoints'] ||
-         Blockly.utils.global['navigator']['msMaxTouchPoints'])));
+     !!(utilsGlobal['navigator'] &&
+        (utilsGlobal['navigator']['maxTouchPoints'] ||
+            utilsGlobal['navigator']['msMaxTouchPoints'])));
 exports.TOUCH_ENABLED = TOUCH_ENABLED;
 
 /**
@@ -47,7 +47,7 @@ let touchIdentifier_ = null;
  * @type {Object}
  */
 let TOUCH_MAP = {};
-if (Blockly.utils.global['PointerEvent']) {
+if (utilsGlobal['PointerEvent']) {
   TOUCH_MAP = {
     'mousedown': ['pointerdown'],
     'mouseenter': ['pointerenter'],
@@ -80,7 +80,7 @@ let longPid_ = 0;
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
- * @param {Blockly.Gesture} gesture The gesture that triggered this longStart.
+ * @param {Gesture} gesture The gesture that triggered this longStart.
  */
 const longStart = function(e, gesture) {
   longStop();
@@ -102,7 +102,7 @@ const longStart = function(e, gesture) {
     if (gesture) {
       gesture.handleRightClick(e);
     }
-  }, Blockly.internalConstants.LONGPRESS);
+  }, internalConstants.LONGPRESS);
 };
 /** @package */
 exports.longStart = longStart;
@@ -203,7 +203,7 @@ exports.checkTouchIdentifier = checkTouchIdentifier;
  * @param {!Event} e A touch event.
  */
 const setClientFromTouch = function(e) {
-  if (Blockly.utils.string.startsWith(e.type, 'touch')) {
+  if (utilsString.startsWith(e.type, 'touch')) {
     // Map the touch event's properties to the event.
     const touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;
@@ -218,9 +218,9 @@ exports.setClientFromTouch = setClientFromTouch;
  * @return {boolean} True if it is a mouse or touch event; false otherwise.
  */
 const isMouseOrTouchEvent = function(e) {
-  return Blockly.utils.string.startsWith(e.type, 'touch') ||
-      Blockly.utils.string.startsWith(e.type, 'mouse') ||
-      Blockly.utils.string.startsWith(e.type, 'pointer');
+  return utilsString.startsWith(e.type, 'touch') ||
+      utilsString.startsWith(e.type, 'mouse') ||
+      utilsString.startsWith(e.type, 'pointer');
 };
 exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
 
@@ -230,8 +230,8 @@ exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
  * @return {boolean} True if it is a touch event; false otherwise.
  */
 const isTouchEvent = function(e) {
-  return Blockly.utils.string.startsWith(e.type, 'touch') ||
-      Blockly.utils.string.startsWith(e.type, 'pointer');
+  return utilsString.startsWith(e.type, 'touch') ||
+      utilsString.startsWith(e.type, 'pointer');
 };
 exports.isTouchEvent = isTouchEvent;
 

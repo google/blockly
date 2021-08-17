@@ -102,7 +102,6 @@ TopRow.prototype.measure = function() {
   let height = 0;
   let width = 0;
   let ascenderHeight = 0;
-  let e = 0, elem;
   for (let i = 0; i < this.elements.length; i++) {
     const elem = this.elements[i];
     width += elem.width;

@@ -13,33 +13,34 @@
 goog.module('Blockly.FlyoutMetricsManager');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.MetricsManager');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const IFlyout = goog.requireType('Blockly.IFlyout');
+const MetricsManager = goog.require('Blockly.MetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
- * @param {!Blockly.WorkspaceSvg} workspace The flyout's workspace.
- * @param {!Blockly.IFlyout} flyout The flyout.
- * @extends {Blockly.MetricsManager}
+ * @param {!WorkspaceSvg} workspace The flyout's workspace.
+ * @param {!IFlyout} flyout The flyout.
+ * @extends {MetricsManager}
  * @constructor
  */
 const FlyoutMetricsManager = function(workspace, flyout) {
   /**
    * The flyout that owns the workspace to calculate metrics for.
-   * @type {!Blockly.IFlyout}
+   * @type {!IFlyout}
    * @protected
    */
   this.flyout_ = flyout;
 
   FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
 };
-Blockly.utils.object.inherits(
-    FlyoutMetricsManager, Blockly.MetricsManager);
+object.inherits(
+    FlyoutMetricsManager, MetricsManager);
 
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.

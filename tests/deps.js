@@ -191,7 +191,7 @@ goog.addDependency('../../core/scrollbar_pair.js', ['Blockly.ScrollbarPair'], ['
 goog.addDependency('../../core/shortcut_items.js', ['Blockly.ShortcutItems'], ['Blockly', 'Blockly.Gesture', 'Blockly.ShortcutRegistry', 'Blockly.clipboard', 'Blockly.utils.KeyCodes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/shortcut_registry.js', ['Blockly.ShortcutRegistry'], ['Blockly.utils.KeyCodes', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/theme.js', ['Blockly.Theme'], ['Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/theme/classic.js', ['Blockly.Themes.Classic'], ['Blockly.Theme']);
+goog.addDependency('../../core/theme/classic.js', ['Blockly.Themes.Classic'], ['Blockly.Theme'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/theme/zelos.js', ['Blockly.Themes.Zelos'], ['Blockly.Theme'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/theme_manager.js', ['Blockly.ThemeManager'], ['Blockly.utils.dom'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/toolbox/category.js', ['Blockly.ToolboxCategory'], ['Blockly', 'Blockly.Css', 'Blockly.ToolboxItem', 'Blockly.registry', 'Blockly.utils', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es6', 'module': 'goog'});

@@ -148,6 +148,13 @@ Blockly.Flyout = function(workspaceOptions) {
    * @package
    */
   this.targetWorkspace = null;
+
+  /**
+   * A list of blocks that can be reused.
+   * @type {!Array<!Blockly.BlockSvg>}
+   * @private
+   */
+  this.recycledBlocks_ = [];
 };
 Blockly.utils.object.inherits(Blockly.Flyout, Blockly.DeleteArea);
 
@@ -587,7 +594,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       case 'BLOCK':
         var blockInfo = /** @type {!Blockly.utils.toolbox.BlockInfo} */ (contentInfo);
         var blockXml = this.getBlockXml_(blockInfo);
-        var block = this.createBlock_(blockXml);
+        var block = this.createFlyoutBlock_(blockXml);
         // This is a deprecated method for adding gap to a block.
         // <block type="math_arithmetic" gap="8"></block>
         var gap = parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
@@ -662,17 +669,22 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * defined as disabled.
  * @param {!Element} blockXml The xml of the block.
  * @return {!Blockly.BlockSvg} The block created from the blockXml.
- * @protected
+ * @private
  */
-Blockly.Flyout.prototype.createBlock_ = function(blockXml) {
-  var curBlock = /** @type {!Blockly.BlockSvg} */ (
-    Blockly.Xml.domToBlock(blockXml, this.workspace_));
-  if (!curBlock.isEnabled()) {
+Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockXml) {
+  var blockType = blockXml.getAttribute('type');
+  var block = this.recycledBlocks_.find(function(block) {
+    return block.type === blockType;
+  });
+  if (!block) {
+    block = Blockly.Xml.domToBlock(blockXml, this.workspace_);
+  }
+  if (!block.isEnabled()) {
     // Record blocks that were initially disabled.
     // Do not enable these blocks as a result of capacity filtering.
-    this.permanentlyDisabled_.push(curBlock);
+    this.permanentlyDisabled_.push(block);
   }
-  return curBlock;
+  return block;
 };
 
 /**
@@ -729,13 +741,15 @@ Blockly.Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) 
 
 /**
  * Delete blocks, mats and buttons from a previous showing of the flyout.
- * @protected
+ * @private
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
   var oldBlocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; (block = oldBlocks[i]); i++) {
-    if (block.workspace == this.workspace_) {
+    if (this.blockIsRecyclable_(block)) {
+      this.recycleBlock_(block);
+    } else {
       block.dispose(false, false);
     }
   }
@@ -756,6 +770,30 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
 
   // Clear potential variables from the previous showing.
   this.workspace_.getPotentialVariableMap().clear();
+};
+
+/**
+ * Returns whether the given block can be recycled or not.
+ * @param {!Blocky.BlockSvg} _block The block to check for recyclability.
+ * @return {boolean} True if the block can be recycled. False otherwise.
+ * @protected
+ */
+Blockly.Flyout.prototype.blockIsRecyclable_ = function(_block) {
+  // By default, recycling is disabled.
+  return false;
+};
+
+/**
+ * Puts a previously created block into the recycle bin and moves it to the
+ * top of the workspace. Used during large workspace swaps to limit the number
+ * of new DOM elements we need to create.
+ * @param {!Blockly.BlockSvg} block The block to recycle.
+ * @private
+ */
+Blockly.Flyout.prototype.recycleBlock_ = function(block) {
+  var xy = block.getRelativeToSurfaceXY();
+  block.moveBy(-xy.x, -xy.y);
+  this.recycledBlocks_.push(block);
 };
 
 /**

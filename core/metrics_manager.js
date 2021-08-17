@@ -96,8 +96,8 @@ Blockly.MetricsManager.UiMetrics;
  * @protected
  */
 Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
-  var width = 0;
-  var height = 0;
+  let width = 0;
+  let height = 0;
   if (elem) {
     width = elem.getWidth();
     height = elem.getHeight();
@@ -115,7 +115,7 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
  * @public
  */
 Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  var flyoutDimensions =
+  const flyoutDimensions =
       this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
   return {
     width: flyoutDimensions.width,
@@ -134,7 +134,7 @@ Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
  * @public
  */
 Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
-  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
+  const toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
 
   return {
     width: toolboxDimensions.width,
@@ -162,22 +162,22 @@ Blockly.MetricsManager.prototype.getSvgMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
-  var absoluteLeft = 0;
-  var toolboxMetrics = this.getToolboxMetrics();
-  var flyoutMetrics = this.getFlyoutMetrics(true);
-  var doesToolboxExist = !!this.workspace_.getToolbox();
-  var doesFlyoutExist = !!this.workspace_.getFlyout(true);
-  var toolboxPosition =
+  let absoluteLeft = 0;
+  const toolboxMetrics = this.getToolboxMetrics();
+  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const doesToolboxExist = !!this.workspace_.getToolbox();
+  const doesFlyoutExist = !!this.workspace_.getFlyout(true);
+  const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  var atLeft = toolboxPosition == Blockly.utils.toolbox.Position.LEFT;
-  var atTop = toolboxPosition == Blockly.utils.toolbox.Position.TOP;
+  const atLeft = toolboxPosition == Blockly.utils.toolbox.Position.LEFT;
+  const atTop = toolboxPosition == Blockly.utils.toolbox.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
     absoluteLeft = flyoutMetrics.width;
   }
-  var absoluteTop = 0;
+  let absoluteTop = 0;
   if (doesToolboxExist && atTop) {
     absoluteTop = toolboxMetrics.height;
   } else if (doesFlyoutExist && atTop) {
@@ -202,12 +202,12 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
  */
 Blockly.MetricsManager.prototype.getViewMetrics = function(
     opt_getWorkspaceCoordinates) {
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var svgMetrics = this.getSvgMetrics();
-  var toolboxMetrics = this.getToolboxMetrics();
-  var flyoutMetrics = this.getFlyoutMetrics(true);
-  var doesToolboxExist = !!this.workspace_.getToolbox();
-  var toolboxPosition =
+  const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  const svgMetrics = this.getSvgMetrics();
+  const toolboxMetrics = this.getToolboxMetrics();
+  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const doesToolboxExist = !!this.workspace_.getToolbox();
+  const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
@@ -247,10 +247,10 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  */
 Blockly.MetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
-  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+  const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
   // Block bounding box is in workspace coordinates.
-  var blockBox = this.workspace_.getBlocksBoundingBox();
+  const blockBox = this.workspace_.getBlocksBoundingBox();
 
   return {
     height: (blockBox.bottom - blockBox.top) * scale,
@@ -287,12 +287,12 @@ Blockly.MetricsManager.prototype.getComputedFixedEdges_ = function(
     return {};
   }
 
-  var hScrollEnabled = this.workspace_.isMovableHorizontally();
-  var vScrollEnabled = this.workspace_.isMovableVertically();
+  const hScrollEnabled = this.workspace_.isMovableHorizontally();
+  const vScrollEnabled = this.workspace_.isMovableVertically();
 
-  var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
+  const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
 
-  var edges = {};
+  const edges = {};
   if (!vScrollEnabled) {
     edges.top = viewMetrics.top;
     edges.bottom = viewMetrics.top + viewMetrics.height;
@@ -316,23 +316,23 @@ Blockly.MetricsManager.prototype.getComputedFixedEdges_ = function(
  */
 Blockly.MetricsManager.prototype.getPaddedContent_ = function(
     viewMetrics, contentMetrics) {
-  var contentBottom = contentMetrics.top + contentMetrics.height;
-  var contentRight = contentMetrics.left + contentMetrics.width;
+  const contentBottom = contentMetrics.top + contentMetrics.height;
+  const contentRight = contentMetrics.left + contentMetrics.width;
 
-  var viewWidth = viewMetrics.width;
-  var viewHeight = viewMetrics.height;
-  var halfWidth = viewWidth / 2;
-  var halfHeight = viewHeight / 2;
+  const viewWidth = viewMetrics.width;
+  const viewHeight = viewMetrics.height;
+  const halfWidth = viewWidth / 2;
+  const halfHeight = viewHeight / 2;
 
   // Add a padding around the content that is at least half a screen wide.
   // Ensure padding is wide enough that blocks can scroll over entire screen.
-  var top =
+  const top =
       Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
-  var left =
+  const left =
       Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
-  var bottom =
+  const bottom =
       Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
-  var right =
+  const right =
       Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
 
   return {top: top, bottom: bottom, left: left, right: right};
@@ -353,22 +353,22 @@ Blockly.MetricsManager.prototype.getPaddedContent_ = function(
  */
 Blockly.MetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  var viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
-  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var fixedEdges = this.getComputedFixedEdges_(viewMetrics);
+  const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
+  const contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  const fixedEdges = this.getComputedFixedEdges_(viewMetrics);
 
   // Add padding around content.
-  var paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
+  const paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
-  var top = fixedEdges.top !== undefined ?
+  const top = fixedEdges.top !== undefined ?
       fixedEdges.top : paddedContent.top;
-  var left = fixedEdges.left !== undefined ?
+  const left = fixedEdges.left !== undefined ?
       fixedEdges.left : paddedContent.left;
-  var bottom = fixedEdges.bottom !== undefined ?
+  const bottom = fixedEdges.bottom !== undefined ?
       fixedEdges.bottom : paddedContent.bottom;
-  var right = fixedEdges.right !== undefined ?
+  const right = fixedEdges.right !== undefined ?
       fixedEdges.right : paddedContent.right;
 
   return {
@@ -428,13 +428,14 @@ Blockly.MetricsManager.prototype.getUiMetrics = function() {
  * @public
  */
 Blockly.MetricsManager.prototype.getMetrics = function() {
-  var toolboxMetrics = this.getToolboxMetrics();
-  var flyoutMetrics = this.getFlyoutMetrics(true);
-  var svgMetrics = this.getSvgMetrics();
-  var absoluteMetrics = this.getAbsoluteMetrics();
-  var viewMetrics = this.getViewMetrics();
-  var contentMetrics = this.getContentMetrics();
-  var scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  const toolboxMetrics = this.getToolboxMetrics();
+  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const svgMetrics = this.getSvgMetrics();
+  const absoluteMetrics = this.getAbsoluteMetrics();
+  const viewMetrics = this.getViewMetrics();
+  const contentMetrics = this.getContentMetrics();
+  const scrollMetrics = this.getScrollMetrics(false, viewMetrics,
+      contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,

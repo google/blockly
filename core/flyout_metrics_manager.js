@@ -48,13 +48,14 @@ Blockly.utils.object.inherits(
  * @private
  */
 Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
+  let blockBoundingBox;
   try {
-    var blockBoundingBox = this.workspace_.getCanvas().getBBox();
+    blockBoundingBox = this.workspace_.getCanvas().getBBox();
   } catch (e) {
     // Firefox has trouble with hidden elements (Bug 528969).
     // 2021 Update: It looks like this was fixed around Firefox 77 released in
     // 2020.
-    var blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
+    blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
   }
   return blockBoundingBox;
 };
@@ -65,8 +66,8 @@ Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
 Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
   // The bounding box is in workspace coordinates.
-  var blockBoundingBox = this.getBoundingBox_();
-  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+  const blockBoundingBox = this.getBoundingBox_();
+  const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
   return {
     height: blockBoundingBox.height * scale,
@@ -81,14 +82,14 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
  */
 Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var margin = this.flyout_.MARGIN * this.workspace_.scale;
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  const contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  const margin = this.flyout_.MARGIN * this.workspace_.scale;
+  const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
   // The left padding isn't just the margin. Some blocks are also offset by
   // tabWidth so that value and statement blocks line up.
   // The contentMetrics.left value is equivalent to the variable left padding.
-  var leftPadding = contentMetrics.left;
+  const leftPadding = contentMetrics.left;
 
   return {
     height: (contentMetrics.height + 2 * margin) / scale,

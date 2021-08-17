@@ -12,7 +12,7 @@
 goog.module('Blockly.Themes.Zelos');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Theme');
+const Theme = goog.require('Blockly.Theme');
 
 
 // Temporary holding object.
@@ -103,7 +103,7 @@ Zelos.categoryStyles = {
 };
 
 Zelos =
-    new Blockly.Theme('zelos', Zelos.defaultBlockStyles,
+    new Theme('zelos', Zelos.defaultBlockStyles,
         Zelos.categoryStyles);
 
 exports = Zelos;

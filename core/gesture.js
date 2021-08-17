@@ -14,8 +14,6 @@
 goog.module('Blockly.Gesture');
 goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
@@ -280,7 +278,7 @@ Gesture.prototype.updateFromEvent_ = function(e) {
   // Exceeded the drag radius for the first time.
   if (changed) {
     this.updateIsDragging_();
-    Blockly.longStop_();
+    Touch.longStop();
   }
   this.mostRecentEvent_ = e;
 };
@@ -511,7 +509,7 @@ Gesture.prototype.doStart = function(e) {
   if ((e.type.toLowerCase() == 'touchstart' ||
        e.type.toLowerCase() == 'pointerdown') &&
       e.pointerType != 'mouse') {
-    Blockly.longStart(e, this);
+    Touch.longStart(e, this);
   }
 
   this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
@@ -561,7 +559,7 @@ Gesture.prototype.handleMove = function(e) {
  */
 Gesture.prototype.handleUp = function(e) {
   this.updateFromEvent_(e);
-  Blockly.longStop_();
+  Touch.longStop();
 
   if (this.isEnding_) {
     console.log('Trying to end a gesture recursively.');
@@ -607,7 +605,7 @@ Gesture.prototype.cancel = function() {
   if (this.isEnding_) {
     return;
   }
-  Blockly.longStop_();
+  Touch.longStop();
   if (this.isDraggingBubble_) {
     this.bubbleDragger_.endBubbleDrag(
         this.mostRecentEvent_, this.currentDragDeltaXY_);

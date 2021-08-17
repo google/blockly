@@ -22,6 +22,7 @@ goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
+goog.require('Blockly.Touch');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
@@ -433,9 +434,9 @@ Blockly.inject.bindDocumentEvents_ = function() {
         document, 'keydown', null, Blockly.onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
-    Blockly.browserEvents.bind(document, 'touchend', null, Blockly.longStop_);
+    Blockly.browserEvents.bind(document, 'touchend', null, Blockly.Touch.longStop);
     Blockly.browserEvents.bind(
-        document, 'touchcancel', null, Blockly.longStop_);
+        document, 'touchcancel', null, Blockly.Touch.longStop);
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (Blockly.utils.userAgent.IPAD) {
       Blockly.browserEvents.conditionalBind(

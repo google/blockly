@@ -33,8 +33,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {BaseStatementInput}
  */
 const StatementInput = function(constants, input) {
-  StatementInput.superClass_.constructor.call(this,
-      constants, input);
+  StatementInput.superClass_.constructor.call(this, constants, input);
 
   if (this.connectedBlock) {
     // Find the bottom-most connected block in the stack.
@@ -48,7 +47,6 @@ const StatementInput = function(constants, input) {
     }
   }
 };
-object.inherits(StatementInput,
-    BaseStatementInput);
+object.inherits(StatementInput, BaseStatementInput);
 
 exports = StatementInput;

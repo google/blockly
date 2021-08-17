@@ -15,6 +15,7 @@ goog.provide('Blockly.TouchGesture');
 
 goog.require('Blockly.browserEvents');
 goog.require('Blockly.Gesture');
+goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
@@ -152,7 +153,7 @@ Blockly.TouchGesture.prototype.handleStart = function(e) {
     this.handleTouchStart(e);
 
     if (this.isMultiTouch()) {
-      Blockly.longStop_();
+      Blockly.Touch.longStop();
     }
   }
 };
@@ -174,7 +175,7 @@ Blockly.TouchGesture.prototype.handleMove = function(e) {
     if (Blockly.Touch.isTouchEvent(e)) {
       this.handleTouchMove(e);
     }
-    Blockly.longStop_();
+    Blockly.Touch.longStop();
   } else {
     Blockly.TouchGesture.superClass_.handleMove.call(this, e);
   }

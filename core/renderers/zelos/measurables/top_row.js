@@ -5,16 +5,13 @@
  */
 
 /**
- * @fileoverview An object representing a single row on a rendered block and all
- * of its subcomponents.
+ * @fileoverview An object representing the top row of a rendered block.
  * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
-goog.provide('Blockly.zelos.BottomRow');
 goog.provide('Blockly.zelos.TopRow');
 
-goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.utils.object');
 
@@ -63,47 +60,6 @@ Blockly.zelos.TopRow.prototype.hasLeftSquareCorner = function(block) {
  * @override
  */
 Blockly.zelos.TopRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection && !block.statementInputCount &&
-    !block.nextConnection;
-};
-
-/**
- * An object containing information about what elements are in the bottom row of
- * a block as well as spacing information for the top row.
- * Elements in a bottom row can consist of corners, spacers and next
- * connections.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.BottomRow}
- */
-Blockly.zelos.BottomRow = function(constants) {
-  Blockly.zelos.BottomRow.superClass_.constructor.call(this, constants);
-};
-Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
-    Blockly.blockRendering.BottomRow);
-
-/**
- * @override
- */
-Blockly.zelos.BottomRow.prototype.endsWithElemSpacer = function() {
-  return false;
-};
-
-/**
- * Render a round corner unless the block has an output connection.
- * @override
- */
-Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
-  return !!block.outputConnection;
-};
-
-/**
- * Render a round corner unless the block has an output connection.
- * @override
- */
-Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
     !block.nextConnection;
 };

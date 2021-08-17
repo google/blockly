@@ -13,24 +13,25 @@
 goog.module('Blockly.blockRendering.Connection');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const Measurable = goog.require('Blockly.blockRendering.Measurable');
+/* eslint-disable-next-line no-unused-vars */
+const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {!Blockly.RenderedConnection} connectionModel The connection object on
+ * @param {!RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Measurable}
+ * @extends {Measurable}
  */
 const Connection = function(constants, connectionModel) {
   Connection.superClass_.constructor.call(this,
@@ -38,9 +39,9 @@ const Connection = function(constants, connectionModel) {
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
   this.isDynamicShape = !!this.shape['isDynamic'];
-  this.type |= Blockly.blockRendering.Types.CONNECTION;
+  this.type |= Types.CONNECTION;
 };
-Blockly.utils.object.inherits(Connection,
-    Blockly.blockRendering.Measurable);
+object.inherits(Connection,
+    Measurable);
 
 exports = Connection;

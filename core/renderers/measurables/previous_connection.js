@@ -13,35 +13,36 @@
 goog.module('Blockly.blockRendering.PreviousConnection');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Connection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.RenderedConnection');
+const Connection = goog.require('Blockly.blockRendering.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space a previous connection takes
  * up during rendering.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
+ * @param {RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Connection}
+ * @extends {Connection}
  */
 const PreviousConnection = function(
     constants, connectionModel) {
   PreviousConnection.superClass_.constructor.call(this,
       constants, connectionModel);
-  this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
+  this.type |= Types.PREVIOUS_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 
 };
-Blockly.utils.object.inherits(PreviousConnection,
-    Blockly.blockRendering.Connection);
+object.inherits(PreviousConnection,
+    Connection);
 
 exports = PreviousConnection;

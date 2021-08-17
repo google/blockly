@@ -14,29 +14,30 @@
 goog.module('Blockly.blockRendering.OutputConnection');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.Connection');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.RenderedConnection');
+const Connection = goog.require('Blockly.blockRendering.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about the space an output connection takes
  * up during rendering.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
- * @param {Blockly.RenderedConnection} connectionModel The connection object on
+ * @param {RenderedConnection} connectionModel The connection object on
  *     the block that this represents.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Connection}
+ * @extends {Connection}
  */
 const OutputConnection = function(constants, connectionModel) {
   OutputConnection.superClass_.constructor.call(this,
       constants, connectionModel);
-  this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
+  this.type |= Types.OUTPUT_CONNECTION;
 
   this.height = !this.isDynamicShape ? this.shape.height : 0;
   this.width = !this.isDynamicShape ? this.shape.width : 0;
@@ -45,7 +46,7 @@ const OutputConnection = function(constants, connectionModel) {
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionOffsetX = 0;
 };
-Blockly.utils.object.inherits(OutputConnection,
-    Blockly.blockRendering.Connection);
+object.inherits(OutputConnection,
+    Connection);
 
 exports = OutputConnection;

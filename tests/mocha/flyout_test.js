@@ -236,36 +236,37 @@ suite.only('Flyout', function() {
 
   suite('createFlyoutInfo_', function() {
     setup(function() {
-      this.simpleToolboxJSON = getSimpleJSON();
       this.flyout = this.workspace.getFlyout();
       this.createFlyoutSpy = sinon.spy(this.flyout, 'createFlyoutInfo_');
 
     });
 
-    function checkLayoutContents(actual, expected, opt_message) {
-      chai.assert.equal(actual.length, expected.length, opt_message);
-      for (var i = 0; i < actual.length; i++) {
-        chai.assert.equal(actual[i].type, expected[i].type, opt_message);
-        if (actual[i].type == 'BLOCK') {
-          chai.assert.typeOf(actual[i]['block'], 'Blockly.Block');
-        } else if (actual[i].type == 'BUTTON' || actual[i].type == 'LABEL') {
-          chai.assert.typeOf(actual[i]['block'], 'Blockly.FlyoutButton');
-        }
-      }
-    }
-
     function checkFlyoutInfo(flyoutSpy) {
-      var expectedContents = [
-        {type: "block"},
-        {type: "button"},
-        {type: "button"}
-      ];
-      var expectedGaps = [20, 24, 24];
       var flyoutInfo = flyoutSpy.returnValues[0];
       var contents = flyoutInfo.contents;
       var gaps = flyoutInfo.gaps;
+
+      var expectedGaps = [20, 24, 24];
       chai.assert.deepEqual(gaps, expectedGaps);
-      checkLayoutContents(contents, expectedContents, 'Contents');
+
+      chai.assert.equal(contents.length, 3, 'Contents');
+
+      chai.assert.equal(contents[0].type, 'block', 'Contents');
+      var block = contents[0]['block'];
+      chai.assert.instanceOf(block, Blockly.BlockSvg);
+      chai.assert.equal(block.getFieldValue('OP'), 'NEQ');
+      var childA = block.getInputTargetBlock('A');
+      var childB = block.getInputTargetBlock('B');
+      chai.assert.isTrue(childA.isShadow());
+      chai.assert.isFalse(childB.isShadow());
+      chai.assert.equal(childA.getFieldValue('NUM'), 1);
+      chai.assert.equal(childB.getFieldValue('NUM'), 2);
+
+      chai.assert.equal(contents[1].type, 'button', 'Contents');
+      chai.assert.instanceOf(contents[1]['button'], Blockly.FlyoutButton);
+
+      chai.assert.equal(contents[2].type, 'button', 'Contents');
+      chai.assert.instanceOf(contents[2]['button'], Blockly.FlyoutButton);
     }
 
     suite('Direct show', function() {
@@ -281,17 +282,33 @@ suite.only('Flyout', function() {
       });
 
       test('Array of JSON', function() {
-        this.flyout.show(this.simpleToolboxJSON);
+        this.flyout.show(getSimpleJson());
         checkFlyoutInfo(this.createFlyoutSpy);
       });
 
-      test('Array of xml', function() {
+      test('Array of Proper JSON', function() {
+        this.flyout.show(getProperSimpleJson());
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of XML', function() {
         this.flyout.show(getXmlArray());
         checkFlyoutInfo(this.createFlyoutSpy);
       });
     });
 
     suite('Dynamic category', function() {
+      setup(function() {
+        this.stubAndAssert = function(val) {
+          sinon.stub(
+              this.flyout.workspace_.targetWorkspace,
+              'getToolboxCategoryCallback')
+              .returns(function() { return val; });
+          this.flyout.show('someString');
+          checkFlyoutInfo(this.createFlyoutSpy);
+        };
+      });
+
       test('No category available', function() {
         chai.assert.throws(
             function() {
@@ -301,27 +318,25 @@ suite.only('Flyout', function() {
             'a toolbox category.');
       });
 
-      test('Function does not return array', function() {
-        sinon.stub(
-            this.flyout.workspace_.targetWorkspace,
-            'getToolboxCategoryCallback')
-            .returns(function() { return null; });
-        chai.assert.throws(
-            function() {
-              this.flyout.show('someString');
-            }.bind(this),
-            'Result of toolbox category callback must be an array.');
+      test('Node', function() {
+        this.stubAndAssert(this.toolboxXml);
       });
 
-      test('Returns array', function() {
-        sinon.stub(
-            this.flyout.workspace_.targetWorkspace,
-            'getToolboxCategoryCallback')
-            .returns(function() { return getXmlArray(); });
-        chai.assert.doesNotThrow(
-            function() {
-              this.flyout.show('someString');
-            }.bind(this));
+      test('NodeList', function() {
+        this.stubAndAssert(
+            document.getElementById('toolbox-simple').childNodes);
+      });
+
+      test('Array of JSON', function() {
+        this.stubAndAssert(getSimpleJson());
+      });
+
+      test('Array of Proper JSON', function() {
+        this.stubAndAssert(getProperSimpleJson());
+      });
+
+      test('Array of XML', function() {
+        this.stubAndAssert(getXmlArray());
       });
     });
   });

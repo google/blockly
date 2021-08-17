@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.zelos.BottomRow');
+goog.module('Blockly.zelos.BottomRow');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.BottomRow');
 goog.require('Blockly.utils.object');
@@ -29,16 +30,16 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * @constructor
  * @extends {Blockly.blockRendering.BottomRow}
  */
-Blockly.zelos.BottomRow = function(constants) {
-  Blockly.zelos.BottomRow.superClass_.constructor.call(this, constants);
+const BottomRow = function(constants) {
+  BottomRow.superClass_.constructor.call(this, constants);
 };
-Blockly.utils.object.inherits(Blockly.zelos.BottomRow,
+Blockly.utils.object.inherits(BottomRow,
     Blockly.blockRendering.BottomRow);
 
 /**
  * @override
  */
-Blockly.zelos.BottomRow.prototype.endsWithElemSpacer = function() {
+BottomRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
 
@@ -46,7 +47,7 @@ Blockly.zelos.BottomRow.prototype.endsWithElemSpacer = function() {
  * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
+BottomRow.prototype.hasLeftSquareCorner = function(block) {
   return !!block.outputConnection;
 };
 
@@ -54,7 +55,9 @@ Blockly.zelos.BottomRow.prototype.hasLeftSquareCorner = function(block) {
  * Render a round corner unless the block has an output connection.
  * @override
  */
-Blockly.zelos.BottomRow.prototype.hasRightSquareCorner = function(block) {
+BottomRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
     !block.nextConnection;
 };
+
+exports = BottomRow;

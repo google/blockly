@@ -26,7 +26,7 @@ const object = goog.require('Blockly.utils.object');
 
 /**
  * An object containing information about what elements are in the bottom row of
- * a block as well as spacing information for the top row.
+ * a block as well as spacing information for the bottom row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
  * @param {!ConstantProvider} constants The rendering

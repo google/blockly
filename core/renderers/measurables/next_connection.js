@@ -34,13 +34,11 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Connection}
  */
 const NextConnection = function(constants, connectionModel) {
-  NextConnection.superClass_.constructor.call(this,
-      constants, connectionModel);
+  NextConnection.superClass_.constructor.call(this, constants, connectionModel);
   this.type |= Types.NEXT_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 };
-object.inherits(NextConnection,
-    Connection);
+object.inherits(NextConnection, Connection);
 
 exports = NextConnection;

@@ -35,8 +35,8 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Connection}
  */
 const OutputConnection = function(constants, connectionModel) {
-  OutputConnection.superClass_.constructor.call(this,
-      constants, connectionModel);
+  OutputConnection.superClass_.constructor.call(
+      this, constants, connectionModel);
   this.type |= Types.OUTPUT_CONNECTION;
 
   this.height = !this.isDynamicShape ? this.shape.height : 0;
@@ -46,7 +46,6 @@ const OutputConnection = function(constants, connectionModel) {
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionOffsetX = 0;
 };
-object.inherits(OutputConnection,
-    Connection);
+object.inherits(OutputConnection, Connection);
 
 exports = OutputConnection;

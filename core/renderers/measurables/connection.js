@@ -34,14 +34,12 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Measurable}
  */
 const Connection = function(constants, connectionModel) {
-  Connection.superClass_.constructor.call(this,
-      constants);
+  Connection.superClass_.constructor.call(this, constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
   this.isDynamicShape = !!this.shape['isDynamic'];
   this.type |= Types.CONNECTION;
 };
-object.inherits(Connection,
-    Measurable);
+object.inherits(Connection, Measurable);
 
 exports = Connection;

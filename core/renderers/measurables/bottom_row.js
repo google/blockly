@@ -13,12 +13,15 @@
 goog.module('Blockly.blockRendering.BottomRow');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.blockRendering.NextConnection');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const NextConnection = goog.requireType('Blockly.blockRendering.NextConnection');
+const Row = goog.require('Blockly.blockRendering.Row');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -26,16 +29,16 @@ goog.require('Blockly.utils.object');
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Row}
+ * @extends {Row}
  */
 const BottomRow = function(constants) {
   BottomRow.superClass_.constructor.call(this,
       constants);
-  this.type |= Blockly.blockRendering.Types.BOTTOM_ROW;
+  this.type |= Types.BOTTOM_ROW;
 
   /**
    * Whether this row has a next connection.
@@ -47,7 +50,7 @@ const BottomRow = function(constants) {
   /**
    * The next connection on the row, if any.
    * @package
-   * @type {Blockly.blockRendering.NextConnection}
+   * @type {NextConnection}
    */
   this.connection = null;
 
@@ -66,12 +69,12 @@ const BottomRow = function(constants) {
    */
   this.baseline = 0;
 };
-Blockly.utils.object.inherits(BottomRow,
-    Blockly.blockRendering.Row);
+object.inherits(BottomRow,
+    Row);
 
 /**
  * Returns whether or not the bottom row has a left square corner.
- * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
+ * @param {!BlockSvg} block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a left square corner.
  */
 BottomRow.prototype.hasLeftSquareCorner = function(
@@ -81,7 +84,7 @@ BottomRow.prototype.hasLeftSquareCorner = function(
 
 /**
  * Returns whether or not the bottom row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
+ * @param {!BlockSvg} _block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a right square corner.
  */
 BottomRow.prototype.hasRightSquareCorner = function(
@@ -99,10 +102,10 @@ BottomRow.prototype.measure = function() {
   for (let i = 0; i < this.elements.length; i++) {
     const elem = this.elements[i];
     width += elem.width;
-    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
+    if (!(Types.isSpacer(elem))) {
       // Note: this assumes that next connections have *only* descenderHeight,
       // with no height above the baseline.
-      if (Blockly.blockRendering.Types.isNextConnection(elem)) {
+      if (Types.isNextConnection(elem)) {
         descenderHeight = Math.max(descenderHeight, elem.height);
       } else {
         height = Math.max(height, elem.height);

@@ -12,37 +12,38 @@
 goog.module('Blockly.blockRendering.SpacerRow');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.InRowSpacer');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
+const Row = goog.require('Blockly.blockRendering.Row');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about a spacer between two rows.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @param {number} height The height of the spacer.
  * @param {number} width The width of the spacer.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Row}
+ * @extends {Row}
  */
 const SpacerRow = function(constants, height, width) {
   SpacerRow.superClass_.constructor.call(this,
       constants);
-  this.type |= Blockly.blockRendering.Types.SPACER |
-      Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
+  this.type |= Types.SPACER |
+      Types.BETWEEN_ROW_SPACER;
   this.width = width;
   this.height = height;
   this.followsStatement = false;
   this.widthWithConnectedBlocks = 0;
   this.elements = [
-    new Blockly.blockRendering.InRowSpacer(this.constants_, width)];
+    new InRowSpacer(this.constants_, width)];
 };
-Blockly.utils.object.inherits(SpacerRow,
-    Blockly.blockRendering.Row);
+object.inherits(SpacerRow,
+    Row);
 
 /**
  * @override

@@ -9,15 +9,16 @@
  */
 'use strict';
 
-goog.provide('Blockly.Themes.Zelos');
+goog.module('Blockly.Themes.Zelos');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Theme');
 
 
 // Temporary holding object.
-Blockly.Themes.Zelos = {};
+let Zelos = {};
 
-Blockly.Themes.Zelos.defaultBlockStyles = {
+Zelos.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "#CF63CF",
     "colourSecondary": "#C94FC9",
@@ -71,7 +72,7 @@ Blockly.Themes.Zelos.defaultBlockStyles = {
   }
 };
 
-Blockly.Themes.Zelos.categoryStyles = {
+Zelos.categoryStyles = {
   "colour_category": {
     "colour": "#CF63CF"
   },
@@ -101,6 +102,8 @@ Blockly.Themes.Zelos.categoryStyles = {
   }
 };
 
-Blockly.Themes.Zelos =
-    new Blockly.Theme('zelos', Blockly.Themes.Zelos.defaultBlockStyles,
-        Blockly.Themes.Zelos.categoryStyles);
+Zelos =
+    new Blockly.Theme('zelos', Zelos.defaultBlockStyles,
+        Zelos.categoryStyles);
+
+exports = Zelos;

@@ -593,13 +593,9 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK':
         var blockInfo = /** @type {!Blockly.utils.toolbox.BlockInfo} */ (contentInfo);
-        var blockXml = this.getBlockXml_(blockInfo);
-        var block = this.createFlyoutBlock_(blockXml);
-        // This is a deprecated method for adding gap to a block.
-        // <block type="math_arithmetic" gap="8"></block>
-        var gap = parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? defaultGap : gap);
+        var block = this.createFlyoutBlock_(blockInfo);
         contents.push({type: 'block', block: block});
+        this.addBlockGap_(blockInfo, gaps, defaultGap);
         break;
       case 'SEP':
         var sepInfo = /** @type {!Blockly.utils.toolbox.SeparatorInfo} */ (contentInfo);
@@ -626,23 +622,18 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 /**
  * Gets the flyout definition for the dynamic category.
  * @param {string} categoryName The name of the dynamic category.
- * @return {!Array<!Element>} The array of flyout items.
+ * @return {?Blockly.utils.toolbox.FlyoutDefinition} The definition of the
+ *     flyout in one of its many forms.
  * @private
  */
 Blockly.Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
-  // Look up the correct category generation function and call that to get a
-  // valid XML list.
-  var fnToApply = this.workspace_.targetWorkspace.getToolboxCategoryCallback(
-      categoryName);
+  var fnToApply =
+      this.workspace_.targetWorkspace.getToolboxCategoryCallback(categoryName);
   if (typeof fnToApply != 'function') {
     throw TypeError('Couldn\'t find a callback function when opening' +
         ' a toolbox category.');
   }
-  var flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-  if (!Array.isArray(flyoutDef)) {
-    throw new TypeError('Result of toolbox category callback must be an array.');
-  }
-  return flyoutDef;
+  return fnToApply(this.workspace_.targetWorkspace);
 };
 
 /**
@@ -667,18 +658,27 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
 /**
  * Create a block from the xml and permanently disable any blocks that were
  * defined as disabled.
- * @param {!Element} blockXml The xml of the block.
+ * @param {!Blockly.utils.toolbox.BlockInfo} blockInfo The info of the block.
  * @return {!Blockly.BlockSvg} The block created from the blockXml.
  * @private
  */
-Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockXml) {
-  var blockType = blockXml.getAttribute('type');
-  var block = this.recycledBlocks_.find(function(block) {
-    return block.type === blockType;
-  });
-  if (!block) {
-    block = Blockly.Xml.domToBlock(blockXml, this.workspace_);
+Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
+  var block;
+  if (blockInfo['blockxml']) {
+    var xml = typeof blockInfo['blockxml'] === 'string' ?
+        Blockly.Xml.textToDom(blockInfo['blockxml']) :
+        blockInfo['blockxml'];
+    block = this.getRecycledBlock_(xml.getAttribute('type'));
+    if (!block) {
+      block = Blockly.Xml.domToBlock(xml, this.workspace_);
+    }
+  } else {
+    block = this.getRecycledBlock_(blockInfo['type']);
+    if (!block) {
+      block = Blockly.serialization.blocks.load(blockInfo, this.workspace_);
+    }
   }
+
   if (!block.isEnabled()) {
     // Record blocks that were initially disabled.
     // Do not enable these blocks as a result of capacity filtering.
@@ -688,33 +688,36 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockXml) {
 };
 
 /**
- * Get the xml from the block info object.
- * @param {!Blockly.utils.toolbox.BlockInfo}  blockInfo The object holding
- *    information about a block.
- * @return {!Element} The xml for the block.
- * @throws {Error} if the xml is not a valid block definition.
- * @private
+ * Returns a block from the array of recycled blocks with the given type, or
+ * undefined if one cannot be found.
+ * @param {string} blockType The type of the block to try to recycle.
+ * @return {(!Blockly.BlockSvg|undefined)} The recycled block, or undefined if
+ *     one could not be recycled.
  */
-Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  var blockElement = null;
-  var blockXml = blockInfo['blockxml'];
+Blockly.Flyout.prototype.getRecycledBlock_ = function(blockType) {
+  return this.recycledBlocks_.find(function(block) {
+    return block.type === blockType;
+  });
+};
 
-  if (blockXml && typeof blockXml != 'string') {
-    blockElement = blockXml;
-  } else if (blockXml && typeof blockXml == 'string') {
-    blockElement = Blockly.Xml.textToDom(blockXml);
-    blockInfo['blockxml'] = blockElement;
-  } else if (blockInfo['type']) {
-    blockElement = Blockly.utils.xml.createElement('xml');
-    blockElement.setAttribute('type', blockInfo['type']);
-    blockElement.setAttribute('disabled', blockInfo['disabled']);
-    blockInfo['blockxml'] = blockElement;
+/**
+ * Adds a gap in the flyout based on block info.
+ * @param {!Blockly.utils.toolbox.BlockInfo} blockInfo Information about a
+ *     block.
+ * @param {!Array<number>} gaps The list of gaps between items in the flyout.
+ * @param {number} defaultGap The default gap between one element and the next.
+ */
+Blockly.Flyout.prototype.addBlockGap_ = function(blockInfo, gaps, defaultGap) {
+  var gap;
+  if (blockInfo['gap']) {
+    gap = parseInt(blockInfo['gap'], 10);
+  } else if (blockInfo['blockxml']) {
+    var xml = typeof blockInfo['blockxml'] === 'string' ?
+        Blockly.Xml.textToDom(blockInfo['blockxml']) :
+        blockInfo['blockxml'];
+    gap = parseInt(xml.getAttribute('gap'), 10);
   }
-
-  if (!blockElement) {
-    throw Error('Error: Invalid block definition. Block definition must have blockxml or type.');
-  }
-  return blockElement;
+  gaps.push(isNaN(gap) ? defaultGap : gap);
 };
 
 /**

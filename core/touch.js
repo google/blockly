@@ -32,7 +32,7 @@ const TOUCH_ENABLED =
      // IE10 uses non-standard touch events, so it has a different check.
      !!(utilsGlobal['navigator'] &&
         (utilsGlobal['navigator']['maxTouchPoints'] ||
-            utilsGlobal['navigator']['msMaxTouchPoints'])));
+         utilsGlobal['navigator']['msMaxTouchPoints'])));
 exports.TOUCH_ENABLED = TOUCH_ENABLED;
 
 /**
@@ -139,8 +139,7 @@ exports.clearTouchIdentifier = clearTouchIdentifier;
  *     registered handler; false if it should be blocked.
  */
 const shouldHandleEvent = function(e) {
-  return !isMouseOrTouchEvent(e) ||
-      checkTouchIdentifier(e);
+  return !isMouseOrTouchEvent(e) || checkTouchIdentifier(e);
 };
 exports.shouldHandleEvent = shouldHandleEvent;
 
@@ -152,11 +151,13 @@ exports.shouldHandleEvent = shouldHandleEvent;
  *     defined.  Otherwise 'mouse'.
  */
 const getTouchIdentifierFromEvent = function(e) {
-  return e.pointerId != undefined ? e.pointerId :
+  return e.pointerId != undefined ?
+      e.pointerId :
       (e.changedTouches && e.changedTouches[0] &&
-      e.changedTouches[0].identifier !== undefined &&
-      e.changedTouches[0].identifier !== null) ?
-      e.changedTouches[0].identifier : 'mouse';
+       e.changedTouches[0].identifier !== undefined &&
+       e.changedTouches[0].identifier !== null) ?
+      e.changedTouches[0].identifier :
+      'mouse';
 };
 exports.getTouchIdentifierFromEvent = getTouchIdentifierFromEvent;
 
@@ -177,8 +178,7 @@ const checkTouchIdentifier = function(e) {
 
   // if (touchIdentifier_) is insufficient because Android touch
   // identifiers may be zero.
-  if (touchIdentifier_ !== undefined &&
-      touchIdentifier_ !== null) {
+  if (touchIdentifier_ !== undefined && touchIdentifier_ !== null) {
     // We're already tracking some touch/mouse event.  Is this from the same
     // source?
     return touchIdentifier_ == identifier;
@@ -251,10 +251,10 @@ const splitEventByTouches = function(e) {
         type: e.type,
         changedTouches: [e.changedTouches[i]],
         target: e.target,
-        stopPropagation: function () {
+        stopPropagation: function() {
           e.stopPropagation();
         },
-        preventDefault: function () {
+        preventDefault: function() {
           e.preventDefault();
         }
       };

@@ -11,14 +11,15 @@
 
 'use strict';
 
-goog.provide('Blockly.zelos.PathObject');
+goog.module('Blockly.zelos.PathObject');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
-goog.require('Blockly.zelos.ConstantProvider');
 
+goog.requireType('Blockly.zelos.ConstantProvider');
 goog.requireType('Blockly.Theme');
 
 
@@ -33,8 +34,8 @@ goog.requireType('Blockly.Theme');
  * @extends {Blockly.blockRendering.PathObject}
  * @package
  */
-Blockly.zelos.PathObject = function(root, style, constants) {
-  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, style,
+const PathObject = function(root, style, constants) {
+  PathObject.superClass_.constructor.call(this, root, style,
       constants);
 
   /**
@@ -74,14 +75,14 @@ Blockly.zelos.PathObject = function(root, style, constants) {
    */
   this.outputShapeType = null;
 };
-Blockly.utils.object.inherits(Blockly.zelos.PathObject,
+Blockly.utils.object.inherits(PathObject,
     Blockly.blockRendering.PathObject);
 
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
-  Blockly.zelos.PathObject.superClass_.setPath.call(this, pathString);
+PathObject.prototype.setPath = function(pathString) {
+  PathObject.superClass_.setPath.call(this, pathString);
   if (this.svgPathSelected_) {
     this.svgPathSelected_.setAttribute('d', pathString);
   }
@@ -90,8 +91,8 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.applyColour = function(block) {
-  Blockly.zelos.PathObject.superClass_.applyColour.call(this, block);
+PathObject.prototype.applyColour = function(block) {
+  PathObject.superClass_.applyColour.call(this, block);
   // Set shadow stroke colour.
   if (block.isShadow() && block.getParent()) {
     this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
@@ -106,8 +107,8 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.flipRTL = function() {
-  Blockly.zelos.PathObject.superClass_.flipRTL.call(this);
+PathObject.prototype.flipRTL = function() {
+  PathObject.superClass_.flipRTL.call(this);
   // Mirror each input outline path.
   for (const key in this.outlines_) {
     this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
@@ -117,7 +118,7 @@ Blockly.zelos.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
+PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {
     if (!this.svgPathSelected_) {
@@ -139,7 +140,7 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
+PathObject.prototype.updateReplacementFade = function(
     enable) {
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {
@@ -153,7 +154,7 @@ Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
+PathObject.prototype.updateShapeForInputHighlight = function(
     conn, enable) {
   const name = conn.getParentInput().name;
   const outlinePath = this.getOutlinePath_(name);
@@ -172,7 +173,7 @@ Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
  * Method that's called when the drawer is about to draw the block.
  * @package
  */
-Blockly.zelos.PathObject.prototype.beginDrawing = function() {
+PathObject.prototype.beginDrawing = function() {
   this.remainingOutlines_ = Object.create(null);
   for (const key in this.outlines_) {
     // The value set here isn't used anywhere, we are just using the
@@ -185,7 +186,7 @@ Blockly.zelos.PathObject.prototype.beginDrawing = function() {
  * Method that's called when the drawer is done drawing.
  * @package
  */
-Blockly.zelos.PathObject.prototype.endDrawing = function() {
+PathObject.prototype.endDrawing = function() {
   // Go through all remaining outlines that were not used this draw pass, and
   // remove them.
   if (this.remainingOutlines_) {
@@ -203,7 +204,7 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
+PathObject.prototype.setOutlinePath = function(name, pathString) {
   const outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
   outline.setAttribute('fill', this.style.colourTertiary);
@@ -215,7 +216,7 @@ Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
  * @return {!SVGElement} The SVG outline path.
  * @private
  */
-Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
+PathObject.prototype.getOutlinePath_ = function(name) {
   if (!this.outlines_[name]) {
     this.outlines_[name] = Blockly.utils.dom.createSvgElement(
         Blockly.utils.Svg.PATH, {
@@ -236,7 +237,9 @@ Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
  * @param {string} name The input name.
  * @private
  */
-Blockly.zelos.PathObject.prototype.removeOutlinePath_ = function(name) {
+PathObject.prototype.removeOutlinePath_ = function(name) {
   this.outlines_[name].parentNode.removeChild(this.outlines_[name]);
   delete this.outlines_[name];
 };
+
+exports = PathObject;

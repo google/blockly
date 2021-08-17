@@ -10,7 +10,8 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-goog.provide('Blockly.zelos.StatementInput');
+goog.module('Blockly.zelos.StatementInput');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.utils.object');
@@ -30,8 +31,8 @@ goog.requireType('Blockly.Input');
  * @constructor
  * @extends {Blockly.blockRendering.StatementInput}
  */
-Blockly.zelos.StatementInput = function(constants, input) {
-  Blockly.zelos.StatementInput.superClass_.constructor.call(this,
+const StatementInput = function(constants, input) {
+  StatementInput.superClass_.constructor.call(this,
       constants, input);
 
   if (this.connectedBlock) {
@@ -46,5 +47,7 @@ Blockly.zelos.StatementInput = function(constants, input) {
     }
   }
 };
-Blockly.utils.object.inherits(Blockly.zelos.StatementInput,
+Blockly.utils.object.inherits(StatementInput,
     Blockly.blockRendering.StatementInput);
+
+exports = StatementInput;

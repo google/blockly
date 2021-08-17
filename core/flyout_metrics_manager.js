@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.FlyoutMetricsManager');
+goog.module('Blockly.FlyoutMetricsManager');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.MetricsManager');
 goog.require('Blockly.utils.object');
@@ -27,7 +28,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @extends {Blockly.MetricsManager}
  * @constructor
  */
-Blockly.FlyoutMetricsManager = function(workspace, flyout) {
+const FlyoutMetricsManager = function(workspace, flyout) {
   /**
    * The flyout that owns the workspace to calculate metrics for.
    * @type {!Blockly.IFlyout}
@@ -35,10 +36,10 @@ Blockly.FlyoutMetricsManager = function(workspace, flyout) {
    */
   this.flyout_ = flyout;
 
-  Blockly.FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
+  FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
 };
 Blockly.utils.object.inherits(
-    Blockly.FlyoutMetricsManager, Blockly.MetricsManager);
+    FlyoutMetricsManager, Blockly.MetricsManager);
 
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.
@@ -47,7 +48,7 @@ Blockly.utils.object.inherits(
  *     bounding box of the blocks on the workspace.
  * @private
  */
-Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
+FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
   let blockBoundingBox;
   try {
     blockBoundingBox = this.workspace_.getCanvas().getBBox();
@@ -63,7 +64,7 @@ Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
 /**
  * @override
  */
-Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
+FlyoutMetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
   // The bounding box is in workspace coordinates.
   const blockBoundingBox = this.getBoundingBox_();
@@ -80,7 +81,7 @@ Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
 /**
  * @override
  */
-Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
+FlyoutMetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   const contentMetrics = opt_contentMetrics || this.getContentMetrics();
   const margin = this.flyout_.MARGIN * this.workspace_.scale;
@@ -98,3 +99,5 @@ Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
     left: 0,
   };
 };
+
+exports = FlyoutMetricsManager;

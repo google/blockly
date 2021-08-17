@@ -31,19 +31,15 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Row}
  */
 const SpacerRow = function(constants, height, width) {
-  SpacerRow.superClass_.constructor.call(this,
-      constants);
-  this.type |= Types.SPACER |
-      Types.BETWEEN_ROW_SPACER;
+  SpacerRow.superClass_.constructor.call(this, constants);
+  this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
   this.width = width;
   this.height = height;
   this.followsStatement = false;
   this.widthWithConnectedBlocks = 0;
-  this.elements = [
-    new InRowSpacer(this.constants_, width)];
+  this.elements = [new InRowSpacer(this.constants_, width)];
 };
-object.inherits(SpacerRow,
-    Row);
+object.inherits(SpacerRow, Row);
 
 /**
  * @override

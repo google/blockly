@@ -39,8 +39,7 @@ const InputRow = function(constants) {
    */
   this.connectedBlockWidths = 0;
 };
-object.inherits(InputRow,
-    Row);
+object.inherits(InputRow, Row);
 
 /**
  * Inspect all subcomponents and populate all size properties on the row.
@@ -56,10 +55,9 @@ InputRow.prototype.measure = function() {
     if (Types.isInput(elem)) {
       if (Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (Types.isExternalInput(elem) &&
-          elem.connectedBlockWidth != 0) {
-        connectedBlockWidths += (elem.connectedBlockWidth -
-          elem.connectionWidth);
+      } else if (Types.isExternalInput(elem) && elem.connectedBlockWidth != 0) {
+        connectedBlockWidths +=
+            (elem.connectedBlockWidth - elem.connectionWidth);
       }
     }
     if (!(Types.isSpacer(elem))) {

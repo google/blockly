@@ -562,6 +562,7 @@ Blockly.Flyout.prototype.show = function(flyoutDef) {
 
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
+  this.emptyRecycledBlocks_();
 };
 
 /**
@@ -695,9 +696,10 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
  *     one could not be recycled.
  */
 Blockly.Flyout.prototype.getRecycledBlock_ = function(blockType) {
-  return this.recycledBlocks_.find(function(block) {
+  var index = this.recycledBlocks_.findIndex(function(block) {
     return block.type === blockType;
   });
+  return index == -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
 };
 
 /**
@@ -773,6 +775,17 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
 
   // Clear potential variables from the previous showing.
   this.workspace_.getPotentialVariableMap().clear();
+};
+
+/**
+ * Empties all of the recycld blocks, properly disposing of them.
+ * @private
+ */
+Blockly.Flyout.prototype.emptyRecycledBlocks_ = function() {
+  for (var i = 0; i < this.recycledBlocks_.length; i++) {
+    this.recycledBlocks_[i].dispose();
+  }
+  this.recycledBlocks_ = [];
 };
 
 /**

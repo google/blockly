@@ -39,8 +39,7 @@ const FlyoutMetricsManager = function(workspace, flyout) {
 
   FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
 };
-object.inherits(
-    FlyoutMetricsManager, MetricsManager);
+object.inherits(FlyoutMetricsManager, MetricsManager);
 
 /**
  * Gets the bounding box of the blocks on the flyout's workspace.

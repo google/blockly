@@ -219,7 +219,8 @@ MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == toolbox.Position.TOP ||
         toolboxPosition == toolbox.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (toolboxPosition == toolbox.Position.LEFT ||
+    } else if (
+        toolboxPosition == toolbox.Position.LEFT ||
         toolboxPosition == toolbox.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
@@ -227,7 +228,8 @@ MetricsManager.prototype.getViewMetrics = function(
     if (toolboxPosition == toolbox.Position.TOP ||
         toolboxPosition == toolbox.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (toolboxPosition == toolbox.Position.LEFT ||
+    } else if (
+        toolboxPosition == toolbox.Position.LEFT ||
         toolboxPosition == toolbox.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
@@ -285,8 +287,7 @@ MetricsManager.prototype.hasFixedEdges = function() {
  *     area.
  * @protected
  */
-MetricsManager.prototype.getComputedFixedEdges_ = function(
-    opt_viewMetrics) {
+MetricsManager.prototype.getComputedFixedEdges_ = function(opt_viewMetrics) {
   if (!this.hasFixedEdges()) {
     // Return early if there are no edges.
     return {};
@@ -367,14 +368,13 @@ MetricsManager.prototype.getScrollMetrics = function(
   const paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
   // Use combination of fixed bounds and padded content to make scroll area.
-  const top = fixedEdges.top !== undefined ?
-      fixedEdges.top : paddedContent.top;
-  const left = fixedEdges.left !== undefined ?
-      fixedEdges.left : paddedContent.left;
-  const bottom = fixedEdges.bottom !== undefined ?
-      fixedEdges.bottom : paddedContent.bottom;
-  const right = fixedEdges.right !== undefined ?
-      fixedEdges.right : paddedContent.right;
+  const top = fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
+  const left =
+      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
+  const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
+                                                   paddedContent.bottom;
+  const right =
+      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
 
   return {
     top: top / scale,
@@ -439,7 +439,8 @@ MetricsManager.prototype.getMetrics = function() {
   const absoluteMetrics = this.getAbsoluteMetrics();
   const viewMetrics = this.getViewMetrics();
   const contentMetrics = this.getContentMetrics();
-  const scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  const scrollMetrics =
+      this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
@@ -473,7 +474,6 @@ MetricsManager.prototype.getMetrics = function() {
 };
 
 registry.register(
-    registry.Type.METRICS_MANAGER, registry.DEFAULT,
-    MetricsManager);
+    registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
 
 exports = MetricsManager;

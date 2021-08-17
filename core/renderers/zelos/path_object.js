@@ -14,24 +14,25 @@
 goog.module('Blockly.zelos.PathObject');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.PathObject');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.zelos.ConstantProvider');
-goog.requireType('Blockly.Theme');
+const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
+const Svg = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const Theme = goog.requireType('Blockly.Theme');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
- * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ * @param {!Theme.BlockStyle} style The style object to use for
  *     colouring.
- * @param {!Blockly.zelos.ConstantProvider} constants The renderer's constants.
+ * @param {!ConstantProvider} constants The renderer's constants.
  * @constructor
- * @extends {Blockly.blockRendering.PathObject}
+ * @extends {BasePathObject}
  * @package
  */
 const PathObject = function(root, style, constants) {
@@ -40,7 +41,7 @@ const PathObject = function(root, style, constants) {
 
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.zelos.ConstantProvider}
+   * @type {!ConstantProvider}
    */
   this.constants = constants;
 
@@ -75,8 +76,8 @@ const PathObject = function(root, style, constants) {
    */
   this.outputShapeType = null;
 };
-Blockly.utils.object.inherits(PathObject,
-    Blockly.blockRendering.PathObject);
+object.inherits(PathObject,
+    BasePathObject);
 
 /**
  * @override
@@ -218,8 +219,8 @@ PathObject.prototype.setOutlinePath = function(name, pathString) {
  */
 PathObject.prototype.getOutlinePath_ = function(name) {
   if (!this.outlines_[name]) {
-    this.outlines_[name] = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.PATH, {
+    this.outlines_[name] = dom.createSvgElement(
+        Svg.PATH, {
           'class': 'blocklyOutlinePath',
           // IE doesn't like paths without the data definition, set empty default
           'd': ''

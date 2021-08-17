@@ -13,7 +13,7 @@
 goog.module('Blockly.Themes.Classic');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Theme');
+const Theme = goog.require('Blockly.Theme');
 
 
 // Temporary holding object.
@@ -84,7 +84,7 @@ Classic.categoryStyles = {
 };
 
 Classic =
-    new Blockly.Theme('classic', Classic.defaultBlockStyles,
+    new Theme('classic', Classic.defaultBlockStyles,
         Classic.categoryStyles);
 
 exports = Classic;

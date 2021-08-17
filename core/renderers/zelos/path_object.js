@@ -36,8 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  */
 const PathObject = function(root, style, constants) {
-  PathObject.superClass_.constructor.call(this, root, style,
-      constants);
+  PathObject.superClass_.constructor.call(this, root, style, constants);
 
   /**
    * The renderer's constant provider.
@@ -76,8 +75,7 @@ const PathObject = function(root, style, constants) {
    */
   this.outputShapeType = null;
 };
-object.inherits(PathObject,
-    BasePathObject);
+object.inherits(PathObject, BasePathObject);
 
 /**
  * @override
@@ -124,10 +122,10 @@ PathObject.prototype.updateSelected = function(enable) {
   if (enable) {
     if (!this.svgPathSelected_) {
       this.svgPathSelected_ =
-        /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
+          /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
       this.svgPathSelected_.setAttribute('fill', 'none');
-      this.svgPathSelected_.setAttribute('filter',
-          'url(#' + this.constants.selectedGlowFilterId + ')');
+      this.svgPathSelected_.setAttribute(
+          'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
       this.svgRoot.appendChild(this.svgPathSelected_);
     }
   } else {
@@ -141,12 +139,11 @@ PathObject.prototype.updateSelected = function(enable) {
 /**
  * @override
  */
-PathObject.prototype.updateReplacementFade = function(
-    enable) {
+PathObject.prototype.updateReplacementFade = function(enable) {
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     this.svgPath.removeAttribute('filter');
   }
@@ -155,16 +152,15 @@ PathObject.prototype.updateReplacementFade = function(
 /**
  * @override
  */
-PathObject.prototype.updateShapeForInputHighlight = function(
-    conn, enable) {
+PathObject.prototype.updateShapeForInputHighlight = function(conn, enable) {
   const name = conn.getParentInput().name;
   const outlinePath = this.getOutlinePath_(name);
   if (!outlinePath) {
     return;
   }
   if (enable) {
-    outlinePath.setAttribute('filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')');
+    outlinePath.setAttribute(
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     outlinePath.removeAttribute('filter');
   }
@@ -222,7 +218,8 @@ PathObject.prototype.getOutlinePath_ = function(name) {
     this.outlines_[name] = dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyOutlinePath',
-          // IE doesn't like paths without the data definition, set empty default
+          // IE doesn't like paths without the data definition, set empty
+          // default
           'd': ''
         },
         this.svgRoot);

@@ -35,8 +35,7 @@ const object = goog.require('Blockly.utils.object');
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);
 };
-object.inherits(TopRow,
-    BaseTopRow);
+object.inherits(TopRow, BaseTopRow);
 
 /**
  * @override
@@ -50,8 +49,8 @@ TopRow.prototype.endsWithElemSpacer = function() {
  * @override
  */
 TopRow.prototype.hasLeftSquareCorner = function(block) {
-  const hasHat = (block.hat ?
-      block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+  const hasHat =
+      (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   return !!block.outputConnection || hasHat;
 };
@@ -62,7 +61,7 @@ TopRow.prototype.hasLeftSquareCorner = function(block) {
  */
 TopRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
-    !block.nextConnection;
+      !block.nextConnection;
 };
 
 exports = TopRow;

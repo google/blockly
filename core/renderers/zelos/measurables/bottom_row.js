@@ -33,8 +33,7 @@ const object = goog.require('Blockly.utils.object');
 const BottomRow = function(constants) {
   BottomRow.superClass_.constructor.call(this, constants);
 };
-object.inherits(BottomRow,
-    BaseBottomRow);
+object.inherits(BottomRow, BaseBottomRow);
 
 /**
  * @override
@@ -57,7 +56,7 @@ BottomRow.prototype.hasLeftSquareCorner = function(block) {
  */
 BottomRow.prototype.hasRightSquareCorner = function(block) {
   return !!block.outputConnection && !block.statementInputCount &&
-    !block.nextConnection;
+      !block.nextConnection;
 };
 
 exports = BottomRow;

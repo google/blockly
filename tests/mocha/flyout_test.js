@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Flyout', function() {
+suite.only('Flyout', function() {
   setup(function() {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
@@ -268,42 +268,61 @@ suite('Flyout', function() {
       checkLayoutContents(contents, expectedContents, 'Contents');
     }
 
-    test('Node', function() {
-      this.flyout.show(this.toolboxXml);
-      checkFlyoutInfo(this.createFlyoutSpy);
+    suite('Direct show', function() {
+      test('Node', function() {
+        this.flyout.show(this.toolboxXml);
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('NodeList', function() {
+        var nodeList = document.getElementById('toolbox-simple').childNodes;
+        this.flyout.show(nodeList);
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of JSON', function() {
+        this.flyout.show(this.simpleToolboxJSON);
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of xml', function() {
+        this.flyout.show(getXmlArray());
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
     });
-    test('NodeList', function() {
-      var nodeList = document.getElementById('toolbox-simple').childNodes;
-      this.flyout.show(nodeList);
-      checkFlyoutInfo(this.createFlyoutSpy);
-    });
-    test('Array of JSON', function() {
-      this.flyout.show(this.simpleToolboxJSON);
-      checkFlyoutInfo(this.createFlyoutSpy);
-    });
-    test('Array of xml', function() {
-      this.flyout.show(getXmlArray());
-      checkFlyoutInfo(this.createFlyoutSpy);
-    });
-    test('Custom Toolbox: No Category Available', function() {
-      chai.assert.throws(function() {
-        this.flyout.show('someString');
-      }.bind(this), 'Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
-    });
-    test('Custom Toolbox: Function does not return array', function() {
-      sinon.stub(this.flyout.workspace_.targetWorkspace,
-          'getToolboxCategoryCallback').returns(function(){return null;});
-      chai.assert.throws(function() {
-        this.flyout.show('someString');
-      }.bind(this), 'Result of toolbox category callback must be an array.');
-    });
-    test('Custom Toolbox: Returns Array', function() {
-      sinon.stub(this.flyout.workspace_.targetWorkspace,
-          'getToolboxCategoryCallback').returns(function(){return getXmlArray();});
-      chai.assert.doesNotThrow(function() {
-        this.flyout.show('someString');
-      }.bind(this));
+
+    suite('Dynamic category', function() {
+      test('No category available', function() {
+        chai.assert.throws(
+            function() {
+              this.flyout.show('someString');
+            }.bind(this),
+            'Couldn\'t find a callback function when opening ' +
+            'a toolbox category.');
+      });
+
+      test('Function does not return array', function() {
+        sinon.stub(
+            this.flyout.workspace_.targetWorkspace,
+            'getToolboxCategoryCallback')
+            .returns(function() { return null; });
+        chai.assert.throws(
+            function() {
+              this.flyout.show('someString');
+            }.bind(this),
+            'Result of toolbox category callback must be an array.');
+      });
+
+      test('Returns array', function() {
+        sinon.stub(
+            this.flyout.workspace_.targetWorkspace,
+            'getToolboxCategoryCallback')
+            .returns(function() { return getXmlArray(); });
+        chai.assert.doesNotThrow(
+            function() {
+              this.flyout.show('someString');
+            }.bind(this));
+      });
     });
   });
 });

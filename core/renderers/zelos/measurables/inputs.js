@@ -36,7 +36,7 @@ Blockly.zelos.StatementInput = function(constants, input) {
 
   if (this.connectedBlock) {
     // Find the bottom-most connected block in the stack.
-    var block = this.connectedBlock;
+    let block = this.connectedBlock;
     while (block.getNextBlock()) {
       block = block.getNextBlock();
     }

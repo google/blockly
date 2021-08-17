@@ -29,8 +29,8 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.SpacerRow = function(constants, height, width) {
-  Blockly.blockRendering.SpacerRow.superClass_.constructor.call(this,
+const SpacerRow = function(constants, height, width) {
+  SpacerRow.superClass_.constructor.call(this,
       constants);
   this.type |= Blockly.blockRendering.Types.SPACER |
       Blockly.blockRendering.Types.BETWEEN_ROW_SPACER;
@@ -41,12 +41,14 @@ Blockly.blockRendering.SpacerRow = function(constants, height, width) {
   this.elements = [
     new Blockly.blockRendering.InRowSpacer(this.constants_, width)];
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.SpacerRow,
+Blockly.utils.object.inherits(SpacerRow,
     Blockly.blockRendering.Row);
 
 /**
  * @override
  */
-Blockly.blockRendering.SpacerRow.prototype.measure = function() {
+SpacerRow.prototype.measure = function() {
   // NOP.  Width and height were set at creation.
 };
+
+exports = SpacerRow;

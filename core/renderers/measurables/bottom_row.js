@@ -32,8 +32,8 @@ goog.require('Blockly.utils.object');
  * @constructor
  * @extends {Blockly.blockRendering.Row}
  */
-Blockly.blockRendering.BottomRow = function(constants) {
-  Blockly.blockRendering.BottomRow.superClass_.constructor.call(this,
+const BottomRow = function(constants) {
+  BottomRow.superClass_.constructor.call(this,
       constants);
   this.type |= Blockly.blockRendering.Types.BOTTOM_ROW;
 
@@ -66,7 +66,7 @@ Blockly.blockRendering.BottomRow = function(constants) {
    */
   this.baseline = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
+Blockly.utils.object.inherits(BottomRow,
     Blockly.blockRendering.Row);
 
 /**
@@ -74,7 +74,7 @@ Blockly.utils.object.inherits(Blockly.blockRendering.BottomRow,
  * @param {!Blockly.BlockSvg} block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a left square corner.
  */
-Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
+BottomRow.prototype.hasLeftSquareCorner = function(
     block) {
   return !!block.outputConnection || !!block.getNextBlock();
 };
@@ -84,7 +84,7 @@ Blockly.blockRendering.BottomRow.prototype.hasLeftSquareCorner = function(
  * @param {!Blockly.BlockSvg} _block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a right square corner.
  */
-Blockly.blockRendering.BottomRow.prototype.hasRightSquareCorner = function(
+BottomRow.prototype.hasRightSquareCorner = function(
     _block) {
   return true;
 };
@@ -92,7 +92,7 @@ Blockly.blockRendering.BottomRow.prototype.hasRightSquareCorner = function(
 /**
  * @override
  */
-Blockly.blockRendering.BottomRow.prototype.measure = function() {
+BottomRow.prototype.measure = function() {
   var height = 0;
   var width = 0;
   var descenderHeight = 0;
@@ -117,13 +117,15 @@ Blockly.blockRendering.BottomRow.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.blockRendering.BottomRow.prototype.startsWithElemSpacer = function() {
+BottomRow.prototype.startsWithElemSpacer = function() {
   return false;
 };
 
 /**
  * @override
  */
-Blockly.blockRendering.BottomRow.prototype.endsWithElemSpacer = function() {
+BottomRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
+
+exports = BottomRow;

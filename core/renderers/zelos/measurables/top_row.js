@@ -13,10 +13,10 @@
 goog.module('Blockly.zelos.TopRow');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.TopRow');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
+const BaseTopRow = goog.require('Blockly.blockRendering.TopRow');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -26,17 +26,17 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.TopRow}
+ * @extends {BaseTopRow}
  */
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);
 };
-Blockly.utils.object.inherits(TopRow,
-    Blockly.blockRendering.TopRow);
+object.inherits(TopRow,
+    BaseTopRow);
 
 /**
  * @override

@@ -13,10 +13,10 @@
 goog.module('Blockly.zelos.BottomRow');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
+const BaseBottomRow = goog.require('Blockly.blockRendering.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -24,17 +24,17 @@ goog.requireType('Blockly.blockRendering.ConstantProvider');
  * a block as well as spacing information for the top row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.BottomRow}
+ * @extends {BaseBottomRow}
  */
 const BottomRow = function(constants) {
   BottomRow.superClass_.constructor.call(this, constants);
 };
-Blockly.utils.object.inherits(BottomRow,
-    Blockly.blockRendering.BottomRow);
+object.inherits(BottomRow,
+    BaseBottomRow);
 
 /**
  * @override

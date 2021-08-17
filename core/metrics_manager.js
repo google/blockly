@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.MetricsManager');
+goog.module('Blockly.MetricsManager');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Size');
@@ -30,7 +31,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @implements {Blockly.IMetricsManager}
  * @constructor
  */
-Blockly.MetricsManager = function(workspace) {
+const MetricsManager = function(workspace) {
   /**
    * The workspace to calculate metrics for.
    * @type {!Blockly.WorkspaceSvg}
@@ -48,7 +49,7 @@ Blockly.MetricsManager = function(workspace) {
  *            position: !Blockly.utils.toolbox.Position
  *          }}
  */
-Blockly.MetricsManager.ToolboxMetrics;
+MetricsManager.ToolboxMetrics;
 /**
  * Describes where the viewport starts in relation to the workspace SVG.
  * @typedef {{
@@ -56,7 +57,7 @@ Blockly.MetricsManager.ToolboxMetrics;
  *            top: number
  *          }}
  */
-Blockly.MetricsManager.AbsoluteMetrics;
+MetricsManager.AbsoluteMetrics;
 /**
  * All the measurements needed to describe the size and location of a container.
  * @typedef {{
@@ -66,7 +67,7 @@ Blockly.MetricsManager.AbsoluteMetrics;
  *            left: number
  *          }}
  */
-Blockly.MetricsManager.ContainerRegion;
+MetricsManager.ContainerRegion;
 /**
  * Describes fixed edges of the workspace.
  * @typedef {{
@@ -76,16 +77,16 @@ Blockly.MetricsManager.ContainerRegion;
  *            right: (number|undefined)
  *          }}
  */
-Blockly.MetricsManager.FixedEdges;
+MetricsManager.FixedEdges;
 /**
  * Common metrics used for UI elements.
  * @typedef {{
- *            viewMetrics: !Blockly.MetricsManager.ContainerRegion,
- *            absoluteMetrics: !Blockly.MetricsManager.AbsoluteMetrics,
- *            toolboxMetrics: !Blockly.MetricsManager.ToolboxMetrics
+ *            viewMetrics: !MetricsManager.ContainerRegion,
+ *            absoluteMetrics: !MetricsManager.AbsoluteMetrics,
+ *            toolboxMetrics: !MetricsManager.ToolboxMetrics
  *          }}
  */
-Blockly.MetricsManager.UiMetrics;
+MetricsManager.UiMetrics;
 /**
  * Gets the dimensions of the given workspace component, in pixel coordinates.
  * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
@@ -95,7 +96,7 @@ Blockly.MetricsManager.UiMetrics;
  *     attributes, which will both be zero if elem did not exist.
  * @protected
  */
-Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
+MetricsManager.prototype.getDimensionsPx_ = function(elem) {
   let width = 0;
   let height = 0;
   if (elem) {
@@ -110,11 +111,11 @@ Blockly.MetricsManager.prototype.getDimensionsPx_ = function(elem) {
  * coordinates. Returns 0 for the width and height if the workspace has a
  * category toolbox instead of a simple toolbox.
  * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
- * @return {!Blockly.MetricsManager.ToolboxMetrics} The width and height of the
+ * @return {!MetricsManager.ToolboxMetrics} The width and height of the
  *     flyout.
  * @public
  */
-Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
+MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
   const flyoutDimensions =
       this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
   return {
@@ -129,11 +130,11 @@ Blockly.MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
  * coordinates. Returns 0 for the width and height if the workspace has a simple
  * toolbox instead of a category toolbox. To get the width and height of a
  * simple toolbox @see {@link getFlyoutMetrics}.
- * @return {!Blockly.MetricsManager.ToolboxMetrics} The object with the width,
+ * @return {!MetricsManager.ToolboxMetrics} The object with the width,
  *     height and position of the toolbox.
  * @public
  */
-Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
+MetricsManager.prototype.getToolboxMetrics = function() {
   const toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
 
   return {
@@ -150,18 +151,18 @@ Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
  *     SVG element.
  * @public
  */
-Blockly.MetricsManager.prototype.getSvgMetrics = function() {
+MetricsManager.prototype.getSvgMetrics = function() {
   return this.workspace_.getCachedParentSvgSize();
 };
 
 /**
  * Gets the absolute left and absolute top in pixel coordinates.
  * This is where the visible workspace starts in relation to the SVG container.
- * @return {!Blockly.MetricsManager.AbsoluteMetrics} The absolute metrics for
+ * @return {!MetricsManager.AbsoluteMetrics} The absolute metrics for
  *     the workspace.
  * @public
  */
-Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
+MetricsManager.prototype.getAbsoluteMetrics = function() {
   let absoluteLeft = 0;
   const toolboxMetrics = this.getToolboxMetrics();
   const flyoutMetrics = this.getFlyoutMetrics(true);
@@ -195,12 +196,12 @@ Blockly.MetricsManager.prototype.getAbsoluteMetrics = function() {
  * coordinates. The visible workspace does not include the toolbox or flyout.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
  *     workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The width, height, top and
+ * @return {!MetricsManager.ContainerRegion} The width, height, top and
  *     left of the viewport in either workspace coordinates or pixel
  *     coordinates.
  * @public
  */
-Blockly.MetricsManager.prototype.getViewMetrics = function(
+MetricsManager.prototype.getViewMetrics = function(
     opt_getWorkspaceCoordinates) {
   const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   const svgMetrics = this.getSvgMetrics();
@@ -241,11 +242,11 @@ Blockly.MetricsManager.prototype.getViewMetrics = function(
  * workspace (workspace comments and blocks).
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @return {!Blockly.MetricsManager.ContainerRegion} The
+ * @return {!MetricsManager.ContainerRegion} The
  *     metrics for the content container.
  * @public
  */
-Blockly.MetricsManager.prototype.getContentMetrics = function(
+MetricsManager.prototype.getContentMetrics = function(
     opt_getWorkspaceCoordinates) {
   const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
@@ -265,7 +266,7 @@ Blockly.MetricsManager.prototype.getContentMetrics = function(
  * @return {boolean} Whether the scroll area has fixed edges.
  * @package
  */
-Blockly.MetricsManager.prototype.hasFixedEdges = function() {
+MetricsManager.prototype.hasFixedEdges = function() {
   // This exists for optimization of bump logic.
   return !this.workspace_.isMovableHorizontally() ||
       !this.workspace_.isMovableVertically();
@@ -273,14 +274,14 @@ Blockly.MetricsManager.prototype.hasFixedEdges = function() {
 
 /**
  * Computes the fixed edges of the scroll area.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @return {!Blockly.MetricsManager.FixedEdges} The fixed edges of the scroll
+ * @return {!MetricsManager.FixedEdges} The fixed edges of the scroll
  *     area.
  * @protected
  */
-Blockly.MetricsManager.prototype.getComputedFixedEdges_ = function(
+MetricsManager.prototype.getComputedFixedEdges_ = function(
     opt_viewMetrics) {
   if (!this.hasFixedEdges()) {
     // Return early if there are no edges.
@@ -306,15 +307,15 @@ Blockly.MetricsManager.prototype.getComputedFixedEdges_ = function(
 
 /**
  * Returns the content area with added padding.
- * @param {!Blockly.MetricsManager.ContainerRegion} viewMetrics The view
+ * @param {!MetricsManager.ContainerRegion} viewMetrics The view
  *     metrics.
- * @param {!Blockly.MetricsManager.ContainerRegion} contentMetrics The content
+ * @param {!MetricsManager.ContainerRegion} contentMetrics The content
  *     metrics.
  * @return {{top: number, bottom: number, left: number, right: number}} The
  *     padded content area.
  * @protected
  */
-Blockly.MetricsManager.prototype.getPaddedContent_ = function(
+MetricsManager.prototype.getPaddedContent_ = function(
     viewMetrics, contentMetrics) {
   const contentBottom = contentMetrics.top + contentMetrics.height;
   const contentRight = contentMetrics.left + contentMetrics.width;
@@ -342,16 +343,16 @@ Blockly.MetricsManager.prototype.getPaddedContent_ = function(
  * Returns the metrics for the scroll area of the workspace.
  * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
  *     in workspace coordinates, false to get them in pixel coordinates.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_viewMetrics The view
+ * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
  *     metrics if they have been previously computed. Passing in null may cause
  *     the view metrics to be computed again, if it is needed.
- * @param {!Blockly.MetricsManager.ContainerRegion=} opt_contentMetrics The
+ * @param {!MetricsManager.ContainerRegion=} opt_contentMetrics The
  *     content metrics if they have been previously computed. Passing in null
  *     may cause the content metrics to be computed again, if it is needed.
- * @return {!Blockly.MetricsManager.ContainerRegion} The metrics for the scroll
+ * @return {!MetricsManager.ContainerRegion} The metrics for the scroll
  *    container.
  */
-Blockly.MetricsManager.prototype.getScrollMetrics = function(
+MetricsManager.prototype.getScrollMetrics = function(
     opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
@@ -381,9 +382,9 @@ Blockly.MetricsManager.prototype.getScrollMetrics = function(
 
 /**
  * Returns common metrics used by UI elements.
- * @return {!Blockly.MetricsManager.UiMetrics} The UI metrics.
+ * @return {!MetricsManager.UiMetrics} The UI metrics.
  */
-Blockly.MetricsManager.prototype.getUiMetrics = function() {
+MetricsManager.prototype.getUiMetrics = function() {
   return {
     viewMetrics: this.getViewMetrics(),
     absoluteMetrics: this.getAbsoluteMetrics(),
@@ -427,15 +428,14 @@ Blockly.MetricsManager.prototype.getUiMetrics = function() {
  *     level workspace.
  * @public
  */
-Blockly.MetricsManager.prototype.getMetrics = function() {
+MetricsManager.prototype.getMetrics = function() {
   const toolboxMetrics = this.getToolboxMetrics();
   const flyoutMetrics = this.getFlyoutMetrics(true);
   const svgMetrics = this.getSvgMetrics();
   const absoluteMetrics = this.getAbsoluteMetrics();
   const viewMetrics = this.getViewMetrics();
   const contentMetrics = this.getContentMetrics();
-  const scrollMetrics = this.getScrollMetrics(false, viewMetrics,
-      contentMetrics);
+  const scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
@@ -470,4 +470,6 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
 
 Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
-    Blockly.MetricsManager);
+    MetricsManager);
+
+exports = MetricsManager;

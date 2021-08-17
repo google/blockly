@@ -93,10 +93,11 @@ BottomRow.prototype.hasRightSquareCorner = function(
  * @override
  */
 BottomRow.prototype.measure = function() {
-  var height = 0;
-  var width = 0;
-  var descenderHeight = 0;
-  for (var e = 0, elem; (elem = this.elements[e]); e++) {
+  let height = 0;
+  let width = 0;
+  let descenderHeight = 0;
+  for (let i = 0; i < this.elements.length; i++) {
+    const elem = this.elements[i];
     width += elem.width;
     if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
       // Note: this assumes that next connections have *only* descenderHeight,

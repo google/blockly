@@ -154,7 +154,8 @@ const Row = function(constants) {
  */
 // TODO: Consider moving this to InputRow, if possible.
 Row.prototype.getLastInput = function() {
-  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
+  for (let i = this.elements.length - 1; i >= 0; i--) {
+    const elem = this.elements[i];
     if (Blockly.blockRendering.Types.isInput(elem)) {
       return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
     }
@@ -195,7 +196,8 @@ Row.prototype.endsWithElemSpacer = function() {
  * @package
  */
 Row.prototype.getFirstSpacer = function() {
-  for (var i = 0, elem; (elem = this.elements[i]); i++) {
+  for (let i = 0; i < this.elements.length; i++) {
+    const elem = this.elements[i];
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }
@@ -210,7 +212,8 @@ Row.prototype.getFirstSpacer = function() {
  * @package
  */
 Row.prototype.getLastSpacer = function() {
-  for (var i = this.elements.length - 1, elem; (elem = this.elements[i]); i--) {
+  for (let i = this.elements.length - 1; i >= 0; i--) {
+    const elem = this.elements[i];
     if (Blockly.blockRendering.Types.isSpacer(elem)) {
       return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
     }

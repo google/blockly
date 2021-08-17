@@ -48,8 +48,9 @@ Blockly.utils.object.inherits(InputRow,
 InputRow.prototype.measure = function() {
   this.width = this.minWidth;
   this.height = this.minHeight;
-  var connectedBlockWidths = 0;
-  for (var e = 0, elem; (elem = this.elements[e]); e++) {
+  let connectedBlockWidths = 0;
+  for (let i = 0; i < this.elements.length; i++) {
+    const elem = this.elements[i];
     this.width += elem.width;
     if (Blockly.blockRendering.Types.isInput(elem)) {
       if (Blockly.blockRendering.Types.isStatementInput(elem)) {

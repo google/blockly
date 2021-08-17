@@ -16,7 +16,6 @@ suite('JSO Deserialization', function() {
   });
 
   teardown(function() {
-    workspaceTeardown.call(this, this.workspace);
     sharedTestTeardown.call(this);
   });
 
@@ -461,6 +460,224 @@ suite('JSO Deserialization', function() {
               this.workspace.id,
               'testId');
         });
+      });
+    });
+  });
+
+  suite('Exceptions', function() {
+    setup(function() {
+      this.assertThrows = function(state, error) {
+        chai.assert.throws(() => {
+          Blockly.serialization.workspaces.load(state, this.workspace);
+        }, error);
+      };
+    });
+
+    suite('Undefined block type', function() {
+      test('Name', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'not_a_real_block',
+              }
+            ]
+          }
+        };
+        this.assertThrows(state, TypeError);
+      });
+
+      test('Casing', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'MATH_NUMBER',
+              }
+            ]
+          }
+        };
+        this.assertThrows(state, TypeError);
+      });
+    });
+
+    suite('Missing connection', function() {
+      test('Input name', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_compare',
+                'inputs': {
+                  'not_an_input': {
+                    'block': {
+                      'type': 'logic_boolean'
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.MissingConnection);
+      });
+
+      test('Input casing', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_compare',
+                'inputs': {
+                  'a': {
+                    'block': {
+                      'type': 'logic_boolean'
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.MissingConnection);
+      });
+
+      test('Next', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_compare',
+                'next': {
+                  'block': {
+                    'type': 'text_print',
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.MissingConnection);
+      });
+
+      test('Previous', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'text_print',
+                'next': {
+                  'block': {
+                    'type': 'logic_compare',
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.MissingConnection);
+      });
+
+      test('Output', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_compare',
+                'inputs': {
+                  'A': {
+                    'block': {
+                      'type': 'text_print'
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.MissingConnection);
+      });
+    });
+
+    suite('Bad connection check', function() {
+      test('Bad checks', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_operation',
+                'inputs': {
+                  'A': {
+                    'block': {
+                      'type': 'math_number'
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.BadConnectionCheck);
+      });
+    });
+
+    suite.skip('Real child of shadow', function() {
+      test('Input', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'logic_compare',
+                'inputs': {
+                  'A': {
+                    'shadow': {
+                      'type': 'logic_compare',
+                      'inputs': {
+                        'A': {
+                          'block': {
+                            'type': 'logic_boolean',
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.RealChildOfShadow);
+      });
+
+      test('Next', function() {
+        const state = {
+          'blocks': {
+            'blocks': [
+              {
+                'type': 'text_print',
+                'next': {
+                  'shadow': {
+                    'type': 'text_input',
+                    'next': {
+                      'block': {
+                        'type': 'text_input',
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        };
+        this.assertThrows(
+            state, Blockly.serialization.exceptions.RealChildOfShadow);
       });
     });
   });

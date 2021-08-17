@@ -280,11 +280,12 @@ Connection.prototype.onFailedConnect = function(_otherConnection) {
 /**
  * Connect this connection to another connection.
  * @param {!Connection} otherConnection Connection to connect to.
+ * @return {boolean} Whether the the blocks are now connected or not.
  */
 Connection.prototype.connect = function(otherConnection) {
   if (this.targetConnection == otherConnection) {
     // Already connected together.  NOP.
-    return;
+    return true;
   }
 
   const checker = this.getConnectionChecker();
@@ -305,6 +306,8 @@ Connection.prototype.connect = function(otherConnection) {
       Events.setGroup(false);
     }
   }
+
+  return this.isConnected();
 };
 
 /**

@@ -233,6 +233,7 @@ function sharedTestTeardown() {
     // Clear Blockly.Event state.
     Blockly.Events.setGroup(false);
     Blockly.Events.disabled_ = 0;
+    Blockly.Events.setRecordUndo(true);
     if (Blockly.Events.FIRE_QUEUE_.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that

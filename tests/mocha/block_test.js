@@ -1990,7 +1990,7 @@ suite('Blocks', function() {
       var recordUndoDuringInit;
       Blockly.Blocks['init_test_block'].init = function() {
         initCalled = true;
-        recordUndoDuringInit = Blockly.Events.recordUndo;
+        recordUndoDuringInit = Blockly.Events.getRecordUndo();
         throw new Error();
       };
       chai.assert.throws(function() {
@@ -1998,7 +1998,7 @@ suite('Blocks', function() {
       }.bind(this));
       chai.assert.isFalse(recordUndoDuringInit,
           'recordUndo should be false during block init function');
-      chai.assert.isTrue(Blockly.Events.recordUndo,
+      chai.assert.isTrue(Blockly.Events.getRecordUndo(),
           'recordUndo should be reset to true after init');
       chai.assert.isTrue(initCalled, 'expected init function to be called');
     });

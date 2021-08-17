@@ -36,8 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @extends {Row}
  */
 const BottomRow = function(constants) {
-  BottomRow.superClass_.constructor.call(this,
-      constants);
+  BottomRow.superClass_.constructor.call(this, constants);
   this.type |= Types.BOTTOM_ROW;
 
   /**
@@ -69,16 +68,14 @@ const BottomRow = function(constants) {
    */
   this.baseline = 0;
 };
-object.inherits(BottomRow,
-    Row);
+object.inherits(BottomRow, Row);
 
 /**
  * Returns whether or not the bottom row has a left square corner.
  * @param {!BlockSvg} block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a left square corner.
  */
-BottomRow.prototype.hasLeftSquareCorner = function(
-    block) {
+BottomRow.prototype.hasLeftSquareCorner = function(block) {
   return !!block.outputConnection || !!block.getNextBlock();
 };
 
@@ -87,8 +84,7 @@ BottomRow.prototype.hasLeftSquareCorner = function(
  * @param {!BlockSvg} _block The block whose bottom row this represents.
  * @return {boolean} Whether or not the bottom row has a right square corner.
  */
-BottomRow.prototype.hasRightSquareCorner = function(
-    _block) {
+BottomRow.prototype.hasRightSquareCorner = function(_block) {
   return true;
 };
 

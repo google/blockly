@@ -69,8 +69,7 @@ const TopRow = function(constants) {
    */
   this.connection = null;
 };
-object.inherits(TopRow,
-    Row);
+object.inherits(TopRow, Row);
 
 /**
  * Returns whether or not the top row has a left square corner.
@@ -78,13 +77,13 @@ object.inherits(TopRow,
  * @return {boolean} Whether or not the top row has a left square corner.
  */
 TopRow.prototype.hasLeftSquareCorner = function(block) {
-  const hasHat = (block.hat ?
-      block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+  const hasHat =
+      (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
   const prevBlock = block.getPreviousBlock();
 
-  return !!block.outputConnection ||
-      hasHat || (prevBlock ? prevBlock.getNextBlock() == block : false);
+  return !!block.outputConnection || hasHat ||
+      (prevBlock ? prevBlock.getNextBlock() == block : false);
 };
 
 /**
@@ -92,8 +91,7 @@ TopRow.prototype.hasLeftSquareCorner = function(block) {
  * @param {!BlockSvg} _block The block whose top row this represents.
  * @return {boolean} Whether or not the top row has a right square corner.
  */
-TopRow.prototype.hasRightSquareCorner = function(
-    _block) {
+TopRow.prototype.hasRightSquareCorner = function(_block) {
   return true;
 };
 

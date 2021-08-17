@@ -10,15 +10,16 @@
  */
 'use strict';
 
-goog.provide('Blockly.Themes.Classic');
+goog.module('Blockly.Themes.Classic');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Theme');
 
 
 // Temporary holding object.
-Blockly.Themes.Classic = {};
+let Classic = {};
 
-Blockly.Themes.Classic.defaultBlockStyles = {
+Classic.defaultBlockStyles = {
   "colour_blocks": {
     "colourPrimary": "20"
   },
@@ -52,7 +53,7 @@ Blockly.Themes.Classic.defaultBlockStyles = {
   }
 };
 
-Blockly.Themes.Classic.categoryStyles = {
+Classic.categoryStyles = {
   "colour_category": {
     "colour": "20"
   },
@@ -82,6 +83,8 @@ Blockly.Themes.Classic.categoryStyles = {
   }
 };
 
-Blockly.Themes.Classic =
-    new Blockly.Theme('classic', Blockly.Themes.Classic.defaultBlockStyles,
-        Blockly.Themes.Classic.categoryStyles);
+Classic =
+    new Blockly.Theme('classic', Classic.defaultBlockStyles,
+        Classic.categoryStyles);
+
+exports = Classic;

@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.Connection');
+goog.module('Blockly.blockRendering.Connection');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
@@ -31,13 +32,15 @@ goog.requireType('Blockly.RenderedConnection');
  * @constructor
  * @extends {Blockly.blockRendering.Measurable}
  */
-Blockly.blockRendering.Connection = function(constants, connectionModel) {
-  Blockly.blockRendering.Connection.superClass_.constructor.call(this,
+const Connection = function(constants, connectionModel) {
+  Connection.superClass_.constructor.call(this,
       constants);
   this.connectionModel = connectionModel;
   this.shape = this.constants_.shapeFor(connectionModel);
   this.isDynamicShape = !!this.shape['isDynamic'];
   this.type |= Blockly.blockRendering.Types.CONNECTION;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.Connection,
+Blockly.utils.object.inherits(Connection,
     Blockly.blockRendering.Measurable);
+
+exports = Connection;

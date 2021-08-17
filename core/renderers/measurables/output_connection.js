@@ -11,7 +11,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.OutputConnection');
+goog.module('Blockly.blockRendering.OutputConnection');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Types');
@@ -32,8 +33,8 @@ goog.requireType('Blockly.RenderedConnection');
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
-  Blockly.blockRendering.OutputConnection.superClass_.constructor.call(this,
+const OutputConnection = function(constants, connectionModel) {
+  OutputConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.OUTPUT_CONNECTION;
 
@@ -44,5 +45,7 @@ Blockly.blockRendering.OutputConnection = function(constants, connectionModel) {
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   this.connectionOffsetX = 0;
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.OutputConnection,
+Blockly.utils.object.inherits(OutputConnection,
     Blockly.blockRendering.Connection);
+
+exports = OutputConnection;

@@ -10,7 +10,8 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
-goog.provide('Blockly.blockRendering.PreviousConnection');
+goog.module('Blockly.blockRendering.PreviousConnection');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.blockRendering.Connection');
 goog.require('Blockly.blockRendering.Types');
@@ -31,14 +32,16 @@ goog.requireType('Blockly.RenderedConnection');
  * @constructor
  * @extends {Blockly.blockRendering.Connection}
  */
-Blockly.blockRendering.PreviousConnection = function(
+const PreviousConnection = function(
     constants, connectionModel) {
-  Blockly.blockRendering.PreviousConnection.superClass_.constructor.call(this,
+  PreviousConnection.superClass_.constructor.call(this,
       constants, connectionModel);
   this.type |= Blockly.blockRendering.Types.PREVIOUS_CONNECTION;
   this.height = this.shape.height;
   this.width = this.shape.width;
 
 };
-Blockly.utils.object.inherits(Blockly.blockRendering.PreviousConnection,
+Blockly.utils.object.inherits(PreviousConnection,
     Blockly.blockRendering.Connection);
+
+exports = PreviousConnection;

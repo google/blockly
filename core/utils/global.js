@@ -10,20 +10,17 @@
  */
 'use strict';
 
-/**
- * @name Blockly.utils.global
- * @namespace
- */
-goog.provide('Blockly.utils.global');
+goog.module('Blockly.utils.global');
+goog.module.declareLegacyNamespace();
 
 
 /**
  * Reference to the global object.
  *
  * More info on this implementation here:
- * https://docs.google.com/document/d/1NAeW4Wk7I7FV0Y2tcUFvQdGMc89k2vdgSXInw8_nvCI/edit
+ * https://docs.google.com/document/d/1NAeW4Wk7I7FV0Y2tcUFvQdGMc89k2vdgSXInw8_nvCI
  */
-Blockly.utils.global = function() {
+const utilsGlobal = function() {
   if (typeof self === 'object') {
     return self;
   }
@@ -35,3 +32,5 @@ Blockly.utils.global = function() {
   }
   return this;
 }();
+
+exports = utilsGlobal;

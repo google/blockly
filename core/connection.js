@@ -283,11 +283,12 @@ Blockly.Connection.prototype.onFailedConnect = function(_otherConnection) {
 /**
  * Connect this connection to another connection.
  * @param {!Blockly.Connection} otherConnection Connection to connect to.
+ * @return {boolean} Whether the the blocks are now connected or not.
  */
 Blockly.Connection.prototype.connect = function(otherConnection) {
   if (this.targetConnection == otherConnection) {
     // Already connected together.  NOP.
-    return;
+    return true;
   }
 
   var checker = this.getConnectionChecker();
@@ -308,6 +309,8 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       Blockly.Events.setGroup(false);
     }
   }
+
+  return this.isConnected();
 };
 
 /**

@@ -33,7 +33,7 @@ class MissingBlockType extends DeserializationError {
 
     /**
      * The state object containing the bad name.
-     * @type{!State}
+     * @type {!State}
      */
     this.state = state;
   }
@@ -46,7 +46,7 @@ exports.MissingBlockType = MissingBlockType;
  */
 class MissingConnection extends DeserializationError {
   /**
-   * @param {string} connection The name of the connection that is missing. Eg
+   * @param {string} connection The name of the connection that is missing. E.g.
    *     'IF0', or 'next'.
    * @param {!Blockly.Block} block The block missing the connection.
    * @param {!State} state The state object containing the bad connection.
@@ -57,13 +57,13 @@ connection`);
 
     /**
      * The block missing the connection.
-     * @type{!Blockly.Block}
+     * @type {!Blockly.Block}
      */
     this.block = block;
 
     /**
      * The state object containing the bad name.
-     * @type{!State}
+     * @type {!State}
      */
     this.state = state;
   }
@@ -78,7 +78,7 @@ class BadConnectionCheck extends DeserializationError {
   /**
    * @param {string} reason The reason the connections were not compatible.
    * @param {string} childConnection The name of the incompatible child
-   *     connection. Eg 'output' or 'previous'.
+   *     connection. E.g. 'output' or 'previous'.
    * @param {!Blockly.Block} childBlock The child block that could not connect
    *     to its parent.
    * @param {!State} childState The state object representing the child block.
@@ -89,14 +89,14 @@ ${childConnection} to its parent, because: ${reason}`);
 
     /**
      * The block that could not connect to its parent.
-     * @type{!Blockly.Block}
+     * @type {!Blockly.Block}
      */
     this.childBlock = childBlock;
 
     /**
      * The state object representing the block that could not connect to its
      * parent.
-     * @type{!State}
+     * @type {!State}
      */
     this.childState = childState;
   }
@@ -120,7 +120,7 @@ children`);
 
     /**
      * The state object representing the real block.
-     * @type{!State}
+     * @type {!State}
      */
     this.state = state;
   }

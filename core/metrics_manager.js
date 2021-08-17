@@ -13,28 +13,32 @@
 goog.module('Blockly.MetricsManager');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.toolbox');
-
-goog.requireType('Blockly.IFlyout');
-goog.requireType('Blockly.IMetricsManager');
-goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.utils.Metrics');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const IFlyout = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const IToolbox = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const Metrics = goog.requireType('Blockly.utils.Metrics');
+const Size = goog.require('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
 
 
 /**
  * The manager for all workspace metrics calculations.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to calculate metrics
+ * @param {!WorkspaceSvg} workspace The workspace to calculate metrics
  *     for.
- * @implements {Blockly.IMetricsManager}
+ * @implements {IMetricsManager}
  * @constructor
  */
 const MetricsManager = function(workspace) {
   /**
    * The workspace to calculate metrics for.
-   * @type {!Blockly.WorkspaceSvg}
+   * @type {!WorkspaceSvg}
    * @protected
    */
   this.workspace_ = workspace;
@@ -46,7 +50,7 @@ const MetricsManager = function(workspace) {
  * @typedef {{
  *            width: number,
  *            height: number,
- *            position: !Blockly.utils.toolbox.Position
+ *            position: !toolbox.Position
  *          }}
  */
 MetricsManager.ToolboxMetrics;
@@ -89,10 +93,10 @@ MetricsManager.FixedEdges;
 MetricsManager.UiMetrics;
 /**
  * Gets the dimensions of the given workspace component, in pixel coordinates.
- * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
+ * @param {?IToolbox|?IFlyout} elem The element to get the
  *     dimensions of, or null.  It should be a toolbox or flyout, and should
  *     implement getWidth() and getHeight().
- * @return {!Blockly.utils.Size} An object containing width and height
+ * @return {!Size} An object containing width and height
  *     attributes, which will both be zero if elem did not exist.
  * @protected
  */
@@ -103,7 +107,7 @@ MetricsManager.prototype.getDimensionsPx_ = function(elem) {
     width = elem.getWidth();
     height = elem.getHeight();
   }
-  return new Blockly.utils.Size(width, height);
+  return new Size(width, height);
 };
 
 /**
@@ -147,7 +151,7 @@ MetricsManager.prototype.getToolboxMetrics = function() {
 /**
  * Gets the width and height of the workspace's parent SVG element in pixel
  * coordinates. This area includes the toolbox and the visible workspace area.
- * @return {!Blockly.utils.Size} The width and height of the workspace's parent
+ * @return {!Size} The width and height of the workspace's parent
  *     SVG element.
  * @public
  */
@@ -171,8 +175,8 @@ MetricsManager.prototype.getAbsoluteMetrics = function() {
   const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  const atLeft = toolboxPosition == Blockly.utils.toolbox.Position.LEFT;
-  const atTop = toolboxPosition == Blockly.utils.toolbox.Position.TOP;
+  const atLeft = toolboxPosition == toolbox.Position.LEFT;
+  const atTop = toolboxPosition == toolbox.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
@@ -212,19 +216,19 @@ MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
-        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
+    if (toolboxPosition == toolbox.Position.TOP ||
+        toolboxPosition == toolbox.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
-        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
+    } else if (toolboxPosition == toolbox.Position.LEFT ||
+        toolboxPosition == toolbox.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == Blockly.utils.toolbox.Position.TOP ||
-        toolboxPosition == Blockly.utils.toolbox.Position.BOTTOM) {
+    if (toolboxPosition == toolbox.Position.TOP ||
+        toolboxPosition == toolbox.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (toolboxPosition == Blockly.utils.toolbox.Position.LEFT ||
-        toolboxPosition == Blockly.utils.toolbox.Position.RIGHT) {
+    } else if (toolboxPosition == toolbox.Position.LEFT ||
+        toolboxPosition == toolbox.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }
@@ -424,7 +428,7 @@ MetricsManager.prototype.getUiMetrics = function() {
  * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
  * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
  *     compare.
- * @return {!Blockly.utils.Metrics} Contains size and position metrics of a top
+ * @return {!Metrics} Contains size and position metrics of a top
  *     level workspace.
  * @public
  */
@@ -468,8 +472,8 @@ MetricsManager.prototype.getMetrics = function() {
   };
 };
 
-Blockly.registry.register(
-    Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
+registry.register(
+    registry.Type.METRICS_MANAGER, registry.DEFAULT,
     MetricsManager);
 
 exports = MetricsManager;

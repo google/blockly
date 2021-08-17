@@ -13,23 +13,24 @@
 goog.module('Blockly.blockRendering.InputRow');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const Row = goog.require('Blockly.blockRendering.Row');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
  * An object containing information about a row that holds one or more inputs.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Row}
+ * @extends {Row}
  */
 const InputRow = function(constants) {
   InputRow.superClass_.constructor.call(this, constants);
-  this.type |= Blockly.blockRendering.Types.INPUT_ROW;
+  this.type |= Types.INPUT_ROW;
 
   /**
    * The total width of all blocks connected to this row.
@@ -38,8 +39,8 @@ const InputRow = function(constants) {
    */
   this.connectedBlockWidths = 0;
 };
-Blockly.utils.object.inherits(InputRow,
-    Blockly.blockRendering.Row);
+object.inherits(InputRow,
+    Row);
 
 /**
  * Inspect all subcomponents and populate all size properties on the row.
@@ -52,16 +53,16 @@ InputRow.prototype.measure = function() {
   for (let i = 0; i < this.elements.length; i++) {
     const elem = this.elements[i];
     this.width += elem.width;
-    if (Blockly.blockRendering.Types.isInput(elem)) {
-      if (Blockly.blockRendering.Types.isStatementInput(elem)) {
+    if (Types.isInput(elem)) {
+      if (Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (Blockly.blockRendering.Types.isExternalInput(elem) &&
+      } else if (Types.isExternalInput(elem) &&
           elem.connectedBlockWidth != 0) {
         connectedBlockWidths += (elem.connectedBlockWidth -
           elem.connectionWidth);
       }
     }
-    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
+    if (!(Types.isSpacer(elem))) {
       this.height = Math.max(this.height, elem.height);
     }
   }

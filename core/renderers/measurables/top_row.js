@@ -12,12 +12,15 @@
 goog.module('Blockly.blockRendering.TopRow');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.blockRendering.PreviousConnection');
-goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const PreviousConnection = goog.requireType('Blockly.blockRendering.PreviousConnection');
+const Row = goog.require('Blockly.blockRendering.Row');
+const Types = goog.require('Blockly.blockRendering.Types');
+const object = goog.require('Blockly.utils.object');
 
 
 /**
@@ -27,16 +30,16 @@ goog.require('Blockly.utils.object');
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Row}
+ * @extends {Row}
  */
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);
 
-  this.type |= Blockly.blockRendering.Types.TOP_ROW;
+  this.type |= Types.TOP_ROW;
 
   /**
    * The starting point for drawing the row, in the y direction.
@@ -62,16 +65,16 @@ const TopRow = function(constants) {
 
   /**
    * The previous connection on the block, if any.
-   * @type {Blockly.blockRendering.PreviousConnection}
+   * @type {PreviousConnection}
    */
   this.connection = null;
 };
-Blockly.utils.object.inherits(TopRow,
-    Blockly.blockRendering.Row);
+object.inherits(TopRow,
+    Row);
 
 /**
  * Returns whether or not the top row has a left square corner.
- * @param {!Blockly.BlockSvg} block The block whose top row this represents.
+ * @param {!BlockSvg} block The block whose top row this represents.
  * @return {boolean} Whether or not the top row has a left square corner.
  */
 TopRow.prototype.hasLeftSquareCorner = function(block) {
@@ -86,7 +89,7 @@ TopRow.prototype.hasLeftSquareCorner = function(block) {
 
 /**
  * Returns whether or not the top row has a right square corner.
- * @param {!Blockly.BlockSvg} _block The block whose top row this represents.
+ * @param {!BlockSvg} _block The block whose top row this represents.
  * @return {boolean} Whether or not the top row has a right square corner.
  */
 TopRow.prototype.hasRightSquareCorner = function(
@@ -105,8 +108,8 @@ TopRow.prototype.measure = function() {
   for (let i = 0; i < this.elements.length; i++) {
     const elem = this.elements[i];
     width += elem.width;
-    if (!(Blockly.blockRendering.Types.isSpacer(elem))) {
-      if (Blockly.blockRendering.Types.isHat(elem)) {
+    if (!(Types.isSpacer(elem))) {
+      if (Types.isHat(elem)) {
         ascenderHeight = Math.max(ascenderHeight, elem.ascenderHeight);
       } else {
         height = Math.max(height, elem.height);

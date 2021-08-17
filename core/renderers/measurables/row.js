@@ -12,17 +12,21 @@
 goog.module('Blockly.blockRendering.Row');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.blockRendering.InputConnection');
-goog.requireType('Blockly.blockRendering.InRowSpacer');
-goog.requireType('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
+/* eslint-disable-next-line no-unused-vars */
+const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const InputConnection = goog.requireType('Blockly.blockRendering.InputConnection');
+/* eslint-disable-next-line no-unused-vars */
+const InRowSpacer = goog.requireType('Blockly.blockRendering.InRowSpacer');
+/* eslint-disable-next-line no-unused-vars */
+const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
+const Types = goog.require('Blockly.blockRendering.Types');
 
 
 /**
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
@@ -33,12 +37,12 @@ const Row = function(constants) {
    * @package
    * @type {number}
    */
-  this.type = Blockly.blockRendering.Types.ROW;
+  this.type = Types.ROW;
 
   /**
    * An array of elements contained in this row.
    * @package
-   * @type {!Array<!Blockly.blockRendering.Measurable>}
+   * @type {!Array<!Measurable>}
    */
   this.elements = [];
 
@@ -131,7 +135,7 @@ const Row = function(constants) {
 
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @type {!ConstantProvider}
    * @protected
    */
   this.constants_ = constants;
@@ -148,7 +152,7 @@ const Row = function(constants) {
 
 /**
  * Get the last input on this row, if it has one.
- * @return {Blockly.blockRendering.InputConnection} The last input on the row,
+ * @return {InputConnection} The last input on the row,
  *     or null.
  * @package
  */
@@ -156,8 +160,8 @@ const Row = function(constants) {
 Row.prototype.getLastInput = function() {
   for (let i = this.elements.length - 1; i >= 0; i--) {
     const elem = this.elements[i];
-    if (Blockly.blockRendering.Types.isInput(elem)) {
-      return /** @type {Blockly.blockRendering.InputConnection} */ (elem);
+    if (Types.isInput(elem)) {
+      return /** @type {InputConnection} */ (elem);
     }
   }
   return null;
@@ -191,15 +195,15 @@ Row.prototype.endsWithElemSpacer = function() {
 
 /**
  * Convenience method to get the first spacer element on this row.
- * @return {Blockly.blockRendering.InRowSpacer} The first spacer element on
+ * @return {InRowSpacer} The first spacer element on
  *   this row.
  * @package
  */
 Row.prototype.getFirstSpacer = function() {
   for (let i = 0; i < this.elements.length; i++) {
     const elem = this.elements[i];
-    if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
+    if (Types.isSpacer(elem)) {
+      return /** @type {InRowSpacer} */ (elem);
     }
   }
   return null;
@@ -207,15 +211,15 @@ Row.prototype.getFirstSpacer = function() {
 
 /**
  * Convenience method to get the last spacer element on this row.
- * @return {Blockly.blockRendering.InRowSpacer} The last spacer element on
+ * @return {InRowSpacer} The last spacer element on
  *   this row.
  * @package
  */
 Row.prototype.getLastSpacer = function() {
   for (let i = this.elements.length - 1; i >= 0; i--) {
     const elem = this.elements[i];
-    if (Blockly.blockRendering.Types.isSpacer(elem)) {
-      return /** @type {Blockly.blockRendering.InRowSpacer} */ (elem);
+    if (Types.isSpacer(elem)) {
+      return /** @type {InRowSpacer} */ (elem);
     }
   }
   return null;

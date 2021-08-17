@@ -10,15 +10,14 @@
  */
 'use strict';
 
-goog.provide('Blockly.FlyoutMetricsManager');
 goog.provide('Blockly.MetricsManager');
 
-goog.requireType('Blockly.IMetricsManager');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.toolbox');
 
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.IMetricsManager');
 goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.utils.Metrics');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -50,7 +49,6 @@ Blockly.MetricsManager = function(workspace) {
  *          }}
  */
 Blockly.MetricsManager.ToolboxMetrics;
-
 /**
  * Describes where the viewport starts in relation to the workspace SVG.
  * @typedef {{
@@ -59,8 +57,6 @@ Blockly.MetricsManager.ToolboxMetrics;
  *          }}
  */
 Blockly.MetricsManager.AbsoluteMetrics;
-
-
 /**
  * All the measurements needed to describe the size and location of a container.
  * @typedef {{
@@ -71,7 +67,6 @@ Blockly.MetricsManager.AbsoluteMetrics;
  *          }}
  */
 Blockly.MetricsManager.ContainerRegion;
-
 /**
  * Describes fixed edges of the workspace.
  * @typedef {{
@@ -82,7 +77,6 @@ Blockly.MetricsManager.ContainerRegion;
  *          }}
  */
 Blockly.MetricsManager.FixedEdges;
-
 /**
  * Common metrics used for UI elements.
  * @typedef {{
@@ -92,7 +86,6 @@ Blockly.MetricsManager.FixedEdges;
  *          }}
  */
 Blockly.MetricsManager.UiMetrics;
-
 /**
  * Gets the dimensions of the given workspace component, in pixel coordinates.
  * @param {?Blockly.IToolbox|?Blockly.IFlyout} elem The element to get the
@@ -477,82 +470,3 @@ Blockly.MetricsManager.prototype.getMetrics = function() {
 Blockly.registry.register(
     Blockly.registry.Type.METRICS_MANAGER, Blockly.registry.DEFAULT,
     Blockly.MetricsManager);
-
-/**
- * Calculates metrics for a flyout's workspace.
- * The metrics are mainly used to size scrollbars for the flyout.
- * @param {!Blockly.WorkspaceSvg} workspace The flyout's workspace.
- * @param {!Blockly.IFlyout} flyout The flyout.
- * @extends {Blockly.MetricsManager}
- * @constructor
- */
-Blockly.FlyoutMetricsManager = function(workspace, flyout) {
-  /**
-   * The flyout that owns the workspace to calculate metrics for.
-   * @type {!Blockly.IFlyout}
-   * @protected
-   */
-  this.flyout_ = flyout;
-
-  Blockly.FlyoutMetricsManager.superClass_.constructor.call(this, workspace);
-};
-Blockly.utils.object.inherits(
-    Blockly.FlyoutMetricsManager, Blockly.MetricsManager);
-
-/**
- * Gets the bounding box of the blocks on the flyout's workspace.
- * This is in workspace coordinates.
- * @return {!SVGRect|{height: number, y: number, width: number, x: number}} The
- *     bounding box of the blocks on the workspace.
- * @private
- */
-Blockly.FlyoutMetricsManager.prototype.getBoundingBox_ = function() {
-  try {
-    var blockBoundingBox = this.workspace_.getCanvas().getBBox();
-  } catch (e) {
-    // Firefox has trouble with hidden elements (Bug 528969).
-    // 2021 Update: It looks like this was fixed around Firefox 77 released in
-    // 2020.
-    var blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
-  }
-  return blockBoundingBox;
-};
-
-/**
- * @override
- */
-Blockly.FlyoutMetricsManager.prototype.getContentMetrics = function(
-    opt_getWorkspaceCoordinates) {
-  // The bounding box is in workspace coordinates.
-  var blockBoundingBox = this.getBoundingBox_();
-  var scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
-
-  return {
-    height: blockBoundingBox.height * scale,
-    width: blockBoundingBox.width * scale,
-    top: blockBoundingBox.y * scale,
-    left: blockBoundingBox.x * scale,
-  };
-};
-
-/**
- * @override
- */
-Blockly.FlyoutMetricsManager.prototype.getScrollMetrics = function(
-    opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-  var contentMetrics = opt_contentMetrics || this.getContentMetrics();
-  var margin = this.flyout_.MARGIN * this.workspace_.scale;
-  var scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-
-  // The left padding isn't just the margin. Some blocks are also offset by
-  // tabWidth so that value and statement blocks line up.
-  // The contentMetrics.left value is equivalent to the variable left padding.
-  var leftPadding = contentMetrics.left;
-
-  return {
-    height: (contentMetrics.height + 2 * margin) / scale,
-    width: (contentMetrics.width + leftPadding + margin) / scale,
-    top: 0,
-    left: 0,
-  };
-};

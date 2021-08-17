@@ -238,7 +238,6 @@ suite.only('Flyout', function() {
     setup(function() {
       this.flyout = this.workspace.getFlyout();
       this.createFlyoutSpy = sinon.spy(this.flyout, 'createFlyoutInfo_');
-
     });
 
     function checkFlyoutInfo(flyoutSpy) {
@@ -338,6 +337,68 @@ suite.only('Flyout', function() {
       test('Array of XML', function() {
         this.stubAndAssert(getXmlArray());
       });
+    });
+  });
+
+  suite('Recycling', function() {
+    setup(function() {
+      this.flyout = this.workspace.getFlyout();
+    });
+
+    test('Recycling disabled', function() {
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 123
+            }
+          }
+        ]
+      });
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 321
+            }
+          }
+        ]
+      });
+      const block = this.flyout.workspace_.getAllBlocks()[0];
+      console.log(block);
+      chai.assert.equal(block.getFieldValue('NUM'), 321);
+    });
+
+    test('Recycling enabled', function() {
+      this.flyout.blockIsRecyclable_ = function() { return true; };
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 123
+            }
+          }
+        ]
+      });
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 321
+            }
+          }
+        ]
+      });
+      const block = this.flyout.workspace_.getAllBlocks()[0];
+      chai.assert.equal(block.getFieldValue('NUM'), 123);
     });
   });
 });

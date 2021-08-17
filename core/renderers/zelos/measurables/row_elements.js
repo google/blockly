@@ -36,7 +36,6 @@ const RightConnectionShape = function(constants) {
   this.height = 0;
   this.width = 0;
 };
-object.inherits(RightConnectionShape,
-    Measurable);
+object.inherits(RightConnectionShape, Measurable);
 
 exports = RightConnectionShape;

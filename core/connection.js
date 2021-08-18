@@ -603,8 +603,8 @@ Blockly.Connection.prototype.getShadowDom = function(returnCurrent) {
 
 /**
  * Changes the connection's shadow block.
- * @param {?blocks.State} shadowState An state represetation of the block or
- *     null.
+ * @param {?Blockly.serialization.blocks.State} shadowState An state
+ *     represetation of the block or null.
  */
 Blockly.Connection.prototype.setShadowState = function(shadowState) {
   this.setShadowStateInternal_({shadowState: shadowState});
@@ -617,13 +617,14 @@ Blockly.Connection.prototype.setShadowState = function(shadowState) {
  *     attached to this connection, this serializes the state of that block
  *     and returns it (so that field values are correct). Otherwise the saved
  *     state is just returned.
- * @return {?blocks.State} Serialized object representation of the block, or
- *     null.
+ * @return {?Blockly.serialization.blocks.State} Serialized object
+ *     representation of the block, or null.
  */
 Blockly.Connection.prototype.getShadowState = function(returnCurrent) {
   if (returnCurrent && this.targetBlock() && this.targetBlock().isShadow()) {
-    return Blockly.serialization.blocks
-        .save(this.targetBlock(), {addNextBlocks: true});
+    return Blockly.serialization.blocks.save(
+        /** @type {!Blockly.Block} */ (this.targetBlock()),
+        {addNextBlocks: true});
   }
   return this.shadowState_;
 };
@@ -700,7 +701,8 @@ Blockly.Connection.prototype.toString = function() {
 /**
  * Returns the state of the shadowDom_ and shadowState_ properties, then
  * temporarily sets those properties to null so no shadow respawns.
- * @return {{shadowDom: ?Element, shadowState: ?Object}} The state of both the
+ * @return {{shadowDom: ?Element,
+ *     shadowState: ?Blockly.serialization.blocks.State}} The state of both the
  *     shadowDom_ and shadowState_ properties.
  * @private
  */
@@ -715,9 +717,9 @@ Blockly.Connection.prototype.stashShadowState_ = function() {
 
 /**
  * Reapplies the stashed state of the shadowDom_ and shadowState_ properties.
- * @param {{shadowDom: (?Element|undefined), shadowState:
- *     (?Object|undefined)}=} param0 The state to reapply to the shadowDom_ and
- *     shadowState_ properties.
+ * @param {{shadowDom: ?Element,
+ *     shadowState: ?Blockly.serialization.blocks.State}} param0 The state to
+ *     reapply to the shadowDom_ and shadowState_ properties.
  * @private
  */
 Blockly.Connection.prototype.applyShadowState_ =
@@ -728,9 +730,9 @@ Blockly.Connection.prototype.applyShadowState_ =
 
 /**
  * Sets the state of the shadow of this connection.
- * @param {{shadowDom: (?Element|undefined), shadowState:
- *     (?Object|undefined)}=} param0 The state to set the shadow of this
- *     connection to.
+ * @param {{shadowDom: (?Element|undefined),
+ *     shadowState: (?Blockly.serialization.blocks.State|undefined)}=} param0
+ *     The state to set the shadow of this connection to.
  * @private
  */
 Blockly.Connection.prototype.setShadowStateInternal_ =
@@ -756,7 +758,7 @@ Blockly.Connection.prototype.setShadowStateInternal_ =
         var shadow = this.createShadowBlock_();
         this.serializeShadow_(shadow);
         if (shadow) {
-          shadow.dispose();
+          shadow.dispose(false);
         }
       }
     };
@@ -797,7 +799,7 @@ Blockly.Connection.prototype.serializeShadow_ = function(shadow) {
   if (!shadow) {
     return;
   }
-  this.shadowDom_ = Blockly.Xml.blockToDom(shadow);
+  this.shadowDom_ = /** @type {!Element} */ (Blockly.Xml.blockToDom(shadow));
   this.shadowState_ = Blockly.serialization.blocks
       .save(shadow, {addNextBlocks: true});
 };

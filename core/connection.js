@@ -471,18 +471,8 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
  * @protected
  */
 Blockly.Connection.prototype.respawnShadow_ = function() {
-  var blockShadow = this.createShadowBlock_();
-  if (!blockShadow) {
-    return;
-  }
-
-  if (blockShadow.outputConnection) {
-    this.connect(blockShadow.outputConnection);
-  } else if (blockShadow.previousConnection) {
-    this.connect(blockShadow.previousConnection);
-  } else {
-    throw Error('Shadow block does not have output or previous statement.');
-  }
+  // Have to keep respawnShadow_ for backwards compatibility.
+  this.createShadowBlock_(true);
 };
 
 /**
@@ -765,11 +755,13 @@ Blockly.Connection.prototype.setShadowStateInternal_ =
 /**
  * Creates a shadow block based on the current shadowState_ or shadowDom_.
  * shadowState_ gets priority.
+ * @param {boolean} attemptToConnect Whether to try to connect the shadow block
+ *     to this connection or not.
  * @return {?Blockly.Block} The shadow block that was created, or null if both
  *     the shadowState_ and shadowDom_ are null.
  * @private
  */
-Blockly.Connection.prototype.createShadowBlock_ = function() {
+Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   var parentBlock = this.getSourceBlock();
   var shadowState = this.getShadowState();
   var shadowDom = this.getShadowDom();
@@ -777,15 +769,28 @@ Blockly.Connection.prototype.createShadowBlock_ = function() {
     return null;
   }
 
-  var blockShadow = null;
   if (shadowState) {
-    blockShadow = Blockly.serialization.blocks
-        .load(shadowState, parentBlock.workspace);
-    blockShadow.setShadow(true);
-  } else if (shadowDom) {
-    blockShadow = Blockly.Xml.domToBlock(shadowDom, parentBlock.workspace);
+    var blockShadow = Blockly.serialization.blocks.loadInternal(
+        shadowState,
+        parentBlock.workspace,
+        attemptToConnect ? this : undefined,
+        true);
+    return blockShadow;
   }
-  return blockShadow;
+  
+  if (shadowDom) {
+    blockShadow = Blockly.Xml.domToBlock(shadowDom, parentBlock.workspace);
+    if (attemptToConnect) {
+      if (blockShadow.outputConnection) {
+        this.connect(blockShadow.outputConnection);
+      } else if (blockShadow.previousConnection) {
+        this.connect(blockShadow.previousConnection);
+      } else {
+        throw Error('Shadow block does not have output or previous statement.');
+      }
+    }
+    return blockShadow;
+  }
 };
 
 /**

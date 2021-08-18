@@ -25,7 +25,7 @@ const Size = goog.require('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
+const toolboxUtils = goog.require('Blockly.utils.toolbox');
 
 
 /**
@@ -50,7 +50,7 @@ const MetricsManager = function(workspace) {
  * @typedef {{
  *            width: number,
  *            height: number,
- *            position: !toolbox.Position
+ *            position: !toolboxUtils.Position
  *          }}
  */
 MetricsManager.ToolboxMetrics;
@@ -175,8 +175,8 @@ MetricsManager.prototype.getAbsoluteMetrics = function() {
   const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  const atLeft = toolboxPosition == toolbox.Position.LEFT;
-  const atTop = toolboxPosition == toolbox.Position.TOP;
+  const atLeft = toolboxPosition == toolboxUtils.Position.LEFT;
+  const atTop = toolboxPosition == toolboxUtils.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
@@ -216,21 +216,21 @@ MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == toolbox.Position.TOP ||
-        toolboxPosition == toolbox.Position.BOTTOM) {
+    if (toolboxPosition == toolboxUtils.Position.TOP ||
+        toolboxPosition == toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
     } else if (
-        toolboxPosition == toolbox.Position.LEFT ||
-        toolboxPosition == toolbox.Position.RIGHT) {
+        toolboxPosition == toolboxUtils.Position.LEFT ||
+        toolboxPosition == toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == toolbox.Position.TOP ||
-        toolboxPosition == toolbox.Position.BOTTOM) {
+    if (toolboxPosition == toolboxUtils.Position.TOP ||
+        toolboxPosition == toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
     } else if (
-        toolboxPosition == toolbox.Position.LEFT ||
-        toolboxPosition == toolbox.Position.RIGHT) {
+        toolboxPosition == toolboxUtils.Position.LEFT ||
+        toolboxPosition == toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }

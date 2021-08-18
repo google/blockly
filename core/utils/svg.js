@@ -43,142 +43,142 @@ Svg.prototype.toString = function() {
   return this.tagName_;
 };
 
-/** @type {!Svg<!SVGAnimateElement>}
+/**
+ * @type {!Svg<!SVGAnimateElement>}
  * @package
  */
-Svg.ANIMATE =
-    new Svg('animate');
+Svg.ANIMATE = new Svg('animate');
 
-/** @type {!Svg<!SVGCircleElement>}
-* @package
- */
-Svg.CIRCLE =
-    new Svg('circle');
-
-/** @type {!Svg<!SVGClipPathElement>}
+/**
+ * @type {!Svg<!SVGCircleElement>}
  * @package
  */
-Svg.CLIPPATH =
-    new Svg('clipPath');
+Svg.CIRCLE = new Svg('circle');
 
-/** @type {!Svg<!SVGDefsElement>}
+/**
+ * @type {!Svg<!SVGClipPathElement>}
  * @package
  */
-Svg.DEFS =
-    new Svg('defs');
+Svg.CLIPPATH = new Svg('clipPath');
 
-/** @type {!Svg<!SVGFECompositeElement>}
+/**
+ * @type {!Svg<!SVGDefsElement>}
  * @package
  */
-Svg.FECOMPOSITE =
-    new Svg('feComposite');
+Svg.DEFS = new Svg('defs');
 
-/** @type {!Svg<!SVGFEComponentTransferElement>}
+/**
+ * @type {!Svg<!SVGFECompositeElement>}
  * @package
  */
-Svg.FECOMPONENTTRANSFER =
-    new Svg('feComponentTransfer');
+Svg.FECOMPOSITE = new Svg('feComposite');
 
-/** @type {!Svg<!SVGFEFloodElement>}
+/**
+ * @type {!Svg<!SVGFEComponentTransferElement>}
  * @package
  */
-Svg.FEFLOOD =
-    new Svg('feFlood');
+Svg.FECOMPONENTTRANSFER = new Svg('feComponentTransfer');
 
-/** @type {!Svg<!SVGFEFuncAElement>}
+/**
+ * @type {!Svg<!SVGFEFloodElement>}
  * @package
  */
-Svg.FEFUNCA =
-    new Svg('feFuncA');
+Svg.FEFLOOD = new Svg('feFlood');
 
-/** @type {!Svg<!SVGFEGaussianBlurElement>}
+/**
+ * @type {!Svg<!SVGFEFuncAElement>}
  * @package
  */
-Svg.FEGAUSSIANBLUR =
-    new Svg('feGaussianBlur');
+Svg.FEFUNCA = new Svg('feFuncA');
 
-/** @type {!Svg<!SVGFEPointLightElement>}
+/**
+ * @type {!Svg<!SVGFEGaussianBlurElement>}
  * @package
  */
-Svg.FEPOINTLIGHT =
-    new Svg('fePointLight');
+Svg.FEGAUSSIANBLUR = new Svg('feGaussianBlur');
 
-/** @type {!Svg<!SVGFESpecularLightingElement>}
+/**
+ * @type {!Svg<!SVGFEPointLightElement>}
  * @package
  */
-Svg.FESPECULARLIGHTING =
-    new Svg('feSpecularLighting');
+Svg.FEPOINTLIGHT = new Svg('fePointLight');
 
-/** @type {!Svg<!SVGFilterElement>}
+/**
+ * @type {!Svg<!SVGFESpecularLightingElement>}
  * @package
  */
-Svg.FILTER =
-    new Svg('filter');
+Svg.FESPECULARLIGHTING = new Svg('feSpecularLighting');
 
-/** @type {!Svg<!SVGForeignObjectElement>}
+/**
+ * @type {!Svg<!SVGFilterElement>}
  * @package
  */
-Svg.FOREIGNOBJECT =
-    new Svg('foreignObject');
+Svg.FILTER = new Svg('filter');
 
-/** @type {!Svg<!SVGGElement>}
+/**
+ * @type {!Svg<!SVGForeignObjectElement>}
  * @package
  */
-Svg.G =
-    new Svg('g');
+Svg.FOREIGNOBJECT = new Svg('foreignObject');
 
-/** @type {!Svg<!SVGImageElement>}
+/**
+ * @type {!Svg<!SVGGElement>}
  * @package
  */
-Svg.IMAGE =
-    new Svg('image');
+Svg.G = new Svg('g');
 
-/** @type {!Svg<!SVGLineElement>}
+/**
+ * @type {!Svg<!SVGImageElement>}
  * @package
  */
-Svg.LINE =
-    new Svg('line');
+Svg.IMAGE = new Svg('image');
 
-/** @type {!Svg<!SVGPathElement>}
+/**
+ * @type {!Svg<!SVGLineElement>}
  * @package
  */
-Svg.PATH =
-    new Svg('path');
+Svg.LINE = new Svg('line');
 
-/** @type {!Svg<!SVGPatternElement>}
+/**
+ * @type {!Svg<!SVGPathElement>}
  * @package
  */
-Svg.PATTERN =
-    new Svg('pattern');
+Svg.PATH = new Svg('path');
 
-/** @type {!Svg<!SVGPolygonElement>}
+/**
+ * @type {!Svg<!SVGPatternElement>}
  * @package
  */
-Svg.POLYGON =
-    new Svg('polygon');
+Svg.PATTERN = new Svg('pattern');
 
-/** @type {!Svg<!SVGRectElement>}
+/**
+ * @type {!Svg<!SVGPolygonElement>}
  * @package
  */
-Svg.RECT =
-    new Svg('rect');
+Svg.POLYGON = new Svg('polygon');
 
-/** @type {!Svg<!SVGSVGElement>}
+/**
+ * @type {!Svg<!SVGRectElement>}
  * @package
  */
-Svg.SVG =
-    new Svg('svg');
+Svg.RECT = new Svg('rect');
 
-/** @type {!Svg<!SVGTextElement>}
+/**
+ * @type {!Svg<!SVGSVGElement>}
  * @package
  */
-Svg.TEXT =
-    new Svg('text');
+Svg.SVG = new Svg('svg');
 
-/** @type {!Svg<!SVGTSpanElement>}
+/**
+ * @type {!Svg<!SVGTextElement>}
  * @package
  */
-Svg.TSPAN =
-    new Svg('tspan');
+Svg.TEXT = new Svg('text');
+
+/**
+ * @type {!Svg<!SVGTSpanElement>}
+ * @package
+ */
+Svg.TSPAN = new Svg('tspan');
 
 exports = Svg;

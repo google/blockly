@@ -48,12 +48,14 @@ exports.save = save;
  *       by the user. False by default.
  */
 const load = function(state, workspace, {recordUndo = false} = {}) {
-  const deserializers =
-      Object.entries(
-          registry.getAllItems(registry.Type.PLUGIN_SERIALIZER))
-          .sort(
-              ([, {priority: priorityA}], [, {priority: priorityB}]) =>
-                priorityB - priorityA);
+  const serializerMap = registry.getAllItems(registry.Type.PLUGIN_SERIALIZER);
+  if (!serializerMap) {
+    return;
+  }
+
+  const deserializers = Object.entries(serializerMap)
+      .sort(([, {priority: priorityA}], [, {priority: priorityB}]) =>
+        priorityB - priorityA);
 
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
@@ -73,8 +75,9 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
     deserializer.clear(workspace);
   }
 
-  // reverse() is destructive.
-  for (const [name, deserializer] of deserializers.reverse()) {
+  // reverse() is destructive, so we have to re-reverse to correct the order.
+  for (let [name, deserializer] of deserializers.reverse()) {
+    name = /** @type {string} */ (name);
     const pluginState = state[name];
     if (pluginState) {
       deserializer.load(state[name], workspace);

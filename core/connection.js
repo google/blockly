@@ -744,7 +744,7 @@ Blockly.Connection.prototype.setShadowStateInternal_ =
           this.serializeShadow_(this.targetBlock());
         }
       } else {
-        var shadow = this.createShadowBlock_();
+        var shadow = this.createShadowBlock_(false);
         this.serializeShadow_(shadow);
         if (shadow) {
           shadow.dispose(false);
@@ -791,6 +791,7 @@ Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
     }
     return blockShadow;
   }
+  return null;
 };
 
 /**

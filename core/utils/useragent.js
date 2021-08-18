@@ -71,56 +71,47 @@ let MOBILE;
 exports.MOBILE = MOBILE;
 
 (function(raw) {
-  raw = raw;
-  const rawUpper = raw.toUpperCase();
+raw = raw;
+const rawUpper = raw.toUpperCase();
 
-  /**
-   * Case-insensitive test of whether name is in the useragent string.
-   * @param {string} name Name to test.
-   * @return {boolean} True if name is present.
-   */
-  function has(name) {
-    return rawUpper.indexOf(name.toUpperCase()) != -1;
-  }
+/**
+ * Case-insensitive test of whether name is in the useragent string.
+ * @param {string} name Name to test.
+ * @return {boolean} True if name is present.
+ */
+function has(name) {
+  return rawUpper.indexOf(name.toUpperCase()) != -1;
+}
 
-  // Browsers.  Logic from:
-  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/browser.js
-  IE = has('Trident') || has('MSIE');
-  EDGE = has('Edge');
-  // Useragent for JavaFX:
-  // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
-  //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
-  JAVA_FX = has('JavaFX');
-  CHROME = (has('Chrome') || has('CriOS')) &&
-        !EDGE;
+// Browsers.  Logic from:
+// https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/browser.js
+IE = has('Trident') || has('MSIE');
+EDGE = has('Edge');
+// Useragent for JavaFX:
+// Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
+//     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
+JAVA_FX = has('JavaFX');
+CHROME = (has('Chrome') || has('CriOS')) && !EDGE;
 
-  // Engines.  Logic from:
-  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js
-  WEBKIT = has('WebKit') &&
-      !EDGE;
-  GECKO = has('Gecko') &&
-      !WEBKIT &&
-      !IE &&
-      !EDGE;
+// Engines.  Logic from:
+// https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js
+WEBKIT = has('WebKit') && !EDGE;
+GECKO = has('Gecko') && !WEBKIT && !IE && !EDGE;
 
-  // Platforms.  Logic from:
-  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js and
-  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/extra.js
-  ANDROID = has('Android');
-  const maxTouchPoints = globalUtils['navigator'] &&
-      globalUtils['navigator']['maxTouchPoints'];
-  IPAD = has('iPad') ||
-      has('Macintosh') && maxTouchPoints > 0;
-  IPOD = has('iPod');
-  IPHONE = has('iPhone') &&
-      !IPAD && !IPOD;
-  MAC = has('Macintosh');
+// Platforms.  Logic from:
+// https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js
+// and
+// https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/extra.js
+ANDROID = has('Android');
+const maxTouchPoints =
+    globalUtils['navigator'] && globalUtils['navigator']['maxTouchPoints'];
+IPAD = has('iPad') || has('Macintosh') && maxTouchPoints > 0;
+IPOD = has('iPod');
+IPHONE = has('iPhone') && !IPAD && !IPOD;
+MAC = has('Macintosh');
 
-  // Devices.  Logic from:
-  // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/device.js
-  TABLET = IPAD ||
-      (ANDROID && !has('Mobile')) || has('Silk');
-  MOBILE = !TABLET &&
-      (IPOD || IPHONE ||
-       ANDROID || has('IEMobile'));
+// Devices.  Logic from:
+// https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/device.js
+TABLET = IPAD || (ANDROID && !has('Mobile')) || has('Silk');
+MOBILE = !TABLET && (IPOD || IPHONE || ANDROID || has('IEMobile'));
 })((globalUtils['navigator'] && globalUtils['navigator']['userAgent']) || '');

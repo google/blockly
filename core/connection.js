@@ -623,8 +623,7 @@ Blockly.Connection.prototype.setShadowState = function(shadowState) {
 Blockly.Connection.prototype.getShadowState = function(returnCurrent) {
   if (returnCurrent && this.targetBlock() && this.targetBlock().isShadow()) {
     return Blockly.serialization.blocks.save(
-        /** @type {!Blockly.Block} */ (this.targetBlock()),
-        {addNextBlocks: true});
+        /** @type {!Blockly.Block} */ (this.targetBlock()));
   }
   return this.shadowState_;
 };
@@ -800,6 +799,5 @@ Blockly.Connection.prototype.serializeShadow_ = function(shadow) {
     return;
   }
   this.shadowDom_ = /** @type {!Element} */ (Blockly.Xml.blockToDom(shadow));
-  this.shadowState_ = Blockly.serialization.blocks
-      .save(shadow, {addNextBlocks: true});
+  this.shadowState_ = Blockly.serialization.blocks.save(shadow);
 };

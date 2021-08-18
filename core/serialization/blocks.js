@@ -466,6 +466,7 @@ const loadIcons = function(block, state) {
     block.commentModel.pinned = comment['pinned'];
     block.commentModel.size = new Size(comment['width'], comment['height']);
     if (comment['pinned'] && block.getCommentIcon && !block.isInFlyout) {
+      // Give the block a chance to be positioned and rendered before showing.
       setTimeout(() => block.getCommentIcon().setVisible(true), 1);
     }
   }

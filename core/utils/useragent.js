@@ -12,14 +12,10 @@
  */
 'use strict';
 
-/**
- * @name Blockly.utils.userAgent
- * @namespace
- */
 goog.module('Blockly.utils.userAgent');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.global');
+const globalUtils = goog.require('Blockly.utils.global');
 
 
 /** @type {boolean} */
@@ -111,8 +107,8 @@ exports.MOBILE = MOBILE;
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js and
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/extra.js
   ANDROID = has('Android');
-  const maxTouchPoints = Blockly.utils.global['navigator'] &&
-      Blockly.utils.global['navigator']['maxTouchPoints'];
+  const maxTouchPoints = globalUtils['navigator'] &&
+      globalUtils['navigator']['maxTouchPoints'];
   IPAD = has('iPad') ||
       has('Macintosh') && maxTouchPoints > 0;
   IPOD = has('iPod');
@@ -127,4 +123,4 @@ exports.MOBILE = MOBILE;
   MOBILE = !TABLET &&
       (IPOD || IPHONE ||
        ANDROID || has('IEMobile'));
-})((Blockly.utils.global['navigator'] && Blockly.utils.global['navigator']['userAgent']) || '');
+})((globalUtils['navigator'] && globalUtils['navigator']['userAgent']) || '');

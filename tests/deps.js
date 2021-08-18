@@ -222,7 +222,7 @@ goog.addDependency('../../core/utils/style.js', ['Blockly.utils.style'], ['Block
 goog.addDependency('../../core/utils/svg.js', ['Blockly.utils.Svg'], []);
 goog.addDependency('../../core/utils/svg_paths.js', ['Blockly.utils.svgPaths'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/toolbox.js', ['Blockly.utils.toolbox'], ['Blockly.Xml', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/useragent.js', ['Blockly.utils.userAgent'], ['Blockly.utils.global']);
+goog.addDependency('../../core/utils/useragent.js', ['Blockly.utils.userAgent'], ['Blockly.utils.global'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/xml.js', ['Blockly.utils.xml'], []);
 goog.addDependency('../../core/variable_map.js', ['Blockly.VariableMap'], ['Blockly.Events', 'Blockly.Events.VarDelete', 'Blockly.Events.VarRename', 'Blockly.Msg', 'Blockly.Names', 'Blockly.VariableModel', 'Blockly.utils', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/variable_model.js', ['Blockly.VariableModel'], ['Blockly.Events', 'Blockly.Events.VarCreate', 'Blockly.utils'], {'lang': 'es6', 'module': 'goog'});

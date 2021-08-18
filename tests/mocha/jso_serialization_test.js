@@ -274,6 +274,67 @@ suite('JSO Serialization', function() {
       });
     });
 
+    suite('Icons', function() {
+      suite('Comment', function() {
+        test('Basic', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.setCommentText('test');
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(
+              jso,
+              'icons',
+              {
+                'comment': {
+                  'text': 'test',
+                  'pinned': false,
+                  'height': 80,
+                  'width': 160,
+                }
+              },
+          );
+        });
+
+        test('Pinned', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.setCommentText('test');
+          block.commentModel.pinned = true;
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(
+              jso,
+              'icons',
+              {
+                'comment': {
+                  'text': 'test',
+                  'pinned': true,
+                  'height': 80,
+                  'width': 160,
+                }
+              },
+          );
+        });
+
+        test('Size', function() {
+          const block = this.workspace.newBlock('row_block');
+          block.setCommentText('test');
+          block.commentModel.size.height = 40;
+          block.commentModel.size.width = 320;
+          const jso = Blockly.serialization.blocks.save(block);
+          assertProperty(
+              jso,
+              'icons',
+              {
+                'comment': {
+                  'text': 'test',
+                  'pinned': false,
+                  'height': 40,
+                  'width': 320,
+                }
+              },
+          );
+        });
+      });
+    });
+
     suite('Fields', function() {
       class StringStateField extends Blockly.Field {
         constructor(value, validator = undefined, config = undefined) {

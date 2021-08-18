@@ -20,6 +20,7 @@ const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
 const {MissingBlockType, MissingConnection, BadConnectionCheck} =
     goog.require('Blockly.serialization.exceptions');
+const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
@@ -54,6 +55,7 @@ exports.ConnectionState = ConnectionState;
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: *,
+ *     icons: (!Object<string, *>|undefined),
  *     fields: (!Object<string, *>|undefined),
  *     inputs: (!Object<string, !ConnectionState>|undefined),
  *     next: (!ConnectionState|undefined)
@@ -99,6 +101,7 @@ const save = function(
   }
   saveAttributes(block, state);
   saveExtraState(block, state);
+  saveIcons(block, state);
   saveFields(block, state);
   if (addInputBlocks) {
     saveInputBlocks(block, state);
@@ -172,13 +175,32 @@ const saveExtraState = function(block, state) {
 };
 
 /**
+ * Adds the state of all of the icons on the block to the given state object.
+ * @param {!Block} block The block to serialize the icon state of.
+ * @param {!State} state The state object to append to.
+ */
+const saveIcons = function(block, state) {
+  // TODO(#2105): Remove this logic and put it in the icon.
+  if (block.getCommentText()) {
+    state['icons'] = {
+      'comment': {
+        'text': block.getCommentText(),
+        'pinned': block.commentModel.pinned,
+        'height': Math.round(block.commentModel.size.height),
+        'width': Math.round(block.commentModel.size.width),
+      }
+    };
+  }
+};
+
+/**
  * Adds the state of all of the fields on the block to the given state object.
  * @param {!Block} block The block to serialize the field state of.
  * @param {!State} state The state object to append to.
  */
 const saveFields = function(block, state) {
   let hasFieldState = false;
-  let fields = Object.create(null);
+  const fields = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
     for (let j = 0; j < input.fieldRow.length; j++) {
@@ -322,7 +344,7 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
   loadAttributes(block, state);
   loadExtraState(block, state);
   tryToConnectParent(parentConnection, block, state);
-  // loadIcons(block, state);
+  loadIcons(block, state);
   loadFields(block, state);
   loadInputBlocks(block, state);
   loadNextBlocks(block, state);
@@ -424,6 +446,29 @@ const tryToConnectParent = function(parentConnection, child, state) {
             'output connection' : 'previous connection',
         child,
         state);
+  }
+};
+
+/**
+ * Applies icon state to the icons on the block, based on the given state
+ * object.
+ * @param {!Block} block The block to set the icon state of.
+ * @param {!State} state The state object to reference.
+ */
+const loadIcons = function(block, state) {
+  if (!state['icons']) {
+    return;
+  }
+  // TODO(#2105): Remove this logic and put it in the icon.
+  const comment = state['icons']['comment'];
+  if (comment) {
+    block.setCommentText(comment['text']);
+    block.commentModel.pinned = comment['pinned'];
+    block.commentModel.size = new Size(comment['width'], comment['height']);
+    if (comment['pinned'] && block.getCommentIcon && !block.isInFlyout) {
+      // Give the block a chance to be positioned and rendered before showing.
+      setTimeout(() => block.getCommentIcon().setVisible(true), 1);
+    }
   }
 };
 

@@ -1834,5 +1834,4 @@ var runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 };
 
 runSerializerTestSuite(null, null, Serializer);
-Serializer.Icons.skip = true;
 runSerializerTestSuite(state => state, state => state, Serializer);

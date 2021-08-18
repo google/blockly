@@ -25,7 +25,7 @@ goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
-goog.requireType('Blockly.serialization.PluginSerializer');
+goog.requireType('Blockly.serialization.IPluginSerializer');
 
 
 /**
@@ -107,7 +107,7 @@ Blockly.registry.Type.METRICS_MANAGER =
 Blockly.registry.Type.BLOCK_DRAGGER =
     new Blockly.registry.Type('blockDragger');
 
-/** @type {!Blockly.registry.Type<Blockly.serialization.PluginSerializer>} */
+/** @type {!Blockly.registry.Type<Blockly.serialization.IPluginSerializer>} */
 Blockly.registry.Type.PLUGIN_SERIALIZER =
     new Blockly.registry.Type('pluginSerializer');
 
@@ -280,7 +280,7 @@ Blockly.registry.getObject = function(type, name, opt_throwIfMissing) {
 
 /**
  * Returns a map of items registered with the given type.
- * @param {string|!Blocklly.registry.Type<T>} type The type of the plugin.
+ * @param {string|!Blockly.registry.Type<T>} type The type of the plugin.
  *     (e.g. Category)
  * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
  *     are unable to find the object.

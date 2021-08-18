@@ -604,7 +604,7 @@ class BlockSerializer {
    */
   save(workspace) {
     const blockState = [];
-    for (const block of workspace.getTopBlocks()) {
+    for (const block of workspace.getTopBlocks(false)) {
       // TODO: JavaScript class semantics make this call confusing. Any way to
       //    make this clearly not recursive?
       const state = save(block, {addCoordinates: true, addNextBlocks: true});
@@ -641,8 +641,7 @@ class BlockSerializer {
    */
   clear(workspace) {
     // Cannot use workspace.clear() because that also removes variables.
-    const blocks = workspace.getTopBlocks();
-    for (const block of blocks) {
+    for (const block of workspace.getTopBlocks(false)) {
       block.dispose(false);
     }
   }

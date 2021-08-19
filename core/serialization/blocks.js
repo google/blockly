@@ -20,7 +20,7 @@ const Block = goog.requireType('Blockly.Block');
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
+const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');

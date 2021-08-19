@@ -28,7 +28,6 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');

@@ -15,8 +15,8 @@ goog.module.declareLegacyNamespace();
 
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const IPluginSerializer =
-    goog.requireType('Blockly.serialization.IPluginSerializer');
+const ISerializer =
+    goog.requireType('Blockly.serialization.ISerializer');
 // eslint-disable-next-line no-unused-vars
 const VariableModel = goog.requireType('Blockly.VariableModel');
 // eslint-disable-next-line no-unused-vars
@@ -41,7 +41,7 @@ exports.State = State;
  * @param {!VariableModel} variableModel The variable to serialize.
  * @return {!State} The serialized state of the variable.
  */
-const save = function(variableModel) {
+const saveVariable = function(variableModel) {
   const state = {
     'name': variableModel.name,
     'id': variableModel.getId()
@@ -51,8 +51,6 @@ const save = function(variableModel) {
   }
   return state;
 };
-/** @package */
-exports.save = save;
 
 /**
  * Loads the variable represented by the given state into the given workspace.
@@ -64,7 +62,7 @@ exports.save = save;
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
  */
-const load = function(state, workspace, {recordUndo = false} = {}) {
+const loadVariable = function(state, workspace, {recordUndo = false} = {}) {
   const prevRecordUndo = Events.recordUndo;
   Events.recordUndo = recordUndo;
   const existingGroup = Events.getGroup();
@@ -77,12 +75,10 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   Events.setGroup(existingGroup);
   Events.recordUndo = prevRecordUndo;
 };
-/** @package */
-exports.load = load;
 
 /**
- * Plugin serializer for saving and loading variable state.
- * @implements {IPluginSerializer}
+ * Serializer for saving and loading variable state.
+ * @implements {ISerializer}
  */
 class VariableSerializer {
   constructor() {
@@ -102,7 +98,7 @@ class VariableSerializer {
   save(workspace) {
     const variableStates = [];
     for (const variable of workspace.getAllVariables()) {
-      variableStates.push(save(variable));
+      variableStates.push(saveVariable(variable));
     }
     return variableStates.length ? variableStates : null;
   }
@@ -115,7 +111,7 @@ class VariableSerializer {
    */
   load(state, workspace) {
     for (const varState of state) {
-      load(varState, workspace, {recordUndo: Events.recordUndo});
+      loadVariable(varState, workspace, {recordUndo: Events.recordUndo});
     }
   }
 

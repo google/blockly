@@ -20,8 +20,8 @@ const Block = goog.requireType('Blockly.Block');
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const IPluginSerializer =
-    goog.requireType('Blockly.serialization.IPluginSerializer');
+const ISerializer =
+    goog.requireType('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
@@ -583,9 +583,13 @@ const initBlock = function(block, rendered) {
   }
 };
 
+// Aliases to disambiguate saving/loading within the serializer.
+const saveBlock = save;
+const loadBlock = load;
+
 /**
- * Plugin serializer for saving and loading block state.
- * @implements {IPluginSerializer}
+ * Serializer for saving and loading block state.
+ * @implements {ISerializer}
  */
 class BlockSerializer {
   constructor() {
@@ -605,9 +609,7 @@ class BlockSerializer {
   save(workspace) {
     const blockState = [];
     for (const block of workspace.getTopBlocks(false)) {
-      // TODO: JavaScript class semantics make this call confusing. Any way to
-      //    make this clearly not recursive?
-      const state = save(block, {addCoordinates: true, addNextBlocks: true});
+      const state = saveBlock(block, {addCoordinates: true});
       if (state) {
         blockState.push(state);
       }
@@ -631,7 +633,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      load(state, workspace, {recordUndo: Events.recordUndo});
+      loadBlock(state, workspace, {recordUndo: Events.recordUndo});
     }
   }
 

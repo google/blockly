@@ -289,7 +289,12 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
   try {
     result = this.workspace_.newBlock(imType);
     result.setInsertionMarker(true);
-    if (sourceBlock.mutationToDom) {
+    if (sourceBlock.saveExtraState) {
+      const state = sourceBlock.saveExtraState();
+      if (state) {
+        result.loadExtraState(state);
+      }
+    } else if (sourceBlock.mutationToDom) {
       const oldMutationDom = sourceBlock.mutationToDom();
       if (oldMutationDom) {
         result.domToMutation(oldMutationDom);

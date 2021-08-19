@@ -897,11 +897,11 @@ Field.prototype.setValue = function(newValue) {
     return;
   }
 
+  this.doValueUpdate_(newValue);
   if (source && Events.isEnabled()) {
     Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
         source, 'field', this.name || null, oldValue, newValue));
   }
-  this.doValueUpdate_(newValue);
   if (this.isDirty_) {
     this.forceRerender();
   }

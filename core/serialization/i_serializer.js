@@ -42,7 +42,7 @@ class ISerializer {
    * Saves the state of the plugin.
    * @param {!Workspace} workspace The workspace the plugin to serialize is
    *     associated with.
-   * @return {?Object} A JS object containing the plugin's state, or null if
+   * @return {?} A JS object containing the plugin's state, or null if
    *     there is no state to record.
    */
   save(workspace) {}
@@ -51,7 +51,8 @@ class ISerializer {
 
   /**
    * Loads the state of the plugin.
-   * @param {!Object} state The state of the plugin to deserialize.
+   * @param {?} state The state of the plugin to deserialize. This will always
+   *     be non-null.
    * @param {!Workspace} workspace The workspace the plugin to deserialize is
    *     associated with.
    */

@@ -13,17 +13,15 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
+const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 // eslint-disable-next-line no-unused-vars
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
-const {MissingBlockType, MissingConnection, BadConnectionCheck} =
-    goog.require('Blockly.serialization.exceptions');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
-const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 
 
@@ -266,15 +264,14 @@ const saveNextBlocks = function(block, state) {
  *     shadow block, or any connected real block.
  */
 const saveConnection = function(connection) {
-  const shadow = connection.getShadowDom();
+  const shadow = connection.getShadowState();
   const child = connection.targetBlock();
   if (!shadow && !child) {
     return null;
   }
   var state = Object.create(null);
   if (shadow) {
-    state['shadow'] = Xml.domToText(shadow)
-        .replace('xmlns="https://developers.google.com/blockly/xml"', '');
+    state['shadow'] = shadow;
   }
   if (child && !child.isShadow()) {
     state['block'] = save(child);
@@ -332,14 +329,18 @@ exports.load = load;
  * @param {!Workspace} workspace The workspace to add the block to.
  * @param {!Connection=} parentConnection The optional parent connection to
  *     attach the block to.
+ * @param {boolean} isShadow Whether the block we are loading is a shadow block
+ *     or not.
  * @return {!Block} The block that was just loaded.
  */
-const loadInternal = function(state, workspace, parentConnection = undefined) {
+const loadInternal = function(
+    state, workspace, parentConnection = undefined, isShadow = false) {
   if (!state['type']) {
     throw new MissingBlockType(state);
   }
 
   const block = workspace.newBlock(state['type'], state['id']);
+  block.setShadow(isShadow);
   loadCoords(block, state);
   loadAttributes(block, state);
   loadExtraState(block, state);
@@ -351,6 +352,8 @@ const loadInternal = function(state, workspace, parentConnection = undefined) {
   initBlock(block, workspace.rendered);
   return block;
 };
+/** @package */
+exports.loadInternal = loadInternal;
 
 /**
  * Applies any coordinate information available on the state object to the
@@ -416,6 +419,10 @@ const loadExtraState = function(block, state) {
 const tryToConnectParent = function(parentConnection, child, state) {
   if (!parentConnection) {
     return;
+  }
+
+  if (parentConnection.getSourceBlock().isShadow() && !child.isShadow()) {
+    throw new RealChildOfShadow(state);
   }
   
   let connected = false;
@@ -542,7 +549,7 @@ const loadNextBlocks = function(block, state) {
  */
 const loadConnection = function(connection, connectionState) {
   if (connectionState['shadow']) {
-    connection.setShadowDom(Blockly.Xml.textToDom(connectionState['shadow']));
+    connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
     loadInternal(

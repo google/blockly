@@ -24,10 +24,9 @@ const object = goog.require('Blockly.utils.object');
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Input} input The statement input to measure and store
- *     information for.
+ * @param {!ConstantProvider} constants The rendering constants provider.
+ * @param {!Input} input The statement input to measure and store information
+ *    for.
  * @package
  * @constructor
  * @extends {BaseStatementInput}
@@ -38,8 +37,9 @@ const StatementInput = function(constants, input) {
   if (this.connectedBlock) {
     // Find the bottom-most connected block in the stack.
     let block = this.connectedBlock;
-    while (block.getNextBlock()) {
-      block = block.getNextBlock();
+    let nextBlock;
+    while ((nextBlock = block.getNextBlock())) {
+      block = nextBlock;
     }
     if (!block.nextConnection) {
       this.height = this.connectedBlockHeight;

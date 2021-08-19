@@ -419,7 +419,7 @@ suite('JSO Serialization', function() {
           const block = this.workspace.newBlock(blockType);
           block.getInput(inputName).connection.setShadowDom(
               Blockly.Xml.textToDom(
-                  '<block type="' + blockType + '" id="test"></block>'));
+                  '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
 
@@ -430,7 +430,7 @@ suite('JSO Serialization', function() {
               childBlock.outputConnection || childBlock.previousConnection);
           block.getInput(inputName).connection.setShadowDom(
               Blockly.Xml.textToDom(
-                  '<block type="' + blockType + '" id="test"></block>'));
+                  '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
   
@@ -496,11 +496,11 @@ suite('JSO Serialization', function() {
             this.assertChild('row_block', 'INPUT');
           });
   
-          test.skip('Shadow', function() {
+          test('Shadow', function() {
             this.assertShadow('row_block', 'INPUT');
           });
   
-          test.skip('Overwritten shadow', function() {
+          test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('row_block', 'INPUT');
           });
         });
@@ -526,11 +526,11 @@ suite('JSO Serialization', function() {
             this.assertChild('statement_block', 'NAME');
           });
   
-          test.skip('Shadow', function() {
+          test('Shadow', function() {
             this.assertShadow('statement_block', 'NAME');
           });
   
-          test.skip('Overwritten shadow', function() {
+          test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('statement_block', 'NAME');
           });
 
@@ -590,7 +590,7 @@ suite('JSO Serialization', function() {
             const block = this.workspace.newBlock('stack_block');
             block.nextConnection.setShadowDom(
                 Blockly.Xml.textToDom(
-                    '<block type="stack_block" id="test"></block>'));
+                    '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
 
@@ -600,7 +600,7 @@ suite('JSO Serialization', function() {
             block.nextConnection.connect(childBlock.previousConnection);
             block.nextConnection.setShadowDom(
                 Blockly.Xml.textToDom(
-                    '<block type="stack_block" id="test"></block>'));
+                    '<shadow type="stack_block" id="test"></shadow>'));
             return block;
           };
         });
@@ -614,14 +614,14 @@ suite('JSO Serialization', function() {
                 jso['next'], {'block': { 'type': 'stack_block', 'id': 'id2'}});
           });
   
-          test.skip('Shadow', function() {
+          test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'shadow': { 'type': 'stack_block', 'id': 'test'}});
           });
   
-          test.skip('Overwritten shadow', function() {
+          test('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
             const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(

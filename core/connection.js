@@ -21,6 +21,7 @@ goog.require('Blockly.Events.BlockMove');
 goog.require('Blockly.IASTNodeLocationWithBlock');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.Xml');
+goog.require('Blockly.serialization.blocks');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.IConnectionChecker');
@@ -117,8 +118,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
   // Make sure the parentConnection is available.
   var orphan;
   if (parentConnection.isConnected()) {
-    var shadowDom = parentConnection.getShadowDom(true);
-    parentConnection.shadowDom_ = null;  // Set to null so it doesn't respawn.
+    let shadowState = parentConnection.stashShadowState_();
     var target = parentConnection.targetBlock();
     if (target.isShadow()) {
       target.dispose(false);
@@ -126,7 +126,7 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       parentConnection.disconnect();
       orphan = target;
     }
-    parentConnection.shadowDom_ = shadowDom;
+    parentConnection.applyShadowState_(shadowState);
   }
 
   // Connect the new connection to the parent.
@@ -161,11 +161,10 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
  * @package
  */
 Blockly.Connection.prototype.dispose = function() {
-
   // isConnected returns true for shadows and non-shadows.
   if (this.isConnected()) {
     // Destroy the attached shadow block & its children (if it exists).
-    this.setShadowDom(null);
+    this.setShadowStateInternal_();
 
     var targetBlock = this.targetBlock();
     if (targetBlock) {
@@ -472,18 +471,8 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
  * @protected
  */
 Blockly.Connection.prototype.respawnShadow_ = function() {
-  var parentBlock = this.getSourceBlock();
-  var shadow = this.getShadowDom();
-  if (parentBlock.workspace && shadow) {
-    var blockShadow = Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
-    if (blockShadow.outputConnection) {
-      this.connect(blockShadow.outputConnection);
-    } else if (blockShadow.previousConnection) {
-      this.connect(blockShadow.previousConnection);
-    } else {
-      throw Error('Child block does not have output or previous statement.');
-    }
-  }
+  // Have to keep respawnShadow_ for backwards compatibility.
+  this.createShadowBlock_(true);
 };
 
 /**
@@ -581,18 +570,10 @@ Blockly.Connection.prototype.getCheck = function() {
 
 /**
  * Changes the connection's shadow block.
- * @param {?Element} shadow DOM representation of a block or null.
+ * @param {?Element} shadowDom DOM representation of a block or null.
  */
-Blockly.Connection.prototype.setShadowDom = function(shadow) {
-  this.shadowDom_ = shadow;
-  var target = this.targetBlock();
-  if (!target) {
-    this.respawnShadow_();
-  } else if (target.isShadow()) {
-    // The disconnect from dispose will automatically generate the new shadow.
-    target.dispose(false);
-    this.respawnShadow_();
-  }
+Blockly.Connection.prototype.setShadowDom = function(shadowDom) {
+  this.setShadowStateInternal_({shadowDom: shadowDom});
 };
 
 /**
@@ -608,6 +589,33 @@ Blockly.Connection.prototype.getShadowDom = function(returnCurrent) {
       /** @type {!Element} */ (Blockly.Xml.blockToDom(
           /** @type {!Blockly.Block} */ (this.targetBlock()))) :
       this.shadowDom_;
+};
+
+/**
+ * Changes the connection's shadow block.
+ * @param {?Blockly.serialization.blocks.State} shadowState An state
+ *     represetation of the block or null.
+ */
+Blockly.Connection.prototype.setShadowState = function(shadowState) {
+  this.setShadowStateInternal_({shadowState: shadowState});
+};
+
+/**
+ * Returns the serialized object representation of the connection's shadow
+ * block.
+ * @param {boolean=} returnCurrent If true, and the shadow block is currently
+ *     attached to this connection, this serializes the state of that block
+ *     and returns it (so that field values are correct). Otherwise the saved
+ *     state is just returned.
+ * @return {?Blockly.serialization.blocks.State} Serialized object
+ *     representation of the block, or null.
+ */
+Blockly.Connection.prototype.getShadowState = function(returnCurrent) {
+  if (returnCurrent && this.targetBlock() && this.targetBlock().isShadow()) {
+    return Blockly.serialization.blocks.save(
+        /** @type {!Blockly.Block} */ (this.targetBlock()));
+  }
+  return this.shadowState_;
 };
 
 /**
@@ -677,4 +685,125 @@ Blockly.Connection.prototype.toString = function() {
     }
   }
   return msg + block.toDevString();
+};
+
+/**
+ * Returns the state of the shadowDom_ and shadowState_ properties, then
+ * temporarily sets those properties to null so no shadow respawns.
+ * @return {{shadowDom: ?Element,
+ *     shadowState: ?Blockly.serialization.blocks.State}} The state of both the
+ *     shadowDom_ and shadowState_ properties.
+ * @private
+ */
+Blockly.Connection.prototype.stashShadowState_ = function() {
+  const shadowDom = this.getShadowDom(true);
+  const shadowState = this.getShadowState(true);
+  // Set to null so it doesn't respawn.
+  this.shadowDom_ = null;
+  this.shadowState_ = null;
+  return {shadowDom, shadowState};
+};
+
+/**
+ * Reapplies the stashed state of the shadowDom_ and shadowState_ properties.
+ * @param {{shadowDom: ?Element,
+ *     shadowState: ?Blockly.serialization.blocks.State}} param0 The state to
+ *     reapply to the shadowDom_ and shadowState_ properties.
+ * @private
+ */
+Blockly.Connection.prototype.applyShadowState_ =
+    function({shadowDom, shadowState}) {
+      this.shadowDom_ = shadowDom;
+      this.shadowState_ = shadowState;
+    };
+
+/**
+ * Sets the state of the shadow of this connection.
+ * @param {{shadowDom: (?Element|undefined),
+ *     shadowState: (?Blockly.serialization.blocks.State|undefined)}=} param0
+ *     The state to set the shadow of this connection to.
+ * @private
+ */
+Blockly.Connection.prototype.setShadowStateInternal_ =
+    function({shadowDom = null, shadowState = null} = {}) {
+      // One or both of these should always be null.
+      // If neither is null, the shadowState will get priority.
+      this.shadowDom_ = shadowDom;
+      this.shadowState_ = shadowState;
+
+      var target = this.targetBlock();
+      if (!target) {
+        this.respawnShadow_();
+        if (this.targetBlock() && this.targetBlock().isShadow()) {
+          this.serializeShadow_(this.targetBlock());
+        }
+      } else if (target.isShadow()) {
+        target.dispose(false);
+        this.respawnShadow_();
+        if (this.targetBlock() && this.targetBlock().isShadow()) {
+          this.serializeShadow_(this.targetBlock());
+        }
+      } else {
+        var shadow = this.createShadowBlock_(false);
+        this.serializeShadow_(shadow);
+        if (shadow) {
+          shadow.dispose(false);
+        }
+      }
+    };
+
+/**
+ * Creates a shadow block based on the current shadowState_ or shadowDom_.
+ * shadowState_ gets priority.
+ * @param {boolean} attemptToConnect Whether to try to connect the shadow block
+ *     to this connection or not.
+ * @return {?Blockly.Block} The shadow block that was created, or null if both
+ *     the shadowState_ and shadowDom_ are null.
+ * @private
+ */
+Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
+  var parentBlock = this.getSourceBlock();
+  var shadowState = this.getShadowState();
+  var shadowDom = this.getShadowDom();
+  if (!parentBlock.workspace || (!shadowState && !shadowDom)) {
+    return null;
+  }
+
+  if (shadowState) {
+    var blockShadow = Blockly.serialization.blocks.loadInternal(
+        shadowState,
+        parentBlock.workspace,
+        attemptToConnect ? this : undefined,
+        true);
+    return blockShadow;
+  }
+  
+  if (shadowDom) {
+    blockShadow = Blockly.Xml.domToBlock(shadowDom, parentBlock.workspace);
+    if (attemptToConnect) {
+      if (blockShadow.outputConnection) {
+        this.connect(blockShadow.outputConnection);
+      } else if (blockShadow.previousConnection) {
+        this.connect(blockShadow.previousConnection);
+      } else {
+        throw Error('Shadow block does not have output or previous statement.');
+      }
+    }
+    return blockShadow;
+  }
+  return null;
+};
+
+/**
+ * Saves the given shadow block to both the shadowDom_ and shadowState_
+ * properties, in their respective serialized forms.
+ * @param {?Blockly.Block} shadow The shadow to serialize, or null.
+ * @private
+ */
+Blockly.Connection.prototype.serializeShadow_ = function(shadow) {
+  if (!shadow) {
+    return;
+  }
+  this.shadowDom_ = /** @type {!Element} */ (Blockly.Xml.blockToDom(shadow));
+  this.shadowState_ = Blockly.serialization.blocks.save(shadow);
 };

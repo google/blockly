@@ -622,7 +622,7 @@ suite('JSO Deserialization', function() {
       });
     });
 
-    suite.skip('Real child of shadow', function() {
+    suite('Real child of shadow', function() {
       test('Input', function() {
         const state = {
           'blocks': {
@@ -659,10 +659,10 @@ suite('JSO Deserialization', function() {
                 'type': 'text_print',
                 'next': {
                   'shadow': {
-                    'type': 'text_input',
+                    'type': 'text_print',
                     'next': {
                       'block': {
-                        'type': 'text_input',
+                        'type': 'text_print',
                       }
                     }
                   }

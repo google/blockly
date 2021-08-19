@@ -504,7 +504,6 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
   Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
   var blockShadow = this.targetBlock();
   if (!blockShadow) {
-    // This connection must not have a shadowDom_.
     return;
   }
   blockShadow.initSvg();

@@ -292,6 +292,8 @@ DropDownDiv.showPositionedByField = function(
       getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
 };
 
+const internal = {};
+
 /**
  * Get the scaled bounding box of a block.
  * @param {!BlockSvg} block The block.
@@ -408,7 +410,7 @@ DropDownDiv.show = function(
  * @return {!DropDownDiv.BoundsInfo} An object containing size
  *     information about the bounding element (bounding box and width/height).
  */
-let getBoundsInfo = function() {
+internal.getBoundsInfo = function() {
   const boundPosition = style.getPageOffset(
       /** @type {!Element} */ (DropDownDiv.boundsElement_));
   const boundSize = style.getSize(
@@ -436,9 +438,9 @@ let getBoundsInfo = function() {
  * @return {!DropDownDiv.PositionMetrics} Various final metrics,
  *     including rendered positions for drop-down and arrow.
  */
-const getPositionMetrics = function(
+internal.getPositionMetrics = function(
     primaryX, primaryY, secondaryX, secondaryY) {
-  const boundsInfo = getBoundsInfo();
+  const boundsInfo = internal.getBoundsInfo();
   const divSize = style.getSize(
       /** @type {!Element} */ (DropDownDiv.DIV_));
 
@@ -689,7 +691,7 @@ DropDownDiv.hideWithoutAnimation = function() {
  */
 const positionInternal = function(primaryX, primaryY, secondaryX, secondaryY) {
   const metrics =
-      getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
+      internal.getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
@@ -756,12 +758,4 @@ DropDownDiv.repositionForWindowResize = function() {
 };
 exports = DropDownDiv;
 
-exports.testOnly_setGetBoundsInfo = function(getBoundsInfoMock) {
-  goog.setTestOnly();
-  getBoundsInfo = getBoundsInfoMock;
-};
-
-exports.testOnly_getPositionMetrics = function (...args) {
-  goog.setTestOnly();
-  return getPositionMetrics(...args);
-}
+exports.TEST_ONLY = internal;

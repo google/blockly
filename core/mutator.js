@@ -28,7 +28,6 @@ goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.BlockSvg');
@@ -413,9 +412,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
     Blockly.Events.setGroup(true);
-    var block = this.block_;
-    var oldMutationDom = block.mutationToDom();
-    var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+    var block = /** @type {!Blockly.BlockSvg} */ (this.block_);
+    var oldExtraState = Blockly.Events.BlockChange.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.
     var savedRendered = block.rendered;
@@ -433,11 +431,10 @@ Blockly.Mutator.prototype.workspaceChanged_ = function(e) {
       block.render();
     }
 
-    var newMutationDom = block.mutationToDom();
-    var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
-    if (oldMutation != newMutation) {
+    var newExtraState = Blockly.Events.BlockChange.getExtraBlockState_(block);
+    if (oldExtraState != newExtraState) {
       Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
-          block, 'mutation', null, oldMutation, newMutation));
+          block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {

@@ -497,6 +497,7 @@ function defineStatementBlock() {
     "helpUrl": ""
   }]);
 }
+
 function defineBasicBlockWithField() {
   Blockly.defineBlocksWithJsonArray([{
     "type": "test_field_block",
@@ -509,6 +510,99 @@ function defineBasicBlockWithField() {
     ],
     "output": null
   }]);
+}
+
+function defineMutatorBlocks() {
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': 'xml_block',
+      'mutator': 'xml_mutator'
+    },
+    {
+      'type': 'jso_block',
+      'mutator': 'jso_mutator'
+    },
+    {
+      'type': 'checkbox_block',
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'field_checkbox',
+          'name': 'CHECK'
+        }
+      ]
+    }
+  ]);
+
+  const xmlMutator = {
+    hasInput: false,
+
+    mutationToDom: function() {
+      var mutation = Blockly.utils.xml.createElement('mutation');
+      mutation.setAttribute('hasInput', this.hasInput);
+      return mutation;
+    },
+
+    domToMutation: function(mutation) {
+      this.hasInput = mutation.getAttribute('hasInput') == 'true';
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    }
+  };
+  Blockly.Extensions.registerMutator('xml_mutator', xmlMutator);
+
+  const jsoMutator = {
+    hasInput: false,
+
+    saveExtraState: function() {
+      return {hasInput: this.hasInput};
+    },
+
+    loadExtraState: function(state) {
+      this.hasInput = state.hasInput || false;
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    }
+  };
+  Blockly.Extensions.registerMutator('jso_mutator', jsoMutator);
 }
 
 function createTestBlock() {

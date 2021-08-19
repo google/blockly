@@ -506,7 +506,6 @@ RenderedConnection.prototype.respawnShadow_ = function() {
   RenderedConnection.superClass_.respawnShadow_.call(this);
   const blockShadow = this.targetBlock();
   if (!blockShadow) {
-    // This connection must not have a shadowDom_.
     return;
   }
   blockShadow.initSvg();

@@ -15,6 +15,8 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
 const object = goog.require('Blockly.utils.object');
@@ -125,22 +127,40 @@ BlockChange.prototype.run = function(forward) {
       block.setInputsInline(!!value);
       break;
     case 'mutation': {
-      let oldMutation = '';
-      if (block.mutationToDom) {
-        const oldMutationDom = block.mutationToDom();
-        oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
+      const oldState = BlockChange.getExtraBlockState_(
+          /** @type {!BlockSvg} */ (block));
+      if (block.loadExtraState) {
+        block.loadExtraState(JSON.parse(/** @type {string} */ (value) || '{}'));
+      } else if (block.domToMutation) {
+        block.domToMutation(
+            Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      if (block.domToMutation) {
-        const dom = Xml.textToDom(/** @type {string} */
-                                  (value) || '<mutation/>');
-        block.domToMutation(dom);
-      }
-      Events.fire(new BlockChange(block, 'mutation', null, oldMutation, value));
+      Events.fire(new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:
       console.warn('Unknown change type: ' + this.element);
   }
+};
+
+// TODO (#5397): Encapsulate this in the BlocklyMutationChange event when
+//    refactoring change events.
+/**
+ * Returns the extra state of the given block (either as XML or a JSO, depending
+ * on the block's definition).
+ * @param {!BlockSvg} block The block to get the extra state of.
+ * @return {string} A stringified version of the extra state of the given block.
+ * @package
+ */
+BlockChange.getExtraBlockState_ = function(block) {
+  if (block.saveExtraState) {
+    const state = block.saveExtraState();
+    return state ? JSON.stringify(state) : '';
+  } else if (block.mutationToDom) {
+    const state = block.mutationToDom();
+    return state ? Xml.domToText(state) : '';
+  }
+  return '';
 };
 
 registry.register(registry.Type.EVENT, Events.CHANGE, BlockChange);

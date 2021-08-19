@@ -34,7 +34,6 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
-const Xml = goog.require('Blockly.Xml');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
@@ -408,9 +407,8 @@ Mutator.prototype.workspaceChanged_ = function(e) {
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
     Events.setGroup(true);
-    const block = this.block_;
-    const oldMutationDom = block.mutationToDom();
-    const oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
+    const block = /** @type {!BlockSvg} */ (this.block_);
+    const oldExtraState = Events.BlockChange.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.
     const savedRendered = block.rendered;
@@ -428,11 +426,10 @@ Mutator.prototype.workspaceChanged_ = function(e) {
       block.render();
     }
 
-    const newMutationDom = block.mutationToDom();
-    const newMutation = newMutationDom && Xml.domToText(newMutationDom);
-    if (oldMutation != newMutation) {
+    const newExtraState = Events.BlockChange.getExtraBlockState_(block);
+    if (oldExtraState != newExtraState) {
       Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
-          block, 'mutation', null, oldMutation, newMutation));
+          block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
       const group = Events.getGroup();
       setTimeout(function() {

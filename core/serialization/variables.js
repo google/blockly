@@ -54,7 +54,6 @@ const saveVariable = function(variableModel) {
 
 /**
  * Loads the variable represented by the given state into the given workspace.
- * Do not call this directly, use workspace.createVariable instead.
  * @param {!State} state The state of a variable to deserialize into the
  *     workspace.
  * @param {!Workspace} workspace The workspace to add the variable to.

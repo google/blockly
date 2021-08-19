@@ -25,7 +25,7 @@ goog.requireType('Blockly.IToolbox');
 goog.requireType('Blockly.Options');
 goog.requireType('Blockly.Theme');
 goog.requireType('Blockly.ToolboxItem');
-goog.requireType('Blockly.serialization.IPluginSerializer');
+goog.requireType('Blockly.serialization.ISerializer');
 
 
 /**
@@ -107,7 +107,7 @@ Blockly.registry.Type.METRICS_MANAGER =
 Blockly.registry.Type.BLOCK_DRAGGER =
     new Blockly.registry.Type('blockDragger');
 
-/** @type {!Blockly.registry.Type<Blockly.serialization.IPluginSerializer>} */
+/** @type {!Blockly.registry.Type<Blockly.serialization.ISerializer>} */
 Blockly.registry.Type.PLUGIN_SERIALIZER =
     new Blockly.registry.Type('pluginSerializer');
 

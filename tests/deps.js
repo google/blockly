@@ -19,7 +19,7 @@ goog.addDependency('../../core/bubble.js', ['Blockly.Bubble'], ['Blockly.IBubble
 goog.addDependency('../../core/bubble_dragger.js', ['Blockly.BubbleDragger'], ['Blockly.Bubble', 'Blockly.ComponentManager', 'Blockly.Events', 'Blockly.Events.CommentMove', 'Blockly.constants', 'Blockly.utils', 'Blockly.utils.Coordinate']);
 goog.addDependency('../../core/comment.js', ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.Css', 'Blockly.Events', 'Blockly.Events.BlockChange', 'Blockly.Events.BubbleOpen', 'Blockly.Icon', 'Blockly.Warning', 'Blockly.browserEvents', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.userAgent']);
 goog.addDependency('../../core/component_manager.js', ['Blockly.ComponentManager'], []);
-goog.addDependency('../../core/connection.js', ['Blockly.Connection'], ['Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.utils.deprecation']);
+goog.addDependency('../../core/connection.js', ['Blockly.Connection'], ['Blockly.Events', 'Blockly.Events.BlockMove', 'Blockly.IASTNodeLocationWithBlock', 'Blockly.Xml', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.serialization.blocks', 'Blockly.utils.deprecation'], {'lang': 'es6'});
 goog.addDependency('../../core/connection_checker.js', ['Blockly.ConnectionChecker'], ['Blockly.Connection', 'Blockly.IConnectionChecker', 'Blockly.connectionTypes', 'Blockly.constants', 'Blockly.registry']);
 goog.addDependency('../../core/connection_db.js', ['Blockly.ConnectionDB'], ['Blockly.RenderedConnection', 'Blockly.connectionTypes', 'Blockly.constants']);
 goog.addDependency('../../core/connection_types.js', ['Blockly.connectionTypes'], []);
@@ -155,7 +155,7 @@ goog.addDependency('../../core/requires.js', ['Blockly.requires'], ['Blockly', '
 goog.addDependency('../../core/scrollbar.js', ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['Blockly.Events', 'Blockly.Touch', 'Blockly.browserEvents', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Metrics', 'Blockly.utils.Svg', 'Blockly.utils.dom']);
 goog.addDependency('../../core/serialization/blocks.js', ['Blockly.serialization.blocks'], ['Blockly.Events', 'Blockly.inputTypes', 'Blockly.registry', 'Blockly.serialization.exceptions', 'Blockly.serialization.priorities', 'Blockly.utils.Size'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/serialization/exceptions.js', ['Blockly.serialization.exceptions'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/serialization/i_plugin_serializer.js', ['Blockly.serialization.IPluginSerializer'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/serialization/i_plugin_serializer.js', ['Blockly.serialization.ISerializer'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/serialization/priorities.js', ['Blockly.serialization.priorities'], [], {'module': 'goog'});
 goog.addDependency('../../core/serialization/variables.js', ['Blockly.serialization.variables'], ['Blockly.Events', 'Blockly.registry', 'Blockly.serialization.priorities'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/serialization/workspaces.js', ['Blockly.serialization.workspaces'], ['Blockly.Events', 'Blockly.Workspace', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es6', 'module': 'goog'});

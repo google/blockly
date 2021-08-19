@@ -27,6 +27,7 @@ exports.DeserializationError = DeserializationError;
 class MissingBlockType extends DeserializationError {
   /**
    * @param {!State} state The state object which is missing the block type.
+   * @package
    */
   constructor(state) {
     super(`Expected to find a 'type' property, defining the block type`);
@@ -50,6 +51,7 @@ class MissingConnection extends DeserializationError {
    *     'IF0', or 'next'.
    * @param {!Blockly.Block} block The block missing the connection.
    * @param {!State} state The state object containing the bad connection.
+   * @package
    */
   constructor(connection, block, state) {
     super(`The block ${block.toDevString()} is missing a(n) ${connection}
@@ -82,6 +84,7 @@ class BadConnectionCheck extends DeserializationError {
    * @param {!Blockly.Block} childBlock The child block that could not connect
    *     to its parent.
    * @param {!State} childState The state object representing the child block.
+   * @package
    */
   constructor(reason, childConnection, childBlock, childState) {
     super(`The block ${childBlock.toDevString()} could not connect its
@@ -112,6 +115,7 @@ exports.BadConnectionCheck = BadConnectionCheck;
 class RealChildOfShadow extends DeserializationError {
   /**
    * @param {!State} state The state object representing the real block.
+   * @package
    */
   constructor(state) {
     super(`Encountered a real block which is defined as a child of a shadow

@@ -26,6 +26,9 @@ suite('Registry', function() {
     if (Blockly.registry.typeMap_['test'] &&
         Blockly.registry.typeMap_['test']['test_name']) {
       delete Blockly.registry.typeMap_['test']['test_name'];
+      delete Blockly.registry.typeMap_['test'];
+      delete Blockly.registry.nameMap_['test']['test_name'];
+      delete Blockly.registry.nameMap_['test'];
     }
   });
   
@@ -165,6 +168,14 @@ suite('Registry', function() {
   suite('getAllItems', function() {
     setup(function() {
       Blockly.registry.register('test', 'test_name', {});
+      Blockly.registry.register('test', 'casedNAME', {});
+    });
+
+    teardown(function() {
+      delete Blockly.registry.typeMap_['test']['casedname'];
+      delete Blockly.registry.typeMap_['test'];
+      delete Blockly.registry.nameMap_['test']['casedname'];
+      delete Blockly.registry.nameMap_['test'];
     });
 
     test('Has', function() {
@@ -177,12 +188,31 @@ suite('Registry', function() {
 
     test('Throw if missing', function() {
       chai.assert.throws(function() {
-        Blockly.registry.getAllItems('bad_type', true);
+        Blockly.registry.getAllItems('bad_type', false, true);
       });
     });
 
-    test('Case', function() {
+    test('Ignore type case', function() {
       chai.assert.isNotNull(Blockly.registry.getAllItems('TEST'));
+    });
+
+    test('Respect name case', function() {
+      chai.assert.deepEqual(
+          Blockly.registry.getAllItems('test', true),
+          {
+            'test_name': {},
+            'casedNAME': {}
+          });
+    });
+
+    test('Respect overwriting name case', function() {
+      Blockly.registry.register('test', 'CASEDname', {});
+      chai.assert.deepEqual(
+          Blockly.registry.getAllItems('test', true),
+          {
+            'test_name': {},
+            'CASEDname': {}
+          });
     });
   });
 
@@ -197,10 +227,8 @@ suite('Registry', function() {
           'test' : 'test_name'
         }
       };
-      Blockly.registry.typeMap_['test'] = {
-        'test_name': TestClass,
-        'default': this.defaultClass
-      };
+      Blockly.registry.register('test', 'test_name', TestClass);
+      Blockly.registry.register('test', 'default', this.defaultClass);
     });
 
     test('Simple - Plugin name given', function() {

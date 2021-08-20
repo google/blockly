@@ -71,8 +71,6 @@ Serializer.Attributes.testCases = [
   Serializer.Attributes.Basic,
   Serializer.Attributes.Collapsed,
   Serializer.Attributes.Disabled,
-  Serializer.Attributes.Deletable,
-  Serializer.Attributes.Movable,
 ];
 
 Serializer.Attributes.Inline = new SerializerTestSuite('Inline');

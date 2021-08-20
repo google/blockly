@@ -26,7 +26,7 @@ const Size = goog.require('Blockly.utils.Size');
 const Workspace = goog.requireType('Blockly.Workspace');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
-const registry = goog.require('Blockly.registry');
+const registry = goog.require('Blockly.serialization.registry');
 
 
 // TODO: Remove this once lint is fixed.
@@ -648,5 +648,4 @@ class BlockSerializer {
   }
 }
 
-registry.register(
-    registry.Type.PLUGIN_SERIALIZER, 'blocks', new BlockSerializer());
+registry.register('blocks', new BlockSerializer());

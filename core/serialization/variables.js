@@ -21,7 +21,7 @@ const VariableModel = goog.requireType('Blockly.VariableModel');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const priorities = goog.require('Blockly.serialization.priorities');
-const registry = goog.require('Blockly.registry');
+const registry = goog.require('Blockly.serialization.registry');
 
 
 /**
@@ -123,5 +123,4 @@ class VariableSerializer {
   }
 }
 
-registry.register(
-    registry.Type.PLUGIN_SERIALIZER, 'variables', new VariableSerializer());
+registry.register('variables', new VariableSerializer());

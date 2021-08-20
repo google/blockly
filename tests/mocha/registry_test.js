@@ -206,7 +206,7 @@ suite('Registry', function() {
     });
 
     test('Respect overwriting name case', function() {
-      Blockly.registry.register('test', 'CASEDname', {});
+      Blockly.registry.register('test', 'CASEDname', {}, true);
       chai.assert.deepEqual(
           Blockly.registry.getAllItems('test', true),
           {

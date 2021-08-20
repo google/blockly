@@ -115,9 +115,11 @@ Blockly.registry.Type.METRICS_MANAGER =
 Blockly.registry.Type.BLOCK_DRAGGER =
     new Blockly.registry.Type('blockDragger');
 
-/** @type {!Blockly.registry.Type<Blockly.serialization.ISerializer>} */
-Blockly.registry.Type.PLUGIN_SERIALIZER =
-    new Blockly.registry.Type('pluginSerializer');
+/**
+ * @type {!Blockly.registry.Type<Blockly.serialization.ISerializer>}
+ * @package
+ */
+Blockly.registry.Type.SERIALIZER = new Blockly.registry.Type('serializer');
 
 /**
  * Registers a class based on a type and name.

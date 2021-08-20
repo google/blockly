@@ -619,14 +619,12 @@ suite('JSO Deserialization', function() {
 
   test('Priority', function() {
     const blocksSerializer = Blockly.registry.getClass(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks');
+        Blockly.registry.Type.SERIALIZER, 'blocks');
     const variablesSerializer = Blockly.registry.getClass(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'variables');
+        Blockly.registry.Type.SERIALIZER, 'variables');
 
-    Blockly.registry.unregister(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks');
-    Blockly.registry.unregister(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'variables');
+    Blockly.serialization.registry.unregister('blocks');
+    Blockly.serialization.registry.unregister('variables');
 
     const calls = [];
 
@@ -649,29 +647,19 @@ suite('JSO Deserialization', function() {
       clear: () => calls.push('third-clear'),
     };
 
-    Blockly.registry.register(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'third', third);
-    Blockly.registry.register(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'first', first);
-    Blockly.registry.register(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'second', second);
+    Blockly.serialization.registry.register('third', third);
+    Blockly.serialization.registry.register('first', first);
+    Blockly.serialization.registry.register('second', second);
 
     Blockly.serialization.workspaces.load(
         {'first': {}, 'third': {}, 'second': {}}, this.workspace);
     
-    Blockly.registry.unregister(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'first');
-    Blockly.registry.unregister(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'second');
-    Blockly.registry.unregister(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'third');
+    Blockly.serialization.registry.unregister('first');
+    Blockly.serialization.registry.unregister('second');
+    Blockly.serialization.registry.unregister('third');
 
-    Blockly.registry.register(
-        Blockly.registry.Type.PLUGIN_SERIALIZER, 'blocks', blocksSerializer);
-    Blockly.registry.register(
-        Blockly.registry.Type.PLUGIN_SERIALIZER,
-        'variables',
-        variablesSerializer);
+    Blockly.serialization.registry.register('blocks', blocksSerializer);
+    Blockly.serialization.registry.register('variables', variablesSerializer);
 
     chai.assert.deepEqual(
         calls,

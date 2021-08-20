@@ -27,8 +27,7 @@ const registry = goog.require('Blockly.registry');
  */
 const save = function(workspace) {
   const state = Object.create(null);
-  const serializerMap = registry.getAllItems(
-      registry.Type.PLUGIN_SERIALIZER, true);
+  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   for (const key in serializerMap) {
     const save = serializerMap[key].save(workspace);
     if (save) {
@@ -49,8 +48,7 @@ exports.save = save;
  *       by the user. False by default.
  */
 const load = function(state, workspace, {recordUndo = false} = {}) {
-  const serializerMap = registry.getAllItems(
-      registry.Type.PLUGIN_SERIALIZER, true);
+  const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {
     return;
   }

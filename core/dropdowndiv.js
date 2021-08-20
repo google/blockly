@@ -129,14 +129,14 @@ DropDownDiv.arrow_;
 /**
  * Drop-downs will appear within the bounds of this element if possible.
  * Set in DropDownDiv.setBoundsElement.
- * @type {Element}
+ * @type {?Element}
  * @private
  */
 DropDownDiv.boundsElement_ = null;
 
 /**
  * The object currently using the drop-down.
- * @type {Object}
+ * @type {?Object}
  * @private
  */
 DropDownDiv.owner_ = null;
@@ -205,8 +205,8 @@ DropDownDiv.createDom = function() {
   DropDownDiv.DIV_.style.opacity = 0;
 
   // Transition animation for transform: translate() and opacity.
-  DropDownDiv.DIV_.style.transition = 'transform ' + DropDownDiv.ANIMATION_TIME +
-      's, ' +
+  DropDownDiv.DIV_.style.transition = 'transform ' +
+      DropDownDiv.ANIMATION_TIME + 's, ' +
       'opacity ' + DropDownDiv.ANIMATION_TIME + 's';
 
   // Handle focusin/out events to add a visual indicator when
@@ -222,7 +222,7 @@ DropDownDiv.createDom = function() {
 /**
  * Set an element to maintain bounds within. Drop-downs will appear
  * within the box of this element if possible.
- * @param {Element} boundsElement Element to bind drop-down to.
+ * @param {?Element} boundsElement Element to bind drop-down to.
  */
 DropDownDiv.setBoundsElement = function(boundsElement) {
   DropDownDiv.boundsElement_ = boundsElement;
@@ -351,7 +351,7 @@ const showPositionedByRect = function(
         /** @type {!WorkspaceSvg} */ (workspace.options.parentWorkspace);
   }
   DropDownDiv.setBoundsElement(
-      /** @type {Element} */ (workspace.getParentSvg().parentNode));
+      /** @type {?Element} */ (workspace.getParentSvg().parentNode));
   return DropDownDiv.show(
       field, sourceBlock.RTL, primaryX, primaryY, secondaryX, secondaryY,
       opt_onHide);
@@ -365,7 +365,7 @@ const showPositionedByRect = function(
  * will point there, and the container will be positioned below it.
  * If we can't maintain the container bounds at the primary point, fall-back to
  * the secondary point and position above.
- * @param {Object} owner The object showing the drop-down
+ * @param {?Object} owner The object showing the drop-down
  * @param {boolean} rtl Right-to-left (true) or left-to-right (false).
  * @param {number} primaryX Desired origin point x, in absolute px.
  * @param {number} primaryY Desired origin point y, in absolute px.
@@ -604,7 +604,7 @@ DropDownDiv.isVisible = function() {
 
 /**
  * Hide the menu only if it is owned by the provided object.
- * @param {Object} owner Object which must be owning the drop-down to hide.
+ * @param {?Object} owner Object which must be owning the drop-down to hide.
  * @param {boolean=} opt_withoutAnimation True if we should hide the dropdown
  *     without animating.
  * @return {boolean} True if hidden.
@@ -744,7 +744,7 @@ DropDownDiv.repositionForWindowResize = function() {
     const field = /** @type {!Field} */ (DropDownDiv.owner_);
     const block = /** @type {!BlockSvg} */ (field.getSourceBlock());
     const bBox = DropDownDiv.positionToField_ ? getScaledBboxOfField(field) :
-                                   getScaledBboxOfBlock(block);
+                                                getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     const primaryY = bBox.bottom;

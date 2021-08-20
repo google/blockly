@@ -167,7 +167,8 @@ Blockly.WorkspaceSvg = function(
   /**
   * Map from function names to callbacks, for deciding what to do when a custom
   * toolbox category is opened.
-  * @type {!Object<string, ?function(!Blockly.Workspace):!Array<!Element>>}
+  * @type {!Object<string, ?function(!Blockly.Workspace):
+  *     !Blockly.utils.toolbox.FlyoutDefinition>}
   * @private
   */
   this.toolboxCategoryCallbacks_ = Object.create(null);
@@ -2498,8 +2499,9 @@ Blockly.WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  * custom toolbox categories in this workspace.  See the variable and procedure
  * categories as an example.
  * @param {string} key The name to use to look up this function.
- * @param {function(!Blockly.Workspace):!Array<!Element>} func The function to
- *     call when the given toolbox category is opened.
+ * @param {function(!Blockly.Workspace):
+ *     !Blockly.utils.toolbox.FlyoutDefinition} func The function to call when
+ *     the given toolbox category is opened.
  */
 Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
     func) {
@@ -2513,9 +2515,9 @@ Blockly.WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key,
  * Get the callback function associated with a given key, for populating
  * custom toolbox categories in this workspace.
  * @param {string} key The name to use to look up the function.
- * @return {?function(!Blockly.Workspace):!Array<!Element>} The function
- *     corresponding to the given key for this workspace, or null if no function
- *     is registered.
+ * @return {?function(!Blockly.Workspace):
+ *     !Blockly.utils.toolbox.FlyoutDefinition} The function corresponding to
+ *     the given key for this workspace, or null if no function is registered.
  */
 Blockly.WorkspaceSvg.prototype.getToolboxCategoryCallback = function(key) {
   return this.toolboxCategoryCallbacks_[key] || null;

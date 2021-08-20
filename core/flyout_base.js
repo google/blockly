@@ -36,7 +36,6 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.utils.xml');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 
@@ -623,7 +622,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 /**
  * Gets the flyout definition for the dynamic category.
  * @param {string} categoryName The name of the dynamic category.
- * @return {?Blockly.utils.toolbox.FlyoutDefinition} The definition of the
+ * @return {!Blockly.utils.toolbox.FlyoutDefinition} The definition of the
  *     flyout in one of its many forms.
  * @private
  */
@@ -676,7 +675,11 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
   } else {
     block = this.getRecycledBlock_(blockInfo['type']);
     if (!block) {
-      block = Blockly.serialization.blocks.load(blockInfo, this.workspace_);
+      blockInfo['disabled'] =
+          blockInfo['disabled'] || blockInfo['disabled'] == true;
+      block = Blockly.serialization.blocks.load(
+          /** @type {Blockly.serialization.blocks.State} */ (blockInfo),
+          this.workspace_);
     }
   }
 
@@ -685,7 +688,7 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
     // Do not enable these blocks as a result of capacity filtering.
     this.permanentlyDisabled_.push(block);
   }
-  return block;
+  return /** @type {!Blockly.BlockSvg} */ (block);
 };
 
 /**
@@ -790,7 +793,7 @@ Blockly.Flyout.prototype.emptyRecycledBlocks_ = function() {
 
 /**
  * Returns whether the given block can be recycled or not.
- * @param {!Blocky.BlockSvg} _block The block to check for recyclability.
+ * @param {!Blockly.BlockSvg} _block The block to check for recyclability.
  * @return {boolean} True if the block can be recycled. False otherwise.
  * @protected
  */

@@ -46,14 +46,14 @@ exports.ConnectionState = ConnectionState;
  * Represents the state of a given block.
  * @typedef {{
  *     type: string,
- *     id: string,
+ *     id: (string|undefined),
  *     x: (number|undefined),
  *     y: (number|undefined),
  *     collapsed: (boolean|undefined),
  *     disabled: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
- *     extra-state: *,
+ *     extra-state: (*|undefined),
  *     icons: (!Object<string, *>|undefined),
  *     fields: (!Object<string, *>|undefined),
  *     inputs: (!Object<string, !ConnectionState>|undefined),

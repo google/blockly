@@ -84,7 +84,7 @@ class State {
     this.y;
 
     /**
-     * Whether the block so collapsed or not. True if it is collapsed, undefined
+     * Whether the block is collapsed or not. True if it is collapsed, undefined
      * if not.
      * @type {(boolean|undefined)}
      */
@@ -127,7 +127,7 @@ class State {
     this.inline;
 
     /**
-     * An extra string that gets round-tripped through serialiation. Often used
+     * An extra string that gets round-tripped through serialization. Often used
      * for associating blocks with external assets.
      * @type {(string|undefined)}
      */
@@ -136,19 +136,19 @@ class State {
     /**
      * The extra state associated with the block.
      * In the past this was called a "mutation".
-     * @type {(*|undefined)}
+     * @type {*}
      */
     this.extraState;
 
     /**
      * The state of the icons attached to this block.
-     * @type {(!Object<string, *>|undfined)}
+     * @type {(!Object<string, *>|undefined)}
      */
     this.icons;
 
     /**
      * The state of the fields attached to this block.
-     * @type {(!Objec<string, *>|undefined)}
+     * @type {(!Object<string, *>|undefined)}
      */
     this.fields;
 

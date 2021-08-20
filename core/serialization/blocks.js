@@ -136,7 +136,7 @@ class State {
     /**
      * The extra state associated with the block.
      * In the past this was called a "mutation".
-     * @type {*}
+     * @type {(*|undefined)}
      */
     this.extraState;
 

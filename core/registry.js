@@ -38,6 +38,8 @@ const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
 const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
 
 
 /**
@@ -45,11 +47,19 @@ const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
  * registering and the value being the constructor function.
  * e.g. {'field': {'field_angle': Blockly.FieldAngle}}
  *
- * @type {Object<string, Object<string, function(new:?)>>}
+ * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
 const typeMap = Object.create(null);
 /** @private */
 exports.typeMap_ = typeMap;
+
+/**
+ * A map of maps. With the keys being the type and caseless name of the class we
+ * are registring, and the value being the most recent cased name for that
+ * registration.
+ * @type {!Object<string, !Object<string, string>>}
+ */
+const nameMap = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
@@ -119,6 +129,12 @@ Type.METRICS_MANAGER = new Type('metricsManager');
 Type.BLOCK_DRAGGER = new Type('blockDragger');
 
 /**
+ * @type {!Type<ISerializer>}
+ * @package
+ */
+Type.SERIALIZER = new Type('serializer');
+
+/**
  * Registers a class based on a type and name.
  * @param {string|!Type<T>} type The type of the plugin.
  *     (e.g. Field, Renderer)
@@ -129,7 +145,7 @@ Type.BLOCK_DRAGGER = new Type('blockDragger');
  *     an already registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
- * it's type.
+ *     it's type.
  * @template T
  */
 const register = function(type, name, registryItem, opt_allowOverrides) {
@@ -146,25 +162,29 @@ const register = function(type, name, registryItem, opt_allowOverrides) {
         'Invalid name "' + name + '". The name must be a' +
         ' non-empty string.');
   }
-  name = name.toLowerCase();
+  const caselessName = name.toLowerCase();
   if (!registryItem) {
     throw Error('Can not register a null value');
   }
   let typeRegistry = typeMap[type];
+  let nameRegistry = nameMap[type];
   // If the type registry has not been created, create it.
   if (!typeRegistry) {
     typeRegistry = typeMap[type] = Object.create(null);
+    nameRegistry = nameMap[type] = Object.create(null);
   }
 
   // Validate that the given class has all the required properties.
   validate(type, registryItem);
 
   // Don't throw an error if opt_allowOverrides is true.
-  if (!opt_allowOverrides && typeRegistry[name]) {
+  if (!opt_allowOverrides && typeRegistry[caselessName]) {
     throw Error(
-        'Name "' + name + '" with type "' + type + '" already registered.');
+        'Name "' + caselessName + '" with type "' + type +
+        '" already registered.');
   }
-  typeRegistry[name] = registryItem;
+  typeRegistry[caselessName] = registryItem;
+  nameRegistry[caselessName] = name;
 };
 exports.register = register;
 
@@ -203,6 +223,7 @@ const unregister = function(type, name) {
     return;
   }
   delete typeMap[type][name];
+  delete nameMap[type][name];
 };
 exports.unregister = unregister;
 
@@ -287,6 +308,43 @@ const getObject = function(type, name, opt_throwIfMissing) {
   return /** @type {T} */ (getItem(type, name, opt_throwIfMissing));
 };
 exports.getObject = getObject;
+
+/**
+ * Returns a map of items registered with the given type.
+ * @param {string|!Type<T>} type The type of the plugin. (e.g. Category)
+ * @param {boolean} opt_cased Whether or not to return a map with cased keys
+ *     (rather than caseless keys). False by default.
+ * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
+ *     are unable to find the object. False by default.
+ * @return {?Object<string, ?T|?function(new:T, ...?)>} A map of objects with
+ *     the given type, or null if none exists.
+ * @template T
+ */
+const getAllItems = function(type, opt_cased, opt_throwIfMissing) {
+  type = String(type).toLowerCase();
+  const typeRegistry = typeMap[type];
+  if (!typeRegistry) {
+    const msg = `Unable to find [${type}] in the registry.`;
+    if (opt_throwIfMissing) {
+      throw new Error(`${msg} You must require or register a ${type} plugin.`);
+    } else {
+      console.warn(msg);
+    }
+    return null;
+  }
+  if (!opt_cased) {
+    return typeRegistry;
+  }
+  const nameRegistry = nameMap[type];
+  const casedRegistry = Object.create(null);
+  const keys = Object.keys(typeRegistry);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    casedRegistry[nameRegistry[key]] = typeRegistry[key];
+  }
+  return casedRegistry;
+};
+exports.getAllItems = getAllItems;
 
 /**
  * Gets the class from Blockly options for the given type.

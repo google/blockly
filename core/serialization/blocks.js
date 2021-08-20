@@ -19,10 +19,14 @@ const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
+// eslint-disable-next-line no-unused-vars
+const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const inputTypes = goog.require('Blockly.inputTypes');
+const priorities = goog.require('Blockly.serialization.priorities');
+const serializationRegistry = goog.require('Blockly.serialization.registry');
 
 
 // TODO: Remove this once lint is fixed.
@@ -577,3 +581,71 @@ const initBlock = function(block, rendered) {
     block.initModel();
   }
 };
+
+// Aliases to disambiguate saving/loading within the serializer.
+const saveBlock = save;
+const loadBlock = load;
+
+/**
+ * Serializer for saving and loading block state.
+ * @implements {ISerializer}
+ */
+class BlockSerializer {
+  constructor() {
+    /**
+     * The priority for deserializing blocks.
+     * @type {number}
+     */
+    this.priority = priorities.BLOCKS;
+  }
+
+  /**
+   * Serializes the blocks of the given workspace.
+   * @param {!Workspace} workspace The workspace to save the blocks of.
+   * @return {?{languageVersion: number, blocks:!Array<!State>}} The state of
+   *     the workspace's blocks, or null if there are no blocks.
+   */
+  save(workspace) {
+    const blockState = [];
+    for (const block of workspace.getTopBlocks(false)) {
+      const state = saveBlock(block, {addCoordinates: true});
+      if (state) {
+        blockState.push(state);
+      }
+    }
+    if (blockState.length) {
+      return {
+        'languageVersion': 0, // Currently unused.
+        'blocks': blockState
+      };
+    }
+    return null;
+  }
+
+  /**
+   * Deserializes the blocks defined by the given state into the given
+   * workspace.
+   * @param {{languageVersion: number, blocks:!Array<!State>}} state The state
+   *     of the blocks to deserialize.
+   * @param {!Workspace} workspace The workspace to deserialize into.
+   */
+  load(state, workspace) {
+    const blockStates = state['blocks'];
+    for (const state of blockStates) {
+      loadBlock(state, workspace, {recordUndo: Events.getRecordUndo()});
+    }
+  }
+
+  /**
+   * Disposes of any blocks that exist on the workspace.
+   * @param {!Workspace} workspace The workspace to clear the blocks of.
+   */
+  clear(workspace) {
+    // Cannot use workspace.clear() because that also removes variables.
+    for (const block of workspace.getTopBlocks(false)) {
+      block.dispose(false);
+    }
+  }
+}
+
+serializationRegistry.register('blocks', new BlockSerializer());

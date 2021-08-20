@@ -94,188 +94,128 @@ suite('JSO Deserialization', function() {
     });
 
     suite('Var create', function() {
-      suite('Top-level call', function() {
-        test('Just var', function() {
-          const state = {
-            'variables': [
-              {
-                'name': 'test',
-                'id': 'testId',
-              }
-            ]
-          };
-          Blockly.serialization.workspaces.load(state, this.workspace);
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'recordUndo': false
-              },
-              this.workspace.id);
-        });
-
-        test('Record undo', function() {
-          const state = {
-            'variables': [
-              {
-                'name': 'test',
-                'id': 'testId',
-              }
-            ]
-          };
-          Blockly.serialization.workspaces.load(state, this.workspace, {recordUndo: true});
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'recordUndo': true
-              },
-              this.workspace.id);
-        });
-
-        test('Grouping', function() {
-          const state = {
-            'variables': [
-              {
-                'name': 'test',
-                'id': 'testId',
-              }
-            ]
-          };
-          Blockly.Events.setGroup('my group');
-          Blockly.serialization.workspaces.load(state, this.workspace);
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'group': 'my group'
-              },
-              this.workspace.id);
-        });
-
-        test('Multiple vars grouped', function() {
-          const state = {
-            'variables': [
-              {
-                'name': 'test',
-                'id': 'testId',
-              },
-              {
-                'name': 'test2',
-                'id': 'testId2',
-              }
-            ]
-          };
-          Blockly.serialization.workspaces.load(state, this.workspace);
-          const calls = this.eventsFireStub.getCalls();
-          const group = calls[0].args[0].group;
-          chai.assert.isTrue(calls.every(call => call.args[0].group == group));
-        });
-
-        test('Var with block', function() {
-          const state = {
-            'variables': [
-              {
-                'name': 'test',
-                'id': 'testId',
-              }
-            ],
-            'blocks': {
-              'blocks': [
-                {
-                  'type': 'variables_get',
-                  'id': 'blockId',
-                  'x': 42,
-                  'y': 42,
-                  'fields': {
-                    'VAR': 'testId'
-                  }
-                },
-              ]
+      test('Just var', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
             }
-          };
-          Blockly.serialization.workspaces.load(state, this.workspace);
-          const calls = this.eventsFireStub.getCalls();
-          const count = calls.reduce((acc, call) => {
-            if (call.args[0] instanceof Blockly.Events.VarCreate) {
-              return acc + 1;
-            }
-            return acc;
-          }, 0);
-          chai.assert.equal(count, 1);
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {'varName': 'test', 'varId': 'testId', 'varType': ''},
-              this.workspace.id);
-        });
+          ]
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': false
+            },
+            this.workspace.id);
       });
 
-      suite('Direct call', function() {
-        test('Just var', function() {
-          const state = {
-            'name': 'test',
-            'id': 'testId',
-          };
-          Blockly.serialization.variables.load(state, this.workspace);
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'recordUndo': false
-              },
-              this.workspace.id);
-        });
+      test('Record undo', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
+            }
+          ]
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace, {recordUndo: true});
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'recordUndo': true
+            },
+            this.workspace.id);
+      });
 
-        test('Record undo', function() {
-          const state = {
-            'name': 'test',
-            'id': 'testId',
-          };
-          Blockly.serialization.variables
-              .load(state, this.workspace, {recordUndo: true});
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
-              {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'recordUndo': true
-              },
-              this.workspace.id);
-        });
+      test('Grouping', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
+            }
+          ]
+        };
+        Blockly.Events.setGroup('my group');
+        Blockly.serialization.workspaces.load(state, this.workspace);
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {
+              'varName': 'test',
+              'varId': 'testId',
+              'varType': '',
+              'group': 'my group'
+            },
+            this.workspace.id);
+      });
 
-        test('Grouping', function() {
-          const state = {
-            'name': 'test',
-            'id': 'testId',
-          };
-          Blockly.Events.setGroup('my group');
-          Blockly.serialization.variables.load(state, this.workspace);
-          assertEventFired(
-              this.eventsFireStub,
-              Blockly.Events.VarCreate,
+      test('Multiple vars grouped', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
+            },
+            {
+              'name': 'test2',
+              'id': 'testId2',
+            }
+          ]
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+        const calls = this.eventsFireStub.getCalls();
+        const group = calls[0].args[0].group;
+        chai.assert.isTrue(calls.every(call => call.args[0].group == group));
+      });
+
+      test('Var with block', function() {
+        const state = {
+          'variables': [
+            {
+              'name': 'test',
+              'id': 'testId',
+            }
+          ],
+          'blocks': {
+            'blocks': [
               {
-                'varName': 'test',
-                'varId': 'testId',
-                'varType': '',
-                'group': 'my group'
+                'type': 'variables_get',
+                'id': 'blockId',
+                'x': 42,
+                'y': 42,
+                'fields': {
+                  'VAR': 'testId'
+                }
               },
-              this.workspace.id);
-        });
+            ]
+          }
+        };
+        Blockly.serialization.workspaces.load(state, this.workspace);
+        const calls = this.eventsFireStub.getCalls();
+        const count = calls.reduce((acc, call) => {
+          if (call.args[0] instanceof Blockly.Events.VarCreate) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+        chai.assert.equal(count, 1);
+        assertEventFired(
+            this.eventsFireStub,
+            Blockly.Events.VarCreate,
+            {'varName': 'test', 'varId': 'testId', 'varType': ''},
+            this.workspace.id);
       });
     });
 
@@ -680,5 +620,61 @@ suite('JSO Deserialization', function() {
             state, Blockly.serialization.exceptions.RealChildOfShadow);
       });
     });
+  });
+
+  test('Priority', function() {
+    const blocksSerializer = Blockly.registry.getClass(
+        Blockly.registry.Type.SERIALIZER, 'blocks');
+    const variablesSerializer = Blockly.registry.getClass(
+        Blockly.registry.Type.SERIALIZER, 'variables');
+
+    Blockly.serialization.registry.unregister('blocks');
+    Blockly.serialization.registry.unregister('variables');
+
+    const calls = [];
+
+    const first = {
+      priority: 100,
+      save: () => null,
+      load: () => calls.push('first-load'),
+      clear: () => calls.push('first-clear'),
+    };
+    const second = {
+      priority: 0,
+      save: () => null,
+      load: () => calls.push('second-load'),
+      clear: () => calls.push('second-clear'),
+    };
+    const third = {
+      priority: -10,
+      save: () => null,
+      load: () => calls.push('third-load'),
+      clear: () => calls.push('third-clear'),
+    };
+
+    Blockly.serialization.registry.register('third', third);
+    Blockly.serialization.registry.register('first', first);
+    Blockly.serialization.registry.register('second', second);
+
+    Blockly.serialization.workspaces.load(
+        {'first': {}, 'third': {}, 'second': {}}, this.workspace);
+    
+    Blockly.serialization.registry.unregister('first');
+    Blockly.serialization.registry.unregister('second');
+    Blockly.serialization.registry.unregister('third');
+
+    Blockly.serialization.registry.register('blocks', blocksSerializer);
+    Blockly.serialization.registry.register('variables', variablesSerializer);
+
+    chai.assert.deepEqual(
+        calls,
+        [
+          'third-clear',
+          'second-clear',
+          'first-clear',
+          'first-load',
+          'second-load',
+          'third-load'
+        ]);
   });
 });

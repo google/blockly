@@ -699,20 +699,21 @@ suite('JSO Serialization', function() {
 
   suite('Variables', function() {
     test('Without type', function() {
-      const variable = this.workspace.createVariable('testVar', '', 'testId');
-      const jso = Blockly.serialization.variables.save(variable);
-      assertProperty(jso, 'name', 'testVar');
-      assertProperty(jso, 'id', 'testId');
-      assertNoProperty(jso, 'type');
+      this.workspace.createVariable('testVar', '', 'testId');
+      const jso = Blockly.serialization.workspaces.save(this.workspace);
+      const variable = jso['variables'][0];
+      assertProperty(variable, 'name', 'testVar');
+      assertProperty(variable, 'id', 'testId');
+      assertNoProperty(variable, 'type');
     });
 
     test('With type', function() {
-      const variable = this.workspace
-          .createVariable('testVar', 'testType', 'testId');
-      const jso = Blockly.serialization.variables.save(variable);
-      assertProperty(jso, 'name', 'testVar');
-      assertProperty(jso, 'id', 'testId');
-      assertProperty(jso, 'type', 'testType');
+      this.workspace.createVariable('testVar', 'testType', 'testId');
+      const jso = Blockly.serialization.workspaces.save(this.workspace);
+      const variable = jso['variables'][0];
+      assertProperty(variable, 'name', 'testVar');
+      assertProperty(variable, 'id', 'testId');
+      assertProperty(variable, 'type', 'testType');
     });
   });
 });

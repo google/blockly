@@ -82,4 +82,7 @@ goog.require('Blockly.zelos.Renderer');
 // Classic is the default theme.
 goog.require('Blockly.Themes.Classic');
 
+goog.require('Blockly.serialization.blocks');
+goog.require('Blockly.serialization.registry');
+goog.require('Blockly.serialization.variables');
 goog.require('Blockly.serialization.workspaces');

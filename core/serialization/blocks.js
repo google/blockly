@@ -259,7 +259,7 @@ const saveConnection = function(connection) {
   if (!shadow && !child) {
     return null;
   }
-  var state = Object.create(null);
+  const state = Object.create(null);
   if (shadow) {
     state['shadow'] = shadow;
   }
@@ -279,21 +279,49 @@ const saveConnection = function(connection) {
  * @return {!Block} The block that was just loaded.
  */
 const load = function(state, workspace, {recordUndo = false} = {}) {
+  return loadInternal(state, workspace, {recordUndo});
+};
+exports.load = load;
+
+/**
+ * Loads the block represented by the given state into the given workspace.
+ * This is defined internally so that the extra parameters don't clutter our
+ * external API.
+ * But it is exported so that other places within Blockly can call it directly
+ * with the extra paramters.
+ * @param {!State} state The state of a block to deserialize into the workspace.
+ * @param {!Workspace} workspace The workspace to add the block to.
+ * @param {{parentConnection: (!Connection|undefined), isShadow:
+ *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
+ *     parentConnection: If provided, the system will attempt to connect the
+ *       block to this connection after it is created. Undefined by default.
+ *     isShadow: The block will be set to a shadow block after it is created.
+ *       False by default.
+ *     recordUndo: If true, events triggered by this function will be undo-able
+ *       by the user. False by default.
+ * @return {!Block} The block that was just loaded.
+ */
+const loadInternal = function(
+    state,
+    workspace,
+    {
+      parentConnection = undefined,
+      isShadow = false,
+      recordUndo = false
+    } = {}
+) {
   const prevRecordUndo = Events.getRecordUndo();
   Events.setRecordUndo(recordUndo);
   const existingGroup = Events.getGroup();
   if (!existingGroup) {
     Events.setGroup(true);
   }
-
-  // We only want to fire an event for the top block.
   Events.disable();
 
-  const block = loadInternal(state, workspace);
+  const block = loadPrivate(state, workspace, {parentConnection, isShadow});
 
   Events.enable();
   Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
-
   Events.setGroup(existingGroup);
   Events.setRecordUndo(prevRecordUndo);
   
@@ -309,22 +337,32 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
 
   return block;
 };
-exports.load = load;
+/** @package */
+exports.loadInternal = loadInternal;
 
 /**
  * Loads the block represented by the given state into the given workspace.
- * This is defined internally so that the extra optional parameter doesn't
- * clutter our external API.
+ * This is defined privately so that it can be called recursively without firing
+ * eroneous events. Events (and other things we only want to occur on the top
+ * block) are handled by loadInternal.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
- * @param {!Connection=} parentConnection The optional parent connection to
- *     attach the block to.
- * @param {boolean} isShadow Whether the block we are loading is a shadow block
- *     or not.
+ * @param {{parentConnection: (!Connection|undefined), isShadow:
+ *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
+ *     parentConnection: If provided, the system will attempt to connect the
+ *       block to this connection after it is created. Undefined by default.
+ *     isShadow: The block will be set to a shadow block after it is created.
+ *       False by default.
  * @return {!Block} The block that was just loaded.
  */
-const loadInternal = function(
-    state, workspace, parentConnection = undefined, isShadow = false) {
+const loadPrivate = function(
+    state,
+    workspace,
+    {
+      parentConnection = undefined,
+      isShadow = false,
+    } = {}
+) {
   if (!state['type']) {
     throw new MissingBlockType(state);
   }
@@ -340,10 +378,9 @@ const loadInternal = function(
   loadInputBlocks(block, state);
   loadNextBlocks(block, state);
   initBlock(block, workspace.rendered);
+
   return block;
 };
-/** @package */
-exports.loadInternal = loadInternal;
 
 /**
  * Applies any coordinate information available on the state object to the
@@ -533,10 +570,10 @@ const loadConnection = function(connection, connectionState) {
     connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
-    loadInternal(
+    loadPrivate(
         connectionState['block'],
         connection.getSourceBlock().workspace,
-        connection);
+        {parentConnection: connection});
   }
 };
 

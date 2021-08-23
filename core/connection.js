@@ -122,8 +122,8 @@ Connection.prototype.connect_ = function(childConnection) {
   // Make sure the parentConnection is available.
   let orphan;
   if (parentConnection.isConnected()) {
-    let shadowState = parentConnection.stashShadowState_();
-    var target = parentConnection.targetBlock();
+    const shadowState = parentConnection.stashShadowState_();
+    const target = parentConnection.targetBlock();
     if (target.isShadow()) {
       target.dispose(false);
     } else {
@@ -717,7 +717,7 @@ Connection.prototype.setShadowStateInternal_ =
       this.shadowDom_ = shadowDom;
       this.shadowState_ = shadowState;
 
-      var target = this.targetBlock();
+      const target = this.targetBlock();
       if (!target) {
         this.respawnShadow_();
         if (this.targetBlock() && this.targetBlock().isShadow()) {
@@ -730,7 +730,7 @@ Connection.prototype.setShadowStateInternal_ =
           this.serializeShadow_(this.targetBlock());
         }
       } else {
-        var shadow = this.createShadowBlock_(false);
+        const shadow = this.createShadowBlock_(false);
         this.serializeShadow_(shadow);
         if (shadow) {
           shadow.dispose(false);
@@ -748,15 +748,16 @@ Connection.prototype.setShadowStateInternal_ =
  * @private
  */
 Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
-  var parentBlock = this.getSourceBlock();
-  var shadowState = this.getShadowState();
-  var shadowDom = this.getShadowDom();
+  const parentBlock = this.getSourceBlock();
+  const shadowState = this.getShadowState();
+  const shadowDom = this.getShadowDom();
   if (!parentBlock.workspace || (!shadowState && !shadowDom)) {
     return null;
   }
 
+  let blockShadow;
   if (shadowState) {
-    var blockShadow = blocks.loadInternal(
+    blockShadow = blocks.loadInternal(
         shadowState,
         parentBlock.workspace,
         attemptToConnect ? this : undefined,
@@ -767,12 +768,23 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   if (shadowDom) {
     blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {
-      if (blockShadow.outputConnection) {
-        this.connect(blockShadow.outputConnection);
-      } else if (blockShadow.previousConnection) {
-        this.connect(blockShadow.previousConnection);
+      if (this.type == Blockly.connectionTypes.INPUT_VALUE) {
+        if (!blockShadow.outputConnection) {
+          throw new Error('Shadow block is missing an output connection');
+        }
+        if (!this.connect(blockShadow.outputConnection)) {
+          throw new Error('Could not connect shadow block to connection');
+        }
+      } else if (this.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+        if (!blockShadow.previousConnection) {
+          throw new Error('Shadow block is missing previous connection');
+        }
+        if (!this.connect(blockShadow.previousConnection)) {
+          throw new Error('Could not connect shadow block to connection');
+        }
       } else {
-        throw Error('Shadow block does not have output or previous statement.');
+        throw new Error(
+            'Cannot connect a shadow block to a previous/output connection');
       }
     }
     return blockShadow;

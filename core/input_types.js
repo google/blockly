@@ -13,7 +13,7 @@
 
 goog.provide('Blockly.inputTypes');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 
 /**
  * Enum for the type of a connection or input.
@@ -21,9 +21,9 @@ goog.require('Blockly.connectionTypes');
  */
 Blockly.inputTypes = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
-  VALUE: Blockly.connectionTypes.INPUT_VALUE,
+  VALUE: Blockly.ConnectionTypes.INPUT_VALUE,
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
-  STATEMENT: Blockly.connectionTypes.NEXT_STATEMENT,
+  STATEMENT: Blockly.ConnectionTypes.NEXT_STATEMENT,
   // A dummy input.  Used to add field(s) with no input.
   DUMMY: 5
 };

@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.Connection');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
@@ -104,7 +104,7 @@ Blockly.Connection.prototype.y = 0;
  * @protected
  */
 Blockly.Connection.prototype.connect_ = function(childConnection) {
-  var INPUT = Blockly.connectionTypes.INPUT_VALUE;
+  var INPUT = Blockly.ConnectionTypes.INPUT_VALUE;
   var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
@@ -190,8 +190,8 @@ Blockly.Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Blockly.Connection.prototype.isSuperior = function() {
-  return this.type == Blockly.connectionTypes.INPUT_VALUE ||
-      this.type == Blockly.connectionTypes.NEXT_STATEMENT;
+  return this.type == Blockly.ConnectionTypes.INPUT_VALUE ||
+      this.type == Blockly.ConnectionTypes.NEXT_STATEMENT;
 };
 
 /**
@@ -390,7 +390,7 @@ Blockly.Connection.getConnectionForOrphanedOutput_ =
  */
 Blockly.Connection.getConnectionForOrphanedConnection =
     function(startBlock, orphanConnection) {
-      if (orphanConnection.type === Blockly.connectionTypes.OUTPUT_VALUE) {
+      if (orphanConnection.type === Blockly.ConnectionTypes.OUTPUT_VALUE) {
         return Blockly.Connection.getConnectionForOrphanedOutput_(
             startBlock, orphanConnection.getSourceBlock());
       }

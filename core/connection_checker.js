@@ -14,7 +14,7 @@
 goog.provide('Blockly.ConnectionChecker');
 
 goog.require('Blockly.Connection');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.IConnectionChecker');
@@ -200,9 +200,9 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   switch (b.type) {
-    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
+    case Blockly.ConnectionTypes.PREVIOUS_STATEMENT:
       return this.canConnectToPrevious_(a, b);
-    case Blockly.connectionTypes.OUTPUT_VALUE: {
+    case Blockly.ConnectionTypes.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
       if ((b.isConnected() &&
@@ -212,7 +212,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case Blockly.connectionTypes.INPUT_VALUE: {
+    case Blockly.ConnectionTypes.INPUT_VALUE: {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
@@ -223,7 +223,7 @@ Blockly.ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case Blockly.connectionTypes.NEXT_STATEMENT: {
+    case Blockly.ConnectionTypes.NEXT_STATEMENT: {
       // Don't let a block with no next connection bump other blocks out of the
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal

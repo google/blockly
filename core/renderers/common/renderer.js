@@ -19,7 +19,7 @@ goog.require('Blockly.blockRendering.IPathObject');
 goog.require('Blockly.blockRendering.MarkerSvg');
 goog.require('Blockly.blockRendering.PathObject');
 goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
@@ -246,7 +246,7 @@ Blockly.blockRendering.Renderer.prototype.shouldHighlightConnection =
  */
 Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
     function(topBlock, orphanBlock, localType) {
-      var orphanConnection = localType === Blockly.connectionTypes.OUTPUT_VALUE ?
+      var orphanConnection = localType === Blockly.ConnectionTypes.OUTPUT_VALUE ?
           orphanBlock.outputConnection : orphanBlock.previousConnection;
       return !!Blockly.Connection.getConnectionForOrphanedConnection(
           /** @type {!Blockly.Block} **/ (topBlock),
@@ -266,8 +266,8 @@ Blockly.blockRendering.Renderer.prototype.orphanCanConnectAtEnd =
  */
 Blockly.blockRendering.Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == Blockly.connectionTypes.OUTPUT_VALUE ||
-      local.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+  if (local.type == Blockly.ConnectionTypes.OUTPUT_VALUE ||
+      local.type == Blockly.ConnectionTypes.PREVIOUS_STATEMENT) {
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,

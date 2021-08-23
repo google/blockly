@@ -14,7 +14,7 @@ goog.provide('Blockly.InsertionMarkerManager');
 
 goog.require('Blockly.blockAnimations');
 goog.require('Blockly.ComponentManager');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
@@ -644,7 +644,7 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
       (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
 
   var isFirstInOutputStack =
-      imConn.type == Blockly.connectionTypes.INPUT_VALUE &&
+      imConn.type == Blockly.ConnectionTypes.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -652,7 +652,7 @@ Blockly.InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
     imConn.targetBlock().unplug(false);
   }
   // Inside of a C-block, first statement connection.
-  else if (imConn.type == Blockly.connectionTypes.NEXT_STATEMENT &&
+  else if (imConn.type == Blockly.ConnectionTypes.NEXT_STATEMENT &&
       imConn != markerNext) {
     var innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);

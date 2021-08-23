@@ -15,7 +15,7 @@ goog.provide('Blockly.Block');
 goog.require('Blockly.ASTNode');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Connection');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
@@ -508,7 +508,7 @@ Blockly.Block.prototype.getOnlyValueConnection_ = function() {
   for (var i = 0; i < this.inputList.length; i++) {
     var thisConnection = this.inputList[i].connection;
     if (thisConnection &&
-        thisConnection.type == Blockly.connectionTypes.INPUT_VALUE &&
+        thisConnection.type == Blockly.ConnectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -671,7 +671,7 @@ Blockly.Block.prototype.getPreviousBlock = function() {
 Blockly.Block.prototype.getFirstStatementConnection = function() {
   for (var i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+        input.connection.type == Blockly.ConnectionTypes.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -1157,7 +1157,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(Blockly.connectionTypes.PREVIOUS_STATEMENT);
+          this.makeConnection_(Blockly.ConnectionTypes.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1185,7 +1185,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     }
     if (!this.nextConnection) {
       this.nextConnection =
-          this.makeConnection_(Blockly.connectionTypes.NEXT_STATEMENT);
+          this.makeConnection_(Blockly.ConnectionTypes.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1218,7 +1218,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
             'connection.');
       }
       this.outputConnection =
-          this.makeConnection_(Blockly.connectionTypes.OUTPUT_VALUE);
+          this.makeConnection_(Blockly.ConnectionTypes.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {

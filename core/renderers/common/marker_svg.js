@@ -14,7 +14,7 @@
 goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.Events');
@@ -214,9 +214,9 @@ Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == Blockly.connectionTypes.INPUT_VALUE) {
+  } else if (connectionType == Blockly.ConnectionTypes.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == Blockly.connectionTypes.NEXT_STATEMENT) {
+  } else if (connectionType == Blockly.ConnectionTypes.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);

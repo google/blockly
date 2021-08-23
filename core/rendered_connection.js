@@ -13,7 +13,7 @@
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils');
@@ -289,8 +289,8 @@ Blockly.RenderedConnection.prototype.highlight = function() {
   var sourceBlockSvg = /** @type {!Blockly.BlockSvg} */ (this.sourceBlock_);
   var renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
   var shape = renderConstants.shapeFor(this);
-  if (this.type == Blockly.connectionTypes.INPUT_VALUE ||
-      this.type == Blockly.connectionTypes.OUTPUT_VALUE) {
+  if (this.type == Blockly.ConnectionTypes.INPUT_VALUE ||
+      this.type == Blockly.ConnectionTypes.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     var yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = Blockly.utils.svgPaths.moveBy(0, -yLen) +
@@ -395,8 +395,8 @@ Blockly.RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   var renderList = [];
-  if (this.type != Blockly.connectionTypes.INPUT_VALUE &&
-      this.type != Blockly.connectionTypes.NEXT_STATEMENT) {
+  if (this.type != Blockly.ConnectionTypes.INPUT_VALUE &&
+      this.type != Blockly.ConnectionTypes.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
@@ -550,8 +550,8 @@ Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
     childBlock.updateDisabled();
   }
   if (parentRendered && childRendered) {
-    if (parentConnection.type == Blockly.connectionTypes.NEXT_STATEMENT ||
-        parentConnection.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+    if (parentConnection.type == Blockly.ConnectionTypes.NEXT_STATEMENT ||
+        parentConnection.type == Blockly.ConnectionTypes.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
       // Rendering a child will render its parent.
       childBlock.render();

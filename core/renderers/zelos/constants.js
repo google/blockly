@@ -14,7 +14,7 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.colour');
@@ -652,8 +652,8 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     checks = connection.targetConnection.getCheck();
   }
   switch (connection.type) {
-    case Blockly.connectionTypes.INPUT_VALUE:
-    case Blockly.connectionTypes.OUTPUT_VALUE:
+    case Blockly.ConnectionTypes.INPUT_VALUE:
+    case Blockly.ConnectionTypes.OUTPUT_VALUE:
       var outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
       if (outputShape != null) {
@@ -674,8 +674,8 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
         return this.ROUNDED;
       }
       return this.ROUNDED;
-    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
-    case Blockly.connectionTypes.NEXT_STATEMENT:
+    case Blockly.ConnectionTypes.PREVIOUS_STATEMENT:
+    case Blockly.ConnectionTypes.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown type');

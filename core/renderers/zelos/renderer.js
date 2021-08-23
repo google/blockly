@@ -14,7 +14,7 @@ goog.provide('Blockly.zelos.Renderer');
 
 goog.require('Blockly.blockRendering');
 goog.require('Blockly.blockRendering.Renderer');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.InsertionMarkerManager');
@@ -113,8 +113,8 @@ Blockly.zelos.Renderer.prototype.makePathObject = function(root, style) {
  * @override
  */
 Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
-  return conn.type != Blockly.connectionTypes.INPUT_VALUE &&
-      conn.type !== Blockly.connectionTypes.OUTPUT_VALUE;
+  return conn.type != Blockly.ConnectionTypes.INPUT_VALUE &&
+      conn.type !== Blockly.ConnectionTypes.OUTPUT_VALUE;
 };
 
 /**
@@ -122,7 +122,7 @@ Blockly.zelos.Renderer.prototype.shouldHighlightConnection = function(conn) {
  */
 Blockly.zelos.Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == Blockly.connectionTypes.OUTPUT_VALUE) {
+  if (local.type == Blockly.ConnectionTypes.OUTPUT_VALUE) {
     if (!closest.isConnected()) {
       return Blockly.InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
     }

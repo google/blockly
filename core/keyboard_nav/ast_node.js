@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.ASTNode');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.Coordinate');
@@ -150,16 +150,16 @@ Blockly.ASTNode.createConnectionNode = function(connection) {
     return null;
   }
   var type = connection.type;
-  if (type == Blockly.connectionTypes.INPUT_VALUE) {
+  if (type == Blockly.ConnectionTypes.INPUT_VALUE) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == Blockly.connectionTypes.NEXT_STATEMENT &&
+  } else if (type == Blockly.ConnectionTypes.NEXT_STATEMENT &&
       connection.getParentInput()) {
     return Blockly.ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == Blockly.connectionTypes.NEXT_STATEMENT) {
+  } else if (type == Blockly.ConnectionTypes.NEXT_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.NEXT, connection);
-  } else if (type == Blockly.connectionTypes.OUTPUT_VALUE) {
+  } else if (type == Blockly.ConnectionTypes.OUTPUT_VALUE) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.OUTPUT, connection);
-  } else if (type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (type == Blockly.ConnectionTypes.PREVIOUS_STATEMENT) {
     return new Blockly.ASTNode(Blockly.ASTNode.types.PREVIOUS, connection);
   }
   return null;

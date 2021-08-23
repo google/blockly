@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.blockRendering.ConstantProvider');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils');
@@ -997,11 +997,11 @@ Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function(
 Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
     connection) {
   switch (connection.type) {
-    case Blockly.connectionTypes.INPUT_VALUE:
-    case Blockly.connectionTypes.OUTPUT_VALUE:
+    case Blockly.ConnectionTypes.INPUT_VALUE:
+    case Blockly.ConnectionTypes.OUTPUT_VALUE:
       return this.PUZZLE_TAB;
-    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
-    case Blockly.connectionTypes.NEXT_STATEMENT:
+    case Blockly.ConnectionTypes.PREVIOUS_STATEMENT:
+    case Blockly.ConnectionTypes.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown connection type');

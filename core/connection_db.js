@@ -14,7 +14,7 @@
 
 goog.provide('Blockly.ConnectionDB');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
@@ -291,13 +291,13 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
 Blockly.ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   var dbList = [];
-  dbList[Blockly.connectionTypes.INPUT_VALUE] =
+  dbList[Blockly.ConnectionTypes.INPUT_VALUE] =
       new Blockly.ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.OUTPUT_VALUE] =
+  dbList[Blockly.ConnectionTypes.OUTPUT_VALUE] =
       new Blockly.ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.NEXT_STATEMENT] =
+  dbList[Blockly.ConnectionTypes.NEXT_STATEMENT] =
       new Blockly.ConnectionDB(checker);
-  dbList[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+  dbList[Blockly.ConnectionTypes.PREVIOUS_STATEMENT] =
       new Blockly.ConnectionDB(checker);
   return dbList;
 };

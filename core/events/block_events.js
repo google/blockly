@@ -20,7 +20,7 @@ goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
 goog.provide('Blockly.Events.Move');  // Deprecated.
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
@@ -552,7 +552,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == Blockly.ConnectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

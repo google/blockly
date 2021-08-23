@@ -11,13 +11,13 @@
 
 'use strict';
 
-goog.provide('Blockly.connectionTypes');
+goog.provide('Blockly.ConnectionTypes');
 
 /**
  * Enum for the type of a connection or input.
  * @enum {number}
  */
-Blockly.connectionTypes = {
+Blockly.ConnectionTypes = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
   INPUT_VALUE: 1,
   // A left-facing value output.  E.g. 'random fraction'.

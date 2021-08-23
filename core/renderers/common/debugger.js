@@ -16,7 +16,7 @@ goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
 goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.utils.dom');
@@ -226,19 +226,19 @@ Blockly.blockRendering.Debug.prototype.drawConnection = function(conn) {
   var colour;
   var size;
   var fill;
-  if (conn.type == Blockly.connectionTypes.INPUT_VALUE) {
+  if (conn.type == Blockly.ConnectionTypes.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
     fill = 'none';
-  } else if (conn.type == Blockly.connectionTypes.OUTPUT_VALUE) {
+  } else if (conn.type == Blockly.ConnectionTypes.OUTPUT_VALUE) {
     size = 2;
     colour = 'magenta';
     fill = colour;
-  } else if (conn.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+  } else if (conn.type == Blockly.ConnectionTypes.NEXT_STATEMENT) {
     size = 4;
     colour = 'goldenrod';
     fill = 'none';
-  } else if (conn.type == Blockly.connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (conn.type == Blockly.ConnectionTypes.PREVIOUS_STATEMENT) {
     size = 2;
     colour = 'goldenrod';
     fill = colour;

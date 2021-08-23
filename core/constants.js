@@ -12,7 +12,7 @@
 
 goog.provide('Blockly.constants');
 
-goog.require('Blockly.connectionTypes');
+goog.require('Blockly.ConnectionTypes');
 
 
 /**
@@ -152,14 +152,14 @@ Blockly.DRAG_FREE = 2;
  * @const
  */
 Blockly.OPPOSITE_TYPE = [];
-Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.INPUT_VALUE] =
-    Blockly.connectionTypes.OUTPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.OUTPUT_VALUE] =
-    Blockly.connectionTypes.INPUT_VALUE;
-Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.NEXT_STATEMENT] =
-    Blockly.connectionTypes.PREVIOUS_STATEMENT;
-Blockly.OPPOSITE_TYPE[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
-    Blockly.connectionTypes.NEXT_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.ConnectionTypes.INPUT_VALUE] =
+    Blockly.ConnectionTypes.OUTPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.ConnectionTypes.OUTPUT_VALUE] =
+    Blockly.ConnectionTypes.INPUT_VALUE;
+Blockly.OPPOSITE_TYPE[Blockly.ConnectionTypes.NEXT_STATEMENT] =
+    Blockly.ConnectionTypes.PREVIOUS_STATEMENT;
+Blockly.OPPOSITE_TYPE[Blockly.ConnectionTypes.PREVIOUS_STATEMENT] =
+    Blockly.ConnectionTypes.NEXT_STATEMENT;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.

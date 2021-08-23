@@ -773,8 +773,11 @@ Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
     var blockShadow = Blockly.serialization.blocks.loadInternal(
         shadowState,
         parentBlock.workspace,
-        attemptToConnect ? this : undefined,
-        true);
+        {
+          parentConnection: attemptToConnect ? this : undefined,
+          isShadow: true,
+          recordUndo: false,
+        });
     return blockShadow;
   }
   

@@ -51,9 +51,6 @@ exports.ConnectionState = ConnectionState;
  *     y: (number|undefined),
  *     collapsed: (boolean|undefined),
  *     disabled: (boolean|undefined),
- *     editable: (boolean|undefined),
- *     deletable: (boolean|undefined),
- *     movable: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: *,
@@ -118,7 +115,7 @@ exports.save = save;
 
 /**
  * Adds attributes to the given state object based on the state of the block.
- * Eg collapsed, disabled, editable, etc.
+ * Eg collapsed, disabled, inline, etc.
  * @param {!Block} block The block to base the attributes on.
  * @param {!State} state The state object to append to.
  */
@@ -129,21 +126,10 @@ const saveAttributes = function(block, state) {
   if (!block.isEnabled()) {
     state['enabled'] = false;
   }
-  if (!block.isEditable()) {
-    state['editable'] = false;
-  }
-  if (!block.isDeletable() && !block.isShadow()) {
-    state['deletable'] = false;
-  }
-  if (!block.isMovable() && !block.isShadow()) {
-    state['movable'] = false;
-  }
-
   if (block.inputsInline !== undefined &&
       block.inputsInline !== block.inputsInlineDefault) {
     state['inline'] = block.inputsInline;
   }
-
   // Data is a nullable string, so we don't need to worry about falsy values.
   if (block.data) {
     state['data'] = block.data;
@@ -382,15 +368,6 @@ const loadAttributes = function(block, state) {
   }
   if (state['enabled'] === false) {
     block.setEnabled(false);
-  }
-  if (state['editable'] === false) {
-    block.setEditable(false);
-  }
-  if (state['deletable'] === false) {
-    block.setDeletable(false);
-  }
-  if (state['movable'] === false) {
-    block.setMovable(false);
   }
   if (state['inline'] !== undefined) {
     block.setInputsInline(state['inline']);

@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Classes for all comment events.
+ * @fileoverview Class for comment move event.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';

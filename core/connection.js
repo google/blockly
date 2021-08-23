@@ -781,12 +781,23 @@ Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   if (shadowDom) {
     blockShadow = Blockly.Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {
-      if (blockShadow.outputConnection) {
-        this.connect(blockShadow.outputConnection);
-      } else if (blockShadow.previousConnection) {
-        this.connect(blockShadow.previousConnection);
+      if (this.type == Blockly.connectionTypes.INPUT_VALUE) {
+        if (!blockShadow.outputConnection) {
+          throw new Error('Shadow block is missing an output connection');
+        }
+        if (!this.connect(blockShadow.outputConnection)) {
+          throw new Error('Could not connect shadow block to connection');
+        }
+      } else if (this.type == Blockly.connectionTypes.NEXT_STATEMENT) {
+        if (!blockShadow.previousConnection) {
+          throw new Error('Shadow block is missing previous connection');
+        }
+        if (!this.connect(blockShadow.previousConnection)) {
+          throw new Error('Could not connect shadow block to connection');
+        }
       } else {
-        throw Error('Shadow block does not have output or previous statement.');
+        throw new Error(
+            'Cannot connect a shadow block to a previous/output connection');
       }
     }
     return blockShadow;

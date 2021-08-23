@@ -1296,6 +1296,56 @@ suite('Connection', function() {
               assertNextNotHasBlock(parent);
             });
           });
+
+          suite('Invalid', function() {
+            test('Attach to output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="row_block">')));
+            });
+
+            test('Attach to previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_block">')));
+            });
+
+            test('Missing output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_block">')));
+            });
+
+            test('Missing previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="row_block">')));
+            });
+
+            test('Invalid connection checks, output', function() {
+              const block = this.workspace.newBlock('logic_operation');
+              chai.assert.throws(() =>
+                block.getInput('A').connection.setShadowDom(
+                    Blockly.Xml.textToDom('<block type="stack_block">')));
+            });
+
+            test('Invalid connection checks, previous', function() {
+              Blockly.defineBlocksWithJsonArray([{
+                "type": "stack_checks_block",
+                "message0": "",
+                "previousStatement": "check 1",
+                "nextStatement": "check 2"
+              }]);
+              const block = this.workspace.newBlock('stack_checks_block');
+              chai.assert.throws(() =>
+                block.nextConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_checks_block">')));
+            });
+          });
         });
 
         suite('setShadowState', function() {
@@ -2514,6 +2564,53 @@ suite('Connection', function() {
               assertNextHasBlock(parent.getNextBlock(), true);
               parent.nextConnection.setShadowState(null);
               assertNextNotHasBlock(parent);
+            });
+          });
+
+          suite('Invalid', function() {
+            test('Attach to output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowState({'type': 'row_block'}));
+            });
+
+            test('Attach to previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowState(
+                    {'type': 'stack_block'}));
+            });
+
+            test('Missing output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowState({'type': 'stack_block'}));
+            });
+
+            test('Missing previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowState({'type': 'row_block'}));
+            });
+
+            test('Invalid connection checks, output', function() {
+              const block = this.workspace.newBlock('logic_operation');
+              chai.assert.throws(() =>
+                block.getInput('A').connection.setShadowState(
+                    {'type': 'math_number'}));
+            });
+
+            test('Invalid connection checks, previous', function() {
+              Blockly.defineBlocksWithJsonArray([{
+                "type": "stack_checks_block",
+                "message0": "",
+                "previousStatement": "check 1",
+                "nextStatement": "check 2"
+              }]);
+              const block = this.workspace.newBlock('stack_checks_block');
+              chai.assert.throws(() =>
+                block.nextConnection.setShadowState(
+                    {'type': 'stack_checks_block'}));
             });
           });
         });

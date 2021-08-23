@@ -49,7 +49,7 @@ Serializer.Empty = new SerializerTestCase('Empty',
 );
 Serializer.Data = new SerializerTestCase('Data',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="logic_negate" id="id******************" editable="false" x="42" y="42">' +
+    '<block type="logic_negate" id="id******************" x="42" y="42">' +
     '<data>test data</data>' +
     '</block>' +
     '</xml>');
@@ -71,25 +71,10 @@ Serializer.Attributes.Disabled = new SerializerTestCase('Disabled',
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="logic_negate" id="id******************" disabled="true" x="42" y="42"></block>' +
     '</xml>');
-Serializer.Attributes.Deletable = new SerializerTestCase('Deletable',
-    '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="logic_negate" id="id******************" deletable="false" x="42" y="42"></block>' +
-    '</xml>');
-Serializer.Attributes.Movable = new SerializerTestCase('Movable',
-    '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="logic_negate" id="id******************" movable="false" x="42" y="42"></block>' +
-    '</xml>');
-Serializer.Attributes.Editable = new SerializerTestCase('Editable',
-    '<xml xmlns="https://developers.google.com/blockly/xml">' +
-    '<block type="logic_negate" id="id******************" editable="false" x="42" y="42"></block>' +
-    '</xml>');
 Serializer.Attributes.testCases = [
   Serializer.Attributes.Basic,
   Serializer.Attributes.Collapsed,
   Serializer.Attributes.Disabled,
-  Serializer.Attributes.Deletable,
-  Serializer.Attributes.Movable,
-  Serializer.Attributes.Editable,
 ];
 
 Serializer.Attributes.Inline = new SerializerTestSuite('Inline');

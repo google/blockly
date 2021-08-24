@@ -30,7 +30,7 @@ const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const Row = goog.requireType('Blockly.blockRendering.Row');
 const Svg = goog.require('Blockly.utils.Svg');
 const Types = goog.require('Blockly.blockRendering.Types');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const dom = goog.require('Blockly.utils.dom');
 
 

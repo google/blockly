@@ -30,7 +30,7 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const constants = goog.require('Blockly.constants');
 const internalConstants = goog.require('Blockly.internalConstants');
 

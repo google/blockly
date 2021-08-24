@@ -28,7 +28,7 @@ const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWith
 const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 
 
 /**

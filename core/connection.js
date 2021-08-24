@@ -23,7 +23,7 @@ const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const deprecation = goog.require('Blockly.utils.deprecation');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');

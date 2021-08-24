@@ -18,7 +18,7 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 

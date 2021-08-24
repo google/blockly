@@ -31,7 +31,7 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const object = goog.require('Blockly.utils.object');
 
 

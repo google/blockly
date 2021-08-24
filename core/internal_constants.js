@@ -15,7 +15,7 @@
 goog.module('Blockly.internalConstants');
 goog.module.declareLegacyNamespace();
 
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 
 
 /**

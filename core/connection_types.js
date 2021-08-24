@@ -11,7 +11,7 @@
 
 'use strict';
 
-goog.module('Blockly.connectionTypes');
+goog.module('
 goog.module.declareLegacyNamespace();
 
 /**

@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const Svg = goog.require('Blockly.utils.Svg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');

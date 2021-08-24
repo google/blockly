@@ -38,7 +38,7 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const inputTypes = goog.require('Blockly.inputTypes');

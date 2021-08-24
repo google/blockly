@@ -14,7 +14,7 @@
 goog.module('Blockly.inputTypes');
 goog.module.declareLegacyNamespace();
 
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 
 /**
  * Enum for the type of a connection or input.

@@ -33,7 +33,7 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /** @suppress {extraRequire} */

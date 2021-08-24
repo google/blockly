@@ -19,7 +19,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const connectionTypes = goog.require('
 const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');

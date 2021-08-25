@@ -2094,22 +2094,22 @@ declare module Blockly {
     var ALIGN_RIGHT: any /*missing*/;
 
     /**
-     * @see 
+     * @see Blockly.connectionTypes.INPUT_VALUE
      */
     var INPUT_VALUE: any /*missing*/;
 
     /**
-     * @see 
+     * @see Blockly.connectionTypes.OUTPUT_VALUE
      */
     var OUTPUT_VALUE: any /*missing*/;
 
     /**
-     * @see 
+     * @see Blockly.connectionTypes.NEXT_STATEMENT
      */
     var NEXT_STATEMENT: any /*missing*/;
 
     /**
-     * @see 
+     * @see Blockly.connectionTypes.PREVIOUS_STATEMENT 
      */
     var PREVIOUS_STATEMENT: any /*missing*/;
 

@@ -23,7 +23,7 @@ const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
-const connectionTypes = goog.require('
+const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -294,8 +294,8 @@ RenderedConnection.prototype.highlight = function() {
   const sourceBlockSvg = /** @type {!BlockSvg} */ (this.sourceBlock_);
   const renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
   const shape = renderConstants.shapeFor(this);
-  if (this.type == connectionTypes.INPUT_VALUE ||
-      this.type == connectionTypes.OUTPUT_VALUE) {
+  if (this.type == ConnectionTypes.INPUT_VALUE ||
+      this.type == ConnectionTypes.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
     steps = utils.svgPaths.moveBy(0, -yLen) +
@@ -397,8 +397,8 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   const renderList = [];
-  if (this.type != connectionTypes.INPUT_VALUE &&
-      this.type != connectionTypes.NEXT_STATEMENT) {
+  if (this.type !=ConnectionTypes.INPUT_VALUE &&
+      this.type != ConnectionTypes.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
@@ -550,8 +550,8 @@ RenderedConnection.prototype.connect_ = function(childConnection) {
     childBlock.updateDisabled();
   }
   if (parentRendered && childRendered) {
-    if (parentConnection.type == connectionTypes.NEXT_STATEMENT ||
-        parentConnection.type == connectionTypes.PREVIOUS_STATEMENT) {
+    if (parentConnection.type == ConnectionTypes.NEXT_STATEMENT ||
+        parentConnection.type == ConnectionTypes.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
       // Rendering a child will render its parent.
       childBlock.render();

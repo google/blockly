@@ -19,7 +19,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
-const connectionTypes = goog.require('
+const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -958,11 +958,11 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
  */
 ConstantProvider.prototype.shapeFor = function(connection) {
   switch (connection.type) {
-    case connectionTypes.INPUT_VALUE:
-    case connectionTypes.OUTPUT_VALUE:
+    case ConnectionTypes.INPUT_VALUE:
+    case ConnectionTypes.OUTPUT_VALUE:
       return this.PUZZLE_TAB;
-    case connectionTypes.PREVIOUS_STATEMENT:
-    case connectionTypes.NEXT_STATEMENT:
+    case ConnectionTypes.PREVIOUS_STATEMENT:
+    case ConnectionTypes.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown connection type');

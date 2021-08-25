@@ -18,7 +18,7 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
-const connectionTypes = goog.require('
+const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -172,7 +172,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == ConnectionTypes.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

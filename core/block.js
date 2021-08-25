@@ -38,7 +38,7 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('
+const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const inputTypes = goog.require('Blockly.inputTypes');
@@ -507,7 +507,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == connectionTypes.INPUT_VALUE &&
+    if (thisConnection && thisConnection.type == ConnectionTypes.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -672,7 +672,7 @@ Block.prototype.getPreviousBlock = function() {
 Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == connectionTypes.NEXT_STATEMENT) {
+        input.connection.type == ConnectionTypes.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -1170,7 +1170,7 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(connectionTypes.PREVIOUS_STATEMENT);
+          this.makeConnection_(ConnectionTypes.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1199,7 +1199,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     }
     if (!this.nextConnection) {
       this.nextConnection =
-          this.makeConnection_(connectionTypes.NEXT_STATEMENT);
+          this.makeConnection_(ConnectionTypes.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1234,7 +1234,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
             'connection.');
       }
       this.outputConnection =
-          this.makeConnection_(connectionTypes.OUTPUT_VALUE);
+          this.makeConnection_(ConnectionTypes.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {

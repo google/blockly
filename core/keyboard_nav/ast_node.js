@@ -28,7 +28,7 @@ const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWith
 const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('
+const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 
 
 /**
@@ -155,16 +155,16 @@ ASTNode.createConnectionNode = function(connection) {
     return null;
   }
   const type = connection.type;
-  if (type == connectionTypes.INPUT_VALUE) {
+  if (type == ConnectionTypes.INPUT_VALUE) {
     return ASTNode.createInputNode(connection.getParentInput());
   } else if (
-      type == connectionTypes.NEXT_STATEMENT && connection.getParentInput()) {
+      type == ConnectionTypes.NEXT_STATEMENT && connection.getParentInput()) {
     return ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == connectionTypes.NEXT_STATEMENT) {
+  } else if (type == ConnectionTypes.NEXT_STATEMENT) {
     return new ASTNode(ASTNode.types.NEXT, connection);
-  } else if (type == connectionTypes.OUTPUT_VALUE) {
+  } else if (type == ConnectionTypes.OUTPUT_VALUE) {
     return new ASTNode(ASTNode.types.OUTPUT, connection);
-  } else if (type == connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (type == ConnectionTypes.PREVIOUS_STATEMENT) {
     return new ASTNode(ASTNode.types.PREVIOUS, connection);
   }
   return null;

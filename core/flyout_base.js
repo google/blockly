@@ -679,7 +679,7 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
         blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
       }
-      block = Blockly.serialization.blocks.load(
+      block = Blockly.serialization.blocks.append(
           /** @type {Blockly.serialization.blocks.State} */ (blockInfo),
           this.workspace_);
     }
@@ -1068,7 +1068,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
   targetWorkspace.setResizesEnabled(false);
   var block = /** @type {!Blockly.BlockSvg} */
-      (Blockly.serialization.blocks.load(json, targetWorkspace));
+      (Blockly.serialization.blocks.append(json, targetWorkspace));
 
   this.positionNewBlock_(oldBlock, block);
 

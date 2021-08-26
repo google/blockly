@@ -301,10 +301,10 @@ const saveConnection = function(connection, doFullSerialization) {
  *       by the user. False by default.
  * @return {!Block} The block that was just loaded.
  */
-const load = function(state, workspace, {recordUndo = false} = {}) {
-  return loadInternal(state, workspace, {recordUndo});
+const append = function(state, workspace, {recordUndo = false} = {}) {
+  return appendInternal(state, workspace, {recordUndo});
 };
-exports.load = load;
+exports.append = append;
 
 /**
  * Loads the block represented by the given state into the given workspace.
@@ -322,9 +322,9 @@ exports.load = load;
  *       False by default.
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
- * @return {!Block} The block that was just loaded.
+ * @return {!Block} The block that was just appended.
  */
-const loadInternal = function(
+const appendInternal = function(
     state,
     workspace,
     {
@@ -341,7 +341,7 @@ const loadInternal = function(
   }
   Events.disable();
 
-  const block = loadPrivate(state, workspace, {parentConnection, isShadow});
+  const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
   Events.enable();
   Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
@@ -361,13 +361,13 @@ const loadInternal = function(
   return block;
 };
 /** @package */
-exports.loadInternal = loadInternal;
+exports.appendInternal = appendInternal;
 
 /**
  * Loads the block represented by the given state into the given workspace.
  * This is defined privately so that it can be called recursively without firing
  * eroneous events. Events (and other things we only want to occur on the top
- * block) are handled by loadInternal.
+ * block) are handled by appendInternal.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
  * @param {{parentConnection: (!Connection|undefined), isShadow:
@@ -376,9 +376,9 @@ exports.loadInternal = loadInternal;
  *       block to this connection after it is created. Undefined by default.
  *     isShadow: The block will be set to a shadow block after it is created.
  *       False by default.
- * @return {!Block} The block that was just loaded.
+ * @return {!Block} The block that was just appended.
  */
-const loadPrivate = function(
+const appendPrivate = function(
     state,
     workspace,
     {
@@ -601,7 +601,7 @@ const loadConnection = function(connection, connectionState) {
     connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
-    loadPrivate(
+    appendPrivate(
         connectionState['block'],
         connection.getSourceBlock().workspace,
         {parentConnection: connection});
@@ -627,9 +627,8 @@ const initBlock = function(block, rendered) {
   }
 };
 
-// Aliases to disambiguate saving/loading within the serializer.
+// Alias to disambiguate saving within the serializer.
 const saveBlock = save;
-const loadBlock = load;
 
 /**
  * Serializer for saving and loading block state.
@@ -678,7 +677,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      loadBlock(state, workspace, {recordUndo: Events.recordUndo});
+      append(state, workspace, {recordUndo: Events.recordUndo});
     }
   }
 

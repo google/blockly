@@ -311,7 +311,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    Blockly.serialization.blocks.load(this.json, workspace);
+    Blockly.serialization.blocks.append(this.json, workspace);
   } else {
     for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
@@ -428,7 +428,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    Blockly.serialization.blocks.load(this.oldJson, workspace);
+    Blockly.serialization.blocks.append(this.oldJson, workspace);
   }
 };
 

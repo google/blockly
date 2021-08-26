@@ -172,12 +172,12 @@ FieldDropdown.prototype.fromXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {string} The dropdown value held by this field.
+ * @return {*} The dropdown value held by this field.
  * @override
  * @package
  */
 FieldDropdown.prototype.saveState = function() {
-  return /** @type {string} */ (this.getValue());
+  return this.getValue();
 };
 
 /**

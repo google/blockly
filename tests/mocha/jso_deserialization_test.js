@@ -80,7 +80,9 @@ suite('JSO Deserialization', function() {
                 'x': 42,
                 'y': 42,
                 'fields': {
-                  'VAR': 'testId'
+                  'VAR': {
+                    'id': 'testId'
+                  }
                 }
               },
             ]
@@ -196,7 +198,9 @@ suite('JSO Deserialization', function() {
                 'x': 42,
                 'y': 42,
                 'fields': {
-                  'VAR': 'testId'
+                  'VAR': {
+                    'id': 'testId'
+                  }
                 }
               },
             ]

@@ -362,7 +362,7 @@ exports.getCallers = getCallers;
  * @param {!Block} defBlock Procedure definition block.
  */
 const mutateCallers = function(defBlock) {
-  const oldRecordUndo = Events.recordUndo;
+  const oldRecordUndo = Events.getRecordUndo();
   const procedureBlock = /** @type {!ProcedureBlock} */ (defBlock);
   const name = procedureBlock.getProcedureDef()[0];
   const xmlElement = defBlock.mutationToDom(true);
@@ -377,10 +377,10 @@ const mutateCallers = function(defBlock) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
-      Events.recordUndo = false;
+      Events.setRecordUndo(false);
       Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
           caller, 'mutation', null, oldMutation, newMutation));
-      Events.recordUndo = oldRecordUndo;
+      Events.setRecordUndo(oldRecordUndo);
     }
   }
 };

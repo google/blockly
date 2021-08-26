@@ -34,7 +34,7 @@ goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es6', 'mo
 goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.BlockSvg', 'Blockly.DragTarget', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/dropdowndiv.js', ['Blockly.DropDownDiv'], ['Blockly.common', 'Blockly.utils.Rect', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.style'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/events/events.js', ['Blockly.Events'], ['Blockly.registry', 'Blockly.utils']);
+goog.addDependency('../../core/events/events.js', ['Blockly.Events'], ['Blockly.registry', 'Blockly.utils', 'Blockly.utils.deprecation'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_abstract.js', ['Blockly.Events.Abstract'], ['Blockly.Events'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_block_base.js', ['Blockly.Events.BlockBase'], ['Blockly.Events.Abstract', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/events/events_block_change.js', ['Blockly.Events.BlockChange'], ['Blockly.Events', 'Blockly.Xml', 'Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});

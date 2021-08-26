@@ -458,7 +458,7 @@ RenderedConnection.prototype.isConnectionAllowed = function(
  */
 RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
   const block = this.getSourceBlock();
-  if (Events.recordUndo) {
+  if (Events.getRecordUndo()) {
     const group = Events.getGroup();
     setTimeout(function() {
       if (!block.isDisposed() && !block.getParent()) {

@@ -675,8 +675,8 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
   } else {
     block = this.getRecycledBlock_(blockInfo['type']);
     if (!block) {
-      blockInfo['disabled'] =
-          blockInfo['disabled'] || blockInfo['disabled'] == true;
+      blockInfo['enabled'] =
+          blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
       block = Blockly.serialization.blocks.load(
           /** @type {Blockly.serialization.blocks.State} */ (blockInfo),
           this.workspace_);
@@ -697,11 +697,16 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
  * @param {string} blockType The type of the block to try to recycle.
  * @return {(!Blockly.BlockSvg|undefined)} The recycled block, or undefined if
  *     one could not be recycled.
+ * @private
  */
 Blockly.Flyout.prototype.getRecycledBlock_ = function(blockType) {
-  var index = this.recycledBlocks_.findIndex(function(block) {
-    return block.type === blockType;
-  });
+  var index = -1;
+  for (var i = 0; i < this.recycledBlocks_.length; i++) {
+    if (this.recycledBlocks_[i].type == blockType) {
+      index = i;
+      break;
+    }
+  }
   return index == -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
 };
 
@@ -711,6 +716,7 @@ Blockly.Flyout.prototype.getRecycledBlock_ = function(blockType) {
  *     block.
  * @param {!Array<number>} gaps The list of gaps between items in the flyout.
  * @param {number} defaultGap The default gap between one element and the next.
+ * @private
  */
 Blockly.Flyout.prototype.addBlockGap_ = function(blockInfo, gaps, defaultGap) {
   var gap;
@@ -781,7 +787,7 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
 };
 
 /**
- * Empties all of the recycld blocks, properly disposing of them.
+ * Empties all of the recycled blocks, properly disposing of them.
  * @private
  */
 Blockly.Flyout.prototype.emptyRecycledBlocks_ = function() {

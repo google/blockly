@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite.only('Flyout', function() {
+suite('Flyout', function() {
   setup(function() {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
@@ -340,6 +340,148 @@ suite.only('Flyout', function() {
     });
   });
 
+  suite('Creating blocks', function() {
+    suite('Disabled', function() {
+      setup(function() {
+        this.flyout = this.workspace.getFlyout();
+
+        this.assertDisabled = function(disabled) {
+          var block = this.flyout.getWorkspace().getTopBlocks(false)[0];
+          chai.assert.equal(!block.isEnabled(), disabled);
+        };
+      });
+
+      suite('XML', function() {
+        test('True string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="true"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(true);
+        });
+
+        test('False string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="false"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled string', function() {
+          // The XML system supports this for some reason!?
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="disabled"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(true);
+        });
+
+        test('Different string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="random"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(false);
+        });
+      });
+
+      suite('JSON', function() {
+        test('True string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'true'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('False string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'false'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'disabled'  // This is not respected by the JSON!
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('True value', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': true
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('False value', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': false
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Different string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'random'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Empty string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': ''
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+      });
+    });
+  });
+
   suite('Recycling', function() {
     setup(function() {
       this.flyout = this.workspace.getFlyout();
@@ -369,7 +511,6 @@ suite.only('Flyout', function() {
         ]
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
-      console.log(block);
       chai.assert.equal(block.getFieldValue('NUM'), 321);
     });
 

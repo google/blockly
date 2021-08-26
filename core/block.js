@@ -224,14 +224,14 @@ const Block = function(workspace, prototypeName, opt_id) {
   if (!existingGroup) {
     Events.setGroup(true);
   }
-  const initialUndoFlag = Events.recordUndo;
+  const initialUndoFlag = Events.getRecordUndo();
 
   try {
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      Events.recordUndo = false;
+      Events.setRecordUndo(false);
       this.init();
-      Events.recordUndo = initialUndoFlag;
+      Events.setRecordUndo(initialUndoFlag);
     }
 
     // Fire a create event.
@@ -244,7 +244,7 @@ const Block = function(workspace, prototypeName, opt_id) {
       Events.setGroup(false);
     }
     // In case init threw, recordUndo flag should still be reset.
-    Events.recordUndo = initialUndoFlag;
+    Events.setRecordUndo(initialUndoFlag);
   }
 
   // Record initial inline state.

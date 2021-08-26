@@ -174,7 +174,10 @@ const position_ = function(menu, e, rtl) {
  * @private
  */
 const createWidget_ = function(menu) {
-  const div = WidgetDiv.DIV;
+  const div = WidgetDiv.getDiv();
+  if (!div) {
+    throw Error('Attempting to create a context menu when widget div is null');
+  }
   menu.render(div);
   const menuDom = menu.getElement();
   dom.addClass(

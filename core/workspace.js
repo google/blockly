@@ -633,14 +633,14 @@ Workspace.prototype.undo = function(redo) {
     outputStack.push(event);
   }
   events = Events.filter(events, redo);
-  Events.recordUndo = false;
+  Events.setRecordUndo(false);
   try {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       event.run(redo);
     }
   } finally {
-    Events.recordUndo = true;
+    Events.setRecordUndo(true);
   }
 };
 

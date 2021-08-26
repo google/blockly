@@ -25,6 +25,8 @@ const Size = goog.require('Blockly.utils.Size');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const inputTypes = goog.require('Blockly.inputTypes');
 const utilsXml = goog.require('Blockly.utils.xml');
@@ -433,11 +435,10 @@ const domToWorkspace = function(xml, workspace) {
   }
   let variablesFirst = true;
   try {
-    for (let i = 0; i < xml.childNodes.length; i++) {
-      const xmlChild = xml.childNodes[i];
+    for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = /** @type {!Element} */ (xmlChild);
-      if (name == 'block' || (name == 'shadow' && !Events.recordUndo)) {
+      if (name == 'block' || (name == 'shadow' && !Events.getRecordUndo())) {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
@@ -466,7 +467,7 @@ const domToWorkspace = function(xml, workspace) {
           } else {
             WorkspaceCommentSvg.fromXml(
                 xmlChildElement,
-                /** @type {!Blockly.WorkspaceSvg} */ (workspace), width);
+                /** @type {!WorkspaceSvg} */ (workspace), width);
           }
         } else {
           const WorkspaceComment = goog.module.get('Blockly.WorkspaceComment');

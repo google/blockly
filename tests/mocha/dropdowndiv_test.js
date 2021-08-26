@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+
+const DropDownDiv = goog.require('Blockly.DropDownDiv');
 suite('DropDownDiv', function() {
   suite('Positioning', function() {
     setup(function() {
       sharedTestSetup.call(this);
-      this.boundsStub = sinon.stub(Blockly.DropDownDiv, 'getBoundsInfo_')
+      this.boundsStub = sinon.stub(Blockly.DropDownDiv.TEST_ONLY, 'getBoundsInfo')
           .returns({
             left: 0,
             right: 100,
@@ -31,7 +33,7 @@ suite('DropDownDiv', function() {
       sharedTestTeardown.call(this);
     });
     test('Below, in Bounds', function() {
-      var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 0, 50, -10);
+      var metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 0, 50, -10);
       // "Above" in value actually means below in render.
       chai.assert.isAtLeast(metrics.initialY, 0);
       chai.assert.isAbove(metrics.finalY, 0);
@@ -39,7 +41,7 @@ suite('DropDownDiv', function() {
       chai.assert.isTrue(metrics.arrowAtTop);
     });
     test('Above, in Bounds', function() {
-      var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 100, 50, 90);
+      var metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 100, 50, 90);
       // "Below" in value actually means above in render.
       chai.assert.isAtMost(metrics.initialY, 100);
       chai.assert.isBelow(metrics.finalY, 100);
@@ -47,7 +49,7 @@ suite('DropDownDiv', function() {
       chai.assert.isFalse(metrics.arrowAtTop);
     });
     test('Below, out of Bounds', function() {
-      var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 60, 50, 50);
+      var metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 60, 50, 50);
       // "Above" in value actually means below in render.
       chai.assert.isAtLeast(metrics.initialY, 60);
       chai.assert.isAbove(metrics.finalY, 60);
@@ -55,7 +57,7 @@ suite('DropDownDiv', function() {
       chai.assert.isTrue(metrics.arrowAtTop);
     });
     test('Above, in Bounds', function() {
-      var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 100, 50, 90);
+      var metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 100, 50, 90);
       // "Below" in value actually means above in render.
       chai.assert.isAtMost(metrics.initialY, 100);
       chai.assert.isBelow(metrics.finalY, 100);
@@ -64,7 +66,7 @@ suite('DropDownDiv', function() {
     });
     test('No Solution, Render At Top', function() {
       this.clientHeightStub.get(function() { return 100; });
-      var metrics = Blockly.DropDownDiv.getPositionMetrics_(50, 60, 50, 50);
+      var metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 60, 50, 50);
       // "Above" in value actually means below in render.
       chai.assert.equal(metrics.initialY, 0);
       chai.assert.equal(metrics.finalY, 0);

@@ -196,7 +196,7 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {{id: string}} The id of the variable referenced by this field.
+ * @return {{id: string}} The ID of the variable referenced by this field.
  * @override
  * @package
  */

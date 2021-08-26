@@ -186,26 +186,6 @@ Blockly.FieldColour.prototype.initView = function() {
 };
 
 /**
- * Saves this field's value.
- * @return {string} The colour value held by this field.
- * @override
- * @package
- */
-Blockly.FieldColour.prototype.saveState = function() {
-  return /** @type {string} */ (this.getValue());
-};
-
-/**
- * Sets the field's value based on the given state.
- * @param {*} state The state to apply to the colour field.
- * @override
- * @package
- */
-Blockly.FieldColour.prototype.loadState = function(state) {
-  this.setValue(state);
-};
-
-/**
  * @override
  */
 Blockly.FieldColour.prototype.applyColour = function() {

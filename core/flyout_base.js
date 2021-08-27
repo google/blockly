@@ -1059,20 +1059,22 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     throw Error('oldBlock is not rendered.');
   }
 
-  // Create the new block by cloning the block in the flyout (via XML).
-  // This cast assumes that the oldBlock can not be an insertion marker.
-  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(oldBlock, true));
-  // The target workspace would normally resize during domToBlock, which will
-  // lead to weird jumps.  Save it for terminateDrag.
-  targetWorkspace.setResizesEnabled(false);
-
-  // Using domToBlock instead of domToWorkspace means that the new block will be
-  // placed at position (0, 0) in main workspace units.
-  var block = /** @type {!Blockly.BlockSvg} */
-      (Blockly.Xml.domToBlock(xml, targetWorkspace));
-  var svgRootNew = block.getSvgRoot();
-  if (!svgRootNew) {
-    throw Error('block is not rendered.');
+  if (oldBlock.mutationToDom && !oldBlock.saveExtraState) {
+    // Create the new block by cloning the block in the flyout (via XML).
+    // This cast assumes that the oldBlock can not be an insertion marker.
+    var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(oldBlock, true));
+    // The target workspace would normally resize during domToBlock, which will
+    // lead to weird jumps.  Save it for terminateDrag.
+    targetWorkspace.setResizesEnabled(false);
+    // Using domToBlock instead of domToWorkspace means that the new block will be
+    // placed at position (0, 0) in main workspace units.
+    var block = /** @type {!Blockly.BlockSvg} */
+        (Blockly.Xml.domToBlock(xml, targetWorkspace));
+  } else {
+    var json = Blockly.serialization.blocks.save(oldBlock);
+    targetWorkspace.setResizesEnabled(false);
+    var block = /** @type {!Blockly.BlockSvg} */
+        (Blockly.serialization.blocks.load(json, targetWorkspace));
   }
 
   // The offset in pixels between the main workspace's origin and the upper left

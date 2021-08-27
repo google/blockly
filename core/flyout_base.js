@@ -1071,7 +1071,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     var block = /** @type {!Blockly.BlockSvg} */
         (Blockly.Xml.domToBlock(xml, targetWorkspace));
   } else {
-    var json = Blockly.serialization.blocks.save(oldBlock);
+    var json = /** @type {!Blockly.serialization.blocks.State} */
+        (Blockly.serialization.blocks.save(oldBlock));
     targetWorkspace.setResizesEnabled(false);
     var block = /** @type {!Blockly.BlockSvg} */
         (Blockly.serialization.blocks.load(json, targetWorkspace));

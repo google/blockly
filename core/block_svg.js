@@ -963,18 +963,28 @@ Blockly.BlockSvg.prototype.toCopyData = function() {
   if (this.isInsertionMarker_) {
     return null;
   }
-  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
-  // Copy only the selected block and internal blocks.
-  Blockly.Xml.deleteNext(xml);
-  // Encode start position in XML.
-  var xy = this.getRelativeToSurfaceXY();
-  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
-  xml.setAttribute('y', xy.y);
-  return {
-    xml: xml,
-    source: this.workspace,
-    typeCounts: Blockly.utils.getBlockTypeCounts(this, true)
-  };
+  if (this.mutationToDom && !this.saveExtraState) {
+    var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
+    // Copy only the selected block and internal blocks.
+    Blockly.Xml.deleteNext(xml);
+    // Encode start position in XML.
+    var xy = this.getRelativeToSurfaceXY();
+    xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
+    xml.setAttribute('y', xy.y);
+    return {
+      saveInfo: xml,
+      source: this.workspace,
+      typeCounts: Blockly.utils.getBlockTypeCounts(this, true)
+    };
+  } else {
+    return {
+      saveInfo: /** @type {!Blockly.serialization.blocks.State} */
+          (Blockly.serialization.blocks.save(
+              this, {addCoordinates: true, addNextBlocks: false})),
+      source: this.workspace,
+      typeCounts: Blockly.utils.getBlockTypeCounts(this, true)
+    };
+  }
 };
 
 /**

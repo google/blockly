@@ -26,15 +26,17 @@ Blockly.ICopyable = function() {};
 /**
  * Encode for copying.
  * @return {?Blockly.ICopyable.CopyData} Copy metadata.
+ * @package
  */
 Blockly.ICopyable.prototype.toCopyData;
 
 /**
  * Copy Metadata.
  * @typedef {{
- *            xml:!Element,
+ *            saveInfo:(!Object|!Element),
  *            source:Blockly.WorkspaceSvg,
  *            typeCounts:?Object
  *          }}
+ * @package
  */
 Blockly.ICopyable.CopyData;

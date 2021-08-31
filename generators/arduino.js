@@ -89,6 +89,7 @@ Blockly.Arduino.DEF_FUNC_NAME = Blockly.Arduino.FUNCTION_NAME_PLACEHOLDER_;
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Arduino.init = function(workspace) {
+  
   // Create a dictionary of definitions to be printed at the top of the sketch
   Blockly.Arduino.includes_ = Object.create(null);
   // Create a dictionary of global definitions to be printed after variables
@@ -113,6 +114,8 @@ Blockly.Arduino.init = function(workspace) {
   } else {
     Blockly.Arduino.variableDB_.reset();
   }
+
+  Blockly.Arduino.variableDB_.setVariableMap(workspace.getVariableMap());
 
   // Iterate through to capture all blocks types and set the function arguments
   var varsWithTypes = Blockly.Arduino.StaticTyping.collectVarsWithTypes(workspace);

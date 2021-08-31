@@ -45,7 +45,7 @@ Blockly.Arduino['procedures_defreturn'] = function(block) {
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
     args[x] =
-        Blockly.Arduino.getArduinoType_(block.getArgType(block.arguments_[x])) +
+        'double' +
         ' ' +
         Blockly.Arduino.variableDB_.getName(block.arguments_[x],
             Blockly.Variables.NAME_TYPE);

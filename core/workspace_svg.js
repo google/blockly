@@ -1801,7 +1801,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
 
-  // Zoom should also be enabled by the command key on Mac devices.
+  // Zoom should also be enabled by the command key on Mac devices,
+  // but not super on Unix.
   var commandKey;
   if (Blockly.utils.userAgent.MAC) {
     commandKey = e.metaKey;

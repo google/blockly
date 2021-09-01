@@ -1800,7 +1800,14 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   }
 
   var scrollDelta = Blockly.utils.getScrollDeltaPixels(e);
-  if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
+
+  // Zoom should also be enabled by the command key on Mac devices.
+  var commandKey;
+  if (Blockly.utils.userAgent.MAC) {
+    commandKey = e.metaKey;
+  }
+
+  if (canWheelZoom && (e.ctrlKey || commandKey || !canWheelMove)) {
     // Zoom.
     // The vertical scroll distance that corresponds to a click of a zoom
     // button.

@@ -15,6 +15,7 @@
 goog.provide('Blockly.ThemeManager');
 
 goog.require('Blockly.Theme');
+goog.require('Blockly.utils');
 
 goog.requireType('Blockly.Workspace');
 goog.requireType('Blockly.WorkspaceSvg');
@@ -129,11 +130,9 @@ Blockly.ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @package
  */
 Blockly.ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
-  var index = this.subscribedWorkspaces_.indexOf(workspace);
-  if (index < 0) {
+  if (!Blockly.utils.arrayRemove(this.subscribedWorkspaces_, workspace)) {
     throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
   }
-  this.subscribedWorkspaces_.splice(index, 1);
 };
 
 /**

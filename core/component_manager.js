@@ -13,6 +13,8 @@
 
 goog.provide('Blockly.ComponentManager');
 
+goog.require('Blockly.utils');
+
 goog.requireType('Blockly.IAutoHideable');
 goog.requireType('Blockly.IComponent');
 goog.requireType('Blockly.IDeleteArea');
@@ -93,8 +95,7 @@ Blockly.ComponentManager.prototype.removeComponent = function(id) {
   }
   for (var i = 0; i < componentInfo.capabilities.length; i++) {
     var capability = String(componentInfo.capabilities[i]).toLowerCase();
-    this.capabilityToComponentIds_[capability].splice(
-        this.capabilityToComponentIds_[capability].indexOf(id), 1);
+    Blockly.utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
   }
   delete this.componentData_[id];
 };
@@ -139,10 +140,8 @@ Blockly.ComponentManager.prototype.removeCapability = function(id, capability) {
     return;
   }
   capability = String(capability).toLowerCase();
-  this.componentData_[id].capabilities.splice(
-      this.componentData_[id].capabilities.indexOf(capability), 1);
-  this.capabilityToComponentIds_[capability].splice(
-      this.capabilityToComponentIds_[capability].indexOf(id), 1);
+  Blockly.utils.arrayRemove(this.componentData_[id].capabilities, capability);
+  Blockly.utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
 };
 
 /**

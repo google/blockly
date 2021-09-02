@@ -201,6 +201,16 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldVariable.prototype.saveState = function() {
+  if (Blockly.FieldVariable.prototype.saveState === this.saveState &&
+      Blockly.FieldVariable.prototype.toXml !== this.toXml) {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    var text = Blockly.Xml.domToText(this.toXml(elem));
+    return text.replace(
+        'xmlns="https://developers.google.com/blockly/xml" ', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
   // Make sure the variable is initialized.
   this.initModel();
   return {
@@ -215,6 +225,13 @@ Blockly.FieldVariable.prototype.saveState = function() {
  * @package
  */
 Blockly.FieldVariable.prototype.loadState = function(state) {
+  if (Blockly.FieldVariable.prototype.loadState === this.loadState &&
+      Blockly.FieldVariable.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Blockly.Xml.textToDom(state));
+    return;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
   // This is necessary so that blocks in the flyout can have custom var names.
   var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace,

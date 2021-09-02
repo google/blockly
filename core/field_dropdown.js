@@ -175,6 +175,13 @@ Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldDropdown.prototype.loadState = function(state) {
+  if (Blockly.FieldDropdown.prototype.loadState === this.loadState &&
+      Blockly.FieldDropdown.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Blockly.Xml.textToDom(state));
+    return;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
   if (this.isOptionListDynamic()) {
     this.getOptions(false);
   }

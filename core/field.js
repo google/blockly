@@ -422,6 +422,16 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
  * @package
  */
 Blockly.Field.prototype.saveState = function() {
+  if (Blockly.Field.prototype.saveState === this.saveState &&
+      Blockly.Field.prototype.toXml !== this.toXml) {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    var text = Blockly.Xml.domToText(this.toXml(elem));
+    return text.replace(
+        'xmlns="https://developers.google.com/blockly/xml" ', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
   return this.getValue();
 };
 
@@ -432,6 +442,13 @@ Blockly.Field.prototype.saveState = function() {
  * @package
  */
 Blockly.Field.prototype.loadState = function(state) {
+  if (Blockly.Field.prototype.loadState === this.loadState &&
+      Blockly.Field.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Blockly.Xml.textToDom(state));
+    return;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
   this.setValue(state);
 };
 

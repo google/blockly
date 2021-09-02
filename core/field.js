@@ -458,7 +458,7 @@ Blockly.Field.prototype.saveLegacyState = function(callingClass) {
     elem.setAttribute("name", this.name || '');
     var text = Blockly.Xml.domToText(this.toXml(elem));
     return text.replace(
-        'xmlns="https://developers.google.com/blockly/xml" ', '');
+        ' xmlns="https://developers.google.com/blockly/xml"', '');
   }
   // Either they called this on purpose from their saveState, or they have
   // no implementations of either hook. Just do our thing.

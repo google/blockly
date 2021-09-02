@@ -166,7 +166,8 @@ const saveExtraState = function(block, state) {
   } else if (block.mutationToDom) {
     const extraState = block.mutationToDom();
     if (extraState !== null) {
-      state['extraState'] = Xml.domToText(extraState);
+      state['extraState'] = Xml.domToText(extraState).replace(
+          ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
   }
 };

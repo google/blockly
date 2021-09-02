@@ -487,7 +487,7 @@ suite('Toolbox', function() {
   suite('parseMethods', function() {
     setup(function() {
       this.categoryToolboxJSON = getCategoryJSON();
-      this.simpleToolboxJSON = getSimpleJSON();
+      this.simpleToolboxJSON = getSimpleJson();
     });
 
     function checkValue(actual, expected, value) {

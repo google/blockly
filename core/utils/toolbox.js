@@ -33,6 +33,7 @@ goog.requireType('Blockly.ToolboxSeparator');
  *            type:(string|undefined),
  *            gap:(string|number|undefined),
  *            disabled: (string|boolean|undefined),
+ *            enabled: (boolean|undefined),
  *            id: (string|undefined),
  *            x: (number|undefined),
  *            y: (number|undefined),

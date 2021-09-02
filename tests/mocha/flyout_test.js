@@ -341,7 +341,7 @@ suite('Flyout', function() {
   });
 
   suite('Creating blocks', function() {
-    suite('Disabled', function() {
+    suite('Enabled/Disabled', function() {
       setup(function() {
         this.flyout = this.workspace.getFlyout();
 
@@ -395,7 +395,42 @@ suite('Flyout', function() {
       });
 
       suite('JSON', function() {
-        test('True string', function() {
+        test('All undefined', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Enabled true', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'enabled': true,
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Enabled false', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'enabled': false,
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('Disabled true string', function() {
           var json = [
             {
               'kind': 'block',
@@ -407,7 +442,7 @@ suite('Flyout', function() {
           this.assertDisabled(true);
         });
 
-        test('False string', function() {
+        test('Disabled false string', function() {
           var json = [
             {
               'kind': 'block',
@@ -431,7 +466,7 @@ suite('Flyout', function() {
           this.assertDisabled(false);
         });
 
-        test('True value', function() {
+        test('Disabled true value', function() {
           var json = [
             {
               'kind': 'block',
@@ -443,7 +478,7 @@ suite('Flyout', function() {
           this.assertDisabled(true);
         });
 
-        test('False value', function() {
+        test('Disabled false value', function() {
           var json = [
             {
               'kind': 'block',
@@ -455,7 +490,7 @@ suite('Flyout', function() {
           this.assertDisabled(false);
         });
 
-        test('Different string', function() {
+        test('Disabled different string', function() {
           var json = [
             {
               'kind': 'block',
@@ -467,7 +502,7 @@ suite('Flyout', function() {
           this.assertDisabled(false);
         });
 
-        test('Empty string', function() {
+        test('Disabled empty string', function() {
           var json = [
             {
               'kind': 'block',

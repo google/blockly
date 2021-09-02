@@ -675,8 +675,10 @@ Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
   } else {
     block = this.getRecycledBlock_(blockInfo['type']);
     if (!block) {
-      blockInfo['enabled'] =
-          blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+      if (blockInfo['enabled'] === undefined) {
+        blockInfo['enabled'] =
+            blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+      }
       block = Blockly.serialization.blocks.load(
           /** @type {Blockly.serialization.blocks.State} */ (blockInfo),
           this.workspace_);

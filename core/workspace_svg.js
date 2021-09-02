@@ -200,11 +200,12 @@ const WorkspaceSvg = function(
   this.markerManager_ = new MarkerManager(this);
 
   /**
-   * Map from function names to callbacks, for deciding what to do when a custom
-   * toolbox category is opened.
-   * @type {!Object<string, ?function(!Workspace):!Array<!Element>>}
-   * @private
-   */
+  * Map from function names to callbacks, for deciding what to do when a custom
+  * toolbox category is opened.
+  * @type {!Object<string, ?function(!Workspace):
+  *     !toolbox.FlyoutDefinition>}
+  * @private
+  */
   this.toolboxCategoryCallbacks_ = Object.create(null);
 
   /**
@@ -2547,7 +2548,7 @@ WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  * custom toolbox categories in this workspace.  See the variable and procedure
  * categories as an example.
  * @param {string} key The name to use to look up this function.
- * @param {function(!Workspace):!Array<!Element>} func The function to
+ * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function to
  *     call when the given toolbox category is opened.
  */
 WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
@@ -2561,7 +2562,7 @@ WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
  * Get the callback function associated with a given key, for populating
  * custom toolbox categories in this workspace.
  * @param {string} key The name to use to look up the function.
- * @return {?function(!Workspace):!Array<!Element>} The function
+ * @return {?function(!Workspace): !toolbox.FlyoutDefinition} The function
  *     corresponding to the given key for this workspace, or null if no function
  *     is registered.
  */

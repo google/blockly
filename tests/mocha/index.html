@@ -113,12 +113,26 @@
     </script>
 
     <div id="blocklyDiv"></div>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
-      <block type="logic_operation"></block>
+      <block type="logic_compare">
+        <field name="OP">NEQ</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+      </block>
       <sep gap="20"></sep>
       <button text="insert" callbackkey="insertConnectionRows"></button>
       <label text="tooltips"></label>
     </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
       <category name="First" css-container="something">
         <block type="basic_block">
@@ -134,6 +148,7 @@
         </block>
       </category>
     </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
       <category name="First" expanded="true" categorystyle="logic_category">
         <sep gap="-1"></sep>

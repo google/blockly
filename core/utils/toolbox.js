@@ -17,6 +17,8 @@
 goog.module('Blockly.utils.toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
+const {ConnectionState} = goog.requireType('Blockly.serialization.blocks');
+/* eslint-disable-next-line no-unused-vars */
 const ToolboxCategory = goog.requireType('Blockly.ToolboxCategory');
 /* eslint-disable-next-line no-unused-vars */
 const ToolboxSeparator = goog.requireType('Blockly.ToolboxSeparator');
@@ -25,12 +27,28 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 
 /**
  * The information needed to create a block in the toolbox.
+ * Note that disabled has a different type for backwards compatibility.
  * @typedef {{
  *            kind:string,
  *            blockxml:(string|!Node|undefined),
  *            type:(string|undefined),
  *            gap:(string|number|undefined),
- *            disabled: (string|boolean|undefined)
+ *            disabled: (string|boolean|undefined),
+ *            enabled: (boolean|undefined),
+ *            id: (string|undefined),
+ *            x: (number|undefined),
+ *            y: (number|undefined),
+ *            collapsed: (boolean|undefined),
+ *            editable: (boolean|undefined),
+ *            deletable: (boolean|undefined),
+ *            movable: (boolean|undefined),
+ *            inline: (boolean|undefined),
+ *            data: (string|undefined),
+ *            extra-state: (*|undefined),
+ *            icons: (!Object<string, *>|undefined),
+ *            fields: (!Object<string, *>|undefined),
+ *            inputs: (!Object<string, !ConnectionState>|undefined),
+ *            next: (!ConnectionState|undefined)
  *          }}
  */
 let BlockInfo;

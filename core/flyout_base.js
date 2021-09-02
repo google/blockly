@@ -34,13 +34,13 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
 const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
-const utilsXml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 /** @suppress {extraRequire} */
@@ -155,6 +155,13 @@ const Flyout = function(workspaceOptions) {
    * @package
    */
   this.targetWorkspace = null;
+
+  /**
+   * A list of blocks that can be reused.
+   * @type {!Array<!BlockSvg>}
+   * @private
+   */
+  this.recycledBlocks_ = [];
 };
 object.inherits(Flyout, DeleteArea);
 
@@ -560,6 +567,7 @@ Flyout.prototype.show = function(flyoutDef) {
 
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
+  this.emptyRecycledBlocks_();
 };
 
 /**
@@ -591,15 +599,10 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK': {
-        const blockInfo = /** @type {!toolbox.BlockInfo} */ (contentInfo);
-        const blockXml = this.getBlockXml_(blockInfo);
-        const block = this.createBlock_(blockXml);
-        // This is a deprecated method for adding gap to a block.
-        // <block type="math_arithmetic" gap="8"></block>
-        const gap =
-            parseInt(blockInfo['gap'] || blockXml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? defaultGap : gap);
+        var blockInfo = /** @type {!toolbox.BlockInfo} */ (contentInfo);
+        var block = this.createFlyoutBlock_(blockInfo);
         contents.push({type: 'block', block: block});
+        this.addBlockGap_(blockInfo, gaps, defaultGap);
         break;
       }
       case 'SEP': {
@@ -630,7 +633,8 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 /**
  * Gets the flyout definition for the dynamic category.
  * @param {string} categoryName The name of the dynamic category.
- * @return {!Array<!Element>} The array of flyout items.
+ * @return {!Blockly.utils.toolbox.FlyoutDefinition} The definition of the
+ *     flyout in one of its many forms.
  * @private
  */
 Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
@@ -643,12 +647,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
         'Couldn\'t find a callback function when opening' +
         ' a toolbox category.');
   }
-  const flyoutDef = fnToApply(this.workspace_.targetWorkspace);
-  if (!Array.isArray(flyoutDef)) {
-    throw new TypeError(
-        'Result of toolbox category callback must be an array.');
-  }
-  return flyoutDef;
+  return fnToApply(this.workspace_.targetWorkspace);
 };
 
 /**
@@ -674,50 +673,77 @@ Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
 /**
  * Create a block from the xml and permanently disable any blocks that were
  * defined as disabled.
- * @param {!Element} blockXml The xml of the block.
+ * @param {!toolbox.BlockInfo} blockInfo The info of the block.
  * @return {!BlockSvg} The block created from the blockXml.
- * @protected
+ * @private
  */
-Flyout.prototype.createBlock_ = function(blockXml) {
-  const curBlock =
-      /** @type {!BlockSvg} */ (Xml.domToBlock(blockXml, this.workspace_));
-  if (!curBlock.isEnabled()) {
+Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
+  let block;
+  if (blockInfo['blockxml']) {
+    const xml = typeof blockInfo['blockxml'] === 'string' ?
+        Xml.textToDom(blockInfo['blockxml']) :
+        blockInfo['blockxml'];
+    block = this.getRecycledBlock_(xml.getAttribute('type'));
+    if (!block) {
+      block = Xml.domToBlock(xml, this.workspace_);
+    }
+  } else {
+    block = this.getRecycledBlock_(blockInfo['type']);
+    if (!block) {
+      if (blockInfo['enabled'] === undefined) {
+        blockInfo['enabled'] =
+            blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+      }
+      block = blocks.load(
+          /** @type {blocks.State} */ (blockInfo),this.workspace_);
+    }
+  }
+
+  if (!block.isEnabled()) {
     // Record blocks that were initially disabled.
     // Do not enable these blocks as a result of capacity filtering.
-    this.permanentlyDisabled_.push(curBlock);
+    this.permanentlyDisabled_.push(block);
   }
-  return curBlock;
+  return /** @type {!BlockSvg} */ (block);
 };
 
 /**
- * Get the xml from the block info object.
- * @param {!toolbox.BlockInfo}  blockInfo The object holding
- *    information about a block.
- * @return {!Element} The xml for the block.
- * @throws {Error} if the xml is not a valid block definition.
+ * Returns a block from the array of recycled blocks with the given type, or
+ * undefined if one cannot be found.
+ * @param {string} blockType The type of the block to try to recycle.
+ * @return {(!BlockSvg|undefined)} The recycled block, or undefined if
+ *     one could not be recycled.
  * @private
  */
-Flyout.prototype.getBlockXml_ = function(blockInfo) {
-  let blockElement = null;
-  const blockXml = blockInfo['blockxml'];
-
-  if (blockXml && typeof blockXml != 'string') {
-    blockElement = blockXml;
-  } else if (blockXml && typeof blockXml == 'string') {
-    blockElement = Xml.textToDom(blockXml);
-    blockInfo['blockxml'] = blockElement;
-  } else if (blockInfo['type']) {
-    blockElement = utilsXml.createElement('xml');
-    blockElement.setAttribute('type', blockInfo['type']);
-    blockElement.setAttribute('disabled', blockInfo['disabled']);
-    blockInfo['blockxml'] = blockElement;
+Flyout.prototype.getRecycledBlock_ = function(blockType) {
+  let index = -1;
+  for (let i = 0; i < this.recycledBlocks_.length; i++) {
+    if (this.recycledBlocks_[i].type == blockType) {
+      index = i;
+      break;
+    }
   }
+  return index == -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
+};
 
-  if (!blockElement) {
-    throw Error(
-        'Error: Invalid block definition. Block definition must have blockxml or type.');
+/**
+ * Adds a gap in the flyout based on block info.
+ * @param {!toolbox.BlockInfo} blockInfo Information about a block.
+ * @param {!Array<number>} gaps The list of gaps between items in the flyout.
+ * @param {number} defaultGap The default gap between one element and the next.
+ * @private
+ */
+Flyout.prototype.addBlockGap_ = function(blockInfo, gaps, defaultGap) {
+  let gap;
+  if (blockInfo['gap']) {
+    gap = parseInt(blockInfo['gap'], 10);
+  } else if (blockInfo['blockxml']) {
+    const xml = typeof blockInfo['blockxml'] === 'string' ?
+        Xml.textToDom(blockInfo['blockxml']) :
+        blockInfo['blockxml'];
+    gap = parseInt(xml.getAttribute('gap'), 10);
   }
-  return blockElement;
+  gaps.push(isNaN(gap) ? defaultGap : gap);
 };
 
 /**
@@ -745,13 +771,15 @@ Flyout.prototype.addSeparatorGap_ = function(sepInfo, gaps, defaultGap) {
 
 /**
  * Delete blocks, mats and buttons from a previous showing of the flyout.
- * @protected
+ * @private
  */
 Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
   const oldBlocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = oldBlocks[i]); i++) {
-    if (block.workspace == this.workspace_) {
+    if (this.blockIsRecyclable_(block)) {
+      this.recycleBlock_(block);
+    } else {
       block.dispose(false, false);
     }
   }
@@ -772,6 +800,41 @@ Flyout.prototype.clearOldBlocks_ = function() {
 
   // Clear potential variables from the previous showing.
   this.workspace_.getPotentialVariableMap().clear();
+};
+
+/**
+ * Empties all of the recycled blocks, properly disposing of them.
+ * @private
+ */
+Flyout.prototype.emptyRecycledBlocks_ = function() {
+  for (let i = 0; i < this.recycledBlocks_.length; i++) {
+    this.recycledBlocks_[i].dispose();
+  }
+  this.recycledBlocks_ = [];
+};
+
+/**
+ * Returns whether the given block can be recycled or not.
+ * @param {!BlockSvg} _block The block to check for recyclability.
+ * @return {boolean} True if the block can be recycled. False otherwise.
+ * @protected
+ */
+Flyout.prototype.blockIsRecyclable_ = function(_block) {
+  // By default, recycling is disabled.
+  return false;
+};
+
+/**
+ * Puts a previously created block into the recycle bin and moves it to the
+ * top of the workspace. Used during large workspace swaps to limit the number
+ * of new DOM elements we need to create.
+ * @param {!BlockSvg} block The block to recycle.
+ * @private
+ */
+Flyout.prototype.recycleBlock_ = function(block) {
+  const xy = block.getRelativeToSurfaceXY();
+  block.moveBy(-xy.x, -xy.y);
+  this.recycledBlocks_.push(block);
 };
 
 /**
@@ -1010,20 +1073,21 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     throw Error('oldBlock is not rendered.');
   }
 
-  // Create the new block by cloning the block in the flyout (via XML).
-  // This cast assumes that the oldBlock can not be an insertion marker.
-  const xml = /** @type {!Element} */ (Xml.blockToDom(oldBlock, true));
-  // The target workspace would normally resize during domToBlock, which will
-  // lead to weird jumps.  Save it for terminateDrag.
-  targetWorkspace.setResizesEnabled(false);
-
-  // Using domToBlock instead of domToWorkspace means that the new block will be
-  // placed at position (0, 0) in main workspace units.
-  const block = /** @type {!BlockSvg} */
-      (Xml.domToBlock(xml, targetWorkspace));
-  const svgRootNew = block.getSvgRoot();
-  if (!svgRootNew) {
-    throw Error('block is not rendered.');
+  let block;
+  if (oldBlock.mutationToDom && !oldBlock.saveExtraState) {
+    // Create the new block by cloning the block in the flyout (via XML).
+    // This cast assumes that the oldBlock can not be an insertion marker.
+    const xml = /** @type {!Element} */ (Xml.blockToDom(oldBlock, true));
+    // The target workspace would normally resize during domToBlock, which will
+    // lead to weird jumps.  Save it for terminateDrag.
+    targetWorkspace.setResizesEnabled(false);
+    // Using domToBlock instead of domToWorkspace means that the new block will be
+    // placed at position (0, 0) in main workspace units.
+    block = /** @type {!BlockSvg} */ (Xml.domToBlock(xml, targetWorkspace));
+  } else {
+    const json = /** @type {!blocks.State} */ (blocks.save(oldBlock));
+    targetWorkspace.setResizesEnabled(false);
+    block = /** @type {!BlockSvg} */ (blocks.load(json, targetWorkspace));
   }
 
   // The offset in pixels between the main workspace's origin and the upper left

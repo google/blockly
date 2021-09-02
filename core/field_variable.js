@@ -196,7 +196,7 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {{id: string}} The ID of the variable referenced by this field.
+ * @return {*} The ID of the variable referenced by this field.
  * @override
  * @package
  */
@@ -227,7 +227,7 @@ Blockly.FieldVariable.prototype.saveState = function() {
 Blockly.FieldVariable.prototype.loadState = function(state) {
   if (Blockly.FieldVariable.prototype.loadState === this.loadState &&
       Blockly.FieldVariable.prototype.fromXml !== this.fromXml) {
-    this.fromXml(Blockly.Xml.textToDom(state));
+    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
     return;
   }
   // Either they called this on purpose from their loadState, or they have

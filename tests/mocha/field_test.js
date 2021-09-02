@@ -71,7 +71,7 @@ suite('Abstract Fields', function() {
     });
   });
 
-  suite.only('Serialization', function() {
+  suite('Serialization', function() {
     class DefaultSerializationField extends Blockly.Field {
       constructor(value, validator = undefined, config = undefined) {
         super(value, validator, config);

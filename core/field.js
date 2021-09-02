@@ -444,7 +444,7 @@ Blockly.Field.prototype.saveState = function() {
 Blockly.Field.prototype.loadState = function(state) {
   if (Blockly.Field.prototype.loadState === this.loadState &&
       Blockly.Field.prototype.fromXml !== this.fromXml) {
-    this.fromXml(Blockly.Xml.textToDom(state));
+    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
     return;
   }
   // Either they called this on purpose from their loadState, or they have

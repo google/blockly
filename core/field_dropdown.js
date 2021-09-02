@@ -177,7 +177,7 @@ Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
 Blockly.FieldDropdown.prototype.loadState = function(state) {
   if (Blockly.FieldDropdown.prototype.loadState === this.loadState &&
       Blockly.FieldDropdown.prototype.fromXml !== this.fromXml) {
-    this.fromXml(Blockly.Xml.textToDom(state));
+    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
     return;
   }
   // Either they called this on purpose from their loadState, or they have

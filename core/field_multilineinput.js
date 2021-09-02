@@ -122,6 +122,42 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
 };
 
 /**
+ * Saves this field's value.
+ * @return {*} The state of this field.
+ * @package
+ */
+Blockly.FieldMultilineInput.prototype.saveState = function() {
+  if (Blockly.FieldMultilineInput.prototype.saveState === this.saveState &&
+      Blockly.FieldMultilineInput.prototype.toXml !== this.toXml) {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    var text = Blockly.Xml.domToText(this.toXml(elem));
+    return text.replace(
+        'xmlns="https://developers.google.com/blockly/xml" ', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
+  return this.getValue();
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state of the variable to assign to this variable field.
+ * @override
+ * @package
+ */
+Blockly.FieldMultilineInput.prototype.loadState = function(state) {
+  if (Blockly.FieldMultilineInput.prototype.loadState === this.loadState &&
+      Blockly.FieldMultilineInput.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
+    return;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
+  this.setValue(state);
+};
+
+/**
  * Create the block UI for this field.
  * @package
  */

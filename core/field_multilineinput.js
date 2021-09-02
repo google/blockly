@@ -127,16 +127,10 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.saveState = function() {
-  if (Blockly.FieldMultilineInput.prototype.saveState === this.saveState &&
-      Blockly.FieldMultilineInput.prototype.toXml !== this.toXml) {
-    var elem = Blockly.utils.xml.createElement("field");
-    elem.setAttribute("name", this.name || '');
-    var text = Blockly.Xml.domToText(this.toXml(elem));
-    return text.replace(
-        'xmlns="https://developers.google.com/blockly/xml" ', '');
+  var legacyState = this.saveLegacyState(Blockly.FieldMultilineInput);
+  if (legacyState !== null) {
+    return legacyState;
   }
-  // Either they called this on purpose from their saveState, or they have
-  // no implementations of either hook. Just do our thing.
   return this.getValue();
 };
 
@@ -147,14 +141,9 @@ Blockly.FieldMultilineInput.prototype.saveState = function() {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.loadState = function(state) {
-  if (Blockly.FieldMultilineInput.prototype.loadState === this.loadState &&
-      Blockly.FieldMultilineInput.prototype.fromXml !== this.fromXml) {
-    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
-    return;
+  if (!this.loadLegacyState(Blockly.Field, state)) {
+    this.setValue(state);
   }
-  // Either they called this on purpose from their loadState, or they have
-  // no implementations of either hook. Just do our thing.
-  this.setValue(state);
 };
 
 /**

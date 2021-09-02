@@ -107,16 +107,10 @@ Blockly.FieldCheckbox.prototype.configure_ = function(config) {
  * @package
  */
 Blockly.FieldCheckbox.prototype.saveState = function() {
-  if (Blockly.FieldCheckbox.prototype.saveState === this.saveState &&
-      Blockly.FieldCheckbox.prototype.toXml !== this.toXml) {
-    var elem = Blockly.utils.xml.createElement("field");
-    elem.setAttribute("name", this.name || '');
-    var text = Blockly.Xml.domToText(this.toXml(elem));
-    return text.replace(
-        'xmlns="https://developers.google.com/blockly/xml" ', '');
+  var legacyState = this.saveLegacyState(Blockly.FieldCheckbox);
+  if (legacyState !== null) {
+    return legacyState;
   }
-  // Either they called this on purpose from their saveState, or they have
-  // no implementations of either hook. Just do our thing.
   return this.getValueBoolean();
 };
 

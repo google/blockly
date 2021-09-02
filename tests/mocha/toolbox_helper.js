@@ -49,12 +49,24 @@ exports.getCategoryJSON = getCategoryJSON;
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a simple toolbox.
  */
-function getSimpleJSON() {
+function getSimpleJson() {
   return {"contents":[
     {
       "kind":"BLOCK",
-      "blockxml": "<block type=\"logic_operation\"></block>",
-      "type":"logic_operation"
+      "blockxml":
+        `<block type="logic_compare">
+          <field name="OP">NEQ</field>
+          <value name="A">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="B">
+            <block type="math_number">
+              <field name="NUM">2</field>
+            </block>
+          </value>
+        </block>`,
     },
     {
       "kind":"SEP",
@@ -71,7 +83,52 @@ function getSimpleJSON() {
     }
   ]};
 }
-exports.getSimpleJSON = getSimpleJSON;
+exports.getSimpleJson = getSimpleJson;
+
+function getProperSimpleJson() {
+  return {
+    "contents": [
+      {
+        "kind":"BLOCK",
+        "type": "logic_compare",
+        "fields": {
+          "OP": "NEQ",
+        },
+        "inputs": {
+          "A": {
+            "shadow": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 1,
+              }
+            }
+          },
+          "B": {
+            "block": {
+              "type": "math_number",
+              "fields": {
+                "NUM": 2,
+              }
+            }
+          }
+        }
+      },
+      {
+        "kind":"SEP",
+        "gap":"20"
+      },
+      {
+        "kind":"BUTTON",
+        "text": "insert",
+        "callbackkey": "insertConnectionRows"
+      },
+      {
+        "kind":"LABEL",
+        "text":"tooltips"
+      }
+    ]};
+}
+exports.getProperSimpleJson = getProperSimpleJson;
 
 /**
  * Get JSON for a toolbox that contains categories that contain categories.
@@ -123,10 +180,20 @@ exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 function getXmlArray() {
-  // Need to use HTMLElement instead of Element so parser output is
-  // consistent with other tests
-  var block = document.createElement('block');
-  block.setAttribute('type', 'logic_operation');
+  var block = Blockly.Xml.textToDom(
+      `<block type="logic_compare">
+        <field name="OP">NEQ</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+      </block>`);
   var separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
   var button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
   var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');

@@ -7,7 +7,7 @@
 goog.module('Blockly.test.flyout');
 
 const {defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJSON, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
+const {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getProperSimpleJson, getSeparator, getSimpleJson, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
 
 
 suite('Flyout', function() {
@@ -242,74 +242,345 @@ suite('Flyout', function() {
 
   suite('createFlyoutInfo_', function() {
     setup(function() {
-      this.simpleToolboxJSON = getSimpleJSON();
       this.flyout = this.workspace.getFlyout();
       this.createFlyoutSpy = sinon.spy(this.flyout, 'createFlyoutInfo_');
-
     });
 
-    function checkLayoutContents(actual, expected, opt_message) {
-      chai.assert.equal(actual.length, expected.length, opt_message);
-      for (var i = 0; i < actual.length; i++) {
-        chai.assert.equal(actual[i].type, expected[i].type, opt_message);
-        if (actual[i].type == 'BLOCK') {
-          chai.assert.typeOf(actual[i]['block'], 'Blockly.Block');
-        } else if (actual[i].type == 'BUTTON' || actual[i].type == 'LABEL') {
-          chai.assert.typeOf(actual[i]['block'], 'Blockly.FlyoutButton');
-        }
-      }
-    }
-
     function checkFlyoutInfo(flyoutSpy) {
-      var expectedContents = [
-        {type: "block"},
-        {type: "button"},
-        {type: "button"}
-      ];
-      var expectedGaps = [20, 24, 24];
       var flyoutInfo = flyoutSpy.returnValues[0];
       var contents = flyoutInfo.contents;
       var gaps = flyoutInfo.gaps;
+
+      var expectedGaps = [20, 24, 24];
       chai.assert.deepEqual(gaps, expectedGaps);
-      checkLayoutContents(contents, expectedContents, 'Contents');
+
+      chai.assert.equal(contents.length, 3, 'Contents');
+
+      chai.assert.equal(contents[0].type, 'block', 'Contents');
+      var block = contents[0]['block'];
+      chai.assert.instanceOf(block, Blockly.BlockSvg);
+      chai.assert.equal(block.getFieldValue('OP'), 'NEQ');
+      var childA = block.getInputTargetBlock('A');
+      var childB = block.getInputTargetBlock('B');
+      chai.assert.isTrue(childA.isShadow());
+      chai.assert.isFalse(childB.isShadow());
+      chai.assert.equal(childA.getFieldValue('NUM'), 1);
+      chai.assert.equal(childB.getFieldValue('NUM'), 2);
+
+      chai.assert.equal(contents[1].type, 'button', 'Contents');
+      chai.assert.instanceOf(contents[1]['button'], Blockly.FlyoutButton);
+
+      chai.assert.equal(contents[2].type, 'button', 'Contents');
+      chai.assert.instanceOf(contents[2]['button'], Blockly.FlyoutButton);
     }
 
-    test('Node', function() {
-      this.flyout.show(this.toolboxXml);
-      checkFlyoutInfo(this.createFlyoutSpy);
+    suite('Direct show', function() {
+      test('Node', function() {
+        this.flyout.show(this.toolboxXml);
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('NodeList', function() {
+        var nodeList = document.getElementById('toolbox-simple').childNodes;
+        this.flyout.show(nodeList);
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of JSON', function() {
+        this.flyout.show(getSimpleJson());
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of Proper JSON', function() {
+        this.flyout.show(getProperSimpleJson());
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
+
+      test('Array of XML', function() {
+        this.flyout.show(getXmlArray());
+        checkFlyoutInfo(this.createFlyoutSpy);
+      });
     });
-    test('NodeList', function() {
-      var nodeList = document.getElementById('toolbox-simple').childNodes;
-      this.flyout.show(nodeList);
-      checkFlyoutInfo(this.createFlyoutSpy);
+
+    suite('Dynamic category', function() {
+      setup(function() {
+        this.stubAndAssert = function(val) {
+          sinon.stub(
+              this.flyout.workspace_.targetWorkspace,
+              'getToolboxCategoryCallback')
+              .returns(function() { return val; });
+          this.flyout.show('someString');
+          checkFlyoutInfo(this.createFlyoutSpy);
+        };
+      });
+
+      test('No category available', function() {
+        chai.assert.throws(
+            function() {
+              this.flyout.show('someString');
+            }.bind(this),
+            'Couldn\'t find a callback function when opening ' +
+            'a toolbox category.');
+      });
+
+      test('Node', function() {
+        this.stubAndAssert(this.toolboxXml);
+      });
+
+      test('NodeList', function() {
+        this.stubAndAssert(
+            document.getElementById('toolbox-simple').childNodes);
+      });
+
+      test('Array of JSON', function() {
+        this.stubAndAssert(getSimpleJson());
+      });
+
+      test('Array of Proper JSON', function() {
+        this.stubAndAssert(getProperSimpleJson());
+      });
+
+      test('Array of XML', function() {
+        this.stubAndAssert(getXmlArray());
+      });
     });
-    test('Array of JSON', function() {
-      this.flyout.show(this.simpleToolboxJSON);
-      checkFlyoutInfo(this.createFlyoutSpy);
+  });
+
+  suite('Creating blocks', function() {
+    suite('Enabled/Disabled', function() {
+      setup(function() {
+        this.flyout = this.workspace.getFlyout();
+
+        this.assertDisabled = function(disabled) {
+          var block = this.flyout.getWorkspace().getTopBlocks(false)[0];
+          chai.assert.equal(!block.isEnabled(), disabled);
+        };
+      });
+
+      suite('XML', function() {
+        test('True string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="true"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(true);
+        });
+
+        test('False string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="false"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled string', function() {
+          // The XML system supports this for some reason!?
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="disabled"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(true);
+        });
+
+        test('Different string', function() {
+          var xml = Blockly.Xml.textToDom(
+              '<xml>' +
+              '<block type="text_print" disabled="random"></block>' +
+              '</xml>'
+          );
+          this.flyout.show(xml);
+          this.assertDisabled(false);
+        });
+      });
+
+      suite('JSON', function() {
+        test('All undefined', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Enabled true', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'enabled': true,
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Enabled false', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'enabled': false,
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('Disabled true string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'true'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('Disabled false string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'false'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'disabled'  // This is not respected by the JSON!
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled true value', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': true
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(true);
+        });
+
+        test('Disabled false value', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': false
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled different string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': 'random'
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+
+        test('Disabled empty string', function() {
+          var json = [
+            {
+              'kind': 'block',
+              'type': 'text_print',
+              'disabled': ''
+            }
+          ];
+          this.flyout.show(json);
+          this.assertDisabled(false);
+        });
+      });
     });
-    test('Array of xml', function() {
-      this.flyout.show(getXmlArray());
-      checkFlyoutInfo(this.createFlyoutSpy);
+  });
+
+  suite('Recycling', function() {
+    setup(function() {
+      this.flyout = this.workspace.getFlyout();
     });
-    test('Custom Toolbox: No Category Available', function() {
-      chai.assert.throws(function() {
-        this.flyout.show('someString');
-      }.bind(this), 'Couldn\'t find a callback function when opening' +
-          ' a toolbox category.');
+
+    test('Recycling disabled', function() {
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 123
+            }
+          }
+        ]
+      });
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 321
+            }
+          }
+        ]
+      });
+      const block = this.flyout.workspace_.getAllBlocks()[0];
+      chai.assert.equal(block.getFieldValue('NUM'), 321);
     });
-    test('Custom Toolbox: Function does not return array', function() {
-      sinon.stub(this.flyout.workspace_.targetWorkspace,
-          'getToolboxCategoryCallback').returns(function(){return null;});
-      chai.assert.throws(function() {
-        this.flyout.show('someString');
-      }.bind(this), 'Result of toolbox category callback must be an array.');
-    });
-    test('Custom Toolbox: Returns Array', function() {
-      sinon.stub(this.flyout.workspace_.targetWorkspace,
-          'getToolboxCategoryCallback').returns(function(){return getXmlArray();});
-      chai.assert.doesNotThrow(function() {
-        this.flyout.show('someString');
-      }.bind(this));
+
+    test('Recycling enabled', function() {
+      this.flyout.blockIsRecyclable_ = function() { return true; };
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 123
+            }
+          }
+        ]
+      });
+      this.flyout.show({
+        'contents': [
+          {
+            'kind': 'BLOCK',
+            'type': 'math_number',
+            'fields': {
+              'NUM': 321
+            }
+          }
+        ]
+      });
+      const block = this.flyout.workspace_.getAllBlocks()[0];
+      chai.assert.equal(block.getFieldValue('NUM'), 123);
     });
   });
 });

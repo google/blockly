@@ -665,7 +665,11 @@ WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 WorkspaceCommentSvg.prototype.toCopyData = function() {
-  return {xml: this.toXmlWithXY(), source: this.workspace, typeCounts: null};
+  return {
+    saveInfo: this.toXmlWithXY(),
+    source: this.workspace,
+    typeCounts: null
+  };
 };
 
 /**

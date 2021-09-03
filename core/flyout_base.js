@@ -37,6 +37,7 @@ const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
@@ -155,7 +156,7 @@ const Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 };
-utils.object.inherits(Flyout, DeleteArea);
+object.inherits(Flyout, DeleteArea);
 
 /**
  * Does the flyout automatically close when a block is created?

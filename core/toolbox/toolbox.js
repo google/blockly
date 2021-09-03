@@ -50,6 +50,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const utils = goog.require('Blockly.utils');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -189,7 +190,7 @@ const Toolbox = function(workspace) {
    */
   this.boundEvents_ = [];
 };
-utils.object.inherits(Toolbox, DeleteArea);
+object.inherits(Toolbox, DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.

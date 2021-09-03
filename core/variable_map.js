@@ -149,10 +149,7 @@ Blockly.VariableMap.prototype.renameVariableWithConflict_ = function(variable,
   Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_DELETE))(
       variable));
   // And remove it from the list.
-  var variableList = this.getVariablesOfType(type);
-  var variableIndex = variableList.indexOf(variable);
-  this.variableMap_[type].splice(variableIndex, 1);
-
+  Blockly.utils.arrayRemove(this.variableMap_[type], variable);
 };
 
 /* End functions for renaming variables. */
@@ -205,9 +202,10 @@ Blockly.VariableMap.prototype.createVariable = function(name,
  * @param {!Blockly.VariableModel} variable Variable to delete.
  */
 Blockly.VariableMap.prototype.deleteVariable = function(variable) {
+  var variableId = variable.getId();
   var variableList = this.variableMap_[variable.type];
   for (var i = 0, tempVar; (tempVar = variableList[i]); i++) {
-    if (tempVar.getId() == variable.getId()) {
+    if (tempVar.getId() == variableId) {
       variableList.splice(i, 1);
       Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_DELETE))(
           variable));

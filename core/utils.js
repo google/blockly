@@ -519,14 +519,13 @@ Blockly.utils.getViewportBBox = function() {
 
 /**
  * Removes the first occurrence of a particular value from an array.
- * @param {!Array} arr Array from which to remove
- *     value.
- * @param {*} obj Object to remove.
+ * @param {!Array} arr Array from which to remove value.
+ * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
  * @package
  */
-Blockly.utils.arrayRemove = function(arr, obj) {
-  var i = arr.indexOf(obj);
+Blockly.utils.arrayRemove = function(arr, value) {
+  var i = arr.indexOf(value);
   if (i == -1) {
     return false;
   }

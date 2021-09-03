@@ -240,8 +240,7 @@ Blockly.Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(this.typedBlocksDB_[block.type]
-      .indexOf(block), 1);
+  Blockly.utils.arrayRemove(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }

@@ -391,7 +391,7 @@ const package = gulp.parallel(
   packageBlockly,
   packageBlocks,
   packageArduino,
-  //packageJavascript,
+  packageJavascript,
   //packagePython,
   //packageLua,
   //packageDart,

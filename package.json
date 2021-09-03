@@ -1,6 +1,6 @@
 {
   "name": "leaphy-blockly",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly",

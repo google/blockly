@@ -30,7 +30,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IDraggable');
@@ -731,7 +730,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
  * @private
  */
 Blockly.Trashcan.prototype.cleanBlockJson_ = function(json) {
-  var json = /** @type {!Blockly.serialization.blocks.State} */
+  json = /** @type {!Blockly.serialization.blocks.State} */
       (JSON.parse(JSON.stringify(json)));  // Create dep copy.
 
   function cleanRec(json) {

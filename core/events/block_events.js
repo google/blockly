@@ -26,8 +26,8 @@ goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.xml');
 goog.require('Blockly.Xml');
+goog.require('Blockly.serialization.blocks');
 
 goog.requireType('Blockly.Block');
 
@@ -404,7 +404,7 @@ Blockly.Events.Delete.prototype.fromJson = function(json) {
   this.oldXml = Blockly.Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   this.wasShadow =
-    json['wasShadow'] || this.oldXml.tagName.toLowerCase == 'shadow';
+    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
   this.oldJson = /** @type {!Blockly.serialization.blocks.State} */
       (json['oldJson']);
   if (json['recordUndo'] !== undefined) {

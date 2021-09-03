@@ -38,19 +38,19 @@ exports.copy = copy;
  * @return {boolean} True if the paste was successful, false otherwise.
  */
 const paste = function() {
-  if (!copyData.xml) {
+  if (!copyData) {
     return false;
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
-  var workspace = copyData.source;
+  let workspace = copyData.source;
   if (workspace.isFlyout) {
     workspace = workspace.targetWorkspace;
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
     Events.setGroup(true);
-    workspace.paste(copyData.xml);
+    workspace.paste(copyData.saveInfo);
     Events.setGroup(false);
     return true;
   }
@@ -65,15 +65,9 @@ exports.paste = paste;
  *     duplicated.
  */
 const duplicate = function(toDuplicate) {
-  // Save the clipboard.
   const oldCopyData = copyData;
-
-  // Create a duplicate via a copy/paste operation.
   copy(toDuplicate);
-  // copy() replaced the value of copyData.
-  toDuplicate.workspace.paste(copyData.xml);
-
-  // Restore the clipboard.
+  toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
 };
 /** @package */

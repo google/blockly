@@ -681,4 +681,31 @@ suite('JSO Deserialization', function() {
           'third-load'
         ]);
   });
+
+  suite('Extra state', function() {
+    // Most of this is covered by our round-trip tests. But we need one test
+    // for old xml hooks.
+    test('Xml hooks', function() {
+      Blockly.Blocks['test_block'] = {
+        init: function() { },
+
+        mutationToDom: function() { },
+
+        domToMutation: function(element) {
+          this.someProperty = element.getAttribute('value');
+        }
+      };
+
+      const block = Blockly.serialization.blocks.load(
+          {
+            'type': 'test_block',
+            'extraState': '<mutation value="some value"></mutation>',
+          },
+          this.workspace);
+
+      delete Blockly.Blocks['test_block'];
+
+      chai.assert.equal(block.someProperty, 'some value');
+    });
+  });
 });

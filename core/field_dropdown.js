@@ -175,12 +175,13 @@ Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
  * @package
  */
 Blockly.FieldDropdown.prototype.loadState = function(state) {
-  if (!this.loadLegacyState(Blockly.FieldDropdown, state)) {
-    if (this.isOptionListDynamic()) {
-      this.getOptions(false);
-    }
-    this.setValue(state);
+  if (this.loadLegacyState(Blockly.FieldDropdown, state)) {
+    return;
   }
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(state);
 };
 
 /**

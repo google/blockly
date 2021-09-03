@@ -436,9 +436,10 @@ Blockly.Field.prototype.saveState = function() {
  * @package
  */
 Blockly.Field.prototype.loadState = function(state) {
-  if (!this.loadLegacyState(Blockly.Field, state)) {
-    this.setValue(state);
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
   }
+  this.setValue(state);
 };
 
 // eslint-disable-next-line valid-jsdoc

@@ -219,15 +219,16 @@ Blockly.FieldVariable.prototype.saveState = function() {
  * @package
  */
 Blockly.FieldVariable.prototype.loadState = function(state) {
-  if (!this.loadLegacyState(Blockly.Field, state)) {
-    // This is necessary so that blocks in the flyout can have custom var names.
-    var variable = Blockly.Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace,
-        state['id'] || null,
-        state['name'],
-        state['type'] || '');
-    this.setValue(variable.getId());
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
   }
+  // This is necessary so that blocks in the flyout can have custom var names.
+  var variable = Blockly.Variables.getOrCreateVariablePackage(
+      this.sourceBlock_.workspace,
+      state['id'] || null,
+      state['name'],
+      state['type'] || '');
+  this.setValue(variable.getId());
 };
 
 /**

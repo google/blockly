@@ -141,9 +141,10 @@ Blockly.FieldMultilineInput.prototype.saveState = function() {
  * @package
  */
 Blockly.FieldMultilineInput.prototype.loadState = function(state) {
-  if (!this.loadLegacyState(Blockly.Field, state)) {
-    this.setValue(state);
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
   }
+  this.setValue(state);
 };
 
 /**

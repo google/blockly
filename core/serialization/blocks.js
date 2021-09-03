@@ -257,7 +257,7 @@ const saveNextBlocks = function(block, state) {
  *     shadow block, or any connected real block.
  */
 const saveConnection = function(connection) {
-  const shadow = connection.getShadowState();
+  const shadow = connection.getShadowState(true);
   const child = connection.targetBlock();
   if (!shadow && !child) {
     return null;

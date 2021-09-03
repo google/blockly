@@ -431,6 +431,62 @@ suite('JSO Serialization', function() {
         };
       });
 
+      suite('Editing shadow value', function() {
+        test('Not overwritten', function() {
+          const block = this.workspace.newBlock('text_print');
+          block.getInput('TEXT').connection.setShadowState({
+            'type': 'text',
+            'id': 'id'
+          });
+          block.getInputTargetBlock('TEXT').setFieldValue('new value', 'TEXT');
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso,
+              'TEXT',
+              {
+                'shadow': {
+                  'type': 'text',
+                  'id': 'id',
+                  'fields': {
+                    'TEXT': 'new value'
+                  }
+                }
+              });
+        });
+
+        test('Overwritten', function() {
+          const block = this.workspace.newBlock('text_print');
+          block.getInput('TEXT').connection.setShadowState({
+            'type': 'text',
+            'id': 'id'
+          });
+          block.getInputTargetBlock('TEXT').setFieldValue('new value', 'TEXT');
+          const childBlock = this.workspace.newBlock('text');
+          block.getInput('TEXT').connection.connect(
+              childBlock.outputConnection);
+          const jso = Blockly.serialization.blocks.save(block);
+          this.assertInput(
+              jso,
+              'TEXT',
+              {
+                'shadow': {
+                  'type': 'text',
+                  'id': 'id',
+                  'fields': {
+                    'TEXT': 'new value'
+                  }
+                },
+                'block': {
+                  'type': 'text',
+                  'id': 'id3',
+                  'fields': {
+                    'TEXT': ''
+                  }
+                },
+              });
+        });
+      });
+
       suite('Value', function() {
         suite('With serialization', function() {
           test('Child', function() {

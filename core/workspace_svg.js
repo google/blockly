@@ -1480,6 +1480,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(state) {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
+  
+  // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
     this.pasteBlock_(
         null, /** @type {!Blockly.serialization.blocks.State} */ (state));
@@ -1555,7 +1557,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           blockY += Blockly.SNAP_RADIUS * 2;
         }
       } while (collide);
-      block.moveTo({x: blockX, y: blockY});
+      block.moveTo(new Blockly.utils.Coordinate(blockX, blockY));
     }
   } finally {
     Blockly.Events.enable();

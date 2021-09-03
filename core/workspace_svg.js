@@ -87,6 +87,7 @@ const Xml = goog.require('Blockly.Xml');
 /* eslint-disable-next-line no-unused-vars */
 const ZoomControls = goog.requireType('Blockly.ZoomControls');
 const blockRendering = goog.require('Blockly.blockRendering');
+const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -1504,43 +1505,57 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 };
 
 /**
- * Paste the provided block onto the workspace.
- * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
- *     DocumentFragment if the block was an insertion marker.
+ * Pastes the provided block or workspace comment onto the workspace.
+ * Does not check whether there is remaining capacity for the object, that
+ * should be done before calling this method.
+ * @param {!Object|!Element|!DocumentFragment} state The representation of the
+ *     thing to paste.
  */
-WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (!this.rendered || !xmlBlock.tagName ||
-      xmlBlock.getElementsByTagName('block').length >=
-          this.remainingCapacity()) {
+WorkspaceSvg.prototype.paste = function(state) {
+  if (!this.rendered || !state['type'] && !state.tagName) {
     return;
   }
-  // The check above for tagName rules out the possibility of this being a
-  // DocumentFragment.
-  xmlBlock = /** @type {!Element} */ (xmlBlock);
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  if (xmlBlock.tagName.toLowerCase() == 'comment') {
-    this.pasteWorkspaceComment_(xmlBlock);
+  
+  // Checks if this is JSON. JSON has a type property, while elements don't.
+  if (state['type']) {
+    this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
   } else {
-    this.pasteBlock_(xmlBlock);
+    const xmlBlock = /** @type {!Element} */ (state);
+    if (xmlBlock.tagName.toLowerCase() == 'comment') {
+      this.pasteWorkspaceComment_(xmlBlock);
+    } else {
+      this.pasteBlock_(xmlBlock, null);
+    }
   }
 };
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {?Element} xmlBlock XML block element.
+ * @param {?blocks.State} jsonBlock JSON block
+ *     representation.
  * @private
  */
-WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
+WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   Events.disable();
   let block;
   try {
-    block = Xml.domToBlock(xmlBlock, this);
+    let blockX;
+    let blockY;
+    if (xmlBlock) {
+      block = Xml.domToBlock(xmlBlock, this);
+      blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    } else if (jsonBlock) {
+      block = blocks.load(jsonBlock, this);
+      blockX = jsonBlock['x'] || 10;
+      blockY = jsonBlock['y'] || 10;
+    }
 
     // Move the duplicate to original position.
-    let blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-    let blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     if (!isNaN(blockX) && !isNaN(blockY)) {
       if (this.RTL) {
         blockX = -blockX;
@@ -1580,7 +1595,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
           blockY += internalConstants.SNAP_RADIUS * 2;
         }
       } while (collide);
-      block.moveBy(blockX, blockY);
+      block.moveTo(new Coordinate(blockX, blockY));
     }
   } finally {
     Events.enable();

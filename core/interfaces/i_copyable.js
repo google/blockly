@@ -29,13 +29,14 @@ const ICopyable = function() {};
 /**
  * Encode for copying.
  * @return {?ICopyable.CopyData} Copy metadata.
+ * @package
  */
 ICopyable.prototype.toCopyData;
 
 /**
  * Copy Metadata.
  * @typedef {{
- *            xml:!Element,
+ *            saveInfo:(!Object|!Element),
  *            source:WorkspaceSvg,
  *            typeCounts:?Object
  *          }}

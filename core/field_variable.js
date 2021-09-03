@@ -196,11 +196,15 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {{id: string}} The ID of the variable referenced by this field.
+ * @return {*} The ID of the variable referenced by this field.
  * @override
  * @package
  */
 Blockly.FieldVariable.prototype.saveState = function() {
+  var legacyState = this.saveLegacyState(Blockly.Field);
+  if (legacyState !== null) {
+    return legacyState;
+  }
   // Make sure the variable is initialized.
   this.initModel();
   return {
@@ -215,6 +219,9 @@ Blockly.FieldVariable.prototype.saveState = function() {
  * @package
  */
 Blockly.FieldVariable.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
+  }
   // This is necessary so that blocks in the flyout can have custom var names.
   var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace,

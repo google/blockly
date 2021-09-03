@@ -24,6 +24,7 @@ const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
+const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -161,6 +162,12 @@ const saveExtraState = function(block, state) {
     const extraState = block.saveExtraState();
     if (extraState !== null) {
       state['extraState'] = extraState;
+    }
+  } else if (block.mutationToDom) {
+    const extraState = block.mutationToDom();
+    if (extraState !== null) {
+      state['extraState'] = Xml.domToText(extraState).replace(
+          ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
   }
 };
@@ -427,7 +434,11 @@ const loadExtraState = function(block, state) {
   if (!state['extraState']) {
     return;
   }
-  block.loadExtraState(state['extraState']);
+  if (block.loadExtraState) {
+    block.loadExtraState(state['extraState']);
+  } else {
+    block.domToMutation(Xml.textToDom(state['extraState']));
+  }
 };
 
 /**

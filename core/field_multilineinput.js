@@ -123,21 +123,27 @@ Blockly.FieldMultilineInput.prototype.fromXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {string} The text value held by this field.
- * @override
+ * @return {*} The state of this field.
  * @package
  */
 Blockly.FieldMultilineInput.prototype.saveState = function() {
-  return /** @type {string} */ (this.getValue());
+  var legacyState = this.saveLegacyState(Blockly.FieldMultilineInput);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValue();
 };
 
 /**
  * Sets the field's value based on the given state.
- * @param {*} state The state to apply to the multiline input field.
+ * @param {*} state The state of the variable to assign to this variable field.
  * @override
  * @package
  */
 Blockly.FieldMultilineInput.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
+  }
   this.setValue(state);
 };
 

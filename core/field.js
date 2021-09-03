@@ -422,6 +422,10 @@ Blockly.Field.prototype.toXml = function(fieldElement) {
  * @package
  */
 Blockly.Field.prototype.saveState = function() {
+  var legacyState = this.saveLegacyState(Blockly.Field);
+  if (legacyState !== null) {
+    return legacyState;
+  }
   return this.getValue();
 };
 
@@ -432,7 +436,54 @@ Blockly.Field.prototype.saveState = function() {
  * @package
  */
 Blockly.Field.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Blockly.Field, state)) {
+    return;
+  }
   this.setValue(state);
+};
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Returns a stringified version of the XML state, if it should be used.
+ * Otherwise this returns null, to signal the field should use its own
+ * serialization.
+ * @param {?} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @return {?string} The stringified version of the XML state, or null.
+ * @protected
+ */
+Blockly.Field.prototype.saveLegacyState = function(callingClass) {
+  if (callingClass.prototype.saveState === this.saveState &&
+      callingClass.prototype.toXml !== this.toXml) {
+    var elem = Blockly.utils.xml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    var text = Blockly.Xml.domToText(this.toXml(elem));
+    return text.replace(
+        ' xmlns="https://developers.google.com/blockly/xml"', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
+  return null;
+};
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Loads the given state using either the old XML hoooks, if they should be
+ * used. Returns true to indicate loading has been handled, false otherwise.
+ * @param {?} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @param {*} state The state to apply to the field.
+ * @return {boolean} Whether the state was applied or not.
+ */
+Blockly.Field.prototype.loadLegacyState = function(callingClass, state) {
+  if (callingClass.prototype.loadState === this.loadState &&
+      callingClass.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Blockly.Xml.textToDom(/** @type {string} */ (state)));
+    return true;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
+  return false;
 };
 
 /**

@@ -255,26 +255,6 @@ Blockly.FieldAngle.prototype.initView = function() {
 };
 
 /**
- * Saves this field's value.
- * @return {number} The angle value held by this field.
- * @override
- * @package
- */
-Blockly.FieldAngle.prototype.saveState = function() {
-  return /** @type {number} */ (this.getValue());
-};
-
-/**
- * Sets the field's value based on the given state.
- * @param {*} state The state to apply to the angle field.
- * @override
- * @package
- */
-Blockly.FieldAngle.prototype.loadState = function(state) {
-  this.setValue(state);
-};
-
-/**
  * Updates the graph when the field rerenders.
  * @protected
  * @override

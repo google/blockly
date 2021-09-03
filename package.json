@@ -1,18 +1,18 @@
 {
-  "name": "blockly",
-  "version": "5.20210325.1",
+  "name": "leaphy-blockly",
+  "version": "0.0.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
-    "blockly"
+    "blockly",
+    "leaphy"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/google/blockly.git"
+    "url": "https://github.com/leaphy-robotics/leaphy-blockly.git"
   },
   "bugs": {
-    "url": "https://github.com/google/blockly/issues"
+    "url": "https://github.com/leaphy-robotics/leaphy-blockly/issues"
   },
-  "homepage": "https://developers.google.com/blockly/",
   "author": {
     "name": "Neil Fraser"
   },

@@ -1,6 +1,6 @@
 {
   "name": "leaphy-blockly",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly",
@@ -16,6 +16,9 @@
   "author": {
     "name": "Neil Fraser"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "gulp build",
     "build:blocks": "gulp buildBlocks",

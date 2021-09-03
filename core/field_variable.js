@@ -199,11 +199,15 @@ FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {{id: string}} The ID of the variable referenced by this field.
+ * @return {*} The ID of the variable referenced by this field.
  * @override
  * @package
  */
 FieldVariable.prototype.saveState = function() {
+  const legacyState = this.saveLegacyState(FieldVariable);
+  if (legacyState !== null) {
+    return legacyState;
+  }
   // Make sure the variable is initialized.
   this.initModel();
   return {
@@ -218,6 +222,9 @@ FieldVariable.prototype.saveState = function() {
  * @package
  */
 FieldVariable.prototype.loadState = function(state) {
+  if (this.loadLegacyState(FieldVariable, state)) {
+    return;
+  }
   // This is necessary so that blocks in the flyout can have custom var names.
   const variable = Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace,

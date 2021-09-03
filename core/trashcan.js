@@ -32,6 +32,7 @@ const IPositionable = goog.requireType('Blockly.IPositionable');
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Options = goog.require('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
+const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
@@ -39,10 +40,10 @@ const Xml = goog.require('Blockly.Xml');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 
@@ -123,7 +124,7 @@ const Trashcan = function(workspace) {
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
-utils.object.inherits(Trashcan, DeleteArea);
+object.inherits(Trashcan, DeleteArea);
 
 /**
  * Width of both the trash can and lid images.
@@ -453,7 +454,7 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 
   const height = BODY_HEIGHT + LID_HEIGHT;
   const startRect = uiPosition.getStartPositionRect(
-      cornerPosition, new utils.Size(WIDTH, height), MARGIN_HORIZONTAL,
+      cornerPosition, new Size(WIDTH, height), MARGIN_HORIZONTAL,
       MARGIN_VERTICAL, metrics, this.workspace_);
 
   const verticalPosition = cornerPosition.vertical;

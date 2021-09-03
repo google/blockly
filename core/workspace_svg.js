@@ -1467,40 +1467,58 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 };
 
 /**
- * Paste the provided block onto the workspace.
- * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
- *     DocumentFragment if the block was an insertion marker.
+ * Pastes the provided block or workspace comment onto the workspace.
+ * Does not check whether there is remaining capacity for the object, that
+ * should be done before calling this method.
+ * @param {!Object|!Element|!DocumentFragment} state The representation of the
+ *     thing to paste.
  */
-Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (!this.rendered || !xmlBlock.tagName || xmlBlock.getElementsByTagName('block').length >=
-      this.remainingCapacity()) {
+Blockly.WorkspaceSvg.prototype.paste = function(state) {
+  if (!this.rendered || !state['type'] && !state.tagName) {
     return;
   }
-  // The check above for tagName rules out the possibility of this being a DocumentFragment.
-  xmlBlock = /** @type {!Element} */ (xmlBlock);
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  if (xmlBlock.tagName.toLowerCase() == 'comment') {
-    this.pasteWorkspaceComment_(xmlBlock);
+  
+  // Checks if this is JSON. JSON has a type property, while elements don't.
+  if (state['type']) {
+    this.pasteBlock_(
+        null, /** @type {!Blockly.serialization.blocks.State} */ (state));
   } else {
-    this.pasteBlock_(xmlBlock);
+    var xmlBlock = /** @type {!Element} */ (state);
+    if (xmlBlock.tagName.toLowerCase() == 'comment') {
+      this.pasteWorkspaceComment_(xmlBlock);
+    } else {
+      this.pasteBlock_(xmlBlock, null);
+    }
   }
 };
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {?Element} xmlBlock XML block element.
+ * @param {?Blockly.serialization.blocks.State} jsonBlock JSON block
+ *     representation.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
+Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   Blockly.Events.disable();
   try {
-    var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    var block;
+    var blockX;
+    var blockY;
+    if (xmlBlock) {
+      block = Blockly.Xml.domToBlock(xmlBlock, this);
+      blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    } else if (jsonBlock) {
+      block = Blockly.serialization.blocks.load(jsonBlock, this);
+      blockX = jsonBlock['x'] || 10;
+      blockY = jsonBlock['y'] || 10;
+    }
 
     // Move the duplicate to original position.
-    var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-    var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     if (!isNaN(blockX) && !isNaN(blockY)) {
       if (this.RTL) {
         blockX = -blockX;
@@ -1539,7 +1557,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
           blockY += Blockly.SNAP_RADIUS * 2;
         }
       } while (collide);
-      block.moveBy(blockX, blockY);
+      block.moveTo(new Blockly.utils.Coordinate(blockX, blockY));
     }
   } finally {
     Blockly.Events.enable();

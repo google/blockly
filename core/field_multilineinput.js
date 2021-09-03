@@ -124,21 +124,27 @@ FieldMultilineInput.prototype.fromXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {string} The text value held by this field.
- * @override
+ * @return {*} The state of this field.
  * @package
  */
 FieldMultilineInput.prototype.saveState = function() {
-  return /** @type {string} */ (this.getValue());
+  const legacyState = this.saveLegacyState(FieldMultilineInput);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValue();
 };
 
 /**
  * Sets the field's value based on the given state.
- * @param {*} state The state to apply to the multiline input field.
+ * @param {*} state The state of the variable to assign to this variable field.
  * @override
  * @package
  */
 FieldMultilineInput.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Field, state)) {
+    return;
+  }
   this.setValue(state);
 };
 

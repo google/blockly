@@ -45,11 +45,13 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const Xml = goog.require('Blockly.Xml');
 const dom = goog.require('Blockly.utils.dom');
 const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const utilsXml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -439,6 +441,10 @@ Field.prototype.toXml = function(fieldElement) {
  * @package
  */
 Field.prototype.saveState = function() {
+  const legacyState = this.saveLegacyState(Field);
+  if (legacyState !== null) {
+    return legacyState;
+  }
   return this.getValue();
 };
 
@@ -449,7 +455,54 @@ Field.prototype.saveState = function() {
  * @package
  */
 Field.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Field, state)) {
+    return;
+  }
   this.setValue(state);
+};
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Returns a stringified version of the XML state, if it should be used.
+ * Otherwise this returns null, to signal the field should use its own
+ * serialization.
+ * @param {?} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @return {?string} The stringified version of the XML state, or null.
+ * @protected
+ */
+Field.prototype.saveLegacyState = function(callingClass) {
+  if (callingClass.prototype.saveState === this.saveState &&
+      callingClass.prototype.toXml !== this.toXml) {
+    const elem = utilsXml.createElement("field");
+    elem.setAttribute("name", this.name || '');
+    const text = Xml.domToText(this.toXml(elem));
+    return text.replace(
+        ' xmlns="https://developers.google.com/blockly/xml"', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
+  return null;
+};
+
+// eslint-disable-next-line valid-jsdoc
+/**
+ * Loads the given state using either the old XML hoooks, if they should be
+ * used. Returns true to indicate loading has been handled, false otherwise.
+ * @param {?} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @param {*} state The state to apply to the field.
+ * @return {boolean} Whether the state was applied or not.
+ */
+Field.prototype.loadLegacyState = function(callingClass, state) {
+  if (callingClass.prototype.loadState === this.loadState &&
+      callingClass.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Xml.textToDom(/** @type {string} */ (state)));
+    return true;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
+  return false;
 };
 
 /**

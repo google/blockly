@@ -17,9 +17,11 @@ suite('Abstract Fields', function() {
     // console logs.
     createDeprecationWarningStub();
   });
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
+
   suite('Is Serializable', function() {
     // Both EDITABLE and SERIALIZABLE are default.
     function FieldDefault() {
@@ -73,6 +75,269 @@ suite('Abstract Fields', function() {
       chai.assert.isTrue(field.isSerializable());
     });
   });
+
+  suite('Serialization', function() {
+    class DefaultSerializationField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+    }
+
+    class CustomXmlField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+
+      toXml(fieldElement) {
+        fieldElement.textContent = 'custom value';
+        return fieldElement;
+      }
+
+      fromXml(fieldElement) {
+        this.someProperty = fieldElement.textContent;
+      }
+    }
+
+    class CustomXmlCallSuperField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+
+      toXml(fieldElement) {
+        super.toXml(fieldElement);
+        fieldElement.setAttribute('attribute', 'custom value');
+        return fieldElement;
+      }
+
+      fromXml(fieldElement) {
+        super.fromXml(fieldElement);
+        this.someProperty = fieldElement.getAttribute('attribute');
+      }
+    }
+
+    class CustomJsoField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+
+      saveState() {
+        return 'custom value';
+      }
+
+      loadState(state) {
+        this.someProperty = state;
+      }
+    }
+
+    class CustomJsoCallSuperField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+
+      saveState() {
+        return {
+          default: super.saveState(),
+          val: 'custom value'
+        };
+      }
+
+      loadState(state) {
+        super.loadState(state.default);
+        this.someProperty = state.val;
+      }
+    }
+
+    class CustomXmlAndJsoField extends Blockly.Field {
+      constructor(value, validator = undefined, config = undefined) {
+        super(value, validator, config);
+        this.SERIALIZABLE = true;
+      }
+
+      toXml(fieldElement) {
+        fieldElement.textContent = 'custom value';
+        return fieldElement;
+      }
+
+      fromXml(fieldElement) {
+        this.someProperty = fieldElement.textContent;
+      }
+
+      saveState() {
+        return 'custom value';
+      }
+
+      loadState(state) {
+        this.someProperty = state;
+      }
+    }
+
+    suite('Save', function() {
+      suite('JSO', function() {
+        test('No implementations', function() {
+          const field = new DefaultSerializationField('test value');
+          const value = field.saveState();
+          chai.assert.equal(value, 'test value');
+        });
+  
+        test('Xml implementations', function() {
+          const field = new CustomXmlField('test value');
+          const value = field.saveState();
+          chai.assert.equal(value, '<field name="">custom value</field>');
+        });
+  
+        test('Xml super implementation', function() {
+          const field = new CustomXmlCallSuperField('test value');
+          const value = field.saveState();
+          chai.assert.equal(
+              value,
+              '<field name="" attribute="custom value">test value</field>');
+        });
+  
+        test('JSO implementations', function() {
+          const field = new CustomJsoField('test value');
+          const value = field.saveState();
+          chai.assert.equal(value, 'custom value');
+        });
+  
+        test('JSO super implementations', function() {
+          const field = new CustomJsoCallSuperField('test value');
+          const value = field.saveState();
+          chai.assert.deepEqual(
+              value, {default: 'test value', val: 'custom value'});
+        });
+
+        test('Xml and JSO implementations', function() {
+          const field = new CustomXmlAndJsoField('test value');
+          const value = field.saveState();
+          chai.assert.equal(value, 'custom value');
+        });
+      });
+
+      suite('Xml', function() {
+        test('No implementations', function() {
+          const field = new DefaultSerializationField('test value');
+          const element = document.createElement('field');
+          const value = Blockly.Xml.domToText(field.toXml(element));
+          chai.assert.equal(
+              value,
+              '<field xmlns="http://www.w3.org/1999/xhtml">test value</field>');
+        });
+  
+        test('Xml implementations', function() {
+          const field = new CustomXmlField('test value');
+          const element = document.createElement('field');
+          const value = Blockly.Xml.domToText(field.toXml(element));
+          chai.assert.equal(
+              value,
+              '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+          );
+        });
+  
+        test('Xml super implementation', function() {
+          const field = new CustomXmlCallSuperField('test value');
+          const element = document.createElement('field');
+          const value = Blockly.Xml.domToText(field.toXml(element));
+          chai.assert.equal(
+              value,
+              '<field xmlns="http://www.w3.org/1999/xhtml" ' +
+              'attribute="custom value">test value</field>');
+        });
+
+        test('Xml and JSO implementations', function() {
+          const field = new CustomXmlAndJsoField('test value');
+          const element = document.createElement('field');
+          const value = Blockly.Xml.domToText(field.toXml(element));
+          chai.assert.equal(
+              value,
+              '<field xmlns="http://www.w3.org/1999/xhtml">custom value</field>'
+          );
+        });
+      });
+    });
+
+    suite('Load', function() {
+      suite('JSO', function() {
+        test('No implementations', function() {
+          const field = new DefaultSerializationField('');
+          field.loadState('test value');
+          chai.assert.equal(field.getValue(), 'test value');
+        });
+  
+        test('Xml implementations', function() {
+          const field = new CustomXmlField('');
+          field.loadState('<field name="">custom value</field>');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+  
+        test('Xml super implementation', function() {
+          const field = new CustomXmlCallSuperField('');
+          field.loadState(
+              '<field attribute="custom value" name="">test value</field>');
+          chai.assert.equal(field.getValue(), 'test value');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+  
+        test('JSO implementations', function() {
+          const field = new CustomJsoField('');
+          field.loadState('custom value');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+  
+        test('JSO super implementations', function() {
+          const field = new CustomJsoCallSuperField('');
+          field.loadState({default: 'test value', val: 'custom value'});
+          chai.assert.equal(field.getValue(), 'test value');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+        
+        test('Xml and JSO implementations', function() {
+          const field = new CustomXmlAndJsoField('');
+          field.loadState('custom value');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+      });
+
+      suite('Xml', function() {
+        test('No implementations', function() {
+          const field = new DefaultSerializationField('');
+          field.fromXml(
+              Blockly.Xml.textToDom('<field name="">test value</field>'));
+          chai.assert.equal(field.getValue(), 'test value');
+        });
+  
+        test('Xml implementations', function() {
+          const field = new CustomXmlField('');
+          field.fromXml(
+              Blockly.Xml.textToDom('<field name="">custom value</field>'));
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+  
+        test('Xml super implementation', function() {
+          const field = new CustomXmlCallSuperField('');
+          field.fromXml(
+              Blockly.Xml.textToDom(
+                  '<field attribute="custom value" name="">test value</field>'
+              )
+          );
+          chai.assert.equal(field.getValue(), 'test value');
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+
+        test('XML andd JSO implementations', function() {
+          const field = new CustomXmlAndJsoField('');
+          field.fromXml(
+              Blockly.Xml.textToDom('<field name="">custom value</field>'));
+          chai.assert.equal(field.someProperty, 'custom value');
+        });
+      });
+    });
+  });
+
   suite('setValue', function() {
     function addSpies(field, excludeSpies = []) {
       if (!excludeSpies.includes('doValueInvalid_')) {
@@ -321,6 +586,7 @@ suite('Abstract Fields', function() {
       sinon.assert.calledOnce(this.field.doValueUpdate_);
     });
   });
+
   suite('Customization', function() {
     // All this field does is wrap the abstract field.
     function CustomField(opt_config) {

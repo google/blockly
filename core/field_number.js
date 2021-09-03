@@ -119,26 +119,6 @@ FieldNumber.prototype.configure_ = function(config) {
 };
 
 /**
- * Saves this field's value.
- * @return {number} The number value held by this field.
- * @override
- * @package
- */
-FieldNumber.prototype.saveState = function() {
-  return /** @type {number} */ (this.getValue());
-};
-
-/**
- * Sets the field's value based on the given state.
- * @param {*} state The state to apply to the nuber field.
- * @override
- * @package
- */
-FieldNumber.prototype.loadState = function(state) {
-  this.setValue(state);
-};
-
-/**
  * Set the maximum, minimum and precision constraints on this field.
  * Any of these properties may be undefined or NaN to be disabled.
  * Setting precision (usually a power of 10) enforces a minimum step between

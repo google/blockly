@@ -208,6 +208,18 @@ suite('JSO Serialization', function() {
         const jso = Blockly.serialization.blocks.save(block);
         assertProperty(jso, 'extraState', ['state1', 42, true]);
       });
+
+      test('Xml hooks', function() {
+        const block = this.workspace.newBlock('row_block');
+        block.mutationToDom = function() {
+          var container = Blockly.utils.xml.createElement('mutation');
+          container.setAttribute('value', 'some value');
+          return container;
+        };
+        const jso = Blockly.serialization.blocks.save(block);
+        assertProperty(
+            jso, 'extraState', '<mutation value="some value"></mutation>');
+      });
     });
 
     suite('Icons', function() {

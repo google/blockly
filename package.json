@@ -1,6 +1,6 @@
 {
   "name": "leaphy-blockly",
-  "version": "0.0.6",
+  "version": "0.0.12",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly",
@@ -40,6 +40,7 @@
     "lint": "eslint .",
     "package": "gulp package",
     "prepare": "npm run package",
+    "publish": "gulp publish",
     "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",

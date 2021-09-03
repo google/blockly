@@ -731,7 +731,7 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
  */
 Blockly.Trashcan.prototype.cleanBlockJson_ = function(json) {
   json = /** @type {!Blockly.serialization.blocks.State} */
-      (JSON.parse(JSON.stringify(json)));  // Create dep copy.
+      (JSON.parse(JSON.stringify(json)));  // Create deep copy.
 
   function cleanRec(json) {
     if (!json) {
@@ -742,6 +742,13 @@ Blockly.Trashcan.prototype.cleanBlockJson_ = function(json) {
     delete json['x'];
     delete json['y'];
     delete json['enabled'];
+
+    if (json['icons'] && json['icons']['comment']) {
+      var comment = json['icons']['comment'];
+      delete comment['height'];
+      delete comment['width'];
+      delete comment['pinned'];
+    }
 
     var inputs = json['inputs'];
     for (var name in inputs) {

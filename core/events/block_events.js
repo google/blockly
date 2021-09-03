@@ -283,7 +283,7 @@ Blockly.Events.Create.prototype.toJson = function() {
   var json = Blockly.Events.Create.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
-  json['blockJson'] = this.blockJson_;
+  json['blockJson_'] = this.blockJson_;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -299,7 +299,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
   this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
   this.blockJson_ = /** @type {!Blockly.serialization.blocks.State} */
-      (json['blockJson']);
+      (json['blockJson_']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }

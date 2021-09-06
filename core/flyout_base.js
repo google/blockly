@@ -1061,6 +1061,24 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     throw Error('oldBlock is not rendered.');
   }
 
+  // Create variables.
+  var variableMap = this.workspace_.getPotentialVariableMap();
+  var blocks = oldBlock.getDescendants(false);
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    var ids = block.getVars();
+    for (var j = 0; j < ids.length; j++) {
+      var id = ids[j];
+      var model = variableMap.getVariableById(id);
+      if (!model) {
+        // It must already exist in the main workspace.
+        continue;
+      }
+      Blockly.Variables.getOrCreateVariablePackage(
+          targetWorkspace, id, model.name, model.type);
+    }
+  }
+
   // Clone the block.
   var json = /** @type {!Blockly.serialization.blocks.State} */
       (Blockly.serialization.blocks.save(oldBlock));
@@ -1068,6 +1086,20 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   targetWorkspace.setResizesEnabled(false);
   var block = /** @type {!Blockly.BlockSvg} */
       (Blockly.serialization.blocks.load(json, targetWorkspace));
+
+  this.positionBlock_(oldBlock, block);
+
+  return block;
+};
+
+/**
+ * Positions a block on the target workspace.
+ * @param {!Blockly.BlockSvg} oldBlock The flyout block being copied.
+ * @param {!Blockly.BlockSvg} block The block to posiiton.
+ * @private
+ */
+Blockly.Flyout.prototype.positionBlock_ = function(oldBlock, block) {
+  var targetWorkspace = this.targetWorkspace;
 
   // The offset in pixels between the main workspace's origin and the upper left
   // corner of the injection div.
@@ -1096,7 +1128,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   finalOffset.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffset.x, finalOffset.y);
-  return block;
 };
 
 /**

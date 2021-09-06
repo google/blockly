@@ -114,8 +114,7 @@ class VariableSerializer {
   }
 
   /**
-   * Disposes of any variables or potential variables that exist on the
-   * workspace.
+   * Disposes of any variables that exist on the workspace.
    * @param {!Workspace} workspace The workspace to clear the variables of.
    */
   clear(workspace) {

@@ -52,9 +52,6 @@ exports.ConnectionState = ConnectionState;
  *     y: (number|undefined),
  *     collapsed: (boolean|undefined),
  *     enabled: (boolean|undefined),
- *     editable: (boolean|undefined),
- *     deletable: (boolean|undefined),
- *     movable: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: (*|undefined),
@@ -148,8 +145,8 @@ const saveAttributes = function(block, state) {
 
 /**
  * Adds the coordinates of the given block to the given state object.
- * @param {!Block} block The block to base the coordinates on
- * @param {!State} state The state object to append to
+ * @param {!Block} block The block to base the coordinates on.
+ * @param {!State} state The state object to append to.
  */
 const saveCoords = function(block, state) {
   const workspace = block.workspace;
@@ -318,8 +315,8 @@ exports.append = append;
  *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
  *     parentConnection: If provided, the system will attempt to connect the
  *       block to this connection after it is created. Undefined by default.
- *     isShadow: The block will be set to a shadow block after it is created.
- *       False by default.
+ *     isShadow: If true, the block will be set to a shadow block after it is
+ *       created. False by default.
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
  * @return {!Block} The block that was just appended.
@@ -370,8 +367,8 @@ exports.appendInternal = appendInternal;
  * block) are handled by appendInternal.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
- * @param {{parentConnection: (!Connection|undefined), isShadow:
- *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
+ * @param {{parentConnection: (!Connection|undefined),
+ *     isShadow: (boolean|undefined)}=} param1
  *     parentConnection: If provided, the system will attempt to connect the
  *       block to this connection after it is created. Undefined by default.
  *     isShadow: The block will be set to a shadow block after it is created.
@@ -460,9 +457,9 @@ const loadExtraState = function(block, state) {
 
 /**
  * Attempts to connect the block to the parent connection, if it exists.
- * @param {(!Connection|undefined)} parentConnection The parent connnection to
+ * @param {(!Connection|undefined)} parentConnection The parent connection to
  *     try to connect the block to.
- * @param {!Block} child The block to try to conecnt to the parent.
+ * @param {!Block} child The block to try to connect to the parent.
  * @param {!State} state The state which defines the given block
  */
 const tryToConnectParent = function(parentConnection, child, state) {
@@ -591,7 +588,7 @@ const loadNextBlocks = function(block, state) {
 /**
  * Applies the state defined by connectionState to the given connection, ie
  * assigns shadows and attaches child blocks.
- * @param {!Connection} connection The connection to serialize the
+ * @param {!Connection} connection The connection to deserialize the
  *     connected blocks of.
  * @param {!ConnectionState} connectionState The object containing the state of
  *     any connected shadow block, or any connected real block.

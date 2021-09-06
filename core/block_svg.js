@@ -33,6 +33,7 @@ goog.require('Blockly.ICopyable');
 goog.require('Blockly.IDraggable');
 goog.require('Blockly.Msg');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.serialization.blocks');
 goog.require('Blockly.TabNavigateCursor');
 goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */

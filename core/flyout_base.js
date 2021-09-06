@@ -28,6 +28,7 @@ goog.require('Blockly.FlyoutMetricsManager');
 goog.require('Blockly.Gesture');
 goog.require('Blockly.IFlyout');
 goog.require('Blockly.ScrollbarPair');
+goog.require('Blockly.serialization.blocks');
 goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
@@ -659,7 +660,7 @@ Blockly.Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * Create a block from the xml and permanently disable any blocks that were
  * defined as disabled.
  * @param {!Blockly.utils.toolbox.BlockInfo} blockInfo The info of the block.
- * @return {!Blockly.BlockSvg} The block created from the blockXml.
+ * @return {!Blockly.BlockSvg} The block created from the blockInfo.
  * @private
  */
 Blockly.Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {

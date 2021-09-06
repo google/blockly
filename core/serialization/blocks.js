@@ -399,8 +399,12 @@ const loadPrivate = function(
  * @param {!State} state The state object to reference.
  */
 const loadCoords = function(block, state) {
-  const x = state['x'] === undefined ? 0 : state['x'];
+  let x = state['x'] === undefined ? 0 : state['x'];
   const y = state['y'] === undefined ? 0 : state['y'];
+
+  const workspace = block.workspace;
+  x = workspace.RTL ? workspace.getWidth() - x : x;
+
   block.moveBy(x, y);
 };
 

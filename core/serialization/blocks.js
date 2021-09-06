@@ -203,19 +203,17 @@ const saveIcons = function(block, state) {
  *     state).
  */
 const saveFields = function(block, state, doFullSerialization) {
-  let hasFieldState = false;
   const fields = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
     for (let j = 0; j < input.fieldRow.length; j++) {
       const field = input.fieldRow[j];
       if (field.isSerializable()) {
-        hasFieldState = true;
         fields[field.name] = field.saveState(doFullSerialization);
       }
     }
   }
-  if (hasFieldState) {
+  if (Object.keys(fields).length) {
     state['fields'] = fields;
   }
 };
@@ -647,18 +645,18 @@ class BlockSerializer {
    *     the workspace's blocks, or null if there are no blocks.
    */
   save(workspace) {
-    const blockState = [];
+    const blockStates = [];
     for (const block of workspace.getTopBlocks(false)) {
       const state = saveBlock(
           block, {addCoordinates: true, doFullSerialization: false});
       if (state) {
-        blockState.push(state);
+        blockStates.push(state);
       }
     }
-    if (blockState.length) {
+    if (blockStates.length) {
       return {
         'languageVersion': 0, // Currently unused.
-        'blocks': blockState
+        'blocks': blockStates
       };
     }
     return null;

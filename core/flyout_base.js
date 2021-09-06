@@ -599,8 +599,8 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 
     switch (contentInfo['kind'].toUpperCase()) {
       case 'BLOCK': {
-        var blockInfo = /** @type {!toolbox.BlockInfo} */ (contentInfo);
-        var block = this.createFlyoutBlock_(blockInfo);
+        const blockInfo = /** @type {!toolbox.BlockInfo} */ (contentInfo);
+        const block = this.createFlyoutBlock_(blockInfo);
         contents.push({type: 'block', block: block});
         this.addBlockGap_(blockInfo, gaps, defaultGap);
         break;
@@ -633,7 +633,7 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
 /**
  * Gets the flyout definition for the dynamic category.
  * @param {string} categoryName The name of the dynamic category.
- * @return {!Blockly.utils.toolbox.FlyoutDefinition} The definition of the
+ * @return {!toolbox.FlyoutDefinition} The definition of the
  *     flyout in one of its many forms.
  * @private
  */
@@ -1073,22 +1073,11 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     throw Error('oldBlock is not rendered.');
   }
 
-  let block;
-  if (oldBlock.mutationToDom && !oldBlock.saveExtraState) {
-    // Create the new block by cloning the block in the flyout (via XML).
-    // This cast assumes that the oldBlock can not be an insertion marker.
-    const xml = /** @type {!Element} */ (Xml.blockToDom(oldBlock, true));
-    // The target workspace would normally resize during domToBlock, which will
-    // lead to weird jumps.  Save it for terminateDrag.
-    targetWorkspace.setResizesEnabled(false);
-    // Using domToBlock instead of domToWorkspace means that the new block will be
-    // placed at position (0, 0) in main workspace units.
-    block = /** @type {!BlockSvg} */ (Xml.domToBlock(xml, targetWorkspace));
-  } else {
-    const json = /** @type {!blocks.State} */ (blocks.save(oldBlock));
-    targetWorkspace.setResizesEnabled(false);
-    block = /** @type {!BlockSvg} */ (blocks.load(json, targetWorkspace));
-  }
+  // Clone the block.
+  const json = /** @type {!blocks.State} */ (blocks.save(oldBlock));
+  // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
+  targetWorkspace.setResizesEnabled(false);
+  const block = /** @type {!BlockSvg} */ (blocks.load(json, targetWorkspace));
 
   // The offset in pixels between the main workspace's origin and the upper left
   // corner of the injection div.

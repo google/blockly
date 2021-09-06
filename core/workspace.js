@@ -266,7 +266,12 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
     }
     blocks.sort(this.sortObjects_);
   }
-  return blocks;
+
+  var filtered = blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
+
+  return filtered;
 };
 
 /**

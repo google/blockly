@@ -19,7 +19,8 @@
 goog.module('Blockly.utils.userAgent');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.utils.global');
+const global = goog.require('Blockly.utils.global');
+
 
 /**
  * @type {string}
@@ -102,8 +103,8 @@ let isMobile;
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js and
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/extra.js
   isAndroid = has('Android');
-  const maxTouchPoints = Blockly.utils.global['navigator'] &&
-      Blockly.utils.global['navigator']['maxTouchPoints'];
+  const maxTouchPoints = global['navigator'] &&
+      global['navigator']['maxTouchPoints'];
   isIPad = has('iPad') ||
       has('Macintosh') && maxTouchPoints > 0;
   isIPod = has('iPod');
@@ -118,7 +119,7 @@ let isMobile;
   isMobile = !isTablet &&
       (isIPod || isIPhone ||
        isAndroid || has('IEMobile'));
-})((Blockly.utils.global['navigator'] && Blockly.utils.global['navigator']['userAgent']) || '');
+})((global['navigator'] && global['navigator']['userAgent']) || '');
 
 /** @const {string} */
 exports.raw = rawUserAgent;
@@ -130,7 +131,7 @@ exports.IE = isIe;
 exports.EDGE = isEdge;
 
 /** @const {boolean} */
-exports.JavaFx;
+exports.JavaFx = isJavaFx;
 
 /** @const {boolean} */
 exports.CHROME = isChrome;

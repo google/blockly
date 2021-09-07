@@ -16,13 +16,13 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Classic = goog.require('Blockly.Themes.Classic');
-const IdGenerator = goog.require('Blockly.utils.IdGenerator');
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
 const Theme = goog.require('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const deprecation = goog.require('Blockly.utils.deprecation');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 
@@ -377,7 +377,7 @@ Options.parseThemeOptions_ = function(options) {
     return /** @type {!Theme} */ (theme);
   }
   return Theme.defineTheme(
-      theme.name || ('builtin' + IdGenerator.getNextUniqueId()), theme);
+      theme.name || ('builtin' + idGenerator.getNextUniqueId()), theme);
 };
 
 /**

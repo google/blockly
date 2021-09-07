@@ -13,10 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.IdGenerator
+ * @name Blockly.utils.idGenerator
  * @namespace
  */
-goog.module('Blockly.utils.IdGenerator');
+goog.module('Blockly.utils.idGenerator');
 goog.module.declareLegacyNamespace();
 
 

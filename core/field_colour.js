@@ -16,7 +16,6 @@ goog.module.declareLegacyNamespace();
 const Css = goog.require('Blockly.Css');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
 const Field = goog.require('Blockly.Field');
-const IdGenerator = goog.require('Blockly.utils.IdGenerator');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Size = goog.require('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
@@ -24,6 +23,7 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
@@ -545,7 +545,7 @@ FieldColour.prototype.dropdownCreate_ = function() {
     row.appendChild(cell);
     cell.label = colours[i];  // This becomes the value, if clicked.
     cell.title = titles[i] || colours[i];
-    cell.id = IdGenerator.getNextUniqueId();
+    cell.id = idGenerator.getNextUniqueId();
     cell.setAttribute('data-index', i);
     aria.setRole(cell, aria.Role.GRIDCELL);
     aria.setState(cell, aria.State.LABEL, colours[i]);

@@ -15,7 +15,7 @@ goog.module.declareLegacyNamespace();
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
-const idGenerator = goog.require('Blockly.utils.IdGenerator');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 
 
 /**

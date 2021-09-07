@@ -1087,7 +1087,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   var block = /** @type {!Blockly.BlockSvg} */
       (Blockly.serialization.blocks.load(json, targetWorkspace));
 
-  this.positionBlock_(oldBlock, block);
+  this.positionNewBlock_(oldBlock, block);
 
   return block;
 };
@@ -1098,7 +1098,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
  * @param {!Blockly.BlockSvg} block The block to posiiton.
  * @private
  */
-Blockly.Flyout.prototype.positionBlock_ = function(oldBlock, block) {
+Blockly.Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
   var targetWorkspace = this.targetWorkspace;
 
   // The offset in pixels between the main workspace's origin and the upper left

@@ -6,6 +6,7 @@
 
     <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
     <script src="../../blockly_uncompressed.js"></script>
+    <script src="./mocha_deps.js"></script>
     <script src="../../generators/dart.js"></script>
     <script src="../../generators/javascript.js"></script>
     <script src="../../generators/lua.js"></script>
@@ -91,7 +92,7 @@
     <script src="procedures_test.js"></script>
     <script src="registry_test.js"></script>
     <script src="theme_test.js"></script>
-    <script src="toolbox_test.js"></script>
+    <script>goog.require('ToolboxTest')</script>
     <script src="tooltip_test.js"></script>
     <script src="trashcan_test.js"></script>
     <script src="utils_test.js"></script>

@@ -1055,7 +1055,8 @@ Blockly.Flyout.prototype.isScrollable = function() {
  * @private
  */
 Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
-  var targetWorkspace = this.targetWorkspace;
+  var targetWorkspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (this.targetWorkspace);
   var svgRootOld = oldBlock.getSvgRoot();
   if (!svgRootOld) {
     throw Error('oldBlock is not rendered.');

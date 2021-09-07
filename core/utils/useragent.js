@@ -62,7 +62,7 @@ Blockly.utils.userAgent.MOBILE;
 
 (function(raw) {
   Blockly.utils.userAgent.raw = raw;
-  var rawUpper = Blockly.utils.userAgent.raw.toUpperCase();
+  const rawUpper = Blockly.utils.userAgent.raw.toUpperCase();
   /**
    * Case-insensitive test of whether name is in the useragent string.
    * @param {string} name Name to test.
@@ -96,7 +96,7 @@ Blockly.utils.userAgent.MOBILE;
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js and
   // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/extra.js
   Blockly.utils.userAgent.ANDROID = has('Android');
-  var maxTouchPoints = Blockly.utils.global['navigator'] &&
+  const maxTouchPoints = Blockly.utils.global['navigator'] &&
       Blockly.utils.global['navigator']['maxTouchPoints'];
   Blockly.utils.userAgent.IPAD = has('iPad') ||
       has('Macintosh') && maxTouchPoints > 0;

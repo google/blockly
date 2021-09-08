@@ -255,7 +255,7 @@ function sharedTestTeardown() {
  * @return {!SinonStub} The created stub.
  */
 function createGenUidStubWithReturns(returnIds) {
-  var stub = sinon.stub(Blockly.utils, "genUid");
+  var stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
   if (Array.isArray(returnIds)) {
     for (var i = 0; i < returnIds.length; i++) {
       stub.onCall(i).returns(returnIds[i]);

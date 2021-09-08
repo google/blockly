@@ -17,7 +17,7 @@ const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const utils = goog.require('Blockly.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const xml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentChange');
@@ -41,8 +41,9 @@ goog.require('Blockly.Events.CommentMove');
  */
 const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
-  this.id =
-      (opt_id && !workspace.getCommentById(opt_id)) ? opt_id : utils.genUid();
+  this.id = (opt_id && !workspace.getCommentById(opt_id)) ?
+      opt_id :
+      idGenerator.genUid();
 
   workspace.addTopComment(this);
 

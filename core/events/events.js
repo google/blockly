@@ -32,8 +32,8 @@ const CommentMove = goog.requireType('Blockly.Events.CommentMove');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const deprecation = goog.require('Blockly.utils.deprecation');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -477,7 +477,7 @@ exports.getGroup = getGroup;
  */
 const setGroup = function(state) {
   if (typeof state == 'boolean') {
-    group = state ? utils.genUid() : '';
+    group = state ? idGenerator.genUid() : '';
   } else {
     group = state;
   }

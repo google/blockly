@@ -67,6 +67,11 @@ const renamings = {
 
       },
     },
+    'Blockly.utils': {
+      exports: {
+        genUid: {module: 'Blockly.utils.idGenerator'},
+      }
+    },
     'Blockly.utils.IdGenerator': {
       module: 'Blockly.utils.idGenerator',
     }

@@ -2168,7 +2168,8 @@ Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
 };
 
 /**
- * Scroll the workspace to center on the given block.
+ * Scroll the workspace to center on the given block. If the block has other
+ * blocks stacked below it, the workspace will be centered on the stack.
  * @param {?string} id ID of block center on.
  * @public
  */

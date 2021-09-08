@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('ToolboxTest');
+goog.module('Blockly.test.toolbox');
 
 const utilsToolbox = goog.require('Blockly.utils.toolbox');
 

@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('TestHelpers');
+goog.module('Blockly.test.helpers');
+goog.module.declareLegacyNamespace();
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+
 
 /**
  * Check if a variable with the given values exists.

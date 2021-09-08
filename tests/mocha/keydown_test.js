@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('KeyDownTest');
+goog.module('Blockly.test.keyDown');
 
-const {sharedTestSetup, sharedTestTeardown, defineStackBlock, createKeyDownEvent} = goog.require('TestHelpers');
+const {sharedTestSetup, sharedTestTeardown, defineStackBlock, createKeyDownEvent} = goog.require('Blockly.test.helpers');
+
 
 suite('Key Down', function() {
   setup(function() {

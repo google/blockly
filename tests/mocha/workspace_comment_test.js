@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.workspaceComment');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 goog.require('Blockly.WorkspaceComment');
+
 
 suite('Workspace comment', function() {
   setup(function() {

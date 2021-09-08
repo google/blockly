@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.workspaceSvg');
+
+const {assertEventFired, assertEventNotFired, assertVariableValues, createFireChangeListenerSpy, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('WorkspaceSvg', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -333,9 +338,5 @@ suite('WorkspaceSvg', function() {
             this.changeListenerSpy, this.workspace, this.clock, 10);
       });
     });
-  });
-
-  suite('Workspace Base class', function() {
-    testAWorkspace();
   });
 });

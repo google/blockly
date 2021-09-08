@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.widgetDiv');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('WidgetDiv', function() {
   setup(function() {
     sharedTestSetup.call(this);

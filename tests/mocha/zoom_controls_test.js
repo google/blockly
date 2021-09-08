@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.zoomControls');
+
+const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
+
+
 suite("Zoom Controls", function() {
   setup(function() {
     sharedTestSetup.call(this);

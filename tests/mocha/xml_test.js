@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.xml');
+
+const {addBlockTypeToCleanup, assertVariableValues, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {
     chai.assert.equal(text, fieldDom.textContent);

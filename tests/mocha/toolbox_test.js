@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.toolbox');
 
-const utilsToolbox = goog.require('Blockly.utils.toolbox');
+const {defineStackBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Toolbox', function() {

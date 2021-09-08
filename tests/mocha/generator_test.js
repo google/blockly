@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.generator');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 goog.require('Blockly.Dart');
 goog.require('Blockly.JavaScript');
 goog.require('Blockly.Lua');

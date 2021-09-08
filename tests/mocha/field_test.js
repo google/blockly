@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldTest');
+
+const {addBlockTypeToCleanup, addMessageToCleanup, createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Abstract Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);

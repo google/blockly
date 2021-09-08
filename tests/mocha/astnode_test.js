@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('ASTTest');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('TestHelpers');
+
 suite('ASTNode', function() {
   setup(function() {
     sharedTestSetup.call(this);

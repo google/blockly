@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('KeyDownTest');
+
+const {sharedTestSetup, sharedTestTeardown, defineStackBlock, createKeyDownEvent} = goog.require('TestHelpers');
+
 suite('Key Down', function() {
   setup(function() {
     sharedTestSetup.call(this);

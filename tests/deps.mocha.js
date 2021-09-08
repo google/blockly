@@ -330,7 +330,6 @@ goog.addDependency('../../tests/mocha/json_test.js', [], [], {'lang': 'es6'});
 goog.addDependency('../../tests/mocha/keydown_test.js', ['Blockly.test.keyDown'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/logic_ternary_test.js', [], [], {'lang': 'es6'});
 goog.addDependency('../../tests/mocha/metrics_test.js', [], []);
-goog.addDependency('../../tests/mocha/mocha_deps.js', [], []);
 goog.addDependency('../../tests/mocha/names_test.js', [], []);
 goog.addDependency('../../tests/mocha/procedures_test.js', [], ['Blockly.Blocks.procedures', 'Blockly.Msg'], {'lang': 'es6'});
 goog.addDependency('../../tests/mocha/procedures_test_helpers.js', [], [], {'lang': 'es6'});

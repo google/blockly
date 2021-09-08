@@ -337,6 +337,7 @@ function buildDeps(done) {
   const closurePath = argv.closureLibrary ?
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
+
   const roots = [
     closurePath,
     'core',
@@ -344,16 +345,17 @@ function buildDeps(done) {
   ];
 
   const testRoots = [
-    closurePath,
-    'core',
-    'blocks',
+    ...roots,
     'generators',
     'tests/mocha'
   ];
+
   const args = roots.map(root => `--root '${root}' `).join('');
-  const testArgs = testRoots.map(root => `--root '${root}' `).join('');
   execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
-  execSync(`closure-make-deps ${testArgs} > tests/mocha/mocha_deps.js`, {stdio: 'inherit'});
+
+  const testArgs = testRoots.map(root => `--root '${root}' `).join('');
+  execSync(`closure-make-deps ${testArgs} > tests/deps.mocha.js`,
+      {stdio: 'inherit'});
   done();
 };
 

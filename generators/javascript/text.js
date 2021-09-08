@@ -33,8 +33,8 @@ Blockly.JavaScript['text_multiline'] = function(block) {
  * Enclose the provided value in 'String(...)' function.
  * Leave string literals alone.
  * @param {string} value Code evaluating to a value.
- * @return {[string, number]} Array containing code evaluating to a string and
- *    the order of the returned code.
+ * @return {Array<string|number>} Array containing code evaluating to a string and
+ *    the order of the returned code.[string, number]
  * @private
  */
 Blockly.JavaScript.text.forceString_ = function(value) {

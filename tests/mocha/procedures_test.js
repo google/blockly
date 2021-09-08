@@ -6,10 +6,10 @@
 
 goog.module('Blockly.test.procedures');
 
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
 goog.require('Blockly.Blocks.procedures');
 goog.require('Blockly.Msg');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
 
 
 suite('Procedures', function() {

@@ -7,7 +7,7 @@
 goog.module('Blockly.test.flyout');
 
 const {defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {getBasicToolbox, getChildItem, getCollapsibleItem, getNonCollapsibleItem, getDeeplyNestedJSON, getSeparator, getInjectedToolbox, getSimpleJSON, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
+const {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJSON, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
 
 
 suite('Flyout', function() {

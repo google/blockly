@@ -7,6 +7,7 @@
 goog.module('Blockly.test.workspaceSvg');
 
 const {assertEventFired, assertEventNotFired, assertVariableValues, createFireChangeListenerSpy, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
 
 
 suite('WorkspaceSvg', function() {
@@ -338,5 +339,8 @@ suite('WorkspaceSvg', function() {
             this.changeListenerSpy, this.workspace, this.clock, 10);
       });
     });
+  });
+  suite('Workspace Base class', function() {
+    testAWorkspace();
   });
 });

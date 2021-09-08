@@ -9,7 +9,6 @@ goog.module('Blockly.test.dropdown');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
 suite('DropDownDiv', function() {
   suite('Positioning', function() {
     setup(function() {

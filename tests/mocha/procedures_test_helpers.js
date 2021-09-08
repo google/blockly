@@ -11,7 +11,6 @@ goog.module('Blockly.test.procedureHelpers');
  * @param {!Blockly.Block} block The procedure definition or call block to
  *    check.
  * @param {!Array<string>} varIds An array of variable ids.
- * @private
  */
 function assertBlockVarModels(block, varIds) {
   const expectedVarModels = [];
@@ -25,9 +24,8 @@ function assertBlockVarModels(block, varIds) {
  * Asserts that the procedure call block has the expected arguments.
  * @param {!Blockly.Block} callBlock The procedure definition block.
  * @param {Array<string>=} args An array of argument names.
- * @private
  */
-function assertCallBlockArgsStructure_(callBlock, args) {
+function assertCallBlockArgsStructure(callBlock, args) {
   // inputList also contains "TOPROW"
   chai.assert.equal(callBlock.inputList.length - 1, args.length,
       'call block has the expected number of args');
@@ -97,7 +95,7 @@ function assertCallBlockStructure(callBlock, args = [], varIds = []) {
     chai.assert.notInclude(callBlock.toString(), 'with');
   }
 
-  assertCallBlockArgsStructure_(callBlock, args);
+  assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
 }
 exports.assertCallBlockStructure = assertCallBlockStructure;

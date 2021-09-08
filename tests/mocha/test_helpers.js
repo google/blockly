@@ -5,7 +5,6 @@
  */
 
 goog.module('Blockly.test.helpers');
-goog.module.declareLegacyNamespace();
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 

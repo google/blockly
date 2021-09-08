@@ -7,6 +7,7 @@
 goog.module('Blockly.test.toolbox');
 
 const {defineStackBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getNonCollapsibleItem, getDeeplyNestedJSON, getSeparator, getInjectedToolbox, getSimpleJSON, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
 
 
 suite('Toolbox', function() {

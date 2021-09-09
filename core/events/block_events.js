@@ -253,9 +253,8 @@ Blockly.Events.Create = function(opt_block) {
   /**
    * JSON representation of the block that was just created.
    * @type {!Blockly.serialization.blocks.State}
-   * @private
    */
-  this.blockJson_ = /** @type {!Blockly.serialization.blocks.State} */
+  this.json = /** @type {!Blockly.serialization.blocks.State} */
       (Blockly.serialization.blocks.save(opt_block, {addCoordinates: true}));
 };
 Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
@@ -283,7 +282,7 @@ Blockly.Events.Create.prototype.toJson = function() {
   var json = Blockly.Events.Create.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
-  json['blockJson_'] = this.blockJson_;
+  json['json'] = this.json;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -298,8 +297,8 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
   Blockly.Events.Create.superClass_.fromJson.call(this, json);
   this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
-  this.blockJson_ = /** @type {!Blockly.serialization.blocks.State} */
-      (json['blockJson_']);
+  this.json = /** @type {!Blockly.serialization.blocks.State} */
+      (json['json']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -312,7 +311,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    Blockly.serialization.blocks.load(this.blockJson_, workspace);
+    Blockly.serialization.blocks.load(this.json, workspace);
   } else {
     for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);

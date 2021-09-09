@@ -262,7 +262,7 @@ Code.tabClick = function(clickedName) {
       xmlDom = Blockly.Xml.textToDom(xmlText);
     } catch (e) {
       var q =
-          window.confirm(MSG['badXml'].replace('%1', e));
+          window.confirm(MSG['parseError'].replace('%1', e));
       if (!q) {
         // Leave the user on the XML tab.
         return;
@@ -346,9 +346,8 @@ Code.renderContent = function() {
     xmlTextarea.focus();
   } else if (content.id == 'content_json') {
     var jsonTextarea = document.getElementById('content_json');
-    console.log(Blockly.serialization);
     jsonTextarea.value = JSON.stringify(
-      Blockly.serialization.workspaces.save(Code.workspace), null, 2);
+        Blockly.serialization.workspaces.save(Code.workspace), null, 2);
     jsonTextarea.focus();
   } else if (content.id == 'content_javascript') {
     Code.attemptCodeGeneration(Blockly.JavaScript);
@@ -492,7 +491,7 @@ Code.init = function() {
     BlocklyStorage['HTTPREQUEST_ERROR'] = MSG['httpRequestError'];
     BlocklyStorage['LINK_ALERT'] = MSG['linkAlert'];
     BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
-    BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
+    BlocklyStorage['XML_ERROR'] = MSG['loadError'];
     Code.bindClick(linkButton,
         function() {BlocklyStorage.link(Code.workspace);});
   } else if (linkButton) {

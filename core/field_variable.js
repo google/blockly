@@ -196,20 +196,28 @@ Blockly.FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {*} The ID of the variable referenced by this field.
+ * @param {boolean=} doFullSerialization If true, the variable field will
+ *     serialize the full state of the field being referenced (ie ID, name,
+ *     and type) rather than just a reference to it (ie ID).
+ * @return {*} The state of the variable field.
  * @override
  * @package
  */
-Blockly.FieldVariable.prototype.saveState = function() {
+Blockly.FieldVariable.prototype.saveState = function(doFullSerialization) {
   var legacyState = this.saveLegacyState(Blockly.Field);
   if (legacyState !== null) {
     return legacyState;
   }
   // Make sure the variable is initialized.
   this.initModel();
-  return {
+  var state = {
     'id': this.variable_.getId()
   };
+  if (doFullSerialization) {
+    state['name'] = this.variable_.name;
+    state['type'] = this.variable_.type;
+  }
+  return state;
 };
 
 /**

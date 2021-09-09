@@ -1062,24 +1062,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
     throw Error('oldBlock is not rendered.');
   }
 
-  // Create variables.
-  var variableMap = this.workspace_.getPotentialVariableMap();
-  var blocks = oldBlock.getDescendants(false);
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
-    var ids = block.getVars();
-    for (var j = 0; j < ids.length; j++) {
-      var id = ids[j];
-      var model = variableMap.getVariableById(id);
-      if (!model) {
-        // It must already exist in the main workspace.
-        continue;
-      }
-      Blockly.Variables.getOrCreateVariablePackage(
-          targetWorkspace, id, model.name, model.type);
-    }
-  }
-
   // Clone the block.
   var json = /** @type {!Blockly.serialization.blocks.State} */
       (Blockly.serialization.blocks.save(oldBlock));

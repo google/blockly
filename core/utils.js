@@ -19,19 +19,21 @@
 goog.module('Blockly.utils');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.internalConstants');
-goog.require('Blockly.Msg');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.global');
-goog.require('Blockly.utils.Rect');
-goog.require('Blockly.utils.idGenerator');
-goog.require('Blockly.utils.string');
-goog.require('Blockly.utils.style');
-goog.require('Blockly.utils.userAgent');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const Block = goog.requireType('Blockly.Block');
+const Coordinate = goog.require('Blockly.utils.Coordinate');
+const Msg = goog.require('Blockly.Msg');
+const Rect = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const colourUtils = goog.require('Blockly.utils.colour');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const global = goog.require('Blockly.utils.global');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const internalConstants = goog.require('Blockly.internalConstants');
+const stringUtils = goog.require('Blockly.utils.string');
+const style = goog.require('Blockly.utils.style');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -64,10 +66,10 @@ exports.isTargetInput = isTargetInput;
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
- * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Object with .x and .y properties.
  */
 const getRelativeXY = function(element) {
-  const xy = new Blockly.utils.Coordinate(0, 0);
+  const xy = new Coordinate(0, 0);
   // First, check for x and y attributes.
   const x = element.getAttribute('x');
   if (x) {
@@ -109,7 +111,7 @@ exports.getRelativeXY = getRelativeXY;
  * @param {!Element} element SVG element to find the coordinates of. If this is
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
- * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Object with .x and .y properties.
  */
 const getInjectionDivXY = function(element) {
   let x = 0;
@@ -124,7 +126,7 @@ const getInjectionDivXY = function(element) {
     }
     element = /** @type {!Element} */ (element.parentNode);
   }
-  return new Blockly.utils.Coordinate(x, y);
+  return new Coordinate(x, y);
 };
 exports.getInjectionDivXY_ = getInjectionDivXY;
 
@@ -156,7 +158,7 @@ getRelativeXY.XY_STYLE_REGEX_ =
  * @return {boolean} True if right-click.
  */
 const isRightButton = function(e) {
-  if (e.ctrlKey && Blockly.utils.userAgent.MAC) {
+  if (e.ctrlKey && userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
@@ -201,13 +203,13 @@ const getScrollDeltaPixels = function(e) {
       };
     case 0x01:  // Line mode.
       return {
-        x: e.deltaX * Blockly.internalConstants.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * Blockly.internalConstants.LINE_MODE_MULTIPLIER
+        x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
+        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER
       };
     case 0x02:  // Page mode.
       return {
-        x: e.deltaX * Blockly.internalConstants.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * Blockly.internalConstants.PAGE_MODE_MULTIPLIER
+        x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER
       };
   }
 };
@@ -217,7 +219,7 @@ exports.getScrollDeltaPixels = getScrollDeltaPixels;
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
  * It will also replace string table references (e.g., %{bky_my_msg} and
  * %{BKY_MY_MSG} will both be replaced with the value in
- * Blockly.Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
+ * Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
  * (e.g., '%%').
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
@@ -231,7 +233,7 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
 /**
  * Replaces string table references in a message, if the message is a string.
  * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
- * the value in Blockly.Msg['MY_MSG'].
+ * the value in Msg['MY_MSG'].
  * @param {string|?} message Message, which may be a string that contains
  *     string table references.
  * @return {string} String with message references replaced.
@@ -249,7 +251,7 @@ exports.replaceMessageReferences = replaceMessageReferences;
 
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
- * the Blockly.Msg string table.
+ * the Msg string table.
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
@@ -257,7 +259,7 @@ exports.replaceMessageReferences = replaceMessageReferences;
 const checkMessageReferences = function(message) {
   let validSoFar = true;
 
-  const msgTable = Blockly.Msg;
+  const msgTable = Msg;
 
   // TODO (#1169): Implement support for other string tables,
   // prefixes other than BKY_.
@@ -352,10 +354,10 @@ const tokenizeInterpolation_ = function(message,
           // BKY_ is the prefix used to namespace the strings used in Blockly
           // core files and the predefined blocks in ../blocks/.
           // These strings are defined in ../msgs/ files.
-          const bklyKey = Blockly.utils.string.startsWith(keyUpper, 'BKY_') ?
+          const bklyKey = stringUtils.startsWith(keyUpper, 'BKY_') ?
               keyUpper.substring(4) : null;
-          if (bklyKey && bklyKey in Blockly.Msg) {
-            const rawValue = Blockly.Msg[bklyKey];
+          if (bklyKey && bklyKey in Msg) {
+            const rawValue = Msg[bklyKey];
             if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(tokens,
@@ -418,10 +420,10 @@ const tokenizeInterpolation_ = function(message,
  * @deprecated Use Blockly.utils.idGenerator.genUid instead.
  */
 const genUid = function() {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Blockly.utils.genUid', 'September 2021', 'September 2022',
       'Blockly.utils.idGenerator.genUid');
-  return Blockly.utils.idGenerator.genUid();
+  return idGenerator.genUid();
 };
 exports.genUid = genUid;
 
@@ -436,7 +438,7 @@ const is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!Blockly.utils.global['getComputedStyle']) {
+  if (!global['getComputedStyle']) {
     return false;
   }
 
@@ -456,7 +458,7 @@ const is3dSupported = function() {
   for (let t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = Blockly.utils.global['getComputedStyle'](el);
+      const computedStyle = global['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not
@@ -502,13 +504,13 @@ exports.runAfterPageLoad = runAfterPageLoad;
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return {!Blockly.utils.Rect} An object containing window width, height, and
+ * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
  */
 const getViewportBBox = function() {
   // Pixels, in window coordinates.
-  const scrollOffset = Blockly.utils.style.getViewportPageOffset();
-  return new Blockly.utils.Rect(
+  const scrollOffset = style.getViewportPageOffset();
+  return new Rect(
       scrollOffset.y,
       document.documentElement.clientHeight + scrollOffset.y,
       scrollOffset.x,
@@ -539,18 +541,18 @@ exports.arrayRemove = arrayRemove;
 /**
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
- * @return {!Blockly.utils.Coordinate} Object with values 'x' and 'y'.
+ * @return {!Coordinate} Object with values 'x' and 'y'.
  */
 const getDocumentScroll = function() {
   const el = document.documentElement;
   const win = window;
-  if (Blockly.utils.userAgent.IE && win.pageYOffset != el.scrollTop) {
+  if (userAgent.IE && win.pageYOffset != el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
-    return new Blockly.utils.Coordinate(el.scrollLeft, el.scrollTop);
+    return new Coordinate(el.scrollLeft, el.scrollTop);
   }
-  return new Blockly.utils.Coordinate(
+  return new Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 };
 exports.getDocumentScroll = getDocumentScroll;
@@ -558,7 +560,7 @@ exports.getDocumentScroll = getDocumentScroll;
 /**
  * Get a map of all the block's descendants mapping their type to the number of
  *    children with that type.
- * @param {!Blockly.Block} block The block to map.
+ * @param {!Block} block The block to map.
  * @param {boolean=} opt_stripFollowing Optionally ignore all following
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
@@ -587,10 +589,10 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
 
 /**
  * Converts screen coordinates to workspace coordinates.
- * @param {!Blockly.WorkspaceSvg} ws The workspace to find the coordinates on.
- * @param {!Blockly.utils.Coordinate} screenCoordinates The screen coordinates to
+ * @param {!WorkspaceSvg} ws The workspace to find the coordinates on.
+ * @param {!Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
- * @return {!Blockly.utils.Coordinate} The workspace coordinates.
+ * @return {!Coordinate} The workspace coordinates.
  */
 const screenToWsCoordinates = function(ws, screenCoordinates) {
   const screenX = screenCoordinates.x;
@@ -603,7 +605,7 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   const boundingRect = injectionDiv.getBoundingClientRect();
 
   // The client coordinates offset by the injection div's upper left corner.
-  const clientOffsetPixels = new Blockly.utils.Coordinate(
+  const clientOffsetPixels = new Coordinate(
       screenX - boundingRect.left, screenY - boundingRect.top);
 
   // The offset in pixels between the main workspace's origin and the upper
@@ -612,7 +614,7 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
 
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
-  const finalOffsetPixels = Blockly.utils.Coordinate.difference(
+  const finalOffsetPixels = Coordinate.difference(
       clientOffsetPixels, mainOffsetPixels);
 
   // The position in main workspace coordinates.
@@ -639,12 +641,12 @@ const parseBlockColour = function(colour) {
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     return {
       hue: hue,
-      hex: Blockly.utils.colour.hsvToHex(
-          hue, Blockly.internalConstants.HSV_SATURATION,
-          Blockly.internalConstants.HSV_VALUE * 255)
+      hex: colourUtils.hsvToHex(
+          hue, internalConstants.HSV_SATURATION,
+          internalConstants.HSV_VALUE * 255)
     };
   } else {
-    const hex = Blockly.utils.colour.parse(dereferenced);
+    const hex = colourUtils.parse(dereferenced);
     if (hex) {
       // Only store hue if colour is set as a hue.
       return {

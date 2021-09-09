@@ -585,7 +585,7 @@ suite('Events', function() {
               ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
               '</block>',
           ids: [thisObj.block.id],
-          blockJson_: {
+          json: {
             'type': 'simple_test_block',
             'id': 'testBlockId1',
             'x': 0,
@@ -604,7 +604,7 @@ suite('Events', function() {
               ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
               '</shadow>',
           ids: [thisObj.shadowBlock.id],
-          blockJson_: {
+          json: {
             'type': 'simple_test_block',
             'id': 'testBlockId2',
             'x': 0,

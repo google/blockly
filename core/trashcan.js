@@ -425,7 +425,9 @@ Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-  var contents = this.contents_.map(JSON.parse);
+  var contents = this.contents_.map(function(string) {
+    return JSON.parse(string);
+  });
   this.flyout.show(contents);
   this.fireUiEvent_(true);
 };

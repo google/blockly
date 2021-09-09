@@ -36,7 +36,8 @@ const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const Xml = goog.require('Blockly.Xml');
+/* eslint-disable-next-line no-unused-vars */
+const blocks = goog.requireType('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -73,7 +74,7 @@ const Trashcan = function(workspace) {
   this.id = 'trashcan';
 
   /**
-   * A list of XML (stored as strings) representing blocks in the trashcan.
+   * A list of JSON (stored as strings) representing blocks in the trashcan.
    * @type {!Array<string>}
    * @private
    */
@@ -393,8 +394,10 @@ Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-  const xml = this.contents_.map(Xml.textToDom);
-  this.flyout.show(xml);
+  const contents = this.contents_.map(function(string) {
+    return JSON.parse(string);
+  });
+  this.flyout.show(contents);
   this.fireUiEvent_(true);
 };
 
@@ -669,14 +672,12 @@ Trashcan.prototype.onDelete_ = function(event) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-  // Must check that the tagName exists since oldXml can be a DocumentFragment.
-  if (event.type == Events.BLOCK_DELETE && event.oldXml.tagName &&
-      event.oldXml.tagName.toLowerCase() != 'shadow') {
-    const cleanedXML = this.cleanBlockXML_(event.oldXml);
-    if (this.contents_.indexOf(cleanedXML) != -1) {
+  if (event.type == Events.BLOCK_DELETE && !event.wasShadow) {
+    const cleanedJson = this.cleanBlockJson_(event.oldJson);
+    if (this.contents_.indexOf(cleanedJson) != -1) {
       return;
     }
-    this.contents_.unshift(cleanedXML);
+    this.contents_.unshift(cleanedJson);
     while (this.contents_.length >
            this.workspace_.options.maxTrashcanContents) {
       this.contents_.pop();
@@ -687,52 +688,51 @@ Trashcan.prototype.onDelete_ = function(event) {
 };
 
 /**
- * Converts XML representing a block into text that can be stored in the
- *    content array.
- * @param {!Element} xml An XML tree defining the block and any
- *    connected child blocks.
- * @return {string} Text representing the XML tree, cleaned of all unnecessary
- * attributes.
+ * Converts JSON representing a block into text that can be stored in the
+ * content array.
+ * @param {!blocks.State} json A JSON representation of
+ *     a block's state.
+ * @return {string} Text representing the JSON, cleaned of all unnecessary
+ *     attributes.
  * @private
  */
-Trashcan.prototype.cleanBlockXML_ = function(xml) {
-  const xmlBlock = xml.cloneNode(true);
-  let node = xmlBlock;
-  while (node) {
-    // Things like text inside tags are still treated as nodes, but they
-    // don't have attributes (or the removeAttribute function) so we can
-    // skip removing attributes from them.
-    if (node.removeAttribute) {
-      node.removeAttribute('x');
-      node.removeAttribute('y');
-      node.removeAttribute('id');
-      node.removeAttribute('disabled');
-      if (node.nodeName == 'comment') {  // Future proof just in case.
-        node.removeAttribute('h');
-        node.removeAttribute('w');
-        node.removeAttribute('pinned');
-      }
+Trashcan.prototype.cleanBlockJson_ = function(json) {
+  // Create a deep copy.
+  json = /** @type {!blocks.State} */(JSON.parse(JSON.stringify(json)));
+
+  function cleanRec(json) {
+    if (!json) {
+      return;
     }
 
-    // Try to go down the tree
-    let nextNode = node.firstChild || node.nextSibling;
-    // If we can't go down, try to go back up the tree.
-    if (!nextNode) {
-      nextNode = node.parentNode;
-      while (nextNode) {
-        // We are valid again!
-        if (nextNode.nextSibling) {
-          nextNode = nextNode.nextSibling;
-          break;
-        }
-        // Try going up again. If parentNode is null that means we have
-        // reached the top, and we will break out of both loops.
-        nextNode = nextNode.parentNode;
-      }
+    delete json['id'];
+    delete json['x'];
+    delete json['y'];
+    delete json['enabled'];
+
+    if (json['icons'] && json['icons']['comment']) {
+      const comment = json['icons']['comment'];
+      delete comment['height'];
+      delete comment['width'];
+      delete comment['pinned'];
     }
-    node = nextNode;
+
+    const inputs = json['inputs'];
+    for (var name in inputs) {
+      const input = inputs[name];
+      cleanRec(input['block']);
+      cleanRec(input['shadow']);
+    }
+    if (json['next']) {
+      const next = json['next'];
+      cleanRec(next['block']);
+      cleanRec(next['shadow']);
+    }
   }
-  return Xml.domToText(xmlBlock);
+
+  cleanRec(json);
+  json['kind'] = 'BLOCK';
+  return JSON.stringify(json);
 };
 
 exports = Trashcan;

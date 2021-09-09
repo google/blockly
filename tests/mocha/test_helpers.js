@@ -459,18 +459,18 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   assertXmlProperties_(eventArg, xmlProperties);
 }
 
-function defineStackBlock() {
+function defineStackBlock(name = 'stack_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "stack_block",
+    "type": name,
     "message0": "",
     "previousStatement": null,
     "nextStatement": null
   }]);
 }
 
-function defineRowBlock() {
+function defineRowBlock(name = 'row_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "row_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
@@ -482,9 +482,9 @@ function defineRowBlock() {
   }]);
 }
 
-function defineStatementBlock() {
+function defineStatementBlock(name = 'statement_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "statement_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
@@ -500,9 +500,9 @@ function defineStatementBlock() {
   }]);
 }
 
-function defineBasicBlockWithField() {
+function defineBasicBlockWithField(name = 'test_field_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "test_field_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {

@@ -18,9 +18,9 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.serialization.blocks');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const xml = goog.require('Blockly.utils.xml');
 
 
 /**
@@ -40,12 +40,15 @@ const BlockCreate = function(opt_block) {
     this.recordUndo = false;
   }
 
-  if (opt_block.workspace.rendered) {
-    this.xml = Xml.blockToDomWithXY(opt_block);
-  } else {
-    this.xml = Xml.blockToDom(opt_block);
-  }
+  this.xml = Xml.blockToDomWithXY(opt_block);
   this.ids = Events.getDescendantIds(opt_block);
+
+  /**
+   * JSON representation of the block that was just created.
+   * @type {!blocks.State}
+   */
+  this.json = /** @type {!blocks.State} */ (blocks.save(
+      opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockCreate, BlockBase);
 
@@ -63,6 +66,7 @@ BlockCreate.prototype.toJson = function() {
   const json = BlockCreate.superClass_.toJson.call(this);
   json['xml'] = Xml.domToText(this.xml);
   json['ids'] = this.ids;
+  json['json'] = this.json;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -77,6 +81,7 @@ BlockCreate.prototype.fromJson = function(json) {
   BlockCreate.superClass_.fromJson.call(this, json);
   this.xml = Xml.textToDom(json['xml']);
   this.ids = json['ids'];
+  this.json = /** @type {!blocks.State} */ (json['json']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -89,9 +94,7 @@ BlockCreate.prototype.fromJson = function(json) {
 BlockCreate.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
-    const xmlEl = xml.createElement('xml');
-    xmlEl.appendChild(this.xml);
-    Xml.domToWorkspace(xmlEl, workspace);
+    blocks.load(this.json, workspace);
   } else {
     for (let i = 0; i < this.ids.length; i++) {
       const id = this.ids[i];

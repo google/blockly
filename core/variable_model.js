@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const utils = goog.require('Blockly.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
 
@@ -65,7 +65,7 @@ const VariableModel = function(workspace, name, opt_type, opt_id) {
    * @type {string}
    * @private
    */
-  this.id_ = opt_id || utils.genUid();
+  this.id_ = opt_id || idGenerator.genUid();
 
   Events.fire(new (Events.get(Events.VAR_CREATE))(this));
 };

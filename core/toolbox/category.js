@@ -23,6 +23,7 @@ const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem'
 const IToolbox = goog.requireType('Blockly.IToolbox');
 const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const aria = goog.require('Blockly.utils.aria');
+const colourUtils = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -429,7 +430,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
     if (!isNaN(hue)) {
       return Blockly.hueToHex(hue);
     } else {
-      const hex = utils.colour.parse(colour);
+      const hex = colourUtils.parse(colour);
       if (hex) {
         return hex;
       } else {

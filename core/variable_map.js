@@ -21,8 +21,8 @@ const Names = goog.require('Blockly.Names');
 const VariableModel = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
 /** @suppress {extraRequire} */
@@ -183,7 +183,7 @@ VariableMap.prototype.createVariable = function(name, opt_type, opt_id) {
   if (opt_id && this.getVariableById(opt_id)) {
     throw Error('Variable id, "' + opt_id + '", is already in use.');
   }
-  const id = opt_id || utils.genUid();
+  const id = opt_id || idGenerator.genUid();
   const type = opt_type || '';
   variable = new VariableModel(this.workspace, name, type, id);
 

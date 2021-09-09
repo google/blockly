@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Sdílej bloky tímto odkazem: \n\n%1",
   hashError: "Omlouváme se, '%1' nesouhlasí s žádným z uložených souborů.",
   loadError: "Nepodařilo se uložit vás soubor.  Pravděpodobně byl vytvořen jinou verzí Blockly?",
-  parseError: "Chyba parsování XML:\n%1\n\nVybrat \"OK\" pro zahození vašich změn nebo 'Cancel' k dalšímu upravování XML."
+  parseError: "Chyba parsování %1:\n%2\n\nVybrat \"OK\" pro zahození vašich změn nebo 'Cancel' k dalšímu upravování %1."
 };

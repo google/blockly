@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Tel von dein Bausten mit dem Link:\n\n%1",
   hashError: "„%1“ stimmt leider mit kenem üweren gespeicherte Programm.",
   loadError: "Dein gespeicherte Datei könnt net gelood sin. Vielleicht woard se mit ener annre Version von Blockly erstellt.",
-  parseError: "Fehler beim Parse von XML:\n%1\n\nWähle 'OK' zum Verwerfe von deiner Ändrunge orrer 'Abbreche' zum XML weiter beoorbeite."
+  parseError: "Fehler beim Parse von %1:\n%2\n\nWähle 'OK' zum Verwerfe von deiner Ändrunge orrer 'Abbreche' zum %1 weiter beoorbeite."
 };

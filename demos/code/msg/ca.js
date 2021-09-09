@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Comparteix els teus blocs amb aquest enllaç: %1",
   hashError: "Ho sentim, '%1' no es correspon amb cap fitxer desat de Blockly.",
   loadError: "No s'ha pogut carregar el teu fitxer desat.  Potser va ser creat amb una versió diferent de Blockly?",
-  parseError: "Error d'anàlisi XML:\n%1\n\nSeleccioneu 'Acceptar' per abandonar els vostres canvis, o 'Cancel·lar' per continuar editant l'XML."
+  parseError: "Error d'anàlisi %1:\n%2\n\nSeleccioneu 'Acceptar' per abandonar els vostres canvis, o 'Cancel·lar' per continuar editant l'%1."
 };

@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Dela dina block med denna länk: \n\n%1",
   hashError: "Tyvärr, '%1' överensstämmer inte med något sparat program.",
   loadError: "Kunde inte läsa din sparade fil. Den skapades kanske med en annan version av Blockly?",
-  parseError: "Fel vid parsning av XML:\n%1\n\nKlicka på 'OK' för att strunta i dina ändringar eller 'Avbryt' för att fortsätta redigera XML-koden."
+  parseError: "Fel vid parsning av %1:\n%2\n\nKlicka på 'OK' för att strunta i dina ändringar eller 'Avbryt' för att fortsätta redigera %1-koden."
 };

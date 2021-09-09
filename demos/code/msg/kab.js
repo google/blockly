@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Bḍu iḥedran-ik s useqdec n useɣwen-agi:\n\n%1",
   hashError: "Suref-aɣ, '%1' ur imenṭaḍ ulad d yiwen n wahil yettwaskelsen.",
   loadError: "Ur izmir ara ad d-isali afaylu  n usekles. Ahatyettwarna s lqem-nniḍen n Blockly?",
-  parseError: "Tuccḍa di tesleḍt n XML :\n%1\n\nFren 'IH' akken ad tzgleḍ asnifel-ik 'Sefsex' akken ad tkemmleḍ asnifel n XML."
+  parseError: "Tuccḍa di tesleḍt n %1 :\n%2\n\nFren 'IH' akken ad tzgleḍ asnifel-ik 'Sefsex' akken ad tkemmleḍ asnifel n %1."
 };

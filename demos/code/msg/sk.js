@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Zdieľať tento program skopírovaním odkazu\n\n%1",
   hashError: "Prepáč, '%1' nie je meno žiadnemu uloženému programu.",
   loadError: "Nebolo možné načítať uložený súbor. Možno bol vytvorený v inej verzii Blocky.",
-  parseError: "Chyba pri parsovaní XML:\n%1\n\nStlačte 'OK' ak chcete zrušiť zmeny alebo 'Zrušiť' pre pokračovanie v úpravách XML."
+  parseError: "Chyba pri parsovaní %1:\n%2\n\nStlačte 'OK' ak chcete zrušiť zmeny alebo 'Zrušiť' pre pokračovanie v úpravách %1."
 };

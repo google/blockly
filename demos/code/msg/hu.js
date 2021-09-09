@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Ezzel a hivatkozással tudod megosztani a programodat:\n\n%1",
   hashError: "Sajnos a '%1' hivatkozás nem tartozik egyetlen programhoz sem.",
   loadError: "A programodat nem lehet betölteni.  Elképzelhető, hogy a Blockly egy másik verziójában készült?",
-  parseError: "Hiba az XML feldolgozásakor:\n%1\n\nVáltozások elvetése?"
+  parseError: "Hiba az %1 feldolgozásakor:\n%2\n\nVáltozások elvetése?"
 };

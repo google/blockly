@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Teile deine Bausteine mit diesem Link:\n\n%1",
   hashError: "„%1“ stimmt leider mit keinem gespeicherten Programm überein.",
   loadError: "Deine gespeicherte Datei konnte nicht geladen werden. Vielleicht wurde sie mit einer anderen Version von Blockly erstellt.",
-  parseError: "Fehler beim Parsen von XML:\n%1\n\nWähle 'OK' zum Verwerfen deiner Änderungen oder 'Abbrechen' zum weiteren Bearbeiten des XML."
+  parseError: "Fehler beim Parsen von %1:\n%2\n\nWähle 'OK' zum Verwerfen deiner Änderungen oder 'Abbrechen' zum weiteren Bearbeiten des %1."
 };

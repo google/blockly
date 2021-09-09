@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Deildu kubbunum þínum með þessari krækju:",
   hashError: "Því miður, '%1' passar ekki við neitt vistað forrit.",
   loadError: "Gat ekki hlaðið vistuðu skrána þína. Var hún kannske búin til í annarri útgáfu af Blockly?",
-  parseError: "Villa við úrvinnslu XML:\n%1\n\nVeldu 'Í lagi' til að sleppa breytingum eða 'Hætta við' til að halda áfram með XML."
+  parseError: "Villa við úrvinnslu %1:\n%2\n\nVeldu 'Í lagi' til að sleppa breytingum eða 'Hætta við' til að halda áfram með %1."
 };

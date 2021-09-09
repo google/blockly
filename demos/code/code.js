@@ -261,8 +261,8 @@ Code.tabClick = function(clickedName) {
     try {
       xmlDom = Blockly.Xml.textToDom(xmlText);
     } catch (e) {
-      var q =
-          window.confirm(MSG['parseError'].replace('%1', e));
+      var q = window.confirm(
+          MSG['parseError'].replaceAll('%1', 'XML').replace('%2', e));
       if (!q) {
         // Leave the user on the XML tab.
         return;
@@ -281,7 +281,8 @@ Code.tabClick = function(clickedName) {
     try {
       json = JSON.parse(jsonText);
     } catch (e) {
-      var q = window.confirm(MSG['badJson'].replace('%1', e));
+      var q = window.confirm(
+          MSG['parseError'].replaceAll('%1', 'JSON').replace('%2', e));
       if (!q) {
         // Leave the user on the JSON tab.
         return;

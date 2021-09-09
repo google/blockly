@@ -20,5 +20,5 @@ var MSG = {
   linkAlert: "Partagez vos blocs grâce à ce lien:\n\n%1",
   hashError: "Désolé, '%1' ne correspond à aucun programme sauvegardé.",
   loadError: "Impossible de charger le fichier de sauvegarde.  Peut être a t-il été créé avec une autre version de Blockly?",
-  parseError: "Erreur d’analyse du XML :\n%1\n\nSélectionner 'OK' pour abandonner vos modifications ou 'Annuler' pour continuer à modifier le XML."
+  parseError: "Erreur d’analyse du %1 :\n%2\n\nSélectionner 'OK' pour abandonner vos modifications ou 'Annuler' pour continuer à modifier le %1."
 };

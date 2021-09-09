@@ -54,11 +54,11 @@ exports.noEvent = noEvent;
  */
 const isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
-         e.target.type == 'number' || e.target.type == 'email' ||
-         e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url' ||
-         e.target.isContentEditable ||
-         (e.target.dataset && e.target.dataset.isTextInput == 'true');
+      e.target.type == 'number' || e.target.type == 'email' ||
+      e.target.type == 'password' || e.target.type == 'search' ||
+      e.target.type == 'tel' || e.target.type == 'url' ||
+      e.target.isContentEditable ||
+      (e.target.dataset && e.target.dataset.isTextInput == 'true');
 };
 exports.isTargetInput = isTargetInput;
 
@@ -92,8 +92,7 @@ const getRelativeXY = function(element) {
   // Then check for style = transform: translate(...) or translate3d(...)
   const style = element.getAttribute('style');
   if (style && style.indexOf('translate') > -1) {
-    const styleComponents =
-        style.match(getRelativeXY.XY_STYLE_REGEX_);
+    const styleComponents = style.match(getRelativeXY.XY_STYLE_REGEX_);
     if (styleComponents) {
       xy.x += Number(styleComponents[1]);
       if (styleComponents[3]) {
@@ -139,8 +138,7 @@ exports.getInjectionDivXY_ = getInjectionDivXY;
  * @type {!RegExp}
  * @private
  */
-getRelativeXY.XY_REGEX_ =
-    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
+getRelativeXY.XY_REGEX_ = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 
 /**
  * Static regex to pull the x,y values out of a translate() or translate3d()
@@ -197,10 +195,7 @@ const getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {
     case 0x00:  // Pixel mode.
     default:
-      return {
-        x: e.deltaX,
-        y: e.deltaY
-      };
+      return {x: e.deltaX, y: e.deltaY};
     case 0x01:  // Line mode.
       return {
         x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
@@ -285,8 +280,7 @@ exports.checkMessageReferences = checkMessageReferences;
  *     interpolation tokens (%1, %2, ...) when true.
  * @return {!Array<string|number>} Array of strings and numbers.
  */
-const tokenizeInterpolation_ = function(message,
-    parseInterpolationTokens) {
+const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   const tokens = [];
   const chars = message.split('');
   chars.push('');  // End marker.
@@ -341,8 +335,8 @@ const tokenizeInterpolation_ = function(message,
       if (c == '') {
         // Premature end before closing '}'
         buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
-        i--;  // Parse this char again.
-        state = 0;  // and parse as string literal.
+        i--;                        // Parse this char again.
+        state = 0;                  // and parse as string literal.
       } else if (c != '}') {
         buffer.push(c);
       } else {
@@ -355,14 +349,15 @@ const tokenizeInterpolation_ = function(message,
           // core files and the predefined blocks in ../blocks/.
           // These strings are defined in ../msgs/ files.
           const bklyKey = stringUtils.startsWith(keyUpper, 'BKY_') ?
-              keyUpper.substring(4) : null;
+              keyUpper.substring(4) :
+              null;
           if (bklyKey && bklyKey in Msg) {
             const rawValue = Msg[bklyKey];
             if (typeof rawValue == 'string') {
               // Attempt to dereference substrings, too, appending to the end.
-              Array.prototype.push.apply(tokens,
-                  tokenizeInterpolation_(
-                      rawValue, parseInterpolationTokens));
+              Array.prototype.push.apply(
+                  tokens,
+                  tokenizeInterpolation_(rawValue, parseInterpolationTokens));
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
               // placeholders (%1, %2, etc). Make sure all other values are
@@ -511,11 +506,8 @@ const getViewportBBox = function() {
   // Pixels, in window coordinates.
   const scrollOffset = style.getViewportPageOffset();
   return new Rect(
-      scrollOffset.y,
-      document.documentElement.clientHeight + scrollOffset.y,
-      scrollOffset.x,
-      document.documentElement.clientWidth + scrollOffset.x
-  );
+      scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
+      scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 };
 /** @package */
 exports.getViewportBBox = getViewportBBox;
@@ -605,8 +597,8 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   const boundingRect = injectionDiv.getBoundingClientRect();
 
   // The client coordinates offset by the injection div's upper left corner.
-  const clientOffsetPixels = new Coordinate(
-      screenX - boundingRect.left, screenY - boundingRect.top);
+  const clientOffsetPixels =
+      new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
 
   // The offset in pixels between the main workspace's origin and the upper
   // left corner of the injection div.
@@ -614,8 +606,8 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
 
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
-  const finalOffsetPixels = Coordinate.difference(
-      clientOffsetPixels, mainOffsetPixels);
+  const finalOffsetPixels =
+      Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
 
   // The position in main workspace coordinates.
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
@@ -634,8 +626,8 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
  * @throws {Error} If the colour cannot be parsed.
  */
 const parseBlockColour = function(colour) {
-  const dereferenced = (typeof colour == 'string') ?
-      replaceMessageReferences(colour) : colour;
+  const dereferenced =
+      (typeof colour == 'string') ? replaceMessageReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
@@ -649,10 +641,7 @@ const parseBlockColour = function(colour) {
     const hex = colourUtils.parse(dereferenced);
     if (hex) {
       // Only store hue if colour is set as a hue.
-      return {
-        hue: null,
-        hex: hex
-      };
+      return {hue: null, hex: hex};
     } else {
       let errorMsg = 'Invalid colour: "' + dereferenced + '"';
       if (colour != dereferenced) {

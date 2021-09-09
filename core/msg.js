@@ -14,7 +14,8 @@
  * Name space for the Msg singleton.
  * Msg gets populated in the message files.
  */
-goog.provide('Blockly.Msg');
+goog.module('Blockly.Msg');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.utils.global');
 
@@ -27,5 +28,5 @@ if (!Blockly.utils.global['Blockly']) {
   Blockly.utils.global['Blockly'] = {};
 }
 if (!Blockly.utils.global['Blockly']['Msg']) {
-  Blockly.utils.global['Blockly']['Msg'] = Blockly.Msg;
+  Blockly.utils.global['Blockly']['Msg'] = exports;
 }

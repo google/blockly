@@ -44,7 +44,7 @@ exports.TipInfo = TipInfo;
  */
 let visible = false;
 /** @deprecated September 2021 */
-exports.visible = visible;
+exports.visible;
 
 const isVisible = function() {
   return visible;

@@ -16,7 +16,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.svgPaths');
-goog.module.declareLegacyNamespace();
 
 
 /**

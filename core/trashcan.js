@@ -30,7 +30,6 @@ goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.Events.Abstract');
 goog.requireType('Blockly.IDraggable');
@@ -64,7 +63,7 @@ Blockly.Trashcan = function(workspace) {
   this.id = 'trashcan';
 
   /**
-   * A list of XML (stored as strings) representing blocks in the trashcan.
+   * A list of JSON (stored as strings) representing blocks in the trashcan.
    * @type {!Array<string>}
    * @private
    */
@@ -426,8 +425,10 @@ Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-  var xml = this.contents_.map(Blockly.Xml.textToDom);
-  this.flyout.show(xml);
+  var contents = this.contents_.map(function(string) {
+    return JSON.parse(string);
+  });
+  this.flyout.show(contents);
   this.fireUiEvent_(true);
 };
 
@@ -706,14 +707,12 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-  // Must check that the tagName exists since oldXml can be a DocumentFragment.
-  if (event.type == Blockly.Events.BLOCK_DELETE && event.oldXml.tagName &&
-      event.oldXml.tagName.toLowerCase() != 'shadow') {
-    var cleanedXML = this.cleanBlockXML_(event.oldXml);
-    if (this.contents_.indexOf(cleanedXML) != -1) {
+  if (event.type == Blockly.Events.BLOCK_DELETE && !event.wasShadow) {
+    var cleanedJson = this.cleanBlockJson_(event.oldJson);
+    if (this.contents_.indexOf(cleanedJson) != -1) {
       return;
     }
-    this.contents_.unshift(cleanedXML);
+    this.contents_.unshift(cleanedJson);
     while (this.contents_.length >
         this.workspace_.options.maxTrashcanContents) {
       this.contents_.pop();
@@ -724,50 +723,49 @@ Blockly.Trashcan.prototype.onDelete_ = function(event) {
 };
 
 /**
- * Converts XML representing a block into text that can be stored in the
- *    content array.
- * @param {!Element} xml An XML tree defining the block and any
- *    connected child blocks.
- * @return {string} Text representing the XML tree, cleaned of all unnecessary
- * attributes.
+ * Converts JSON representing a block into text that can be stored in the
+ * content array.
+ * @param {!Blockly.serialization.blocks.State} json A JSON representation of
+ *     a block's state.
+ * @return {string} Text representing the JSON, cleaned of all unnecessary
+ *     attributes.
  * @private
  */
-Blockly.Trashcan.prototype.cleanBlockXML_ = function(xml) {
-  var xmlBlock = xml.cloneNode(true);
-  var node = xmlBlock;
-  while (node) {
-    // Things like text inside tags are still treated as nodes, but they
-    // don't have attributes (or the removeAttribute function) so we can
-    // skip removing attributes from them.
-    if (node.removeAttribute) {
-      node.removeAttribute('x');
-      node.removeAttribute('y');
-      node.removeAttribute('id');
-      node.removeAttribute('disabled');
-      if (node.nodeName == 'comment') {  // Future proof just in case.
-        node.removeAttribute('h');
-        node.removeAttribute('w');
-        node.removeAttribute('pinned');
-      }
+Blockly.Trashcan.prototype.cleanBlockJson_ = function(json) {
+  json = /** @type {!Blockly.serialization.blocks.State} */
+      (JSON.parse(JSON.stringify(json)));  // Create deep copy.
+
+  function cleanRec(json) {
+    if (!json) {
+      return;
     }
 
-    // Try to go down the tree
-    var nextNode = node.firstChild || node.nextSibling;
-    // If we can't go down, try to go back up the tree.
-    if (!nextNode) {
-      nextNode = node.parentNode;
-      while (nextNode) {
-        // We are valid again!
-        if (nextNode.nextSibling) {
-          nextNode = nextNode.nextSibling;
-          break;
-        }
-        // Try going up again. If parentNode is null that means we have
-        // reached the top, and we will break out of both loops.
-        nextNode = nextNode.parentNode;
-      }
+    delete json['id'];
+    delete json['x'];
+    delete json['y'];
+    delete json['enabled'];
+
+    if (json['icons'] && json['icons']['comment']) {
+      var comment = json['icons']['comment'];
+      delete comment['height'];
+      delete comment['width'];
+      delete comment['pinned'];
     }
-    node = nextNode;
+
+    var inputs = json['inputs'];
+    for (var name in inputs) {
+      var input = inputs[name];
+      cleanRec(input['block']);
+      cleanRec(input['shadow']);
+    }
+    if (json['next']) {
+      var next = json['next'];
+      cleanRec(next['block']);
+      cleanRec(next['shadow']);
+    }
   }
-  return Blockly.Xml.domToText(xmlBlock);
+  
+  cleanRec(json);
+  json['kind'] = 'BLOCK';
+  return JSON.stringify(json);
 };

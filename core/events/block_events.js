@@ -26,8 +26,8 @@ goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.xml');
 goog.require('Blockly.Xml');
+goog.require('Blockly.serialization.blocks');
 
 goog.requireType('Blockly.Block');
 
@@ -247,12 +247,15 @@ Blockly.Events.Create = function(opt_block) {
     this.recordUndo = false;
   }
 
-  if (opt_block.workspace.rendered) {
-    this.xml = Blockly.Xml.blockToDomWithXY(opt_block);
-  } else {
-    this.xml = Blockly.Xml.blockToDom(opt_block);
-  }
+  this.xml = Blockly.Xml.blockToDomWithXY(opt_block);
   this.ids = Blockly.Events.getDescendantIds(opt_block);
+
+  /**
+   * JSON representation of the block that was just created.
+   * @type {!Blockly.serialization.blocks.State}
+   */
+  this.json = /** @type {!Blockly.serialization.blocks.State} */
+      (Blockly.serialization.blocks.save(opt_block, {addCoordinates: true}));
 };
 Blockly.utils.object.inherits(Blockly.Events.Create, Blockly.Events.BlockBase);
 
@@ -279,6 +282,7 @@ Blockly.Events.Create.prototype.toJson = function() {
   var json = Blockly.Events.Create.superClass_.toJson.call(this);
   json['xml'] = Blockly.Xml.domToText(this.xml);
   json['ids'] = this.ids;
+  json['json'] = this.json;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -293,6 +297,8 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
   Blockly.Events.Create.superClass_.fromJson.call(this, json);
   this.xml = Blockly.Xml.textToDom(json['xml']);
   this.ids = json['ids'];
+  this.json = /** @type {!Blockly.serialization.blocks.State} */
+      (json['json']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -305,9 +311,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = this.getEventWorkspace_();
   if (forward) {
-    var xml = Blockly.utils.xml.createElement('xml');
-    xml.appendChild(this.xml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    Blockly.serialization.blocks.load(this.json, workspace);
   } else {
     for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
@@ -341,12 +345,22 @@ Blockly.Events.Delete = function(opt_block) {
     this.recordUndo = false;
   }
 
-  if (opt_block.workspace.rendered) {
-    this.oldXml = Blockly.Xml.blockToDomWithXY(opt_block);
-  } else {
-    this.oldXml = Blockly.Xml.blockToDom(opt_block);
-  }
+  this.oldXml = Blockly.Xml.blockToDomWithXY(opt_block);
   this.ids = Blockly.Events.getDescendantIds(opt_block);
+
+  /**
+   * Was the block that was just deleted a shadow?
+   * @type {boolean}
+   */
+  this.wasShadow = opt_block.isShadow();
+
+  /**
+   * JSON representation of the block that was just deleted.
+   * @type {!Blockly.serialization.blocks.State}
+   */
+  this.oldJson = /** @type {!Blockly.serialization.blocks.State} */
+      (Blockly.serialization.blocks.save(opt_block, {addCoordinates: true}));
+
 };
 Blockly.utils.object.inherits(Blockly.Events.Delete, Blockly.Events.BlockBase);
 
@@ -372,6 +386,8 @@ Blockly.Events.Delete.prototype.toJson = function() {
   var json = Blockly.Events.Delete.superClass_.toJson.call(this);
   json['oldXml'] = Blockly.Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
+  json['wasShadow'] = this.wasShadow;
+  json['oldJson'] = this.oldJson;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -386,6 +402,10 @@ Blockly.Events.Delete.prototype.fromJson = function(json) {
   Blockly.Events.Delete.superClass_.fromJson.call(this, json);
   this.oldXml = Blockly.Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
+  this.wasShadow =
+    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
+  this.oldJson = /** @type {!Blockly.serialization.blocks.State} */
+      (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -408,9 +428,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    var xml = Blockly.utils.xml.createElement('xml');
-    xml.appendChild(this.oldXml);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    Blockly.serialization.blocks.load(this.oldJson, workspace);
   }
 };
 

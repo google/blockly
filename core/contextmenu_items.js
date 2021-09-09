@@ -22,9 +22,9 @@ const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 
 
 /** Option to undo previous action. */
@@ -288,7 +288,7 @@ const registerDeleteAll = function() {
       }
       scope.workspace.cancelCurrentGesture();
       const deletableBlocks = getDeletableBlocks_(scope.workspace);
-      const eventGroup = utils.genUid();
+      const eventGroup = idGenerator.genUid();
       if (deletableBlocks.length < 2) {
         deleteNext_(deletableBlocks, eventGroup);
       } else {

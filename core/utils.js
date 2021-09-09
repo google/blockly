@@ -24,6 +24,7 @@ goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.Rect');
+goog.require('Blockly.utils.idGenerator');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.style');
 goog.require('Blockly.utils.userAgent');
@@ -402,29 +403,16 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
 };
 
 /**
- * Generate a unique ID.  This should be globally unique.
- * 87 characters ^ 20 length > 128 bits (better than a UUID).
+ * Generate a unique ID.
  * @return {string} A globally unique ID string.
+ * @deprecated Use Blockly.utils.idGenerator.genUid instead.
  */
 Blockly.utils.genUid = function() {
-  var length = 20;
-  var soupLength = Blockly.utils.genUid.soup_.length;
-  var id = [];
-  for (var i = 0; i < length; i++) {
-    id[i] = Blockly.utils.genUid.soup_.charAt(Math.random() * soupLength);
-  }
-  return id.join('');
+  Blockly.utils.deprecation.warn(
+      'Blockly.utils.genUid', 'September 2021', 'September 2022',
+      'Blockly.utils.idGenerator.genUid');
+  return Blockly.utils.idGenerator.genUid();
 };
-
-/**
- * Legal characters for the unique ID.  Should be all on a US keyboard.
- * No characters that conflict with XML or JSON.  Requests to remove additional
- * 'problematic' characters from this soup will be denied.  That's your failure
- * to properly escape in your own environment.  Issues #251, #625, #682, #1304.
- * @private
- */
-Blockly.utils.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**
  * Check if 3D transforms are supported by adding an element

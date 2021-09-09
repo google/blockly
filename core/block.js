@@ -41,6 +41,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
@@ -77,8 +78,8 @@ const Block = function(workspace, prototypeName, opt_id) {
   }
 
   /** @type {string} */
-  this.id =
-      (opt_id && !workspace.getBlockById(opt_id)) ? opt_id : utils.genUid();
+  this.id = (opt_id && !workspace.getBlockById(opt_id)) ? opt_id :
+                                                          idGenerator.genUid();
   workspace.setBlockById(this.id, this);
   /** @type {Connection} */
   this.outputConnection = null;

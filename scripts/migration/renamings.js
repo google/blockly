@@ -21,7 +21,7 @@
  */
 const renamings = {
   '4.20201217.0': {
-    Blockly: {
+    'Blockly': {
       exports: {
         // bind/unbind events functions.  See PR #4642
         EventData: {module: 'Blockly.eventHandling', export: 'Data'},
@@ -35,7 +35,7 @@ const renamings = {
     }
   },
   '6.20210701.0': {
-    Blockly: {
+    'Blockly': {
       exports: {
         // Clipboard.  See PR #5237.
         clipboardXml_: {module: 'Blockly.clipboard', export: 'xml'},
@@ -67,6 +67,14 @@ const renamings = {
 
       },
     },
+    'Blockly.utils': {
+      exports: {
+        genUid: {module: 'Blockly.utils.idGenerator'},
+      }
+    },
+    'Blockly.utils.IdGenerator': {
+      module: 'Blockly.utils.idGenerator',
+    }
   },
 };
 

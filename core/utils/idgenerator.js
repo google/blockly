@@ -18,7 +18,7 @@ goog.module('Blockly.utils.idGenerator');
 goog.module.declareLegacyNamespace();
 
 
-/** 
+/**
  * Namespace object for internal implementations we want to be able to
  * stub in tests.
  */
@@ -56,7 +56,11 @@ exports.getNextUniqueId = getNextUniqueId;
 const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
- /** @return {string} */
+/**
+ * Generate a random unique ID.  This should be globally unique.
+ * 87 characters ^ 20 length > 128 bits (better than a UUID).
+ * @return {string} A globally unique ID string.
+ */
 internal.genUid = function() {
   const length = 20;
   const soupLength = soup.length;
@@ -68,8 +72,8 @@ internal.genUid = function() {
 };
 
 /**
- * Generate a random unique ID.  This should be globally unique.
- * 87 characters ^ 20 length > 128 bits (better than a UUID).
+ * Generate a random unique ID.
+ * @see internal.genUid
  * @return {string} A globally unique ID string.
  */
 const genUid = function() {

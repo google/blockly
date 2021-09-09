@@ -404,37 +404,15 @@ Blockly.utils.tokenizeInterpolation_ = function(message,
 
 /**
  * Generate a unique ID.
- *
- * This is actually a get/set accessor pair for
- * Blockly.utils.idGenerator.genUid so that existing code that stubs
- * genUid (including code in
- * blockly-samples/plugins/dev-tools/src/block_test_helpers.mocha.js)
- * can continue to stub/mock this function until we provide a better
- * mechansim for doing so.
- *
  * @return {string} A globally unique ID string.
  * @deprecated Use Blockly.utils.idGenerator.genUid instead.
  */
-Blockly.utils.genUid = function() {};  // For type declaration.
-
-Object.defineProperties(Blockly.utils, {
-  genUid: {
-    get: function() {
-      console.log('get accessor called');
-      Blockly.utils.deprecation.warn(
-        'Blockly.utils.genUid', 'September 2021', 'December 2021',
-        'Blockly.utils.idGenerator.genUid');
-      return Blockly.utils.idGenerator.genUid;
-    },
-    set: function(genUid) {
-      console.log('set accessor called');
-      Blockly.utils.deprecation.warn(
-        'Blockly.utils.genUid', 'September 2021', 'December 2021',
-        'Blockly.utils.idGenerator.genUid');
-      Blockly.utils.idGenerator.genUid = genUid;
-    },
-  }
-});
+Blockly.utils.genUid = function() {
+  Blockly.utils.deprecation.warn(
+      'Blockly.utils.genUid', 'September 2021', 'September 2022',
+      'Blockly.utils.idGenerator.genUid');
+  return Blockly.utils.idGenerator.genUid();
+};
 
 /**
  * Check if 3D transforms are supported by adding an element

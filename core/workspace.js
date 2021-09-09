@@ -267,11 +267,9 @@ Blockly.Workspace.prototype.getBlocksByType = function(type, ordered) {
     blocks.sort(this.sortObjects_);
   }
 
-  var filtered = blocks.filter(function(block) {
+  return blocks.filter(function(block) {
     return !block.isInsertionMarker();
   });
-
-  return filtered;
 };
 
 /**

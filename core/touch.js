@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Gesture = goog.requireType('Blockly.Gesture');
 const internalConstants = goog.require('Blockly.internalConstants');
-const utilsGlobal = goog.require('Blockly.utils.global');
+const {globalThis} = goog.require('Blockly.utils.global');
 const utilsString = goog.require('Blockly.utils.string');
 
 
@@ -26,13 +26,13 @@ const utilsString = goog.require('Blockly.utils.string');
  * @const
  */
 const TOUCH_ENABLED =
-    ('ontouchstart' in utilsGlobal ||
-     !!(utilsGlobal['document'] && document.documentElement &&
+    ('ontouchstart' in globalThis ||
+     !!(globalThis['document'] && document.documentElement &&
         'ontouchstart' in document.documentElement) ||
      // IE10 uses non-standard touch events, so it has a different check.
-     !!(utilsGlobal['navigator'] &&
-        (utilsGlobal['navigator']['maxTouchPoints'] ||
-         utilsGlobal['navigator']['msMaxTouchPoints'])));
+     !!(globalThis['navigator'] &&
+        (globalThis['navigator']['maxTouchPoints'] ||
+         globalThis['navigator']['msMaxTouchPoints'])));
 exports.TOUCH_ENABLED = TOUCH_ENABLED;
 
 /**
@@ -47,7 +47,7 @@ let touchIdentifier_ = null;
  * @type {Object}
  */
 let TOUCH_MAP = {};
-if (utilsGlobal['PointerEvent']) {
+if (globalThis['PointerEvent']) {
   TOUCH_MAP = {
     'mousedown': ['pointerdown'],
     'mouseenter': ['pointerenter'],

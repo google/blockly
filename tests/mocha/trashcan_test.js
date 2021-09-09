@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.trashcan');
 
-const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
+const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, defineRowBlock, defineStatementBlock, defineStackBlock, defineMutatorBlocks, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
 
 
 suite("Trashcan", function() {
@@ -15,14 +15,13 @@ suite("Trashcan", function() {
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString + '</xml>');
     xml = xml.children[0];
-    var event = new Blockly.Events.BlockDelete();
-    event.oldXml = xml;
-    event.workspaceId = workspace.id;
+    var block = Blockly.Xml.domToBlock(xml, workspace);
+    var event = new Blockly.Events.BlockDelete(block);
     Blockly.Events.fire(event);
   }
   function fireNonDeleteEvent(workspace, oldXml) {
     var event = new Blockly.Events.Abstract();
-    event.type = 'dummy_type';
+    event.type = 'test_field_block';
     event.workspaceId = workspace.id;
     if (oldXml) {
       event.oldXml = oldXml;
@@ -32,17 +31,27 @@ suite("Trashcan", function() {
 
   setup(function() {
     sharedTestSetup.call(this);
+    defineBasicBlockWithField();
+    defineRowBlock();
+    defineRowBlock('row_block2');
+    defineStatementBlock();
+    defineStatementBlock('statement_block2');
+    defineStackBlock();
+    defineStackBlock('stack_block2');
+    defineMutatorBlocks();
     this.workspace = Blockly.inject('blocklyDiv',
         {'trashcan': true, 'maxTrashcanContents': Infinity});
     this.trashcan = this.workspace.trashcan;
   });
   teardown(function() {
     sharedTestTeardown.call(this);
+    Blockly.Extensions.unregister('xml_mutator');
+    Blockly.Extensions.unregister('jso_mutator');
   });
 
   suite("Events", function() {
     test("Delete", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
     test("Non-Delete", function() {
@@ -52,7 +61,7 @@ suite("Trashcan", function() {
     test("Non-Delete w/ oldXml", function() {
       var xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
-          '  <block type="dummy_type"/>' +
+          '  <block type="test_field_block"/>' +
           '</xml>'
       );
       xml = xml.children[0];
@@ -60,7 +69,7 @@ suite("Trashcan", function() {
       chai.assert.equal(this.trashcan.contents_.length, 0);
     });
     test("Shadow Delete", function() {
-      fireDeleteEvent(this.workspace, '<shadow type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<shadow type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 0);
     });
     test("Click without contents - fires workspace click", function() {
@@ -73,7 +82,7 @@ suite("Trashcan", function() {
           this.workspace.id, null);
     });
     test("Click with contents - fires trashcanOpen", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
       // Stub flyout interaction.
       var showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
@@ -107,56 +116,52 @@ suite("Trashcan", function() {
   });
   suite("Unique Contents", function() {
     test("Simple", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
+      fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
     test("Different Coords", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" x="10" y="10"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" x="20" y="20"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block" x="10" y="10"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block" x="20" y="20"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
     test("Different IDs", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" id="id1"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" id="id2"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block" id="id1"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block" id="id2"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
     test("No Disabled - Disabled True", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" disabled="true"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block"/>');
+      fireDeleteEvent(
+          this.workspace, '<block type="test_field_block" disabled="true"/>');
       // Disabled tags get removed because disabled blocks aren't allowed to
       // be dragged from flyouts. See #2239 and #3243.
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
-    test("No Editable - Editable False", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" editable="false"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
-    test("No Movable - Movable False", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type" movable="false"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
     test("Different Field Values", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <field name="dummy_name">dummy_value1</field>' +
+          '<block type="test_field_block">' +
+          '  <field name="NAME">dummy_value1</field>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <field name="dummy_name">dummy_value2</field>' +
+          '<block type="test_field_block">' +
+          '  <field name="NAME">dummy_value2</field>' +
           '</block>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("No Values - Values", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="row_block"/>');
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <value name="dummy_input">' +
-          '    <block type="dummy_type"/>' +
+          '<block type="row_block">' +
+          '  <value name="INPUT">' +
+          '    <block type="row_block"/>' +
           '  </value>' +
           '</block>'
       );
@@ -164,27 +169,27 @@ suite("Trashcan", function() {
     });
     test("Different Value Blocks", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <value name="dummy_input">' +
-          '    <block type="dummy_type1"/>' +
+          '<block type="row_block">' +
+          '  <value name="INPUT">' +
+          '    <block type="row_block"/>' +
           '  </value>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <value name="dummy_input">' +
-          '    <block type="dummy_type2"/>' +
+          '<block type="row_block">' +
+          '  <value name="INPUT">' +
+          '    <block type="row_block2"/>' +
           '  </value>' +
           '</block>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("No Statements - Statements", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="statement_block"/>');
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <statement name="dummy_input">' +
-          '    <block type="dummy_type"/>' +
+          '<block type="statement_block">' +
+          '  <statement name="NAME">' +
+          '    <block type="statement_block"/>' +
           '  </statement>' +
           '</block>'
       );
@@ -192,27 +197,27 @@ suite("Trashcan", function() {
     });
     test("Different Statement Blocks", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <statement name="dummy_input">' +
-          '    <block type="dummy_type1"/>' +
+          '<block type="statement_block">' +
+          '  <statement name="NAME">' +
+          '    <block type="statement_block"/>' +
           '  </statement>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <statement name="dummy_input">' +
-          '    <block type="dummy_type2"/>' +
+          '<block type="test_field_block">' +
+          '  <statement name="NAME">' +
+          '    <block type="statement_block2"/>' +
           '  </statement>' +
           '</block>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("No Next - Next", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="stack_block"/>');
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="stack_block">' +
           '  <next>' +
-          '    <block type="dummy_type"/>' +
+          '    <block type="stack_block"/>' +
           '  </next>' +
           '</block>'
       );
@@ -220,25 +225,25 @@ suite("Trashcan", function() {
     });
     test("Different Next Blocks", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="stack_block">' +
           '  <next>' +
-          '    <block type="dummy_type1"/>' +
+          '    <block type="stack_block"/>' +
           '  </next>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="stack_block">' +
           '  <next>' +
-          '    <block type="dummy_type2"/>' +
+          '    <block type="stack_block2"/>' +
           '  </next>' +
           '</block>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
     });
     test("No Comment - Comment", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
+      fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment>comment_text</comment>' +
           '</block>'
       );
@@ -246,12 +251,12 @@ suite("Trashcan", function() {
     });
     test("Different Comment Text", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment>comment_text1</comment>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment>comment_text2</comment>' +
           '</block>'
       );
@@ -259,12 +264,12 @@ suite("Trashcan", function() {
     });
     test("Different Comment Size", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment h="10" w="10">comment_text</comment>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment h="20" w="20">comment_text</comment>' +
           '</block>'
       );
@@ -273,36 +278,27 @@ suite("Trashcan", function() {
     });
     test("Different Comment Pinned", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment pinned="false">comment_text</comment>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
+          '<block type="test_field_block">' +
           '  <comment pinned="true">comment_text</comment>' +
           '</block>'
       );
       // pinned tags are removed b/c the blocks appear the same.
       chai.assert.equal(this.trashcan.contents_.length, 1);
     });
-    test("No Mutator - Mutator", function() {
-      fireDeleteEvent(this.workspace, '<block type="dummy_type"/>');
-      fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <mutation dummy_attribute="dummy_value"></mutation>' +
-          '</block>'
-      );
-      chai.assert.equal(this.trashcan.contents_.length, 2);
-    });
     test("Different Mutator", function() {
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <mutation dummy_attribute="dummy_value1"></mutation>' +
+          '<block type="xml_block">' +
+          '  <mutation hasInput="true"></mutation>' +
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type">' +
-          '  <mutation dummy_attribute="dummy_value2"></mutation>' +
+          '<block type="xml_block">' +
+          '  <mutation hasInputt="false"></mutation>' +
           '</block>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 2);
@@ -312,21 +308,9 @@ suite("Trashcan", function() {
     test("Max 0", function() {
       this.workspace.options.maxTrashcanContents = 0;
       fireDeleteEvent(this.workspace,
-          '<block type="dummy_type"/>'
+          '<block type="test_field_block"/>'
       );
       chai.assert.equal(this.trashcan.contents_.length, 0);
-      this.workspace.options.maxTrashcanContents = Infinity;
-    });
-    test("Last In First Out", function() {
-      this.workspace.options.maxTrashcanContents = 1;
-      fireDeleteEvent(this.workspace, '<block type="dummy_type1"/>');
-      fireDeleteEvent(this.workspace, '<block type="dummy_type2"/>');
-      chai.assert.equal(this.trashcan.contents_.length, 1);
-      chai.assert.equal(
-          Blockly.Xml.textToDom(this.trashcan.contents_[0])
-              .getAttribute('type'),
-          'dummy_type2'
-      );
       this.workspace.options.maxTrashcanContents = Infinity;
     });
   });

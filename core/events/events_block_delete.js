@@ -18,9 +18,9 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.serialization.blocks');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const xml = goog.require('Blockly.utils.xml');
 
 
 /**
@@ -43,12 +43,21 @@ const BlockDelete = function(opt_block) {
     this.recordUndo = false;
   }
 
-  if (opt_block.workspace.rendered) {
-    this.oldXml = Xml.blockToDomWithXY(opt_block);
-  } else {
-    this.oldXml = Xml.blockToDom(opt_block);
-  }
+  this.oldXml = Xml.blockToDomWithXY(opt_block);
   this.ids = Events.getDescendantIds(opt_block);
+
+  /**
+   * Was the block that was just deleted a shadow?
+   * @type {boolean}
+   */
+  this.wasShadow = opt_block.isShadow();
+
+  /**
+   * JSON representation of the block that was just deleted.
+   * @type {!blocks.State}
+   */
+  this.oldJson = /** @type {!blocks.State} */ (blocks.save(
+      opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockDelete, BlockBase);
 
@@ -66,6 +75,8 @@ BlockDelete.prototype.toJson = function() {
   const json = BlockDelete.superClass_.toJson.call(this);
   json['oldXml'] = Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
+  json['wasShadow'] = this.wasShadow;
+  json['oldJson'] = this.oldJson;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -80,6 +91,9 @@ BlockDelete.prototype.fromJson = function(json) {
   BlockDelete.superClass_.fromJson.call(this, json);
   this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
+  this.wasShadow =
+    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
+  this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -103,9 +117,7 @@ BlockDelete.prototype.run = function(forward) {
       }
     }
   } else {
-    const xmlEl = xml.createElement('xml');
-    xmlEl.appendChild(this.oldXml);
-    Xml.domToWorkspace(xmlEl, workspace);
+    blocks.load(this.oldJson, workspace);
   }
 };
 

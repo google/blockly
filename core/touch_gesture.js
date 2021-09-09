@@ -154,7 +154,7 @@ TouchGesture.prototype.handleStart = function(e) {
     this.handleTouchStart(e);
 
     if (this.isMultiTouch()) {
-      Blockly.Touch.longStop();
+      Touch.longStop();
     }
   }
 };
@@ -176,7 +176,7 @@ TouchGesture.prototype.handleMove = function(e) {
     if (Touch.isTouchEvent(e)) {
       this.handleTouchMove(e);
     }
-    Blockly.Touch.longStop();
+    Touch.longStop();
   } else {
     TouchGesture.superClass_.handleMove.call(this, e);
   }

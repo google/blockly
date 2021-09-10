@@ -46,20 +46,19 @@ const utils = goog.require('Blockly.utils');
  */
 const inject = function(container, opt_options) {
   if (typeof container == 'string') {
-    container = document.getElementById(container) ||
-        document.querySelector(container);
+    container =
+        document.getElementById(container) || document.querySelector(container);
   }
   // Verify that the container is in document.
   if (!container || !dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
-  const options = new Options(opt_options ||
-    (/** @type {!BlocklyOptions} */ ({})));
+  const options =
+      new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
   const subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
-  aria.setState(subContainer,
-      aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
+  aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
   container.appendChild(subContainer);
   const svg = createDom_(subContainer, options);
@@ -70,12 +69,13 @@ const inject = function(container, opt_options) {
 
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace = createMainWorkspace_(svg, options, blockDragSurface,
-      workspaceDragSurface);
+  const workspace = createMainWorkspace_(
+      svg, options, blockDragSurface, workspaceDragSurface);
 
   init_(workspace);
 
-  // Keep focus on the first workspace so entering keyboard navigation looks correct.
+  // Keep focus on the first workspace so entering keyboard navigation looks
+  // correct.
   common.setMainWorkspace(workspace);
 
   Blockly.svgResize(workspace);
@@ -122,14 +122,14 @@ const createDom_ = function(container, options) {
         'version': '1.1',
         'class': 'blocklySvg',
         'tabindex': '0'
-      }, container);
+      },
+      container);
   /*
   <defs>
     ... filters go here ...
   </defs>
   */
-  const defs = dom.createSvgElement(
-      Svg.DEFS, {}, svg);
+  const defs = dom.createSvgElement(Svg.DEFS, {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
@@ -150,8 +150,8 @@ const createDom_ = function(container, options) {
  * @return {!WorkspaceSvg} Newly created main workspace.
  * @private
  */
-const createMainWorkspace_ = function(svg, options, blockDragSurface,
-    workspaceDragSurface) {
+const createMainWorkspace_ = function(
+    svg, options, blockDragSurface, workspaceDragSurface) {
   options.parentWorkspace = null;
   const mainWorkspace =
       new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
@@ -160,10 +160,11 @@ const createMainWorkspace_ = function(svg, options, blockDragSurface,
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
-  dom.addClass(mainWorkspace.getInjectionDiv(),
+  dom.addClass(
+      mainWorkspace.getInjectionDiv(),
       mainWorkspace.getRenderer().getClassName());
-  dom.addClass(mainWorkspace.getInjectionDiv(),
-      mainWorkspace.getTheme().getClassName());
+  dom.addClass(
+      mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.
@@ -177,13 +178,14 @@ const createMainWorkspace_ = function(svg, options, blockDragSurface,
     mainWorkspace.addZoomControls();
   }
   // Register the workspace svg as a UI component.
-  mainWorkspace.getThemeManager().subscribe(svg, 'workspaceBackgroundColour',
-      'background-color');
+  mainWorkspace.getThemeManager().subscribe(
+      svg, 'workspaceBackgroundColour', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
-  mainWorkspace.addChangeListener(bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+  mainWorkspace.addChangeListener(
+      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
@@ -249,10 +251,9 @@ const init_ = function(mainWorkspace) {
         !!options.moveOptions.scrollbars.horizontal;
     const verticalScroll = options.moveOptions.scrollbars === true ||
         !!options.moveOptions.scrollbars.vertical;
-    mainWorkspace.scrollbar =
-        new ScrollbarPair(
-            mainWorkspace, horizontalScroll, verticalScroll,
-            'blocklyMainWorkspaceScrollbar');
+    mainWorkspace.scrollbar = new ScrollbarPair(
+        mainWorkspace, horizontalScroll, verticalScroll,
+        'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
     mainWorkspace.setMetrics({x: 0.5, y: 0.5});
@@ -292,20 +293,18 @@ const bindDocumentEvents_ = function() {
         }
       }
     });
-    browserEvents.conditionalBind(
-        document, 'keydown', null, Blockly.onKeyDown);
+    browserEvents.conditionalBind(document, 'keydown', null, Blockly.onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);
-    browserEvents.bind(
-        document, 'touchcancel', null, Touch.longStop);
+    browserEvents.bind(document, 'touchcancel', null, Touch.longStop);
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (userAgent.IPAD) {
       browserEvents.conditionalBind(
           window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
             Blockly.svgResize(/** @type {!WorkspaceSvg} */
-                (common.getMainWorkspace()));
+                              (common.getMainWorkspace()));
           });
     }
   }
@@ -322,22 +321,22 @@ const loadSounds_ = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [
-        pathToMedia + 'click.mp3',
-        pathToMedia + 'click.wav',
+        pathToMedia + 'click.mp3', pathToMedia + 'click.wav',
         pathToMedia + 'click.ogg'
-      ], 'click');
+      ],
+      'click');
   audioMgr.load(
       [
-        pathToMedia + 'disconnect.wav',
-        pathToMedia + 'disconnect.mp3',
+        pathToMedia + 'disconnect.wav', pathToMedia + 'disconnect.mp3',
         pathToMedia + 'disconnect.ogg'
-      ], 'disconnect');
+      ],
+      'disconnect');
   audioMgr.load(
       [
-        pathToMedia + 'delete.mp3',
-        pathToMedia + 'delete.ogg',
+        pathToMedia + 'delete.mp3', pathToMedia + 'delete.ogg',
         pathToMedia + 'delete.wav'
-      ], 'delete');
+      ],
+      'delete');
 
   // Bind temporary hooks that preload the sounds.
   const soundBinds = [];

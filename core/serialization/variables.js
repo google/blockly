@@ -13,11 +13,8 @@
 goog.module('Blockly.serialization.variables');
 goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
-// eslint-disable-next-line no-unused-vars
-const VariableModel = goog.requireType('Blockly.VariableModel');
+const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const priorities = goog.require('Blockly.serialization.priorities');
@@ -34,45 +31,6 @@ const serializationRegistry = goog.require('Blockly.serialization.registry');
  */
 var State;
 exports.State = State;
-
-/**
- * Returns the state of the variable as a plain JavaScript object.
- * @param {!VariableModel} variableModel The variable to serialize.
- * @return {!State} The serialized state of the variable.
- */
-const saveVariable = function(variableModel) {
-  const state = {
-    'name': variableModel.name,
-    'id': variableModel.getId()
-  };
-  if (variableModel.type) {
-    state['type'] = variableModel.type;
-  }
-  return state;
-};
-
-/**
- * Loads the variable represented by the given state into the given workspace.
- * @param {!State} state The state of a variable to deserialize into the
- *     workspace.
- * @param {!Workspace} workspace The workspace to add the variable to.
- * @param {{recordUndo: (boolean|undefined)}=} param1
- *     recordUndo: If true, events triggered by this function will be undo-able
- *       by the user. False by default.
- */
-const loadVariable = function(state, workspace, {recordUndo = false} = {}) {
-  const prevRecordUndo = Events.getRecordUndo();
-  Events.setRecordUndo(recordUndo);
-  const existingGroup = Events.getGroup();
-  if (!existingGroup) {
-    Events.setGroup(true);
-  }
-
-  workspace.createVariable(state['name'], state['type'], state['id']);
-
-  Events.setGroup(existingGroup);
-  Events.setRecordUndo(prevRecordUndo);
-};
 
 /**
  * Serializer for saving and loading variable state.
@@ -96,7 +54,14 @@ class VariableSerializer {
   save(workspace) {
     const variableStates = [];
     for (const variable of workspace.getAllVariables()) {
-      variableStates.push(saveVariable(variable));
+      const state = {
+        'name': variable.name,
+        'id': variable.getId()
+      };
+      if (variable.type) {
+        state['type'] = variable.type;
+      }
+      variableStates.push(state);
     }
     return variableStates.length ? variableStates : null;
   }
@@ -109,13 +74,13 @@ class VariableSerializer {
    */
   load(state, workspace) {
     for (const varState of state) {
-      loadVariable(varState, workspace, {recordUndo: Events.getRecordUndo()});
+      workspace.createVariable(
+          varState['name'], varState['type'], varState['id']);
     }
   }
 
   /**
-   * Disposes of any variables or potential variables that exist on the
-   * workspace.
+   * Disposes of any variables that exist on the workspace.
    * @param {!Workspace} workspace The workspace to clear the variables of.
    */
   clear(workspace) {

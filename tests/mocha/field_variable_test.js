@@ -449,7 +449,7 @@ suite('Variable Fields', function() {
 
     test('ID', function() {
       this.workspace.createVariable('test', '', 'id1');
-      var block = Blockly.serialization.blocks.load({
+      var block = Blockly.serialization.blocks.append({
         'type': 'variables_get',
         'fields': {
           'VAR': {
@@ -465,7 +465,7 @@ suite('Variable Fields', function() {
     });
 
     test('Name, untyped', function() {
-      var block = Blockly.serialization.blocks.load({
+      var block = Blockly.serialization.blocks.append({
         'type': 'variables_get',
         'fields': {
           'VAR': {
@@ -481,7 +481,7 @@ suite('Variable Fields', function() {
     });
 
     test('Name, typed', function() {
-      var block = Blockly.serialization.blocks.load({
+      var block = Blockly.serialization.blocks.append({
         'type': 'variables_get',
         'fields': {
           'VAR': {

@@ -1068,7 +1068,7 @@ Blockly.Block.prototype.getField = function(name) {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array<string>} List of variable names.
+ * @return {!Array<string>} List of variable ids.
  */
 Blockly.Block.prototype.getVars = function() {
   var vars = [];

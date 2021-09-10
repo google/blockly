@@ -71,7 +71,8 @@ exports.State = State;
  * Returns the state of the given block as a plain JavaScript object.
  * @param {!Block} block The block to serialize.
  * @param {{addCoordinates: (boolean|undefined), addInputBlocks:
- *     (boolean|undefined), addNextBlocks: (boolean|undefined)}=} param1
+ *     (boolean|undefined), addNextBlocks: (boolean|undefined),
+ *     doFullSerialization: (boolean|undefined)}=} param1
  *     addCoordinates: If true, the coordinates of the block are added to the
  *       serialized state. False by default.
  *     addinputBlocks: If true, children of the block which are connected to
@@ -79,6 +80,10 @@ exports.State = State;
  *     addNextBlocks: If true, children of the block which are connected to the
  *       block's next connection (if it exists) will be serialized.
  *       True by default.
+ *     doFullSerialization: If true, fields that normally just save a reference
+ *       to some external state (eg variables) will instead serialize all of the
+ *       info about that state. This supports deserializing the block into a
+ *       workspace where that state doesn't yet exist. True by default.
  * @return {?State} The serialized state of the block, or null if the block
  *     could not be serialied (eg it was an insertion marker).
  */
@@ -87,7 +92,8 @@ const save = function(
     {
       addCoordinates = false,
       addInputBlocks = true,
-      addNextBlocks = true
+      addNextBlocks = true,
+      doFullSerialization = true,
     } = {}
 ) {
   if (block.isInsertionMarker()) {
@@ -105,12 +111,12 @@ const save = function(
   saveAttributes(block, state);
   saveExtraState(block, state);
   saveIcons(block, state);
-  saveFields(block, state);
+  saveFields(block, state, doFullSerialization);
   if (addInputBlocks) {
-    saveInputBlocks(block, state);
+    saveInputBlocks(block, state, doFullSerialization);
   }
   if (addNextBlocks) {
-    saveNextBlocks(block, state);
+    saveNextBlocks(block, state, doFullSerialization);
   }
 
   return state;
@@ -195,8 +201,11 @@ const saveIcons = function(block, state) {
  * Adds the state of all of the fields on the block to the given state object.
  * @param {!Block} block The block to serialize the field state of.
  * @param {!State} state The state object to append to.
+ * @param {boolean} doFullSerialization Whether or not to serialize the full
+ *     state of the field (rather than possibly saving a reference to some
+ *     state).
  */
-const saveFields = function(block, state) {
+const saveFields = function(block, state, doFullSerialization) {
   let hasFieldState = false;
   const fields = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
@@ -205,7 +214,7 @@ const saveFields = function(block, state) {
       const field = input.fieldRow[j];
       if (field.isSerializable()) {
         hasFieldState = true;
-        fields[field.name] = field.saveState();
+        fields[field.name] = field.saveState(doFullSerialization);
       }
     }
   }
@@ -219,16 +228,17 @@ const saveFields = function(block, state) {
  * connected to inputs) to the given state object.
  * @param {!Block} block The block to serialize the input blocks of.
  * @param {!State} state The state object to append to.
+ * @param {boolean} doFullSerialization Whether or not to do full serialization.
  */
-const saveInputBlocks = function(block, state) {
+const saveInputBlocks = function(block, state, doFullSerialization) {
   const inputs = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
     if (input.type === inputTypes.DUMMY) {
       continue;
     }
-    const connectionState =
-        saveConnection(/** @type {!Connection} */ (input.connection));
+    const connectionState = saveConnection(
+        /** @type {!Connection} */ (input.connection), doFullSerialization);
     if (connectionState) {
       inputs[input.name] = connectionState;
     }
@@ -244,12 +254,14 @@ const saveInputBlocks = function(block, state) {
  * state object.
  * @param {!Block} block The block to serialize the next blocks of.
  * @param {!State} state The state object to append to.
+ * @param {boolean} doFullSerialization Whether or not to do full serialization.
  */
-const saveNextBlocks = function(block, state) {
+const saveNextBlocks = function(block, state, doFullSerialization) {
   if (!block.nextConnection) {
     return;
   }
-  const connectionState = saveConnection(block.nextConnection);
+  const connectionState = saveConnection(
+      block.nextConnection, doFullSerialization);
   if (connectionState) {
     state['next'] = connectionState;
   }
@@ -262,8 +274,9 @@ const saveNextBlocks = function(block, state) {
  *     blocks of.
  * @return {?ConnectionState} An object containing the state of any connected
  *     shadow block, or any connected real block.
+ * @param {boolean} doFullSerialization Whether or not to do full serialization.
  */
-const saveConnection = function(connection) {
+const saveConnection = function(connection, doFullSerialization) {
   const shadow = connection.getShadowState(true);
   const child = connection.targetBlock();
   if (!shadow && !child) {
@@ -274,7 +287,7 @@ const saveConnection = function(connection) {
     state['shadow'] = shadow;
   }
   if (child && !child.isShadow()) {
-    state['block'] = save(child);
+    state['block'] = save(child, {doFullSerialization});
   }
   return state;
 };
@@ -640,7 +653,8 @@ class BlockSerializer {
   save(workspace) {
     const blockState = [];
     for (const block of workspace.getTopBlocks(false)) {
-      const state = saveBlock(block, {addCoordinates: true});
+      const state = saveBlock(
+          block, {addCoordinates: true, doFullSerialization: false});
       if (state) {
         blockState.push(state);
       }

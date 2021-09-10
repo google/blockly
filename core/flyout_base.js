@@ -1055,7 +1055,8 @@ Blockly.Flyout.prototype.isScrollable = function() {
  * @private
  */
 Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
-  var targetWorkspace = this.targetWorkspace;
+  var targetWorkspace =
+    /** @type {!Blockly.WorkspaceSvg} */ (this.targetWorkspace);
   var svgRootOld = oldBlock.getSvgRoot();
   if (!svgRootOld) {
     throw Error('oldBlock is not rendered.');
@@ -1068,6 +1069,20 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   targetWorkspace.setResizesEnabled(false);
   var block = /** @type {!Blockly.BlockSvg} */
       (Blockly.serialization.blocks.load(json, targetWorkspace));
+
+  this.positionNewBlock_(oldBlock, block);
+
+  return block;
+};
+
+/**
+ * Positions a block on the target workspace.
+ * @param {!Blockly.BlockSvg} oldBlock The flyout block being copied.
+ * @param {!Blockly.BlockSvg} block The block to posiiton.
+ * @private
+ */
+Blockly.Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
+  var targetWorkspace = this.targetWorkspace;
 
   // The offset in pixels between the main workspace's origin and the upper left
   // corner of the injection div.
@@ -1096,7 +1111,6 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   finalOffset.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffset.x, finalOffset.y);
-  return block;
 };
 
 /**

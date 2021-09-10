@@ -362,7 +362,7 @@ suite('JSO Deserialization', function() {
             'x': 42,
             'y': 42
           };
-          Blockly.serialization.blocks.load(state, this.workspace);
+          Blockly.serialization.blocks.append(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -378,8 +378,8 @@ suite('JSO Deserialization', function() {
             'x': 42,
             'y': 42
           };
-          Blockly.serialization.blocks
-              .load(state, this.workspace, {'recordUndo': true});
+          Blockly.serialization.blocks.append(
+              state, this.workspace, {'recordUndo': true});
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -396,7 +396,7 @@ suite('JSO Deserialization', function() {
             'y': 42
           };
           Blockly.Events.setGroup('my group');
-          Blockly.serialization.blocks.load(state, this.workspace);
+          Blockly.serialization.blocks.append(state, this.workspace);
           assertEventFired(
               this.eventsFireStub,
               Blockly.Events.BlockCreate,
@@ -700,7 +700,7 @@ suite('JSO Deserialization', function() {
         }
       };
 
-      const block = Blockly.serialization.blocks.load(
+      const block = Blockly.serialization.blocks.append(
           {
             'type': 'test_block',
             'extraState': '<mutation value="some value"></mutation>',

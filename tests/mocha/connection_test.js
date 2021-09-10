@@ -1352,18 +1352,18 @@ suite('Connection', function() {
           suite('Add - No Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'row_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block', 'id': 'id0'}, workspace);
             }
   
             function createStatementBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'statement_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block', 'id': 'id0'}, workspace);
             }
   
             function createStackBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'stack_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block', 'id': 'id0'}, workspace);
             }
 
             test('Value', function() {
@@ -1551,7 +1551,6 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-
             test('Multiple Next', function() {
               var parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowState({
@@ -1601,7 +1600,7 @@ suite('Connection', function() {
           suite('Add - With Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'row_block',
                     'id': 'id0',
@@ -1618,7 +1617,7 @@ suite('Connection', function() {
             }
   
             function createStatementBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'statement_block',
                     'id': 'id0',
@@ -1635,7 +1634,7 @@ suite('Connection', function() {
             }
   
             function createStackBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'stack_block',
                     'id': 'id0',
@@ -1906,18 +1905,18 @@ suite('Connection', function() {
           suite('Add - With Shadow Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'row_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block', 'id': 'id0'}, workspace);
             }
   
             function createStatementBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'statement_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block', 'id': 'id0'}, workspace);
             }
   
             function createStackBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'stack_block', 'id': 'id0'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block', 'id': 'id0'}, workspace);
             }
   
             test('Value', function() {
@@ -2218,7 +2217,7 @@ suite('Connection', function() {
           suite('Remove - No Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'row_block',
                     'id': 'id0',
@@ -2235,7 +2234,7 @@ suite('Connection', function() {
             }
   
             function createStatementBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'statement_block',
                     'id': 'id0',
@@ -2252,7 +2251,7 @@ suite('Connection', function() {
             }
   
             function createStackBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'stack_block',
                     'id': 'id0',
@@ -2318,7 +2317,7 @@ suite('Connection', function() {
           suite('Remove - Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'row_block',
                     'id': 'id0',
@@ -2339,7 +2338,7 @@ suite('Connection', function() {
             }
   
             function createStatementBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'statement_block',
                     'id': 'id0',
@@ -2360,7 +2359,7 @@ suite('Connection', function() {
             }
   
             function createStackBlocks(workspace) {
-              return Blockly.serialization.blocks.load(
+              return Blockly.serialization.blocks.append(
                   {
                     'type': 'stack_block',
                     'id': 'id0',
@@ -2436,18 +2435,18 @@ suite('Connection', function() {
           suite('Add - Connect & Disconnect - Remove', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'row_block'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block'}, workspace);
             }
   
             function createStatementBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'statement_block'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block'}, workspace);
             }
   
             function createStackBlock(workspace) {
-              return Blockly.serialization.blocks
-                  .load({'type': 'stack_block'}, workspace);
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block'}, workspace);
             }
   
             test('Value', function() {

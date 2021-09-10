@@ -20,7 +20,7 @@ const Block = goog.requireType('Blockly.Block');
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
-const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
+const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
@@ -30,7 +30,7 @@ const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
 
 
-// TODO: Remove this once lint is fixed.
+// TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
 
 /**
@@ -52,9 +52,6 @@ exports.ConnectionState = ConnectionState;
  *     y: (number|undefined),
  *     collapsed: (boolean|undefined),
  *     enabled: (boolean|undefined),
- *     editable: (boolean|undefined),
- *     deletable: (boolean|undefined),
- *     movable: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
  *     extra-state: (*|undefined),
@@ -148,8 +145,8 @@ const saveAttributes = function(block, state) {
 
 /**
  * Adds the coordinates of the given block to the given state object.
- * @param {!Block} block The block to base the coordinates on
- * @param {!State} state The state object to append to
+ * @param {!Block} block The block to base the coordinates on.
+ * @param {!State} state The state object to append to.
  */
 const saveCoords = function(block, state) {
   const workspace = block.workspace;
@@ -206,19 +203,17 @@ const saveIcons = function(block, state) {
  *     state).
  */
 const saveFields = function(block, state, doFullSerialization) {
-  let hasFieldState = false;
   const fields = Object.create(null);
   for (let i = 0; i < block.inputList.length; i++) {
     const input = block.inputList[i];
     for (let j = 0; j < input.fieldRow.length; j++) {
       const field = input.fieldRow[j];
       if (field.isSerializable()) {
-        hasFieldState = true;
         fields[field.name] = field.saveState(doFullSerialization);
       }
     }
   }
-  if (hasFieldState) {
+  if (Object.keys(fields).length) {
     state['fields'] = fields;
   }
 };
@@ -301,10 +296,10 @@ const saveConnection = function(connection, doFullSerialization) {
  *       by the user. False by default.
  * @return {!Block} The block that was just loaded.
  */
-const load = function(state, workspace, {recordUndo = false} = {}) {
-  return loadInternal(state, workspace, {recordUndo});
+const append = function(state, workspace, {recordUndo = false} = {}) {
+  return appendInternal(state, workspace, {recordUndo});
 };
-exports.load = load;
+exports.append = append;
 
 /**
  * Loads the block represented by the given state into the given workspace.
@@ -318,13 +313,13 @@ exports.load = load;
  *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
  *     parentConnection: If provided, the system will attempt to connect the
  *       block to this connection after it is created. Undefined by default.
- *     isShadow: The block will be set to a shadow block after it is created.
- *       False by default.
+ *     isShadow: If true, the block will be set to a shadow block after it is
+ *       created. False by default.
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
- * @return {!Block} The block that was just loaded.
+ * @return {!Block} The block that was just appended.
  */
-const loadInternal = function(
+const appendInternal = function(
     state,
     workspace,
     {
@@ -341,7 +336,7 @@ const loadInternal = function(
   }
   Events.disable();
 
-  const block = loadPrivate(state, workspace, {parentConnection, isShadow});
+  const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
   Events.enable();
   Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
@@ -361,24 +356,24 @@ const loadInternal = function(
   return block;
 };
 /** @package */
-exports.loadInternal = loadInternal;
+exports.appendInternal = appendInternal;
 
 /**
  * Loads the block represented by the given state into the given workspace.
  * This is defined privately so that it can be called recursively without firing
  * eroneous events. Events (and other things we only want to occur on the top
- * block) are handled by loadInternal.
+ * block) are handled by appendInternal.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
- * @param {{parentConnection: (!Connection|undefined), isShadow:
- *     (boolean|undefined), recordUndo: (boolean|undefined)}=} param1
+ * @param {{parentConnection: (!Connection|undefined),
+ *     isShadow: (boolean|undefined)}=} param1
  *     parentConnection: If provided, the system will attempt to connect the
  *       block to this connection after it is created. Undefined by default.
  *     isShadow: The block will be set to a shadow block after it is created.
  *       False by default.
- * @return {!Block} The block that was just loaded.
+ * @return {!Block} The block that was just appended.
  */
-const loadPrivate = function(
+const appendPrivate = function(
     state,
     workspace,
     {
@@ -460,9 +455,9 @@ const loadExtraState = function(block, state) {
 
 /**
  * Attempts to connect the block to the parent connection, if it exists.
- * @param {(!Connection|undefined)} parentConnection The parent connnection to
+ * @param {(!Connection|undefined)} parentConnection The parent connection to
  *     try to connect the block to.
- * @param {!Block} child The block to try to conecnt to the parent.
+ * @param {!Block} child The block to try to connect to the parent.
  * @param {!State} state The state which defines the given block
  */
 const tryToConnectParent = function(parentConnection, child, state) {
@@ -591,7 +586,7 @@ const loadNextBlocks = function(block, state) {
 /**
  * Applies the state defined by connectionState to the given connection, ie
  * assigns shadows and attaches child blocks.
- * @param {!Connection} connection The connection to serialize the
+ * @param {!Connection} connection The connection to deserialize the
  *     connected blocks of.
  * @param {!ConnectionState} connectionState The object containing the state of
  *     any connected shadow block, or any connected real block.
@@ -601,7 +596,7 @@ const loadConnection = function(connection, connectionState) {
     connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
-    loadPrivate(
+    appendPrivate(
         connectionState['block'],
         connection.getSourceBlock().workspace,
         {parentConnection: connection});
@@ -627,9 +622,8 @@ const initBlock = function(block, rendered) {
   }
 };
 
-// Aliases to disambiguate saving/loading within the serializer.
+// Alias to disambiguate saving within the serializer.
 const saveBlock = save;
-const loadBlock = load;
 
 /**
  * Serializer for saving and loading block state.
@@ -651,18 +645,18 @@ class BlockSerializer {
    *     the workspace's blocks, or null if there are no blocks.
    */
   save(workspace) {
-    const blockState = [];
+    const blockStates = [];
     for (const block of workspace.getTopBlocks(false)) {
       const state = saveBlock(
           block, {addCoordinates: true, doFullSerialization: false});
       if (state) {
-        blockState.push(state);
+        blockStates.push(state);
       }
     }
-    if (blockState.length) {
+    if (blockStates.length) {
       return {
         'languageVersion': 0, // Currently unused.
-        'blocks': blockState
+        'blocks': blockStates
       };
     }
     return null;
@@ -678,7 +672,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      loadBlock(state, workspace, {recordUndo: Events.getRecordUndo()});
+      append(state, workspace, {recordUndo: Events.getRecordUndo()});
     }
   }
 

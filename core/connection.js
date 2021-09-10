@@ -757,7 +757,7 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
 
   let blockShadow;
   if (shadowState) {
-    blockShadow = blocks.loadInternal(
+    blockShadow = blocks.appendInternal(
         shadowState,
         parentBlock.workspace,
         {

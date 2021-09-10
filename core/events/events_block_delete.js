@@ -117,7 +117,7 @@ BlockDelete.prototype.run = function(forward) {
       }
     }
   } else {
-    blocks.load(this.oldJson, workspace);
+    blocks.append(this.oldJson, workspace);
   }
 };
 

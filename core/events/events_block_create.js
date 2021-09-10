@@ -94,7 +94,7 @@ BlockCreate.prototype.fromJson = function(json) {
 BlockCreate.prototype.run = function(forward) {
   const workspace = this.getEventWorkspace_();
   if (forward) {
-    blocks.load(this.json, workspace);
+    blocks.append(this.json, workspace);
   } else {
     for (let i = 0; i < this.ids.length; i++) {
       const id = this.ids[i];

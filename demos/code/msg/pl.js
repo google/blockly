@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "Wystąpił problem z żądaniem.",
   linkAlert: "Udpostępnij swoje bloki korzystając z poniższego linku : \n\n\n%1",
   hashError: "Przepraszamy, \"%1\" nie odpowiada żadnemu zapisanemu programowi.",
-  xmlError: "Nie można załadować zapisanego pliku. Być może został utworzony za pomocą innej wersji Blockly?",
-  badXml: "Błąd parsowania XML : \n%1\n\nZaznacz 'OK' aby odrzucić twoje zmiany lub 'Cancel', żeby w przyszłości edytować XML."
+  loadError: "Nie można załadować zapisanego pliku. Być może został utworzony za pomocą innej wersji Blockly?",
+  parseError: "Błąd parsowania %1 : \n%2\n\nZaznacz 'OK' aby odrzucić twoje zmiany lub 'Cancel', żeby w przyszłości edytować %1."
 };

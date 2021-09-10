@@ -1513,7 +1513,7 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
       blockX = parseInt(xmlBlock.getAttribute('x'), 10);
       blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     } else if (jsonBlock) {
-      block = Blockly.serialization.blocks.load(jsonBlock, this);
+      block = Blockly.serialization.blocks.append(jsonBlock, this);
       blockX = jsonBlock['x'] || 10;
       blockY = jsonBlock['y'] || 10;
     }

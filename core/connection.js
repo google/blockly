@@ -770,7 +770,7 @@ Blockly.Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   }
 
   if (shadowState) {
-    var blockShadow = Blockly.serialization.blocks.loadInternal(
+    var blockShadow = Blockly.serialization.blocks.appendInternal(
         shadowState,
         parentBlock.workspace,
         {

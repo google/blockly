@@ -16,7 +16,7 @@ suite('Block Create Event', function() {
 
   test('Create shadow on disconnect', function() {
     Blockly.Events.disable();
-    const block = Blockly.serialization.blocks.load(
+    const block = Blockly.serialization.blocks.append(
         {
           "type": "text_print",
           "inputs": {

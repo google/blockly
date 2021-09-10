@@ -132,7 +132,7 @@ Blockly.registry.Type.SERIALIZER = new Blockly.registry.Type('serializer');
  *     an already registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
- *     it's type.
+ *     its type.
  * @template T
  */
 Blockly.registry.register = function(

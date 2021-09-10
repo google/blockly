@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.inject');
+goog.module('Blockly.inject');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
@@ -18,7 +19,6 @@ goog.require('Blockly.bumpObjects');
 goog.require('Blockly.common');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.Events');
 goog.require('Blockly.Grid');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Options');
@@ -36,8 +36,6 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.WidgetDiv');
 
 goog.requireType('Blockly.BlocklyOptions');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -47,7 +45,7 @@ goog.requireType('Blockly.WorkspaceCommentSvg');
  * @param {Blockly.BlocklyOptions=} opt_options Optional dictionary of options.
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  */
-Blockly.inject = function(container, opt_options) {
+const inject = function(container, opt_options) {
   if (typeof container == 'string') {
     container = document.getElementById(container) ||
         document.querySelector(container);
@@ -65,7 +63,7 @@ Blockly.inject = function(container, opt_options) {
       Blockly.utils.aria.State.LABEL, Blockly.Msg['WORKSPACE_ARIA_LABEL']);
 
   container.appendChild(subContainer);
-  const svg = Blockly.createDom_(subContainer, options);
+  const svg = createDom_(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
@@ -73,10 +71,10 @@ Blockly.inject = function(container, opt_options) {
 
   const workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
+  const workspace = createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
 
-  Blockly.init_(workspace);
+  init_(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks correct.
   Blockly.common.setMainWorkspace(workspace);
@@ -97,7 +95,7 @@ Blockly.inject = function(container, opt_options) {
  * @return {!Element} Newly created SVG image.
  * @private
  */
-Blockly.createDom_ = function(container, options) {
+const createDom_ = function(container, options) {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -153,7 +151,7 @@ Blockly.createDom_ = function(container, options) {
  * @return {!Blockly.WorkspaceSvg} Newly created main workspace.
  * @private
  */
-Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
+const createMainWorkspace_ = function(svg, options, blockDragSurface,
     workspaceDragSurface) {
   options.parentWorkspace = null;
   const mainWorkspace =
@@ -186,7 +184,8 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
-  mainWorkspace.addChangeListener(Blockly.bumpIntoBoundsHandler_(mainWorkspace));
+  mainWorkspace.addChangeListener(
+    goog.module.get('Blockly.bumpObjects').bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
@@ -197,105 +196,11 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 };
 
 /**
- * Extracts the object from the given event.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace the event originated
- *    from.
- * @param {!Blockly.Events.BumpEvent} e An event containing an object.
- * @return {?Blockly.BlockSvg|?Blockly.WorkspaceCommentSvg} The extracted
- *    object.
- * @private
- */
-Blockly.extractObjectFromEvent_ = function(workspace, e) {
-  let object = null;
-  switch (e.type) {
-    case Blockly.Events.BLOCK_CREATE:
-    case Blockly.Events.BLOCK_MOVE:
-      object = workspace.getBlockById(e.blockId);
-      if (object) {
-        object = object.getRootBlock();
-      }
-      break;
-    case Blockly.Events.COMMENT_CREATE:
-    case Blockly.Events.COMMENT_MOVE:
-      object = (
-          /** @type {?Blockly.WorkspaceCommentSvg} */
-          (workspace.getCommentById(e.commentId)));
-      break;
-  }
-  return object;
-};
-
-/**
- * Bumps the top objects in the given workspace into bounds.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace.
- * @private
- */
-Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
-  const metricsManager = workspace.getMetricsManager();
-  if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
-    return;
-  }
-
-  const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
-  const topBlocks = workspace.getTopBoundedElements();
-  for (let i = 0, block; (block = topBlocks[i]); i++) {
-    goog.module.get('Blockly.bumpObjects')
-        .bumpIntoBounds(workspace, scrollMetricsInWsCoords, block);
-  }
-};
-
-/**
- * Creates a handler for bumping objects when they cross fixed bounds.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to handle.
- * @return {function(Blockly.Events.Abstract)} The event handler.
- * @private
- */
-Blockly.bumpIntoBoundsHandler_ = function(workspace) {
-  return function(e) {
-    const metricsManager = workspace.getMetricsManager();
-    if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
-      return;
-    }
-
-    if (Blockly.Events.BUMP_EVENTS.indexOf(e.type) !== -1) {
-      const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
-
-      // Triggered by move/create event
-      const object = Blockly.extractObjectFromEvent_(workspace, e);
-      if (!object) {
-        return;
-      }
-      // Handle undo.
-      const oldGroup = Blockly.Events.getGroup();
-      Blockly.Events.setGroup(e.group);
-
-      const wasBumped = goog.module.get('Blockly.bumpObjects')
-                          .bumpIntoBounds(
-                              workspace, scrollMetricsInWsCoords,
-                              /** @type {!Blockly.IBoundedElement} */ (object));
-
-      if (wasBumped && !e.group) {
-        console.warn('Moved object in bounds but there was no' +
-            ' event group. This may break undo.');
-      }
-      if (oldGroup !== null) {
-        Blockly.Events.setGroup(oldGroup);
-      }
-    } else if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
-      const viewportEvent = /** @type {!Blockly.Events.ViewportChange} */ (e);
-      if (viewportEvent.scale > viewportEvent.oldScale) {
-        Blockly.bumpTopObjectsIntoBounds_(workspace);
-      }
-    }
-  };
-};
-
-/**
  * Initialize Blockly with various handlers.
  * @param {!Blockly.WorkspaceSvg} mainWorkspace Newly created main workspace.
  * @private
  */
-Blockly.init_ = function(mainWorkspace) {
+const init_ = function(mainWorkspace) {
   const options = mainWorkspace.options;
   const svg = mainWorkspace.getParentSvg();
 
@@ -312,11 +217,12 @@ Blockly.init_ = function(mainWorkspace) {
       Blockly.browserEvents.conditionalBind(window, 'resize', null, function() {
         Blockly.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
-        Blockly.bumpTopObjectsIntoBounds_(mainWorkspace);
+        goog.module.get('Blockly.bumpObjects')
+            .bumpTopObjectsIntoBounds(mainWorkspace);
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
-  Blockly.inject.bindDocumentEvents_();
+  bindDocumentEvents_();
 
   if (options.languageTree) {
     const toolbox = mainWorkspace.getToolbox();
@@ -356,7 +262,7 @@ Blockly.init_ = function(mainWorkspace) {
 
   // Load the sounds.
   if (options.hasSounds) {
-    Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
+    loadSounds_(options.pathToMedia, mainWorkspace);
   }
 };
 
@@ -371,7 +277,7 @@ Blockly.init_ = function(mainWorkspace) {
  * understand a concept of focus on the SVG image.
  * @private
  */
-Blockly.inject.bindDocumentEvents_ = function() {
+const bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
     Blockly.browserEvents.conditionalBind(document, 'scroll', null, function() {
       const workspaces = Blockly.Workspace.getAll();
@@ -407,7 +313,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
  * @param {!Blockly.Workspace} workspace The workspace to load sounds for.
  * @private
  */
-Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
+const loadSounds_ = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [
@@ -448,3 +354,5 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   soundBinds.push(Blockly.browserEvents.conditionalBind(
       document, 'touchstart', null, unbindSounds, true));
 };
+
+exports = inject;

@@ -30,7 +30,7 @@ const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
 
 
-// TODO: Remove this once lint is fixed.
+// TODO(#5160): Remove this once lint is fixed.
 /* eslint-disable no-use-before-define */
 
 /**

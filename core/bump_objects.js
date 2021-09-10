@@ -13,21 +13,20 @@
 goog.module('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
-goog.requireType('Blockly.IBoundedElement');
+const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
-goog.requireType('Blockly.MetricsManager');
+const MetricsManager = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-goog.requireType('Blockly.WorkspaceSvg');
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const mathUtils = goog.require('Blockly.utils.math');
 
 /**
  * Bumps the given object that has passed out of bounds.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the object.
- * @param {!Blockly.MetricsManager.ContainerRegion} scrollMetrics Scroll metrics
+ * @param {!WorkspaceSvg} workspace The workspace containing the object.
+ * @param {!MetricsManager.ContainerRegion} scrollMetrics Scroll metrics
  *    in workspace coordinates.
- * @param {!Blockly.IBoundedElement} object The object to bump.
+ * @param {!IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
- * @package
  */
 const bumpObjectIntoBounds = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.

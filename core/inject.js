@@ -14,6 +14,7 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.browserEvents');
+goog.require('Blockly.bumpObjects');
 goog.require('Blockly.common');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
@@ -27,7 +28,6 @@ goog.require('Blockly.Tooltip');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 goog.require('Blockly.Workspace');
@@ -239,7 +239,7 @@ Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
   var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
   var topBlocks = workspace.getTopBoundedElements();
   for (var i = 0, block; (block = topBlocks[i]); i++) {
-    Blockly.bumpObjectIntoBounds_(workspace, scrollMetricsInWsCoords, block);
+    goog.module.get('Blockly.bumpObjects').bumpIntoBounds(workspace, scrollMetricsInWsCoords, block);
   }
 };
 
@@ -268,9 +268,10 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
       var oldGroup = Blockly.Events.getGroup();
       Blockly.Events.setGroup(e.group);
 
-      var wasBumped = Blockly.bumpObjectIntoBounds_(
-          workspace, scrollMetricsInWsCoords,
-          /** @type {!Blockly.IBoundedElement} */ (object));
+      var wasBumped = goog.module.get('Blockly.bumpObjects')
+                          .bumpIntoBounds(
+                              workspace, scrollMetricsInWsCoords,
+                              /** @type {!Blockly.IBoundedElement} */ (object));
 
       if (wasBumped && !e.group) {
         console.warn('Moved object in bounds but there was no' +
@@ -286,57 +287,6 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
       }
     }
   };
-};
-
-/**
- * Bumps the given object that has passed out of bounds.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace containing the object.
- * @param {!Blockly.MetricsManager.ContainerRegion} scrollMetrics Scroll metrics
- *    in workspace coordinates.
- * @param {!Blockly.IBoundedElement} object The object to bump.
- * @return {boolean} True if block was bumped.
- * @package
- */
-Blockly.bumpObjectIntoBounds_ = function(workspace, scrollMetrics, object) {
-  // Compute new top/left position for object.
-  var objectMetrics = object.getBoundingRectangle();
-  var height = objectMetrics.bottom - objectMetrics.top;
-  var width = objectMetrics.right - objectMetrics.left;
-
-  var topClamp = scrollMetrics.top;
-  var scrollMetricsBottom = scrollMetrics.top + scrollMetrics.height;
-  var bottomClamp = scrollMetricsBottom - height;
-  // If the object is taller than the workspace we want to
-  // top-align the block
-  var newYPosition =
-      Blockly.utils.math.clamp(topClamp, objectMetrics.top, bottomClamp);
-  var deltaY = newYPosition - objectMetrics.top;
-
-  // Note: Even in RTL mode the "anchor" of the object is the
-  // top-left corner of the object.
-  var leftClamp = scrollMetrics.left;
-  var scrollMetricsRight = scrollMetrics.left + scrollMetrics.width;
-  var rightClamp = scrollMetricsRight - width;
-  if (workspace.RTL) {
-    // If the object is wider than the workspace and we're in RTL
-    // mode we want to right-align the block, which means setting
-    // the left clamp to match.
-    leftClamp = Math.min(rightClamp, leftClamp);
-  } else {
-    // If the object is wider than the workspace and we're in LTR
-    // mode we want to left-align the block, which means setting
-    // the right clamp to match.
-    rightClamp = Math.max(leftClamp, rightClamp);
-  }
-  var newXPosition =
-      Blockly.utils.math.clamp(leftClamp, objectMetrics.left, rightClamp);
-  var deltaX = newXPosition - objectMetrics.left;
-
-  if (deltaX || deltaY) {
-    object.moveBy(deltaX, deltaY);
-    return true;
-  }
-  return false;
 };
 
 /**

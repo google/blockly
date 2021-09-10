@@ -145,7 +145,7 @@ Type.SERIALIZER = new Type('serializer');
  *     an already registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
- *     it's type.
+ *     its type.
  * @template T
  */
 const register = function(type, name, registryItem, opt_allowOverrides) {

@@ -674,7 +674,7 @@ Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
  * Create a block from the xml and permanently disable any blocks that were
  * defined as disabled.
  * @param {!toolbox.BlockInfo} blockInfo The info of the block.
- * @return {!BlockSvg} The block created from the blockXml.
+ * @return {!BlockSvg} The block created from the blockInfo.
  * @private
  */
 Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
@@ -694,7 +694,7 @@ Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
         blockInfo['enabled'] =
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
       }
-      block = blocks.load(
+      block = blocks.append(
           /** @type {blocks.State} */ (blockInfo),this.workspace_);
     }
   }
@@ -1077,7 +1077,7 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   const json = /** @type {!blocks.State} */ (blocks.save(oldBlock));
   // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
   targetWorkspace.setResizesEnabled(false);
-  const block = /** @type {!BlockSvg} */ (blocks.load(json, targetWorkspace));
+  const block = /** @type {!BlockSvg} */ (blocks.append(json, targetWorkspace));
 
   this.positionNewBlock_(oldBlock, block);
 

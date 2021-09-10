@@ -199,20 +199,28 @@ FieldVariable.prototype.toXml = function(fieldElement) {
 
 /**
  * Saves this field's value.
- * @return {*} The ID of the variable referenced by this field.
+ * @param {boolean=} doFullSerialization If true, the variable field will
+ *     serialize the full state of the field being referenced (ie ID, name,
+ *     and type) rather than just a reference to it (ie ID).
+ * @return {*} The state of the variable field.
  * @override
  * @package
  */
-FieldVariable.prototype.saveState = function() {
+FieldVariable.prototype.saveState = function(doFullSerialization) {
   const legacyState = this.saveLegacyState(FieldVariable);
   if (legacyState !== null) {
     return legacyState;
   }
   // Make sure the variable is initialized.
   this.initModel();
-  return {
+  const state = {
     'id': this.variable_.getId()
   };
+  if (doFullSerialization) {
+    state['name'] = this.variable_.name;
+    state['type'] = this.variable_.type;
+  }
+  return state;
 };
 
 /**

@@ -56,24 +56,24 @@ Blockly.inject = function(container, opt_options) {
   if (!container || !Blockly.utils.dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
-  var options = new Blockly.Options(opt_options ||
+  const options = new Blockly.Options(opt_options ||
     (/** @type {!Blockly.BlocklyOptions} */ ({})));
-  var subContainer = document.createElement('div');
+  const subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   Blockly.utils.aria.setState(subContainer,
       Blockly.utils.aria.State.LABEL, Blockly.Msg['WORKSPACE_ARIA_LABEL']);
 
   container.appendChild(subContainer);
-  var svg = Blockly.createDom_(subContainer, options);
+  const svg = Blockly.createDom_(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
-  var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
+  const blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
 
-  var workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
+  const workspaceDragSurface = new Blockly.WorkspaceDragSurfaceSvg(subContainer);
 
-  var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
+  const workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);
 
   Blockly.init_(workspace);
@@ -117,7 +117,7 @@ Blockly.createDom_ = function(container, options) {
     ...
   </svg>
   */
-  var svg = Blockly.utils.dom.createSvgElement(
+  const svg = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.SVG, {
         'xmlns': Blockly.utils.dom.SVG_NS,
         'xmlns:html': Blockly.utils.dom.HTML_NS,
@@ -131,12 +131,12 @@ Blockly.createDom_ = function(container, options) {
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement(
+  const defs = Blockly.utils.dom.createSvgElement(
       Blockly.utils.Svg.DEFS, {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
-  var rnd = String(Math.random()).substring(2);
+  const rnd = String(Math.random()).substring(2);
 
   options.gridPattern = Blockly.Grid.createDom(rnd, options.gridOptions, defs);
   return svg;
@@ -156,9 +156,9 @@ Blockly.createDom_ = function(container, options) {
 Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
     workspaceDragSurface) {
   options.parentWorkspace = null;
-  var mainWorkspace =
+  const mainWorkspace =
       new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
-  var wsOptions = mainWorkspace.options;
+  const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
@@ -170,7 +170,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.
-    var flyout = mainWorkspace.addFlyout(Blockly.utils.Svg.SVG);
+    const flyout = mainWorkspace.addFlyout(Blockly.utils.Svg.SVG);
     Blockly.utils.dom.insertAfter(flyout, svg);
   }
   if (wsOptions.hasTrashcan) {
@@ -206,7 +206,7 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
  * @private
  */
 Blockly.extractObjectFromEvent_ = function(workspace, e) {
-  var object = null;
+  let object = null;
   switch (e.type) {
     case Blockly.Events.BLOCK_CREATE:
     case Blockly.Events.BLOCK_MOVE:
@@ -231,15 +231,16 @@ Blockly.extractObjectFromEvent_ = function(workspace, e) {
  * @private
  */
 Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
-  var metricsManager = workspace.getMetricsManager();
+  const metricsManager = workspace.getMetricsManager();
   if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
     return;
   }
 
-  var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
-  var topBlocks = workspace.getTopBoundedElements();
-  for (var i = 0, block; (block = topBlocks[i]); i++) {
-    goog.module.get('Blockly.bumpObjects').bumpIntoBounds(workspace, scrollMetricsInWsCoords, block);
+  const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
+  const topBlocks = workspace.getTopBoundedElements();
+  for (let i = 0, block; (block = topBlocks[i]); i++) {
+    goog.module.get('Blockly.bumpObjects')
+        .bumpIntoBounds(workspace, scrollMetricsInWsCoords, block);
   }
 };
 
@@ -251,24 +252,24 @@ Blockly.bumpTopObjectsIntoBounds_ = function(workspace) {
  */
 Blockly.bumpIntoBoundsHandler_ = function(workspace) {
   return function(e) {
-    var metricsManager = workspace.getMetricsManager();
+    const metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
       return;
     }
 
     if (Blockly.Events.BUMP_EVENTS.indexOf(e.type) !== -1) {
-      var scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
+      const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
-      var object = Blockly.extractObjectFromEvent_(workspace, e);
+      const object = Blockly.extractObjectFromEvent_(workspace, e);
       if (!object) {
         return;
       }
       // Handle undo.
-      var oldGroup = Blockly.Events.getGroup();
+      const oldGroup = Blockly.Events.getGroup();
       Blockly.Events.setGroup(e.group);
 
-      var wasBumped = goog.module.get('Blockly.bumpObjects')
+      const wasBumped = goog.module.get('Blockly.bumpObjects')
                           .bumpIntoBounds(
                               workspace, scrollMetricsInWsCoords,
                               /** @type {!Blockly.IBoundedElement} */ (object));
@@ -281,7 +282,7 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
         Blockly.Events.setGroup(oldGroup);
       }
     } else if (e.type === Blockly.Events.VIEWPORT_CHANGE) {
-      var viewportEvent = /** @type {!Blockly.Events.ViewportChange} */ (e);
+      const viewportEvent = /** @type {!Blockly.Events.ViewportChange} */ (e);
       if (viewportEvent.scale > viewportEvent.oldScale) {
         Blockly.bumpTopObjectsIntoBounds_(workspace);
       }
@@ -295,8 +296,8 @@ Blockly.bumpIntoBoundsHandler_ = function(workspace) {
  * @private
  */
 Blockly.init_ = function(mainWorkspace) {
-  var options = mainWorkspace.options;
-  var svg = mainWorkspace.getParentSvg();
+  const options = mainWorkspace.options;
+  const svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
   Blockly.browserEvents.conditionalBind(
@@ -307,7 +308,7 @@ Blockly.init_ = function(mainWorkspace) {
         }
       });
 
-  var workspaceResizeHandler =
+  const workspaceResizeHandler =
       Blockly.browserEvents.conditionalBind(window, 'resize', null, function() {
         Blockly.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
@@ -318,8 +319,8 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.inject.bindDocumentEvents_();
 
   if (options.languageTree) {
-    var toolbox = mainWorkspace.getToolbox();
-    var flyout = mainWorkspace.getFlyout(true);
+    const toolbox = mainWorkspace.getToolbox();
+    const flyout = mainWorkspace.getFlyout(true);
     if (toolbox) {
       toolbox.init();
     } else if (flyout) {
@@ -340,9 +341,9 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
-    var horizontalScroll = options.moveOptions.scrollbars === true ||
+    const horizontalScroll = options.moveOptions.scrollbars === true ||
         !!options.moveOptions.scrollbars.horizontal;
-    var verticalScroll = options.moveOptions.scrollbars === true ||
+    const verticalScroll = options.moveOptions.scrollbars === true ||
         !!options.moveOptions.scrollbars.vertical;
     mainWorkspace.scrollbar =
         new Blockly.ScrollbarPair(
@@ -373,8 +374,8 @@ Blockly.init_ = function(mainWorkspace) {
 Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
     Blockly.browserEvents.conditionalBind(document, 'scroll', null, function() {
-      var workspaces = Blockly.Workspace.getAll();
-      for (var i = 0, workspace; (workspace = workspaces[i]); i++) {
+      const workspaces = Blockly.Workspace.getAll();
+      for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
         if (workspace.updateInverseScreenCTM) {
           workspace.updateInverseScreenCTM();
         }
@@ -407,7 +408,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
  * @private
  */
 Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
-  var audioMgr = workspace.getAudioManager();
+  const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [
         pathToMedia + 'click.mp3',
@@ -428,8 +429,8 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
       ], 'delete');
 
   // Bind temporary hooks that preload the sounds.
-  var soundBinds = [];
-  var unbindSounds = function() {
+  const soundBinds = [];
+  const unbindSounds = function() {
     while (soundBinds.length) {
       Blockly.browserEvents.unbind(soundBinds.pop());
     }

@@ -1079,6 +1079,20 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   targetWorkspace.setResizesEnabled(false);
   const block = /** @type {!BlockSvg} */ (blocks.load(json, targetWorkspace));
 
+  this.positionNewBlock_(oldBlock, block);
+
+  return block;
+};
+
+/**
+ * Positions a block on the target workspace.
+ * @param {!BlockSvg} oldBlock The flyout block being copied.
+ * @param {!BlockSvg} block The block to posiiton.
+ * @private
+ */
+Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
+  const targetWorkspace = this.targetWorkspace;
+
   // The offset in pixels between the main workspace's origin and the upper left
   // corner of the injection div.
   const mainOffsetPixels = targetWorkspace.getOriginOffsetInPixels();
@@ -1105,7 +1119,6 @@ Flyout.prototype.placeNewBlock_ = function(oldBlock) {
   finalOffset.scale(1 / targetWorkspace.scale);
 
   block.moveBy(finalOffset.x, finalOffset.y);
-  return block;
 };
 
 /**

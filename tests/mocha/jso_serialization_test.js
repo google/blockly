@@ -699,6 +699,78 @@ suite('JSO Serialization', function() {
         });
       });
     });
+
+    suite('Do full serialization', function() {
+      suite('True', function() {
+        test('Single block', function() {
+          var block = this.workspace.newBlock('variables_get');
+          var jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepEqual(
+              jso['fields']['VAR'], {'id': 'id2', 'name': 'item', 'type': ''});
+        });
+
+        test('Input block', function() {
+          var block = this.workspace.newBlock('row_block');
+          var childBlock = this.workspace.newBlock('variables_get');
+          block.getInput('INPUT').connection.connect(
+              childBlock.outputConnection);
+          var jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepEqual(
+              jso['inputs']['INPUT']['block']['fields']['VAR'],
+              {'id': 'id4', 'name': 'item', 'type': ''});
+        });
+
+        test('Next block', function() {
+          var block = this.workspace.newBlock('stack_block');
+          var childBlock = this.workspace.newBlock('variables_set');
+          block.nextConnection.connect(childBlock.previousConnection);
+          var jso = Blockly.serialization.blocks.save(block);
+          chai.assert.deepEqual(
+              jso['next']['block']['fields']['VAR'],
+              {'id': 'id4', 'name': 'item', 'type': ''});
+        });
+      });
+
+      suite('False', function() {
+        test('Single block', function() {
+          var block = this.workspace.newBlock('variables_get');
+          var jso = Blockly.serialization.blocks.save(
+              block, {doFullSerialization: false});
+          chai.assert.deepEqual(jso['fields']['VAR'], {'id': 'id2'});
+          chai.assert.isUndefined(jso['fields']['VAR']['name']);
+          chai.assert.isUndefined(jso['fields']['VAR']['type']);
+        });
+
+        test('Input block', function() {
+          var block = this.workspace.newBlock('row_block');
+          var childBlock = this.workspace.newBlock('variables_get');
+          block.getInput('INPUT').connection.connect(
+              childBlock.outputConnection);
+          var jso = Blockly.serialization.blocks.save(
+              block, {doFullSerialization: false});
+          chai.assert.deepEqual(
+              jso['inputs']['INPUT']['block']['fields']['VAR'], {'id': 'id4'});
+          chai.assert.isUndefined(
+              jso['inputs']['INPUT']['block']['fields']['VAR']['name']);
+          chai.assert.isUndefined(
+              jso['inputs']['INPUT']['block']['fields']['VAR']['type']);
+        });
+
+        test('Next block', function() {
+          var block = this.workspace.newBlock('stack_block');
+          var childBlock = this.workspace.newBlock('variables_set');
+          block.nextConnection.connect(childBlock.previousConnection);
+          var jso = Blockly.serialization.blocks.save(
+              block, {doFullSerialization: false});
+          chai.assert.deepEqual(
+              jso['next']['block']['fields']['VAR'], {'id': 'id4'});
+          chai.assert.isUndefined(
+              jso['next']['block']['fields']['VAR']['name']);
+          chai.assert.isUndefined(
+              jso['next']['block']['fields']['VAR']['type']);
+        });
+      });
+    });
   });
 
   suite('Variables', function() {

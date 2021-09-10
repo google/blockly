@@ -1074,7 +1074,7 @@ Block.prototype.getField = function(name) {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array<string>} List of variable names.
+ * @return {!Array<string>} List of variable ids.
  */
 Block.prototype.getVars = function() {
   const vars = [];

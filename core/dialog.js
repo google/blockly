@@ -30,7 +30,7 @@ let promptImplementation = function(message, defaultValue, callback) {
 };
 
 /**
- * Wrapper to window.alert() that app developers may override to
+ * Wrapper to window.alert() that app developers may override via setAlert to
  * provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
@@ -40,14 +40,19 @@ const alert = function(message, opt_callback) {
 };
 exports.alert = alert;
 
+/**
+ * Sets the function to be run when Blockly.dialog.alert() is called.
+ * @param {!function(string, function()=)} alertFunction The function to be run.
+ * @see Blockly.dialog.alert
+ */
 const setAlert = function(alertFunction) {
   alertImplementation = alertFunction;
 };
 exports.setAlert = setAlert;
 
 /**
- * Wrapper to window.confirm() that app developers may override to
- * provide alternatives to the modal browser window.
+ * Wrapper to window.confirm() that app developers may override via setConfirm
+ * to provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {!function(boolean)} callback The callback for handling user response.
  */
@@ -56,15 +61,21 @@ const confirm = function(message, callback) {
 };
 exports.confirm = confirm;
 
+/**
+ * Sets the function to be run when Blockly.dialog.confirm() is called.
+ * @param {!function(string, !function(boolean))} confirmFunction The function
+ *    to be run.
+ * @see Blockly.dialog.confirm
+ */
 const setConfirm = function(confirmFunction) {
   confirmImplementation = confirmFunction;
 };
 exports.setConfirm = setConfirm;
 
 /**
- * Wrapper to window.prompt() that app developers may override to provide
- * alternatives to the modal browser window. Built-in browser prompts are
- * often used for better text input experience on mobile device. We strongly
+ * Wrapper to window.prompt() that app developers may override via setPrompt to
+ * provide alternatives to the modal browser window. Built-in browser prompts
+ * are often used for better text input experience on mobile device. We strongly
  * recommend testing mobile when overriding this.
  * @param {string} message The message to display to the user.
  * @param {string} defaultValue The value to initialize the prompt with.
@@ -75,6 +86,12 @@ const prompt = function(message, defaultValue, callback) {
 };
 exports.prompt = prompt;
 
+/**
+ * Sets the function to be run when Blockly.dialog.prompt() is called.
+ * @param {!function(string, string, !function(?string))} promptFunction The
+ *    function to be run.
+ * @see Blockly.dialog.prompt
+ */
 const setPrompt = function(promptFunction) {
   promptImplementation = promptFunction;
 };

@@ -295,22 +295,11 @@ Object.defineProperty(Blockly, 'prompt', {
   },
   get: function() {
     Blockly.utils.deprecation.warn(
-        'Blockly.prompy', 'September 2021', 'September 2022',
+        'Blockly.prompt', 'September 2021', 'September 2022',
         'Blockly.dialog.prompt()');
     return Blockly.dialog.prompt;
   }
 });
-
-/**
- * Wrapper to window.prompt() that app developers may override to provide
- * alternatives to the modal browser window. Built-in browser prompts are
- * often used for better text input experience on mobile device. We strongly
- * recommend testing mobile when overriding this.
- * @param {string} message The message to display to the user.
- * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(?string)} callback The callback for handling user response.
- */
-Blockly.prompt = Blockly.dialog.prompt;
 
 /**
  * Helper function for defining a block from JSON.  The resulting function has

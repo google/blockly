@@ -23,6 +23,7 @@ const VariableModel = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
+const dialog = goog.require('Blockly.dialog');
 const utilsXml = goog.require('Blockly.utils.xml');
 
 
@@ -267,7 +268,7 @@ const createVariableButtonHandler = function(
             msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
             msg = msg.replace('%1', existing.name).replace('%2', existing.type);
           }
-          Blockly.alert(msg, function() {
+          dialog.alert(msg, function() {
             promptAndCheckWithAlert(text);  // Recurse
           });
         } else {
@@ -313,7 +314,7 @@ const renameVariable = function(workspace, variable, opt_callback) {
           const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
                           .replace('%1', existing.name)
                           .replace('%2', existing.type);
-          Blockly.alert(msg, function() {
+          dialog.alert(msg, function() {
             promptAndCheckWithAlert(newName);  // Recurse
           });
         } else {
@@ -342,7 +343,7 @@ exports.renameVariable = renameVariable;
  *     variable name, or null if the user picked something illegal.
  */
 const promptName = function(promptText, defaultText, callback) {
-  Blockly.prompt(promptText, defaultText, function(newVar) {
+  dialog.prompt(promptText, defaultText, function(newVar) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {

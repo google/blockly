@@ -21,6 +21,7 @@ const Names = goog.require('Blockly.Names');
 const VariableModel = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const dialog = goog.require('Blockly.dialog');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 /** @suppress {extraRequire} */
@@ -233,7 +234,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
         const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
                                .replace('%1', variableName)
                                .replace('%2', procedureName);
-        Blockly.alert(deleteText);
+        dialog.alert(deleteText);
         return;
       }
     }
@@ -244,7 +245,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
       const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
                               .replace('%1', String(uses.length))
                               .replace('%2', variableName);
-      Blockly.confirm(confirmText, function(ok) {
+      dialog.confirm(confirmText, function(ok) {
         if (ok && variable) {
           map.deleteVariableInternal(variable, uses);
         }

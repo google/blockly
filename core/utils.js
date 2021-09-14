@@ -69,11 +69,21 @@ exports.toolbox = toolbox;
 exports.userAgent = userAgent;
 exports.xml = xmlUtils;
 
+/**
+ * Halts the propagation of the event without doing anything else.
+ * @param {!Event} e An event.
+ */
+const noEvent = function(e) {
+  // This event has been handled.  No need to bubble up to the document.
+  e.preventDefault();
+  e.stopPropagation();
+};
+
 Object.defineProperty(exports, 'noEvent', {
   get: function() {
     deprecation.warn(
       'Blockly.utils.noEvent', 'September 2021', 'September 2022');
-    return browserEvents.noEvent;
+    return noEvent;
   }
 });
 

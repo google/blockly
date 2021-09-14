@@ -182,18 +182,6 @@ const unbind = function(bindData) {
 exports.unbind = unbind;
 
 /**
- * Halts the propagation of the event without doing anything else.
- * @param {!Event} e An event.
- */
-const noEvent = function(e) {
-  // This event has been handled.  No need to bubble up to the document.
-  e.preventDefault();
-  e.stopPropagation();
-};
-exports.noEvent = noEvent;
-
-
-/**
  * Returns true if this event is targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.

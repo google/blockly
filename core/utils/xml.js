@@ -63,7 +63,7 @@ Blockly.utils.xml.createTextNode = function(text) {
  * @public
  */
 Blockly.utils.xml.textToDomDocument = function(text) {
-  var oParser = new DOMParser();
+  const oParser = new DOMParser();
   return oParser.parseFromString(text, 'text/xml');
 };
 
@@ -75,6 +75,6 @@ Blockly.utils.xml.textToDomDocument = function(text) {
  * @public
  */
 Blockly.utils.xml.domToText = function(dom) {
-  var oSerializer = new XMLSerializer();
+  const oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };

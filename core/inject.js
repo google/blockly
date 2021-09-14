@@ -207,7 +207,7 @@ const init = function(mainWorkspace) {
   browserEvents.conditionalBind(
       /** @type {!Element} */ (svg.parentNode), 'contextmenu', null,
       function(e) {
-        if (!utils.isTargetInput(e)) {
+        if (!browserEvents.isTargetInput(e)) {
           e.preventDefault();
         }
       });

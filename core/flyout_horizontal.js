@@ -22,10 +22,10 @@ const Options = goog.requireType('Blockly.Options');
 const Rect = goog.require('Blockly.utils.Rect');
 const Scrollbar = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -210,7 +210,7 @@ HorizontalFlyout.prototype.scrollToStart = function() {
  * @protected
  */
 HorizontalFlyout.prototype.wheel_ = function(e) {
-  const scrollDelta = utils.getScrollDeltaPixels(e);
+  const scrollDelta = browserEvents.getScrollDeltaPixels(e);
   const delta = scrollDelta.x || scrollDelta.y;
 
   if (delta) {

@@ -198,7 +198,7 @@ const createWidget_ = function(menu) {
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
       /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
-      utils.noEvent);
+      browserEvents.noEvent);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };

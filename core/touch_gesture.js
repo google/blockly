@@ -21,7 +21,6 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 
 
 /*
@@ -284,7 +283,7 @@ TouchGesture.prototype.handlePinch_ = function(e) {
         gestureScale * TouchGesture.ZOOM_IN_MULTIPLIER :
         gestureScale * TouchGesture.ZOOM_OUT_MULTIPLIER;
     const workspace = this.startWorkspace_;
-    const position = utils.mouseToSvg(
+    const position = browserEvents.mouseToSvg(
         e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
     workspace.zoom(position.x, position.y, delta);
   }

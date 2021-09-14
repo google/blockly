@@ -24,6 +24,7 @@ const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimation = goog.require('Blockly.blockAnimations');
+const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const events = goog.require('Blockly.Events');
@@ -293,7 +294,7 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
     } else {
       // Blocks dragged directly from a flyout may need to be bumped into
       // bounds.
-      Blockly.bumpObjectIntoBounds_(
+      bumpObjects.bumpIntoBounds(
           this.draggingBlock_.workspace,
           this.workspace_.getMetricsManager().getScrollMetrics(true),
           this.draggingBlock_);

@@ -28,7 +28,7 @@ const Rect = goog.require('Blockly.utils.Rect');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const global = goog.require('Blockly.utils.global');
+const {globalThis} = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const internalConstants = goog.require('Blockly.internalConstants');
 const stringUtils = goog.require('Blockly.utils.string');
@@ -433,7 +433,7 @@ const is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!global['getComputedStyle']) {
+  if (!globalThis['getComputedStyle']) {
     return false;
   }
 
@@ -453,7 +453,7 @@ const is3dSupported = function() {
   for (let t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = global['getComputedStyle'](el);
+      const computedStyle = globalThis['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not

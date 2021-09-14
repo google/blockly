@@ -17,16 +17,16 @@
 goog.module('Blockly.Msg');
 goog.module.declareLegacyNamespace();
 
-const global = goog.require('Blockly.utils.global');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
  * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,
  * the Blockly.Msg object exists for message files included in script tags.
  */
-if (!global['Blockly']) {
-  global['Blockly'] = {};
+if (!globalThis['Blockly']) {
+  globalThis['Blockly'] = {};
 }
-if (!global['Blockly']['Msg']) {
-  global['Blockly']['Msg'] = exports;
+if (!globalThis['Blockly']['Msg']) {
+  globalThis['Blockly']['Msg'] = exports;
 }

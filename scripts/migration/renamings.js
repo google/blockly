@@ -72,6 +72,9 @@ const renamings = {
         genUid: {module: 'Blockly.utils.idGenerator'},
       }
     },
+    'Blockly.utils.global': {
+      export: 'globalThis',  // Previous default export now named.
+    },
     'Blockly.utils.IdGenerator': {
       module: 'Blockly.utils.idGenerator',
     }

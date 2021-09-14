@@ -90,7 +90,8 @@ Object.defineProperty(exports, 'noEvent', {
 Object.defineProperty(exports, 'isTargetInput', {
   get: function() {
     deprecation.warn(
-      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022');
+      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+      'Blockly.browserEvets.isTargetInput');
     return browserEvents.isTargetInput;
   }
 });
@@ -186,7 +187,8 @@ getRelativeXY.XY_STYLE_REGEX_ =
 Object.defineProperty(exports, 'isRightButton', {
   get: function() {
     deprecation.warn(
-      'Blockly.utils.isRightButton', 'September 2021', 'September 2022');
+      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isRightButton');
     return browserEvents.isRightButton;
   }
 });
@@ -194,7 +196,8 @@ Object.defineProperty(exports, 'isRightButton', {
 Object.defineProperty(exports, 'mouseToSvg', {
   get: function() {
     deprecation.warn(
-      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022');
+      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.mouseToSvg');
     return browserEvents.mouseToSvg;
   }
 });
@@ -202,7 +205,8 @@ Object.defineProperty(exports, 'mouseToSvg', {
 Object.defineProperty(exports, 'getScrollDeltaPixels', {
   get: function() {
     deprecation.warn(
-      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022');
+      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.getScrollDeltaPixels');
     return browserEvents.getScrollDeltaPixels;
   }
 });

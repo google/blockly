@@ -52,7 +52,7 @@ WorkspaceFactoryInit.initColourPicker_ = function(controller) {
   // Convert hue numbers to RRGGBB strings.
   for (var i = 0; i < colours.length; i++) {
     if (colours[i] !== '') {
-      colours[i] = Blockly.hueToHex(colours[i]).substring(1);
+      colours[i] = Blockly.utils.colour.hueToHex(colours[i]).substring(1);
     }
   }
   // Convert to 2D array.

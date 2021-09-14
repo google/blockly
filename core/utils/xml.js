@@ -47,8 +47,7 @@ exports.document = getDocument;
  * @return {!Element} New DOM element.
  */
 const createElement = function(tagName) {
-  return getDocument().createElementNS(
-      NAME_SPACE, tagName);
+  return getDocument().createElementNS(NAME_SPACE, tagName);
 };
 exports.createElement = createElement;
 

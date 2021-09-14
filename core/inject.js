@@ -14,6 +14,7 @@ goog.module('Blockly.inject');
 goog.module.declareLegacyNamespace();
 
 const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Css = goog.require('Blockly.Css');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
@@ -61,7 +62,7 @@ const inject = function(container, opt_options) {
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
   container.appendChild(subContainer);
-  const svg = createDom_(subContainer, options);
+  const svg = createDom(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations
   // so that the browser does not repaint during the drag.
@@ -69,10 +70,10 @@ const inject = function(container, opt_options) {
 
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace = createMainWorkspace_(
-      svg, options, blockDragSurface, workspaceDragSurface);
+  const workspace =
+      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
 
-  init_(workspace);
+  init(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks
   // correct.
@@ -92,9 +93,8 @@ const inject = function(container, opt_options) {
  * @param {!Element} container Containing element.
  * @param {!Options} options Dictionary of options.
  * @return {!Element} Newly created SVG image.
- * @private
  */
-const createDom_ = function(container, options) {
+const createDom = function(container, options) {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -148,9 +148,8 @@ const createDom_ = function(container, options) {
  * @param {!WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
  *     SVG for the workspace.
  * @return {!WorkspaceSvg} Newly created main workspace.
- * @private
  */
-const createMainWorkspace_ = function(
+const createMainWorkspace = function(
     svg, options, blockDragSurface, workspaceDragSurface) {
   options.parentWorkspace = null;
   const mainWorkspace =
@@ -198,9 +197,8 @@ const createMainWorkspace_ = function(
 /**
  * Initialize Blockly with various handlers.
  * @param {!WorkspaceSvg} mainWorkspace Newly created main workspace.
- * @private
  */
-const init_ = function(mainWorkspace) {
+const init = function(mainWorkspace) {
   const options = mainWorkspace.options;
   const svg = mainWorkspace.getParentSvg();
 
@@ -222,7 +220,7 @@ const init_ = function(mainWorkspace) {
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
-  bindDocumentEvents_();
+  bindDocumentEvents();
 
   if (options.languageTree) {
     const toolbox = mainWorkspace.getToolbox();
@@ -261,7 +259,7 @@ const init_ = function(mainWorkspace) {
 
   // Load the sounds.
   if (options.hasSounds) {
-    loadSounds_(options.pathToMedia, mainWorkspace);
+    loadSounds(options.pathToMedia, mainWorkspace);
   }
 };
 
@@ -281,9 +279,8 @@ let documentEventsBound = false;
  * out of bounds and released will know that it has been released.
  * Also, 'keydown' has to be on the whole document since the browser doesn't
  * understand a concept of focus on the SVG image.
- * @private
  */
-const bindDocumentEvents_ = function() {
+const bindDocumentEvents = function() {
   if (!documentEventsBound) {
     browserEvents.conditionalBind(document, 'scroll', null, function() {
       const workspaces = Workspace.getAll();
@@ -315,9 +312,8 @@ const bindDocumentEvents_ = function() {
  * Load sounds for the given workspace.
  * @param {string} pathToMedia The path to the media directory.
  * @param {!Workspace} workspace The workspace to load sounds for.
- * @private
  */
-const loadSounds_ = function(pathToMedia, workspace) {
+const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [

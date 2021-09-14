@@ -20,6 +20,7 @@ const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const mathUtils = goog.require('Blockly.utils.math');
 
+
 /**
  * Bumps the given object that has passed out of bounds.
  * @param {!WorkspaceSvg} workspace The workspace containing the object.

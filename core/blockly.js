@@ -354,16 +354,15 @@ Blockly.isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 };
 
-/**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
- */
-Blockly.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(
-      hue, Blockly.internalConstants.HSV_SATURATION,
-      Blockly.internalConstants.HSV_VALUE * 255);
-};
+// Add a getter for Blockly.hueToHex, for legacy reasons.
+Object.defineProperty(Blockly, 'hueToHex', {
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.hueToHex()', 'September 2021', 'September 2022',
+        'Blockly.utils.colour.hueToHex()');
+    return Blockly.utils.colour.hueToHex;
+  }
+});
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,

@@ -375,7 +375,7 @@ Code.checkAllGeneratorFunctionsDefined = function(generator) {
   if (!valid) {
     var msg = 'The generator code for the following blocks not specified for ' +
         generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
-    Blockly.alert(msg);  // Assuming synchronous. No callback.
+    Blockly.dialog.alert(msg);  // Assuming synchronous. No callback.
   }
   return valid;
 };

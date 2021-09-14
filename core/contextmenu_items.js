@@ -22,6 +22,7 @@ const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
+const dialog = goog.require('Blockly.dialog');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -292,7 +293,7 @@ const registerDeleteAll = function() {
       if (deletableBlocks.length < 2) {
         deleteNext_(deletableBlocks, eventGroup);
       } else {
-        Blockly.confirm(
+        dialog.confirm(
             Msg['DELETE_ALL_BLOCKS'].replace('%1', deletableBlocks.length),
             function(ok) {
               if (ok) {

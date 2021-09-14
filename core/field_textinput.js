@@ -13,7 +13,6 @@
 goog.module('Blockly.FieldTextInput');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -27,6 +26,7 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
+const dialog = goog.require('Blockly.dialog');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
@@ -312,7 +312,7 @@ FieldTextInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
  * @private
  */
 FieldTextInput.prototype.showPromptEditor_ = function() {
-  Blockly.prompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
+  dialog.prompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
     this.setValue(this.getValueFromEditorText_(text));
   }.bind(this));
 };

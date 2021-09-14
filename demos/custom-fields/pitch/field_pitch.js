@@ -70,7 +70,7 @@ CustomFields.FieldPitch.prototype.showEditor_ = function() {
 
   var div = Blockly.WidgetDiv.getDiv();
   if (!div.firstChild) {
-    // Mobile interface uses Blockly.prompt.
+    // Mobile interface uses Blockly.dialog.prompt.
     return;
   }
   // Build the DOM.

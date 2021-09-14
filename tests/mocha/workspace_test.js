@@ -115,7 +115,7 @@ function testAWorkspace() {
     test('deleteVariableById(id1) multiple usages confirm', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       var stub =
-          sinon.stub(Blockly, "confirm").callsArgWith(1, true);
+          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -128,7 +128,7 @@ function testAWorkspace() {
     test('deleteVariableById(id1) multiple usages cancel', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       var stub =
-          sinon.stub(Blockly, "confirm").callsArgWith(1, false);
+          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, false);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);

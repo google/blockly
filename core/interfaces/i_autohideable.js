@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview The interface for a component that is automatically hidden
- * when Blockly.hideChaff is called.
+ * when WorkspaceSvg.hideChaff is called.
  * @author kozbial@google.com (Monica Kozbial)
  */
 
@@ -27,7 +27,7 @@ const IComponent = goog.requireType('Blockly.IComponent');
 const IAutoHideable = function() {};
 
 /**
- * Hides the component. Called in Blockly.hideChaff.
+ * Hides the component. Called in WorkspaceSvg.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
  *   Flyouts should not be closed if this is true.
  */

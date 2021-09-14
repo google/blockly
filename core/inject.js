@@ -359,7 +359,7 @@ Blockly.init_ = function(mainWorkspace) {
 
   var workspaceResizeHandler =
       Blockly.browserEvents.conditionalBind(window, 'resize', null, function() {
-        Blockly.hideChaff(true);
+        mainWorkspace.hideChaff(true);
         Blockly.svgResize(mainWorkspace);
         Blockly.bumpTopObjectsIntoBounds_(mainWorkspace);
       });

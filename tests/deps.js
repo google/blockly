@@ -213,7 +213,7 @@ goog.addDependency('../../core/touch_gesture.js', ['Blockly.TouchGesture'], ['Bl
 goog.addDependency('../../core/trashcan.js', ['Blockly.Trashcan'], ['Blockly.ComponentManager', 'Blockly.DeleteArea', 'Blockly.Events', 'Blockly.Events.TrashcanOpen', 'Blockly.Options', 'Blockly.Xml', 'Blockly.browserEvents', 'Blockly.internalConstants', 'Blockly.registry', 'Blockly.uiPosition', 'Blockly.utils.Rect', 'Blockly.utils.Size', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.toolbox'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils.js', ['Blockly.utils'], ['Blockly.Msg', 'Blockly.internalConstants', 'Blockly.utils.Coordinate', 'Blockly.utils.Rect', 'Blockly.utils.colour', 'Blockly.utils.deprecation', 'Blockly.utils.global', 'Blockly.utils.idGenerator', 'Blockly.utils.string', 'Blockly.utils.style', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/aria.js', ['Blockly.utils.aria'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], ['Blockly.internalConstants'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/deprecation.js', ['Blockly.utils.deprecation'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});

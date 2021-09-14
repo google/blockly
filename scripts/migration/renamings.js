@@ -32,7 +32,7 @@ const renamings = {
           export: 'conditionalBind',
         },
       },
-    }
+    },
   },
   '6.20210701.0': {
     'Blockly': {
@@ -70,14 +70,21 @@ const renamings = {
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},
-      }
+      },
     },
     'Blockly.utils.global': {
       export: 'globalThis',  // Previous default export now named.
     },
     'Blockly.utils.IdGenerator': {
       module: 'Blockly.utils.idGenerator',
-    }
+    },
+    'Blockly.utils.xml': {
+      exports: {
+        // document was a function before, too - not a static property
+        // or get accessor.
+        document: {export: 'getDocument'},
+      },
+    },
   },
 };
 

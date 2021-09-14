@@ -24,11 +24,10 @@ Blockly.setLocale = function (locale) {
 // XMLSerializer.
 const globalThis = Blockly.utils.global.globalThis;
 if (typeof globalThis.document !== 'object') {
-  globalThis.DOMParser = require('jsdom/lib/jsdom/living').DOMParser;
-  globalThis.XMLSerializer = require('jsdom/lib/jsdom/living').XMLSerializer;
-  var doc = Blockly.utils.xml.textToDomDocument(
-    '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
-  Blockly.utils.xml.document = function() {
-    return doc;
-  };
+  const jsdom = require('jsdom/lib/jsdom/living');
+  globalThis.DOMParser = jsdom.DOMParser;
+  globalThis.XMLSerializer = jsdom.XMLSerializer;
+  const xmlDocument = Blockly.utils.xml.textToDomDocument(
+    `<xml xmlns="${Blockly.utils.xml.NAME_SPACE}"></xml>`);
+  Blockly.utils.xml.setDocument(xmlDocument);
 }

@@ -428,7 +428,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   } else {
     const hue = Number(colour);
     if (!isNaN(hue)) {
-      return Blockly.hueToHex(hue);
+      return colourUtils.hueToHex(hue);
     } else {
       const hex = colourUtils.parse(colour);
       if (hex) {

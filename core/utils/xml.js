@@ -30,7 +30,7 @@ exports.NAME_SPACE = NAME_SPACE;
  * Get the document object.  This method is overridden in the Node.js build of
  * Blockly. See gulpfile.js, package-blockly-node task.
  *
- * Note that this function is named myDocument so as to not shadow the
+ * Note that this function is named getDocument so as to not shadow the
  * global of the same name, but (for now) exported as .document to not
  * break existing importers.
  *
@@ -47,7 +47,7 @@ exports.document = getDocument;
  * @return {!Element} New DOM element.
  */
 const createElement = function(tagName) {
-  return getDocument().createElementNS(NAME_SPACE, tagName);
+  return exports.document().createElementNS(NAME_SPACE, tagName);
 };
 exports.createElement = createElement;
 
@@ -57,7 +57,7 @@ exports.createElement = createElement;
  * @return {!Text} New DOM text node.
  */
 const createTextNode = function(text) {
-  return getDocument().createTextNode(text);
+  return exports.document().createTextNode(text);
 };
 exports.createTextNode = createTextNode;
 

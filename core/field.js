@@ -464,12 +464,11 @@ Field.prototype.loadState = function(state) {
   this.setValue(state);
 };
 
-// eslint-disable-next-line valid-jsdoc
 /**
  * Returns a stringified version of the XML state, if it should be used.
  * Otherwise this returns null, to signal the field should use its own
  * serialization.
- * @param {?} callingClass The class calling this method.
+ * @param {*} callingClass The class calling this method.
  *     Used to see if `this` has overridden any relevant hooks.
  * @return {?string} The stringified version of the XML state, or null.
  * @protected
@@ -488,11 +487,10 @@ Field.prototype.saveLegacyState = function(callingClass) {
   return null;
 };
 
-// eslint-disable-next-line valid-jsdoc
 /**
  * Loads the given state using either the old XML hoooks, if they should be
  * used. Returns true to indicate loading has been handled, false otherwise.
- * @param {?} callingClass The class calling this method.
+ * @param {*} callingClass The class calling this method.
  *     Used to see if `this` has overridden any relevant hooks.
  * @param {*} state The state to apply to the field.
  * @return {boolean} Whether the state was applied or not.

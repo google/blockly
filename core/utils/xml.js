@@ -19,6 +19,8 @@
 goog.module('Blockly.utils.xml');
 goog.module.declareLegacyNamespace();
 
+const {globalThis} = goog.require('Blockly.utils.global');
+
 
 /**
  * Namespace for Blockly's XML.
@@ -27,19 +29,31 @@ const NAME_SPACE = 'https://developers.google.com/blockly/xml';
 exports.NAME_SPACE = NAME_SPACE;
 
 /**
- * Get the document object.  This method is overridden in the Node.js build of
- * Blockly. See gulpfile.js, package-blockly-node task.
- *
- * Note that this function is named getDocument so as to not shadow the
- * global of the same name, but (for now) exported as .document to not
- * break existing importers.
- *
+ * The Document object to use.  By default this is just document, but
+ * the Node.js build of Blockly (see scripts/package/node/core.js)
+ * calls setDocument to supply a Document implementation from the
+ * jsdom package instead.
+ * @type {!Document}
+ */
+let xmlDocument = globalThis.document;
+
+/**
+ * Get the document object to use for XML serialization.
  * @return {!Document} The document object.
  */
 const getDocument = function() {
-  return document;
+  return xmlDocument;
 };
-exports.document = getDocument;
+exports.getDocument = getDocument;
+
+/**
+ * Get the document object to use for XML serialization.
+ * @param {!Document} document The document object to use.
+ */
+const setDocument = function(document) {
+  xmlDocument = document;
+};
+exports.setDocument = setDocument;
 
 /**
  * Create DOM element for XML.
@@ -47,7 +61,7 @@ exports.document = getDocument;
  * @return {!Element} New DOM element.
  */
 const createElement = function(tagName) {
-  return exports.document().createElementNS(NAME_SPACE, tagName);
+  return xmlDocument.createElementNS(NAME_SPACE, tagName);
 };
 exports.createElement = createElement;
 
@@ -57,7 +71,7 @@ exports.createElement = createElement;
  * @return {!Text} New DOM text node.
  */
 const createTextNode = function(text) {
-  return exports.document().createTextNode(text);
+  return xmlDocument.createTextNode(text);
 };
 exports.createTextNode = createTextNode;
 

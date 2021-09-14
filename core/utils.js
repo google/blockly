@@ -31,6 +31,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
@@ -68,31 +69,21 @@ exports.toolbox = toolbox;
 exports.userAgent = userAgent;
 exports.xml = xmlUtils;
 
-/**
- * Don't do anything for this event, just halt propagation.
- * @param {!Event} e An event.
- */
-const noEvent = function(e) {
-  // This event has been handled.  No need to bubble up to the document.
-  e.preventDefault();
-  e.stopPropagation();
-};
-exports.noEvent = noEvent;
+Object.defineProperty(exports, 'noEvent', {
+  get: function() {
+    deprecation.warn(
+      'Blockly.utils.noEvent', 'September 2021', 'September 2022');
+    return browserEvents.noEvent;
+  }
+});
 
-/**
- * Is this event targeting a text input widget?
- * @param {!Event} e An event.
- * @return {boolean} True if text input.
- */
-const isTargetInput = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' ||
-      e.target.type == 'number' || e.target.type == 'email' ||
-      e.target.type == 'password' || e.target.type == 'search' ||
-      e.target.type == 'tel' || e.target.type == 'url' ||
-      e.target.isContentEditable ||
-      (e.target.dataset && e.target.dataset.isTextInput == 'true');
-};
-exports.isTargetInput = isTargetInput;
+Object.defineProperty(exports, 'isTargetInput', {
+  get: function() {
+    deprecation.warn(
+      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022');
+    return browserEvents.isTargetInput;
+  }
+});
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -182,65 +173,29 @@ getRelativeXY.XY_REGEX_ = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 getRelativeXY.XY_STYLE_REGEX_ =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
-/**
- * Is this event a right-click?
- * @param {!Event} e Mouse event.
- * @return {boolean} True if right-click.
- */
-const isRightButton = function(e) {
-  if (e.ctrlKey && userAgent.MAC) {
-    // Control-clicking on Mac OS X is treated as a right-click.
-    // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
-    return true;
+Object.defineProperty(exports, 'isRightButton', {
+  get: function() {
+    deprecation.warn(
+      'Blockly.utils.isRightButton', 'September 2021', 'September 2022');
+    return browserEvents.isRightButton;
   }
-  return e.button == 2;
-};
-exports.isRightButton = isRightButton;
+});
 
-/**
- * Return the converted coordinates of the given mouse event.
- * The origin (0,0) is the top-left corner of the Blockly SVG.
- * @param {!Event} e Mouse event.
- * @param {!Element} svg SVG element.
- * @param {?SVGMatrix} matrix Inverted screen CTM to use.
- * @return {!SVGPoint} Object with .x and .y properties.
- */
-const mouseToSvg = function(e, svg, matrix) {
-  const svgPoint = svg.createSVGPoint();
-  svgPoint.x = e.clientX;
-  svgPoint.y = e.clientY;
-
-  if (!matrix) {
-    matrix = svg.getScreenCTM().inverse();
+Object.defineProperty(exports, 'mouseToSvg', {
+  get: function() {
+    deprecation.warn(
+      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022');
+    return browserEvents.mouseToSvg;
   }
-  return svgPoint.matrixTransform(matrix);
-};
-exports.mouseToSvg = mouseToSvg;
+});
 
-/**
- * Get the scroll delta of a mouse event in pixel units.
- * @param {!Event} e Mouse event.
- * @return {{x: number, y: number}} Scroll delta object with .x and .y
- *    properties.
- */
-const getScrollDeltaPixels = function(e) {
-  switch (e.deltaMode) {
-    case 0x00:  // Pixel mode.
-    default:
-      return {x: e.deltaX, y: e.deltaY};
-    case 0x01:  // Line mode.
-      return {
-        x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER
-      };
-    case 0x02:  // Page mode.
-      return {
-        x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER
-      };
+Object.defineProperty(exports, 'getScrollDeltaPixels', {
+  get: function() {
+    deprecation.warn(
+      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022');
+    return browserEvents.getScrollDeltaPixels;
   }
-};
-exports.getScrollDeltaPixels = getScrollDeltaPixels;
+});
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).

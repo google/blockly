@@ -215,7 +215,7 @@ goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], [], {
 goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/deprecation.js', ['Blockly.utils.deprecation'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/global.js', ['Blockly.utils.global'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/utils/global.js', ['Blockly.utils.global'], [], {'module': 'goog'});
 goog.addDependency('../../core/utils/idgenerator.js', ['Blockly.utils.idGenerator'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/keycodes.js', ['Blockly.utils.KeyCodes'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/math.js', ['Blockly.utils.math'], [], {'lang': 'es6', 'module': 'goog'});

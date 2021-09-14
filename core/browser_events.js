@@ -14,7 +14,7 @@ goog.module('Blockly.browserEvents');
 goog.module.declareLegacyNamespace();
 
 const Touch = goog.require('Blockly.Touch');
-const global = goog.require('Blockly.utils.global');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
@@ -69,7 +69,7 @@ const conditionalBind = function(
   };
 
   const bindData = [];
-  if (global['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -124,7 +124,7 @@ const bind = function(node, name, thisObject, func) {
   };
 
   const bindData = [];
-  if (global['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);

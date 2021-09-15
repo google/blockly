@@ -21,18 +21,19 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Msg = goog.require('Blockly.Msg');
-const Rect = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const Rect = goog.requireType('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const {globalThis} = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const internalConstants = goog.require('Blockly.internalConstants');
 const stringUtils = goog.require('Blockly.utils.string');
-const style = goog.require('Blockly.utils.style');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
 
 
@@ -63,92 +64,36 @@ const isTargetInput = function(e) {
 exports.isTargetInput = isTargetInput;
 
 /**
- * Return the coordinates of the top-left corner of this element relative to
- * its parent.  Only for SVG elements and children (e.g. rect, g, path).
+ * Returns the coordinates of the top-left corner of the element relative to
+ * its parent. Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
- * @return {!Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Coordinate of the top-left corer of the element.
+ * @deprecated Use Blockly.utils.svgMath.getRelativeXY instead.
  */
 const getRelativeXY = function(element) {
-  const xy = new Coordinate(0, 0);
-  // First, check for x and y attributes.
-  const x = element.getAttribute('x');
-  if (x) {
-    xy.x = parseInt(x, 10);
-  }
-  const y = element.getAttribute('y');
-  if (y) {
-    xy.y = parseInt(y, 10);
-  }
-  // Second, check for transform="translate(...)" attribute.
-  const transform = element.getAttribute('transform');
-  const r = transform && transform.match(getRelativeXY.XY_REGEX_);
-  if (r) {
-    xy.x += Number(r[1]);
-    if (r[3]) {
-      xy.y += Number(r[3]);
-    }
-  }
-
-  // Then check for style = transform: translate(...) or translate3d(...)
-  const style = element.getAttribute('style');
-  if (style && style.indexOf('translate') > -1) {
-    const styleComponents = style.match(getRelativeXY.XY_STYLE_REGEX_);
-    if (styleComponents) {
-      xy.x += Number(styleComponents[1]);
-      if (styleComponents[3]) {
-        xy.y += Number(styleComponents[3]);
-      }
-    }
-  }
-  return xy;
+  deprecation.warn(
+    'Blockly.utils.getRelativeXY', 'September 2021', 'September 2022',
+    'Blockly.utils.svgMath.getRelativeXY'
+  );
+  return svgMath.getRelativeXY(element);
 };
 exports.getRelativeXY = getRelativeXY;
 
 /**
- * Return the coordinates of the top-left corner of this element relative to
+ * Returns the coordinates of the top-left corner of the element relative to
  * the div Blockly was injected into.
  * @param {!Element} element SVG element to find the coordinates of. If this is
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
- * @return {!Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Coordinate of the top-left corer of the element.
+ * @deprecated
  */
 const getInjectionDivXY = function(element) {
-  let x = 0;
-  let y = 0;
-  while (element) {
-    const xy = getRelativeXY(element);
-    x = x + xy.x;
-    y = y + xy.y;
-    const classes = element.getAttribute('class') || '';
-    if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
-      break;
-    }
-    element = /** @type {!Element} */ (element.parentNode);
-  }
-  return new Coordinate(x, y);
+  deprecation.warn(
+    'Blockly.utils.getInjectionDivXY_', 'September 2021', 'September 2022');
+  return svgMath.getInjectionDivXY(element);
 };
 exports.getInjectionDivXY_ = getInjectionDivXY;
-
-/**
- * Static regex to pull the x,y values out of an SVG translate() directive.
- * Note that Firefox and IE (9,10) return 'translate(12)' instead of
- * 'translate(12, 0)'.
- * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
- * Note that IE has been reported to return scientific notation (0.123456e-42).
- * @type {!RegExp}
- * @private
- */
-getRelativeXY.XY_REGEX_ = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
-
-/**
- * Static regex to pull the x,y values out of a translate() or translate3d()
- * style property.
- * Accounts for same exceptions as XY_REGEX_.
- * @type {!RegExp}
- * @private
- */
-getRelativeXY.XY_STYLE_REGEX_ =
-    /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
  * Is this event a right-click?
@@ -423,53 +368,15 @@ const genUid = function() {
 exports.genUid = genUid;
 
 /**
- * Check if 3D transforms are supported by adding an element
- * and attempting to set the property.
+ * Returns true if 3D transforms are supported.
  * @return {boolean} True if 3D transforms are supported.
+ * @deprecated Use Blockly.utils.svgMath.is3dSupported instead.
  */
 const is3dSupported = function() {
-  if (is3dSupported.cached_ !== undefined) {
-    return is3dSupported.cached_;
-  }
-  // CC-BY-SA Lorenzo Polidori
-  // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!globalThis['getComputedStyle']) {
-    return false;
-  }
-
-  const el = document.createElement('p');
-  let has3d = 'none';
-  const transforms = {
-    'webkitTransform': '-webkit-transform',
-    'OTransform': '-o-transform',
-    'msTransform': '-ms-transform',
-    'MozTransform': '-moz-transform',
-    'transform': 'transform'
-  };
-
-  // Add it to the body to get the computed style.
-  document.body.insertBefore(el, null);
-
-  for (let t in transforms) {
-    if (el.style[t] !== undefined) {
-      el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = globalThis['getComputedStyle'](el);
-      if (!computedStyle) {
-        // getComputedStyle in Firefox returns null when Blockly is loaded
-        // inside an iframe with display: none.  Returning false and not
-        // caching is3dSupported means we try again later.  This is most likely
-        // when users are interacting with blocks which should mean Blockly is
-        // visible again.
-        // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-        document.body.removeChild(el);
-        return false;
-      }
-      has3d = computedStyle.getPropertyValue(transforms[t]);
-    }
-  }
-  document.body.removeChild(el);
-  is3dSupported.cached_ = has3d !== 'none';
-  return is3dSupported.cached_;
+  deprecation.warn(
+    'Blockly.utils.is3dSupported', 'September 2021', 'September 2022',
+    'Blockly.utils.svgMath.is3dSupported');
+  return svgMath.is3dSupported();
 };
 exports.is3dSupported = is3dSupported;
 
@@ -497,19 +404,17 @@ const runAfterPageLoad = function(fn) {
 exports.runAfterPageLoad = runAfterPageLoad;
 
 /**
- * Get the position of the current viewport in window coordinates.  This takes
- * scroll into account.
+ * Returns the position of the current viewport in window coordinates. This
+ * takes scroll into account.
  * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
+ * @deprecated
  */
 const getViewportBBox = function() {
-  // Pixels, in window coordinates.
-  const scrollOffset = style.getViewportPageOffset();
-  return new Rect(
-      scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
-      scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
+  deprecation.warn(
+    'Blockly.utils.getViewportBBox', 'September 2021', 'September 2022');
+  return svgMath.getViewportBBox();
 };
-/** @package */
 exports.getViewportBBox = getViewportBBox;
 
 /**
@@ -530,22 +435,18 @@ const arrayRemove = function(arr, obj) {
 /** @package */
 exports.arrayRemove = arrayRemove;
 
+
 /**
- * Gets the document scroll distance as a coordinate object.
+ * Returns the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
- * @return {!Coordinate} Object with values 'x' and 'y'.
+ * @return {!Coordinate} The document scroll distance as a coordinate object.
+ * @deprecated Use Blockly.utils.svgMath.getDocumentScroll instead.
  */
 const getDocumentScroll = function() {
-  const el = document.documentElement;
-  const win = window;
-  if (userAgent.IE && win.pageYOffset != el.scrollTop) {
-    // The keyboard on IE10 touch devices shifts the page using the pageYOffset
-    // without modifying scrollTop. For this case, we want the body scroll
-    // offsets.
-    return new Coordinate(el.scrollLeft, el.scrollTop);
-  }
-  return new Coordinate(
-      win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
+  deprecation.warn(
+    'Blockly.utils.getDocumentScroll', 'September 2021', 'September 2022',
+    'Blockly.utils.svgMath.getDocumentScroll');
+  return svgMath.getDocumentScroll();
 };
 exports.getDocumentScroll = getDocumentScroll;
 
@@ -585,33 +486,12 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  * @param {!Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
  * @return {!Coordinate} The workspace coordinates.
+ * @deprecated
  */
 const screenToWsCoordinates = function(ws, screenCoordinates) {
-  const screenX = screenCoordinates.x;
-  const screenY = screenCoordinates.y;
-
-  const injectionDiv = ws.getInjectionDiv();
-  // Bounding rect coordinates are in client coordinates, meaning that they
-  // are in pixels relative to the upper left corner of the visible browser
-  // window.  These coordinates change when you scroll the browser window.
-  const boundingRect = injectionDiv.getBoundingClientRect();
-
-  // The client coordinates offset by the injection div's upper left corner.
-  const clientOffsetPixels =
-      new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
-
-  // The offset in pixels between the main workspace's origin and the upper
-  // left corner of the injection div.
-  const mainOffsetPixels = ws.getOriginOffsetInPixels();
-
-  // The position of the new comment in pixels relative to the origin of the
-  // main workspace.
-  const finalOffsetPixels =
-      Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
-
-  // The position in main workspace coordinates.
-  const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
-  return finalOffsetMainWs;
+  deprecation.warn(
+    'Blockly.utils.screenToWsCoordinates', 'September 2021', 'September 2022');
+  return ws.screenToWorkspaceXY(screenCoordinates);
 };
 /** @package */
 exports.screenToWsCoordinates = screenToWsCoordinates;

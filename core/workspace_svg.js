@@ -2331,7 +2331,7 @@ WorkspaceSvg.prototype.getScale = function() {
  * @package
  */
 WorkspaceSvg.prototype.scroll = function(x, y) {
-  this.hideChaff(/* opt_onlyClosePopups */ true);
+  this.hideChaff(/* opt_onlyClosePopups= */ true);
 
   // Keep scrolling within the bounds of the content.
   const metrics = this.getMetrics();
@@ -2651,7 +2651,7 @@ WorkspaceSvg.prototype.getGrid = function() {
  * Close tooltips, context menus, dropdown selections, etc.
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
- WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
+WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
   Tooltip.hide();
   WidgetDiv.hide();
   DropDownDiv.hideWithoutAnimation();
@@ -2659,9 +2659,8 @@ WorkspaceSvg.prototype.getGrid = function() {
   var onlyClosePopups = !!opt_onlyClosePopups;
   var autoHideables = this.getComponentManager().getComponents(
       Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
-  autoHideables.forEach(function(autoHideable) {
-    autoHideable.autoHide(onlyClosePopups);
-  });
+  autoHideables.forEach(
+      (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };
 
 exports = WorkspaceSvg;

@@ -113,7 +113,7 @@ ThemeManager.prototype.setTheme = function(theme) {
     }
   }
 
-  for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
+  for (const workspace of this.subscribedWorkspaces_) {
     workspace.hideChaff();
   }
 };

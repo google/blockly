@@ -50,6 +50,8 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const keyCodes = goog.require('Blockly.utils.KeyCodes');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const utils = goog.require('Blockly.utils');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -189,7 +191,7 @@ const Toolbox = function(workspace) {
    */
   this.boundEvents_ = [];
 };
-utils.object.inherits(Toolbox, DeleteArea);
+object.inherits(Toolbox, DeleteArea);
 
 /**
  * Handles the given keyboard shortcut.
@@ -338,20 +340,20 @@ Toolbox.prototype.onClick_ = function(e) {
 Toolbox.prototype.onKeyDown_ = function(e) {
   let handled = false;
   switch (e.keyCode) {
-    case utils.KeyCodes.DOWN:
+    case keyCodes.DOWN:
       handled = this.selectNext_();
       break;
-    case utils.KeyCodes.UP:
+    case keyCodes.UP:
       handled = this.selectPrevious_();
       break;
-    case utils.KeyCodes.LEFT:
+    case keyCodes.LEFT:
       handled = this.selectParent_();
       break;
-    case utils.KeyCodes.RIGHT:
+    case keyCodes.RIGHT:
       handled = this.selectChild_();
       break;
-    case utils.KeyCodes.ENTER:
-    case utils.KeyCodes.SPACE:
+    case keyCodes.ENTER:
+    case keyCodes.SPACE:
       if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
         const collapsibleItem =
             /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);

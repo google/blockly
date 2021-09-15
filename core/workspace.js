@@ -32,6 +32,7 @@ const VariableMap = goog.require('Blockly.VariableMap');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const math = goog.require('Blockly.utils.math');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -56,7 +57,7 @@ const WorkspaceDB_ = Object.create(null);
  */
 const Workspace = function(opt_options) {
   /** @type {string} */
-  this.id = utils.genUid();
+  this.id = idGenerator.genUid();
   WorkspaceDB_[this.id] = this;
   /** @type {!Options} */
   this.options =
@@ -633,14 +634,14 @@ Workspace.prototype.undo = function(redo) {
     outputStack.push(event);
   }
   events = Events.filter(events, redo);
-  Events.recordUndo = false;
+  Events.setRecordUndo(false);
   try {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       event.run(redo);
     }
   } finally {
-    Events.recordUndo = true;
+    Events.setRecordUndo(true);
   }
 };
 

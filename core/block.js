@@ -41,6 +41,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
@@ -77,8 +78,8 @@ const Block = function(workspace, prototypeName, opt_id) {
   }
 
   /** @type {string} */
-  this.id =
-      (opt_id && !workspace.getBlockById(opt_id)) ? opt_id : utils.genUid();
+  this.id = (opt_id && !workspace.getBlockById(opt_id)) ? opt_id :
+                                                          idGenerator.genUid();
   workspace.setBlockById(this.id, this);
   /** @type {Connection} */
   this.outputConnection = null;
@@ -224,14 +225,14 @@ const Block = function(workspace, prototypeName, opt_id) {
   if (!existingGroup) {
     Events.setGroup(true);
   }
-  const initialUndoFlag = Events.recordUndo;
+  const initialUndoFlag = Events.getRecordUndo();
 
   try {
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      Events.recordUndo = false;
+      Events.setRecordUndo(false);
       this.init();
-      Events.recordUndo = initialUndoFlag;
+      Events.setRecordUndo(initialUndoFlag);
     }
 
     // Fire a create event.
@@ -244,7 +245,7 @@ const Block = function(workspace, prototypeName, opt_id) {
       Events.setGroup(false);
     }
     // In case init threw, recordUndo flag should still be reset.
-    Events.recordUndo = initialUndoFlag;
+    Events.setRecordUndo(initialUndoFlag);
   }
 
   // Record initial inline state.

@@ -21,6 +21,7 @@ const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
 const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
 const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
@@ -715,7 +716,7 @@ ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
   // Make a new object with all of the same properties.
   const valid = /** @type {!Theme.BlockStyle} */ ({});
   if (blockStyle) {
-    utils.object.mixin(valid, blockStyle);
+    object.mixin(valid, blockStyle);
   }
   // Validate required properties.
   const parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');

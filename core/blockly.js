@@ -22,6 +22,7 @@ goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
 goog.require('Blockly.ConnectionTypes');
 goog.require('Blockly.constants');
+goog.require('Blockly.dialog');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
@@ -255,41 +256,50 @@ Blockly.hideChaff = function(opt_onlyClosePopups) {
  */
 Blockly.getMainWorkspace = Blockly.common.getMainWorkspace;
 
-/**
- * Wrapper to window.alert() that app developers may override to
- * provide alternatives to the modal browser window.
- * @param {string} message The message to display to the user.
- * @param {function()=} opt_callback The callback when the alert is dismissed.
- */
-Blockly.alert = function(message, opt_callback) {
-  alert(message);
-  if (opt_callback) {
-    opt_callback();
+// Add a getter and setter pair for Blockly.alert, for legacy reasons.
+Object.defineProperty(Blockly, 'alert', {
+  set: function(newAlert) {
+    Blockly.utils.deprecation.warn(
+        'Blockly.alert', 'September 2021', 'September 2022');
+    Blockly.dialog.setAlert(newAlert);
+  },
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.alert', 'September 2021', 'September 2022',
+        'Blockly.dialog.alert()');
+    return Blockly.dialog.alert;
   }
-};
+});
 
-/**
- * Wrapper to window.confirm() that app developers may override to
- * provide alternatives to the modal browser window.
- * @param {string} message The message to display to the user.
- * @param {!function(boolean)} callback The callback for handling user response.
- */
-Blockly.confirm = function(message, callback) {
-  callback(confirm(message));
-};
+// Add a getter and setter pair for Blockly.confirm, for legacy reasons.
+Object.defineProperty(Blockly, 'confirm', {
+  set: function(newConfirm) {
+    Blockly.utils.deprecation.warn(
+        'Blockly.confirm', 'September 2021', 'September 2022');
+    Blockly.dialog.setConfirm(newConfirm);
+  },
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.confirm', 'September 2021', 'September 2022',
+        'Blockly.dialog.confirm()');
+    return Blockly.dialog.confirm;
+  }
+});
 
-/**
- * Wrapper to window.prompt() that app developers may override to provide
- * alternatives to the modal browser window. Built-in browser prompts are
- * often used for better text input experience on mobile device. We strongly
- * recommend testing mobile when overriding this.
- * @param {string} message The message to display to the user.
- * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(?string)} callback The callback for handling user response.
- */
-Blockly.prompt = function(message, defaultValue, callback) {
-  callback(prompt(message, defaultValue));
-};
+// Add a getter and setter pair for Blockly.prompt, for legacy reasons.
+Object.defineProperty(Blockly, 'prompt', {
+  set: function(newPrompt) {
+    Blockly.utils.deprecation.warn(
+        'Blockly.prompt', 'September 2021', 'September 2022');
+    Blockly.dialog.setPrompt(newPrompt);
+  },
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.prompt', 'September 2021', 'September 2022',
+        'Blockly.dialog.prompt()');
+    return Blockly.dialog.prompt;
+  }
+});
 
 /**
  * Helper function for defining a block from JSON.  The resulting function has

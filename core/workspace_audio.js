@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const global = goog.require('Blockly.utils.global');
+const {globalThis} = goog.require('Blockly.utils.global');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 
@@ -72,7 +72,7 @@ WorkspaceAudio.prototype.load = function(filenames, name) {
   }
   let audioTest;
   try {
-    audioTest = new global['Audio']();
+    audioTest = new globalThis['Audio']();
   } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
@@ -84,7 +84,7 @@ WorkspaceAudio.prototype.load = function(filenames, name) {
     const ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new global['Audio'](filename);
+      sound = new globalThis['Audio'](filename);
       break;
     }
   }

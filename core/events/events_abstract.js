@@ -48,7 +48,7 @@ const Abstract = function() {
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = Events.recordUndo;
+  this.recordUndo = Events.getRecordUndo();
 };
 
 /**

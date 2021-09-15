@@ -19,6 +19,7 @@ const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IPositionable = goog.requireType('Blockly.IPositionable');
 const Rect = goog.require('Blockly.utils.Rect');
+const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,7 +28,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const uiPosition = goog.require('Blockly.uiPosition');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
 
@@ -264,7 +264,7 @@ ZoomControls.prototype.position = function(metrics, savedPositions) {
     height += this.LARGE_SPACING_ + this.HEIGHT_;
   }
   const startRect = uiPosition.getStartPositionRect(
-      cornerPosition, new utils.Size(this.WIDTH_, height),
+      cornerPosition, new Size(this.WIDTH_, height),
       this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
 
   const verticalPosition = cornerPosition.vertical;

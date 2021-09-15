@@ -28,6 +28,7 @@ const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utils = goog.require('Blockly.utils');
 
 
@@ -298,16 +299,16 @@ RenderedConnection.prototype.highlight = function() {
       this.type == ConnectionTypes.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-    steps = utils.svgPaths.moveBy(0, -yLen) +
-        utils.svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
-        utils.svgPaths.lineOnAxis('v', yLen);
+    steps = svgPaths.moveBy(0, -yLen) +
+        svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
+        svgPaths.lineOnAxis('v', yLen);
   } else {
     const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
-    steps = utils.svgPaths.moveBy(-xLen, 0) +
-        utils.svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
-        utils.svgPaths.lineOnAxis('h', xLen);
+    steps = svgPaths.moveBy(-xLen, 0) +
+        svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
+        svgPaths.lineOnAxis('h', xLen);
   }
   const xy = this.sourceBlock_.getRelativeToSurfaceXY();
   const x = this.x - xy.x;
@@ -458,7 +459,7 @@ RenderedConnection.prototype.isConnectionAllowed = function(
  */
 RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
   const block = this.getSourceBlock();
-  if (Events.recordUndo) {
+  if (Events.getRecordUndo()) {
     const group = Events.getGroup();
     setTimeout(function() {
       if (!block.isDisposed() && !block.getParent()) {

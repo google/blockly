@@ -15,13 +15,13 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
-const IdGenerator = goog.require('Blockly.utils.IdGenerator');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 
@@ -42,7 +42,7 @@ const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.id_ = toolboxItemDef['toolboxitemid'] || IdGenerator.getNextUniqueId();
+  this.id_ = toolboxItemDef['toolboxitemid'] || idGenerator.getNextUniqueId();
 
   /**
    * The parent of the category.

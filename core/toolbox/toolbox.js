@@ -50,6 +50,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const common = goog.require('Blockly.common');
 const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -315,7 +316,7 @@ Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
 Toolbox.prototype.onClick_ = function(e) {
   if (utils.isRightButton(e) || e.target == this.HtmlDiv) {
     // Close flyout.
-    Blockly.hideChaff(false);
+    common.getMainWorkspace().hideChaff(false);
   } else {
     const targetElement = e.target;
     const itemId = targetElement.getAttribute('id');
@@ -327,7 +328,7 @@ Toolbox.prototype.onClick_ = function(e) {
       }
     }
     // Just close popups.
-    Blockly.hideChaff(true);
+    common.getMainWorkspace().hideChaff(true);
   }
   Touch.clearTouchIdentifier();  // Don't block future drags.
 };
@@ -847,7 +848,7 @@ Toolbox.prototype.setVisible = function(isVisible) {
 };
 
 /**
- * Hides the component. Called in Blockly.hideChaff.
+ * Hides the component. Called in WorkspaceSvg.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
  *     Flyouts should not be closed if this is true.
  */

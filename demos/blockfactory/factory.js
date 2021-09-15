@@ -88,7 +88,7 @@ BlockFactory.formatChange = function() {
   var languageTA = document.getElementById('languageTA');
   if (document.getElementById('format').value == 'Manual-JSON' ||
       document.getElementById('format').value == 'Manual-JS') {
-    Blockly.hideChaff();
+    Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
     languageTA.style.display = 'block';

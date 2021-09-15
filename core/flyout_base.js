@@ -15,7 +15,6 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -858,7 +857,7 @@ Flyout.prototype.createBlock = function(originalBlock) {
   }
 
   // Close the flyout.
-  Blockly.hideChaff();
+  this.targetWorkspace.hideChaff();
 
   const newVariables = Variables.getAddedVariables(
       this.targetWorkspace, variablesBeforeCreation);

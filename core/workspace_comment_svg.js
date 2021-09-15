@@ -868,7 +868,7 @@ WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
       document, 'mouseup', this, this.resizeMouseUp_);
   this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
       document, 'mousemove', this, this.resizeMouseMove_);
-  Blockly.hideChaff();
+  this.workspace.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
 };

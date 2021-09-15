@@ -39,7 +39,8 @@ suite('Key Down', function() {
   suite('Escape', function() {
     setup(function() {
       this.event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField');
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     test('Simple', function() {
       Blockly.onKeyDown(this.event);
@@ -60,7 +61,8 @@ suite('Key Down', function() {
 
   suite('Delete Block', function() {
     setup(function() {
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
       setSelectedBlock(this.workspace);
       this.deleteSpy = sinon.spy(Blockly.selected, 'dispose');
     });
@@ -94,7 +96,8 @@ suite('Key Down', function() {
     setup(function() {
       setSelectedBlock(this.workspace);
       this.copySpy = sinon.spy(Blockly.clipboard, 'copy');
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
       ['Control C', createKeyDownEvent(Blockly.utils.KeyCodes.C, 'NotAField', [Blockly.utils.KeyCodes.CTRL])],
@@ -165,7 +168,8 @@ suite('Key Down', function() {
   suite('Undo', function() {
     setup(function() {
       this.undoSpy = sinon.spy(this.workspace, 'undo');
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
       ['Control Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.CTRL])],
@@ -211,7 +215,8 @@ suite('Key Down', function() {
   suite('Redo', function() {
     setup(function() {
       this.redoSpy = sinon.spy(this.workspace, 'undo');
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
       ['Control Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])],
@@ -258,7 +263,8 @@ suite('Key Down', function() {
     setup(function() {
       this.ctrlYEvent = createKeyDownEvent(Blockly.utils.KeyCodes.Y, 'NotAField', [Blockly.utils.KeyCodes.CTRL]);
       this.undoSpy = sinon.spy(this.workspace, 'undo');
-      this.hideChaffSpy = sinon.spy(Blockly, 'hideChaff');
+      this.hideChaffSpy = sinon.spy(
+        Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     test('Simple', function() {
       Blockly.onKeyDown(this.ctrlYEvent);

@@ -47,8 +47,8 @@ const registerEscape = function() {
     preconditionFn: function(workspace) {
       return !workspace.options.readOnly;
     },
-    callback: function() {
-      Blockly.hideChaff();
+    callback: function(workspace) {
+      workspace.hideChaff();
       return true;
     }
   };
@@ -101,7 +101,7 @@ const registerCopy = function() {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
-      Blockly.hideChaff();
+      workspace.hideChaff();
       clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
       return true;
     }
@@ -194,7 +194,7 @@ const registerUndo = function() {
     },
     callback: function(workspace) {
       // 'z' for undo 'Z' is for redo.
-      Blockly.hideChaff();
+      workspace.hideChaff();
       workspace.undo(false);
       return true;
     }
@@ -228,7 +228,7 @@ const registerRedo = function() {
     },
     callback: function(workspace) {
       // 'z' for undo 'Z' is for redo.
-      Blockly.hideChaff();
+      workspace.hideChaff();
       workspace.undo(true);
       return true;
     }

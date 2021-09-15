@@ -490,7 +490,7 @@ Gesture.prototype.doStart = function(e) {
 
   // Hide chaff also hides the flyout, so don't do it if the click is in a
   // flyout.
-  Blockly.hideChaff(!!this.flyout_);
+  this.startWorkspace_.hideChaff(!!this.flyout_);
 
   this.startWorkspace_.markFocused();
   this.mostRecentEvent_ = e;
@@ -625,12 +625,12 @@ Gesture.prototype.cancel = function() {
 Gesture.prototype.handleRightClick = function(e) {
   if (this.targetBlock_) {
     this.bringBlockToFront_();
-    Blockly.hideChaff(!!this.flyout_);
+    this.targetBlock_.workspace.hideChaff(!!this.flyout_);
     this.targetBlock_.showContextMenu(e);
   } else if (this.startBubble_) {
     this.startBubble_.showContextMenu(e);
   } else if (this.startWorkspace_ && !this.flyout_) {
-    Blockly.hideChaff();
+    this.startWorkspace_.hideChaff();
     this.startWorkspace_.showContextMenu(e);
   }
 

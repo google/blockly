@@ -113,7 +113,9 @@ ThemeManager.prototype.setTheme = function(theme) {
     }
   }
 
-  Blockly.hideChaff();
+  for (const workspace of this.subscribedWorkspaces_) {
+    workspace.hideChaff();
+  }
 };
 
 /**

@@ -13,8 +13,6 @@
 goog.module('Blockly.Bubble');
 goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Fix Blockly requires for Blockly.hideChaff()
-// const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -396,7 +394,7 @@ Bubble.prototype.resizeMouseDown_ = function(e) {
       document, 'mouseup', this, Bubble.bubbleMouseUp_);
   Bubble.onMouseMoveWrapper_ = browserEvents.conditionalBind(
       document, 'mousemove', this, this.resizeMouseMove_);
-  Blockly.hideChaff();
+  this.workspace_.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
 };

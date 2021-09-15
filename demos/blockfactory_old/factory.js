@@ -35,7 +35,7 @@ function formatChange() {
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
   if (document.getElementById('format').value == 'Manual') {
-    Blockly.hideChaff();
+    Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
     languageTA.style.display = 'block';

@@ -74,11 +74,8 @@ const renamings = {
         getViewportBBox: {module: 'Blockly.utils.svgMath'},
         getDocumentScroll: {module: 'Blockly.utils.svgMath'},
         is3dSupported: {module: 'Blockly.utils.svgMath'},
-        screenToWsCoordinates: {
-          // Move to a property of the workspace.
-          module: 'Blockly.WorkspaceSvg',
-          export:'screenToWorkspaceXY'
-        },
+        // screenToWSCoordinates was moved to a property of the workspace and
+        // renamed to screenToWorkspaceXY
       },
     },
     'Blockly.utils.global': {

@@ -590,7 +590,8 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
   }
   if (!standardCategory.colour && standardCategory.hue !== undefined) {
     // Calculate the hex colour based on the hue.
-    standardCategory.colour = Blockly.hueToHex(standardCategory.hue);
+    standardCategory.colour = Blockly.utils.colour.hueToHex(
+      standardCategory.hue);
   }
   // Transfers current flyout blocks to a category if it's the first category
   // created.

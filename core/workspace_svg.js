@@ -797,6 +797,39 @@ WorkspaceSvg.prototype.getSvgXY = function(element) {
 };
 
 /**
+ * Converts screen coordinates to workspace coordinates.
+ * @param {!Coordinate} screenCoordinates The screen coordinates to be converted
+ *     to workspace coordinates
+ * @return {!Coordinate} The workspace coordinates.
+ */
+WorkspaceSvg.prototype.screenToWorkspaceXY = function(screenCoordinates) {
+  const screenX = screenCoordinates.x;
+  const screenY = screenCoordinates.y;
+
+  const injectionDiv = this.getInjectionDiv();
+  // Bounding rect coordinates are in client coordinates, meaning that they
+  // are in pixels relative to the upper left corner of the visible browser
+  // window.  These coordinates change when you scroll the browser window.
+  const boundingRect = injectionDiv.getBoundingClientRect();
+
+  // The client coordinates offset by the injection div's upper left corner.
+  const clientOffsetPixels =
+      new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
+
+  // The offset in pixels between the main workspace's origin and the upper
+  // left corner of the injection div.
+  const mainOffsetPixels = this.getOriginOffsetInPixels();
+
+  // The position in pixels relative to the origin of the main workspace.
+  const finalOffsetPixels =
+      Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
+
+  // The position in main workspace coordinates.
+  const finalOffsetWorkspace = finalOffsetPixels.scale(1 / this.scale);
+  return finalOffsetWorkspace;
+};
+
+/**
  * Gets the size of the workspace's parent SVG element.
  * @return {!Size} The cached width and height of the workspace's
  *     parent SVG element.

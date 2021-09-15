@@ -70,6 +70,15 @@ const renamings = {
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},
+        getRelativeXY: {module: 'Blockly.utils.svgMath'},
+        getViewportBBox: {module: 'Blockly.utils.svgMath'},
+        getDocumentScroll: {module: 'Blockly.utils.svgMath'},
+        is3dSupported: {module: 'Blockly.utils.svgMath'},
+        screenToWsCoordinates: {
+          // Move to a property of the workspace.
+          module: 'Blockly.WorkspaceSvg',
+          export:'screenToWorkspaceXY'
+        },
       },
     },
     'Blockly.utils.global': {

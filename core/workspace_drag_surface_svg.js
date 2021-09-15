@@ -21,7 +21,7 @@ goog.module.declareLegacyNamespace();
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 
 
 /**
@@ -105,7 +105,7 @@ WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @package
  */
 WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  return utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  return svgMath.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
 };
 
 /**

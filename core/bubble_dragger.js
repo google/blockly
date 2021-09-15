@@ -28,7 +28,7 @@ const IDragTarget = goog.requireType('Blockly.IDragTarget');
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
 /** @suppress {extraRequire} */
@@ -89,7 +89,7 @@ const BubbleDragger = function(bubble, workspace) {
    * @private
    */
   this.dragSurface_ =
-      utils.is3dSupported() && !!workspace.getBlockDragSurface() ?
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
       workspace.getBlockDragSurface() :
       null;
 };

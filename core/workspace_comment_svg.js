@@ -35,6 +35,7 @@ const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
@@ -133,7 +134,8 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = utils.is3dSupported() && !!workspace.getBlockDragSurface();
+  this.useDragSurface_ =
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
@@ -350,7 +352,7 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   if (element) {
     do {
       // Loop through this comment and every parent.
-      const xy = utils.getRelativeXY(/** @type {!Element} */ (element));
+      const xy = svgMath.getRelativeXY(/** @type {!Element} */ (element));
       x += xy.x;
       y += xy.y;
       // If this element is the current element on the drag surface, include

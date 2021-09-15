@@ -540,33 +540,31 @@ Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
 /**
  * CSS for angle field.  See css.js for use.
  */
-Blockly.Css.register([
-  /* eslint-disable indent */
-  '.blocklyAngleCircle {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-    'fill: #ddd;',
-    'fill-opacity: .8;',
-  '}',
+Blockly.Css.register(`
+  .blocklyAngleCircle {
+    stroke: #444;
+    stroke-width: 1;
+    fill: #ddd;
+    fill-opacity: .8;
+  }
 
-  '.blocklyAngleMarks {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-  '}',
+  .blocklyAngleMarks {
+    stroke: #444;
+    stroke-width: 1;
+  }
 
-  '.blocklyAngleGauge {',
-    'fill: #f88;',
-    'fill-opacity: .8;',
-    'pointer-events: none;',
-  '}',
+  .blocklyAngleGauge {
+    fill: #f88;
+    fill-opacity: .8;
+    pointer-events: none;
+  }
 
-  '.blocklyAngleLine {',
-    'stroke: #f00;',
-    'stroke-width: 2;',
-    'stroke-linecap: round;',
-    'pointer-events: none;',
-  '}'
-  /* eslint-enable indent */
-]);
+  .blocklyAngleLine {
+    stroke: #f00;
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+`);
 
 Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);

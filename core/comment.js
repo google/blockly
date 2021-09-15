@@ -398,12 +398,17 @@ Comment.prototype.dispose = function() {
 /**
  * CSS for block comment.  See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
-  '.blocklyCommentTextarea {', 'background-color: #fef49c;', 'border: 0;',
-  'outline: 0;', 'margin: 0;', 'padding: 3px;', 'resize: none;',
-  'display: block;', 'text-overflow: hidden;', '}'
-  /* eslint-enable indent */
-]);
+Css.register(`
+  .blocklyCommentTextarea {
+    background-color: #fef49c;
+    border: 0;
+    display: block;
+    margin: 0;
+    outline: 0;
+    padding: 3px;
+    resize: none;
+    text-overflow: hidden;
+  }
+`);
 
 exports = Comment;

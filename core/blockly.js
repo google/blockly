@@ -226,14 +226,16 @@ Blockly.onContextMenu_ = function(e) {
   }
 };
 
-// Add a getter for Blockly.hideChaff, for legacy reasons.
-Object.defineProperty(Blockly, 'hideChaff', {
-  get: function() {
-    Blockly.utils.deprecation.warn(
-        'Blockly.hideChaff', 'September 2021', 'September 2022');
-    return Blockly.common.getMainWorkspace().hideChaff;
-  }
-});
+/**
+ * Close tooltips, context menus, dropdown selections, etc.
+ * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ */
+Blockly.hideChaff = function(opt_onlyClosePopups) {
+  Blockly.utils.deprecation.warn(
+      'Blockly.hideChaff', 'September 2021', 'September 2022');
+  Blockly.common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+};
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on

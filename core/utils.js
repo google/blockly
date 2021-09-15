@@ -74,27 +74,21 @@ exports.xml = xmlUtils;
  * @param {!Event} e An event.
  */
 const noEvent = function(e) {
+  deprecation.warn(
+    'Blockly.utils.noEvent', 'September 2021', 'September 2022');
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
 };
+exports.noEvent = noEvent;
 
-Object.defineProperty(exports, 'noEvent', {
-  get: function() {
-    deprecation.warn(
-      'Blockly.utils.noEvent', 'September 2021', 'September 2022');
-    return noEvent;
-  }
-});
-
-Object.defineProperty(exports, 'isTargetInput', {
-  get: function() {
-    deprecation.warn(
-      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-      'Blockly.browserEvets.isTargetInput');
-    return browserEvents.isTargetInput;
-  }
-});
+const isTargetInput = function(e) {
+  deprecation.warn(
+    'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+    'Blockly.browserEvets.isTargetInput');
+  return browserEvents.isTargetInput;
+};
+exports.isTargetInput = isTargetInput;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -184,32 +178,48 @@ getRelativeXY.XY_REGEX_ = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 getRelativeXY.XY_STYLE_REGEX_ =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
-Object.defineProperty(exports, 'isRightButton', {
-  get: function() {
-    deprecation.warn(
-      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.isRightButton');
-    return browserEvents.isRightButton;
-  }
-});
+/**
+ * Returns true this event is a right-click.
+ * @param {!Event} e Mouse event.
+ * @return {boolean} True if right-click.
+ */
+const isRightButton = function(e) {
+  deprecation.warn(
+    'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+    'Blockly.browserEvents.isRightButton');
+  return browserEvents.isRightButton(e);
+};
+exports.isRightButton = isRightButton;
 
-Object.defineProperty(exports, 'mouseToSvg', {
-  get: function() {
-    deprecation.warn(
-      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.mouseToSvg');
-    return browserEvents.mouseToSvg;
-  }
-});
+/**
+ * Returns the converted coordinates of the given mouse event.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
+ * @param {!Event} e Mouse event.
+ * @param {!Element} svg SVG element.
+ * @param {?SVGMatrix} matrix Inverted screen CTM to use.
+ * @return {!SVGPoint} Object with .x and .y properties.
+ */
+const mouseToSvg = function(e, svg, matrix) {
+  deprecation.warn(
+    'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+    'Blockly.browserEvents.mouseToSvg');
+  return browserEvents.mouseToSvg(e, svg, matrix);
+};
+exports.mouseToSvg = mouseToSvg;
 
-Object.defineProperty(exports, 'getScrollDeltaPixels', {
-  get: function() {
-    deprecation.warn(
-      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.getScrollDeltaPixels');
-    return browserEvents.getScrollDeltaPixels;
-  }
-});
+/**
+ * Returns the scroll delta of a mouse event in pixel units.
+ * @param {!Event} e Mouse event.
+ * @return {{x: number, y: number}} Scroll delta object with .x and .y
+ *    properties.
+ */
+const getScrollDeltaPixels = function(e) {
+  deprecation.warn(
+    'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
+    'Blockly.browserEvents.getScrollDeltaPixels');
+  return browserEvents.getScrollDeltaPixels(e);
+};
+exports.getScrollDeltaPixels = getScrollDeltaPixels;
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).

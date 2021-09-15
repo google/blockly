@@ -34,7 +34,7 @@ const register = function(cssContent) {
   if (injected) {
     throw Error('CSS already injected');
   }
-  // Concatenate cssArray onto CONTENT.
+  // Add new cssContent in the global CONTENT.
   CONTENT += ('\n' + cssContent);
 };
 exports.register = register;
@@ -63,7 +63,6 @@ const inject = function(hasCss, pathToMedia) {
   let cssContent = CONTENT.replace(/<<<PATH>>>/g, mediaPath);
   // Cleanup the collected css content after injecting it to the DOM.
   CONTENT = '';
-
 
   // Inject CSS tag at start of head.
   const cssNode = document.createElement('style');

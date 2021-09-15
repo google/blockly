@@ -113,7 +113,7 @@ let CONTENT = (`
   }
 
   /* Added as a separate rule with multiple classes to make it more specific
-      than a bootstrap rule that selects svg:root. See issue #1275 for context.
+     than a bootstrap rule that selects svg:root. See issue #1275 for context.
   */
   .blocklyWsDragSurface.blocklyOverflowVisible {
     overflow: visible;
@@ -266,7 +266,7 @@ let CONTENT = (`
   }
 
   /* Change the cursor on the whole drag surface in case the mouse gets
-      ahead of block during a drag. This way the cursor is still a closed hand.
+     ahead of block during a drag. This way the cursor is still a closed hand.
     */
   .blocklyBlockDragSurface .blocklyDraggable {
     /* backup for browsers (e.g. IE11) that don't support grabbing */
@@ -381,8 +381,8 @@ let CONTENT = (`
   }
 
   /* Edge and IE introduce a close icon when the input value is longer than a
-      certain length. This affects our sizing calculations of the text input.
-      Hiding the close icon to avoid that. */
+     certain length. This affects our sizing calculations of the text input.
+     Hiding the close icon to avoid that. */
   .blocklyHtmlInput::-ms-clear {
     display: none;
   }
@@ -476,7 +476,7 @@ let CONTENT = (`
     padding-left: 28px;
   }
 
-    /* BiDi override for the resting state. */
+  /* BiDi override for the resting state. */
   .blocklyDropdownMenu .blocklyMenuItemRtl {
     /* Flip left/right padding for BiDi. */
     padding-left: 5px;

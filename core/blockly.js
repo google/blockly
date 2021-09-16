@@ -111,8 +111,6 @@ Blockly.resizeSvgContents = function(workspace) {
   workspace.resizeContents();
 };
 
-
-
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.

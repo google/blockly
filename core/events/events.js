@@ -90,17 +90,6 @@ Object.defineProperties(exports, {
  * @type {number}
  */
 let disabled = 0;
-/** @private */
-exports.disabled_ = disabled;
-
-
-Object.defineProperties(exports, {
-  disabled_: {
-    set: function(newValue) {
-      disabled = newValue;
-    },
-  },
-});
 
 /**
  * Name of event that creates a block. Will be deprecated for BLOCK_CREATE.
@@ -310,8 +299,6 @@ exports.BUMP_EVENTS = BUMP_EVENTS;
  * List of events queued for firing.
  */
 const FIRE_QUEUE = [];
-/** @private */
-exports.FIRE_QUEUE_ = FIRE_QUEUE;
 
 /**
  * Create a custom event and fire it.
@@ -346,8 +333,6 @@ const fireNow = function() {
     }
   }
 };
-/** @private */
-exports.fireNow_ = fireNow;
 
 /**
  * Filter the queued events and merge duplicates.
@@ -571,3 +556,5 @@ const disableOrphans = function(event) {
   }
 };
 exports.disableOrphans = disableOrphans;
+
+exports.TEST_ONLY = {FIRE_QUEUE, fireNow};

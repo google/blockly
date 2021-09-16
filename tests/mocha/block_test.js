@@ -1830,7 +1830,7 @@ suite('Blocks', function() {
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
         // Clear all registered themes.
-        Blockly.registry.typeMap_['theme'] = {};
+        Blockly.registry.TEST_ONLY.typeMap['theme'] = {};
       });
       test('Set colour hue', function() {
         this.block.setColour('20');

@@ -23,8 +23,8 @@ suite('Field Registry', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    if (Blockly.registry.typeMap_['field']['field_custom_test']) {
-      delete Blockly.registry.typeMap_['field']['field_custom_test'];
+    if (Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test']) {
+      delete Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test'];
     }
   });
 

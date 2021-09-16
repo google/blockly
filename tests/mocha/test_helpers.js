@@ -561,15 +561,12 @@ function dispatchPointerEvent(target, type, properties) {
 /**
  * Creates a key down event used for testing.
  * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes enum.
- * @param {string} type The type of the target. This only matters for the
- *     Blockly.utils.isTargetInput method.
  * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
  * @return {!KeyboardEvent} The mocked keydown event.
  */
-function createKeyDownEvent(keyCode, type, modifiers) {
+function createKeyDownEvent(keyCode, modifiers) {
   var event = {
     keyCode: keyCode,
-    target: {type: type},
   };
   if (modifiers && modifiers.length > 0) {
     event.altKey = modifiers.indexOf(Blockly.utils.KeyCodes.ALT) > -1;

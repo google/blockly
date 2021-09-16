@@ -79,7 +79,7 @@ const inject = function(container, opt_options) {
   // correct.
   common.setMainWorkspace(workspace);
 
-  Blockly.svgResize(workspace);
+  common.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
     common.setMainWorkspace(workspace);
@@ -187,7 +187,7 @@ const createMainWorkspace = function(
       bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
-  Blockly.svgResize(mainWorkspace);
+  common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
   DropDownDiv.createDom();
   Tooltip.createDom();
@@ -214,7 +214,7 @@ const init = function(mainWorkspace) {
   const workspaceResizeHandler =
       browserEvents.conditionalBind(window, 'resize', null, function() {
         mainWorkspace.hideChaff(true);
-        Blockly.svgResize(mainWorkspace);
+        common.svgResize(mainWorkspace);
         goog.module.get('Blockly.bumpObjects')
             .bumpTopObjectsIntoBounds(mainWorkspace);
       });
@@ -300,8 +300,8 @@ const bindDocumentEvents = function() {
       browserEvents.conditionalBind(
           window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
-            Blockly.svgResize(/** @type {!WorkspaceSvg} */
-                              (common.getMainWorkspace()));
+            common.svgResize(/** @type {!WorkspaceSvg} */
+                             (common.getMainWorkspace()));
           });
     }
   }

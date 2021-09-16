@@ -76,6 +76,40 @@ const setParentContainer = function(newParent) {
 exports.setParentContainer = setParentContainer;
 
 /**
+ * Size the SVG image to completely fill its container. Call this when the view
+ * actually changes sizes (e.g. on a window resize/device orientation change).
+ * See Blockly.resizeSvgContents to resize the workspace when the contents
+ * change (e.g. when a block is added or removed).
+ * Record the height/width of the SVG image.
+ * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ */
+ const svgResize = function(workspace) {
+  let mainWorkspace = workspace;
+  while (mainWorkspace.options.parentWorkspace) {
+    mainWorkspace = mainWorkspace.options.parentWorkspace;
+  }
+  const svg = mainWorkspace.getParentSvg();
+  const cachedSize = mainWorkspace.getCachedParentSvgSize();
+  const div = svg.parentNode;
+  if (!div) {
+    // Workspace deleted, or something.
+    return;
+  }
+  const width = div.offsetWidth;
+  const height = div.offsetHeight;
+  if (cachedSize.width != width) {
+    svg.setAttribute('width', width + 'px');
+    mainWorkspace.setCachedParentSvgSize(width, null);
+  }
+  if (cachedSize.height != height) {
+    svg.setAttribute('height', height + 'px');
+    mainWorkspace.setCachedParentSvgSize(null, height);
+  }
+  mainWorkspace.resize();
+};
+exports.svgResize = svgResize;
+
+/**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array<!Connection>}
  */

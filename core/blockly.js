@@ -227,14 +227,14 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
-  for (var i = 0; i < jsonArray.length; i++) {
-    var elem = jsonArray[i];
+  for (let i = 0; i < jsonArray.length; i++) {
+    const elem = jsonArray[i];
     if (!elem) {
       console.warn(
           'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
           'Skipping.');
     } else {
-      var typename = elem.type;
+      const typename = elem.type;
       if (typename == null || typename === '') {
         console.warn(
             'Block definition #' + i +

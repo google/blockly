@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldVariable');
+
+const {createGenUidStubWithReturns, createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Variable Fields', function() {
   var FAKE_VARIABLE_NAME = 'default_name';
   var FAKE_ID = 'id1';

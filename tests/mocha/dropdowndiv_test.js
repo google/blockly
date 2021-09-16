@@ -4,8 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.dropdown');
 
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('DropDownDiv', function() {
   suite('Positioning', function() {
     setup(function() {

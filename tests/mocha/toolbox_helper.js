@@ -4,6 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.toolboxHelpers');
+
+
 /**
  * Get JSON for a toolbox that contains categories.
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
@@ -39,6 +42,7 @@ function getCategoryJSON() {
       "name": "Second"
     }]};
 }
+exports.getCategoryJSON = getCategoryJSON;
 
 /**
  * Get JSON for a simple toolbox.
@@ -67,6 +71,7 @@ function getSimpleJSON() {
     }
   ]};
 }
+exports.getSimpleJSON = getSimpleJSON;
 
 /**
  * Get JSON for a toolbox that contains categories that contain categories.
@@ -111,6 +116,7 @@ function getDeeplyNestedJSON() {
       "name": "Second"
     }]};
 }
+exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
 
 /**
  * Get an array filled with xml elements.
@@ -126,6 +132,7 @@ function getXmlArray() {
   var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
+exports.getXmlArray = getXmlArray;
 
 function getInjectedToolbox() {
   /**
@@ -147,6 +154,7 @@ function getInjectedToolbox() {
       });
   return workspace.getToolbox();
 }
+exports.getInjectedToolbox = getInjectedToolbox;
 
 function getBasicToolbox() {
   var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
@@ -155,6 +163,7 @@ function getBasicToolbox() {
   toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
 }
+exports.getBasicToolbox = getBasicToolbox;
 
 function getCollapsibleItem(toolbox) {
   var contents = toolbox.contents_;
@@ -165,6 +174,7 @@ function getCollapsibleItem(toolbox) {
     }
   }
 }
+exports.getCollapsibleItem = getCollapsibleItem;
 
 function getNonCollapsibleItem(toolbox) {
   var contents = toolbox.contents_;
@@ -175,11 +185,14 @@ function getNonCollapsibleItem(toolbox) {
     }
   }
 }
+exports.getNonCollapsibleItem = getNonCollapsibleItem;
 
 function getChildItem(toolbox) {
   return toolbox.getToolboxItemById('nestedCategory');
 }
+exports.getChildItem = getChildItem;
 
 function getSeparator(toolbox) {
   return toolbox.getToolboxItemById('separator');
 }
+exports.getSeparator = getSeparator;

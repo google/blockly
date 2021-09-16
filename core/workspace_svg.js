@@ -28,6 +28,7 @@ const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const Cursor = goog.requireType('Blockly.Cursor');
+const DropDownDiv = goog.require('Blockly.DropDownDiv');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
@@ -63,6 +64,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const ThemeManager = goog.require('Blockly.ThemeManager');
+const Tooltip = goog.require('Blockly.Tooltip');
 const TouchGesture = goog.require('Blockly.TouchGesture');
 /* eslint-disable-next-line no-unused-vars */
 const Trashcan = goog.requireType('Blockly.Trashcan');
@@ -72,6 +74,7 @@ const VariableModel = goog.requireType('Blockly.VariableModel');
 const Variables = goog.requireType('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
 const VariablesDynamic = goog.requireType('Blockly.VariablesDynamic');
+const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Workspace = goog.require('Blockly.Workspace');
 const WorkspaceAudio = goog.require('Blockly.WorkspaceAudio');
 /* eslint-disable-next-line no-unused-vars */
@@ -1443,7 +1446,7 @@ WorkspaceSvg.prototype.setVisible = function(isVisible) {
       this.toolbox_.position();
     }
   } else {
-    Blockly.hideChaff(true);
+    this.hideChaff(true);
   }
 };
 
@@ -2273,7 +2276,7 @@ WorkspaceSvg.prototype.setScale = function(newScale) {
   }
   this.scale = newScale;
 
-  Blockly.hideChaff(false);
+  this.hideChaff(false);
   // Get the flyout, if any, whether our own or owned by the toolbox.
   const flyout = this.getFlyout(false);
   if (flyout && flyout.isVisible()) {
@@ -2328,7 +2331,7 @@ WorkspaceSvg.prototype.getScale = function() {
  * @package
  */
 WorkspaceSvg.prototype.scroll = function(x, y) {
-  Blockly.hideChaff(/* opt_onlyClosePopups */ true);
+  this.hideChaff(/* opt_onlyClosePopups= */ true);
 
   // Keep scrolling within the bounds of the content.
   const metrics = this.getMetrics();
@@ -2642,6 +2645,22 @@ WorkspaceSvg.prototype.getAudioManager = function() {
  */
 WorkspaceSvg.prototype.getGrid = function() {
   return this.grid_;
+};
+
+/**
+ * Close tooltips, context menus, dropdown selections, etc.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ */
+WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
+  Tooltip.hide();
+  WidgetDiv.hide();
+  DropDownDiv.hideWithoutAnimation();
+
+  var onlyClosePopups = !!opt_onlyClosePopups;
+  var autoHideables = this.getComponentManager().getComponents(
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+  autoHideables.forEach(
+      (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };
 
 exports = WorkspaceSvg;

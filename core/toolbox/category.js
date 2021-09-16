@@ -13,7 +13,6 @@
 goog.module('Blockly.ToolboxCategory');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
@@ -428,7 +427,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   } else {
     const hue = Number(colour);
     if (!isNaN(hue)) {
-      return Blockly.hueToHex(hue);
+      return colourUtils.hueToHex(hue);
     } else {
       const hex = colourUtils.parse(colour);
       if (hex) {

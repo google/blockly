@@ -17,7 +17,8 @@
  * @namespace
  */
 goog.module('Blockly.utils.colour');
-goog.module.declareLegacyNamespace();
+
+const internalConstants = goog.require('Blockly.internalConstants');
 
 
 /**
@@ -212,3 +213,14 @@ const names = {
   'yellow': '#ffff00'
 };
 exports.names = names;
+
+/**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ */
+const hueToHex = function(hue) {
+  return hsvToHex(
+      hue, internalConstants.HSV_SATURATION, internalConstants.HSV_VALUE * 255);
+};
+exports.hueToHex = hueToHex;

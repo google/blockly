@@ -23,7 +23,6 @@ goog.require('Blockly.ComponentManager');
 goog.require('Blockly.ConnectionType');
 goog.require('Blockly.constants');
 goog.require('Blockly.dialog');
-goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -42,7 +41,6 @@ goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
-goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils');
@@ -52,7 +50,6 @@ goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.toolbox');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
-goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
@@ -184,7 +181,7 @@ Blockly.onKeyDown = function(e) {
 Blockly.deleteBlock = function(selected) {
   if (!selected.workspace.isFlyout) {
     Blockly.Events.setGroup(true);
-    Blockly.hideChaff();
+    Blockly.common.getMainWorkspace().hideChaff();
     if (selected.outputConnection) {
       // Do not attempt to heal rows
       // (https://github.com/google/blockly/issues/4832)
@@ -232,20 +229,13 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
+ * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
 Blockly.hideChaff = function(opt_onlyClosePopups) {
-  Blockly.Tooltip.hide();
-  Blockly.WidgetDiv.hide();
-  Blockly.DropDownDiv.hideWithoutAnimation();
-
-  var onlyClosePopups = !!opt_onlyClosePopups;
-  var workspace = Blockly.common.getMainWorkspace();
-  var autoHideables = workspace.getComponentManager().getComponents(
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
-  autoHideables.forEach(function(autoHideable) {
-    autoHideable.autoHide(onlyClosePopups);
-  });
+  Blockly.utils.deprecation.warn(
+      'Blockly.hideChaff', 'September 2021', 'September 2022');
+  Blockly.common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
 
 /**
@@ -354,16 +344,15 @@ Blockly.isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 };
 
-/**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
- */
-Blockly.hueToHex = function(hue) {
-  return Blockly.utils.colour.hsvToHex(
-      hue, Blockly.internalConstants.HSV_SATURATION,
-      Blockly.internalConstants.HSV_VALUE * 255);
-};
+// Add a getter for Blockly.hueToHex, for legacy reasons.
+Object.defineProperty(Blockly, 'hueToHex', {
+  get: function() {
+    Blockly.utils.deprecation.warn(
+        'Blockly.hueToHex()', 'September 2021', 'September 2022',
+        'Blockly.utils.colour.hueToHex()');
+    return Blockly.utils.colour.hueToHex;
+  }
+});
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,

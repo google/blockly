@@ -410,7 +410,7 @@ Trashcan.prototype.closeFlyout = function() {
 };
 
 /**
- * Hides the component. Called in Blockly.hideChaff.
+ * Hides the component. Called in WorkspaceSvg.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
  *     Flyouts should not be closed if this is true.
  */

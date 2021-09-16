@@ -24,6 +24,7 @@ const Options = goog.require('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
 const Touch = goog.require('Blockly.Touch');
 const Tooltip = goog.require('Blockly.Tooltip');
+const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const Svg = goog.require('Blockly.utils.Svg');
 const Workspace = goog.require('Blockly.Workspace');
 const WorkspaceDragSurfaceSvg = goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -264,6 +265,29 @@ const init = function(mainWorkspace) {
 };
 
 /**
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
+ * is not visible.
+ * @param {!KeyboardEvent} e Key down event.
+ */
+// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
+// are multiple workspaces and non-main workspaces are able to accept input.
+const onKeyDown = function(e) {
+  const mainWorkspace = common.getMainWorkspace();
+  if (!mainWorkspace) {
+    return;
+  }
+
+  if (utils.isTargetInput(e) ||
+      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
+    // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
+    return;
+  }
+  ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
+};
+
+/**
  * Whether event handlers have been bound. Document event handlers will only
  * be bound once, even if Blockly is destroyed and reinjected.
  * @type {boolean}
@@ -290,7 +314,7 @@ const bindDocumentEvents = function() {
         }
       }
     });
-    browserEvents.conditionalBind(document, 'keydown', null, Blockly.onKeyDown);
+    browserEvents.conditionalBind(document, 'keydown', null, onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);

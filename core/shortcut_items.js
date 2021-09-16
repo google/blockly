@@ -76,7 +76,7 @@ const registerDelete = function() {
       if (Gesture.inProgress()) {
         return false;
       }
-      Blockly.deleteBlock(/** @type {!BlockSvg} */ (Blockly.selected));
+      (/** @type {!BlockSvg} */ (Blockly.selected)).checkAndDelete();
       return true;
     }
   };
@@ -133,8 +133,12 @@ const registerCut = function() {
           Blockly.selected.isMovable() && !Blockly.selected.workspace.isFlyout;
     },
     callback: function() {
-      clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
-      Blockly.deleteBlock(/** @type {!BlockSvg} */ (Blockly.selected));
+      if (!Blockly.selected) {
+        // Shouldn't happen but appeases the type system
+        return false;
+      }
+      clipboard.copy(Blockly.selected);
+      (/** @type {!BlockSvg} */ (Blockly.selected)).checkAndDelete();
       return true;
     }
   };

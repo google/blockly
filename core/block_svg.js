@@ -963,6 +963,30 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
 };
 
 /**
+ * Delete a block and hide chaff when doing so. The block will not be deleted if
+ * it's in a flyout. This is called from the context menu and keyboard shortcuts
+ * as the full delete action. If you are disposing of a block from the workspace
+ * and don't need to perform flyout checks, handle event grouping, or hide
+ * chaff, then use `block.dispose()` directly.
+ * @package
+ */
+BlockSvg.prototype.checkAndDelete = function() {
+  if (this.workspace.isFlyout) {
+    return;
+  }
+  Blockly.Events.setGroup(true);
+  this.workspace.hideChaff();
+  if (this.outputConnection) {
+    // Do not attempt to heal rows
+    // (https://github.com/google/blockly/issues/4832)
+    this.dispose(false, true);
+  } else {
+    this.dispose(/* heal */ true, true);
+  }
+  Blockly.Events.setGroup(false);
+};
+
+/**
  * Encode a block for copying.
  * @return {?ICopyable.CopyData} Copy metadata, or null if the block is
  *     an insertion marker.

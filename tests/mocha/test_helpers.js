@@ -591,29 +591,12 @@ exports.dispatchPointerEvent = dispatchPointerEvent;
 /**
  * Creates a key down event used for testing.
  * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes enum.
- * @param {string} type The type of the target. This only matters for the
- *     Blockly.utils.isTargetInput method.
- * @param {Array<number>} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
- * @return {{keyCode: *, getModifierState: (function(): boolean),
- *     preventDefault: preventDefault, target: {type: *}}} The mocked keydown event.
+ * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
+ * @return {!KeyboardEvent} The mocked keydown event.
  */
-function createKeyDownEvent(keyCode, type, modifiers) {
+function createKeyDownEvent(keyCode, modifiers) {
   var event = {
     keyCode: keyCode,
-    target: {type: type},
-    getModifierState: function(name) {
-      if (name == 'Shift' && this.shiftKey) {
-        return true;
-      } else if (name == 'Control' && this.ctrlKey) {
-        return true;
-      } else if (name == 'Meta' && this.metaKey) {
-        return true;
-      } else if (name == 'Alt' && this.altKey) {
-        return true;
-      }
-      return false;
-    },
-    preventDefault: function() {}
   };
   if (modifiers && modifiers.length > 0) {
     event.altKey = modifiers.indexOf(KeyCodes.ALT) > -1;
@@ -621,7 +604,7 @@ function createKeyDownEvent(keyCode, type, modifiers) {
     event.metaKey = modifiers.indexOf(KeyCodes.META) > -1;
     event.shiftKey = modifiers.indexOf(KeyCodes.SHIFT) > -1;
   }
-  return event;
+  return new KeyboardEvent('keydown', event);
 }
 exports.createKeyDownEvent = createKeyDownEvent;
 

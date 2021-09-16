@@ -16,8 +16,8 @@ goog.module.declareLegacyNamespace();
 
 const FieldLabel = goog.require('Blockly.FieldLabel');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -48,7 +48,7 @@ object.inherits(FieldLabelSerializable, FieldLabel);
  * @nocollapse
  */
 FieldLabelSerializable.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = messages.replaceReferences(options['text']);
   // `this` might be a subclass of FieldLabelSerializable if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);

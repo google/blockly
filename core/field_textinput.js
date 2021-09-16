@@ -29,9 +29,9 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const dialog = goog.require('Blockly.dialog');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -113,7 +113,7 @@ FieldTextInput.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldTextInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = messages.replaceReferences(options['text']);
   // `this` might be a subclass of FieldTextInput if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);

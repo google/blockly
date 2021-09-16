@@ -47,9 +47,9 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const browserEvents = goog.require('Blockly.browserEvents');
+const messages = goog.require('Blockly.utils.messages');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -280,7 +280,7 @@ Field.prototype.SERIALIZABLE = false;
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
   if (typeof tooltip == 'string') {
-    tooltip = utils.replaceMessageReferences(config['tooltip']);
+    tooltip = messages.replaceReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 

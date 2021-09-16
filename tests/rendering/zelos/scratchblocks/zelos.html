@@ -12,11 +12,11 @@
     Blockly.Block.prototype.setColourFromRawValues_ = function (primary, secondary,
       tertiary) {
       primary = typeof primary === 'string' || primary instanceof String ?
-        Blockly.utils.replaceMessageReferences(primary) : primary;
+        Blockly.utils.messages.replaceReferences(primary) : primary;
       secondary = typeof secondary === 'string' || secondary instanceof String ?
-        Blockly.utils.replaceMessageReferences(secondary) : secondary;
+        Blockly.utils.messages.replaceReferences(secondary) : secondary;
       tertiary = typeof tertiary === 'string' || tertiary instanceof String ?
-        Blockly.utils.replaceMessageReferences(tertiary) : tertiary;
+        Blockly.utils.messages.replaceReferences(tertiary) : tertiary;
 
       this.setColour(primary);
       this.style.colourSecondary = secondary;

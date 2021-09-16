@@ -20,10 +20,10 @@ const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const messages = goog.require('Blockly.utils.messages');
 const style = goog.require('Blockly.utils.style');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -167,7 +167,7 @@ FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle'
       },
       this.svgGroup_);
-  let text = utils.replaceMessageReferences(this.text_);
+  let text = messages.replaceReferences(this.text_);
   if (this.workspace_.RTL) {
     // Force text to be RTL by adding an RLM.
     text += '\u200F';

@@ -24,9 +24,9 @@ const Svg = goog.require('Blockly.utils.Svg');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const utilsString = goog.require('Blockly.utils.string');
 
 
@@ -405,10 +405,10 @@ FieldDropdown.prototype.trimOptions_ = function() {
   for (let i = 0; i < options.length; i++) {
     const label = options[i][0];
     if (typeof label == 'string') {
-      options[i][0] = utils.replaceMessageReferences(label);
+      options[i][0] = messages.replaceReferences(label);
     } else {
       if (label.alt != null) {
-        options[i][0].alt = utils.replaceMessageReferences(label.alt);
+        options[i][0].alt = messages.replaceReferences(label.alt);
       }
       hasImages = true;
     }

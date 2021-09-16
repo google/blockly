@@ -44,6 +44,7 @@ const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
@@ -1564,7 +1565,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['tooltip'] !== undefined) {
     const rawValue = json['tooltip'];
-    const localizedText = utils.replaceMessageReferences(rawValue);
+    const localizedText = messages.replaceReferences(rawValue);
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
@@ -1573,7 +1574,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
-    const localizedValue = utils.replaceMessageReferences(rawValue);
+    const localizedValue = messages.replaceReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
   if (typeof json['extensions'] == 'string') {
@@ -1673,7 +1674,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  */
 Block.prototype.interpolate_ = function(
     message, args, lastDummyAlign, warningPrefix) {
-  const tokens = utils.tokenizeInterpolation(message);
+  const tokens = messages.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 

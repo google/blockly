@@ -24,9 +24,9 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -89,7 +89,7 @@ FieldMultilineInput.prototype.configure_ = function(config) {
  * @nocollapse
  */
 FieldMultilineInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = messages.replaceReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);

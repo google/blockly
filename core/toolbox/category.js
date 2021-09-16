@@ -24,10 +24,10 @@ const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const aria = goog.require('Blockly.utils.aria');
 const colourUtils = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -50,7 +50,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
    * @type {string}
    * @protected
    */
-  this.name_ = utils.replaceMessageReferences(categoryDef['name']);
+  this.name_ = messages.replaceReferences(categoryDef['name']);
 
   /**
    * The colour of the category.
@@ -420,7 +420,7 @@ ToolboxCategory.prototype.getClickTarget = function() {
 ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
-  const colour = utils.replaceMessageReferences(colourValue);
+  const colour = messages.replaceReferences(colourValue);
   if (colour == null || colour === '') {
     // No attribute. No colour.
     return '';

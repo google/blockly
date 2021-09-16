@@ -42,7 +42,6 @@ goog.require('Blockly.Procedures');
 goog.require('Blockly.ShortcutRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
@@ -213,18 +212,6 @@ Blockly.paste = Blockly.clipboard.paste;
  * @package
  */
 Blockly.duplicate = Blockly.clipboard.duplicate;
-
-/**
- * Cancel the native context menu, unless the focus is on an HTML input widget.
- * @param {!Event} e Mouse down event.
- * @private
- */
-Blockly.onContextMenu_ = function(e) {
-  if (!Blockly.utils.isTargetInput(e)) {
-    // When focused on an HTML text input widget, don't cancel the context menu.
-    e.preventDefault();
-  }
-};
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.

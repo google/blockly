@@ -24,7 +24,6 @@ const Block = goog.requireType('Blockly.Block');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Metrics = goog.require('Blockly.utils.Metrics');
-const Msg = goog.require('Blockly.Msg');
 const Rect = goog.require('Blockly.utils.Rect');
 const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -39,6 +38,7 @@ const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const internalConstants = goog.require('Blockly.internalConstants');
 const math = goog.require('Blockly.utils.math');
+const messages = goog.require('Blockly.utils.messages');
 const object = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const style = goog.require('Blockly.utils.style');
@@ -240,9 +240,13 @@ exports.getScrollDeltaPixels = getScrollDeltaPixels;
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
  * @return {!Array<string|number>} Array of strings and numbers.
+ * @deprecated Use Blockly.utils.messages.tokenizeInterpolation instead.
  */
 const tokenizeInterpolation = function(message) {
-  return tokenizeInterpolation_(message, true);
+  deprecation.warn(
+    'Blockly.utils.tokenizeInterpolation', 'September 2021', 'September 2022',
+    'Blockly.utils.messages.tokenizeInterpolation');
+  return messages.tokenizeInterpolation(message);
 };
 exports.tokenizeInterpolation = tokenizeInterpolation;
 
@@ -253,15 +257,13 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
  * @param {string|?} message Message, which may be a string that contains
  *     string table references.
  * @return {string} String with message references replaced.
+ * @deprecated Use Blockly.utils.messages.replaceReferences instead.
  */
 const replaceMessageReferences = function(message) {
-  if (typeof message != 'string') {
-    return message;
-  }
-  const interpolatedResult = tokenizeInterpolation_(message, false);
-  // When parseInterpolationTokens == false, interpolatedResult should be at
-  // most length 1.
-  return interpolatedResult.length ? String(interpolatedResult[0]) : '';
+  deprecation.warn(
+    'Blockly.utils.replaceMessageReferences', 'September 2021', 'September 2022',
+    'Blockly.utils.messages.replaceReferences');
+  return messages.replaceReferences(message);
 };
 exports.replaceMessageReferences = replaceMessageReferences;
 
@@ -271,164 +273,15 @@ exports.replaceMessageReferences = replaceMessageReferences;
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
+ * @deprecated Use Blockly.utils.messages.checkReferences instead.
  */
 const checkMessageReferences = function(message) {
-  let validSoFar = true;
-
-  const msgTable = Msg;
-
-  // TODO (#1169): Implement support for other string tables,
-  // prefixes other than BKY_.
-  const m = message.match(/%{BKY_[A-Z]\w*}/ig);
-  for (let i = 0; i < m.length; i++) {
-    const msgKey = m[i].toUpperCase();
-    if (msgTable[msgKey.slice(6, -1)] == undefined) {
-      console.warn('No message string for ' + m[i] + ' in ' + message);
-      validSoFar = false;  // Continue to report other errors.
-    }
-  }
-
-  return validSoFar;
+  deprecation.warn(
+    'Blockly.utils.checkMessageReferences', 'September 2021', 'September 2022',
+    'Blockly.utils.messages.checkReferences');
+  return messages.checkReferences(message);
 };
 exports.checkMessageReferences = checkMessageReferences;
-
-/**
- * Internal implementation of the message reference and interpolation token
- * parsing used by tokenizeInterpolation() and replaceMessageReferences().
- * @param {string} message Text which might contain string table references and
- *     interpolation tokens.
- * @param {boolean} parseInterpolationTokens Option to parse numeric
- *     interpolation tokens (%1, %2, ...) when true.
- * @return {!Array<string|number>} Array of strings and numbers.
- */
-const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
-  const tokens = [];
-  const chars = message.split('');
-  chars.push('');  // End marker.
-  // Parse the message with a finite state machine.
-  // 0 - Base case.
-  // 1 - % found.
-  // 2 - Digit found.
-  // 3 - Message ref found.
-  let state = 0;
-  const buffer = [];
-  let number = null;
-  for (let i = 0; i < chars.length; i++) {
-    const c = chars[i];
-    if (state == 0) {
-      if (c == '%') {
-        const text = buffer.join('');
-        if (text) {
-          tokens.push(text);
-        }
-        buffer.length = 0;
-        state = 1;  // Start escape.
-      } else {
-        buffer.push(c);  // Regular char.
-      }
-    } else if (state == 1) {
-      if (c == '%') {
-        buffer.push(c);  // Escaped %: %%
-        state = 0;
-      } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
-        state = 2;
-        number = c;
-        const text = buffer.join('');
-        if (text) {
-          tokens.push(text);
-        }
-        buffer.length = 0;
-      } else if (c == '{') {
-        state = 3;
-      } else {
-        buffer.push('%', c);  // Not recognized. Return as literal.
-        state = 0;
-      }
-    } else if (state == 2) {
-      if ('0' <= c && c <= '9') {
-        number += c;  // Multi-digit number.
-      } else {
-        tokens.push(parseInt(number, 10));
-        i--;  // Parse this char again.
-        state = 0;
-      }
-    } else if (state == 3) {  // String table reference
-      if (c == '') {
-        // Premature end before closing '}'
-        buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
-        i--;                        // Parse this char again.
-        state = 0;                  // and parse as string literal.
-      } else if (c != '}') {
-        buffer.push(c);
-      } else {
-        const rawKey = buffer.join('');
-        if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
-          // Found a valid string key. Attempt case insensitive match.
-          const keyUpper = rawKey.toUpperCase();
-
-          // BKY_ is the prefix used to namespace the strings used in Blockly
-          // core files and the predefined blocks in ../blocks/.
-          // These strings are defined in ../msgs/ files.
-          const bklyKey = stringUtils.startsWith(keyUpper, 'BKY_') ?
-              keyUpper.substring(4) :
-              null;
-          if (bklyKey && bklyKey in Msg) {
-            const rawValue = Msg[bklyKey];
-            if (typeof rawValue == 'string') {
-              // Attempt to dereference substrings, too, appending to the end.
-              Array.prototype.push.apply(
-                  tokens,
-                  tokenizeInterpolation_(rawValue, parseInterpolationTokens));
-            } else if (parseInterpolationTokens) {
-              // When parsing interpolation tokens, numbers are special
-              // placeholders (%1, %2, etc). Make sure all other values are
-              // strings.
-              tokens.push(String(rawValue));
-            } else {
-              tokens.push(rawValue);
-            }
-          } else {
-            // No entry found in the string table. Pass reference as string.
-            tokens.push('%{' + rawKey + '}');
-          }
-          buffer.length = 0;  // Clear the array
-          state = 0;
-        } else {
-          tokens.push('%{' + rawKey + '}');
-          buffer.length = 0;
-          state = 0;  // and parse as string literal.
-        }
-      }
-    }
-  }
-  let text = buffer.join('');
-  if (text) {
-    tokens.push(text);
-  }
-
-  // Merge adjacent text tokens into a single string.
-  const mergedTokens = [];
-  buffer.length = 0;
-  for (let i = 0; i < tokens.length; ++i) {
-    if (typeof tokens[i] == 'string') {
-      buffer.push(tokens[i]);
-    } else {
-      text = buffer.join('');
-      if (text) {
-        mergedTokens.push(text);
-      }
-      buffer.length = 0;
-      mergedTokens.push(tokens[i]);
-    }
-  }
-  text = buffer.join('');
-  if (text) {
-    mergedTokens.push(text);
-  }
-  buffer.length = 0;
-
-  return mergedTokens;
-};
 
 /**
  * Generate a unique ID.
@@ -648,7 +501,7 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
  */
 const parseBlockColour = function(colour) {
   const dereferenced =
-      (typeof colour == 'string') ? replaceMessageReferences(colour) : colour;
+      (typeof colour == 'string') ? messages.replaceReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {

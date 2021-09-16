@@ -14,7 +14,7 @@
 goog.module('Blockly.inputTypes');
 goog.module.declareLegacyNamespace();
 
-const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 
 /**
  * Enum for the type of a connection or input.
@@ -22,9 +22,9 @@ const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
  */
 const inputTypes = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
-  VALUE: ConnectionTypes.INPUT_VALUE,
+  VALUE: ConnectionType.INPUT_VALUE,
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
-  STATEMENT: ConnectionTypes.NEXT_STATEMENT,
+  STATEMENT: ConnectionType.NEXT_STATEMENT,
   // A dummy input.  Used to add field(s) with no input.
   DUMMY: 5
 };

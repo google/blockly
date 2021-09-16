@@ -23,7 +23,7 @@ const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
-const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const deprecation = goog.require('Blockly.utils.deprecation');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
@@ -108,7 +108,7 @@ Connection.prototype.y = 0;
  * @protected
  */
 Connection.prototype.connect_ = function(childConnection) {
-  const INPUT = ConnectionTypes.INPUT_VALUE;
+  const INPUT = ConnectionType.INPUT_VALUE;
   const parentConnection = this;
   const parentBlock = parentConnection.getSourceBlock();
   const childBlock = childConnection.getSourceBlock();
@@ -194,8 +194,8 @@ Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Connection.prototype.isSuperior = function() {
-  return this.type == ConnectionTypes.INPUT_VALUE ||
-      this.type == ConnectionTypes.NEXT_STATEMENT;
+  return this.type == ConnectionType.INPUT_VALUE ||
+      this.type == ConnectionType.NEXT_STATEMENT;
 };
 
 /**
@@ -384,7 +384,7 @@ const getConnectionForOrphanedOutput = function(startBlock, orphanBlock) {
  */
 Connection.getConnectionForOrphanedConnection = function(
     startBlock, orphanConnection) {
-  if (orphanConnection.type === ConnectionTypes.OUTPUT_VALUE) {
+  if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
     return getConnectionForOrphanedOutput(
         startBlock, orphanConnection.getSourceBlock());
   }

@@ -20,7 +20,7 @@ goog.require('Blockly.browserEvents');
 goog.require('Blockly.clipboard');
 goog.require('Blockly.common');
 goog.require('Blockly.ComponentManager');
-goog.require('Blockly.ConnectionTypes');
+goog.require('Blockly.ConnectionType');
 goog.require('Blockly.constants');
 goog.require('Blockly.dialog');
 goog.require('Blockly.DropDownDiv');
@@ -412,24 +412,24 @@ Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
  */
 
 /**
- * @see Blockly.ConnectionTypes.INPUT_VALUE 
+ * @see Blockly.ConnectionType.INPUT_VALUE 
  */
-Blockly.INPUT_VALUE = Blockly.ConnectionTypes.INPUT_VALUE;
+Blockly.INPUT_VALUE = Blockly.ConnectionType.INPUT_VALUE;
 
 /**
- *  @see Blockly.ConnectionTypes.INPUT_VALUE 
+ *  @see Blockly.ConnectionType.OUTPUT_VALUE 
  */
-Blockly.OUTPUT_VALUE = Blockly.ConnectionTypes.OUTPUT_VALUE
+Blockly.OUTPUT_VALUE = Blockly.ConnectionType.OUTPUT_VALUE
 
 /**
- * @see Blockly.ConnectionTypes.NEXT_STATEMENT
+ * @see Blockly.ConnectionType.NEXT_STATEMENT
  */
-Blockly.NEXT_STATEMENT = Blockly.ConnectionTypes.NEXT_STATEMENT;
+Blockly.NEXT_STATEMENT = Blockly.ConnectionType.NEXT_STATEMENT;
 
 /**
- * @see Blockly.ConnectionTypes.PREVIOUS_STATEMENT
+ * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
  */
-Blockly.PREVIOUS_STATEMENT = Blockly.ConnectionTypes.PREVIOUS_STATEMENT;
+Blockly.PREVIOUS_STATEMENT = Blockly.ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see Blockly.inputTypes.DUMMY_INPUT

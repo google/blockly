@@ -16,7 +16,7 @@ goog.module.declareLegacyNamespace();
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const Svg = goog.require('Blockly.utils.Svg');
-const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -641,8 +641,8 @@ ConstantProvider.prototype.shapeFor = function(connection) {
   }
   let outputShape;
   switch (connection.type) {
-    case ConnectionTypes.INPUT_VALUE:
-    case ConnectionTypes.OUTPUT_VALUE:
+    case ConnectionType.INPUT_VALUE:
+    case ConnectionType.OUTPUT_VALUE:
       outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
       if (outputShape != null) {
@@ -666,8 +666,8 @@ ConstantProvider.prototype.shapeFor = function(connection) {
         return this.ROUNDED;
       }
       return this.ROUNDED;
-    case ConnectionTypes.PREVIOUS_STATEMENT:
-    case ConnectionTypes.NEXT_STATEMENT:
+    case ConnectionType.PREVIOUS_STATEMENT:
+    case ConnectionType.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown type');

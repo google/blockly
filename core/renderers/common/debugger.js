@@ -30,7 +30,7 @@ const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const Row = goog.requireType('Blockly.blockRendering.Row');
 const Svg = goog.require('Blockly.utils.Svg');
 const Types = goog.require('Blockly.blockRendering.Types');
-const ConnectionTypes = goog.require('Blockly.ConnectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const dom = goog.require('Blockly.utils.dom');
 
 
@@ -227,19 +227,19 @@ Debug.prototype.drawConnection = function(conn) {
   let colour;
   let size;
   let fill;
-  if (conn.type == ConnectionTypes.INPUT_VALUE) {
+  if (conn.type == ConnectionType.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
     fill = 'none';
-  } else if (conn.type == ConnectionTypes.OUTPUT_VALUE) {
+  } else if (conn.type == ConnectionType.OUTPUT_VALUE) {
     size = 2;
     colour = 'magenta';
     fill = colour;
-  } else if (conn.type ==CconnectionTypes.NEXT_STATEMENT) {
+  } else if (conn.type ==CconnectionType.NEXT_STATEMENT) {
     size = 4;
     colour = 'goldenrod';
     fill = 'none';
-  } else if (conn.type == ConnectionTypes.PREVIOUS_STATEMENT) {
+  } else if (conn.type == ConnectionType.PREVIOUS_STATEMENT) {
     size = 2;
     colour = 'goldenrod';
     fill = colour;

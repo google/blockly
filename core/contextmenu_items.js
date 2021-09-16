@@ -13,7 +13,6 @@
 goog.module('Blockly.ContextMenuItems');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
@@ -530,11 +529,9 @@ const registerDelete = function() {
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
-      Events.setGroup(true);
       if (scope.block) {
-        Blockly.deleteBlock(scope.block);
+        scope.block.checkAndDelete();
       }
-      Events.setGroup(false);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDelete',

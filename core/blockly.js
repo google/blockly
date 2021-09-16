@@ -22,7 +22,6 @@ goog.require('Blockly.common');
 goog.require('Blockly.connectionTypes');
 goog.require('Blockly.constants');
 goog.require('Blockly.dialog');
-goog.require('Blockly.Events');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -51,7 +50,6 @@ goog.require('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.ICopyable');
 goog.requireType('Blockly.Workspace');
 
@@ -144,26 +142,6 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
-};
-
-/**
- * Delete the given block.
- * @param {!Blockly.BlockSvg} selected The block to delete.
- * @package
- */
-Blockly.deleteBlock = function(selected) {
-  if (!selected.workspace.isFlyout) {
-    Blockly.Events.setGroup(true);
-    Blockly.common.getMainWorkspace().hideChaff();
-    if (selected.outputConnection) {
-      // Do not attempt to heal rows
-      // (https://github.com/google/blockly/issues/4832)
-      selected.dispose(false, true);
-    } else {
-      selected.dispose(/* heal */ true, true);
-    }
-    Blockly.Events.setGroup(false);
-  }
 };
 
 /**

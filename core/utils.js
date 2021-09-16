@@ -72,6 +72,7 @@ exports.xml = xmlUtils;
 /**
  * Halts the propagation of the event without doing anything else.
  * @param {!Event} e An event.
+ * @deprecated
  */
 const noEvent = function(e) {
   deprecation.warn(
@@ -82,11 +83,17 @@ const noEvent = function(e) {
 };
 exports.noEvent = noEvent;
 
+/**
+ * Returns true if this event is targeting a text input widget?
+ * @param {!Event} e An event.
+ * @return {boolean} True if text input.
+ * @deprecated Use Blockly.browserEvents.isTargetInput instead.
+ */
 const isTargetInput = function(e) {
   deprecation.warn(
     'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-    'Blockly.browserEvets.isTargetInput');
-  return browserEvents.isTargetInput;
+    'Blockly.browserEvents.isTargetInput');
+  return browserEvents.isTargetInput(e);
 };
 exports.isTargetInput = isTargetInput;
 
@@ -182,6 +189,7 @@ getRelativeXY.XY_STYLE_REGEX_ =
  * Returns true this event is a right-click.
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
+ * @deprecated Use Blockly.browserEvents.isRightButton instead.
  */
 const isRightButton = function(e) {
   deprecation.warn(
@@ -198,6 +206,7 @@ exports.isRightButton = isRightButton;
  * @param {!Element} svg SVG element.
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
+ * @deprecated Use Blockly.browserEvents.mouseToSvg instead;
  */
 const mouseToSvg = function(e, svg, matrix) {
   deprecation.warn(
@@ -212,6 +221,7 @@ exports.mouseToSvg = mouseToSvg;
  * @param {!Event} e Mouse event.
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
+ * @deprecated Use Blockly.browserEvents.getScrollDeltaPixels instead.
  */
 const getScrollDeltaPixels = function(e) {
   deprecation.warn(

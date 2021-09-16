@@ -36,30 +36,31 @@ suite('Key Down', function() {
     var name = opt_name ? opt_name : 'Not called when readOnly is true';
     test(name, function() {
       this.workspace.options.readOnly = true;
-      Blockly.onKeyDown(keyEvent);
+      document.dispatchEvent(keyEvent);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
   }
 
   suite('Escape', function() {
     setup(function() {
-      this.event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField');
+      this.event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC);
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     test('Simple', function() {
-      Blockly.onKeyDown(this.event);
+      document.dispatchEvent(this.event);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
-    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC, 'NotAField'));
+    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC));
     test('Not called when focus is on an HTML input', function() {
-      var event = createKeyDownEvent(this.event, 'textarea');
-      Blockly.onKeyDown(event);
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC);
+      const input = document.createElement('textarea');
+      input.dispatchEvent(event);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
     test('Not called on hidden workspaces', function() {
       this.workspace.isVisible_ = false;
-      Blockly.onKeyDown(this.event);
+      document.dispatchEvent(this.event);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
   });
@@ -72,8 +73,8 @@ suite('Key Down', function() {
       this.deleteSpy = sinon.spy(Blockly.selected, 'dispose');
     });
     var testCases = [
-      ['Delete', createKeyDownEvent(Blockly.utils.KeyCodes.DELETE, 'NotAField')],
-      ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE, 'NotAField')]
+      ['Delete', createKeyDownEvent(Blockly.utils.KeyCodes.DELETE)],
+      ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE)]
     ];
     // Delete a block.
     suite('Simple', function() {
@@ -81,7 +82,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.hideChaffSpy);
           sinon.assert.calledOnce(this.deleteSpy);
         });
@@ -105,9 +106,9 @@ suite('Key Down', function() {
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
-      ['Control C', createKeyDownEvent(Blockly.utils.KeyCodes.C, 'NotAField', [Blockly.utils.KeyCodes.CTRL])],
-      ['Meta C', createKeyDownEvent(Blockly.utils.KeyCodes.C, 'NotAField', [Blockly.utils.KeyCodes.META])],
-      ['Alt C', createKeyDownEvent(Blockly.utils.KeyCodes.C, 'NotAField', [Blockly.utils.KeyCodes.ALT])]
+      ['Control C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL])],
+      ['Meta C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META])],
+      ['Alt C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT])]
     ];
     // Copy a block.
     suite('Simple', function() {
@@ -115,7 +116,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.copySpy);
           sinon.assert.calledOnce(this.hideChaffSpy);
         });
@@ -136,7 +137,7 @@ suite('Key Down', function() {
         var keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -149,7 +150,7 @@ suite('Key Down', function() {
         var keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.selected, 'isDeletable').returns(false);
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -162,7 +163,7 @@ suite('Key Down', function() {
         var keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.selected, 'isMovable').returns(false);
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -177,9 +178,9 @@ suite('Key Down', function() {
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
-      ['Control Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.CTRL])],
-      ['Meta Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.META])],
-      ['Alt Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.ALT])]
+      ['Control Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL])],
+      ['Meta Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META])],
+      ['Alt Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT])]
     ];
     // Undo.
     suite('Simple', function() {
@@ -187,7 +188,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.undoSpy);
           sinon.assert.calledWith(this.undoSpy, false);
           sinon.assert.calledOnce(this.hideChaffSpy);
@@ -201,7 +202,7 @@ suite('Key Down', function() {
         var keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.undoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -224,9 +225,9 @@ suite('Key Down', function() {
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     var testCases = [
-      ['Control Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])],
-      ['Meta Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT])],
-      ['Alt Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, 'NotAField', [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])]
+      ['Control Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])],
+      ['Meta Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT])],
+      ['Alt Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])]
     ];
     // Undo.
     suite('Simple', function() {
@@ -234,7 +235,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.redoSpy);
           sinon.assert.calledWith(this.redoSpy, true);
           sinon.assert.calledOnce(this.hideChaffSpy);
@@ -248,7 +249,7 @@ suite('Key Down', function() {
         var keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-          Blockly.onKeyDown(keyEvent);
+          document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.redoSpy);
           sinon.assert.notCalled(this.hideChaffSpy);
         });
@@ -266,23 +267,23 @@ suite('Key Down', function() {
 
   suite('UndoWindows', function() {
     setup(function() {
-      this.ctrlYEvent = createKeyDownEvent(Blockly.utils.KeyCodes.Y, 'NotAField', [Blockly.utils.KeyCodes.CTRL]);
+      this.ctrlYEvent = createKeyDownEvent(Blockly.utils.KeyCodes.Y, [Blockly.utils.KeyCodes.CTRL]);
       this.undoSpy = sinon.spy(this.workspace, 'undo');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
     test('Simple', function() {
-      Blockly.onKeyDown(this.ctrlYEvent);
+      document.dispatchEvent(this.ctrlYEvent);
       sinon.assert.calledOnce(this.undoSpy);
       sinon.assert.calledWith(this.undoSpy, true);
       sinon.assert.calledOnce(this.hideChaffSpy);
     });
     test('Not called when a gesture is in progress', function() {
       sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
-      Blockly.onKeyDown(this.ctrlYEvent);
+      document.dispatchEvent(this.ctrlYEvent);
       sinon.assert.notCalled(this.undoSpy);
       sinon.assert.notCalled(this.hideChaffSpy);
     });
-    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.Y, 'NotAField', [Blockly.utils.KeyCodes.CTRL]));
+    runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.Y, [Blockly.utils.KeyCodes.CTRL]));
   });
 });

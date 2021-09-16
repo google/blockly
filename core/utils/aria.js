@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.aria');
-goog.module.declareLegacyNamespace();
 
 
 /** ARIA states/properties prefix. */

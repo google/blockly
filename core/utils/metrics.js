@@ -15,7 +15,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.Metrics');
-goog.module.declareLegacyNamespace();
 
 
 /**

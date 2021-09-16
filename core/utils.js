@@ -22,19 +22,51 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const Metrics = goog.require('Blockly.utils.Metrics');
 const Msg = goog.require('Blockly.Msg');
 const Rect = goog.require('Blockly.utils.Rect');
+const Size = goog.require('Blockly.utils.Size');
+const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const aria = goog.require('Blockly.utils.aria');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const {globalThis} = goog.require('Blockly.utils.global');
+const dom = goog.require('Blockly.utils.dom');
+const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const internalConstants = goog.require('Blockly.internalConstants');
+const math = goog.require('Blockly.utils.math');
+const object = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const style = goog.require('Blockly.utils.style');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
+const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const xmlUtils = goog.require('Blockly.utils.xml');
 
+
+exports.aria = aria;
+exports.colour = colourUtils;
+exports.Coordinate = Coordinate;
+exports.deprecation = deprecation;
+exports.dom = dom;
+exports.global = global;
+exports.idGenerator = idGenerator;
+exports.KeyCodes = KeyCodes;
+exports.math = math;
+exports.Metrics = Metrics;
+exports.object = object;
+exports.Rect = Rect;
+exports.Size = Size;
+exports.string = stringUtils;
+exports.style = style;
+exports.Svg = Svg;
+exports.svgPaths = svgPaths;
+exports.toolbox = toolbox;
+exports.userAgent = userAgent;
+exports.xml = xmlUtils;
 
 /**
  * Don't do anything for this event, just halt propagation.
@@ -433,7 +465,7 @@ const is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!globalThis['getComputedStyle']) {
+  if (!global.globalThis['getComputedStyle']) {
     return false;
   }
 
@@ -453,7 +485,7 @@ const is3dSupported = function() {
   for (let t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = globalThis['getComputedStyle'](el);
+      const computedStyle = global.globalThis['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not

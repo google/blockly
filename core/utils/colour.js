@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.colour');
-goog.module.declareLegacyNamespace();
 
 const internalConstants = goog.require('Blockly.internalConstants');
 

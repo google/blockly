@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.Size');
-goog.module.declareLegacyNamespace();
 
 
 /**

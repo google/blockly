@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.dom');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Svg = goog.requireType('Blockly.utils.Svg');

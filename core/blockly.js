@@ -39,7 +39,6 @@ goog.require('Blockly.inputTypes');
 goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
-goog.require('Blockly.ShortcutRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
 goog.require('Blockly.utils.colour');
@@ -145,30 +144,6 @@ Blockly.svgResize = function(workspace) {
     mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
-};
-
-/**
- * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
- * is not visible.
- * @param {!KeyboardEvent} e Key down event.
- * @package
- */
-// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
-// are multiple workspaces and non-main workspaces are able to accept input.
-Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.common.getMainWorkspace();
-  if (!mainWorkspace) {
-    return;
-  }
-
-  if (Blockly.utils.isTargetInput(e) ||
-      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
-    // When focused on an HTML text input widget, don't trap any keys.
-    // Ignore keypresses on rendered workspaces that have been explicitly
-    // hidden.
-    return;
-  }
-  Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
 };
 
 /**

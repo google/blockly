@@ -16,7 +16,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.deprecation');
-goog.module.declareLegacyNamespace();
 
 
 /**

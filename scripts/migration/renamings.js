@@ -64,7 +64,26 @@ const renamings = {
         },
         setParentContainer: {module: 'Blockly.common'},
         draggingConnections: {module: 'Blockly.common'},
-
+        // Dialogs.  See PR #5457.
+        alert: {
+          module: 'Blockly.dialog',
+          export: 'alert',
+          set: 'setAlert',
+        },
+        confirm: {
+          module: 'Blockly.dialog',
+          export: 'confirm',
+          set: 'setConfirm',
+        },
+        prompt: {
+          module: 'Blockly.dialog',
+          export: 'prompt',
+          set: 'setPrompt',
+        },
+        // hueToHex.  See PR #5462.
+        hueToHex: {module: 'Blockly.utils.colour'},
+        // Blockly.hideChaff() became
+        // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
       },
     },
     'Blockly.utils': {

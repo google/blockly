@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.userAgent');
-goog.module.declareLegacyNamespace();
 
 const {globalThis} = goog.require('Blockly.utils.global');
 

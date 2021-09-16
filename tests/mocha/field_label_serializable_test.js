@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldLabelSerialization');
+
+const {createTestBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Label Serializable Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);

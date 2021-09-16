@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Blockly Theme tests.
- * @author samelh@google.com (Sam El-Husseini)
- */
-'use strict';
+goog.module('Blockly.test.theme');
+
+const {assertEventFired, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Theme', function() {
   setup(function() {

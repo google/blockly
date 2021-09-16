@@ -38,10 +38,8 @@ goog.require('Blockly.inputTypes');
 goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
-goog.require('Blockly.ShortcutRegistry');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
-goog.require('Blockly.utils');
 goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.deprecation');
 goog.require('Blockly.utils.Size');
@@ -147,30 +145,6 @@ Blockly.svgResize = function(workspace) {
 };
 
 /**
- * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
- * is not visible.
- * @param {!KeyboardEvent} e Key down event.
- * @package
- */
-// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
-// are multiple workspaces and non-main workspaces are able to accept input.
-Blockly.onKeyDown = function(e) {
-  var mainWorkspace = Blockly.common.getMainWorkspace();
-  if (!mainWorkspace) {
-    return;
-  }
-
-  if (Blockly.utils.isTargetInput(e) ||
-      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
-    // When focused on an HTML text input widget, don't trap any keys.
-    // Ignore keypresses on rendered workspaces that have been explicitly
-    // hidden.
-    return;
-  }
-  Blockly.ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
-};
-
-/**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
@@ -191,18 +165,6 @@ Blockly.paste = Blockly.clipboard.paste;
  * @package
  */
 Blockly.duplicate = Blockly.clipboard.duplicate;
-
-/**
- * Cancel the native context menu, unless the focus is on an HTML input widget.
- * @param {!Event} e Mouse down event.
- * @private
- */
-Blockly.onContextMenu_ = function(e) {
-  if (!Blockly.utils.isTargetInput(e)) {
-    // When focused on an HTML text input widget, don't cancel the context menu.
-    e.preventDefault();
-  }
-};
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.

@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for Blockly.fieldRegistry
- * @author bekawestberg@gmail.com (Beka Westberg)
- */
-'use strict';
+goog.module('Blockly.test.fieldRegistry');
+
+const {createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Field Registry', function() {
   function CustomFieldType(value) {

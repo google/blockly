@@ -15,7 +15,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.toolbox');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ToolboxCategory = goog.requireType('Blockly.ToolboxCategory');

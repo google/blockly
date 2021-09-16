@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.trashcan');
+
+const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
+
+
 suite("Trashcan", function() {
   function fireDeleteEvent(workspace, xmlString) {
     var xml = Blockly.Xml.textToDom(

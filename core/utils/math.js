@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.math');
-goog.module.declareLegacyNamespace();
 
 
 /**

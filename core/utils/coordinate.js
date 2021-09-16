@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.Coordinate');
-goog.module.declareLegacyNamespace();
 
 /**
  * Class for representing coordinates and positions.

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.shortcutRegistry');
+
+const {createKeyDownEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);

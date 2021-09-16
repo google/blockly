@@ -15,7 +15,6 @@
  * @namespace
  */
 goog.module('Blockly.utils.idGenerator');
-goog.module.declareLegacyNamespace();
 
 
 /**

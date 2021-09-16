@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for Blockly.registry
- * @author aschmiedt@google.com (Abby Schmiedt)
- */
-'use strict';
+goog.module('Blockly.test.registry');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Registry', function() {
   var TestClass = function() {};

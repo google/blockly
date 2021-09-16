@@ -121,6 +121,15 @@ const renamings = {
         isTargetInput: {module: 'Blockly.utils.browserEvents'},
         isRightButton: {module: 'Blockly.utils.browserEvents'},
         mouseToSvg: {module: 'Blockly.utils.browserEvents'},
+        tokenizeInterpolation: {module: 'Blockly.utils.messages'},
+        replaceMessageReferences: {
+          module: 'Blockly.utils.messages',
+          export: 'replaceReferences'
+        },
+        checkMessageReferences: {
+          module: 'Blockly.utils.messages',
+          export: 'checkReferences'
+        },
       },
     },
     'Blockly.utils.global': {

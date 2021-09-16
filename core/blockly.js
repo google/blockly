@@ -112,39 +112,6 @@ Blockly.resizeSvgContents = function(workspace) {
 };
 
 /**
- * Size the SVG image to completely fill its container. Call this when the view
- * actually changes sizes (e.g. on a window resize/device orientation change).
- * See Blockly.resizeSvgContents to resize the workspace when the contents
- * change (e.g. when a block is added or removed).
- * Record the height/width of the SVG image.
- * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
- */
-Blockly.svgResize = function(workspace) {
-  var mainWorkspace = workspace;
-  while (mainWorkspace.options.parentWorkspace) {
-    mainWorkspace = mainWorkspace.options.parentWorkspace;
-  }
-  var svg = mainWorkspace.getParentSvg();
-  var cachedSize = mainWorkspace.getCachedParentSvgSize();
-  var div = svg.parentNode;
-  if (!div) {
-    // Workspace deleted, or something.
-    return;
-  }
-  var width = div.offsetWidth;
-  var height = div.offsetHeight;
-  if (cachedSize.width != width) {
-    svg.setAttribute('width', width + 'px');
-    mainWorkspace.setCachedParentSvgSize(width, null);
-  }
-  if (cachedSize.height != height) {
-    svg.setAttribute('height', height + 'px');
-    mainWorkspace.setCachedParentSvgSize(null, height);
-  }
-  mainWorkspace.resize();
-};
-
-/**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
@@ -333,6 +300,11 @@ Blockly.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
  * @see Blockly.constants.ALIGN.RIGHT
  */
 Blockly.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+
+/**
+ * @see Blockly.common.svgResize
+ */
+Blockly.svgResize = Blockly.common.svgResize;
 
 
 /**

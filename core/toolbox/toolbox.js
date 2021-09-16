@@ -13,7 +13,6 @@
 goog.module('Blockly.Toolbox');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const BlockSvg = goog.require('Blockly.BlockSvg');
@@ -793,7 +792,7 @@ Toolbox.prototype.handleToolboxItemResize = function() {
 
   // Even though the div hasn't changed size, the visible workspace
   // surface of the workspace has, so we may need to reposition everything.
-  Blockly.svgResize(workspace);
+  common.svgResize(workspace);
 };
 
 /**

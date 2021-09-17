@@ -26,7 +26,7 @@ const stringUtils = goog.require('Blockly.utils.string');
  * @return {!Array<string|number>} Array of strings and numbers.
  */
 const tokenizeInterpolation = function(message) {
-  return tokenizeInterpolation_(message, true);
+  return tokenizeInterpolationInternal(message, true);
 };
 exports.tokenizeInterpolation = tokenizeInterpolation;
 
@@ -42,7 +42,7 @@ const replaceReferences = function(message) {
   if (typeof message != 'string') {
     return message;
   }
-  const interpolatedResult = tokenizeInterpolation_(message, false);
+  const interpolatedResult = tokenizeInterpolationInternal(message, false);
   // When parseInterpolationTokens == false, interpolatedResult should be at
   // most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
@@ -85,7 +85,7 @@ exports.checkReferences = checkReferences;
  *     interpolation tokens (%1, %2, ...) when true.
  * @return {!Array<string|number>} Array of strings and numbers.
  */
-const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
+const tokenizeInterpolationInternal = function(message, parseInterpolationTokens) {
   const tokens = [];
   const chars = message.split('');
   chars.push('');  // End marker.
@@ -162,7 +162,7 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(
                   tokens,
-                  tokenizeInterpolation_(rawValue, parseInterpolationTokens));
+                  tokenizeInterpolationInternal(rawValue, parseInterpolationTokens));
             } else if (parseInterpolationTokens) {
               // When parsing interpolation tokens, numbers are special
               // placeholders (%1, %2, etc). Make sure all other values are

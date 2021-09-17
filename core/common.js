@@ -48,6 +48,30 @@ const setMainWorkspace = function(workspace) {
 exports.setMainWorkspace = setMainWorkspace;
 
 /**
+ * Currently selected block.
+ * @type {?Blockly.ICopyable}
+ */
+let selected = null;
+
+/**
+ * Returns the currently selected block.
+ * @return {?Blockly.ICopyable} The currently selected block.
+ */
+const getSelected = function() {
+  return selected;
+};
+exports.getSelected = getSelected;
+
+/**
+ * Sets the currently selected block.
+ * @param {?Blockly.ICopyable} newSelection The newly selected block.
+ */
+const setSelected = function(newSelection) {
+  selected = newSelection;
+};
+exports.setSelected = setSelected;
+
+/**
  * Container element in which to render the WidgetDiv, DropDownDiv and Tooltip.
  * @type {?Element}
  */

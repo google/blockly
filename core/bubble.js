@@ -32,7 +32,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
 
@@ -379,7 +378,7 @@ Bubble.prototype.setDeleteStyle = function(_enable) {
 Bubble.prototype.resizeMouseDown_ = function(e) {
   this.promote();
   Bubble.unbindDragEvents_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

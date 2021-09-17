@@ -53,7 +53,6 @@ const common = goog.require('Blockly.common');
 const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const utils = goog.require('Blockly.utils');
 const toolbox = goog.require('Blockly.utils.toolbox');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
@@ -313,7 +312,7 @@ Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
  * @protected
  */
 Toolbox.prototype.onClick_ = function(e) {
-  if (utils.isRightButton(e) || e.target == this.HtmlDiv) {
+  if (browserEvents.isRightButton(e) || e.target == this.HtmlDiv) {
     // Close flyout.
     common.getMainWorkspace().hideChaff(false);
   } else {

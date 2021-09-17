@@ -135,7 +135,7 @@ Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !utils.isRightButton(e)) {
+  if (!this.block_.isInFlyout && !browserEvents.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };

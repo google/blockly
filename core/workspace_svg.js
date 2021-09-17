@@ -1741,8 +1741,8 @@ WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
-  const point =
-      utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+  const point = browserEvents.mouseToSvg(
+      e, this.getParentSvg(), this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -1755,8 +1755,8 @@ WorkspaceSvg.prototype.startDrag = function(e, xy) {
  * @return {!Coordinate} New location of object.
  */
 WorkspaceSvg.prototype.moveDrag = function(e) {
-  const point =
-      utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+  const point = browserEvents.mouseToSvg(
+      e, this.getParentSvg(), this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -1842,15 +1842,15 @@ WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     return;
   }
 
-  const scrollDelta = utils.getScrollDeltaPixels(e);
+  const scrollDelta = browserEvents.getScrollDeltaPixels(e);
   if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
     // Zoom.
     // The vertical scroll distance that corresponds to a click of a zoom
     // button.
     const PIXELS_PER_ZOOM_STEP = 50;
     const delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
-    const position =
-        utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+    const position = browserEvents.mouseToSvg(
+        e, this.getParentSvg(), this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
     // Scroll.

@@ -853,7 +853,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
  */
 WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
   this.unbindDragEvents_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

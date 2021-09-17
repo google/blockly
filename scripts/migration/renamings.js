@@ -117,6 +117,10 @@ const renamings = {
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},
+        getScrollDelta: {module: 'Blockly.utils.browserEvents'},
+        isTargetInput: {module: 'Blockly.utils.browserEvents'},
+        isRightButton: {module: 'Blockly.utils.browserEvents'},
+        mouseToSvg: {module: 'Blockly.utils.browserEvents'},
       },
     },
     'Blockly.utils.global': {

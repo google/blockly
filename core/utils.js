@@ -57,6 +57,7 @@ exports.global = global;
 exports.idGenerator = idGenerator;
 exports.KeyCodes = KeyCodes;
 exports.math = math;
+exports.messages = messages;
 exports.Metrics = Metrics;
 exports.object = object;
 exports.Rect = Rect;

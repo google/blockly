@@ -66,7 +66,6 @@ async function runMochaTestsInBrowser() {
   console.log(numOfFailure + ' tests failed');
   console.log('============Blockly Mocha Test Summary=================');
   if (parseInt(numOfFailure) !== 0) {
-    await browser.deleteSession();
     return 1;
   }
   await browser.deleteSession();

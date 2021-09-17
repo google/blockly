@@ -80,11 +80,21 @@ Object.defineProperty(Blockly, 'mainWorkspace', {
   }
 });
 
-/**
- * Currently selected block.
- * @type {?Blockly.ICopyable}
- */
-Blockly.selected = null;
+// Add a getter and setter pair for Blockly.selected, for legacy reasons.
+Object.defineProperty(Blockly, 'selected', {
+  get: function() {
+    Blockly.utils.deprecation.warn(
+      'Blockly.selected', 'September 2021', 'September 2022',
+      'Blockly.common.getSelected()');
+    return Blockly.common.getSelected();
+  },
+  set: function(newSelection) {
+    Blockly.utils.deprecation.warn(
+      'Blockly.selected', 'September 2021', 'September 2022',
+      'Blockly.common.setSelected()');
+    Blockly.common.setSelected(newSelection);
+  }
+});
 
 /**
  * Returns the dimensions of the specified SVG image.

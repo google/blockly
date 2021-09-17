@@ -38,6 +38,7 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -396,8 +397,8 @@ Block.prototype.dispose = function(healStack) {
     // well as corruption of the connection database.  Therefore we must
     // methodically step through the blocks and carefully disassemble them.
 
-    if (Blockly.selected == this) {
-      Blockly.selected = null;
+    if (common.getSelected() == this) {
+      common.setSelected(null);
     }
 
     // First, dispose of all my children.

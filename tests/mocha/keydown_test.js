@@ -24,7 +24,7 @@ suite('Key Down', function() {
    */
   function setSelectedBlock(workspace) {
     defineStackBlock();
-    Blockly.selected = workspace.newBlock('stack_block');
+    Blockly.common.setSelected(workspace.newBlock('stack_block'));
   }
 
   /**
@@ -70,7 +70,7 @@ suite('Key Down', function() {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
       setSelectedBlock(this.workspace);
-      this.deleteSpy = sinon.spy(Blockly.selected, 'dispose');
+      this.deleteSpy = sinon.spy(Blockly.common.getSelected(), 'dispose');
     });
     var testCases = [
       ['Delete', createKeyDownEvent(Blockly.utils.KeyCodes.DELETE)],
@@ -149,7 +149,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          sinon.stub(Blockly.selected, 'isDeletable').returns(false);
+          sinon.stub(Blockly.common.getSelected(), 'isDeletable').returns(false);
           document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);
@@ -162,7 +162,7 @@ suite('Key Down', function() {
         var testCaseName = testCase[0];
         var keyEvent = testCase[1];
         test(testCaseName, function() {
-          sinon.stub(Blockly.selected, 'isMovable').returns(false);
+          sinon.stub(Blockly.common.getSelected(), 'isMovable').returns(false);
           document.dispatchEvent(keyEvent);
           sinon.assert.notCalled(this.copySpy);
           sinon.assert.notCalled(this.hideChaffSpy);

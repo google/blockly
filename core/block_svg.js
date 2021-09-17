@@ -313,16 +313,16 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     return;
   }
   let oldId = null;
-  if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+  if (common.getSelected()) {
+    oldId = common.getSelected().id;
     // Unselect any previously selected block.
     Events.disable();
     try {
-      Blockly.selected.unselect();
+      common.getSelected().unselect();
     } finally {
       Events.enable();
     }
@@ -330,7 +330,7 @@ BlockSvg.prototype.select = function() {
   const event =
       new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
   Events.fire(event);
-  Blockly.selected = this;
+  common.setSelected(this);
   this.addSelect();
 };
 
@@ -339,14 +339,14 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (Blockly.selected != this) {
+  if (common.getSelected() != this) {
     return;
   }
   const event =
       new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   Events.fire(event);
-  Blockly.selected = null;
+  common.setSelected(null);
   this.removeSelect();
 };
 
@@ -925,7 +925,7 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
   // contents once the block is disposed.
   const blockWorkspace = this.workspace;
   // If this block is being dragged, unlink the mouse events.
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }

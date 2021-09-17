@@ -18,6 +18,7 @@ goog.module.declareLegacyNamespace();
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const common = goog.require('Blockly.common');
 
 
 /**
@@ -73,8 +74,8 @@ WorkspaceDragger.prototype.dispose = function() {
  * @package
  */
 WorkspaceDragger.prototype.startDrag = function() {
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (common.getSelected()) {
+    common.getSelected().unselect();
   }
   this.workspace_.setupDragSurface();
 };

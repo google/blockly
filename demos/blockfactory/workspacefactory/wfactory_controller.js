@@ -912,14 +912,14 @@ WorkspaceFactoryController.prototype.clearAll = function() {
  */
 WorkspaceFactoryController.prototype.addShadow = function() {
   // No block selected to make a shadow block.
-  if (!Blockly.selected) {
+  if (!Blockly.common.getSelected()) {
     return;
   }
   // Clear any previous warnings on the block (would only have warnings on
   // a non-shadow block if it was nested inside another shadow block).
-  Blockly.selected.setWarningText(null);
+  Blockly.common.getSelected().setWarningText(null);
   // Set selected block and all children as shadow blocks.
-  this.addShadowForBlockAndChildren_(Blockly.selected);
+  this.addShadowForBlockAndChildren_(Blockly.common.getSelected());
 
   // Save and update the preview.
   this.saveStateFromWorkspace();
@@ -957,14 +957,14 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
  */
 WorkspaceFactoryController.prototype.removeShadow = function() {
   // No block selected to modify.
-  if (!Blockly.selected) {
+  if (!Blockly.common.getSelected()) {
     return;
   }
-  this.model.removeShadowBlock(Blockly.selected.id);
-  this.view.unmarkShadowBlock(Blockly.selected);
+  this.model.removeShadowBlock(Blockly.common.getSelected().id);
+  this.view.unmarkShadowBlock(Blockly.common.getSelected());
 
   // If turning invalid shadow block back to normal block, remove warning.
-  Blockly.selected.setWarningText(null);
+  Blockly.common.getSelected().setWarningText(null);
 
   this.saveStateFromWorkspace();
   this.updatePreview();

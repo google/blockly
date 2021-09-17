@@ -34,8 +34,8 @@ const register = function(cssContent) {
   if (injected) {
     throw Error('CSS already injected');
   }
-  // Add new cssContent in the global CONTENT.
-  CONTENT += ('\n' + cssContent);
+  // Add new cssContent in the global content.
+  content += ('\n' + cssContent);
 };
 exports.register = register;
 
@@ -60,9 +60,9 @@ const inject = function(hasCss, pathToMedia) {
   }
   // Strip off any trailing slash (either Unix or Windows).
   const mediaPath = pathToMedia.replace(/[\\/]$/, '');
-  let cssContent = CONTENT.replace(/<<<PATH>>>/g, mediaPath);
+  let cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
   // Cleanup the collected css content after injecting it to the DOM.
-  CONTENT = '';
+  content = '';
 
   // Inject CSS tag at start of head.
   const cssNode = document.createElement('style');
@@ -76,7 +76,7 @@ exports.inject = inject;
 /**
  * The CSS content for Blockly.
  */
-let CONTENT = (`
+let content = (`
   .blocklySvg {
     background-color: #fff;
     outline: none;
@@ -553,4 +553,4 @@ let CONTENT = (`
     margin-right: -24px;
   }
 `);
-exports.CONTENT = CONTENT;
+exports.content = content;

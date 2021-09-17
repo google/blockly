@@ -63,8 +63,8 @@ const registerDelete = function() {
   const deleteShortcut = {
     name: names.DELETE,
     preconditionFn: function(workspace) {
-      return !workspace.options.readOnly && common.getSelected() &&
-          common.getSelected().isDeletable();
+      const selected = common.getSelected();
+      return !workspace.options.readOnly && selected && selected.isDeletable();
     },
     callback: function(workspace, e) {
       // Delete or backspace.
@@ -93,9 +93,9 @@ const registerCopy = function() {
   const copyShortcut = {
     name: names.COPY,
     preconditionFn: function(workspace) {
+      const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          common.getSelected() && common.getSelected().isDeletable() &&
-          common.getSelected().isMovable();
+          selected && selected.isDeletable() && selected.isMovable();
     },
     callback: function(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
@@ -128,10 +128,10 @@ const registerCut = function() {
   const cutShortcut = {
     name: names.CUT,
     preconditionFn: function(workspace) {
+      const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          common.getSelected() && common.getSelected().isDeletable() &&
-          common.getSelected().isMovable() &&
-          !common.getSelected().workspace.isFlyout;
+          selected && selected.isDeletable() && selected.isMovable() &&
+          !selected.workspace.isFlyout;
     },
     callback: function() {
       const selected = common.getSelected();

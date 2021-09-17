@@ -81,12 +81,6 @@ Object.defineProperty(Blockly, 'mainWorkspace', {
 });
 
 /**
- * Currently selected block.
- * @type {?Blockly.ICopyable}
- */
-Blockly.selected = null;
-
-/**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Blockly.utils.Size} Contains width and height properties.

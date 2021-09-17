@@ -16,7 +16,7 @@
  * loads closure/goog/base.js and tests/deps.js, then (in any case)
  * requires Blockly.requires.
  */
-(function(_global) {
+(function(globalThis) {
   /* eslint-disable no-undef */
   var IS_NODE_JS = !!(typeof module !== 'undefined' && module.exports);
 
@@ -40,6 +40,8 @@
     if (!BLOCKLY_DIR) {
       alert('Could not detect Blockly\'s directory name.');
     }
+    // Disable loading of closure/goog/deps.js (which doesn't exist).
+    globalThis.CLOSURE_NO_DEPS = true;
     // Load Closure Library base.js (the only part of the libary we use,
     // mainly for goog.require / goog.provide / goog.module).
     document.write(

@@ -68,8 +68,34 @@ goog.require('Blockly.Xml');
  */
 exports.VERSION = 'uncompiled';
 
-// Add a getter and setter pair for Blockly.mainWorkspace, for legacy reasons.
+// Add a getter and setter pair for Blockly.alert, Blockly.confirm,
+// Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
+// compatibility.
 Object.defineProperties(exports, {
+  alert: {
+    set: function(newAlert) {
+      deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
+      dialog.setAlert(newAlert);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.alert', 'September 2021', 'September 2022',
+          'Blockly.dialog.alert()');
+      return dialog.alert;
+    }
+  },
+  confirm: {
+    set: function(newConfirm) {
+      deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
+      dialog.setConfirm(newConfirm);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.confirm', 'September 2021', 'September 2022',
+          'Blockly.dialog.confirm()');
+      return dialog.confirm;
+    }
+  },
   mainWorkspace: {
     set: function(x) {
       deprecation.warn(
@@ -82,11 +108,19 @@ Object.defineProperties(exports, {
           'Blockly.getMainWorkspace()');
       return common.getMainWorkspace();
     }
-  }
-});
-
-// Add a getter and setter pair for Blockly.selected, for legacy reasons.
-Object.defineProperties(exports, {
+  },
+  prompt: {
+    set: function(newPrompt) {
+      deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
+      dialog.setPrompt(newPrompt);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.prompt', 'September 2021', 'September 2022',
+          'Blockly.dialog.prompt()');
+      return dialog.prompt;
+    }
+  },
   selected: {
     get: function() {
       deprecation.warn(
@@ -100,7 +134,7 @@ Object.defineProperties(exports, {
           'Blockly.common.setSelected()');
       common.setSelected(newSelection);
     }
-  }
+  },
 });
 
 /**
@@ -171,54 +205,6 @@ exports.hideChaff = hideChaff;
  */
 exports.getMainWorkspace = common.getMainWorkspace;
 
-// Add a getter and setter pair for Blockly.alert, for legacy reasons.
-Object.defineProperties(exports, {
-  alert: {
-    set: function(newAlert) {
-      deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
-      dialog.setAlert(newAlert);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.alert', 'September 2021', 'September 2022',
-          'Blockly.dialog.alert()');
-      return dialog.alert;
-    }
-  }
-});
-
-// Add a getter and setter pair for Blockly.confirm, for legacy reasons.
-Object.defineProperties(exports, {
-  confirm: {
-    set: function(newConfirm) {
-      deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
-      dialog.setConfirm(newConfirm);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.confirm', 'September 2021', 'September 2022',
-          'Blockly.dialog.confirm()');
-      return dialog.confirm;
-    }
-  }
-});
-
-// Add a getter and setter pair for Blockly.prompt, for legacy reasons.
-Object.defineProperties(exports, {
-  prompt: {
-    set: function(newPrompt) {
-      deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
-      dialog.setPrompt(newPrompt);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.prompt', 'September 2021', 'September 2022',
-          'Blockly.dialog.prompt()');
-      return dialog.prompt;
-    }
-  }
-});
-
 /**
  * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
@@ -273,17 +259,6 @@ const isNumber = function(str) {
 };
 exports.isNumber = isNumber;
 
-// Add a getter for Blockly.hueToHex, for legacy reasons.
-Object.defineProperties(exports, {
-  hueToHex: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.hueToHex()', 'September 2021', 'September 2022',
-          'Blockly.utils.colour.hueToHex()');
-      return colour.hueToHex;
-    }
-  }
-});
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
@@ -295,6 +270,12 @@ Object.defineProperties(exports, {
 exports.setParentContainer = common.setParentContainer;
 
 /** Aliases. */
+
+/**
+ * @see colour.hueToHex
+ * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
+ */
+ exports.hueToHex = colour.hueToHex;
 
 /**
  * @see browserEvents.bind

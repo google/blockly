@@ -29,6 +29,7 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -64,9 +65,21 @@ const setCurrentBlock = function(block) {
 exports.setCurrentBlock = setCurrentBlock;
 
 // Ad JS accessors for backwards compatibility.
-Object.defineProperty(exports, 'currentBlock', {
-  get: getCurrentBlock,
-  set: setCurrentBlock,
+Object.defineProperties(exports, {
+  currentBlock: {
+    get: function() {
+      deprecation.warn(
+        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
+        'Blockly.Tooltip.getCurrentBlock()');
+      return getCurrentBlock();
+    },
+    set: function(block) {
+      deprecation.warn(
+        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
+        'Blockly.Tooltip.setCurrentBlock(block)');
+      setCurrentBlock(block);
+    },
+  },
 });
 
 /**

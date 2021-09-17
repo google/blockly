@@ -17,12 +17,24 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.clipboard');
-goog.require('Blockly.common');
-goog.require('Blockly.connectionTypes');
-goog.require('Blockly.constants');
-goog.require('Blockly.dialog');
+/* eslint-disable-next-line no-unused-vars */
+const ICopyable = goog.requireType('Blockly.ICopyable');
+const Size = goog.require('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const browserEvents = goog.require('Blockly.browserEvents');
+const clipboard = goog.require('Blockly.clipboard');
+const colour = goog.require('Blockly.utils.colour');
+const common = goog.require('Blockly.common');
+const connectionTypes = goog.require('Blockly.connectionTypes');
+const constants = goog.require('Blockly.constants');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const dialog = goog.require('Blockly.dialog');
+const inputTypes = goog.require('Blockly.inputTypes');
+const internalConstants = goog.require('Blockly.internalConstants');
+const toolbox = goog.require('Blockly.utils.toolbox');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -35,24 +47,14 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.Events.VarCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.inject');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Procedures');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.deprecation');
-goog.require('Blockly.utils.Size');
-goog.require('Blockly.utils.toolbox');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Variables');
-goog.require('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.ICopyable');
-goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -70,15 +72,15 @@ exports.VERSION = 'uncompiled';
 Object.defineProperties(exports, {
   mainWorkspace: {
     set: function(x) {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.mainWorkspace', 'September 2021', 'September 2022');
-      Blockly.common.setMainWorkspace(x);
+      common.setMainWorkspace(x);
     },
     get: function() {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.mainWorkspace', 'September 2021', 'September 2022',
           'Blockly.getMainWorkspace()');
-      return Blockly.common.getMainWorkspace();
+      return common.getMainWorkspace();
     }
   }
 });
@@ -87,16 +89,16 @@ Object.defineProperties(exports, {
 Object.defineProperties(exports, {
  selected: {
    get: function() {
-     Blockly.utils.deprecation.warn(
+     deprecation.warn(
        'Blockly.selected', 'September 2021', 'September 2022',
        'Blockly.common.getSelected()');
-     return Blockly.common.getSelected();
+     return common.getSelected();
    },
    set: function(newSelection) {
-     Blockly.utils.deprecation.warn(
+     deprecation.warn(
        'Blockly.selected', 'September 2021', 'September 2022',
        'Blockly.common.setSelected()');
-     Blockly.common.setSelected(newSelection);
+     common.setSelected(newSelection);
    }
  }
 });
@@ -104,24 +106,24 @@ Object.defineProperties(exports, {
 /**
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
- * @return {!Blockly.utils.Size} Contains width and height properties.
+ * @return {!Size} Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  */
 const svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
   // from setCachedParentSvgSize.
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
-  return new Blockly.utils.Size(svg.cachedWidth_, svg.cachedHeight_);
+  return new Size(svg.cachedWidth_, svg.cachedHeight_);
 };
 exports.svgSize = svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
- * @param {!Blockly.WorkspaceSvg} workspace The workspace to resize.
+ * @param {!WorkspaceSvg} workspace The workspace to resize.
  */
 const resizeSvgContents = function(workspace) {
   workspace.resizeContents();
@@ -130,25 +132,25 @@ exports.resizeSvgContents = resizeSvgContents;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!Blockly.ICopyable} toCopy Block or Workspace Comment to be copied.
+ * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
  */
-exports.copy = Blockly.clipboard.copy;
+exports.copy = clipboard.copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
  */
-exports.paste = Blockly.clipboard.paste;
+exports.paste = clipboard.paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!Blockly.ICopyable} toDuplicate Block or Workspace Comment to be
+ * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     copied.
  * @package
  */
-exports.duplicate = Blockly.clipboard.duplicate;
+exports.duplicate = clipboard.duplicate;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
@@ -156,9 +158,9 @@ exports.duplicate = Blockly.clipboard.duplicate;
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  Blockly.utils.deprecation.warn(
+  deprecation.warn(
       'Blockly.hideChaff', 'September 2021', 'September 2022');
-  Blockly.common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
 
@@ -166,23 +168,23 @@ exports.hideChaff = hideChaff;
  * Returns the main workspace.  Returns the last used main workspace (based on
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
- * @return {!Blockly.Workspace} The main workspace.
+ * @return {!Workspace} The main workspace.
  */
-exports.getMainWorkspace = Blockly.common.getMainWorkspace;
+exports.getMainWorkspace = common.getMainWorkspace;
 
 // Add a getter and setter pair for Blockly.alert, for legacy reasons.
 Object.defineProperties(exports, {
   alert: {
     set: function(newAlert) {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.alert', 'September 2021', 'September 2022');
-      Blockly.dialog.setAlert(newAlert);
+      dialog.setAlert(newAlert);
     },
     get: function() {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.alert', 'September 2021', 'September 2022',
           'Blockly.dialog.alert()');
-      return Blockly.dialog.alert;
+      return dialog.alert;
     }
   }
 });
@@ -191,15 +193,15 @@ Object.defineProperties(exports, {
 Object.defineProperties(exports, {
   confirm: {
     set: function(newConfirm) {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.confirm', 'September 2021', 'September 2022');
-      Blockly.dialog.setConfirm(newConfirm);
+      dialog.setConfirm(newConfirm);
     },
     get: function() {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.confirm', 'September 2021', 'September 2022',
           'Blockly.dialog.confirm()');
-      return Blockly.dialog.confirm;
+      return dialog.confirm;
     }
   }
 });
@@ -208,15 +210,15 @@ Object.defineProperties(exports, {
 Object.defineProperties(exports, {
   prompt: {
     set: function(newPrompt) {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.prompt', 'September 2021', 'September 2022');
-      Blockly.dialog.setPrompt(newPrompt);
+      dialog.setPrompt(newPrompt);
     },
     get: function() {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.prompt', 'September 2021', 'September 2022',
           'Blockly.dialog.prompt()');
-      return Blockly.dialog.prompt;
+      return dialog.prompt;
     }
   }
 });
@@ -279,10 +281,10 @@ exports.isNumber = isNumber;
 Object.defineProperties(exports, {
   hueToHex: {
     get: function() {
-      Blockly.utils.deprecation.warn(
+      deprecation.warn(
           'Blockly.hueToHex()', 'September 2021', 'September 2022',
           'Blockly.utils.colour.hueToHex()');
-      return Blockly.utils.colour.hueToHex;
+      return colour.hueToHex;
     }
   }
 });
@@ -294,129 +296,129 @@ Object.defineProperties(exports, {
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
  */
-exports.setParentContainer = Blockly.common.setParentContainer;
+exports.setParentContainer = common.setParentContainer;
 
 /** Aliases. */
 
 /**
- * @see Blockly.browserEvents.bind
+ * @see browserEvents.bind
  */
-exports.bindEvent_ = Blockly.browserEvents.bind;
+exports.bindEvent_ = browserEvents.bind;
 
 /**
- * @see Blockly.browserEvents.unbind
+ * @see browserEvents.unbind
  */
-exports.unbindEvent_ = Blockly.browserEvents.unbind;
+exports.unbindEvent_ = browserEvents.unbind;
 
 /**
- * @see Blockly.browserEvents.conditionalBind
+ * @see browserEvents.conditionalBind
  */
-exports.bindEventWithChecks_ = Blockly.browserEvents.conditionalBind;
+exports.bindEventWithChecks_ = browserEvents.conditionalBind;
 
 /**
- * @see Blockly.constants.ALIGN.LEFT
+ * @see constants.ALIGN.LEFT
  */
-exports.ALIGN_LEFT = Blockly.constants.ALIGN.LEFT;
+exports.ALIGN_LEFT = constants.ALIGN.LEFT;
 
 /**
- * @see Blockly.constants.ALIGN.CENTRE
+ * @see constants.ALIGN.CENTRE
  */
-exports.ALIGN_CENTRE = Blockly.constants.ALIGN.CENTRE;
+exports.ALIGN_CENTRE = constants.ALIGN.CENTRE;
 
 /**
- * @see Blockly.constants.ALIGN.RIGHT
+ * @see constants.ALIGN.RIGHT
  */
-exports.ALIGN_RIGHT = Blockly.constants.ALIGN.RIGHT;
+exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
 
 /**
- * @see Blockly.common.svgResize
+ * @see common.svgResize
  */
- exports.svgResize = Blockly.common.svgResize;
+ exports.svgResize = common.svgResize;
 
 /**
  * Aliases for constants used for connection and input types.
  */
 
 /**
- * @see Blockly.connectionTypes.INPUT_VALUE
+ * @see connectionTypes.INPUT_VALUE
  */
-exports.INPUT_VALUE = Blockly.connectionTypes.INPUT_VALUE;
+exports.INPUT_VALUE = connectionTypes.INPUT_VALUE;
 
 /**
- * @see Blockly.connectionTypes.OUTPUT_VALUE
+ * @see connectionTypes.OUTPUT_VALUE
  */
-exports.OUTPUT_VALUE = Blockly.connectionTypes.OUTPUT_VALUE;
+exports.OUTPUT_VALUE = connectionTypes.OUTPUT_VALUE;
 
 /**
- * @see Blockly.connectionTypes.NEXT_STATEMENT
+ * @see connectionTypes.NEXT_STATEMENT
  */
-exports.NEXT_STATEMENT = Blockly.connectionTypes.NEXT_STATEMENT;
+exports.NEXT_STATEMENT = connectionTypes.NEXT_STATEMENT;
 
 /**
- * @see Blockly.connectionTypes.PREVIOUS_STATEMENT
+ * @see connectionTypes.PREVIOUS_STATEMENT
  */
-exports.PREVIOUS_STATEMENT = Blockly.connectionTypes.PREVIOUS_STATEMENT;
+exports.PREVIOUS_STATEMENT = connectionTypes.PREVIOUS_STATEMENT;
 
 /**
- * @see Blockly.inputTypes.DUMMY_INPUT
+ * @see inputTypes.DUMMY_INPUT
  */
-exports.DUMMY_INPUT = Blockly.inputTypes.DUMMY;
+exports.DUMMY_INPUT = inputTypes.DUMMY;
 
 /**
  * Aliases for toolbox positions.
  */
 
 /**
- * @see Blockly.utils.toolbox.Position.TOP
+ * @see toolbox.Position.TOP
  */
-exports.TOOLBOX_AT_TOP = Blockly.utils.toolbox.Position.TOP;
+exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
- * @see Blockly.utils.toolbox.Position.BOTTOM
+ * @see toolbox.Position.BOTTOM
  */
-exports.TOOLBOX_AT_BOTTOM = Blockly.utils.toolbox.Position.BOTTOM;
+exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
- * @see Blockly.utils.toolbox.Position.LEFT
+ * @see toolbox.Position.LEFT
  */
-exports.TOOLBOX_AT_LEFT = Blockly.utils.toolbox.Position.LEFT;
+exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
- * @see Blockly.utils.toolbox.Position.RIGHT
+ * @see toolbox.Position.RIGHT
  */
-exports.TOOLBOX_AT_RIGHT = Blockly.utils.toolbox.Position.RIGHT;
+exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.LINE_MODE_MULTIPLIER = Blockly.internalConstants.LINE_MODE_MULTIPLIER;
-exports.PAGE_MODE_MULTIPLIER = Blockly.internalConstants.PAGE_MODE_MULTIPLIER;
-exports.DRAG_RADIUS = Blockly.internalConstants.DRAG_RADIUS;
-exports.FLYOUT_DRAG_RADIUS = Blockly.internalConstants.FLYOUT_DRAG_RADIUS;
-exports.SNAP_RADIUS = Blockly.internalConstants.SNAP_RADIUS;
+exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;
+exports.PAGE_MODE_MULTIPLIER = internalConstants.PAGE_MODE_MULTIPLIER;
+exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
+exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
+exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
 exports.CONNECTING_SNAP_RADIUS =
-    Blockly.internalConstants.CONNECTING_SNAP_RADIUS;
+    internalConstants.CONNECTING_SNAP_RADIUS;
 exports.CURRENT_CONNECTION_PREFERENCE =
-    Blockly.internalConstants.CURRENT_CONNECTION_PREFERENCE;
-exports.BUMP_DELAY = Blockly.internalConstants.BUMP_DELAY;
-exports.BUMP_RANDOMNESS = Blockly.internalConstants.BUMP_RANDOMNESS;
-exports.COLLAPSE_CHARS = Blockly.internalConstants.COLLAPSE_CHARS;
-exports.LONGPRESS = Blockly.internalConstants.LONGPRESS;
-exports.SOUND_LIMIT = Blockly.internalConstants.SOUND_LIMIT;
-exports.DRAG_STACK = Blockly.internalConstants.DRAG_STACK;
-exports.HSV_SATURATION = Blockly.internalConstants.HSV_SATURATION;
-exports.HSV_VALUE = Blockly.internalConstants.HSV_VALUE;
-exports.SPRITE = Blockly.internalConstants.SPRITE;
-exports.DRAG_NONE = Blockly.internalConstants.DRAG_NONE;
-exports.DRAG_STICKY = Blockly.internalConstants.DRAG_STICKY;
-exports.DRAG_BEGIN = Blockly.internalConstants.DRAG_BEGIN;
-exports.DRAG_FREE = Blockly.internalConstants.DRAG_FREE;
-exports.OPPOSITE_TYPE = Blockly.internalConstants.OPPOSITE_TYPE;
+    internalConstants.CURRENT_CONNECTION_PREFERENCE;
+exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
+exports.BUMP_RANDOMNESS = internalConstants.BUMP_RANDOMNESS;
+exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
+exports.LONGPRESS = internalConstants.LONGPRESS;
+exports.SOUND_LIMIT = internalConstants.SOUND_LIMIT;
+exports.DRAG_STACK = internalConstants.DRAG_STACK;
+exports.HSV_SATURATION = internalConstants.HSV_SATURATION;
+exports.HSV_VALUE = internalConstants.HSV_VALUE;
+exports.SPRITE = internalConstants.SPRITE;
+exports.DRAG_NONE = internalConstants.DRAG_NONE;
+exports.DRAG_STICKY = internalConstants.DRAG_STICKY;
+exports.DRAG_BEGIN = internalConstants.DRAG_BEGIN;
+exports.DRAG_FREE = internalConstants.DRAG_FREE;
+exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.VARIABLE_CATEGORY_NAME =
-    Blockly.internalConstants.VARIABLE_CATEGORY_NAME;
+    internalConstants.VARIABLE_CATEGORY_NAME;
 exports.VARIABLE_DYNAMIC_CATEGORY_NAME =
-    Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
+    internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
 exports.PROCEDURE_CATEGORY_NAME =
-    Blockly.internalConstants.PROCEDURE_CATEGORY_NAME;
-exports.RENAME_VARIABLE_ID = Blockly.internalConstants.RENAME_VARIABLE_ID;
-exports.DELETE_VARIABLE_ID = Blockly.internalConstants.DELETE_VARIABLE_ID;
-exports.COLLAPSED_INPUT_NAME = Blockly.constants.COLLAPSED_INPUT_NAME;
-exports.COLLAPSED_FIELD_NAME = Blockly.constants.COLLAPSED_FIELD_NAME;
+    internalConstants.PROCEDURE_CATEGORY_NAME;
+exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
+exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
+exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
+exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;

@@ -86,6 +86,27 @@ const renamings = {
         // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
       },
     },
+    'Blockly.ContextMenu': {
+      exports: {
+        currentBlock: {get: 'getCurrentBlock', set: 'setCurrentBlock'},
+      },
+    },
+    'Blockly.Events': {
+      exports: {
+        recordUndo: {get: 'getRecordUndo', set: 'setRecordUndo'},
+      },
+    },
+    'Blockly.Tooltip': {
+      exports: {
+        DIV: {get: 'getDiv', set: 'setDiv'},
+        visible: {get: 'isVisible'},
+      },
+    },
+    'Blockly.WidgetDiv': {
+      exports: {
+        DIV: {get: 'getDiv'},
+      },
+    },
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},

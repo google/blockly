@@ -87,20 +87,20 @@ Object.defineProperties(exports, {
 
 // Add a getter and setter pair for Blockly.selected, for legacy reasons.
 Object.defineProperties(exports, {
- selected: {
-   get: function() {
-     deprecation.warn(
-       'Blockly.selected', 'September 2021', 'September 2022',
-       'Blockly.common.getSelected()');
-     return common.getSelected();
-   },
-   set: function(newSelection) {
-     deprecation.warn(
-       'Blockly.selected', 'September 2021', 'September 2022',
-       'Blockly.common.setSelected()');
-     common.setSelected(newSelection);
-   }
- }
+  selected: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.selected', 'September 2021', 'September 2022',
+          'Blockly.common.getSelected()');
+      return common.getSelected();
+    },
+    set: function(newSelection) {
+      deprecation.warn(
+          'Blockly.selected', 'September 2021', 'September 2022',
+          'Blockly.common.setSelected()');
+      common.setSelected(newSelection);
+    }
+  }
 });
 
 /**
@@ -158,8 +158,7 @@ exports.duplicate = clipboard.duplicate;
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  deprecation.warn(
-      'Blockly.hideChaff', 'September 2021', 'September 2022');
+  deprecation.warn('Blockly.hideChaff', 'September 2021', 'September 2022');
   common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
@@ -176,8 +175,7 @@ exports.getMainWorkspace = common.getMainWorkspace;
 Object.defineProperties(exports, {
   alert: {
     set: function(newAlert) {
-      deprecation.warn(
-          'Blockly.alert', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
       dialog.setAlert(newAlert);
     },
     get: function() {
@@ -193,8 +191,7 @@ Object.defineProperties(exports, {
 Object.defineProperties(exports, {
   confirm: {
     set: function(newConfirm) {
-      deprecation.warn(
-          'Blockly.confirm', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
       dialog.setConfirm(newConfirm);
     },
     get: function() {
@@ -210,8 +207,7 @@ Object.defineProperties(exports, {
 Object.defineProperties(exports, {
   prompt: {
     set: function(newPrompt) {
-      deprecation.warn(
-          'Blockly.prompt', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
       dialog.setPrompt(newPrompt);
     },
     get: function() {
@@ -394,8 +390,7 @@ exports.PAGE_MODE_MULTIPLIER = internalConstants.PAGE_MODE_MULTIPLIER;
 exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
 exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
 exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
-exports.CONNECTING_SNAP_RADIUS =
-    internalConstants.CONNECTING_SNAP_RADIUS;
+exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
 exports.CURRENT_CONNECTION_PREFERENCE =
     internalConstants.CURRENT_CONNECTION_PREFERENCE;
 exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
@@ -412,12 +407,10 @@ exports.DRAG_STICKY = internalConstants.DRAG_STICKY;
 exports.DRAG_BEGIN = internalConstants.DRAG_BEGIN;
 exports.DRAG_FREE = internalConstants.DRAG_FREE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
-exports.VARIABLE_CATEGORY_NAME =
-    internalConstants.VARIABLE_CATEGORY_NAME;
+exports.VARIABLE_CATEGORY_NAME = internalConstants.VARIABLE_CATEGORY_NAME;
 exports.VARIABLE_DYNAMIC_CATEGORY_NAME =
     internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
-exports.PROCEDURE_CATEGORY_NAME =
-    internalConstants.PROCEDURE_CATEGORY_NAME;
+exports.PROCEDURE_CATEGORY_NAME = internalConstants.PROCEDURE_CATEGORY_NAME;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;

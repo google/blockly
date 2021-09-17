@@ -86,7 +86,7 @@
     "gulp-shell": "^0.8.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
-    "http-server": "^0.12.3",
+    "http-server": "^13.0.2",
     "js-green-licenses": "^3.0.0",
     "mocha": "^8.1.1",
     "readline-sync": "^1.4.10",

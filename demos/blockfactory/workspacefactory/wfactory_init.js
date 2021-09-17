@@ -274,7 +274,7 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
 
         // Disable shadow editing button if turning invalid shadow block back
         // to normal block.
-        if (!Blockly.selected.getSurroundParent()) {
+        if (!Blockly.common.getSelected().getSurroundParent()) {
           document.getElementById('button_addShadow').disabled = true;
         }
       });
@@ -347,7 +347,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // are not nested in parents cannot be shadow blocks).
     if (e.type == Blockly.Events.BLOCK_MOVE ||
         e.type == Blockly.Events.SELECTED) {
-      var selected = Blockly.selected;
+      var selected = Blockly.common.getSelected();
 
       // Show shadow button if a block is selected. Show "Add Shadow" if
       // a block is not a shadow block, show "Remove Shadow" if it is a

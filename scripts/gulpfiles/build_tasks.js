@@ -119,7 +119,7 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
   options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
   options.language_in = 'ECMASCRIPT6_STRICT',
   options.language_out = 'ECMASCRIPT5_STRICT';
-  options.rewrite_polyfills = false;
+  options.rewrite_polyfills = true;
   options.hide_warnings_for = 'node_modules';
   if (opt_warnings_as_error || opt_strict_typechecker) {
     options.jscomp_error = JSCOMP_ERROR;

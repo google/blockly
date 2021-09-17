@@ -285,7 +285,7 @@ suite('Context Menu Items', function() {
       });
 
       test('No dialog for single block', function() {
-        var confirmStub = sinon.stub(Blockly, 'confirm');
+        var confirmStub = sinon.stub(Blockly.dialog, 'confirm');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();

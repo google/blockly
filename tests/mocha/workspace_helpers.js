@@ -93,7 +93,7 @@ function testAWorkspace() {
     test('deleteVariableById(id2) one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
       var stub =
-          sinon.stub(Blockly, "confirm").callsArgWith(1, true);
+          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
       this.workspace.deleteVariableById('id2');
 
       sinon.assert.notCalled(stub);

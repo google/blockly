@@ -172,7 +172,7 @@ suite('Text Input Fields', function() {
             FIELD_TEXT_FONTFAMILY: 'sans-serif'
           };
           field.clickTarget_ = document.createElement('div');
-          Blockly.mainWorkspace = workspace;
+          Blockly.common.setMainWorkspace(workspace);
           Blockly.WidgetDiv.createDom();
           this.stub = sinon.stub(field, 'resizeEditor_');
         };

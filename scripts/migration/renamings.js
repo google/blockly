@@ -84,6 +84,13 @@ const renamings = {
         hueToHex: {module: 'Blockly.utils.colour'},
         // Blockly.hideChaff() became
         // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
+
+        // selected.  See PR #5489.
+        selected: {
+          module: 'Blockly.common',
+          get: 'getSelected',
+          set: 'setSelected',
+        },
       },
     },
     'Blockly.utils': {

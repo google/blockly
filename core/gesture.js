@@ -35,6 +35,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const utils = goog.require('Blockly.utils');
@@ -770,8 +771,8 @@ Gesture.prototype.doBlockClick_ = function() {
  */
 Gesture.prototype.doWorkspaceClick_ = function(_e) {
   const ws = this.creatorWorkspace_;
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (common.getSelected()) {
+    common.getSelected().unselect();
   }
   this.fireWorkspaceClick_(this.startWorkspace_ || ws);
 };

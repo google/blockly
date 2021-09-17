@@ -23,6 +23,7 @@ const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
+const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
@@ -175,7 +176,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     reverse = true;
   }
   // Raise it to the top for extra visibility.
-  const selected = Blockly.selected == rootBlock;
+  const selected = common.getSelected() == rootBlock;
   selected || rootBlock.addSelect();
   let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
             Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -

@@ -30,6 +30,7 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
+const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -43,7 +44,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
  * @constructor
  */
 const InsertionMarkerManager = function(block) {
-  Blockly.selected = block;
+  common.setSelected(block);
 
   /**
    * The top block in the stack being dragged.

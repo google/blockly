@@ -13,7 +13,6 @@
 goog.module('Blockly.ShortcutItems');
 goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Gesture = goog.require('Blockly.Gesture');
@@ -22,6 +21,7 @@ const ICopyable = goog.requireType('Blockly.ICopyable');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const clipboard = goog.require('Blockly.clipboard');
+const common = goog.require('Blockly.common');
 
 
 /**
@@ -63,8 +63,8 @@ const registerDelete = function() {
   const deleteShortcut = {
     name: names.DELETE,
     preconditionFn: function(workspace) {
-      return !workspace.options.readOnly && Blockly.selected &&
-          Blockly.selected.isDeletable();
+      return !workspace.options.readOnly && common.getSelected() &&
+          common.getSelected().isDeletable();
     },
     callback: function(workspace, e) {
       // Delete or backspace.
@@ -76,7 +76,7 @@ const registerDelete = function() {
       if (Gesture.inProgress()) {
         return false;
       }
-      (/** @type {!BlockSvg} */ (Blockly.selected)).checkAndDelete();
+      (/** @type {!BlockSvg} */ (common.getSelected())).checkAndDelete();
       return true;
     }
   };
@@ -94,15 +94,15 @@ const registerCopy = function() {
     name: names.COPY,
     preconditionFn: function(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          Blockly.selected && Blockly.selected.isDeletable() &&
-          Blockly.selected.isMovable();
+          common.getSelected() && common.getSelected().isDeletable() &&
+          common.getSelected().isMovable();
     },
     callback: function(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
       workspace.hideChaff();
-      clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
+      clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
     }
   };
@@ -129,16 +129,18 @@ const registerCut = function() {
     name: names.CUT,
     preconditionFn: function(workspace) {
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          Blockly.selected && Blockly.selected.isDeletable() &&
-          Blockly.selected.isMovable() && !Blockly.selected.workspace.isFlyout;
+          common.getSelected() && common.getSelected().isDeletable() &&
+          common.getSelected().isMovable() &&
+          !common.getSelected().workspace.isFlyout;
     },
     callback: function() {
-      if (!Blockly.selected) {
+      const selected = common.getSelected();
+      if (!selected) {
         // Shouldn't happen but appeases the type system
         return false;
       }
-      clipboard.copy(Blockly.selected);
-      (/** @type {!BlockSvg} */ (Blockly.selected)).checkAndDelete();
+      clipboard.copy(selected);
+      (/** @type {!BlockSvg} */ (selected)).checkAndDelete();
       return true;
     }
   };

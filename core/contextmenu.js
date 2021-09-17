@@ -66,7 +66,7 @@ exports.setCurrentBlock = setCurrentBlock;
 
 // Ad JS accessors for backwards compatibility.
 Object.defineProperties(exports, {
-  visible: {
+  currentBlock: {
     get: function() {
       deprecation.warn(
         'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',

@@ -121,12 +121,22 @@ Blockly.Extensions.registerMutator = function(name, mixinObj, opt_helperFn,
  * @param {string} name The name of the extension to unregister.
  */
 Blockly.Extensions.unregister = function(name) {
-  if (Blockly.Extensions.ALL_[name]) {
+  if (Blockly.Extensions.isRegistered(name)) {
     delete Blockly.Extensions.ALL_[name];
   } else {
     console.warn('No extension mapping for name "' + name +
         '" found to unregister');
   }
+};
+
+/**
+ * Returns whether an extension is registered with the given name.
+ * @param {string} name The name of the extension to check for.
+ * @return {boolean} True if the extension is registered.  False if it is
+ *     not registered.
+ */
+Blockly.Extensions.isRegistered = function(name) {
+  return !!Blockly.Extensions.ALL_[name];
 };
 
 /**

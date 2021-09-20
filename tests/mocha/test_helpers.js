@@ -137,7 +137,7 @@ exports.addMessageToCleanup = addMessageToCleanup;
 
 /**
  * Adds block type to shared cleanup object so that it is cleaned from
- *    Blockly.Blocks global in sharedTestTeardown.
+ *    Blockly.blocks global in sharedTestTeardown.
  * @param {!Object} sharedCleanupObj The shared cleanup object created in
  *    sharedTestSetup.
  * @param {string} blockType The block type to add to shared cleanup object.
@@ -150,7 +150,7 @@ exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
 /**
  * Wraps Blockly.defineBlocksWithJsonArray using stub in order to keep track of
  * block types passed in to method on shared cleanup object so they are cleaned
- * from Blockly.Blocks global in sharedTestTeardown.
+ * from Blockly.blocks global in sharedTestTeardown.
  * @param {!Object} sharedCleanupObj The shared cleanup object created in
  *    sharedTestSetup.
  * @private
@@ -250,7 +250,7 @@ function sharedTestTeardown() {
 
     var blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
-      delete Blockly.Blocks[blockTypes[i]];
+      delete Blockly.blocks[blockTypes[i]];
     }
     var messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {

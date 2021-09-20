@@ -10,11 +10,11 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.texts');  // Deprecated
+goog.provide('Blockly.blocks.texts');  // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
+goog.require('Blockly.blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldMultilineInput');
@@ -226,7 +226,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.Blocks['text_getSubstring'] = {
+Blockly.blocks['text_getSubstring'] = {
   /**
    * Block for getting substring.
    * @this {Blockly.Block}
@@ -347,7 +347,7 @@ Blockly.Blocks['text_getSubstring'] = {
   }
 };
 
-Blockly.Blocks['text_changeCase'] = {
+Blockly.blocks['text_changeCase'] = {
   /**
    * Block for changing capitalization.
    * @this {Blockly.Block}
@@ -368,7 +368,7 @@ Blockly.Blocks['text_changeCase'] = {
   }
 };
 
-Blockly.Blocks['text_trim'] = {
+Blockly.blocks['text_trim'] = {
   /**
    * Block for trimming spaces.
    * @this {Blockly.Block}
@@ -389,7 +389,7 @@ Blockly.Blocks['text_trim'] = {
   }
 };
 
-Blockly.Blocks['text_print'] = {
+Blockly.blocks['text_print'] = {
   /**
    * Block for print statement.
    * @this {Blockly.Block}
@@ -412,7 +412,7 @@ Blockly.Blocks['text_print'] = {
   }
 };
 
-Blockly.Blocks['text_prompt_ext'] = {
+Blockly.blocks['text_prompt_ext'] = {
   /**
    * Block for prompt function (external message).
    * @this {Blockly.Block}
@@ -474,7 +474,7 @@ Blockly.Blocks['text_prompt_ext'] = {
   // XML hooks are kept for backwards compatibility.
 };
 
-Blockly.Blocks['text_prompt'] = {
+Blockly.blocks['text_prompt'] = {
   /**
    * Block for prompt function (internal message).
    * The 'text_prompt_ext' block is preferred as it is more flexible.
@@ -506,12 +506,12 @@ Blockly.Blocks['text_prompt'] = {
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-  updateType_: Blockly.Blocks['text_prompt_ext'].updateType_,
-  mutationToDom: Blockly.Blocks['text_prompt_ext'].mutationToDom,
-  domToMutation: Blockly.Blocks['text_prompt_ext'].domToMutation
+  updateType_: Blockly.blocks['text_prompt_ext'].updateType_,
+  mutationToDom: Blockly.blocks['text_prompt_ext'].mutationToDom,
+  domToMutation: Blockly.blocks['text_prompt_ext'].domToMutation
 };
 
-Blockly.Blocks['text_count'] = {
+Blockly.blocks['text_count'] = {
   /**
    * Block for counting how many times one string appears within another string.
    * @this {Blockly.Block}
@@ -540,7 +540,7 @@ Blockly.Blocks['text_count'] = {
   }
 };
 
-Blockly.Blocks['text_replace'] = {
+Blockly.blocks['text_replace'] = {
   /**
    * Block for replacing one string with another in the text.
    * @this {Blockly.Block}
@@ -574,7 +574,7 @@ Blockly.Blocks['text_replace'] = {
   }
 };
 
-Blockly.Blocks['text_reverse'] = {
+Blockly.blocks['text_reverse'] = {
   /**
    * Block for reversing a string.
    * @this {Blockly.Block}

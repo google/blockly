@@ -15,11 +15,10 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.logic');  // Deprecated
+goog.provide('Blockly.blocks.logic');  // Deprecated
 goog.provide('Blockly.Constants.Logic');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');

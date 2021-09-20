@@ -13,12 +13,12 @@
 
 goog.module('Blockly.VariablesDynamic');
 
-const Blocks = goog.require('Blockly.Blocks');
 const Msg = goog.require('Blockly.Msg');
 const VariableModel = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const blocks = goog.require('Blockly.blocks');
 const xml = goog.require('Blockly.utils.xml');
 
 
@@ -85,7 +85,7 @@ const flyoutCategoryBlocks = function(workspace) {
 
   const xmlList = [];
   if (variableModelList.length > 0) {
-    if (Blocks['variables_set_dynamic']) {
+    if (blocks['variables_set_dynamic']) {
       const firstVariable = variableModelList[variableModelList.length - 1];
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
@@ -93,7 +93,7 @@ const flyoutCategoryBlocks = function(workspace) {
       block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
-    if (Blocks['variables_get_dynamic']) {
+    if (blocks['variables_get_dynamic']) {
       variableModelList.sort(VariableModel.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = xml.createElement('block');

@@ -14,7 +14,6 @@ goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
@@ -37,6 +36,7 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const blocks = goog.require('Blockly.blocks');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -208,7 +208,7 @@ const Block = function(workspace, prototypeName, opt_id) {
   if (prototypeName) {
     /** @type {string} */
     this.type = prototypeName;
-    const prototype = Blocks[prototypeName];
+    const prototype = blocks[prototypeName];
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }

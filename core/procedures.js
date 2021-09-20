@@ -18,7 +18,6 @@ goog.module('Blockly.Procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Blocks = goog.require('Blockly.Blocks');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -29,6 +28,7 @@ const Workspace = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.blocks');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -199,7 +199,7 @@ exports.rename = rename;
  */
 const flyoutCategory = function(workspace) {
   const xmlList = [];
-  if (Blocks['procedures_defnoreturn']) {
+  if (blocks['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
@@ -213,7 +213,7 @@ const flyoutCategory = function(workspace) {
     block.appendChild(nameField);
     xmlList.push(block);
   }
-  if (Blocks['procedures_defreturn']) {
+  if (blocks['procedures_defreturn']) {
     // <block type="procedures_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
@@ -227,7 +227,7 @@ const flyoutCategory = function(workspace) {
     block.appendChild(nameField);
     xmlList.push(block);
   }
-  if (Blocks['procedures_ifreturn']) {
+  if (blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');

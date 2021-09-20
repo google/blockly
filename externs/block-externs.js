@@ -10,7 +10,7 @@
  */
 
 goog.provide('Blockly');
-goog.provide('Blockly.Blocks');
+goog.provide('Blockly.blocks');
 goog.provide('Blockly.Comment');
 goog.provide('Blockly.FieldCheckbox');
 goog.provide('Blockly.FieldColour');

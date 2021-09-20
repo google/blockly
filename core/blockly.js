@@ -18,7 +18,6 @@ goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
 const BlocklyOptions = goog.require('Blockly.BlocklyOptions');
-const Blocks = goog.require('Blockly.Blocks');
 const Bubble = goog.require('Blockly.Bubble');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
@@ -103,6 +102,7 @@ const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const ZoomControls = goog.require('Blockly.ZoomControls');
+const blocks = goog.require('Blockly.blocks');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
@@ -338,12 +338,12 @@ const defineBlocksWithJsonArray = function(jsonArray) {
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
-        if (Blocks[typename]) {
+        if (blocks[typename]) {
           console.warn(
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blocks[typename] = {init: jsonInitFactory(elem)};
+        blocks[typename] = {init: jsonInitFactory(elem)};
       }
     }
   }
@@ -508,6 +508,8 @@ exports.BlocklyOptions = BlocklyOptions;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
+/** @deprecated Use Blockly.blocks instead. */
+exports.Blocks = blocks;
 exports.Bubble = Bubble;
 exports.BubbleDragger = BubbleDragger;
 exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;

@@ -16,12 +16,12 @@
  */
 goog.module('Blockly.Variables');
 
-const Blocks = goog.require('Blockly.Blocks');
 const Msg = goog.require('Blockly.Msg');
 const VariableModel = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.blocks');
 const dialog = goog.require('Blockly.dialog');
 const utilsXml = goog.require('Blockly.utils.xml');
 
@@ -143,17 +143,17 @@ const flyoutCategoryBlocks = function(workspace) {
   if (variableModelList.length > 0) {
     // New variables are added to the end of the variableModelList.
     const mostRecentVariable = variableModelList[variableModelList.length - 1];
-    if (Blocks['variables_set']) {
+    if (blocks['variables_set']) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'variables_set');
-      block.setAttribute('gap', Blocks['math_change'] ? 8 : 24);
+      block.setAttribute('gap', blocks['math_change'] ? 8 : 24);
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
       xmlList.push(block);
     }
-    if (Blocks['math_change']) {
+    if (blocks['math_change']) {
       const block = utilsXml.createElement('block');
       block.setAttribute('type', 'math_change');
-      block.setAttribute('gap', Blocks['variables_get'] ? 20 : 8);
+      block.setAttribute('gap', blocks['variables_get'] ? 20 : 8);
       block.appendChild(generateVariableFieldDom(mostRecentVariable));
       const value = Xml.textToDom(
           '<value name="DELTA">' +
@@ -165,7 +165,7 @@ const flyoutCategoryBlocks = function(workspace) {
       xmlList.push(block);
     }
 
-    if (Blocks['variables_get']) {
+    if (blocks['variables_get']) {
       variableModelList.sort(VariableModel.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = utilsXml.createElement('block');

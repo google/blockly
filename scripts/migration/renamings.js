@@ -93,6 +93,9 @@ const renamings = {
         },
       },
     },
+    'Blockly.Blocks': {
+      module: 'Blockly.blocks',
+    },
     'Blockly.ContextMenu': {
       exports: {
         currentBlock: {get: 'getCurrentBlock', set: 'setCurrentBlock'},

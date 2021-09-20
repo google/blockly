@@ -18,7 +18,7 @@
 goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
+goog.require('Blockly.blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
@@ -115,7 +115,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.Blocks['lists_create_with'] = {
+Blockly.blocks['lists_create_with'] = {
   /**
    * Block for creating a list with any number of elements of any type.
    * @this {Blockly.Block}
@@ -259,7 +259,7 @@ Blockly.Blocks['lists_create_with'] = {
   }
 };
 
-Blockly.Blocks['lists_create_with_container'] = {
+Blockly.blocks['lists_create_with_container'] = {
   /**
    * Mutator block for list container.
    * @this {Blockly.Block}
@@ -274,7 +274,7 @@ Blockly.Blocks['lists_create_with_container'] = {
   }
 };
 
-Blockly.Blocks['lists_create_with_item'] = {
+Blockly.blocks['lists_create_with_item'] = {
   /**
    * Mutator block for adding items.
    * @this {Blockly.Block}
@@ -290,7 +290,7 @@ Blockly.Blocks['lists_create_with_item'] = {
   }
 };
 
-Blockly.Blocks['lists_indexOf'] = {
+Blockly.blocks['lists_indexOf'] = {
   /**
    * Block for finding an item in the list.
    * @this {Blockly.Block}
@@ -319,7 +319,7 @@ Blockly.Blocks['lists_indexOf'] = {
   }
 };
 
-Blockly.Blocks['lists_getIndex'] = {
+Blockly.blocks['lists_getIndex'] = {
   /**
    * Block for getting element at index.
    * @this {Blockly.Block}
@@ -510,7 +510,7 @@ Blockly.Blocks['lists_getIndex'] = {
   }
 };
 
-Blockly.Blocks['lists_setIndex'] = {
+Blockly.blocks['lists_setIndex'] = {
   /**
    * Block for setting the element at index.
    * @this {Blockly.Block}
@@ -656,7 +656,7 @@ Blockly.Blocks['lists_setIndex'] = {
   }
 };
 
-Blockly.Blocks['lists_getSublist'] = {
+Blockly.blocks['lists_getSublist'] = {
   /**
    * Block for getting sublist.
    * @this {Blockly.Block}
@@ -772,7 +772,7 @@ Blockly.Blocks['lists_getSublist'] = {
   }
 };
 
-Blockly.Blocks['lists_sort'] = {
+Blockly.blocks['lists_sort'] = {
   /**
    * Block for sorting a list.
    * @this {Blockly.Block}
@@ -812,7 +812,7 @@ Blockly.Blocks['lists_sort'] = {
   }
 };
 
-Blockly.Blocks['lists_split'] = {
+Blockly.blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.
    * @this {Blockly.Block}

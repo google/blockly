@@ -22,8 +22,8 @@ const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
- * @type {string}
  * The raw useragent string.
+ * @type {string}
  */
 let rawUserAgent;
 

@@ -187,7 +187,7 @@ DropDownDiv.createDom = function() {
   }
   const containerDiv = document.createElement('div');
   containerDiv.className = 'blocklyDropDownDiv';
-  const parentDiv = Blockly.parentContainer || document.body;
+  const parentDiv = common.getParentContainer() || document.body;
   parentDiv.appendChild(containerDiv);
 
   DropDownDiv.DIV_ = containerDiv;
@@ -387,7 +387,7 @@ DropDownDiv.show = function(
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   const mainWorkspace =
-      /** @type {!WorkspaceSvg} */ (Blockly.getMainWorkspace());
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   DropDownDiv.rendererClassName_ = mainWorkspace.getRenderer().getClassName();
   DropDownDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
   dom.addClass(div, DropDownDiv.rendererClassName_);

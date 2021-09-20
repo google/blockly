@@ -26,7 +26,7 @@ const serializationRegistry = goog.require('Blockly.serialization.registry');
  * @typedef {{
  *   name: string,
  *   id: string,
- *   type: (string|undefined),
+ *   type: (string|undefined)
  * }}
  */
 var State;

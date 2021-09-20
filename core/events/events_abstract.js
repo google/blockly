@@ -12,9 +12,7 @@
 'use strict';
 
 goog.module('Blockly.Events.Abstract');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 
@@ -42,13 +40,13 @@ const Abstract = function() {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Events.getGroup();
+  this.group = goog.module.get('Blockly.Events').getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = Events.getRecordUndo();
+  this.recordUndo = goog.module.get('Blockly.Events').getRecordUndo();
 };
 
 /**

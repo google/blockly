@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.BlockDrag');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');

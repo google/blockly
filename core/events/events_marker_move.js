@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.MarkerMove');
-goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */

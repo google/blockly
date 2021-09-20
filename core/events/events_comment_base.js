@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.CommentBase');
-goog.module.declareLegacyNamespace();
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
 const Events = goog.require('Blockly.Events');

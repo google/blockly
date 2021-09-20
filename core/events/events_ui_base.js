@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Events.UiBase');
-goog.module.declareLegacyNamespace();
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');

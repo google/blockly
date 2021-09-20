@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.BubbleOpen');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.CommentMove');
-goog.module.declareLegacyNamespace();
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');

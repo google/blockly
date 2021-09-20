@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.VarCreate');
-goog.module.declareLegacyNamespace();
 
 const Events = goog.require('Blockly.Events');
 const VarBase = goog.require('Blockly.Events.VarBase');

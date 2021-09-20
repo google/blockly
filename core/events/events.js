@@ -15,25 +15,70 @@
  * @namespace Blockly.Events
  */
 goog.module('Blockly.Events');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
+const Abstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockCreate = goog.requireType('Blockly.Events.BlockCreate');
-/* eslint-disable-next-line no-unused-vars */
-const BlockMove = goog.requireType('Blockly.Events.BlockMove');
-/* eslint-disable-next-line no-unused-vars */
-const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
-/* eslint-disable-next-line no-unused-vars */
-const CommentMove = goog.requireType('Blockly.Events.CommentMove');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
+const BlockChange = goog.require('Blockly.Events.BlockChange');
+const BlockCreate = goog.require('Blockly.Events.BlockCreate');
+const BlockDelete = goog.require('Blockly.Events.BlockDelete');
+const BlockDrag = goog.require('Blockly.Events.BlockDrag');
+const BlockMove = goog.require('Blockly.Events.BlockMove');
+const Click = goog.require('Blockly.Events.Click');
+const CommentBase = goog.require('Blockly.Events.CommentBase');
+const CommentChange = goog.require('Blockly.Events.CommentChange');
+const CommentCreate = goog.require('Blockly.Events.CommentCreate');
+const CommentDelete = goog.require('Blockly.Events.CommentDelete');
+const CommentMove = goog.require('Blockly.Events.CommentMove');
+const FinishedLoading = goog.require('Blockly.Events.FinishedLoading');
+const MarkerMove = goog.require('Blockly.Events.MarkerMove');
+const Selected = goog.require('Blockly.Events.Selected');
+const ThemeChange = goog.require('Blockly.Events.ThemeChange');
+const ToolboxItemSelect = goog.require('Blockly.Events.ToolboxItemSelect');
+const TrashcanOpen = goog.require('Blockly.Events.TrashcanOpen');
+const Ui = goog.require('Blockly.Events.Ui');
+const UiBase = goog.require('Blockly.Events.UiBase');
+const VarBase = goog.require('Blockly.Events.VarBase');
+const VarCreate = goog.require('Blockly.Events.VarCreate');
+const VarDelete = goog.require('Blockly.Events.VarDelete');
+const VarRename = goog.require('Blockly.Events.VarRename');
+const ViewportChange = goog.require('Blockly.Events.ViewportChange');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
+
+
+exports.Abstract = Abstract;
+// TODO: is this suppose to be public?
+exports.BlockBase = BlockBase;
+exports.BlockChange = BlockChange;
+exports.BlockCreate = BlockCreate;
+exports.BlockDelete = BlockDelete;
+exports.BlockDrag = BlockDrag;
+exports.BlockMove = BlockMove;
+exports.Click = Click;
+// TODO: Is this suppose to be public?
+exports.CommentBase = CommentBase;
+exports.CommentChange = CommentChange;
+exports.CommentCreate = CommentCreate;
+exports.CommentDelete = CommentDelete;
+exports.CommentMove = CommentMove;
+exports.FinishedLoading = FinishedLoading;
+exports.MarkerMove = MarkerMove;
+exports.Selected = Selected;
+exports.ThemeChange = ThemeChange;
+exports.ToolboxItemSelect = ToolboxItemSelect;
+exports.TrashcanOpen = TrashcanOpen;
+exports.Ui = Ui;
+exports.UiBase = UiBase;
+exports.VarBase = VarBase;
+exports.VarCreate = VarCreate;
+exports.VarDelete = VarDelete;
+exports.VarRename = VarRename;
+exports.ViewportChange = ViewportChange;
 
 
 /**

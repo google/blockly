@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Events.VarBase');
-goog.module.declareLegacyNamespace();
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */

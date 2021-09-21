@@ -15,7 +15,7 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const BlockSvg = goog.require('Blockly.BlockSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');

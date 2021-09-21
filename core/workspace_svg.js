@@ -17,7 +17,7 @@ goog.module.declareLegacyNamespace();
 const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const BlockSvg = goog.require('Blockly.BlockSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Classic = goog.require('Blockly.Themes.Classic');
@@ -1518,7 +1518,7 @@ WorkspaceSvg.prototype.paste = function(state) {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  
+
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));

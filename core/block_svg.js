@@ -1775,4 +1775,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports = BlockSvg;
+exports.BlockSvg = BlockSvg;

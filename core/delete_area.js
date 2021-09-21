@@ -15,7 +15,7 @@
 goog.module('Blockly.DeleteArea');
 goog.module.declareLegacyNamespace();
 
-const BlockSvg = goog.require('Blockly.BlockSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const DragTarget = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const IDeleteArea = goog.requireType('Blockly.IDeleteArea');

@@ -17,7 +17,11 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
+const ICopyable = goog.requireType('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -49,13 +53,13 @@ exports.setMainWorkspace = setMainWorkspace;
 
 /**
  * Currently selected block.
- * @type {?Blockly.ICopyable}
+ * @type {?ICopyable}
  */
 let selected = null;
 
 /**
  * Returns the currently selected block.
- * @return {?Blockly.ICopyable} The currently selected block.
+ * @return {?ICopyable} The currently selected block.
  */
 const getSelected = function() {
   return selected;
@@ -64,7 +68,7 @@ exports.getSelected = getSelected;
 
 /**
  * Sets the currently selected block.
- * @param {?Blockly.ICopyable} newSelection The newly selected block.
+ * @param {?ICopyable} newSelection The newly selected block.
  */
 const setSelected = function(newSelection) {
   selected = newSelection;
@@ -105,9 +109,9 @@ exports.setParentContainer = setParentContainer;
  * See Blockly.resizeSvgContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
- * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
  */
- const svgResize = function(workspace) {
+const svgResize = function(workspace) {
   let mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;

@@ -77,8 +77,7 @@ var JSCOMP_ERROR = [
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
-  // Disabling this until we have fixed all the require issues.
+  'missingRequire',
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -397,7 +396,7 @@ function buildLangfiles(done) {
   // Create output directory.
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
   fs.mkdirSync(outputDir, {recursive: true});
-  
+
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&

@@ -206,7 +206,7 @@ ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
     for (let i = 0; i < contents.length; i++) {
       const itemDef = contents[i];
       const flyoutItem =
-          /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+          /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
       this.flyoutItems_.push(flyoutItem);
     }
   }

@@ -387,5 +387,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblocks genutzt werden.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Teile etwas mit…",
 	"WORKSPACE_ARIA_LABEL": "Blockly Arbeitsbereich",
-	"COLLAPSED_WARNINGS_WARNING": "Eingeklappte Blöcke enthalten Warnungen."
+	"COLLAPSED_WARNINGS_WARNING": "Eingeklappte Blöcke enthalten Warnungen.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Abbrechen"
 }

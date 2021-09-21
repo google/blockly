@@ -357,5 +357,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attenzioneː Questo blocco può essere usato solo all'interno di una definizione di funzione.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Scrivi qualcosa...",
 	"WORKSPACE_ARIA_LABEL": "Area di lavoro di Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "I blocchi compressi contengono avvertimenti."
+	"COLLAPSED_WARNINGS_WARNING": "I blocchi compressi contengono avvertimenti.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Annulla"
 }

@@ -98,5 +98,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "ⵙ:",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
-	"PROCEDURES_MUTATORARG_TOOLTIP": "ⵔⵏⵓ ⴰⵏⴽⵛⴰⵎ ⵖⵔ ⵜⵙⵖⵏⵜ."
+	"PROCEDURES_MUTATORARG_TOOLTIP": "ⵔⵏⵓ ⴰⵏⴽⵛⴰⵎ ⵖⵔ ⵜⵙⵖⵏⵜ.",
+	"DIALOG_OK": "ⵡⴰⵅⵅⴰ",
+	"DIALOG_CANCEL": "ⵙⵔ"
 }

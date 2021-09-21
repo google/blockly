@@ -224,6 +224,13 @@ Field.prototype.visible_ = true;
 Field.prototype.enabled_ = true;
 
 /**
+ * Can the field value be changed using the editor on an editable block?
+ * @type {boolean}
+ * @protected
+ */
+Field.prototype.enabled_ = true;
+
+/**
  * The element the click handler is bound to.
  * @type {Element}
  * @protected

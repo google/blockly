@@ -29,6 +29,7 @@ const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
 const Renderer = goog.requireType('Blockly.zelos.Renderer');
 const RightConnectionShape = goog.require('Blockly.zelos.RightConnectionShape');
+const StatementInput = goog.require('Blockly.zelos.StatementInput');
 const TopRow = goog.require('Blockly.zelos.TopRow');
 const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
@@ -265,6 +266,16 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
       activeRow.align == constants.ALIGN.LEFT &&
       input.align == constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
+  } else if (input.type == Blockly.inputTypes.STATEMENT) {
+    // Handle statements without next connections correctly.
+    activeRow.elements.push(
+        new StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+
+    if (activeRow.align == null) {
+      activeRow.align = input.align;
+    }
+    return;
   }
   RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };

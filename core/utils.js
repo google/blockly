@@ -535,13 +535,12 @@ exports.getViewportBBox = getViewportBBox;
 
 /**
  * Removes the first occurrence of a particular value from an array.
- * @param {!Array} arr Array from which to remove
- *     value.
- * @param {*} obj Object to remove.
+ * @param {!Array} arr Array from which to remove value.
+ * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
  */
-const arrayRemove = function(arr, obj) {
-  const i = arr.indexOf(obj);
+const arrayRemove = function(arr, value) {
+  const i = arr.indexOf(value);
   if (i == -1) {
     return false;
   }

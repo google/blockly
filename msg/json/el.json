@@ -402,5 +402,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι...",
 	"WORKSPACE_ARIA_LABEL": "Χώρος εργασίας Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ."
+	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ.",
+	"DIALOG_OK": "Εντάξει",
+	"DIALOG_CANCEL": "Ακύρωση"
 }

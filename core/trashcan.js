@@ -410,6 +410,7 @@ Trashcan.prototype.closeFlyout = function() {
   }
   this.flyout.hide();
   this.fireUiEvent_(false);
+  this.workspace_.recordDragTargets();
 };
 
 /**

@@ -341,5 +341,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "फ़ंक्शन परिभाषा को हाइलाइट करें",
 	"PROCEDURES_CREATE_DO": "'%1' बनाएँ",
 	"PROCEDURES_IFRETURN_TOOLTIP": "यदि एक मान ट्रू है तो, दूसरा मान रिटर्न करें।",
-	"PROCEDURES_IFRETURN_WARNING": "सावधान: ये ब्लॉक फ़ंक्शन परिभाषा के अंदर ही इस्तेमाल किया जा सकता।"
+	"PROCEDURES_IFRETURN_WARNING": "सावधान: ये ब्लॉक फ़ंक्शन परिभाषा के अंदर ही इस्तेमाल किया जा सकता।",
+	"DIALOG_OK": "ओके",
+	"DIALOG_CANCEL": "रद्द करें"
 }

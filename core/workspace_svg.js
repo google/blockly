@@ -95,6 +95,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -1859,7 +1860,15 @@ WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   }
 
   const scrollDelta = browserEvents.getScrollDeltaPixels(e);
-  if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
+
+  // Zoom should also be enabled by the command key on Mac devices,
+  // but not super on Unix.
+  let commandKey;
+  if (userAgent.MAC) {
+    commandKey = e.metaKey;
+  }
+
+  if (canWheelZoom && (e.ctrlKey || commandKey || !canWheelMove)) {
     // Zoom.
     // The vertical scroll distance that corresponds to a click of a zoom
     // button.
@@ -2222,7 +2231,8 @@ WorkspaceSvg.prototype.scrollCenter = function() {
 };
 
 /**
- * Scroll the workspace to center on the given block.
+ * Scroll the workspace to center on the given block. If the block has other
+ * blocks stacked below it, the workspace will be centered on the stack.
  * @param {?string} id ID of block center on.
  * @public
  */

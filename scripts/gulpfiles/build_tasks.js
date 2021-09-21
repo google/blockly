@@ -364,7 +364,7 @@ function buildDeps(done) {
  */
 function generateLangfiles(done) {
   // Run js_to_json.py
-  const jsToJsonCmd = `python scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -402,7 +402,7 @@ function buildLangfiles(done) {
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
+  const createMessagesCmd = `python3 ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \

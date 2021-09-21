@@ -21,7 +21,6 @@ const Metrics = goog.requireType('Blockly.utils.Metrics');
 const Theme = goog.require('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -378,20 +377,6 @@ Options.parseThemeOptions_ = function(options) {
   }
   return Theme.defineTheme(
       theme.name || ('builtin' + idGenerator.getNextUniqueId()), theme);
-};
-
-/**
- * Parse the provided toolbox tree into a consistent DOM format.
- * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
- *    of same.
- * @return {?Node} DOM tree of blocks, or null.
- * @deprecated Use toolbox.parseToolboxTree. (2020 September 28)
- */
-Options.parseToolboxTree = function(toolboxDef) {
-  deprecation.warn(
-      'Options.parseToolboxTree', 'September 2020', 'September 2021',
-      'toolbox.parseToolboxTree');
-  return toolbox.parseToolboxTree(toolboxDef);
 };
 
 exports = Options;

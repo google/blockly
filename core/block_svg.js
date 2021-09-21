@@ -63,7 +63,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
@@ -272,35 +271,6 @@ BlockSvg.prototype.getColourSecondary = function() {
  */
 BlockSvg.prototype.getColourTertiary = function() {
   return this.style.colourTertiary;
-};
-
-/**
- * Get the shadow colour of a block.
- * @return {?string} #RRGGBB string.
- * @deprecated Use style.colourSecondary. (2020 January 21)
- */
-BlockSvg.prototype.getColourShadow = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourShadow', 'January 2020', 'January 2021',
-      'style.colourSecondary');
-  return this.getColourSecondary();
-};
-
-/**
- * Get the border colour(s) of a block.
- * @return {{colourDark, colourLight, colourBorder}} An object containing
- *     colour values for the border(s) of the block. If the block is using a
- *     style the colourBorder will be defined and equal to the tertiary colour
- *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
- *     attributes will be defined (#RRGGBB strings).
- * @deprecated Use style.colourTertiary. (2020 January 21)
- */
-BlockSvg.prototype.getColourBorder = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourBorder', 'January 2020', 'January 2021',
-      'style.colourTertiary');
-  const colourTertiary = this.getColourTertiary();
-  return {colourBorder: colourTertiary, colourLight: null, colourDark: null};
 };
 
 /**

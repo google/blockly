@@ -85,7 +85,7 @@ const flyoutCategoryBlocks = function(workspace) {
 
   const xmlList = [];
   if (variableModelList.length > 0) {
-    if (blocks['variables_set_dynamic']) {
+    if (blocks.definitions['variables_set_dynamic']) {
       const firstVariable = variableModelList[variableModelList.length - 1];
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
@@ -93,7 +93,7 @@ const flyoutCategoryBlocks = function(workspace) {
       block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
-    if (blocks['variables_get_dynamic']) {
+    if (blocks.definitions['variables_get_dynamic']) {
       variableModelList.sort(VariableModel.compareByName);
       for (let i = 0, variable; (variable = variableModelList[i]); i++) {
         const block = xml.createElement('block');

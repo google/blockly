@@ -208,7 +208,7 @@ const Block = function(workspace, prototypeName, opt_id) {
   if (prototypeName) {
     /** @type {string} */
     this.type = prototypeName;
-    const prototype = blocks[prototypeName];
+    const prototype = blocks.definitions[prototypeName];
     if (!prototype || typeof prototype != 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }

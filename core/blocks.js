@@ -21,6 +21,6 @@ goog.module.declareLegacyNamespace();
  * A mapping of block type names to block prototype objects.
  * @type {!Object<string,!Object>}
  */
-const blocks = Object.create(null);
+const definitions = Object.create(null);
 
-exports = blocks;
+exports.definitions = definitions;

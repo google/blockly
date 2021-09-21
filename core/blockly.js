@@ -338,12 +338,12 @@ const defineBlocksWithJsonArray = function(jsonArray) {
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
-        if (blocks[typename]) {
+        if (blocks.definitions[typename]) {
           console.warn(
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        blocks[typename] = {init: jsonInitFactory(elem)};
+        blocks.definitions[typename] = {init: jsonInitFactory(elem)};
       }
     }
   }
@@ -508,8 +508,8 @@ exports.BlocklyOptions = BlocklyOptions;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
-/** @deprecated Use Blockly.blocks instead. */
-exports.Blocks = blocks;
+/** @deprecated Use Blockly.blocks.definitions instead. */
+exports.Blocks = blocks.definitions;
 exports.Bubble = Bubble;
 exports.BubbleDragger = BubbleDragger;
 exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;

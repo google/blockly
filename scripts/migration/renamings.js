@@ -95,6 +95,7 @@ const renamings = {
     },
     'Blockly.Blocks': {
       module: 'Blockly.blocks',
+      export: 'definitions',  // Previous default export now named.
     },
     'Blockly.ContextMenu': {
       exports: {

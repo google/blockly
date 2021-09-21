@@ -199,7 +199,7 @@ exports.rename = rename;
  */
 const flyoutCategory = function(workspace) {
   const xmlList = [];
-  if (blocks['procedures_defnoreturn']) {
+  if (blocks.definitions['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
@@ -213,7 +213,7 @@ const flyoutCategory = function(workspace) {
     block.appendChild(nameField);
     xmlList.push(block);
   }
-  if (blocks['procedures_defreturn']) {
+  if (blocks.definitions['procedures_defreturn']) {
     // <block type="procedures_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
@@ -227,7 +227,7 @@ const flyoutCategory = function(workspace) {
     block.appendChild(nameField);
     xmlList.push(block);
   }
-  if (blocks['procedures_ifreturn']) {
+  if (blocks.definitions['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');

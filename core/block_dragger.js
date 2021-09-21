@@ -468,4 +468,4 @@ BlockDragger.prototype.getInsertionMarkers = function() {
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);
 
-exports = BlockDragger;
+exports.BlockDragger = BlockDragger;

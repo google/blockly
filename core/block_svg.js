@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.BlockSvg');
-goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Block = goog.require('Blockly.Block');

@@ -13,8 +13,6 @@
 goog.module('Blockly.Xml');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
@@ -30,6 +28,8 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const inputTypes = goog.require('Blockly.inputTypes');
 const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Comment');
 goog.requireType('Blockly.Variables');
 goog.requireType('Blockly.WorkspaceComment');

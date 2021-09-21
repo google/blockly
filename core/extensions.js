@@ -20,9 +20,9 @@
 goog.module('Blockly.Extensions');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Mutator');
 
 
@@ -246,7 +246,7 @@ const checkHasFunctionPair =
   function(object, name1, name2, errorPrefix) {
     var has1 = object[name1] !== undefined;
     var has2 = object[name2] !== undefined;
-  
+
     if (has1 && has2) {
       if (typeof object[name1] != 'function') {
         throw Error(errorPrefix + name1 + ' must be a function.');

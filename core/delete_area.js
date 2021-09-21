@@ -15,13 +15,14 @@
 goog.module('Blockly.DeleteArea');
 goog.module.declareLegacyNamespace();
 
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const DragTarget = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
 const object = goog.require('Blockly.utils.object');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
+
 
 /**
  * Abstract class for a component that can delete a block or bubble that is

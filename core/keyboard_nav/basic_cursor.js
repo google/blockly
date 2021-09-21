@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.BasicCursor');
-goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Cursor = goog.require('Blockly.Cursor');

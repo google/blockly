@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Cursor');
-goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const Marker = goog.require('Blockly.Marker');

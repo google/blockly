@@ -13,7 +13,7 @@
 goog.module('Blockly.BlockSvg');
 
 const ASTNode = goog.require('Blockly.ASTNode');
-const Block = goog.require('Blockly.Block');
+const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */

@@ -19,7 +19,7 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const BasicCursor = goog.require('Blockly.BasicCursor');
-const Block = goog.require('Blockly.Block');
+const {Block} = goog.require('Blockly.Block');
 const Blocks = goog.require('Blockly.Blocks');
 const BlockDragger = goog.require('Blockly.BlockDragger');
 const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');

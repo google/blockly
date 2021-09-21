@@ -13,11 +13,12 @@
 goog.module('Blockly.serialization.exceptions');
 goog.module.declareLegacyNamespace();
 
-
+// eslint-disable-next-line no-unused-vars
+const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const {State} = goog.requireType('Blockly.serialization.blocks');
 
-class DeserializationError extends Error { }
+class DeserializationError extends Error {}
 exports.DeserializationError = DeserializationError;
 
 /**
@@ -49,7 +50,7 @@ class MissingConnection extends DeserializationError {
   /**
    * @param {string} connection The name of the connection that is missing. E.g.
    *     'IF0', or 'next'.
-   * @param {!Blockly.Block} block The block missing the connection.
+   * @param {!Block} block The block missing the connection.
    * @param {!State} state The state object containing the bad connection.
    * @package
    */
@@ -59,7 +60,7 @@ connection`);
 
     /**
      * The block missing the connection.
-     * @type {!Blockly.Block}
+     * @type {!Block}
      */
     this.block = block;
 
@@ -81,7 +82,7 @@ class BadConnectionCheck extends DeserializationError {
    * @param {string} reason The reason the connections were not compatible.
    * @param {string} childConnection The name of the incompatible child
    *     connection. E.g. 'output' or 'previous'.
-   * @param {!Blockly.Block} childBlock The child block that could not connect
+   * @param {!Block} childBlock The child block that could not connect
    *     to its parent.
    * @param {!State} childState The state object representing the child block.
    * @package
@@ -92,7 +93,7 @@ ${childConnection} to its parent, because: ${reason}`);
 
     /**
      * The block that could not connect to its parent.
-     * @type {!Blockly.Block}
+     * @type {!Block}
      */
     this.childBlock = childBlock;
 

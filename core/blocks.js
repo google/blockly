@@ -15,7 +15,6 @@
  * @name Blockly.Blocks
  */
 goog.module('Blockly.blocks');
-goog.module.declareLegacyNamespace();
 
 /**
  * A mapping of block type names to block prototype objects.

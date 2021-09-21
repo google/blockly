@@ -22,7 +22,7 @@ goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
 
 
-Blockly.blocks.definitions['procedures_defnoreturn'] = {
+Blockly.blocks['procedures_defnoreturn'] = {
   /**
    * Block for defining a procedure with no return value.
    * @this {Blockly.Block}
@@ -450,7 +450,7 @@ Blockly.blocks.definitions['procedures_defnoreturn'] = {
   callType_: 'procedures_callnoreturn'
 };
 
-Blockly.blocks.definitions['procedures_defreturn'] = {
+Blockly.blocks['procedures_defreturn'] = {
   /**
    * Block for defining a procedure with a return value.
    * @this {Blockly.Block}
@@ -482,16 +482,12 @@ Blockly.blocks.definitions['procedures_defreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
-  setStatements_:
-      Blockly.blocks.definitions['procedures_defnoreturn'].setStatements_,
-  updateParams_:
-      Blockly.blocks.definitions['procedures_defnoreturn'].updateParams_,
-  mutationToDom:
-      Blockly.blocks.definitions['procedures_defnoreturn'].mutationToDom,
-  domToMutation:
-      Blockly.blocks.definitions['procedures_defnoreturn'].domToMutation,
-  decompose: Blockly.blocks.definitions['procedures_defnoreturn'].decompose,
-  compose: Blockly.blocks.definitions['procedures_defnoreturn'].compose,
+  setStatements_: Blockly.blocks['procedures_defnoreturn'].setStatements_,
+  updateParams_: Blockly.blocks['procedures_defnoreturn'].updateParams_,
+  mutationToDom: Blockly.blocks['procedures_defnoreturn'].mutationToDom,
+  domToMutation: Blockly.blocks['procedures_defnoreturn'].domToMutation,
+  decompose: Blockly.blocks['procedures_defnoreturn'].decompose,
+  compose: Blockly.blocks['procedures_defnoreturn'].compose,
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -503,21 +499,16 @@ Blockly.blocks.definitions['procedures_defreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
-  getVars: Blockly.blocks.definitions['procedures_defnoreturn'].getVars,
-  getVarModels:
-      Blockly.blocks.definitions['procedures_defnoreturn'].getVarModels,
-  renameVarById:
-      Blockly.blocks.definitions['procedures_defnoreturn'].renameVarById,
-  updateVarName:
-      Blockly.blocks.definitions['procedures_defnoreturn'].updateVarName,
-  displayRenamedVar_:
-      Blockly.blocks.definitions['procedures_defnoreturn'].displayRenamedVar_,
-  customContextMenu:
-      Blockly.blocks.definitions['procedures_defnoreturn'].customContextMenu,
+  getVars: Blockly.blocks['procedures_defnoreturn'].getVars,
+  getVarModels: Blockly.blocks['procedures_defnoreturn'].getVarModels,
+  renameVarById: Blockly.blocks['procedures_defnoreturn'].renameVarById,
+  updateVarName: Blockly.blocks['procedures_defnoreturn'].updateVarName,
+  displayRenamedVar_: Blockly.blocks['procedures_defnoreturn'].displayRenamedVar_,
+  customContextMenu: Blockly.blocks['procedures_defnoreturn'].customContextMenu,
   callType_: 'procedures_callreturn'
 };
 
-Blockly.blocks.definitions['procedures_mutatorcontainer'] = {
+Blockly.blocks['procedures_mutatorcontainer'] = {
   /**
    * Mutator block for procedure container.
    * @this {Blockly.Block}
@@ -535,7 +526,7 @@ Blockly.blocks.definitions['procedures_mutatorcontainer'] = {
   },
 };
 
-Blockly.blocks.definitions['procedures_mutatorarg'] = {
+Blockly.blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.
    * @this {Blockly.Block}
@@ -646,7 +637,7 @@ Blockly.blocks.definitions['procedures_mutatorarg'] = {
   }
 };
 
-Blockly.blocks.definitions['procedures_callnoreturn'] = {
+Blockly.blocks['procedures_callnoreturn'] = {
   /**
    * Block for calling a procedure with no return value.
    * @this {Blockly.Block}
@@ -1038,7 +1029,7 @@ Blockly.blocks.definitions['procedures_callnoreturn'] = {
   defType_: 'procedures_defnoreturn'
 };
 
-Blockly.blocks.definitions['procedures_callreturn'] = {
+Blockly.blocks['procedures_callreturn'] = {
   /**
    * Block for calling a procedure with a return value.
    * @this {Blockly.Block}
@@ -1057,33 +1048,24 @@ Blockly.blocks.definitions['procedures_callreturn'] = {
     this.previousEnabledState_ = true;
   },
 
-  getProcedureCall:
-      Blockly.blocks.definitions['procedures_callnoreturn'].getProcedureCall,
-  renameProcedure:
-      Blockly.blocks.definitions['procedures_callnoreturn'].renameProcedure,
+  getProcedureCall: Blockly.blocks['procedures_callnoreturn'].getProcedureCall,
+  renameProcedure: Blockly.blocks['procedures_callnoreturn'].renameProcedure,
   setProcedureParameters_:
-      Blockly.blocks.definitions['procedures_callnoreturn']
-          .setProcedureParameters_,
-  updateShape_:
-      Blockly.blocks.definitions['procedures_callnoreturn'].updateShape_,
-  mutationToDom:
-      Blockly.blocks.definitions['procedures_callnoreturn'].mutationToDom,
-  domToMutation:
-      Blockly.blocks.definitions['procedures_callnoreturn'].domToMutation,
-  saveExtraState:
-      Blockly.blocks.definitions['procedures_callnoreturn'].saveExtraState,
-  loadExtraState:
-      Blockly.blocks.definitions['procedures_callnoreturn'].loadExtraState,
-  getVars: Blockly.blocks.definitions['procedures_callnoreturn'].getVars,
-  getVarModels:
-      Blockly.blocks.definitions['procedures_callnoreturn'].getVarModels,
-  onchange: Blockly.blocks.definitions['procedures_callnoreturn'].onchange,
+      Blockly.blocks['procedures_callnoreturn'].setProcedureParameters_,
+  updateShape_: Blockly.blocks['procedures_callnoreturn'].updateShape_,
+  mutationToDom: Blockly.blocks['procedures_callnoreturn'].mutationToDom,
+  domToMutation: Blockly.blocks['procedures_callnoreturn'].domToMutation,
+  saveExtraState: Blockly.blocks['procedures_callnoreturn'].saveExtraState,
+  loadExtraState: Blockly.blocks['procedures_callnoreturn'].loadExtraState,
+  getVars: Blockly.blocks['procedures_callnoreturn'].getVars,
+  getVarModels: Blockly.blocks['procedures_callnoreturn'].getVarModels,
+  onchange: Blockly.blocks['procedures_callnoreturn'].onchange,
   customContextMenu:
-      Blockly.blocks.definitions['procedures_callnoreturn'].customContextMenu,
+      Blockly.blocks['procedures_callnoreturn'].customContextMenu,
   defType_: 'procedures_defreturn'
 };
 
-Blockly.blocks.definitions['procedures_ifreturn'] = {
+Blockly.blocks['procedures_ifreturn'] = {
   /**
    * Block for conditionally returning a value from a procedure.
    * @this {Blockly.Block}
@@ -1180,9 +1162,7 @@ Blockly.blocks.definitions['procedures_ifreturn'] = {
   /**
    * List of block types that are functions and thus do not need warnings.
    * To add a new function type add this to your code:
-   *
-   * Blockly.blocks.definitions['procedures_ifreturn']
-   *     .FUNCTION_TYPES.push('custom_func');
+   * Blockly.blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
    */
   FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn']
 };

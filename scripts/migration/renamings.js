@@ -20,6 +20,64 @@
  * @type {Object<string, ?>}
  */
 const renamings = {
+  // Example entry:
+  '0.0.0': {  // These renaming were made after version 0.0.0 was published.
+    // Each entry is keyed by the original module name.
+    'module.name.Old': {
+      // If the module has been renamed, its new name will be listed.
+      module: 'module.name.new',
+
+      // Modules which had a default export that has been turned into
+      // a named export the new name will be given.
+      export: 'defaultName',
+
+      // For backward-compatibility reasons, we may choose to continue
+      // to reexport default exports in the same place in the Blockly
+      // tree that they were previously (or nearby).  If so, the full
+      // path to the former default export will be listed.  This path
+      // is only relevant to code that accesses the export via the
+      // namespace tree rather than by a named import.
+      //
+      // The given example implies that:
+      //     module.name.Old ===
+      //         goog.require('module.name.new').defaultExport
+      // which may not be what what one expects but is very handy.
+      path: 'module.name.Old',
+      // If path is not given explicitly then it can be assumed to be
+      // `${module}.${export}`.
+
+      // Modules which already had named exports can instead list
+      // information about exports which have been renamed or moved in
+      // the exports subsection, which is a map from old export name
+      // to object with info about the new export name.
+      exports: {
+        oldExportName: {  // No need to quote this.
+
+          // If the export has been moved to a different module, that
+          // module is listed.
+          module: 'module.name.other',
+
+          // If the export has been given a new name, that is listed.
+          export: 'newExportName',
+
+          // As with default exports, if a named export has been
+          // reexported on the namespace tree somewhere other than at
+          // `${module}.${export}` then that can specified explicitly.
+          path: 'module.name.Old.oldExportName',
+          // This given example implies that code that previously
+          // accessed this export via module.name.Old.oldExportName
+          // can continue to do so; only code using named requires
+          // needs to update from
+          //      goog.require('module.name.Old').oldExportName
+          // to
+          //      goog.require('module.name.new').newExportName
+        },
+        // More individual exports in this module can be listed here.
+      },
+    },
+    // More modules with renamings can be listed here.
+  },
+
   '4.20201217.0': {
     'Blockly': {
       exports: {
@@ -96,6 +154,7 @@ const renamings = {
     'Blockly.Blocks': {
       module: 'Blockly.blocks',
       export: 'definitions',  // Previous default export now named.
+      path: 'Blockly.blocks',  // But still on tree with nearly the same name.
     },
     'Blockly.ContextMenu': {
       exports: {

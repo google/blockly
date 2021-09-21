@@ -593,6 +593,7 @@ exports.WorkspaceSvg = WorkspaceSvg;
 exports.Xml = Xml;
 exports.ZoomControls = ZoomControls;
 exports.blockAnimations = blockAnimations;
+exports.blocks = blocks.definitions;
 exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;

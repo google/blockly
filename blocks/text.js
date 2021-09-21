@@ -226,7 +226,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
-Blockly.blocks.definitions['text_getSubstring'] = {
+Blockly.blocks['text_getSubstring'] = {
   /**
    * Block for getting substring.
    * @this {Blockly.Block}
@@ -347,7 +347,7 @@ Blockly.blocks.definitions['text_getSubstring'] = {
   }
 };
 
-Blockly.blocks.definitions['text_changeCase'] = {
+Blockly.blocks['text_changeCase'] = {
   /**
    * Block for changing capitalization.
    * @this {Blockly.Block}
@@ -368,7 +368,7 @@ Blockly.blocks.definitions['text_changeCase'] = {
   }
 };
 
-Blockly.blocks.definitions['text_trim'] = {
+Blockly.blocks['text_trim'] = {
   /**
    * Block for trimming spaces.
    * @this {Blockly.Block}
@@ -389,7 +389,7 @@ Blockly.blocks.definitions['text_trim'] = {
   }
 };
 
-Blockly.blocks.definitions['text_print'] = {
+Blockly.blocks['text_print'] = {
   /**
    * Block for print statement.
    * @this {Blockly.Block}
@@ -412,7 +412,7 @@ Blockly.blocks.definitions['text_print'] = {
   }
 };
 
-Blockly.blocks.definitions['text_prompt_ext'] = {
+Blockly.blocks['text_prompt_ext'] = {
   /**
    * Block for prompt function (external message).
    * @this {Blockly.Block}
@@ -474,7 +474,7 @@ Blockly.blocks.definitions['text_prompt_ext'] = {
   // XML hooks are kept for backwards compatibility.
 };
 
-Blockly.blocks.definitions['text_prompt'] = {
+Blockly.blocks['text_prompt'] = {
   /**
    * Block for prompt function (internal message).
    * The 'text_prompt_ext' block is preferred as it is more flexible.
@@ -506,12 +506,12 @@ Blockly.blocks.definitions['text_prompt'] = {
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-  updateType_: Blockly.blocks.definitions['text_prompt_ext'].updateType_,
-  mutationToDom: Blockly.blocks.definitions['text_prompt_ext'].mutationToDom,
-  domToMutation: Blockly.blocks.definitions['text_prompt_ext'].domToMutation
+  updateType_: Blockly.blocks['text_prompt_ext'].updateType_,
+  mutationToDom: Blockly.blocks['text_prompt_ext'].mutationToDom,
+  domToMutation: Blockly.blocks['text_prompt_ext'].domToMutation
 };
 
-Blockly.blocks.definitions['text_count'] = {
+Blockly.blocks['text_count'] = {
   /**
    * Block for counting how many times one string appears within another string.
    * @this {Blockly.Block}
@@ -540,7 +540,7 @@ Blockly.blocks.definitions['text_count'] = {
   }
 };
 
-Blockly.blocks.definitions['text_replace'] = {
+Blockly.blocks['text_replace'] = {
   /**
    * Block for replacing one string with another in the text.
    * @this {Blockly.Block}
@@ -574,7 +574,7 @@ Blockly.blocks.definitions['text_replace'] = {
   }
 };
 
-Blockly.blocks.definitions['text_reverse'] = {
+Blockly.blocks['text_reverse'] = {
   /**
    * Block for reversing a string.
    * @this {Blockly.Block}

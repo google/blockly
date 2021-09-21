@@ -17,6 +17,7 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
+const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
 const Size = goog.require('Blockly.utils.Size');
@@ -237,12 +238,12 @@ const defineBlocksWithJsonArray = function(jsonArray) {
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
-        if (Blockly.Blocks[typename]) {
+        if (Blocks[typename]) {
           console.warn(
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {init: jsonInitFactory(elem)};
+        Blocks[typename] = {init: jsonInitFactory(elem)};
       }
     }
   }

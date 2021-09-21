@@ -29,6 +29,7 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
+const clipboard = goog.require('Blockly.clipboard');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -302,7 +303,7 @@ const commentDuplicateOption = function(comment) {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function() {
-      Blockly.duplicate(comment);
+      clipboard.duplicate(comment);
     }
   };
   return duplicateOption;

@@ -2674,7 +2674,7 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
 
   var onlyClosePopups = !!opt_onlyClosePopups;
   var autoHideables = this.getComponentManager().getComponents(
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+      ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };

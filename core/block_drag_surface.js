@@ -256,4 +256,4 @@ BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
   this.surfaceXY_ = null;
 };
 
-exports = BlockDragSurfaceSvg;
+exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;

@@ -22,7 +22,7 @@ const BasicCursor = goog.require('Blockly.BasicCursor');
 const {Block} = goog.require('Blockly.Block');
 const Blocks = goog.require('Blockly.Blocks');
 const BlockDragger = goog.require('Blockly.BlockDragger');
-const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');
+const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const BlockSvg = goog.require('Blockly.BlockSvg');
 const Cursor = goog.require('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */

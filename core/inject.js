@@ -13,7 +13,7 @@
 goog.module('Blockly.inject');
 goog.module.declareLegacyNamespace();
 
-const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');
+const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Css = goog.require('Blockly.Css');

@@ -232,16 +232,18 @@ function sharedTestTeardown() {
   } finally {
     // Clear Blockly.Event state.
     Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
+    while (!Blockly.Events.isEnabled()) {
+      Blockly.Events.enable();
+    }
     Blockly.Events.setRecordUndo(true);
-    if (Blockly.Events.FIRE_QUEUE_.length) {
+    if (Blockly.Events.TEST_ONLY.FIRE_QUEUE.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      Blockly.Events.FIRE_QUEUE_.length = 0;
+      Blockly.Events.TEST_ONLY.FIRE_QUEUE.length = 0;
       console.warn(testRef.fullTitle() +
-          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
-          'leakage from an earlier test');
+          '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
+          'indicate leakage from an earlier test');
     }
 
     // Restore all stubbed methods.

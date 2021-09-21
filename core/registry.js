@@ -50,8 +50,7 @@ const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
  * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
 const typeMap = Object.create(null);
-/** @private */
-exports.typeMap_ = typeMap;
+exports.TEST_ONLY = {typeMap};
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we

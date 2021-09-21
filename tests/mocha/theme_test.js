@@ -16,7 +16,7 @@ suite('Theme', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
     // Clear all registered themes.
-    Blockly.registry.typeMap_['theme'] = {};
+    Blockly.registry.TEST_ONLY.typeMap['theme'] = {};
   });
 
   function defineThemeTestBlocks() {

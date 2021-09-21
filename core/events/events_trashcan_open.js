@@ -12,8 +12,8 @@
 
 goog.module('Blockly.Events.TrashcanOpen');
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -42,7 +42,7 @@ object.inherits(TrashcanOpen, UiBase);
  * Type of this event.
  * @type {string}
  */
-TrashcanOpen.prototype.type = Events.TRASHCAN_OPEN;
+TrashcanOpen.prototype.type = helpers.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -63,6 +63,6 @@ TrashcanOpen.prototype.fromJson = function(json) {
   this.isOpen = json['isOpen'];
 };
 
-registry.register(registry.Type.EVENT, Events.TRASHCAN_OPEN, TrashcanOpen);
+registry.register(registry.Type.EVENT, helpers.TRASHCAN_OPEN, TrashcanOpen);
 
 exports = TrashcanOpen;

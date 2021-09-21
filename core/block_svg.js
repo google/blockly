@@ -974,7 +974,7 @@ BlockSvg.prototype.checkAndDelete = function() {
   if (this.workspace.isFlyout) {
     return;
   }
-  Blockly.Events.setGroup(true);
+  Events.setGroup(true);
   this.workspace.hideChaff();
   if (this.outputConnection) {
     // Do not attempt to heal rows
@@ -983,7 +983,7 @@ BlockSvg.prototype.checkAndDelete = function() {
   } else {
     this.dispose(/* heal */ true, true);
   }
-  Blockly.Events.setGroup(false);
+  Events.setGroup(false);
 };
 
 /**

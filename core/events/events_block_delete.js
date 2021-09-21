@@ -15,9 +15,9 @@ goog.module('Blockly.Events.BlockDelete');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
-const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -43,7 +43,7 @@ const BlockDelete = function(opt_block) {
   }
 
   this.oldXml = Xml.blockToDomWithXY(opt_block);
-  this.ids = Events.getDescendantIds(opt_block);
+  this.ids = helpers.getDescendantIds(opt_block);
 
   /**
    * Was the block that was just deleted a shadow?
@@ -64,7 +64,7 @@ object.inherits(BlockDelete, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockDelete.prototype.type = Events.BLOCK_DELETE;
+BlockDelete.prototype.type = helpers.BLOCK_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -120,6 +120,6 @@ BlockDelete.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.DELETE, BlockDelete);
+registry.register(registry.Type.EVENT, helpers.DELETE, BlockDelete);
 
 exports = BlockDelete;

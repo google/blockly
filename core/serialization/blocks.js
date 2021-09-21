@@ -18,13 +18,13 @@ const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShado
 const Block = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
-const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
+const helpers = goog.require('Blockly.Events.helpers');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -328,20 +328,20 @@ const appendInternal = function(
       recordUndo = false
     } = {}
 ) {
-  const prevRecordUndo = Events.getRecordUndo();
-  Events.setRecordUndo(recordUndo);
-  const existingGroup = Events.getGroup();
+  const prevRecordUndo = helpers.getRecordUndo();
+  helpers.setRecordUndo(recordUndo);
+  const existingGroup = helpers.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    helpers.setGroup(true);
   }
-  Events.disable();
+  helpers.disable();
 
   const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
-  Events.enable();
-  Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
-  Events.setGroup(existingGroup);
-  Events.setRecordUndo(prevRecordUndo);
+  helpers.enable();
+  helpers.fire(new (helpers.get(helpers.BLOCK_CREATE))(block));
+  helpers.setGroup(existingGroup);
+  helpers.setRecordUndo(prevRecordUndo);
   
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
@@ -672,7 +672,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      append(state, workspace, {recordUndo: Events.getRecordUndo()});
+      append(state, workspace, {recordUndo: helpers.getRecordUndo()});
     }
   }
 

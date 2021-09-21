@@ -15,10 +15,10 @@ goog.module('Blockly.Events.MarkerMove');
 const ASTNode = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -73,7 +73,7 @@ object.inherits(MarkerMove, UiBase);
  * Type of this event.
  * @type {string}
  */
-MarkerMove.prototype.type = Events.MARKER_MOVE;
+MarkerMove.prototype.type = helpers.MARKER_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -100,6 +100,6 @@ MarkerMove.prototype.fromJson = function(json) {
   this.newNode = json['newNode'];
 };
 
-registry.register(registry.Type.EVENT, Events.MARKER_MOVE, MarkerMove);
+registry.register(registry.Type.EVENT, helpers.MARKER_MOVE, MarkerMove);
 
 exports = MarkerMove;

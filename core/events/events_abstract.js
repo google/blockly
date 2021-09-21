@@ -13,6 +13,7 @@
 
 goog.module('Blockly.Events.Abstract');
 
+const helpers = goog.require('Blockly.Events.helpers');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 
@@ -40,13 +41,13 @@ const Abstract = function() {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = goog.module.get('Blockly.Events').getGroup();
+  this.group = helpers.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = goog.module.get('Blockly.Events').getRecordUndo();
+  this.recordUndo = helpers.getRecordUndo();
 };
 
 /**

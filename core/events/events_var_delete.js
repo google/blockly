@@ -12,10 +12,10 @@
 
 goog.module('Blockly.Events.VarDelete');
 
-const Events = goog.require('Blockly.Events');
 const VarBase = goog.require('Blockly.Events.VarBase');
 /* eslint-disable-next-line no-unused-vars */
 const VariableModel = goog.requireType('Blockly.VariableModel');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -42,7 +42,7 @@ object.inherits(VarDelete, VarBase);
  * Type of this event.
  * @type {string}
  */
-VarDelete.prototype.type = Events.VAR_DELETE;
+VarDelete.prototype.type = helpers.VAR_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -78,6 +78,6 @@ VarDelete.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.VAR_DELETE, VarDelete);
+registry.register(registry.Type.EVENT, helpers.VAR_DELETE, VarDelete);
 
 exports = VarDelete;

@@ -12,10 +12,10 @@
 
 goog.module('Blockly.Events.VarCreate');
 
-const Events = goog.require('Blockly.Events');
 const VarBase = goog.require('Blockly.Events.VarBase');
 /* eslint-disable-next-line no-unused-vars */
 const VariableModel = goog.requireType('Blockly.VariableModel');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -42,7 +42,7 @@ object.inherits(VarCreate, VarBase);
  * Type of this event.
  * @type {string}
  */
-VarCreate.prototype.type = Events.VAR_CREATE;
+VarCreate.prototype.type = helpers.VAR_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -78,6 +78,6 @@ VarCreate.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.VAR_CREATE, VarCreate);
+registry.register(registry.Type.EVENT, helpers.VAR_CREATE, VarCreate);
 
 exports = VarCreate;

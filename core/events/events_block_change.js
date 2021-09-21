@@ -14,10 +14,11 @@ goog.module('Blockly.Events.BlockChange');
 
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
-const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -30,7 +31,7 @@ const registry = goog.require('Blockly.registry');
  * @param {?string=} opt_name Name of input or field affected, or null.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
  */
 const BlockChange = function(
@@ -44,13 +45,13 @@ const BlockChange = function(
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-object.inherits(BlockChange, Events.BlockBase);
+object.inherits(BlockChange, BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockChange.prototype.type = Events.BLOCK_CHANGE;
+BlockChange.prototype.type = helpers.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -134,7 +135,7 @@ BlockChange.prototype.run = function(forward) {
         block.domToMutation(
             Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      Events.fire(new BlockChange(block, 'mutation', null, oldState, value));
+      helpers.fire(new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:
@@ -162,6 +163,6 @@ BlockChange.getExtraBlockState_ = function(block) {
   return '';
 };
 
-registry.register(registry.Type.EVENT, Events.CHANGE, BlockChange);
+registry.register(registry.Type.EVENT, helpers.CHANGE, BlockChange);
 
 exports = BlockChange;

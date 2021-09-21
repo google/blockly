@@ -12,10 +12,10 @@
 
 goog.module('Blockly.Events.FinishedLoading');
 
-const Events = goog.require('Blockly.Events');
 const EventsAbstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -49,7 +49,7 @@ const FinishedLoading = function(opt_workspace) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Events.getGroup();
+  this.group = helpers.getGroup();
 
   // Workspace events do not undo or redo.
   this.recordUndo = false;
@@ -60,7 +60,7 @@ object.inherits(FinishedLoading, EventsAbstract);
  * Type of this event.
  * @type {string}
  */
-FinishedLoading.prototype.type = Events.FINISHED_LOADING;
+FinishedLoading.prototype.type = helpers.FINISHED_LOADING;
 
 /**
  * Encode the event as JSON.
@@ -90,6 +90,6 @@ FinishedLoading.prototype.fromJson = function(json) {
 };
 
 registry.register(
-    registry.Type.EVENT, Events.FINISHED_LOADING, FinishedLoading);
+    registry.Type.EVENT, helpers.FINISHED_LOADING, FinishedLoading);
 
 exports = FinishedLoading;

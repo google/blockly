@@ -13,8 +13,8 @@
 goog.module('Blockly.Events.ViewportChange');
 
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const helpers = goog.require('Blockly.Events.helpers');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -70,7 +70,7 @@ object.inherits(ViewportChange, UiBase);
  * Type of this event.
  * @type {string}
  */
-ViewportChange.prototype.type = Events.VIEWPORT_CHANGE;
+ViewportChange.prototype.type = helpers.VIEWPORT_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -97,6 +97,6 @@ ViewportChange.prototype.fromJson = function(json) {
   this.oldScale = json['oldScale'];
 };
 
-registry.register(registry.Type.EVENT, Events.VIEWPORT_CHANGE, ViewportChange);
+registry.register(registry.Type.EVENT, helpers.VIEWPORT_CHANGE, ViewportChange);
 
 exports = ViewportChange;

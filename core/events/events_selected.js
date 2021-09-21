@@ -12,9 +12,9 @@
 
 goog.module('Blockly.Events.Selected');
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
 const object = goog.require('Blockly.utils.object');
+const helpers = goog.require('Blockly.Events.helpers');
 const registry = goog.require('Blockly.registry');
 
 
@@ -50,7 +50,7 @@ object.inherits(Selected, UiBase);
  * Type of this event.
  * @type {string}
  */
-Selected.prototype.type = Events.SELECTED;
+Selected.prototype.type = helpers.SELECTED;
 
 /**
  * Encode the event as JSON.
@@ -73,6 +73,6 @@ Selected.prototype.fromJson = function(json) {
   this.newElementId = json['newElementId'];
 };
 
-registry.register(registry.Type.EVENT, Events.SELECTED, Selected);
+registry.register(registry.Type.EVENT, helpers.SELECTED, Selected);
 
 exports = Selected;

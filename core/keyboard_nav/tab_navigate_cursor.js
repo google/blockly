@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.TabNavigateCursor');
-goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const BasicCursor = goog.require('Blockly.BasicCursor');

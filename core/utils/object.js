@@ -22,6 +22,7 @@ goog.module('Blockly.utils.object');
  * @param {!Function} childCtor Child class.
  * @param {!Function} parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
+ * @alias Blockly.utils.object.inherits
  */
 const inherits = function(childCtor, parentCtor) {
   // Set a .superClass_ property so that methods can call parent methods
@@ -45,6 +46,7 @@ exports.inherits = inherits;
  * Copies all the members of a source object to a target object.
  * @param {!Object} target Target.
  * @param {!Object} source Source.
+ * @alias Blockly.utils.object.mixin
  */
 const mixin = function(target, source) {
   for (const x in source) {
@@ -58,6 +60,7 @@ exports.mixin = mixin;
  * @param {!Object} target Target.
  * @param {!Object} source Source.
  * @return {!Object} The resulting object.
+ * @alias Blockly.utils.object.deepMerge
  */
 const deepMerge = function(target, source) {
   for (const x in source) {
@@ -75,6 +78,7 @@ exports.deepMerge = deepMerge;
  * Returns an array of a given object's own enumerable property values.
  * @param {!Object} obj Object containing values.
  * @return {!Array} Array of values.
+ * @alias Blockly.utils.object.values
  */
 const values = function(obj) {
   if (Object.values) {

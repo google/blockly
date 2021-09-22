@@ -27,6 +27,7 @@ const Size = goog.require('Blockly.utils.Size');
  * Similar to Closure's goog.style.getSize
  * @param {!Element} element Element to get size of.
  * @return {!Size} Object with width/height properties.
+ * @alias Blockly.utils.style.getSize
  */
 const getSize = function(element) {
   if (getStyle(element, 'display') != 'none') {
@@ -94,6 +95,7 @@ const getStyle = function(element, style) {
  * @param {!Element} element Element to get style of.
  * @param {string} property Property to get (camel-case).
  * @return {string} Style value.
+ * @alias Blockly.utils.style.getComputedStyle
  */
 const getComputedStyle = function(element, property) {
   if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -118,6 +120,7 @@ exports.getComputedStyle = getComputedStyle;
  * @param {!Element} element Element to get style of.
  * @param {string} style Property to get (camel-case).
  * @return {string} Style value.
+ * @alias Blockly.utils.style.getCascadedStyle
  */
 const getCascadedStyle = function(element, style) {
   return /** @type {string} */ (
@@ -130,6 +133,7 @@ exports.getCascadedStyle = getCascadedStyle;
  * Similar to Closure's goog.style.getPageOffset
  * @param {!Element} el Element to get the page offset for.
  * @return {!Coordinate} The page offset.
+ * @alias Blockly.utils.style.getPageOffset
  */
 const getPageOffset = function(el) {
   const pos = new Coordinate(0, 0);
@@ -152,6 +156,7 @@ exports.getPageOffset = getPageOffset;
  * Calculates the viewport coordinates relative to the document.
  * Similar to Closure's goog.style.getViewportPageOffset
  * @return {!Coordinate} The page offset of the viewport.
+ * @alias Blockly.utils.style.getViewportPageOffset
  */
 const getViewportPageOffset = function() {
   const body = document.body;
@@ -173,6 +178,7 @@ exports.getViewportPageOffset = getViewportPageOffset;
  * @param {!Element} el Element to show or hide.
  * @param {*} isShown True to render the element in its default style,
  *     false to disable rendering the element.
+ * @alias Blockly.utils.style.setElementShown
  */
 const setElementShown = function(el, isShown) {
   el.style.display = isShown ? '' : 'none';
@@ -185,6 +191,7 @@ exports.setElementShown = setElementShown;
  *
  * @param {!Element} el The element to test.
  * @return {boolean} True for right to left, false for left to right.
+ * @alias Blockly.utils.style.isRightToLeft
  */
 const isRightToLeft = function(el) {
   return 'rtl' == getStyle(el, 'direction');
@@ -196,6 +203,7 @@ exports.isRightToLeft = isRightToLeft;
  * Copied from Closure's goog.style.getBorderBox
  * @param {!Element} element  The element to get the border widths for.
  * @return {!Object} The computed border widths.
+ * @alias Blockly.utils.style.getBorderBox
  */
 const getBorderBox = function(element) {
   const left = getComputedStyle(element, 'borderLeftWidth');
@@ -224,6 +232,7 @@ exports.getBorderBox = getBorderBox;
  *     document scroll element will be used.
  * @param {boolean=} opt_center Whether to center the element in the container.
  *     Defaults to false.
+ * @alias Blockly.utils.style.scrollIntoContainerView
  */
 const scrollIntoContainerView = function(element, container, opt_center) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
@@ -246,6 +255,7 @@ exports.scrollIntoContainerView = scrollIntoContainerView;
  *     Defaults to false.
  * @return {!Coordinate} The new scroll position of the container,
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
+ * @alias Blockly.utils.style.getContainerOffsetToScrollInto
  */
 const getContainerOffsetToScrollInto = function(element, container, opt_center) {
   // Absolute position of the element's border's top left corner.

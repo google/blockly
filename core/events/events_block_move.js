@@ -17,7 +17,7 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const connectionTypes = goog.require('Blockly.connectionTypes');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -50,7 +50,7 @@ object.inherits(BlockMove, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockMove.prototype.type = helpers.BLOCK_MOVE;
+BlockMove.prototype.type = eventUtils.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -182,6 +182,6 @@ BlockMove.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, helpers.MOVE, BlockMove);
+registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
 exports = BlockMove;

@@ -17,7 +17,7 @@ const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -40,7 +40,7 @@ const BlockCreate = function(opt_block) {
   }
 
   this.xml = Xml.blockToDomWithXY(opt_block);
-  this.ids = helpers.getDescendantIds(opt_block);
+  this.ids = eventUtils.getDescendantIds(opt_block);
 
   /**
    * JSON representation of the block that was just created.
@@ -55,7 +55,7 @@ object.inherits(BlockCreate, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockCreate.prototype.type = helpers.BLOCK_CREATE;
+BlockCreate.prototype.type = eventUtils.BLOCK_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -108,6 +108,6 @@ BlockCreate.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, helpers.CREATE, BlockCreate);
+registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
 
 exports = BlockCreate;

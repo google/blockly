@@ -13,7 +13,7 @@
 goog.module('Blockly.Events.ToolboxItemSelect');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -50,7 +50,7 @@ object.inherits(ToolboxItemSelect, UiBase);
  * Type of this event.
  * @type {string}
  */
-ToolboxItemSelect.prototype.type = helpers.TOOLBOX_ITEM_SELECT;
+ToolboxItemSelect.prototype.type = eventUtils.TOOLBOX_ITEM_SELECT;
 
 /**
  * Encode the event as JSON.
@@ -74,6 +74,6 @@ ToolboxItemSelect.prototype.fromJson = function(json) {
 };
 
 registry.register(
-    registry.Type.EVENT, helpers.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+    registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
 exports = ToolboxItemSelect;

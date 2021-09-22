@@ -16,7 +16,7 @@ goog.module('Blockly.Events.Ui');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
 const UiBase = goog.require('Blockly.Events.UiBase');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -48,7 +48,7 @@ object.inherits(Ui, UiBase);
  * Type of this event.
  * @type {string}
  */
-Ui.prototype.type = helpers.UI;
+Ui.prototype.type = eventUtils.UI;
 
 /**
  * Encode the event as JSON.
@@ -77,6 +77,6 @@ Ui.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, helpers.UI, Ui);
+registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 
 exports = Ui;

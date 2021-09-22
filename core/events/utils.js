@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.Events.helpers');
+goog.module('Blockly.Events.utils');
 
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Block = goog.requireType('Blockly.Block');

@@ -18,7 +18,7 @@ const CommentDelete = goog.requireType('Blockly.Events.CommentDelete');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utilsXml = goog.require('Blockly.utils.xml');
 
@@ -55,13 +55,13 @@ const CommentBase = function(opt_comment) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = helpers.getGroup();
+  this.group = eventUtils.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = helpers.getRecordUndo();
+  this.recordUndo = eventUtils.getRecordUndo();
 };
 object.inherits(CommentBase, AbstractEvents);
 

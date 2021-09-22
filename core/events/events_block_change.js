@@ -18,7 +18,7 @@ const BlockBase = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Xml = goog.require('Blockly.Xml');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -51,7 +51,7 @@ object.inherits(BlockChange, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockChange.prototype.type = helpers.BLOCK_CHANGE;
+BlockChange.prototype.type = eventUtils.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -135,7 +135,7 @@ BlockChange.prototype.run = function(forward) {
         block.domToMutation(
             Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      helpers.fire(new BlockChange(block, 'mutation', null, oldState, value));
+      eventUtils.fire(new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:
@@ -163,6 +163,6 @@ BlockChange.getExtraBlockState_ = function(block) {
   return '';
 };
 
-registry.register(registry.Type.EVENT, helpers.CHANGE, BlockChange);
+registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
 
 exports = BlockChange;

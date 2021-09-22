@@ -44,7 +44,7 @@ const VarDelete = goog.require('Blockly.Events.VarDelete');
 const VarRename = goog.require('Blockly.Events.VarRename');
 const ViewportChange = goog.require('Blockly.Events.ViewportChange');
 // TODO: Figure out a better name.
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 exports.Abstract = Abstract;
 // TODO: is this suppose to be public?
@@ -75,55 +75,55 @@ exports.VarDelete = VarDelete;
 exports.VarRename = VarRename;
 exports.ViewportChange = ViewportChange;
 
-// Export all the public helpers.
-exports.clearPendingUndo = helpers.clearPendingUndo;
+// Export all the public eventUtils.
+exports.clearPendingUndo = eventUtils.clearPendingUndo;
 // TODO: What should I do about this private nonsense? What should I be exporting?
-exports.disabled = helpers.disabled_;
-exports.disable = helpers.disable;
-exports.enable = helpers.enable;
-exports.filter = helpers.filter;
-exports.fire = helpers.fire;
+exports.disabled = eventUtils.disabled_;
+exports.disable = eventUtils.disable;
+exports.enable = eventUtils.enable;
+exports.filter = eventUtils.filter;
+exports.fire = eventUtils.fire;
 // TODO: What should I do about this private nonsense?
-exports.fireNow = helpers.fireNow_;
-exports.fromJson = helpers.fromJson;
-exports.getDescendantIds = helpers.getDescendantIds;
-exports.get = helpers.get;
-exports.getGroup = helpers.getGroup;
-exports.getRecordUndo = helpers.getRecordUndo;
-exports.isEnabled = helpers.isEnabled;
+exports.fireNow = eventUtils.fireNow_;
+exports.fromJson = eventUtils.fromJson;
+exports.getDescendantIds = eventUtils.getDescendantIds;
+exports.get = eventUtils.get;
+exports.getGroup = eventUtils.getGroup;
+exports.getRecordUndo = eventUtils.getRecordUndo;
+exports.isEnabled = eventUtils.isEnabled;
 // TODO: Same, what to do about this?
-exports.recordUndo = helpers.recordUndo;
-exports.setGroup = helpers.setGroup;
-exports.setRecordUndo = helpers.setRecordUndo;
-exports.disableOrphans = helpers.disableOrphans;
+exports.recordUndo = eventUtils.recordUndo;
+exports.setGroup = eventUtils.setGroup;
+exports.setRecordUndo = eventUtils.setRecordUndo;
+exports.disableOrphans = eventUtils.disableOrphans;
 
 //
-exports.CREATE = helpers.CREATE;
-exports.BLOCK_CREATE = helpers.BLOCK_CREATE;
-exports.DELETE = helpers.DELETE;
-exports.BLOCK_DELETE = helpers.BLOCK_DELETE;
-exports.CHANGE = helpers.CHANGE;
-exports.BLOCK_CHANGE = helpers.BLOCK_CHANGE;
-exports.MOVE = helpers.MOVE;
-exports.BLOCK_MOVE = helpers.BLOCK_MOVE;
-exports.VAR_CREATE = helpers.VAR_CREATE;
-exports.VAR_DELETE = helpers.VAR_DELETE;
-exports.VAR_RENAME = helpers.VAR_RENAME;
-exports.UI = helpers.UI;
-exports.BLOCK_DRAG = helpers.BLOCK_DRAG;
-exports.SELECTED = helpers.SELECTED;
-exports.CLICK = helpers.CLICK;
-exports.MARKER_MOVE = helpers.MARKER_MOVE;
-exports.BUBBLE_OPEN = helpers.BUBBLE_OPEN;
-exports.TRASHCAN_OPEN = helpers.TRASHCAN_OPEN;
-exports.TOOLBOX_ITEM_SELECT = helpers.TOOLBOX_ITEM_SELECT;
-exports.THEME_CHANGE = helpers.THEME_CHANGE;
-exports.VIEWPORT_CHANGE = helpers.VIEWPORT_CHANGE;
-exports.COMMENT_CREATE = helpers.COMMENT_CREATE;
-exports.COMMENT_DELETE = helpers.COMMENT_DELETE;
-exports.COMMENT_CHANGE = helpers.COMMENT_CHANGE;
-exports.COMMENT_MOVE = helpers.COMMENT_MOVE;
-exports.FINISHED_LOADING = helpers.FINISHED_LOADING;
-exports.BumpEvent = helpers.BumpEvent;
-exports.BUMP_EVENTS = helpers.BUMP_EVENTS;
-exports.FIRE_QUEUE_ = helpers.FIRE_QUEUE_;
+exports.CREATE = eventUtils.CREATE;
+exports.BLOCK_CREATE = eventUtils.BLOCK_CREATE;
+exports.DELETE = eventUtils.DELETE;
+exports.BLOCK_DELETE = eventUtils.BLOCK_DELETE;
+exports.CHANGE = eventUtils.CHANGE;
+exports.BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;
+exports.MOVE = eventUtils.MOVE;
+exports.BLOCK_MOVE = eventUtils.BLOCK_MOVE;
+exports.VAR_CREATE = eventUtils.VAR_CREATE;
+exports.VAR_DELETE = eventUtils.VAR_DELETE;
+exports.VAR_RENAME = eventUtils.VAR_RENAME;
+exports.UI = eventUtils.UI;
+exports.BLOCK_DRAG = eventUtils.BLOCK_DRAG;
+exports.SELECTED = eventUtils.SELECTED;
+exports.CLICK = eventUtils.CLICK;
+exports.MARKER_MOVE = eventUtils.MARKER_MOVE;
+exports.BUBBLE_OPEN = eventUtils.BUBBLE_OPEN;
+exports.TRASHCAN_OPEN = eventUtils.TRASHCAN_OPEN;
+exports.TOOLBOX_ITEM_SELECT = eventUtils.TOOLBOX_ITEM_SELECT;
+exports.THEME_CHANGE = eventUtils.THEME_CHANGE;
+exports.VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
+exports.COMMENT_CREATE = eventUtils.COMMENT_CREATE;
+exports.COMMENT_DELETE = eventUtils.COMMENT_DELETE;
+exports.COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
+exports.COMMENT_MOVE = eventUtils.COMMENT_MOVE;
+exports.FINISHED_LOADING = eventUtils.FINISHED_LOADING;
+exports.BumpEvent = eventUtils.BumpEvent;
+exports.BUMP_EVENTS = eventUtils.BUMP_EVENTS;
+exports.FIRE_QUEUE_ = eventUtils.FIRE_QUEUE_;

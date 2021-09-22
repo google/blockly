@@ -15,7 +15,7 @@ goog.module('Blockly.Events.VarRename');
 const VarBase = goog.require('Blockly.Events.VarBase');
 /* eslint-disable-next-line no-unused-vars */
 const VariableModel = goog.requireType('Blockly.VariableModel');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -43,7 +43,7 @@ object.inherits(VarRename, VarBase);
  * Type of this event.
  * @type {string}
  */
-VarRename.prototype.type = helpers.VAR_RENAME;
+VarRename.prototype.type = eventUtils.VAR_RENAME;
 
 /**
  * Encode the event as JSON.
@@ -79,6 +79,6 @@ VarRename.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, helpers.VAR_RENAME, VarRename);
+registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);
 
 exports = VarRename;

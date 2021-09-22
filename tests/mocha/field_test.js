@@ -12,10 +12,6 @@ const {addBlockTypeToCleanup, addMessageToCleanup, createDeprecationWarningStub,
 suite('Abstract Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-    // field.setValue calls trigger a deprecation warning, capture to prevent
-    // console logs.
-    createDeprecationWarningStub();
   });
 
   teardown(function() {

@@ -19,7 +19,6 @@ goog.module.declareLegacyNamespace();
 
 const ASTNode = goog.require('Blockly.ASTNode');
 const BasicCursor = goog.require('Blockly.BasicCursor');
-const {Block} = goog.require('Blockly.Block');
 const Blocks = goog.require('Blockly.Blocks');
 const Cursor = goog.require('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */

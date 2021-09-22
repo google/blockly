@@ -1584,8 +1584,10 @@ Block.prototype.jsonInit = function(json) {
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
-    const rawValue = json['enableContextMenu'];
-    this.contextMenu = !!rawValue;
+    this.contextMenu = !!json['enableContextMenu'];
+  }
+  if (json['suppressPrefixSuffix'] !== undefined) {
+    this.suppressPrefixSuffix = !!json['suppressPrefixSuffix'];
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];

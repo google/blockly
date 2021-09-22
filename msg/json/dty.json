@@ -103,5 +103,7 @@
 	"LOGIC_BOOLEAN_TOOLTIP": "सत्य या असत्य फिर्ता अरन्छ।",
 	"LOGIC_NULL": "शू्य",
 	"LOGIC_NULL_TOOLTIP": "शून्य फिर्ता अरन्छ।",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "केयि भँण..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "केयि भँण...",
+	"DIALOG_OK": "हुन्छ",
+	"DIALOG_CANCEL": "खारेजी"
 }

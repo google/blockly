@@ -347,6 +347,8 @@ Mutator.prototype.setVisible = function(visible) {
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
+    // Update the source block immediately after the bubble becomes visible.
+    this.updateWorkspace_();
     this.applyColour();
   } else {
     // Dispose of the bubble.
@@ -366,17 +368,24 @@ Mutator.prototype.setVisible = function(visible) {
 };
 
 /**
- * Update the source block when the mutator's blocks are changed.
- * Bump down any block that's too high.
  * Fired whenever a change is made to the mutator's workspace.
  * @param {!Abstract} e Custom data for event.
  * @private
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.isUiEvent || (e.type == Events.CHANGE && e.element == 'disabled')) {
-    return;
+  if (!(e.isUiEvent ||
+      (e.type == Events.CHANGE && e.element == 'disabled') ||
+      e.type == Events.CREATE)) {
+    this.updateWorkspace_();
   }
+};
 
+/**
+ * Updates the source block when the mutator's blocks are changed.
+ * Bump down any block that's too high.
+ * @private
+ */
+Mutator.prototype.updateWorkspace_ = function() {
   if (!this.workspace_.isDragging()) {
     const blocks = this.workspace_.getTopBlocks(false);
     const MARGIN = 20;

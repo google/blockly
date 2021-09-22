@@ -257,8 +257,7 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(
-      this.typedBlocksDB_[block.type].indexOf(block), 1);
+  utils.arrayRemove(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -283,7 +282,10 @@ Workspace.prototype.getBlocksByType = function(type, ordered) {
     }
     blocks.sort(this.sortObjects_);
   }
-  return blocks;
+
+  return blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
 };
 
 /**

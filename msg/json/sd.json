@@ -155,5 +155,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "سان:",
 	"PROCEDURES_DEFRETURN_RETURN": "واپس ورو",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "ان پُٽس",
-	"PROCEDURES_CREATE_DO": "تخليق ڪريو '%1'"
+	"PROCEDURES_CREATE_DO": "تخليق ڪريو '%1'",
+	"DIALOG_OK": "ٺيڪ",
+	"DIALOG_CANCEL": "رد"
 }

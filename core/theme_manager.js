@@ -22,6 +22,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -134,11 +135,9 @@ ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @package
  */
 ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
-  const index = this.subscribedWorkspaces_.indexOf(workspace);
-  if (index < 0) {
+  if (!utils.arrayRemove(this.subscribedWorkspaces_, workspace)) {
     throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
   }
-  this.subscribedWorkspaces_.splice(index, 1);
 };
 
 /**

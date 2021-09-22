@@ -17,10 +17,8 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const BasicCursor = goog.require('Blockly.BasicCursor');
+
 const Blocks = goog.require('Blockly.Blocks');
-const Cursor = goog.require('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
 const Marker = goog.require('Blockly.Marker');
@@ -45,6 +43,9 @@ const {Block} = goog.require('Blockly.Block');
 const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
+const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */

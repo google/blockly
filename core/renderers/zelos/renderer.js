@@ -19,8 +19,6 @@ const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const ConstantProvider = goog.require('Blockly.zelos.ConstantProvider');
 const Drawer = goog.require('Blockly.zelos.Drawer');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerSvg = goog.require('Blockly.zelos.MarkerSvg');
 const PathObject = goog.require('Blockly.zelos.PathObject');
 const RenderInfo = goog.require('Blockly.zelos.RenderInfo');
@@ -33,6 +31,7 @@ const connectionTypes = goog.require('Blockly.connectionTypes');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**

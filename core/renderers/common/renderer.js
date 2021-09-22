@@ -23,8 +23,6 @@ const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
 const IRegistrable = goog.requireType('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
 const PathObject = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,6 +39,7 @@ const object = goog.require('Blockly.utils.object');
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**

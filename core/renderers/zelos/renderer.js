@@ -31,6 +31,7 @@ const connectionTypes = goog.require('Blockly.connectionTypes');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
 
 

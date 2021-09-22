@@ -92,6 +92,7 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');

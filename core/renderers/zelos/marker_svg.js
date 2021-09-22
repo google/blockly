@@ -23,6 +23,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
 const {ASTNode} = goog.requireType('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');

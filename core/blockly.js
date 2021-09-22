@@ -17,7 +17,6 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
-
 const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');

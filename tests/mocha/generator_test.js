@@ -94,6 +94,7 @@ suite('Generator', function() {
         var generator = testCase[0];
         var name = testCase[1];
         test(name, function() {
+          generator.init(this.workspace);
           this.blockToCodeTest(generator, false, true, 'row_block');
           this.blockToCodeTest(
               generator, false, false, 'row_blockstack_block', 'thisOnly=false');

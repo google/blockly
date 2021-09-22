@@ -7,7 +7,7 @@
 goog.module('Blockly.test.cursor');
 
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
-const ASTNode = goog.require('Blockly.ASTNode');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 
 
 suite('Cursor', function() {

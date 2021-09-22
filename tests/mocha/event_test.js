@@ -7,7 +7,7 @@
 goog.module('Blockly.test.event');
 
 const {assertEventEquals, assertNthCallEventArgEquals, assertVariableValues, createFireChangeListenerSpy, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const ASTNode = goog.require('Blockly.ASTNode');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 goog.require('Blockly.WorkspaceComment');
 
 

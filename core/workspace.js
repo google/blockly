@@ -257,7 +257,7 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  Blockly.utils.arrayRemove(this.typedBlocksDB_[block.type], block);
+  utils.arrayRemove(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }

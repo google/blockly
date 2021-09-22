@@ -266,7 +266,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
       activeRow.align == constants.ALIGN.LEFT &&
       input.align == constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
-  } else if (input.type == Blockly.inputTypes.STATEMENT) {
+  } else if (input.type == inputTypes.STATEMENT) {
     // Handle statements without next connections correctly.
     activeRow.elements.push(
         new StatementInput(this.constants_, input));

@@ -35,7 +35,6 @@ const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 
 
@@ -277,7 +276,7 @@ const onKeyDown = function(e) {
     return;
   }
 
-  if (utils.isTargetInput(e) ||
+  if (browserEvents.isTargetInput(e) ||
       (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly

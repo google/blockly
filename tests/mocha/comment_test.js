@@ -60,10 +60,7 @@ suite('Comments', function() {
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
-      deprecationWarnStub.restore();
 
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
@@ -76,10 +73,7 @@ suite('Comments', function() {
       this.comment.setVisible(true);
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.updateEditable();
-      deprecationWarnStub.restore();
 
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
@@ -91,10 +85,7 @@ suite('Comments', function() {
     test('Not Editable -> Editable', function() {
       var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
-      deprecationWarnStub.restore();
 
       editableStub.returns(true);
 

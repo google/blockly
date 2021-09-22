@@ -706,4 +706,4 @@ ASTNode.prototype.out = function() {
   return null;
 };
 
-exports = ASTNode;
+exports.ASTNode = ASTNode;

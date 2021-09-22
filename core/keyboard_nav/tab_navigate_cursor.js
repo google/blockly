@@ -13,11 +13,11 @@
 
 goog.module('Blockly.TabNavigateCursor');
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const BasicCursor = goog.require('Blockly.BasicCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const object = goog.require('Blockly.utils.object');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
 
 
 /**
@@ -49,4 +49,4 @@ TabNavigateCursor.prototype.validNode_ = function(node) {
   return isValid;
 };
 
-exports = TabNavigateCursor;
+exports.TabNavigateCursor = TabNavigateCursor;

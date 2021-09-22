@@ -21,8 +21,6 @@ const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Cursor = goog.requireType('Blockly.Cursor');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,8 +39,6 @@ const IFlyout = goog.requireType('Blockly.IFlyout');
 const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
@@ -96,6 +92,10 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */

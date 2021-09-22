@@ -13,7 +13,6 @@
 goog.module('Blockly.Events.MarkerMove');
 goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
 const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
 /* eslint-disable-next-line no-unused-vars */
@@ -22,6 +21,7 @@ const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 
 
 /**

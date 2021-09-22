@@ -95,6 +95,7 @@ exports.isEnabled = helpers.isEnabled;
 exports.recordUndo = helpers.recordUndo;
 exports.setGroup = helpers.setGroup;
 exports.setRecordUndo = helpers.setRecordUndo;
+exports.disableOrphans = helpers.disableOrphans;
 
 //
 exports.CREATE = helpers.CREATE;

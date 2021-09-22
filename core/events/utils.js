@@ -12,12 +12,17 @@
 
 goog.module('Blockly.Events.helpers');
 
+const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
+const BlockMove = goog.requireType('Blockly.Events.BlockMove');
+const BlockCreate = goog.requireType('Blockly.Events.BlockMove');
+const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
+const CommentMove = goog.requireType('Blockly.Events.CommentMove');
 
 
 /**
@@ -514,3 +519,48 @@ const get = function(eventType) {
   return registry.getClass(registry.Type.EVENT, eventType);
 };
 exports.get = get;
+
+/**
+ * Enable/disable a block depending on whether it is properly connected.
+ * Use this on applications where all blocks should be connected to a top block.
+ * Recommend setting the 'disable' option to 'false' in the config so that
+ * users don't try to re-enable disabled orphan blocks.
+ * @param {!Abstract} event Custom data for event.
+ */
+const disableOrphans = function(event) {
+  if (event.type == MOVE || event.type == CREATE) {
+    if (!event.workspaceId) {
+      return;
+    }
+    const Workspace = goog.module.get('Blockly.Workspace');
+    const eventWorkspace = Workspace.getById(event.workspaceId);
+    let block = eventWorkspace.getBlockById(event.blockId);
+    if (block) {
+      // Changing blocks as part of this event shouldn't be undoable.
+      const initialUndoFlag = recordUndo;
+      try {
+        recordUndo = false;
+        const parent = block.getParent();
+        if (parent && parent.isEnabled()) {
+          const children = block.getDescendants(false);
+          for (let i = 0, child; (child = children[i]); i++) {
+            child.setEnabled(true);
+          }
+        } else if (
+            (block.outputConnection || block.previousConnection) &&
+            !eventWorkspace.isDragging()) {
+          do {
+            block.setEnabled(false);
+            block = block.getNextBlock();
+          } while (block);
+        }
+      } finally {
+        recordUndo = initialUndoFlag;
+      }
+    }
+  }
+};
+exports.disableOrphans = disableOrphans;
+
+exports.TEST_ONLY = {FIRE_QUEUE, fireNow};
+

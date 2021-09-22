@@ -152,7 +152,7 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
   // Finally delete the original variable, which is now unreferenced.
   Events.fire(new (Events.get(Events.VAR_DELETE))(variable));
   // And remove it from the list.
-  utils.arrayRemove(this.getVariablesOfType(type), variable);
+  utils.arrayRemove(this.variableMap_[type], variable);
 };
 
 /* End functions for renaming variables. */

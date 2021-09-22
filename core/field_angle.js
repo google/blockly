@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('FieldAngle');
+goog.module('Blockly.FieldAngle');
 goog.module.declareLegacyNamespace();
 
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -22,7 +22,7 @@ const FieldTextInput = goog.require('Blockly.FieldTextInput');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const math = goog.require('Blockly.utils.math');
 const object = goog.require('Blockly.utils.object');
-const Svg = goog.require('Blockly.utils.svg');
+const Svg = goog.require('Blockly.utils.Svg');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 

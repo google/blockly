@@ -30,6 +30,7 @@ let injected = false;
  * components such as fields and the toolbox to store separate CSS.
  * The provided array of CSS will be destroyed by this function.
  * @param {!Array<string>} cssArray Array of CSS strings.
+ * @alias Blockly.Css.register
  */
 const register = function(cssArray) {
   if (injected) {
@@ -50,6 +51,7 @@ exports.register = register;
  * @param {boolean} hasCss If false, don't inject CSS
  *     (providing CSS becomes the document's responsibility).
  * @param {string} pathToMedia Path from page to the Blockly media directory.
+ * @alias Blockly.Css.inject
  */
 const inject = function(hasCss, pathToMedia) {
   // Only inject the CSS once.
@@ -77,6 +79,7 @@ exports.inject = inject;
 
 /**
  * Array making up the CSS content for Blockly.
+ * @alias Blockly.Css.CONTENT
  */
 const CONTENT = [
   `.blocklySvg {

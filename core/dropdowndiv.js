@@ -16,8 +16,6 @@
 goog.module('Blockly.DropDownDiv');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -29,6 +27,8 @@ const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const style = goog.require('Blockly.utils.style');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

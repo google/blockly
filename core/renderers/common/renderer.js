@@ -13,10 +13,6 @@
 goog.module('Blockly.blockRendering.Renderer');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.require('Blockly.Connection');
 const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,6 +37,10 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

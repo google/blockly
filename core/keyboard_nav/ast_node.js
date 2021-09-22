@@ -13,8 +13,6 @@
 goog.module('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +26,8 @@ const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const connectionTypes = goog.require('Blockly.connectionTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**

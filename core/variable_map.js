@@ -13,8 +13,6 @@
 goog.module('Blockly.VariableMap');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 const Names = goog.require('Blockly.Names');
@@ -24,6 +22,8 @@ const Workspace = goog.requireType('Blockly.Workspace');
 const dialog = goog.require('Blockly.dialog');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
 /** @suppress {extraRequire} */

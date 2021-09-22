@@ -15,8 +15,6 @@ goog.module('Blockly.IFlyout');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const IRegistrable = goog.requireType('Blockly.IRegistrable');
@@ -26,6 +24,8 @@ const Svg = goog.requireType('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

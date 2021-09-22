@@ -16,11 +16,11 @@ goog.module('Blockly.blockRendering.IPathObject');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**

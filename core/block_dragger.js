@@ -12,8 +12,6 @@
 
 goog.module('Blockly.BlockDragger');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
@@ -28,6 +26,8 @@ const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const events = goog.require('Blockly.Events');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
@@ -468,4 +468,4 @@ BlockDragger.prototype.getInsertionMarkers = function() {
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);
 
-exports = BlockDragger;
+exports.BlockDragger = BlockDragger;

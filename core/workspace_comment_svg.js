@@ -13,8 +13,6 @@
 goog.module('Blockly.WorkspaceCommentSvg');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
@@ -36,6 +34,8 @@ const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */

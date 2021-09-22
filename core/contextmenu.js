@@ -16,8 +16,6 @@ goog.module.declareLegacyNamespace();
 // TODO(#5073): Add Blockly require after fixing circular dependency.
 // goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
@@ -35,6 +33,8 @@ const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /** @suppress {extraRequire} */

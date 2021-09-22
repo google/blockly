@@ -15,7 +15,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.variables');  // Deprecated.
+goog.provide('Blockly.blocks.variables');
 goog.provide('Blockly.Constants.Variables');
 
 goog.require('Blockly');

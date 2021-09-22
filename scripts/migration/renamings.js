@@ -153,8 +153,8 @@ const renamings = {
     },
     'Blockly.Blocks': {
       module: 'Blockly.blocks',
-      export: 'definitions',  // Previous default export now named.
-      path: 'Blockly.blocks',  // But still on tree with nearly the same name.
+      export: 'Blocks',  // Previous default export now named.
+      path: 'Blockly.Blocks',  // But still on tree with original name.
     },
     'Blockly.ContextMenu': {
       exports: {

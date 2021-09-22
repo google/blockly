@@ -102,7 +102,6 @@ const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const ZoomControls = goog.require('Blockly.ZoomControls');
-const blocks = goog.require('Blockly.blocks');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
@@ -126,6 +125,7 @@ const {Block} = goog.require('Blockly.Block');
 const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+const {Blocks} = goog.require('Blockly.blocks');
 const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -338,12 +338,12 @@ const defineBlocksWithJsonArray = function(jsonArray) {
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
-        if (blocks.definitions[typename]) {
+        if (Blocks[typename]) {
           console.warn(
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        blocks.definitions[typename] = {init: jsonInitFactory(elem)};
+        Blocks[typename] = {init: jsonInitFactory(elem)};
       }
     }
   }
@@ -501,6 +501,7 @@ exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
+// Re-export submodules that no longer declareLegacyNamespace.
 exports.ASTNode = ASTNode;
 exports.BasicCursor = BasicCursor;
 exports.Block = Block;
@@ -508,8 +509,7 @@ exports.BlocklyOptions = BlocklyOptions;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
-/** @deprecated Use Blockly.blocks.definitions instead. */
-exports.Blocks = blocks.definitions;
+exports.Blocks = Blocks;
 exports.Bubble = Bubble;
 exports.BubbleDragger = BubbleDragger;
 exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
@@ -593,7 +593,6 @@ exports.WorkspaceSvg = WorkspaceSvg;
 exports.Xml = Xml;
 exports.ZoomControls = ZoomControls;
 exports.blockAnimations = blockAnimations;
-exports.blocks = blocks.definitions;
 exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;

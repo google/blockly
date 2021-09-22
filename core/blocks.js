@@ -16,10 +16,11 @@
  */
 goog.module('Blockly.blocks');
 
+
 /**
  * A mapping of block type names to block prototype objects.
  * @type {!Object<string,!Object>}
  */
-const definitions = Object.create(null);
+const Blocks = Object.create(null);
 
-exports.definitions = definitions;
+exports.Blocks = Blocks;

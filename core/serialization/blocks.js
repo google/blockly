@@ -15,8 +15,6 @@ goog.module.declareLegacyNamespace();
 
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 // eslint-disable-next-line no-unused-vars
-const Block = goog.requireType('Blockly.Block');
-// eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
 const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
@@ -28,6 +26,8 @@ const Xml = goog.require('Blockly.Xml');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 // TODO(#5160): Remove this once lint is fixed.
@@ -342,7 +342,7 @@ const appendInternal = function(
   Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
   Events.setGroup(existingGroup);
   Events.setRecordUndo(prevRecordUndo);
-  
+
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
   if (workspace.rendered) {
@@ -468,7 +468,7 @@ const tryToConnectParent = function(parentConnection, child, state) {
   if (parentConnection.getSourceBlock().isShadow() && !child.isShadow()) {
     throw new RealChildOfShadow(state);
   }
-  
+
   let connected = false;
   let childConnection;
   if (parentConnection.type == inputTypes.VALUE) {

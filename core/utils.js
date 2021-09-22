@@ -19,8 +19,6 @@
 goog.module('Blockly.utils');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Metrics = goog.require('Blockly.utils.Metrics');
@@ -46,6 +44,8 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const xmlUtils = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 exports.aria = aria;

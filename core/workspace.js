@@ -16,8 +16,6 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
@@ -38,6 +36,8 @@ const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
 
@@ -524,7 +524,7 @@ Workspace.prototype.getWidth = function() {
  * @return {!Block} The created block.
  */
 Workspace.prototype.newBlock = function(prototypeName, opt_id) {
-  const Block = goog.module.get('Blockly.Block');
+  const {Block} = goog.module.get('Blockly.Block');
   return new Block(this, prototypeName, opt_id);
 };
 

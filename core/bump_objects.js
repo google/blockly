@@ -13,8 +13,6 @@
 goog.module('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
@@ -25,6 +23,8 @@ const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const mathUtils = goog.require('Blockly.utils.math');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

@@ -17,14 +17,15 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
-const Block = goog.require('Blockly.Block');
+const ASTNode = goog.require('Blockly.ASTNode');
+const BasicCursor = goog.require('Blockly.BasicCursor');
 const Blocks = goog.require('Blockly.Blocks');
-const BlockDragger = goog.require('Blockly.BlockDragger');
-const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');
-const BlockSvg = goog.require('Blockly.BlockSvg');
+const Cursor = goog.require('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
+const Marker = goog.require('Blockly.Marker');
 const Size = goog.require('Blockly.utils.Size');
+const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
@@ -40,6 +41,10 @@ const dialog = goog.require('Blockly.dialog');
 const inputTypes = goog.require('Blockly.inputTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const {Block} = goog.require('Blockly.Block');
+const {BlockDragger} = goog.require('Blockly.BlockDragger');
+const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -402,7 +407,12 @@ exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
+exports.ASTNode = ASTNode;
+exports.BasicCursor = BasicCursor;
 exports.Block = Block;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
+exports.Cursor = Cursor;
+exports.Marker = Marker;
+exports.TabNavigateCursor = TabNavigateCursor;

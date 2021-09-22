@@ -13,7 +13,6 @@
 goog.module('Blockly.BlockSvg');
 
 const ASTNode = goog.require('Blockly.ASTNode');
-const Block = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */
@@ -67,6 +66,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {Block} = goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -1775,4 +1775,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports = BlockSvg;
+exports.BlockSvg = BlockSvg;

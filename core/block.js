@@ -2157,4 +2157,4 @@ Block.prototype.toDevString = function() {
   return msg;
 };
 
-exports = Block;
+exports.Block = Block;

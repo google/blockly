@@ -14,9 +14,9 @@ goog.module('Blockly.Events.BlockBase');
 goog.module.declareLegacyNamespace();
 
 const Abstract = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**

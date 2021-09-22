@@ -14,11 +14,6 @@ goog.module('Blockly.WorkspaceSvg');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const BlockSvg = goog.require('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Classic = goog.require('Blockly.Themes.Classic');
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -97,6 +92,11 @@ const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -1519,7 +1519,7 @@ WorkspaceSvg.prototype.paste = function(state) {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  
+
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));

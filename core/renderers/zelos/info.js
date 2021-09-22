@@ -15,8 +15,6 @@ goog.module('Blockly.zelos.RenderInfo');
 goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BottomRow = goog.require('Blockly.zelos.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
@@ -35,6 +33,8 @@ const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

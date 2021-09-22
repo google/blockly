@@ -19,8 +19,6 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Blocks = goog.require('Blockly.Blocks');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +31,8 @@ const Workspace = goog.require('Blockly.Workspace');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 

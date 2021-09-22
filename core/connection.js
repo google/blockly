@@ -13,8 +13,6 @@
 goog.module('Blockly.Connection');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
@@ -26,6 +24,8 @@ const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const deprecation = goog.require('Blockly.utils.deprecation');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 /** @suppress {extraRequire} */
@@ -767,7 +767,7 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
         });
     return blockShadow;
   }
-  
+
   if (shadowDom) {
     blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {

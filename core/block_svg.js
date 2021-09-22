@@ -12,7 +12,6 @@
 
 goog.module('Blockly.BlockSvg');
 
-const ASTNode = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */
@@ -47,7 +46,6 @@ const Mutator = goog.requireType('Blockly.Mutator');
 const Rect = goog.require('Blockly.utils.Rect');
 const RenderedConnection = goog.require('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
-const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -66,7 +64,9 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
+const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */

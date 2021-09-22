@@ -13,11 +13,10 @@
 
 goog.module('Blockly.Cursor');
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Marker = goog.require('Blockly.Marker');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Marker} = goog.require('Blockly.Marker');
 
 /**
  * Class for a cursor.
@@ -135,4 +134,4 @@ Cursor.prototype.out = function() {
 
 registry.register(registry.Type.CURSOR, registry.DEFAULT, Cursor);
 
-exports = Cursor;
+exports.Cursor = Cursor;

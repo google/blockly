@@ -67,7 +67,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@blockly/block-test": "^1.0.0",
-    "@blockly/dev-tools": "^2.6.1-beta.0",
+    "@blockly/dev-tools": "^2.6.1",
     "@blockly/theme-modern": "^2.1.1",
     "@wdio/selenium-standalone-service": "^7.10.1",
     "babel-eslint": "^10.1.0",

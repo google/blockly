@@ -19,7 +19,6 @@ const Abstract = goog.requireType('Blockly.Events.Abstract');
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const DeleteArea = goog.require('Blockly.DeleteArea');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
@@ -40,6 +39,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blocks = goog.requireType('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -627,8 +627,8 @@ Trashcan.prototype.click = function() {
  */
 Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
   const uiEvent =
-      new (Events.get(Events.TRASHCAN_OPEN))(trashcanOpen, this.workspace_.id);
-  Events.fire(uiEvent);
+      new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(trashcanOpen, this.workspace_.id);
+  eventUtils.fire(uiEvent);
 };
 
 /**

@@ -21,7 +21,6 @@ const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,6 +34,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.MarkerMove');
@@ -558,9 +558,9 @@ MarkerSvg.prototype.hide = function() {
  */
 MarkerSvg.prototype.fireMarkerEvent_ = function(oldNode, curNode) {
   const curBlock = curNode.getSourceBlock();
-  const event = new (Events.get(Events.MARKER_MOVE))(
+  const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
       curBlock, this.isCursor(), oldNode, curNode);
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

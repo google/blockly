@@ -20,7 +20,6 @@ const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DeleteArea = goog.require('Blockly.DeleteArea');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
@@ -37,6 +36,7 @@ const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -916,7 +916,7 @@ Flyout.prototype.createBlock = function(originalBlock) {
   try {
     newBlock = this.placeNewBlock_(originalBlock);
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 
   // Close the flyout.
@@ -925,17 +925,17 @@ Flyout.prototype.createBlock = function(originalBlock) {
   const newVariables = Variables.getAddedVariables(
       this.targetWorkspace, variablesBeforeCreation);
 
-  if (Events.isEnabled()) {
-    Events.setGroup(true);
+  if (eventUtils.isEnabled()) {
+    eventUtils.setGroup(true);
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      Events.fire(new (Events.get(Events.VAR_CREATE))(thisVariable));
+      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
 
     // Block events come after var events, in case they refer to newly created
     // variables.
-    Events.fire(new (Events.get(Events.BLOCK_CREATE))(newBlock));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
   }
   if (this.autoClose) {
     this.hide();

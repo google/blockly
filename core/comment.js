@@ -21,7 +21,6 @@ const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
 const Size = goog.requireType('Blockly.utils.Size');
@@ -30,6 +29,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /** @suppress {extraRequire} */
@@ -181,7 +181,7 @@ Comment.prototype.createEditor_ = function() {
   this.onChangeWrapper_ =
       browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
         if (this.cachedText_ != this.model_.text) {
-          Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+          eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
         }
@@ -246,8 +246,8 @@ Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Events.fire(
-      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'comment'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();

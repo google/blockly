@@ -21,12 +21,12 @@ const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
 const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -460,13 +460,13 @@ RenderedConnection.prototype.isConnectionAllowed = function(
  */
 RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
   const block = this.getSourceBlock();
-  if (Events.getRecordUndo()) {
-    const group = Events.getGroup();
+  if (eventUtils.getRecordUndo()) {
+    const group = eventUtils.getGroup();
     setTimeout(function() {
       if (!block.isDisposed() && !block.getParent()) {
-        Events.setGroup(group);
+        eventUtils.setGroup(group);
         this.bumpAwayFrom(otherConnection);
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }
     }.bind(this), internalConstants.BUMP_DELAY);
   }

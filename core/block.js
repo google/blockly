@@ -21,7 +21,6 @@ const Blocks = goog.require('Blockly.Blocks');
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -41,6 +40,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
+const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
@@ -222,31 +222,31 @@ const Block = function(workspace, prototypeName, opt_id) {
   // All events fired should be part of the same group.
   // Any events fired during init should not be undoable,
   // so that block creation is atomic.
-  const existingGroup = Events.getGroup();
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
-  const initialUndoFlag = Events.getRecordUndo();
+  const initialUndoFlag = eventUtils.getRecordUndo();
 
   try {
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      Events.setRecordUndo(false);
+      eventUtils.setRecordUndo(false);
       this.init();
-      Events.setRecordUndo(initialUndoFlag);
+      eventUtils.setRecordUndo(initialUndoFlag);
     }
 
     // Fire a create event.
-    if (Events.isEnabled()) {
-      Events.fire(new (Events.get(Events.BLOCK_CREATE))(this));
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
     }
 
   } finally {
     if (!existingGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
     // In case init threw, recordUndo flag should still be reset.
-    Events.setRecordUndo(initialUndoFlag);
+    eventUtils.setRecordUndo(initialUndoFlag);
   }
 
   // Record initial inline state.
@@ -393,10 +393,10 @@ Block.prototype.dispose = function(healStack) {
   }
 
   this.unplug(healStack);
-  if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.BLOCK_DELETE))(this));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
   }
-  Events.disable();
+  eventUtils.disable();
 
   try {
     // This block is now at the top of the workspace.
@@ -433,7 +433,7 @@ Block.prototype.dispose = function(healStack) {
       connection.dispose();
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
     this.disposed = true;
   }
 };
@@ -1272,7 +1272,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
  */
 Block.prototype.setInputsInline = function(newBoolean) {
   if (this.inputsInline != newBoolean) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
   }
@@ -1337,7 +1337,7 @@ Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
     const oldValue = this.disabled;
     this.disabled = !enabled;
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'disabled', null, oldValue, !enabled));
   }
 };
@@ -1373,7 +1373,7 @@ Block.prototype.isCollapsed = function() {
  */
 Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
   }
@@ -2044,7 +2044,7 @@ Block.prototype.setCommentText = function(text) {
   if (this.commentModel.text == text) {
     return;
   }
-  Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
       this, 'comment', null, this.commentModel.text, text));
   this.commentModel.text = text;
   this.comment = text;  // For backwards compatibility.
@@ -2087,10 +2087,10 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = new (Events.get(Events.BLOCK_MOVE))(this);
+  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

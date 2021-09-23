@@ -17,7 +17,6 @@ goog.module.declareLegacyNamespace();
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Events = goog.require('Blockly.Events');
 const Field = goog.require('Blockly.Field');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const Msg = goog.require('Blockly.Msg');
@@ -28,6 +27,7 @@ const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dialog = goog.require('Blockly.dialog');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -210,8 +210,8 @@ FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     const oldValue = this.value_;
     // Revert value when the text becomes invalid.
     this.value_ = this.htmlInput_.untypedDefaultValue_;
-    if (this.sourceBlock_ && Events.isEnabled()) {
-      Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    if (this.sourceBlock_ && eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           this.sourceBlock_, 'field', this.name || null, oldValue,
           this.value_));
     }
@@ -340,7 +340,7 @@ FieldTextInput.prototype.showInlineEditor_ = function(quietInput) {
  * @protected
  */
 FieldTextInput.prototype.widgetCreate_ = function() {
-  Events.setGroup(true);
+  eventUtils.setGroup(true);
   const div = WidgetDiv.getDiv();
 
   dom.addClass(this.getClickTarget_(), 'editing');
@@ -402,7 +402,7 @@ FieldTextInput.prototype.widgetDispose_ = function() {
   if (this.onFinishEditing_) {
     this.onFinishEditing_(this.value_);
   }
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 
   // Actual disposal.
   this.unbindInputEvents_();

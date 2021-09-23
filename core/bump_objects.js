@@ -15,8 +15,6 @@ goog.module('Blockly.bumpObjects');
 /* eslint-disable-next-line no-unused-vars */
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
-const Events = goog.require('Blockly.Events');
-/* eslint-disable-next-line no-unused-vars */
 const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
@@ -24,6 +22,8 @@ const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const eventUtils = goog.require('Blockly.Events.utils');
 const mathUtils = goog.require('Blockly.utils.math');
 
 
@@ -81,7 +81,7 @@ exports.bumpIntoBounds = bumpObjectIntoBounds;
 /**
  * Creates a handler for bumping objects when they cross fixed bounds.
  * @param {!WorkspaceSvg} workspace The workspace to handle.
- * @return {function(Events.Abstract)} The event handler.
+ * @return {function(eventUtils.Abstract)} The event handler.
  */
 const bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
@@ -90,7 +90,7 @@ const bumpIntoBoundsHandler = function(workspace) {
       return;
     }
 
-    if (Events.BUMP_EVENTS.indexOf(e.type) !== -1) {
+    if (eventUtils.BUMP_EVENTS.indexOf(e.type) !== -1) {
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
@@ -99,8 +99,8 @@ const bumpIntoBoundsHandler = function(workspace) {
         return;
       }
       // Handle undo.
-      const oldGroup = Events.getGroup();
-      Events.setGroup(e.group);
+      const oldGroup = eventUtils.getGroup();
+      eventUtils.setGroup(e.group);
 
       const wasBumped = bumpObjectIntoBounds(
           workspace, scrollMetricsInWsCoords,
@@ -112,7 +112,7 @@ const bumpIntoBoundsHandler = function(workspace) {
             ' event group. This may break undo.');
       }
       if (oldGroup !== null) {
-        Events.setGroup(oldGroup);
+        eventUtils.setGroup(oldGroup);
       }
     } else if (e.type === Events.VIEWPORT_CHANGE) {
       const viewportEvent = /** @type {!Events.ViewportChange} */ (e);

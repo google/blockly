@@ -13,10 +13,10 @@
 goog.module('Blockly.serialization.workspaces');
 goog.module.declareLegacyNamespace();
  
-const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.require('Blockly.Workspace');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
  
 
@@ -57,11 +57,11 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
       .sort(([, {priority: priorityA}], [, {priority: priorityB}]) =>
         priorityB - priorityA);
 
-  const prevRecordUndo = Events.getRecordUndo();
-  Events.setRecordUndo(recordUndo);
-  const existingGroup = Events.getGroup();
+  const prevRecordUndo = eventUtils.getRecordUndo();
+  eventUtils.setRecordUndo(recordUndo);
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
 
   dom.startTextWidthCache();
@@ -89,9 +89,9 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   }
   dom.stopTextWidthCache();
 
-  Events.fire(new (Events.get(Events.FINISHED_LOADING))(workspace));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
 
-  Events.setGroup(existingGroup);
-  Events.setRecordUndo(prevRecordUndo);
+  eventUtils.setGroup(existingGroup);
+  eventUtils.setRecordUndo(prevRecordUndo);
 };
 exports.load = load;

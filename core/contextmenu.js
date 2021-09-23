@@ -20,7 +20,6 @@ const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Menu = goog.require('Blockly.Menu');
 const MenuItem = goog.require('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
@@ -31,6 +30,7 @@ const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
@@ -244,7 +244,7 @@ exports.dispose = dispose;
  */
 const callbackFactory = function(block, xml) {
   return function() {
-    Events.disable();
+    eventUtils.disable();
     let newBlock;
     try {
       newBlock = Xml.domToBlock(xml, block.workspace);
@@ -258,10 +258,10 @@ const callbackFactory = function(block, xml) {
       xy.y += internalConstants.SNAP_RADIUS * 2;
       newBlock.moveBy(xy.x, xy.y);
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
-    if (Events.isEnabled() && !newBlock.isShadow()) {
-      Events.fire(new (Events.get(Events.BLOCK_CREATE))(newBlock));
+    if (eventUtils.isEnabled() && !newBlock.isShadow()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };
@@ -281,9 +281,9 @@ const commentDeleteOption = function(comment) {
     text: Msg['REMOVE_COMMENT'],
     enabled: true,
     callback: function() {
-      Events.setGroup(true);
+      eventUtils.setGroup(true);
       comment.dispose();
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
   };
   return deleteOption;

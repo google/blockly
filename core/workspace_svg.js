@@ -29,7 +29,6 @@ const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const Cursor = goog.requireType('Blockly.Cursor');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const Gesture = goog.require('Blockly.Gesture');
@@ -91,6 +90,7 @@ const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -714,8 +714,8 @@ WorkspaceSvg.prototype.refreshTheme = function() {
   }
 
   const event =
-      new (Events.get(Events.THEME_CHANGE))(this.getTheme().name, this.id);
-  Events.fire(event);
+      new (eventUtils.get(Events.THEME_CHANGE))(this.getTheme().name, this.id);
+  eventUtils.fire(event);
 };
 
 /**
@@ -1299,7 +1299,7 @@ WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   this.oldScale_ = scale;
   this.oldTop_ = top;
   this.oldLeft_ = left;
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**
@@ -1598,10 +1598,10 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
       block.moveTo(new Coordinate(blockX, blockY));
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
   if (Events.isEnabled() && !block.isShadow()) {
-    Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
+    eventUtils.fire(new (Events.get(Events.BLOCK_CREATE))(block));
   }
   block.select();
 };
@@ -1634,7 +1634,7 @@ WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
       comment.moveBy(commentX, commentY);
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
   if (Events.isEnabled()) {
     goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
@@ -1930,7 +1930,7 @@ WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
  */
 WorkspaceSvg.prototype.cleanUp = function() {
   this.setResizesEnabled(false);
-  Events.setGroup(true);
+  eventUtils.setGroup(true);
   const topBlocks = this.getTopBlocks(true);
   let cursorY = 0;
   for (let i = 0, block; (block = topBlocks[i]); i++) {
@@ -1943,7 +1943,7 @@ WorkspaceSvg.prototype.cleanUp = function() {
     cursorY = block.getRelativeToSurfaceXY().y + block.getHeightWidth().height +
         this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
   }
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
   this.setResizesEnabled(true);
 };
 
@@ -2168,7 +2168,7 @@ WorkspaceSvg.prototype.zoomToFit = function() {
     this.setScale(Math.min(ratioX, ratioY));
     this.scrollCenter();
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
   this.maybeFireViewportChangeEvent();
 };

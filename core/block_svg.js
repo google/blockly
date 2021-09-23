@@ -24,7 +24,6 @@ const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const FieldLabel = goog.require('Blockly.FieldLabel');
@@ -65,6 +64,7 @@ const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -320,16 +320,16 @@ BlockSvg.prototype.select = function() {
   if (common.getSelected()) {
     oldId = common.getSelected().id;
     // Unselect any previously selected block.
-    Events.disable();
+    eventUtils.disable();
     try {
       common.getSelected().unselect();
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
   }
   const event =
-      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
-  Events.fire(event);
+      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
 };
@@ -343,9 +343,9 @@ BlockSvg.prototype.unselect = function() {
     return;
   }
   const event =
-      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
+      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
-  Events.fire(event);
+  eventUtils.fire(event);
   common.setSelected(null);
   this.removeSelect();
 };
@@ -484,17 +484,17 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const eventsEnabled = Events.isEnabled();
+  const eventsEnabled = eventUtils.isEnabled();
   let event;
   if (eventsEnabled) {
-    event = new (Events.get(Events.BLOCK_MOVE))(this);
+    event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
   }
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.moveConnections(dx, dy);
   if (eventsEnabled) {
     event.recordNew();
-    Events.fire(event);
+    eventUtils.fire(event);
   }
   this.workspace.resizeContents();
 };
@@ -974,7 +974,7 @@ BlockSvg.prototype.checkAndDelete = function() {
   if (this.workspace.isFlyout) {
     return;
   }
-  Events.setGroup(true);
+  eventUtils.setGroup(true);
   this.workspace.hideChaff();
   if (this.outputConnection) {
     // Do not attempt to heal rows
@@ -983,7 +983,7 @@ BlockSvg.prototype.checkAndDelete = function() {
   } else {
     this.dispose(/* heal */ true, true);
   }
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /**
@@ -1599,18 +1599,18 @@ BlockSvg.prototype.bumpNeighbours = function() {
 BlockSvg.prototype.scheduleSnapAndBump = function() {
   const block = this;
   // Ensure that any snap and bump are part of this move's event group.
-  const group = Events.getGroup();
+  const group = eventUtils.getGroup();
 
   setTimeout(function() {
-    Events.setGroup(group);
+    eventUtils.setGroup(group);
     block.snapToGrid();
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }, internalConstants.BUMP_DELAY / 2);
 
   setTimeout(function() {
-    Events.setGroup(group);
+    eventUtils.setGroup(group);
     block.bumpNeighbours();
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }, internalConstants.BUMP_DELAY);
 };
 

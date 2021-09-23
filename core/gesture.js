@@ -18,7 +18,6 @@ goog.module.declareLegacyNamespace();
 const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -36,6 +35,7 @@ const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 /** @suppress {extraRequire} */
@@ -332,8 +332,8 @@ Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
-    if (!Events.getGroup()) {
-      Events.setGroup(true);
+    if (!eventUtils.getGrou()) {
+      eventUtils.setGroup(true);
     }
     // The start block is no longer relevant, because this is a drag.
     this.startBlock_ = null;
@@ -664,7 +664,7 @@ Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  Events.fire(new (Events.get(Events.CLICK))(null, ws.id, 'workspace'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**
@@ -746,20 +746,20 @@ Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
     if (this.targetBlock_.isEnabled()) {
-      if (!Events.getGroup()) {
-        Events.setGroup(true);
+      if (!eventUtils.getGrou()) {
+        eventUtils.setGroup(true);
       }
       const newBlock = this.flyout_.createBlock(this.targetBlock_);
       newBlock.scheduleSnapAndBump();
     }
   } else {
     // Clicks events are on the start block, even if it was a shadow.
-    const event = new (Events.get(Events.CLICK))(
+    const event = new (eventUtils.get(eventUtils.CLICK))(
         this.startBlock_, this.startWorkspace_.id, 'block');
-    Events.fire(event);
+    eventUtils.fire(event);
   }
   this.bringBlockToFront_();
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /**

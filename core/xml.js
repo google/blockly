@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Xml');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');

@@ -15,7 +15,6 @@
  * @namespace
  */
 goog.module('Blockly.Procedures');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');

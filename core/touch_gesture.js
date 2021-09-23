@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.TouchGesture');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Gesture = goog.require('Blockly.Gesture');

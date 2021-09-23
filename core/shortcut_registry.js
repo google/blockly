@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.ShortcutRegistry');
-goog.module.declareLegacyNamespace();
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */

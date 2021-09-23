@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.ContextMenuItems');
-goog.module.declareLegacyNamespace();
 
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Msg = goog.require('Blockly.Msg');

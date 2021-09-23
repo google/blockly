@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldTextInput');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');

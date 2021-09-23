@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.FieldMultilineInput');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 const Field = goog.require('Blockly.Field');

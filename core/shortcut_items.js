@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.ShortcutItems');
-goog.module.declareLegacyNamespace();
 
 const Gesture = goog.require('Blockly.Gesture');
 /* eslint-disable-next-line no-unused-vars */

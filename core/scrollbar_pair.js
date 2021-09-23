@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.ScrollbarPair');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');

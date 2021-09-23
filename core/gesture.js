@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Gesture');
-goog.module.declareLegacyNamespace();
 
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');

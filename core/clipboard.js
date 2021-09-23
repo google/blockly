@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.clipboard');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');

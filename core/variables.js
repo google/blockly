@@ -15,7 +15,6 @@
  * @namespace
  */
 goog.module('Blockly.Variables');
-goog.module.declareLegacyNamespace();
 
 const Blocks = goog.require('Blockly.Blocks');
 const Msg = goog.require('Blockly.Msg');

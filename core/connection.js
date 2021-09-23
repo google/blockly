@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Connection');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');

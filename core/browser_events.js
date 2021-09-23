@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.browserEvents');
-goog.module.declareLegacyNamespace();
 
 const Touch = goog.require('Blockly.Touch');
 const {globalThis} = goog.require('Blockly.utils.global');

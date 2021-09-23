@@ -18,7 +18,6 @@
  * @namespace
  */
 goog.module('Blockly.Extensions');
-goog.module.declareLegacyNamespace();
 
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */

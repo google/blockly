@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.DragTarget');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IDragTarget = goog.requireType('Blockly.IDragTarget');

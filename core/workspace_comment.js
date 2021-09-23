@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceComment');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */

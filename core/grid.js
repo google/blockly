@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Grid');
-goog.module.declareLegacyNamespace();
 
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');

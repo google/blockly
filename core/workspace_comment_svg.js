@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceCommentSvg');
-goog.module.declareLegacyNamespace();
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');

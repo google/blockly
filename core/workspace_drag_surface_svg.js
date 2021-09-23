@@ -15,7 +15,6 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');

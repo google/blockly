@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.RenderedConnection');
-goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.VariableMap');
-goog.module.declareLegacyNamespace();
 
 const Msg = goog.require('Blockly.Msg');
 const Names = goog.require('Blockly.Names');

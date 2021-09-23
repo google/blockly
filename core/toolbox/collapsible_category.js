@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.CollapsibleToolboxCategory');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');

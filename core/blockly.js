@@ -18,6 +18,11 @@ goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
 const Blocks = goog.require('Blockly.Blocks');
+const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
+const Toolbox = goog.require('Blockly.Toolbox');
+const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
+const ToolboxItem = goog.require('Blockly.ToolboxItem');
+const ToolboxSeparator = goog.require('Blockly.ToolboxSeparator');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
 const Marker = goog.require('Blockly.Marker');
@@ -425,6 +430,11 @@ exports.Block = Block;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
+exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
 exports.Cursor = Cursor;
 exports.Marker = Marker;
 exports.TabNavigateCursor = TabNavigateCursor;
+exports.Toolbox = Toolbox;
+exports.ToolboxCategory = ToolboxCategory;
+exports.ToolboxItem = ToolboxItem;
+exports.ToolboxSeparator = ToolboxSeparator;

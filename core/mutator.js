@@ -18,6 +18,7 @@ goog.module.declareLegacyNamespace();
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Block = goog.requireType('Blockly.Block');
+const BlockChange = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
@@ -408,7 +409,7 @@ Mutator.prototype.workspaceChanged_ = function(e) {
   if (this.rootBlock_.workspace == this.workspace_) {
     eventUtils.setGroup(true);
     const block = /** @type {!BlockSvg} */ (this.block_);
-    const oldExtraState = eventUtils.BlockChange.getExtraBlockState_(block);
+    const oldExtraState = BlockChange.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.
     const savedRendered = block.rendered;
@@ -426,7 +427,7 @@ Mutator.prototype.workspaceChanged_ = function(e) {
       block.render();
     }
 
-    const newExtraState = eventUtils.BlockChange.getExtraBlockState_(block);
+    const newExtraState = BlockChange.getExtraBlockState_(block);
     if (oldExtraState != newExtraState) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));

@@ -284,7 +284,7 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
   const imType = sourceBlock.type;
 
-  Events.disable();
+  eventUtils.disable();
   let result;
   try {
     result = this.workspace_.newBlock(imType);
@@ -353,7 +353,7 @@ InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
     if (this.lastMarker_) {
-      Events.disable();
+      eventUtils.disable();
       try {
         this.lastMarker_.dispose();
       } finally {

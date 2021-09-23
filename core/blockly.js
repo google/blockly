@@ -32,6 +32,7 @@ const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
+const Events = goog.require('Blockly.Events');
 const inputTypes = goog.require('Blockly.inputTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -396,3 +397,5 @@ exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+
+exports.Events = Events;

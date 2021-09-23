@@ -910,7 +910,7 @@ Flyout.prototype.isBlockCreatable_ = function(block) {
  */
 Flyout.prototype.createBlock = function(originalBlock) {
   let newBlock = null;
-  Events.disable();
+  eventUtils.disable();
   const variablesBeforeCreation = this.targetWorkspace.getAllVariables();
   this.targetWorkspace.setResizesEnabled(false);
   try {

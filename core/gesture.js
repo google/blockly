@@ -332,7 +332,7 @@ Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
-    if (!eventUtils.getGrou()) {
+    if (!eventUtils.getGroup()) {
       eventUtils.setGroup(true);
     }
     // The start block is no longer relevant, because this is a drag.
@@ -746,7 +746,7 @@ Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
     if (this.targetBlock_.isEnabled()) {
-      if (!eventUtils.getGrou()) {
+      if (!eventUtils.getGroup()) {
         eventUtils.setGroup(true);
       }
       const newBlock = this.flyout_.createBlock(this.targetBlock_);

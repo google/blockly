@@ -267,7 +267,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
  * @package
  */
 VariableMap.prototype.deleteVariableInternal = function(variable, uses) {
-  const existingGroup = eventUtils.getGrou();
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
     eventUtils.setGroup(true);
   }

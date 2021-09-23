@@ -714,7 +714,7 @@ WorkspaceSvg.prototype.refreshTheme = function() {
   }
 
   const event =
-      new (eventUtils.get(Events.THEME_CHANGE))(this.getTheme().name, this.id);
+      new (eventUtils.get(eventUtils.THEME_CHANGE))(this.getTheme().name, this.id);
   eventUtils.fire(event);
 };
 
@@ -1282,7 +1282,7 @@ WorkspaceSvg.prototype.getParentSvg = function() {
  * @package
  */
 WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
-  if (!Events.isEnabled()) {
+  if (!eventUtils.isEnabled()) {
     return;
   }
   const scale = this.scale;
@@ -1294,7 +1294,7 @@ WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
     // negligible changes in viewport top/left.
     return;
   }
-  const event = new (Events.get(Events.VIEWPORT_CHANGE))(
+  const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))(
       top, left, scale, this.id, this.oldScale_);
   this.oldScale_ = scale;
   this.oldTop_ = top;
@@ -1540,7 +1540,7 @@ WorkspaceSvg.prototype.paste = function(state) {
  * @private
  */
 WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
-  Events.disable();
+  eventUtils.disable();
   let block;
   try {
     let blockX;
@@ -1600,8 +1600,8 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   } finally {
     eventUtils.enable();
   }
-  if (Events.isEnabled() && !block.isShadow()) {
-    eventUtils.fire(new (Events.get(Events.BLOCK_CREATE))(block));
+  if (eventUtils.isEnabled() && !block.isShadow()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }
   block.select();
 };
@@ -1614,7 +1614,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
  *     bundled in.
  */
 WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
-  Events.disable();
+  eventUtils.disable();
   let comment;
   try {
     comment = goog.module.get('Blockly.WorkspaceCommentSvg')
@@ -1636,7 +1636,7 @@ WorkspaceSvg.prototype.pasteWorkspaceComment_ = function(xmlComment) {
   } finally {
     eventUtils.enable();
   }
-  if (Events.isEnabled()) {
+  if (eventUtils.isEnabled()) {
     goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
   }
   comment.select();
@@ -2163,7 +2163,7 @@ WorkspaceSvg.prototype.zoomToFit = function() {
   // Scale Units: (pixels / workspaceUnit)
   const ratioX = workspaceWidth / blocksWidth;
   const ratioY = workspaceHeight / blocksHeight;
-  Events.disable();
+  eventUtils.disable();
   try {
     this.setScale(Math.min(ratioX, ratioY));
     this.scrollCenter();

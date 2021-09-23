@@ -10,20 +10,21 @@
  */
 'use strict';
 
-goog.provide('Blockly.FieldAngle');
+goog.module('Blockly.FieldAngle');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.Css');
-goog.require('Blockly.DropDownDiv');
-goog.require('Blockly.fieldRegistry');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.KeyCodes');
-goog.require('Blockly.utils.math');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.userAgent');
-goog.require('Blockly.WidgetDiv');
+const Css = goog.require('Blockly.Css');
+const DropDownDiv = goog.require('Blockly.DropDownDiv');
+const FieldTextInput = goog.require('Blockly.FieldTextInput');
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const Svg = goog.require('Blockly.utils.Svg');
+const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const math = goog.require('Blockly.utils.math');
+const object = goog.require('Blockly.utils.object');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
@@ -36,45 +37,45 @@ goog.require('Blockly.WidgetDiv');
  * @param {Object=} opt_config A map of options used to configure the field.
  *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
  *    for a list of properties this parameter supports.
- * @extends {Blockly.FieldTextInput}
+ * @extends {FieldTextInput}
  * @constructor
  */
-Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
+const FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Should the angle increase as the angle picker is moved clockwise (true)
    * or counterclockwise (false)
-   * @see Blockly.FieldAngle.CLOCKWISE
+   * @see FieldAngle.CLOCKWISE
    * @type {boolean}
    * @private
    */
-  this.clockwise_ = Blockly.FieldAngle.CLOCKWISE;
+  this.clockwise_ = FieldAngle.CLOCKWISE;
 
   /**
    * The offset of zero degrees (and all other angles).
-   * @see Blockly.FieldAngle.OFFSET
+   * @see FieldAngle.OFFSET
    * @type {number}
    * @private
    */
-  this.offset_ = Blockly.FieldAngle.OFFSET;
+  this.offset_ = FieldAngle.OFFSET;
 
   /**
    * The maximum angle to allow before wrapping.
-   * @see Blockly.FieldAngle.WRAP
+   * @see FieldAngle.WRAP
    * @type {number}
    * @private
    */
-  this.wrap_ = Blockly.FieldAngle.WRAP;
+  this.wrap_ = FieldAngle.WRAP;
 
   /**
    * The amount to round angles to when using a mouse or keyboard nav input.
-   * @see Blockly.FieldAngle.ROUND
+   * @see FieldAngle.ROUND
    * @type {number}
    * @private
    */
-  this.round_ = Blockly.FieldAngle.ROUND;
+  this.round_ = FieldAngle.ROUND;
 
-  Blockly.FieldAngle.superClass_.constructor.call(
+  FieldAngle.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 
   /**
@@ -98,26 +99,26 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Wrapper click event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
    * Surface click event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.clickSurfaceWrapper_ = null;
 
   /**
    * Surface mouse move event data.
-   * @type {?Blockly.browserEvents.Data}
+   * @type {?browserEvents.Data}
    * @private
    */
   this.moveSurfaceWrapper_ = null;
 };
-Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
+object.inherits(FieldAngle, FieldTextInput);
 
 
 /**
@@ -125,16 +126,16 @@ Blockly.utils.object.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * @type {*}
  * @protected
  */
-Blockly.FieldAngle.prototype.DEFAULT_VALUE = 0;
+FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.
  * @param {!Object} options A JSON object with options (angle).
- * @return {!Blockly.FieldAngle} The new field instance.
+ * @return {!FieldAngle} The new field instance.
  * @package
  * @nocollapse
  */
-Blockly.FieldAngle.fromJson = function(options) {
+FieldAngle.fromJson = function(options) {
   // `this` might be a subclass of FieldAngle if that class doesn't override
   // the static fromJson method.
   return new this(options['angle'], undefined, options);
@@ -145,27 +146,27 @@ Blockly.FieldAngle.fromJson = function(options) {
  * are not. Editable fields should also be serializable.
  * @type {boolean}
  */
-Blockly.FieldAngle.prototype.SERIALIZABLE = true;
+FieldAngle.prototype.SERIALIZABLE = true;
 
 /**
  * The default amount to round angles to when using a mouse or keyboard nav
  * input. Must be a positive integer to support keyboard navigation.
  * @const {number}
  */
-Blockly.FieldAngle.ROUND = 15;
+FieldAngle.ROUND = 15;
 
 /**
  * Half the width of protractor image.
  * @const {number}
  */
-Blockly.FieldAngle.HALF = 100 / 2;
+FieldAngle.HALF = 100 / 2;
 
 /**
  * Default property describing which direction makes an angle field's value
  * increase. Angle increases clockwise (true) or counterclockwise (false).
  * @const {boolean}
  */
-Blockly.FieldAngle.CLOCKWISE = false;
+FieldAngle.CLOCKWISE = false;
 
 /**
  * The default offset of 0 degrees (and all angles). Always offsets in the
@@ -173,21 +174,21 @@ Blockly.FieldAngle.CLOCKWISE = false;
  * Usually either 0 (0 = right) or 90 (0 = up).
  * @const {number}
  */
-Blockly.FieldAngle.OFFSET = 0;
+FieldAngle.OFFSET = 0;
 
 /**
  * The default maximum angle to allow before wrapping.
  * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
  * @const {number}
  */
-Blockly.FieldAngle.WRAP = 360;
+FieldAngle.WRAP = 360;
 
 /**
  * Radius of protractor circle.  Slightly smaller than protractor size since
  * otherwise SVG crops off half the border at the edges.
  * @const {number}
  */
-Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
+FieldAngle.RADIUS = FieldAngle.HALF - 1;
 
 /**
  * Configure the field based on the given map of options.
@@ -195,8 +196,8 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
  * @protected
  * @override
  */
-Blockly.FieldAngle.prototype.configure_ = function(config) {
-  Blockly.FieldAngle.superClass_.configure_.call(this, config);
+FieldAngle.prototype.configure_ = function(config) {
+  FieldAngle.superClass_.configure_.call(this, config);
 
   switch (config['mode']) {
     case 'compass':
@@ -212,27 +213,27 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
   }
 
   // Allow individual settings to override the mode setting.
-  var clockwise = config['clockwise'];
+  const clockwise = config['clockwise'];
   if (typeof clockwise == 'boolean') {
     this.clockwise_ = clockwise;
   }
 
   // If these are passed as null then we should leave them on the default.
-  var offset = config['offset'];
+  let offset = config['offset'];
   if (offset != null) {
     offset = Number(offset);
     if (!isNaN(offset)) {
       this.offset_ = offset;
     }
   }
-  var wrap = config['wrap'];
+  let wrap = config['wrap'];
   if (wrap != null) {
     wrap = Number(wrap);
     if (!isNaN(wrap)) {
       this.wrap_ = wrap;
     }
   }
-  var round = config['round'];
+  let round = config['round'];
   if (round != null) {
     round = Number(round);
     if (!isNaN(round)) {
@@ -245,11 +246,10 @@ Blockly.FieldAngle.prototype.configure_ = function(config) {
  * Create the block UI for this field.
  * @package
  */
-Blockly.FieldAngle.prototype.initView = function() {
-  Blockly.FieldAngle.superClass_.initView.call(this);
+FieldAngle.prototype.initView = function() {
+  FieldAngle.superClass_.initView.call(this);
   // Add the degree symbol to the left of the number, even in RTL (issue #2380)
-  this.symbol_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.TSPAN, {}, null);
+  this.symbol_ = dom.createSvgElement(Svg.TSPAN, {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
   this.textElement_.appendChild(this.symbol_);
 };
@@ -259,8 +259,8 @@ Blockly.FieldAngle.prototype.initView = function() {
  * @protected
  * @override
  */
-Blockly.FieldAngle.prototype.render_ = function() {
-  Blockly.FieldAngle.superClass_.render_.call(this);
+FieldAngle.prototype.render_ = function() {
+  FieldAngle.superClass_.render_.call(this);
   this.updateGraph_();
 };
 
@@ -270,22 +270,18 @@ Blockly.FieldAngle.prototype.render_ = function() {
  *     or undefined if triggered programmatically.
  * @protected
  */
-Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
+FieldAngle.prototype.showEditor_ = function(opt_e) {
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
-  var noFocus =
-      Blockly.utils.userAgent.MOBILE ||
-      Blockly.utils.userAgent.ANDROID ||
-      Blockly.utils.userAgent.IPAD;
-  Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
+  const noFocus = userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD;
+  FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
   this.dropdownCreate_();
-  Blockly.DropDownDiv.getContentDiv().appendChild(this.editor_);
+  DropDownDiv.getContentDiv().appendChild(this.editor_);
 
-  Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+  DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
       this.sourceBlock_.style.colourTertiary);
 
-  Blockly.DropDownDiv.showPositionedByField(
-      this, this.dropdownDispose_.bind(this));
+  DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
   this.updateGraph_();
 };
@@ -294,46 +290,46 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
  * Create the angle dropdown editor.
  * @private
  */
-Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
-  var svg = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.SVG, {
-        'xmlns': Blockly.utils.dom.SVG_NS,
-        'xmlns:html': Blockly.utils.dom.HTML_NS,
-        'xmlns:xlink': Blockly.utils.dom.XLINK_NS,
+FieldAngle.prototype.dropdownCreate_ = function() {
+  const svg = dom.createSvgElement(
+      Svg.SVG, {
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
-        'height': (Blockly.FieldAngle.HALF * 2) + 'px',
-        'width': (Blockly.FieldAngle.HALF * 2) + 'px',
+        'height': (FieldAngle.HALF * 2) + 'px',
+        'width': (FieldAngle.HALF * 2) + 'px',
         'style': 'touch-action: none'
       }, null);
-  var circle = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.CIRCLE, {
-        'cx': Blockly.FieldAngle.HALF,
-        'cy': Blockly.FieldAngle.HALF,
-        'r': Blockly.FieldAngle.RADIUS,
+  const circle = dom.createSvgElement(
+      Svg.CIRCLE, {
+        'cx': FieldAngle.HALF,
+        'cy': FieldAngle.HALF,
+        'r': FieldAngle.RADIUS,
         'class': 'blocklyAngleCircle'
       }, svg);
-  this.gauge_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH, {
+  this.gauge_ = dom.createSvgElement(
+      Svg.PATH, {
         'class': 'blocklyAngleGauge'
       }, svg);
-  this.line_ = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.LINE, {
-        'x1': Blockly.FieldAngle.HALF,
-        'y1': Blockly.FieldAngle.HALF,
+  this.line_ = dom.createSvgElement(
+      Svg.LINE, {
+        'x1': FieldAngle.HALF,
+        'y1': FieldAngle.HALF,
         'class': 'blocklyAngleLine'
       }, svg);
   // Draw markers around the edge.
-  for (var angle = 0; angle < 360; angle += 15) {
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.LINE, {
-          'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
-          'y1': Blockly.FieldAngle.HALF,
-          'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
+  for (let angle = 0; angle < 360; angle += 15) {
+    dom.createSvgElement(
+        Svg.LINE, {
+          'x1': FieldAngle.HALF + FieldAngle.RADIUS,
+          'y1': FieldAngle.HALF,
+          'x2': FieldAngle.HALF + FieldAngle.RADIUS -
               (angle % 45 == 0 ? 10 : 5),
-          'y2': Blockly.FieldAngle.HALF,
+          'y2': FieldAngle.HALF,
           'class': 'blocklyAngleMarks',
           'transform': 'rotate(' + angle + ',' +
-              Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
+              FieldAngle.HALF + ',' + FieldAngle.HALF + ')'
         }, svg);
   }
 
@@ -341,13 +337,13 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // mousemove even if it's not in the middle of a drag.  In future we may
   // change this behaviour.
   this.clickWrapper_ =
-      Blockly.browserEvents.conditionalBind(svg, 'click', this, this.hide_);
+      browserEvents.conditionalBind(svg, 'click', this, this.hide_);
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.clickSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
       circle, 'click', this, this.onMouseMove_, true, true);
-  this.moveSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+  this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
       circle, 'mousemove', this, this.onMouseMove_, true, true);
   this.editor_ = svg;
 };
@@ -356,17 +352,17 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
  * Disposes of events and DOM-references belonging to the angle editor.
  * @private
  */
-Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
+FieldAngle.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
-    Blockly.browserEvents.unbind(this.clickWrapper_);
+    browserEvents.unbind(this.clickWrapper_);
     this.clickWrapper_ = null;
   }
   if (this.clickSurfaceWrapper_) {
-    Blockly.browserEvents.unbind(this.clickSurfaceWrapper_);
+    browserEvents.unbind(this.clickSurfaceWrapper_);
     this.clickSurfaceWrapper_ = null;
   }
   if (this.moveSurfaceWrapper_) {
-    Blockly.browserEvents.unbind(this.moveSurfaceWrapper_);
+    browserEvents.unbind(this.moveSurfaceWrapper_);
     this.moveSurfaceWrapper_ = null;
   }
   this.gauge_ = null;
@@ -377,9 +373,9 @@ Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
  * Hide the editor.
  * @private
  */
-Blockly.FieldAngle.prototype.hide_ = function() {
-  Blockly.DropDownDiv.hideIfOwner(this);
-  Blockly.WidgetDiv.hide();
+FieldAngle.prototype.hide_ = function() {
+  DropDownDiv.hideIfOwner(this);
+  WidgetDiv.hide();
 };
 
 /**
@@ -387,17 +383,17 @@ Blockly.FieldAngle.prototype.hide_ = function() {
  * @param {!Event} e Mouse move event.
  * @protected
  */
-Blockly.FieldAngle.prototype.onMouseMove_ = function(e) {
+FieldAngle.prototype.onMouseMove_ = function(e) {
   // Calculate angle.
-  var bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
-  var dx = e.clientX - bBox.left - Blockly.FieldAngle.HALF;
-  var dy = e.clientY - bBox.top - Blockly.FieldAngle.HALF;
-  var angle = Math.atan(-dy / dx);
+  const bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
+  const dx = e.clientX - bBox.left - FieldAngle.HALF;
+  const dy = e.clientY - bBox.top - FieldAngle.HALF;
+  let angle = Math.atan(-dy / dx);
   if (isNaN(angle)) {
     // This shouldn't happen, but let's not let this error propagate further.
     return;
   }
-  angle = Blockly.utils.math.toDegrees(angle);
+  angle = math.toDegrees(angle);
   // 0: East, 90: North, 180: West, 270: South.
   if (dx < 0) {
     angle += 180;
@@ -422,7 +418,7 @@ Blockly.FieldAngle.prototype.onMouseMove_ = function(e) {
  * @param {number} angle New angle.
  * @private
  */
-Blockly.FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
+FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
   if (this.round_) {
     angle = Math.round(angle / this.round_) * this.round_;
   }
@@ -436,34 +432,34 @@ Blockly.FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
  * Redraw the graph with the current angle.
  * @private
  */
-Blockly.FieldAngle.prototype.updateGraph_ = function() {
+FieldAngle.prototype.updateGraph_ = function() {
   if (!this.gauge_) {
     return;
   }
   // Always display the input (i.e. getText) even if it is invalid.
-  var angleDegrees = Number(this.getText()) + this.offset_;
+  let angleDegrees = Number(this.getText()) + this.offset_;
   angleDegrees %= 360;
-  var angleRadians = Blockly.utils.math.toRadians(angleDegrees);
-  var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];
-  var x2 = Blockly.FieldAngle.HALF;
-  var y2 = Blockly.FieldAngle.HALF;
+  let angleRadians = math.toRadians(angleDegrees);
+  const path = ['M ', FieldAngle.HALF, ',', FieldAngle.HALF];
+  let x2 = FieldAngle.HALF;
+  let y2 = FieldAngle.HALF;
   if (!isNaN(angleRadians)) {
-    var clockwiseFlag = Number(this.clockwise_);
-    var angle1 = Blockly.utils.math.toRadians(this.offset_);
-    var x1 = Math.cos(angle1) * Blockly.FieldAngle.RADIUS;
-    var y1 = Math.sin(angle1) * -Blockly.FieldAngle.RADIUS;
+    const clockwiseFlag = Number(this.clockwise_);
+    const angle1 = math.toRadians(this.offset_);
+    const x1 = Math.cos(angle1) * FieldAngle.RADIUS;
+    const y1 = Math.sin(angle1) * -FieldAngle.RADIUS;
     if (clockwiseFlag) {
       angleRadians = 2 * angle1 - angleRadians;
     }
-    x2 += Math.cos(angleRadians) * Blockly.FieldAngle.RADIUS;
-    y2 -= Math.sin(angleRadians) * Blockly.FieldAngle.RADIUS;
+    x2 += Math.cos(angleRadians) * FieldAngle.RADIUS;
+    y2 -= Math.sin(angleRadians) * FieldAngle.RADIUS;
     // Don't ask how the flag calculations work.  They just do.
-    var largeFlag = Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
+    let largeFlag = Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
     if (clockwiseFlag) {
       largeFlag = 1 - largeFlag;
     }
     path.push(' l ', x1, ',', y1,
-        ' A ', Blockly.FieldAngle.RADIUS, ',', Blockly.FieldAngle.RADIUS,
+        ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
         ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
   }
   this.gauge_.setAttribute('d', path.join(''));
@@ -477,25 +473,25 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
  * @protected
  * @override
  */
-Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
-  Blockly.FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
+FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
+  FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
 
-  var multiplier;
-  if (e.keyCode === Blockly.utils.KeyCodes.LEFT) {
+  let multiplier;
+  if (e.keyCode === KeyCodes.LEFT) {
     // decrement (increment in RTL)
     multiplier = this.sourceBlock_.RTL ? 1 : -1;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.RIGHT) {
+  } else if (e.keyCode === KeyCodes.RIGHT) {
     // increment (decrement in RTL)
     multiplier = this.sourceBlock_.RTL ? -1 : 1;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.DOWN) {
+  } else if (e.keyCode === KeyCodes.DOWN) {
     // decrement
     multiplier = -1;
-  } else if (e.keyCode === Blockly.utils.KeyCodes.UP) {
+  } else if (e.keyCode === KeyCodes.UP) {
     // increment
     multiplier = 1;
   }
   if (multiplier) {
-    var value = /** @type {number} */ (this.getValue());
+    const value = /** @type {number} */ (this.getValue());
     this.displayMouseOrKeyboardValue_(
         value + (multiplier * this.round_));
     e.preventDefault();
@@ -510,8 +506,8 @@ Blockly.FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
  * @protected
  * @override
  */
-Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
-  var value = Number(opt_newValue);
+FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
+  const value = Number(opt_newValue);
   if (isNaN(value) || !isFinite(value)) {
     return null;
   }
@@ -524,7 +520,7 @@ Blockly.FieldAngle.prototype.doClassValidation_ = function(opt_newValue) {
  * @return {number} The wrapped value.
  * @private
  */
-Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
+FieldAngle.prototype.wrapValue_ = function(value) {
   value %= 360;
   if (value < 0) {
     value += 360;
@@ -538,33 +534,28 @@ Blockly.FieldAngle.prototype.wrapValue_ = function(value) {
 /**
  * CSS for angle field.  See css.js for use.
  */
-Blockly.Css.register([
-  /* eslint-disable indent */
-  '.blocklyAngleCircle {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-    'fill: #ddd;',
-    'fill-opacity: .8;',
-  '}',
-
-  '.blocklyAngleMarks {',
-    'stroke: #444;',
-    'stroke-width: 1;',
-  '}',
-
-  '.blocklyAngleGauge {',
-    'fill: #f88;',
-    'fill-opacity: .8;',
-    'pointer-events: none;',
-  '}',
-
-  '.blocklyAngleLine {',
-    'stroke: #f00;',
-    'stroke-width: 2;',
-    'stroke-linecap: round;',
-    'pointer-events: none;',
-  '}'
-  /* eslint-enable indent */
+Css.register([
+  `.blocklyAngleCircle {
+  stroke: #444;
+  stroke-width: 1;
+  fill: #ddd;
+  fill-opacity: .8;
+}`,
+  `.blocklyAngleMarks {
+  stroke: #444;
+  stroke-width: 1;
+}`,
+  `.blocklyAngleGauge {
+  fill: #f88;
+  fill-opacity: .8;
+  pointer-events: none;
+}`,
+  `.blocklyAngleLine {
+  stroke: #f00;
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}`
 ]);
 
-Blockly.fieldRegistry.register('field_angle', Blockly.FieldAngle);
+fieldRegistry.register('field_angle', FieldAngle);

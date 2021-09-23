@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IDraggable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IDeletable = goog.requireType('Blockly.IDeletable');

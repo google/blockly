@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.IRegistrable');
-goog.module.declareLegacyNamespace();
 
 
 /**

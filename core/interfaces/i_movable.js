@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IMovable');
-goog.module.declareLegacyNamespace();
 
 
 /**

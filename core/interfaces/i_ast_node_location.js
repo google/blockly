@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IASTNodeLocation');
-goog.module.declareLegacyNamespace();
 
 /**
  * An AST node location interface.

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.serialization.variables');
-goog.module.declareLegacyNamespace();
 
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.require('Blockly.serialization.ISerializer');

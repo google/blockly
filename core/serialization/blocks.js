@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.serialization.blocks');
-goog.module.declareLegacyNamespace();
 
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 // eslint-disable-next-line no-unused-vars

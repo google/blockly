@@ -120,12 +120,12 @@ const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {Block} = goog.require('Blockly.Block');
 const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');

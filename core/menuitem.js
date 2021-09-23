@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.MenuItem');
-goog.module.declareLegacyNamespace();
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');

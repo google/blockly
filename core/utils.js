@@ -17,7 +17,6 @@
  * @namespace
  */
 goog.module('Blockly.utils');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');

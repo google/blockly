@@ -20,7 +20,6 @@
  * @namespace
  */
 goog.module('Blockly.Tooltip');
-goog.module.declareLegacyNamespace();
 
 const blocklyString = goog.require('Blockly.utils.string');
 const browserEvents = goog.require('Blockly.browserEvents');

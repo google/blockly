@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.clipboard');
-goog.module.declareLegacyNamespace();
 
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */

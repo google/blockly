@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');

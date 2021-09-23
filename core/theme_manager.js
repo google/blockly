@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.ThemeManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');

@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.DeleteArea');
-goog.module.declareLegacyNamespace();
 
 const DragTarget = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */

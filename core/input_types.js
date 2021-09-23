@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.inputTypes');
-goog.module.declareLegacyNamespace();
 
 const connectionTypes = goog.require('Blockly.connectionTypes');
 

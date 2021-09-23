@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FlyoutButton');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');

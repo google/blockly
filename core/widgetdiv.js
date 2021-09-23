@@ -114,7 +114,7 @@ exports.createDom = createDom;
  * @param {boolean} rtl Right-to-left (true) or left-to-right (false).
  * @param {Function} newDispose Optional cleanup function to be run when the
  *     widget is closed.
- * @alias Blocky.WidgetDiv.show
+ * @alias Blockly.WidgetDiv.show
  */
 const show = function(newOwner, rtl, newDispose) {
   hide();

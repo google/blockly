@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Themes.Classic');
-goog.module.declareLegacyNamespace();
 
 const Theme = goog.require('Blockly.Theme');
 

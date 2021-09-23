@@ -10,7 +10,6 @@
 'use strict';
 
 goog.module('Blockly.Themes.Zelos');
-goog.module.declareLegacyNamespace();
 
 const Theme = goog.require('Blockly.Theme');
 

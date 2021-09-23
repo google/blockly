@@ -14,11 +14,6 @@ goog.module('Blockly.WorkspaceSvg');
 goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const BlockSvg = goog.require('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Classic = goog.require('Blockly.Themes.Classic');
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -26,8 +21,6 @@ const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Cursor = goog.requireType('Blockly.Cursor');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
 /* eslint-disable-next-line no-unused-vars */
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
@@ -45,8 +38,6 @@ const IFlyout = goog.requireType('Blockly.IFlyout');
 const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
@@ -95,7 +86,17 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -1518,7 +1519,7 @@ WorkspaceSvg.prototype.paste = function(state) {
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  
+
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
@@ -1859,7 +1860,15 @@ WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   }
 
   const scrollDelta = browserEvents.getScrollDeltaPixels(e);
-  if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
+
+  // Zoom should also be enabled by the command key on Mac devices,
+  // but not super on Unix.
+  let commandKey;
+  if (userAgent.MAC) {
+    commandKey = e.metaKey;
+  }
+
+  if (canWheelZoom && (e.ctrlKey || commandKey || !canWheelMove)) {
     // Zoom.
     // The vertical scroll distance that corresponds to a click of a zoom
     // button.
@@ -2222,7 +2231,8 @@ WorkspaceSvg.prototype.scrollCenter = function() {
 };
 
 /**
- * Scroll the workspace to center on the given block.
+ * Scroll the workspace to center on the given block. If the block has other
+ * blocks stacked below it, the workspace will be centered on the stack.
  * @param {?string} id ID of block center on.
  * @public
  */
@@ -2674,7 +2684,7 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
 
   var onlyClosePopups = !!opt_onlyClosePopups;
   var autoHideables = this.getComponentManager().getComponents(
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+      ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };

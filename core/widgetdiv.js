@@ -57,6 +57,7 @@ let themeClassName = '';
 /**
  * The HTML container for popup overlays (e.g. editor widgets).
  * @type {?Element}
+ * @alias Blockly.WidgetDiv.DIV
  */
 let DIV;
 /** @deprecated September 2021 */
@@ -65,6 +66,7 @@ exports.DIV = DIV;
 /**
  * Returns the HTML container for editor widgets.
  * @return {?Element} The editor widget container.
+ * @alias Blockly.WidgetDiv.getDiv
  */
 const getDiv = function() {
   return DIV;
@@ -93,6 +95,7 @@ Object.defineProperties(exports, {
 
 /**
  * Create the widget div and inject it onto the page.
+ * @alias Blockly.WidgetDiv.createDom
  */
 const createDom = function() {
   if (DIV) {
@@ -112,6 +115,7 @@ exports.createDom = createDom;
  * @param {boolean} rtl Right-to-left (true) or left-to-right (false).
  * @param {Function} newDispose Optional cleanup function to be run when the
  *     widget is closed.
+ * @alias Blocky.WidgetDiv.show
  */
 const show = function(newOwner, rtl, newDispose) {
   hide();
@@ -131,6 +135,7 @@ exports.show = show;
 
 /**
  * Destroy the widget and hide the div.
+ * @alias Blockly.WidgetDiv.hide
  */
 const hide = function() {
   if (!isVisible()) {
@@ -161,6 +166,7 @@ exports.hide = hide;
 /**
  * Is the container visible?
  * @return {boolean} True if visible.
+ * @alias Blockly.WidgetDiv.isVisible
  */
 const isVisible = function() {
   return !!owner;
@@ -171,6 +177,7 @@ exports.isVisible = isVisible;
  * Destroy the widget and hide the div if it is being used by the specified
  * object.
  * @param {!Object} oldOwner The object that was using this container.
+ * @alias Blockly.WidgetDiv.hideIfOwner
  */
 const hideIfOwner = function(oldOwner) {
   if (owner == oldOwner) {
@@ -205,6 +212,7 @@ const positionInternal = function(x, y, height) {
  *     the widget div, in window coordinates.
  * @param {boolean} rtl Whether the workspace is in RTL mode.  This determines
  *     horizontal alignment.
+ * @alias Blockly.WidgetDiv.positionWithAnchor
  */
 const positionWithAnchor = function(viewportBBox, anchorBBox, widgetSize, rtl) {
   const y = calculateY(viewportBBox, anchorBBox, widgetSize);

@@ -45,6 +45,7 @@ const VarRename = goog.require('Blockly.Events.VarRename');
 const ViewportChange = goog.require('Blockly.Events.ViewportChange');
 const eventUtils = goog.require('Blockly.Events.utils');
 
+
 // Events.
 exports.Abstract = Abstract;
 exports.BlockBase = BlockBase;

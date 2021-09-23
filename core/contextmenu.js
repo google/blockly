@@ -16,8 +16,6 @@ goog.module.declareLegacyNamespace();
 // TODO(#5073): Add Blockly require after fixing circular dependency.
 // goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Menu = goog.require('Blockly.Menu');
@@ -28,12 +26,15 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
+const clipboard = goog.require('Blockly.clipboard');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /** @suppress {extraRequire} */
@@ -302,7 +303,7 @@ const commentDuplicateOption = function(comment) {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function() {
-      Blockly.duplicate(comment);
+      clipboard.duplicate(comment);
     }
   };
   return duplicateOption;

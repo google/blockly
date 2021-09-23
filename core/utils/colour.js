@@ -31,6 +31,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
  * @param {string|number} str Colour in some CSS format.
  * @return {?string} A string containing a hex representation of the colour,
  *   or null if can't be parsed.
+ * @alias Blockly.utils.colour.parse
  */
 const parse = function(str) {
   str = String(str).toLowerCase().trim();
@@ -69,6 +70,7 @@ exports.parse = parse;
  * @param {number} g Amount of green, int between 0 and 255.
  * @param {number} b Amount of blue, int between 0 and 255.
  * @return {string} Hex representation of the colour.
+ * @alias Blockly.utils.colour.rgbToHex
  */
 const rgbToHex = function(r, g, b) {
   const rgb = (r << 16) | (g << 8) | b;
@@ -84,6 +86,7 @@ exports.rgbToHex = rgbToHex;
  * @param {string} colour String representing colour in any
  *     colour format ('#ff0000', 'red', '0xff000', etc).
  * @return {!Array<number>} RGB representation of the colour.
+ * @alias Blockly.utils.colour.hexToRgb
  */
 const hexToRgb = function(colour) {
   const hex = parse(colour);
@@ -106,6 +109,7 @@ exports.hexToRgb = hexToRgb;
  * @param {number} s Saturation value in [0, 1].
  * @param {number} v Brightness in [0, 255].
  * @return {string} Hex representation of the colour.
+ * @alias Blockly.utils.colour.hsvToHex
  */
 const hsvToHex = function(h, s, v) {
   let red = 0;
@@ -167,6 +171,7 @@ exports.hsvToHex = hsvToHex;
  * @param {number} factor The weight to be given to colour1 over colour2.
  *     Values should be in the range [0, 1].
  * @return {?string} Combined colour represented in hex.
+ * @alias Blockly.utils.colour.blend
  */
 const blend = function(colour1, colour2, factor) {
   const hex1 = parse(colour1);
@@ -193,6 +198,7 @@ exports.blend = blend;
  * while the values are the "hex" values.
  *
  * @type {!Object<string, string>}
+ * @alias Blockly.utils.colour.names
  */
 const names = {
   'aqua': '#00ffff',
@@ -218,6 +224,7 @@ exports.names = names;
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
+ * @alias Blockly.utils.colour.hueToHex
  */
 const hueToHex = function(hue) {
   return hsvToHex(

@@ -16,8 +16,6 @@
 goog.module('Blockly.DropDownDiv');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -29,6 +27,8 @@ const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const style = goog.require('Blockly.utils.style');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -187,7 +187,7 @@ DropDownDiv.createDom = function() {
   }
   const containerDiv = document.createElement('div');
   containerDiv.className = 'blocklyDropDownDiv';
-  const parentDiv = Blockly.parentContainer || document.body;
+  const parentDiv = common.getParentContainer() || document.body;
   parentDiv.appendChild(containerDiv);
 
   DropDownDiv.DIV_ = containerDiv;
@@ -387,7 +387,7 @@ DropDownDiv.show = function(
   div.style.direction = rtl ? 'rtl' : 'ltr';
 
   const mainWorkspace =
-      /** @type {!WorkspaceSvg} */ (Blockly.getMainWorkspace());
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   DropDownDiv.rendererClassName_ = mainWorkspace.getRenderer().getClassName();
   DropDownDiv.themeClassName_ = mainWorkspace.getTheme().getClassName();
   dom.addClass(div, DropDownDiv.rendererClassName_);

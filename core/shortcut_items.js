@@ -13,8 +13,6 @@
 goog.module('Blockly.ShortcutItems');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Gesture = goog.require('Blockly.Gesture');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
@@ -22,6 +20,8 @@ const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const clipboard = goog.require('Blockly.clipboard');
 const common = goog.require('Blockly.common');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

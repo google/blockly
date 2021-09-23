@@ -13,7 +13,6 @@
 goog.module('Blockly.Events.utils');
 
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -23,6 +22,7 @@ const BlockMove = goog.requireType('Blockly.Events.BlockMove');
 const BlockCreate = goog.requireType('Blockly.Events.BlockMove');
 const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
 const CommentMove = goog.requireType('Blockly.Events.CommentMove');
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**

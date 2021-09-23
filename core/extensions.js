@@ -20,9 +20,9 @@
 goog.module('Blockly.Extensions');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Mutator');
 
 
@@ -31,7 +31,7 @@ goog.requireType('Blockly.Mutator');
  * @private
  */
 const allExtensions = Object.create(null);
-exports.ALL_ = allExtensions;
+exports.TEST_ONLY = {allExtensions};
 
 /**
  * Registers a new extension function. Extensions are functions that help
@@ -42,6 +42,7 @@ exports.ALL_ = allExtensions;
  * @param {Function} initFn The function to initialize an extended block.
  * @throws {Error} if the extension name is empty, the extension is already
  *     registered, or extensionFn is not a function.
+ * @alias Blockly.Extensions.register
  */
 const register = function(name, initFn) {
   if ((typeof name != 'string') || (name.trim() == '')) {
@@ -63,6 +64,7 @@ exports.register = register;
  * @param {!Object} mixinObj The values to mix in.
  * @throws {Error} if the extension name is empty or the extension is already
  *     registered.
+ * @alias Blockly.Extensions.registerMixin
  */
 const registerMixin = function(name, mixinObj) {
   if (!mixinObj || typeof mixinObj != 'object') {
@@ -86,6 +88,7 @@ exports.registerMixin = registerMixin;
  * @param {!Array<string>=} opt_blockList A list of blocks to appear in the
  *     flyout of the mutator dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
+ * @alias Blockly.Extensions.registerMutator
  */
 const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
@@ -119,6 +122,7 @@ exports.registerMutator = registerMutator;
 /**
  * Unregisters the extension registered with the given name.
  * @param {string} name The name of the extension to unregister.
+ * @alias Blockly.Extensions.unregister
  */
 const unregister = function(name) {
   if (allExtensions[name]) {
@@ -137,6 +141,7 @@ exports.unregister = unregister;
  * @param {!Block} block The block to apply the named extension to.
  * @param {boolean} isMutator True if this extension defines a mutator.
  * @throws {Error} if the extension is not found.
+ * @alias Blockly.Extensions.apply
  */
 const apply = function(name, block, isMutator) {
   const extensionFn = allExtensions[name];
@@ -246,7 +251,7 @@ const checkHasFunctionPair =
   function(object, name1, name2, errorPrefix) {
     var has1 = object[name1] !== undefined;
     var has2 = object[name2] !== undefined;
-  
+
     if (has1 && has2) {
       if (typeof object[name1] != 'function') {
         throw Error(errorPrefix + name1 + ' must be a function.');
@@ -348,6 +353,7 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
  * @param {!Object<string, string>} lookupTable The table of field values to
  *     tooltip text.
  * @return {!Function} The extension function.
+ * @alias Blockly.Extensions.buildTooltipForDropdown
  */
 const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   // List of block types already validated, to minimize duplicate warnings.
@@ -430,6 +436,7 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
  *     %1 placeholder.
  * @param {string} fieldName The field with the replacement text.
  * @return {!Function} The extension function.
+ * @alias Blockly.Extensions.buildTooltipWithFieldText
  */
 const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Check the tooltip string messages for invalid references.

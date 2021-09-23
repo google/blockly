@@ -77,8 +77,7 @@ var JSCOMP_ERROR = [
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
-  // Disabling this until we have fixed all the require issues.
+  'missingRequire',
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -365,7 +364,7 @@ function buildDeps(done) {
  */
 function generateLangfiles(done) {
   // Run js_to_json.py
-  const jsToJsonCmd = `python scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -397,13 +396,13 @@ function buildLangfiles(done) {
   // Create output directory.
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
   fs.mkdirSync(outputDir, {recursive: true});
-  
+
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
+  const createMessagesCmd = `python3 ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \

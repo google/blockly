@@ -6,8 +6,9 @@
 
 goog.module('Blockly.test.event');
 
+const eventUtils = goog.require('Blockly.Events.utils');
 const {assertEventEquals, assertNthCallEventArgEquals, assertVariableValues, createFireChangeListenerSpy, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const eventUtils = goog.require('Blockly.Events');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 goog.require('Blockly.WorkspaceComment');
 
 
@@ -368,36 +369,36 @@ suite('Events', function() {
           isStart: false, blockId: thisObj.block.id, blocks: [thisObj.block]})},
       {title: 'null to Block Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [thisObj.block, true, null,
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block)],
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: thisObj.block.id, oldNode: null,
-          newNode: new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          newNode: new ASTNode(ASTNode.types.BLOCK,
               thisObj.block)})},
       {title: 'null to Workspace Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [null, true, null,
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: null, oldNode: null,
-          newNode: Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          newNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))})},
       {title: 'Workspace to Block Marker move',
         class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [thisObj.block, true,
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block)],
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: thisObj.block.id,
-          oldNode: Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          oldNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
-          newNode: new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          newNode: new ASTNode(ASTNode.types.BLOCK,
               thisObj.block)})},
       {title: 'Block to Workspace Marker move',
         class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [null, true,
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block),
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))]},
       {title: 'Selected', class: Blockly.Events.Selected,
         getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],

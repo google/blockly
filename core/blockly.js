@@ -17,9 +17,12 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
+const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
+const Marker = goog.require('Blockly.Marker');
 const Size = goog.require('Blockly.utils.Size');
+const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
@@ -36,6 +39,13 @@ const Events = goog.require('Blockly.Events');
 const inputTypes = goog.require('Blockly.inputTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const {Block} = goog.require('Blockly.Block');
+const {BlockDragger} = goog.require('Blockly.BlockDragger');
+const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
+const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -66,6 +76,7 @@ goog.require('Blockly.Xml');
  * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the
  * compiler to override this constant.
  * @define {string}
+ * @alias Blockly.VERSION
  */
 exports.VERSION = 'uncompiled';
 
@@ -143,6 +154,7 @@ Object.defineProperties(exports, {
  * @param {!SVGElement} svg SVG image.
  * @return {!Size} Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
+ * @alias Blockly.svgSize
  */
 const svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
@@ -159,6 +171,7 @@ exports.svgSize = svgSize;
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @alias Blockly.resizeSvgContents
  */
 const resizeSvgContents = function(workspace) {
   workspace.resizeContents();
@@ -169,6 +182,7 @@ exports.resizeSvgContents = resizeSvgContents;
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
  * @package
+ * @alias Blockly.copy
  */
 exports.copy = clipboard.copy;
 
@@ -176,6 +190,7 @@ exports.copy = clipboard.copy;
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
  * @package
+ * @alias Blockly.paste
  */
 exports.paste = clipboard.paste;
 
@@ -184,6 +199,7 @@ exports.paste = clipboard.paste;
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     copied.
  * @package
+ * @alias Blockly.duplicate
  */
 exports.duplicate = clipboard.duplicate;
 
@@ -191,6 +207,7 @@ exports.duplicate = clipboard.duplicate;
  * Close tooltips, context menus, dropdown selections, etc.
  * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
   deprecation.warn('Blockly.hideChaff', 'September 2021', 'September 2022');
@@ -203,6 +220,7 @@ exports.hideChaff = hideChaff;
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
  * @return {!Workspace} The main workspace.
+ * @alias Blockly.getMainWorkspace
  */
 exports.getMainWorkspace = common.getMainWorkspace;
 
@@ -223,6 +241,7 @@ const jsonInitFactory = function(jsonDef) {
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @alias Blockly.defineBlocksWithJsonArray
  */
 const defineBlocksWithJsonArray = function(jsonArray) {
   for (let i = 0; i < jsonArray.length; i++) {
@@ -238,12 +257,12 @@ const defineBlocksWithJsonArray = function(jsonArray) {
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
       } else {
-        if (Blockly.Blocks[typename]) {
+        if (Blocks[typename]) {
           console.warn(
               'Block definition #' + i + ' in JSON array' +
               ' overwrites prior definition of "' + typename + '".');
         }
-        Blockly.Blocks[typename] = {init: jsonInitFactory(elem)};
+        Blocks[typename] = {init: jsonInitFactory(elem)};
       }
     }
   }
@@ -254,6 +273,7 @@ exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
+ * @alias Blockly.isNumber
  */
 const isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
@@ -267,6 +287,7 @@ exports.isNumber = isNumber;
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
+ * @alias Blockly.setParentContainer
  */
 exports.setParentContainer = common.setParentContainer;
 
@@ -275,6 +296,7 @@ exports.setParentContainer = common.setParentContainer;
 /**
  * @see colour.hueToHex
  * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
+ * @alias Blockly.hueToHex
  */
  exports.hueToHex = colour.hueToHex;
 
@@ -398,4 +420,13 @@ exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
+exports.ASTNode = ASTNode;
+exports.BasicCursor = BasicCursor;
+exports.Block = Block;
+exports.BlockDragger = BlockDragger;
+exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
+exports.BlockSvg = BlockSvg;
+exports.Cursor = Cursor;
 exports.Events = Events;
+exports.Marker = Marker;
+exports.TabNavigateCursor = TabNavigateCursor;

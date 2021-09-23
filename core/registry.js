@@ -17,8 +17,6 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Cursor = goog.requireType('Blockly.Cursor');
-/* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
@@ -40,6 +38,8 @@ const Theme = goog.requireType('Blockly.Theme');
 const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
+/* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
 
 
 /**
@@ -50,8 +50,7 @@ const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
  * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
 const typeMap = Object.create(null);
-/** @private */
-exports.typeMap_ = typeMap;
+exports.TEST_ONLY = {typeMap};
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we

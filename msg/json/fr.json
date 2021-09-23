@@ -391,5 +391,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attention : ce bloc ne peut être utilisé que dans une définition de fonction.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Expliquez quelque chose...",
 	"WORKSPACE_ARIA_LABEL": "Espace de travail de Blocky",
-	"COLLAPSED_WARNINGS_WARNING": "Les blocs repliés contiennent des avertissements."
+	"COLLAPSED_WARNINGS_WARNING": "Les blocs repliés contiennent des avertissements.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Annuler"
 }

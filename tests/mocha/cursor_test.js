@@ -7,6 +7,7 @@
 goog.module('Blockly.test.cursor');
 
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 
 
 suite('Cursor', function() {
@@ -82,14 +83,14 @@ suite('Cursor', function() {
   });
 
   test('Next - From a Previous skip over next connection and block', function() {
-    var prevNode = Blockly.ASTNode.createConnectionNode(this.blocks.A.previousConnection);
+    var prevNode = ASTNode.createConnectionNode(this.blocks.A.previousConnection);
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
     chai.assert.equal(curNode.getLocation(), this.blocks.B.previousConnection);
   });
   test('Next - From last block in a stack go to next connection', function() {
-    var prevNode = Blockly.ASTNode.createConnectionNode(this.blocks.B.previousConnection);
+    var prevNode = ASTNode.createConnectionNode(this.blocks.B.previousConnection);
     this.cursor.setCurNode(prevNode);
     this.cursor.next();
     var curNode = this.cursor.getCurNode();
@@ -98,7 +99,7 @@ suite('Cursor', function() {
 
   test('In - From output connection', function() {
     var fieldBlock = this.blocks.E;
-    var outputNode = Blockly.ASTNode.createConnectionNode(fieldBlock.outputConnection);
+    var outputNode = ASTNode.createConnectionNode(fieldBlock.outputConnection);
     this.cursor.setCurNode(outputNode);
     this.cursor.in();
     var curNode = this.cursor.getCurNode();
@@ -107,7 +108,7 @@ suite('Cursor', function() {
 
   test('Prev - From previous connection skip over next connection', function() {
     var prevConnection = this.blocks.B.previousConnection;
-    var prevConnectionNode = Blockly.ASTNode.createConnectionNode(prevConnection);
+    var prevConnectionNode = ASTNode.createConnectionNode(prevConnection);
     this.cursor.setCurNode(prevConnectionNode);
     this.cursor.prev();
     var curNode = this.cursor.getCurNode();
@@ -116,7 +117,7 @@ suite('Cursor', function() {
 
   test('Out - From field skip over block node', function() {
     var field = this.blocks.E.inputList[0].fieldRow[0];
-    var fieldNode = Blockly.ASTNode.createFieldNode(field);
+    var fieldNode = ASTNode.createFieldNode(field);
     this.cursor.setCurNode(fieldNode);
     this.cursor.out();
     var curNode = this.cursor.getCurNode();

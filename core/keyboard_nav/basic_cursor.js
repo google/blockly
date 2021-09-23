@@ -12,12 +12,11 @@
 'use strict';
 
 goog.module('Blockly.BasicCursor');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Cursor = goog.require('Blockly.Cursor');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Cursor} = goog.require('Blockly.Cursor');
 
 
 /**
@@ -217,4 +216,4 @@ BasicCursor.prototype.getRightMostChild_ = function(node) {
 registry.register(
     registry.Type.CURSOR, BasicCursor.registrationName, BasicCursor);
 
-exports = BasicCursor;
+exports.BasicCursor = BasicCursor;

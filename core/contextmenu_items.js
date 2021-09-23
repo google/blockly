@@ -13,8 +13,6 @@
 goog.module('Blockly.ContextMenuItems');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
@@ -25,6 +23,8 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /** Option to undo previous action. */

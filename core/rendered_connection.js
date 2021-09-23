@@ -13,10 +13,6 @@
 goog.module('Blockly.RenderedConnection');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
@@ -31,6 +27,10 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

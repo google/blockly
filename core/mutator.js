@@ -17,12 +17,9 @@ goog.module.declareLegacyNamespace();
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const BlockChange = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
@@ -40,6 +37,10 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const xml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -348,6 +349,8 @@ Mutator.prototype.setVisible = function(visible) {
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
+    // Update the source block immediately after the bubble becomes visible.
+    this.updateWorkspace_();
     this.applyColour();
   } else {
     // Dispose of the bubble.
@@ -367,17 +370,24 @@ Mutator.prototype.setVisible = function(visible) {
 };
 
 /**
- * Update the source block when the mutator's blocks are changed.
- * Bump down any block that's too high.
  * Fired whenever a change is made to the mutator's workspace.
  * @param {!Abstract} e Custom data for event.
  * @private
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
-  if (e.isUiEvent || (e.type == eventUtils.CHANGE && e.element == 'disabled')) {
-    return;
+  if (!(e.isUiEvent ||
+      (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
+      e.type == eventUtils.CREATE)) {
+    this.updateWorkspace_();
   }
+};
 
+/**
+ * Updates the source block when the mutator's blocks are changed.
+ * Bump down any block that's too high.
+ * @private
+ */
+Mutator.prototype.updateWorkspace_ = function() {
   if (!this.workspace_.isDragging()) {
     const blocks = this.workspace_.getTopBlocks(false);
     const MARGIN = 20;

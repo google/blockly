@@ -269,5 +269,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "namey cıkewtışi:",
 	"PROCEDURES_CREATE_DO": "'%1' vıraze",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Çiyê vace...",
-	"WORKSPACE_ARIA_LABEL": "Blockly Caygurenayışi"
+	"WORKSPACE_ARIA_LABEL": "Blockly Caygurenayışi",
+	"DIALOG_OK": "TEMAM",
+	"DIALOG_CANCEL": "Bıtexelne"
 }

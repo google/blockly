@@ -11,12 +11,11 @@
 'use strict';
 
 goog.module('Blockly.blockAnimations');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

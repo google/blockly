@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.BlockSvg');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Block = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */
@@ -48,7 +45,6 @@ const Mutator = goog.requireType('Blockly.Mutator');
 const Rect = goog.require('Blockly.utils.Rect');
 const RenderedConnection = goog.require('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
-const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -62,13 +58,15 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Block} = goog.require('Blockly.Block');
+const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -272,35 +270,6 @@ BlockSvg.prototype.getColourSecondary = function() {
  */
 BlockSvg.prototype.getColourTertiary = function() {
   return this.style.colourTertiary;
-};
-
-/**
- * Get the shadow colour of a block.
- * @return {?string} #RRGGBB string.
- * @deprecated Use style.colourSecondary. (2020 January 21)
- */
-BlockSvg.prototype.getColourShadow = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourShadow', 'January 2020', 'January 2021',
-      'style.colourSecondary');
-  return this.getColourSecondary();
-};
-
-/**
- * Get the border colour(s) of a block.
- * @return {{colourDark, colourLight, colourBorder}} An object containing
- *     colour values for the border(s) of the block. If the block is using a
- *     style the colourBorder will be defined and equal to the tertiary colour
- *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
- *     attributes will be defined (#RRGGBB strings).
- * @deprecated Use style.colourTertiary. (2020 January 21)
- */
-BlockSvg.prototype.getColourBorder = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourBorder', 'January 2020', 'January 2021',
-      'style.colourTertiary');
-  const colourTertiary = this.getColourTertiary();
-  return {colourBorder: colourTertiary, colourLight: null, colourDark: null};
 };
 
 /**
@@ -1806,4 +1775,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports = BlockSvg;
+exports.BlockSvg = BlockSvg;

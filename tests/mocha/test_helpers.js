@@ -201,7 +201,6 @@ function sharedTestSetup(options = {}) {
   this.sharedCleanup = {
     blockTypesCleanup_: [],
     messagesCleanup_: []
-
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
@@ -217,8 +216,7 @@ exports.sharedTestSetup = sharedTestSetup;
 function sharedTestTeardown() {
   var testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
-    console.error('"' + testRef.fullTitle() +
-        '" did not call sharedTestSetup');
+    console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
   }
 
   try {
@@ -233,16 +231,18 @@ function sharedTestTeardown() {
   } finally {
     // Clear Blockly.Event state.
     eventUtils.setGroup(false);
-    eventUtils.disabled_ = 0;
+    while (!Blockly.Events.isEnabled()) {
+      eventUtils.enable();
+    }
     eventUtils.setRecordUndo(true);
-    if (eventUtils.FIRE_QUEUE_.length) {
+    if (eventUtils.TEST_ONLY.FIRE_QUEUE.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      eventUtils.FIRE_QUEUE_.length = 0;
-      console.warn(testRef.fullTitle() +
-          '" needed cleanup of eventUtils.FIRE_QUEUE_. This may indicate ' +
-          'leakage from an earlier test');
+      eventUtils.TEST_ONLY.FIRE_QUEUE.length = 0;
+      console.warn('"' + testRef.fullTitle() +
+          '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
+          'indicate leakage from an earlier test');
     }
 
     // Restore all stubbed methods.

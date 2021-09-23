@@ -15,7 +15,6 @@ goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const BlockSvg = goog.require('Blockly.BlockSvg');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
@@ -54,6 +53,7 @@ const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 

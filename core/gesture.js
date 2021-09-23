@@ -14,8 +14,6 @@
 goog.module('Blockly.Gesture');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -38,6 +36,8 @@ const common = goog.require('Blockly.common');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */

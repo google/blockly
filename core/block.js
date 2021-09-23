@@ -11,11 +11,9 @@
 'use strict';
 
 goog.module('Blockly.Block');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const ASTNode = goog.require('Blockly.ASTNode');
 const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
@@ -46,6 +44,7 @@ const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -1585,8 +1584,10 @@ Block.prototype.jsonInit = function(json) {
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
-    const rawValue = json['enableContextMenu'];
-    this.contextMenu = !!rawValue;
+    this.contextMenu = !!json['enableContextMenu'];
+  }
+  if (json['suppressPrefixSuffix'] !== undefined) {
+    this.suppressPrefixSuffix = !!json['suppressPrefixSuffix'];
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
@@ -2156,4 +2157,4 @@ Block.prototype.toDevString = function() {
   return msg;
 };
 
-exports = Block;
+exports.Block = Block;

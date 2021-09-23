@@ -13,8 +13,6 @@
 goog.module('Blockly.FieldVariable');
 goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
 /* eslint-disable-next-line no-unused-vars */
 const Menu = goog.requireType('Blockly.Menu');
@@ -29,6 +27,8 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 

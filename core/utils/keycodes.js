@@ -28,6 +28,7 @@ goog.module('Blockly.utils.KeyCodes');
  * correct for non US keyboard layouts. See comments below.
  *
  * @enum {number}
+ * @alias Blockly.utils.KeyCodes
  */
 const KeyCodes = {
   WIN_KEY_FF_LINUX: 0,

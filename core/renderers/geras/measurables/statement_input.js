@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.geras.StatementInput');
-goog.module.declareLegacyNamespace();
 
 const BaseStatementInput = goog.require('Blockly.blockRendering.StatementInput');
 /* eslint-disable-next-line no-unused-vars */

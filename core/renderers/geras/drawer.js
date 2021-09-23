@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.geras.Drawer');
-goog.module.declareLegacyNamespace();
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
 const Highlighter = goog.require('Blockly.geras.Highlighter');

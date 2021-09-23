@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.FieldLabel');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldNumber');
-goog.module.declareLegacyNamespace();
 
 const FieldTextInput = goog.require('Blockly.FieldTextInput');
 const aria = goog.require('Blockly.utils.aria');

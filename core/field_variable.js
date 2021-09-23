@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldVariable');
-goog.module.declareLegacyNamespace();
 
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
 /* eslint-disable-next-line no-unused-vars */

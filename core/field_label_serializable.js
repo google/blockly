@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.FieldLabelSerializable');
-goog.module.declareLegacyNamespace();
 
 const FieldLabel = goog.require('Blockly.FieldLabel');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');

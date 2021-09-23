@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.fieldRegistry');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');

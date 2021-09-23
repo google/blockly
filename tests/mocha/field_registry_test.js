@@ -63,10 +63,7 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
 
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
@@ -91,10 +88,7 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
       
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');

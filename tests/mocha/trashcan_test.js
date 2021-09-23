@@ -205,7 +205,7 @@ suite("Trashcan", function() {
           '</block>'
       );
       fireDeleteEvent(this.workspace,
-          '<block type="test_field_block">' +
+          '<block type="statement_block2">' +
           '  <statement name="NAME">' +
           '    <block type="statement_block2"/>' +
           '  </statement>' +

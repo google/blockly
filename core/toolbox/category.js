@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.ToolboxCategory');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */

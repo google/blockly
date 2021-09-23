@@ -451,30 +451,6 @@ suite('XML', function() {
   suite('domToBlock', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "variables_get",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR"
-          }
-        ]
-      },
-      {
-        "type": "variables_set",
-        "message0": "%1 %2",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR"
-          },
-          {
-            "type": "input_value",
-            "name": "VALUE"
-          }
-        ]
-      }]);
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);

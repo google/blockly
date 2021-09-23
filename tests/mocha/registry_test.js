@@ -6,8 +6,7 @@
 
 goog.module('Blockly.test.registry');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
-
+const {assertWarnings, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Registry', function() {
@@ -99,11 +98,15 @@ suite('Registry', function() {
 
     suite('Does not have', function() {
       test('Type', function() {
-        chai.assert.isNull(Blockly.registry.getClass('bad_type', 'test_name'));
+        assertWarnings(() => {
+          chai.assert.isNull(Blockly.registry.getClass('bad_type', 'test_name'));
+        }, /Unable to find/);
       });
 
       test('Name', function() {
-        chai.assert.isNull(Blockly.registry.getClass('test', 'bad_name'));
+        assertWarnings(() => {
+          chai.assert.isNull(Blockly.registry.getClass('test', 'bad_name'));
+        }, /Unable to find/);
       });
 
       test('Throw if missing', function() {
@@ -135,11 +138,16 @@ suite('Registry', function() {
 
     suite('Does not have', function() {
       test('Type', function() {
-        chai.assert.isNull(Blockly.registry.getObject('bad_type', 'test_name'));
+        assertWarnings(() => {
+          chai.assert.isNull(Blockly.registry.getObject('bad_type', 'test_name'));
+        }, /Unable to find/);
       });
 
       test('Name', function() {
-        chai.assert.isNull(Blockly.registry.getObject('test', 'bad_name'));
+
+        assertWarnings(() => {
+          chai.assert.isNull(Blockly.registry.getObject('test', 'bad_name'));
+        }, /Unable to find/);
       });
 
       test('Throw if missing', function() {
@@ -175,7 +183,9 @@ suite('Registry', function() {
     });
 
     test('Does not have', function() {
-      chai.assert.isNull(Blockly.registry.getAllItems('bad_type'));
+      assertWarnings(() => {
+        chai.assert.isNull(Blockly.registry.getAllItems('bad_type'));
+      }, /Unable to find/);
     });
 
     test('Throw if missing', function() {
@@ -247,12 +257,10 @@ suite('Registry', function() {
     test('Incorrect Plugin Name', function() {
       this.options['plugins']['test'] = 'random';
       var testClass;
-      var warnings = testHelpers.captureWarnings(() => {
+      assertWarnings(() => {
         testClass = Blockly.registry.getClassFromOptions('test', this.options);
-      });
+      }, /Unable to find/);
       chai.assert.isNull(testClass);
-      chai.assert.equal(warnings.length, 1,
-          'Expecting 1 warning about no name "random" found.');
     });
   });
 });

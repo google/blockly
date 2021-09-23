@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.workspaceHelpers');
 
-const {assertVariableValues, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertVariableValues, assertWarnings, workspaceTeardown} = goog.require('Blockly.test.helpers');
 const eventUtils = goog.require('Blockly.Events.utils');
 
 
@@ -1295,11 +1295,9 @@ function testAWorkspace() {
           this.workspace.createVariable('name1', 'type1', 'id1');
           this.workspace.deleteVariableById('id1');
           var workspace = this.workspace;
-          var warnings = testHelpers.captureWarnings(function() {
+          assertWarnings(() => {
             workspace.deleteVariableById('id1');
-          });
-          chai.assert.equal(warnings.length, 1,
-              'Expected 1 warning for second deleteVariableById call.');
+          }, /Can't delete/);
 
           // Check the undoStack only recorded one delete event.
           var undoStack = this.workspace.undoStack_;
@@ -1324,11 +1322,9 @@ function testAWorkspace() {
           createVarBlocksNoEvents(this.workspace, ['id1']);
           this.workspace.deleteVariableById('id1');
           var workspace = this.workspace;
-          var warnings = testHelpers.captureWarnings(function() {
+          assertWarnings(() => {
             workspace.deleteVariableById('id1');
-          });
-          chai.assert.equal(warnings.length, 1,
-              'Expected 1 warning for second deleteVariableById call.');
+          }, /Can't delete/);
 
           // Check the undoStack only recorded one delete event.
           var undoStack = this.workspace.undoStack_;

@@ -91,7 +91,6 @@ exports.recordUndo = eventUtils.recordUndo;
 exports.setGroup = eventUtils.setGroup;
 exports.setRecordUndo = eventUtils.setRecordUndo;
 exports.disableOrphans = eventUtils.disableOrphans;
-exports.disabled_ = eventUtils.disabled_;
 
 // Event types.
 exports.BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;

@@ -257,12 +257,10 @@ suite('Registry', function() {
     test('Incorrect Plugin Name', function() {
       this.options['plugins']['test'] = 'random';
       var testClass;
-      var warnings = testHelpers.captureWarnings(() => {
+      assertWarnings(() => {
         testClass = Blockly.registry.getClassFromOptions('test', this.options);
-      });
+      }, /Unable to find/);
       chai.assert.isNull(testClass);
-      chai.assert.equal(warnings.length, 1,
-          'Expecting 1 warning about no name "random" found.');
     });
   });
 });

@@ -17,7 +17,6 @@
 goog.module('Blockly.Events');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const BlockChange = goog.require('Blockly.Events.BlockChange');
 const BlockCreate = goog.require('Blockly.Events.BlockCreate');

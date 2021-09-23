@@ -17,20 +17,19 @@ goog.module.declareLegacyNamespace();
 const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
+const debug = goog.require('Blockly.blockRendering.debug');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const registry = goog.require('Blockly.registry');
 
-
-/**
- * Whether or not the debugger is turned on.
- * @type {boolean}
- */
-let useDebugger = false;
 /**
  * Returns whether the debugger is turned on.
  * @return {boolean} Whether the debugger is turned on.
  */
 const isDebuggerEnabled = function() {
-  return useDebugger;
+  deprecation.warn(
+      'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
+  return debug.isDebuggerEnabled();
 };
 /** @package */
 exports.isDebuggerEnabled = isDebuggerEnabled;
@@ -42,7 +41,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  *     to register.
  * @throws {Error} if a renderer with the same name has already been registered.
  */
-const register = function(name, rendererClass) {
+ const register = function(name, rendererClass) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 };
 exports.register = register;
@@ -61,7 +60,10 @@ exports.unregister = unregister;
  * @package
  */
 const startDebugger = function() {
-  useDebugger = true;
+  deprecation.warn(
+      'Blockly.blockRendering.startDebugger()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
+  debug.startDebugger();
 };
 /** @package */
 exports.startDebugger = startDebugger;
@@ -71,7 +73,10 @@ exports.startDebugger = startDebugger;
  * @package
  */
 const stopDebugger = function() {
-  useDebugger = false;
+  deprecation.warn(
+      'Blockly.blockRendering.stopDebugger()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
+  debug.stopDebugger();
 };
 /** @package */
 exports.stopDebugger = stopDebugger;

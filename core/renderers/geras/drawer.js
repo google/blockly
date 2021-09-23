@@ -18,7 +18,7 @@ const Highlighter = goog.require('Blockly.geras.Highlighter');
 const PathObject = goog.requireType('Blockly.geras.PathObject');
 /* eslint-disable-next-line no-unused-vars */
 const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
-const blockRendering = goog.require('Blockly.blockRendering');
+const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
@@ -56,7 +56,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     pathObject.flipRTL();
   }
-  if (blockRendering.isDebuggerEnabled()) {
+  if (debug.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();

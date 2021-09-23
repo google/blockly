@@ -19,7 +19,7 @@ const PathObject = goog.requireType('Blockly.zelos.PathObject');
 const RenderInfo = goog.requireType('Blockly.zelos.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const Row = goog.requireType('Blockly.blockRendering.Row');
-const blockRendering = goog.require('Blockly.blockRendering');
+const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
@@ -56,7 +56,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     pathObject.flipRTL();
   }
-  if (blockRendering.isDebuggerEnabled()) {
+  if (debug.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();

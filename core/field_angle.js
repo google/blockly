@@ -559,3 +559,5 @@ Css.register([
 ]);
 
 fieldRegistry.register('field_angle', FieldAngle);
+
+exports = FieldAngle;

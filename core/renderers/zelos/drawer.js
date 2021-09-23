@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.Drawer');
-goog.module.declareLegacyNamespace();
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
 /* eslint-disable-next-line no-unused-vars */

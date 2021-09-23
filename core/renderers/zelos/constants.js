@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.ConstantProvider');
-goog.module.declareLegacyNamespace();
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const Svg = goog.require('Blockly.utils.Svg');

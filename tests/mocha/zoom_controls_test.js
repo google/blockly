@@ -7,7 +7,6 @@
 goog.module('Blockly.test.zoomControls');
 
 const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
-const Click = goog.require('Blockly.Events.Click');
 
 
 suite("Zoom Controls", function() {
@@ -31,7 +30,7 @@ suite("Zoom Controls", function() {
       simulateClick(this.zoomControls.zoomInGroup_);
 
       assertEventFired(
-          this.eventsFireStub, Click,
+          this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'zoom_controls'}, this.workspace.id, null);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
@@ -42,7 +41,7 @@ suite("Zoom Controls", function() {
       simulateClick(this.zoomControls.zoomOutGroup_);
 
       assertEventFired(
-          this.eventsFireStub, Click,
+          this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'zoom_controls'}, this.workspace.id, null);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
@@ -53,10 +52,10 @@ suite("Zoom Controls", function() {
       simulateClick(this.zoomControls.zoomResetGroup_);
 
       assertEventFired(
-          this.eventsFireStub, Click,
+          this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'zoom_controls'}, this.workspace.id, null);
       assertEventNotFired(
-          this.eventsFireStub, Click,
+          this.eventsFireStub, Blockly.Events.Click,
           {targetType: 'workspace'});
       chai.assert.equal(this.workspace.getScale(), 1);
     });

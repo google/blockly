@@ -6,7 +6,6 @@
 
 goog.module('Blockly.test.gesture');
 
-const Events = goog.require('Blockly.Events');
 const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatchPointerEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -34,9 +33,9 @@ suite('Gesture', function() {
     chai.assert.isTrue(isFieldClickSpy.alwaysReturned(isFieldClick));
 
 
-    assertEventFired(eventsFireStub, Events.Selected,
+    assertEventFired(eventsFireStub, Blockly.Events.Selected,
         {oldElementId: null, newElementId: block.id}, fieldWorkspace.id);
-    assertEventNotFired(eventsFireStub, Events.Click, {});
+    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});
   }
 
   function getTopFlyoutBlock(flyout) {

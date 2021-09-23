@@ -6,8 +6,7 @@
 
 goog.module('Blockly.test.comments');
 
-const BubbleOpen = goog.require('Blockly.Events.BubbleOpen');
-const {assertEventFired, createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Comments', function() {
@@ -54,7 +53,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, BubbleOpen,
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
           {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
@@ -66,7 +65,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, BubbleOpen,
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
           {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
@@ -79,7 +78,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, BubbleOpen,
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
           {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });
@@ -94,7 +93,7 @@ suite('Comments', function() {
       chai.assert.isTrue(this.comment.isVisible());
       assertEditable(this.comment);
       assertEventFired(
-          this.eventsFireStub, BubbleOpen,
+          this.eventsFireStub, Blockly.Events.BubbleOpen,
           {bubbleType: 'comment', isOpen: true}, this.workspace.id,
           this.block.id);
     });

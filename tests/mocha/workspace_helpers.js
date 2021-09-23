@@ -7,6 +7,7 @@
 goog.module('Blockly.test.workspaceHelpers');
 
 const {assertVariableValues, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 
 function testAWorkspace() {
@@ -26,8 +27,8 @@ function testAWorkspace() {
 
   teardown(function() {
     // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
+    eventUtils.setGroup(false);
+    eventUtils.disabled_ = 0;
     sinon.restore();
   });
 
@@ -45,19 +46,19 @@ function testAWorkspace() {
   function createVarBlocksNoEvents(workspace, ids) {
     var blocks = [];
     // Turn off events to avoid testing XML at the same time.
-    Blockly.Events.disable();
+    eventUtils.disable();
     for (var i = 0, id; (id = ids[i]); i++) {
       var block = new Blockly.Block(workspace, 'get_var_block');
       block.inputList[0].fieldRow[0].setValue(id);
       blocks.push(block);
     }
-    Blockly.Events.enable();
+    eventUtils.enable();
     return blocks;
   }
 
   suite('clear', function() {
     test('Trivial', function() {
-      sinon.stub(Blockly.Events, "setGroup").returns(null);
+      sinon.stub(eventUtils, "setGroup").returns(null);
       this.workspace.createVariable('name1', 'type1', 'id1');
       this.workspace.createVariable('name2', 'type2', 'id2');
       this.workspace.newBlock('');
@@ -70,7 +71,7 @@ function testAWorkspace() {
     });
 
     test('No variables', function() {
-      sinon.stub(Blockly.Events, "setGroup").returns(null);
+      sinon.stub(eventUtils, "setGroup").returns(null);
       this.workspace.newBlock('');
 
       this.workspace.clear();

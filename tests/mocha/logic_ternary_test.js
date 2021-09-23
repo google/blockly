@@ -7,6 +7,7 @@
 goog.module('Blockly.test.logicTernary');
 
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 
 suite('Logic ternary', function() {
@@ -78,7 +79,7 @@ suite('Logic ternary', function() {
     function connectParentAndCheckConnections(
         block, parent, parentInputName, opt_thenInput, opt_elseInput) {
       parent.getInput(parentInputName).connection.connect(block.outputConnection);
-      Blockly.Events.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(block.getParent(), parent,
           'Successful connection to parent');
       if (opt_thenInput) {
@@ -93,7 +94,7 @@ suite('Logic ternary', function() {
     function connectThenInputAndCheckConnections(
         block, thenInput, opt_elseInput, opt_parent) {
       block.getInput('THEN').connection.connect(thenInput.outputConnection);
-      Blockly.Events.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(thenInput.getParent(), block, 'THEN is connected');
       if (opt_parent) {
         chai.assert.equal(block.getParent(), opt_parent,
@@ -107,7 +108,7 @@ suite('Logic ternary', function() {
     function connectElseInputAndCheckConnections(
         block, elseInput, opt_thenInput, opt_parent) {
       block.getInput('ELSE').connection.connect(elseInput.outputConnection);
-      Blockly.Events.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(elseInput.getParent(), block, 'ELSE is connected');
       if (opt_parent) {
         chai.assert.equal(block.getParent(), opt_parent,

@@ -24,6 +24,7 @@ const BlockCreate = goog.require('Blockly.Events.BlockCreate');
 const BlockDelete = goog.require('Blockly.Events.BlockDelete');
 const BlockDrag = goog.require('Blockly.Events.BlockDrag');
 const BlockMove = goog.require('Blockly.Events.BlockMove');
+const BubbleOpen = goog.require('Blockly.Events.BubbleOpen');
 const Click = goog.require('Blockly.Events.Click');
 const CommentBase = goog.require('Blockly.Events.CommentBase');
 const CommentChange = goog.require('Blockly.Events.CommentChange');
@@ -48,6 +49,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 
 // Events.
 exports.Abstract = Abstract;
+exports.BubbleOpen = BubbleOpen;
 exports.BlockBase = BlockBase;
 exports.BlockChange = BlockChange;
 exports.BlockCreate = BlockCreate;
@@ -90,6 +92,7 @@ exports.recordUndo = eventUtils.recordUndo;
 exports.setGroup = eventUtils.setGroup;
 exports.setRecordUndo = eventUtils.setRecordUndo;
 exports.disableOrphans = eventUtils.disableOrphans;
+exports.disabled_ = eventUtils.disabled_;
 
 // Event types.
 exports.BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;

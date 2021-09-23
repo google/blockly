@@ -452,6 +452,9 @@ const disable = function() {
 };
 exports.disable = disable;
 
+// TODO: Fix this.
+exports.disabled_ = disabled;
+
 /**
  * Start sending events.  Unless events were already disabled when the
  * corresponding call to disable was made.

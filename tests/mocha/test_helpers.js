@@ -7,8 +7,8 @@
 goog.module('Blockly.test.helpers');
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-// TODO: Do I use this or do I still use Events?
 const eventUtils = goog.require('Blockly.Events.utils');
+
 
 /**
  * Check if a variable with the given values exists.
@@ -231,7 +231,7 @@ function sharedTestTeardown() {
   } finally {
     // Clear Blockly.Event state.
     eventUtils.setGroup(false);
-    while (!Blockly.Events.isEnabled()) {
+    while (!eventUtils.isEnabled()) {
       eventUtils.enable();
     }
     eventUtils.setRecordUndo(true);

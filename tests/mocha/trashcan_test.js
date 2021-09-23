@@ -7,6 +7,7 @@
 goog.module('Blockly.test.trashcan');
 
 const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, defineRowBlock, defineStatementBlock, defineStackBlock, defineMutatorBlocks, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 
 suite("Trashcan", function() {
@@ -17,7 +18,7 @@ suite("Trashcan", function() {
     xml = xml.children[0];
     var block = Blockly.Xml.domToBlock(xml, workspace);
     var event = new Blockly.Events.BlockDelete(block);
-    Blockly.Events.fire(event);
+    eventUtils.fire(event);
   }
   function fireNonDeleteEvent(workspace, oldXml) {
     var event = new Blockly.Events.Abstract();
@@ -26,7 +27,7 @@ suite("Trashcan", function() {
     if (oldXml) {
       event.oldXml = oldXml;
     }
-    Blockly.Events.fire(/** @type {Blockly.Events.Abstract} */ event);
+    eventUtils.fire(/** @type {Blockly.Events.Abstract} */ event);
   }
 
   setup(function() {

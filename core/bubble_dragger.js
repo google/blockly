@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.BubbleDragger');
-goog.module.declareLegacyNamespace();
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');

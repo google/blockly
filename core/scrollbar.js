@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.Scrollbar');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 const Touch = goog.require('Blockly.Touch');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */

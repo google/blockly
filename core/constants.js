@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.constants');
-goog.module.declareLegacyNamespace();
 
 
 /**

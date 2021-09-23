@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.InsertionMarkerManager');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');

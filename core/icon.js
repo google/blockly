@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Icon');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Bubble = goog.requireType('Blockly.Bubble');

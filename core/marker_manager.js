@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.MarkerManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');

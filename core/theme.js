@@ -10,7 +10,6 @@
 'use strict';
 
 goog.module('Blockly.Theme');
-goog.module.declareLegacyNamespace();
 
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');

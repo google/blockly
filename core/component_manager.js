@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.ComponentManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IAutoHideable = goog.requireType('Blockly.IAutoHideable');

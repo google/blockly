@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceDragger');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');

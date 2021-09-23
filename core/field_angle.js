@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldAngle');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.ZoomControls');
-goog.module.declareLegacyNamespace();
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');

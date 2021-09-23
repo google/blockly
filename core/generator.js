@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Generator');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Names = goog.requireType('Blockly.Names');

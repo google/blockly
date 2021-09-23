@@ -14,7 +14,6 @@
 'use strict';
 
 goog.module('Blockly.DropDownDiv');
-goog.module.declareLegacyNamespace();
 
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */

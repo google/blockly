@@ -13,6 +13,7 @@
 goog.module('Blockly.Events.BlockChange');
 goog.module.declareLegacyNamespace();
 
+const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
 const object = goog.require('Blockly.utils.object');
@@ -31,7 +32,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @param {?string=} opt_name Name of input or field affected, or null.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
  */
 const BlockChange = function(
@@ -45,7 +46,7 @@ const BlockChange = function(
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-object.inherits(BlockChange, Events.BlockBase);
+object.inherits(BlockChange, BlockBase);
 
 /**
  * Type of this event.

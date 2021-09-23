@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldImage');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const Size = goog.require('Blockly.utils.Size');

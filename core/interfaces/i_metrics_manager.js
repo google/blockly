@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IMetricsManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');

@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IDeletable');
-goog.module.declareLegacyNamespace();
 
 
 /**

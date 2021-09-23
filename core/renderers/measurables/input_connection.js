@@ -10,7 +10,6 @@
  */
 
 goog.module('Blockly.blockRendering.InputConnection');
-goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */

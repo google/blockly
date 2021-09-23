@@ -11,7 +11,6 @@
  */
 
 goog.module('Blockly.blockRendering.Icon');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyIcon = goog.requireType('Blockly.Icon');

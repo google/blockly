@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.blockRendering.Renderer');
-goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
 const ConnectionType = goog.require('Blockly.ConnectionType');

@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.blockRendering.Measurable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');

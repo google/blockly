@@ -11,7 +11,6 @@
  */
 
 goog.module('Blockly.blockRendering.InlineInput');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');

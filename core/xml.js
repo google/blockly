@@ -27,7 +27,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
-const eventHelpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const inputTypes = goog.require('Blockly.inputTypes');
 const utilsXml = goog.require('Blockly.utils.xml');
 goog.requireType('Blockly.Comment');
@@ -424,9 +424,9 @@ const domToWorkspace = function(xml, workspace) {
   }
   const newBlockIds = [];  // A list of block IDs added by this call.
   dom.startTextWidthCache();
-  const existingGroup = eventHelpers.getGroup();
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    eventHelpers.setGroup(true);
+    eventUtils.setGroup(true);
   }
 
   // Disable workspace resizes as an optimization.
@@ -438,7 +438,7 @@ const domToWorkspace = function(xml, workspace) {
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = /** @type {!Element} */ (xmlChild);
-      if (name == 'block' || (name == 'shadow' && !eventHelpers.getRecordUndo())) {
+      if (name == 'block' || (name == 'shadow' && !eventUtils.getRecordUndo())) {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
@@ -493,7 +493,7 @@ const domToWorkspace = function(xml, workspace) {
     }
   } finally {
     if (!existingGroup) {
-      eventHelpers.setGroup(false);
+      eventUtils.setGroup(false);
     }
     dom.stopTextWidthCache();
   }
@@ -501,7 +501,7 @@ const domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
-  eventHelpers.fire(new (eventHelpers.get(eventHelpers.FINISHED_LOADING))(workspace));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
 };
 exports.domToWorkspace = domToWorkspace;
@@ -575,7 +575,7 @@ const domToBlock = function(xmlBlock, workspace) {
         'swap the arguments.');
   }
   // Create top-level block.
-  eventHelpers.disable();
+  eventUtils.disable();
   const variablesBeforeCreation = workspace.getAllVariables();
   let topBlock;
   try {
@@ -609,20 +609,20 @@ const domToBlock = function(xmlBlock, workspace) {
       }
     }
   } finally {
-    eventHelpers.enable();
+    eventUtils.enable();
   }
-  if (eventHelpers.isEnabled()) {
+  if (eventUtils.isEnabled()) {
     const newVariables =
         goog.module.get('Blockly.Variables')
             .getAddedVariables(workspace, variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventHelpers.fire(new (eventHelpers.get(eventHelpers.VAR_CREATE))(thisVariable));
+      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    eventHelpers.fire(new (eventHelpers.get(eventHelpers.CREATE))(topBlock));
+    eventUtils.fire(new (eventUtils.get(eventUtils.CREATE))(topBlock));
   }
   return topBlock;
 };

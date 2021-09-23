@@ -24,7 +24,7 @@ const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
-const helpers = goog.require('Blockly.Events.helpers');
+const eventUtils = goog.require('Blockly.Events.utils');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -328,20 +328,20 @@ const appendInternal = function(
       recordUndo = false
     } = {}
 ) {
-  const prevRecordUndo = helpers.getRecordUndo();
-  helpers.setRecordUndo(recordUndo);
-  const existingGroup = helpers.getGroup();
+  const prevRecordUndo = eventUtils.getRecordUndo();
+  eventUtils.setRecordUndo(recordUndo);
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    helpers.setGroup(true);
+    eventUtils.setGroup(true);
   }
-  helpers.disable();
+  eventUtils.disable();
 
   const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
-  helpers.enable();
-  helpers.fire(new (helpers.get(helpers.BLOCK_CREATE))(block));
-  helpers.setGroup(existingGroup);
-  helpers.setRecordUndo(prevRecordUndo);
+  eventUtils.enable();
+  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+  eventUtils.setGroup(existingGroup);
+  eventUtils.setRecordUndo(prevRecordUndo);
   
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
@@ -672,7 +672,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      append(state, workspace, {recordUndo: helpers.getRecordUndo()});
+      append(state, workspace, {recordUndo: eventUtils.getRecordUndo()});
     }
   }
 

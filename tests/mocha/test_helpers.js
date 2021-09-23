@@ -7,7 +7,8 @@
 goog.module('Blockly.test.helpers');
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-
+// TODO: Do I use this or do I still use Events?
+const eventUtils = goog.require('Blockly.Events.utils');
 
 /**
  * Check if a variable with the given values exists.
@@ -113,7 +114,7 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(Blockly.Events, 'fire');
+  var stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -231,16 +232,16 @@ function sharedTestTeardown() {
     console.error(testRef.fullTitle() + '\n', e);
   } finally {
     // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    Blockly.Events.setRecordUndo(true);
-    if (Blockly.Events.FIRE_QUEUE_.length) {
+    eventUtils.setGroup(false);
+    eventUtils.disabled_ = 0;
+    eventUtils.setRecordUndo(true);
+    if (eventUtils.FIRE_QUEUE_.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      Blockly.Events.FIRE_QUEUE_.length = 0;
+      eventUtils.FIRE_QUEUE_.length = 0;
       console.warn(testRef.fullTitle() +
-          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
+          '" needed cleanup of eventUtils.FIRE_QUEUE_. This may indicate ' +
           'leakage from an earlier test');
     }
 

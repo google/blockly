@@ -16,7 +16,6 @@ goog.module('Blockly.Events.utils');
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -43,8 +42,6 @@ let group = '';
  * @alias Blockly.Events.recordUndo
  */
 let recordUndo = true;
-/** @deprecated September 2021 */
-exports.recordUndo = recordUndo;
 
 /**
  * Sets whether events should be added to the undo stack.
@@ -65,23 +62,6 @@ const getRecordUndo = function() {
   return recordUndo;
 };
 exports.getRecordUndo = getRecordUndo;
-
-Object.defineProperties(exports, {
-  recordUndo: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.getRecordUndo()');
-      return getRecordUndo();
-    },
-    set: function(record) {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.setRecordUndo()');
-      setRecordUndo(record);
-    },
-  }
-});
 
 /**
  * Allow change events to be created and fired.

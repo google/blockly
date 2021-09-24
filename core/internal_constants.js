@@ -14,7 +14,7 @@
 
 goog.module('Blockly.internalConstants');
 
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**

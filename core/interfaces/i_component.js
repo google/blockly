@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.IComponent');
-goog.module.declareLegacyNamespace();
 
 
 /**

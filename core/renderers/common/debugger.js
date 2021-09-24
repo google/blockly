@@ -27,10 +27,10 @@ const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const Row = goog.requireType('Blockly.blockRendering.Row');
 const Svg = goog.require('Blockly.utils.Svg');
 const Types = goog.require('Blockly.blockRendering.Types');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**

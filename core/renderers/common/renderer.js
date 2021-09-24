@@ -13,7 +13,6 @@
 goog.module('Blockly.blockRendering.Renderer');
 
 const Connection = goog.require('Blockly.Connection');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const Debug = goog.requireType('Blockly.blockRendering.Debug');
@@ -38,6 +37,7 @@ const object = goog.require('Blockly.utils.object');
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
 

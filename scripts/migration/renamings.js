@@ -179,6 +179,8 @@ const renamings = {
     },
     'Blockly.connectionTypes': {
       module: 'Blockly.ConnectionType',
+      export: 'ConnectionType',  // Previous default export now named.
+      path: 'Blockly.ConnectionType',  // Type reexported directly.
     },
     'Blockly.utils': {
       exports: {
@@ -191,6 +193,7 @@ const renamings = {
     },
     'Blockly.utils.global': {
       export: 'globalThis',  // Previous default export now named.
+      path: 'Blockly.utils.global',  // But still exported under original name.
     },
     'Blockly.utils.IdGenerator': {
       module: 'Blockly.utils.idGenerator',

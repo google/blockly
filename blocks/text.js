@@ -14,7 +14,6 @@ goog.provide('Blockly.Blocks.texts');  // Deprecated
 goog.provide('Blockly.Constants.Text');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldMultilineInput');

@@ -18,7 +18,6 @@ goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
 const BlocklyOptions = goog.require('Blockly.BlocklyOptions');
-const Blocks = goog.require('Blockly.Blocks');
 const Bubble = goog.require('Blockly.Bubble');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
@@ -150,12 +149,13 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
 const zelos = goog.require('Blockly.zelos');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {Block} = goog.require('Blockly.Block');
 const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {BasicCursor} = goog.require('Blockly.BasicCursor');
+const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
@@ -532,6 +532,7 @@ exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
+// Re-export submodules that no longer declareLegacyNamespace.
 exports.ASTNode = ASTNode;
 exports.BasicCursor = BasicCursor;
 exports.Block = Block;
@@ -539,6 +540,7 @@ exports.BlocklyOptions = BlocklyOptions;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
+exports.Blocks = Blocks;
 exports.Bubble = Bubble;
 exports.BubbleDragger = BubbleDragger;
 exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;

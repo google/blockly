@@ -14,7 +14,6 @@ goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
@@ -44,6 +43,7 @@ const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');

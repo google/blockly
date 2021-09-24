@@ -18,7 +18,6 @@
 goog.provide('Blockly.Constants.VariablesDynamic');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 

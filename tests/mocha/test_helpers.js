@@ -7,6 +7,7 @@
 goog.module('Blockly.test.helpers');
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const {Blocks} = goog.require('Blockly.blocks');
 
 
 /**
@@ -250,7 +251,7 @@ function sharedTestTeardown() {
 
     var blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
-      delete Blockly.Blocks[blockTypes[i]];
+      delete Blocks[blockTypes[i]];
     }
     var messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {

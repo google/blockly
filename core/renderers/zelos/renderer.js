@@ -26,10 +26,10 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
 

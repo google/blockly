@@ -13,7 +13,6 @@
 goog.module('Blockly.InsertionMarkerManager');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
@@ -31,6 +30,7 @@ const constants = goog.require('Blockly.constants');
 const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**

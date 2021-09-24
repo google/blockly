@@ -15,7 +15,6 @@ goog.module('Blockly.RenderedConnection');
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -30,6 +29,7 @@ const utils = goog.require('Blockly.utils');
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**

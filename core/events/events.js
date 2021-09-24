@@ -76,47 +76,6 @@ exports.VarDelete = VarDelete;
 exports.VarRename = VarRename;
 exports.ViewportChange = ViewportChange;
 
-// Event utils.
-exports.clearPendingUndo = eventUtils.clearPendingUndo;
-exports.disable = eventUtils.disable;
-exports.enable = eventUtils.enable;
-exports.filter = eventUtils.filter;
-exports.fire = eventUtils.fire;
-exports.fromJson = eventUtils.fromJson;
-exports.getDescendantIds = eventUtils.getDescendantIds;
-exports.get = eventUtils.get;
-exports.getGroup = eventUtils.getGroup;
-exports.getRecordUndo = eventUtils.getRecordUndo;
-exports.isEnabled = eventUtils.isEnabled;
-exports.setGroup = eventUtils.setGroup;
-exports.setRecordUndo = eventUtils.setRecordUndo;
-exports.disableOrphans = eventUtils.disableOrphans;
-
-/**
- * Sets whether the next event should be added to the undo stack.
- * @type {boolean}
- * @deprecated September 2021
- * @alias Blockly.Events.recordUndo
- */
-exports.recordUndo = false;
-
-Object.defineProperties(exports, {
-  recordUndo: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.getRecordUndo()');
-      return eventUtils.getRecordUndo();
-    },
-    set: function(record) {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.setRecordUndo()');
-      eventUtils.setRecordUndo(record);
-    },
-  }
-});
-
 // Event types.
 exports.BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;
 exports.BLOCK_CREATE = eventUtils.BLOCK_CREATE;
@@ -146,3 +105,44 @@ exports.VAR_CREATE = eventUtils.VAR_CREATE;
 exports.VAR_DELETE = eventUtils.VAR_DELETE;
 exports.VAR_RENAME = eventUtils.VAR_RENAME;
 exports.VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
+
+// Event utils.
+exports.clearPendingUndo = eventUtils.clearPendingUndo;
+exports.disable = eventUtils.disable;
+exports.enable = eventUtils.enable;
+exports.filter = eventUtils.filter;
+exports.fire = eventUtils.fire;
+exports.fromJson = eventUtils.fromJson;
+exports.getDescendantIds = eventUtils.getDescendantIds;
+exports.get = eventUtils.get;
+exports.getGroup = eventUtils.getGroup;
+exports.getRecordUndo = eventUtils.getRecordUndo;
+exports.isEnabled = eventUtils.isEnabled;
+exports.setGroup = eventUtils.setGroup;
+exports.setRecordUndo = eventUtils.setRecordUndo;
+exports.disableOrphans = eventUtils.disableOrphans;
+
+/**
+ * Sets whether the next event should be added to the undo stack.
+ * @type {boolean}
+ * @deprecated September 2021
+ */
+exports.recordUndo = false;
+
+Object.defineProperties(exports, {
+  recordUndo: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+          'Blockly.Events.getRecordUndo()');
+      return eventUtils.getRecordUndo();
+    },
+    set: function(record) {
+      deprecation.warn(
+          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+          'Blockly.Events.setRecordUndo()');
+      eventUtils.setRecordUndo(record);
+    },
+  }
+});
+

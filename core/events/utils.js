@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Helpers methods for events that are fired as a result of
+ * @fileoverview Helper methods for events that are fired as a result of
  * actions in Blockly's editor.
  */
 'use strict';
@@ -15,10 +15,6 @@ goog.module('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
 const BlockMove = goog.requireType('Blockly.Events.BlockMove');
 /* eslint-disable-next-line no-unused-vars */
 const BlockCreate = goog.requireType('Blockly.Events.BlockMove');
@@ -27,6 +23,9 @@ const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
 const CommentMove = goog.requireType('Blockly.Events.CommentMove');
 /* eslint-disable-next-line no-unused-vars */
+const Workspace = goog.requireType('Blockly.Workspace');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const registry = goog.require('Blockly.registry');
 const {Block} = goog.requireType('Blockly.Block');
 
 
@@ -39,7 +38,6 @@ let group = '';
 /**
  * Sets whether the next event should be added to the undo stack.
  * @type {boolean}
- * @alias Blockly.Events.recordUndo
  */
 let recordUndo = true;
 
@@ -575,4 +573,7 @@ const disableOrphans = function(event) {
 };
 exports.disableOrphans = disableOrphans;
 
-exports.TEST_ONLY = {FIRE_QUEUE, fireNow};
+exports.TEST_ONLY = {
+  FIRE_QUEUE,
+  fireNow
+};

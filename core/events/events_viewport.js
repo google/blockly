@@ -12,7 +12,6 @@
 
 goog.module('Blockly.Events.ViewportChange');
 
-
 const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');

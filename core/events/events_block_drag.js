@@ -12,8 +12,8 @@
 
 goog.module('Blockly.Events.BlockDrag');
 
-const eventUtils = goog.require('Blockly.Events.utils');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */

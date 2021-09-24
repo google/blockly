@@ -28,8 +28,8 @@ function testAWorkspace() {
   teardown(function() {
     // Clear Blockly.Event state.
     eventUtils.setGroup(false);
-    while (!Blockly.Events.isEnabled()) {
-      Blockly.Events.enable();
+    while (!eventUtils.isEnabled()) {
+      eventUtils.enable();
     }
     sinon.restore();
   });

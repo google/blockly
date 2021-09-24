@@ -15,7 +15,6 @@ goog.module('Blockly.InsertionMarkerManager');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,6 +26,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -175,7 +175,7 @@ InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
 InsertionMarkerManager.prototype.dispose = function() {
   this.availableConnections_.length = 0;
 
-  Events.disable();
+  eventUtils.disable();
   try {
     if (this.firstMarker_) {
       this.firstMarker_.dispose();
@@ -184,7 +184,7 @@ InsertionMarkerManager.prototype.dispose = function() {
       this.lastMarker_.dispose();
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 };
 
@@ -226,9 +226,9 @@ InsertionMarkerManager.prototype.wouldConnectBlock = function() {
 InsertionMarkerManager.prototype.applyConnections = function() {
   if (this.closestConnection_) {
     // Don't fire events for insertion markers.
-    Events.disable();
+    eventUtils.disable();
     this.hidePreview_();
-    Events.enable();
+    eventUtils.enable();
     // Connect two blocks together.
     this.localConnection_.connect(this.closestConnection_);
     if (this.topBlock_.rendered) {
@@ -263,10 +263,10 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 
   if (shouldUpdate) {
     // Don't fire events for insertion marker creation or movement.
-    Events.disable();
+    eventUtils.disable();
     this.maybeHidePreview_(candidate);
     this.maybeShowPreview_(candidate);
-    Events.enable();
+    eventUtils.enable();
   }
 };
 
@@ -281,7 +281,7 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
   const imType = sourceBlock.type;
 
-  Events.disable();
+  eventUtils.disable();
   let result;
   try {
     result = this.workspace_.newBlock(imType);
@@ -327,7 +327,7 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
     result.initSvg();
     result.getSvgRoot().setAttribute('visibility', 'hidden');
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 
   return result;
@@ -350,11 +350,11 @@ InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
     if (this.lastMarker_) {
-      Events.disable();
+      eventUtils.disable();
       try {
         this.lastMarker_.dispose();
       } finally {
-        Events.enable();
+        eventUtils.enable();
       }
     }
     this.lastMarker_ = this.createMarkerBlock_(lastOnStack.getSourceBlock());

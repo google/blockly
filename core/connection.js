@@ -12,7 +12,6 @@
 
 goog.module('Blockly.Connection');
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
@@ -22,6 +21,7 @@ const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const deprecation = goog.require('Blockly.utils.deprecation');
+const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -134,14 +134,14 @@ Connection.prototype.connect_ = function(childConnection) {
 
   // Connect the new connection to the parent.
   let event;
-  if (Events.isEnabled()) {
-    event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
+  if (eventUtils.isEnabled()) {
+    event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock);
   }
   connectReciprocally(parentConnection, childConnection);
   childBlock.setParent(parentBlock);
   if (event) {
     event.recordNew();
-    Events.fire(event);
+    eventUtils.fire(event);
   }
 
   // Deal with the orphan if it exists.
@@ -289,9 +289,9 @@ Connection.prototype.connect = function(otherConnection) {
 
   const checker = this.getConnectionChecker();
   if (checker.canConnect(this, otherConnection, false)) {
-    const eventGroup = Events.getGroup();
+    const eventGroup = eventUtils.getGroup();
     if (!eventGroup) {
-      Events.setGroup(true);
+      eventUtils.setGroup(true);
     }
     // Determine which block is superior (higher in the source stack).
     if (this.isSuperior()) {
@@ -302,7 +302,7 @@ Connection.prototype.connect = function(otherConnection) {
       otherConnection.connect_(this);
     }
     if (!eventGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
   }
 
@@ -423,9 +423,9 @@ Connection.prototype.disconnect = function() {
     parentConnection = otherConnection;
   }
 
-  const eventGroup = Events.getGroup();
+  const eventGroup = eventUtils.getGroup();
   if (!eventGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
   this.disconnectInternal_(parentBlock, childBlock);
   if (!childBlock.isShadow()) {
@@ -433,7 +433,7 @@ Connection.prototype.disconnect = function() {
     parentConnection.respawnShadow_();
   }
   if (!eventGroup) {
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }
 };
 
@@ -445,8 +445,8 @@ Connection.prototype.disconnect = function() {
  */
 Connection.prototype.disconnectInternal_ = function(parentBlock, childBlock) {
   let event;
-  if (Events.isEnabled()) {
-    event = new (Events.get(Events.BLOCK_MOVE))(childBlock);
+  if (eventUtils.isEnabled()) {
+    event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock);
   }
   const otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;
@@ -454,7 +454,7 @@ Connection.prototype.disconnectInternal_ = function(parentBlock, childBlock) {
   childBlock.setParent(null);
   if (event) {
     event.recordNew();
-    Events.fire(event);
+    eventUtils.fire(event);
   }
 };
 

@@ -12,7 +12,6 @@
 
 goog.module('Blockly.ScrollbarPair');
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
 const Scrollbar = goog.require('Blockly.Scrollbar');
@@ -20,6 +19,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 
 /**
@@ -135,7 +135,7 @@ ScrollbarPair.prototype.resize = function() {
 
   if (resizeH || resizeV) {
     try {
-      Events.disable();
+      eventUtils.disable();
       if (this.hScroll && resizeH) {
         this.hScroll.resize(hostMetrics);
       }
@@ -143,7 +143,7 @@ ScrollbarPair.prototype.resize = function() {
         this.vScroll.resize(hostMetrics);
       }
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
     this.workspace_.maybeFireViewportChangeEvent();
   }

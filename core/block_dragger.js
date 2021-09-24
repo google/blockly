@@ -24,7 +24,7 @@ const blockAnimation = goog.require('Blockly.blockAnimations');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
-const events = goog.require('Blockly.Events');
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -146,8 +146,8 @@ const initIconData = function(block) {
  * @public
  */
 BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
-  if (!events.getGroup()) {
-    events.setGroup(true);
+  if (!eventUtils.getGroup()) {
+    eventUtils.setGroup(true);
   }
   this.fireDragStartEvent_();
 
@@ -213,9 +213,9 @@ BlockDragger.prototype.disconnectBlock_ = function(
  * @protected
  */
 BlockDragger.prototype.fireDragStartEvent_ = function() {
-  const event = new (events.get(events.BLOCK_DRAG))(
+  const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
-  events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**
@@ -301,7 +301,7 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
 
-  events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /**
@@ -362,9 +362,9 @@ BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
  * @protected
  */
 BlockDragger.prototype.fireDragEndEvent_ = function() {
-  const event = new (events.get(events.BLOCK_DRAG))(
+  const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
-  events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**
@@ -395,10 +395,10 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
-  const event = new (events.get(events.BLOCK_MOVE))(this.draggingBlock_);
+  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
-  events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

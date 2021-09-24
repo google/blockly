@@ -15,6 +15,7 @@ goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const BlockChange = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Bubble = goog.require('Blockly.Bubble');
@@ -22,7 +23,6 @@ const Bubble = goog.require('Blockly.Bubble');
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 const Options = goog.require('Blockly.Options');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -30,6 +30,7 @@ const Svg = goog.require('Blockly.utils.Svg');
 const Workspace = goog.requireType('Blockly.Workspace');
 const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -38,8 +39,6 @@ const xml = goog.require('Blockly.utils.xml');
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -188,7 +187,7 @@ Mutator.prototype.createEditor_ = function() {
   }
   this.workspace_ = new WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
-  this.workspace_.addChangeListener(Events.disableOrphans);
+  this.workspace_.addChangeListener(eventUtils.disableOrphans);
 
   // Mutator flyouts go inside the mutator workspace's <g> rather than in
   // a top level SVG. Instead of handling scale themselves, mutators
@@ -294,8 +293,8 @@ Mutator.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
-  Events.fire(
-      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'mutator'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Bubble(
@@ -373,8 +372,8 @@ Mutator.prototype.setVisible = function(visible) {
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
   if (!(e.isUiEvent ||
-      (e.type == Events.CHANGE && e.element == 'disabled') ||
-      e.type == Events.CREATE)) {
+      (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
+      e.type == eventUtils.CREATE)) {
     this.updateWorkspace_();
   }
 };
@@ -414,9 +413,9 @@ Mutator.prototype.updateWorkspace_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
     const block = /** @type {!BlockSvg} */ (this.block_);
-    const oldExtraState = Events.BlockChange.getExtraBlockState_(block);
+    const oldExtraState = BlockChange.getExtraBlockState_(block);
 
     // Switch off rendering while the source block is rebuilt.
     const savedRendered = block.rendered;
@@ -434,16 +433,16 @@ Mutator.prototype.updateWorkspace_ = function() {
       block.render();
     }
 
-    const newExtraState = Events.BlockChange.getExtraBlockState_(block);
+    const newExtraState = BlockChange.getExtraBlockState_(block);
     if (oldExtraState != newExtraState) {
-      Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
-      const group = Events.getGroup();
+      const group = eventUtils.getGroup();
       setTimeout(function() {
-        Events.setGroup(group);
+        eventUtils.setGroup(group);
         block.bumpNeighbours();
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }, internalConstants.BUMP_DELAY);
     }
 
@@ -452,7 +451,7 @@ Mutator.prototype.updateWorkspace_ = function() {
     if (!this.workspace_.isDragging()) {
       this.resizeBubble_();
     }
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }
 };
 

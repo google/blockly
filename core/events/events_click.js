@@ -11,14 +11,14 @@
 'use strict';
 
 goog.module('Blockly.Events.Click');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+
 
 /**
  * Class for a click event.
@@ -49,7 +49,7 @@ object.inherits(Click, UiBase);
  * Type of this event.
  * @type {string}
  */
-Click.prototype.type = Events.CLICK;
+Click.prototype.type = eventUtils.CLICK;
 
 /**
  * Encode the event as JSON.
@@ -74,6 +74,6 @@ Click.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.CLICK, Click);
+registry.register(registry.Type.EVENT, eventUtils.CLICK, Click);
 
 exports = Click;

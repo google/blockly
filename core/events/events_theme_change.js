@@ -11,10 +11,9 @@
 'use strict';
 
 goog.module('Blockly.Events.ThemeChange');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -42,7 +41,7 @@ object.inherits(ThemeChange, UiBase);
  * Type of this event.
  * @type {string}
  */
-ThemeChange.prototype.type = Events.THEME_CHANGE;
+ThemeChange.prototype.type = eventUtils.THEME_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -63,6 +62,6 @@ ThemeChange.prototype.fromJson = function(json) {
   this.themeName = json['themeName'];
 };
 
-registry.register(registry.Type.EVENT, Events.THEME_CHANGE, ThemeChange);
+registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);
 
 exports = ThemeChange;

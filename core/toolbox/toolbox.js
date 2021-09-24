@@ -18,7 +18,6 @@ const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCateg
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const DeleteArea = goog.require('Blockly.DeleteArea');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
@@ -46,8 +45,9 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
 const common = goog.require('Blockly.common');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -988,9 +988,9 @@ Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  const event = new (Events.get(Events.TOOLBOX_ITEM_SELECT))(
+  const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
       oldElement, newElement, this.workspace_.id);
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

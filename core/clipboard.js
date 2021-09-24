@@ -12,9 +12,10 @@
 
 goog.module('Blockly.clipboard');
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
+const eventUtils = goog.require('Blockly.Events.utils');
+
 
 /**
  * Metadata about the object that is currently on the clipboard.
@@ -48,9 +49,9 @@ const paste = function() {
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
     workspace.paste(copyData.saveInfo);
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
     return true;
   }
   return false;

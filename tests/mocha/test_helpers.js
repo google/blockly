@@ -7,6 +7,7 @@
 goog.module('Blockly.test.helpers');
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
 
 
@@ -114,7 +115,7 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(Blockly.Events, 'fire');
+  var stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -230,16 +231,16 @@ function sharedTestTeardown() {
     console.error(testRef.fullTitle() + '\n', e);
   } finally {
     // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    while (!Blockly.Events.isEnabled()) {
-      Blockly.Events.enable();
+    eventUtils.setGroup(false);
+    while (!eventUtils.isEnabled()) {
+      eventUtils.enable();
     }
-    Blockly.Events.setRecordUndo(true);
-    if (Blockly.Events.TEST_ONLY.FIRE_QUEUE.length) {
+    eventUtils.setRecordUndo(true);
+    if (eventUtils.TEST_ONLY.FIRE_QUEUE.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      Blockly.Events.TEST_ONLY.FIRE_QUEUE.length = 0;
+      eventUtils.TEST_ONLY.FIRE_QUEUE.length = 0;
       console.warn('"' + testRef.fullTitle() +
           '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
           'indicate leakage from an earlier test');

@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.comments');
 
-const {assertEventFired, createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Comments', function() {

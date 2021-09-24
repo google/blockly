@@ -11,12 +11,11 @@
 'use strict';
 
 goog.module('Blockly.Events.BlockCreate');
-goog.module.declareLegacyNamespace();
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
-const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,7 +40,7 @@ const BlockCreate = function(opt_block) {
   }
 
   this.xml = Xml.blockToDomWithXY(opt_block);
-  this.ids = Events.getDescendantIds(opt_block);
+  this.ids = eventUtils.getDescendantIds(opt_block);
 
   /**
    * JSON representation of the block that was just created.
@@ -56,7 +55,7 @@ object.inherits(BlockCreate, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockCreate.prototype.type = Events.BLOCK_CREATE;
+BlockCreate.prototype.type = eventUtils.BLOCK_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -109,6 +108,6 @@ BlockCreate.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.CREATE, BlockCreate);
+registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
 
 exports = BlockCreate;

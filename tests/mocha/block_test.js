@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.blocks');
 
+const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
 const {createDeprecationWarningStub, createRenderedBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
@@ -1082,7 +1083,7 @@ suite('Blocks', function() {
       function assertCommentEvent(eventSpy, oldValue, newValue) {
         var calls = eventSpy.getCalls();
         var event = calls[calls.length - 1].args[0];
-        chai.assert.equal(event.type, Blockly.Events.BLOCK_CHANGE);
+        chai.assert.equal(event.type, eventUtils.BLOCK_CHANGE);
         chai.assert.equal(event.element, 'comment');
         chai.assert.equal(event.oldValue, oldValue);
         chai.assert.equal(event.newValue, newValue);
@@ -1090,10 +1091,10 @@ suite('Blocks', function() {
       function assertNoCommentEvent(eventSpy) {
         var calls = eventSpy.getCalls();
         var event = calls[calls.length - 1].args[0];
-        chai.assert.notEqual(event.type, Blockly.Events.BLOCK_CHANGE);
+        chai.assert.notEqual(event.type, eventUtils.BLOCK_CHANGE);
       }
       setup(function() {
-        this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
+        this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
       });
       teardown(function() {
         this.eventsFireSpy.restore();
@@ -1364,7 +1365,7 @@ suite('Blocks', function() {
     }
 
     setup(function() {
-      Blockly.Events.disable();
+      eventUtils.disable();
       // We need a visible workspace.
       this.workspace = Blockly.inject('blocklyDiv', {});
       Blockly.defineBlocksWithJsonArray([
@@ -1382,7 +1383,7 @@ suite('Blocks', function() {
       ]);
     });
     teardown(function() {
-      Blockly.Events.enable();
+      eventUtils.enable();
       workspaceTeardown.call(this, this.workspace);
     });
     suite('Connecting and Disconnecting', function() {
@@ -1988,7 +1989,7 @@ suite('Blocks', function() {
       var recordUndoDuringInit;
       Blocks['init_test_block'].init = function() {
         initCalled = true;
-        recordUndoDuringInit = Blockly.Events.getRecordUndo();
+        recordUndoDuringInit = eventUtils.getRecordUndo();
         throw new Error();
       };
       chai.assert.throws(function() {
@@ -1996,7 +1997,7 @@ suite('Blocks', function() {
       }.bind(this));
       chai.assert.isFalse(recordUndoDuringInit,
           'recordUndo should be false during block init function');
-      chai.assert.isTrue(Blockly.Events.getRecordUndo(),
+      chai.assert.isTrue(eventUtils.getRecordUndo(),
           'recordUndo should be reset to true after init');
       chai.assert.isTrue(initCalled, 'expected init function to be called');
     });

@@ -16,13 +16,13 @@ goog.module.declareLegacyNamespace();
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 // eslint-disable-next-line no-unused-vars
 const Connection = goog.requireType('Blockly.Connection');
-const Events = goog.require('Blockly.Events');
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 const Size = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const inputTypes = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -328,20 +328,20 @@ const appendInternal = function(
       recordUndo = false
     } = {}
 ) {
-  const prevRecordUndo = Events.getRecordUndo();
-  Events.setRecordUndo(recordUndo);
-  const existingGroup = Events.getGroup();
+  const prevRecordUndo = eventUtils.getRecordUndo();
+  eventUtils.setRecordUndo(recordUndo);
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
-  Events.disable();
+  eventUtils.disable();
 
   const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
-  Events.enable();
-  Events.fire(new (Events.get(Events.BLOCK_CREATE))(block));
-  Events.setGroup(existingGroup);
-  Events.setRecordUndo(prevRecordUndo);
+  eventUtils.enable();
+  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
+  eventUtils.setGroup(existingGroup);
+  eventUtils.setRecordUndo(prevRecordUndo);
 
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
@@ -672,7 +672,7 @@ class BlockSerializer {
   load(state, workspace) {
     const blockStates = state['blocks'];
     for (const state of blockStates) {
-      append(state, workspace, {recordUndo: Events.getRecordUndo()});
+      append(state, workspace, {recordUndo: eventUtils.getRecordUndo()});
     }
   }
 

@@ -15,7 +15,6 @@ goog.module('Blockly.WorkspaceCommentSvg');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +30,7 @@ const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
@@ -171,17 +171,17 @@ WorkspaceCommentSvg.prototype.dispose = function() {
     this.workspace.cancelCurrentGesture();
   }
 
-  if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.COMMENT_DELETE))(this));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
   }
 
   dom.removeNode(this.svgGroup_);
   // Dispose of any rendered components
   this.disposeInternal_();
 
-  Events.disable();
+  eventUtils.disable();
   WorkspaceCommentSvg.superClass_.dispose.call(this);
-  Events.enable();
+  eventUtils.enable();
 };
 
 /**
@@ -260,16 +260,16 @@ WorkspaceCommentSvg.prototype.select = function() {
   if (common.getSelected()) {
     oldId = common.getSelected().id;
     // Unselect any previously selected block.
-    Events.disable();
+    eventUtils.disable();
     try {
       common.getSelected().unselect();
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
   }
   const event =
-      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
-  Events.fire(event);
+      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
 };
@@ -283,8 +283,8 @@ WorkspaceCommentSvg.prototype.unselect = function() {
     return;
   }
   const event =
-      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
-  Events.fire(event);
+      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
+  eventUtils.fire(event);
   common.setSelected(null);
   this.removeSelect();
   this.blurFocus();
@@ -376,13 +376,13 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  const event = new (Events.get(Events.COMMENT_MOVE))(this);
+  const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(this);
   // TODO: Do I need to look up the relative to surface XY position here?
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.xy_ = new Coordinate(xy.x + dx, xy.y + dy);
   event.recordNew();
-  Events.fire(event);
+  eventUtils.fire(event);
   this.workspace.resizeContents();
 };
 
@@ -606,7 +606,7 @@ WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
  * @package
  */
 WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
-  Events.disable();
+  eventUtils.disable();
   let comment;
   try {
     const info = WorkspaceComment.parseAttributes(xmlComment);
@@ -628,7 +628,7 @@ WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
       }
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 
   WorkspaceComment.fireCreateEvent(

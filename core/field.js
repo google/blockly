@@ -19,7 +19,6 @@ const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvid
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -42,6 +41,7 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -951,8 +951,8 @@ Field.prototype.setValue = function(newValue) {
   }
 
   this.doValueUpdate_(newValue);
-  if (source && Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+  if (source && eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         source, 'field', this.name || null, oldValue, newValue));
   }
   if (this.isDirty_) {

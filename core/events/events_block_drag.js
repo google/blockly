@@ -11,10 +11,9 @@
 'use strict';
 
 goog.module('Blockly.Events.BlockDrag');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -55,7 +54,7 @@ object.inherits(BlockDrag, UiBase);
  * Type of this event.
  * @type {string}
  */
-BlockDrag.prototype.type = Events.BLOCK_DRAG;
+BlockDrag.prototype.type = eventUtils.BLOCK_DRAG;
 
 /**
  * Encode the event as JSON.
@@ -80,6 +79,6 @@ BlockDrag.prototype.fromJson = function(json) {
   this.blocks = json['blocks'];
 };
 
-registry.register(registry.Type.EVENT, Events.BLOCK_DRAG, BlockDrag);
+registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);
 
 exports = BlockDrag;

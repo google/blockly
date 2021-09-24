@@ -14,7 +14,6 @@ goog.module('Blockly.BubbleDragger');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IBubble = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
@@ -25,6 +24,7 @@ const IDragTarget = goog.requireType('Blockly.IDragTarget');
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const eventUtils = goog.require('Blockly.Events.utils');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
@@ -109,8 +109,8 @@ BubbleDragger.prototype.dispose = function() {
  * @package
  */
 BubbleDragger.prototype.startBubbleDrag = function() {
-  if (!Events.getGroup()) {
-    Events.setGroup(true);
+  if (!eventUtils.getGroup()) {
+    eventUtils.setGroup(true);
   }
 
   this.workspace_.setResizesEnabled(false);
@@ -226,7 +226,7 @@ BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) {
   }
   this.workspace_.setResizesEnabled(true);
 
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /**
@@ -236,11 +236,11 @@ BubbleDragger.prototype.endBubbleDrag = function(e, currentDragDeltaXY) {
 BubbleDragger.prototype.fireMoveEvent_ = function() {
   if (this.draggingBubble_.isComment) {
     // TODO (adodson): Resolve build errors when requiring WorkspaceCommentSvg.
-    const event = new (Events.get(Events.COMMENT_MOVE))(
+    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
         /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_));
     event.setOldCoordinate(this.startXY_);
     event.recordNew();
-    Events.fire(event);
+    eventUtils.fire(event);
   }
   // TODO (fenichel): move events for comments.
   return;

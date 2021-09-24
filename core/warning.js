@@ -15,10 +15,10 @@ goog.module('Blockly.Warning');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -89,8 +89,8 @@ Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Events.fire(
-      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'warning'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
   } else {

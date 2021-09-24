@@ -13,12 +13,12 @@
 goog.module('Blockly.ContextMenuItems');
 
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
-const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
 const dialog = goog.require('Blockly.dialog');
+const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -242,7 +242,7 @@ const getDeletableBlocks_ = function(workspace) {
  */
 const deleteNext_ = function(deleteList, eventGroup) {
   const DELAY = 10;
-  Events.setGroup(eventGroup);
+  eventUtils.setGroup(eventGroup);
   const block = deleteList.shift();
   if (block) {
     if (block.workspace) {
@@ -252,7 +252,7 @@ const deleteNext_ = function(deleteList, eventGroup) {
       deleteNext_(deleteList, eventGroup);
     }
   }
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /** Option to delete all blocks. */
@@ -484,13 +484,13 @@ const registerDisable = function() {
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
       const block = scope.block;
-      const group = Events.getGroup();
+      const group = eventUtils.getGroup();
       if (!group) {
-        Events.setGroup(true);
+        eventUtils.setGroup(true);
       }
       block.setEnabled(!block.isEnabled());
       if (!group) {
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,

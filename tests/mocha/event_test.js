@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.event');
 
+const eventUtils = goog.require('Blockly.Events.utils');
 const {assertEventEquals, assertNthCallEventArgEquals, assertVariableValues, createFireChangeListenerSpy, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 goog.require('Blockly.WorkspaceComment');
@@ -14,7 +15,7 @@ goog.require('Blockly.WorkspaceComment');
 suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.eventsFireSpy = sinon.spy(Blockly.Events, 'fire');
+    this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',
@@ -41,15 +42,15 @@ suite('Events', function() {
     // Disable events while constructing the block: this is a test of the
     // Blockly.Event constructors, not the block constructors.
     // Set the group id to avoid an extra call to genUid.
-    Blockly.Events.disable();
+    eventUtils.disable();
     try {
-      Blockly.Events.setGroup('unused');
+      eventUtils.setGroup('unused');
       var block = new Blockly.Block(
           workspace, 'simple_test_block');
     } finally {
-      Blockly.Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
-    Blockly.Events.enable();
+    eventUtils.enable();
     return block;
   }
 
@@ -81,7 +82,7 @@ suite('Events', function() {
 
     test('Old UI event without block', function() {
       var TEST_GROUP_ID = 'testGroup';
-      Blockly.Events.setGroup(TEST_GROUP_ID);
+      eventUtils.setGroup(TEST_GROUP_ID);
       var event = new Blockly.Events.Ui(null, 'foo', 'bar', 'baz');
       assertEventEquals(event, Blockly.Events.UI, '', null, {
         'element': 'foo',
@@ -138,7 +139,7 @@ suite('Events', function() {
 
       test('Old UI event with block', function() {
         var TEST_GROUP_ID = 'testGroup';
-        Blockly.Events.setGroup(TEST_GROUP_ID);
+        eventUtils.setGroup(TEST_GROUP_ID);
         var event = new Blockly.Events.Ui(this.block, 'foo', 'bar', 'baz');
         sinon.assert.calledOnce(this.genUidStub);
         assertEventEquals(event, Blockly.Events.UI, this.workspace.id,
@@ -154,7 +155,7 @@ suite('Events', function() {
 
       test('Click with block', function() {
         var TEST_GROUP_ID = 'testGroup';
-        Blockly.Events.setGroup(TEST_GROUP_ID);
+        eventUtils.setGroup(TEST_GROUP_ID);
         var event = new Blockly.Events.Click(this.block, null, 'block');
         assertEventEquals(event, Blockly.Events.CLICK, this.workspace.id,
             this.TEST_BLOCK_ID, {
@@ -716,7 +717,7 @@ suite('Events', function() {
       test('Var create', function() {
         var json = {type: "var_create", varId: "id2", varType: "type2",
           varName: "name2"};
-        var event = Blockly.Events.fromJson(json, this.workspace);
+        var event = eventUtils.fromJson(json, this.workspace);
         var x = this.workspace.getVariableById('id2');
         chai.assert.isNull(x);
         event.run(true);
@@ -747,7 +748,7 @@ suite('Events', function() {
       test('Var delete', function() {
         var json = {type: "var_delete", varId: "id2", varType: "type2",
           varName: "name2"};
-        var event = Blockly.Events.fromJson(json, this.workspace);
+        var event = eventUtils.fromJson(json, this.workspace);
         chai.assert.isNull(this.workspace.getVariableById('id2'));
         event.run(false);
         assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
@@ -783,7 +784,7 @@ suite('Events', function() {
         new Blockly.Events.BlockChange(block, 'field', 'VAR', 'id1', 'id2'),
         new Blockly.Events.Click(block)
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
@@ -801,7 +802,7 @@ suite('Events', function() {
         new Blockly.Events.BlockCreate(block2),
         new Blockly.Events.BlockMove(block2)
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 4);  // no event should have been removed.
     });
 
@@ -811,7 +812,7 @@ suite('Events', function() {
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 2);  // duplicate moves should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
@@ -826,7 +827,7 @@ suite('Events', function() {
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
-      var filteredEvents = Blockly.Events.filter(events, false);
+      var filteredEvents = eventUtils.filter(events, false);
       chai.assert.equal(filteredEvents.length, 2);  // duplicate event should have been removed.
       // test that the order hasn't changed
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BlockCreate);
@@ -840,7 +841,7 @@ suite('Events', function() {
       var events = [];
       addMoveEvent(events, block, 0, 0);
       addMoveEvent(events, block, 1, 1);
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);  // second move event merged into first
       chai.assert.equal(filteredEvents[0].newCoordinate.x, 1);
       chai.assert.equal(filteredEvents[0].newCoordinate.y, 1);
@@ -852,7 +853,7 @@ suite('Events', function() {
         new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item', 'item1'),
         new Blockly.Events.BlockChange(block1, 'field', 'VAR', 'item1', 'item2')
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
       chai.assert.equal(filteredEvents[0].oldValue, 'item');
       chai.assert.equal(filteredEvents[0].newValue, 'item2');
@@ -863,7 +864,7 @@ suite('Events', function() {
         new Blockly.Events.ViewportChange(1, 2, 3, this.workspace, 4),
         new Blockly.Events.ViewportChange(5, 6, 7, this.workspace, 8)
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       chai.assert.equal(filteredEvents.length, 1);  // second change event merged into first
       chai.assert.equal(filteredEvents[0].viewTop, 5);
       chai.assert.equal(filteredEvents[0].viewLeft, 6);
@@ -883,7 +884,7 @@ suite('Events', function() {
         new Blockly.Events.BubbleOpen(block3, true, 'warning'),
         new Blockly.Events.Click(block3)
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       // click event merged into corresponding *Open event
       chai.assert.equal(filteredEvents.length, 3);
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.BubbleOpen);
@@ -902,7 +903,7 @@ suite('Events', function() {
         new Blockly.Events.Click(block),
         new Blockly.Events.Ui(block, 'stackclick', undefined, undefined)
       ];
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       // click and stackclick should both exist
       chai.assert.equal(filteredEvents.length, 2);
       chai.assert.isTrue(filteredEvents[0] instanceof Blockly.Events.Click);
@@ -922,7 +923,7 @@ suite('Events', function() {
       var events = [];
       addMoveEventParent(events, block, null);
       addMoveEventParent(events, block, null);
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       // The two events should be merged, but because nothing has changed
       // they will be filtered out.
       chai.assert.equal(filteredEvents.length, 0);
@@ -943,7 +944,7 @@ suite('Events', function() {
       events.push(new Blockly.Events.BlockDelete(block2));
       addMoveEvent(events, block1, 2, 2);
 
-      var filteredEvents = Blockly.Events.filter(events, true);
+      var filteredEvents = eventUtils.filter(events, true);
       // Nothing should have merged.
       chai.assert.equal(filteredEvents.length, 4);
       // test that the order hasn't changed
@@ -1099,7 +1100,7 @@ suite('Events', function() {
       workspaceTeardown.call(this, this.workspace);
     });
     test('Created orphan block is disabled', function() {
-      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      this.workspace.addChangeListener(eventUtils.disableOrphans);
       var block = this.workspace.newBlock('controls_for');
       block.initSvg();
       block.render();
@@ -1111,7 +1112,7 @@ suite('Events', function() {
           'Expected orphan block to be disabled after creation');
     });
     test('Created procedure block is enabled', function() {
-      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      this.workspace.addChangeListener(eventUtils.disableOrphans);
 
       // Procedure block is never an orphan
       var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
@@ -1125,7 +1126,7 @@ suite('Events', function() {
           'Expected top-level procedure block to be enabled');
     });
     test('Moving a block to top-level disables it', function() {
-      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      this.workspace.addChangeListener(eventUtils.disableOrphans);
       var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
       functionBlock.render();
@@ -1147,7 +1148,7 @@ suite('Events', function() {
           'Expected disconnected block to be disabled');
     });
     test('Giving block a parent enables it', function() {
-      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      this.workspace.addChangeListener(eventUtils.disableOrphans);
       var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
       functionBlock.render();
@@ -1166,7 +1167,7 @@ suite('Events', function() {
           'Expected block to be enabled after connecting to parent');
     });
     test('disableOrphans events are not undoable', function() {
-      this.workspace.addChangeListener(Blockly.Events.disableOrphans);
+      this.workspace.addChangeListener(eventUtils.disableOrphans);
       var functionBlock = this.workspace.newBlock('procedures_defnoreturn');
       functionBlock.initSvg();
       functionBlock.render();

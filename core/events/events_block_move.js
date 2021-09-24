@@ -11,11 +11,10 @@
 'use strict';
 
 goog.module('Blockly.Events.BlockMove');
-goog.module.declareLegacyNamespace();
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -51,7 +50,7 @@ object.inherits(BlockMove, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockMove.prototype.type = Events.BLOCK_MOVE;
+BlockMove.prototype.type = eventUtils.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -183,6 +182,6 @@ BlockMove.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.MOVE, BlockMove);
+registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
 exports = BlockMove;

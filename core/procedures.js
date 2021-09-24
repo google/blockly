@@ -18,7 +18,6 @@ goog.module('Blockly.Procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const Msg = goog.require('Blockly.Msg');
@@ -28,6 +27,7 @@ const Workspace = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -306,7 +306,7 @@ const updateMutatorFlyout = function(workspace) {
  * @alias Blockly.Procedures.mutatorOpenListener
  */
 const mutatorOpenListener = function(e) {
-  if (!(e.type == Events.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
+  if (!(e.type == eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
         e.isOpen)) {
     return;
   }
@@ -329,8 +329,8 @@ exports.mutatorOpenListener = mutatorOpenListener;
  * @param {!Abstract} e The event that triggered this listener.
  */
 const mutatorChangeListener = function(e) {
-  if (e.type != Events.BLOCK_CREATE && e.type != Events.BLOCK_DELETE &&
-      e.type != Events.BLOCK_CHANGE) {
+  if (e.type != eventUtils.BLOCK_CREATE && e.type != eventUtils.BLOCK_DELETE &&
+      e.type != eventUtils.BLOCK_CHANGE) {
     return;
   }
   const workspaceId = /** @type {string} */ (e.workspaceId);
@@ -371,7 +371,7 @@ exports.getCallers = getCallers;
  * @alias Blockly.Procedures.mutateCallers
  */
 const mutateCallers = function(defBlock) {
-  const oldRecordUndo = Events.getRecordUndo();
+  const oldRecordUndo = eventUtils.getRecordUndo();
   const procedureBlock = /** @type {!ProcedureBlock} */ (defBlock);
   const name = procedureBlock.getProcedureDef()[0];
   const xmlElement = defBlock.mutationToDom(true);
@@ -386,10 +386,10 @@ const mutateCallers = function(defBlock) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
-      Events.setRecordUndo(false);
-      Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+      eventUtils.setRecordUndo(false);
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           caller, 'mutation', null, oldMutation, newMutation));
-      Events.setRecordUndo(oldRecordUndo);
+      eventUtils.setRecordUndo(oldRecordUndo);
     }
   }
 };

@@ -18,7 +18,6 @@ const Abstract = goog.requireType('Blockly.Events.Abstract');
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +29,7 @@ const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
+const eventUtils = goog.require('Blockly.Events.utils');
 const math = goog.require('Blockly.utils.math');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -379,9 +379,9 @@ Workspace.prototype.getAllBlocks = function(ordered) {
 Workspace.prototype.clear = function() {
   this.isClearing = true;
   try {
-    const existingGroup = Events.getGroup();
+    const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
-      Events.setGroup(true);
+      eventUtils.setGroup(true);
     }
     while (this.topBlocks_.length) {
       this.topBlocks_[0].dispose(false);
@@ -390,7 +390,7 @@ Workspace.prototype.clear = function() {
       this.topComments_[this.topComments_.length - 1].dispose();
     }
     if (!existingGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
     this.variableMap_.clear();
     if (this.potentialVariableMap_) {
@@ -634,15 +634,15 @@ Workspace.prototype.undo = function(redo) {
     const event = events[i];
     outputStack.push(event);
   }
-  events = Events.filter(events, redo);
-  Events.setRecordUndo(false);
+  events = eventUtils.filter(events, redo);
+  eventUtils.setRecordUndo(false);
   try {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       event.run(redo);
     }
   } finally {
-    Events.setRecordUndo(true);
+    eventUtils.setRecordUndo(true);
   }
 };
 
@@ -653,7 +653,7 @@ Workspace.prototype.clearUndo = function() {
   this.undoStack_.length = 0;
   this.redoStack_.length = 0;
   // Stop any events already in the firing queue from being undoable.
-  Events.clearPendingUndo();
+  eventUtils.clearPendingUndo();
 };
 
 /**

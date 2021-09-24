@@ -11,10 +11,9 @@
 'use strict';
 
 goog.module('Blockly.Events.BubbleOpen');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -56,7 +55,7 @@ object.inherits(BubbleOpen, UiBase);
  * Type of this event.
  * @type {string}
  */
-BubbleOpen.prototype.type = Events.BUBBLE_OPEN;
+BubbleOpen.prototype.type = eventUtils.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -81,6 +80,6 @@ BubbleOpen.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.BUBBLE_OPEN, BubbleOpen);
+registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
 
 exports = BubbleOpen;

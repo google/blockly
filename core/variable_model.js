@@ -12,9 +12,9 @@
 
 goog.module('Blockly.VariableModel');
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
@@ -66,7 +66,7 @@ const VariableModel = function(workspace, name, opt_type, opt_id) {
    */
   this.id_ = opt_id || idGenerator.genUid();
 
-  Events.fire(new (Events.get(Events.VAR_CREATE))(this));
+  eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(this));
 };
 
 /**

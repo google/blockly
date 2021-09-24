@@ -16,11 +16,11 @@ goog.module.declareLegacyNamespace();
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**

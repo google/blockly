@@ -13,7 +13,8 @@
 
 goog.module('Blockly.inputTypes');
 
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+
 
 /**
  * Enum for the type of a connection or input.

@@ -29,4 +29,4 @@ const ConnectionType = {
   PREVIOUS_STATEMENT: 4
 };
 
-exports = ConnectionType;
+exports.ConnectionType = ConnectionType;

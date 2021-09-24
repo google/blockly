@@ -27,7 +27,6 @@ const ComponentManager = goog.require('Blockly.ComponentManager');
 const ConnectionChecker = goog.require('Blockly.ConnectionChecker');
 const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const Connection = goog.require('Blockly.Connection');
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuItems = goog.require('Blockly.ContextMenuItems');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
@@ -157,6 +156,7 @@ const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');

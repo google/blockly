@@ -12,7 +12,6 @@
 
 goog.module('Blockly.Connection');
 
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
@@ -25,6 +24,7 @@ const blocks = goog.require('Blockly.serialization.blocks');
 const deprecation = goog.require('Blockly.utils.deprecation');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 /** @suppress {extraRequire} */

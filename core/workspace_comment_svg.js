@@ -11,11 +11,7 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceCommentSvg');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const Blockly = goog.require('Blockly');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
@@ -33,9 +29,12 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
@@ -167,7 +166,7 @@ WorkspaceCommentSvg.prototype.dispose = function() {
     return;
   }
   // If this comment is being dragged, unlink the mouse events.
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
@@ -254,16 +253,16 @@ WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
  * @package
  */
 WorkspaceCommentSvg.prototype.select = function() {
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     return;
   }
   let oldId = null;
-  if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+  if (common.getSelected()) {
+    oldId = common.getSelected().id;
     // Unselect any previously selected block.
     Events.disable();
     try {
-      Blockly.selected.unselect();
+      common.getSelected().unselect();
     } finally {
       Events.enable();
     }
@@ -271,7 +270,7 @@ WorkspaceCommentSvg.prototype.select = function() {
   const event =
       new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
   Events.fire(event);
-  Blockly.selected = this;
+  common.setSelected(this);
   this.addSelect();
 };
 
@@ -280,13 +279,13 @@ WorkspaceCommentSvg.prototype.select = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.unselect = function() {
-  if (Blockly.selected != this) {
+  if (common.getSelected() != this) {
     return;
   }
   const event =
       new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
   Events.fire(event);
-  Blockly.selected = null;
+  common.setSelected(null);
   this.removeSelect();
   this.blurFocus();
 };
@@ -665,7 +664,11 @@ WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 WorkspaceCommentSvg.prototype.toCopyData = function() {
-  return {xml: this.toXmlWithXY(), source: this.workspace, typeCounts: null};
+  return {
+    saveInfo: this.toXmlWithXY(),
+    source: this.workspace,
+    typeCounts: null
+  };
 };
 
 /**
@@ -853,7 +856,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
  */
 WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
   this.unbindDragEvents_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

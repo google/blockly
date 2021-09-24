@@ -196,6 +196,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "style": "loop_blocks",
     "helpUrl": "%{BKY_CONTROLS_FLOW_STATEMENTS_HELPURL}",
+    "suppressPrefixSuffix": true,
     "extensions": [
       "controls_flow_tooltip",
       "controls_flow_in_loop_check"
@@ -300,12 +301,6 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     'controls_for',
     'controls_whileUntil'
   ],
-
-  /**
-   * Don't automatically add STATEMENT_PREFIX and STATEMENT_SUFFIX to generated
-   * code.  These will be handled manually in this block's generators.
-   */
-  suppressPrefixSuffix: true,
 
   /**
    * Is the given block enclosed (at any level) by a loop?

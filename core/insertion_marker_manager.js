@@ -11,13 +11,9 @@
 'use strict';
 
 goog.module('Blockly.InsertionMarkerManager');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
@@ -30,9 +26,11 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const internalConstants = goog.require('Blockly.internalConstants');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -43,7 +41,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
  * @constructor
  */
 const InsertionMarkerManager = function(block) {
-  Blockly.selected = block;
+  common.setSelected(block);
 
   /**
    * The top block in the stack being dragged.
@@ -288,7 +286,12 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
   try {
     result = this.workspace_.newBlock(imType);
     result.setInsertionMarker(true);
-    if (sourceBlock.mutationToDom) {
+    if (sourceBlock.saveExtraState) {
+      const state = sourceBlock.saveExtraState();
+      if (state) {
+        result.loadExtraState(state);
+      }
+    } else if (sourceBlock.mutationToDom) {
       const oldMutationDom = sourceBlock.mutationToDom();
       if (oldMutationDom) {
         result.domToMutation(oldMutationDom);

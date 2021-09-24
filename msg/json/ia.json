@@ -333,5 +333,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
 	"WORKSPACE_ARIA_LABEL": "Spatio de travalio de Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos."
+	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Cancellar"
 }

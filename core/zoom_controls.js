@@ -11,13 +11,14 @@
 'use strict';
 
 goog.module('Blockly.ZoomControls');
-goog.module.declareLegacyNamespace();
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IPositionable = goog.requireType('Blockly.IPositionable');
+/* eslint-disable-next-line no-unused-vars */
+const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Rect = goog.require('Blockly.utils.Rect');
 const Size = goog.require('Blockly.utils.Size');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -247,7 +248,7 @@ ZoomControls.prototype.getBoundingRectangle = function() {
  * Positions the zoom controls.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
- * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
  * @param {!Array<!Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
@@ -264,8 +265,8 @@ ZoomControls.prototype.position = function(metrics, savedPositions) {
     height += this.LARGE_SPACING_ + this.HEIGHT_;
   }
   const startRect = uiPosition.getStartPositionRect(
-      cornerPosition, new Size(this.WIDTH_, height),
-      this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
+      cornerPosition, new Size(this.WIDTH_, height), this.MARGIN_HORIZONTAL_,
+      this.MARGIN_VERTICAL_, metrics, this.workspace_);
 
   const verticalPosition = cornerPosition.vertical;
   const bumpDirection = verticalPosition === uiPosition.verticalPosition.TOP ?

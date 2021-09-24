@@ -64,7 +64,54 @@ const renamings = {
         },
         setParentContainer: {module: 'Blockly.common'},
         draggingConnections: {module: 'Blockly.common'},
+        // Dialogs.  See PR #5457.
+        alert: {
+          module: 'Blockly.dialog',
+          export: 'alert',
+          set: 'setAlert',
+        },
+        confirm: {
+          module: 'Blockly.dialog',
+          export: 'confirm',
+          set: 'setConfirm',
+        },
+        prompt: {
+          module: 'Blockly.dialog',
+          export: 'prompt',
+          set: 'setPrompt',
+        },
+        // hueToHex.  See PR #5462.
+        hueToHex: {module: 'Blockly.utils.colour'},
+        // Blockly.hideChaff() became
+        // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
 
+        // selected.  See PR #5489.
+        selected: {
+          module: 'Blockly.common',
+          get: 'getSelected',
+          set: 'setSelected',
+        },
+      },
+    },
+    'Blockly.ContextMenu': {
+      exports: {
+        currentBlock: {get: 'getCurrentBlock', set: 'setCurrentBlock'},
+      },
+    },
+    'Blockly.Events': {
+      exports: {
+        recordUndo: {get: 'getRecordUndo', set: 'setRecordUndo'},
+      },
+    },
+    'Blockly.Tooltip': {
+      exports: {
+        DIV: {get: 'getDiv', set: 'setDiv'},
+        visible: {get: 'isVisible'},
+      },
+    },
+    'Blockly.WidgetDiv': {
+      exports: {
+        DIV: {get: 'getDiv'},
       },
     },
     'Blockly.connectionTypes': {
@@ -73,6 +120,10 @@ const renamings = {
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},
+        getScrollDelta: {module: 'Blockly.utils.browserEvents'},
+        isTargetInput: {module: 'Blockly.utils.browserEvents'},
+        isRightButton: {module: 'Blockly.utils.browserEvents'},
+        mouseToSvg: {module: 'Blockly.utils.browserEvents'},
       },
     },
     'Blockly.utils.global': {

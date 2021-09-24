@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.FieldDropdown');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
@@ -168,6 +167,22 @@ FieldDropdown.prototype.fromXml = function(fieldElement) {
     this.getOptions(false);
   }
   this.setValue(fieldElement.textContent);
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the dropdown field.
+ * @override
+ * @package
+ */
+FieldDropdown.prototype.loadState = function(state) {
+  if (this.loadLegacyState(FieldDropdown, state)) {
+    return;
+  }
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(state);
 };
 
 /**

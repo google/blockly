@@ -14,14 +14,16 @@
 goog.module('Blockly.ISelectable');
 goog.module.declareLegacyNamespace();
 
-goog.requireType('Blockly.IDeletable');
-goog.requireType('Blockly.IMovable');
+// eslint-disable-next-line no-unused-vars
+const IDeletable = goog.requireType('Blockly.IDeletable');
+// eslint-disable-next-line no-unused-vars
+const IMovable = goog.requireType('Blockly.IMovable');
 
 
 /**
  * The interface for an object that is selectable.
- * @extends {Blockly.IDeletable}
- * @extends {Blockly.IMovable}
+ * @extends {IDeletable}
+ * @extends {IMovable}
  * @interface
  */
 const ISelectable = function() {};

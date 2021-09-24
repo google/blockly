@@ -17,7 +17,6 @@
 'use strict';
 
 goog.module('Blockly.BlockDragSurfaceSvg');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -257,4 +256,4 @@ BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
   this.surfaceXY_ = null;
 };
 
-exports = BlockDragSurfaceSvg;
+exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;

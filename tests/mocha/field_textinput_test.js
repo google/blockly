@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldTextInput');
+
+const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Text Input Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -167,7 +172,7 @@ suite('Text Input Fields', function() {
             FIELD_TEXT_FONTFAMILY: 'sans-serif'
           };
           field.clickTarget_ = document.createElement('div');
-          Blockly.mainWorkspace = workspace;
+          Blockly.common.setMainWorkspace(workspace);
           Blockly.WidgetDiv.createDom();
           this.stub = sinon.stub(field, 'resizeEditor_');
         };
@@ -213,6 +218,29 @@ suite('Text Input Fields', function() {
         field.setSpellcheck(false);
         chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldTextInput(value);
+        block.getInput('INPUT').appendField(field, 'TEXT');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'TEXT': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('test text');
     });
   });
 });

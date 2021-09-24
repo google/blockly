@@ -11,13 +11,7 @@
 'use strict';
 
 goog.module('Blockly.WorkspaceSvg');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const BlockSvg = goog.require('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Classic = goog.require('Blockly.Themes.Classic');
@@ -26,8 +20,6 @@ const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Cursor = goog.requireType('Blockly.Cursor');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
 const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
@@ -46,8 +38,6 @@ const IFlyout = goog.requireType('Blockly.IFlyout');
 const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
@@ -87,6 +77,7 @@ const Xml = goog.require('Blockly.Xml');
 /* eslint-disable-next-line no-unused-vars */
 const ZoomControls = goog.requireType('Blockly.ZoomControls');
 const blockRendering = goog.require('Blockly.blockRendering');
+const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -94,7 +85,17 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -200,11 +201,12 @@ const WorkspaceSvg = function(
   this.markerManager_ = new MarkerManager(this);
 
   /**
-   * Map from function names to callbacks, for deciding what to do when a custom
-   * toolbox category is opened.
-   * @type {!Object<string, ?function(!Workspace):!Array<!Element>>}
-   * @private
-   */
+  * Map from function names to callbacks, for deciding what to do when a custom
+  * toolbox category is opened.
+  * @type {!Object<string, ?function(!Workspace):
+  *     !toolbox.FlyoutDefinition>}
+  * @private
+  */
   this.toolboxCategoryCallbacks_ = Object.create(null);
 
   /**
@@ -1503,43 +1505,57 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
 };
 
 /**
- * Paste the provided block onto the workspace.
- * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
- *     DocumentFragment if the block was an insertion marker.
+ * Pastes the provided block or workspace comment onto the workspace.
+ * Does not check whether there is remaining capacity for the object, that
+ * should be done before calling this method.
+ * @param {!Object|!Element|!DocumentFragment} state The representation of the
+ *     thing to paste.
  */
-WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (!this.rendered || !xmlBlock.tagName ||
-      xmlBlock.getElementsByTagName('block').length >=
-          this.remainingCapacity()) {
+WorkspaceSvg.prototype.paste = function(state) {
+  if (!this.rendered || !state['type'] && !state.tagName) {
     return;
   }
-  // The check above for tagName rules out the possibility of this being a
-  // DocumentFragment.
-  xmlBlock = /** @type {!Element} */ (xmlBlock);
   if (this.currentGesture_) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
-  if (xmlBlock.tagName.toLowerCase() == 'comment') {
-    this.pasteWorkspaceComment_(xmlBlock);
+
+  // Checks if this is JSON. JSON has a type property, while elements don't.
+  if (state['type']) {
+    this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
   } else {
-    this.pasteBlock_(xmlBlock);
+    const xmlBlock = /** @type {!Element} */ (state);
+    if (xmlBlock.tagName.toLowerCase() == 'comment') {
+      this.pasteWorkspaceComment_(xmlBlock);
+    } else {
+      this.pasteBlock_(xmlBlock, null);
+    }
   }
 };
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * @param {?Element} xmlBlock XML block element.
+ * @param {?blocks.State} jsonBlock JSON block
+ *     representation.
  * @private
  */
-WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
+WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   Events.disable();
   let block;
   try {
-    block = Xml.domToBlock(xmlBlock, this);
+    let blockX;
+    let blockY;
+    if (xmlBlock) {
+      block = Xml.domToBlock(xmlBlock, this);
+      blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    } else if (jsonBlock) {
+      block = blocks.append(jsonBlock, this);
+      blockX = jsonBlock['x'] || 10;
+      blockY = jsonBlock['y'] || 10;
+    }
 
     // Move the duplicate to original position.
-    let blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-    let blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     if (!isNaN(blockX) && !isNaN(blockY)) {
       if (this.RTL) {
         blockX = -blockX;
@@ -1579,7 +1595,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
           blockY += internalConstants.SNAP_RADIUS * 2;
         }
       } while (collide);
-      block.moveBy(blockX, blockY);
+      block.moveTo(new Coordinate(blockX, blockY));
     }
   } finally {
     Events.enable();
@@ -1741,8 +1757,8 @@ WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
-  const point =
-      utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+  const point = browserEvents.mouseToSvg(
+      e, this.getParentSvg(), this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -1755,8 +1771,8 @@ WorkspaceSvg.prototype.startDrag = function(e, xy) {
  * @return {!Coordinate} New location of object.
  */
 WorkspaceSvg.prototype.moveDrag = function(e) {
-  const point =
-      utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+  const point = browserEvents.mouseToSvg(
+      e, this.getParentSvg(), this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -1842,15 +1858,23 @@ WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
     return;
   }
 
-  const scrollDelta = utils.getScrollDeltaPixels(e);
-  if (canWheelZoom && (e.ctrlKey || !canWheelMove)) {
+  const scrollDelta = browserEvents.getScrollDeltaPixels(e);
+
+  // Zoom should also be enabled by the command key on Mac devices,
+  // but not super on Unix.
+  let commandKey;
+  if (userAgent.MAC) {
+    commandKey = e.metaKey;
+  }
+
+  if (canWheelZoom && (e.ctrlKey || commandKey || !canWheelMove)) {
     // Zoom.
     // The vertical scroll distance that corresponds to a click of a zoom
     // button.
     const PIXELS_PER_ZOOM_STEP = 50;
     const delta = -scrollDelta.y / PIXELS_PER_ZOOM_STEP;
-    const position =
-        utils.mouseToSvg(e, this.getParentSvg(), this.getInverseScreenCTM());
+    const position = browserEvents.mouseToSvg(
+        e, this.getParentSvg(), this.getInverseScreenCTM());
     this.zoom(position.x, position.y, delta);
   } else {
     // Scroll.
@@ -2206,7 +2230,8 @@ WorkspaceSvg.prototype.scrollCenter = function() {
 };
 
 /**
- * Scroll the workspace to center on the given block.
+ * Scroll the workspace to center on the given block. If the block has other
+ * blocks stacked below it, the workspace will be centered on the stack.
  * @param {?string} id ID of block center on.
  * @public
  */
@@ -2547,7 +2572,7 @@ WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  * custom toolbox categories in this workspace.  See the variable and procedure
  * categories as an example.
  * @param {string} key The name to use to look up this function.
- * @param {function(!Workspace):!Array<!Element>} func The function to
+ * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function to
  *     call when the given toolbox category is opened.
  */
 WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
@@ -2561,7 +2586,7 @@ WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
  * Get the callback function associated with a given key, for populating
  * custom toolbox categories in this workspace.
  * @param {string} key The name to use to look up the function.
- * @return {?function(!Workspace):!Array<!Element>} The function
+ * @return {?function(!Workspace): !toolbox.FlyoutDefinition} The function
  *     corresponding to the given key for this workspace, or null if no function
  *     is registered.
  */
@@ -2658,7 +2683,7 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
 
   var onlyClosePopups = !!opt_onlyClosePopups;
   var autoHideables = this.getComponentManager().getComponents(
-      Blockly.ComponentManager.Capability.AUTOHIDEABLE, true);
+      ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };

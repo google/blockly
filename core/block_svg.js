@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.BlockSvg');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Block = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */
@@ -49,7 +46,6 @@ const Mutator = goog.requireType('Blockly.Mutator');
 const Rect = goog.require('Blockly.utils.Rect');
 const RenderedConnection = goog.require('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
-const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -57,18 +53,20 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const Warning = goog.requireType('Blockly.Warning');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const Xml = goog.require('Blockly.Xml');
 const blockAnimations = goog.require('Blockly.blockAnimations');
+const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const ConnectionType = goog.require('Blockly.ConnectionType');
 const constants = goog.require('Blockly.constants');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Block} = goog.require('Blockly.Block');
+const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -275,35 +273,6 @@ BlockSvg.prototype.getColourTertiary = function() {
 };
 
 /**
- * Get the shadow colour of a block.
- * @return {?string} #RRGGBB string.
- * @deprecated Use style.colourSecondary. (2020 January 21)
- */
-BlockSvg.prototype.getColourShadow = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourShadow', 'January 2020', 'January 2021',
-      'style.colourSecondary');
-  return this.getColourSecondary();
-};
-
-/**
- * Get the border colour(s) of a block.
- * @return {{colourDark, colourLight, colourBorder}} An object containing
- *     colour values for the border(s) of the block. If the block is using a
- *     style the colourBorder will be defined and equal to the tertiary colour
- *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
- *     attributes will be defined (#RRGGBB strings).
- * @deprecated Use style.colourTertiary. (2020 January 21)
- */
-BlockSvg.prototype.getColourBorder = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourBorder', 'January 2020', 'January 2021',
-      'style.colourTertiary');
-  const colourTertiary = this.getColourTertiary();
-  return {colourBorder: colourTertiary, colourLight: null, colourDark: null};
-};
-
-/**
  * Selects this block. Highlights the block visually and fires a select event
  * if the block is not already selected.
  */
@@ -313,16 +282,16 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     return;
   }
   let oldId = null;
-  if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+  if (common.getSelected()) {
+    oldId = common.getSelected().id;
     // Unselect any previously selected block.
     Events.disable();
     try {
-      Blockly.selected.unselect();
+      common.getSelected().unselect();
     } finally {
       Events.enable();
     }
@@ -330,7 +299,7 @@ BlockSvg.prototype.select = function() {
   const event =
       new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
   Events.fire(event);
-  Blockly.selected = this;
+  common.setSelected(this);
   this.addSelect();
 };
 
@@ -339,14 +308,14 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (Blockly.selected != this) {
+  if (common.getSelected() != this) {
     return;
   }
   const event =
       new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   Events.fire(event);
-  Blockly.selected = null;
+  common.setSelected(null);
   this.removeSelect();
 };
 
@@ -925,7 +894,7 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
   // contents once the block is disposed.
   const blockWorkspace = this.workspace;
   // If this block is being dragged, unlink the mouse events.
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
@@ -963,6 +932,30 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
 };
 
 /**
+ * Delete a block and hide chaff when doing so. The block will not be deleted if
+ * it's in a flyout. This is called from the context menu and keyboard shortcuts
+ * as the full delete action. If you are disposing of a block from the workspace
+ * and don't need to perform flyout checks, handle event grouping, or hide
+ * chaff, then use `block.dispose()` directly.
+ * @package
+ */
+BlockSvg.prototype.checkAndDelete = function() {
+  if (this.workspace.isFlyout) {
+    return;
+  }
+  Events.setGroup(true);
+  this.workspace.hideChaff();
+  if (this.outputConnection) {
+    // Do not attempt to heal rows
+    // (https://github.com/google/blockly/issues/4832)
+    this.dispose(false, true);
+  } else {
+    this.dispose(/* heal */ true, true);
+  }
+  Events.setGroup(false);
+};
+
+/**
  * Encode a block for copying.
  * @return {?ICopyable.CopyData} Copy metadata, or null if the block is
  *     an insertion marker.
@@ -972,15 +965,9 @@ BlockSvg.prototype.toCopyData = function() {
   if (this.isInsertionMarker_) {
     return null;
   }
-  const xml = /** @type {!Element} */ (Xml.blockToDom(this, true));
-  // Copy only the selected block and internal blocks.
-  Xml.deleteNext(xml);
-  // Encode start position in XML.
-  const xy = this.getRelativeToSurfaceXY();
-  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
-  xml.setAttribute('y', xy.y);
   return {
-    xml: xml,
+    saveInfo: /** @type {!blocks.State} */(blocks.save(
+        this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
     typeCounts: utils.getBlockTypeCounts(this, true)
   };
@@ -1788,4 +1775,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports = BlockSvg;
+exports.BlockSvg = BlockSvg;

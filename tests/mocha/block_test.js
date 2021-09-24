@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.blocks');
+
+const {createDeprecationWarningStub, createRenderedBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Blocks', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
@@ -1171,10 +1176,7 @@ suite('Blocks', function() {
           // Restored up by call to sinon.restore() in sharedTestTeardown()
           sinon.stub(this.block, 'isEditable').returns(false);
           var icon = this.block.getCommentIcon();
-          // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-          var deprecationWarnStub = createDeprecationWarningStub();
           icon.setVisible(true);
-          deprecationWarnStub.restore();
 
           this.block.setCommentText('test2');
           chai.assert.equal(this.block.getCommentText(), 'test2');
@@ -1825,7 +1827,7 @@ suite('Blocks', function() {
       teardown(function() {
         workspaceTeardown.call(this, this.workspace);
         // Clear all registered themes.
-        Blockly.registry.typeMap_['theme'] = {};
+        Blockly.registry.TEST_ONLY.typeMap['theme'] = {};
       });
       test('Set colour hue', function() {
         this.block.setColour('20');
@@ -1985,7 +1987,7 @@ suite('Blocks', function() {
       var recordUndoDuringInit;
       Blockly.Blocks['init_test_block'].init = function() {
         initCalled = true;
-        recordUndoDuringInit = Blockly.Events.recordUndo;
+        recordUndoDuringInit = Blockly.Events.getRecordUndo();
         throw new Error();
       };
       chai.assert.throws(function() {
@@ -1993,7 +1995,7 @@ suite('Blocks', function() {
       }.bind(this));
       chai.assert.isFalse(recordUndoDuringInit,
           'recordUndo should be false during block init function');
-      chai.assert.isTrue(Blockly.Events.recordUndo,
+      chai.assert.isTrue(Blockly.Events.getRecordUndo(),
           'recordUndo should be reset to true after init');
       chai.assert.isTrue(initCalled, 'expected init function to be called');
     });

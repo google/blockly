@@ -11,12 +11,7 @@
 'use strict';
 
 goog.module('Blockly.ContextMenu');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -29,10 +24,14 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
+const clipboard = goog.require('Blockly.clipboard');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /** @suppress {extraRequire} */
@@ -64,9 +63,21 @@ const setCurrentBlock = function(block) {
 exports.setCurrentBlock = setCurrentBlock;
 
 // Ad JS accessors for backwards compatibility.
-Object.defineProperty(exports, 'currentBlock', {
-  get: getCurrentBlock,
-  set: setCurrentBlock,
+Object.defineProperties(exports, {
+  currentBlock: {
+    get: function() {
+      deprecation.warn(
+        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
+        'Blockly.Tooltip.getCurrentBlock()');
+      return getCurrentBlock();
+    },
+    set: function(block) {
+      deprecation.warn(
+        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
+        'Blockly.Tooltip.setCurrentBlock(block)');
+      setCurrentBlock(block);
+    },
+  },
 });
 
 /**
@@ -184,10 +195,22 @@ const createWidget_ = function(menu) {
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
-      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
-      utils.noEvent);
+      /** @type {!EventTarget} */ (menuDom),
+      'contextmenu',
+      null,
+      haltPropagation);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
+};
+
+/**
+ * Halts the propagation of the event without doing anything else.
+ * @param {!Event} e An event.
+ */
+const haltPropagation = function(e) {
+  // This event has been handled.  No need to bubble up to the document.
+  e.preventDefault();
+  e.stopPropagation();
 };
 
 /**
@@ -277,7 +300,7 @@ const commentDuplicateOption = function(comment) {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function() {
-      Blockly.duplicate(comment);
+      clipboard.duplicate(comment);
     }
   };
   return duplicateOption;

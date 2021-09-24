@@ -11,15 +11,14 @@
 'use strict';
 
 goog.module('Blockly.Block');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const ASTNode = goog.require('Blockly.ASTNode');
 const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
@@ -38,13 +37,14 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -331,17 +331,33 @@ Block.prototype.onchange;
 
 /**
  * An optional serialization method for defining how to serialize the
- * mutation state. This must be coupled with defining `domToMutation`.
+ * mutation state to XML. This must be coupled with defining `domToMutation`.
  * @type {?function(...):!Element}
  */
 Block.prototype.mutationToDom;
 
 /**
  * An optional deserialization method for defining how to deserialize the
- * mutation state. This must be coupled with defining `mutationToDom`.
+ * mutation state from XML. This must be coupled with defining `mutationToDom`.
  * @type {?function(!Element)}
  */
 Block.prototype.domToMutation;
+
+/**
+ * An optional serialization method for defining how to serialize the block's
+ * extra state (eg mutation state) to something JSON compatible. This must be
+ * coupled with defining `loadExtraState`.
+ * @type {?function(): *}
+ */
+Block.prototype.saveExtraState;
+
+/**
+ * An optional serialization method for defining how to deserialize the block's
+ * extra state (eg mutation state) from something JSON compatible. This must be
+ * coupled with defining `saveExtraState`.
+ * @type {?function(*)}
+ */
+Block.prototype.loadExtraState;
 
 /**
  * An optional property for suppressing adding STATEMENT_PREFIX and
@@ -396,8 +412,8 @@ Block.prototype.dispose = function(healStack) {
     // well as corruption of the connection database.  Therefore we must
     // methodically step through the blocks and carefully disassemble them.
 
-    if (Blockly.selected == this) {
-      Blockly.selected = null;
+    if (common.getSelected() == this) {
+      common.setSelected(null);
     }
 
     // First, dispose of all my children.
@@ -1057,7 +1073,7 @@ Block.prototype.getField = function(name) {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array<string>} List of variable names.
+ * @return {!Array<string>} List of variable ids.
  */
 Block.prototype.getVars = function() {
   const vars = [];
@@ -1318,9 +1334,10 @@ Block.prototype.isEnabled = function() {
  */
 Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
-        this, 'disabled', null, this.disabled, !enabled));
+    const oldValue = this.disabled;
     this.disabled = !enabled;
+    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+        this, 'disabled', null, oldValue, !enabled));
   }
 };
 
@@ -1567,8 +1584,10 @@ Block.prototype.jsonInit = function(json) {
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
-    const rawValue = json['enableContextMenu'];
-    this.contextMenu = !!rawValue;
+    this.contextMenu = !!json['enableContextMenu'];
+  }
+  if (json['suppressPrefixSuffix'] !== undefined) {
+    this.suppressPrefixSuffix = !!json['suppressPrefixSuffix'];
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
@@ -2138,4 +2157,4 @@ Block.prototype.toDevString = function() {
   return msg;
 };
 
-exports = Block;
+exports.Block = Block;

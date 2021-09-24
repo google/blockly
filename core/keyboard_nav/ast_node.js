@@ -11,12 +11,10 @@
 'use strict';
 
 goog.module('Blockly.ASTNode');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -28,7 +26,8 @@ const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWith
 const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const ConnectionType = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -707,4 +706,4 @@ ASTNode.prototype.out = function() {
   return null;
 };
 
-exports = ASTNode;
+exports.ASTNode = ASTNode;

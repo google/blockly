@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.event');
+
+const {assertEventEquals, assertNthCallEventArgEquals, assertVariableValues, createFireChangeListenerSpy, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {ASTNode} = goog.require('Blockly.ASTNode');
 goog.require('Blockly.WorkspaceComment');
+
 
 suite('Events', function() {
   setup(function() {
@@ -363,36 +368,36 @@ suite('Events', function() {
           isStart: false, blockId: thisObj.block.id, blocks: [thisObj.block]})},
       {title: 'null to Block Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [thisObj.block, true, null,
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block)],
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: thisObj.block.id, oldNode: null,
-          newNode: new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          newNode: new ASTNode(ASTNode.types.BLOCK,
               thisObj.block)})},
       {title: 'null to Workspace Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [null, true, null,
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: null, oldNode: null,
-          newNode: Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          newNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))})},
       {title: 'Workspace to Block Marker move',
         class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [thisObj.block, true,
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block)],
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
         getExpectedJson: (thisObj) => ({type: 'marker_move',
           isCursor: true, blockId: thisObj.block.id,
-          oldNode: Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          oldNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
-          newNode: new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK,
+          newNode: new ASTNode(ASTNode.types.BLOCK,
               thisObj.block)})},
       {title: 'Block to Workspace Marker move',
         class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [null, true,
-          new Blockly.ASTNode(Blockly.ASTNode.types.BLOCK, thisObj.block),
-          Blockly.ASTNode.createWorkspaceNode(thisObj.workspace,
+          new ASTNode(ASTNode.types.BLOCK, thisObj.block),
+          ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))]},
       {title: 'Selected', class: Blockly.Events.Selected,
         getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],
@@ -433,48 +438,118 @@ suite('Events', function() {
           viewLeft: 0, scale: 1.2, oldScale: 1})},
     ];
     var blockEventTestCases = [
-      {title: 'Block change', class: Blockly.Events.BlockChange,
+      {
+        title: 'Block change',
+        class: Blockly.Events.BlockChange,
         getArgs: (thisObj) => [thisObj.block, 'collapsed', null, false, true],
-        getExpectedJson: (thisObj) => ({type: 'change',
-          blockId: thisObj.block.id, element: 'collapsed', oldValue: false,
-          newValue: true})},
-      {title: 'Block create', class: Blockly.Events.BlockCreate,
+        getExpectedJson: (thisObj) => ({
+          type: 'change',
+          blockId: thisObj.block.id,
+          element: 'collapsed',
+          oldValue: false,
+          newValue: true
+        })
+      },
+      {
+        title: 'Block create',
+        class: Blockly.Events.BlockCreate,
         getArgs: (thisObj) => [thisObj.block],
-        getExpectedJson: (thisObj) => ({type: 'create',
+        getExpectedJson: (thisObj) => ({
+          type: 'create',
           blockId: thisObj.block.id,
           xml: '<block xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId1"></block>',
-          ids: [thisObj.block.id]})},
-      {title: 'Block create (shadow)', class: Blockly.Events.BlockCreate,
+              ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
+              '</block>',
+          ids: [thisObj.block.id],
+          json: {
+            'type': 'simple_test_block',
+            'id': 'testBlockId1',
+            'x': 0,
+            'y': 0,
+          },
+        })
+      },
+      {
+        title: 'Block create (shadow)',
+        class: Blockly.Events.BlockCreate,
         getArgs: (thisObj) => [thisObj.shadowBlock],
-        getExpectedJson: (thisObj) => ({type: 'create',
+        getExpectedJson: (thisObj) => ({
+          type: 'create',
           blockId: thisObj.shadowBlock.id,
           xml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId2"></shadow>',
-          ids: [thisObj.shadowBlock.id], recordUndo: false})},
-      {title: 'Block delete', class: Blockly.Events.BlockDelete,
+              ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
+              '</shadow>',
+          ids: [thisObj.shadowBlock.id],
+          json: {
+            'type': 'simple_test_block',
+            'id': 'testBlockId2',
+            'x': 0,
+            'y': 0,
+          },
+          recordUndo: false
+        })
+      },
+      {
+        title: 'Block delete',
+        class: Blockly.Events.BlockDelete,
         getArgs: (thisObj) => [thisObj.block],
-        getExpectedJson: (thisObj) => ({type: 'delete',
+        getExpectedJson: (thisObj) => ({
+          type: 'delete',
           blockId: thisObj.block.id,
           oldXml: '<block xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId1"></block>',
-          ids: [thisObj.block.id]})},
-      {title: 'Block delete (shadow)', class: Blockly.Events.BlockDelete,
+              ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
+              '</block>',
+          ids: [thisObj.block.id],
+          wasShadow: false,
+          oldJson: {
+            'type': 'simple_test_block',
+            'id': 'testBlockId1',
+            'x': 0,
+            'y': 0,
+          },
+        })
+      },
+      {
+        title: 'Block delete (shadow)',
+        class: Blockly.Events.BlockDelete,
         getArgs: (thisObj) => [thisObj.shadowBlock],
-        getExpectedJson: (thisObj) => ({type: 'delete',
+        getExpectedJson: (thisObj) => ({
+          type: 'delete',
           blockId: thisObj.shadowBlock.id,
           oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
-              ' type="simple_test_block" id="testBlockId2"></shadow>',
-          ids: [thisObj.shadowBlock.id], recordUndo: false})},
+              ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
+              '</shadow>',
+          ids: [thisObj.shadowBlock.id],
+          wasShadow: true,
+          oldJson: {
+            'type': 'simple_test_block',
+            'id': 'testBlockId2',
+            'x': 0,
+            'y': 0,
+          },
+          recordUndo: false
+        })
+      },
       // TODO(#4577) Test serialization of move event coordinate properties.
-      {title: 'Block move', class: Blockly.Events.BlockMove,
+      {
+        title: 'Block move',
+        class: Blockly.Events.BlockMove,
         getArgs: (thisObj) => [thisObj.block],
-        getExpectedJson: (thisObj) => ({type: 'move',
-          blockId: thisObj.block.id})},
-      {title: 'Block move (shadow)', class: Blockly.Events.BlockMove,
+        getExpectedJson: (thisObj) => ({
+          type: 'move',
+          blockId: thisObj.block.id
+        })
+      },
+      {
+        title: 'Block move (shadow)',
+        class: Blockly.Events.BlockMove,
         getArgs: (thisObj) => [thisObj.shadowBlock],
-        getExpectedJson: (thisObj) => ({type: 'move',
-          blockId: thisObj.shadowBlock.id, recordUndo: false})},
+        getExpectedJson: (thisObj) => ({
+          type: 'move',
+          blockId: thisObj.shadowBlock.id,
+          recordUndo: false
+        })
+      },
     ];
     var workspaceEventTestCases = [
       {title: 'Finished Loading', class: Blockly.Events.FinishedLoading,

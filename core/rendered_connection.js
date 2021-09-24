@@ -11,25 +11,25 @@
 'use strict';
 
 goog.module('Blockly.RenderedConnection');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -175,7 +175,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     reverse = true;
   }
   // Raise it to the top for extra visibility.
-  const selected = Blockly.selected == rootBlock;
+  const selected = common.getSelected() == rootBlock;
   selected || rootBlock.addSelect();
   let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
             Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
@@ -398,7 +398,7 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   const renderList = [];
-  if (this.type !=ConnectionType.INPUT_VALUE &&
+  if (this.type != ConnectionType.INPUT_VALUE &&
       this.type != ConnectionType.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
@@ -505,7 +505,6 @@ RenderedConnection.prototype.respawnShadow_ = function() {
   RenderedConnection.superClass_.respawnShadow_.call(this);
   const blockShadow = this.targetBlock();
   if (!blockShadow) {
-    // This connection must not have a shadowDom_.
     return;
   }
   blockShadow.initSvg();

@@ -29,6 +29,7 @@ const ROLE_ATTRIBUTE = 'role';
  * ARIA role values.
  * Copied from Closure's goog.a11y.aria.Role
  * @enum {string}
+ * @alias Blockly.utils.aria.Role
  */
 const Role = {
   // ARIA role for an interactive control of tabular data.
@@ -74,6 +75,7 @@ exports.Role = Role;
  * ARIA states and properties.
  * Copied from Closure's goog.a11y.aria.State
  * @enum {string}
+ * @alias Blockly.utils.aria.State
  */
 const State = {
   // ARIA property for setting the currently active descendant of an element,
@@ -143,6 +145,7 @@ exports.State = State;
  *
  * @param {!Element} element DOM node to set role of.
  * @param {!Blockly.utils.aria.Role} roleName Role name.
+ * @alias Blockly.utils.aria.setRole
  */
 const setRole = function(element, roleName) {
   element.setAttribute(ROLE_ATTRIBUTE, roleName);
@@ -158,6 +161,7 @@ exports.setRole = setRole;
  *     not an extra attribute.
  * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
+ * @alias Blockly.utils.aria.setState
  */
 const setState = function(element, stateName, value) {
   if (Array.isArray(value)) {

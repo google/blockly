@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FieldCheckbox');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
@@ -100,6 +99,20 @@ FieldCheckbox.prototype.configure_ = function(config) {
   if (config['checkCharacter']) {
     this.checkChar_ = config['checkCharacter'];
   }
+};
+
+/**
+ * Saves this field's value.
+ * @return {*} The boolean value held by this field.
+ * @override
+ * @package
+ */
+FieldCheckbox.prototype.saveState = function() {
+  const legacyState = this.saveLegacyState(FieldCheckbox);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValueBoolean();
 };
 
 /**

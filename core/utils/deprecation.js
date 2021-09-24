@@ -27,6 +27,7 @@ goog.module('Blockly.utils.deprecation');
  *     deprecation date.
  * @param {string=} opt_use The name of a function or property to use instead,
  *     if any.
+ * @alias Blockly.utils.deprecation.warn
  */
 const warn = function(name, deprecationDate, deletionDate, opt_use) {
   let msg = name + ' was deprecated on ' + deprecationDate +

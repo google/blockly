@@ -14,8 +14,6 @@ goog.module('Blockly.geras.Drawer');
 goog.module.declareLegacyNamespace();
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Highlighter = goog.require('Blockly.geras.Highlighter');
 /* eslint-disable-next-line no-unused-vars */
 const PathObject = goog.requireType('Blockly.geras.PathObject');
@@ -24,6 +22,8 @@ const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

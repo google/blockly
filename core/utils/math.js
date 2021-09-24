@@ -24,6 +24,7 @@ goog.module('Blockly.utils.math');
  * Copied from Closure's goog.math.toRadians.
  * @param {number} angleDegrees Angle in degrees.
  * @return {number} Angle in radians.
+ * @alias Blockly.utils.math.toRadians
  */
 const toRadians = function(angleDegrees) {
   return angleDegrees * Math.PI / 180;
@@ -35,6 +36,7 @@ exports.toRadians = toRadians;
  * Copied from Closure's goog.math.toDegrees.
  * @param {number} angleRadians Angle in radians.
  * @return {number} Angle in degrees.
+ * @alias Blockly.utils.math.toDegrees
  */
 const toDegrees = function(angleRadians) {
   return angleRadians * 180 / Math.PI;
@@ -47,6 +49,7 @@ exports.toDegrees = toDegrees;
  * @param {number} number The number to clamp.
  * @param {number} upperBound The desired upper bound.
  * @return {number} The clamped number.
+ * @alias Blockly.utils.math.clamp
  */
 const clamp = function(lowerBound, number, upperBound) {
   if (upperBound < lowerBound) {

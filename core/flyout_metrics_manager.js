@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.FlyoutMetricsManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');

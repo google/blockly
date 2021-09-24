@@ -15,8 +15,6 @@ goog.module.declareLegacyNamespace();
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const PathObject = goog.requireType('Blockly.zelos.PathObject');
 /* eslint-disable-next-line no-unused-vars */
 const RenderInfo = goog.requireType('Blockly.zelos.RenderInfo');
@@ -25,6 +23,8 @@ const Row = goog.requireType('Blockly.blockRendering.Row');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

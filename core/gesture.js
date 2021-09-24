@@ -12,10 +12,7 @@
 'use strict';
 
 goog.module('Blockly.Gesture');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
@@ -35,9 +32,11 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
-const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */
@@ -474,7 +473,7 @@ Gesture.prototype.startDraggingBubble_ = function() {
  * @package
  */
 Gesture.prototype.doStart = function(e) {
-  if (utils.isTargetInput(e)) {
+  if (browserEvents.isTargetInput(e)) {
     this.cancel();
     return;
   }
@@ -501,7 +500,7 @@ Gesture.prototype.doStart = function(e) {
     this.targetBlock_.select();
   }
 
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     this.handleRightClick(e);
     return;
   }
@@ -770,8 +769,8 @@ Gesture.prototype.doBlockClick_ = function() {
  */
 Gesture.prototype.doWorkspaceClick_ = function(_e) {
   const ws = this.creatorWorkspace_;
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (common.getSelected()) {
+    common.getSelected().unselect();
   }
   this.fireWorkspaceClick_(this.startWorkspace_ || ws);
 };

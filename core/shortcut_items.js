@@ -11,17 +11,16 @@
 'use strict';
 
 goog.module('Blockly.ShortcutItems');
-goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Gesture = goog.require('Blockly.Gesture');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const clipboard = goog.require('Blockly.clipboard');
+const common = goog.require('Blockly.common');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -63,8 +62,8 @@ const registerDelete = function() {
   const deleteShortcut = {
     name: names.DELETE,
     preconditionFn: function(workspace) {
-      return !workspace.options.readOnly && Blockly.selected &&
-          Blockly.selected.isDeletable();
+      const selected = common.getSelected();
+      return !workspace.options.readOnly && selected && selected.isDeletable();
     },
     callback: function(workspace, e) {
       // Delete or backspace.
@@ -76,7 +75,7 @@ const registerDelete = function() {
       if (Gesture.inProgress()) {
         return false;
       }
-      Blockly.deleteBlock(/** @type {!BlockSvg} */ (Blockly.selected));
+      (/** @type {!BlockSvg} */ (common.getSelected())).checkAndDelete();
       return true;
     }
   };
@@ -93,16 +92,16 @@ const registerCopy = function() {
   const copyShortcut = {
     name: names.COPY,
     preconditionFn: function(workspace) {
+      const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          Blockly.selected && Blockly.selected.isDeletable() &&
-          Blockly.selected.isMovable();
+          selected && selected.isDeletable() && selected.isMovable();
     },
     callback: function(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
       // an error due to the lack of a selection.
       e.preventDefault();
       workspace.hideChaff();
-      clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
+      clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
     }
   };
@@ -128,13 +127,19 @@ const registerCut = function() {
   const cutShortcut = {
     name: names.CUT,
     preconditionFn: function(workspace) {
+      const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() &&
-          Blockly.selected && Blockly.selected.isDeletable() &&
-          Blockly.selected.isMovable() && !Blockly.selected.workspace.isFlyout;
+          selected && selected.isDeletable() && selected.isMovable() &&
+          !selected.workspace.isFlyout;
     },
     callback: function() {
-      clipboard.copy(/** @type {!ICopyable} */ (Blockly.selected));
-      Blockly.deleteBlock(/** @type {!BlockSvg} */ (Blockly.selected));
+      const selected = common.getSelected();
+      if (!selected) {
+        // Shouldn't happen but appeases the type system
+        return false;
+      }
+      clipboard.copy(selected);
+      (/** @type {!BlockSvg} */ (selected)).checkAndDelete();
       return true;
     }
   };

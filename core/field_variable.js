@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.FieldVariable');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
 /* eslint-disable-next-line no-unused-vars */
 const Menu = goog.requireType('Blockly.Menu');
@@ -29,6 +26,8 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -195,6 +194,51 @@ FieldVariable.prototype.toXml = function(fieldElement) {
     fieldElement.setAttribute('variabletype', this.variable_.type);
   }
   return fieldElement;
+};
+
+/**
+ * Saves this field's value.
+ * @param {boolean=} doFullSerialization If true, the variable field will
+ *     serialize the full state of the field being referenced (ie ID, name,
+ *     and type) rather than just a reference to it (ie ID).
+ * @return {*} The state of the variable field.
+ * @override
+ * @package
+ */
+FieldVariable.prototype.saveState = function(doFullSerialization) {
+  const legacyState = this.saveLegacyState(FieldVariable);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  // Make sure the variable is initialized.
+  this.initModel();
+  const state = {
+    'id': this.variable_.getId()
+  };
+  if (doFullSerialization) {
+    state['name'] = this.variable_.name;
+    state['type'] = this.variable_.type;
+  }
+  return state;
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state of the variable to assign to this variable field.
+ * @override
+ * @package
+ */
+FieldVariable.prototype.loadState = function(state) {
+  if (this.loadLegacyState(FieldVariable, state)) {
+    return;
+  }
+  // This is necessary so that blocks in the flyout can have custom var names.
+  const variable = Variables.getOrCreateVariablePackage(
+      this.sourceBlock_.workspace,
+      state['id'] || null,
+      state['name'],
+      state['type'] || '');
+  this.setValue(variable.getId());
 };
 
 /**

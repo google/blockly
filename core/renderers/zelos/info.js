@@ -15,8 +15,6 @@ goog.module('Blockly.zelos.RenderInfo');
 goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BottomRow = goog.require('Blockly.zelos.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
@@ -29,11 +27,14 @@ const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
 const Renderer = goog.requireType('Blockly.zelos.Renderer');
 const RightConnectionShape = goog.require('Blockly.zelos.RightConnectionShape');
+const StatementInput = goog.require('Blockly.zelos.StatementInput');
 const TopRow = goog.require('Blockly.zelos.TopRow');
 const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -265,6 +266,16 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
       activeRow.align == constants.ALIGN.LEFT &&
       input.align == constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
+  } else if (input.type == inputTypes.STATEMENT) {
+    // Handle statements without next connections correctly.
+    activeRow.elements.push(
+        new StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+
+    if (activeRow.align == null) {
+      activeRow.align = input.align;
+    }
+    return;
   }
   RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };

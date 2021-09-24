@@ -12,7 +12,7 @@
 'use strict';
 
 goog.module('Blockly.ConnectionType');
-goog.module.declareLegacyNamespace();
+
 
 /**
  * Enum for the type of a connection or input.

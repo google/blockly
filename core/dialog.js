@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.dialog');
-goog.module.declareLegacyNamespace();
 
 let alertImplementation = function(message, opt_callback) {
   window.alert(message);

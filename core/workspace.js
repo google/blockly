@@ -11,12 +11,9 @@
 'use strict';
 
 goog.module('Blockly.Workspace');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
@@ -38,6 +35,8 @@ const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
 
@@ -257,8 +256,7 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(
-      this.typedBlocksDB_[block.type].indexOf(block), 1);
+  utils.arrayRemove(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -283,7 +281,10 @@ Workspace.prototype.getBlocksByType = function(type, ordered) {
     }
     blocks.sort(this.sortObjects_);
   }
-  return blocks;
+
+  return blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
 };
 
 /**
@@ -522,7 +523,7 @@ Workspace.prototype.getWidth = function() {
  * @return {!Block} The created block.
  */
 Workspace.prototype.newBlock = function(prototypeName, opt_id) {
-  const Block = goog.module.get('Blockly.Block');
+  const {Block} = goog.module.get('Blockly.Block');
   return new Block(this, prototypeName, opt_id);
 };
 

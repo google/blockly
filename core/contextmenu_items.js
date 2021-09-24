@@ -11,11 +11,7 @@
 'use strict';
 
 goog.module('Blockly.ContextMenuItems');
-goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
@@ -26,6 +22,8 @@ const dialog = goog.require('Blockly.dialog');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /** Option to undo previous action. */
@@ -530,11 +528,9 @@ const registerDelete = function() {
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
-      Events.setGroup(true);
       if (scope.block) {
-        Blockly.deleteBlock(scope.block);
+        scope.block.checkAndDelete();
       }
-      Events.setGroup(false);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDelete',

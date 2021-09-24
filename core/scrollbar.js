@@ -11,10 +11,7 @@
 'use strict';
 
 goog.module('Blockly.Scrollbar');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 const Touch = goog.require('Blockly.Touch');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -680,13 +677,13 @@ Scrollbar.prototype.onMouseDownBar_ = function(e) {
   this.workspace_.markFocused();
   Touch.clearTouchIdentifier();  // This is really a click.
   this.cleanUp_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
     e.stopPropagation();
     return;
   }
-  const mouseXY = utils.mouseToSvg(
+  const mouseXY = browserEvents.mouseToSvg(
       e, this.workspace_.getParentSvg(), this.workspace_.getInverseScreenCTM());
   const mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
@@ -719,7 +716,7 @@ Scrollbar.prototype.onMouseDownBar_ = function(e) {
 Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   this.workspace_.markFocused();
   this.cleanUp_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
     e.stopPropagation();

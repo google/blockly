@@ -13,7 +13,6 @@
 'use strict';
 
 goog.module('Blockly.internalConstants');
-goog.module.declareLegacyNamespace();
 
 const ConnectionType = goog.require('Blockly.ConnectionType');
 

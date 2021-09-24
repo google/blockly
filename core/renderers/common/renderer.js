@@ -11,9 +11,9 @@
 'use strict';
 
 goog.module('Blockly.blockRendering.Renderer');
-goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const Debug = goog.requireType('Blockly.blockRendering.Debug');
@@ -32,8 +32,7 @@ const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const blockRendering = goog.require('Blockly.blockRendering');
-const ConnectionType = goog.require('Blockly.ConnectionType');
+const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -289,7 +288,7 @@ Renderer.prototype.getConnectionPreviewMethod = function(
  * @package
  */
 Renderer.prototype.render = function(block) {
-  if (blockRendering.isDebuggerEnabled() && !block.renderingDebugger) {
+  if (debug.isDebuggerEnabled() && !block.renderingDebugger) {
     block.renderingDebugger = this.makeDebugger_();
   }
   const info = this.makeRenderInfo_(block);

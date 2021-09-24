@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.MarkerSvg');
-goog.module.declareLegacyNamespace();
 
 const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */

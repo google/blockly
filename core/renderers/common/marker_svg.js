@@ -12,7 +12,6 @@
 
 
 goog.module('Blockly.blockRendering.MarkerSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');

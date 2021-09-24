@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.thrasos.Renderer');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
 const RenderInfo = goog.require('Blockly.thrasos.RenderInfo');

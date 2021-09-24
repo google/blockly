@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.PathObject');
-goog.module.declareLegacyNamespace();
 
 const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */

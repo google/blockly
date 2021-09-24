@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.thrasos.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */

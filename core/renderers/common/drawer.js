@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.blockRendering.Drawer');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -26,7 +25,7 @@ const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const Row = goog.requireType('Blockly.blockRendering.Row');
 const Types = goog.require('Blockly.blockRendering.Types');
-const blockRendering = goog.require('Blockly.blockRendering');
+const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -74,7 +73,7 @@ Drawer.prototype.draw = function() {
   if (this.info_.RTL) {
     this.block_.pathObject.flipRTL();
   }
-  if (blockRendering.isDebuggerEnabled()) {
+  if (debug.isDebuggerEnabled()) {
     this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
   }
   this.recordSizeOnBlock_();

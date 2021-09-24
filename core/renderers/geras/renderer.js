@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.geras.Renderer');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */

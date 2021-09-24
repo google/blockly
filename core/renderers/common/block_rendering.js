@@ -11,26 +11,52 @@
 'use strict';
 
 goog.module('Blockly.blockRendering');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
+const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
+const Connection = goog.require('Blockly.blockRendering.Connection');
+const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
+const Debug = goog.require('Blockly.blockRendering.Debug');
+const Drawer = goog.require('Blockly.blockRendering.Drawer');
+const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
+const Field = goog.require('Blockly.blockRendering.Field');
+const Hat = goog.require('Blockly.blockRendering.Hat');
+const Icon = goog.require('Blockly.blockRendering.Icon');
+const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
+const InlineInput = goog.require('Blockly.blockRendering.InlineInput');
+const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
+const InputRow = goog.require('Blockly.blockRendering.InputRow');
+const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
+const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
+const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
+const Measurable = goog.require('Blockly.blockRendering.Measurable');
+const NextConnection = goog.require('Blockly.blockRendering.NextConnection');
+const OutputConnection = goog.require('Blockly.blockRendering.OutputConnection');
+const PathObject = goog.require('Blockly.blockRendering.PathObject');
+const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnection');
+const Renderer = goog.require('Blockly.blockRendering.Renderer');
+const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
+const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
+const Row = goog.require('Blockly.blockRendering.Row');
+const SpacerRow = goog.require('Blockly.blockRendering.SpacerRow');
+const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');
+const StatementInput = goog.require('Blockly.blockRendering.StatementInput');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
+const TopRow = goog.require('Blockly.blockRendering.TopRow');
+const Types = goog.require('Blockly.blockRendering.Types');
+const debug = goog.require('Blockly.blockRendering.debug');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const registry = goog.require('Blockly.registry');
 
-
-/**
- * Whether or not the debugger is turned on.
- * @type {boolean}
- */
-let useDebugger = false;
 /**
  * Returns whether the debugger is turned on.
  * @return {boolean} Whether the debugger is turned on.
  */
 const isDebuggerEnabled = function() {
-  return useDebugger;
+  deprecation.warn(
+      'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
+  return debug.isDebuggerEnabled();
 };
 /** @package */
 exports.isDebuggerEnabled = isDebuggerEnabled;
@@ -42,7 +68,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  *     to register.
  * @throws {Error} if a renderer with the same name has already been registered.
  */
-const register = function(name, rendererClass) {
+ const register = function(name, rendererClass) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 };
 exports.register = register;
@@ -61,7 +87,10 @@ exports.unregister = unregister;
  * @package
  */
 const startDebugger = function() {
-  useDebugger = true;
+  deprecation.warn(
+      'Blockly.blockRendering.startDebugger()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
+  debug.startDebugger();
 };
 /** @package */
 exports.startDebugger = startDebugger;
@@ -71,7 +100,10 @@ exports.startDebugger = startDebugger;
  * @package
  */
 const stopDebugger = function() {
-  useDebugger = false;
+  deprecation.warn(
+      'Blockly.blockRendering.stopDebugger()', 'September 2021',
+      'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
+  debug.stopDebugger();
 };
 /** @package */
 exports.stopDebugger = stopDebugger;
@@ -93,3 +125,35 @@ const init = function(name, theme, opt_rendererOverrides) {
 };
 /** @package */
 exports.init = init;
+
+exports.BottomRow = BottomRow;
+exports.Connection = Connection;
+exports.ConstantProvider = ConstantProvider;
+exports.Debug = Debug;
+exports.Drawer = Drawer;
+exports.ExternalValueInput = ExternalValueInput;
+exports.Field = Field;
+exports.Hat = Hat;
+exports.Icon = Icon;
+exports.InRowSpacer = InRowSpacer;
+exports.InlineInput = InlineInput;
+exports.InputConnection = InputConnection;
+exports.InputRow = InputRow;
+exports.IPathObject = IPathObject;
+exports.JaggedEdge = JaggedEdge;
+exports.MarkerSvg = MarkerSvg;
+exports.Measurable = Measurable;
+exports.NextConnection = NextConnection;
+exports.OutputConnection = OutputConnection;
+exports.PathObject = PathObject;
+exports.PreviousConnection = PreviousConnection;
+exports.Renderer = Renderer;
+exports.RenderInfo = RenderInfo;
+exports.RoundCorner = RoundCorner;
+exports.Row = Row;
+exports.SpacerRow = SpacerRow;
+exports.SquareCorner = SquareCorner;
+exports.StatementInput = StatementInput;
+exports.TopRow = TopRow;
+exports.Types = Types;
+exports.debug = debug;

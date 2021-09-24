@@ -13,7 +13,9 @@
 goog.module('Blockly.Events.CommentBase');
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
 const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
+/* eslint-disable-next-line no-unused-vars */
 const CommentDelete = goog.requireType('Blockly.Events.CommentDelete');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');

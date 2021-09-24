@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.IRegistrableField');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
@@ -26,7 +25,7 @@ const Field = goog.requireType('Blockly.Field');
  *     fromJson:IRegistrableField.fromJson
  * }}
  */
-let IRegistrableField;
+let IRegistrableField = {};
 
 /**
  * @typedef {function(!Object): Field}

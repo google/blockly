@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.geras.InlineInput');
-goog.module.declareLegacyNamespace();
 
 const BaseInlineInput = goog.require('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */

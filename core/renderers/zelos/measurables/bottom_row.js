@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.BottomRow');
-goog.module.declareLegacyNamespace();
 
 const BaseBottomRow = goog.require('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */

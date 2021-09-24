@@ -20,11 +20,11 @@ const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 /** @suppress {extraRequire} */
@@ -108,7 +108,7 @@ Connection.prototype.y = 0;
  * @protected
  */
 Connection.prototype.connect_ = function(childConnection) {
-  const INPUT = connectionTypes.INPUT_VALUE;
+  const INPUT = ConnectionType.INPUT_VALUE;
   const parentConnection = this;
   const parentBlock = parentConnection.getSourceBlock();
   const childBlock = childConnection.getSourceBlock();
@@ -193,8 +193,8 @@ Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Connection.prototype.isSuperior = function() {
-  return this.type == connectionTypes.INPUT_VALUE ||
-      this.type == connectionTypes.NEXT_STATEMENT;
+  return this.type == ConnectionType.INPUT_VALUE ||
+      this.type == ConnectionType.NEXT_STATEMENT;
 };
 
 /**
@@ -386,7 +386,7 @@ const getConnectionForOrphanedOutput = function(startBlock, orphanBlock) {
  */
 Connection.getConnectionForOrphanedConnection = function(
     startBlock, orphanConnection) {
-  if (orphanConnection.type === connectionTypes.OUTPUT_VALUE) {
+  if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
     return getConnectionForOrphanedOutput(
         startBlock, orphanConnection.getSourceBlock());
   }
@@ -770,14 +770,14 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   if (shadowDom) {
     blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {
-      if (this.type == connectionTypes.INPUT_VALUE) {
+      if (this.type == ConnectionType.INPUT_VALUE) {
         if (!blockShadow.outputConnection) {
           throw new Error('Shadow block is missing an output connection');
         }
         if (!this.connect(blockShadow.outputConnection)) {
           throw new Error('Could not connect shadow block to connection');
         }
-      } else if (this.type == connectionTypes.NEXT_STATEMENT) {
+      } else if (this.type == ConnectionType.NEXT_STATEMENT) {
         if (!blockShadow.previousConnection) {
           throw new Error('Shadow block is missing previous connection');
         }

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.minimalist.ConstantProvider');
-goog.module.declareLegacyNamespace();
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');

@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.geras.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');

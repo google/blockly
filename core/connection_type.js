@@ -11,13 +11,14 @@
 
 'use strict';
 
-goog.module('Blockly.connectionTypes');
+goog.module('Blockly.ConnectionType');
+
 
 /**
  * Enum for the type of a connection or input.
  * @enum {number}
  */
-const connectionTypes = {
+const ConnectionType = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.
   INPUT_VALUE: 1,
   // A left-facing value output.  E.g. 'random fraction'.
@@ -28,4 +29,4 @@ const connectionTypes = {
   PREVIOUS_STATEMENT: 4
 };
 
-exports = connectionTypes;
+exports.ConnectionType = ConnectionType;

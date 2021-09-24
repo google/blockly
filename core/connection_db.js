@@ -20,7 +20,7 @@ const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 
@@ -293,10 +293,10 @@ ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dxy) {
 ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   const dbList = [];
-  dbList[connectionTypes.INPUT_VALUE] = new ConnectionDB(checker);
-  dbList[connectionTypes.OUTPUT_VALUE] = new ConnectionDB(checker);
-  dbList[connectionTypes.NEXT_STATEMENT] = new ConnectionDB(checker);
-  dbList[connectionTypes.PREVIOUS_STATEMENT] = new ConnectionDB(checker);
+  dbList[ConnectionType.INPUT_VALUE] = new ConnectionDB(checker);
+  dbList[ConnectionType.OUTPUT_VALUE] = new ConnectionDB(checker);
+  dbList[ConnectionType.NEXT_STATEMENT] = new ConnectionDB(checker);
+  dbList[ConnectionType.PREVIOUS_STATEMENT] = new ConnectionDB(checker);
   return dbList;
 };
 

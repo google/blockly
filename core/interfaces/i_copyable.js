@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.ICopyable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ISelectable = goog.requireType('Blockly.ISelectable');

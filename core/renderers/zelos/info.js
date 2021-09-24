@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.zelos.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 const BottomRow = goog.require('Blockly.zelos.BottomRow');

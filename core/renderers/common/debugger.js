@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.blockRendering.Debug');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -28,10 +27,10 @@ const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 const Row = goog.requireType('Blockly.blockRendering.Row');
 const Svg = goog.require('Blockly.utils.Svg');
 const Types = goog.require('Blockly.blockRendering.Types');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -227,19 +226,19 @@ Debug.prototype.drawConnection = function(conn) {
   let colour;
   let size;
   let fill;
-  if (conn.type == connectionTypes.INPUT_VALUE) {
+  if (conn.type == ConnectionType.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
     fill = 'none';
-  } else if (conn.type == connectionTypes.OUTPUT_VALUE) {
+  } else if (conn.type == ConnectionType.OUTPUT_VALUE) {
     size = 2;
     colour = 'magenta';
     fill = colour;
-  } else if (conn.type == connectionTypes.NEXT_STATEMENT) {
+  } else if (conn.type == ConnectionType.NEXT_STATEMENT) {
     size = 4;
     colour = 'goldenrod';
     fill = 'none';
-  } else if (conn.type == connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (conn.type == ConnectionType.PREVIOUS_STATEMENT) {
     size = 2;
     colour = 'goldenrod';
     fill = colour;

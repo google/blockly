@@ -7,6 +7,7 @@
 goog.module('Blockly.test.blocks');
 
 const eventUtils = goog.require('Blockly.Events.utils');
+const {Blocks} = goog.require('Blockly.blocks');
 const {createDeprecationWarningStub, createRenderedBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -1986,7 +1987,7 @@ suite('Blocks', function() {
       // so we assert init was called to be safe.
       var initCalled = false;
       var recordUndoDuringInit;
-      Blockly.Blocks['init_test_block'].init = function() {
+      Blocks['init_test_block'].init = function() {
         initCalled = true;
         recordUndoDuringInit = eventUtils.getRecordUndo();
         throw new Error();

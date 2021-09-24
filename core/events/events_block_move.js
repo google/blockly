@@ -14,12 +14,12 @@ goog.module('Blockly.Events.BlockMove');
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -171,7 +171,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == ConnectionType.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

@@ -22,7 +22,7 @@ Blockly.setLocale = function (locale) {
 
 // Override textToDomDocument and provide Node.js alternatives to DOMParser and
 // XMLSerializer.
-const globalThis = Blockly.utils.global.globalThis;
+const globalThis = Blockly.utils.global;
 if (typeof globalThis.document !== 'object') {
   const jsdom = require('jsdom/lib/jsdom/living');
   globalThis.DOMParser = jsdom.DOMParser;

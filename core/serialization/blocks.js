@@ -306,7 +306,7 @@ exports.append = append;
  * This is defined internally so that the extra parameters don't clutter our
  * external API.
  * But it is exported so that other places within Blockly can call it directly
- * with the extra paramters.
+ * with the extra parameters.
  * @param {!State} state The state of a block to deserialize into the workspace.
  * @param {!Workspace} workspace The workspace to add the block to.
  * @param {{parentConnection: (!Connection|undefined), isShadow:

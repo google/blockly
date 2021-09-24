@@ -18,7 +18,6 @@ goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
 const BlocklyOptions = goog.require('Blockly.BlocklyOptions');
-const Blocks = goog.require('Blockly.Blocks');
 const Bubble = goog.require('Blockly.Bubble');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
@@ -55,11 +54,37 @@ const Generator = goog.require('Blockly.Generator');
 const Gesture = goog.require('Blockly.Gesture');
 const Grid = goog.require('Blockly.Grid');
 const HorizontalFlyout = goog.require('Blockly.HorizontalFlyout');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
+const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
+const IAutoHideable = goog.require('Blockly.IAutoHideable');
+const IBlockDragger = goog.require('Blockly.IBlockDragger');
+const IBoundedElement = goog.require('Blockly.IBoundedElement');
+const IBubble = goog.require('Blockly.IBubble');
+const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
+const IComponent = goog.require('Blockly.IComponent');
+const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
+const IContextMenu = goog.require('Blockly.IContextMenu');
 const Icon = goog.require('Blockly.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const ICopyable = goog.require('Blockly.ICopyable');
+const IDeletable = goog.require('Blockly.IDeletable');
+const IDeleteArea = goog.require('Blockly.IDeleteArea');
+const IDragTarget = goog.require('Blockly.IDragTarget');
+const IDraggable = goog.require('Blockly.IDraggable');
+const IFlyout = goog.require('Blockly.IFlyout');
+const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
+const IMetricsManager = goog.require('Blockly.IMetricsManager');
+const IMovable = goog.require('Blockly.IMovable');
 const Input = goog.require('Blockly.Input');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+const IPositionable = goog.require('Blockly.IPositionable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
+const IRegistrableField = goog.require('Blockly.IRegistrableField');
+const ISelectable = goog.require('Blockly.ISelectable');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
+const IStyleable = goog.require('Blockly.IStyleable');
+const IToolbox = goog.require('Blockly.IToolbox');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
 const Marker = goog.require('Blockly.Marker');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 const Menu = goog.require('Blockly.Menu');
@@ -104,29 +129,35 @@ const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const ZoomControls = goog.require('Blockly.ZoomControls');
 const blockAnimations = goog.require('Blockly.blockAnimations');
+const blockRendering = goog.require('Blockly.blockRendering');
 const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const clipboard = goog.require('Blockly.clipboard');
 const colour = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const geras = goog.require('Blockly.geras');
 const inject = goog.require('Blockly.inject');
 const inputTypes = goog.require('Blockly.inputTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
+const minimalist = goog.require('Blockly.minimalist');
 const registry = goog.require('Blockly.registry');
+const thrasos = goog.require('Blockly.thrasos');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
+const zelos = goog.require('Blockly.zelos');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {Block} = goog.require('Blockly.Block');
 const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {BasicCursor} = goog.require('Blockly.BasicCursor');
+const {Blocks} = goog.require('Blockly.blocks');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Cursor} = goog.require('Blockly.Cursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -422,24 +453,24 @@ exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
  */
 
 /**
- * @see connectionTypes.INPUT_VALUE
+ * @see ConnectionType.INPUT_VALUE
  */
-exports.INPUT_VALUE = connectionTypes.INPUT_VALUE;
+exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
- * @see connectionTypes.OUTPUT_VALUE
+ * @see ConnectionType.OUTPUT_VALUE
  */
-exports.OUTPUT_VALUE = connectionTypes.OUTPUT_VALUE;
+exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
- * @see connectionTypes.NEXT_STATEMENT
+ * @see ConnectionType.NEXT_STATEMENT
  */
-exports.NEXT_STATEMENT = connectionTypes.NEXT_STATEMENT;
+exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
- * @see connectionTypes.PREVIOUS_STATEMENT
+ * @see ConnectionType.PREVIOUS_STATEMENT
  */
-exports.PREVIOUS_STATEMENT = connectionTypes.PREVIOUS_STATEMENT;
+exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
@@ -502,6 +533,7 @@ exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
+// Re-export submodules that no longer declareLegacyNamespace.
 exports.ASTNode = ASTNode;
 exports.BasicCursor = BasicCursor;
 exports.Block = Block;
@@ -509,12 +541,14 @@ exports.BlocklyOptions = BlocklyOptions;
 exports.BlockDragger = BlockDragger;
 exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
 exports.BlockSvg = BlockSvg;
+exports.Blocks = Blocks;
 exports.Bubble = Bubble;
 exports.BubbleDragger = BubbleDragger;
 exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
 exports.Comment = Comment;
 exports.ComponentManager = ComponentManager;
 exports.Connection = Connection;
+exports.ConnectionType = ConnectionType;
 exports.ConnectionChecker = ConnectionChecker;
 exports.ConnectionDB = ConnectionDB;
 exports.ContextMenu = ContextMenu;
@@ -546,9 +580,37 @@ exports.Generator = Generator;
 exports.Gesture = Gesture;
 exports.Grid = Grid;
 exports.HorizontalFlyout = HorizontalFlyout;
+exports.IASTNodeLocation = IASTNodeLocation;
+exports.IASTNodeLocationSvg = IASTNodeLocationSvg;
+exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
+exports.IAutoHideable = IAutoHideable;
+exports.IBlockDragger = IBlockDragger;
+exports.IBoundedElement = IBoundedElement;
+exports.IBubble = IBubble;
+exports.ICollapsibleToolboxItem = ICollapsibleToolboxItem;
+exports.IComponent = IComponent;
+exports.IConnectionChecker = IConnectionChecker;
+exports.IContextMenu = IContextMenu;
 exports.Icon = Icon;
+exports.ICopyable = ICopyable;
+exports.IDeletable = IDeletable;
+exports.IDeleteArea = IDeleteArea;
+exports.IDragTarget = IDragTarget;
+exports.IDraggable = IDraggable;
+exports.IFlyout = IFlyout;
+exports.IKeyboardAccessible = IKeyboardAccessible;
+exports.IMetricsManager = IMetricsManager;
+exports.IMovable = IMovable;
 exports.Input = Input;
 exports.InsertionMarkerManager = InsertionMarkerManager;
+exports.IPositionable = IPositionable;
+exports.IRegistrable = IRegistrable;
+exports.IRegistrableField = IRegistrableField;
+exports.ISelectable = ISelectable;
+exports.ISelectableToolboxItem = ISelectableToolboxItem;
+exports.IStyleable = IStyleable;
+exports.IToolbox = IToolbox;
+exports.IToolboxItem = IToolboxItem;
 exports.Marker = Marker;
 exports.MarkerManager = MarkerManager;
 exports.Menu = Menu;
@@ -592,16 +654,22 @@ exports.WorkspaceSvg = WorkspaceSvg;
 exports.Xml = Xml;
 exports.ZoomControls = ZoomControls;
 exports.blockAnimations = blockAnimations;
+exports.blockRendering = blockRendering;
 exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
-exports.connectionTypes = connectionTypes;
+/** @deprecated Use Blockly.ConnectionType instead. */
+exports.connectionTypes = ConnectionType;
 exports.constants = constants;
 exports.dialog = dialog;
 exports.fieldRegistry = fieldRegistry;
+exports.geras = geras;
 exports.inject = inject;
 exports.inputTypes = inputTypes;
+exports.minimalist = minimalist;
 exports.registry = registry;
+exports.thrasos = thrasos;
 exports.uiPosition = uiPosition;
 exports.utils = utils;
+exports.zelos = zelos;

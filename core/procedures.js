@@ -18,7 +18,6 @@ goog.module('Blockly.Procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const Msg = goog.require('Blockly.Msg');
@@ -32,6 +31,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Blocks} = goog.require('Blockly.blocks');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 

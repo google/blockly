@@ -12,7 +12,6 @@
 
 
 goog.module('Blockly.blockRendering.MarkerSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
@@ -27,13 +26,13 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
 /** @suppress {extraRequire} */
@@ -217,9 +216,9 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == connectionTypes.INPUT_VALUE) {
+  } else if (connectionType == ConnectionType.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == connectionTypes.NEXT_STATEMENT) {
+  } else if (connectionType == ConnectionType.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);

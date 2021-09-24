@@ -10,7 +10,6 @@
 'use strict';
 
 goog.module('Blockly.minimalist.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */

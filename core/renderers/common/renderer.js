@@ -33,7 +33,7 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -248,7 +248,7 @@ Renderer.prototype.shouldHighlightConnection = function(_conn) {
 Renderer.prototype.orphanCanConnectAtEnd = function(
     topBlock, orphanBlock, localType) {
   const orphanConnection =
-      (localType === connectionTypes.OUTPUT_VALUE ?
+      (localType === ConnectionType.OUTPUT_VALUE ?
            orphanBlock.outputConnection :
            orphanBlock.previousConnection);
   return !!Connection.getConnectionForOrphanedConnection(
@@ -269,8 +269,8 @@ Renderer.prototype.orphanCanConnectAtEnd = function(
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == connectionTypes.OUTPUT_VALUE ||
-      local.type == connectionTypes.PREVIOUS_STATEMENT) {
+  if (local.type == ConnectionType.OUTPUT_VALUE ||
+      local.type == ConnectionType.PREVIOUS_STATEMENT) {
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,

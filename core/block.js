@@ -18,6 +18,7 @@ const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
@@ -37,7 +38,6 @@ const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -524,7 +524,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == connectionTypes.INPUT_VALUE &&
+    if (thisConnection && thisConnection.type == ConnectionType.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -689,7 +689,7 @@ Block.prototype.getPreviousBlock = function() {
 Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == connectionTypes.NEXT_STATEMENT) {
+        input.connection.type == ConnectionType.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -1187,7 +1187,7 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(connectionTypes.PREVIOUS_STATEMENT);
+          this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1216,7 +1216,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     }
     if (!this.nextConnection) {
       this.nextConnection =
-          this.makeConnection_(connectionTypes.NEXT_STATEMENT);
+          this.makeConnection_(ConnectionType.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1251,7 +1251,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
             'connection.');
       }
       this.outputConnection =
-          this.makeConnection_(connectionTypes.OUTPUT_VALUE);
+          this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {

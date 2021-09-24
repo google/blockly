@@ -27,7 +27,7 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -115,8 +115,8 @@ Renderer.prototype.makePathObject = function(root, style) {
  * @override
  */
 Renderer.prototype.shouldHighlightConnection = function(conn) {
-  return conn.type != connectionTypes.INPUT_VALUE &&
-      conn.type !== connectionTypes.OUTPUT_VALUE;
+  return conn.type != ConnectionType.INPUT_VALUE &&
+      conn.type !== ConnectionType.OUTPUT_VALUE;
 };
 
 /**
@@ -124,7 +124,7 @@ Renderer.prototype.shouldHighlightConnection = function(conn) {
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == connectionTypes.OUTPUT_VALUE) {
+  if (local.type == ConnectionType.OUTPUT_VALUE) {
     if (!closest.isConnected()) {
       return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
     }

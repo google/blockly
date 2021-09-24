@@ -114,6 +114,9 @@ const renamings = {
         DIV: {get: 'getDiv'},
       },
     },
+    'Blockly.connectionTypes': {
+      module: 'Blockly.ConnectionType',
+    },
     'Blockly.utils': {
       exports: {
         genUid: {module: 'Blockly.utils.idGenerator'},

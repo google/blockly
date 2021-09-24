@@ -27,6 +27,7 @@ const ComponentManager = goog.require('Blockly.ComponentManager');
 const ConnectionChecker = goog.require('Blockly.ConnectionChecker');
 const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const Connection = goog.require('Blockly.Connection');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuItems = goog.require('Blockly.ContextMenuItems');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
@@ -108,7 +109,6 @@ const bumpObjects = goog.require('Blockly.bumpObjects');
 const clipboard = goog.require('Blockly.clipboard');
 const colour = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
@@ -421,24 +421,24 @@ exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
  */
 
 /**
- * @see connectionTypes.INPUT_VALUE
+ * @see ConnectionType.INPUT_VALUE
  */
-exports.INPUT_VALUE = connectionTypes.INPUT_VALUE;
+exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
- * @see connectionTypes.OUTPUT_VALUE
+ * @see ConnectionType.OUTPUT_VALUE
  */
-exports.OUTPUT_VALUE = connectionTypes.OUTPUT_VALUE;
+exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
- * @see connectionTypes.NEXT_STATEMENT
+ * @see ConnectionType.NEXT_STATEMENT
  */
-exports.NEXT_STATEMENT = connectionTypes.NEXT_STATEMENT;
+exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
- * @see connectionTypes.PREVIOUS_STATEMENT
+ * @see ConnectionType.PREVIOUS_STATEMENT
  */
-exports.PREVIOUS_STATEMENT = connectionTypes.PREVIOUS_STATEMENT;
+exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
@@ -514,6 +514,7 @@ exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
 exports.Comment = Comment;
 exports.ComponentManager = ComponentManager;
 exports.Connection = Connection;
+exports.ConnectionType = ConnectionType;
 exports.ConnectionChecker = ConnectionChecker;
 exports.ConnectionDB = ConnectionDB;
 exports.ContextMenu = ContextMenu;
@@ -594,7 +595,8 @@ exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
-exports.connectionTypes = connectionTypes;
+/** @deprecated Use Blockly.ConnectionType instead. */
+exports.connectionTypes = ConnectionType;
 exports.constants = constants;
 exports.dialog = dialog;
 exports.fieldRegistry = fieldRegistry;

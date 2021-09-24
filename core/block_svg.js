@@ -57,7 +57,7 @@ const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -1597,8 +1597,8 @@ BlockSvg.prototype.positionNearConnection = function(
     sourceConnection, targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == connectionTypes.NEXT_STATEMENT ||
-      sourceConnection.type == connectionTypes.INPUT_VALUE) {
+  if (sourceConnection.type == ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type == ConnectionType.INPUT_VALUE) {
     const dx = targetConnection.x - sourceConnection.x;
     const dy = targetConnection.y - sourceConnection.y;
 

@@ -14,7 +14,7 @@
 
 goog.module('Blockly.internalConstants');
 
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -162,12 +162,12 @@ exports.DRAG_FREE = DRAG_FREE;
  * @const
  */
 const OPPOSITE_TYPE = [];
-OPPOSITE_TYPE[connectionTypes.INPUT_VALUE] = connectionTypes.OUTPUT_VALUE;
-OPPOSITE_TYPE[connectionTypes.OUTPUT_VALUE] = connectionTypes.INPUT_VALUE;
-OPPOSITE_TYPE[connectionTypes.NEXT_STATEMENT] =
-    connectionTypes.PREVIOUS_STATEMENT;
-OPPOSITE_TYPE[connectionTypes.PREVIOUS_STATEMENT] =
-    connectionTypes.NEXT_STATEMENT;
+OPPOSITE_TYPE[ConnectionType.INPUT_VALUE] = ConnectionType.OUTPUT_VALUE;
+OPPOSITE_TYPE[ConnectionType.OUTPUT_VALUE] = ConnectionType.INPUT_VALUE;
+OPPOSITE_TYPE[ConnectionType.NEXT_STATEMENT] =
+    ConnectionType.PREVIOUS_STATEMENT;
+OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
+    ConnectionType.NEXT_STATEMENT;
 
 exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
 

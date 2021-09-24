@@ -28,7 +28,7 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const ConnectionType = goog.require('Blockly.ConnectionType');
 const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const {ASTNode} = goog.require('Blockly.ASTNode');
@@ -217,9 +217,9 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == connectionTypes.INPUT_VALUE) {
+  } else if (connectionType == ConnectionType.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == connectionTypes.NEXT_STATEMENT) {
+  } else if (connectionType == ConnectionType.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);

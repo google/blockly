@@ -116,6 +116,8 @@ const renamings = {
     },
     'Blockly.connectionTypes': {
       module: 'Blockly.ConnectionType',
+      export: 'ConnectionType',  // Previous default export now named.
+      path: 'Blockly.ConnectionType',  // Type reexported directly.
     },
     'Blockly.utils': {
       exports: {

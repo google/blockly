@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.procedures');
+goog.provide('Blockly.Blocks.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Comment');

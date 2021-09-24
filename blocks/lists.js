@@ -15,7 +15,6 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.lists');
 goog.provide('Blockly.Constants.Lists');
 
 goog.require('Blockly');

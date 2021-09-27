@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.utils.idGenerator
- * @namespace
+ * Generators for unique IDs.
+ * @namespace Blockly.utils.idGenerator
  */
 goog.module('Blockly.utils.idGenerator');
 
@@ -20,6 +20,7 @@ goog.module('Blockly.utils.idGenerator');
 /**
  * Namespace object for internal implementations we want to be able to
  * stub in tests.
+ * @alias Blockly.utils.idGenerator.TEST_ONLY
  */
 const internal = {};
 exports.TEST_ONLY = internal;

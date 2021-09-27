@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.Rect
- * @namespace
+ * Utility methods for rectangle manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.Rect
  */
 goog.module('Blockly.utils.Rect');
 
@@ -27,6 +29,7 @@ goog.module('Blockly.utils.Rect');
  * @param {number} right Right.
  * @struct
  * @constructor
+ * @alias Blockly.utils.Rect
  */
 const Rect = function(top, bottom, left, right) {
   /** @type {number} */

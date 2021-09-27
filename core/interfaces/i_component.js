@@ -12,7 +12,7 @@
 
 'use strict';
 
-goog.provide('Blockly.IComponent');
+goog.module('Blockly.IComponent');
 
 
 /**
@@ -20,11 +20,13 @@ goog.provide('Blockly.IComponent');
  * ComponentManager.
  * @interface
  */
-Blockly.IComponent = function() {};
+const IComponent = function() {};
 
 /**
  * The unique id for this component that is used to register with the
  * ComponentManager.
  * @type {string}
  */
-Blockly.IComponent.id;
+IComponent.id;
+
+exports = IComponent;

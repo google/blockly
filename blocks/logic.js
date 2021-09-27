@@ -19,7 +19,6 @@ goog.provide('Blockly.Blocks.logic');  // Deprecated
 goog.provide('Blockly.Constants.Logic');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
@@ -299,6 +298,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
 
   /**
    * Create XML to represent the number of else-if and else inputs.
+   * Backwards compatible serialization implementation.
    * @return {Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -317,6 +317,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Parse XML to restore the else-if and else inputs.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -324,6 +325,34 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
     this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10) || 0;
     this.rebuildShape_();
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {?{elseIfCount: (number|undefined), haseElse: (boolean|undefined)}}
+   *     The state of this block, ie the else if count and else state.
+   */
+  saveExtraState: function() {
+    if (!this.elseifCount_ && !this.elseCount_) {
+      return null;
+    }
+    var state = Object.create(null);
+    if (this.elseifCount_) {
+      state['elseIfCount'] = this.elseifCount_;
+    }
+    if (this.elseCount_) {
+      state['hasElse'] = true;
+    }
+    return state;
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the else if count and
+   *     else state.
+   */
+  loadExtraState: function(state) {
+    this.elseifCount_ = state['elseIfCount'] || 0;
+    this.elseCount_ = state['hasElse'] ? 1 : 0;
+    this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.

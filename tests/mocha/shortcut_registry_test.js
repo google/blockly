@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.shortcutRegistry');
+
+const {createKeyDownEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -233,25 +238,25 @@ suite('Keyboard Shortcut Registry Test', function() {
         }
       };
       this.callBackStub =
-          addShortcut(this.registry, this.testShortcut, 'keyCode', true);
+          addShortcut(this.registry, this.testShortcut, Blockly.utils.KeyCodes.C, true);
     });
     test('Execute a shortcut from event', function() {
-      var event = createKeyDownEvent('keyCode', '');
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(this.callBackStub);
     });
     test('No shortcut executed from event', function() {
-      var event = createKeyDownEvent('nonExistentKeyCode', '');
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.D);
       chai.assert.isFalse(this.registry.onKeyDown(this.workspace, event));
     });
     test('No precondition available - execute callback', function() {
       delete this.testShortcut['precondition'];
-      var event = createKeyDownEvent('keyCode', '');
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(this.callBackStub);
     });
     test('Execute all shortcuts in list', function() {
-      var event = createKeyDownEvent('keyCode', '');
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
       var testShortcut2 = {
         'name': 'test_shortcut_2',
         'callback': function() {
@@ -262,13 +267,13 @@ suite('Keyboard Shortcut Registry Test', function() {
         }
       };
       var testShortcut2Stub =
-          addShortcut(this.registry, testShortcut2, 'keyCode', false);
+          addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, false);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
       sinon.assert.calledOnce(this.callBackStub);
     });
     test('Stop executing shortcut when event is handled', function() {
-      var event = createKeyDownEvent('keyCode', '');
+      var event = createKeyDownEvent(Blockly.utils.KeyCodes.C);
       var testShortcut2 = {
         'name': 'test_shortcut_2',
         'callback': function() {
@@ -279,7 +284,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         }
       };
       var testShortcut2Stub =
-          addShortcut(this.registry, testShortcut2, 'keyCode', true);
+          addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, true);
       chai.assert.isTrue(this.registry.onKeyDown(this.workspace, event));
       sinon.assert.calledOnce(testShortcut2Stub);
       sinon.assert.notCalled(this.callBackStub);
@@ -320,25 +325,25 @@ suite('Keyboard Shortcut Registry Test', function() {
 
   suite('serializeKeyEvent', function() {
     test('Serialize key', function() {
-      var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A, '');
+      var mockEvent = createKeyDownEvent(Blockly.utils.KeyCodes.A);
       var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, '65');
     });
     test('Serialize key code and modifier', function() {
       var mockEvent = createKeyDownEvent(
-          Blockly.utils.KeyCodes.A, '', [Blockly.utils.KeyCodes.CTRL]);
+          Blockly.utils.KeyCodes.A, [Blockly.utils.KeyCodes.CTRL]);
       var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Control+65');
     });
     test('Serialize only a modifier', function() {
       var mockEvent =
-          createKeyDownEvent(null, '', [Blockly.utils.KeyCodes.CTRL]);
+          createKeyDownEvent(null, [Blockly.utils.KeyCodes.CTRL]);
       var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Control');
     });
     test('Serialize multiple modifiers', function() {
       var mockEvent = createKeyDownEvent(
-          null, '',
+          null,
           [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT]);
       var serializedKey = this.registry.serializeKeyEvent_(mockEvent);
       chai.assert.equal(serializedKey, 'Shift+Control');

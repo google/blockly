@@ -13,10 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.Size
+ * @name Size
  * @namespace
  */
-goog.provide('Blockly.utils.Size');
+goog.module('Blockly.utils.Size');
 
 
 /**
@@ -26,7 +26,7 @@ goog.provide('Blockly.utils.Size');
  * @struct
  * @constructor
  */
-Blockly.utils.Size = function(width, height) {
+const Size = function(width, height) {
   /**
    * Width
    * @type {number}
@@ -42,12 +42,12 @@ Blockly.utils.Size = function(width, height) {
 
 /**
  * Compares sizes for equality.
- * @param {?Blockly.utils.Size} a A Size.
- * @param {?Blockly.utils.Size} b A Size.
+ * @param {?Size} a A Size.
+ * @param {?Size} b A Size.
  * @return {boolean} True iff the sizes have equal widths and equal
  *     heights, or if both are null.
  */
-Blockly.utils.Size.equals = function(a, b) {
+Size.equals = function(a, b) {
   if (a == b) {
     return true;
   }
@@ -56,3 +56,5 @@ Blockly.utils.Size.equals = function(a, b) {
   }
   return a.width == b.width && a.height == b.height;
 };
+
+exports = Size;

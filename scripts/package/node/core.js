@@ -22,12 +22,12 @@ Blockly.setLocale = function (locale) {
 
 // Override textToDomDocument and provide Node.js alternatives to DOMParser and
 // XMLSerializer.
-if (typeof Blockly.utils.global.document !== 'object') {
-  Blockly.utils.global.DOMParser = require('jsdom/lib/jsdom/living').DOMParser;
-  Blockly.utils.global.XMLSerializer = require('jsdom/lib/jsdom/living').XMLSerializer;
-  var doc = Blockly.utils.xml.textToDomDocument(
-    '<xml xmlns="https://developers.google.com/blockly/xml"></xml>');
-  Blockly.utils.xml.document = function() {
-    return doc;
-  };
+const globalThis = Blockly.utils.global;
+if (typeof globalThis.document !== 'object') {
+  const jsdom = require('jsdom/lib/jsdom/living');
+  globalThis.DOMParser = jsdom.DOMParser;
+  globalThis.XMLSerializer = jsdom.XMLSerializer;
+  const xmlDocument = Blockly.utils.xml.textToDomDocument(
+    `<xml xmlns="${Blockly.utils.xml.NAME_SPACE}"></xml>`);
+  Blockly.utils.xml.setDocument(xmlDocument);
 }

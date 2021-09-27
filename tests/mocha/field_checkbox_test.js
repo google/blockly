@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldCheckbox');
+
+const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Checkbox Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -202,6 +207,33 @@ suite('Checkbox Fields', function() {
         chai.assert(field.textContent_.nodeValue,
             Blockly.FieldCheckbox.CHECK_CHAR);
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldCheckbox(value);
+        block.getInput('INPUT').appendField(field, 'CHECK');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'CHECK': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('True', function() {
+      this.assertValue(true);
+    });
+
+    test('False', function() {
+      this.assertValue(false);
     });
   });
 });

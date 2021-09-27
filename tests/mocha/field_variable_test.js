@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldVariable');
+
+const {createGenUidStubWithReturns, createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Variable Fields', function() {
   var FAKE_VARIABLE_NAME = 'default_name';
   var FAKE_ID = 'id1';
@@ -11,8 +16,8 @@ suite('Variable Fields', function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     // Stub for default variable name.
-    sinon.stub(Blockly.Variables, 'generateUniqueName')
-        .returns(FAKE_VARIABLE_NAME);
+    sinon.stub(Blockly.Variables, 'generateUniqueName').returns(
+      FAKE_VARIABLE_NAME);
   });
   teardown(function() {
     sharedTestTeardown.call(this);
@@ -375,6 +380,126 @@ suite('Variable Fields', function() {
       this.workspace.renameVariableById('id1', 'name2');
       chai.assert.equal(this.variableField.getText(), 'name2');
       chai.assert.equal(this.variableField.getValue(), 'id2');
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      createGenUidStubWithReturns(new Array(10).fill().map((_, i) => 'id' + i));
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    suite('Full', function() {
+      test('Untyped', function() {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldVariable('x');
+        block.getInput('INPUT').appendField(field, 'VAR');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(
+            jso['fields'], {'VAR': {'id': 'id2', 'name': 'x', 'type': ''}});
+      });
+  
+      test('Typed', function() {
+        const block = this.workspace.newBlock('row_block');
+        const field =
+            new Blockly.FieldVariable('x', undefined, undefined, 'String');
+        block.getInput('INPUT').appendField(field, 'VAR');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(
+            jso['fields'], {'VAR': {'id': 'id2', 'name': 'x', 'type': 'String'}});
+      });
+    });
+
+    suite('Not full', function() {
+      test('Untyped', function() {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldVariable('x');
+        block.getInput('INPUT').appendField(field, 'VAR');
+        const jso = Blockly.serialization.blocks.save(
+            block, {doFullSerialization: false});
+        chai.assert.deepEqual(jso['fields'], {'VAR': {'id': 'id2'}});
+        chai.assert.isUndefined(jso['fields']['VAR']['name']);
+        chai.assert.isUndefined(jso['fields']['VAR']['type']);
+      });
+  
+      test('Typed', function() {
+        const block = this.workspace.newBlock('row_block');
+        const field =
+            new Blockly.FieldVariable('x', undefined, undefined, 'String');
+        block.getInput('INPUT').appendField(field, 'VAR');
+        const jso = Blockly.serialization.blocks.save(
+            block, {doFullSerialization: false});
+        chai.assert.deepEqual(jso['fields'], {'VAR': {'id': 'id2'}});
+        chai.assert.isUndefined(jso['fields']['VAR']['name']);
+        chai.assert.isUndefined(jso['fields']['VAR']['type']);
+      });
+    });
+  });
+
+  suite('Deserialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      createGenUidStubWithReturns(new Array(10).fill().map((_, i) => 'id' + i));
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('ID', function() {
+      this.workspace.createVariable('test', '', 'id1');
+      var block = Blockly.serialization.blocks.append({
+        'type': 'variables_get',
+        'fields': {
+          'VAR': {
+            'id': 'id1'
+          }
+        }
+      },
+      this.workspace);
+      var variable = block.getField('VAR').getVariable();
+      chai.assert.equal(variable.name, 'test');
+      chai.assert.equal(variable.type, '');
+      chai.assert.equal(variable.getId(), 'id1');
+    });
+
+    test('Name, untyped', function() {
+      var block = Blockly.serialization.blocks.append({
+        'type': 'variables_get',
+        'fields': {
+          'VAR': {
+            'name': 'test',
+          }
+        }
+      },
+      this.workspace);
+      var variable = block.getField('VAR').getVariable();
+      chai.assert.equal(variable.name, 'test');
+      chai.assert.equal(variable.type, '');
+      chai.assert.equal(variable.getId(), 'id2');
+    });
+
+    test('Name, typed', function() {
+      var block = Blockly.serialization.blocks.append({
+        'type': 'variables_get',
+        'fields': {
+          'VAR': {
+            'name': 'test',
+            'type': 'string',
+          }
+        }
+      },
+      this.workspace);
+      var variable = block.getField('VAR').getVariable();
+      chai.assert.equal(variable.name, 'test');
+      chai.assert.equal(variable.type, 'string');
+      chai.assert.equal(variable.getId(), 'id2');
     });
   });
 });

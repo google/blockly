@@ -10,20 +10,19 @@
  */
 'use strict';
 
-/**
- * @name Blockly.utils.global
- * @namespace
- */
-goog.provide('Blockly.utils.global');
+goog.module('Blockly.utils.global');
 
 
 /**
  * Reference to the global object.
  *
  * More info on this implementation here:
- * https://docs.google.com/document/d/1NAeW4Wk7I7FV0Y2tcUFvQdGMc89k2vdgSXInw8_nvCI/edit
+ * https://docs.google.com/document/d/1NAeW4Wk7I7FV0Y2tcUFvQdGMc89k2vdgSXInw8_nvCI
  */
-Blockly.utils.global = function() {
+exports.globalThis = (function() {  // Not "let globalThis" to avoid shadowing.
+  if (typeof globalThis === 'object') {
+    return globalThis;
+  }
   if (typeof self === 'object') {
     return self;
   }
@@ -34,4 +33,4 @@ Blockly.utils.global = function() {
     return global;
   }
   return this;
-}();
+})();

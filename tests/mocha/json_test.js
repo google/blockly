@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.json');
+
+const {addMessageToCleanup, assertNoWarnings, assertWarnings, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('JSON Block Definitions', function() {
   setup(function() {
     sharedTestSetup.call(this);

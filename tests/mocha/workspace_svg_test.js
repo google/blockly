@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.workspaceSvg');
+
+const {assertEventFired, assertEventNotFired, assertVariableValues, createFireChangeListenerSpy, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
+
+
 suite('WorkspaceSvg', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -111,11 +117,6 @@ suite('WorkspaceSvg', function() {
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has categories.  Can\'t change mode.');
-    });
-    test('Passing in string as toolboxdef', function() {
-      var parseToolboxFake = sinon.spy(Blockly.utils.toolbox, 'parseToolboxTree');
-      this.workspace.updateToolbox('<xml><category name="something"></category></xml>');
-      sinon.assert.calledOnce(parseToolboxFake);
     });
   });
 
@@ -339,7 +340,6 @@ suite('WorkspaceSvg', function() {
       });
     });
   });
-
   suite('Workspace Base class', function() {
     testAWorkspace();
   });

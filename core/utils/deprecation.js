@@ -15,7 +15,7 @@
  * @name Blockly.utils.deprecation
  * @namespace
  */
-goog.provide('Blockly.utils.deprecation');
+goog.module('Blockly.utils.deprecation');
 
 
 /**
@@ -27,14 +27,15 @@ goog.provide('Blockly.utils.deprecation');
  *     deprecation date.
  * @param {string=} opt_use The name of a function or property to use instead,
  *     if any.
- * @package
+ * @alias Blockly.utils.deprecation.warn
  */
-Blockly.utils.deprecation.warn = function(
-    name, deprecationDate, deletionDate, opt_use) {
-  var msg = name + ' was deprecated on ' + deprecationDate +
-        ' and will be deleted on ' + deletionDate + '.';
+const warn = function(name, deprecationDate, deletionDate, opt_use) {
+  let msg = name + ' was deprecated on ' + deprecationDate +
+      ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }
   console.warn(msg);
 };
+/** @package */
+exports.warn = warn;

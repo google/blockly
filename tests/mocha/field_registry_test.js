@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for Blockly.fieldRegistry
- * @author bekawestberg@gmail.com (Beka Westberg)
- */
-'use strict';
+goog.module('Blockly.test.fieldRegistry');
+
+const {createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Field Registry', function() {
   function CustomFieldType(value) {
@@ -24,8 +23,8 @@ suite('Field Registry', function() {
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    if (Blockly.registry.typeMap_['field']['field_custom_test']) {
-      delete Blockly.registry.typeMap_['field']['field_custom_test'];
+    if (Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test']) {
+      delete Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test'];
     }
   });
 
@@ -64,10 +63,7 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
 
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
@@ -92,10 +88,7 @@ suite('Field Registry', function() {
         value: 'ok'
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
       
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.connectionDb');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Connection Database', function() {
   setup(function() {
     sharedTestSetup.call(this);

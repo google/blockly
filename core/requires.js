@@ -42,7 +42,6 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.VariablesDynamic');
 // Only need to require these two if you're using workspace comments.
 // goog.require('Blockly.WorkspaceCommentSvg');
-// goog.require('Blockly.WorkspaceCommentSvg.render');
 // If zoom controls aren't required, then Blockly.inject's
 // "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');
@@ -82,3 +81,8 @@ goog.require('Blockly.zelos.Renderer');
 // Blockly Themes.
 // Classic is the default theme.
 goog.require('Blockly.Themes.Classic');
+
+goog.require('Blockly.serialization.blocks');
+goog.require('Blockly.serialization.registry');
+goog.require('Blockly.serialization.variables');
+goog.require('Blockly.serialization.workspaces');

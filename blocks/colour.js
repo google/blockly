@@ -19,7 +19,6 @@ goog.provide('Blockly.Blocks.colour');  // Deprecated
 goog.provide('Blockly.Constants.Colour');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldLabel');
 

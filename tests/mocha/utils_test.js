@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.utils');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Utils', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -16,7 +21,7 @@ suite('Utils', function() {
     var uuids = {};
     chai.assert.equal([1, 2, 3].indexOf(4), -1);
     for (var i = 0; i < 1000; i++) {
-      var uuid = Blockly.utils.genUid();
+      var uuid = Blockly.utils.idGenerator.genUid();
       chai.assert.isFalse(uuid in uuids, 'UUID different: ' + uuid);
       uuids[uuid] = true;
     }

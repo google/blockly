@@ -16,7 +16,7 @@
  * @name Blockly.utils.KeyCodes
  * @namespace
  */
-goog.provide('Blockly.utils.KeyCodes');
+goog.module('Blockly.utils.KeyCodes');
 
 
 /**
@@ -28,8 +28,9 @@ goog.provide('Blockly.utils.KeyCodes');
  * correct for non US keyboard layouts. See comments below.
  *
  * @enum {number}
+ * @alias Blockly.utils.KeyCodes
  */
-Blockly.utils.KeyCodes = {
+const KeyCodes = {
   WIN_KEY_FF_LINUX: 0,
   MAC_ENTER: 3,
   BACKSPACE: 8,
@@ -166,3 +167,5 @@ Blockly.utils.KeyCodes = {
   // http://en.community.dell.com/support-forums/laptop/f/3518/p/19285957/19523128.aspx
   PHANTOM: 255
 };
+
+exports = KeyCodes;

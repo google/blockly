@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The class representing a marker.
+ * Used primarily for keyboard navigation to show a marked location.
+ * @namespace Blockly.Marker
+ */
 goog.module('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -23,6 +28,7 @@ const {ASTNode} = goog.requireType('Blockly.ASTNode');
  * Class for a marker.
  * This is used in keyboard navigation to save a location in the Blockly AST.
  * @constructor
+ * @alias Blockly.Marker
  */
 const Marker = function() {
   /**

@@ -75,7 +75,7 @@
     "clang-format": "^1.5.0",
     "concurrently": "^6.0.0",
     "eslint": "^7.28.0",
-    "google-closure-compiler": "^20210601.0.0",
+    "google-closure-compiler": "^20210907.0.0",
     "google-closure-deps": "^20210601.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",

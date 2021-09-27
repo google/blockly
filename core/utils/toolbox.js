@@ -239,6 +239,7 @@ exports.Position = Position;
  * @return {?ToolboxInfo} Object holding information
  *     for creating a toolbox.
  * @alias Blockly.utils.toolbox.convertToolboxDefToJson
+ * @package
  */
 const convertToolboxDefToJson = function(toolboxDef) {
   if (!toolboxDef) {
@@ -254,7 +255,6 @@ const convertToolboxDefToJson = function(toolboxDef) {
   validateToolbox(toolboxJson);
   return toolboxJson;
 };
-/** @package */
 exports.convertToolboxDefToJson = convertToolboxDefToJson;
 
 /**
@@ -287,6 +287,7 @@ const validateToolbox = function(toolboxJson) {
  *    the flyout in one of its many forms.
  * @return {!FlyoutItemInfoArray} A list of flyout items.
  * @alias Blockly.utils.toolbox.convertFlyoutDefToJsonArray
+ * @package
  */
 const convertFlyoutDefToJsonArray = function(flyoutDef) {
   if (!flyoutDef) {
@@ -305,7 +306,6 @@ const convertFlyoutDefToJsonArray = function(flyoutDef) {
 
   return xmlToJsonArray(/** @type {!Array<Node>|!NodeList} */ (flyoutDef));
 };
-/** @package */
 exports.convertFlyoutDefToJsonArray = convertFlyoutDefToJsonArray;
 
 /**
@@ -314,6 +314,7 @@ exports.convertFlyoutDefToJsonArray = convertFlyoutDefToJsonArray;
  *     information for creating a toolbox.
  * @return {boolean} True if the toolbox has categories.
  * @alias Blockly.utils.toolbox.hasCategories
+ * @package
  */
 const hasCategories = function(toolboxJson) {
   if (!toolboxJson) {
@@ -330,7 +331,6 @@ const hasCategories = function(toolboxJson) {
   });
   return !!categories.length;
 };
-/** @package */
 exports.hasCategories = hasCategories;
 
 /**
@@ -339,6 +339,7 @@ exports.hasCategories = hasCategories;
  *    information for creating a category.
  * @return {boolean} True if the category has subcategories.
  * @alias Blockly.utils.toolbox.isCategoryCollapsible
+ * @package
  */
 const isCategoryCollapsible = function(categoryInfo) {
   if (!categoryInfo || !categoryInfo['contents']) {
@@ -350,7 +351,6 @@ const isCategoryCollapsible = function(categoryInfo) {
   });
   return !!categories.length;
 };
-/** @package */
 exports.isCategoryCollapsible = isCategoryCollapsible;
 
 /**

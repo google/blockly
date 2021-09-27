@@ -541,6 +541,7 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
  *     were freshly added to the workspace after creating the new block,
  *     or [] if no new variables were added to the workspace.
  * @alias Blockly.Variables.getAddedVariables
+ * @package
  */
 const getAddedVariables = function(workspace, originalVariables) {
   const allCurrentVariables = workspace.getAllVariables();
@@ -557,5 +558,4 @@ const getAddedVariables = function(workspace, originalVariables) {
   }
   return addedVariables;
 };
-/** @package */
 exports.getAddedVariables = getAddedVariables;

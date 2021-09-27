@@ -56,6 +56,7 @@ const registry = goog.require('Blockly.registry');
  * Returns whether the debugger is turned on.
  * @return {boolean} Whether the debugger is turned on.
  * @alias Blockly.blockRendering.isDebuggerEnabled
+ * @package
  */
 const isDebuggerEnabled = function() {
   deprecation.warn(
@@ -63,7 +64,6 @@ const isDebuggerEnabled = function() {
       'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
   return debug.isDebuggerEnabled();
 };
-/** @package */
 exports.isDebuggerEnabled = isDebuggerEnabled;
 
 /**
@@ -92,6 +92,7 @@ exports.unregister = unregister;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.startDebugger
+ * @package
  */
 const startDebugger = function() {
   deprecation.warn(
@@ -99,13 +100,13 @@ const startDebugger = function() {
       'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
   debug.startDebugger();
 };
-/** @package */
 exports.startDebugger = startDebugger;
 
 /**
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.stopDebugger
+ * @package
  */
 const stopDebugger = function() {
   deprecation.warn(
@@ -113,7 +114,6 @@ const stopDebugger = function() {
       'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
   debug.stopDebugger();
 };
-/** @package */
 exports.stopDebugger = stopDebugger;
 
 /**
@@ -125,6 +125,7 @@ exports.stopDebugger = stopDebugger;
  *     Already initialized.
  * @package
  * @alias Blockly.blockRendering.init
+ * @package
  */
 const init = function(name, theme, opt_rendererOverrides) {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);
@@ -132,7 +133,6 @@ const init = function(name, theme, opt_rendererOverrides) {
   renderer.init(theme, opt_rendererOverrides);
   return renderer;
 };
-/** @package */
 exports.init = init;
 
 exports.BottomRow = BottomRow;

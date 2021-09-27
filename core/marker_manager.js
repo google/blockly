@@ -29,6 +29,7 @@ const {Marker} = goog.requireType('Blockly.Marker');
  * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
  * @alias Blockly.MarkerManager
+ * @package
  */
 const MarkerManager = function(workspace) {
   /**
@@ -198,5 +199,4 @@ MarkerManager.prototype.dispose = function() {
   }
 };
 
-/** @package */
 exports = MarkerManager;

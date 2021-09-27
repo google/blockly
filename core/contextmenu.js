@@ -284,6 +284,7 @@ exports.callbackFactory = callbackFactory;
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDeleteOption
+ * @package
  */
 const commentDeleteOption = function(comment) {
   const deleteOption = {
@@ -297,7 +298,6 @@ const commentDeleteOption = function(comment) {
   };
   return deleteOption;
 };
-/** @package */
 exports.commentDeleteOption = commentDeleteOption;
 
 /**
@@ -306,6 +306,7 @@ exports.commentDeleteOption = commentDeleteOption;
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDuplicateOption
+ * @package
  */
 const commentDuplicateOption = function(comment) {
   const duplicateOption = {
@@ -317,7 +318,6 @@ const commentDuplicateOption = function(comment) {
   };
   return duplicateOption;
 };
-/** @package */
 exports.commentDuplicateOption = commentDuplicateOption;
 
 /**
@@ -330,6 +330,7 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
+ * @package
  */
 const workspaceCommentOption = function(ws, e) {
   const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');
@@ -386,5 +387,4 @@ const workspaceCommentOption = function(ws, e) {
   };
   return wsCommentOption;
 };
-/** @package */
 exports.workspaceCommentOption = workspaceCommentOption;

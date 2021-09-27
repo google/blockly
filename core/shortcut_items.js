@@ -287,6 +287,7 @@ exports.registerRedo = registerRedo;
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
  * @alias Blockly.ShortcutItems.registerDefaultShortcuts
+ * @package
  */
 const registerDefaultShortcuts = function() {
   registerEscape();
@@ -297,7 +298,6 @@ const registerDefaultShortcuts = function() {
   registerUndo();
   registerRedo();
 };
-/** @package */
 exports.registerDefaultShortcuts = registerDefaultShortcuts;
 
 registerDefaultShortcuts();

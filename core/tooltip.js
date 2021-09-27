@@ -44,8 +44,6 @@ exports.TipInfo = TipInfo;
  * @alias Blockly.Tooltip.visible
  */
 let visible = false;
-/** @deprecated September 2021 */
-exports.visible;
 
 /**
  * Returns whether or not a tooltip is showing
@@ -155,8 +153,6 @@ exports.MARGINS = MARGINS;
  * @alias Blockly.Tooltip.DIV
  */
 let DIV = null;
-/** @deprecated September 2021 */
-exports.DIV = DIV;
 
 /**
  * Returns the HTML tooltip container.

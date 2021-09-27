@@ -59,8 +59,6 @@ let themeClassName = '';
  * @alias Blockly.WidgetDiv.DIV
  */
 let DIV;
-/** @deprecated September 2021 */
-exports.DIV = DIV;
 
 /**
  * Returns the HTML container for editor widgets.

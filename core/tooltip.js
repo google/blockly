@@ -156,7 +156,7 @@ exports.MARGINS = MARGINS;
  */
 let DIV = null;
 /** @deprecated September 2021 */
-exports.DIV = DIV;
+exports.DIV;
 
 /**
  * Returns the HTML tooltip container.

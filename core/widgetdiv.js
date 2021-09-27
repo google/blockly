@@ -60,7 +60,7 @@ let themeClassName = '';
  */
 let DIV;
 /** @deprecated September 2021 */
-exports.DIV = DIV;
+exports.DIV;
 
 /**
  * Returns the HTML container for editor widgets.

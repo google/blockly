@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview The record type for an object containing functions for
- *     serializing part of the workspace.
+ * serializing part of the workspace.
  */
 
 'use strict';

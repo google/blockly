@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @namespace Blockly.BlockSvg
+ */
 goog.module('Blockly.BlockSvg');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -89,6 +93,7 @@ goog.require('Blockly.Touch');
  * @implements {ICopyable}
  * @implements {IDraggable}
  * @constructor
+ * @alias Blockly.BlockSvg
  */
 const BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.

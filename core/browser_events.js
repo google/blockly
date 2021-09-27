@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Browser event handling.
+ * @namespace Blockly.browserEvents
+ */
 goog.module('Blockly.browserEvents');
 
 const Touch = goog.require('Blockly.Touch');
@@ -22,6 +26,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
  * @typedef {!Array<!Array>}
+ * @alias Blockly.browserEvents.Data
  */
 let Data;
 exports.Data = Data;
@@ -44,6 +49,7 @@ exports.Data = Data;
  *     provided.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
+ * @alias Blockly.browserEvents.conditionalBind
  */
 const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
@@ -114,6 +120,7 @@ exports.conditionalBind = conditionalBind;
  * @param {!Function} func Function to call when event is triggered.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
+ * @alias Blockly.browserEvents.bind
  */
 const bind = function(node, name, thisObject, func) {
   const wrapFunc = function(e) {
@@ -166,6 +173,7 @@ exports.bind = bind;
  * @param {!Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
+ * @alias Blockly.browserEvents.unbind
  */
 const unbind = function(bindData) {
   let func;
@@ -184,6 +192,7 @@ exports.unbind = unbind;
  * Returns true if this event is targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.
+ * @alias Blockly.browserEvents.isTargetInput
  */
 const isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
@@ -199,6 +208,7 @@ exports.isTargetInput = isTargetInput;
  * Returns true this event is a right-click.
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
+ * @alias Blockly.browserEvents.isRightButton
  */
 const isRightButton = function(e) {
   if (e.ctrlKey && userAgent.MAC) {
@@ -217,6 +227,7 @@ exports.isRightButton = isRightButton;
  * @param {!Element} svg SVG element.
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
+ * @alias Blockly.browserEvents.mouseToSvg
  */
 const mouseToSvg = function(e, svg, matrix) {
   const svgPoint = svg.createSVGPoint();
@@ -235,6 +246,7 @@ exports.mouseToSvg = mouseToSvg;
  * @param {!Event} e Mouse event.
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
+ * @alias Blockly.browserEvents.getScrollDeltaPixels
  */
 const getScrollDeltaPixels = function(e) {
   switch (e.deltaMode) {

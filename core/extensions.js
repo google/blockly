@@ -14,8 +14,11 @@
 'use strict';
 
 /**
- * @name Blockly.Extensions
- * @namespace
+ * Extensions are functions that help initialize blocks, usually
+ *      adding dynamic behavior such as onchange handlers and mutators. These
+ *      are applied using Block.applyExtension(), or the JSON "extensions"
+ *      array attribute.
+ * @namespace Blockly.Extensions
  */
 goog.module('Blockly.Extensions');
 

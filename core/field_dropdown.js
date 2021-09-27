@@ -12,6 +12,12 @@
  */
 'use strict';
 
+/**
+ * Dropdown input field.  Used for editable titles and variables.
+ * In the interests of a consistent UI, the toolbox shares some functions and
+ * properties with the context menu.
+ * @namespace Blockly.FieldDropdown
+ */
 goog.module('Blockly.FieldDropdown');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -44,6 +50,7 @@ const utilsString = goog.require('Blockly.utils.string');
  * @extends {Field}
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
+ * @alias Blockly.FieldDropdown
  */
 const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   if (typeof menuGenerator != 'function') {

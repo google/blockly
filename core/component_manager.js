@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * Manager for all items registered with the workspace.
+ * @namespace Blockly.ComponentManager
+ */
 goog.module('Blockly.ComponentManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -29,6 +33,7 @@ const utils = goog.require('Blockly.utils');
 /**
  * Manager for all items registered with the workspace.
  * @constructor
+ * @alias Blockly.ComponentManager
  */
 const ComponentManager = function() {
   /**

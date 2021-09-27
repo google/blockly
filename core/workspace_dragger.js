@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for dragging a workspace visually.
+ * @namespace Blockly.WorkspaceDragger
+ */
 goog.module('Blockly.WorkspaceDragger');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -26,6 +30,7 @@ const common = goog.require('Blockly.common');
  * commands based on events.
  * @param {!WorkspaceSvg} workspace The workspace to drag.
  * @constructor
+ * @alias Blockly.WorkspaceDragger
  */
 const WorkspaceDragger = function(workspace) {
   /**

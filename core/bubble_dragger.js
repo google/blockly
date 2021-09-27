@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for dragging a bubble visually.
+ * @namespace Blockly.BubbleDragger
+ */
 goog.module('Blockly.BubbleDragger');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -43,6 +47,7 @@ goog.require('Blockly.constants');
  * @param {!IBubble} bubble The item on the bubble canvas to drag.
  * @param {!WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
+ * @alias Blockly.BubbleDragger
  */
 const BubbleDragger = function(bubble, workspace) {
   /**

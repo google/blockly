@@ -12,7 +12,7 @@
 
 /**
  * A mapping of block type names to block prototype objects.
- * @name Blockly.Blocks
+ * @namespace Blockly.blocks
  */
 goog.module('Blockly.blocks');
 
@@ -20,6 +20,7 @@ goog.module('Blockly.blocks');
 /**
  * A mapping of block type names to block prototype objects.
  * @type {!Object<string,!Object>}
+ * @alias Blockly.blocks.Blocks
  */
 const Blocks = Object.create(null);
 

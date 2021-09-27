@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a workspace rendered as SVG.
+ * @namespace Blockly.WorkspaceSvg
+ */
 goog.module('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -119,6 +123,7 @@ goog.require('Blockly.Msg');
  * @extends {Workspace}
  * @implements {IASTNodeLocationSvg}
  * @constructor
+ * @alias Blockly.WorkspaceSvg
  */
 const WorkspaceSvg = function(
     options, opt_blockDragSurface, opt_wsDragSurface) {

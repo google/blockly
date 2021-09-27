@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * This file is a universal registry that provides generic methods
+ *    for registering and unregistering different types of classes.
+ * @namespace Blockly.registry
+ */
 goog.module('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -62,6 +67,7 @@ const nameMap = Object.create(null);
 /**
  * The string used to register the default class for a type of plugin.
  * @type {string}
+ * @alias Blockly.registry.DEFAULT
  */
 const DEFAULT = 'default';
 exports.DEFAULT = DEFAULT;
@@ -71,6 +77,7 @@ exports.DEFAULT = DEFAULT;
  * @param {string} name The name of the registry type.
  * @constructor
  * @template T
+ * @alias Blockly.registry.Type
  */
 const Type = function(name) {
   /**
@@ -145,6 +152,7 @@ Type.SERIALIZER = new Type('serializer');
  *     already been registered, or if the given class or object is not valid for
  *     its type.
  * @template T
+ * @alias Blockly.registry.register
  */
 const register = function(type, name, registryItem, opt_allowOverrides) {
   if ((!(type instanceof Type) && typeof type != 'string') ||
@@ -209,6 +217,7 @@ const validate = function(type, registryItem) {
  *     (e.g. Field, Renderer)
  * @param {string} name The plugin's name. (Ex. field_angle, geras)
  * @template T
+ * @alias Blockly.registry.unregister
  */
 const unregister = function(type, name) {
   type = String(type).toLowerCase();
@@ -263,6 +272,7 @@ const getItem = function(type, name, opt_throwIfMissing) {
  * @return {boolean} True if the registry has an item with the given type and
  *     name, false otherwise.
  * @template T
+ * @alias Blockly.registry.hasItem
  */
 const hasItem = function(type, name) {
   type = String(type).toLowerCase();
@@ -285,6 +295,7 @@ exports.hasItem = hasItem;
  * @return {?function(new:T, ...?)} The class with the given name and type or
  *     null if none exists.
  * @template T
+ * @alias Blockly.registry.getClass
  */
 const getClass = function(type, name, opt_throwIfMissing) {
   return /** @type {?function(new:T, ...?)} */ (
@@ -301,6 +312,7 @@ exports.getClass = getClass;
  *     are unable to find the object.
  * @return {?T} The object with the given name and type or null if none exists.
  * @template T
+ * @alias Blockly.registry.getObject
  */
 const getObject = function(type, name, opt_throwIfMissing) {
   return /** @type {T} */ (getItem(type, name, opt_throwIfMissing));
@@ -317,6 +329,7 @@ exports.getObject = getObject;
  * @return {?Object<string, ?T|?function(new:T, ...?)>} A map of objects with
  *     the given type, or null if none exists.
  * @template T
+ * @alias Blockly.registry.getAllItems
  */
 const getAllItems = function(type, opt_cased, opt_throwIfMissing) {
   type = String(type).toLowerCase();
@@ -354,6 +367,7 @@ exports.getAllItems = getAllItems;
  *     are unable to find the plugin.
  * @return {?function(new:T, ...?)} The class for the plugin.
  * @template T
+ * @alias Blockly.registry.getClassFromOptions
  */
 const getClassFromOptions = function(type, options, opt_throwIfMissing) {
   const typeName = type.toString();

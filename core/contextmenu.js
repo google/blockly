@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Functionality for the right-click context menus.
+ * @namespace Blockly.ContextMenu
+ */
 goog.module('Blockly.ContextMenu');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -47,6 +51,7 @@ let currentBlock = null;
 /**
  * Gets the block the context menu is currently attached to.
  * @return {?Block} The block the context menu is attached to.
+ * @alias Blockly.ContextMenu.getCurrentBlock
  */
 const getCurrentBlock = function() {
   return currentBlock;
@@ -56,6 +61,7 @@ exports.getCurrentBlock = getCurrentBlock;
 /**
  * Sets the block the context menu is currently attached to.
  * @param {?Block} block The block the context menu is attached to.
+ * @alias Blockly.ContextMenu.setCurrentBlock
  */
 const setCurrentBlock = function(block) {
   currentBlock = block;
@@ -91,6 +97,7 @@ let menu_ = null;
  * @param {!Event} e Mouse event.
  * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
+ * @alias Blockly.ContextMenu.show
  */
 const show = function(e, options, rtl) {
   WidgetDiv.show(exports, rtl, dispose);
@@ -215,6 +222,7 @@ const haltPropagation = function(e) {
 
 /**
  * Hide the context menu.
+ * @alias Blockly.ContextMenu.hide
  */
 const hide = function() {
   WidgetDiv.hideIfOwner(exports);
@@ -224,6 +232,7 @@ exports.hide = hide;
 
 /**
  * Dispose of the menu.
+ * @alias Blockly.ContextMenu.dispose
  */
 const dispose = function() {
   if (menu_) {
@@ -239,6 +248,7 @@ exports.dispose = dispose;
  * @param {!Block} block Original block.
  * @param {!Element} xml XML representation of new block.
  * @return {!Function} Function that creates a block.
+ * @alias Blockly.ContextMenu.callbackFactory
  */
 const callbackFactory = function(block, xml) {
   return function() {
@@ -273,6 +283,7 @@ exports.callbackFactory = callbackFactory;
  * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @alias Blockly.ContextMenu.commentDeleteOption
  */
 const commentDeleteOption = function(comment) {
   const deleteOption = {
@@ -294,6 +305,7 @@ exports.commentDeleteOption = commentDeleteOption;
  * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @alias Blockly.ContextMenu.commentDuplicateOption
  */
 const commentDuplicateOption = function(comment) {
   const duplicateOption = {
@@ -317,6 +329,7 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @package
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
+ * @alias Blockly.ContextMenu.workspaceCommentOption
  */
 const workspaceCommentOption = function(ws, e) {
   const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');

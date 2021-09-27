@@ -12,6 +12,11 @@
  */
 'use strict';
 
+/**
+ * Object in charge of storing and updating a workspace theme
+ *     and UI components.
+ * @namespace Blockly.ThemeManager
+ */
 goog.module('Blockly.ThemeManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +35,7 @@ const utils = goog.require('Blockly.utils');
  * @param {!Theme} theme The workspace theme.
  * @constructor
  * @package
+ * @alias Blockly.ThemeManager
  */
 const ThemeManager = function(workspace, theme) {
   /**

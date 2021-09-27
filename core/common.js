@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Common functions used both internally and externally, but which
+ * must not be at the top level to avoid circular dependencies.
+ * @namespace Blockly.common
+ */
 goog.module('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -35,6 +40,7 @@ let mainWorkspace;
  * this function, particularly if there are multiple Blockly instances on a
  * page.
  * @return {!Workspace} The main workspace.
+ * @alias Blockly.common.getMainWorkspace
  */
 const getMainWorkspace = function() {
   return mainWorkspace;
@@ -44,6 +50,7 @@ exports.getMainWorkspace = getMainWorkspace;
 /**
  * Sets last used main workspace.
  * @param {!Workspace} workspace The most recently used top level workspace.
+ * @alias Blockly.common.setMainWorkspace
  */
 const setMainWorkspace = function(workspace) {
   mainWorkspace = workspace;
@@ -59,6 +66,7 @@ let selected = null;
 /**
  * Returns the currently selected block.
  * @return {?ICopyable} The currently selected block.
+ * @alias Blockly.common.getSelected
  */
 const getSelected = function() {
   return selected;
@@ -68,6 +76,7 @@ exports.getSelected = getSelected;
 /**
  * Sets the currently selected block.
  * @param {?ICopyable} newSelection The newly selected block.
+ * @alias Blockly.common.setSelected
  */
 const setSelected = function(newSelection) {
   selected = newSelection;
@@ -84,6 +93,7 @@ let parentContainer;
  * Get the container element in which to render the WidgetDiv, DropDownDiv and\
  * Tooltip.
  * @return {?Element} The parent container.
+ * @alias Blockly.common.getParentContainer
  */
 const getParentContainer = function() {
   return parentContainer;
@@ -96,6 +106,7 @@ exports.getParentContainer = getParentContainer;
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} newParent The container element.
+ * @alias Blockly.common.setParentContainer
  */
 const setParentContainer = function(newParent) {
   parentContainer = newParent;
@@ -109,6 +120,7 @@ exports.setParentContainer = setParentContainer;
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
  * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @alias Blockly.common.svgResize
  */
 const svgResize = function(workspace) {
   let mainWorkspace = workspace;

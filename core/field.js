@@ -12,6 +12,12 @@
  */
 'use strict';
 
+/**
+ * Field.  Used for editable titles, variables, etc.
+ * This is an abstract class that defines the UI on the block.  Actual
+ * instances would be FieldTextInput, FieldDropdown, etc.
+ * @namespace Blockly.Field
+ */
 goog.module('Blockly.Field');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -72,6 +78,7 @@ goog.require('Blockly.Gesture');
  * @implements {IASTNodeLocationWithBlock}
  * @implements {IKeyboardAccessible}
  * @implements {IRegistrable}
+ * @alias Blockly.Field
  */
 const Field = function(value, opt_validator, opt_config) {
   /**

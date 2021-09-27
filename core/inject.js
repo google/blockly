@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Functions for injecting Blockly into a web page.
+ * @namespace Blockly.inject
+ */
 goog.module('Blockly.inject');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -43,6 +47,7 @@ const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
  *     or a CSS selector.
  * @param {BlocklyOptions=} opt_options Optional dictionary of options.
  * @return {!WorkspaceSvg} Newly created main workspace.
+ * @alias Blockly.inject
  */
 const inject = function(container, opt_options) {
   if (typeof container == 'string') {

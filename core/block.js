@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * The class representing one block.
+ * @namespace Blockly.Block
+ */
 goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -67,6 +71,7 @@ goog.require('Blockly.Events.BlockMove');
  * @implements {IASTNodeLocation}
  * @implements {IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
+ * @alias Blockly.Block
  */
 const Block = function(workspace, prototypeName, opt_id) {
   const Generator = goog.module.get('Blockly.Generator');

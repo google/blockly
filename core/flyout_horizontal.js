@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Horizontal flyout tray containing blocks which may be created.
+ * @namespace Blockly.HorizontalFlyout
+ */
 goog.module('Blockly.HorizontalFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +37,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
  *     workspace.
  * @extends {Flyout}
  * @constructor
+ * @alias Blockly.HorizontalFlyout
  */
 const HorizontalFlyout = function(workspaceOptions) {
   HorizontalFlyout.superClass_.constructor.call(this, workspaceOptions);

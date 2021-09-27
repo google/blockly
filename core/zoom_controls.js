@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a zoom icons.
+ * @namespace Blockly.ZoomControls
+ */
 goog.module('Blockly.ZoomControls');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -38,6 +42,7 @@ goog.require('Blockly.Events.Click');
  * @param {!WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
  * @implements {IPositionable}
+ * @alias Blockly.ZoomControls
  */
 const ZoomControls = function(workspace) {
   /**

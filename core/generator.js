@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Utility functions for generating executable code from
+ * Blockly code.
+ * @namespace Blockly.Generator
+ */
 goog.module('Blockly.Generator');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +33,7 @@ const {Block} = goog.requireType('Blockly.Block');
  * Class for a code generator that translates the blocks into a language.
  * @param {string} name Language name of this generator.
  * @constructor
+ * @alias Blockly.Generator
  */
 const Generator = function(name) {
   this.name_ = name;

@@ -11,7 +11,7 @@
 'use strict';
 
 /**
- * The top level namespace used to access the Blockly library.
+ * Core JavaScript library for Blockly.
  * @namespace Blockly
  */
 goog.module('Blockly');

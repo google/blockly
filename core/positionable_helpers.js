@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Utility functions for positioning UI elements.
+ * @namespace Blockly.uiPosition
+ */
 goog.module('Blockly.uiPosition');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -26,6 +30,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 /**
  * Enum for vertical positioning.
  * @enum {number}
+ * @alias Blockly.uiPosition.verticalPosition
  */
 const verticalPosition = {
   TOP: 0,
@@ -37,6 +42,7 @@ exports.verticalPosition = verticalPosition;
 /**
  * Enum for horizontal positioning.
  * @enum {number}
+ * @alias Blockly.uiPosition.horizontalPosition
  */
 const horizontalPosition = {
   LEFT: 0,
@@ -59,6 +65,7 @@ exports.Position = Position;
 /**
  * Enum for bump rules to use for dealing with collisions.
  * @enum {number}
+ * @alias Blockly.uiPosition.bumpDirection
  */
 const bumpDirection = {
   UP: 0,
@@ -81,6 +88,7 @@ exports.bumpDirection = bumpDirection;
  * @param {!MetricsManager.UiMetrics} metrics The workspace UI metrics.
  * @param {!WorkspaceSvg} workspace The workspace.
  * @return {!Rect} The suggested start position.
+ * @alias Blockly.uiPosition.getStartPositionRect
  */
 const getStartPositionRect = function(
     position, size, horizontalPadding, verticalPadding, metrics, workspace) {
@@ -125,6 +133,7 @@ exports.getStartPositionRect = getStartPositionRect;
  * @param {!WorkspaceSvg} workspace The workspace.
  * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
  * @return {!Position} The suggested corner position.
+ * @alias Blockly.uiPosition.getCornerOppositeToolbox
  */
 const getCornerOppositeToolbox = function(workspace, metrics) {
   const leftCorner =
@@ -150,6 +159,7 @@ exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
  * @param {!Array<!Rect>} savedPositions List of rectangles that
  *    represent the positions of UI elements already placed.
  * @return {!Rect} The suggested position rectangle.
+ * @alias Blockly.uiPosition.bumpPositionRect
  */
 const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
   let top = startRect.top;

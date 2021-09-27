@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Calculates and reports workspace metrics.
+ * @namespace Blockly.MetricsManager
+ */
 goog.module('Blockly.MetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +37,7 @@ const toolboxUtils = goog.require('Blockly.utils.toolbox');
  *     for.
  * @implements {IMetricsManager}
  * @constructor
+ * @alias Blockly.MetricsManager
  */
 const MetricsManager = function(workspace) {
   /**

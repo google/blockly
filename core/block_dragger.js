@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for dragging a block visually.
+ * @namespace Blockly.BlockDragger
+ */
 goog.module('Blockly.BlockDragger');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -41,6 +45,7 @@ goog.require('Blockly.Events.BlockMove');
  * @param {!WorkspaceSvg} workspace The workspace to drag on.
  * @constructor
  * @implements {IBlockDragger}
+ * @alias Blockly.BlockDragger
  */
 const BlockDragger = function(block, workspace) {
   /**

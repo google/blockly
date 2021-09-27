@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Blockly menu item similar to Closure's goog.ui.MenuItem
+ * @namespace Blockly.MenuItem
+ */
 goog.module('Blockly.MenuItem');
 
 const aria = goog.require('Blockly.utils.aria');
@@ -24,6 +28,7 @@ const idGenerator = goog.require('Blockly.utils.idGenerator');
  *     of the item, or a HTML element to display.
  * @param {string=} opt_value Data/model associated with the menu item.
  * @constructor
+ * @alias Blockly.MenuItem
  */
 const MenuItem = function(content, opt_value) {
   /**

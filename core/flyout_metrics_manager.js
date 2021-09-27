@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Calculates and reports flyout workspace metrics.
+ * @namespace Blockly.FlyoutMetricsManager
+ */
 goog.module('Blockly.FlyoutMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -27,6 +31,7 @@ const object = goog.require('Blockly.utils.object');
  * @param {!IFlyout} flyout The flyout.
  * @extends {MetricsManager}
  * @constructor
+ * @alias Blockly.FlyoutMetricsManager
  */
 const FlyoutMetricsManager = function(workspace, flyout) {
   /**

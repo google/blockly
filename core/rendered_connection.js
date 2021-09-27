@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Components for creating connections between blocks.
+ * @namespace Blockly.RenderedConnection
+ */
 goog.module('Blockly.RenderedConnection');
 
 const Connection = goog.require('Blockly.Connection');
@@ -38,6 +42,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * @param {number} type The type of the connection.
  * @extends {Connection}
  * @constructor
+ * @alias Blockly.RenderedConnection
  */
 const RenderedConnection = function(source, type) {
   RenderedConnection.superClass_.constructor.call(this, source, type);

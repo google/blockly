@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Registers default keyboard shortcuts.
+ * @namespace Blockly.ShortcutItems
+ */
 goog.module('Blockly.ShortcutItems');
 
 const Gesture = goog.require('Blockly.Gesture');
@@ -26,6 +30,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /**
  * Object holding the names of the default shortcut items.
  * @enum {string}
+ * @alias Blockly.ShortcutItems.names
  */
 const names = {
   ESCAPE: 'escape',
@@ -38,7 +43,10 @@ const names = {
 };
 exports.names = names;
 
-/** Keyboard shortcut to hide chaff on escape. */
+/**
+ * Keyboard shortcut to hide chaff on escape.
+ * @alias Blockly.ShortcutItems.registerEscape
+ */
 const registerEscape = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const escapeAction = {
@@ -56,7 +64,10 @@ const registerEscape = function() {
 };
 exports.registerEscape = registerEscape;
 
-/** Keyboard shortcut to delete a block on delete or backspace */
+/**
+ * Keyboard shortcut to delete a block on delete or backspace
+ * @alias Blockly.ShortcutItems.registerDelete
+ */
 const registerDelete = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const deleteShortcut = {
@@ -86,7 +97,10 @@ const registerDelete = function() {
 };
 exports.registerDelete = registerDelete;
 
-/** Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c. */
+/**
+ * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
+ * @alias Blockly.ShortcutItems.registerCopy
+ */
 const registerCopy = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const copyShortcut = {
@@ -121,7 +135,10 @@ const registerCopy = function() {
 };
 exports.registerCopy = registerCopy;
 
-/** Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x. */
+/**
+ * Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x.
+ * @alias Blockly.ShortcutItems.registerCut
+ */
 const registerCut = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const cutShortcut = {
@@ -160,7 +177,10 @@ const registerCut = function() {
 };
 exports.registerCut = registerCut;
 
-/** Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v. */
+/**
+ * Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v.
+ * @alias Blockly.ShortcutItems.registerPaste
+ */
 const registerPaste = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const pasteShortcut = {
@@ -189,7 +209,10 @@ const registerPaste = function() {
 };
 exports.registerPaste = registerPaste;
 
-/** Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z. */
+/**
+ * Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z.
+ * @alias Blockly.ShortcutItems.registerUndo
+ */
 const registerUndo = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const undoShortcut = {
@@ -223,6 +246,7 @@ exports.registerUndo = registerUndo;
 /**
  * Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z,
  * or alt+shift+z.
+ * @alias Blockly.ShortcutItems.registerRedo
  */
 const registerRedo = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
@@ -262,6 +286,7 @@ exports.registerRedo = registerRedo;
 /**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
+ * @alias Blockly.ShortcutItems.registerDefaultShortcuts
  */
 const registerDefaultShortcuts = function() {
   registerEscape();

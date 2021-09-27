@@ -12,6 +12,12 @@
  */
 'use strict';
 
+/**
+ * Fields can be created based on a JSON definition. This file
+ *    contains methods for registering those JSON definitions, and building the
+ *    fields based on JSON.
+ * @namespace Blockly.fieldRegistry
+ */
 goog.module('Blockly.fieldRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +37,7 @@ const registry = goog.require('Blockly.registry');
  * @throws {Error} if the type name is empty, the field is already
  *     registered, or the fieldClass is not an object containing a fromJson
  *     function.
+ * @alias Blockly.fieldRegistry.register
  */
 const register = function(type, fieldClass) {
   registry.register(registry.Type.FIELD, type, fieldClass);
@@ -40,6 +47,7 @@ exports.register = register;
 /**
  * Unregisters the field registered with the given type.
  * @param {string} type The field type name as used in the JSON definition.
+ * @alias Blockly.fieldRegistry.unregister
  */
 const unregister = function(type) {
   registry.unregister(registry.Type.FIELD, type);
@@ -54,6 +62,7 @@ exports.unregister = unregister;
  *     to the field type.
  * @return {?Field} The new field instance or null if a field wasn't
  *     found with the given type name
+ * @alias Blockly.fieldRegistry.fromJson
  */
 const fromJson = function(options) {
   const fieldObject = /** @type {?IRegistrableField} */ (

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Blockly menu similar to Closure's goog.ui.Menu
+ * @namespace Blockly.Menu
+ */
 goog.module('Blockly.Menu');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -27,6 +31,7 @@ const style = goog.require('Blockly.utils.style');
 /**
  * A basic menu class.
  * @constructor
+ * @alias Blockly.Menu
  */
 const Menu = function() {
   /**

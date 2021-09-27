@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a code comment on the workspace.
+ * @namespace Blockly.WorkspaceComment
+ */
 goog.module('Blockly.WorkspaceComment');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -37,6 +41,7 @@ goog.require('Blockly.Events.CommentMove');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
+ * @alias Blockly.WorkspaceComment
  */
 const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */

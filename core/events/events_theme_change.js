@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of a theme update.
+ * @namespace Blockly.Events.ThemeChange
+ */
 goog.module('Blockly.Events.ThemeChange');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -25,6 +29,7 @@ const registry = goog.require('Blockly.registry');
  *    event. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.ThemeChange
  */
 const ThemeChange = function(opt_themeName, opt_workspaceId) {
   ThemeChange.superClass_.constructor.call(this, opt_workspaceId);

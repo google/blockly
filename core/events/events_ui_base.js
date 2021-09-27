@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Base class for events fired as a result of UI actions in
+ * Blockly's editor.
+ * @namespace Blockly.Events.UiBase
+ */
 goog.module('Blockly.Events.UiBase');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
@@ -27,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  *    Undefined for a blank event.
  * @extends {Abstract}
  * @constructor
+ * @alias Blockly.Events.UiBase
  */
 const UiBase = function(opt_workspaceId) {
   UiBase.superClass_.constructor.call(this);

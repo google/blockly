@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Classes for all types of variable events.
+ * @namespace Blockly.Events.VarDelete
+ */
 goog.module('Blockly.Events.VarDelete');
 
 const VarBase = goog.require('Blockly.Events.VarBase');
@@ -26,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *     for a blank event.
  * @extends {VarBase}
  * @constructor
+ * @alias Blockly.Events.VarDelete
  */
 const VarDelete = function(opt_variable) {
   VarDelete.superClass_.constructor.call(this, opt_variable);

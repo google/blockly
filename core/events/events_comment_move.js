@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for comment move event.
+ * @namespace Blockly.Events.CommentMove
+ */
 goog.module('Blockly.Events.CommentMove');
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
@@ -27,6 +31,7 @@ const registry = goog.require('Blockly.registry');
  *     moved.  Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentMove
  */
 const CommentMove = function(opt_comment) {
   CommentMove.superClass_.constructor.call(this, opt_comment);

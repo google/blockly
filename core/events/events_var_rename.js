@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a variable rename event.
+ * @namespace Blockly.Events.VarRename
+ */
 goog.module('Blockly.Events.VarRename');
 
 const VarBase = goog.require('Blockly.Events.VarBase');
@@ -27,6 +31,7 @@ const registry = goog.require('Blockly.registry');
  * @param {string=} newName The new name the variable will be changed to.
  * @extends {VarBase}
  * @constructor
+ * @alias Blockly.Events.VarRename
  */
 const VarRename = function(opt_variable, newName) {
   VarRename.superClass_.constructor.call(this, opt_variable);

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for comment creation event.
+ * @namespace Blockly.Events.CommentCreate
+ */
 goog.module('Blockly.Events.CommentCreate');
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
@@ -27,6 +31,7 @@ const registry = goog.require('Blockly.registry');
  *     Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentCreate
  */
 const CommentCreate = function(opt_comment) {
   CommentCreate.superClass_.constructor.call(this, opt_comment);

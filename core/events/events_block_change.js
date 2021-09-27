@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a block change event.
+ * @namespace Blockly.Events.BlockChange
+ */
 goog.module('Blockly.Events.BlockChange');
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
@@ -33,6 +37,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @param {*=} opt_newValue New value of element.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockChange
  */
 const BlockChange = function(
     opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {

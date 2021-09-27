@@ -10,6 +10,11 @@
  */
 'use strict';
 
+/**
+ * Helper methods for events that are fired as a result of
+ * actions in Blockly's editor.
+ * @namespace Blockly.Events.utils
+ */
 goog.module('Blockly.Events.utils');
 
 /* eslint-disable-next-line no-unused-vars */

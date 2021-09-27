@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a variable creation event.
+ * @namespace Blockly.Events.VarCreate
+ */
 goog.module('Blockly.Events.VarCreate');
 
 const VarBase = goog.require('Blockly.Events.VarBase');
@@ -26,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *     for a blank event.
  * @extends {VarBase}
  * @constructor
+ * @alias Blockly.Events.VarCreate
  */
 const VarCreate = function(opt_variable) {
   VarCreate.superClass_.constructor.call(this, opt_variable);

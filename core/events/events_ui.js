@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * (Deprecated) Events fired as a result of UI actions in
+ * Blockly's editor.
+ * @namespace Blockly.Events.Ui
+ */
 goog.module('Blockly.Events.Ui');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -32,6 +37,7 @@ const {Block} = goog.requireType('Blockly.Block');
  * @extends {UiBase}
  * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
+ * @alias Blockly.Events.Ui
  */
 const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;

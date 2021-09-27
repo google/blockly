@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for comment deletion event.
+ * @namespace Blockly.Events.CommentDelete
+ */
 goog.module('Blockly.Events.CommentDelete');
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
@@ -26,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *     Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentDelete
  */
 const CommentDelete = function(opt_comment) {
   CommentDelete.superClass_.constructor.call(this, opt_comment);

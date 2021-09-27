@@ -6,11 +6,16 @@
 
 /**
  * @fileoverview Abstract class for events fired as a result of actions in
- *     Blockly's editor.
+ * Blockly's editor.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
+/**
+ * Abstract class for events fired as a result of actions in
+ * Blockly's editor.
+ * @namespace Blockly.Events.Abstract
+ */
 goog.module('Blockly.Events.Abstract');
 
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -21,6 +26,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /**
  * Abstract class for an event.
  * @constructor
+ * @alias Blockly.Events.Abstract
  */
 const Abstract = function() {
   /**

@@ -11,6 +11,10 @@
  */
 'use strict';
 
+/**
+ * A separator used for separating toolbox categories.
+ * @namespace Blockly.ToolboxSeparator
+ */
 goog.module('Blockly.ToolboxSeparator');
 
 const Css = goog.require('Blockly.Css');
@@ -32,6 +36,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * @param {!IToolbox} toolbox The parent toolbox for the separator.
  * @constructor
  * @extends {ToolboxItem}
+ * @alias Blockly.ToolboxSeparator
  */
 const ToolboxSeparator = function(separatorDef, toolbox) {
   ToolboxSeparator.superClass_.constructor.call(this, separatorDef, toolbox);

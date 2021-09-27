@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Toolbox from whence to create blocks.
+ * @namespace Blockly.Toolbox
+ */
 goog.module('Blockly.Toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -68,6 +72,7 @@ goog.require('Blockly.Events.ToolboxItemSelect');
  * @implements {IStyleable}
  * @implements {IToolbox}
  * @extends {DeleteArea}
+ * @alias Blockly.Toolbox
  */
 const Toolbox = function(workspace) {
   Toolbox.superClass_.constructor.call(this);

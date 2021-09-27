@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a block move event.
+ * @namespace Blockly.Events.BlockMove
+ */
 goog.module('Blockly.Events.BlockMove');
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
@@ -28,6 +32,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  *     event.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockMove
  */
 const BlockMove = function(opt_block) {
   BlockMove.superClass_.constructor.call(this, opt_block);

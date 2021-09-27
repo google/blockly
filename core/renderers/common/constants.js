@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * An object that provides constants for rendering blocks.
+ * @namespace Blockly.blockRendering.ConstantProvider
+ */
 goog.module('Blockly.blockRendering.ConstantProvider');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +34,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * An object that provides constants for rendering blocks.
  * @constructor
  * @package
+ * @alias Blockly.blockRendering.ConstantProvider
  */
 const ConstantProvider = function() {
   /**

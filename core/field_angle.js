@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Angle input field.
+ * @namespace Blockly.FieldAngle
+ */
 goog.module('Blockly.FieldAngle');
 
 const Css = goog.require('Blockly.Css');
@@ -38,6 +42,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
+ * @alias Blockly.FieldAngle
  */
 const FieldAngle = function(opt_value, opt_validator, opt_config) {
 

@@ -6,10 +6,14 @@
 
 /**
  * @fileoverview Handles serializing blocks to plain JavaScript objects only
- *     containing state.
+ * containing state.
  */
 'use strict';
 
+/**
+ * Handles serializing blocks to plain JavaScript objects only containing state.
+ * @namespace Blockly.serialization.blocks
+ */
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
@@ -39,6 +43,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *   shadow: (!State|undefined),
  *   block: (!State|undefined)
  * }}
+ * @alias Blockly.serialization.blocks.ConnectionState
  */
 var ConnectionState;
 exports.ConnectionState = ConnectionState;
@@ -60,6 +65,7 @@ exports.ConnectionState = ConnectionState;
  *     inputs: (!Object<string, !ConnectionState>|undefined),
  *     next: (!ConnectionState|undefined)
  * }}
+ * @alias Blockly.serialization.blocks.State
  */
 var State;
 exports.State = State;
@@ -83,6 +89,7 @@ exports.State = State;
  *       workspace where that state doesn't yet exist. True by default.
  * @return {?State} The serialized state of the block, or null if the block
  *     could not be serialied (eg it was an insertion marker).
+ * @alias Blockly.serialization.blocks.save
  */
 const save = function(
     block,
@@ -295,6 +302,7 @@ const saveConnection = function(connection, doFullSerialization) {
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
  * @return {!Block} The block that was just loaded.
+ * @alias Blockly.serialization.blocks.append
  */
 const append = function(state, workspace, {recordUndo = false} = {}) {
   return appendInternal(state, workspace, {recordUndo});
@@ -318,6 +326,7 @@ exports.append = append;
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
  * @return {!Block} The block that was just appended.
+ * @alias Blockly.serialization.blocks.appendInternal
  */
 const appendInternal = function(
     state,
@@ -628,6 +637,7 @@ const saveBlock = save;
 /**
  * Serializer for saving and loading block state.
  * @implements {ISerializer}
+ * @alias Blockly.serialization.blocks.BlockSerializer
  */
 class BlockSerializer {
   constructor() {

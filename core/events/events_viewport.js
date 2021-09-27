@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of a viewport change.
+ * @namespace Blockly.Events.ViewportChange
+ */
 goog.module('Blockly.Events.ViewportChange');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -32,6 +36,7 @@ const registry = goog.require('Blockly.registry');
  *    blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.ViewportChange
  */
 const ViewportChange = function(
     opt_top, opt_left, opt_scale, opt_workspaceId, opt_oldScale) {

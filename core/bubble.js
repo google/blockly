@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a UI bubble.
+ * @namespace Blockly.Bubble
+ */
 goog.module('Blockly.Bubble');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -47,6 +51,7 @@ goog.require('Blockly.Workspace');
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
  * @implements {IBubble}
  * @constructor
+ * @alias Blockly.Bubble
  */
 const Bubble = function(
     workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {

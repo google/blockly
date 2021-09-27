@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Zelos renderer.
+ * @namespace Blockly.zelos.Renderer
+ */
 goog.module('Blockly.zelos.Renderer');
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
@@ -40,6 +44,7 @@ const {Marker} = goog.requireType('Blockly.Marker');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.zelos.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);

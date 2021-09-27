@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object that controls settings for the workspace.
+ * @namespace Blockly.Options
+ */
 goog.module('Blockly.Options');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -32,6 +36,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
  *     Specification:
  * https://developers.google.com/blockly/guides/get-started/web#configuration
  * @constructor
+ * @alias Blockly.Options
  */
 const Options = function(options) {
   let toolboxJsonDef = null;

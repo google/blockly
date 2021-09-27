@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.style
- * @namespace
+ * Utilities for element styles.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.style
  */
 goog.module('Blockly.utils.style');
 

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods animating a block on connection and disconnection.
+ * @namespace Blockly.blockAnimations
+ */
 goog.module('Blockly.blockAnimations');
 
 const Svg = goog.require('Blockly.utils.Svg');
@@ -33,6 +37,7 @@ let disconnectGroup = null;
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param {!BlockSvg} block The block being disposed of.
+ * @alias Blockly.blockAnimations.disposeUiEffect
  */
 const disposeUiEffect = function(block) {
   const workspace = block.workspace;
@@ -83,6 +88,7 @@ const disposeUiStep = function(clone, rtl, start, workspaceScale) {
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
  * @param {!BlockSvg} block The block being connected.
+ * @alias Blockly.blockAnimations.connectionUiEffect
  */
 const connectionUiEffect = function(block) {
   const workspace = block.workspace;
@@ -138,6 +144,7 @@ const connectionUiStep = function(ripple, start, scale) {
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
  * @param {!BlockSvg} block The block being disconnected.
+ * @alias Blockly.blockAnimations.disconnectUiEffect
  */
 const disconnectUiEffect = function(block) {
   block.workspace.getAudioManager().play('disconnect');
@@ -185,6 +192,7 @@ const disconnectUiStep = function(group, magnitude, start) {
 
 /**
  * Stop the disconnect UI animation immediately.
+ * @alias Blockly.blockAnimations.disconnectUiStop
  */
 const disconnectUiStop = function() {
   if (disconnectGroup) {

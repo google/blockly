@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.utils.toolbox
- * @namespace
+ * Utility functions for the toolbox and flyout.
+ * @namespace Blockly.utils.toolbox
  */
 goog.module('Blockly.utils.toolbox');
 

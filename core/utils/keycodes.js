@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.KeyCodes
- * @namespace
+ * Constant declarations for common key codes.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.KeyCodes
  */
 goog.module('Blockly.utils.KeyCodes');
 

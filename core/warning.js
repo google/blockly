@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a warning.
+ * @namespace Blockly.Warning
+ */
 goog.module('Blockly.Warning');
 
 const Bubble = goog.require('Blockly.Bubble');
@@ -33,6 +37,7 @@ goog.require('Blockly.Events.BubbleOpen');
  * @param {!Block} block The block associated with this warning.
  * @extends {Icon}
  * @constructor
+ * @alias Blockly.Warning
  */
 const Warning = function(block) {
   Warning.superClass_.constructor.call(this, block);

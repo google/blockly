@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a code comment.
+ * @namespace Blockly.Comment
+ */
 goog.module('Blockly.Comment');
 
 const Bubble = goog.require('Blockly.Bubble');
@@ -44,6 +48,7 @@ goog.require('Blockly.Warning');
  * @param {!Block} block The block associated with this comment.
  * @extends {Icon}
  * @constructor
+ * @alias Blockly.Comment
  */
 const Comment = function(block) {
   Comment.superClass_.constructor.call(this, block);

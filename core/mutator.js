@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Object representing a mutator dialog.  A mutator allows the
+ * user to change the shape of a block using a nested blocks editor.
+ * @namespace Blockly.Mutator
+ */
 goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -48,6 +53,7 @@ goog.require('Blockly.Events.BubbleOpen');
  * @param {!Array<string>} quarkNames List of names of sub-blocks for flyout.
  * @extends {Icon}
  * @constructor
+ * @alias Blockly.Mutator
  */
 const Mutator = function(quarkNames) {
   Mutator.superClass_.constructor.call(this, null);

@@ -12,6 +12,12 @@
  */
 'use strict';
 
+/**
+ * A database of all the rendered connections that could
+ *    possibly be connected to (i.e. not collapsed, etc).
+ *    Sorted by y coordinate.
+ * @namespace Blockly.ConnectionDB
+ */
 goog.module('Blockly.ConnectionDB');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +39,7 @@ goog.require('Blockly.constants');
  *     connection type checker, used to decide if connections are valid during a
  *     drag.
  * @constructor
+ * @alias Blockly.ConnectionDB
  */
 const ConnectionDB = function(checker) {
   /**

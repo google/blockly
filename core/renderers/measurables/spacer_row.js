@@ -9,6 +9,10 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a spacer between two rows.
+ * @namespace Blockly.blockRendering.SpacerRow
+ */
 goog.module('Blockly.blockRendering.SpacerRow');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Row}
+ * @alias Blockly.blockRendering.SpacerRow
  */
 const SpacerRow = function(constants, height, width) {
   SpacerRow.superClass_.constructor.call(this, constants);

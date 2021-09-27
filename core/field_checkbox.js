@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Checkbox field.  Checked or not checked.
+ * @namespace Blockly.FieldCheckbox
+ */
 goog.module('Blockly.FieldCheckbox');
 
 const Field = goog.require('Blockly.Field');
@@ -34,6 +38,7 @@ goog.require('Blockly.Events.BlockChange');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldCheckbox
  */
 const FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   /**

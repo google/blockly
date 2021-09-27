@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name ContextMenuRegistry
- * @namespace
+ * Registry for context menu option items.
+ * @namespace Blockly.ContextMenuRegistry
  */
 goog.module('Blockly.ContextMenuRegistry');
 
@@ -28,6 +28,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * from ContextMenuRegistry.registry.
  * @constructor
  * @private
+ * @alias Blockly.ContextMenuRegistry
  */
 const ContextMenuRegistry = function() {
   // Singleton instance should be registered once.

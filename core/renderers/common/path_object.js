@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @namespace Blockly.blockRendering.PathObject
+ */
 goog.module('Blockly.blockRendering.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -38,6 +42,7 @@ const {Block} = goog.requireType('Blockly.Block');
  * @constructor
  * @implements {IPathObject}
  * @package
+ * @alias Blockly.blockRendering.PathObject
  */
 const PathObject = function(root, style, constants) {
   /**

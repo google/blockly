@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing an icon on a block.
+ * @namespace Blockly.Icon
+ */
 goog.module('Blockly.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -29,6 +33,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @param {BlockSvg} block The block associated with this icon.
  * @constructor
  * @abstract
+ * @alias Blockly.Icon
  */
 const Icon = function(block) {
   /**

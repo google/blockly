@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Base renderer.
+ * @namespace Blockly.blockRendering.Renderer
+ */
 goog.module('Blockly.blockRendering.Renderer');
 
 const Connection = goog.require('Blockly.Connection');
@@ -48,6 +52,7 @@ const {Marker} = goog.requireType('Blockly.Marker');
  * @package
  * @constructor
  * @implements {IRegistrable}
+ * @alias Blockly.blockRendering.Renderer
  */
 const Renderer = function(name) {
   /**

@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for a bubble.
+ * @namespace Blockly.IBubble
+ */
 goog.module('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +32,7 @@ const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
  * @interface
  * @extends {IDraggable}
  * @extends {IContextMenu}
+ * @alias Blockly.IBubble
  */
 const IBubble = function() {};
 

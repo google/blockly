@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.xml
- * @namespace
+ * XML element manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.xml
  */
 goog.module('Blockly.utils.xml');
 

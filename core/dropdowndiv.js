@@ -13,6 +13,10 @@
 
 'use strict';
 
+/**
+ * A div that floats on top of the workspace, for drop-down menus.
+ * @namespace Blockly.DropDownDiv
+ */
 goog.module('Blockly.DropDownDiv');
 
 const Rect = goog.require('Blockly.utils.Rect');
@@ -34,6 +38,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * Class for drop-down div.
  * @constructor
  * @package
+ * @alias Blockly.DropDownDiv
  */
 const DropDownDiv = function() {};
 

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of trashcan flyout open and close.
+ * @namespace Blockly.Events.TrashcanOpen
+ */
 goog.module('Blockly.Events.TrashcanOpen');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -26,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *    Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.TrashcanOpen
  */
 const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
   TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);

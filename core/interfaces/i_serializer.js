@@ -6,11 +6,16 @@
 
 /**
  * @fileoverview The record type for an object containing functions for
- *     serializing part of the workspace.
+ * serializing part of the workspace.
  */
 
 'use strict';
 
+/**
+ * The record type for an object containing functions for
+ *     serializing part of the workspace.
+ * @namespace Blockly.serialization.ISerializer
+ */
 goog.module('Blockly.serialization.ISerializer');
 goog.module.declareLegacyNamespace();
 
@@ -21,6 +26,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /**
  * Serializes and deserializes a plugin or system.
  * @interface
+ * @alias Blockly.serialization.ISerializer.ISerializer
  */
 class ISerializer {
   constructor() {

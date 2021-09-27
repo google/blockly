@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.WidgetDiv
- * @namespace
+ * A div that floats on top of Blockly.  This singleton contains
+ *     temporary HTML UI widgets that the user is currently interacting with.
+ *     E.g. text input areas, colour pickers, context menus.
+ * @namespace Blockly.WidgetDiv
  */
 goog.module('Blockly.WidgetDiv');
 
@@ -73,6 +75,8 @@ exports.getDiv = getDiv;
 /**
  * Allows unit tests to reset the div.
  * @param {?Element} newDiv The new value for the DIV field.
+ * @alias Blockly.WidgetDiv.testOnly_setDiv
+ * @ignore
  */
 const testOnly_setDiv = function(newDiv) {
   DIV = newDiv;

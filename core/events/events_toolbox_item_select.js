@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of selecting an item on the toolbox.
+ * @namespace Blockly.Events.ToolboxItemSelect
+ */
 goog.module('Blockly.Events.ToolboxItemSelect');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -28,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  *    Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.ToolboxItemSelect
  */
 const ToolboxItemSelect = function(opt_oldItem, opt_newItem, opt_workspaceId) {
   ToolboxItemSelect.superClass_.constructor.call(this, opt_workspaceId);

@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing a spacer in a row of a rendered
+ * block.
+ * @namespace Blockly.blockRendering.InRowSpacer
+ */
 goog.module('Blockly.blockRendering.InRowSpacer');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +33,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.InRowSpacer
  */
 const InRowSpacer = function(constants, width) {
   InRowSpacer.superClass_.constructor.call(this, constants);

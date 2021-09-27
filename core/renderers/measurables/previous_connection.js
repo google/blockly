@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing the space a previous connection takes up
+ * during rendering.
+ * @namespace Blockly.blockRendering.PreviousConnection
+ */
 goog.module('Blockly.blockRendering.PreviousConnection');
 
 const Connection = goog.require('Blockly.blockRendering.Connection');
@@ -31,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Connection}
+ * @alias Blockly.blockRendering.PreviousConnection
  */
 const PreviousConnection = function(constants, connectionModel) {
   PreviousConnection.superClass_.constructor.call(

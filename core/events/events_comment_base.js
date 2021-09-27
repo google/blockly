@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Base class for comment events.
+ * @namespace Blockly.Events.CommentBase
+ */
 goog.module('Blockly.Events.CommentBase');
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
@@ -31,6 +35,7 @@ const utilsXml = goog.require('Blockly.utils.xml');
  *     corresponds to.  Undefined for a blank event.
  * @extends {AbstractEvents}
  * @constructor
+ * @alias Blockly.Events.CommentBase
  */
 const CommentBase = function(opt_comment) {
   /**

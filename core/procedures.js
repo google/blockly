@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.Procedures
- * @namespace
+ * Utility functions for handling procedures.
+ * @namespace Blockly.Procedures
  */
 goog.module('Blockly.Procedures');
 

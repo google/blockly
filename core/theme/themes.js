@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Namespace for themes.
+ * @namespace Blockly.Themes
+ */
 goog.module('Blockly.Themes');
 
 const Classic = goog.require('Blockly.Themes.Classic');

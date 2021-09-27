@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a block creation event.
+ * @namespace Blockly.Events.BlockCreate
+ */
 goog.module('Blockly.Events.BlockCreate');
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
@@ -28,6 +32,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *     event.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockCreate
  */
 const BlockCreate = function(opt_block) {
   BlockCreate.superClass_.constructor.call(this, opt_block);

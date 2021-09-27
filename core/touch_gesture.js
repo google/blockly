@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The class extends Gesture to support pinch to zoom
+ * for both pointer and touch events.
+ * @namespace Blockly.TouchGesture
+ */
 goog.module('Blockly.TouchGesture');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -34,6 +39,7 @@ const object = goog.require('Blockly.utils.object');
  *     this gesture and has a reference to it.
  * @extends {Gesture}
  * @constructor
+ * @alias Blockly.TouchGesture
  */
 const TouchGesture = function(e, creatorWorkspace) {
   TouchGesture.superClass_.constructor.call(this, e, creatorWorkspace);

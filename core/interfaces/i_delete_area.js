@@ -12,6 +12,11 @@
 
 'use strict';
 
+/**
+ * The interface for a component that can delete a block or bubble
+ * that is dropped on top of it.
+ * @namespace Blockly.IDeleteArea
+ */
 goog.module('Blockly.IDeleteArea');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -25,6 +30,7 @@ const IDragTarget = goog.requireType('Blockly.IDragTarget');
  * on top of it.
  * @extends {IDragTarget}
  * @interface
+ * @alias Blockly.IDeleteArea
  */
 const IDeleteArea = function() {};
 

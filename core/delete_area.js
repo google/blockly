@@ -12,6 +12,11 @@
 
 'use strict';
 
+/**
+ * The abstract class for a component that can delete a block or
+ * bubble that is dropped on top of it.
+ * @namespace Blockly.DeleteArea
+ */
 goog.module('Blockly.DeleteArea');
 
 const DragTarget = goog.require('Blockly.DragTarget');
@@ -29,6 +34,7 @@ const {BlockSvg} = goog.require('Blockly.BlockSvg');
  * @extends {DragTarget}
  * @implements {IDeleteArea}
  * @constructor
+ * @alias Blockly.DeleteArea
  */
 const DeleteArea = function() {
   DeleteArea.superClass_.constructor.call(this);

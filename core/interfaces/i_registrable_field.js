@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for a Blockly field that can be registered.
+ * @namespace Blockly.IRegistrableField
+ */
 goog.module('Blockly.IRegistrableField');
 
 /* eslint-disable-next-line no-unused-vars */

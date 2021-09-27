@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * A toolbox category used to organize blocks in the toolbox.
+ * @namespace Blockly.CollapsibleToolboxCategory
+ */
 goog.module('Blockly.CollapsibleToolboxCategory');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -37,6 +41,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
  * @constructor
  * @extends {ToolboxCategory}
  * @implements {ICollapsibleToolboxItem}
+ * @alias Blockly.CollapsibleToolboxCategory
  */
 const CollapsibleToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   /**

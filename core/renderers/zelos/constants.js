@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * An object that provides constants for rendering blocks in Zelos
+ * mode.
+ * @namespace Blockly.zelos.ConstantProvider
+ */
 goog.module('Blockly.zelos.ConstantProvider');
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
@@ -27,6 +32,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * @constructor
  * @package
  * @extends {BaseConstantProvider}
+ * @alias Blockly.zelos.ConstantProvider
  */
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);

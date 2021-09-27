@@ -10,6 +10,11 @@
  */
 'use strict';
 
+/**
+ * The class representing an AST node.
+ * Used to traverse the Blockly AST.
+ * @namespace Blockly.ASTNode
+ */
 goog.module('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -39,6 +44,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * @param {!IASTNodeLocation} location The position in the AST.
  * @param {!ASTNode.Params=} opt_params Optional dictionary of options.
  * @constructor
+ * @alias Blockly.ASTNode
  */
 const ASTNode = function(type, location, opt_params) {
   if (!location) {

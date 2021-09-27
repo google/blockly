@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Object for configuring and updating a workspace grid in
+ * Blockly.
+ * @namespace Blockly.Grid
+ */
 goog.module('Blockly.Grid');
 
 const Svg = goog.require('Blockly.utils.Svg');
@@ -26,6 +31,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
  *     See grid documentation:
  *     https://developers.google.com/blockly/guides/configure/web/grid
  * @constructor
+ * @alias Blockly.Grid
  */
 const Grid = function(pattern, options) {
   /**

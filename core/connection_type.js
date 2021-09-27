@@ -11,12 +11,17 @@
 
 'use strict';
 
+/**
+ * An enum for the possible types of connections.
+ * @namespace Blockly.ConnectionType
+ */
 goog.module('Blockly.ConnectionType');
 
 
 /**
  * Enum for the type of a connection or input.
  * @enum {number}
+ * @alias Blockly.ConnectionType
  */
 const ConnectionType = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.

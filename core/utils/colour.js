@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.colour
- * @namespace
+ * Utility methods for colour manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.colour
  */
 goog.module('Blockly.utils.colour');
 

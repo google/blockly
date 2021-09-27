@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * An object that encapsulates logic for checking whether a
+ * potential connection is safe and valid.
+ * @namespace Blockly.ConnectionChecker
+ */
 goog.module('Blockly.ConnectionChecker');
 
 const Connection = goog.require('Blockly.Connection');
@@ -28,6 +33,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * Class for connection type checking logic.
  * @implements {IConnectionChecker}
  * @constructor
+ * @alias Blockly.ConnectionChecker
  */
 const ConnectionChecker = function() {};
 

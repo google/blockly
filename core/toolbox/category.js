@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * A toolbox category used to organize blocks in the toolbox.
+ * @namespace Blockly.ToolboxCategory
+ */
 goog.module('Blockly.ToolboxCategory');
 
 const Css = goog.require('Blockly.Css');
@@ -39,6 +43,7 @@ const utils = goog.require('Blockly.utils');
  * @constructor
  * @extends {ToolboxItem}
  * @implements {ISelectableToolboxItem}
+ * @alias Blockly.ToolboxCategory
  */
 const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   ToolboxCategory.superClass_.constructor.call(

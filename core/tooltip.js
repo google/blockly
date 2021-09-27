@@ -16,8 +16,13 @@
 'use strict';
 
 /**
- * @name Blockly.Tooltip
- * @namespace
+ * Library to create tooltips for Blockly.
+ * First, call init() after onload.
+ * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
+ * If the tooltip is a string, then that message will be displayed.
+ * If the tooltip is an SVG element, then that object's tooltip will be used.
+ * Third, call bindMouseEvents(e) passing the SVG element.
+ * @namespace Blockly.Tooltip
  */
 goog.module('Blockly.Tooltip');
 

@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The class representing a basic cursor.
+ * Used to demo switching between different cursors.
+ * @namespace Blockly.BasicCursor
+ */
 goog.module('Blockly.BasicCursor');
 
 const object = goog.require('Blockly.utils.object');
@@ -25,6 +30,7 @@ const {Cursor} = goog.require('Blockly.Cursor');
  * previous.
  * @constructor
  * @extends {Cursor}
+ * @alias Blockly.BasicCursor
  */
 const BasicCursor = function() {
   BasicCursor.superClass_.constructor.call(this);

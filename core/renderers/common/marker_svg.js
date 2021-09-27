@@ -11,6 +11,10 @@
 'use strict';
 
 
+/**
+ * Methods for graphically rendering a marker as SVG.
+ * @namespace Blockly.blockRendering.MarkerSvg
+ */
 goog.module('Blockly.blockRendering.MarkerSvg');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -65,6 +69,7 @@ const HEIGHT_MULTIPLIER = 3 / 4;
  *     the renderer.
  * @param {!Marker} marker The marker to draw.
  * @constructor
+ * @alias Blockly.blockRendering.MarkerSvg
  */
 const MarkerSvg = function(workspace, constants, marker) {
   /**

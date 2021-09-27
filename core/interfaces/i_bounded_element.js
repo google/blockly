@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for a bounded element.
+ * @namespace Blockly.IBoundedElement
+ */
 goog.module('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -20,6 +24,7 @@ const Rect = goog.requireType('Blockly.utils.Rect');
 /**
  * A bounded element interface.
  * @interface
+ * @alias Blockly.IBoundedElement
  */
 const IBoundedElement = function() {};
 

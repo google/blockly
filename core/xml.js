@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * XML reader and writer.
+ * @namespace Blockly.Xml
+ */
 goog.module('Blockly.Xml');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -40,6 +44,7 @@ goog.requireType('Blockly.WorkspaceCommentSvg');
  * @param {!Workspace} workspace The workspace containing blocks.
  * @param {boolean=} opt_noId True if the encoder should skip the block IDs.
  * @return {!Element} XML DOM element.
+ * @alias Blockly.Xml.workspaceToDom
  */
 const workspaceToDom = function(workspace, opt_noId) {
   const treeXml = utilsXml.createElement('xml');
@@ -67,6 +72,7 @@ exports.workspaceToDom = workspaceToDom;
  * @param {!Array<!VariableModel>} variableList List of all variable
  *     models.
  * @return {!Element} Tree of XML elements.
+ * @alias Blockly.Xml.variablesToDom
  */
 const variablesToDom = function(variableList) {
   const variables = utilsXml.createElement('variables');
@@ -90,6 +96,7 @@ exports.variablesToDom = variablesToDom;
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element|!DocumentFragment} Tree of XML elements or an empty
  *     document fragment if the block was an insertion marker.
+ * @alias Blockly.Xml.blockToDomWithXY
  */
 const blockToDomWithXY = function(block, opt_noId) {
   if (block.isInsertionMarker()) {  // Skip over insertion markers.
@@ -155,6 +162,7 @@ const allFieldsToDom = function(block, element) {
  * @param {boolean=} opt_noId True if the encoder should skip the block ID.
  * @return {!Element|!DocumentFragment} Tree of XML elements or an empty
  *     document fragment if the block was an insertion marker.
+ * @alias Blockly.Xml.blockToDom
  */
 const blockToDom = function(block, opt_noId) {
   // Skip over insertion markers.
@@ -323,6 +331,7 @@ const cloneShadow = function(shadow, opt_noId) {
  * unless the DOM itself has whitespace built-in.
  * @param {!Node} dom A tree of XML nodes.
  * @return {string} Text representation.
+ * @alias Blockly.Xml.domToText
  */
 const domToText = function(dom) {
   const text = utilsXml.domToText(dom);
@@ -336,6 +345,7 @@ exports.domToText = domToText;
  * Converts a DOM structure into properly indented text.
  * @param {!Node} dom A tree of XML elements.
  * @return {string} Text representation.
+ * @alias Blockly.Xml.domToPrettyText
  */
 const domToPrettyText = function(dom) {
   // This function is not guaranteed to be correct for all XML.
@@ -370,6 +380,7 @@ exports.domToPrettyText = domToPrettyText;
  * @return {!Element} A DOM object representing the singular child of the
  *     document element.
  * @throws if the text doesn't parse.
+ * @alias Blockly.Xml.textToDom
  */
 const textToDom = function(text) {
   const doc = utilsXml.textToDomDocument(text);
@@ -387,6 +398,7 @@ exports.textToDom = textToDom;
  * @param {!Element} xml XML DOM.
  * @param {!Workspace} workspace The workspace.
  * @return {!Array<string>} An array containing new block IDs.
+ * @alias Blockly.Xml.clearWorkspaceAndLoadFromXml
  */
 const clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(false);
@@ -404,6 +416,7 @@ exports.clearWorkspaceAndLoadFromXml = clearWorkspaceAndLoadFromXml;
  * @return {!Array<string>} An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  *     comments are not bundled in.
+ * @alias Blockly.Xml.domToWorkspace
  */
 const domToWorkspace = function(xml, workspace) {
   if (xml instanceof goog.module.get('Blockly.Workspace')) {
@@ -511,6 +524,7 @@ exports.domToWorkspace = domToWorkspace;
  * @param {!Element} xml The XML DOM.
  * @param {!Workspace} workspace The workspace to add to.
  * @return {!Array<string>} An array containing new block IDs.
+ * @alias Blockly.Xml.appendDomToWorkspace
  */
 const appendDomToWorkspace = function(xml, workspace) {
   let bbox;  // Bounding box of the current blocks.
@@ -561,6 +575,7 @@ exports.appendDomToWorkspace = appendDomToWorkspace;
  * @param {!Element} xmlBlock XML block element.
  * @param {!Workspace} workspace The workspace.
  * @return {!Block} The root block created.
+ * @alias Blockly.Xml.domToBlock
  */
 const domToBlock = function(xmlBlock, workspace) {
   if (xmlBlock instanceof goog.module.get('Blockly.Workspace')) {
@@ -632,6 +647,7 @@ exports.domToBlock = domToBlock;
  * @param {!Element} xmlVariables List of XML variable elements.
  * @param {!Workspace} workspace The workspace to which the variable
  *     should be added.
+ * @alias Blockly.Xml.domToVariables
  */
 const domToVariables = function(xmlVariables, workspace) {
   for (let i = 0; i < xmlVariables.childNodes.length; i++) {
@@ -998,6 +1014,7 @@ const domToField = function(block, fieldName, xml) {
  * Remove any 'next' block (statements in a stack).
  * @param {!Element|!DocumentFragment} xmlBlock XML block element or an empty
  *     DocumentFragment if the block was an insertion marker.
+ * @alias Blockly.Xml.deleteNext
  */
 const deleteNext = function(xmlBlock) {
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {

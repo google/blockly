@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.Css
- * @namespace
+ * Inject Blockly's CSS synchronously.
+ * @namespace Blockly.Css
  */
 goog.module('Blockly.Css');
 

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object in charge of managing markers and the cursor.
+ * @namespace Blockly.MarkerManager
+ */
 goog.module('Blockly.MarkerManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -24,6 +28,7 @@ const {Marker} = goog.requireType('Blockly.Marker');
  * Class to manage the multiple markers and the cursor on a workspace.
  * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
+ * @alias Blockly.MarkerManager
  */
 const MarkerManager = function(workspace) {
   /**

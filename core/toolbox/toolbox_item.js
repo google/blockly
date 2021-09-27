@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * An item in the toolbox.
+ * @namespace Blockly.ToolboxItem
+ */
 goog.module('Blockly.ToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -34,6 +38,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  *     or null if the category does not have a parent.
  * @constructor
  * @implements {IToolboxItem}
+ * @alias Blockly.ToolboxItem
  */
 const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
   /**

@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for an object that is copyable.
+ * @namespace Blockly.ICopyable
+ */
 goog.module('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -22,6 +26,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * @extends {ISelectable}
  * @interface
+ * @alias Blockly.ICopyable
  */
 const ICopyable = function() {};
 

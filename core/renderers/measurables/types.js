@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * Measurable types.
+ * @namespace Blockly.blockRendering.Types
+ */
 goog.module('Blockly.blockRendering.Types');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -22,6 +26,7 @@ const Row = goog.requireType('Blockly.blockRendering.Row');
 /**
  * Types of rendering elements.
  * @enum {number}
+ * @alias Blockly.blockRendering.Types
  */
 const Types = {
   NONE: 0,                       // None

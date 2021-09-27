@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of UI click in Blockly's editor.
+ * @namespace Blockly.Events.Click
+ */
 goog.module('Blockly.Events.Click');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -31,6 +35,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *    event. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.Click
  */
 const Click = function(opt_block, opt_workspaceId, opt_targetType) {
   const workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;

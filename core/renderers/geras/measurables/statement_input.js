@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Objects representing statement inputs with connections on a
+ * rendered block.
+ * @namespace Blockly.geras.StatementInput
+ */
 goog.module('Blockly.geras.StatementInput');
 
 const BaseStatementInput = goog.require('Blockly.blockRendering.StatementInput');
@@ -31,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseStatementInput}
+ * @alias Blockly.geras.StatementInput
  */
 const StatementInput = function(constants, input) {
   StatementInput.superClass_.constructor.call(this, constants, input);

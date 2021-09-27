@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * Name space for the Msg singleton.
- * Msg gets populated in the message files.
+ * Empty name space for the Message singleton.
+ * @namespace Blockly.Msg
  */
 goog.module('Blockly.Msg');
 goog.module.declareLegacyNamespace();

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Layout code for a vertical variant of the flyout.
+ * @namespace Blockly.VerticalFlyout
+ */
 goog.module('Blockly.VerticalFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -37,6 +41,7 @@ goog.require('Blockly.constants');
  *     workspace.
  * @extends {Flyout}
  * @constructor
+ * @alias Blockly.VerticalFlyout
  */
 const VerticalFlyout = function(workspaceOptions) {
   VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);

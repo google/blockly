@@ -20,7 +20,7 @@ goog.module('Blockly.utils.idGenerator');
 /**
  * Namespace object for internal implementations we want to be able to
  * stub in tests.
- * @alias Blockly.utils.idGenerator.TEST_ONLY
+ * @ignore
  */
 const internal = {};
 exports.TEST_ONLY = internal;

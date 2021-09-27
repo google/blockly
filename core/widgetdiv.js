@@ -78,6 +78,7 @@ exports.getDiv = getDiv;
  * Allows unit tests to reset the div.
  * @param {?Element} newDiv The new value for the DIV field.
  * @alias Blockly.WidgetDiv.testOnly_setDiv
+ * @ignore
  */
 const testOnly_setDiv = function(newDiv) {
   DIV = newDiv;

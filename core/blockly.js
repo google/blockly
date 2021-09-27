@@ -5,13 +5,13 @@
  */
 
 /**
- * @fileoverview Core JavaScript library for Blockly.
+ * @fileoverview The top level namespace used to access the Blockly library.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 /**
- * Core JavaScript library for Blockly.
+ * The top level namespace used to access the Blockly library.
  * @namespace Blockly
  */
 goog.module('Blockly');

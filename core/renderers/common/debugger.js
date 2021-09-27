@@ -5,13 +5,13 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview Methods for rendering debug graphics.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
 /**
- * Methods for graphically rendering a block as SVG.
+ * Methods for rendering debug graphics.
  * @namespace Blockly.blockRendering.Debug
  */
 goog.module('Blockly.blockRendering.Debug');

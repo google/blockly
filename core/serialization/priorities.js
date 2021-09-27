@@ -5,13 +5,15 @@
  */
 
 /**
- * @fileoverview Includes constants for the priorities of different plugin
+ * @fileoverview The top level namespace for priorities of plugin serializers.
+ * Includes constants for the priorities of different plugin
  * serializers. Higher priorities are deserialized first.
  */
 
 'use strict';
 
 /**
+ * The top level namespace for priorities of plugin serializers.
  * Includes constants for the priorities of different plugin serializers. Higher
  * priorities are deserialized first.
  * @namespace Blockly.serialization.priorities

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Namespace for block rendering functionality.
+ * @namespace Blockly.blockRendering
+ */
 goog.module('Blockly.blockRendering');
 
 const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
@@ -51,6 +55,7 @@ const registry = goog.require('Blockly.registry');
 /**
  * Returns whether the debugger is turned on.
  * @return {boolean} Whether the debugger is turned on.
+ * @alias Blockly.blockRendering.isDebuggerEnabled
  */
 const isDebuggerEnabled = function() {
   deprecation.warn(
@@ -76,6 +81,7 @@ exports.register = register;
 /**
  * Unregisters the renderer registered with the given name.
  * @param {string} name The name of the renderer.
+ * @alias Blockly.blockRendering.unregister
  */
 const unregister = function(name) {
   registry.unregister(registry.Type.RENDERER, name);
@@ -85,6 +91,7 @@ exports.unregister = unregister;
 /**
  * Turn on the blocks debugger.
  * @package
+ * @alias Blockly.blockRendering.startDebugger
  */
 const startDebugger = function() {
   deprecation.warn(
@@ -98,6 +105,7 @@ exports.startDebugger = startDebugger;
 /**
  * Turn off the blocks debugger.
  * @package
+ * @alias Blockly.blockRendering.stopDebugger
  */
 const stopDebugger = function() {
   deprecation.warn(
@@ -116,6 +124,7 @@ exports.stopDebugger = stopDebugger;
  * @return {!Renderer} The new instance of a renderer.
  *     Already initialized.
  * @package
+ * @alias Blockly.blockRendering.init
  */
 const init = function(name, theme, opt_rendererOverrides) {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);

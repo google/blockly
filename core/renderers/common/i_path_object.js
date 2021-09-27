@@ -12,6 +12,11 @@
 
 'use strict';
 
+/**
+ * The interface for an object that owns a block's rendering SVG
+ * elements.
+ * @namespace Blockly.blockRendering.IPathObject
+ */
 goog.module('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +33,7 @@ const {Block} = goog.requireType('Blockly.Block');
  * @param {!ConstantProvider} _constants The renderer's
  *     constants.
  * @interface
+ * @alias Blockly.blockRendering.IPathObject
  */
 const IPathObject = function(_root, _constants) {};
 

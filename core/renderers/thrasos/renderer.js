@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Thrasos renderer.
+ * @namespace Blockly.thrasos.Renderer
+ */
 goog.module('Blockly.thrasos.Renderer');
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
@@ -26,6 +30,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.thrasos.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);

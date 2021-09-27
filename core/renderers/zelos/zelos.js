@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Re-exports of Blockly.zelos.* modules.
+ * @namespace Blockly.zelos
+ */
 goog.module('Blockly.zelos');
 
 const BottomRow = goog.require('Blockly.zelos.BottomRow');

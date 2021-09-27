@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * An object representing the bottom row of a rendered block.
+ * @namespace Blockly.zelos.BottomRow
+ */
 goog.module('Blockly.zelos.BottomRow');
 
 const BaseBottomRow = goog.require('Blockly.blockRendering.BottomRow');
@@ -28,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseBottomRow}
+ * @alias Blockly.zelos.BottomRow
  */
 const BottomRow = function(constants) {
   BottomRow.superClass_.constructor.call(this, constants);

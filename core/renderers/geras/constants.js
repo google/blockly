@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * An object that provides constants for rendering blocks in Geras
+ * mode.
+ * @namespace Blockly.geras.ConstantProvider
+ */
 goog.module('Blockly.geras.ConstantProvider');
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
@@ -22,6 +27,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @package
  * @extends {BaseConstantProvider}
+ * @alias Blockly.geras.ConstantProvider
  */
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);

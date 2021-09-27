@@ -11,6 +11,10 @@
  */
 'use strict';
 
+/**
+ * Makecode/scratch-style renderer.
+ * @namespace Blockly.zelos.RenderInfo
+ */
 goog.module('Blockly.zelos.RenderInfo');
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
@@ -48,6 +52,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @constructor
  * @package
  * @extends {BaseRenderInfo}
+ * @alias Blockly.zelos.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);

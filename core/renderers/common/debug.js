@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Block rendering debugging functionality.
+ * @namespace Blockly.blockRendering.debug
+ */
 goog.module('Blockly.blockRendering.debug');
 
 
@@ -20,6 +24,7 @@ let useDebugger = false;
 /**
  * Returns whether the debugger is turned on.
  * @return {boolean} Whether the debugger is turned on.
+ * @alias Blockly.blockRendering.debug.isDebuggerEnabled
  */
 const isDebuggerEnabled = function() {
   return useDebugger;
@@ -30,6 +35,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
 /**
  * Turn on the blocks debugger.
  * @package
+ * @alias Blockly.blockRendering.debug.startDebugger
  */
 const startDebugger = function() {
   useDebugger = true;
@@ -40,6 +46,7 @@ exports.startDebugger = startDebugger;
 /**
  * Turn off the blocks debugger.
  * @package
+ * @alias Blockly.blockRendering.debug.stopDebugger
  */
 const stopDebugger = function() {
   useDebugger = false;

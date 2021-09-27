@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Minimalist renderer.
+ * @namespace Blockly.minimalist.Renderer
+ */
 goog.module('Blockly.minimalist.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -29,6 +33,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.minimalist.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);

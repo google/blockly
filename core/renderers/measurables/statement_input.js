@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing statement inputs with connections on a
+ * rendered block.
+ * @namespace Blockly.blockRendering.StatementInput
+ */
 goog.module('Blockly.blockRendering.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {InputConnection}
+ * @alias Blockly.blockRendering.StatementInput
  */
 const StatementInput = function(constants, input) {
   StatementInput.superClass_.constructor.call(this, constants, input);

@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @namespace Blockly.geras.PathObject
+ */
 goog.module('Blockly.geras.PathObject');
 
 const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
@@ -34,6 +38,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @extends {BasePathObject}
  * @package
+ * @alias Blockly.geras.PathObject
  */
 const PathObject = function(root, style, constants) {
   /**

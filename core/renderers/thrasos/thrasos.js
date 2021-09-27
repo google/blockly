@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Re-exports of Blockly.thrasos.* modules.
+ * @namespace Blockly.thrasos
+ */
 goog.module('Blockly.thrasos');
 
 const RenderInfo = goog.require('Blockly.thrasos.RenderInfo');

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a marker as SVG.
+ * @namespace Blockly.zelos.MarkerSvg
+ */
 goog.module('Blockly.zelos.MarkerSvg');
 
 const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
@@ -38,6 +42,7 @@ const {Marker} = goog.requireType('Blockly.Marker');
  * @param {!Marker} marker The marker to draw.
  * @constructor
  * @extends {BaseMarkerSvg}
+ * @alias Blockly.zelos.MarkerSvg
  */
 const MarkerSvg = function(workspace, constants, marker) {
   MarkerSvg.superClass_.constructor.call(this, workspace, constants, marker);

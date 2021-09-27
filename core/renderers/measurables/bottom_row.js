@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a bottom row on a rendered block.
+ * of its subcomponents.
+ * @namespace Blockly.blockRendering.BottomRow
+ */
 goog.module('Blockly.blockRendering.BottomRow');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +38,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {Row}
+ * @alias Blockly.blockRendering.BottomRow
  */
 const BottomRow = function(constants) {
   BottomRow.superClass_.constructor.call(this, constants);

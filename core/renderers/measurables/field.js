@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing a field in a row of a rendered
+ * block.
+ * @namespace Blockly.blockRendering.Field
+ */
 goog.module('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +38,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Field
  */
 const Field = function(constants, field, parentInput) {
   Field.superClass_.constructor.call(this, constants);

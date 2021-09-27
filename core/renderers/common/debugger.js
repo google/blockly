@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @namespace Blockly.blockRendering.Debug
+ */
 goog.module('Blockly.blockRendering.Debug');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -39,6 +43,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  *     constants.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Debug
  */
 const Debug = function(constants) {
   /**

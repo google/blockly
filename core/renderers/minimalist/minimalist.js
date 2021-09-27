@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Re-exports of Blockly.minimalist.* modules.
+ * @namespace Blockly.minimalist
+ */
 goog.module('Blockly.minimalist');
 
 const ConstantProvider = goog.require('Blockly.minimalist.ConstantProvider');

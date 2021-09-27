@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Renderer that preserves the look and feel of Blockly pre-2019.
+ * @namespace Blockly.geras.Drawer
+ */
 goog.module('Blockly.geras.Drawer');
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
@@ -33,6 +37,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseDrawer}
+ * @alias Blockly.geras.Drawer
  */
 const Drawer = function(block, info) {
   Drawer.superClass_.constructor.call(this, block, info);

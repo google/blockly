@@ -6,10 +6,15 @@
 
 /**
  * @fileoverview Handles serializing variables to plain JavaScript objects, only
- *     containing state.
+ * containing state.
  */
 'use strict';
 
+/**
+ * Handles serializing variables to plain JavaScript objects, only containing
+ * state.
+ * @namespace Blockly.serialization.variables
+ */
 goog.module('Blockly.serialization.variables');
 goog.module.declareLegacyNamespace();
 
@@ -28,6 +33,7 @@ const serializationRegistry = goog.require('Blockly.serialization.registry');
  *   id: string,
  *   type: (string|undefined)
  * }}
+ * @alias Blockly.serialization.variables.State
  */
 var State;
 exports.State = State;
@@ -35,6 +41,7 @@ exports.State = State;
 /**
  * Serializer for saving and loading variable state.
  * @implements {ISerializer}
+ * @alias Blockly.serialization.variables.VariableSerializer
  */
 class VariableSerializer {
   constructor() {

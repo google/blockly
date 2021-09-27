@@ -6,10 +6,15 @@
 
 /**
  * @fileoverview Contains top-level functions for serializing workspaces to
- *     plain JavaScript objects.
+ * plain JavaScript objects.
  */
 'use strict';
 
+/**
+ * Contains top-level functions for serializing workspaces to plain JavaScript
+ * objects.
+ * @namespace Blockly.serialization.workspaces
+ */
 goog.module('Blockly.serialization.workspaces');
 goog.module.declareLegacyNamespace();
  
@@ -24,6 +29,7 @@ const registry = goog.require('Blockly.registry');
  * Returns the state of the workspace as a plain JavaScript object.
  * @param {!Workspace} workspace The workspace to serialize.
  * @return {!Object<string, *>} The serialized state of the workspace.
+ * @alias Blockly.serialization.workspaces.save
  */
 const save = function(workspace) {
   const state = Object.create(null);
@@ -46,6 +52,7 @@ exports.save = save;
  * @param {{recordUndo: (boolean|undefined)}=} param1
  *     recordUndo: If true, events triggered by this function will be undo-able
  *       by the user. False by default.
+ * @alias Blockly.serialization.workspaces.load
  */
 const load = function(state, workspace, {recordUndo = false} = {}) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);

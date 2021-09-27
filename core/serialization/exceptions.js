@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Contains custom errors thrown by the serialization system.
+ * @namespace Blockly.serialization.exceptions
+ */
 goog.module('Blockly.serialization.exceptions');
 goog.module.declareLegacyNamespace();
 
@@ -18,13 +22,16 @@ const {State} = goog.requireType('Blockly.serialization.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
-
+/**
+ * @alias Blockly.serialization.exceptions.DeserializationError
+ */
 class DeserializationError extends Error {}
 exports.DeserializationError = DeserializationError;
 
 /**
  * Represents an error where the serialized state is expected to provide a
  * block type, but it is not provided.
+ * @alias Blockly.serialization.exceptions.MissingBlockType
  */
 class MissingBlockType extends DeserializationError {
   /**
@@ -46,6 +53,7 @@ exports.MissingBlockType = MissingBlockType;
 /**
  * Represents an error where deserialization encountered a block that did
  * not have a connection that was defined in the serialized state.
+ * @alias Blockly.serialization.exceptions.MissingConnection
  */
 class MissingConnection extends DeserializationError {
   /**
@@ -77,6 +85,7 @@ exports.MissingConnection = MissingConnection;
 /**
  * Represents an error where deserialization tried to connect two connections
  * that were not compatible.
+ * @alias Blockly.serialization.exceptions.BadConnectionCheck
  */
 class BadConnectionCheck extends DeserializationError {
   /**
@@ -113,6 +122,7 @@ exports.BadConnectionCheck = BadConnectionCheck;
  * was deserializing children of a shadow.
  * This is an error because it is an invariant of Blockly that shadow blocks
  * do not have real children.
+ * @alias Blockly.serialization.exceptions.RealChildOfShadow
  */
 class RealChildOfShadow extends DeserializationError {
   /**

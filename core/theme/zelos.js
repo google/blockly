@@ -87,6 +87,11 @@ Zelos.categoryStyles = {
   'variable_dynamic_category': {'colour': '#FF8C1A'}
 };
 
+/**
+ * Zelos theme.
+ * @type {Blockly.Theme}
+ * @alias Blockly.Themes.Zelos
+ */
 Zelos = new Theme('zelos', Zelos.defaultBlockStyles, Zelos.categoryStyles);
 
 exports = Zelos;

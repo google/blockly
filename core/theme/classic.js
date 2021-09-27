@@ -48,6 +48,12 @@ Classic.categoryStyles = {
   'variable_dynamic_category': {'colour': '310'}
 };
 
+/**
+ * Classic theme.
+ * Contains multi-coloured border to create shadow effect.
+ * @type {Blockly.Theme}
+ * @alias Blockly.Themes.Classic
+ */
 Classic =
     new Theme('classic', Classic.defaultBlockStyles, Classic.categoryStyles);
 

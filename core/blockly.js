@@ -159,6 +159,7 @@ const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Cursor} = goog.require('Blockly.Cursor');
+const {globalThis} = goog.require('Blockly.utils.global');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -673,3 +674,20 @@ exports.thrasos = thrasos;
 exports.uiPosition = uiPosition;
 exports.utils = utils;
 exports.zelos = zelos;
+
+// Temporary hack to copy accessor properties from exports to the
+// global Blockly object as the routine to copy exports in
+// goog.exportPath_ (see closure/goog/base.js) invoked by
+// declareLegacyNamespace only copies normal data properties, not
+// accessors.  This can be removed once all remaining calls to
+// declareLegacyNamspace have been removed.
+if (globalThis.Blockly && typeof globalThis.Blockly === 'object') {
+  const descriptors = Object.getOwnPropertyDescriptors(exports);
+  const accessors = {};
+  for (const key in descriptors) {
+    if (descriptors[key].get || descriptors[key].set) {
+      accessors[key] = descriptors[key];
+    }
+  }
+  Object.defineProperties(globalThis.Blockly, accessors);
+}

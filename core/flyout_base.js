@@ -1117,7 +1117,7 @@ Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
   // The position of the old block in main workspace coordinates.
   finalOffset.scale(1 / targetWorkspace.scale);
 
-  block.moveBy(finalOffset.x, finalOffset.y);
+  block.moveTo(new Coordinate(finalOffset.x, finalOffset.y));
 };
 
 /**

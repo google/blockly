@@ -206,7 +206,7 @@ function buildCompressed() {
       .pipe(compile(
           {
             dependency_mode: 'PRUNE',
-            entry_point: './core-requires.js',
+            entry_point: './core-blockly.js',
             js_output_file: 'blockly_compressed.js',
             externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
             define: defines,

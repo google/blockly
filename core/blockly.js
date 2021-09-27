@@ -15,7 +15,6 @@
  * @namespace Blockly
  */
 goog.module('Blockly');
-goog.module.declareLegacyNamespace();
 
 const BlocklyOptions = goog.require('Blockly.BlocklyOptions');
 const Bubble = goog.require('Blockly.Bubble');
@@ -91,6 +90,7 @@ const Menu = goog.require('Blockly.Menu');
 const MenuItem = goog.require('Blockly.MenuItem');
 const MetricsManager = goog.require('Blockly.MetricsManager');
 const Mutator = goog.require('Blockly.Mutator');
+const Msg = goog.require('Blockly.Msg');
 const Names = goog.require('Blockly.Names');
 const Options = goog.require('Blockly.Options');
 const Procedures = goog.require('Blockly.Procedures');
@@ -617,6 +617,7 @@ exports.Menu = Menu;
 exports.MenuItem = MenuItem;
 exports.MetricsManager = MetricsManager;
 exports.Mutator = Mutator;
+exports.Msg = Msg;
 exports.Names = Names;
 exports.Options = Options;
 exports.Procedures = Procedures;

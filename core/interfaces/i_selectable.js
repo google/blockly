@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for an object that is selectable.
+ * @namespace Blockly.ISelectable
+ */
 goog.module('Blockly.ISelectable');
 
 // eslint-disable-next-line no-unused-vars
@@ -24,6 +28,7 @@ const IMovable = goog.requireType('Blockly.IMovable');
  * @extends {IDeletable}
  * @extends {IMovable}
  * @interface
+ * @alias Blockly.ISelectable
  */
 const ISelectable = function() {};
 

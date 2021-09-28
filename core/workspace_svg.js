@@ -1553,18 +1553,19 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);
       blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      if (this.RTL) {
+        blockX = -blockX;
+      }
       blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     } else if (jsonBlock) {
       block = blocks.append(jsonBlock, this);
       blockX = jsonBlock['x'] || 10;
+      blockX = this.getWidth() - blockX;
       blockY = jsonBlock['y'] || 10;
     }
 
     // Move the duplicate to original position.
     if (!isNaN(blockX) && !isNaN(blockY)) {
-      if (this.RTL) {
-        blockX = -blockX;
-      }
       // Offset block until not clobbering another block and not in connection
       // distance with neighbouring blocks.
       let collide;

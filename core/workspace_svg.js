@@ -1548,8 +1548,8 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   eventUtils.disable();
   let block;
   try {
-    let blockX;
-    let blockY;
+    let blockX = 0;
+    let blockY = 0;
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);
       blockX = parseInt(xmlBlock.getAttribute('x'), 10);

@@ -198,6 +198,17 @@ exports.VERSION = 'uncompiled';
 // Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
 // compatibility.
 Object.defineProperties(exports, {
+  /**
+   * Wrapper to window.alert() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.alert
+   * @function
+   * @param {string} message The message to display to the user.
+   * @param {function()=} opt_callback The callback when the alert is
+   *     dismissed.
+   * @deprecated (September 2021): Use Blockly.dialog.alert /
+   *     .setAlert() instead.
+   */
   alert: {
     set: function(newAlert) {
       deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
@@ -210,6 +221,17 @@ Object.defineProperties(exports, {
       return dialog.alert;
     }
   },
+  /**
+   * Wrapper to window.confirm() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.confirm
+   * @function
+   * @param {string} message The message to display to the user.
+   * @param {!function(boolean)} callback The callback for handling
+   *     user response.
+   * @deprecated (September 2021): Use Blockly.dialog.confirm /
+   *     .setConfirm() instead.
+   */
   confirm: {
     set: function(newConfirm) {
       deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
@@ -222,6 +244,14 @@ Object.defineProperties(exports, {
       return dialog.confirm;
     }
   },
+  /**
+   * The main workspace most recently used.
+   * Set by Blockly.WorkspaceSvg.prototype.markFocused
+   * @name Blockly.mainWorkspace
+   * @type {Blockly.Workspace}
+   * @deprecated (September 2021): Use Blockly.common.getMainWorkspace() / 
+   *     .setMainWorkspace instead.
+   */
   mainWorkspace: {
     set: function(x) {
       deprecation.warn(
@@ -235,6 +265,21 @@ Object.defineProperties(exports, {
       return common.getMainWorkspace();
     }
   },
+  /**
+   * Wrapper to window.prompt() that app developers may override to
+   * provide alternatives to the modal browser window. Built-in
+   * browser prompts are often used for better text input experience
+   * on mobile device. We strongly recommend testing mobile when
+   * overriding this.
+   * @name Blockly.prompt
+   * @function
+   * @param {string} message The message to display to the user.
+   * @param {string} defaultValue The value to initialize the prompt with.
+   * @param {!function(?string)} callback The callback for handling
+   *     user response.
+   * @deprecated (September 2021): Use Blockly.dialog.prompt /
+   *     .setPrompt() instead.
+   */
   prompt: {
     set: function(newPrompt) {
       deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
@@ -247,6 +292,13 @@ Object.defineProperties(exports, {
       return dialog.prompt;
     }
   },
+  /**
+   * Currently selected block.
+   * @name Blockly.selected
+   * @type {?Blockly.ICopyable}
+   * @deprecated (September 2021): Use Blockly.common.getSelected() /
+   *     .setSelected instead.
+   */
   selected: {
     get: function() {
       deprecation.warn(

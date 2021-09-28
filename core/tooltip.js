@@ -61,11 +61,10 @@ exports.isVisible = isVisible;
 
 /**
  * Is a tooltip currently showing?
+ * @name Blockly.Tooltip.visible
  * @type {boolean}
- * @alias Blockly.Tooltip.visible
  * @deprecated (September 2021): use Blockly.Tooltip.isVisible() instead.
  */
-exports.visible;
 Object.defineProperties(exports, {
   visible: {
     get: function() {
@@ -176,11 +175,10 @@ exports.getDiv = getDiv;
 
 /**
  * The HTML container.  Set once by createDom.
+ * @name Blockly.Tooltip.DIV
  * @type {Element}
- * @alias Blockly.Tooltip.DIV
  * @deprecated (September 2021): use Blockly.Tooltip.getDiv() and .setDiv().
  */
-exports.DIV;
 Object.defineProperties(exports, {
   DIV: {
     get: function() {

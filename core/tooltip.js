@@ -59,13 +59,15 @@ const isVisible = function() {
 };
 exports.isVisible = isVisible;
 
-/**
- * Is a tooltip currently showing?
- * @name Blockly.Tooltip.visible
- * @type {boolean}
- * @deprecated (September 2021): use Blockly.Tooltip.isVisible() instead.
- */
 Object.defineProperties(exports, {
+  /**
+   * Is a tooltip currently showing?
+   * @name Blockly.Tooltip.visible
+   * @type {boolean}
+   * @deprecated (September 2021): use Blockly.Tooltip.isVisible()
+   *     instead.
+   * @suppress {checkTypes}
+   */
   visible: {
     get: function() {
       deprecation.warn(
@@ -173,13 +175,15 @@ const getDiv = function() {
 };
 exports.getDiv = getDiv;
 
-/**
- * The HTML container.  Set once by createDom.
- * @name Blockly.Tooltip.DIV
- * @type {Element}
- * @deprecated (September 2021): use Blockly.Tooltip.getDiv() and .setDiv().
- */
 Object.defineProperties(exports, {
+  /**
+   * The HTML container.  Set once by createDom.
+   * @name Blockly.Tooltip.DIV
+   * @type {Element}
+   * @deprecated (September 2021): use Blockly.Tooltip.getDiv() and
+   *     .setDiv().
+   * @suppress {checkTypes}
+   */
   DIV: {
     get: function() {
       deprecation.warn(

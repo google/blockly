@@ -69,14 +69,16 @@ const setCurrentBlock = function(block) {
 exports.setCurrentBlock = setCurrentBlock;
 
 // Add JS accessors for backwards compatibility.
-/**
- * Which block is the context menu attached to?
- * @name Blockly.ContextMenu.currentBlock
- * @type {Blockly.Block}
- * @deprecated (September 2021): Use Blockly.Tooltip.getCurrentBlock() /
- *     .setCurrentBlock() instead.
- */
 Object.defineProperties(exports, {
+  /**
+   * Which block is the context menu attached to?
+   * @name Blockly.ContextMenu.currentBlock
+   * @type {Block}
+   * @deprecated (September 2021): Use
+   *     Blockly.Tooltip.getCurrentBlock() / .setCurrentBlock()
+   *     instead.
+   * @suppress {checkTypes}
+   */
   currentBlock: {
     get: function() {
       deprecation.warn(

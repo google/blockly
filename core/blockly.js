@@ -208,6 +208,7 @@ Object.defineProperties(exports, {
    *     dismissed.
    * @deprecated (September 2021): Use Blockly.dialog.alert /
    *     .setAlert() instead.
+   * @suppress {checkTypes}
    */
   alert: {
     set: function(newAlert) {
@@ -231,6 +232,7 @@ Object.defineProperties(exports, {
    *     user response.
    * @deprecated (September 2021): Use Blockly.dialog.confirm /
    *     .setConfirm() instead.
+   * @suppress {checkTypes}
    */
   confirm: {
     set: function(newConfirm) {
@@ -248,9 +250,10 @@ Object.defineProperties(exports, {
    * The main workspace most recently used.
    * Set by Blockly.WorkspaceSvg.prototype.markFocused
    * @name Blockly.mainWorkspace
-   * @type {Blockly.Workspace}
-   * @deprecated (September 2021): Use Blockly.common.getMainWorkspace() / 
+   * @type {Workspace}
+   * @deprecated (September 2021): Use Blockly.common.getMainWorkspace() /
    *     .setMainWorkspace instead.
+   * @suppress {checkTypes}
    */
   mainWorkspace: {
     set: function(x) {
@@ -279,6 +282,7 @@ Object.defineProperties(exports, {
    *     user response.
    * @deprecated (September 2021): Use Blockly.dialog.prompt /
    *     .setPrompt() instead.
+   * @suppress {checkTypes}
    */
   prompt: {
     set: function(newPrompt) {
@@ -295,9 +299,10 @@ Object.defineProperties(exports, {
   /**
    * Currently selected block.
    * @name Blockly.selected
-   * @type {?Blockly.ICopyable}
+   * @type {?ICopyable}
    * @deprecated (September 2021): Use Blockly.common.getSelected() /
    *     .setSelected instead.
+   * @suppress {checkTypes}
    */
   selected: {
     get: function() {

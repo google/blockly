@@ -57,6 +57,7 @@ exports.horizontalPosition = horizontalPosition;
  *   horizontal: !horizontalPosition,
  *   vertical: !verticalPosition
  * }}
+ * @alias Blockly.uiPosition.Position
  * @package
  */
 let Position;

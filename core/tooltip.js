@@ -46,7 +46,6 @@ exports.TipInfo = TipInfo;
 /**
  * Is a tooltip currently showing?
  * @type {boolean}
- * @alias Blockly.Tooltip.visible
  */
 let visible = false;
 
@@ -60,6 +59,13 @@ const isVisible = function() {
 };
 exports.isVisible = isVisible;
 
+/**
+ * Is a tooltip currently showing?
+ * @type {boolean}
+ * @alias Blockly.Tooltip.visible
+ * @deprecated (September 2021): use Blockly.Tooltip.isVisible() instead.
+ */
+exports.visible;
 Object.defineProperties(exports, {
   visible: {
     get: function() {
@@ -155,7 +161,6 @@ exports.MARGINS = MARGINS;
 /**
  * The HTML container.  Set once by createDom.
  * @type {Element}
- * @alias Blockly.Tooltip.DIV
  */
 let DIV = null;
 
@@ -169,6 +174,13 @@ const getDiv = function() {
 };
 exports.getDiv = getDiv;
 
+/**
+ * The HTML container.  Set once by createDom.
+ * @type {Element}
+ * @alias Blockly.Tooltip.DIV
+ * @deprecated (September 2021): use Blockly.Tooltip.getDiv() and .setDiv().
+ */
+exports.DIV;
 Object.defineProperties(exports, {
   DIV: {
     get: function() {

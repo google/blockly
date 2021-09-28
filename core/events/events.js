@@ -122,6 +122,13 @@ exports.setGroup = eventUtils.setGroup;
 exports.setRecordUndo = eventUtils.setRecordUndo;
 exports.disableOrphans = eventUtils.disableOrphans;
 
+/**
+ * Sets whether the next event should be added to the undo stack.
+ * @type {boolean}
+ * @deprecated (September 2021): Use Blockly.Events.getRecordUndo()
+ *     and .setRecordUndo().
+ */
+exports.recordUndo;
 Object.defineProperties(exports, {
   recordUndo: {
     get: function() {

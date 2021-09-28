@@ -58,7 +58,6 @@ let themeClassName = '';
 /**
  * The HTML container for popup overlays (e.g. editor widgets).
  * @type {?Element}
- * @alias Blockly.WidgetDiv.DIV
  */
 let DIV;
 
@@ -83,6 +82,13 @@ const testOnly_setDiv = function(newDiv) {
 };
 exports.testOnly_setDiv = testOnly_setDiv;
 
+/**
+ * The HTML container for popup overlays (e.g. editor widgets).
+ * @type {?Element}
+ * @alias Blockly.WidgetDiv.DIV
+ * @deprecated (September 2021): use Blockly.WidgetDiv.getDiv() and .setDiv().
+ */
+exports.DIV;
 Object.defineProperties(exports, {
   DIV: {
     get: function() {

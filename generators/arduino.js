@@ -89,7 +89,6 @@ Blockly.Arduino.DEF_FUNC_NAME = Blockly.Arduino.FUNCTION_NAME_PLACEHOLDER_;
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Arduino.init = function(workspace) {
-  
   // Create a dictionary of definitions to be printed at the top of the sketch
   Blockly.Arduino.includes_ = Object.create(null);
   // Create a dictionary of global definitions to be printed after variables
@@ -109,8 +108,7 @@ Blockly.Arduino.init = function(workspace) {
   Blockly.Arduino.pins_ = Object.create(null);
 
   if (!Blockly.Arduino.variableDB_) {
-    Blockly.Arduino.variableDB_ =
-        new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_);
+    Blockly.Arduino.variableDB_ = new Blockly.Names(Blockly.Arduino.RESERVED_WORDS_);
   } else {
     Blockly.Arduino.variableDB_.reset();
   }
@@ -122,10 +120,9 @@ Blockly.Arduino.init = function(workspace) {
   Blockly.Arduino.StaticTyping.setProcedureArgs(workspace, varsWithTypes);
 
   // Set variable declarations with their Arduino type in the defines dictionary
-  for (var varName in varsWithTypes) {
-    Blockly.Arduino.addVariable(varName,
-        Blockly.Arduino.getArduinoType_(varsWithTypes[varName]) +' ' +
-        Blockly.Arduino.variableDB_.getName(varName, Blockly.Variables.NAME_TYPE) + ';');
+  for (var varId in varsWithTypes) {
+    var varName = Blockly.Arduino.variableDB_.getName(varId, Blockly.Variables.NAME_TYPE);
+    Blockly.Arduino.addDeclaration(varName, Blockly.Arduino.getArduinoType_(varsWithTypes[varId]) +' ' + varName + ';');
   }
 };
 

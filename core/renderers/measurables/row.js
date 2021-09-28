@@ -11,7 +11,7 @@
 
 /**
  * Object representing a single row on a rendered block.
- * @namespace Blockly.blockRendering.Row
+ * @class
  */
 goog.module('Blockly.blockRendering.Row');
 

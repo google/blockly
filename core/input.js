@@ -12,7 +12,7 @@
 
 /**
  * Object representing an input (value, statement, or dummy).
- * @namespace Blockly.Input
+ * @class
  */
 goog.module('Blockly.Input');
 

@@ -12,7 +12,7 @@
 
 /**
  * Class for a variable creation event.
- * @namespace Blockly.Events.VarCreate
+ * @class
  */
 goog.module('Blockly.Events.VarCreate');
 

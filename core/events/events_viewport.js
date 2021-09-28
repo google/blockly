@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of a viewport change.
- * @namespace Blockly.Events.ViewportChange
+ * @class
  */
 goog.module('Blockly.Events.ViewportChange');
 

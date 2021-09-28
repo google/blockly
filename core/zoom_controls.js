@@ -12,7 +12,7 @@
 
 /**
  * Object representing a zoom icons.
- * @namespace Blockly.ZoomControls
+ * @class
  */
 goog.module('Blockly.ZoomControls');
 

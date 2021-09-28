@@ -13,7 +13,7 @@
 /**
  * Objects representing a field in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.Field
+ * @class
  */
 goog.module('Blockly.blockRendering.Field');
 

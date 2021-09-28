@@ -12,7 +12,7 @@
 
 /**
  * Class for a block creation event.
- * @namespace Blockly.Events.BlockCreate
+ * @class
  */
 goog.module('Blockly.Events.BlockCreate');
 

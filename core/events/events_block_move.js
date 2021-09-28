@@ -12,7 +12,7 @@
 
 /**
  * Class for a block move event.
- * @namespace Blockly.Events.BlockMove
+ * @class
  */
 goog.module('Blockly.Events.BlockMove');
 

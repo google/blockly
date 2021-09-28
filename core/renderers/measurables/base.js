@@ -13,7 +13,7 @@
 
 /**
  * Methods for graphically rendering a block as SVG.
- * @namespace Blockly.blockRendering.Measurable
+ * @class
  */
 goog.module('Blockly.blockRendering.Measurable');
 

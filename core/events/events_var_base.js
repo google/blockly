@@ -12,7 +12,7 @@
 
 /**
  * Abstract class for a variable event.
- * @namespace Blockly.Events.VarBase
+ * @class
  */
 goog.module('Blockly.Events.VarBase');
 

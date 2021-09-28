@@ -12,7 +12,7 @@
 
 /**
  * The class representing one block.
- * @namespace Blockly.Block
+ * @class
  */
 goog.module('Blockly.Block');
 

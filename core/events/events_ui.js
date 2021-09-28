@@ -14,7 +14,7 @@
 /**
  * (Deprecated) Events fired as a result of UI actions in
  * Blockly's editor.
- * @namespace Blockly.Events.Ui
+ * @class
  */
 goog.module('Blockly.Events.Ui');
 

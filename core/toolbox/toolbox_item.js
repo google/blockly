@@ -12,7 +12,7 @@
 
 /**
  * An item in the toolbox.
- * @namespace Blockly.ToolboxItem
+ * @class
  */
 goog.module('Blockly.ToolboxItem');
 

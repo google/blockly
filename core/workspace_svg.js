@@ -12,7 +12,7 @@
 
 /**
  * Object representing a workspace rendered as SVG.
- * @namespace Blockly.WorkspaceSvg
+ * @class
  */
 goog.module('Blockly.WorkspaceSvg');
 

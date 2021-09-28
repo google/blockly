@@ -14,7 +14,7 @@
 /**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
- * @namespace Blockly.TouchGesture
+ * @class
  */
 goog.module('Blockly.TouchGesture');
 

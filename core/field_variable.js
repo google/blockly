@@ -12,7 +12,7 @@
 
 /**
  * Variable input field.
- * @namespace Blockly.FieldVariable
+ * @class
  */
 goog.module('Blockly.FieldVariable');
 

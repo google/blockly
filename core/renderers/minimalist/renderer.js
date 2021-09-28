@@ -11,7 +11,7 @@
 
 /**
  * Minimalist renderer.
- * @namespace Blockly.minimalist.Renderer
+ * @class
  */
 goog.module('Blockly.minimalist.Renderer');
 

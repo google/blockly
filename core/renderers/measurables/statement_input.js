@@ -13,7 +13,7 @@
 /**
  * Class representing statement inputs with connections on a
  * rendered block.
- * @namespace Blockly.blockRendering.StatementInput
+ * @class
  */
 goog.module('Blockly.blockRendering.StatementInput');
 

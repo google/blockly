@@ -11,7 +11,7 @@
 
 /**
  * Object representing a top row on a rendered block.
- * @namespace Blockly.blockRendering.TopRow
+ * @class
  */
 goog.module('Blockly.blockRendering.TopRow');
 

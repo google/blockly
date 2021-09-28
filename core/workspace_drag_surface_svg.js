@@ -19,7 +19,7 @@
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS translation instead of SVG so the
  * blocks are never repainted during drag improving performance.
- * @namespace Blockly.WorkspaceDragSurfaceSvg
+ * @class
  */
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
 

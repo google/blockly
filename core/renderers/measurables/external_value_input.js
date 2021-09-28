@@ -13,7 +13,7 @@
 /**
  * Class representing external value inputs with connections on a
  * rendered block.
- * @namespace Blockly.blockRendering.ExternalValueInput
+ * @class
  */
 goog.module('Blockly.blockRendering.ExternalValueInput');
 

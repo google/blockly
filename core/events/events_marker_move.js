@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of a marker move.
- * @namespace Blockly.Events.MarkerMove
+ * @class
  */
 goog.module('Blockly.Events.MarkerMove');
 

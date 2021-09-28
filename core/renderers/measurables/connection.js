@@ -13,7 +13,7 @@
 /**
  * Base class representing the space a connection takes up during
  * rendering.
- * @namespace Blockly.blockRendering.Connection
+ * @class
  */
 goog.module('Blockly.blockRendering.Connection');
 

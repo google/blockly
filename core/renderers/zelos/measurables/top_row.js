@@ -12,7 +12,7 @@
 
 /**
  * An object representing the top row of a rendered block.
- * @namespace Blockly.zelos.TopRow
+ * @class
  */
 goog.module('Blockly.zelos.TopRow');
 

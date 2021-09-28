@@ -14,7 +14,7 @@
 /**
  * Objects representing inline inputs with connections on a
  * rendered block.
- * @namespace Blockly.geras.InlineInput
+ * @class
  */
 goog.module('Blockly.geras.InlineInput');
 

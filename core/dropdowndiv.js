@@ -15,7 +15,7 @@
 
 /**
  * A div that floats on top of the workspace, for drop-down menus.
- * @namespace Blockly.DropDownDiv
+ * @class
  */
 goog.module('Blockly.DropDownDiv');
 

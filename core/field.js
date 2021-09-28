@@ -16,7 +16,7 @@
  * Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be FieldTextInput, FieldDropdown, etc.
- * @namespace Blockly.Field
+ * @class
  */
 goog.module('Blockly.Field');
 

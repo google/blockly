@@ -12,7 +12,7 @@
 
 /**
  * Layout code for a vertical variant of the flyout.
- * @namespace Blockly.VerticalFlyout
+ * @class
  */
 goog.module('Blockly.VerticalFlyout');
 

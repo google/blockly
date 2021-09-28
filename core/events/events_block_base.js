@@ -12,7 +12,7 @@
 
 /**
  * Base class for all types of block events.
- * @namespace Blockly.Events.BlockBase
+ * @class
  */
 goog.module('Blockly.Events.BlockBase');
 

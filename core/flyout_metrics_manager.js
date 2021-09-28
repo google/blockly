@@ -12,7 +12,7 @@
 
 /**
  * Calculates and reports flyout workspace metrics.
- * @namespace Blockly.FlyoutMetricsManager
+ * @class
  */
 goog.module('Blockly.FlyoutMetricsManager');
 

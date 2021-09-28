@@ -13,7 +13,7 @@
 /**
  * An object that provides constants for rendering blocks in the
  * minimalist renderer.
- * @namespace Blockly.minimalist.ConstantProvider
+ * @class
  */
 goog.module('Blockly.minimalist.ConstantProvider');
 

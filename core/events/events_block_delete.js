@@ -12,7 +12,7 @@
 
 /**
  * Class for a block delete event.
- * @namespace Blockly.Events.BlockDelete
+ * @class
  */
 goog.module('Blockly.Events.BlockDelete');
 

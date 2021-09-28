@@ -12,7 +12,7 @@
 
 /**
  * Objects for rendering highlights on blocks.
- * @namespace Blockly.geras.HighlightConstantProvider
+ * @class
  */
 goog.module('Blockly.geras.HighlightConstantProvider');
 

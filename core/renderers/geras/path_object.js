@@ -13,7 +13,7 @@
 
 /**
  * An object that owns a block's rendering SVG elements.
- * @namespace Blockly.geras.PathObject
+ * @class
  */
 goog.module('Blockly.geras.PathObject');
 

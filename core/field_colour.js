@@ -12,7 +12,7 @@
 
 /**
  * Colour input field.
- * @namespace Blockly.FieldColour
+ * @class
  */
 goog.module('Blockly.FieldColour');
 

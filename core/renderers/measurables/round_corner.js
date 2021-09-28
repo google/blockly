@@ -13,7 +13,7 @@
 /**
  * Objects representing a round corner in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.RoundCorner
+ * @class
  */
 goog.module('Blockly.blockRendering.RoundCorner');
 

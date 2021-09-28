@@ -12,7 +12,7 @@
 
 /**
  * Base renderer.
- * @namespace Blockly.blockRendering.Renderer
+ * @class
  */
 goog.module('Blockly.blockRendering.Renderer');
 

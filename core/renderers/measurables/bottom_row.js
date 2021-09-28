@@ -13,7 +13,7 @@
 /**
  * Object representing a bottom row on a rendered block.
  * of its subcomponents.
- * @namespace Blockly.blockRendering.BottomRow
+ * @class
  */
 goog.module('Blockly.blockRendering.BottomRow');
 

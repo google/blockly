@@ -416,31 +416,37 @@ exports.setParentContainer = common.setParentContainer;
 
 /**
  * @see browserEvents.bind
+ * @alias Blockly.bindEvent_
  */
 exports.bindEvent_ = browserEvents.bind;
 
 /**
  * @see browserEvents.unbind
+ * @alias Blockly.unbindEvent_
  */
 exports.unbindEvent_ = browserEvents.unbind;
 
 /**
  * @see browserEvents.conditionalBind
+ * @alias Blockly.bindEventWithChecks_
  */
 exports.bindEventWithChecks_ = browserEvents.conditionalBind;
 
 /**
  * @see constants.ALIGN.LEFT
+ * @alias Blockly.ALIGN_LEFT
  */
 exports.ALIGN_LEFT = constants.ALIGN.LEFT;
 
 /**
  * @see constants.ALIGN.CENTRE
+ * @alias Blockly.ALIGN_CENTRE
  */
 exports.ALIGN_CENTRE = constants.ALIGN.CENTRE;
 
 /**
  * @see constants.ALIGN.RIGHT
+ * @alias Blockly.ALIGN_RIGHT
  */
 exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
 
@@ -455,26 +461,31 @@ exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
 
 /**
  * @see ConnectionType.INPUT_VALUE
+ * @alias Blockly.INPUT_VALUE
  */
 exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
  * @see ConnectionType.OUTPUT_VALUE
+ * @alias Blockly.OUTPUT_VALUE
  */
 exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
  * @see ConnectionType.NEXT_STATEMENT
+ * @alias Blockly.NEXT_STATEMENT
  */
 exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
  * @see ConnectionType.PREVIOUS_STATEMENT
+ * @alias Blockly.PREVIOUS_STATEMENT
  */
 exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
+ * @alias Blockly.DUMMY_INPUT
  */
 exports.DUMMY_INPUT = inputTypes.DUMMY;
 
@@ -484,21 +495,25 @@ exports.DUMMY_INPUT = inputTypes.DUMMY;
 
 /**
  * @see toolbox.Position.TOP
+ * @alias Blockly.TOOLBOX_AT_TOP
  */
 exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
  * @see toolbox.Position.BOTTOM
+ * @alias Blockly.TOOLBOX_AT_BOTTOM
  */
 exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
  * @see toolbox.Position.LEFT
+ * @alias Blockly.TOOLBOX_AT_LEFT
  */
 exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
  * @see toolbox.Position.RIGHT
+ * @alias Blockly.TOOLBOX_AT_RIGHT
  */
 exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 

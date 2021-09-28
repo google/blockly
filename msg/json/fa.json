@@ -5,6 +5,7 @@
 			"Arash.pt",
 			"AzorAhai",
 			"Dalba",
+			"Darafsh",
 			"Ebraminio",
 			"Hamisun",
 			"Hossein.safavi",
@@ -21,6 +22,7 @@
 	"DUPLICATE_BLOCK": "تکراری",
 	"ADD_COMMENT": "افزودن نظر",
 	"REMOVE_COMMENT": "حذف نظر",
+	"DUPLICATE_COMMENT": "دیدگاه تکراری",
 	"EXTERNAL_INPUTS": "ورودی‌های خارجی",
 	"INLINE_INPUTS": "ورودی‌های درون خطی",
 	"DELETE_BLOCK": "حذف بلوک",
@@ -196,6 +198,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://fa.wikipedia.org/wiki/%D8%AA%D9%88%D9%84%DB%8C%D8%AF_%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "کسر تصادفی",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "بازگرداندن کسری تصادفی بین ۰٫۰ (بسته) تا ۱٫۰ (باز).",
+	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
 	"TEXT_TEXT_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D8%B4%D8%AA%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29",
 	"TEXT_TEXT_TOOLTIP": "یک حرف، کلمه یا خطی از متن.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "ایجاد متن با",
@@ -346,5 +349,7 @@
 	"PROCEDURES_CREATE_DO": "ساختن «%1»",
 	"PROCEDURES_IFRETURN_TOOLTIP": "اگر یک مقدار صحیح است، مقدار دوم را برگردان.",
 	"PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "یک چیزی بگو..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "یک چیزی بگو...",
+	"DIALOG_OK": "تأیید",
+	"DIALOG_CANCEL": "لغو"
 }

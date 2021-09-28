@@ -63,28 +63,17 @@ Blockly.Msg["DELETE_BLOCK"] = "حذف بلوک";
 Blockly.Msg["DELETE_VARIABLE"] = "متغیر '%1'را پاک کنید";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "تعداد %1 استفاده از متغیر '%2' پاک شود؟";
 Blockly.Msg["DELETE_X_BLOCKS"] = "حذف بلوک‌های %1";
+Blockly.Msg["DIALOG_CANCEL"] = "لغو";
+Blockly.Msg["DIALOG_OK"] = "تأیید";
 Blockly.Msg["DISABLE_BLOCK"] = "غیرفعال‌سازی بلوک";
 Blockly.Msg["DUPLICATE_BLOCK"] = "تکراری";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "دیدگاه تکراری";
 Blockly.Msg["ENABLE_BLOCK"] = "فعال‌سازی بلوک";
 Blockly.Msg["EXPAND_ALL"] = "گسترش بلوک‌ها";
 Blockly.Msg["EXPAND_BLOCK"] = "گسترش بلوک";
 Blockly.Msg["EXTERNAL_INPUTS"] = "ورودی‌های خارجی";
 Blockly.Msg["HELP"] = "راهنما";
 Blockly.Msg["INLINE_INPUTS"] = "ورودی‌های درون خطی";
-Blockly.Msg["IOS_CANCEL"] = "لغو";
-Blockly.Msg["IOS_ERROR"] = "خطا";
-Blockly.Msg["IOS_OK"] = "تأیید";
-Blockly.Msg["IOS_PROCEDURES_ADD_INPUT"] = "+ افزودن ورودی";
-Blockly.Msg["IOS_PROCEDURES_ALLOW_STATEMENTS"] = "اجازه اظهارات";
-Blockly.Msg["IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR"] = "این تابع دارای ورودی‌های تکراری است.";
-Blockly.Msg["IOS_PROCEDURES_INPUTS"] = "ورودی‌ها";
-Blockly.Msg["IOS_VARIABLES_ADD_BUTTON"] = "افزودن";
-Blockly.Msg["IOS_VARIABLES_ADD_VARIABLE"] = "+ افزودن متغیر";
-Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "حذف";
-Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "نام متغیر نمی‌تواند خالی باشد";
-Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "تغییر نام";
-Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "نام متغیر";
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "ایجاد فهرست خالی";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.";
@@ -203,7 +192,7 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "بازگرداندن باقی�
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "بازگرداندن تفاوت دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "بازگرداندن حاصلضرب دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "بازگرداندن اولین عددی که از توان عدد دوم حاصل شده باشد.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
 Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
 Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://fa.wikipedia.org/wiki/%D8%A7%D8%B5%D8%B7%D9%84%D8%A7%D8%AD_%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D9%86%D9%88%DB%8C%D8%B3%DB%8C#.D8.A7.D9.81.D8.B2.D8.A7.DB.8C.D8.B4_.D8.B4.D9.85.D8.A7.D8.B1.D9.86.D8.AF.D9.87";

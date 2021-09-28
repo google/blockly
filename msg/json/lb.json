@@ -141,5 +141,7 @@
 	"PROCEDURES_DEFNORETURN_COMMENT": "Dës Funktioun beschreiwen...",
 	"PROCEDURES_DEFRETURN_RETURN": "zréck",
 	"PROCEDURES_CREATE_DO": "'%1' uleeën",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sot eppes..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sot eppes...",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Ofbriechen"
 }

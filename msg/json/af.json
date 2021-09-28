@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"Qmeades",
+			"Winstonza"
+		]
+	},
+	"VARIABLES_DEFAULT_NAME": "item",
+	"UNNAMED_KEY": "onbenoem",
+	"TODAY": "vandag",
+	"DUPLICATE_BLOCK": "duplikaat",
+	"ADD_COMMENT": "Voeg kommentaar by",
+	"REMOVE_COMMENT": "Verwyder kommentaar",
+	"DUPLICATE_COMMENT": "Dupliseer kommentaar",
+	"DELETE_BLOCK": "verwyder blok",
+	"DELETE_X_BLOCKS": "verwyder %1 blokke",
+	"DELETE_ALL_BLOCKS": "verwyder al %1 blokke?",
+	"HELP": "Hulp",
+	"UNDO": "Ontdaan",
+	"REDO": "Doen weer",
+	"CHANGE_VALUE_TITLE": "Wysig waarde:",
+	"RENAME_VARIABLE": "Hernoem veranderlike...",
+	"RENAME_VARIABLE_TITLE": "Hernoem al %1 veranderlikes na:",
+	"NEW_VARIABLE": "Skep veranderlike",
+	"NEW_STRING_VARIABLE": "Skep teks veranderlike",
+	"NEW_NUMBER_VARIABLE": "Skep numeriese veranderlike",
+	"NEW_COLOUR_VARIABLE": "Skep kleur veranderlike",
+	"NEW_VARIABLE_TYPE_TITLE": "Nuwe veranderlike tipe:",
+	"NEW_VARIABLE_TITLE": "Nuwe veranderlike naam:",
+	"VARIABLE_ALREADY_EXISTS": "'n Veranderlike met die naam '%1' bestaan reeds.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'n Veranderlike met die naam '%1' bestaan reeds vir 'n ander tipe veranderlike: '%2'.",
+	"DELETE_VARIABLE_CONFIRMATION": "Wissig %1 gebruike van die '%2' veranderlike?",
+	"DIALOG_OK": "Oukei"
+}

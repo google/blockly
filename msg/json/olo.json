@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ilja.mos",
+			"Mashoi7"
+		]
+	},
+	"TODAY": "Tänäpäi",
+	"DUPLICATE_BLOCK": "Kopiiruija",
+	"ADD_COMMENT": "Ližätä kommentarii",
+	"REMOVE_COMMENT": "Poistua kommentarii",
+	"HELP": "Kyzy abuu",
+	"CHANGE_VALUE_TITLE": "Muuttua merkitys:",
+	"COLOUR_RGB_TITLE": "Väri",
+	"COLOUR_RGB_RED": "ruskei",
+	"COLOUR_RGB_GREEN": "vihandu",
+	"COLOUR_RGB_BLUE": "sinine",
+	"COLOUR_BLEND_COLOUR1": "väri 1",
+	"COLOUR_BLEND_COLOUR2": "väri 2",
+	"CONTROLS_REPEAT_INPUT_DO": "rua",
+	"CONTROLS_IF_MSG_IF": "gu",
+	"CONTROLS_IF_MSG_ELSEIF": "sit gu",
+	"CONTROLS_IF_MSG_ELSE": "sit",
+	"LOGIC_OPERATION_AND": "da",
+	"LOGIC_OPERATION_OR": "libo",
+	"LOGIC_BOOLEAN_TRUE": "tozi",
+	"LOGIC_BOOLEAN_FALSE": "valeh",
+	"LOGIC_TERNARY_IF_TRUE": "ollou tozi",
+	"LOGIC_TERNARY_IF_FALSE": "ei olle tozi",
+	"MATH_IS_POSITIVE": "on pozitiivine",
+	"MATH_IS_NEGATIVE": "on negatiivine",
+	"TEXT_TEXT_TOOLTIP": "Kirjain, sana libo riädy tekstua.",
+	"TEXT_JOIN_TITLE_CREATEWITH": "luaji tekstu",
+	"TEXT_CHARAT_FROM_START": "eči kirjain #",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Hylgiä"
+}

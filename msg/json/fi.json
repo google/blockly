@@ -368,5 +368,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sano jotakin...",
 	"WORKSPACE_ARIA_LABEL": "Blocklyn työnäkymä",
-	"COLLAPSED_WARNINGS_WARNING": "Supistetut lohkot sisältävät varoituksia."
+	"COLLAPSED_WARNINGS_WARNING": "Supistetut lohkot sisältävät varoituksia.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Peru"
 }

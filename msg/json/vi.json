@@ -353,5 +353,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó...",
 	"WORKSPACE_ARIA_LABEL": "Không gian làm việc Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo."
+	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Hủy"
 }

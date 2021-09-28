@@ -338,5 +338,7 @@
 	"PROCEDURES_CREATE_DO": "Ṣe idasile '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ti iye ba jẹ otitọ, lẹhinna da iye keji pada.",
 	"PROCEDURES_IFRETURN_WARNING": "Ikilo: Bulọọki yii le ṣee lo nikan laarin itumọ iṣẹ kan",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sọ nkankan..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sọ nkankan...",
+	"DIALOG_OK": "O DARA",
+	"DIALOG_CANCEL": "Fagilé"
 }

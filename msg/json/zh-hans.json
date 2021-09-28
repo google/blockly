@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			")8",
 			"A Chinese Wikipedian",
 			"Ambeta",
 			"DGCK81LNN",
@@ -14,6 +15,7 @@
 			"Muhaoying",
 			"Qiyue2001",
 			"Shatteredwind",
+			"Shimamura Sakura",
 			"Tonylianlong",
 			"WindWood",
 			"Xiaomingyan",
@@ -24,7 +26,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
-	"UNNAMED_KEY": "匿名",
+	"UNNAMED_KEY": "未命名",
 	"TODAY": "今天",
 	"DUPLICATE_BLOCK": "复制",
 	"ADD_COMMENT": "添加注释",
@@ -379,5 +381,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "警告：这个块只能在函数内部使用。",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "说点什么...",
 	"WORKSPACE_ARIA_LABEL": "Blockly工作区",
-	"COLLAPSED_WARNINGS_WARNING": "已收起的信息块内包含警告。"
+	"COLLAPSED_WARNINGS_WARNING": "已收起的信息块内包含警告。",
+	"DIALOG_OK": "确认",
+	"DIALOG_CANCEL": "取消"
 }

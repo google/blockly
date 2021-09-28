@@ -347,13 +347,13 @@ const onMouseMove = function(e) {
 /**
  * Dispose of the tooltip.
  * @alias Blockly.Tooltip.dispose
+ * @package
  */
 const dispose = function() {
   element = null;
   poisonedElement = null;
   hide();
 };
-/** @package */
 exports.dispose = dispose;
 
 /**
@@ -377,23 +377,23 @@ exports.hide = hide;
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
  * @alias Blockly.Tooltip.block
+ * @package
  */
 const block = function() {
   hide();
   blocked = true;
 };
-/** @package */
 exports.block = block;
 
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
  * @alias Blockly.Tooltip.unblock
+ * @package
  */
 const unblock = function() {
   blocked = false;
 };
-/** @package */
 exports.unblock = unblock;
 
 /**

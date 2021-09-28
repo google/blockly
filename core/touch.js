@@ -86,6 +86,7 @@ let longPid_ = 0;
  * @param {!Event} e Touch start event.
  * @param {Gesture} gesture The gesture that triggered this longStart.
  * @alias Blockly.Touch.longStart
+ * @package
  */
 const longStart = function(e, gesture) {
   longStop();
@@ -109,13 +110,13 @@ const longStart = function(e, gesture) {
     }
   }, internalConstants.LONGPRESS);
 };
-/** @package */
 exports.longStart = longStart;
 
 /**
  * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
  * or a drag hath begun.  Kill the queued long-press task.
  * @alias Blockly.Touch.longStop
+ * @package
  */
 const longStop = function() {
   if (longPid_) {
@@ -123,7 +124,6 @@ const longStop = function() {
     longPid_ = 0;
   }
 };
-/** @package */
 exports.longStop = longStop;
 
 /**

@@ -63,6 +63,7 @@ exports.unregister = unregister;
  * @return {?Field} The new field instance or null if a field wasn't
  *     found with the given type name
  * @alias Blockly.fieldRegistry.fromJson
+ * @package
  */
 const fromJson = function(options) {
   const fieldObject = /** @type {?IRegistrableField} */ (
@@ -77,5 +78,4 @@ const fromJson = function(options) {
   }
   return fieldObject.fromJson(options);
 };
-/** @package */
 exports.fromJson = fromJson;

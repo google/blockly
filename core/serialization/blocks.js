@@ -327,6 +327,7 @@ exports.append = append;
  *       by the user. False by default.
  * @return {!Block} The block that was just appended.
  * @alias Blockly.serialization.blocks.appendInternal
+ * @package
  */
 const appendInternal = function(
     state,
@@ -364,7 +365,6 @@ const appendInternal = function(
 
   return block;
 };
-/** @package */
 exports.appendInternal = appendInternal;
 
 /**

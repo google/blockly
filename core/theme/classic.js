@@ -20,10 +20,7 @@ goog.module('Blockly.Themes.Classic');
 const Theme = goog.require('Blockly.Theme');
 
 
-// Temporary holding object.
-let Classic = {};
-
-Classic.defaultBlockStyles = {
+let defaultBlockStyles = {
   'colour_blocks': {'colourPrimary': '20'},
   'list_blocks': {'colourPrimary': '260'},
   'logic_blocks': {'colourPrimary': '210'},
@@ -36,7 +33,7 @@ Classic.defaultBlockStyles = {
   'hat_blocks': {'colourPrimary': '330', 'hat': 'cap'}
 };
 
-Classic.categoryStyles = {
+let categoryStyles = {
   'colour_category': {'colour': '20'},
   'list_category': {'colour': '260'},
   'logic_category': {'colour': '210'},
@@ -51,10 +48,10 @@ Classic.categoryStyles = {
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
- * @type {Blockly.Theme}
+ * @type {Theme}
  * @alias Blockly.Themes.Classic
  */
-Classic =
-    new Theme('classic', Classic.defaultBlockStyles, Classic.categoryStyles);
+const Classic =
+    new Theme('classic', defaultBlockStyles, categoryStyles);
 
 exports = Classic;

@@ -14,7 +14,7 @@
 /**
  * The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
- * @namespace Blockly.Marker
+ * @class
  */
 goog.module('Blockly.Marker');
 

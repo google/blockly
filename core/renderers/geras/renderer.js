@@ -12,7 +12,7 @@
 
 /**
  * Geras renderer.
- * @namespace Blockly.geras.Renderer
+ * @class
  */
 goog.module('Blockly.geras.Renderer');
 

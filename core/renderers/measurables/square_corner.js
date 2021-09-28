@@ -13,7 +13,7 @@
 /**
  * Objects representing a square corner in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.SquareCorner
+ * @class
  */
 goog.module('Blockly.blockRendering.SquareCorner');
 

@@ -11,7 +11,7 @@
 
 /**
  * Minimalist render info object.
- * @namespace Blockly.minimalist.RenderInfo
+ * @class
  */
 goog.module('Blockly.minimalist.RenderInfo');
 

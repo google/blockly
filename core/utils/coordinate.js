@@ -16,7 +16,7 @@
  * Utility methods for coordinate manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @namespace Blockly.utils.Coordinate
+ * @class
  */
 goog.module('Blockly.utils.Coordinate');
 

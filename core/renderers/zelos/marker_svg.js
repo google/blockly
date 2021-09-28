@@ -12,7 +12,7 @@
 
 /**
  * Methods for graphically rendering a marker as SVG.
- * @namespace Blockly.zelos.MarkerSvg
+ * @class
  */
 goog.module('Blockly.zelos.MarkerSvg');
 

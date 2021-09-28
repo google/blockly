@@ -13,7 +13,7 @@
 /**
  * The class representing an AST node.
  * Used to traverse the Blockly AST.
- * @namespace Blockly.ASTNode
+ * @class
  */
 goog.module('Blockly.ASTNode');
 

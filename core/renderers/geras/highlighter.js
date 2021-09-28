@@ -14,7 +14,7 @@
 /**
  * Methods for adding highlights on block, for rendering in
  * compatibility mode.
- * @namespace Blockly.geras.Highlighter
+ * @class
  */
 goog.module('Blockly.geras.Highlighter');
 

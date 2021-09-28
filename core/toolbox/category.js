@@ -12,7 +12,7 @@
 
 /**
  * A toolbox category used to organize blocks in the toolbox.
- * @namespace Blockly.ToolboxCategory
+ * @class
  */
 goog.module('Blockly.ToolboxCategory');
 

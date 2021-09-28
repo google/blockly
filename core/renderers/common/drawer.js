@@ -12,7 +12,7 @@
 
 /**
  * Methods for graphically rendering a block as SVG.
- * @namespace Blockly.blockRendering.Drawer
+ * @class
  */
 goog.module('Blockly.blockRendering.Drawer');
 

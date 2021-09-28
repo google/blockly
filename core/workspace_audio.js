@@ -14,7 +14,7 @@
 /**
  * Object in charge of loading, storing, and playing audio for a
  *     workspace.
- * @namespace Blockly.WorkspaceAudio
+ * @class
  */
 goog.module('Blockly.WorkspaceAudio');
 

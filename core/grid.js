@@ -14,7 +14,7 @@
 /**
  * Object for configuring and updating a workspace grid in
  * Blockly.
- * @namespace Blockly.Grid
+ * @class
  */
 goog.module('Blockly.Grid');
 

@@ -12,7 +12,7 @@
 
 /**
  * Object representing a warning.
- * @namespace Blockly.Warning
+ * @class
  */
 goog.module('Blockly.Warning');
 

@@ -14,7 +14,7 @@
 /**
  * Utility functions for generating executable code from
  * Blockly code.
- * @namespace Blockly.Generator
+ * @class
  */
 goog.module('Blockly.Generator');
 

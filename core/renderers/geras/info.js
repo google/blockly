@@ -14,7 +14,7 @@
 /**
  * Old (compatibility) renderer.
  * Geras: spirit of old age.
- * @namespace Blockly.geras.RenderInfo
+ * @class
  */
 goog.module('Blockly.geras.RenderInfo');
 

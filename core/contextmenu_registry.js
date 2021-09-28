@@ -12,7 +12,7 @@
 
 /**
  * Registry for context menu option items.
- * @namespace Blockly.ContextMenuRegistry
+ * @class
  */
 goog.module('Blockly.ContextMenuRegistry');
 

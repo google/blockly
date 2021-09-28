@@ -12,7 +12,7 @@
 
 /**
  * Class for a finished loading workspace event.
- * @namespace Blockly.Events.FinishedLoading
+ * @class
  */
 goog.module('Blockly.Events.FinishedLoading');
 

@@ -12,7 +12,7 @@
 
 /**
  * Components for the variable model.
- * @namespace Blockly.VariableModel
+ * @class
  */
 goog.module('Blockly.VariableModel');
 

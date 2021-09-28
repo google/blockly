@@ -12,7 +12,7 @@
 
 /**
  * Checkbox field.  Checked or not checked.
- * @namespace Blockly.FieldCheckbox
+ * @class
  */
 goog.module('Blockly.FieldCheckbox');
 

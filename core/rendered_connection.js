@@ -12,7 +12,7 @@
 
 /**
  * Components for creating connections between blocks.
- * @namespace Blockly.RenderedConnection
+ * @class
  */
 goog.module('Blockly.RenderedConnection');
 

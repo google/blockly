@@ -13,7 +13,7 @@
 
 /**
  * Makecode/scratch-style renderer.
- * @namespace Blockly.zelos.RenderInfo
+ * @class
  */
 goog.module('Blockly.zelos.RenderInfo');
 

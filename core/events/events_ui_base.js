@@ -14,7 +14,7 @@
 /**
  * Base class for events fired as a result of UI actions in
  * Blockly's editor.
- * @namespace Blockly.Events.UiBase
+ * @class
  */
 goog.module('Blockly.Events.UiBase');
 

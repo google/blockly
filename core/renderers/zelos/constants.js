@@ -14,7 +14,7 @@
 /**
  * An object that provides constants for rendering blocks in Zelos
  * mode.
- * @namespace Blockly.zelos.ConstantProvider
+ * @class
  */
 goog.module('Blockly.zelos.ConstantProvider');
 

@@ -12,7 +12,7 @@
 
 /**
  * An object representing the bottom row of a rendered block.
- * @namespace Blockly.zelos.BottomRow
+ * @class
  */
 goog.module('Blockly.zelos.BottomRow');
 

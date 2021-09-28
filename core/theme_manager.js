@@ -15,7 +15,7 @@
 /**
  * Object in charge of storing and updating a workspace theme
  *     and UI components.
- * @namespace Blockly.ThemeManager
+ * @class
  */
 goog.module('Blockly.ThemeManager');
 

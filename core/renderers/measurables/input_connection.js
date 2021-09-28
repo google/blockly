@@ -11,7 +11,7 @@
 
 /**
  * Class representing inputs with connections on a rendered block.
- * @namespace Blockly.blockRendering.InputConnection
+ * @class
  */
 goog.module('Blockly.blockRendering.InputConnection');
 

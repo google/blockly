@@ -12,7 +12,7 @@
 
 /**
  * Class for comment change event.
- * @namespace Blockly.Events.CommentChange
+ * @class
  */
 goog.module('Blockly.Events.CommentChange');
 

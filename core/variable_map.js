@@ -12,7 +12,7 @@
 
 /**
  * Object representing a map of variables and their types.
- * @namespace Blockly.VariableMap
+ * @class
  */
 goog.module('Blockly.VariableMap');
 

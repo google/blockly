@@ -13,7 +13,7 @@
 /**
  * Class representing the space a next connection takes up during
  * rendering.
- * @namespace Blockly.blockRendering.NextConnection
+ * @class
  */
 goog.module('Blockly.blockRendering.NextConnection');
 

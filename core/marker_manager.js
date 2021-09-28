@@ -12,7 +12,7 @@
 
 /**
  * Object in charge of managing markers and the cursor.
- * @namespace Blockly.MarkerManager
+ * @class
  */
 goog.module('Blockly.MarkerManager');
 

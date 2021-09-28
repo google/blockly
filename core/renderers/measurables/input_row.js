@@ -13,7 +13,7 @@
 /**
  * Object representing a row that holds one or more inputs on a
  * rendered block.
- * @namespace Blockly.blockRendering.InputRow
+ * @class
  */
 goog.module('Blockly.blockRendering.InputRow');
 

@@ -12,7 +12,7 @@
 
 /**
  * Class that controls updates to connections during drags.
- * @namespace Blockly.InsertionMarkerManager
+ * @class
  */
 goog.module('Blockly.InsertionMarkerManager');
 

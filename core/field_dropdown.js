@@ -16,7 +16,7 @@
  * Dropdown input field.  Used for editable titles and variables.
  * In the interests of a consistent UI, the toolbox shares some functions and
  * properties with the context menu.
- * @namespace Blockly.FieldDropdown
+ * @class
  */
 goog.module('Blockly.FieldDropdown');
 

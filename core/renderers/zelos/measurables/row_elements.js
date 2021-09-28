@@ -13,7 +13,7 @@
 /**
  * Zelos specific objects representing elements in a row of a
  * rendered block.
- * @namespace Blockly.zelos.RightConnectionShape
+ * @class
  */
 goog.module('Blockly.zelos.RightConnectionShape');
 

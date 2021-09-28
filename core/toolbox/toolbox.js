@@ -12,7 +12,7 @@
 
 /**
  * Toolbox from whence to create blocks.
- * @namespace Blockly.Toolbox
+ * @class
  */
 goog.module('Blockly.Toolbox');
 

@@ -11,7 +11,7 @@
 
 /**
  * Minimalist rendering drawer.
- * @namespace Blockly.minimalist.Drawer
+ * @class
  */
 goog.module('Blockly.minimalist.Drawer');
 

@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of bubble open.
- * @namespace Blockly.Events.BubbleOpen
+ * @class
  */
 goog.module('Blockly.Events.BubbleOpen');
 

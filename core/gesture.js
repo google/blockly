@@ -14,7 +14,7 @@
 /**
  * The class representing an in-progress gesture, usually a drag
  * or a tap.
- * @namespace Blockly.Gesture
+ * @class
  */
 goog.module('Blockly.Gesture');
 

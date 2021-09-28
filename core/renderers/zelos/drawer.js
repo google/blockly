@@ -12,7 +12,7 @@
 
 /**
  * Zelos renderer.
- * @namespace Blockly.zelos.Drawer
+ * @class
  */
 goog.module('Blockly.zelos.Drawer');
 

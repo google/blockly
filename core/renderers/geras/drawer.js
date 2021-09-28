@@ -12,7 +12,7 @@
 
 /**
  * Renderer that preserves the look and feel of Blockly pre-2019.
- * @namespace Blockly.geras.Drawer
+ * @class
  */
 goog.module('Blockly.geras.Drawer');
 

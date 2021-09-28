@@ -12,7 +12,7 @@
 
 /**
  * Thrasos renderer.
- * @namespace Blockly.thrasos.Renderer
+ * @class
  */
 goog.module('Blockly.thrasos.Renderer');
 

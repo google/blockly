@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a block drag.
- * @namespace Blockly.Events.BlockDrag
+ * @class
  */
 goog.module('Blockly.Events.BlockDrag');
 

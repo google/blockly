@@ -12,7 +12,7 @@
 
 /**
  * Object representing a workspace.
- * @namespace Blockly.Workspace
+ * @class
  */
 goog.module('Blockly.Workspace');
 

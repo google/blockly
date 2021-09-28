@@ -30,7 +30,6 @@ let copyData = null;
 const copy = function(toCopy) {
   copyData = toCopy.toCopyData();
 };
-/** @package */
 exports.copy = copy;
 
 /**
@@ -56,7 +55,6 @@ const paste = function() {
   }
   return false;
 };
-/** @package */
 exports.paste = paste;
 
 /**
@@ -70,5 +68,4 @@ const duplicate = function(toDuplicate) {
   toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
 };
-/** @package */
 exports.duplicate = duplicate;

@@ -194,9 +194,78 @@ goog.require('Blockly.Xml');
  */
 exports.VERSION = 'uncompiled';
 
-// Add a getter and setter pair for Blockly.alert, Blockly.confirm,
-// Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
-// compatibility.
+/*
+ * Top-level functions on the Blockly namespace.
+ * These functions are used only in external code. Do not call these functions
+ * from internal code as importing from this file can cause circular
+ * dependencies. Do not add new functions here. There is probably a better
+ * namespace to put new functions on.
+ */
+
+/**
+ * Helper function for defining a block from JSON.  The resulting function has
+ * the correct value of jsonDef at the point in code where jsonInit is called.
+ * @param {!Object} jsonDef The JSON definition of a block.
+ * @return {function()} A function that calls jsonInit with the correct value
+ *     of jsonDef.
+ */
+const jsonInitFactory = function(jsonDef) {
+  return function() {
+    this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @alias Blockly.defineBlocksWithJsonArray
+ */
+const defineBlocksWithJsonArray = function(jsonArray) {
+  for (let i = 0; i < jsonArray.length; i++) {
+    const elem = jsonArray[i];
+    if (!elem) {
+      console.warn(
+          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
+          'Skipping.');
+    } else {
+      const typename = elem.type;
+      if (typename == null || typename === '') {
+        console.warn(
+            'Block definition #' + i +
+            ' in JSON array is missing a type attribute. Skipping.');
+      } else {
+        if (Blocks[typename]) {
+          console.warn(
+              'Block definition #' + i + ' in JSON array' +
+              ' overwrites prior definition of "' + typename + '".');
+        }
+        Blocks[typename] = {init: jsonInitFactory(elem)};
+      }
+    }
+  }
+};
+exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+
+/**
+ * Is the given string a number (includes negative and decimals).
+ * @param {string} str Input string.
+ * @return {boolean} True if number, false otherwise.
+ * @alias Blockly.isNumber
+ */
+const isNumber = function(str) {
+  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
+};
+exports.isNumber = isNumber;
+
+/*
+ * Aliased functions and properties that used to be on the Blockly namespace.
+ * Everything in this section is deprecated. Both external and internal code
+ * should avoid using these functions and use the designated replacements.
+ * Anything in this section may be removed in a future version of Blockly.
+ */
+
+// Add accessors for properties on Blockly that have now been deprecated.
 Object.defineProperties(exports, {
   alert: {
     set: function(newAlert) {
@@ -261,6 +330,102 @@ Object.defineProperties(exports, {
       common.setSelected(newSelection);
     }
   },
+  ALIGN_LEFT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.ALIGN_LEFT', 'September 2021', 'September 2022',
+          'Blockly.constants.ALIGN_LEFT');
+      return constants.ALIGN_LEFT;
+    }
+  },
+  ALIGN_CENTRE: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.ALIGN_CENTRE', 'September 2021', 'September 2022',
+          'Blockly.constants.ALIGN_CENTRE');
+      return constants.ALIGN_CENTRE;
+    }
+  },
+  ALIGN_RIGHT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.ALIGN_RIGHT', 'September 2021', 'September 2022',
+          'Blockly.constants.ALIGN_RIGHT');
+      return constants.ALIGN_RIGHT;
+    }
+  },
+  INPUT_VALUE: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.INPUT_VALUE', 'September 2021', 'September 2022',
+          'Blockly.ConnectionType.INPUT_VALUE');
+      return ConnectionType.INPUT_VALUE;
+    }
+  },
+  OUTPUT_VALUE: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.OUTPUT_VALUE', 'September 2021', 'September 2022',
+          'Blockly.ConnectionType.OUTPUT_VALUE');
+      return ConnectionType.OUTPUT_VALUE;
+    }
+  },
+  NEXT_STATEMENT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.NEXT_STATEMENT', 'September 2021', 'September 2022',
+          'Blockly.ConnectionType.NEXT_STATEMENT');
+      return ConnectionType.NEXT_STATEMENT;
+    }
+  },
+  PREVIOUS_STATEMENT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.PREVIOUS_STATEMENT', 'September 2021', 'September 2022',
+          'Blockly.ConnectionType.PREVIOUS_STATEMENT');
+      return ConnectionType.PREVIOUS_STATEMENT;
+    }
+  },
+  DUMMY_INPUT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.DUMMY_INPUT', 'September 2021', 'September 2022',
+          'Blockly.inputTypes.DUMMY_INPUT');
+      return inputTypes.DUMMY_INPUT;
+    }
+  },
+  TOOLBOX_AT_TOP: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.TOOLBOX_AT_TOP', 'September 2021', 'September 2022',
+          'Blockly.utils.toolbox.Position.TOOLBOX_AT_TOP');
+      return toolbox.Position.TOOLBOX_AT_TOP;
+    }
+  },
+  TOOLBOX_AT_BOTTOM: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.TOOLBOX_AT_BOTTOM', 'September 2021', 'September 2022',
+          'Blockly.utils.toolbox.Position.TOOLBOX_AT_BOTTOM');
+      return toolbox.Position.TOOLBOX_AT_BOTTOM;
+    }
+  },
+  TOOLBOX_AT_LEFT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.TOOLBOX_AT_LEFT', 'September 2021', 'September 2022',
+          'Blockly.utils.toolbox.Position.TOOLBOX_AT_LEFT');
+      return toolbox.Position.TOOLBOX_AT_LEFT;
+    }
+  },
+  TOOLBOX_AT_RIGHT: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.TOOLBOX_AT_RIGHT', 'September 2021', 'September 2022',
+          'Blockly.utils.toolbox.Position.TOOLBOX_AT_RIGHT');
+      return toolbox.Position.TOOLBOX_AT_RIGHT;
+    }
+  },
 });
 
 /**
@@ -268,6 +433,7 @@ Object.defineProperties(exports, {
  * @param {!SVGElement} svg SVG image.
  * @return {!Size} Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
+ * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
  * @alias Blockly.svgSize
  */
 const svgSize = function(svg) {
@@ -285,9 +451,14 @@ exports.svgSize = svgSize;
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @deprecated Use workspace.resizeContents. (2021 September 30)
+ * @see Blockly.WorkspaceSvg.resizeContents
  * @alias Blockly.resizeSvgContents
  */
 const resizeSvgContents = function(workspace) {
+  deprecation.warn(
+      'Blockly.resizeSvgContents', 'September 2021', 'September 2022',
+      'workspace.resizeContents');
   workspace.resizeContents();
 };
 exports.resizeSvgContents = resizeSvgContents;
@@ -295,32 +466,55 @@ exports.resizeSvgContents = resizeSvgContents;
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
- * @package
+ * @deprecated Use Blockly.clipboard.copy(). (2021 September 30)
+ * @see Blockly.clipboard.copy
  * @alias Blockly.copy
  */
-exports.copy = clipboard.copy;
+const copy = function(toCopy) {
+  deprecation.warn(
+      'Blockly.copy', 'September 2021', 'September 2022',
+      'Blockly.clipboard.copy');
+  clipboard.copy(toCopy);
+};
+exports.copy = copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
- * @package
+ * @deprecated Use Blockly.clipboard.paste(). (2021 September 30)
+ * @see Blockly.clipboard.paste
  * @alias Blockly.paste
  */
-exports.paste = clipboard.paste;
+const paste = function() {
+  deprecation.warn(
+      'Blockly.paste', 'September 2021', 'September 2022',
+      'Blockly.clipboard.paste');
+  return clipboard.paste();
+};
+exports.paste = paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     copied.
- * @package
+ * @deprecated Use Blockly.clipboard.duplicate(). (2021 September 30)
+ * @see Blockly.clipboard.duplicate
  * @alias Blockly.duplicate
  */
-exports.duplicate = clipboard.duplicate;
+const duplicate = function(toDuplicate) {
+  deprecation.warn(
+      'Blockly.duplicate', 'September 2021', 'September 2022',
+      'Blockly.clipboard.duplicate');
+  clipboard.duplicate(toDuplicate);
+};
+exports.duplicate = duplicate;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ * @deprecated Use Blockly.common.getMainWorkspace().hideChaff(). (2021
+ *     September 30)
+ * @see Blockly.WorkspaceSvg.hideChaff
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
@@ -334,66 +528,17 @@ exports.hideChaff = hideChaff;
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
  * @return {!Workspace} The main workspace.
+ * @deprecated Use Blockly.common.getMainWorkspace(). (30 September 2021)
+ * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
-exports.getMainWorkspace = common.getMainWorkspace;
-
-/**
- * Helper function for defining a block from JSON.  The resulting function has
- * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function()} A function that calls jsonInit with the correct value
- *     of jsonDef.
- */
-const jsonInitFactory = function(jsonDef) {
-  return function() {
-    this.jsonInit(jsonDef);
-  };
+const getMainWorkspace = function() {
+  deprecation.warn(
+      'Blockly.getMainWorkspace', 'September 2021', 'September 2022',
+      'Blockly.common.getMainWorkspace');
+  return common.getMainWorkspace();
 };
-
-/**
- * Define blocks from an array of JSON block definitions, as might be generated
- * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @alias Blockly.defineBlocksWithJsonArray
- */
-const defineBlocksWithJsonArray = function(jsonArray) {
-  for (let i = 0; i < jsonArray.length; i++) {
-    const elem = jsonArray[i];
-    if (!elem) {
-      console.warn(
-          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
-          'Skipping.');
-    } else {
-      const typename = elem.type;
-      if (typename == null || typename === '') {
-        console.warn(
-            'Block definition #' + i +
-            ' in JSON array is missing a type attribute. Skipping.');
-      } else {
-        if (Blocks[typename]) {
-          console.warn(
-              'Block definition #' + i + ' in JSON array' +
-              ' overwrites prior definition of "' + typename + '".');
-        }
-        Blocks[typename] = {init: jsonInitFactory(elem)};
-      }
-    }
-  }
-};
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
-
-/**
- * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
- * @alias Blockly.isNumber
- */
-const isNumber = function(str) {
-  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
-};
-exports.isNumber = isNumber;
-
+exports.getMainWorkspace = getMainWorkspace;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
@@ -401,106 +546,123 @@ exports.isNumber = isNumber;
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
+ * @deprecated Use Blockly.common.setParentContainer(). (30 September 2021)
+ * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
-exports.setParentContainer = common.setParentContainer;
-
-/** Aliases. */
+const setParentContainer = function(container) {
+  deprecation.warn(
+      'Blockly.setParentContainer', 'September 2021', 'September 2022',
+      'Blockly.common.setParentContainer');
+  common.setParentContainer(container);
+};
+exports.setParentContainer = setParentContainer;
 
 /**
- * @see colour.hueToHex
- * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ * @deprecated Use Blockly.utils.colour.hueToHex(). (30 September 2021)
+ * @see Blockly.utils.colour.hueToHex
  * @alias Blockly.hueToHex
  */
- exports.hueToHex = colour.hueToHex;
+const hueToHex = function(hue) {
+  deprecation.warn(
+      'Blockly.hueToHex', 'September 2021', 'September 2022',
+      'Blockly.utils.colour.hueToHex');
+  return colour.hueToHex(hue);
+};
+exports.hueToHex = hueToHex;
 
 /**
- * @see browserEvents.bind
+ * Bind an event handler that should be called regardless of whether it is part
+ * of the active touch stream.
+ * Use this for events that are not part of a multi-part gesture (e.g.
+ * mouseover for tooltips).
+ * @param {!EventTarget} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {?Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @return {!Data} Opaque data that can be passed to
+ *     unbindEvent_.
+ * @deprecated Use Blockly.browserEvents.bind(). (30 September 2021)
+ * @see Blockly.browserEvents.bind
+ * @alias Blockly.bindEvent_
  */
-exports.bindEvent_ = browserEvents.bind;
+const bindEvent_ = function(node, name, thisObject, func) {
+  deprecation.warn(
+      'Blockly.bindEvent_', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.bind');
+  return browserEvents.bind(node, name, thisObject, func);
+};
+exports.bindEvent_ = bindEvent_;
 
 /**
+ * Unbind one or more events event from a function call.
+ * @param {!Data} bindData Opaque data from bindEvent_.
+ *     This list is emptied during the course of calling this function.
+ * @return {!Function} The function call.
+ * @deprecated Use Blockly.browserEvents.unbind(). (30 September 2021)
  * @see browserEvents.unbind
  */
-exports.unbindEvent_ = browserEvents.unbind;
+const unbindEvent_ = function(bindData) {
+  deprecation.warn(
+      'Blockly.unbindEvent_', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.unbind');
+  return browserEvents.unbind(bindData);
+};
+exports.unbindEvent_ = unbindEvent_;
 
 /**
+ * Bind an event handler that can be ignored if it is not part of the active
+ * touch stream.
+ * Use this for events that either start or continue a multi-part gesture (e.g.
+ * mousedown or mousemove, which may be part of a drag or click).
+ * @param {!EventTarget} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {?Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
+ *     should not block execution of other event handlers on this touch or
+ *     other simultaneous touches.  False by default.
+ * @param {boolean=} opt_noPreventDefault True if triggering on this event
+ *     should prevent the default handler.  False by default.  If
+ *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
+ *     provided.
+ * @return {!Data} Opaque data that can be passed to
+ *     unbindEvent_.
+ * @deprecated Use Blockly.browserEvents.conditionalBind(). (30 September 2021)
  * @see browserEvents.conditionalBind
  */
-exports.bindEventWithChecks_ = browserEvents.conditionalBind;
+const bindEventWithChecks_ = function(
+    node, name, thisObject, func, opt_noCaptureIdentifier,
+    opt_noPreventDefault) {
+  deprecation.warn(
+      'Blockly.bindEventWithChecks_', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.conditionalBind');
+  return browserEvents.conditionalBind(
+      node, name, thisObject, func, opt_noCaptureIdentifier,
+      opt_noPreventDefault);
+};
+exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 /**
- * @see constants.ALIGN.LEFT
+ * Size the SVG image to completely fill its container. Call this when the view
+ * actually changes sizes (e.g. on a window resize/device orientation change).
+ * See Blockly.resizeSvgContents to resize the workspace when the contents
+ * change (e.g. when a block is added or removed).
+ * Record the height/width of the SVG image.
+ * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @deprecated Use Blockly.common.svgResize(). (30 September 2021)
+ * @see Blockly.common.svgResize
  */
-exports.ALIGN_LEFT = constants.ALIGN.LEFT;
-
-/**
- * @see constants.ALIGN.CENTRE
- */
-exports.ALIGN_CENTRE = constants.ALIGN.CENTRE;
-
-/**
- * @see constants.ALIGN.RIGHT
- */
-exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
-
-/**
- * @see common.svgResize
- */
- exports.svgResize = common.svgResize;
-
-/**
- * Aliases for constants used for connection and input types.
- */
-
-/**
- * @see ConnectionType.INPUT_VALUE
- */
-exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
-
-/**
- * @see ConnectionType.OUTPUT_VALUE
- */
-exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
-
-/**
- * @see ConnectionType.NEXT_STATEMENT
- */
-exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
-
-/**
- * @see ConnectionType.PREVIOUS_STATEMENT
- */
-exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
-
-/**
- * @see inputTypes.DUMMY_INPUT
- */
-exports.DUMMY_INPUT = inputTypes.DUMMY;
-
-/**
- * Aliases for toolbox positions.
- */
-
-/**
- * @see toolbox.Position.TOP
- */
-exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
-
-/**
- * @see toolbox.Position.BOTTOM
- */
-exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
-
-/**
- * @see toolbox.Position.LEFT
- */
-exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
-
-/**
- * @see toolbox.Position.RIGHT
- */
-exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+const svgResize = function(workspace) {
+  deprecation.warn(
+      'Blockly.svgResize', 'September 2021', 'September 2022',
+      'Blockly.common.svgResize');
+  common.svgResize(workspace);
+};
+exports.svgResize = svgResize;
 
 // Aliases to allow external code to access these values for legacy reasons.
 exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;

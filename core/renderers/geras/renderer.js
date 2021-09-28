@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Geras renderer.
+ * @namespace Blockly.geras.Renderer
+ */
 goog.module('Blockly.geras.Renderer');
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
@@ -36,6 +40,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.geras.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);

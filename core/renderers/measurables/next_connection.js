@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing the space a next connection takes up during
+ * rendering.
+ * @namespace Blockly.blockRendering.NextConnection
+ */
 goog.module('Blockly.blockRendering.NextConnection');
 
 const Connection = goog.require('Blockly.blockRendering.Connection');
@@ -31,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Connection}
+ * @alias Blockly.blockRendering.NextConnection
  */
 const NextConnection = function(constants, connectionModel) {
   NextConnection.superClass_.constructor.call(this, constants, connectionModel);

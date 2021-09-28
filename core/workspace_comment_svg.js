@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a code comment on a rendered workspace.
+ * @namespace Blockly.WorkspaceCommentSvg
+ */
 goog.module('Blockly.WorkspaceCommentSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
@@ -79,6 +83,7 @@ const TEXTAREA_OFFSET = 2;
  * @implements {IBubble}
  * @implements {ICopyable}
  * @constructor
+ * @alias Blockly.WorkspaceCommentSvg
  */
 const WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {

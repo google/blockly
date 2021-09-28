@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a block delete event.
+ * @namespace Blockly.Events.BlockDelete
+ */
 goog.module('Blockly.Events.BlockDelete');
 
 const BlockBase = goog.require('Blockly.Events.BlockBase');
@@ -28,6 +32,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *     event.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockDelete
  */
 const BlockDelete = function(opt_block) {
   BlockDelete.superClass_.constructor.call(this, opt_block);

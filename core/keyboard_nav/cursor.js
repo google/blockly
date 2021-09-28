@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The class representing a cursor.
+ * Used primarily for keyboard navigation.
+ * @namespace Blockly.Cursor
+ */
 goog.module('Blockly.Cursor');
 
 const object = goog.require('Blockly.utils.object');
@@ -23,6 +28,7 @@ const {Marker} = goog.require('Blockly.Marker');
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Marker}
+ * @alias Blockly.Cursor
  */
 const Cursor = function() {
   Cursor.superClass_.constructor.call(this);

@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Old (compatibility) renderer.
+ * Geras: spirit of old age.
+ * @namespace Blockly.geras.RenderInfo
+ */
 goog.module('Blockly.geras.RenderInfo');
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
@@ -43,6 +48,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @constructor
  * @package
  * @extends {BaseRenderInfo}
+ * @alias Blockly.geras.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);

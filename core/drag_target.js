@@ -12,6 +12,11 @@
 
 'use strict';
 
+/**
+ * The abstract class for a component with custom behaviour when a
+ * block or bubble is dragged over or dropped on top of it.
+ * @namespace Blockly.DragTarget
+ */
 goog.module('Blockly.DragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -27,6 +32,7 @@ const Rect = goog.requireType('Blockly.utils.Rect');
  * is dragged over or dropped on top of it.
  * @implements {IDragTarget}
  * @constructor
+ * @alias Blockly.DragTarget
  */
 const DragTarget = function() {};
 

@@ -5,11 +5,15 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
+ * @fileoverview Methods for rendering debug graphics.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
+/**
+ * Methods for rendering debug graphics.
+ * @namespace Blockly.blockRendering.Debug
+ */
 goog.module('Blockly.blockRendering.Debug');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -39,6 +43,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  *     constants.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Debug
  */
 const Debug = function(constants) {
   /**

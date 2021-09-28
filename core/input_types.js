@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * An enum for the possible types of inputs.
+ * @namespace Blockly.inputTypes
+ */
 goog.module('Blockly.inputTypes');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -19,6 +23,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /**
  * Enum for the type of a connection or input.
  * @enum {number}
+ * @alias Blockly.inputTypes
  */
 const inputTypes = {
   // A right-facing value input.  E.g. 'set item to' or 'return'.

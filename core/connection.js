@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Components for creating connections between blocks.
+ * @namespace Blockly.Connection
+ */
 goog.module('Blockly.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -37,6 +41,7 @@ goog.require('Blockly.Events.BlockMove');
  * @param {number} type The type of the connection.
  * @constructor
  * @implements {IASTNodeLocationWithBlock}
+ * @alias Blockly.Connection
  */
 const Connection = function(source, type) {
   /**

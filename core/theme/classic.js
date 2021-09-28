@@ -10,6 +10,11 @@
  */
 'use strict';
 
+/**
+ * Classic theme.
+ * Contains multi-coloured border to create shadow effect.
+ * @namespace Blockly.Themes.Classic
+ */
 goog.module('Blockly.Themes.Classic');
 
 const Theme = goog.require('Blockly.Theme');

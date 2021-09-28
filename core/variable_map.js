@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a map of variables and their types.
+ * @namespace Blockly.VariableMap
+ */
 goog.module('Blockly.VariableMap');
 
 const Msg = goog.require('Blockly.Msg');
@@ -36,6 +40,7 @@ goog.require('Blockly.Events.VarRename');
  * variables are the type indicated by the key.
  * @param {!Workspace} workspace The workspace this map belongs to.
  * @constructor
+ * @alias Blockly.VariableMap
  */
 const VariableMap = function(workspace) {
   /**

@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing external value inputs with connections on a
+ * rendered block.
+ * @namespace Blockly.blockRendering.ExternalValueInput
+ */
 goog.module('Blockly.blockRendering.ExternalValueInput');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {InputConnection}
+ * @alias Blockly.blockRendering.ExternalValueInput
  */
 const ExternalValueInput = function(constants, input) {
   ExternalValueInput.superClass_.constructor.call(this, constants, input);

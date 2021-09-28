@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @namespace Blockly.blockRendering.RenderInfo
+ */
 goog.module('Blockly.blockRendering.RenderInfo');
 
 const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
@@ -59,6 +63,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @param {!BlockSvg} block The block to measure.
  * @constructor
  * @package
+ * @alias Blockly.blockRendering.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   this.block_ = block;

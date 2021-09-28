@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Minimalist rendering drawer.
+ * @namespace Blockly.minimalist.Drawer
+ */
 goog.module('Blockly.minimalist.Drawer');
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
@@ -27,6 +31,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseDrawer}
+ * @alias Blockly.minimalist.Drawer
  */
 const Drawer = function(block, info) {
   Drawer.superClass_.constructor.call(this, block, info);

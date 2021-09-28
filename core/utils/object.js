@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.utils.object
- * @namespace
+ * Utility methods for objects.
+ * @namespace Blockly.utils.object
  */
 goog.module('Blockly.utils.object');
 

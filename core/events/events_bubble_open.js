@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of bubble open.
+ * @namespace Blockly.Events.BubbleOpen
+ */
 goog.module('Blockly.Events.BubbleOpen');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -31,6 +35,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  *    or 'warning'. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.BubbleOpen
  */
 const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;

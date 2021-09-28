@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Zelos theme.
+ * @namespace Blockly.Themes.Zelos
+ */
 goog.module('Blockly.Themes.Zelos');
 
 const Theme = goog.require('Blockly.Theme');

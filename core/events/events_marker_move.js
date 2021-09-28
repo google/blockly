@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of a marker move.
+ * @namespace Blockly.Events.MarkerMove
+ */
 goog.module('Blockly.Events.MarkerMove');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -35,6 +39,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *    Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.MarkerMove
  */
 const MarkerMove = function(opt_block, isCursor, opt_oldNode, opt_newNode) {
   let workspaceId = opt_block ? opt_block.workspace.id : undefined;

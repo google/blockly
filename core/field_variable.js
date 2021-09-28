@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Variable input field.
+ * @namespace Blockly.FieldVariable
+ */
 goog.module('Blockly.FieldVariable');
 
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
@@ -49,6 +53,7 @@ goog.require('Blockly.Events.BlockChange');
  *    for a list of properties this parameter supports.
  * @extends {FieldDropdown}
  * @constructor
+ * @alias Blockly.FieldVariable
  */
 const FieldVariable = function(
     varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {

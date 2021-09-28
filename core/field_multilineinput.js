@@ -12,6 +12,10 @@
  */
 'use strict';
 
+/**
+ * Text Area field.
+ * @namespace Blockly.FieldMultilineInput
+ */
 goog.module('Blockly.FieldMultilineInput');
 
 const Css = goog.require('Blockly.Css');
@@ -42,6 +46,7 @@ const utils = goog.require('Blockly.utils');
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
+ * @alias Blockly.FieldMultilineInput
  */
 const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   FieldMultilineInput.superClass_.constructor.call(

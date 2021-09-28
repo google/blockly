@@ -9,6 +9,10 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a top row on a rendered block.
+ * @namespace Blockly.blockRendering.TopRow
+ */
 goog.module('Blockly.blockRendering.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -34,6 +38,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {Row}
+ * @alias Blockly.blockRendering.TopRow
  */
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);

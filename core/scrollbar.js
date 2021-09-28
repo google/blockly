@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a scrollbar.
+ * @namespace Blockly.Scrollbar
+ */
 goog.module('Blockly.Scrollbar');
 
 const Touch = goog.require('Blockly.Touch');
@@ -39,6 +43,7 @@ const utils = goog.require('Blockly.utils');
  * @param {string=} opt_class A class to be applied to this scrollbar.
  * @param {number=} opt_margin The margin to apply to this scrollbar.
  * @constructor
+ * @alias Blockly.Scrollbar
  */
 const Scrollbar = function(
     workspace, horizontal, opt_pair, opt_class, opt_margin) {

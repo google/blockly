@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @namespace Blockly.blockRendering.Drawer
+ */
 goog.module('Blockly.blockRendering.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -38,6 +42,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  *   information needed to render this block.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Drawer
  */
 const Drawer = function(block, info) {
   this.block_ = block;

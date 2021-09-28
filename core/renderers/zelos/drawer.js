@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Zelos renderer.
+ * @namespace Blockly.zelos.Drawer
+ */
 goog.module('Blockly.zelos.Drawer');
 
 const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
@@ -34,6 +38,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @package
  * @constructor
  * @extends {BaseDrawer}
+ * @alias Blockly.zelos.Drawer
  */
 const Drawer = function(block, info) {
   Drawer.superClass_.constructor.call(this, block, info);

@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The class representing an in-progress gesture, usually a drag
+ * or a tap.
+ * @namespace Blockly.Gesture
+ */
 goog.module('Blockly.Gesture');
 
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
@@ -55,6 +60,7 @@ goog.require('Blockly.Events.Click');
  * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
  *     this gesture and has a reference to it.
  * @constructor
+ * @alias Blockly.Gesture
  */
 const Gesture = function(e, creatorWorkspace) {
   /**

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Number input field
+ * @namespace Blockly.FieldNumber
+ */
 goog.module('Blockly.FieldNumber');
 
 const FieldTextInput = goog.require('Blockly.FieldTextInput');
@@ -34,6 +38,7 @@ const object = goog.require('Blockly.utils.object');
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
+ * @alias Blockly.FieldNumber
  */
 const FieldNumber = function(
     opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {

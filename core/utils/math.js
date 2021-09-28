@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.math
- * @namespace
+ * Utility methods for math.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.math
  */
 goog.module('Blockly.utils.math');
 

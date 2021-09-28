@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing an input (value, statement, or dummy).
+ * @namespace Blockly.Input
+ */
 goog.module('Blockly.Input');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -36,6 +40,7 @@ goog.require('Blockly.FieldLabel');
  * @param {!Block} block The block containing this input.
  * @param {Connection} connection Optional connection for this input.
  * @constructor
+ * @alias Blockly.Input
  */
 const Input = function(type, name, block, connection) {
   if (type != inputTypes.DUMMY && !name) {

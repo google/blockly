@@ -6,10 +6,15 @@
 
 /**
  * @fileoverview Contains functions registering serializers (eg blocks,
- *     variables, plugins, etc).
+ * variables, plugins, etc).
  */
 'use strict';
 
+/**
+ * Contains functions registering serializers (eg blocks, variables, plugins,
+ * etc).
+ * @namespace Blockly.serialization.registry
+ */
 goog.module('Blockly.serialization.registry');
 goog.module.declareLegacyNamespace();
 
@@ -24,6 +29,7 @@ const registry = goog.require('Blockly.registry');
  * deserialization.
  * @param {string} name The name of the serializer to register.
  * @param {ISerializer} serializer The serializer to register.
+ * @alias Blockly.serialization.registry.register
  */
 const register = function(name, serializer) {
   registry.register(registry.Type.SERIALIZER, name, serializer);
@@ -33,6 +39,7 @@ exports.register = register;
 /**
  * Unregisters the serializer associated with the given name.
  * @param {string} name The name of the serializer to unregister.
+ * @alias Blockly.serialization.registry.unregister
  */
 const unregister = function(name) {
   registry.unregister(registry.Type.SERIALIZER, name);

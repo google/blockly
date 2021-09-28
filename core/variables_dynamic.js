@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Utility functions for handling typed variables.
+ *
+ * @namespace Blockly.VariablesDynamic
+ */
 goog.module('Blockly.VariablesDynamic');
 
 const Msg = goog.require('Blockly.Msg');
@@ -45,6 +50,7 @@ exports.onCreateVariableButtonClick_Colour = onCreateVariableButtonClick_Colour;
  * variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
+ * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
   let xmlList = [];
@@ -79,6 +85,7 @@ exports.flyoutCategory = flyoutCategory;
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML block elements.
+ * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 const flyoutCategoryBlocks = function(workspace) {
   const variableModelList = workspace.getAllVariables();

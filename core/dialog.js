@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * Wrapper functions around JS functions for showing alert/confirmation dialogs.
+ * @namespace Blockly.dialog
+ */
 goog.module('Blockly.dialog');
 
 let alertImplementation = function(message, opt_callback) {
@@ -33,6 +37,7 @@ let promptImplementation = function(message, defaultValue, callback) {
  * provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
+ * @alias Blockly.dialog.alert
  */
 const alert = function(message, opt_callback) {
   alertImplementation(message, opt_callback);
@@ -43,6 +48,7 @@ exports.alert = alert;
  * Sets the function to be run when Blockly.dialog.alert() is called.
  * @param {!function(string, function()=)} alertFunction The function to be run.
  * @see Blockly.dialog.alert
+ * @alias Blockly.dialog.setAlert
  */
 const setAlert = function(alertFunction) {
   alertImplementation = alertFunction;
@@ -54,6 +60,7 @@ exports.setAlert = setAlert;
  * to provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {!function(boolean)} callback The callback for handling user response.
+ * @alias Blockly.dialog.confirm
  */
 const confirm = function(message, callback) {
   confirmImplementation(message, callback);
@@ -65,6 +72,7 @@ exports.confirm = confirm;
  * @param {!function(string, !function(boolean))} confirmFunction The function
  *    to be run.
  * @see Blockly.dialog.confirm
+ * @alias Blockly.dialog.setConfirm
  */
 const setConfirm = function(confirmFunction) {
   confirmImplementation = confirmFunction;
@@ -79,6 +87,7 @@ exports.setConfirm = setConfirm;
  * @param {string} message The message to display to the user.
  * @param {string} defaultValue The value to initialize the prompt with.
  * @param {!function(?string)} callback The callback for handling user response.
+ * @alias Blockly.dialog.prompt
  */
 const prompt = function(message, defaultValue, callback) {
   promptImplementation(message, defaultValue, callback);
@@ -90,6 +99,7 @@ exports.prompt = prompt;
  * @param {!function(string, string, !function(?string))} promptFunction The
  *    function to be run.
  * @see Blockly.dialog.prompt
+ * @alias Blockly.dialog.setPrompt
  */
 const setPrompt = function(promptFunction) {
   promptImplementation = promptFunction;

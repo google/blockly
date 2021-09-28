@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Flyout tray containing blocks which may be created.
+ * @namespace Blockly.Flyout
+ */
 goog.module('Blockly.Flyout');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -60,6 +64,7 @@ goog.require('Blockly.Touch');
  * @abstract
  * @implements {IFlyout}
  * @extends {DeleteArea}
+ * @alias Blockly.Flyout
  */
 const Flyout = function(workspaceOptions) {
   Flyout.superClass_.constructor.call(this);
@@ -1117,7 +1122,7 @@ Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
   // The position of the old block in main workspace coordinates.
   finalOffset.scale(1 / targetWorkspace.scale);
 
-  block.moveBy(finalOffset.x, finalOffset.y);
+  block.moveTo(new Coordinate(finalOffset.x, finalOffset.y));
 };
 
 /**

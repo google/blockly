@@ -10,6 +10,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing a jagged edge in a row of a rendered
+ * block.
+ * @namespace Blockly.blockRendering.JaggedEdge
+ */
 goog.module('Blockly.blockRendering.JaggedEdge');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -27,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.JaggedEdge
  */
 const JaggedEdge = function(constants) {
   JaggedEdge.superClass_.constructor.call(this, constants);

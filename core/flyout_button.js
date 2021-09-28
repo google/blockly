@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a button in the flyout.
+ * @namespace Blockly.FlyoutButton
+ */
 goog.module('Blockly.FlyoutButton');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -35,6 +39,7 @@ const utils = goog.require('Blockly.utils');
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
  * @package
+ * @alias Blockly.FlyoutButton
  */
 const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
   // Labels behave the same as buttons, but are styled differently.

@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Utilities for bumping objects back into worksapce bounds.
+ * @namespace Blockly.bumpObjects
+ */
 goog.module('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -37,6 +41,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  *    in workspace coordinates.
  * @param {!IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
+ * @alias Blockly.bumpObjects.bumpIntoBounds
  */
 const bumpObjectIntoBounds = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.
@@ -85,6 +90,7 @@ exports.bumpIntoBounds = bumpObjectIntoBounds;
  * Creates a handler for bumping objects when they cross fixed bounds.
  * @param {!WorkspaceSvg} workspace The workspace to handle.
  * @return {function(Abstract)} The event handler.
+ * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 const bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
@@ -158,6 +164,7 @@ const extractObjectFromEvent = function(workspace, e) {
 /**
  * Bumps the top objects in the given workspace into bounds.
  * @param {!WorkspaceSvg} workspace The workspace.
+ * @alias Blockly.bumpObjects.bumpTopObjectsIntoBounds
  */
 const bumpTopObjectsIntoBounds = function(workspace) {
   const metricsManager = workspace.getMetricsManager();

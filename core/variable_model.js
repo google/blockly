@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Components for the variable model.
+ * @namespace Blockly.VariableModel
+ */
 goog.module('Blockly.VariableModel');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -33,6 +37,7 @@ goog.require('Blockly.Events.VarCreate');
  *     a UUID.
  * @see {Blockly.FieldVariable}
  * @constructor
+ * @alias Blockly.VariableModel
  */
 const VariableModel = function(workspace, name, opt_type, opt_id) {
   /**

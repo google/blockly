@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a workspace.
+ * @namespace Blockly.Workspace
+ */
 goog.module('Blockly.Workspace');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -53,6 +57,7 @@ const WorkspaceDB_ = Object.create(null);
  * @param {!Options=} opt_options Dictionary of options.
  * @constructor
  * @implements {IASTNodeLocation}
+ * @alias Blockly.Workspace
  */
 const Workspace = function(opt_options) {
   /** @type {string} */

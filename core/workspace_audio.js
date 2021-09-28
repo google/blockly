@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * Object in charge of loading, storing, and playing audio for a
+ *     workspace.
+ * @namespace Blockly.WorkspaceAudio
+ */
 goog.module('Blockly.WorkspaceAudio');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -25,6 +30,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
  * @param {WorkspaceSvg} parentWorkspace The parent of the workspace
  *     this audio object belongs to, or null.
  * @constructor
+ * @alias Blockly.WorkspaceAudio
  */
 const WorkspaceAudio = function(parentWorkspace) {
   /**

@@ -12,8 +12,8 @@
 'use strict';
 
 /**
- * @name Blockly.utils.svgPaths
- * @namespace
+ * Methods for creating parts of SVG path strings.  See
+ * @namespace Blockly.utils.svgPaths
  */
 goog.module('Blockly.utils.svgPaths');
 

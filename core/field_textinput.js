@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Text input field.
+ * @namespace Blockly.FieldTextInput
+ */
 goog.module('Blockly.FieldTextInput');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -48,6 +52,7 @@ goog.require('Blockly.Events.BlockChange');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldTextInput
  */
 const FieldTextInput = function(opt_value, opt_validator, opt_config) {
   /**

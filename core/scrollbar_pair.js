@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a pair of scrollbars.
+ * @namespace Blockly.ScrollbarPair
+ */
 goog.module('Blockly.ScrollbarPair');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -32,6 +36,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
  * @param {string=} opt_class A class to be applied to these scrollbars.
  * @param {number=} opt_margin The margin to apply to these scrollbars.
  * @constructor
+ * @alias Blockly.ScrollbarPair
  */
 const ScrollbarPair = function(
     workspace, addHorizontal, addVertical, opt_class, opt_margin) {

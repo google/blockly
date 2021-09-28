@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Re-exports of Blockly.geras.* modules.
+ * @namespace Blockly.geras
+ */
 goog.module('Blockly.geras');
 
 const ConstantProvider = goog.require('Blockly.geras.ConstantProvider');

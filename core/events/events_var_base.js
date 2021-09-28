@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Abstract class for a variable event.
+ * @namespace Blockly.Events.VarBase
+ */
 goog.module('Blockly.Events.VarBase');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
@@ -24,6 +28,7 @@ const object = goog.require('Blockly.utils.object');
  *     corresponds to.  Undefined for a blank event.
  * @extends {Abstract}
  * @constructor
+ * @alias Blockly.Events.VarBase
  */
 const VarBase = function(opt_variable) {
   VarBase.superClass_.constructor.call(this);

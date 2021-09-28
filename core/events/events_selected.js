@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of element select action.
+ * @namespace Blockly.Events.Selected
+ */
 goog.module('Blockly.Events.Selected');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -28,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  *    Null if no element previously selected. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.Selected
  */
 const Selected = function(opt_oldElementId, opt_newElementId, opt_workspaceId) {
   Selected.superClass_.constructor.call(this, opt_workspaceId);

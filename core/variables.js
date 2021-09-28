@@ -11,8 +11,8 @@
 'use strict';
 
 /**
- * @name Blockly.Variables
- * @namespace
+ * Utility functions for handling variables.
+ * @namespace Blockly.Variables
  */
 goog.module('Blockly.Variables');
 

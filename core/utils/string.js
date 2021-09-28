@@ -13,8 +13,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.string
- * @namespace
+ * Utility methods for string manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.string
  */
 goog.module('Blockly.utils.string');
 

@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * The interface for a flyout.
+ * @namespace Blockly.IFlyout
+ */
 goog.module('Blockly.IFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +35,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * Interface for a flyout.
  * @extends {IRegistrable}
  * @interface
+ * @alias Blockly.IFlyout
  */
 const IFlyout = function() {};
 

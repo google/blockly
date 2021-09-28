@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for a finished loading workspace event.
+ * @namespace Blockly.Events.FinishedLoading
+ */
 goog.module('Blockly.Events.FinishedLoading');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
@@ -29,6 +33,7 @@ const registry = goog.require('Blockly.registry');
  *    loading.  Undefined for a blank event.
  * @extends {Abstract}
  * @constructor
+ * @alias Blockly.Events.FinishedLoading
  */
 const FinishedLoading = function(opt_workspace) {
   /**

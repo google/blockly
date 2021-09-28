@@ -11,12 +11,17 @@
 
 'use strict';
 
+/**
+ * The interface for an object that is deletable.
+ * @namespace Blockly.IDeletable
+ */
 goog.module('Blockly.IDeletable');
 
 
 /**
  * The interface for an object that can be deleted.
  * @interface
+ * @alias Blockly.IDeletable
  */
 const IDeletable = function() {};
 

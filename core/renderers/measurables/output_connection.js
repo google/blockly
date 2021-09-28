@@ -11,6 +11,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing the space a output connection takes up
+ * during rendering.
+ * @namespace Blockly.blockRendering.OutputConnection
+ */
 goog.module('Blockly.blockRendering.OutputConnection');
 
 const Connection = goog.require('Blockly.blockRendering.Connection');
@@ -32,6 +37,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Connection}
+ * @alias Blockly.blockRendering.OutputConnection
  */
 const OutputConnection = function(constants, connectionModel) {
   OutputConnection.superClass_.constructor.call(

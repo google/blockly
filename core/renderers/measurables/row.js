@@ -9,6 +9,10 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a single row on a rendered block.
+ * @namespace Blockly.blockRendering.Row
+ */
 goog.module('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -29,6 +33,7 @@ const Types = goog.require('Blockly.blockRendering.Types');
  *   constants provider.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Row
  */
 const Row = function(constants) {
   /**

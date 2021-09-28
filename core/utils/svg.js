@@ -12,8 +12,9 @@
 'use strict';
 
 /**
- * @name Svg
- * @namespace
+ * Defines the Svg class. Its constants enumerate
+ * all SVG tag names used by Blockly.
+ * @namespace Blockly.utils.Svg
  */
 goog.module('Blockly.utils.Svg');
 
@@ -24,6 +25,7 @@ goog.module('Blockly.utils.Svg');
  * @constructor
  * @template T
  * @private
+ * @alias Blockly.utils.Svg
  */
 const Svg = function(tagName) {
   /**

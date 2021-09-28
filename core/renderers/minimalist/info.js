@@ -9,6 +9,10 @@
  */
 'use strict';
 
+/**
+ * Minimalist render info object.
+ * @namespace Blockly.minimalist.RenderInfo
+ */
 goog.module('Blockly.minimalist.RenderInfo');
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
@@ -31,6 +35,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
  * @constructor
  * @package
  * @extends {BaseRenderInfo}
+ * @alias Blockly.minimalist.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);

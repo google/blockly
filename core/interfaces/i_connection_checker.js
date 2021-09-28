@@ -11,6 +11,11 @@
  */
 'use strict';
 
+/**
+ * The interface for an object that encapsulates logic for
+ * checking whether a potential connection is safe and valid.
+ * @namespace Blockly.IConnectionChecker
+ */
 goog.module('Blockly.IConnectionChecker');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -22,6 +27,7 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /**
  * Class for connection type checking logic.
  * @interface
+ * @alias Blockly.IConnectionChecker
  */
 const IConnectionChecker = function() {};
 

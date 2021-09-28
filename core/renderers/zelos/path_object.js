@@ -11,6 +11,10 @@
 
 'use strict';
 
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @namespace Blockly.zelos.PathObject
+ */
 goog.module('Blockly.zelos.PathObject');
 
 const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
@@ -33,6 +37,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @extends {BasePathObject}
  * @package
+ * @alias Blockly.zelos.PathObject
  */
 const PathObject = function(root, style, constants) {
   PathObject.superClass_.constructor.call(this, root, style, constants);

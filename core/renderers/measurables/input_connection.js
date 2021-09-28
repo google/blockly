@@ -9,6 +9,10 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing inputs with connections on a rendered block.
+ * @namespace Blockly.blockRendering.InputConnection
+ */
 goog.module('Blockly.blockRendering.InputConnection');
 
 const Connection = goog.require('Blockly.blockRendering.Connection');
@@ -29,6 +33,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Connection}
+ * @alias Blockly.blockRendering.InputConnection
  */
 const InputConnection = function(constants, input) {
   InputConnection.superClass_.constructor.call(

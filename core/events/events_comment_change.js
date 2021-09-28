@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class for comment change event.
+ * @namespace Blockly.Events.CommentChange
+ */
 goog.module('Blockly.Events.CommentChange');
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
@@ -28,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  * @param {string=} opt_newContents New contents of the comment.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentChange
  */
 const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
   CommentChange.superClass_.constructor.call(this, opt_comment);

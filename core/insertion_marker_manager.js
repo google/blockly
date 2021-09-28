@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Class that controls updates to connections during drags.
+ * @namespace Blockly.InsertionMarkerManager
+ */
 goog.module('Blockly.InsertionMarkerManager');
 
 const ComponentManager = goog.require('Blockly.ComponentManager');
@@ -39,6 +43,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * unhiglighting it as needed during a drag.
  * @param {!BlockSvg} block The top block in the stack being dragged.
  * @constructor
+ * @alias Blockly.InsertionMarkerManager
  */
 const InsertionMarkerManager = function(block) {
   common.setSelected(block);

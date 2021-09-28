@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Object representing a trash can icon.
+ * @namespace Blockly.Trashcan
+ */
 goog.module('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -55,6 +59,7 @@ goog.require('Blockly.Events.TrashcanOpen');
  * @implements {IAutoHideable}
  * @implements {IPositionable}
  * @extends {DeleteArea}
+ * @alias Blockly.Trashcan
  */
 const Trashcan = function(workspace) {
   Trashcan.superClass_.constructor.call(this);

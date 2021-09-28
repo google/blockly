@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * Events fired as a block drag.
+ * @namespace Blockly.Events.BlockDrag
+ */
 goog.module('Blockly.Events.BlockDrag');
 
 const UiBase = goog.require('Blockly.Events.UiBase');
@@ -30,6 +34,7 @@ const {Block} = goog.requireType('Blockly.Block');
  *    drag. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.BlockDrag
  */
 const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;

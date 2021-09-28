@@ -1,3 +1,15 @@
+# Leaphy Blockly
+
+## Building
+
+In a Python-enabled terminal, run `yarn build`. WARNING: This may get you a lot of changed files as all the language files are recreated. 
+If you don't want this, use `yarn build:not:langfiles`. Look at package.json for more build options.
+
+## Publishing a new version of the leaphy-blockly package to npm
+
+In a python-enabled terminal, run `yarn publish`. Enter a version number that does not exist yet. Wait. Boom!
+
+
 # Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)
 
 Google's Blockly is a library that adds a visual code editor to web and mobile apps. The Blockly editor uses interlocking, graphical blocks to represent code concepts like variables, logical expressions, loops, and more. It allows users to apply programming principles without having to worry about syntax or the intimidation of a blinking cursor on the command line.  All code is free and open source.

@@ -351,5 +351,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Diwallit : Gallout a rafe ar bloc'h bezañ implijet e termenadur un arc'hwel hepken.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Lavaret un dra bennak...",
 	"WORKSPACE_ARIA_LABEL": "Takad labour Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Kemennoù-diwall zo er bloc'hadoù pleget."
+	"COLLAPSED_WARNINGS_WARNING": "Kemennoù-diwall zo er bloc'hadoù pleget.",
+	"DIALOG_OK": "Mat eo",
+	"DIALOG_CANCEL": "Nullañ"
 }

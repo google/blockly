@@ -356,46 +356,6 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
 
 /** @type {string} */
-/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.\n{{Identical|OK}}
-Blockly.Msg.IOS_OK = 'OK';
-/** @type {string} */
-/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.\n{{Identical|Cancel}}
-Blockly.Msg.IOS_CANCEL = 'Cancel';
-/** @type {string} */
-/// alert - Title text for an error dialogue.\n{{Identical|Error}}
-Blockly.Msg.IOS_ERROR = 'Error';
-/** @type {string} */
-/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.\n{{Identical|Input}}
-Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
-/** @type {string} */
-/// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
-Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
-/** @type {string} */
-/// option text - Text describing an option to allow statements to be added within a procedure. This is used inside a dialogue window to configure a procedure.
-Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
-/** @type {string} */
-/// alert - Error message when duplicate parameters (aka. "inputs") have been defined on a procedure. This is used inside a dialogue window to configure procedure parameters.
-Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
-/** @type {string} */
-/// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
-Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
-/** @type {string} */
-/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.\n{{Identical|Add}}
-Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
-/** @type {string} */
-/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.\n{{Identical|Rename}}
-Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
-/** @type {string} */
-/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.\n{{Identical|Delete}}
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
-/** @type {string} */
-/// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
-Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
-/** @type {string} */
-/// alert - Error message that is displayed when the user attempts to create a variable without a name.
-Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = 'You can\'t use an empty variable name.';
-
-/** @type {string} */
 /// {{Optional}} url - Information about comparisons.
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
 /** @type {string} */
@@ -1628,3 +1588,11 @@ Blockly.Msg.WORKSPACE_ARIA_LABEL = 'Blockly Workspace';
 /// that block have warnings attached to them. It should inform the user that the
 /// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';
+
+/** @type {string} */
+/// button label - Pressing this button closes help information.\n{{Identical|OK}}
+Blockly.Msg.DIALOG_OK = 'OK';
+
+/** @type {string} */
+/// button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}
+Blockly.Msg.DIALOG_CANCEL = 'Cancel';

@@ -1,0 +1,16 @@
+{
+	"@metadata": {
+		"authors": [
+			"හරිත"
+		]
+	},
+	"VARIABLES_DEFAULT_NAME": "අයිතමය",
+	"DELETE_X_BLOCKS": "රූපතහඩු %1 මකාදමන්න",
+	"EXPAND_ALL": "රූපතහඩු විහිදන්න",
+	"HELP": "උදව්",
+	"COLOUR_RGB_RED": "රතු",
+	"COLOUR_RGB_GREEN": "කොළ",
+	"COLOUR_RGB_BLUE": "නිල්",
+	"DIALOG_OK": "හරි",
+	"DIALOG_CANCEL": "අවලංගු කරන්න"
+}

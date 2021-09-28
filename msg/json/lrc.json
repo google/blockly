@@ -132,5 +132,7 @@
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "دادٱیا",
 	"PROCEDURES_MUTATORARG_TITLE": "نوم دادٱ:",
-	"PROCEDURES_CREATE_DO": "دۏرس کردن%1"
+	"PROCEDURES_CREATE_DO": "دۏرس کردن%1",
+	"DIALOG_OK": "خۊئٱ",
+	"DIALOG_CANCEL": "رٱد كردن"
 }

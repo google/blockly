@@ -310,5 +310,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "நிரல்பாகத்தை விளக்கமாக காட்டு",
 	"PROCEDURES_CREATE_DO": "'%1' உருவாக்குக",
 	"PROCEDURES_IFRETURN_TOOLTIP": "மதிப்பு உண்மையானால், இரண்டாவது மதிப்பை பின்கொடு.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ஏதாகினும் பகர்க..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ஏதாகினும் பகர்க...",
+	"DIALOG_OK": "சரி",
+	"DIALOG_CANCEL": "இரத்து செய்"
 }

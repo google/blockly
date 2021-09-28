@@ -338,5 +338,7 @@
 	"PROCEDURES_CREATE_DO": "Ƙirƙiri '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Idan wata kima gaskiya ce, to dawo da kima ta biyu.",
 	"PROCEDURES_IFRETURN_WARNING": "Gargaɗi: Za a iya amfani da wannan bulo ne kawai a cikin bayani na wani aiki.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Faɗi wani abu..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Faɗi wani abu...",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Cancel"
 }

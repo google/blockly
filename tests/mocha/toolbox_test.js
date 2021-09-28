@@ -33,7 +33,7 @@ suite('Toolbox', function() {
       chai.assert.isDefined(this.toolbox.HtmlDiv);
     });
     test('Init called -> HtmlDiv is inserted before parent node', function() {
-      var toolboxDiv = Blockly.getMainWorkspace().getInjectionDiv().childNodes[0];
+      var toolboxDiv = Blockly.common.getMainWorkspace().getInjectionDiv().childNodes[0];
       chai.assert.equal(toolboxDiv.className,
           'blocklyToolboxDiv blocklyNonSelectable');
     });

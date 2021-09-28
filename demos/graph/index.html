@@ -334,7 +334,7 @@ Graph.plot = function(code) {
 Graph.resize = function() {
   var width = Math.max(window.innerWidth - 440, 250);
   document.getElementById('blocklyDiv').style.width = width + 'px';
-  Blockly.svgResize(Graph.workspace);
+  Blockly.common.svgResize(Graph.workspace);
 };
 
 /**

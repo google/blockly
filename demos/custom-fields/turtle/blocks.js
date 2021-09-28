@@ -14,7 +14,7 @@ Blockly.Blocks['turtle_basic'] = {
     this.appendDummyInput()
         .appendField('simple turtle');
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
+        .setAlign(Blockly.constants.ALIGN.CENTRE)
         .appendField(new CustomFields.FieldTurtle(), 'TURTLE');
     this.setStyle('loop_blocks');
     this.setCommentText('Demonstrates a turtle field with no validator.');
@@ -26,7 +26,7 @@ Blockly.Blocks['turtle_nullifier'] = {
     this.appendDummyInput()
         .appendField('no trademarks');
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
+        .setAlign(Blockly.constants.ALIGN.CENTRE)
         .appendField(new CustomFields.FieldTurtle(null, null, null, this.validate)
             , 'TURTLE');
     this.setStyle('loop_blocks');
@@ -64,7 +64,7 @@ Blockly.Blocks['turtle_nullifier'] = {
 Blockly.Blocks['turtle_changer'] = {
   init: function() {
     this.appendDummyInput()
-      .setAlign(Blockly.ALIGN_CENTRE)
+      .setAlign(Blockly.constants.ALIGN.CENTRE)
         .appendField('force hats');
     this.appendDummyInput()
         .appendField(new CustomFields.FieldTurtle(

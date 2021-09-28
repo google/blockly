@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.connectionChecker');
 
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -27,7 +28,7 @@ suite('Connection checker', function() {
     }
 
     test('Target Null', function() {
-      var connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
+      var connection = new Blockly.Connection({}, ConnectionType.INPUT_VALUE);
       assertReasonHelper(
           this.checker,
           connection,
@@ -36,8 +37,8 @@ suite('Connection checker', function() {
     });
     test('Target Self', function() {
       var block = {workspace: 1};
-      var connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
-      var connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
+      var connection1 = new Blockly.Connection(block, ConnectionType.INPUT_VALUE);
+      var connection2 = new Blockly.Connection(block, ConnectionType.OUTPUT_VALUE);
 
       assertReasonHelper(
           this.checker,
@@ -47,9 +48,9 @@ suite('Connection checker', function() {
     });
     test('Different Workspaces', function() {
       var connection1 = new Blockly.Connection(
-          {workspace: 1}, Blockly.INPUT_VALUE);
+          {workspace: 1}, ConnectionType.INPUT_VALUE);
       var connection2 = new Blockly.Connection(
-          {workspace: 2}, Blockly.OUTPUT_VALUE);
+          {workspace: 2}, ConnectionType.OUTPUT_VALUE);
 
       assertReasonHelper(
           this.checker,
@@ -66,13 +67,13 @@ suite('Connection checker', function() {
         var outBlock = { isShadow: function() {}};
         var inBlock = { isShadow: function() {}};
         this.previous = new Blockly.Connection(
-            prevBlock, Blockly.PREVIOUS_STATEMENT);
+            prevBlock, ConnectionType.PREVIOUS_STATEMENT);
         this.next = new Blockly.Connection(
-            nextBlock, Blockly.NEXT_STATEMENT);
+            nextBlock, ConnectionType.NEXT_STATEMENT);
         this.output = new Blockly.Connection(
-            outBlock, Blockly.OUTPUT_VALUE);
+            outBlock, ConnectionType.OUTPUT_VALUE);
         this.input = new Blockly.Connection(
-            inBlock, Blockly.INPUT_VALUE);
+            inBlock, ConnectionType.INPUT_VALUE);
       });
       test('Previous, Next', function() {
         assertReasonHelper(
@@ -163,8 +164,8 @@ suite('Connection checker', function() {
       test('Previous Shadow', function() {
         var prevBlock = { isShadow: function() { return true; }};
         var nextBlock = { isShadow: function() { return false; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        var prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -175,8 +176,8 @@ suite('Connection checker', function() {
       test('Next Shadow', function() {
         var prevBlock = { isShadow: function() { return false; }};
         var nextBlock = { isShadow: function() { return true; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        var prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -187,8 +188,8 @@ suite('Connection checker', function() {
       test('Prev and Next Shadow', function() {
         var prevBlock = { isShadow: function() { return true; }};
         var nextBlock = { isShadow: function() { return true; }};
-        var prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        var next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        var prev = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        var next = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -199,8 +200,8 @@ suite('Connection checker', function() {
       test('Output Shadow', function() {
         var outBlock = { isShadow: function() { return true; }};
         var inBlock = { isShadow: function() { return false; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        var outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,
@@ -211,8 +212,8 @@ suite('Connection checker', function() {
       test('Input Shadow', function() {
         var outBlock = { isShadow: function() { return false; }};
         var inBlock = { isShadow: function() { return true; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        var outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,
@@ -223,8 +224,8 @@ suite('Connection checker', function() {
       test('Output and Input Shadow', function() {
         var outBlock = { isShadow: function() { return true; }};
         var inBlock = { isShadow: function() { return true; }};
-        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        var outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,
@@ -236,8 +237,8 @@ suite('Connection checker', function() {
   });
   suite('Check Types', function() {
     setup(function() {
-      this.con1 = new Blockly.Connection({}, Blockly.PREVIOUS_STATEMENT);
-      this.con2 = new Blockly.Connection({}, Blockly.NEXT_STATEMENT);
+      this.con1 = new Blockly.Connection({}, ConnectionType.PREVIOUS_STATEMENT);
+      this.con2 = new Blockly.Connection({}, ConnectionType.NEXT_STATEMENT);
     });
     function assertCheckTypes(checker, one, two) {
       chai.assert.isTrue(checker.doTypeChecks(one, two));

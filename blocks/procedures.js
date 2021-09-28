@@ -464,7 +464,7 @@ Blockly.Blocks['procedures_defreturn'] = {
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
     this.appendValueInput('RETURN')
-        .setAlign(Blockly.ALIGN_RIGHT)
+        .setAlign(Blockly.constants.ALIGN.RIGHT)
         .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
     this.setMutator(new Blockly.Mutator(['procedures_mutatorarg']));
     if ((this.workspace.options.comments ||
@@ -800,7 +800,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         // Add new input.
         field = new Blockly.FieldLabel(this.arguments_[i]);
         var input = this.appendValueInput('ARG' + i)
-            .setAlign(Blockly.ALIGN_RIGHT)
+            .setAlign(Blockly.constants.ALIGN.RIGHT)
             .appendField(field, 'ARGNAME' + i);
         input.init();
       }

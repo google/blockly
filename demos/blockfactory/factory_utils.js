@@ -122,11 +122,11 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     }
     var name = input.name;
     if (name) {
-      if (input.type == Blockly.INPUT_VALUE) {
+      if (input.type == Blockly.ConnectionType.INPUT_VALUE) {
         code.push(makeVar('value', name) +
                   " = Blockly." + language + ".valueToCode(block, '" + name +
                   "', Blockly." + language + ".ORDER_ATOMIC);");
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
+      } else if (input.type == Blockly.ConnectionType.NEXT_STATEMENT) {
         code.push(makeVar('statements', name) +
                   " = Blockly." + language + ".statementToCode(block, '" +
                   name + "');");
@@ -298,7 +298,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
       }
       var align = contentsBlock.getFieldValue('ALIGN');
       if (align != 'LEFT') {
-        code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
+        code.push('        .setAlign(Blockly.constants.ALIGN.' + align + ')');
       }
       var fields = FactoryUtils.getFieldsJs_(
           contentsBlock.getInputTargetBlock('FIELDS'));

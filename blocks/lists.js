@@ -244,7 +244,7 @@ Blockly.Blocks['lists_create_with'] = {
     for (var i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i)
-            .setAlign(Blockly.ALIGN_RIGHT);
+            .setAlign(Blockly.constants.ALIGN.RIGHT);
         if (i == 0) {
           input.appendField(Blockly.Msg['LISTS_CREATE_WITH_INPUT_WITH']);
         }
@@ -425,7 +425,7 @@ Blockly.Blocks['lists_getIndex'] = {
     var container = Blockly.utils.xml.createElement('mutation');
     var isStatement = !this.outputConnection;
     container.setAttribute('statement', isStatement);
-    var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
+    var isAt = this.getInput('AT').type == Blockly.ConnectionType.INPUT_VALUE;
     container.setAttribute('at', isAt);
     return container;
   },
@@ -593,7 +593,7 @@ Blockly.Blocks['lists_setIndex'] = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
+    var isAt = this.getInput('AT').type == Blockly.ConnectionType.INPUT_VALUE;
     container.setAttribute('at', isAt);
     return container;
   },
@@ -697,9 +697,9 @@ Blockly.Blocks['lists_getSublist'] = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
+    var isAt1 = this.getInput('AT1').type == Blockly.ConnectionType.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
-    var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
+    var isAt2 = this.getInput('AT2').type == Blockly.ConnectionType.INPUT_VALUE;
     container.setAttribute('at2', isAt2);
     return container;
   },

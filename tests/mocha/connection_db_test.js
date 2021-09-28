@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.connectionDb');
 
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -34,7 +35,7 @@ suite('Connection Database', function() {
     };
     this.createSimpleTestConnections = function() {
       for (var i = 0; i < 10; i++) {
-        var connection = this.createConnection(0, i, Blockly.PREVIOUS_STATEMENT);
+        var connection = this.createConnection(0, i, ConnectionType.PREVIOUS_STATEMENT);
         this.database.addConnection(connection, i);
       }
     };
@@ -113,14 +114,14 @@ suite('Connection Database', function() {
   });
   suite('Get Neighbors', function() {
     test('Empty Database', function() {
-      var connection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+      var connection = this.createConnection(0, 0, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       chai.assert.isEmpty(this.database.getNeighbours(connection), 100);
     });
     test('Block At Top', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 0, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 4);
       chai.assert.sameMembers(neighbors, this.database.connections_.slice(0, 5));
@@ -128,7 +129,7 @@ suite('Connection Database', function() {
     test('Block In Middle', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(0, 4, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 4, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 2);
       chai.assert.sameMembers(neighbors, this.database.connections_.slice(2, 7));
@@ -136,7 +137,7 @@ suite('Connection Database', function() {
     test('Block At End', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(0, 9, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 9, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 4);
       chai.assert.sameMembers(neighbors, this.database.connections_.slice(5, 10));
@@ -144,7 +145,7 @@ suite('Connection Database', function() {
     test('Out of Range X', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(10, 9, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(10, 9, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 4);
       chai.assert.isEmpty(neighbors);
@@ -152,7 +153,7 @@ suite('Connection Database', function() {
     test('Out of Range Y', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(0, 19, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 19, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 4);
       chai.assert.isEmpty(neighbors);
@@ -160,7 +161,7 @@ suite('Connection Database', function() {
     test('Out of Range Diagonal', function() {
       this.createSimpleTestConnections();
 
-      var checkConnection = this.createConnection(-2, -2, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(-2, -2, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       var neighbors = this.database.getNeighbours(checkConnection, 2);
       chai.assert.isEmpty(neighbors);
@@ -169,7 +170,7 @@ suite('Connection Database', function() {
   suite('Ordering', function() {
     test('Simple', function() {
       for (var i = 0; i < 10; i++) {
-        var connection = this.createConnection(0, i, Blockly.NEXT_STATEMENT);
+        var connection = this.createConnection(0, i, ConnectionType.NEXT_STATEMENT);
         this.database.addConnection(connection, i);
       }
       this.assertOrder();
@@ -193,7 +194,7 @@ suite('Connection Database', function() {
       var length = xCoords.length;
       for (var i = 0; i < length; i++) {
         var connection = this.createConnection(xCoords[i], yCoords[i],
-            Blockly.NEXT_STATEMENT);
+            ConnectionType.NEXT_STATEMENT);
         this.database.addConnection(connection, yCoords[i]);
       }
       this.assertOrder();
@@ -215,22 +216,22 @@ suite('Connection Database', function() {
           });
 
       this.createCheckConnection = function(x, y) {
-        var checkConnection = this.createConnection(x, y, Blockly.NEXT_STATEMENT,
+        var checkConnection = this.createConnection(x, y, ConnectionType.NEXT_STATEMENT,
             new Blockly.ConnectionDB());
         return checkConnection;
       };
     });
     test('Empty Database', function() {
-      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 0, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       chai.assert.isNull(this.database.searchForClosest(
           checkConnection, 100, {x: 0, y: 0}).connection);
     });
     test('Too Far', function() {
-      var connection = this.createConnection(0, 100, Blockly.PREVIOUS_STATEMENT);
+      var connection = this.createConnection(0, 100, ConnectionType.PREVIOUS_STATEMENT);
       this.database.addConnection(connection, 100);
 
-      var checkConnection = this.createConnection(0, 0, Blockly.NEXT_STATEMENT,
+      var checkConnection = this.createConnection(0, 0, ConnectionType.NEXT_STATEMENT,
           new Blockly.ConnectionDB());
       chai.assert.isNull(this.database.searchForClosest(
           checkConnection, 50, {x: 0, y: 0}).connection);
@@ -256,9 +257,9 @@ suite('Connection Database', function() {
       chai.assert.equal(last, closest);
     });
     test('No Y-Coord Priority', function() {
-      var connection1 = this.createConnection(6, 6, Blockly.PREVIOUS_STATEMENT);
+      var connection1 = this.createConnection(6, 6, ConnectionType.PREVIOUS_STATEMENT);
       this.database.addConnection(connection1, 6);
-      var connection2 = this.createConnection(5, 5, Blockly.PREVIOUS_STATEMENT);
+      var connection2 = this.createConnection(5, 5, ConnectionType.PREVIOUS_STATEMENT);
       this.database.addConnection(connection2, 5);
 
       var checkConnection = this.createCheckConnection(4, 6);

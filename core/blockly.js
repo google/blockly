@@ -334,24 +334,24 @@ Object.defineProperties(exports, {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_LEFT', 'September 2021', 'September 2022',
-          'Blockly.constants.ALIGN_LEFT');
-      return constants.ALIGN_LEFT;
+          'Blockly.constants.ALIGN.LEFT');
+      return constants.ALIGN.LEFT;
     }
   },
   ALIGN_CENTRE: {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_CENTRE', 'September 2021', 'September 2022',
-          'Blockly.constants.ALIGN_CENTRE');
-      return constants.ALIGN_CENTRE;
+          'Blockly.constants.ALIGN.CENTRE');
+      return constants.ALIGN.CENTRE;
     }
   },
   ALIGN_RIGHT: {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_RIGHT', 'September 2021', 'September 2022',
-          'Blockly.constants.ALIGN_RIGHT');
-      return constants.ALIGN_RIGHT;
+          'Blockly.constants.ALIGN.RIGHT');
+      return constants.ALIGN.RIGHT;
     }
   },
   INPUT_VALUE: {
@@ -390,40 +390,40 @@ Object.defineProperties(exports, {
     get: function() {
       deprecation.warn(
           'Blockly.DUMMY_INPUT', 'September 2021', 'September 2022',
-          'Blockly.inputTypes.DUMMY_INPUT');
-      return inputTypes.DUMMY_INPUT;
+          'Blockly.inputTypes.DUMMY');
+      return inputTypes.DUMMY;
     }
   },
   TOOLBOX_AT_TOP: {
     get: function() {
       deprecation.warn(
           'Blockly.TOOLBOX_AT_TOP', 'September 2021', 'September 2022',
-          'Blockly.utils.toolbox.Position.TOOLBOX_AT_TOP');
-      return toolbox.Position.TOOLBOX_AT_TOP;
+          'Blockly.utils.toolbox.Position.TOP');
+      return toolbox.Position.TOP;
     }
   },
   TOOLBOX_AT_BOTTOM: {
     get: function() {
       deprecation.warn(
           'Blockly.TOOLBOX_AT_BOTTOM', 'September 2021', 'September 2022',
-          'Blockly.utils.toolbox.Position.TOOLBOX_AT_BOTTOM');
-      return toolbox.Position.TOOLBOX_AT_BOTTOM;
+          'Blockly.utils.toolbox.Position.BOTTOM');
+      return toolbox.Position.BOTTOM;
     }
   },
   TOOLBOX_AT_LEFT: {
     get: function() {
       deprecation.warn(
           'Blockly.TOOLBOX_AT_LEFT', 'September 2021', 'September 2022',
-          'Blockly.utils.toolbox.Position.TOOLBOX_AT_LEFT');
-      return toolbox.Position.TOOLBOX_AT_LEFT;
+          'Blockly.utils.toolbox.Position.LEFT');
+      return toolbox.Position.LEFT;
     }
   },
   TOOLBOX_AT_RIGHT: {
     get: function() {
       deprecation.warn(
           'Blockly.TOOLBOX_AT_RIGHT', 'September 2021', 'September 2022',
-          'Blockly.utils.toolbox.Position.TOOLBOX_AT_RIGHT');
-      return toolbox.Position.TOOLBOX_AT_RIGHT;
+          'Blockly.utils.toolbox.Position.RIGHT');
+      return toolbox.Position.RIGHT;
     }
   },
 });
@@ -583,7 +583,7 @@ exports.hueToHex = hueToHex;
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Data} Opaque data that can be passed to
+ * @return {!browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @deprecated Use Blockly.browserEvents.bind(). (30 September 2021)
  * @see Blockly.browserEvents.bind
@@ -599,7 +599,7 @@ exports.bindEvent_ = bindEvent_;
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!Data} bindData Opaque data from bindEvent_.
+ * @param {!browserEvents.Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
  * @deprecated Use Blockly.browserEvents.unbind(). (30 September 2021)
@@ -629,7 +629,7 @@ exports.unbindEvent_ = unbindEvent_;
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Data} Opaque data that can be passed to
+ * @return {!browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
  * @deprecated Use Blockly.browserEvents.conditionalBind(). (30 September 2021)
  * @see browserEvents.conditionalBind

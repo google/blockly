@@ -261,9 +261,9 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     var align = 'LEFT'; // Left alignment is the default.
-    if (input.align === Blockly.ALIGN_CENTRE) {
+    if (input.align === Blockly.constants.ALIGN.CENTRE) {
       align = 'CENTRE';
-    } else if (input.align === Blockly.ALIGN_RIGHT) {
+    } else if (input.align === Blockly.constants.ALIGN.RIGHT) {
       align = 'RIGHT';
     }
 
@@ -289,10 +289,10 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
  * @private
  */
 BlockDefinitionExtractor.input_ = function(input, align) {
-  var isDummy = (input.type === Blockly.DUMMY_INPUT);
+  var isDummy = (input.type === Blockly.inputTypes.DUMMY);
   var inputTypeAttr =
       isDummy ? 'input_dummy' :
-      (input.type === Blockly.INPUT_VALUE) ? 'input_value' : 'input_statement';
+      (input.type === Blockly.ConnectionType.INPUT_VALUE) ? 'input_value' : 'input_statement';
   var inputDefBlock =
       BlockDefinitionExtractor.newDomElement_('block', {type: inputTypeAttr});
 

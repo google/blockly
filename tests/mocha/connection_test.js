@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.connection');
 
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {assertSingleDeprecationWarningCall, createDeprecationWarningStub, createGenUidStubWithReturns, defineRowBlock, defineStatementBlock, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -41,7 +42,7 @@ suite('Connection', function() {
   test('Deprecated - canConnectWithReason fails', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
+    var conn2 = this.createConnection(ConnectionType.OUTPUT_VALUE);
     chai.assert.equal(conn1.canConnectWithReason(conn2),
         Blockly.Connection.REASON_WRONG_TYPE);
     assertSingleDeprecationWarningCall(deprecateWarnSpy,
@@ -62,7 +63,7 @@ suite('Connection', function() {
   test('Deprecated - checkConnection fails', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
     var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
+    var conn2 = this.createConnection(ConnectionType.OUTPUT_VALUE);
     chai.assert.throws(function() {
       conn1.checkConnection(conn2);
     });

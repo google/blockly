@@ -36,7 +36,6 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.startDebugger
- * @package
  */
 const startDebugger = function() {
   useDebugger = true;
@@ -47,7 +46,6 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.stopDebugger
- * @package
  */
 const stopDebugger = function() {
   useDebugger = false;

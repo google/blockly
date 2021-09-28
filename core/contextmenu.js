@@ -337,7 +337,6 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
- * @package
  */
 const workspaceCommentOption = function(ws, e) {
   const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');

@@ -19,7 +19,7 @@ goog.module('Blockly.ZoomControls');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
+const IPositionable = goog.require('Blockly.IPositionable');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Rect = goog.require('Blockly.utils.Rect');

@@ -20,7 +20,7 @@ goog.module('Blockly.ConnectionChecker');
 
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const common = goog.require('Blockly.common');

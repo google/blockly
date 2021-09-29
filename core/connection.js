@@ -17,7 +17,7 @@
 goog.module('Blockly.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
+const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */

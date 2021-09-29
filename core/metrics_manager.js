@@ -19,7 +19,7 @@ goog.module('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
+const IMetricsManager = goog.require('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */

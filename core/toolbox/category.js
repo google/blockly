@@ -20,7 +20,7 @@ const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 const ToolboxItem = goog.require('Blockly.ToolboxItem');

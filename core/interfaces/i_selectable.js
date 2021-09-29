@@ -18,9 +18,9 @@
 goog.module('Blockly.ISelectable');
 
 // eslint-disable-next-line no-unused-vars
-const IDeletable = goog.requireType('Blockly.IDeletable');
+const IDeletable = goog.require('Blockly.IDeletable');
 // eslint-disable-next-line no-unused-vars
-const IMovable = goog.requireType('Blockly.IMovable');
+const IMovable = goog.require('Blockly.IMovable');
 
 
 /**

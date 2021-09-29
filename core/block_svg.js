@@ -29,13 +29,13 @@ const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Field = goog.requireType('Blockly.Field');
 const FieldLabel = goog.require('Blockly.FieldLabel');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
+const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
+const IBoundedElement = goog.require('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const ICopyable = goog.require('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const IDraggable = goog.require('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
 /* eslint-disable-next-line no-unused-vars */

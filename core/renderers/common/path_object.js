@@ -22,7 +22,7 @@ const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
+const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');

@@ -23,7 +23,7 @@ const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 const Options = goog.require('Blockly.Options');

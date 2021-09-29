@@ -26,9 +26,9 @@ const Extensions = goog.require('Blockly.Extensions');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
-const IDeletable = goog.requireType('Blockly.IDeletable');
+const IDeletable = goog.require('Blockly.IDeletable');
 const Input = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Mutator = goog.requireType('Blockly.Mutator');

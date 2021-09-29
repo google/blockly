@@ -23,13 +23,13 @@ const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const DeleteArea = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
+const IAutoHideable = goog.require('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
+const IPositionable = goog.require('Blockly.IPositionable');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Options = goog.require('Blockly.Options');

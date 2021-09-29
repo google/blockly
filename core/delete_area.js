@@ -21,7 +21,7 @@ goog.module('Blockly.DeleteArea');
 
 const DragTarget = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const IDeleteArea = goog.require('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
 const object = goog.require('Blockly.utils.object');

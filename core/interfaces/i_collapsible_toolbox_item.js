@@ -18,7 +18,7 @@
 goog.module('Blockly.ICollapsibleToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 

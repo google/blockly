@@ -23,7 +23,7 @@ const Debug = goog.requireType('Blockly.blockRendering.Debug');
 const Drawer = goog.require('Blockly.blockRendering.Drawer');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.requireType('Blockly.IRegistrable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
 const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');

@@ -23,7 +23,7 @@ const DeleteArea = goog.require('Blockly.DeleteArea');
 const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
+const IFlyout = goog.require('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const Options = goog.requireType('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');

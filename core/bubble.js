@@ -18,7 +18,7 @@ goog.module('Blockly.Bubble');
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
+const IBubble = goog.require('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Scrollbar = goog.require('Blockly.Scrollbar');

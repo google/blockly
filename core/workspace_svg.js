@@ -30,7 +30,7 @@ const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
 const Gesture = goog.require('Blockly.Gesture');
 const Grid = goog.require('Blockly.Grid');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
+const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
 const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */

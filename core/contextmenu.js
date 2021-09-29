@@ -68,8 +68,16 @@ const setCurrentBlock = function(block) {
 };
 exports.setCurrentBlock = setCurrentBlock;
 
-// Ad JS accessors for backwards compatibility.
+// Add JS accessors for backwards compatibility.
 Object.defineProperties(exports, {
+  /**
+   * Which block is the context menu attached to?
+   * @name Blockly.ContextMenu.currentBlock
+   * @type {Block}
+   * @deprecated Use Blockly.Tooltip.getCurrentBlock() /
+   *     .setCurrentBlock() instead.  (September 2021)
+   * @suppress {checkTypes}
+   */
   currentBlock: {
     get: function() {
       deprecation.warn(
@@ -330,7 +338,6 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
- * @package
  */
 const workspaceCommentOption = function(ws, e) {
   const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');

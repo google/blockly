@@ -31,6 +31,7 @@ const CommentMove = goog.requireType('Blockly.Events.CommentMove');
 const Workspace = goog.requireType('Blockly.Workspace');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
 

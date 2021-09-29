@@ -198,6 +198,15 @@ exports.VERSION = 'uncompiled';
 // Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
 // compatibility.
 Object.defineProperties(exports, {
+  /**
+   * Wrapper to window.alert() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.alert
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   alert: {
     set: function(newAlert) {
       deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
@@ -210,6 +219,15 @@ Object.defineProperties(exports, {
       return dialog.alert;
     }
   },
+  /**
+   * Wrapper to window.confirm() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.confirm
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   confirm: {
     set: function(newConfirm) {
       deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
@@ -222,6 +240,15 @@ Object.defineProperties(exports, {
       return dialog.confirm;
     }
   },
+  /**
+   * The main workspace most recently used.
+   * Set by Blockly.WorkspaceSvg.prototype.markFocused
+   * @name Blockly.mainWorkspace
+   * @type {Workspace}
+   * @deprecated Use Blockly.common.getMainWorkspace() /
+   *     .setMainWorkspace instead.  (September 2021)
+   * @suppress {checkTypes}
+   */
   mainWorkspace: {
     set: function(x) {
       deprecation.warn(
@@ -235,6 +262,18 @@ Object.defineProperties(exports, {
       return common.getMainWorkspace();
     }
   },
+  /**
+   * Wrapper to window.prompt() that app developers may override to
+   * provide alternatives to the modal browser window. Built-in
+   * browser prompts are often used for better text input experience
+   * on mobile device. We strongly recommend testing mobile when
+   * overriding this.
+   * @name Blockly.prompt
+   * @type {!function(string, string, function()=)}
+   * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   prompt: {
     set: function(newPrompt) {
       deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
@@ -247,6 +286,14 @@ Object.defineProperties(exports, {
       return dialog.prompt;
     }
   },
+  /**
+   * Currently selected block.
+   * @name Blockly.selected
+   * @type {?ICopyable}
+   * @deprecated Use Blockly.common.getSelected() / .setSelected
+   *     instead.  (September 2021)
+   * @suppress {checkTypes}
+   */
   selected: {
     get: function() {
       deprecation.warn(

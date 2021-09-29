@@ -417,10 +417,16 @@ Generator.prototype.functionNames_;
 Generator.prototype.nameDB_;
 
 Object.defineProperties(Generator.prototype, {
+  /**
+   * A database of variable names.
+   * @name Blockly.Generator.prototype.variableDB_
+   * @type {!Names|undefined}
+   * @protected
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @suppress {checkTypes}
+   */
   variableDB_: {
     /**
-     * Getter.
-     * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
      * @this {Generator}
      * @return {!Names|undefined} Name database.
      */
@@ -429,8 +435,6 @@ Object.defineProperties(Generator.prototype, {
       return this.nameDB_;
     },
     /**
-     * Setter.
-     * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
      * @this {Generator}
      * @param {!Names|undefined} nameDb New name database.
      */

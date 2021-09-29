@@ -92,7 +92,6 @@ exports.unregister = unregister;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.startDebugger
- * @package
  */
 const startDebugger = function() {
   deprecation.warn(
@@ -106,7 +105,6 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.stopDebugger
- * @package
  */
 const stopDebugger = function() {
   deprecation.warn(
@@ -125,7 +123,6 @@ exports.stopDebugger = stopDebugger;
  *     Already initialized.
  * @package
  * @alias Blockly.blockRendering.init
- * @package
  */
 const init = function(name, theme, opt_rendererOverrides) {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);

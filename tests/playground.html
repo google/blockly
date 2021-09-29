@@ -392,7 +392,7 @@ var spaghettiXml = [
       }
     };
     console.time('Spaghetti serialization');
-    Blockly.serialization.load(obj, workspace);
+    Blockly.serialization.workspaces.load(obj, workspace);
     console.timeEnd('Spaghetti serialization');
   }
   var spaghettiJs = JSON.stringify({

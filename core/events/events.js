@@ -127,8 +127,8 @@ Object.defineProperties(exports, {
    * Sets whether the next event should be added to the undo stack.
    * @name Blockly.Evenents.recordUndo
    * @type {boolean}
-   * @deprecated (September 2021): Use Blockly.Events.getRecordUndo()
-   *     and .setRecordUndo().
+   * @deprecated Use Blockly.Events.getRecordUndo() and
+   *     .setRecordUndo().  (September 2021)
    * @suppress {checkTypes}
    */
   recordUndo: {

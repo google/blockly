@@ -202,12 +202,9 @@ Object.defineProperties(exports, {
    * Wrapper to window.alert() that app developers may override to
    * provide alternatives to the modal browser window.
    * @name Blockly.alert
-   * @function
-   * @param {string} message The message to display to the user.
-   * @param {function()=} opt_callback The callback when the alert is
-   *     dismissed.
-   * @deprecated (September 2021): Use Blockly.dialog.alert /
-   *     .setAlert() instead.
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
+   *     (September 2021)
    * @suppress {checkTypes}
    */
   alert: {
@@ -226,12 +223,9 @@ Object.defineProperties(exports, {
    * Wrapper to window.confirm() that app developers may override to
    * provide alternatives to the modal browser window.
    * @name Blockly.confirm
-   * @function
-   * @param {string} message The message to display to the user.
-   * @param {!function(boolean)} callback The callback for handling
-   *     user response.
-   * @deprecated (September 2021): Use Blockly.dialog.confirm /
-   *     .setConfirm() instead.
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
+   *     (September 2021)
    * @suppress {checkTypes}
    */
   confirm: {
@@ -251,8 +245,8 @@ Object.defineProperties(exports, {
    * Set by Blockly.WorkspaceSvg.prototype.markFocused
    * @name Blockly.mainWorkspace
    * @type {Workspace}
-   * @deprecated (September 2021): Use Blockly.common.getMainWorkspace() /
-   *     .setMainWorkspace instead.
+   * @deprecated Use Blockly.common.getMainWorkspace() /
+   *     .setMainWorkspace instead.  (September 2021)
    * @suppress {checkTypes}
    */
   mainWorkspace: {
@@ -275,13 +269,9 @@ Object.defineProperties(exports, {
    * on mobile device. We strongly recommend testing mobile when
    * overriding this.
    * @name Blockly.prompt
-   * @function
-   * @param {string} message The message to display to the user.
-   * @param {string} defaultValue The value to initialize the prompt with.
-   * @param {!function(?string)} callback The callback for handling
-   *     user response.
-   * @deprecated (September 2021): Use Blockly.dialog.prompt /
-   *     .setPrompt() instead.
+   * @type {!function(string, string, function()=)}
+   * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
+   *     (September 2021)
    * @suppress {checkTypes}
    */
   prompt: {
@@ -300,8 +290,8 @@ Object.defineProperties(exports, {
    * Currently selected block.
    * @name Blockly.selected
    * @type {?ICopyable}
-   * @deprecated (September 2021): Use Blockly.common.getSelected() /
-   *     .setSelected instead.
+   * @deprecated Use Blockly.common.getSelected() / .setSelected
+   *     instead.  (September 2021)
    * @suppress {checkTypes}
    */
   selected: {

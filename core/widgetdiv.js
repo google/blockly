@@ -87,8 +87,8 @@ Object.defineProperties(exports, {
    * The HTML container for popup overlays (e.g. editor widgets).
    * @name Blockly.WidgetDiv.DIV
    * @type {?Element}
-   * @deprecated (September 2021): use Blockly.WidgetDiv.getDiv() and
-   *     .setDiv().
+   * @deprecated Use Blockly.WidgetDiv.getDiv() and .setDiv().
+   *     (September 2021)
    * @suppress {checkTypes}
    */
   DIV: {

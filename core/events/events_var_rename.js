@@ -12,7 +12,7 @@
 
 /**
  * Class for a variable rename event.
- * @namespace Blockly.Events.VarRename
+ * @class
  */
 goog.module('Blockly.Events.VarRename');
 

@@ -14,7 +14,7 @@
 
 /**
  * Text Area field.
- * @namespace Blockly.FieldMultilineInput
+ * @class
  */
 goog.module('Blockly.FieldMultilineInput');
 

@@ -13,7 +13,7 @@
 /**
  * Zelos specific objects representing inputs with connections on
  * a rendered block.
- * @namespace Blockly.zelos.StatementInput
+ * @class
  */
 goog.module('Blockly.zelos.StatementInput');
 

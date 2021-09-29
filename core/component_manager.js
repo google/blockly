@@ -13,7 +13,7 @@
 
 /**
  * Manager for all items registered with the workspace.
- * @namespace Blockly.ComponentManager
+ * @class
  */
 goog.module('Blockly.ComponentManager');
 

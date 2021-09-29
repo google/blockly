@@ -12,7 +12,7 @@
 
 /**
  * Text input field.
- * @namespace Blockly.FieldTextInput
+ * @class
  */
 goog.module('Blockly.FieldTextInput');
 

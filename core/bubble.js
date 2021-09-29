@@ -12,7 +12,7 @@
 
 /**
  * Object representing a UI bubble.
- * @namespace Blockly.Bubble
+ * @class
  */
 goog.module('Blockly.Bubble');
 

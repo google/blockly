@@ -12,7 +12,7 @@
 
 /**
  * Object representing a code comment on a rendered workspace.
- * @namespace Blockly.WorkspaceCommentSvg
+ * @class
  */
 goog.module('Blockly.WorkspaceCommentSvg');
 

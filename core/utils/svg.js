@@ -14,7 +14,7 @@
 /**
  * Defines the Svg class. Its constants enumerate
  * all SVG tag names used by Blockly.
- * @namespace Blockly.utils.Svg
+ * @class
  */
 goog.module('Blockly.utils.Svg');
 

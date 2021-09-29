@@ -15,7 +15,7 @@
 /**
  * The abstract class for a component with custom behaviour when a
  * block or bubble is dragged over or dropped on top of it.
- * @namespace Blockly.DragTarget
+ * @class
  */
 goog.module('Blockly.DragTarget');
 

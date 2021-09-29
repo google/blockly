@@ -13,7 +13,7 @@
 /**
  * Class representing the space a previous connection takes up
  * during rendering.
- * @namespace Blockly.blockRendering.PreviousConnection
+ * @class
  */
 goog.module('Blockly.blockRendering.PreviousConnection');
 

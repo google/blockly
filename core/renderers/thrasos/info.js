@@ -14,7 +14,7 @@
 /**
  * New (evolving) renderer.
  * Thrasos: spirit of boldness.
- * @namespace Blockly.thrasos.RenderInfo
+ * @class
  */
 goog.module('Blockly.thrasos.RenderInfo');
 

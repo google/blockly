@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of selecting an item on the toolbox.
- * @namespace Blockly.Events.ToolboxItemSelect
+ * @class
  */
 goog.module('Blockly.Events.ToolboxItemSelect');
 

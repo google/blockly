@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of element select action.
- * @namespace Blockly.Events.Selected
+ * @class
  */
 goog.module('Blockly.Events.Selected');
 

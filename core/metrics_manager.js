@@ -12,7 +12,7 @@
 
 /**
  * Calculates and reports workspace metrics.
- * @namespace Blockly.MetricsManager
+ * @class
  */
 goog.module('Blockly.MetricsManager');
 

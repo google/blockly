@@ -12,7 +12,7 @@
 
 /**
  * Object representing a trash can icon.
- * @namespace Blockly.Trashcan
+ * @class
  */
 goog.module('Blockly.Trashcan');
 

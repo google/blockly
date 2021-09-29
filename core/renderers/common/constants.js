@@ -12,7 +12,7 @@
 
 /**
  * An object that provides constants for rendering blocks.
- * @namespace Blockly.blockRendering.ConstantProvider
+ * @class
  */
 goog.module('Blockly.blockRendering.ConstantProvider');
 

@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of UI click in Blockly's editor.
- * @namespace Blockly.Events.Click
+ * @class
  */
 goog.module('Blockly.Events.Click');
 

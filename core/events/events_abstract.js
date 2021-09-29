@@ -14,7 +14,7 @@
 /**
  * Abstract class for events fired as a result of actions in
  * Blockly's editor.
- * @namespace Blockly.Events.Abstract
+ * @class
  */
 goog.module('Blockly.Events.Abstract');
 

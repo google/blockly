@@ -12,7 +12,7 @@
 
 /**
  * Methods for rendering debug graphics.
- * @namespace Blockly.blockRendering.Debug
+ * @class
  */
 goog.module('Blockly.blockRendering.Debug');
 

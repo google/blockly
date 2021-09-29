@@ -12,7 +12,7 @@
 
 /**
  * Classes for all types of variable events.
- * @namespace Blockly.Events.VarDelete
+ * @class
  */
 goog.module('Blockly.Events.VarDelete');
 

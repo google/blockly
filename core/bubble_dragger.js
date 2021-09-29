@@ -12,7 +12,7 @@
 
 /**
  * Methods for dragging a bubble visually.
- * @namespace Blockly.BubbleDragger
+ * @class
  */
 goog.module('Blockly.BubbleDragger');
 

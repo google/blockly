@@ -13,7 +13,7 @@
 /**
  * Objects representing a hat in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.Hat
+ * @class
  */
 goog.module('Blockly.blockRendering.Hat');
 

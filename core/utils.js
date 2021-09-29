@@ -537,6 +537,7 @@ exports.runAfterPageLoad = runAfterPageLoad;
  * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
  * @alias Blockly.utils.getViewportBBox
+ * @package
  */
 const getViewportBBox = function() {
   // Pixels, in window coordinates.
@@ -545,7 +546,6 @@ const getViewportBBox = function() {
       scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
       scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 };
-/** @package */
 exports.getViewportBBox = getViewportBBox;
 
 /**
@@ -554,6 +554,7 @@ exports.getViewportBBox = getViewportBBox;
  * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
  * @alias Blockly.utils.arrayRemove
+ * @package
  */
 const arrayRemove = function(arr, value) {
   const i = arr.indexOf(value);
@@ -563,7 +564,6 @@ const arrayRemove = function(arr, value) {
   arr.splice(i, 1);
   return true;
 };
-/** @package */
 exports.arrayRemove = arrayRemove;
 
 /**
@@ -624,6 +624,7 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  * be converted to workspace coordinates
  * @return {!Coordinate} The workspace coordinates.
  * @alias Blockly.utils.screenToWsCoordinates
+ * @package
  */
 const screenToWsCoordinates = function(ws, screenCoordinates) {
   const screenX = screenCoordinates.x;
@@ -652,7 +653,6 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
-/** @package */
 exports.screenToWsCoordinates = screenToWsCoordinates;
 
 /**

@@ -14,7 +14,7 @@
 /**
  * An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
- * @namespace Blockly.ConnectionChecker
+ * @class
  */
 goog.module('Blockly.ConnectionChecker');
 

@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of trashcan flyout open and close.
- * @namespace Blockly.Events.TrashcanOpen
+ * @class
  */
 goog.module('Blockly.Events.TrashcanOpen');
 

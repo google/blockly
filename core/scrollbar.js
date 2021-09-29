@@ -12,7 +12,7 @@
 
 /**
  * Object representing a scrollbar.
- * @namespace Blockly.Scrollbar
+ * @class
  */
 goog.module('Blockly.Scrollbar');
 

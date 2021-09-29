@@ -12,7 +12,7 @@
 
 /**
  * Class for comment deletion event.
- * @namespace Blockly.Events.CommentDelete
+ * @class
  */
 goog.module('Blockly.Events.CommentDelete');
 

@@ -12,7 +12,7 @@
 
 /**
  * Object that controls settings for the workspace.
- * @namespace Blockly.Options
+ * @class
  */
 goog.module('Blockly.Options');
 

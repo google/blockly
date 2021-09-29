@@ -14,7 +14,7 @@
 /**
  * The class representing a basic cursor.
  * Used to demo switching between different cursors.
- * @namespace Blockly.BasicCursor
+ * @class
  */
 goog.module('Blockly.BasicCursor');
 

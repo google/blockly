@@ -13,7 +13,7 @@
 /**
  * Objects representing an icon in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.Icon
+ * @class
  */
 goog.module('Blockly.blockRendering.Icon');
 

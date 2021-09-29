@@ -304,6 +304,7 @@ const updateMutatorFlyout = function(workspace) {
  * update and adds a mutator change listener to the mutator workspace.
  * @param {!Abstract} e The event that triggered this listener.
  * @alias Blockly.Procedures.mutatorOpenListener
+ * @package
  */
 const mutatorOpenListener = function(e) {
   if (!(e.type == eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
@@ -320,7 +321,6 @@ const mutatorOpenListener = function(e) {
   updateMutatorFlyout(workspace);
   workspace.addChangeListener(mutatorChangeListener);
 };
-/** @package */
 exports.mutatorOpenListener = mutatorOpenListener;
 
 /**

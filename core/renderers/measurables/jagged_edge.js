@@ -13,7 +13,7 @@
 /**
  * Objects representing a jagged edge in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.JaggedEdge
+ * @class
  */
 goog.module('Blockly.blockRendering.JaggedEdge');
 

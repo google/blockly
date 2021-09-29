@@ -14,7 +14,7 @@
 /**
  * Class representing the space a output connection takes up
  * during rendering.
- * @namespace Blockly.blockRendering.OutputConnection
+ * @class
  */
 goog.module('Blockly.blockRendering.OutputConnection');
 

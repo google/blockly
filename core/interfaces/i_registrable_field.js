@@ -28,6 +28,7 @@ const Field = goog.requireType('Blockly.Field');
  * @typedef {{
  *     fromJson:IRegistrableField.fromJson
  * }}
+ * @alias Blockly.IRegistrableField
  */
 let IRegistrableField = {};
 

@@ -14,7 +14,7 @@
 /**
  * Non-editable, non-serializable text field.  Used for titles,
  *    labels, etc.
- * @namespace Blockly.FieldLabel
+ * @class
  */
 goog.module('Blockly.FieldLabel');
 

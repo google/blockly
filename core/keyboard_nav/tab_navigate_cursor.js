@@ -14,7 +14,7 @@
 /**
  * The class representing a cursor that is used to navigate
  * between tab navigable fields.
- * @namespace Blockly.TabNavigateCursor
+ * @class
  */
 goog.module('Blockly.TabNavigateCursor');
 

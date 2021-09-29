@@ -12,7 +12,7 @@
 
 /**
  * Image field.  Used for pictures, icons, etc.
- * @namespace Blockly.FieldImage
+ * @class
  */
 goog.module('Blockly.FieldImage');
 

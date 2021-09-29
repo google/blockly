@@ -14,7 +14,7 @@
 /**
  * The class representing a cursor.
  * Used primarily for keyboard navigation.
- * @namespace Blockly.Cursor
+ * @class
  */
 goog.module('Blockly.Cursor');
 

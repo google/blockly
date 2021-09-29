@@ -12,7 +12,7 @@
 
 /**
  * Utility functions for handling variable and procedure names.
- * @namespace Blockly.Names
+ * @class
  */
 goog.module('Blockly.Names');
 

@@ -12,7 +12,7 @@
 
 /**
  * Horizontal flyout tray containing blocks which may be created.
- * @namespace Blockly.HorizontalFlyout
+ * @class
  */
 goog.module('Blockly.HorizontalFlyout');
 

@@ -11,7 +11,7 @@
 
 /**
  * Object representing a spacer between two rows.
- * @namespace Blockly.blockRendering.SpacerRow
+ * @class
  */
 goog.module('Blockly.blockRendering.SpacerRow');
 

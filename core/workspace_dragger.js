@@ -12,7 +12,7 @@
 
 /**
  * Methods for dragging a workspace visually.
- * @namespace Blockly.WorkspaceDragger
+ * @class
  */
 goog.module('Blockly.WorkspaceDragger');
 

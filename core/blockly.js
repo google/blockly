@@ -604,6 +604,7 @@ exports.bindEvent_ = bindEvent_;
  * @return {!Function} The function call.
  * @deprecated Use Blockly.browserEvents.unbind(). (30 September 2021)
  * @see browserEvents.unbind
+ * @alias Blockly.unbindEvent_
  */
 const unbindEvent_ = function(bindData) {
   deprecation.warn(
@@ -633,6 +634,7 @@ exports.unbindEvent_ = unbindEvent_;
  *     unbindEvent_.
  * @deprecated Use Blockly.browserEvents.conditionalBind(). (30 September 2021)
  * @see browserEvents.conditionalBind
+ * @alias Blockly.bindEventWithChecks_
  */
 const bindEventWithChecks_ = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,

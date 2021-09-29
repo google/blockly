@@ -14,7 +14,7 @@
 /**
  * Objects representing statement inputs with connections on a
  * rendered block.
- * @namespace Blockly.geras.StatementInput
+ * @class
  */
 goog.module('Blockly.geras.StatementInput');
 

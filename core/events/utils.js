@@ -492,6 +492,7 @@ exports.setGroup = setGroup;
  * @param {!Block} block The root block.
  * @return {!Array<string>} List of block IDs.
  * @alias Blockly.Events.utils.getDescendantIds
+ * @package
  */
 const getDescendantIds = function(block) {
   const ids = [];
@@ -501,7 +502,6 @@ const getDescendantIds = function(block) {
   }
   return ids;
 };
-/** @package */
 exports.getDescendantIds = getDescendantIds;
 
 /**

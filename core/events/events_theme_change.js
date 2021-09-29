@@ -12,7 +12,7 @@
 
 /**
  * Events fired as a result of a theme update.
- * @namespace Blockly.Events.ThemeChange
+ * @class
  */
 goog.module('Blockly.Events.ThemeChange');
 

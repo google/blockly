@@ -12,7 +12,7 @@
 
 /**
  * Class for a button in the flyout.
- * @namespace Blockly.FlyoutButton
+ * @class
  */
 goog.module('Blockly.FlyoutButton');
 

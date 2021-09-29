@@ -12,7 +12,7 @@
 
 /**
  * Blockly menu similar to Closure's goog.ui.Menu
- * @namespace Blockly.Menu
+ * @class
  */
 goog.module('Blockly.Menu');
 

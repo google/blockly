@@ -14,7 +14,7 @@
 /**
  * An object that provides constants for rendering blocks in Geras
  * mode.
- * @namespace Blockly.geras.ConstantProvider
+ * @class
  */
 goog.module('Blockly.geras.ConstantProvider');
 

@@ -13,7 +13,7 @@
 /**
  * Objects representing a spacer in a row of a rendered
  * block.
- * @namespace Blockly.blockRendering.InRowSpacer
+ * @class
  */
 goog.module('Blockly.blockRendering.InRowSpacer');
 

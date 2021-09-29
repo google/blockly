@@ -12,7 +12,7 @@
 
 /**
  * Angle input field.
- * @namespace Blockly.FieldAngle
+ * @class
  */
 goog.module('Blockly.FieldAngle');
 

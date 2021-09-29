@@ -11,7 +11,7 @@
 
 /**
  * The class representing a theme.
- * @namespace Blockly.Theme
+ * @class
  */
 goog.module('Blockly.Theme');
 

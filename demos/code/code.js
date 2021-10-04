@@ -33,6 +33,7 @@ Code.LANGUAGE_NAME = {
   'fa': 'فارسی',
   'fr': 'Français',
   'he': 'עברית',
+  'hr': 'Hrvatski',
   'hrx': 'Hunsrik',
   'hu': 'Magyar',
   'ia': 'Interlingua',

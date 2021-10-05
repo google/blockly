@@ -671,7 +671,7 @@ Css.register([
   padding-right: 0;
 }`,
 
-  `.blocklyTreeIcon {',
+  `.blocklyTreeIcon {
   background-image: url(<<<PATH>>>/sprites.png);
   height: 16px;
   vertical-align: middle;

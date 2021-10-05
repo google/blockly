@@ -509,7 +509,7 @@ Css.register([
 }`,
 
   `.blocklyZoom>image:active, .blocklyZoom>svg>image:active {
-  'opacity: .8;
+  opacity: .8;
 }`
 ]);
 

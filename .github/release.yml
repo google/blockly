@@ -1,0 +1,18 @@
+# release.yml
+
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - dependabot
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - api_change
+    - title: Cleanup ♻️
+      labels:
+        - type: cleanup
+    - title: Other Changes
+      labels:
+        - "*"

@@ -17,8 +17,7 @@ gulp.umd = require('gulp-umd');
 
 var path = require('path');
 var fs = require('fs');
-
-var packageJson = require('../../package.json');
+var { getPackageJson } = require('./helper_tasks');
 
 const blocklyRoot = '../../';
 
@@ -29,7 +28,7 @@ const packageDistribution = 'dist';
 /**
  * A helper method for wrapping a file into a Universal Module Definition.
  * @param {string} namespace The export namespace.
- * @param {Array.<Object>} dependencies An array of dependencies to inject.
+ * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
 function packageUMD(namespace, dependencies) {
   return gulp.umd({
@@ -43,7 +42,7 @@ function packageUMD(namespace, dependencies) {
 /**
  * A helper method for wrapping a file into a CommonJS module for Node.js.
  * @param {string} namespace The export namespace.
- * @param {Array.<Object>} dependencies An array of dependencies to inject.
+ * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
 function packageCommonJS(namespace, dependencies) {
   return gulp.umd({
@@ -337,6 +336,7 @@ function packageMedia() {
  * This task copies the package.json file into the distribution directory.
  */
 function packageJSON(cb) {
+  const packageJson = getPackageJson();
   const json = Object.assign({}, packageJson);
   delete json['scripts'];
   if (!fs.existsSync(packageDistribution)) {

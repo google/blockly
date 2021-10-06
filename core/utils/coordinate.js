@@ -42,8 +42,8 @@ Blockly.utils.Coordinate = function(x, y) {
 
 /**
  * Compares coordinates for equality.
- * @param {Blockly.utils.Coordinate} a A Coordinate.
- * @param {Blockly.utils.Coordinate} b A Coordinate.
+ * @param {?Blockly.utils.Coordinate} a A Coordinate.
+ * @param {?Blockly.utils.Coordinate} b A Coordinate.
  * @return {boolean} True iff the coordinates are equal, or if both are null.
  */
 Blockly.utils.Coordinate.equals = function(a, b) {
@@ -98,6 +98,14 @@ Blockly.utils.Coordinate.difference = function(a, b) {
  */
 Blockly.utils.Coordinate.sum = function(a, b) {
   return new Blockly.utils.Coordinate(a.x + b.x, a.y + b.y);
+};
+
+/**
+ * Creates a new copy of this coordinate.
+ * @return {!Blockly.utils.Coordinate} A copy of this coordinate.
+ */
+Blockly.utils.Coordinate.prototype.clone = function() {
+  return new Blockly.utils.Coordinate(this.x, this.y);
 };
 
 /**

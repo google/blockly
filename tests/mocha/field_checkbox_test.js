@@ -53,7 +53,7 @@ suite('Checkbox Fields', function() {
   var defaultFieldValue = 'FALSE';
   /**
    * Asserts that the field property values are set to default.
-   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!Blockly.FieldCheckbox} field The field to check.
    */
   var assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(
@@ -61,7 +61,7 @@ suite('Checkbox Fields', function() {
   };
   /**
    * Asserts that the field properties are correct based on the test case.
-   * @param {!Blockly.FieldNumber} field The field to check.
+   * @param {!Blockly.FieldCheckbox} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
   var validTestCaseAssertField = function(field, testCase) {

@@ -57,6 +57,16 @@ suite('Inputs', function() {
         this.dummy.insertFieldAt(0, 'field');
         chai.assert.instanceOf(this.dummy.fieldRow[0], Blockly.FieldLabel);
       });
+      test('String w/ field_label overwritten', function() {
+        Blockly.fieldRegistry.unregister('field_label');
+        Blockly.fieldRegistry.register('field_label', Blockly.FieldNumber);
+
+        this.dummy.insertFieldAt(0, '1');
+        chai.assert.instanceOf(this.dummy.fieldRow[0], Blockly.FieldNumber);
+
+        Blockly.fieldRegistry.unregister('field_label');
+        Blockly.fieldRegistry.register('field_label', Blockly.FieldLabel);
+      });
       test('Empty String', function() {
         this.dummy.insertFieldAt(0, '');
         chai.assert.isEmpty(this.dummy.fieldRow);

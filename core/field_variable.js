@@ -12,8 +12,10 @@
 
 goog.provide('Blockly.FieldVariable');
 
+/** @suppress {extraRequire} */
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
-goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.fieldRegistry');
@@ -25,6 +27,9 @@ goog.require('Blockly.VariableModel');
 goog.require('Blockly.Variables');
 goog.require('Blockly.Xml');
 
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Menu');
+goog.requireType('Blockly.MenuItem');
 
 
 /**
@@ -34,7 +39,7 @@ goog.require('Blockly.Xml');
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a variable ID  & returns a
  *    validated variable ID, or null to abort the change.
- * @param {Array.<string>=} opt_variableTypes A list of the types of variables
+ * @param {Array<string>=} opt_variableTypes A list of the types of variables
  *     to include in the dropdown.
  * @param {string=} opt_defaultType The type of variable to create if this
  *     field's value is not explicitly set.  Defaults to ''.
@@ -53,8 +58,8 @@ Blockly.FieldVariable = function(varName, opt_validator, opt_variableTypes,
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {(!Array.<!Array>|
-   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
+   * @type {(!Array<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array<!Array>)}
    * @protected
    */
   this.menuGenerator_ = Blockly.FieldVariable.dropdownCreate;
@@ -124,7 +129,7 @@ Blockly.FieldVariable.prototype.configure_ = function(config) {
  */
 Blockly.FieldVariable.prototype.initModel = function() {
   if (this.variable_) {
-    return; // Initialization already happened.
+    return;  // Initialization already happened.
   }
   var variable = Blockly.Variables.getOrCreateVariablePackage(
       this.sourceBlock_.workspace, null,
@@ -220,7 +225,7 @@ Blockly.FieldVariable.prototype.getText = function() {
  * Get the variable model for the selected variable.
  * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
  * after the variable has been deleted).
- * @return {Blockly.VariableModel} The selected variable, or null if none was
+ * @return {?Blockly.VariableModel} The selected variable, or null if none was
  *     selected.
  * @package
  */
@@ -233,7 +238,7 @@ Blockly.FieldVariable.prototype.getVariable = function() {
  * Returns null if the variable is not set, because validators should not
  * run on the initial setValue call, because the field won't be attached to
  * a block and workspace at that point.
- * @return {Function} Validation function, or null.
+ * @return {?Function} Validation function, or null.
  */
 Blockly.FieldVariable.prototype.getValidator = function() {
   // Validators shouldn't operate on the initial setValue call.
@@ -246,9 +251,9 @@ Blockly.FieldVariable.prototype.getValidator = function() {
 };
 
 /**
- * Ensure that the id belongs to a valid variable of an allowed type.
- * @param {*=} opt_newValue The id of the new variable to set.
- * @return {?string} The validated id, or null if invalid.
+ * Ensure that the ID belongs to a valid variable of an allowed type.
+ * @param {*=} opt_newValue The ID of the new variable to set.
+ * @return {?string} The validated ID, or null if invalid.
  * @protected
  */
 Blockly.FieldVariable.prototype.doClassValidation_ = function(opt_newValue) {
@@ -295,7 +300,7 @@ Blockly.FieldVariable.prototype.doValueUpdate_ = function(newId) {
 Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
   var typeList = this.getVariableTypes_();
   if (!typeList) {
-    return true; // If it's null, all types are valid.
+    return true;  // If it's null, all types are valid.
   }
   for (var i = 0; i < typeList.length; i++) {
     if (type == typeList[i]) {
@@ -307,7 +312,7 @@ Blockly.FieldVariable.prototype.typeIsAllowed_ = function(type) {
 
 /**
  * Return a list of variable types to include in the dropdown.
- * @return {!Array.<string>} Array of variable types.
+ * @return {!Array<string>} Array of variable types.
  * @throws {Error} if variableTypes is an empty array.
  * @private
  */
@@ -333,7 +338,7 @@ Blockly.FieldVariable.prototype.getVariableTypes_ = function() {
 /**
  * Parse the optional arguments representing the allowed variable types and the
  * default variable type.
- * @param {Array.<string>=} opt_variableTypes A list of the types of variables
+ * @param {Array<string>=} opt_variableTypes A list of the types of variables
  *     to include in the dropdown.  If null or undefined, variables of all types
  *     will be displayed in the dropdown.
  * @param {string=} opt_defaultType The type of the variable to create if this
@@ -383,7 +388,7 @@ Blockly.FieldVariable.prototype.refreshVariableName = function() {
 /**
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
- * @return {!Array.<!Array>} Array of variable names/id tuples.
+ * @return {!Array<!Array>} Array of variable names/id tuples.
  * @this {Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function() {

@@ -2,18 +2,15 @@
 .*
 *.soy
 *.komodoproject
-/deploy
+deploy
 /static/appengine/
-/static/closure/
 /static/demos/plane/soy/*.jar
 /static/demos/plane/xlf/
 /static/externs/
 /static/msg/json/
-/static/node_modules/
 /static/scripts/
 /static/typings/
 
-/static/build.py
 /static/eslintrc.json
 /static/gulpfile.js
 /static/jsconfig.json

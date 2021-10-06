@@ -7,7 +7,7 @@
 /**
  * @fileoverview Stores and updates information about state and categories
  * in workspace factory. Each list element is either a separator or a category,
- * and each category stores its name, XML to load that category, color,
+ * and each category stores its name, XML to load that category, colour,
  * custom tags, and a unique ID making it possible to change category names and
  * move categories easily. Keeps track of the currently selected list
  * element. Also keeps track of all the user-created shadow blocks and
@@ -246,7 +246,7 @@ WorkspaceFactoryModel.prototype.getSelectedXml = function() {
 
 /**
  * Return ordered list of ListElement objects.
- * @return {!Array.<!ListElement>} ordered list of ListElement objects
+ * @return {!Array<!ListElement>} ordered list of ListElement objects
  */
 WorkspaceFactoryModel.prototype.getToolboxList = function() {
   return this.toolboxList;
@@ -360,7 +360,7 @@ WorkspaceFactoryModel.prototype.addCustomTag = function(category, tag) {
  * @param {!Element} xml The XML to be saved.
  */
 WorkspaceFactoryModel.prototype.savePreloadXml = function(xml) {
-  this.preloadXml = xml
+  this.preloadXml = xml;
 };
 
 /**
@@ -383,7 +383,7 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
  * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.
- * @return {!Array.<string>} Array of block types currently being used.
+ * @return {!Array<string>} Array of block types currently being used.
  */
 WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
   var blockTypeList = [];
@@ -424,7 +424,7 @@ WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
 
 /**
  * Adds new imported block types to the list of current imported block types.
- * @param {!Array.<string>} blockTypes Array of block types imported.
+ * @param {!Array<string>} blockTypes Array of block types imported.
  */
 WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
   this.importedBlockTypes = this.importedBlockTypes.concat(blockTypes);
@@ -432,7 +432,7 @@ WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
 
 /**
  * Updates block types in block library.
- * @param {!Array.<string>} blockTypes Array of block types in block library.
+ * @param {!Array<string>} blockTypes Array of block types in block library.
  */
 WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
   this.libBlockTypes = blockTypes;
@@ -445,8 +445,8 @@ WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
  * @return {boolean} True if blockType is defined, false otherwise.
  */
 WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
-  var isStandardBlock = StandardCategories.coreBlockTypes.indexOf(blockType)
-      != -1;
+  var isStandardBlock =
+      StandardCategories.coreBlockTypes.indexOf(blockType) != -1;
   var isLibBlock = this.libBlockTypes.indexOf(blockType) != -1;
   var isImportedBlock = this.importedBlockTypes.indexOf(blockType) != -1;
   return (isStandardBlock || isLibBlock || isImportedBlock);
@@ -454,7 +454,7 @@ WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
 
 /**
  * Checks if any of the block types are already defined.
- * @param {!Array.<string>} blockTypes Array of block types.
+ * @param {!Array<string>} blockTypes Array of block types.
  * @return {boolean} True if a block type in the array is already defined,
  *    false if none of the blocks are already defined.
  */
@@ -479,8 +479,8 @@ ListElement = function(type, opt_name) {
   this.name = opt_name ? opt_name : null;
   // Unique ID of element. Does not change.
   this.id = Blockly.utils.genUid();
-  // Color of category. Default is no color. Null if separator.
-  this.color = null;
+  // Colour of category. Default is no colour. Null if separator.
+  this.colour = null;
   // Stores a custom tag, if necessary. Null if no custom tag or separator.
   this.custom = null;
 };
@@ -510,7 +510,7 @@ ListElement.prototype.saveFromWorkspace = function(workspace) {
  * not a category.
  * @param {string} name New name of category.
  */
-ListElement.prototype.changeName = function (name) {
+ListElement.prototype.changeName = function(name) {
   // Only update list elements that are categories.
   if (this.type != ListElement.TYPE_CATEGORY) {
     return;
@@ -519,16 +519,16 @@ ListElement.prototype.changeName = function (name) {
 };
 
 /**
- * Sets the color of a category. If tries to set the color of something other
+ * Sets the colour of a category. If tries to set the colour of something other
  * than a category, returns.
- * @param {?string} color The color that should be used for that category,
+ * @param {?string} colour The colour that should be used for that category,
  *     or null if none.
  */
-ListElement.prototype.changeColor = function (color) {
+ListElement.prototype.changeColour = function(colour) {
   if (this.type != ListElement.TYPE_CATEGORY) {
     return;
   }
-  this.color = color;
+  this.colour = colour;
 };
 
 /**
@@ -543,7 +543,7 @@ ListElement.prototype.copy = function() {
   // Copy all attributes except ID.
   copy.name = this.name;
   copy.xml = this.xml;
-  copy.color = this.color;
+  copy.colour = this.colour;
   copy.custom = this.custom;
   // Return copy.
   return copy;

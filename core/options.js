@@ -12,14 +12,12 @@
 
 goog.provide('Blockly.Options');
 
+goog.require('Blockly.registry');
 goog.require('Blockly.Theme');
 goog.require('Blockly.Themes.Classic');
-goog.require('Blockly.registry');
 goog.require('Blockly.utils.IdGenerator');
 goog.require('Blockly.utils.Metrics');
 goog.require('Blockly.utils.toolbox');
-goog.require('Blockly.utils.userAgent');
-goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.WorkspaceSvg');
 
@@ -125,7 +123,7 @@ Blockly.Options = function(options) {
   this.readOnly = readOnly;
   /** @type {number} */
   this.maxBlocks = options['maxBlocks'] || Infinity;
-  /** @type {?Object.<string, number>} */
+  /** @type {?Object<string, number>} */
   this.maxInstances = options['maxInstances'];
   /** @type {string} */
   this.pathToMedia = pathToMedia;
@@ -134,7 +132,7 @@ Blockly.Options = function(options) {
   /** @type {!Blockly.Options.MoveOptions} */
   this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
   /** @deprecated  January 2019 */
-  this.hasScrollbars = this.moveOptions.scrollbars;
+  this.hasScrollbars = !!this.moveOptions.scrollbars;
   /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
   /** @type {number} */
@@ -177,7 +175,7 @@ Blockly.Options = function(options) {
 
   /**
    * Map of plugin type to name of registered plugin or plugin class.
-   * @type {!Object.<string, (function(new:?, ...?)|string)>}
+   * @type {!Object<string, (function(new:?, ...?)|string)>}
    */
   this.plugins = plugins;
 };
@@ -205,11 +203,20 @@ Blockly.Options.GridOptions;
  * Move Options.
  * @typedef {{
  *     drag: boolean,
- *     scrollbars: boolean,
+ *     scrollbars: (boolean | !Blockly.Options.ScrollbarOptions),
  *     wheel: boolean
  * }}
  */
 Blockly.Options.MoveOptions;
+
+/**
+ * Scrollbar Options.
+ * @typedef {{
+ *     horizontal: boolean,
+ *     vertical: boolean
+ * }}
+ */
+Blockly.Options.ScrollbarOptions;
 
 /**
  * Zoom Options.
@@ -252,12 +259,26 @@ Blockly.Options.parseMoveOptions_ = function(options, hasCategories) {
   var moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
+  } else if (typeof move['scrollbars'] == 'object') {
+    moveOptions.scrollbars = {};
+    moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
+    moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
+    // Convert scrollbars object to boolean if they have the same value.
+    // This allows us to easily check for whether any scrollbars exist using
+    // !!moveOptions.scrollbars.
+    if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
+      moveOptions.scrollbars = true;
+    } else if (!moveOptions.scrollbars.horizontal &&
+        !moveOptions.scrollbars.vertical) {
+      moveOptions.scrollbars = false;
+    }
   } else {
     moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
   }
+
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
-    // Defaults to false so that developers' settings don't appear to change.
-    moveOptions.wheel = false;
+    // Defaults to true if single-direction scroll is enabled.
+    moveOptions.wheel = typeof moveOptions.scrollbars == 'object';
   } else {
     moveOptions.wheel = !!move['wheel'];
   }

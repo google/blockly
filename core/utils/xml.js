@@ -18,6 +18,7 @@
  */
 goog.provide('Blockly.utils.xml');
 
+
 /**
  * Namespace for Blockly's XML.
  */

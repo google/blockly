@@ -34,6 +34,8 @@ suite('Toolbox', function() {
     test('Init called -> Toolbox is subscribed to background and foreground colour', function() {
       var themeManager = this.toolbox.workspace_.getThemeManager();
       var themeManagerSpy = sinon.spy(themeManager, 'subscribe');
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       sinon.assert.calledWith(themeManagerSpy, this.toolbox.HtmlDiv,
           'toolboxBackgroundColour', 'background-color');
@@ -42,10 +44,14 @@ suite('Toolbox', function() {
     });
     test('Init called -> Render is called', function() {
       var renderSpy = sinon.spy(this.toolbox, 'render');
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       sinon.assert.calledOnce(renderSpy);
     });
     test('Init called -> Flyout is initialized', function() {
+      var componentManager = this.toolbox.workspace_.getComponentManager();
+      sinon.stub(componentManager, 'addComponent');
       this.toolbox.init();
       chai.assert.isDefined(this.toolbox.flyout_);
     });
@@ -423,6 +429,8 @@ suite('Toolbox', function() {
   suite('position', function() {
     setup(function() {
       this.toolbox = getBasicToolbox();
+      var metricsStub = sinon.stub(this.toolbox.workspace_, 'getMetrics');
+      metricsStub.returns({});
     });
 
     function checkHorizontalToolbox(toolbox) {
@@ -444,7 +452,7 @@ suite('Toolbox', function() {
     });
     test('Horizontal toolbox at top -> Should anchor horizontal toolbox to top', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_TOP;
+      toolbox.toolboxPosition = Blockly.utils.toolbox.Position.TOP;
       toolbox.horizontalLayout_ = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
@@ -452,7 +460,7 @@ suite('Toolbox', function() {
     });
     test('Horizontal toolbox at bottom -> Should anchor horizontal toolbox to bottom', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_BOTTOM;
+      toolbox.toolboxPosition = Blockly.utils.toolbox.Position.BOTTOM;
       toolbox.horizontalLayout_ = true;
       toolbox.position();
       checkHorizontalToolbox(toolbox);
@@ -460,7 +468,7 @@ suite('Toolbox', function() {
     });
     test('Vertical toolbox at right -> Should anchor to right', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_RIGHT;
+      toolbox.toolboxPosition = Blockly.utils.toolbox.Position.RIGHT;
       toolbox.horizontalLayout_ = false;
       toolbox.position();
       chai.assert.equal(toolbox.HtmlDiv.style.right, '0px', 'Check right');
@@ -468,7 +476,7 @@ suite('Toolbox', function() {
     });
     test('Vertical toolbox at left -> Should anchor to left', function() {
       var toolbox = this.toolbox;
-      toolbox.toolboxPosition = Blockly.TOOLBOX_AT_LEFT;
+      toolbox.toolboxPosition = Blockly.utils.toolbox.Position.LEFT;
       toolbox.horizontalLayout_ = false;
       toolbox.position();
       chai.assert.equal(toolbox.HtmlDiv.style.left, '0px', 'Check left');

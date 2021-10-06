@@ -12,15 +12,16 @@
 
 goog.provide('Blockly.blockRendering.Drawer');
 
-goog.require('Blockly.blockRendering.BottomRow');
-goog.require('Blockly.blockRendering.InputRow');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.RenderInfo');
 goog.require('Blockly.blockRendering.Row');
-goog.require('Blockly.blockRendering.SpacerRow');
-goog.require('Blockly.blockRendering.TopRow');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.svgPaths');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.blockRendering.Field');
+goog.requireType('Blockly.blockRendering.Icon');
+goog.requireType('Blockly.blockRendering.InlineInput');
+goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -226,7 +227,7 @@ Blockly.blockRendering.Drawer.prototype.drawRightSideRow_ = function(row) {
 
 /**
  * Add steps for the bottom edge of a block, possibly including a notch
- * for the next connection
+ * for the next connection.
  * @protected
  */
 Blockly.blockRendering.Drawer.prototype.drawBottom_ = function() {
@@ -448,7 +449,7 @@ Blockly.blockRendering.Drawer.prototype.positionNextConnection_ = function() {
 
   if (bottomRow.connection) {
     var connInfo = bottomRow.connection;
-    var x = connInfo.xPos; // Already contains info about startX
+    var x = connInfo.xPos;  // Already contains info about startX.
     var connX = (this.info_.RTL ? -x : x);
     connInfo.connectionModel.setOffsetInBlock(connX, bottomRow.baseline);
   }

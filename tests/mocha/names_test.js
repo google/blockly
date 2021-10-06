@@ -21,7 +21,7 @@ suite('Names', function() {
   test('Safe name', function() {
     var varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.safeName_(''), 'unnamed','SafeName empty.');
-    chai.assert.equal( varDB.safeName_('foobar'), 'foobar','SafeName ok.');
+    chai.assert.equal(varDB.safeName_('foobar'), 'foobar','SafeName ok.');
     chai.assert.equal(varDB.safeName_('9lives'), 'my_9lives', 'SafeName number start.');
     chai.assert.equal(varDB.safeName_('lives9'), 'lives9', 'SafeName number end.');
     chai.assert.equal(varDB.safeName_('!@#$'), '____', 'SafeName special chars.');
@@ -38,6 +38,9 @@ suite('Names', function() {
     chai.assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name add #4.');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1b.');
     chai.assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name get #4.');
+
+    chai.assert.equal(String(varDB.getUserNames('var')), 'foo.bar,foo bar,door', 'Get var names.');
+    chai.assert.equal(String(varDB.getUserNames('proc')), 'foo.bar', 'Get proc names.');
   });
 
   test('Get distinct name', function() {

@@ -38,7 +38,7 @@ Blockly.utils.svgPaths.point = function(x, y) {
  * These coordinates are unitless and hence in the user coordinate system.
  * @param {string} command The command to use.
  *     Should be one of: c, C, s, S, q, Q.
- * @param {!Array.<string>} points  An array containing all of the points to pass to the
+ * @param {!Array<string>} points  An array containing all of the points to pass to the
  *     curve command, in order.  The points are represented as strings of the
  *     format ' x, y '.
  * @return {string} A string defining one or more Bezier curves.  See the MDN
@@ -96,7 +96,7 @@ Blockly.utils.svgPaths.lineTo = function(dx, dy) {
  * equivalent to a series of 'l' commands.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
- * @param {!Array.<string>} points An array containing all of the points to
+ * @param {!Array<string>} points An array containing all of the points to
  *     draw lines to, in order.  The points are represented as strings of the
  *     format ' dx,dy '.
  * @return {string} A string of the format ' l (dx,dy)+ '

@@ -16,9 +16,11 @@ goog.provide('Blockly.blockRendering.InputConnection');
 goog.provide('Blockly.blockRendering.StatementInput');
 
 goog.require('Blockly.blockRendering.Connection');
-goog.require('Blockly.blockRendering.Measurable');
 goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.Input');
 
 
 /**

@@ -14,7 +14,10 @@
 goog.provide('Blockly.zelos.ConstantProvider');
 
 goog.require('Blockly.blockRendering.ConstantProvider');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.utils.colour');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
@@ -211,23 +214,23 @@ Blockly.zelos.ConstantProvider = function() {
    * @package
    */
   this.SHAPE_IN_SHAPE_PADDING = {
-    1: { // Outer shape: hexagon.
-      0: 5 * this.GRID_UNIT, // Field in hexagon.
-      1: 2 * this.GRID_UNIT, // Hexagon in hexagon.
-      2: 5 * this.GRID_UNIT, // Round in hexagon.
-      3: 5 * this.GRID_UNIT  // Square in hexagon.
+    1: {  // Outer shape: hexagon.
+      0: 5 * this.GRID_UNIT,  // Field in hexagon.
+      1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
+      2: 5 * this.GRID_UNIT,  // Round in hexagon.
+      3: 5 * this.GRID_UNIT   // Square in hexagon.
     },
-    2: { // Outer shape: round.
-      0: 3 * this.GRID_UNIT, // Field in round.
-      1: 3 * this.GRID_UNIT, // Hexagon in round.
-      2: 1 * this.GRID_UNIT, // Round in round.
-      3: 2 * this.GRID_UNIT  // Square in round.
+    2: {  // Outer shape: round.
+      0: 3 * this.GRID_UNIT,  // Field in round.
+      1: 3 * this.GRID_UNIT,  // Hexagon in round.
+      2: 1 * this.GRID_UNIT,  // Round in round.
+      3: 2 * this.GRID_UNIT   // Square in round.
     },
-    3: { // Outer shape: square.
-      0: 2 * this.GRID_UNIT, // Field in square.
-      1: 2 * this.GRID_UNIT, // Hexagon in square.
-      2: 2 * this.GRID_UNIT, // Round in square.
-      3: 2 * this.GRID_UNIT  // Square in square.
+    3: {  // Outer shape: square.
+      0: 2 * this.GRID_UNIT,  // Field in square.
+      1: 2 * this.GRID_UNIT,  // Hexagon in square.
+      2: 2 * this.GRID_UNIT,  // Round in square.
+      3: 2 * this.GRID_UNIT   // Square in square.
     }
   };
 
@@ -649,8 +652,8 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
     checks = connection.targetConnection.getCheck();
   }
   switch (connection.type) {
-    case Blockly.INPUT_VALUE:
-    case Blockly.OUTPUT_VALUE:
+    case Blockly.connectionTypes.INPUT_VALUE:
+    case Blockly.connectionTypes.OUTPUT_VALUE:
       var outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
       if (outputShape != null) {
@@ -671,8 +674,8 @@ Blockly.zelos.ConstantProvider.prototype.shapeFor = function(
         return this.ROUNDED;
       }
       return this.ROUNDED;
-    case Blockly.PREVIOUS_STATEMENT:
-    case Blockly.NEXT_STATEMENT:
+    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
+    case Blockly.connectionTypes.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown type');

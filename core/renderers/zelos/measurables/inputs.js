@@ -15,6 +15,9 @@ goog.provide('Blockly.zelos.StatementInput');
 goog.require('Blockly.blockRendering.StatementInput');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.Input');
+
 
 /**
  * An object containing information about the space a statement input takes up

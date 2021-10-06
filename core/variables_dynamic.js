@@ -13,11 +13,13 @@
 
 goog.provide('Blockly.VariablesDynamic');
 
-goog.require('Blockly.Variables');
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils.xml');
 goog.require('Blockly.VariableModel');
+goog.require('Blockly.Variables');
+
+goog.requireType('Blockly.Workspace');
 
 
 Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
@@ -36,7 +38,7 @@ Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML elements.
+ * @return {!Array<!Element>} Array of XML elements.
  */
 Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
   var xmlList = [];
@@ -69,7 +71,7 @@ Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
 /**
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @return {!Array<!Element>} Array of XML block elements.
  */
 Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
   var variableModelList = workspace.getAllVariables();

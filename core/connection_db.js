@@ -14,10 +14,13 @@
 
 goog.provide('Blockly.ConnectionDB');
 
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 goog.require('Blockly.RenderedConnection');
 
 goog.requireType('Blockly.IConnectionChecker');
+goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
@@ -32,7 +35,7 @@ goog.requireType('Blockly.IConnectionChecker');
 Blockly.ConnectionDB = function(checker) {
   /**
    * Array of connections sorted by y position in workspace units.
-   * @type {!Array.<!Blockly.RenderedConnection>}
+   * @type {!Array<!Blockly.RenderedConnection>}
    * @private
    */
   this.connections_ = [];
@@ -81,21 +84,21 @@ Blockly.ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
 
   yPos = conn.y;
   // Walk forward and back on the y axis looking for the connection.
-  var pointerMin = bestGuess;
-  var pointerMax = bestGuess;
-  while (pointerMin >= 0 && this.connections_[pointerMin].y == yPos) {
-    if (this.connections_[pointerMin] == conn) {
-      return pointerMin;
+  var pointer = bestGuess;
+  while (pointer >= 0 && this.connections_[pointer].y == yPos) {
+    if (this.connections_[pointer] == conn) {
+      return pointer;
     }
-    pointerMin--;
+    pointer--;
   }
 
-  while (pointerMax < this.connections_.length &&
-         this.connections_[pointerMax].y == yPos) {
-    if (this.connections_[pointerMax] == conn) {
-      return pointerMax;
+  pointer = bestGuess;
+  while (pointer < this.connections_.length &&
+         this.connections_[pointer].y == yPos) {
+    if (this.connections_[pointer] == conn) {
+      return pointer;
     }
-    pointerMax++;
+    pointer++;
   }
   return -1;
 };
@@ -147,7 +150,7 @@ Blockly.ConnectionDB.prototype.removeConnection = function(connection, yPos) {
  * @param {!Blockly.RenderedConnection} connection The connection whose
  *     neighbours should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
- * @return {!Array.<!Blockly.RenderedConnection>} List of connections.
+ * @return {!Array<!Blockly.RenderedConnection>} List of connections.
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this.connections_;
@@ -283,14 +286,18 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
  * Initialize a set of connection DBs for a workspace.
  * @param {!Blockly.IConnectionChecker} checker The workspace's
  *     connection checker, used to decide if connections are valid during a drag.
- * @return {!Array.<!Blockly.ConnectionDB>} Array of databases.
+ * @return {!Array<!Blockly.ConnectionDB>} Array of databases.
  */
 Blockly.ConnectionDB.init = function(checker) {
   // Create four databases, one for each connection type.
   var dbList = [];
-  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB(checker);
-  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB(checker);
-  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB(checker);
-  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB(checker);
+  dbList[Blockly.connectionTypes.INPUT_VALUE] =
+      new Blockly.ConnectionDB(checker);
+  dbList[Blockly.connectionTypes.OUTPUT_VALUE] =
+      new Blockly.ConnectionDB(checker);
+  dbList[Blockly.connectionTypes.NEXT_STATEMENT] =
+      new Blockly.ConnectionDB(checker);
+  dbList[Blockly.connectionTypes.PREVIOUS_STATEMENT] =
+      new Blockly.ConnectionDB(checker);
   return dbList;
 };

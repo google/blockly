@@ -12,15 +12,18 @@
 
 goog.provide('Blockly.FieldAngle');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.Css');
 goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.utils.dom');
+goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
 
 
 /**
@@ -75,34 +78,41 @@ Blockly.FieldAngle = function(opt_value, opt_validator, opt_config) {
       this, opt_value, opt_validator, opt_config);
 
   /**
+   * The angle picker's SVG element.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.editor_ = null;
+
+  /**
    * The angle picker's gauge path depending on the value.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    */
   this.gauge_ = null;
 
   /**
    * The angle picker's line drawn representing the value's angle.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    */
   this.line_ = null;
 
   /**
    * Wrapper click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickWrapper_ = null;
 
   /**
    * Surface click event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.clickSurfaceWrapper_ = null;
 
   /**
    * Surface mouse move event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.moveSurfaceWrapper_ = null;
@@ -180,7 +190,8 @@ Blockly.FieldAngle.RADIUS = Blockly.FieldAngle.HALF - 1;
 /**
  * Configure the field based on the given map of options.
  * @param {!Object} config A map of options to configure the field based on.
- * @private
+ * @protected
+ * @override
  */
 Blockly.FieldAngle.prototype.configure_ = function(config) {
   Blockly.FieldAngle.superClass_.configure_.call(this, config);
@@ -245,7 +256,7 @@ Blockly.FieldAngle.prototype.initView = function() {
 
 /**
  * Updates the graph when the field rerenders.
- * @private
+ * @protected
  * @override
  */
 Blockly.FieldAngle.prototype.render_ = function() {
@@ -267,8 +278,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
       Blockly.utils.userAgent.IPAD;
   Blockly.FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
 
-  var editor = this.dropdownCreate_();
-  Blockly.DropDownDiv.getContentDiv().appendChild(editor);
+  this.dropdownCreate_();
+  Blockly.DropDownDiv.getContentDiv().appendChild(this.editor_);
 
   Blockly.DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
       this.sourceBlock_.style.colourTertiary);
@@ -281,7 +292,6 @@ Blockly.FieldAngle.prototype.showEditor_ = function(opt_e) {
 
 /**
  * Create the angle dropdown editor.
- * @return {!SVGElement} The newly created angle picker.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
@@ -331,34 +341,32 @@ Blockly.FieldAngle.prototype.dropdownCreate_ = function() {
   // mousemove even if it's not in the middle of a drag.  In future we may
   // change this behaviour.
   this.clickWrapper_ =
-      Blockly.bindEventWithChecks_(svg, 'click', this, this.hide_);
+      Blockly.browserEvents.conditionalBind(svg, 'click', this, this.hide_);
   // On touch devices, the picker's value is only updated with a drag. Add
   // a click handler on the drag surface to update the value if the surface
   // is clicked.
-  this.clickSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'click', this, this.onMouseMove_,
-          true, true);
-  this.moveSurfaceWrapper_ =
-      Blockly.bindEventWithChecks_(circle, 'mousemove', this, this.onMouseMove_,
-          true, true);
-  return svg;
+  this.clickSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'click', this, this.onMouseMove_, true, true);
+  this.moveSurfaceWrapper_ = Blockly.browserEvents.conditionalBind(
+      circle, 'mousemove', this, this.onMouseMove_, true, true);
+  this.editor_ = svg;
 };
 
 /**
- * Disposes of events and dom-references belonging to the angle editor.
+ * Disposes of events and DOM-references belonging to the angle editor.
  * @private
  */
 Blockly.FieldAngle.prototype.dropdownDispose_ = function() {
   if (this.clickWrapper_) {
-    Blockly.unbindEvent_(this.clickWrapper_);
+    Blockly.browserEvents.unbind(this.clickWrapper_);
     this.clickWrapper_ = null;
   }
   if (this.clickSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.clickSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.clickSurfaceWrapper_);
     this.clickSurfaceWrapper_ = null;
   }
   if (this.moveSurfaceWrapper_) {
-    Blockly.unbindEvent_(this.moveSurfaceWrapper_);
+    Blockly.browserEvents.unbind(this.moveSurfaceWrapper_);
     this.moveSurfaceWrapper_ = null;
   }
   this.gauge_ = null;

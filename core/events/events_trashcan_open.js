@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a trashcan open event.
  * @param {boolean=} opt_isOpen Whether the trashcan flyout is opening (false if

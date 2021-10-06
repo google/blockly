@@ -13,6 +13,9 @@
 
 goog.provide('Blockly.blockRendering.Types');
 
+goog.requireType('Blockly.blockRendering.Measurable');
+goog.requireType('Blockly.blockRendering.Row');
+
 
 /**
  * Types of rendering elements.

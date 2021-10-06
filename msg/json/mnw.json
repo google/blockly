@@ -101,5 +101,6 @@
 	"MATH_NUMBER_TOOLTIP": "မဂၞန်မွဲ",
 	"MATH_ARITHMETIC_HELPURL": "https://en.wikipedia.org/wiki/Arithmetic",
 	"MATH_SINGLE_HELPURL": "https://en.wikipedia.org/wiki/Square_root",
-	"MATH_SINGLE_OP_ABSOLUTE": "ဍာံဍာံ"
+	"MATH_SINGLE_OP_ABSOLUTE": "ဍာံဍာံ",
+	"DIALOG_CANCEL": "တးပဲါ"
 }

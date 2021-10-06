@@ -17,6 +17,7 @@ goog.require('Blockly.Events.UiBase');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+
 /**
  * Class for a viewport change event.
  * @param {number=} opt_top Top-edge of the visible portion of the workspace,
@@ -27,11 +28,13 @@ goog.require('Blockly.utils.object');
  *    event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
+ * @param {number=} opt_oldScale The old scale of the workspace. Undefined for a
+ *    blank event.
  * @extends {Blockly.Events.UiBase}
  * @constructor
  */
 Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
-    opt_workspaceId) {
+    opt_workspaceId, opt_oldScale) {
   Blockly.Events.ViewportChange.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
@@ -53,6 +56,12 @@ Blockly.Events.ViewportChange = function(opt_top, opt_left, opt_scale,
    * @type {number|undefined}
    */
   this.scale = opt_scale;
+
+  /**
+   * The old scale of the workspace.
+   * @type {number|undefined}
+   */
+  this.oldScale = opt_oldScale;
 };
 Blockly.utils.object.inherits(Blockly.Events.ViewportChange,
     Blockly.Events.UiBase);
@@ -72,6 +81,7 @@ Blockly.Events.ViewportChange.prototype.toJson = function() {
   json['viewTop'] = this.viewTop;
   json['viewLeft'] = this.viewLeft;
   json['scale'] = this.scale;
+  json['oldScale'] = this.oldScale;
   return json;
 };
 
@@ -84,6 +94,7 @@ Blockly.Events.ViewportChange.prototype.fromJson = function(json) {
   this.viewTop = json['viewTop'];
   this.viewLeft = json['viewLeft'];
   this.scale = json['scale'];
+  this.oldScale = json['oldScale'];
 };
 
 Blockly.registry.register(Blockly.registry.Type.EVENT,

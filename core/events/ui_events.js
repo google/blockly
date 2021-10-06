@@ -18,6 +18,9 @@ goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.Block');
+
+
 /**
  * Base class for a UI event.
  * UI events are events that don't need to be sent over the wire for multi-user

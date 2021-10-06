@@ -12,7 +12,10 @@
 
 goog.provide('Blockly.FieldTextInput');
 
+goog.require('Blockly.browserEvents');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
@@ -23,8 +26,11 @@ goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.KeyCodes');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.userAgent');
+goog.require('Blockly.WidgetDiv');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -59,14 +65,14 @@ Blockly.FieldTextInput = function(opt_value, opt_validator, opt_config) {
 
   /**
    * Key down event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyDownWrapper_ = null;
 
   /**
    * Key input event data.
-   * @type {?Blockly.EventData}
+   * @type {?Blockly.browserEvents.Data}
    * @private
    */
   this.onKeyInputWrapper_ = null;
@@ -199,7 +205,7 @@ Blockly.FieldTextInput.prototype.doValueInvalid_ = function(_invalidValue) {
     // Revert value when the text becomes invalid.
     this.value_ = this.htmlInput_.untypedDefaultValue_;
     if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
-      Blockly.Events.fire(new Blockly.Events.BlockChange(
+      Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BLOCK_CHANGE))(
           this.sourceBlock_, 'field', this.name || null, oldValue, this.value_));
     }
   }
@@ -383,7 +389,7 @@ Blockly.FieldTextInput.prototype.widgetCreate_ = function() {
 
 /**
  * Closes the editor, saves the results, and disposes of any events or
- * dom-references belonging to the editor.
+ * DOM-references belonging to the editor.
  * @protected
  */
 Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
@@ -418,13 +424,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
  */
 Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
   // Trap Enter without IME and Esc to hide.
-  this.onKeyDownWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+  this.onKeyDownWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
   // Resize after every input change.
-  this.onKeyInputWrapper_ =
-      Blockly.bindEventWithChecks_(
-          htmlInput, 'input', this, this.onHtmlInputChange_);
+  this.onKeyInputWrapper_ = Blockly.browserEvents.conditionalBind(
+      htmlInput, 'input', this, this.onHtmlInputChange_);
 };
 
 /**
@@ -433,11 +437,11 @@ Blockly.FieldTextInput.prototype.bindInputEvents_ = function(htmlInput) {
  */
 Blockly.FieldTextInput.prototype.unbindInputEvents_ = function() {
   if (this.onKeyDownWrapper_) {
-    Blockly.unbindEvent_(this.onKeyDownWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyDownWrapper_);
     this.onKeyDownWrapper_ = null;
   }
   if (this.onKeyInputWrapper_) {
-    Blockly.unbindEvent_(this.onKeyInputWrapper_);
+    Blockly.browserEvents.unbind(this.onKeyInputWrapper_);
     this.onKeyInputWrapper_ = null;
   }
 };
@@ -452,7 +456,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
   } else if (e.keyCode == Blockly.utils.KeyCodes.ESC) {
-    this.htmlInput_.value = this.htmlInput_.defaultValue;
+    this.setValue(this.htmlInput_.untypedDefaultValue_);
     Blockly.WidgetDiv.hide();
     Blockly.DropDownDiv.hideWithoutAnimation();
   } else if (e.keyCode == Blockly.utils.KeyCodes.TAB) {
@@ -486,8 +490,8 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(_e) {
 };
 
 /**
- * Set the html input value and the field's internal value. The difference
- * between this and ``setValue`` is that this also updates the html input
+ * Set the HTML input value and the field's internal value. The difference
+ * between this and ``setValue`` is that this also updates the HTML input
  * value whilst editing.
  * @param {*} newValue New value.
  * @protected
@@ -534,28 +538,28 @@ Blockly.FieldTextInput.prototype.isTabNavigable = function() {
 
 /**
  * Use the `getText_` developer hook to override the field's text representation.
- * When we're currently editing, return the current html value instead.
+ * When we're currently editing, return the current HTML value instead.
  * Otherwise, return null which tells the field to use the default behaviour
  * (which is a string cast of the field's value).
- * @return {?string} The html value if we're editing, otherwise null.
+ * @return {?string} The HTML value if we're editing, otherwise null.
  * @protected
  * @override
  */
 Blockly.FieldTextInput.prototype.getText_ = function() {
   if (this.isBeingEdited_ && this.htmlInput_) {
-    // We are currently editing, return the html input value instead.
+    // We are currently editing, return the HTML input value instead.
     return this.htmlInput_.value;
   }
   return null;
 };
 
 /**
- * Transform the provided value into a text to show in the html input.
- * Override this method if the field's html input representation is different
+ * Transform the provided value into a text to show in the HTML input.
+ * Override this method if the field's HTML input representation is different
  * than the field's value. This should be coupled with an override of
  * `getValueFromEditorText_`.
  * @param {*} value The value stored in this field.
- * @return {string} The text to show on the html input.
+ * @return {string} The text to show on the HTML input.
  * @protected
  */
 Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
@@ -563,12 +567,12 @@ Blockly.FieldTextInput.prototype.getEditorText_ = function(value) {
 };
 
 /**
- * Transform the text received from the html input into a value to store
+ * Transform the text received from the HTML input into a value to store
  * in this field.
- * Override this method if the field's html input representation is different
+ * Override this method if the field's HTML input representation is different
  * than the field's value. This should be coupled with an override of
  * `getEditorText_`.
- * @param {string} text Text received from the html input.
+ * @param {string} text Text received from the HTML input.
  * @return {*} The value to store.
  * @protected
  */

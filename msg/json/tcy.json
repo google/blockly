@@ -3,12 +3,14 @@
 		"authors": [
 			"BHARATHESHA ALASANDEMAJALU",
 			"Bharathesha Alasandemajalu",
+			"Chidananda Kampa",
 			"Kiranpoojary",
 			"Ravi Mundkur",
 			"Vishwanatha Badikana"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ವಸ್ತು",
+	"UNNAMED_KEY": "ಪುದರ್ ಇಜ್ಜಂತಿನವು",
 	"TODAY": "ಇನಿ",
 	"DUPLICATE_BLOCK": "ನಕಲ್",
 	"ADD_COMMENT": "ಟಿಪ್ಪಣಿ ಸೇರ್ಸಲೆ",
@@ -25,7 +27,7 @@
 	"EXPAND_ALL": "ಮಾತಾ ತಡೆಕ್ಲೆನ ಮಾಹಿತಿನ್ ಪರಡಾವು",
 	"DISABLE_BLOCK": "ಬ್ಲಾಕ್‍ನ್ ದೆತ್ತ್‌ಪಾಡ್",
 	"ENABLE_BLOCK": "ತಡೆನ್ ಸಕ್ರಿಯೊ ಮಲ್ಪು",
-	"HELP": "ಸಕಾಯೊ",
+	"HELP": "ಸಹಾಯೊ",
 	"UNDO": "ದುಂಬುದಲೆಕೊ",
 	"REDO": "ಕುಡ ಮಲ್ಪು",
 	"CHANGE_VALUE_TITLE": "ಮೌಲ್ಯೊನು ಬದಲ್ ಮಲ್ಪು",
@@ -113,7 +115,7 @@
 	"LOGIC_TERNARY_IF_FALSE": "ಒಂಜಿ ವೇಲೆ ಸುಲ್ಲಾಂಡ",
 	"LOGIC_TERNARY_TOOLTIP": "'ಪರೀಕ್ಷೆ'ಡ್ ಶರ್ತನ್ ಸರಿತೂಲೆ. ಶರ್ತ ನಿಜವಾದಿತ್ತ್ಂಡ, 'ಒಂಜಿ ವೇಲೆ ನಿಜ ಆಂಡ' ಮೌಲ್ಯೊನು ಪಿರಕೊರ್ಪುಂಡು; ಇಜ್ಜಿಂಡ 'ಒಂಜಿ ವೇಲೆ ಸುಲ್ಲಾಂಡ' ಮೌಲ್ಯೊನು ಪಿರಕೊರ್ಪುಂಡು.",
 	"MATH_NUMBER_HELPURL": "https://en.wikipedia.org/wiki/ಸಂಖ್ಯೆ",
-	"MATH_NUMBER_TOOLTIP": "ಅ ನಂಬ್ರೊ",
+	"MATH_NUMBER_TOOLTIP": "ಅ ನಂಬ್ರೊ.",
 	"MATH_ARITHMETIC_HELPURL": "https://en.wikipedia.org/wiki/ಅಂಕಗಣಿತ",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "ರಡ್ಡ್ ಸಂಖ್ಯೆದ ಮೊತ್ತನ್ ಪಿರಕೊರು.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "ರಡ್ಡ ಸ್ಂಖ್ಯೆದ ವ್ಯತ್ಯಾಸೊನು ಪಿರಕೊರು.",
@@ -252,7 +254,7 @@
 	"LISTS_GET_INDEX_FROM_END": "ಅಕೇರಿಡ್ದ್ #",
 	"LISTS_GET_INDEX_FIRST": "ಸುರುತ",
 	"LISTS_GET_INDEX_LAST": "ಕಡೆತ",
-	"LISTS_GET_INDEX_RANDOM": "ಗೊತ್ತು ಗುರಿದಾಂತಿನ",
+	"LISTS_GET_INDEX_RANDOM": "ಒವ್ವಾಂಡಲ",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 ಸುರುತ ವಿಸಯೊ",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 ಅಕೇರಿತ ವಿಸಯೊ",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "ಒಂಜಿ ಪಟ್ಟಿಡ್ ನಿರ್ದಿಷ್ಟ ಸ್ಥಿತಿಡ್ ವಿಸಯೊನು ಪಿರಕೊರ್ಪುಂಡು.",
@@ -324,5 +326,8 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "ದೆರ್ತ್ ತೋಜುನ ಕಾರ್ಯೊದ ವ್ಯಾಕ್ಯಾನೊ",
 	"PROCEDURES_CREATE_DO": " '%1'ನ್ ಉಂಡುಮಲ್ಪುಲೆ",
 	"PROCEDURES_IFRETURN_TOOLTIP": "ಮೌಲ್ಯೊ ಸತ್ಯೊ ಆಂಡ, ರಡ್ಡನೆ ಮೌಲ್ಯೊನು ಪಿರಕೊರು.",
-	"PROCEDURES_IFRETURN_WARNING": "ಎಚ್ಚರಿಕೆ: ಒಂಜಿ ಕಾರ್ಯ ವ್ಯಾಕ್ಯಾನೊದುಲಯಿ ಮಾತ್ರ ಈ ತಡೆನ್ ಗಲಸೊಲಿ."
+	"PROCEDURES_IFRETURN_WARNING": "ಎಚ್ಚರಿಕೆ: ಒಂಜಿ ಕಾರ್ಯ ವ್ಯಾಕ್ಯಾನೊದುಲಯಿ ಮಾತ್ರ ಈ ತಡೆನ್ ಗಲಸೊಲಿ.",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ದಾದಾಂಡಲ ಪನ್ಲೇ...",
+	"DIALOG_OK": "ಅವು",
+	"DIALOG_CANCEL": "ಉಂತಾಲೆ"
 }

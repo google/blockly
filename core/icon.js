@@ -12,11 +12,15 @@
 
 goog.provide('Blockly.Icon');
 
+goog.require('Blockly.browserEvents');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.Svg');
+
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Bubble');
 
 
 /**
@@ -52,14 +56,14 @@ Blockly.Icon.prototype.SIZE = 17;
 
 /**
  * Bubble UI (if visible).
- * @type {Blockly.Bubble}
+ * @type {?Blockly.Bubble}
  * @protected
  */
 Blockly.Icon.prototype.bubble_ = null;
 
 /**
  * Absolute coordinate of icon's center.
- * @type {Blockly.utils.Coordinate}
+ * @type {?Blockly.utils.Coordinate}
  * @protected
  */
 Blockly.Icon.prototype.iconXY_ = null;
@@ -87,7 +91,7 @@ Blockly.Icon.prototype.createIcon = function() {
   this.drawIcon_(this.iconGroup_);
 
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
-  Blockly.bindEventWithChecks_(
+  Blockly.browserEvents.conditionalBind(
       this.iconGroup_, 'mouseup', this, this.iconClick_);
   this.updateEditable();
 };
@@ -173,7 +177,7 @@ Blockly.Icon.prototype.computeIconLocation = function() {
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {Blockly.utils.Coordinate} Object with x and y properties in
+ * @return {?Blockly.utils.Coordinate} Object with x and y properties in
  *     workspace coordinates.
  */
 Blockly.Icon.prototype.getIconLocation = function() {

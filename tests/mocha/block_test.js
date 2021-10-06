@@ -1104,6 +1104,61 @@ suite('Blocks', function() {
       });
     });
   });
+  suite('Getting/Setting Field (Values)', function() {
+    setup(function() {
+      this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          '<block type="text"><field name = "TEXT">test</field></block>'
+      ), this.workspace);
+    });
+
+    test('Getting Field', function() {
+      chai.assert.instanceOf(this.block.getField('TEXT'), Blockly.Field);
+    });
+    test('Getting Field without Name', function() {
+      chai.assert.throws(this.block.getField.bind(this.block), TypeError);
+    });
+    test('Getting Value of Field without Name', function() {
+      chai.assert.throws(this.block.getFieldValue.bind(this.block), TypeError);
+    });
+    test('Getting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.getField.bind(this.block, inputs[i]),
+            TypeError);
+      }
+    });
+    test('Getting Value of Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(
+            this.block.getFieldValue.bind(this.block, inputs[i]), TypeError);
+      }
+    });
+    test('Getting/Setting Field Value', function() {
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'test');
+      this.block.setFieldValue('abc', 'TEXT');
+      chai.assert.equal(this.block.getFieldValue('TEXT'), 'abc');
+    });
+    test('Setting Field without Name', function() {
+      chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test'));
+    });
+    test('Setting Field with Wrong Type', function() {
+      var testFunction = function() {
+        return 'TEXT';
+      };
+      var inputs = [1, null, testFunction, {toString: testFunction}, ['TEXT']];
+      for (var i = 0; i < inputs.length; i++) {
+        chai.assert.throws(this.block.setFieldValue.bind(this.block, 'test',
+            inputs[i]), TypeError);
+      }
+    });
+  });
   suite('Icon Management', function() {
     suite('Bubbles and Collapsing', function() {
       setup(function() {
@@ -1577,6 +1632,64 @@ suite('Blocks', function() {
         assertCollapsed(blockA, 'X');
       });
     });
+    suite('Disabled Blocks', function() {
+      test('Children of Collapsed Blocks Should Enable Properly', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+        // Disable the block and collapse it.
+        blockA.setEnabled(false);
+        blockA.setCollapsed(true);
+
+        // Enable the block before expanding it.
+        blockA.setEnabled(true);
+        blockA.setCollapsed(false);
+
+        // The child blocks should be enabled.
+        chai.assert.isFalse(blockB.disabled);
+        chai.assert.isFalse(blockB.getSvgRoot().classList.contains('blocklyDisabled'));
+      });
+      test('Children of Collapsed Block Should Not Update', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+
+        // Disable the block and collapse it.
+        blockA.setEnabled(false);
+        blockA.setCollapsed(true);
+
+        var blockUpdateDisabled = sinon.stub(blockB, 'updateDisabled');
+
+        // Enable the block before expanding it.
+        blockA.setEnabled(true);
+
+        // For performance reasons updateDisabled should not be called
+        // on children of collapsed blocks.
+        sinon.assert.notCalled(blockUpdateDisabled);
+      });
+      test('Disabled Children of Collapsed Blocks Should Stay Disabled', function() {
+        var blockA = createRenderedBlock(this.workspace,'statement_block');
+        var blockB = createRenderedBlock(this.workspace,'stack_block');
+        blockA.getInput('STATEMENT').connection
+            .connect(blockB.previousConnection);
+
+        // Disable the child block.
+        blockB.setEnabled(false);
+
+        // Collapse and disable the parent block.
+        blockA.setCollapsed(false);
+        blockA.setEnabled(false);
+
+        // Enable the parent block.
+        blockA.setEnabled(true);
+        blockA.setCollapsed(true);
+
+        // Child blocks should stay disabled if they have been set.
+        chai.assert.isTrue(blockB.disabled);
+      });
+    });
   });
   suite('Style', function() {
     suite('Headless', function() {
@@ -1652,7 +1765,7 @@ suite('Blocks', function() {
           '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'repeat 10 times do ?',
+        toString: 'repeat 10 times do ?'
       },
       {
         name: 'nested statement blocks',
@@ -1666,7 +1779,7 @@ suite('Blocks', function() {
             '<block type="controls_if"></block>' +
           '</statement>' +
         '</block>',
-        toString: 'repeat 10 times do if ? do ?',
+        toString: 'repeat 10 times do if ? do ?'
       },
       {
         name: 'nested Boolean output blocks',
@@ -1682,7 +1795,7 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'if ((? and ?) = ?) do ?',
+        toString: 'if ((? and ?) = ?) do ?'
       },
       {
         name: 'output block',
@@ -1694,7 +1807,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'square root 9',
+        toString: 'square root 9'
       },
       {
         name: 'nested Number output blocks',
@@ -1724,7 +1837,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: '(10 × 5) + 3',
+        toString: '(10 × 5) + 3'
       },
       {
         name: 'nested String output blocks',
@@ -1741,8 +1854,15 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'create text with “ Hello ” “ World ”',
+        toString: 'create text with “ Hello ” “ World ”'
       },
+      {
+        name: 'parentheses in string literal',
+        xml: '<block type="text">' +
+          '<field name="TEXT">foo ( bar ) baz</field>' +
+        '</block>',
+        toString: '“ foo ( bar ) baz ”'
+      }
     ];
     // Create mocha test cases for each toString test.
     toStringTests.forEach(function(t) {

@@ -18,10 +18,11 @@
  */
 goog.provide('Blockly.WidgetDiv');
 
-goog.require('Blockly.utils.style');
+goog.require('Blockly.utils.dom');
 
 goog.requireType('Blockly.utils.Rect');
 goog.requireType('Blockly.utils.Size');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -189,8 +190,8 @@ Blockly.WidgetDiv.positionWithAnchor = function(viewportBBox, anchorBBox,
  *     current viewport, in window coordinates.
  * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {!Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ *     the widget div.
  * @param {boolean} rtl Whether the Blockly workspace is in RTL mode.
  * @return {number} A valid x-coordinate for the top left corner of the widget
  *     div, in window coordinates.
@@ -221,8 +222,8 @@ Blockly.WidgetDiv.calculateX_ = function(viewportBBox, anchorBBox, widgetSize,
  *     current viewport, in window coordinates.
  * @param {!Blockly.utils.Rect} anchorBBox The bounding rectangle of the anchor,
  *     in window coordinates.
- * @param {Blockly.utils.Size} widgetSize The dimensions of the widget inside the
- *     widget div.
+ * @param {!Blockly.utils.Size} widgetSize The dimensions of the widget inside
+ *     the widget div.
  * @return {number} A valid y-coordinate for the top left corner of the widget
  *     div, in window coordinates.
  * @private

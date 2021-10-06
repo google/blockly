@@ -14,29 +14,24 @@
 
 goog.provide('Blockly.FieldDropdown');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.BlockChange');
+goog.require('Blockly.DropDownDiv');
 goog.require('Blockly.Field');
 goog.require('Blockly.fieldRegistry');
 goog.require('Blockly.Menu');
 goog.require('Blockly.MenuItem');
-goog.require('Blockly.navigation');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.aria');
 goog.require('Blockly.utils.Coordinate');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Size');
 goog.require('Blockly.utils.string');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.userAgent');
 
-goog.requireType('Blockly.ShortcutRegistry');
-
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array>|!Function)} menuGenerator A non-empty array of
+ * @param {(!Array<!Array>|!Function)} menuGenerator A non-empty array of
  *     options for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is called to validate
  *    changes to the field's value. Takes in a language-neutral dropdown
@@ -57,15 +52,15 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   /**
    * An array of options for a dropdown list,
    * or a function which generates these options.
-   * @type {(!Array.<!Array>|
-   *    !function(this:Blockly.FieldDropdown): !Array.<!Array>)}
+   * @type {(!Array<!Array>|
+   *    !function(this:Blockly.FieldDropdown): !Array<!Array>)}
    * @protected
    */
   this.menuGenerator_ = menuGenerator;
 
   /**
    * A cache of the most recently generated options.
-   * @type {Array.<!Array.<string>>}
+   * @type {Array<!Array<string>>}
    * @private
    */
   this.generatedOptions_ = null;
@@ -100,35 +95,35 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
 
   /**
    * A reference to the currently selected menu item.
-   * @type {Blockly.MenuItem}
+   * @type {?Blockly.MenuItem}
    * @private
    */
   this.selectedMenuItem_ = null;
 
   /**
    * The dropdown menu.
-   * @type {Blockly.Menu}
+   * @type {?Blockly.Menu}
    * @protected
    */
   this.menu_ = null;
 
   /**
    * SVG image element if currently selected option is an image, or null.
-   * @type {SVGImageElement}
+   * @type {?SVGImageElement}
    * @private
    */
   this.imageElement_ = null;
 
   /**
    * Tspan based arrow element.
-   * @type {SVGTSpanElement}
+   * @type {?SVGTSpanElement}
    * @private
    */
   this.arrow_ = null;
 
   /**
    * SVG based arrow element.
-   * @type {SVGElement}
+   * @type {?SVGElement}
    * @private
    */
   this.svgArrow_ = null;
@@ -155,6 +150,20 @@ Blockly.FieldDropdown.ImageProperties;
  */
 Blockly.FieldDropdown.fromJson = function(options) {
   return new Blockly.FieldDropdown(options['options'], undefined, options);
+};
+
+/**
+ * Sets the field's value based on the given XML element. Should only be
+ * called by Blockly.Xml.
+ * @param {!Element} fieldElement The element containing info about the
+ *    field's state.
+ * @package
+ */
+Blockly.FieldDropdown.prototype.fromXml = function(fieldElement) {
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(fieldElement.textContent);
 };
 
 /**
@@ -279,7 +288,7 @@ Blockly.FieldDropdown.prototype.createSVGArrow_ = function() {
  * @protected
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
-  this.menu_ = this.dropdownCreate_();
+  this.dropdownCreate_();
   if (opt_e && typeof opt_e.clientX === 'number') {
     this.menu_.openingCoords =
         new Blockly.utils.Coordinate(opt_e.clientX, opt_e.clientY);
@@ -318,18 +327,18 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(opt_e) {
 
 /**
  * Create the dropdown editor.
- * @return {!Blockly.Menu} The newly created dropdown menu.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
   var menu = new Blockly.Menu();
   menu.setRole(Blockly.utils.aria.Role.LISTBOX);
+  this.menu_ = menu;
 
   var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
   for (var i = 0; i < options.length; i++) {
-    var content = options[i][0]; // Human-readable text or image.
-    var value = options[i][1];   // Language-neutral value.
+    var content = options[i][0];  // Human-readable text or image.
+    var value = options[i][1];    // Language-neutral value.
     if (typeof content == 'object') {
       // An image, not text.
       var image = new Image(content['width'], content['height']);
@@ -348,12 +357,10 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
   }
-
-  return menu;
 };
 
 /**
- * Disposes of events and dom-references belonging to the dropdown editor.
+ * Disposes of events and DOM-references belonging to the dropdown editor.
  * @private
  */
 Blockly.FieldDropdown.prototype.dropdownDispose_ = function() {
@@ -440,11 +447,11 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
 /**
  * Use the calculated prefix and suffix lengths to trim all of the options in
  * the given array.
- * @param {!Array.<!Array>} options Array of option tuples:
+ * @param {!Array<!Array>} options Array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @param {number} prefixLength The length of the common prefix.
  * @param {number} suffixLength The length of the common suffix
- * @return {!Array.<!Array>} A new array with all of the option text trimmed.
+ * @return {!Array<!Array>} A new array with all of the option text trimmed.
  */
 Blockly.FieldDropdown.applyTrim_ = function(options,
     prefixLength, suffixLength) {
@@ -471,7 +478,7 @@ Blockly.FieldDropdown.prototype.isOptionListDynamic = function() {
  * Return a list of the options for this dropdown.
  * @param {boolean=} opt_useCache For dynamic options, whether or not to use the
  *     cached options or to re-generate them.
- * @return {!Array.<!Array>} A non-empty array of option tuples:
+ * @return {!Array<!Array>} A non-empty array of option tuples:
  *     (human-readable text or image, language-neutral name).
  * @throws {TypeError} If generated options are incorrectly structured.
  */
@@ -483,7 +490,7 @@ Blockly.FieldDropdown.prototype.getOptions = function(opt_useCache) {
     }
     return this.generatedOptions_;
   }
-  return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
+  return /** @type {!Array<!Array<string>>} */ (this.menuGenerator_);
 };
 
 /**
@@ -737,29 +744,5 @@ Blockly.FieldDropdown.validateOptions_ = function(options) {
     throw TypeError('Found invalid FieldDropdown options.');
   }
 };
-
-/**
- * Handles the given action.
- * This is only triggered when keyboard accessibility mode is enabled.
- * @param {!Blockly.ShortcutRegistry.KeyboardShortcut} action The action to be handled.
- * @return {boolean} True if the field handled the action, false otherwise.
- * @package
- */
-Blockly.FieldDropdown.prototype.onBlocklyAction = function(action) {
-  if (this.menu_) {
-    switch (action.name) {
-      case Blockly.navigation.actionNames.PREVIOUS:
-        this.menu_.highlightPrevious();
-        return true;
-      case Blockly.navigation.actionNames.NEXT:
-        this.menu_.highlightNext();
-        return true;
-      default:
-        return false;
-    }
-  }
-  return Blockly.FieldDropdown.superClass_.onBlocklyAction.call(this, action);
-};
-
 
 Blockly.fieldRegistry.register('field_dropdown', Blockly.FieldDropdown);

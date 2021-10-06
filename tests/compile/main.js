@@ -14,6 +14,7 @@ goog.require('Blockly.VerticalFlyout');
 goog.require('Blockly.Constants.Logic');
 goog.require('Blockly.Constants.Loops');
 goog.require('Blockly.Constants.Math');
+goog.require('Blockly.Constants.TestBlocks');
 goog.require('Blockly.Constants.Text');
 goog.require('Blockly.Constants.Lists');
 goog.require('Blockly.Constants.Colour');

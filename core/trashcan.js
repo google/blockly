@@ -12,26 +12,43 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('Blockly.browserEvents');
+goog.require('Blockly.ComponentManager');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.DeleteArea');
+goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
-goog.require('Blockly.Scrollbar');
+goog.require('Blockly.IAutoHideable');
+goog.require('Blockly.IPositionable');
+goog.require('Blockly.Options');
+goog.require('Blockly.registry');
+goog.require('Blockly.uiPosition');
+goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Rect');
 goog.require('Blockly.utils.Svg');
 goog.require('Blockly.utils.toolbox');
 goog.require('Blockly.Xml');
 
-goog.requireType('Blockly.IDeleteArea');
+goog.requireType('Blockly.Events.Abstract');
+goog.requireType('Blockly.IDraggable');
 goog.requireType('Blockly.IFlyout');
+goog.requireType('Blockly.utils.Rect');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class for a trash can.
  * @param {!Blockly.WorkspaceSvg} workspace The workspace to sit in.
  * @constructor
- * @implements {Blockly.IDeleteArea}
+ * @implements {Blockly.IAutoHideable}
+ * @implements {Blockly.IPositionable}
+ * @extends {Blockly.DeleteArea}
  */
 Blockly.Trashcan = function(workspace) {
+  Blockly.Trashcan.superClass_.constructor.call(this);
   /**
    * The workspace the trashcan sits in.
    * @type {!Blockly.WorkspaceSvg}
@@ -40,8 +57,15 @@ Blockly.Trashcan = function(workspace) {
   this.workspace_ = workspace;
 
   /**
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
+   * @type {string}
+   */
+  this.id = 'trashcan';
+
+  /**
    * A list of XML (stored as strings) representing blocks in the trashcan.
-   * @type {!Array.<string>}
+   * @type {!Array<string>}
    * @private
    */
   this.contents_ = [];
@@ -65,28 +89,32 @@ Blockly.Trashcan = function(workspace) {
         'rtl': this.workspace_.RTL,
         'oneBasedIndex': this.workspace_.options.oneBasedIndex,
         'renderer': this.workspace_.options.renderer,
-        'rendererOverrides': this.workspace_.options.rendererOverrides
+        'rendererOverrides': this.workspace_.options.rendererOverrides,
+        'move': {
+          'scrollbars': true,
+        }
       }));
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
         this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.TOP ?
         Blockly.utils.toolbox.Position.BOTTOM : Blockly.utils.toolbox.Position.TOP;
-    if (!Blockly.HorizontalFlyout) {
-      throw Error('Missing require for Blockly.HorizontalFlyout');
-    }
-    this.flyout = new Blockly.HorizontalFlyout(flyoutWorkspaceOptions);
+    var HorizontalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX,
+        this.workspace_.options, true);
+    this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
       this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ?
         Blockly.utils.toolbox.Position.LEFT : Blockly.utils.toolbox.Position.RIGHT;
-    if (!Blockly.VerticalFlyout) {
-      throw Error('Missing require for Blockly.VerticalFlyout');
-    }
-    this.flyout = new Blockly.VerticalFlyout(flyoutWorkspaceOptions);
+    var VerticalFlyout = Blockly.registry.getClassFromOptions(
+        Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX,
+        this.workspace_.options, true);
+    this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
   }
   this.workspace_.addChangeListener(this.onDelete_.bind(this));
 };
+Blockly.utils.object.inherits(Blockly.Trashcan, Blockly.DeleteArea);
 
 /**
  * Width of both the trash can and lid images.
@@ -110,18 +138,18 @@ Blockly.Trashcan.prototype.BODY_HEIGHT_ = 44;
 Blockly.Trashcan.prototype.LID_HEIGHT_ = 16;
 
 /**
- * Distance between trashcan and bottom edge of workspace.
+ * Distance between trashcan and bottom or top edge of workspace.
  * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 20;
+Blockly.Trashcan.prototype.MARGIN_VERTICAL_ = 20;
 
 /**
- * Distance between trashcan and right edge of workspace.
+ * Distance between trashcan and right or left edge of workspace.
  * @const {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 20;
+Blockly.Trashcan.prototype.MARGIN_HORIZONTAL_ = 20;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -245,6 +273,13 @@ Blockly.Trashcan.prototype.left_ = 0;
 Blockly.Trashcan.prototype.top_ = 0;
 
 /**
+ * Whether this has been initialized.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Trashcan.prototype.initialized_ = false;
+
+/**
  * Create the trash can elements.
  * @return {!SVGElement} The trash can's SVG group.
  */
@@ -317,34 +352,38 @@ Blockly.Trashcan.prototype.createDom = function() {
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
   // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
   // See #4303
-  Blockly.bindEvent_(
+  Blockly.browserEvents.bind(
       this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
-  Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.click);
+  Blockly.browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
   // Bind to body instead of this.svgGroup_ so that we don't get lid jitters
-  Blockly.bindEvent_(body, 'mouseover', this, this.mouseOver_);
-  Blockly.bindEvent_(body, 'mouseout', this, this.mouseOut_);
+  Blockly.browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
+  Blockly.browserEvents.bind(body, 'mouseout', this, this.mouseOut_);
   this.animateLid_();
   return this.svgGroup_;
 };
 
 /**
- * Initialize the trash can.
- * @param {number} verticalSpacing Vertical distance from workspace edge to the
- *    same edge of the trashcan.
- * @return {number} Vertical distance from workspace edge to the opposite
- *    edge of the trashcan.
+ * Initializes the trash can.
  */
-Blockly.Trashcan.prototype.init = function(verticalSpacing) {
+Blockly.Trashcan.prototype.init = function() {
   if (this.workspace_.options.maxTrashcanContents > 0) {
     Blockly.utils.dom.insertAfter(
         this.flyout.createDom(Blockly.utils.Svg.SVG),
         this.workspace_.getParentSvg());
     this.flyout.init(this.workspace_);
   }
-
-  this.verticalSpacing_ = this.MARGIN_BOTTOM_ + verticalSpacing;
+  this.workspace_.getComponentManager().addComponent({
+    component: this,
+    weight: 1,
+    capabilities: [
+      Blockly.ComponentManager.Capability.AUTOHIDEABLE,
+      Blockly.ComponentManager.Capability.DELETE_AREA,
+      Blockly.ComponentManager.Capability.DRAG_TARGET,
+      Blockly.ComponentManager.Capability.POSITIONABLE
+    ]
+  });
+  this.initialized_ = true;
   this.setLidOpen(false);
-  return this.verticalSpacing_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
 };
 
 /**
@@ -353,6 +392,7 @@ Blockly.Trashcan.prototype.init = function(verticalSpacing) {
  * @suppress {checkTypes}
  */
 Blockly.Trashcan.prototype.dispose = function() {
+  this.workspace_.getComponentManager().removeComponent('trashcan');
   if (this.svgGroup_) {
     Blockly.utils.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
@@ -386,11 +426,7 @@ Blockly.Trashcan.prototype.openFlyout = function() {
   if (this.contentsIsOpen()) {
     return;
   }
-
-  var xml = [];
-  for (var i = 0, text; (text = this.contents_[i]); i++) {
-    xml[i] = Blockly.Xml.textToDom(text);
-  }
+  var xml = this.contents_.map(Blockly.Xml.textToDom);
   this.flyout.show(xml);
   this.fireUiEvent_(true);
 };
@@ -402,9 +438,21 @@ Blockly.Trashcan.prototype.closeFlyout = function() {
   if (!this.contentsIsOpen()) {
     return;
   }
-
   this.flyout.hide();
   this.fireUiEvent_(false);
+};
+
+/**
+ * Hides the component. Called in Blockly.hideChaff.
+ * @param {boolean} onlyClosePopups Whether only popups should be closed.
+ *     Flyouts should not be closed if this is true.
+ */
+Blockly.Trashcan.prototype.autoHide = function(onlyClosePopups) {
+  // For now the trashcan flyout always autocloses because it overlays the
+  // trashcan UI (no trashcan to click to close it).
+  if (!onlyClosePopups && this.flyout) {
+    this.closeFlyout();
+  }
 };
 
 /**
@@ -421,44 +469,58 @@ Blockly.Trashcan.prototype.emptyContents = function() {
 };
 
 /**
- * Position the trashcan.
+ * Positions the trashcan.
  * It is positioned in the opposite corner to the corner the
  * categories/toolbox starts at.
+ * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ *     are already on the workspace.
  */
-Blockly.Trashcan.prototype.position = function() {
+Blockly.Trashcan.prototype.position = function(metrics, savedPositions) {
   // Not yet initialized.
-  if (!this.verticalSpacing_) {
+  if (!this.initialized_) {
     return;
   }
-  var metrics = this.workspace_.getMetrics();
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
-    return;
-  }
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
-      (this.workspace_.horizontalLayout && !this.workspace_.RTL)) {
-    // Toolbox starts in the left corner.
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-  } else {
-    // Toolbox starts in the right corner.
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
-  }
 
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-    this.top_ = this.verticalSpacing_;
-  } else {
-    this.top_ = metrics.viewHeight + metrics.absoluteTop -
-        (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.verticalSpacing_;
-  }
+  var cornerPosition =
+      Blockly.uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
 
+  var height = this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  var startRect = Blockly.uiPosition.getStartPositionRect(
+      cornerPosition, new Blockly.utils.Size(this.WIDTH_, height),
+      this.MARGIN_HORIZONTAL_, this.MARGIN_VERTICAL_, metrics, this.workspace_);
+
+  var verticalPosition = cornerPosition.vertical;
+  var bumpDirection =
+      verticalPosition === Blockly.uiPosition.verticalPosition.TOP ?
+          Blockly.uiPosition.bumpDirection.DOWN :
+          Blockly.uiPosition.bumpDirection.UP;
+  var positionRect = Blockly.uiPosition.bumpPositionRect(
+      startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
+
+  this.top_ = positionRect.top;
+  this.left_ = positionRect.left;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
- * Return the deletion rectangle for this trash can.
- * @return {Blockly.utils.Rect} Rectangle in which to delete.
+ * Returns the bounding rectangle of the UI element in pixel units relative to
+ * the Blockly injection div.
+ * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ *   bounding box should be ignored by other UI elements.
+ */
+Blockly.Trashcan.prototype.getBoundingRectangle = function() {
+  var bottom = this.top_ + this.BODY_HEIGHT_ + this.LID_HEIGHT_;
+  var right = this.left_ + this.WIDTH_;
+  return new Blockly.utils.Rect(this.top_, bottom, this.left_, right);
+};
+
+/**
+ * Returns the bounding rectangle of the drag target area in pixel units
+ * relative to viewport.
+ * @return {?Blockly.utils.Rect} The component's bounding box. Null if drag
+ *   target area should be ignored.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
   if (!this.svgGroup_) {
@@ -472,6 +534,38 @@ Blockly.Trashcan.prototype.getClientRect = function() {
   var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var right = left + this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_;
   return new Blockly.utils.Rect(top, bottom, left, right);
+};
+
+/**
+ * Handles when a cursor with a block or bubble is dragged over this drag
+ * target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragOver = function(_dragElement) {
+  this.setLidOpen(this.wouldDelete_);
+};
+
+/**
+ * Handles when a cursor with a block or bubble exits this drag target.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDragExit = function(_dragElement) {
+  this.setLidOpen(false);
+};
+
+/**
+ * Handles when a block or bubble is dropped on this component.
+ * Should not handle delete here.
+ * @param {!Blockly.IDraggable} _dragElement The block or bubble currently being
+ *   dragged.
+ * @override
+ */
+Blockly.Trashcan.prototype.onDrop = function(_dragElement) {
+  setTimeout(this.setLidOpen.bind(this, false), 100);
 };
 
 /**
@@ -519,7 +613,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  * @private
  */
 Blockly.Trashcan.prototype.setLidAngle_ = function(lidAngle) {
-  var openAtRight = this.workspace_.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT ||
+  var openAtRight =
+      this.workspace_.toolboxPosition == Blockly.utils.toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute('transform', 'rotate(' +
       (openAtRight ? -lidAngle : lidAngle) + ',' +
@@ -560,13 +655,13 @@ Blockly.Trashcan.prototype.click = function() {
 };
 
 /**
- * Fires a ui event for trashcan flyout open or close.
+ * Fires a UI event for trashcan flyout open or close.
  * @param {boolean} trashcanOpen Whether the flyout is opening.
  * @private
  */
 Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  var uiEvent =
-      new Blockly.Events.TrashcanOpen(trashcanOpen,this.workspace_.id);
+  var uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
+      trashcanOpen,this.workspace_.id);
   Blockly.Events.fire(uiEvent);
 };
 

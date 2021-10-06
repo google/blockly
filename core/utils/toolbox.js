@@ -10,9 +10,15 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.toolbox
+ * @namespace
+ */
 goog.provide('Blockly.utils.toolbox');
 
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.Xml');
 
 goog.requireType('Blockly.ToolboxCategory');
 goog.requireType('Blockly.ToolboxSeparator');
@@ -172,14 +178,14 @@ Blockly.utils.toolbox.CATEGORY_TOOLBOX_KIND = 'categoryToolbox';
 Blockly.utils.toolbox.FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
- * Position of the the toolbox relative to the flyout.
+ * Position of the the toolbox and/or flyout relative to the workspace.
  * @enum {number}
  */
 Blockly.utils.toolbox.Position = {
-  TOP: Blockly.TOOLBOX_AT_TOP,
-  BOTTOM: Blockly.TOOLBOX_AT_BOTTOM,
-  LEFT: Blockly.TOOLBOX_AT_LEFT,
-  RIGHT: Blockly.TOOLBOX_AT_RIGHT
+  TOP: 0,
+  BOTTOM: 1,
+  LEFT: 2,
+  RIGHT: 3
 };
 
 /**
@@ -207,7 +213,7 @@ Blockly.utils.toolbox.convertToolboxDefToJson = function(toolboxDef) {
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
- * @param {Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
+ * @param {!Blockly.utils.toolbox.ToolboxInfo} toolboxJson Object holding
  *     information for creating a toolbox.
  * @throws {Error} if the toolbox is not the correct format.
  * @private
@@ -339,7 +345,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
     var tagName = child.tagName.toUpperCase();
     obj['kind'] = tagName;
 
-    // Store the xml for a block
+    // Store the XML for a block.
     if (tagName == 'BLOCK') {
       obj['blockxml'] = child;
     } else if (child.childNodes && child.childNodes.length > 0) {
@@ -347,7 +353,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function(toolboxDef) {
       obj['contents'] = Blockly.utils.toolbox.xmlToJsonArray_(child);
     }
 
-    // Add xml attributes to object
+    // Add XML attributes to object
     Blockly.utils.toolbox.addAttributes_(child, obj);
     arr.push(obj);
   }

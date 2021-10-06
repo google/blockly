@@ -29,3 +29,10 @@ Blockly.IBoundedElement = function() {};
  * @return {!Blockly.utils.Rect} Object with coordinates of the bounded element.
  */
 Blockly.IBoundedElement.prototype.getBoundingRectangle;
+
+/**
+ * Move the element by a relative offset.
+ * @param {number} dx Horizontal offset in workspace units.
+ * @param {number} dy Vertical offset in workspace units.
+ */
+Blockly.IBoundedElement.prototype.moveBy;

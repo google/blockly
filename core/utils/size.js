@@ -42,8 +42,8 @@ Blockly.utils.Size = function(width, height) {
 
 /**
  * Compares sizes for equality.
- * @param {Blockly.utils.Size} a A Size.
- * @param {Blockly.utils.Size} b A Size.
+ * @param {?Blockly.utils.Size} a A Size.
+ * @param {?Blockly.utils.Size} b A Size.
  * @return {boolean} True iff the sizes have equal widths and equal
  *     heights, or if both are null.
  */

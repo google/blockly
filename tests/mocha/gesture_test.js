@@ -88,16 +88,4 @@ suite('Gesture', function() {
     var block = getTopFlyoutBlock(flyout);
     testGestureIsFieldClick(block, true, this.eventsFireStub);
   });
-
-  test('Shift click in accessibility mode - moves the cursor', function() {
-    this.workspace.keyboardAccessibilityMode = true;
-
-    var eventTarget = this.workspace.svgGroup_;
-    simulateClick(eventTarget, {shiftKey: true});
-
-    var cursor = this.workspace.getCursor();
-    var cursorNode = cursor.getCurNode();
-    chai.assert.exists(cursorNode);
-    chai.assert.equal(cursorNode.getType(), Blockly.ASTNode.types.WORKSPACE);
-  });
 });

@@ -12,12 +12,13 @@
 
 goog.provide('Blockly.zelos.Drawer');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
 goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.blockRendering.Types');
 goog.require('Blockly.utils.object');
+goog.require('Blockly.utils.svgPaths');
 goog.require('Blockly.zelos.RenderInfo');
 
+goog.requireType('Blockly.blockRendering.Row');
+goog.requireType('Blockly.BlockSvg');
 goog.requireType('Blockly.zelos.PathObject');
 
 

@@ -15,6 +15,8 @@ goog.provide('Blockly.blockRendering.Measurable');
 
 goog.require('Blockly.blockRendering.Types');
 
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+
 
 /**
  * The base class to represent a part of a block that takes up space during

@@ -14,10 +14,23 @@
 goog.provide('Blockly.blockRendering.MarkerSvg');
 
 goog.require('Blockly.ASTNode');
+goog.require('Blockly.connectionTypes');
+/** @suppress {extraRequire} */
 goog.require('Blockly.constants');
+goog.require('Blockly.Events');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Events.MarkerMove');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
+
+goog.requireType('Blockly.blockRendering.ConstantProvider');
+goog.requireType('Blockly.BlockSvg');
+goog.requireType('Blockly.Connection');
+goog.requireType('Blockly.Field');
+goog.requireType('Blockly.IASTNodeLocationSvg');
+goog.requireType('Blockly.Marker');
+goog.requireType('Blockly.RenderedConnection');
+goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -196,13 +209,14 @@ Blockly.blockRendering.MarkerSvg.prototype.draw = function(oldNode, curNode) {
 Blockly.blockRendering.MarkerSvg.prototype.showAtLocation_ = function(curNode) {
   var curNodeAsConnection =
     /** @type {!Blockly.Connection} */ (curNode.getLocation());
+  var connectionType = curNodeAsConnection.type;
   if (curNode.getType() == Blockly.ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (curNodeAsConnection.type == Blockly.INPUT_VALUE) {
+  } else if (connectionType == Blockly.connectionTypes.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (curNodeAsConnection.type == Blockly.NEXT_STATEMENT) {
+  } else if (connectionType == Blockly.connectionTypes.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == Blockly.ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);
@@ -552,7 +566,7 @@ Blockly.blockRendering.MarkerSvg.prototype.hide = function() {
 Blockly.blockRendering.MarkerSvg.prototype.fireMarkerEvent_ = function(
     oldNode, curNode) {
   var curBlock = curNode.getSourceBlock();
-  var event = new Blockly.Events.MarkerMove(
+  var event = new (Blockly.Events.get(Blockly.Events.MARKER_MOVE))(
       curBlock, this.isCursor(), oldNode, curNode);
   Blockly.Events.fire(event);
 };

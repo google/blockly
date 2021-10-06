@@ -17,6 +17,8 @@ goog.require('Blockly.Events.Abstract');
 goog.require('Blockly.registry');
 goog.require('Blockly.utils.object');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Class for a finished loading event.

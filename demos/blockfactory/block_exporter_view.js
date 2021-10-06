@@ -70,7 +70,7 @@ BlockExporterView.prototype.deselectAllBlocks = function() {
 /**
  * Given an array of selected blocks, selects these blocks in the view, marking
  * the checkboxes accordingly.
- * @param {Array.<Blockly.Block>} blockTypes Array of block types to select.
+ * @param {Array<Blockly.Block>} blockTypes Array of block types to select.
  */
 BlockExporterView.prototype.setSelectedBlockTypes = function(blockTypes) {
   for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
@@ -80,7 +80,7 @@ BlockExporterView.prototype.setSelectedBlockTypes = function(blockTypes) {
 
 /**
  * Returns array of selected blocks.
- * @return {!Array.<string>} Array of all selected block types.
+ * @return {!Array<string>} Array of all selected block types.
  */
 BlockExporterView.prototype.getSelectedBlockTypes = function() {
   var selectedTypes = [];

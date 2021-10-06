@@ -20,6 +20,8 @@ goog.require('Blockly.utils');
 goog.require('Blockly.utils.dom');
 goog.require('Blockly.utils.Svg');
 
+goog.requireType('Blockly.utils.Coordinate');
+
 
 /**
  * Blocks are moved into this SVG during a drag, improving performance.

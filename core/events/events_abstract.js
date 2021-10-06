@@ -15,6 +15,8 @@ goog.provide('Blockly.Events.Abstract');
 
 goog.require('Blockly.Events');
 
+goog.requireType('Blockly.Workspace');
+
 
 /**
  * Abstract class for an event.
@@ -50,7 +52,7 @@ Blockly.Events.Abstract = function() {
 };
 
 /**
- * Whether or not the event is a ui event.
+ * Whether or not the event is a UI event.
  * @type {boolean}
  */
 Blockly.Events.Abstract.prototype.isUiEvent = false;

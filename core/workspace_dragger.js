@@ -14,6 +14,8 @@ goog.provide('Blockly.WorkspaceDragger');
 
 goog.require('Blockly.utils.Coordinate');
 
+goog.requireType('Blockly.WorkspaceSvg');
+
 
 /**
  * Class for a workspace dragger.  It moves the workspace around when it is
@@ -30,6 +32,20 @@ Blockly.WorkspaceDragger = function(workspace) {
    * @private
    */
   this.workspace_ = workspace;
+
+  /**
+   * Whether horizontal scroll is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.horizontalScrollEnabled_ = this.workspace_.isMovableHorizontally();
+
+  /**
+   * Whether vertical scroll is enabled.
+   * @type {boolean}
+   * @private
+   */
+  this.verticalScrollEnabled_ = this.workspace_.isMovableVertically();
 
   /**
    * The scroll position of the workspace at the beginning of the drag.
@@ -81,5 +97,14 @@ Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY) {
  */
 Blockly.WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   var newXY = Blockly.utils.Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
-  this.workspace_.scroll(newXY.x, newXY.y);
+
+  if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
+    this.workspace_.scroll(newXY.x, newXY.y);
+  } else if (this.horizontalScrollEnabled_) {
+    this.workspace_.scroll(newXY.x, this.workspace_.scrollY);
+  } else if (this.verticalScrollEnabled_) {
+    this.workspace_.scroll(this.workspace_.scrollX, newXY.y);
+  } else {
+    throw new TypeError('Invalid state.');
+  }
 };

@@ -239,8 +239,8 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
           return;
         }
         document.getElementById('categoryName').value = selected.name;
-        document.getElementById('categoryColour').value = selected.color ?
-            selected.color.substring(1).toLowerCase() : '';
+        document.getElementById('categoryColour').value = selected.colour ?
+            selected.colour.substring(1).toLowerCase() : '';
         console.log(document.getElementById('categoryColour').value);
         // Link the colour picker to the field.
         cp_init('categoryColour');
@@ -346,7 +346,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // surrounding parent, meaning it is nested in another block (blocks that
     // are not nested in parents cannot be shadow blocks).
     if (e.type == Blockly.Events.BLOCK_MOVE ||
-        e.type == Blockly.Event.SELECTED) {
+        e.type == Blockly.Events.SELECTED) {
       var selected = Blockly.selected;
 
       // Show shadow button if a block is selected. Show "Add Shadow" if

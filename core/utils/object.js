@@ -10,6 +10,10 @@
  */
 'use strict';
 
+/**
+ * @name Blockly.utils.object
+ * @namespace
+ */
 goog.provide('Blockly.utils.object');
 
 
@@ -62,9 +66,7 @@ Blockly.utils.object.deepMerge = function(target, source) {
  */
 Blockly.utils.object.values = function(obj) {
   if (Object.values) {
-    /* eslint-disable es5/no-es6-methods */
     return Object.values(obj);
-    /* eslint-enable es5/no-es6-methods */
   }
   // Fallback for IE.
   return Object.keys(obj).map(function(e) {

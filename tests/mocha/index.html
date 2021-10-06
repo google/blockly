@@ -52,6 +52,7 @@
     <script src="toolbox_helper.js"></script>
 
     <script src="astnode_test.js"></script>
+    <script src="block_json_test.js"></script>
     <script src="block_test.js"></script>
     <script src="comment_test.js"></script>
     <script src="connection_db_test.js"></script>
@@ -86,8 +87,6 @@
     <script src="logic_ternary_test.js"></script>
     <script src="metrics_test.js"></script>
     <script src="names_test.js"></script>
-    <script src="navigation_modify_test.js"></script>
-    <script src="navigation_test.js"></script>
     <script src="procedures_test_helpers.js"></script>
     <script src="procedures_test.js"></script>
     <script src="registry_test.js"></script>
@@ -113,22 +112,6 @@
       <button text="insert" callbackkey="insertConnectionRows"></button>
       <label text="tooltips"></label>
     </xml>
-
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-minimal" style="display: none">
-      <block type="basic_block"></block>
-    </xml>
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-incorrect" style="display: none">
-      <block type="basic_block"></block>
-      <category name="First">
-        <block type="basic_block">
-          <field name="TEXT">FirstCategory-FirstBlock</field>
-        </block>
-        <block type="basic_block">
-          <field name="TEXT">FirstCategory-SecondBlock</field>
-        </block>
-      </category>
-    </xml>
-
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
       <category name="First" css-container="something">
         <block type="basic_block">
@@ -144,7 +127,6 @@
         </block>
       </category>
     </xml>
-
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
       <category name="First" expanded="true" categorystyle="logic_category">
         <sep gap="-1"></sep>
@@ -161,10 +143,6 @@
         <category toolboxitemid="nestedCategory" name="NestedItemOne"></category>
       </category>
       <category name="lastItem"></category>
-    </xml>
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-connections" style="display: none">
-      <block type="stack_block"></block>
-      <block type="row_block"></block>
     </xml>
 
     <xml xmlns="https://developers.google.com/blockly/xml" id="gesture-test-toolbox" style="display: none">

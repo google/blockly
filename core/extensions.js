@@ -127,7 +127,7 @@ exports.registerMutator = registerMutator;
  * @alias Blockly.Extensions.unregister
  */
 const unregister = function(name) {
-  if (allExtensions[name]) {
+  if (isRegistered(name)) {
     delete allExtensions[name];
   } else {
     console.warn(
@@ -135,6 +135,18 @@ const unregister = function(name) {
   }
 };
 exports.unregister = unregister;
+
+/**
+ * Returns whether an extension is registered with the given name.
+ * @param {string} name The name of the extension to check for.
+ * @return {boolean} True if the extension is registered.  False if it is
+ *     not registered.
+ * @alias Blockly.Extensions.isRegistered
+ */
+const isRegistered = function(name) {
+  return !!allExtensions[name];
+};
+exports.isRegistered = isRegistered;
 
 /**
  * Applies an extension method to a block. This should only be called during

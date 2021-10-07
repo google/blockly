@@ -12,19 +12,27 @@
 
 'use strict';
 
-goog.provide('Blockly.IComponent');
+/**
+ * Interface for a workspace component that can be registered with
+ * the ComponentManager.
+ * @namespace Blockly.IComponent
+ */
+goog.module('Blockly.IComponent');
 
 
 /**
  * The interface for a workspace component that can be registered with the
  * ComponentManager.
  * @interface
+ * @alias Blockly.IComponent
  */
-Blockly.IComponent = function() {};
+const IComponent = function() {};
 
 /**
  * The unique id for this component that is used to register with the
  * ComponentManager.
  * @type {string}
  */
-Blockly.IComponent.id;
+IComponent.id;
+
+exports = IComponent;

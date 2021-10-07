@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.contextMenuItem');
+
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Context Menu Items', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -17,11 +22,11 @@ suite('Context Menu Items', function() {
     Blockly.ContextMenuItems.registerDefaultOptions();
     this.registry = Blockly.ContextMenuRegistry.registry;
   });
-  
+
   teardown(function() {
     sharedTestTeardown.call(this);
   });
-  
+
   suite('Workspace Items', function() {
     setup(function() {
       this.scope = {workspace: this.workspace};
@@ -255,7 +260,8 @@ suite('Context Menu Items', function() {
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        var confirmStub = sinon.stub(Blockly, 'confirm').callsArgWith(1, true);
+        var confirmStub = sinon.stub(
+          Blockly.dialog, 'confirm').callsArgWith(1, true);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -267,7 +273,8 @@ suite('Context Menu Items', function() {
 
       test('Does not delete blocks if not confirmed', function() {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        var confirmStub = sinon.stub(Blockly, 'confirm').callsArgWith(1, false);
+        var confirmStub = sinon.stub(
+          Blockly.dialog, 'confirm').callsArgWith(1, false);
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
@@ -278,7 +285,7 @@ suite('Context Menu Items', function() {
       });
 
       test('No dialog for single block', function() {
-        var confirmStub = sinon.stub(Blockly, 'confirm');
+        var confirmStub = sinon.stub(Blockly.dialog, 'confirm');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
@@ -328,12 +335,12 @@ suite('Context Menu Items', function() {
       });
 
       test('Calls duplicate', function() {
-        var stub = sinon.stub(Blockly, 'duplicate');
+        var spy = sinon.spy(Blockly.clipboard, 'duplicate');
 
         this.duplicateOption.callback(this.scope);
 
-        sinon.assert.calledOnce(stub);
-        sinon.assert.calledWith(stub, this.block);
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, this.block);
       });
 
       test('Has correct label', function() {

@@ -11,14 +11,22 @@
 
 'use strict';
 
-goog.provide('Blockly.IDraggable');
+/**
+ * The interface for an object that is draggable.
+ * @namespace Blockly.IDraggable
+ */
+goog.module('Blockly.IDraggable');
 
-goog.require('Blockly.IDeletable');
+/* eslint-disable-next-line no-unused-vars */
+const IDeletable = goog.require('Blockly.IDeletable');
 
 
 /**
  * The interface for an object that can be dragged.
- * @extends {Blockly.IDeletable}
+ * @extends {IDeletable}
  * @interface
+ * @alias Blockly.IDraggable
  */
-Blockly.IDraggable = function() {};
+const IDraggable = function() {};
+
+exports = IDraggable;

@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for gesture.
- * @author marisaleung@google.com (Marisa Leung)
- */
-'use strict';
+goog.module('Blockly.test.gesture');
+
+const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatchPointerEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Gesture', function() {
   function testGestureIsFieldClick(block, isFieldClick, eventsFireStub){

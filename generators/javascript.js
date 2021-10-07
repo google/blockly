@@ -42,7 +42,7 @@ Blockly.JavaScript.addReservedWords(
     // Magic variable.
     'arguments,' +
     // Everything in the current environment (835 items in Chrome, 104 in Node).
-    Object.getOwnPropertyNames(Blockly.utils.global).join(','));
+    Object.getOwnPropertyNames(Blockly.utils.global.globalThis).join(','));
 
 /**
  * Order of operation ENUMs.

@@ -88,7 +88,7 @@ BlockFactory.formatChange = function() {
   var languageTA = document.getElementById('languageTA');
   if (document.getElementById('format').value == 'Manual-JSON' ||
       document.getElementById('format').value == 'Manual-JS') {
-    Blockly.hideChaff();
+    Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
     languageTA.style.display = 'block';
@@ -179,14 +179,15 @@ BlockFactory.updatePreview = function() {
     return;
   }
 
-  // Backup Blockly.Blocks object so that main workspace and preview don't
-  // collide if user creates a 'factory_base' block, for instance.
-  var backupBlocks = Blockly.Blocks;
+  // Backup Blockly.Blocks definitions so we can delete them all
+  // before instantiating user-defined block.  This avoids a collision
+  // between the main workspace and preview if the user creates a
+  // 'factory_base' block, for instance.
+  var originalBlocks = Object.assign(Object.create(null), Blockly.Blocks);
   try {
-    // Make a shallow copy.
-    Blockly.Blocks = Object.create(null);
-    for (var prop in backupBlocks) {
-      Blockly.Blocks[prop] = backupBlocks[prop];
+    // Delete existing blocks.
+    for (var key in Blockly.Blocks) {
+      delete Blockly.Blocks[key];
     }
 
     if (format == 'JSON') {
@@ -206,18 +207,14 @@ BlockFactory.updatePreview = function() {
       }
     }
 
-    // Look for a block on Blockly.Blocks that does not match the backup.
-    var blockType = null;
-    for (var type in Blockly.Blocks) {
-      if (typeof Blockly.Blocks[type].init == 'function' &&
-          Blockly.Blocks[type] != backupBlocks[type]) {
-        blockType = type;
-        break;
-      }
-    }
-    if (!blockType) {
+    // Look for newly-created block(s) (ideally just one).
+    var createdTypes = Object.getOwnPropertyNames(Blockly.Blocks);
+    if (createdTypes.length < 1) {
       return;
+    } else if (createdTypes.length > 1) {
+      console.log('Unexpectedly found more than one block definition');
     }
+    var blockType = createdTypes[0];
 
     // Create the preview block.
     var previewBlock = BlockFactory.previewWorkspace.newBlock(blockType);
@@ -251,7 +248,12 @@ BlockFactory.updatePreview = function() {
     BlockFactory.updateBlocksFlag = false
     BlockFactory.updateBlocksFlagDelayed = false
   } finally {
-    Blockly.Blocks = backupBlocks;
+    // Remove all newly-created block(s).
+    for (var key in Blockly.Blocks) {
+      delete Blockly.Blocks[key];
+    }
+    // Restore original blocks.
+    Object.assign(Blockly.Blocks, originalBlocks);
   }
 };
 

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.widgetDiv');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('WidgetDiv', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -40,7 +45,7 @@ suite('WidgetDiv', function() {
           anchorBBox, rtl, expectedX, expectedY, expectedHeight) {
         Blockly.WidgetDiv.positionWithAnchor(
             this.viewportBBox, anchorBBox, this.widgetSize, rtl);
-        var style = Blockly.WidgetDiv.DIV.style;
+        var style = Blockly.WidgetDiv.getDiv().style;
         chai.assert.equal(style.left, expectedX + 'px', 'Left');
         chai.assert.equal(style.top, expectedY + 'px', 'Top');
         chai.assert.equal(style.height, expectedHeight + 'px', 'Height');

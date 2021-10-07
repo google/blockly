@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.connection');
+
+const {assertSingleDeprecationWarningCall, createDeprecationWarningStub, createGenUidStubWithReturns, defineRowBlock, defineStatementBlock, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Connection', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -25,8 +30,8 @@ suite('Connection', function() {
 
   test('Deprecated - canConnectWithReason passes', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
-    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
-    var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
+    var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
+    var conn2 = this.createConnection(Blockly.NEXT_NAME);
     chai.assert.equal(conn1.canConnectWithReason(conn2),
         Blockly.Connection.CAN_CONNECT);
     assertSingleDeprecationWarningCall(deprecateWarnSpy,
@@ -35,7 +40,7 @@ suite('Connection', function() {
 
   test('Deprecated - canConnectWithReason fails', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
-    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
     var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
     chai.assert.equal(conn1.canConnectWithReason(conn2),
         Blockly.Connection.REASON_WRONG_TYPE);
@@ -45,8 +50,8 @@ suite('Connection', function() {
 
   test('Deprecated - checkConnection passes', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
-    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
-    var conn2 = this.createConnection(Blockly.NEXT_STATEMENT);
+    var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
+    var conn2 = this.createConnection(Blockly.NEXT_NAME);
     chai.assert.doesNotThrow(function() {
       conn1.checkConnection(conn2);
     });
@@ -56,7 +61,7 @@ suite('Connection', function() {
 
   test('Deprecated - checkConnection fails', function() {
     var deprecateWarnSpy = createDeprecationWarningStub();
-    var conn1 = this.createConnection(Blockly.PREVIOUS_STATEMENT);
+    var conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
     var conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
     chai.assert.throws(function() {
       conn1.checkConnection(conn2);
@@ -65,7 +70,7 @@ suite('Connection', function() {
         'Connection.prototype.checkConnection');
   });
 
-  suite('Set Shadow Dom', function() {
+  suite('Set Shadow', function() {
 
     function assertBlockMatches(block, isShadow, opt_id) {
       chai.assert.equal(block.isShadow(), isShadow,
@@ -100,6 +105,14 @@ suite('Connection', function() {
       chai.assert.notExists(block,
           `expected block ${block && block.id} to not be attached to next connection`);
     }
+    
+    function assertSerialization(block, jso, xmlText) {
+      const actualJso = Blockly.serialization.blocks
+          .save(block, {addNextBlocks: true});
+      const actualXml = Blockly.Xml.domToText(Blockly.Xml.blockToDom(block));
+      chai.assert.deepEqual(actualJso, jso);
+      chai.assert.equal(actualXml, xmlText);
+    }
 
     var testSuites = [
       {
@@ -122,660 +135,2482 @@ suite('Connection', function() {
         setup(function() {
           this.workspace = testSuite.createWorkspace();
 
-          Blockly.defineBlocksWithJsonArray([
-            {
-              "type": "stack_block",
-              "message0": "",
-              "previousStatement": null,
-              "nextStatement": null
-            },
-            {
-              "type": "row_block",
-              "message0": "%1",
-              "args0": [
-                {
-                  "type": "input_value",
-                  "name": "INPUT"
-                }
-              ],
-              "output": null
-            },
-            {
-              "type": "statement_block",
-              "message0": "%1",
-              "args0": [
-                {
-                  "type": "input_statement",
-                  "name": "STATEMENT"
-                }
-              ],
-              "previousStatement": null,
-              "nextStatement": null
-            }]);
+          defineRowBlock();
+          defineStatementBlock();
+          defineStackBlock();
+
+          createGenUidStubWithReturns(
+              new Array(30).fill().map((_, i) => 'id' + i));
         });
 
         teardown(function() {
           workspaceTeardown.call(this, this.workspace);
         });
 
-        suite('Add - No Block Connected', function() {
-          // These are defined separately in each suite.
-          function createRowBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          function createStatementBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          function createStackBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          test('Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block"/>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true);
+        suite('setShadowDom', function() {
+          suite('Add - No Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="id1"/>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="id1">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="id2"/>' +
+                  '  </value>' +
+                  '</shadow>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="id1"/>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="id1">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="id2"/>' +
+                  '  </statement>' +
+                  '</shadow>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="id1"/>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="id1">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="id2"/>' +
+                  '  </next>' +
+                  '</shadow>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Add - With Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlocks(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block" id="id0">' +
+                  '  <value name="INPUT">' +
+                  '    <block type="row_block" id="idA"/>' +
+                  '  </value>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlocks(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block" id="id0">' +
+                  '  <statement name="NAME">' +
+                  '    <block type="statement_block" id="idA"/>' +
+                  '  </statement>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlocks(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="id0">' +
+                  '  <next>' +
+                  '    <block type="stack_block" id="idA"/>' +
+                  '  </next>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="id1"/>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="id1">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="id2"/>' +
+                  '  </value>' +
+                  '</shadow>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', false);
+              assertInputNotHasBlock(parent.getInputTargetBlock('INPUT'), 'INPUT');
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="id1"/>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="id1">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="id2"/>' +
+                  '  </statement>' +
+                  '</shadow>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', false);
+              assertInputNotHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME');
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="id1"/>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="id1">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="id2"/>' +
+                  '  </next>' +
+                  '</shadow>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, false);
+              assertNextNotHasBlock(parent.getNextBlock());
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Add - With Shadow Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="id0"/>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="1"/>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true, '1');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="2"/>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="1">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="a"/>' +
+                  '  </value>' +
+                  '</shadow>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true, '1');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block" id="2">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="b"/>' +
+                  '  </value>' +
+                  '</shadow>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="b"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="1"/>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true, '1');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="2"/>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="1">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="a"/>' +
+                  '  </statement>' +
+                  '</shadow>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true, '1');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true, 'a');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="2">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="b"/>' +
+                  '  </statement>' +
+                  '</shadow>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true, '2');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="b"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="1"/>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true, '1');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="2"/>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="1">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="a"/>' +
+                  '  </next>' +
+                  '</shadow>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true, '1');
+              assertNextHasBlock(parent.getNextBlock(), true, 'a');
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="2">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="b"/>' +
+                  '  </next>' +
+                  '</shadow>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true, '2');
+              assertNextHasBlock(parent.getNextBlock(), true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'b',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="b"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Remove - No Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block" id="id0">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="idA"/>' +
+                  '  </value>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block" id="id0">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="idA"/>' +
+                  '  </statement>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="id0">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="idA"/>' +
+                  '  </next>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'STATEMENT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowDom(null);
+              assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Remove - Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block" id="id0">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block" id="idA"/>' +
+                  '    <block type="row_block" id="idB"/>' +
+                  '  </value>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block" id="id0">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block" id="idA"/>' +
+                  '    <block type="statement_block" id="idB"/>' +
+                  '  </statement>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block" id="id0">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="idA"/>' +
+                  '    <block type="stack_block" id="idB"/>' +
+                  '  </next>' +
+                  '</block>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.setShadowDom(null);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection.setShadowDom(null);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowDom(null);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Add - Connect & Disconnect - Remove', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="row_block"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStatementBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="statement_block"/>'
+              ), workspace);
+              return block;
+            }
+  
+            function createStackBlock(workspace) {
+              var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+                  '<block type="stack_block"/>'
+              ), workspace);
+              return block;
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block"/>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true);
+              var child = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.connect(child.outputConnection);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              parent.getInput('INPUT').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="row_block">' +
+                  '  <value name="INPUT">' +
+                  '    <shadow type="row_block"/>' +
+                  '  </value>' +
+                  '</shadow>'
+              );
+              parent.getInput('INPUT').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              var child = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.connect(child.outputConnection);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              parent.getInput('INPUT').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block"/>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true);
+              var child = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .connect(child.previousConnection);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              parent.getInput('NAME').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'NAME');
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block">' +
+                  '  <statement name="NAME">' +
+                  '    <shadow type="statement_block"/>' +
+                  '  </statement>' +
+                  '</shadow>'
+              );
+              parent.getInput('NAME').connection.setShadowDom(xml);
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              var child = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .connect(child.previousConnection);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              parent.getInput('NAME').connection.setShadowDom(null);
+              assertInputNotHasBlock(parent, 'NAME');
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block"/>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true);
+              var child = createStatementBlock(this.workspace);
+              parent.nextConnection.connect(child.previousConnection);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              parent.nextConnection.setShadowDom(null);
+              assertNextNotHasBlock(parent);
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              var xml = Blockly.Xml.textToDom(
+                  '<shadow type="stack_block" id="parent">' +
+                  '  <next>' +
+                  '    <shadow type="stack_block" id="child"/>' +
+                  '  </next>' +
+                  '</shadow>'
+              );
+              parent.nextConnection.setShadowDom(xml);
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              var child = createStatementBlock(this.workspace);
+              parent.nextConnection.connect(child.previousConnection);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              parent.nextConnection.setShadowDom(null);
+              assertNextNotHasBlock(parent);
+            });
           });
 
-          test('Multiple Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block"/>' +
-                '  </value>' +
-                '</shadow>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
-          });
+          suite('Invalid', function() {
+            test('Attach to output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="row_block">')));
+            });
 
-          test('Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block"/>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true);
-          });
+            test('Attach to previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_block">')));
+            });
 
-          test('Multiple Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block"/>' +
-                '  </statement>' +
-                '</shadow>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
-          });
+            test('Missing output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_block">')));
+            });
 
-          test('Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block"/>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true);
-          });
+            test('Missing previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="row_block">')));
+            });
 
-          test('Multiple Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block">' +
-                '  <next>' +
-                '    <shadow type="stack_block"/>' +
-                '  </next>' +
-                '</shadow>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true);
-            assertNextHasBlock(parent.getNextBlock(), true);
+            test('Invalid connection checks, output', function() {
+              const block = this.workspace.newBlock('logic_operation');
+              chai.assert.throws(() =>
+                block.getInput('A').connection.setShadowDom(
+                    Blockly.Xml.textToDom('<block type="stack_block">')));
+            });
+
+            test('Invalid connection checks, previous', function() {
+              Blockly.defineBlocksWithJsonArray([{
+                "type": "stack_checks_block",
+                "message0": "",
+                "previousStatement": "check 1",
+                "nextStatement": "check 2"
+              }]);
+              const block = this.workspace.newBlock('stack_checks_block');
+              chai.assert.throws(() =>
+                block.nextConnection.setShadowDom(Blockly.Xml.textToDom(
+                    '<block type="stack_checks_block">')));
+            });
           });
         });
 
-        suite('Add - With Block Connected', function() {
-          // These are defined separately in each suite.
-          function createRowBlocks(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <block type="row_block"/>' +
-                '  </value>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
+        suite('setShadowState', function() {
+          suite('Add - No Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block', 'id': 'id0'}, workspace);
+            }
+  
+            function createStatementBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block', 'id': 'id0'}, workspace);
+            }
+  
+            function createStackBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block', 'id': 'id0'}, workspace);
+            }
 
-          function createStatementBlocks(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <block type="statement_block"/>' +
-                '  </statement>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection
+                  .setShadowState({'type': 'row_block', 'id': 'id1'});
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
 
-          function createStackBlocks(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block">' +
-                '  <next>' +
-                '    <block type="stack_block"/>' +
-                '  </next>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState({
+                'type': 'row_block',
+                'id': 'id1',
+                'inputs': {
+                  'INPUT': {
+                    'shadow': {
+                      'type': 'row_block',
+                      'id': 'id2'
+                    }
+                  }
+                }
+              });
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
 
-          test('Value', function() {
-            var parent = createRowBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block"/>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', false);
-            parent.getInput('INPUT').connection.disconnect();
-            assertInputHasBlock(parent, 'INPUT', true);
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .setShadowState({'type': 'statement_block', 'id': 'id1'});
+              assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+
+            test('Multiple Statment', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection.setShadowState({
+                'type': 'statement_block',
+                'id': 'id1',
+                'inputs': {
+                  'NAME': {
+                    'shadow': {
+                      'type': 'statement_block',
+                      'id': 'id2',
+                    }
+                  }
+                }
+              });
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': 'id1'});
+              assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowState({
+                'type': 'stack_block',
+                'id': 'id1',
+                'next': {
+                  'shadow': {
+                    'type': 'stack_block',
+                    'id': 'id2',
+                  }
+                }
+              });
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
           });
 
-          test('Multiple Value', function() {
-            var parent = createRowBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block"/>' +
-                '  </value>' +
-                '</shadow>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', false);
-            assertInputNotHasBlock(parent.getInputTargetBlock('INPUT'), 'INPUT');
-            parent.getInput('INPUT').connection.disconnect();
-            assertInputHasBlock(parent, 'INPUT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+          suite('Add - With Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'block': {
+                          'type': 'row_block',
+                          'id': 'idA'
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStatementBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'block': {
+                          'type': 'statement_block',
+                          'id': 'idA'
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStackBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'block': {
+                        'type': 'stack_block',
+                        'id': 'idA'
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              parent.getInput('INPUT').connection
+                  .setShadowState({'type': 'row_block', 'id': 'id1'});
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState(
+                  {
+                    'type': 'row_block',
+                    'id': 'id1',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id2',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'INPUT', false);
+              assertInputNotHasBlock(parent.getInputTargetBlock('INPUT'), 'INPUT');
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id1">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="id2"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              parent.getInput('NAME').connection
+                  .setShadowState({'type': 'statement_block', 'id': 'id1'});
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              parent.getInput('NAME').connection.setShadowState(
+                  {
+                    'type': 'statement_block',
+                    'id': 'id1',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id2',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'NAME', false);
+              assertInputNotHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME');
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'id2',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id1">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="id2"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': 'id1'});
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              parent.nextConnection.setShadowState(
+                  {
+                    'type': 'stack_block',
+                    'id': 'id1',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id2',
+                      }
+                    }
+                  }
+              );
+              assertNextHasBlock(parent, false);
+              assertNextNotHasBlock(parent.getNextBlock());
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'id2',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id1">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="id2"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Add - With Shadow Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block', 'id': 'id0'}, workspace);
+            }
+  
+            function createStatementBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block', 'id': 'id0'}, workspace);
+            }
+  
+            function createStackBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block', 'id': 'id0'}, workspace);
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection
+                  .setShadowState({'type': 'row_block', 'id': '1'});
+              assertInputHasBlock(parent, 'INPUT', true, '1');
+              parent.getInput('INPUT').connection
+                  .setShadowState({'type': 'row_block', 'id': '2'});
+              assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2"></shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState(
+                  {
+                    'type': 'row_block',
+                    'id': '1',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'a',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'INPUT', true, '1');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
+              parent.getInput('INPUT').connection.setShadowState(
+                  {
+                    'type': 'row_block',
+                    'id': '2',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'b',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'INPUT', true, '2');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': '2',
+                          'inputs': {
+                            'INPUT': {
+                              'shadow': {
+                                'type': 'row_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="2">' +
+                  '<value name="INPUT">' +
+                  '<shadow type="row_block" id="b"></shadow>' +
+                  '</value>' +
+                  '</shadow>' +
+                  '</value>' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .setShadowState({'type': 'statement_block', 'id': '1'});
+              assertInputHasBlock(parent, 'NAME', true, '1');
+              parent.getInput('NAME').connection
+                  .setShadowState({'type': 'statement_block', 'id': '2'});
+              assertInputHasBlock(parent, 'NAME', true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2"></shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection.setShadowState(
+                  {
+                    'type': 'statement_block',
+                    'id': '1',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'a',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'NAME', true, '1');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true, 'a');
+              parent.getInput('NAME').connection.setShadowState(
+                  {
+                    'type': 'statement_block',
+                    'id': '2',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'b',
+                        }
+                      }
+                    }
+                  }
+              );
+              assertInputHasBlock(parent, 'NAME', true, '2');
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': '2',
+                          'inputs': {
+                            'NAME': {
+                              'shadow': {
+                                'type': 'statement_block',
+                                'id': 'b',
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="2">' +
+                  '<statement name="NAME">' +
+                  '<shadow type="statement_block" id="b"></shadow>' +
+                  '</statement>' +
+                  '</shadow>' +
+                  '</statement>' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': '1'});
+              assertNextHasBlock(parent, true, '1');
+              parent.nextConnection
+                  .setShadowState({'type': 'stack_block', 'id': '2'});
+              assertNextHasBlock(parent, true, '2');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2"></shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowState(
+                  {
+                    'type': 'stack_block',
+                    'id': '1',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'a',
+                      }
+                    }
+                  }
+              );
+              assertNextHasBlock(parent, true, '1');
+              assertNextHasBlock(parent.getNextBlock(), true, 'a');
+              parent.nextConnection.setShadowState(
+                  {
+                    'type': 'stack_block',
+                    'id': '2',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'b',
+                      }
+                    }
+                  }
+              );
+              assertNextHasBlock(parent, true, '2');
+              assertNextHasBlock(parent.getNextBlock(), true, 'b');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': '2',
+                        'next': {
+                          'shadow': {
+                            'type': 'stack_block',
+                            'id': 'b',
+                          }
+                        }
+                      }
+                    }
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="2">' +
+                  '<next>' +
+                  '<shadow type="stack_block" id="b"></shadow>' +
+                  '</next>' +
+                  '</shadow>' +
+                  '</next>' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Remove - No Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStatementBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStackBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              parent.getInput('NAME').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              parent.nextConnection.setShadowState(null);
+              assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Remove - Block Connected', function() {
+            // These are defined separately in each suite.
+            function createRowBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'INPUT': {
+                        'shadow': {
+                          'type': 'row_block',
+                          'id': 'id1',
+                        },
+                        'block': {
+                          'type': 'row_block',
+                          'id': 'id2',
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStatementBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                    'inputs': {
+                      'NAME': {
+                        'shadow': {
+                          'type': 'statement_block',
+                          'id': 'id1',
+                        },
+                        'block': {
+                          'type': 'statement_block',
+                          'id': 'id2',
+                        }
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            function createStackBlocks(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                    'next': {
+                      'shadow': {
+                        'type': 'stack_block',
+                        'id': 'id1',
+                      },
+                      'block': {
+                        'type': 'stack_block',
+                        'id': 'id2',
+                      }
+                    }
+                  },
+                  workspace);
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlocks(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState(null);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputNotHasBlock(parent, 'INPUT');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'row_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="row_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlocks(this.workspace);
+              parent.getInput('NAME').connection.setShadowState(null);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputNotHasBlock(parent, 'NAME');
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'statement_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="statement_block" id="id0">' +
+                  '</block>'
+              );
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlocks(this.workspace);
+              parent.nextConnection.setShadowState(null);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextNotHasBlock(parent);
+              assertSerialization(
+                  parent,
+                  {
+                    'type': 'stack_block',
+                    'id': 'id0',
+                  },
+                  '<block xmlns="https://developers.google.com/blockly/xml" ' +
+                  'type="stack_block" id="id0">' +
+                  '</block>'
+              );
+            });
+          });
+  
+          suite('Add - Connect & Disconnect - Remove', function() {
+            // These are defined separately in each suite.
+            function createRowBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'row_block'}, workspace);
+            }
+  
+            function createStatementBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'statement_block'}, workspace);
+            }
+  
+            function createStackBlock(workspace) {
+              return Blockly.serialization.blocks.append(
+                  {'type': 'stack_block'}, workspace);
+            }
+  
+            test('Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection
+                  .setShadowState({'type': 'row_block'});
+              assertInputHasBlock(parent, 'INPUT', true);
+              var child = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.connect(child.outputConnection);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              parent.getInput('INPUT').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+            });
+  
+            test('Multiple Value', function() {
+              var parent = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.setShadowState({
+                'type': 'row_block',
+                'inputs': {
+                  'INPUT': {
+                    'shadow': {
+                      'type': 'row_block',
+                    }
+                  }
+                }
+              });
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              var child = createRowBlock(this.workspace);
+              parent.getInput('INPUT').connection.connect(child.outputConnection);
+              assertInputHasBlock(parent, 'INPUT', false);
+              parent.getInput('INPUT').connection.disconnect();
+              assertInputHasBlock(parent, 'INPUT', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('INPUT'), 'INPUT', true);
+              parent.getInput('INPUT').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'INPUT');
+            });
+  
+            test('Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .setShadowState({'type': 'statement_block'});
+              assertInputHasBlock(parent, 'NAME', true);
+              var child = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .connect(child.previousConnection);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              parent.getInput('NAME').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'NAME');
+            });
+  
+            test('Multiple Statement', function() {
+              var parent = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection.setShadowState({
+                'type': 'statement_block',
+                'inputs': {
+                  'NAME': {
+                    'shadow': {
+                      'type': 'statement_block',
+                    }
+                  }
+                }
+              });
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              var child = createStatementBlock(this.workspace);
+              parent.getInput('NAME').connection
+                  .connect(child.previousConnection);
+              assertInputHasBlock(parent, 'NAME', false);
+              parent.getInput('NAME').connection.disconnect();
+              assertInputHasBlock(parent, 'NAME', true);
+              assertInputHasBlock(
+                  parent.getInputTargetBlock('NAME'), 'NAME', true);
+              parent.getInput('NAME').connection.setShadowState(null);
+              assertInputNotHasBlock(parent, 'NAME');
+            });
+  
+            test('Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowState({'type': 'stack_block'});
+              var child = createStatementBlock(this.workspace);
+              parent.nextConnection.connect(child.previousConnection);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              parent.nextConnection.setShadowState(null);
+              assertNextNotHasBlock(parent);
+            });
+  
+            test('Multiple Next', function() {
+              var parent = createStackBlock(this.workspace);
+              parent.nextConnection.setShadowState({
+                'type': 'stack_block',
+                'next': {
+                  'shadow': {
+                    'type': 'stack_block'
+                  }
+                }
+              });
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              var child = createStatementBlock(this.workspace);
+              parent.nextConnection.connect(child.previousConnection);
+              assertNextHasBlock(parent, false);
+              parent.nextConnection.disconnect();
+              assertNextHasBlock(parent, true);
+              assertNextHasBlock(parent.getNextBlock(), true);
+              parent.nextConnection.setShadowState(null);
+              assertNextNotHasBlock(parent);
+            });
           });
 
-          test('Statement', function() {
-            var parent = createStatementBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block"/>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', false);
-            parent.getInput('STATEMENT').connection.disconnect();
-            assertInputHasBlock(parent, 'STATEMENT', true);
-          });
+          suite('Invalid', function() {
+            test('Attach to output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowState({'type': 'row_block'}));
+            });
 
-          test('Multiple Statement', function() {
-            var parent = createStatementBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block"/>' +
-                '  </statement>' +
-                '</shadow>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', false);
-            assertInputNotHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT');
-            parent.getInput('STATEMENT').connection.disconnect();
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
-          });
+            test('Attach to previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowState(
+                    {'type': 'stack_block'}));
+            });
 
-          test('Next', function() {
-            var parent = createStackBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block"/>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, false);
-            parent.nextConnection.disconnect();
-            assertNextHasBlock(parent, true);
-          });
+            test('Missing output', function() {
+              const block = this.workspace.newBlock('row_block');
+              chai.assert.throws(() =>
+                block.outputConnection.setShadowState({'type': 'stack_block'}));
+            });
 
-          test('Multiple Next', function() {
-            var parent = createStackBlocks(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block">' +
-                '  <next>' +
-                '    <shadow type="stack_block"/>' +
-                '  </next>' +
-                '</shadow>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, false);
-            assertNextNotHasBlock(parent.getNextBlock());
-            parent.nextConnection.disconnect();
-            assertNextHasBlock(parent, true);
-            assertNextHasBlock(parent.getNextBlock(), true);
-          });
-        });
+            test('Missing previous', function() {
+              const block = this.workspace.newBlock('stack_block');
+              chai.assert.throws(() =>
+                block.previousConnection.setShadowState({'type': 'row_block'}));
+            });
 
-        suite('Add - With Shadow Connected', function() {
-          // These are defined separately in each suite.
-          function createRowBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block"/>'
-            ), workspace);
-            return block;
-          }
+            test('Invalid connection checks, output', function() {
+              const block = this.workspace.newBlock('logic_operation');
+              chai.assert.throws(() =>
+                block.getInput('A').connection.setShadowState(
+                    {'type': 'math_number'}));
+            });
 
-          function createStatementBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          function createStackBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          test('Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block" id="1"/>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true, '1');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block" id="2"/>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true, '2');
-          });
-
-          test('Multiple Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block" id="1">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block" id="a"/>' +
-                '  </value>' +
-                '</shadow>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true, '1');
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block" id="2">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block" id="b"/>' +
-                '  </value>' +
-                '</shadow>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true, '2');
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
-          });
-
-          test('Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block" id="1"/>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true, '1');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block" id="2"/>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true, '2');
-          });
-
-          test('Multiple Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block" id="1">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block" id="a"/>' +
-                '  </statement>' +
-                '</shadow>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true, '1');
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true, 'a');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block" id="2">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block" id="b"/>' +
-                '  </statement>' +
-                '</shadow>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true, '2');
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true, 'b');
-          });
-
-          test('Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block" id="1"/>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true, '1');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block" id="2"/>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true, '2');
-          });
-
-          test('Multiple Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block" id="1">' +
-                '  <next>' +
-                '    <shadow type="stack_block" id="a"/>' +
-                '  </next>' +
-                '</shadow>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true, '1');
-            assertNextHasBlock(parent.getNextBlock(), true, 'a');
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block" id="2">' +
-                '  <next>' +
-                '    <shadow type="stack_block" id="b"/>' +
-                '  </next>' +
-                '</shadow>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true, '2');
-            assertNextHasBlock(parent.getNextBlock(), true, 'b');
-          });
-        });
-
-        suite('Remove - No Block Connected', function() {
-          // These are defined separately in each suite.
-          function createRowBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block"/>' +
-                '  </value>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          function createStatementBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block"/>' +
-                '  </statement>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          function createStackBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block">' +
-                '  <next>' +
-                '    <shadow type="stack_block"/>' +
-                '  </next>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          test('Value', function() {
-            var parent = createRowBlock(this.workspace);
-            parent.getInput('INPUT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'INPUT');
-          });
-
-          test('Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            parent.getInput('STATEMENT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'STATMENT');
-          });
-
-          test('Next', function() {
-            var parent = createStackBlock(this.workspace);
-            parent.nextConnection.setShadowDom(null);
-            assertNextNotHasBlock(parent);
-          });
-        });
-
-        suite('Remove - Block Connected', function() {
-          // These are defined separately in each suite.
-          function createRowBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block"/>' +
-                '    <block type="row_block"/>' +
-                '  </value>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          function createStatementBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block"/>' +
-                '    <block type="statement_block"/>' +
-                '  </statement>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          function createStackBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block">' +
-                '  <next>' +
-                '    <shadow type="stack_block"/>' +
-                '    <block type="stack_block"/>' +
-                '  </next>' +
-                '</block>'
-            ), workspace);
-            return block;
-          }
-
-          test('Value', function() {
-            var parent = createRowBlock(this.workspace);
-            parent.getInput('INPUT').connection.setShadowDom(null);
-            assertInputHasBlock(parent, 'INPUT', false);
-            parent.getInput('INPUT').connection.disconnect();
-            assertInputNotHasBlock(parent, 'INPUT');
-          });
-
-          test('Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            parent.getInput('STATEMENT').connection.setShadowDom(null);
-            assertInputHasBlock(parent, 'STATEMENT', false);
-            parent.getInput('STATEMENT').connection.disconnect();
-            assertInputNotHasBlock(parent, 'STATEMENT');
-          });
-
-          test('Next', function() {
-            var parent = createStackBlock(this.workspace);
-            parent.nextConnection.setShadowDom(null);
-            assertNextHasBlock(parent, false);
-            parent.nextConnection.disconnect();
-            assertNextNotHasBlock(parent);
-          });
-        });
-
-        suite('Add - Connect & Disconnect - Remove', function() {
-          // These are defined separately in each suite.
-          function createRowBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="row_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          function createStatementBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="statement_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          function createStackBlock(workspace) {
-            var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-                '<block type="stack_block"/>'
-            ), workspace);
-            return block;
-          }
-
-          test('Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block"/>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true);
-            var child = createRowBlock(this.workspace);
-            parent.getInput('INPUT').connection.connect(child.outputConnection);
-            assertInputHasBlock(parent, 'INPUT', false);
-            parent.getInput('INPUT').connection.disconnect();
-            assertInputHasBlock(parent, 'INPUT', true);
-            parent.getInput('INPUT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'INPUT');
-          });
-
-          test('Multiple Value', function() {
-            var parent = createRowBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="row_block">' +
-                '  <value name="INPUT">' +
-                '    <shadow type="row_block"/>' +
-                '  </value>' +
-                '</shadow>'
-            );
-            parent.getInput('INPUT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'INPUT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
-            var child = createRowBlock(this.workspace);
-            parent.getInput('INPUT').connection.connect(child.outputConnection);
-            assertInputHasBlock(parent, 'INPUT', false);
-            parent.getInput('INPUT').connection.disconnect();
-            assertInputHasBlock(parent, 'INPUT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('INPUT'), 'INPUT', true);
-            parent.getInput('INPUT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'INPUT');
-          });
-
-          test('Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block"/>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            var child = createStatementBlock(this.workspace);
-            parent.getInput('STATEMENT').connection
-                .connect(child.previousConnection);
-            assertInputHasBlock(parent, 'STATEMENT', false);
-            parent.getInput('STATEMENT').connection.disconnect();
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            parent.getInput('STATEMENT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'STATEMENT');
-          });
-
-          test('Multiple Statement', function() {
-            var parent = createStatementBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="statement_block">' +
-                '  <statement name="STATEMENT">' +
-                '    <shadow type="statement_block"/>' +
-                '  </statement>' +
-                '</shadow>'
-            );
-            parent.getInput('STATEMENT').connection.setShadowDom(xml);
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
-            var child = createStatementBlock(this.workspace);
-            parent.getInput('STATEMENT').connection
-                .connect(child.previousConnection);
-            assertInputHasBlock(parent, 'STATEMENT', false);
-            parent.getInput('STATEMENT').connection.disconnect();
-            assertInputHasBlock(parent, 'STATEMENT', true);
-            assertInputHasBlock(
-                parent.getInputTargetBlock('STATEMENT'), 'STATEMENT', true);
-            parent.getInput('STATEMENT').connection.setShadowDom(null);
-            assertInputNotHasBlock(parent, 'STATEMENT');
-          });
-
-          test('Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block"/>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true);
-            var child = createStatementBlock(this.workspace);
-            parent.nextConnection.connect(child.previousConnection);
-            assertNextHasBlock(parent, false);
-            parent.nextConnection.disconnect();
-            assertNextHasBlock(parent, true);
-            parent.nextConnection.setShadowDom(null);
-            assertNextNotHasBlock(parent);
-          });
-
-          test('Multiple Next', function() {
-            var parent = createStackBlock(this.workspace);
-            var xml = Blockly.Xml.textToDom(
-                '<shadow type="stack_block">' +
-                '  <next>' +
-                '    <shadow type="stack_block"/>' +
-                '  </next>' +
-                '</shadow>'
-            );
-            parent.nextConnection.setShadowDom(xml);
-            assertNextHasBlock(parent, true);
-            assertNextHasBlock(parent.getNextBlock(), true);
-            var child = createStatementBlock(this.workspace);
-            parent.nextConnection.connect(child.previousConnection);
-            assertNextHasBlock(parent, false);
-            parent.nextConnection.disconnect();
-            assertNextHasBlock(parent, true);
-            assertNextHasBlock(parent.getNextBlock(), true);
-            parent.nextConnection.setShadowDom(null);
-            assertNextNotHasBlock(parent);
+            test('Invalid connection checks, previous', function() {
+              Blockly.defineBlocksWithJsonArray([{
+                "type": "stack_checks_block",
+                "message0": "",
+                "previousStatement": "check 1",
+                "nextStatement": "check 2"
+              }]);
+              const block = this.workspace.newBlock('stack_checks_block');
+              chai.assert.throws(() =>
+                block.nextConnection.setShadowState(
+                    {'type': 'stack_checks_block'}));
+            });
           });
         });
       });
@@ -907,7 +2742,7 @@ suite('Connection', function() {
             },
             {
               "type": "input_statement",
-              "name": "STATEMENT",
+              "name": "NAME",
               "check": 'check1'
             }
           ],
@@ -920,7 +2755,7 @@ suite('Connection', function() {
           "args0": [
             {
               "type": "input_statement",
-              "name": "STATEMENT",
+              "name": "NAME",
               "check": 'check1'
             }
           ],
@@ -933,7 +2768,7 @@ suite('Connection', function() {
           "args0": [
             {
               "type": "input_statement",
-              "name": "STATEMENT",
+              "name": "NAME",
               "check": 'check2'
             }
           ],
@@ -946,7 +2781,7 @@ suite('Connection', function() {
           "args0": [
             {
               "type": "input_statement",
-              "name": "STATEMENT",
+              "name": "NAME",
               "check": 'check1'
             }
           ],
@@ -979,13 +2814,13 @@ suite('Connection', function() {
         var newParent = this.workspace.newBlock('statement_block');
         var child = this.workspace.newBlock('stack_block');
 
-        oldParent.getInput('STATEMENT').connection
+        oldParent.getInput('NAME').connection
             .connect(child.previousConnection);
-        newParent.getInput('STATEMENT').connection
+        newParent.getInput('NAME').connection
             .connect(child.previousConnection);
 
         chai.assert.isFalse(
-            oldParent.getInput('STATEMENT').connection.isConnected());
+            oldParent.getInput('NAME').connection.isConnected());
         this.assertBlockCount(3);
       });
 
@@ -1024,15 +2859,15 @@ suite('Connection', function() {
         var xml = Blockly.Xml.textToDom(
             '<shadow type="stack_block"/>'
         );
-        newParent.getInput('STATEMENT').connection.setShadowDom(xml);
+        newParent.getInput('NAME').connection.setShadowDom(xml);
         chai.assert.isTrue(
-            newParent.getInputTargetBlock('STATEMENT').isShadow());
+            newParent.getInputTargetBlock('NAME').isShadow());
 
-        newParent.getInput('STATEMENT').connection
+        newParent.getInput('NAME').connection
             .connect(child.previousConnection);
 
         chai.assert.isFalse(
-            newParent.getInputTargetBlock('STATEMENT').isShadow());
+            newParent.getInputTargetBlock('NAME').isShadow());
         this.assertBlockCount(2);
       });
 
@@ -1077,15 +2912,15 @@ suite('Connection', function() {
         var xml = Blockly.Xml.textToDom(
             '<shadow type="stack_block"/>'
         );
-        newParent.getInput('STATEMENT').connection.setShadowDom(xml);
-        newParent.getInputTargetBlock('STATEMENT')
+        newParent.getInput('NAME').connection.setShadowDom(xml);
+        newParent.getInputTargetBlock('NAME')
             .setFieldValue('new', 'FIELD');
 
-        newParent.getInput('STATEMENT').connection
+        newParent.getInput('NAME').connection
             .connect(child.previousConnection);
-        newParent.getInput('STATEMENT').connection.disconnect();
+        newParent.getInput('NAME').connection.disconnect();
 
-        const target = newParent.getInputTargetBlock('STATEMENT');
+        const target = newParent.getInputTargetBlock('NAME');
         chai.assert.isTrue(target.isShadow());
         chai.assert.equal(target.getFieldValue('FIELD'), 'new');
         this.assertBlockCount(3);
@@ -1403,16 +3238,16 @@ suite('Connection', function() {
             var parent = this.workspace.newBlock('statement_block');
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild = this.workspace.newBlock('stack_block');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild);
+                parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
             chai.assert.equal(newChild.getNextBlock(), oldChild);
             this.assertBlockCount(3);
@@ -1423,17 +3258,17 @@ suite('Connection', function() {
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild1 = this.workspace.newBlock('stack_block_1to2');
             var newChild2 = this.workspace.newBlock('stack_block_2to1');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             newChild1.nextConnection.connect(newChild2.previousConnection);
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild1.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild1);
+                parent.getInputTargetBlock('NAME'), newChild1);
             chai.assert.isTrue(newChild2.nextConnection.isConnected());
             chai.assert.equal(newChild2.getNextBlock(), oldChild);
             this.assertBlockCount(4);
@@ -1443,17 +3278,17 @@ suite('Connection', function() {
             var parent = this.workspace.newBlock('statement_block');
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild = this.workspace.newBlock('stack_block_1to2');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild);
+                parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isFalse(newChild.nextConnection.isConnected());
             chai.assert.isTrue(spy.calledOnce);
             this.assertBlockCount(3);
@@ -1463,17 +3298,17 @@ suite('Connection', function() {
             var parent = this.workspace.newBlock('statement_block');
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild = this.workspace.newBlock('stack_block_noend');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild);
+                parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(spy.calledOnce);
             this.assertBlockCount(3);
           });
@@ -1484,20 +3319,20 @@ suite('Connection', function() {
             var parent = this.workspace.newBlock('statement_block');
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild = this.workspace.newBlock('stack_block');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             var xml = Blockly.Xml.textToDom(
                 '<shadow type="stack_block"/>'
             );
             newChild.nextConnection.setShadowDom(xml);
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild);
+                parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
             chai.assert.equal(newChild.getNextBlock(), oldChild);
             this.assertBlockCount(3);
@@ -1508,7 +3343,7 @@ suite('Connection', function() {
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild1 = this.workspace.newBlock('stack_block_1to2');
             var newChild2 = this.workspace.newBlock('stack_block_2to1');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             newChild1.nextConnection.connect(newChild2.previousConnection);
             var xml = Blockly.Xml.textToDom(
@@ -1516,13 +3351,13 @@ suite('Connection', function() {
             );
             newChild2.nextConnection.setShadowDom(xml);
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild1.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild1);
+                parent.getInputTargetBlock('NAME'), newChild1);
             chai.assert.isTrue(newChild2.nextConnection.isConnected());
             chai.assert.equal(newChild2.getNextBlock(), oldChild);
             this.assertBlockCount(4);
@@ -1532,7 +3367,7 @@ suite('Connection', function() {
             var parent = this.workspace.newBlock('statement_block');
             var oldChild = this.workspace.newBlock('stack_block');
             var newChild = this.workspace.newBlock('stack_block_1to2');
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(oldChild.previousConnection);
             var xml = Blockly.Xml.textToDom(
                 '<shadow type="stack_block_2to1"/>'
@@ -1540,13 +3375,13 @@ suite('Connection', function() {
             newChild.nextConnection.setShadowDom(xml);
             var spy = sinon.spy(oldChild.previousConnection, 'onFailedConnect');
 
-            parent.getInput('STATEMENT').connection
+            parent.getInput('NAME').connection
                 .connect(newChild.previousConnection);
 
             chai.assert.isTrue(
-                parent.getInput('STATEMENT').connection.isConnected());
+                parent.getInput('NAME').connection.isConnected());
             chai.assert.equal(
-                parent.getInputTargetBlock('STATEMENT'), newChild);
+                parent.getInputTargetBlock('NAME'), newChild);
             chai.assert.isTrue(newChild.nextConnection.isConnected());
             chai.assert.isTrue(newChild.getNextBlock().isShadow());
             chai.assert.isTrue(spy.calledOnce);

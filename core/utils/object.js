@@ -11,10 +11,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.object
- * @namespace
+ * Utility methods for objects.
+ * @namespace Blockly.utils.object
  */
-goog.provide('Blockly.utils.object');
+goog.module('Blockly.utils.object');
 
 
 /**
@@ -22,8 +22,9 @@ goog.provide('Blockly.utils.object');
  * @param {!Function} childCtor Child class.
  * @param {!Function} parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
+ * @alias Blockly.utils.object.inherits
  */
-Blockly.utils.object.inherits = function(childCtor, parentCtor) {
+const inherits = function(childCtor, parentCtor) {
   // Set a .superClass_ property so that methods can call parent methods
   // without hard-coding the parent class name.
   // Could be replaced by ES6's super().
@@ -39,42 +40,47 @@ Blockly.utils.object.inherits = function(childCtor, parentCtor) {
   // Alternatively, one could use this instead:
   // Object.setPrototypeOf(childCtor.prototype, parentCtor.prototype);
 };
+exports.inherits = inherits;
 
 /**
  * Copies all the members of a source object to a target object.
  * @param {!Object} target Target.
  * @param {!Object} source Source.
+ * @alias Blockly.utils.object.mixin
  */
-Blockly.utils.object.mixin = function(target, source) {
-  for (var x in source) {
+const mixin = function(target, source) {
+  for (const x in source) {
     target[x] = source[x];
   }
 };
+exports.mixin = mixin;
 
 /**
  * Complete a deep merge of all members of a source object with a target object.
  * @param {!Object} target Target.
  * @param {!Object} source Source.
  * @return {!Object} The resulting object.
+ * @alias Blockly.utils.object.deepMerge
  */
-Blockly.utils.object.deepMerge = function(target, source) {
-  for (var x in source) {
+const deepMerge = function(target, source) {
+  for (const x in source) {
     if (source[x] != null && typeof source[x] === 'object') {
-      target[x] = Blockly.utils.object.deepMerge(
-          target[x] || Object.create(null), source[x]);
+      target[x] = deepMerge(target[x] || Object.create(null), source[x]);
     } else {
       target[x] = source[x];
     }
   }
   return target;
 };
+exports.deepMerge = deepMerge;
 
 /**
  * Returns an array of a given object's own enumerable property values.
  * @param {!Object} obj Object containing values.
  * @return {!Array} Array of values.
+ * @alias Blockly.utils.object.values
  */
-Blockly.utils.object.values = function(obj) {
+const values = function(obj) {
   if (Object.values) {
     return Object.values(obj);
   }
@@ -83,3 +89,4 @@ Blockly.utils.object.values = function(obj) {
     return obj[e];
   });
 };
+exports.values = values;

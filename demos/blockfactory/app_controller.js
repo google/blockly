@@ -631,7 +631,7 @@ AppController.prototype.confirmLeavePage = function(e) {
  * @param {string} id ID of element to show.
  */
 AppController.prototype.openModal = function(id) {
-  Blockly.hideChaff();
+  Blockly.common.getMainWorkspace().hideChaff();
   this.modalName_ = id;
   document.getElementById(id).style.display = 'block';
   document.getElementById('modalShadow').style.display = 'block';

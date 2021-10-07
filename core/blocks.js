@@ -12,12 +12,16 @@
 
 /**
  * A mapping of block type names to block prototype objects.
- * @name Blockly.Blocks
+ * @namespace Blockly.blocks
  */
-goog.provide('Blockly.Blocks');
+goog.module('Blockly.blocks');
+
 
 /**
  * A mapping of block type names to block prototype objects.
- * @type {!Object<string,Object>}
+ * @type {!Object<string,!Object>}
+ * @alias Blockly.blocks.Blocks
  */
-Blockly.Blocks = Object.create(null);
+const Blocks = Object.create(null);
+
+exports.Blocks = Blocks;

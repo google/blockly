@@ -209,7 +209,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -223,7 +223,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }

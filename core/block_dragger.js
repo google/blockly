@@ -400,7 +400,8 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
-  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
+  const event =
+      new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   eventUtils.fire(event);

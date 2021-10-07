@@ -701,11 +701,10 @@ Connection.prototype.stashShadowState_ = function() {
  *     to reapply to the shadowDom_ and shadowState_ properties.
  * @private
  */
-Connection.prototype.applyShadowState_ =
-    function({shadowDom, shadowState}) {
-      this.shadowDom_ = shadowDom;
-      this.shadowState_ = shadowState;
-    };
+Connection.prototype.applyShadowState_ = function({shadowDom, shadowState}) {
+  this.shadowDom_ = shadowDom;
+  this.shadowState_ = shadowState;
+};
 
 /**
  * Sets the state of the shadow of this connection.
@@ -714,33 +713,33 @@ Connection.prototype.applyShadowState_ =
  *     connection to.
  * @private
  */
-Connection.prototype.setShadowStateInternal_ =
-    function({shadowDom = null, shadowState = null} = {}) {
-      // One or both of these should always be null.
-      // If neither is null, the shadowState will get priority.
-      this.shadowDom_ = shadowDom;
-      this.shadowState_ = shadowState;
+Connection.prototype.setShadowStateInternal_ = function(
+    {shadowDom = null, shadowState = null} = {}) {
+  // One or both of these should always be null.
+  // If neither is null, the shadowState will get priority.
+  this.shadowDom_ = shadowDom;
+  this.shadowState_ = shadowState;
 
-      const target = this.targetBlock();
-      if (!target) {
-        this.respawnShadow_();
-        if (this.targetBlock() && this.targetBlock().isShadow()) {
-          this.serializeShadow_(this.targetBlock());
-        }
-      } else if (target.isShadow()) {
-        target.dispose(false);
-        this.respawnShadow_();
-        if (this.targetBlock() && this.targetBlock().isShadow()) {
-          this.serializeShadow_(this.targetBlock());
-        }
-      } else {
-        const shadow = this.createShadowBlock_(false);
-        this.serializeShadow_(shadow);
-        if (shadow) {
-          shadow.dispose(false);
-        }
-      }
-    };
+  const target = this.targetBlock();
+  if (!target) {
+    this.respawnShadow_();
+    if (this.targetBlock() && this.targetBlock().isShadow()) {
+      this.serializeShadow_(this.targetBlock());
+    }
+  } else if (target.isShadow()) {
+    target.dispose(false);
+    this.respawnShadow_();
+    if (this.targetBlock() && this.targetBlock().isShadow()) {
+      this.serializeShadow_(this.targetBlock());
+    }
+  } else {
+    const shadow = this.createShadowBlock_(false);
+    this.serializeShadow_(shadow);
+    if (shadow) {
+      shadow.dispose(false);
+    }
+  }
+};
 
 /**
  * Creates a shadow block based on the current shadowState_ or shadowDom_.
@@ -761,14 +760,11 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
 
   let blockShadow;
   if (shadowState) {
-    blockShadow = blocks.appendInternal(
-        shadowState,
-        parentBlock.workspace,
-        {
-          parentConnection: attemptToConnect ? this : undefined,
-          isShadow: true,
-          recordUndo: false,
-        });
+    blockShadow = blocks.appendInternal(shadowState, parentBlock.workspace, {
+      parentConnection: attemptToConnect ? this : undefined,
+      isShadow: true,
+      recordUndo: false,
+    });
     return blockShadow;
   }
 

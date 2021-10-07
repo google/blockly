@@ -71,8 +71,8 @@ Object.defineProperties(exports, {
   visible: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.isVisible()');
+          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.isVisible()');
       return isVisible();
     }
   }
@@ -187,8 +187,8 @@ Object.defineProperties(exports, {
   DIV: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.getDiv()');
+          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.getDiv()');
       return getDiv();
     }
   }

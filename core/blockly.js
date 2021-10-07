@@ -459,7 +459,7 @@ exports.setParentContainer = common.setParentContainer;
  * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
  * @alias Blockly.hueToHex
  */
- exports.hueToHex = colour.hueToHex;
+exports.hueToHex = colour.hueToHex;
 
 /**
  * @see browserEvents.bind
@@ -500,7 +500,7 @@ exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
 /**
  * @see common.svgResize
  */
- exports.svgResize = common.svgResize;
+exports.svgResize = common.svgResize;
 
 /**
  * Aliases for constants used for connection and input types.

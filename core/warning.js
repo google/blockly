@@ -94,8 +94,8 @@ Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'warning'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
   } else {

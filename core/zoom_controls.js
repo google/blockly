@@ -491,8 +491,8 @@ ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 ZoomControls.prototype.fireZoomEvent_ = function() {
-  const uiEvent =
-      new (eventUtils.get(eventUtils.CLICK))(null, this.workspace_.id, 'zoom_controls');
+  const uiEvent = new (eventUtils.get(eventUtils.CLICK))(
+      null, this.workspace_.id, 'zoom_controls');
   eventUtils.fire(uiEvent);
 };
 

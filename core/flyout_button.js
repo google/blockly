@@ -316,26 +316,15 @@ FlyoutButton.prototype.onMouseUp_ = function(e) {
  */
 Css.register([
   /* eslint-disable indent */
-  '.blocklyFlyoutButton {',
-    'fill: #888;',
-    'cursor: default;',
-  '}',
+  '.blocklyFlyoutButton {', 'fill: #888;', 'cursor: default;', '}',
 
-  '.blocklyFlyoutButtonShadow {',
-    'fill: #666;',
-  '}',
+  '.blocklyFlyoutButtonShadow {', 'fill: #666;', '}',
 
-  '.blocklyFlyoutButton:hover {',
-    'fill: #aaa;',
-  '}',
+  '.blocklyFlyoutButton:hover {', 'fill: #aaa;', '}',
 
-  '.blocklyFlyoutLabel {',
-    'cursor: default;',
-  '}',
+  '.blocklyFlyoutLabel {', 'cursor: default;', '}',
 
-  '.blocklyFlyoutLabelBackground {',
-    'opacity: 0;',
-  '}',
+  '.blocklyFlyoutLabelBackground {', 'opacity: 0;', '}',
   /* eslint-enable indent */
 ]);
 

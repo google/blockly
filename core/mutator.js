@@ -299,8 +299,8 @@ Mutator.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'mutator'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Bubble(
@@ -378,8 +378,8 @@ Mutator.prototype.setVisible = function(visible) {
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
   if (!(e.isUiEvent ||
-      (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
-      e.type == eventUtils.CREATE)) {
+        (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
+        e.type == eventUtils.CREATE)) {
     this.updateWorkspace_();
   }
 };

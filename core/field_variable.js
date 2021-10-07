@@ -217,9 +217,7 @@ FieldVariable.prototype.saveState = function(doFullSerialization) {
   }
   // Make sure the variable is initialized.
   this.initModel();
-  const state = {
-    'id': this.variable_.getId()
-  };
+  const state = {'id': this.variable_.getId()};
   if (doFullSerialization) {
     state['name'] = this.variable_.name;
     state['type'] = this.variable_.type;
@@ -239,9 +237,7 @@ FieldVariable.prototype.loadState = function(state) {
   }
   // This is necessary so that blocks in the flyout can have custom var names.
   const variable = Variables.getOrCreateVariablePackage(
-      this.sourceBlock_.workspace,
-      state['id'] || null,
-      state['name'],
+      this.sourceBlock_.workspace, state['id'] || null, state['name'],
       state['type'] || '');
   this.setValue(variable.getId());
 };

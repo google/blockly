@@ -38,14 +38,14 @@ const userAgent = goog.require('Blockly.utils.userAgent');
  *    changes to the field's value. Takes in a number & returns a
  *    validated number, or null to abort the change.
  * @param {Object=} opt_config A map of options used to configure the field.
- *    See the [field creation documentation]{@link https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
+ *    See the [field creation documentation]{@link
+ * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
  * @alias Blockly.FieldAngle
  */
 const FieldAngle = function(opt_value, opt_validator, opt_config) {
-
   /**
    * Should the angle increase as the angle picker is moved clockwise (true)
    * or counterclockwise (false)
@@ -282,7 +282,8 @@ FieldAngle.prototype.showEditor_ = function(opt_e) {
   this.dropdownCreate_();
   DropDownDiv.getContentDiv().appendChild(this.editor_);
 
-  DropDownDiv.setColour(this.sourceBlock_.style.colourPrimary,
+  DropDownDiv.setColour(
+      this.sourceBlock_.style.colourPrimary,
       this.sourceBlock_.style.colourTertiary);
 
   DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
@@ -304,37 +305,39 @@ FieldAngle.prototype.dropdownCreate_ = function() {
         'height': (FieldAngle.HALF * 2) + 'px',
         'width': (FieldAngle.HALF * 2) + 'px',
         'style': 'touch-action: none'
-      }, null);
+      },
+      null);
   const circle = dom.createSvgElement(
       Svg.CIRCLE, {
         'cx': FieldAngle.HALF,
         'cy': FieldAngle.HALF,
         'r': FieldAngle.RADIUS,
         'class': 'blocklyAngleCircle'
-      }, svg);
-  this.gauge_ = dom.createSvgElement(
-      Svg.PATH, {
-        'class': 'blocklyAngleGauge'
-      }, svg);
+      },
+      svg);
+  this.gauge_ =
+      dom.createSvgElement(Svg.PATH, {'class': 'blocklyAngleGauge'}, svg);
   this.line_ = dom.createSvgElement(
       Svg.LINE, {
         'x1': FieldAngle.HALF,
         'y1': FieldAngle.HALF,
         'class': 'blocklyAngleLine'
-      }, svg);
+      },
+      svg);
   // Draw markers around the edge.
   for (let angle = 0; angle < 360; angle += 15) {
     dom.createSvgElement(
         Svg.LINE, {
           'x1': FieldAngle.HALF + FieldAngle.RADIUS,
           'y1': FieldAngle.HALF,
-          'x2': FieldAngle.HALF + FieldAngle.RADIUS -
-              (angle % 45 == 0 ? 10 : 5),
+          'x2':
+              FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 == 0 ? 10 : 5),
           'y2': FieldAngle.HALF,
           'class': 'blocklyAngleMarks',
-          'transform': 'rotate(' + angle + ',' +
-              FieldAngle.HALF + ',' + FieldAngle.HALF + ')'
-        }, svg);
+          'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
+              FieldAngle.HALF + ')'
+        },
+        svg);
   }
 
   // The angle picker is different from other fields in that it updates on
@@ -462,8 +465,8 @@ FieldAngle.prototype.updateGraph_ = function() {
     if (clockwiseFlag) {
       largeFlag = 1 - largeFlag;
     }
-    path.push(' l ', x1, ',', y1,
-        ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
+    path.push(
+        ' l ', x1, ',', y1, ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
         ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
   }
   this.gauge_.setAttribute('d', path.join(''));
@@ -496,8 +499,7 @@ FieldAngle.prototype.onHtmlInputKeyDown_ = function(e) {
   }
   if (multiplier) {
     const value = /** @type {number} */ (this.getValue());
-    this.displayMouseOrKeyboardValue_(
-        value + (multiplier * this.round_));
+    this.displayMouseOrKeyboardValue_(value + (multiplier * this.round_));
     e.preventDefault();
     e.stopPropagation();
   }

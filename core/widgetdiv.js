@@ -94,8 +94,8 @@ Object.defineProperties(exports, {
   DIV: {
     get: function() {
       deprecation.warn(
-        'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-        'Blockly.WidgetDiv.getDiv()');
+          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
+          'Blockly.WidgetDiv.getDiv()');
       return getDiv();
     }
   }

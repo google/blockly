@@ -81,14 +81,14 @@ Object.defineProperties(exports, {
   currentBlock: {
     get: function() {
       deprecation.warn(
-        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.getCurrentBlock()');
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
       return getCurrentBlock();
     },
     set: function(block) {
       deprecation.warn(
-        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.setCurrentBlock(block)');
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
       setCurrentBlock(block);
     },
   },
@@ -210,9 +210,7 @@ const createWidget_ = function(menu) {
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
-      /** @type {!EventTarget} */ (menuDom),
-      'contextmenu',
-      null,
+      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
       haltPropagation);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
@@ -349,8 +347,7 @@ const workspaceCommentOption = function(ws, e) {
   const addWsComment = function() {
     const comment = new WorkspaceCommentSvg(
         ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
-        WorkspaceCommentSvg.DEFAULT_SIZE,
-        WorkspaceCommentSvg.DEFAULT_SIZE);
+        WorkspaceCommentSvg.DEFAULT_SIZE, WorkspaceCommentSvg.DEFAULT_SIZE);
 
     const injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they

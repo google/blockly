@@ -450,7 +450,8 @@ const domToWorkspace = function(xml, workspace) {
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = /** @type {!Element} */ (xmlChild);
-      if (name == 'block' || (name == 'shadow' && !eventUtils.getRecordUndo())) {
+      if (name == 'block' ||
+          (name == 'shadow' && !eventUtils.getRecordUndo())) {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
@@ -632,7 +633,8 @@ const domToBlock = function(xmlBlock, workspace) {
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.

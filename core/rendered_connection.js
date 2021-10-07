@@ -304,16 +304,14 @@ RenderedConnection.prototype.highlight = function() {
       this.type == ConnectionType.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-    steps = svgPaths.moveBy(0, -yLen) +
-        svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
-        svgPaths.lineOnAxis('v', yLen);
+    steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
+        shape.pathDown + svgPaths.lineOnAxis('v', yLen);
   } else {
     const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
-    steps = svgPaths.moveBy(-xLen, 0) +
-        svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
-        svgPaths.lineOnAxis('h', xLen);
+    steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
+        shape.pathLeft + svgPaths.lineOnAxis('h', xLen);
   }
   const xy = this.sourceBlock_.getRelativeToSurfaceXY();
   const x = this.x - xy.x;

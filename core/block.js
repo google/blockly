@@ -1220,8 +1220,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          this.makeConnection_(ConnectionType.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection_(ConnectionType.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1255,8 +1254,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
             'Remove previous connection prior to adding output ' +
             'connection.');
       }
-      this.outputConnection =
-          this.makeConnection_(ConnectionType.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {

@@ -273,8 +273,8 @@ WorkspaceComment.prototype.getContent = function() {
  */
 WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    eventUtils.fire(
-        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, this.content_, content));
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
+        this, this.content_, content));
     this.content_ = content;
   }
 };

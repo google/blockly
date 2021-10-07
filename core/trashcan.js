@@ -631,8 +631,8 @@ Trashcan.prototype.click = function() {
  * @private
  */
 Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  const uiEvent =
-      new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(trashcanOpen, this.workspace_.id);
+  const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+      trashcanOpen, this.workspace_.id);
   eventUtils.fire(uiEvent);
 };
 
@@ -703,7 +703,7 @@ Trashcan.prototype.onDelete_ = function(event) {
  */
 Trashcan.prototype.cleanBlockJson_ = function(json) {
   // Create a deep copy.
-  json = /** @type {!blocks.State} */(JSON.parse(JSON.stringify(json)));
+  json = /** @type {!blocks.State} */ (JSON.parse(JSON.stringify(json)));
 
   function cleanRec(json) {
     if (!json) {

@@ -301,8 +301,8 @@ BlockSvg.prototype.select = function() {
       eventUtils.enable();
     }
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
@@ -316,8 +316,8 @@ BlockSvg.prototype.unselect = function() {
   if (common.getSelected() != this) {
     return;
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   eventUtils.fire(event);
   common.setSelected(null);
@@ -619,8 +619,8 @@ BlockSvg.prototype.getBoundingRectangle = function() {
  */
 BlockSvg.prototype.markDirty = function() {
   this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
-      .getRenderer()
-      .getConstants();
+                                  .getRenderer()
+                                  .getConstants();
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -971,8 +971,8 @@ BlockSvg.prototype.toCopyData = function() {
     return null;
   }
   return {
-    saveInfo: /** @type {!blocks.State} */(blocks.save(
-        this, {addCoordinates: true, addNextBlocks: false})),
+    saveInfo: /** @type {!blocks.State} */ (
+        blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
     typeCounts: utils.getBlockTypeCounts(this, true)
   };

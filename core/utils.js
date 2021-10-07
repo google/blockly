@@ -77,8 +77,7 @@ exports.xml = xmlUtils;
  * @alias Blockly.utils.noEvent
  */
 const noEvent = function(e) {
-  deprecation.warn(
-    'Blockly.utils.noEvent', 'September 2021', 'September 2022');
+  deprecation.warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
@@ -94,8 +93,8 @@ exports.noEvent = noEvent;
  */
 const isTargetInput = function(e) {
   deprecation.warn(
-    'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.isTargetInput');
+      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isTargetInput');
   return browserEvents.isTargetInput(e);
 };
 exports.isTargetInput = isTargetInput;
@@ -199,8 +198,8 @@ getRelativeXY.XY_STYLE_REGEX_ =
  */
 const isRightButton = function(e) {
   deprecation.warn(
-    'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.isRightButton');
+      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isRightButton');
   return browserEvents.isRightButton(e);
 };
 exports.isRightButton = isRightButton;
@@ -217,8 +216,8 @@ exports.isRightButton = isRightButton;
  */
 const mouseToSvg = function(e, svg, matrix) {
   deprecation.warn(
-    'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.mouseToSvg');
+      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.mouseToSvg');
   return browserEvents.mouseToSvg(e, svg, matrix);
 };
 exports.mouseToSvg = mouseToSvg;
@@ -233,8 +232,8 @@ exports.mouseToSvg = mouseToSvg;
  */
 const getScrollDeltaPixels = function(e) {
   deprecation.warn(
-    'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.getScrollDeltaPixels');
+      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.getScrollDeltaPixels');
   return browserEvents.getScrollDeltaPixels(e);
 };
 exports.getScrollDeltaPixels = getScrollDeltaPixels;

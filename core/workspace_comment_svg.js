@@ -137,7 +137,8 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = utils.is3dSupported() && !!workspace.getBlockDragSurface();
+  this.useDragSurface_ =
+      utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
@@ -272,8 +273,8 @@ WorkspaceCommentSvg.prototype.select = function() {
       eventUtils.enable();
     }
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
@@ -287,8 +288,8 @@ WorkspaceCommentSvg.prototype.unselect = function() {
   if (common.getSelected() != this) {
     return;
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(null);
   this.removeSelect();
@@ -347,8 +348,9 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   let x = 0;
   let y = 0;
 
-  const dragSurfaceGroup =
-      this.useDragSurface_ ? this.workspace.getBlockDragSurface().getGroup() : null;
+  const dragSurfaceGroup = this.useDragSurface_ ?
+      this.workspace.getBlockDragSurface().getGroup() :
+      null;
 
   let element = this.getSvgRoot();
   if (element) {

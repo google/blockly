@@ -669,7 +669,8 @@ Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  eventUtils.fire(new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**

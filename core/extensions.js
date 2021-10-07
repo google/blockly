@@ -261,24 +261,24 @@ const checkMutatorDialog = function(object, errorPrefix) {
  * @throws {Error} If the object has only one of the functions, or either is
  *     not actually a function.
  */
-const checkHasFunctionPair =
-  function(object, name1, name2, errorPrefix) {
-    var has1 = object[name1] !== undefined;
-    var has2 = object[name2] !== undefined;
+const checkHasFunctionPair = function(object, name1, name2, errorPrefix) {
+  var has1 = object[name1] !== undefined;
+  var has2 = object[name2] !== undefined;
 
-    if (has1 && has2) {
-      if (typeof object[name1] != 'function') {
-        throw Error(errorPrefix + name1 + ' must be a function.');
-      } else if (typeof object[name2] != 'function') {
-        throw Error(errorPrefix + name2 + ' must be a function.');
-      }
-      return true;
-    } else if (!has1 && !has2) {
-      return false;
+  if (has1 && has2) {
+    if (typeof object[name1] != 'function') {
+      throw Error(errorPrefix + name1 + ' must be a function.');
+    } else if (typeof object[name2] != 'function') {
+      throw Error(errorPrefix + name2 + ' must be a function.');
     }
-    throw Error(errorPrefix +
-      'Must have both or neither of "' + name1 + '" and "' + name2 + '"');
-  };
+    return true;
+  } else if (!has1 && !has2) {
+    return false;
+  }
+  throw Error(
+      errorPrefix + 'Must have both or neither of "' + name1 + '" and "' +
+      name2 + '"');
+};
 
 /**
  * Checks that the given object required mutator properties.
@@ -289,7 +289,8 @@ const checkHasMutatorProperties = function(errorPrefix, object) {
   var hasXmlHooks = checkXmlHooks(object, errorPrefix);
   var hasJsonHooks = checkJsonHooks(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
-    throw Error(errorPrefix +
+    throw Error(
+        errorPrefix +
         'Mutations must contain either XML hooks, or JSON hooks, or both');
   }
   // A block with a mutator isn't required to have a mutation dialog, but

@@ -250,8 +250,8 @@ Comment.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'comment'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();

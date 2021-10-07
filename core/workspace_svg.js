@@ -206,12 +206,12 @@ const WorkspaceSvg = function(
   this.markerManager_ = new MarkerManager(this);
 
   /**
-  * Map from function names to callbacks, for deciding what to do when a custom
-  * toolbox category is opened.
-  * @type {!Object<string, ?function(!Workspace):
-  *     !toolbox.FlyoutDefinition>}
-  * @private
-  */
+   * Map from function names to callbacks, for deciding what to do when a custom
+   * toolbox category is opened.
+   * @type {!Object<string, ?function(!Workspace):
+   *     !toolbox.FlyoutDefinition>}
+   * @private
+   */
   this.toolboxCategoryCallbacks_ = Object.create(null);
 
   /**
@@ -718,8 +718,8 @@ WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  const event =
-      new (eventUtils.get(eventUtils.THEME_CHANGE))(this.getTheme().name, this.id);
+  const event = new (eventUtils.get(eventUtils.THEME_CHANGE))(
+      this.getTheme().name, this.id);
   eventUtils.fire(event);
 };
 

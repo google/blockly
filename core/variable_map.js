@@ -117,7 +117,8 @@ VariableMap.prototype.renameVariableById = function(id, newName) {
  */
 VariableMap.prototype.renameVariableAndUses_ = function(
     variable, newName, blocks) {
-  eventUtils.fire(new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName));
   variable.name = newName;
   for (let i = 0; i < blocks.length; i++) {
     blocks[i].updateVarName(variable);

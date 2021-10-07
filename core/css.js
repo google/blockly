@@ -130,7 +130,7 @@ const CONTENT = [
   right: 0;
   bottom: 0;
   overflow: visible !important;
-  z-index: 50;',  /* Display below toolbox, but above everything else. */
+  z-index: 50;  /* Display below toolbox, but above everything else. */
 }`,
 
   `.blocklyBlockCanvas.blocklyCanvasTransitioning,
@@ -148,7 +148,7 @@ const CONTENT = [
   opacity: .9;
   padding: 2px;
   position: absolute;
-  z-index: 100000;',  /* big value for bootstrap3 compatibility */
+  z-index: 100000;  /* big value for bootstrap3 compatibility */
 }`,
 
   `.blocklyDropDownDiv {
@@ -168,9 +168,8 @@ const CONTENT = [
   `.blocklyDropDownDiv.blocklyFocused {
   box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
 }`,
-
   `.blocklyDropDownContent {
-  max-height: 300px;',  // @todo: spec for maximum height.
+  max-height: 300px;  
   overflow: auto;
   overflow-x: hidden;
   position: relative;
@@ -392,7 +391,7 @@ const CONTENT = [
 
   `.blocklyMainBackground {
   stroke-width: 1;
-  stroke: #c6c6c6;',  /* Equates to #ddd due to border being off-pixel. */
+  stroke: #c6c6c6;  /* Equates to #ddd due to border being off-pixel. */
 }`,
 
   `.blocklyMutatorBackground {
@@ -498,7 +497,7 @@ const CONTENT = [
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 100%;
-  z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
+  z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }`,
 
   `.blocklyWidgetDiv .blocklyMenu.blocklyFocused {
@@ -506,12 +505,12 @@ const CONTENT = [
 }`,
 
   `.blocklyDropDownDiv .blocklyMenu {
-  background: inherit;',  /* Compatibility with gapi, reset from goog-menu */
-  border: inherit;',  /* Compatibility with gapi, reset from goog-menu */
+  background: inherit;  /* Compatibility with gapi, reset from goog-menu */
+  border: inherit;  /* Compatibility with gapi, reset from goog-menu */
   font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
   outline: none;
-  position: relative;',  /* Compatibility with gapi, reset from goog-menu */
-  z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
+  position: relative;  /* Compatibility with gapi, reset from goog-menu */
+  z-index: 20000;  /* Arbitrary, but some apps depend on it... */
 }`,
 
   /* State: resting. */
@@ -549,7 +548,7 @@ const CONTENT = [
   background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px;
   float: left;
   margin-left: -24px;
-  position: static;',  /* Scroll with the menu. */
+  position: static;  /* Scroll with the menu. */
 }`,
 
   `.blocklyMenuItemRtl .blocklyMenuItemCheckbox {

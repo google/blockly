@@ -413,7 +413,7 @@ const defineBlocksWithJsonArray = function(jsonArray) {
           'Skipping.');
     } else {
       const typename = elem.type;
-      if (typename == null || typename === '') {
+      if (!typename) {
         console.warn(
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');

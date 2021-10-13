@@ -244,11 +244,11 @@ Menu.prototype.getMenuItem_ = function(elem) {
   // a menu item's div, or some element within the menu item.
   // Walk up parents until one meets either the menu's root element, or
   // a menu item's div.
-  while (elem && elem != menuElem) {
+  while (elem && elem !== menuElem) {
     if (dom.hasClass(elem, 'blocklyMenuItem')) {
       // Having found a menu item's div, locate that menu item in this menu.
       for (let i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
-        if (menuItem.getElement() == elem) {
+        if (menuItem.getElement() === elem) {
           return menuItem;
         }
       }
@@ -351,7 +351,7 @@ Menu.prototype.handleMouseOver_ = function(e) {
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
-      if (this.highlightedItem_ != menuItem) {
+      if (this.highlightedItem_ !== menuItem) {
         this.setHighlighted(menuItem);
       }
     } else {
@@ -369,7 +369,7 @@ Menu.prototype.handleClick_ = function(e) {
   const oldCoords = this.openingCoords;
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
-  if (oldCoords && typeof e.clientX == 'number') {
+  if (oldCoords && typeof e.clientX === 'number') {
     const newCoords = new Coordinate(e.clientX, e.clientY);
     if (Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent

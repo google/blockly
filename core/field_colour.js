@@ -213,7 +213,7 @@ FieldColour.prototype.applyColour = function() {
  * @protected
  */
 FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+  if (typeof opt_newValue !== 'string') {
     return null;
   }
   return colour.parse(opt_newValue);
@@ -540,7 +540,7 @@ FieldColour.prototype.dropdownCreate_ = function() {
   aria.setState(table, aria.State.COLCOUNT, columns);
   let row;
   for (let i = 0; i < colours.length; i++) {
-    if (i % columns == 0) {
+    if (i % columns === 0) {
       row = document.createElement('tr');
       aria.setRole(row, aria.Role.ROW);
       table.appendChild(row);
@@ -553,9 +553,9 @@ FieldColour.prototype.dropdownCreate_ = function() {
     cell.setAttribute('data-index', i);
     aria.setRole(cell, aria.Role.GRIDCELL);
     aria.setState(cell, aria.State.LABEL, colours[i]);
-    aria.setState(cell, aria.State.SELECTED, colours[i] == selectedColour);
+    aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);
     cell.style.backgroundColor = colours[i];
-    if (colours[i] == selectedColour) {
+    if (colours[i] === selectedColour) {
       cell.className = 'blocklyColourSelected';
       this.highlightedIndex_ = i;
     }

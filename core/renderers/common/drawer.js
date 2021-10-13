@@ -179,7 +179,7 @@ Drawer.prototype.drawValueInput_ = function(row) {
   const input = row.getLastInput();
   this.positionExternalValueConnection_(row);
 
-  const pathDown = (typeof input.shape.pathDown == 'function') ?
+  const pathDown = (typeof input.shape.pathDown === 'function') ?
       input.shape.pathDown(input.height) :
       input.shape.pathDown;
 
@@ -268,7 +268,7 @@ Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     const tabBottom =
         outputConnection.connectionOffsetY + outputConnection.height;
-    const pathUp = (typeof outputConnection.shape.pathUp == 'function') ?
+    const pathUp = (typeof outputConnection.shape.pathUp === 'function') ?
         outputConnection.shape.pathUp(outputConnection.height) :
         outputConnection.shape.pathUp;
 

@@ -94,7 +94,7 @@ const Options = function(options) {
     toolboxPosition =
         toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
   } else {
-    toolboxPosition = (toolboxAtStart == rtl) ? toolbox.Position.RIGHT :
+    toolboxPosition = (toolboxAtStart === rtl) ? toolbox.Position.RIGHT :
                                                 toolbox.Position.LEFT;
   }
 
@@ -261,7 +261,7 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
   const moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
-  } else if (typeof move['scrollbars'] == 'object') {
+  } else if (typeof move['scrollbars'] === 'object') {
     moveOptions.scrollbars = {};
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
     moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
@@ -281,7 +281,7 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
 
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
     // Defaults to true if single-direction scroll is enabled.
-    moveOptions.wheel = typeof moveOptions.scrollbars == 'object';
+    moveOptions.wheel = typeof moveOptions.scrollbars === 'object';
   } else {
     moveOptions.wheel = !!move['wheel'];
   }
@@ -373,7 +373,7 @@ Options.parseGridOptions_ = function(options) {
  */
 Options.parseThemeOptions_ = function(options) {
   const theme = options['theme'] || Classic;
-  if (typeof theme == 'string') {
+  if (typeof theme === 'string') {
     return /** @type {!Theme} */ (
         registry.getObject(registry.Type.THEME, theme));
   } else if (theme instanceof Theme) {

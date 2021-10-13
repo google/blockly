@@ -172,7 +172,7 @@ WorkspaceCommentSvg.prototype.dispose = function() {
     return;
   }
   // If this comment is being dragged, unlink the mouse events.
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
@@ -259,7 +259,7 @@ WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
  * @package
  */
 WorkspaceCommentSvg.prototype.select = function() {
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     return;
   }
   let oldId = null;
@@ -285,7 +285,7 @@ WorkspaceCommentSvg.prototype.select = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.unselect = function() {
-  if (common.getSelected() != this) {
+  if (common.getSelected() !== this) {
     return;
   }
   const event = new (eventUtils.get(eventUtils.SELECTED))(
@@ -362,15 +362,15 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
         const surfaceTranslation =
             this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
       element = element.parentNode;
-    } while (element && element != this.workspace.getBubbleCanvas() &&
-             element != dragSurfaceGroup);
+    } while (element && element !== this.workspace.getBubbleCanvas() &&
+             element !== dragSurfaceGroup);
   }
   this.xy_ = new Coordinate(x, y);
   return this.xy_;

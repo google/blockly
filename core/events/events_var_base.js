@@ -32,7 +32,7 @@ const object = goog.require('Blockly.utils.object');
  */
 const VarBase = function(opt_variable) {
   VarBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_variable == 'undefined';
+  this.isBlank = typeof opt_variable === 'undefined';
 
   /**
    * The variable id for the variable this event pertains to.

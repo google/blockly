@@ -287,7 +287,7 @@ Field.prototype.SERIALIZABLE = false;
  */
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
-  if (typeof tooltip == 'string') {
+  if (typeof tooltip === 'string') {
     tooltip = utils.replaceMessageReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
@@ -627,7 +627,7 @@ Field.prototype.isVisible = function() {
  * @package
  */
 Field.prototype.setVisible = function(visible) {
-  if (this.visible_ == visible) {
+  if (this.visible_ === visible) {
     return;
   }
   this.visible_ = visible;
@@ -715,7 +715,7 @@ Field.prototype.showEditor = function(opt_e) {
  */
 Field.prototype.updateSize_ = function(opt_margin) {
   const constants = this.getConstants();
-  const xOffset = opt_margin != undefined ?
+  const xOffset = opt_margin !== undefined ?
       opt_margin :
       (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
   let totalWidth = xOffset * 2;
@@ -795,7 +795,7 @@ Field.prototype.getSize = function() {
   if (this.isDirty_) {
     this.render_();
     this.isDirty_ = false;
-  } else if (this.visible_ && this.size_.width == 0) {
+  } else if (this.visible_ && this.size_.width === 0) {
     // If the field is not visible the width will be 0 as well, one of the
     // problems with the old system.
     console.warn(

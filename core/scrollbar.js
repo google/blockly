@@ -212,15 +212,15 @@ Scrollbar.DEFAULT_SCROLLBAR_MARGIN = 0.5;
  */
 Scrollbar.metricsAreEquivalent_ = function(first, second) {
   return (
-      first.viewWidth == second.viewWidth &&
-      first.viewHeight == second.viewHeight &&
-      first.viewLeft == second.viewLeft && first.viewTop == second.viewTop &&
-      first.absoluteTop == second.absoluteTop &&
-      first.absoluteLeft == second.absoluteLeft &&
-      first.scrollWidth == second.scrollWidth &&
-      first.scrollHeight == second.scrollHeight &&
-      first.scrollLeft == second.scrollLeft &&
-      first.scrollTop == second.scrollTop);
+      first.viewWidth === second.viewWidth &&
+      first.viewHeight === second.viewHeight &&
+      first.viewLeft === second.viewLeft && first.viewTop === second.viewTop &&
+      first.absoluteTop === second.absoluteTop &&
+      first.absoluteLeft === second.absoluteLeft &&
+      first.scrollWidth === second.scrollWidth &&
+      first.scrollHeight === second.scrollHeight &&
+      first.scrollLeft === second.scrollLeft &&
+      first.scrollTop === second.scrollTop);
 };
 
 /**
@@ -460,9 +460,9 @@ Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   // Compute the handle offset.
   // The position of the handle can be between:
   //     0 and this.scrollbarLength_ - handleLength
-  // If viewLeft == scrollLeft
+  // If viewLeft === scrollLeft
   //     then the offset should be 0
-  // If viewRight == scrollRight
+  // If viewRight === scrollRight
   //     then viewLeft = scrollLeft + scrollWidth - viewWidth
   //     then the offset should be max offset
 
@@ -554,9 +554,9 @@ Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   // Compute the handle offset.
   // The position of the handle can be between:
   //     0 and this.scrollbarLength_ - handleLength
-  // If viewTop == scrollTop
+  // If viewTop === scrollTop
   //     then the offset should be 0
-  // If viewBottom == scrollBottom
+  // If viewBottom === scrollBottom
   //     then viewTop = scrollTop + scrollHeight - viewHeight
   //     then the offset should be max offset
 
@@ -624,7 +624,7 @@ Scrollbar.prototype.isVisible = function() {
  * @param {boolean} visible Whether the container is visible
  */
 Scrollbar.prototype.setContainerVisible = function(visible) {
-  const visibilityChanged = (visible != this.containerVisible_);
+  const visibilityChanged = (visible !== this.containerVisible_);
 
   this.containerVisible_ = visible;
   if (visibilityChanged) {
@@ -638,7 +638,7 @@ Scrollbar.prototype.setContainerVisible = function(visible) {
  * @param {boolean} visible True if visible.
  */
 Scrollbar.prototype.setVisible = function(visible) {
-  const visibilityChanged = (visible != this.isVisible());
+  const visibilityChanged = (visible !== this.isVisible());
 
   // Ideally this would also apply to scrollbar pairs, but that's a bigger
   // headache (due to interactions with the corner square).

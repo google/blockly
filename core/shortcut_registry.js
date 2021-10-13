@@ -166,7 +166,7 @@ ShortcutRegistry.prototype.removeKeyMapping = function(
   const shortcutIdx = shortcutNames.indexOf(shortcutName);
   if (shortcutIdx > -1) {
     shortcutNames.splice(shortcutIdx, 1);
-    if (shortcutNames.length == 0) {
+    if (shortcutNames.length === 0) {
       delete this.keyMap_[keyCode];
     }
     return true;
@@ -290,13 +290,13 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
   let serializedKey = '';
   for (const modifier in ShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {
-      if (serializedKey != '') {
+      if (serializedKey !== '') {
         serializedKey += '+';
       }
       serializedKey += modifier;
     }
   }
-  if (serializedKey != '' && e.keyCode) {
+  if (serializedKey !== '' && e.keyCode) {
     serializedKey = serializedKey + '+' + e.keyCode;
   } else if (e.keyCode) {
     serializedKey = e.keyCode.toString();
@@ -336,7 +336,7 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
     for (const modifier in ShortcutRegistry.modifierKeys) {
       const modifierKeyCode = ShortcutRegistry.modifierKeys[modifier];
       if (modifiers.indexOf(modifierKeyCode) > -1) {
-        if (serializedKey != '') {
+        if (serializedKey !== '') {
           serializedKey += '+';
         }
         serializedKey += modifier;
@@ -344,7 +344,7 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
     }
   }
 
-  if (serializedKey != '' && keyCode) {
+  if (serializedKey !== '' && keyCode) {
     serializedKey = serializedKey + '+' + keyCode;
   } else if (keyCode) {
     serializedKey = keyCode.toString();

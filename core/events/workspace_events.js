@@ -40,7 +40,7 @@ const FinishedLoading = function(opt_workspace) {
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
-  this.isBlank = typeof opt_workspace == 'undefined';
+  this.isBlank = typeof opt_workspace === 'undefined';
 
   /**
    * The workspace identifier for this event.

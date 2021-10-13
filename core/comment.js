@@ -184,7 +184,7 @@ Comment.prototype.createEditor_ = function() {
       });
   this.onChangeWrapper_ =
       browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
-        if (this.cachedText_ != this.model_.text) {
+        if (this.cachedText_ !== this.model_.text) {
           eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
@@ -247,7 +247,7 @@ Comment.prototype.resizeTextarea_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Comment.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     return;
   }
   eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(

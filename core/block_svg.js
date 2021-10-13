@@ -287,7 +287,7 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     return;
   }
   let oldId = null;
@@ -313,7 +313,7 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (common.getSelected() != this) {
+  if (common.getSelected() !== this) {
     return;
   }
   const event = new (eventUtils.get(eventUtils.SELECTED))(
@@ -376,7 +376,7 @@ BlockSvg.prototype.getIcons = function() {
  */
 BlockSvg.prototype.setParent = function(newParent) {
   const oldParent = this.parentBlock_;
-  if (newParent == oldParent) {
+  if (newParent === oldParent) {
     return;
   }
 
@@ -436,15 +436,15 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
         const surfaceTranslation =
             this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
       element = /** @type {!SVGElement} */ (element.parentNode);
-    } while (element && element != this.workspace.getCanvas() &&
-             element != dragSurfaceGroup);
+    } while (element && element !== this.workspace.getCanvas() &&
+             element !== dragSurfaceGroup);
   }
   return new Coordinate(x, y);
 };
@@ -631,7 +631,7 @@ BlockSvg.prototype.markDirty = function() {
  * @param {boolean} collapsed True if collapsed.
  */
 BlockSvg.prototype.setCollapsed = function(collapsed) {
-  if (this.collapsed_ == collapsed) {
+  if (this.collapsed_ === collapsed) {
     return;
   }
   BlockSvg.superClass_.setCollapsed.call(this, collapsed);
@@ -655,7 +655,7 @@ BlockSvg.prototype.updateCollapsed_ = function() {
   const collapsedFieldName = constants.COLLAPSED_FIELD_NAME;
 
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name != collapsedInputName) {
+    if (input.name !== collapsedInputName) {
       input.setVisible(!collapsed);
     }
   }
@@ -728,7 +728,7 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
  */
 BlockSvg.prototype.showHelp = function() {
   const url =
-      (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
+      (typeof this.helpUrl === 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
     window.open(url);
   }
@@ -860,7 +860,7 @@ BlockSvg.prototype.setShadow = function(shadow) {
  * @package
  */
 BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
-  if (this.isInsertionMarker_ == insertionMarker) {
+  if (this.isInsertionMarker_ === insertionMarker) {
     return;  // No change.
   }
   this.isInsertionMarker_ = insertionMarker;
@@ -899,12 +899,12 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
   // contents once the block is disposed.
   const blockWorkspace = this.workspace;
   // If this block is being dragged, unlink the mouse events.
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
-  if (ContextMenu.getCurrentBlock() == this) {
+  if (ContextMenu.getCurrentBlock() === this) {
     ContextMenu.hide();
   }
 
@@ -1033,13 +1033,13 @@ BlockSvg.prototype.setCommentText = function(text) {
   if (!Comment) {
     throw Error('Missing require for Blockly.Comment');
   }
-  if (this.commentModel.text == text) {
+  if (this.commentModel.text === text) {
     return;
   }
   BlockSvg.superClass_.setCommentText.call(this, text);
 
-  const shouldHaveComment = text != null;
-  if (!!this.commentIcon_ == shouldHaveComment) {
+  const shouldHaveComment = text !== null;
+  if (!!this.commentIcon_ === shouldHaveComment) {
     // If the comment's state of existence is correct, but the text is new
     // that means we're just updating a comment.
     this.commentIcon_.updateText();
@@ -1105,7 +1105,7 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
   }
 
   let changedState = false;
-  if (typeof text == 'string') {
+  if (typeof text === 'string') {
     // Bubble up to add a warning on top-most collapsed block.
     let parent = this.getSurroundParent();
     let collapsedParent = null;
@@ -1137,7 +1137,7 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
       if (!newText) {
         this.warning.dispose();
       }
-      changedState = oldText != newText;
+      changedState = oldText !== newText;
     }
   }
   if (changedState && this.rendered) {
@@ -1172,7 +1172,7 @@ BlockSvg.prototype.setMutator = function(mutator) {
  * @param {boolean} enabled True if enabled.
  */
 BlockSvg.prototype.setEnabled = function(enabled) {
-  if (this.isEnabled() != enabled) {
+  if (this.isEnabled() !== enabled) {
     BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered && !this.getInheritedDisabled()) {
       this.updateDisabled();
@@ -1552,7 +1552,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
       // either one of them is unconnected, then there could be confusion.
       if (!connection.isConnected() || !otherConnection.isConnected()) {
         // Only bump blocks if they are from different tree structures.
-        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+        if (otherConnection.getSourceBlock().getRootBlock() !== rootBlock) {
           // Always bump the inferior block.
           if (connection.isSuperior()) {
             otherConnection.bumpAwayFrom(connection);
@@ -1602,8 +1602,8 @@ BlockSvg.prototype.positionNearConnection = function(
     sourceConnection, targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == ConnectionType.NEXT_STATEMENT ||
-      sourceConnection.type == ConnectionType.INPUT_VALUE) {
+  if (sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type === ConnectionType.INPUT_VALUE) {
     const dx = targetConnection.x - sourceConnection.x;
     const dy = targetConnection.y - sourceConnection.y;
 

@@ -218,27 +218,27 @@ FieldAngle.prototype.configure_ = function(config) {
 
   // Allow individual settings to override the mode setting.
   const clockwise = config['clockwise'];
-  if (typeof clockwise == 'boolean') {
+  if (typeof clockwise === 'boolean') {
     this.clockwise_ = clockwise;
   }
 
   // If these are passed as null then we should leave them on the default.
   let offset = config['offset'];
-  if (offset != null) {
+  if (offset !== null) {
     offset = Number(offset);
     if (!isNaN(offset)) {
       this.offset_ = offset;
     }
   }
   let wrap = config['wrap'];
-  if (wrap != null) {
+  if (wrap !== null) {
     wrap = Number(wrap);
     if (!isNaN(wrap)) {
       this.wrap_ = wrap;
     }
   }
   let round = config['round'];
-  if (round != null) {
+  if (round !== null) {
     round = Number(round);
     if (!isNaN(round)) {
       this.round_ = round;
@@ -331,7 +331,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
           'x1': FieldAngle.HALF + FieldAngle.RADIUS,
           'y1': FieldAngle.HALF,
           'x2':
-              FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 == 0 ? 10 : 5),
+              FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 === 0 ? 10 : 5),
           'y2': FieldAngle.HALF,
           'class': 'blocklyAngleMarks',
           'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
@@ -430,7 +430,7 @@ FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
     angle = Math.round(angle / this.round_) * this.round_;
   }
   angle = this.wrapValue_(angle);
-  if (angle != this.value_) {
+  if (angle !== this.value_) {
     this.setEditorValue_(angle);
   }
 };

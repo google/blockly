@@ -146,7 +146,7 @@ FieldTextInput.prototype.CURSOR = 'text';
  */
 FieldTextInput.prototype.configure_ = function(config) {
   FieldTextInput.superClass_.configure_.call(this, config);
-  if (typeof config['spellcheck'] == 'boolean') {
+  if (typeof config['spellcheck'] === 'boolean') {
     this.spellcheck_ = config['spellcheck'];
   }
 };
@@ -282,7 +282,7 @@ FieldTextInput.prototype.render_ = function() {
  * @param {boolean} check True if checked.
  */
 FieldTextInput.prototype.setSpellcheck = function(check) {
-  if (check == this.spellcheck_) {
+  if (check === this.spellcheck_) {
     return;
   }
   this.spellcheck_ = check;
@@ -457,14 +457,14 @@ FieldTextInput.prototype.unbindInputEvents_ = function() {
  * @protected
  */
 FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  if (e.keyCode == KeyCodes.ENTER) {
+  if (e.keyCode === KeyCodes.ENTER) {
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == KeyCodes.ESC) {
+  } else if (e.keyCode === KeyCodes.ESC) {
     this.setValue(this.htmlInput_.untypedDefaultValue_);
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == KeyCodes.TAB) {
+  } else if (e.keyCode === KeyCodes.TAB) {
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
     this.sourceBlock_.tab(this, !e.shiftKey);

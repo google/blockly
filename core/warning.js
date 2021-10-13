@@ -91,7 +91,7 @@ Warning.prototype.drawIcon_ = function(group) {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Warning.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     return;
   }
   eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
@@ -133,7 +133,7 @@ Warning.prototype.disposeBubble_ = function() {
  *     multiple warnings.
  */
 Warning.prototype.setText = function(text, id) {
-  if (this.text_[id] == text) {
+  if (this.text_[id] === text) {
     return;
   }
   if (text) {

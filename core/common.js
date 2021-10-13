@@ -136,11 +136,11 @@ const svgResize = function(workspace) {
   }
   const width = div.offsetWidth;
   const height = div.offsetHeight;
-  if (cachedSize.width != width) {
+  if (cachedSize.width !== width) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (cachedSize.height != height) {
+  if (cachedSize.height !== height) {
     svg.setAttribute('height', height + 'px');
     mainWorkspace.setCachedParentSvgSize(null, height);
   }

@@ -511,9 +511,9 @@ Gesture.prototype.doStart = function(e) {
     return;
   }
 
-  if ((e.type.toLowerCase() == 'touchstart' ||
-       e.type.toLowerCase() == 'pointerdown') &&
-      e.pointerType != 'mouse') {
+  if ((e.type.toLowerCase() === 'touchstart' ||
+       e.type.toLowerCase() === 'pointerdown') &&
+      e.pointerType !== 'mouse') {
     Touch.longStart(e, this);
   }
 
@@ -837,7 +837,7 @@ Gesture.prototype.setStartBlock = function(block) {
   // If the gesture already went through a bubble, don't set the start block.
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
-    if (block.isInFlyout && block != block.getRootBlock()) {
+    if (block.isInFlyout && block !== block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {
       this.setTargetBlock_(block);

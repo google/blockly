@@ -413,7 +413,7 @@ Flyout.prototype.isVisible = function() {
  * @param {boolean} visible True if visible.
  */
 Flyout.prototype.setVisible = function(visible) {
-  const visibilityChanged = (visible != this.isVisible());
+  const visibilityChanged = (visible !== this.isVisible());
 
   this.isVisible_ = visible;
   if (visibilityChanged) {
@@ -431,7 +431,7 @@ Flyout.prototype.setVisible = function(visible) {
  * @param {boolean} visible Whether the container is visible.
  */
 Flyout.prototype.setContainerVisible = function(visible) {
-  const visibilityChanged = (visible != this.containerVisible_);
+  const visibilityChanged = (visible !== this.containerVisible_);
   this.containerVisible_ = visible;
   if (visibilityChanged) {
     this.updateDisplay_();
@@ -469,7 +469,7 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
 
-  if (this.svgGroup_.tagName == 'svg') {
+  if (this.svgGroup_.tagName === 'svg') {
     const transform = 'translate(' + x + 'px,' + y + 'px)';
     dom.setCssTransform(this.svgGroup_, transform);
   } else {
@@ -531,7 +531,7 @@ Flyout.prototype.show = function(flyoutDef) {
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
-  if (typeof flyoutDef == 'string') {
+  if (typeof flyoutDef === 'string') {
     flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
@@ -646,7 +646,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
   // valid XML list.
   const fnToApply =
       this.workspace_.targetWorkspace.getToolboxCategoryCallback(categoryName);
-  if (typeof fnToApply != 'function') {
+  if (typeof fnToApply !== 'function') {
     throw TypeError(
         'Couldn\'t find a callback function when opening' +
         ' a toolbox category.');
@@ -722,12 +722,12 @@ Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
 Flyout.prototype.getRecycledBlock_ = function(blockType) {
   let index = -1;
   for (let i = 0; i < this.recycledBlocks_.length; i++) {
-    if (this.recycledBlocks_[i].type == blockType) {
+    if (this.recycledBlocks_[i].type === blockType) {
       index = i;
       break;
     }
   }
-  return index == -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
+  return index === -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
 };
 
 /**
@@ -1031,7 +1031,7 @@ Flyout.prototype.moveRectToBlock_ = function(rect, block) {
 Flyout.prototype.filterForCapacity_ = function() {
   const blocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = blocks[i]); i++) {
-    if (this.permanentlyDisabled_.indexOf(block) == -1) {
+    if (this.permanentlyDisabled_.indexOf(block) === -1) {
       const enable = this.targetWorkspace.isCapacityAvailable(
           utils.getBlockTypeCounts(block));
       while (block) {

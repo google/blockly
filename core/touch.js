@@ -91,7 +91,7 @@ let longPid_ = 0;
 const longStart = function(e, gesture) {
   longStop();
   // Punt on multitouch events.
-  if (e.changedTouches && e.changedTouches.length != 1) {
+  if (e.changedTouches && e.changedTouches.length !== 1) {
     return;
   }
   longPid_ = setTimeout(function() {
@@ -160,7 +160,7 @@ exports.shouldHandleEvent = shouldHandleEvent;
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
 const getTouchIdentifierFromEvent = function(e) {
-  return e.pointerId != undefined ?
+  return e.pointerId !== undefined ?
       e.pointerId :
       (e.changedTouches && e.changedTouches[0] &&
        e.changedTouches[0].identifier !== undefined &&
@@ -191,10 +191,10 @@ const checkTouchIdentifier = function(e) {
   if (touchIdentifier_ !== undefined && touchIdentifier_ !== null) {
     // We're already tracking some touch/mouse event.  Is this from the same
     // source?
-    return touchIdentifier_ == identifier;
+    return touchIdentifier_ === identifier;
   }
-  if (e.type == 'mousedown' || e.type == 'touchstart' ||
-      e.type == 'pointerdown') {
+  if (e.type === 'mousedown' || e.type === 'touchstart' ||
+      e.type === 'pointerdown') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
     touchIdentifier_ = identifier;

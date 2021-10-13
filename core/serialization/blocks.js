@@ -480,7 +480,7 @@ const tryToConnectParent = function(parentConnection, child, state) {
 
   let connected = false;
   let childConnection;
-  if (parentConnection.type == inputTypes.VALUE) {
+  if (parentConnection.type === inputTypes.VALUE) {
     childConnection = child.outputConnection;
     if (!childConnection) {
       throw new MissingConnection('output', child, state);
@@ -502,7 +502,7 @@ const tryToConnectParent = function(parentConnection, child, state) {
                 childConnection, parentConnection, false),
             childConnection,
             parentConnection),
-        parentConnection.type == inputTypes.VALUE ?
+        parentConnection.type === inputTypes.VALUE ?
             'output connection' : 'previous connection',
         child,
         state);

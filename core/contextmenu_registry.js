@@ -145,16 +145,16 @@ ContextMenuRegistry.prototype.getContextMenuOptions = function(
   const registry = this.registry_;
   Object.keys(registry).forEach(function(id) {
     const item = registry[id];
-    if (scopeType == item.scopeType) {
+    if (scopeType === item.scopeType) {
       const precondition = item.preconditionFn(scope);
-      if (precondition != 'hidden') {
-        const displayText = typeof item.displayText == 'function' ?
+      if (precondition !== 'hidden') {
+        const displayText = typeof item.displayText === 'function' ?
             item.displayText(scope) :
             item.displayText;
         /** @type {!ContextMenuRegistry.ContextMenuOption} */
         const menuOption = {
           text: displayText,
-          enabled: (precondition == 'enabled'),
+          enabled: (precondition === 'enabled'),
           callback: item.callback,
           scope: scope,
           weight: item.weight,

@@ -96,7 +96,7 @@ BlockDelete.prototype.fromJson = function(json) {
   this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   this.wasShadow =
-    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
+    json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
   this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -115,7 +115,7 @@ BlockDelete.prototype.run = function(forward) {
       const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
-      } else if (id == this.blockId) {
+      } else if (id === this.blockId) {
         // Only complain about root-level block.
         console.warn('Can\'t delete non-existent block: ' + id);
       }

@@ -41,7 +41,7 @@ const UiBase = function(opt_workspaceId) {
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
-  this.isBlank = typeof opt_workspaceId == 'undefined';
+  this.isBlank = typeof opt_workspaceId === 'undefined';
 
   /**
    * The workspace identifier for this event.

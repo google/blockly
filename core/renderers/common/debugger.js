@@ -231,19 +231,19 @@ Debug.prototype.drawConnection = function(conn) {
   let colour;
   let size;
   let fill;
-  if (conn.type == ConnectionType.INPUT_VALUE) {
+  if (conn.type === ConnectionType.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
     fill = 'none';
-  } else if (conn.type == ConnectionType.OUTPUT_VALUE) {
+  } else if (conn.type === ConnectionType.OUTPUT_VALUE) {
     size = 2;
     colour = 'magenta';
     fill = colour;
-  } else if (conn.type == ConnectionType.NEXT_STATEMENT) {
+  } else if (conn.type === ConnectionType.NEXT_STATEMENT) {
     size = 4;
     colour = 'goldenrod';
     fill = 'none';
-  } else if (conn.type == ConnectionType.PREVIOUS_STATEMENT) {
+  } else if (conn.type === ConnectionType.PREVIOUS_STATEMENT) {
     size = 2;
     colour = 'goldenrod';
     fill = colour;

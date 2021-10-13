@@ -295,7 +295,7 @@ Mutator.prototype.onBubbleMove_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Mutator.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     // No change.
     return;
   }
@@ -378,8 +378,8 @@ Mutator.prototype.setVisible = function(visible) {
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
   if (!(e.isUiEvent ||
-        (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
-        e.type == eventUtils.CREATE)) {
+        (e.type === eventUtils.CHANGE && e.element === 'disabled') ||
+        e.type === eventUtils.CREATE)) {
     this.updateWorkspace_();
   }
 };
@@ -418,7 +418,7 @@ Mutator.prototype.updateWorkspace_ = function() {
   }
 
   // When the mutator's workspace changes, update the source block.
-  if (this.rootBlock_.workspace == this.workspace_) {
+  if (this.rootBlock_.workspace === this.workspace_) {
     eventUtils.setGroup(true);
     const block = /** @type {!BlockSvg} */ (this.block_);
     const oldExtraState = BlockChange.getExtraBlockState_(block);
@@ -440,7 +440,7 @@ Mutator.prototype.updateWorkspace_ = function() {
     }
 
     const newExtraState = BlockChange.getExtraBlockState_(block);
-    if (oldExtraState != newExtraState) {
+    if (oldExtraState !== newExtraState) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
@@ -505,8 +505,8 @@ Mutator.reconnect = function(connectionChild, block, inputName) {
   }
   const connectionParent = block.getInput(inputName).connection;
   const currentParent = connectionChild.targetBlock();
-  if ((!currentParent || currentParent == block) &&
-      connectionParent.targetConnection != connectionChild) {
+  if ((!currentParent || currentParent === block) &&
+      connectionParent.targetConnection !== connectionChild) {
     if (connectionParent.isConnected()) {
       // There's already something connected here.  Get rid of it.
       connectionParent.disconnect();

@@ -273,8 +273,8 @@ Renderer.prototype.orphanCanConnectAtEnd = function(
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == ConnectionType.OUTPUT_VALUE ||
-      local.type == ConnectionType.PREVIOUS_STATEMENT) {
+  if (local.type === ConnectionType.OUTPUT_VALUE ||
+      local.type === ConnectionType.PREVIOUS_STATEMENT) {
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,

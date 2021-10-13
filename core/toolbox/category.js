@@ -221,7 +221,7 @@ ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
  */
 ToolboxCategory.prototype.init = function() {
   this.createDom_();
-  if (this.toolboxItemDef_['hidden'] == 'true') {
+  if (this.toolboxItemDef_['hidden'] === 'true') {
     this.hide();
   }
 };
@@ -425,7 +425,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   const colour = utils.replaceMessageReferences(colourValue);
-  if (colour == null || colour === '') {
+  if (colour === null || colour === '') {
     // No attribute. No colour.
     return '';
   } else {
@@ -482,7 +482,7 @@ ToolboxCategory.prototype.setVisible_ = function(isVisible) {
   this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
   this.isHidden_ = !isVisible;
 
-  if (this.parentToolbox_.getSelectedItem() == this) {
+  if (this.parentToolbox_.getSelectedItem() === this) {
     this.parentToolbox_.clearSelection();
   }
 };
@@ -623,7 +623,7 @@ ToolboxCategory.prototype.getContents = function() {
 ToolboxCategory.prototype.updateFlyoutContents = function(contents) {
   this.flyoutItems_ = [];
 
-  if (typeof contents == 'string') {
+  if (typeof contents === 'string') {
     this.toolboxItemDef_['custom'] = contents;
   } else {
     // Removes old custom field when contents is updated.

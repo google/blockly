@@ -42,7 +42,7 @@ const CommentBase = function(opt_comment) {
    * Whether or not an event is blank.
    * @type {boolean}
    */
-  this.isBlank = typeof opt_comment == 'undefined';
+  this.isBlank = typeof opt_comment === 'undefined';
 
   /**
    * The ID of the comment this event pertains to.

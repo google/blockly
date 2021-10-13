@@ -81,7 +81,7 @@ VariableMap.prototype.renameVariable = function(variable, newName) {
   eventUtils.setGroup(true);
   try {
     // The IDs may match if the rename is a simple case change (name1 -> Name1).
-    if (!conflictVar || conflictVar.getId() == variable.getId()) {
+    if (!conflictVar || conflictVar.getId() === variable.getId()) {
       this.renameVariableAndUses_(variable, newName, blocks);
     } else {
       this.renameVariableWithConflict_(variable, newName, conflictVar, blocks);
@@ -143,7 +143,7 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
   const type = variable.type;
   const oldCase = conflictVar.name;
 
-  if (newName != oldCase) {
+  if (newName !== oldCase) {
     // Simple rename to change the case and update references.
     this.renameVariableAndUses_(conflictVar, newName, blocks);
   }
@@ -176,7 +176,7 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
 VariableMap.prototype.createVariable = function(name, opt_type, opt_id) {
   let variable = this.getVariable(name, opt_type);
   if (variable) {
-    if (opt_id && variable.getId() != opt_id) {
+    if (opt_id && variable.getId() !== opt_id) {
       throw Error(
           'Variable "' + name + '" is already in use and its id is "' +
           variable.getId() + '" which conflicts with the passed in ' +
@@ -214,7 +214,7 @@ VariableMap.prototype.deleteVariable = function(variable) {
   const variableList = this.variableMap_[variable.type];
   for (let i = 0; i < variableList.length; i++) {
     const tempVar = variableList[i];
-    if (tempVar.getId() == variableId) {
+    if (tempVar.getId() === variableId) {
       variableList.splice(i, 1);
       eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
       return;
@@ -234,8 +234,8 @@ VariableMap.prototype.deleteVariableById = function(id) {
     const variableName = variable.name;
     const uses = this.getVariableUsesById(id);
     for (let i = 0, block; (block = uses[i]); i++) {
-      if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
+      if (block.type === 'procedures_defnoreturn' ||
+          block.type === 'procedures_defreturn') {
         const procedureName = block.getFieldValue('NAME');
         const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
                                .replace('%1', variableName)
@@ -323,7 +323,7 @@ VariableMap.prototype.getVariableById = function(id) {
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     for (let j = 0, variable; (variable = this.variableMap_[key][j]); j++) {
-      if (variable.getId() == id) {
+      if (variable.getId() === id) {
         return variable;
       }
     }
@@ -365,7 +365,7 @@ VariableMap.prototype.getVariableTypes = function(ws) {
   const types = Object.keys(variableMap);
   let hasEmpty = false;
   for (let i = 0; i < types.length; i++) {
-    if (types[i] == '') {
+    if (types[i] === '') {
       hasEmpty = true;
     }
   }
@@ -415,7 +415,7 @@ VariableMap.prototype.getVariableUsesById = function(id) {
     const blockVariables = blocks[i].getVarModels();
     if (blockVariables) {
       for (let j = 0; j < blockVariables.length; j++) {
-        if (blockVariables[j].getId() == id) {
+        if (blockVariables[j].getId() === id) {
           uses.push(blocks[i]);
         }
       }

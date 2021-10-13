@@ -316,7 +316,7 @@ Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
  * @protected
  */
 Toolbox.prototype.onClick_ = function(e) {
-  if (browserEvents.isRightButton(e) || e.target == this.HtmlDiv) {
+  if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
     // Close flyout.
     common.getMainWorkspace().hideChaff(false);
   } else {
@@ -465,7 +465,7 @@ Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment) {
 
   // Categories that are collapsible are created using a class registered under
   // a different name.
-  if (registryName.toUpperCase() == 'CATEGORY' &&
+  if (registryName.toUpperCase() === 'CATEGORY' &&
       toolbox.isCategoryCollapsible(
           /** @type {!toolbox.CategoryInfo} */ (toolboxItemDef))) {
     registryName = CollapsibleToolboxCategory.registrationName;
@@ -559,11 +559,11 @@ Toolbox.prototype.getClientRect = function() {
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (this.toolboxPosition == toolbox.Position.TOP) {
+  if (this.toolboxPosition === toolbox.Position.TOP) {
     return new Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == toolbox.Position.BOTTOM) {
+  } else if (this.toolboxPosition === toolbox.Position.BOTTOM) {
     return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == toolbox.Position.LEFT) {
+  } else if (this.toolboxPosition === toolbox.Position.LEFT) {
     return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
   } else {  // Right
     return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
@@ -759,13 +759,13 @@ Toolbox.prototype.position = function() {
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
     this.width_ = workspaceMetrics.viewWidth;
-    if (this.toolboxPosition == toolbox.Position.TOP) {
+    if (this.toolboxPosition === toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
       toolboxDiv.style.bottom = '0';
     }
   } else {
-    if (this.toolboxPosition == toolbox.Position.RIGHT) {
+    if (this.toolboxPosition === toolbox.Position.RIGHT) {
       toolboxDiv.style.right = '0';
     } else {  // Left
       toolboxDiv.style.left = '0';
@@ -785,10 +785,10 @@ Toolbox.prototype.handleToolboxItemResize = function() {
   // to the new absolute edge (ie toolbox edge).
   const workspace = this.workspace_;
   const rect = this.HtmlDiv.getBoundingClientRect();
-  const newX = this.toolboxPosition == toolbox.Position.LEFT ?
+  const newX = this.toolboxPosition === toolbox.Position.LEFT ?
       workspace.scrollX + rect.width :
       workspace.scrollX;
-  const newY = this.toolboxPosition == toolbox.Position.TOP ?
+  const newY = this.toolboxPosition === toolbox.Position.TOP ?
       workspace.scrollY + rect.height :
       workspace.scrollY;
   workspace.translate(newX, newY);
@@ -874,11 +874,11 @@ Toolbox.prototype.setSelectedItem = function(newItem) {
   }
   newItem = /** @type {ISelectableToolboxItem} */ (newItem);
 
-  if (this.shouldDeselectItem_(oldItem, newItem) && oldItem != null) {
+  if (this.shouldDeselectItem_(oldItem, newItem) && oldItem !== null) {
     this.deselectItem_(oldItem);
   }
 
-  if (this.shouldSelectItem_(oldItem, newItem) && newItem != null) {
+  if (this.shouldSelectItem_(oldItem, newItem) && newItem !== null) {
     this.selectItem_(oldItem, newItem);
   }
 
@@ -898,7 +898,7 @@ Toolbox.prototype.setSelectedItem = function(newItem) {
 Toolbox.prototype.shouldDeselectItem_ = function(oldItem, newItem) {
   // Deselect the old item unless the old item is collapsible and has been
   // previously clicked on.
-  return oldItem != null && (!oldItem.isCollapsible() || oldItem != newItem);
+  return oldItem !== null && (!oldItem.isCollapsible() || oldItem !== newItem);
 };
 
 /**
@@ -912,7 +912,7 @@ Toolbox.prototype.shouldDeselectItem_ = function(oldItem, newItem) {
  */
 Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {
   // Select the new item unless the old item equals the new item.
-  return newItem != null && newItem != oldItem;
+  return newItem !== null && newItem !== oldItem;
 };
 
 /**
@@ -969,7 +969,7 @@ Toolbox.prototype.selectItemByPosition = function(position) {
  * @protected
  */
 Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if ((oldItem == newItem && !newItem.isCollapsible()) || !newItem ||
+  if ((oldItem === newItem && !newItem.isCollapsible()) || !newItem ||
       !newItem.getContents().length) {
     this.flyout_.hide();
   } else {
@@ -990,7 +990,7 @@ Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   const oldElement = oldItem && oldItem.getName();
   let newElement = newItem && newItem.getName();
   // In this case the toolbox closes, so the newElement should be null.
-  if (oldItem == newItem) {
+  if (oldItem === newItem) {
     newElement = null;
   }
   const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(

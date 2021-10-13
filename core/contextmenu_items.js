@@ -287,7 +287,7 @@ const registerDeleteAll = function() {
         return;
       }
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
-      if (deletableBlocksLength == 1) {
+      if (deletableBlocksLength === 1) {
         return Msg['DELETE_BLOCK'];
       } else {
         return Msg['DELETE_X_BLOCKS'].replace(
@@ -441,8 +441,8 @@ const registerInline = function() {
         for (let i = 1; i < block.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs
           // next to each other.
-          if (block.inputList[i - 1].type != inputTypes.STATEMENT &&
-              block.inputList[i].type != inputTypes.STATEMENT) {
+          if (block.inputList[i - 1].type !== inputTypes.STATEMENT &&
+              block.inputList[i].type !== inputTypes.STATEMENT) {
             return 'enabled';
           }
         }
@@ -555,7 +555,7 @@ const registerDelete = function() {
         // Blocks in the current stack would survive this block's deletion.
         descendantCount -= nextBlock.getDescendants(false).length;
       }
-      return (descendantCount == 1) ?
+      return (descendantCount === 1) ?
           Msg['DELETE_BLOCK'] :
           Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
     },
@@ -593,7 +593,7 @@ const registerHelp = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       const block = scope.block;
-      const url = (typeof block.helpUrl == 'function') ? block.helpUrl() :
+      const url = (typeof block.helpUrl === 'function') ? block.helpUrl() :
                                                          block.helpUrl;
       if (url) {
         return 'enabled';

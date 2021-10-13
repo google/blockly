@@ -32,7 +32,7 @@ const {Block} = goog.requireType('Blockly.Block');
  */
 const BlockBase = function(opt_block) {
   BlockBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_block == 'undefined';
+  this.isBlank = typeof opt_block === 'undefined';
 
   /**
    * The block ID for the block this event pertains to

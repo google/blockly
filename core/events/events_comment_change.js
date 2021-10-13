@@ -41,9 +41,9 @@ const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
   }
 
   this.oldContents_ =
-      typeof opt_oldContents == 'undefined' ? '' : opt_oldContents;
+      typeof opt_oldContents === 'undefined' ? '' : opt_oldContents;
   this.newContents_ =
-      typeof opt_newContents == 'undefined' ? '' : opt_newContents;
+      typeof opt_newContents === 'undefined' ? '' : opt_newContents;
 };
 object.inherits(CommentChange, CommentBase);
 
@@ -79,7 +79,7 @@ CommentChange.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 CommentChange.prototype.isNull = function() {
-  return this.oldContents_ == this.newContents_;
+  return this.oldContents_ === this.newContents_;
 };
 
 /**

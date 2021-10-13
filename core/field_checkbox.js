@@ -232,8 +232,8 @@ FieldCheckbox.prototype.getText = function() {
  * @private
  */
 FieldCheckbox.prototype.convertValueToBool_ = function(value) {
-  if (typeof value == 'string') {
-    return value == 'TRUE';
+  if (typeof value === 'string') {
+    return value === 'TRUE';
   } else {
     return !!value;
   }

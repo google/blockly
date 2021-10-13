@@ -614,7 +614,7 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
   this.setComponentConstants_(theme);
 
   this.ADD_START_HATS =
-      theme.startHats != null ? theme.startHats : this.ADD_START_HATS;
+      theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
 };
 
 /**
@@ -624,15 +624,15 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle && theme.fontStyle['family'] !== undefined ?
       theme.fontStyle['family'] :
       this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle && theme.fontStyle['weight'] !== undefined ?
       theme.fontStyle['weight'] :
       this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle && theme.fontStyle['size'] !== undefined ?
       theme.fontStyle['size'] :
       this.FIELD_TEXT_FONTSIZE;
 
@@ -686,7 +686,7 @@ ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
  */
 ConstantProvider.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+      (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
            this.getBlockStyleForColour(blockStyleName.substring(5)).style :
            this.createBlockStyle_('#000000'));
 };

@@ -495,17 +495,17 @@ Bubble.prototype.layoutBubble_ = function() {
   const mostOverlap = Math.max(
       topPositionOverlap, startPositionOverlap, closerPositionOverlap,
       fartherPositionOverlap);
-  if (topPositionOverlap == mostOverlap) {
+  if (topPositionOverlap === mostOverlap) {
     this.relativeLeft_ = topPosition.x;
     this.relativeTop_ = topPosition.y;
     return;
   }
-  if (startPositionOverlap == mostOverlap) {
+  if (startPositionOverlap === mostOverlap) {
     this.relativeLeft_ = startPosition.x;
     this.relativeTop_ = startPosition.y;
     return;
   }
-  if (closerPositionOverlap == mostOverlap) {
+  if (closerPositionOverlap === mostOverlap) {
     this.relativeLeft_ = closerPosition.x;
     this.relativeTop_ = closerPosition.y;
     return;
@@ -753,7 +753,7 @@ Bubble.prototype.renderArrow_ = function() {
   // Find the relative coordinates of the center of the anchor.
   let relAnchorX = -this.relativeLeft_;
   let relAnchorY = -this.relativeTop_;
-  if (relBubbleX == relAnchorX && relBubbleY == relAnchorY) {
+  if (relBubbleX === relAnchorX && relBubbleY === relAnchorY) {
     // Null case.  Bubble is directly on top of the anchor.
     // Short circuit this rather than wade through divide by zeros.
     steps.push('M ' + relBubbleX + ',' + relBubbleY);

@@ -101,7 +101,7 @@ Highlighter.prototype.drawTopCorner = function(row) {
       this.steps_ += this.notchPaths_.pathLeft;
     } else if (Types.isHat(elem)) {
       this.steps_ += this.startPaths_.path(this.RTL_);
-    } else if (Types.isSpacer(elem) && elem.width != 0) {
+    } else if (Types.isSpacer(elem) && elem.width !== 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.

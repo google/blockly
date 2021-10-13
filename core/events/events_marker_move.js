@@ -43,7 +43,7 @@ const {Block} = goog.requireType('Blockly.Block');
  */
 const MarkerMove = function(opt_block, isCursor, opt_oldNode, opt_newNode) {
   let workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  if (opt_newNode && opt_newNode.getType() == ASTNode.types.WORKSPACE) {
+  if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
     workspaceId = (/** @type {!Workspace} */ (opt_newNode.getLocation())).id;
   }
   MarkerMove.superClass_.constructor.call(this, workspaceId);

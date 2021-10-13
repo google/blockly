@@ -111,7 +111,7 @@ const Trashcan = function(workspace) {
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == toolbox.Position.TOP ?
+        this.workspace_.toolboxPosition === toolbox.Position.TOP ?
         toolbox.Position.BOTTOM :
         toolbox.Position.TOP;
     const HorizontalFlyout = registry.getClassFromOptions(
@@ -120,7 +120,7 @@ const Trashcan = function(workspace) {
     this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == toolbox.Position.RIGHT ?
+        this.workspace_.toolboxPosition === toolbox.Position.RIGHT ?
         toolbox.Position.LEFT :
         toolbox.Position.RIGHT;
     const VerticalFlyout = registry.getClassFromOptions(
@@ -547,7 +547,7 @@ Trashcan.prototype.onDrop = function(_dragElement) {
  * @package
  */
 Trashcan.prototype.setLidOpen = function(state) {
-  if (this.isLidOpen == state) {
+  if (this.isLidOpen === state) {
     return;
   }
   clearTimeout(this.lidTask_);
@@ -585,7 +585,7 @@ Trashcan.prototype.animateLid_ = function() {
  */
 Trashcan.prototype.setLidAngle_ = function(lidAngle) {
   const openAtRight =
-      this.workspace_.toolboxPosition == toolbox.Position.RIGHT ||
+      this.workspace_.toolboxPosition === toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute(
       'transform',
@@ -677,9 +677,9 @@ Trashcan.prototype.onDelete_ = function(event) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-  if (event.type == eventUtils.BLOCK_DELETE && !event.wasShadow) {
+  if (event.type === eventUtils.BLOCK_DELETE && !event.wasShadow) {
     const cleanedJson = this.cleanBlockJson_(event.oldJson);
-    if (this.contents_.indexOf(cleanedJson) != -1) {
+    if (this.contents_.indexOf(cleanedJson) !== -1) {
       return;
     }
     this.contents_.unshift(cleanedJson);

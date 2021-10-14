@@ -11,11 +11,14 @@
 
 'use strict';
 
+/**
+ * The interface for a positionable UI element.
+ * @namespace Blockly.IPositionable
+ */
 goog.module('Blockly.IPositionable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
+const IComponent = goog.require('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
@@ -26,6 +29,7 @@ const Rect = goog.requireType('Blockly.utils.Rect');
  * Interface for a component that is positioned on top of the workspace.
  * @extends {IComponent}
  * @interface
+ * @alias Blockly.IPositionable
  */
 const IPositionable = function() {};
 

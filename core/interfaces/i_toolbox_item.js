@@ -11,13 +11,17 @@
 
 'use strict';
 
+/**
+ * The interface for a toolbox item.
+ * @namespace Blockly.IToolboxItem
+ */
 goog.module('Blockly.IToolboxItem');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * Interface for an item in the toolbox.
  * @interface
+ * @alias Blockly.IToolboxItem
  */
 const IToolboxItem = function() {};
 

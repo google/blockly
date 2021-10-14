@@ -11,27 +11,31 @@
 
 'use strict';
 
+/**
+ * The interface for a flyout.
+ * @namespace Blockly.IFlyout
+ */
 goog.module('Blockly.IFlyout');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.requireType('Blockly.IRegistrable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const Svg = goog.requireType('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
  * Interface for a flyout.
  * @extends {IRegistrable}
  * @interface
+ * @alias Blockly.IFlyout
  */
 const IFlyout = function() {};
 

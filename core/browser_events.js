@@ -10,17 +10,23 @@
  */
 'use strict';
 
+/**
+ * Browser event handling.
+ * @namespace Blockly.browserEvents
+ */
 goog.module('Blockly.browserEvents');
-goog.module.declareLegacyNamespace();
 
 const Touch = goog.require('Blockly.Touch');
 const {globalThis} = goog.require('Blockly.utils.global');
+const internalConstants = goog.require('Blockly.internalConstants');
+const userAgent = goog.require('Blockly.utils.userAgent');
 
 
 /**
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
  * @typedef {!Array<!Array>}
+ * @alias Blockly.browserEvents.Data
  */
 let Data;
 exports.Data = Data;
@@ -43,6 +49,7 @@ exports.Data = Data;
  *     provided.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
+ * @alias Blockly.browserEvents.conditionalBind
  */
 const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
@@ -113,6 +120,7 @@ exports.conditionalBind = conditionalBind;
  * @param {!Function} func Function to call when event is triggered.
  * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
+ * @alias Blockly.browserEvents.bind
  */
 const bind = function(node, name, thisObject, func) {
   const wrapFunc = function(e) {
@@ -165,6 +173,7 @@ exports.bind = bind;
  * @param {!Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
+ * @alias Blockly.browserEvents.unbind
  */
 const unbind = function(bindData) {
   let func;
@@ -178,3 +187,82 @@ const unbind = function(bindData) {
   return func;
 };
 exports.unbind = unbind;
+
+/**
+ * Returns true if this event is targeting a text input widget?
+ * @param {!Event} e An event.
+ * @return {boolean} True if text input.
+ * @alias Blockly.browserEvents.isTargetInput
+ */
+const isTargetInput = function(e) {
+  return e.target.type == 'textarea' || e.target.type == 'text' ||
+      e.target.type == 'number' || e.target.type == 'email' ||
+      e.target.type == 'password' || e.target.type == 'search' ||
+      e.target.type == 'tel' || e.target.type == 'url' ||
+      e.target.isContentEditable ||
+      (e.target.dataset && e.target.dataset.isTextInput == 'true');
+};
+exports.isTargetInput = isTargetInput;
+
+/**
+ * Returns true this event is a right-click.
+ * @param {!Event} e Mouse event.
+ * @return {boolean} True if right-click.
+ * @alias Blockly.browserEvents.isRightButton
+ */
+const isRightButton = function(e) {
+  if (e.ctrlKey && userAgent.MAC) {
+    // Control-clicking on Mac OS X is treated as a right-click.
+    // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
+    return true;
+  }
+  return e.button == 2;
+};
+exports.isRightButton = isRightButton;
+
+/**
+ * Returns the converted coordinates of the given mouse event.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
+ * @param {!Event} e Mouse event.
+ * @param {!Element} svg SVG element.
+ * @param {?SVGMatrix} matrix Inverted screen CTM to use.
+ * @return {!SVGPoint} Object with .x and .y properties.
+ * @alias Blockly.browserEvents.mouseToSvg
+ */
+const mouseToSvg = function(e, svg, matrix) {
+  const svgPoint = svg.createSVGPoint();
+  svgPoint.x = e.clientX;
+  svgPoint.y = e.clientY;
+
+  if (!matrix) {
+    matrix = svg.getScreenCTM().inverse();
+  }
+  return svgPoint.matrixTransform(matrix);
+};
+exports.mouseToSvg = mouseToSvg;
+
+/**
+ * Returns the scroll delta of a mouse event in pixel units.
+ * @param {!Event} e Mouse event.
+ * @return {{x: number, y: number}} Scroll delta object with .x and .y
+ *    properties.
+ * @alias Blockly.browserEvents.getScrollDeltaPixels
+ */
+const getScrollDeltaPixels = function(e) {
+  switch (e.deltaMode) {
+    case 0x00:  // Pixel mode.
+    default:
+      return {x: e.deltaX, y: e.deltaY};
+    case 0x01:  // Line mode.
+      return {
+        x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
+        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER
+      };
+    case 0x02:  // Page mode.
+      return {
+        x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER
+      };
+  }
+};
+exports.getScrollDeltaPixels = getScrollDeltaPixels;

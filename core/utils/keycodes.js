@@ -13,11 +13,12 @@
 'use strict';
 
 /**
- * @name Blockly.utils.KeyCodes
- * @namespace
+ * Constant declarations for common key codes.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.KeyCodes
  */
 goog.module('Blockly.utils.KeyCodes');
-goog.module.declareLegacyNamespace();
 
 
 /**
@@ -29,6 +30,7 @@ goog.module.declareLegacyNamespace();
  * correct for non US keyboard layouts. See comments below.
  *
  * @enum {number}
+ * @alias Blockly.utils.KeyCodes
  */
 const KeyCodes = {
   WIN_KEY_FF_LINUX: 0,

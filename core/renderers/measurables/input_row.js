@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a row that holds one or more inputs on a
+ * rendered block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.InputRow');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -27,6 +31,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Row}
+ * @alias Blockly.blockRendering.InputRow
  */
 const InputRow = function(constants) {
   InputRow.superClass_.constructor.call(this, constants);

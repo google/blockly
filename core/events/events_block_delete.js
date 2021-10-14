@@ -10,17 +10,20 @@
  */
 'use strict';
 
+/**
+ * Class for a block delete event.
+ * @class
+ */
 goog.module('Blockly.Events.BlockDelete');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
-const Events = goog.require('Blockly.Events');
 const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.serialization.blocks');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const xml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -29,6 +32,7 @@ const xml = goog.require('Blockly.utils.xml');
  *     event.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockDelete
  */
 const BlockDelete = function(opt_block) {
   BlockDelete.superClass_.constructor.call(this, opt_block);
@@ -43,12 +47,21 @@ const BlockDelete = function(opt_block) {
     this.recordUndo = false;
   }
 
-  if (opt_block.workspace.rendered) {
-    this.oldXml = Xml.blockToDomWithXY(opt_block);
-  } else {
-    this.oldXml = Xml.blockToDom(opt_block);
-  }
-  this.ids = Events.getDescendantIds(opt_block);
+  this.oldXml = Xml.blockToDomWithXY(opt_block);
+  this.ids = eventUtils.getDescendantIds(opt_block);
+
+  /**
+   * Was the block that was just deleted a shadow?
+   * @type {boolean}
+   */
+  this.wasShadow = opt_block.isShadow();
+
+  /**
+   * JSON representation of the block that was just deleted.
+   * @type {!blocks.State}
+   */
+  this.oldJson = /** @type {!blocks.State} */ (blocks.save(
+      opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockDelete, BlockBase);
 
@@ -56,7 +69,7 @@ object.inherits(BlockDelete, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockDelete.prototype.type = Events.BLOCK_DELETE;
+BlockDelete.prototype.type = eventUtils.BLOCK_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -66,6 +79,8 @@ BlockDelete.prototype.toJson = function() {
   const json = BlockDelete.superClass_.toJson.call(this);
   json['oldXml'] = Xml.domToText(this.oldXml);
   json['ids'] = this.ids;
+  json['wasShadow'] = this.wasShadow;
+  json['oldJson'] = this.oldJson;
   if (!this.recordUndo) {
     json['recordUndo'] = this.recordUndo;
   }
@@ -80,6 +95,9 @@ BlockDelete.prototype.fromJson = function(json) {
   BlockDelete.superClass_.fromJson.call(this, json);
   this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
+  this.wasShadow =
+    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
+  this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
   }
@@ -103,12 +121,10 @@ BlockDelete.prototype.run = function(forward) {
       }
     }
   } else {
-    const xmlEl = xml.createElement('xml');
-    xmlEl.appendChild(this.oldXml);
-    Xml.domToWorkspace(xmlEl, workspace);
+    blocks.append(this.oldJson, workspace);
   }
 };
 
-registry.register(registry.Type.EVENT, Events.DELETE, BlockDelete);
+registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);
 
 exports = BlockDelete;

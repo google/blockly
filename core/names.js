@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Utility functions for handling variable and procedure names.
+ * @class
+ */
 goog.module('Blockly.Names');
-goog.module.declareLegacyNamespace();
 
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +34,7 @@ goog.requireType('Blockly.Procedures');
  * @param {string=} opt_variablePrefix Some languages need a '$' or a namespace
  *     before all variable names (but not procedure names).
  * @constructor
+ * @alias Blockly.Names
  */
 const Names = function(reservedWords, opt_variablePrefix) {
   this.variablePrefix_ = opt_variablePrefix || '';

@@ -6,15 +6,19 @@
 
 /**
  * @fileoverview Abstract class for events fired as a result of actions in
- *     Blockly's editor.
+ * Blockly's editor.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
+/**
+ * Abstract class for events fired as a result of actions in
+ * Blockly's editor.
+ * @class
+ */
 goog.module('Blockly.Events.Abstract');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
+const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 
@@ -22,6 +26,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /**
  * Abstract class for an event.
  * @constructor
+ * @alias Blockly.Events.Abstract
  */
 const Abstract = function() {
   /**
@@ -42,13 +47,13 @@ const Abstract = function() {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Events.getGroup();
+  this.group = eventUtils.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = Events.getRecordUndo();
+  this.recordUndo = eventUtils.getRecordUndo();
 };
 
 /**

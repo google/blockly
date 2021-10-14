@@ -11,17 +11,21 @@
 
 'use strict';
 
+/**
+ * The interface for an AST node location SVG.
+ * @namespace Blockly.IASTNodeLocationSvg
+ */
 goog.module('Blockly.IASTNodeLocationSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 
 
 /**
  * An AST node location SVG interface.
  * @interface
  * @extends {IASTNodeLocation}
+ * @alias Blockly.IASTNodeLocationSvg
  */
 const IASTNodeLocationSvg = function() {};
 

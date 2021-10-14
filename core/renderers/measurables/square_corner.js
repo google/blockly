@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing a square corner in a row of a rendered
+ * block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.SquareCorner');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -29,6 +33,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.SquareCorner
  */
 const SquareCorner = function(constants, opt_position) {
   SquareCorner.superClass_.constructor.call(this, constants);

@@ -16,8 +16,16 @@
 
 'use strict';
 
+/**
+ * A class that manages a surface for dragging blocks.  When a
+ * block drag is started, we move the block (and children) to a separate DOM
+ * element that we move around using translate3d. At the end of the drag, the
+ * blocks are put back in into the SVG they came from. This helps
+ * performance by avoiding repainting the entire SVG on every mouse move
+ * while dragging blocks.
+ * @class
+ */
 goog.module('Blockly.BlockDragSurfaceSvg');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Svg = goog.require('Blockly.utils.Svg');
@@ -30,6 +38,7 @@ const utils = goog.require('Blockly.utils');
  * SVG that contains only the currently moving block, or nothing.
  * @param {!Element} container Containing element.
  * @constructor
+ * @alias Blockly.BlockDragSurfaceSvg
  */
 const BlockDragSurfaceSvg = function(container) {
   /**
@@ -257,4 +266,4 @@ BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
   this.surfaceXY_ = null;
 };
 
-exports = BlockDragSurfaceSvg;
+exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;

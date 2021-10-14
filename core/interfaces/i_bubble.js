@@ -11,17 +11,20 @@
 
 'use strict';
 
+/**
+ * The interface for a bubble.
+ * @namespace Blockly.IBubble
+ */
 goog.module('Blockly.IBubble');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IContextMenu = goog.requireType('Blockly.IContextMenu');
+const IContextMenu = goog.require('Blockly.IContextMenu');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const IDraggable = goog.require('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 
 
 /**
@@ -29,6 +32,7 @@ const IDraggable = goog.requireType('Blockly.IDraggable');
  * @interface
  * @extends {IDraggable}
  * @extends {IContextMenu}
+ * @alias Blockly.IBubble
  */
 const IBubble = function() {};
 

@@ -13,11 +13,12 @@
 'use strict';
 
 /**
- * @name Blockly.utils.string
- * @namespace
+ * Utility methods for string manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.string
  */
 goog.module('Blockly.utils.string');
-goog.module.declareLegacyNamespace();
 
 
 /**
@@ -26,6 +27,7 @@ goog.module.declareLegacyNamespace();
  * @param {string} str The string to check.
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
+ * @alias Blockly.utils.string.startsWith
  */
 const startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) == 0;
@@ -36,6 +38,7 @@ exports.startsWith = startsWith;
  * Given an array of strings, return the length of the shortest one.
  * @param {!Array<string>} array Array of strings.
  * @return {number} Length of shortest string.
+ * @alias Blockly.utils.string.shortestStringLength
  */
 const shortestStringLength = function(array) {
   if (!array.length) {
@@ -55,6 +58,7 @@ exports.shortestStringLength = shortestStringLength;
  * @param {!Array<string>} array Array of strings.
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
+ * @alias Blockly.utils.string.commonWordPrefix
  */
 const commonWordPrefix = function(array, opt_shortest) {
   if (!array.length) {
@@ -92,6 +96,7 @@ exports.commonWordPrefix = commonWordPrefix;
  * @param {!Array<string>} array Array of strings.
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
+ * @alias Blockly.utils.string.commonWordSuffix
  */
 const commonWordSuffix = function(array, opt_shortest) {
   if (!array.length) {
@@ -128,6 +133,7 @@ exports.commonWordSuffix = commonWordSuffix;
  * @param {string} text Text to wrap.
  * @param {number} limit Width to wrap each line.
  * @return {string} Wrapped text.
+ * @alias Blockly.utils.string.wrap
  */
 const wrap = function(text, limit) {
   const lines = text.split('\n');

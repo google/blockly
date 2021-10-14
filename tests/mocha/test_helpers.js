@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.helpers');
+
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {Blocks} = goog.require('Blockly.blocks');
+
+
 /**
  * Check if a variable with the given values exists.
  * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
@@ -19,10 +26,11 @@ function assertVariableValues(container, name, type, id) {
   chai.assert.equal(variable.type, type);
   chai.assert.equal(variable.getId(), id);
 }
+exports.assertVariableValues = assertVariableValues;
 
 /**
  * Asserts that the given function logs the provided warning messages.
- * @param {function} innerFunc The function to call.
+ * @param {function()} innerFunc The function to call.
  * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
  *    messages (in the expected order).
  */
@@ -36,14 +44,16 @@ function assertWarnings(innerFunc, messages) {
     chai.assert.match(warnings[i], message);
   });
 }
+exports.assertWarnings = assertWarnings;
 
 /**
  * Asserts that the given function logs no warning messages.
- * @param {function} innerFunc The function to call.
+ * @param {function()} innerFunc The function to call.
  */
 function assertNoWarnings(innerFunc) {
   assertWarnings(innerFunc, []);
 }
+exports.assertNoWarnings = assertNoWarnings;
 
 /**
  * Stubs Blockly.utils.deprecation.warn call.
@@ -52,6 +62,7 @@ function assertNoWarnings(innerFunc) {
 function createDeprecationWarningStub() {
   return sinon.stub(Blockly.utils.deprecation, 'warn');
 }
+exports.createDeprecationWarningStub = createDeprecationWarningStub;
 
 /**
  * Asserts whether the given deprecation warning stub or call was called with
@@ -63,6 +74,7 @@ function createDeprecationWarningStub() {
 function assertDeprecationWarningCall(spyOrSpyCall, functionName) {
   sinon.assert.calledWith(spyOrSpyCall, functionName);
 }
+exports.assertDeprecationWarningCall = assertDeprecationWarningCall;
 
 /**
  * Asserts that there was a single deprecation warning call with the given
@@ -75,6 +87,7 @@ function assertSingleDeprecationWarningCall(spy, functionName) {
   sinon.assert.calledOnce(spy);
   assertDeprecationWarningCall(spy.getCall(0), functionName);
 }
+exports.assertSingleDeprecationWarningCall = assertSingleDeprecationWarningCall;
 
 /**
  * Safely disposes of Blockly workspace, logging any errors.
@@ -92,6 +105,7 @@ function workspaceTeardown(workspace) {
     console.error(testRef.fullTitle() + '\n', e);
   }
 }
+exports.workspaceTeardown = workspaceTeardown;
 
 /**
  * Creates stub for Blockly.Events.fire that advances the clock forward after
@@ -101,7 +115,7 @@ function workspaceTeardown(workspace) {
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(Blockly.Events, 'fire');
+  var stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -121,6 +135,7 @@ function createEventsFireStubFireImmediately_(clock) {
 function addMessageToCleanup(sharedCleanupObj, message) {
   sharedCleanupObj.messagesCleanup_.push(message);
 }
+exports.addMessageToCleanup = addMessageToCleanup;
 
 /**
  * Adds block type to shared cleanup object so that it is cleaned from
@@ -132,6 +147,7 @@ function addMessageToCleanup(sharedCleanupObj, message) {
 function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
   sharedCleanupObj.blockTypesCleanup_.push(blockType);
 }
+exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
 
 /**
  * Wraps Blockly.defineBlocksWithJsonArray using stub in order to keep track of
@@ -186,12 +202,12 @@ function sharedTestSetup(options = {}) {
   this.sharedCleanup = {
     blockTypesCleanup_: [],
     messagesCleanup_: []
-
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
   wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
 }
+exports.sharedTestSetup = sharedTestSetup;
 
 /**
  * Shared cleanup method that clears up pending setTimeout calls, disposes of
@@ -201,8 +217,7 @@ function sharedTestSetup(options = {}) {
 function sharedTestTeardown() {
   var testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
-    console.error('"' + testRef.fullTitle() +
-        '" did not call sharedTestSetup');
+    console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
   }
 
   try {
@@ -216,16 +231,19 @@ function sharedTestTeardown() {
     console.error(testRef.fullTitle() + '\n', e);
   } finally {
     // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    if (Blockly.Events.FIRE_QUEUE_.length) {
+    eventUtils.setGroup(false);
+    while (!eventUtils.isEnabled()) {
+      eventUtils.enable();
+    }
+    eventUtils.setRecordUndo(true);
+    if (eventUtils.TEST_ONLY.FIRE_QUEUE.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      Blockly.Events.FIRE_QUEUE_.length = 0;
-      console.warn(testRef.fullTitle() +
-          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
-          'leakage from an earlier test');
+      eventUtils.TEST_ONLY.FIRE_QUEUE.length = 0;
+      console.warn('"' + testRef.fullTitle() +
+          '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
+          'indicate leakage from an earlier test');
     }
 
     // Restore all stubbed methods.
@@ -234,7 +252,7 @@ function sharedTestTeardown() {
 
     var blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
-      delete Blockly.Blocks[blockTypes[i]];
+      delete Blocks[blockTypes[i]];
     }
     var messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {
@@ -244,6 +262,7 @@ function sharedTestTeardown() {
     Blockly.WidgetDiv.testOnly_setDiv(null);
   }
 }
+exports.sharedTestTeardown = sharedTestTeardown;
 
 /**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
@@ -265,6 +284,7 @@ function createGenUidStubWithReturns(returnIds) {
   }
   return stub;
 }
+exports.createGenUidStubWithReturns = createGenUidStubWithReturns;
 
 /**
  * Creates spy for workspace fireChangeListener
@@ -275,6 +295,7 @@ function createGenUidStubWithReturns(returnIds) {
 function createFireChangeListenerSpy(workspace) {
   return sinon.spy(workspace, 'fireChangeListener');
 }
+exports.createFireChangeListenerSpy = createFireChangeListenerSpy;
 
 /**
  * Asserts whether the given xml property has the expected property.
@@ -365,6 +386,7 @@ function assertEventEquals(event, expectedType,
     chai.assert.isFalse(event.isUiEvent);
   }
 }
+exports.assertEventEquals = assertEventEquals;
 
 /**
  * Asserts that an event with the given values was fired.
@@ -387,6 +409,7 @@ function assertEventFired(spy, instanceType, expectedProperties,
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
 }
+exports.assertEventFired = assertEventFired;
 
 /**
  * Asserts that an event with the given values was not fired.
@@ -411,12 +434,13 @@ function assertEventNotFired(spy, instanceType, expectedProperties,
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.neverCalledWith(spy, expectedEvent);
 }
+exports.assertEventNotFired = assertEventNotFired;
 
 /**
  * Filters out xml properties from given object based on key.
  * @param {Object<string, *>} properties The properties to filter.
- * @return {[Object<string, *>, Object<string, *>]} A list containing split non
- *    xml properties and xml properties.
+ * @return {Array<Object<string, *>>} A list containing split non
+ *    xml properties and xml properties. [Object<string, *>, Object<string, *>]
  * @private
  */
 function splitByXmlProperties_(properties) {
@@ -457,19 +481,21 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   var eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);
 }
+exports.assertNthCallEventArgEquals = assertNthCallEventArgEquals;
 
-function defineStackBlock() {
+function defineStackBlock(name = 'stack_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "stack_block",
+    "type": name,
     "message0": "",
     "previousStatement": null,
     "nextStatement": null
   }]);
 }
+exports.defineStackBlock = defineStackBlock;
 
-function defineRowBlock() {
+function defineRowBlock(name = 'row_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "row_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
@@ -480,10 +506,11 @@ function defineRowBlock() {
     "output": null
   }]);
 }
+exports.defineRowBlock = defineRowBlock;
 
-function defineStatementBlock() {
+function defineStatementBlock(name = 'statement_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "statement_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
@@ -498,9 +525,11 @@ function defineStatementBlock() {
     "helpUrl": ""
   }]);
 }
-function defineBasicBlockWithField() {
+exports.defineStatementBlock = defineStatementBlock;
+
+function defineBasicBlockWithField(name = 'test_field_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "test_field_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
@@ -511,6 +540,101 @@ function defineBasicBlockWithField() {
     "output": null
   }]);
 }
+exports.defineBasicBlockWithField = defineBasicBlockWithField;
+
+function defineMutatorBlocks() {
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': 'xml_block',
+      'mutator': 'xml_mutator'
+    },
+    {
+      'type': 'jso_block',
+      'mutator': 'jso_mutator'
+    },
+    {
+      'type': 'checkbox_block',
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'field_checkbox',
+          'name': 'CHECK'
+        }
+      ]
+    }
+  ]);
+
+  const xmlMutator = {
+    hasInput: false,
+
+    mutationToDom: function() {
+      var mutation = Blockly.utils.xml.createElement('mutation');
+      mutation.setAttribute('hasInput', this.hasInput);
+      return mutation;
+    },
+
+    domToMutation: function(mutation) {
+      this.hasInput = mutation.getAttribute('hasInput') == 'true';
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    }
+  };
+  Blockly.Extensions.registerMutator('xml_mutator', xmlMutator);
+
+  const jsoMutator = {
+    hasInput: false,
+
+    saveExtraState: function() {
+      return {hasInput: this.hasInput};
+    },
+
+    loadExtraState: function(state) {
+      this.hasInput = state.hasInput || false;
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    }
+  };
+  Blockly.Extensions.registerMutator('jso_mutator', jsoMutator);
+}
+exports.defineMutatorBlocks = defineMutatorBlocks;
 
 function createTestBlock() {
   return {
@@ -526,6 +650,7 @@ function createTestBlock() {
     'updateVarName': Blockly.Block.prototype.updateVarName,
   };
 }
+exports.createTestBlock = createTestBlock;
 
 function createRenderedBlock(workspaceSvg, type) {
   var block = workspaceSvg.newBlock(type);
@@ -533,6 +658,7 @@ function createRenderedBlock(workspaceSvg, type) {
   block.render();
   return block;
 }
+exports.createRenderedBlock = createRenderedBlock;
 
 /**
  * Triggers pointer event on target.
@@ -557,43 +683,27 @@ function dispatchPointerEvent(target, type, properties) {
   const event = new PointerEvent(type, eventInitDict);
   target.dispatchEvent(event);
 }
+exports.dispatchPointerEvent = dispatchPointerEvent;
 
 /**
  * Creates a key down event used for testing.
  * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes enum.
- * @param {string} type The type of the target. This only matters for the
- *     Blockly.utils.isTargetInput method.
- * @param {Array<number>} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
- * @return {{keyCode: *, getModifierState: (function(): boolean),
- *     preventDefault: preventDefault, target: {type: *}}} The mocked keydown event.
+ * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
+ * @return {!KeyboardEvent} The mocked keydown event.
  */
-function createKeyDownEvent(keyCode, type, modifiers) {
+function createKeyDownEvent(keyCode, modifiers) {
   var event = {
     keyCode: keyCode,
-    target: {type: type},
-    getModifierState: function(name) {
-      if (name == 'Shift' && this.shiftKey) {
-        return true;
-      } else if (name == 'Control' && this.ctrlKey) {
-        return true;
-      } else if (name == 'Meta' && this.metaKey) {
-        return true;
-      } else if (name == 'Alt' && this.altKey) {
-        return true;
-      }
-      return false;
-    },
-    preventDefault: function() {}
   };
   if (modifiers && modifiers.length > 0) {
-    event.altKey = modifiers.indexOf(Blockly.utils.KeyCodes.ALT) > -1;
-    event.ctrlKey = modifiers.indexOf(Blockly.utils.KeyCodes.CTRL) > -1;
-    event.metaKey = modifiers.indexOf(Blockly.utils.KeyCodes.META) > -1;
-    event.shiftKey = modifiers.indexOf(Blockly.utils.KeyCodes.SHIFT) > -1;
+    event.altKey = modifiers.indexOf(KeyCodes.ALT) > -1;
+    event.ctrlKey = modifiers.indexOf(KeyCodes.CTRL) > -1;
+    event.metaKey = modifiers.indexOf(KeyCodes.META) > -1;
+    event.shiftKey = modifiers.indexOf(KeyCodes.SHIFT) > -1;
   }
-  return event;
+  return new KeyboardEvent('keydown', event);
 }
-
+exports.createKeyDownEvent = createKeyDownEvent;
 
 /**
  * Simulates mouse click by triggering relevant mouse events.
@@ -606,3 +716,4 @@ function simulateClick(target, properties) {
   dispatchPointerEvent(target, 'pointerup', properties);
   dispatchPointerEvent(target, 'click', properties);
 }
+exports.simulateClick = simulateClick;

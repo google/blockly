@@ -11,13 +11,16 @@
 
 'use strict';
 
+/**
+ * The interface for a toolbox.
+ * @namespace Blockly.IToolbox
+ */
 goog.module('Blockly.IToolbox');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.requireType('Blockly.IRegistrable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +33,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * Interface for a toolbox.
  * @extends {IRegistrable}
  * @interface
+ * @alias Blockly.IToolbox
  */
 const IToolbox = function() {};
 

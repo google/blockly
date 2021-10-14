@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Base class representing the space a connection takes up during
+ * rendering.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Connection');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -32,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Connection
  */
 const Connection = function(constants, connectionModel) {
   Connection.superClass_.constructor.call(this, constants);

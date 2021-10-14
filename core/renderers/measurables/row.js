@@ -9,8 +9,11 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a single row on a rendered block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Row');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -30,6 +33,7 @@ const Types = goog.require('Blockly.blockRendering.Types');
  *   constants provider.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Row
  */
 const Row = function(constants) {
   /**

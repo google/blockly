@@ -10,25 +10,30 @@
  */
 'use strict';
 
+/**
+ * Registers default context menu items.
+ * @namespace Blockly.ContextMenuItems
+ */
 goog.module('Blockly.ContextMenuItems');
-goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
-const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
 const dialog = goog.require('Blockly.dialog');
+const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
-/** Option to undo previous action. */
+/**
+ * Option to undo previous action.
+ * @alias Blockly.ContextMenuItems.registerUndo
+ */
 const registerUndo = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const undoOption = {
@@ -54,7 +59,10 @@ const registerUndo = function() {
 };
 exports.registerUndo = registerUndo;
 
-/** Option to redo previous action. */
+/**
+ * Option to redo previous action.
+ * @alias Blockly.ContextMenuItems.registerRedo
+ */
 const registerRedo = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const redoOption = {
@@ -80,7 +88,10 @@ const registerRedo = function() {
 };
 exports.registerRedo = registerRedo;
 
-/** Option to clean up blocks. */
+/**
+ * Option to clean up blocks.
+ * @alias Blockly.ContextMenuItems.registerCleanup
+ */
 const registerCleanup = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const cleanOption = {
@@ -128,7 +139,10 @@ const toggleOption_ = function(shouldCollapse, topBlocks) {
   }
 };
 
-/** Option to collapse all blocks. */
+/**
+ * Option to collapse all blocks.
+ * @alias Blockly.ContextMenuItems.registerCollapse
+ */
 const registerCollapse = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const collapseOption = {
@@ -164,7 +178,10 @@ const registerCollapse = function() {
 };
 exports.registerCollapse = registerCollapse;
 
-/** Option to expand all blocks. */
+/**
+ * Option to expand all blocks.
+ * @alias Blockly.ContextMenuItems.registerExpand
+ */
 const registerExpand = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const expandOption = {
@@ -244,7 +261,7 @@ const getDeletableBlocks_ = function(workspace) {
  */
 const deleteNext_ = function(deleteList, eventGroup) {
   const DELAY = 10;
-  Events.setGroup(eventGroup);
+  eventUtils.setGroup(eventGroup);
   const block = deleteList.shift();
   if (block) {
     if (block.workspace) {
@@ -254,10 +271,13 @@ const deleteNext_ = function(deleteList, eventGroup) {
       deleteNext_(deleteList, eventGroup);
     }
   }
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
-/** Option to delete all blocks. */
+/**
+ * Option to delete all blocks.
+ * @alias Blockly.ContextMenuItems.registerDeleteAll
+ */
 const registerDeleteAll = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const deleteOption = {
@@ -323,7 +343,10 @@ const registerWorkspaceOptions_ = function() {
   registerDeleteAll();
 };
 
-/** Option to duplicate a block. */
+/**
+ * Option to duplicate a block.
+ * @alias Blockly.ContextMenuItems.registerDuplicate
+ */
 const registerDuplicate = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const duplicateOption = {
@@ -355,7 +378,10 @@ const registerDuplicate = function() {
 };
 exports.registerDuplicate = registerDuplicate;
 
-/** Option to add or remove block-level comment. */
+/**
+ * Option to add or remove block-level comment.
+ * @alias Blockly.ContextMenuItems.registerComment
+ */
 const registerComment = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const commentOption = {
@@ -396,7 +422,10 @@ const registerComment = function() {
 };
 exports.registerComment = registerComment;
 
-/** Option to inline variables. */
+/**
+ * Option to inline variables.
+ * @alias Blockly.ContextMenuItems.registerInline
+ */
 const registerInline = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const inlineOption = {
@@ -432,7 +461,10 @@ const registerInline = function() {
 };
 exports.registerInline = registerInline;
 
-/** Option to collapse or expand a block. */
+/**
+ * Option to collapse or expand a block.
+ * @alias Blockly.ContextMenuItems.registerCollapseExpandBlock
+ */
 const registerCollapseExpandBlock = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const collapseExpandOption = {
@@ -462,7 +494,10 @@ const registerCollapseExpandBlock = function() {
 };
 exports.registerCollapseExpandBlock = registerCollapseExpandBlock;
 
-/** Option to disable or enable a block. */
+/**
+ * Option to disable or enable a block.
+ * @alias Blockly.ContextMenuItems.registerDisable
+ */
 const registerDisable = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const disableOption = {
@@ -486,13 +521,13 @@ const registerDisable = function() {
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
       const block = scope.block;
-      const group = Events.getGroup();
+      const group = eventUtils.getGroup();
       if (!group) {
-        Events.setGroup(true);
+        eventUtils.setGroup(true);
       }
       block.setEnabled(!block.isEnabled());
       if (!group) {
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
@@ -503,7 +538,10 @@ const registerDisable = function() {
 };
 exports.registerDisable = registerDisable;
 
-/** Option to delete a block. */
+/**
+ * Option to delete a block.
+ * @alias Blockly.ContextMenuItems.registerDelete
+ */
 const registerDelete = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const deleteOption = {
@@ -530,11 +568,9 @@ const registerDelete = function() {
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
-      Events.setGroup(true);
       if (scope.block) {
-        Blockly.deleteBlock(scope.block);
+        scope.block.checkAndDelete();
       }
-      Events.setGroup(false);
     },
     scopeType: ContextMenuRegistry.ScopeType.BLOCK,
     id: 'blockDelete',
@@ -544,7 +580,10 @@ const registerDelete = function() {
 };
 exports.registerDelete = registerDelete;
 
-/** Option to open help for a block. */
+/**
+ * Option to open help for a block.
+ * @alias Blockly.ContextMenuItems.registerHelp
+ */
 const registerHelp = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const helpOption = {
@@ -591,6 +630,7 @@ const registerBlockOptions_ = function() {
  * Registers all default context menu items. This should be called once per
  * instance of ContextMenuRegistry.
  * @package
+ * @alias Blockly.ContextMenuItems.registerDefaultOptions
  */
 const registerDefaultOptions = function() {
   registerWorkspaceOptions_();

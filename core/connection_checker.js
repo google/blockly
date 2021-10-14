@@ -11,24 +11,29 @@
  */
 'use strict';
 
+/**
+ * An object that encapsulates logic for checking whether a
+ * potential connection is safe and valid.
+ * @class
+ */
 goog.module('Blockly.ConnectionChecker');
-goog.module.declareLegacyNamespace();
 
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
+const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
  * Class for connection type checking logic.
  * @implements {IConnectionChecker}
  * @constructor
+ * @alias Blockly.ConnectionChecker
  */
 const ConnectionChecker = function() {};
 
@@ -202,9 +207,9 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   switch (b.type) {
-    case connectionTypes.PREVIOUS_STATEMENT:
+    case ConnectionType.PREVIOUS_STATEMENT:
       return this.canConnectToPrevious_(a, b);
-    case connectionTypes.OUTPUT_VALUE: {
+    case ConnectionType.OUTPUT_VALUE: {
       // Don't offer to connect an already connected left (male) value plug to
       // an available right (female) value plug.
       if ((b.isConnected() && !b.targetBlock().isInsertionMarker()) ||
@@ -213,7 +218,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case connectionTypes.INPUT_VALUE: {
+    case ConnectionType.INPUT_VALUE: {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an immovable block.
@@ -223,7 +228,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
       break;
     }
-    case connectionTypes.NEXT_STATEMENT: {
+    case ConnectionType.NEXT_STATEMENT: {
       // Don't let a block with no next connection bump other blocks out of the
       // stack.  But covering up a shadow block or stack of shadow blocks is
       // fine.  Similarly, replacing a terminal statement with another terminal

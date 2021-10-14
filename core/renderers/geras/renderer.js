@@ -10,16 +10,17 @@
  */
 'use strict';
 
+/**
+ * Geras renderer.
+ * @class
+ */
 goog.module('Blockly.geras.Renderer');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const BaseConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ConstantProvider = goog.require('Blockly.geras.ConstantProvider');
 const Drawer = goog.require('Blockly.geras.Drawer');
 const HighlightConstantProvider = goog.require('Blockly.geras.HighlightConstantProvider');
@@ -29,6 +30,8 @@ const RenderInfo = goog.require('Blockly.geras.RenderInfo');
 const Theme = goog.requireType('Blockly.Theme');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -37,6 +40,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.geras.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);

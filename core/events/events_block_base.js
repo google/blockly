@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Base class for all types of block events.
+ * @class
+ */
 goog.module('Blockly.Events.BlockBase');
-goog.module.declareLegacyNamespace();
 
 const Abstract = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -25,6 +28,7 @@ const object = goog.require('Blockly.utils.object');
  *     Undefined for a blank event.
  * @extends {Abstract}
  * @constructor
+ * @alias Blockly.Events.BlockBase
  */
 const BlockBase = function(opt_block) {
   BlockBase.superClass_.constructor.call(this);

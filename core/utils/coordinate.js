@@ -13,11 +13,12 @@
 'use strict';
 
 /**
- * @name Blockly.utils.Coordinate
- * @namespace
+ * Utility methods for coordinate manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @class
  */
 goog.module('Blockly.utils.Coordinate');
-goog.module.declareLegacyNamespace();
 
 /**
  * Class for representing coordinates and positions.
@@ -25,6 +26,7 @@ goog.module.declareLegacyNamespace();
  * @param {number} y Top.
  * @struct
  * @constructor
+ * @alias Blockly.utils.Coordinate
  */
 const Coordinate = function(x, y) {
   /**

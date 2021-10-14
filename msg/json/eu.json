@@ -228,5 +228,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "sarreraren izena:",
 	"PROCEDURES_CREATE_DO": "'%1' sortu",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Balioa egiazkoa bada, orduan itzuli bigarren baliora.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Esan zerbait..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Esan zerbait...",
+	"DIALOG_OK": "Ados",
+	"DIALOG_CANCEL": "Utzi"
 }

@@ -9,11 +9,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Object representing a top row on a rendered block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.TopRow');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -21,6 +22,8 @@ const PreviousConnection = goog.requireType('Blockly.blockRendering.PreviousConn
 const Row = goog.require('Blockly.blockRendering.Row');
 const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -35,6 +38,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Row}
+ * @alias Blockly.blockRendering.TopRow
  */
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);

@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Checkbox field.  Checked or not checked.
+ * @class
+ */
 goog.module('Blockly.FieldCheckbox');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
@@ -35,6 +38,7 @@ goog.require('Blockly.Events.BlockChange');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldCheckbox
  */
 const FieldCheckbox = function(opt_value, opt_validator, opt_config) {
   /**
@@ -100,6 +104,20 @@ FieldCheckbox.prototype.configure_ = function(config) {
   if (config['checkCharacter']) {
     this.checkChar_ = config['checkCharacter'];
   }
+};
+
+/**
+ * Saves this field's value.
+ * @return {*} The boolean value held by this field.
+ * @override
+ * @package
+ */
+FieldCheckbox.prototype.saveState = function() {
+  const legacyState = this.saveLegacyState(FieldCheckbox);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValueBoolean();
 };
 
 /**

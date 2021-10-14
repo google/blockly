@@ -191,5 +191,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "ইনপুটের নাম:",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "ক্রিয়াতে একটি ইনপুট যোগ করুন।",
 	"PROCEDURES_HIGHLIGHT_DEF": "ক্রিয়ার সংজ্ঞা উজ্জল করুন",
-	"PROCEDURES_IFRETURN_TOOLTIP": "যদি মান সত্য হয় তাহলে দ্বিতীয় মান পাঠাবে।"
+	"PROCEDURES_IFRETURN_TOOLTIP": "যদি মান সত্য হয় তাহলে দ্বিতীয় মান পাঠাবে।",
+	"DIALOG_OK": "ঠিক আছে",
+	"DIALOG_CANCEL": "বাতিল"
 }

@@ -10,14 +10,17 @@
  */
 'use strict';
 
+/**
+ * A toolbox category used to organize blocks in the toolbox.
+ * @class
+ */
 goog.module('Blockly.ToolboxCategory');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 const ToolboxItem = goog.require('Blockly.ToolboxItem');
@@ -40,6 +43,7 @@ const utils = goog.require('Blockly.utils');
  * @constructor
  * @extends {ToolboxItem}
  * @implements {ISelectableToolboxItem}
+ * @alias Blockly.ToolboxCategory
  */
 const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
   ToolboxCategory.superClass_.constructor.call(
@@ -206,7 +210,7 @@ ToolboxCategory.prototype.parseContents_ = function(categoryDef) {
     for (let i = 0; i < contents.length; i++) {
       const itemDef = contents[i];
       const flyoutItem =
-          /** @type {Blockly.utils.toolbox.FlyoutItemInfo} */ (itemDef);
+          /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
       this.flyoutItems_.push(flyoutItem);
     }
   }

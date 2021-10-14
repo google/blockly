@@ -12,15 +12,16 @@
 
 /**
  * A mapping of block type names to block prototype objects.
- * @name Blockly.Blocks
+ * @namespace Blockly.blocks
  */
-goog.module('Blockly.Blocks');
-goog.module.declareLegacyNamespace();
+goog.module('Blockly.blocks');
+
 
 /**
  * A mapping of block type names to block prototype objects.
  * @type {!Object<string,!Object>}
+ * @alias Blockly.blocks.Blocks
  */
 const Blocks = Object.create(null);
 
-exports = Blocks;
+exports.Blocks = Blocks;

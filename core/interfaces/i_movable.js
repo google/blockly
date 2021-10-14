@@ -11,13 +11,17 @@
 
 'use strict';
 
+/**
+ * The interface for an object that is movable.
+ * @namespace Blockly.IMovable
+ */
 goog.module('Blockly.IMovable');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * The interface for an object that is movable.
  * @interface
+ * @alias Blockly.IMovable
  */
 const IMovable = function() {};
 

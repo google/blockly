@@ -14,8 +14,14 @@
 
 'use strict';
 
+/**
+ * An SVG that floats on top of the workspace.
+ * Blocks are moved into this SVG during a drag, improving performance.
+ * The entire SVG is translated using CSS translation instead of SVG so the
+ * blocks are never repainted during drag improving performance.
+ * @class
+ */
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
@@ -30,6 +36,7 @@ const utils = goog.require('Blockly.utils');
  * blocks are never repainted during drag improving performance.
  * @param {!Element} container Containing element.
  * @constructor
+ * @alias Blockly.WorkspaceDragSurfaceSvg
  */
 const WorkspaceDragSurfaceSvg = function(container) {
   this.container_ = container;

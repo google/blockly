@@ -10,15 +10,18 @@
  */
 'use strict';
 
+/**
+ * An item in the toolbox.
+ * @class
+ */
 goog.module('Blockly.ToolboxItem');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -35,6 +38,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  *     or null if the category does not have a parent.
  * @constructor
  * @implements {IToolboxItem}
+ * @alias Blockly.ToolboxItem
  */
 const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
   /**

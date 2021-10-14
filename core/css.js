@@ -11,11 +11,10 @@
 'use strict';
 
 /**
- * @name Blockly.Css
- * @namespace
+ * Inject Blockly's CSS synchronously.
+ * @namespace Blockly.Css
  */
 goog.module('Blockly.Css');
-goog.module.declareLegacyNamespace();
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 
@@ -32,6 +31,7 @@ let injected = false;
  * components such as fields and the toolbox to store separate CSS.
  * @param {string|!Array<string>} cssContent Multiline CSS string or an array of
  *    single lines of CSS.
+ * @alias Blockly.Css.register
  */
 const register = function(cssContent) {
   if (injected) {
@@ -59,6 +59,7 @@ exports.register = register;
  * @param {boolean} hasCss If false, don't inject CSS
  *     (providing CSS becomes the document's responsibility).
  * @param {string} pathToMedia Path from page to the Blockly media directory.
+ * @alias Blockly.Css.inject
  */
 const inject = function(hasCss, pathToMedia) {
   // Only inject the CSS once.
@@ -86,6 +87,7 @@ exports.inject = inject;
 
 /**
  * The CSS content for Blockly.
+ * @alias Blockly.Css.content
  */
 let content = (`
   .blocklySvg {

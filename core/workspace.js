@@ -10,20 +10,20 @@
  */
 'use strict';
 
+/**
+ * Object representing a workspace.
+ * @class
+ */
 goog.module('Blockly.Workspace');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
 const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
 const Options = goog.require('Blockly.Options');
@@ -33,11 +33,14 @@ const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
+const eventUtils = goog.require('Blockly.Events.utils');
 const math = goog.require('Blockly.utils.math');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
 
@@ -54,6 +57,7 @@ const WorkspaceDB_ = Object.create(null);
  * @param {!Options=} opt_options Dictionary of options.
  * @constructor
  * @implements {IASTNodeLocation}
+ * @alias Blockly.Workspace
  */
 const Workspace = function(opt_options) {
   /** @type {string} */
@@ -257,8 +261,7 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  this.typedBlocksDB_[block.type].splice(
-      this.typedBlocksDB_[block.type].indexOf(block), 1);
+  utils.arrayRemove(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -283,7 +286,10 @@ Workspace.prototype.getBlocksByType = function(type, ordered) {
     }
     blocks.sort(this.sortObjects_);
   }
-  return blocks;
+
+  return blocks.filter(function(block) {
+    return !block.isInsertionMarker();
+  });
 };
 
 /**
@@ -378,9 +384,9 @@ Workspace.prototype.getAllBlocks = function(ordered) {
 Workspace.prototype.clear = function() {
   this.isClearing = true;
   try {
-    const existingGroup = Events.getGroup();
+    const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
-      Events.setGroup(true);
+      eventUtils.setGroup(true);
     }
     while (this.topBlocks_.length) {
       this.topBlocks_[0].dispose(false);
@@ -389,7 +395,7 @@ Workspace.prototype.clear = function() {
       this.topComments_[this.topComments_.length - 1].dispose();
     }
     if (!existingGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
     this.variableMap_.clear();
     if (this.potentialVariableMap_) {
@@ -522,7 +528,7 @@ Workspace.prototype.getWidth = function() {
  * @return {!Block} The created block.
  */
 Workspace.prototype.newBlock = function(prototypeName, opt_id) {
-  const Block = goog.module.get('Blockly.Block');
+  const {Block} = goog.module.get('Blockly.Block');
   return new Block(this, prototypeName, opt_id);
 };
 
@@ -633,15 +639,15 @@ Workspace.prototype.undo = function(redo) {
     const event = events[i];
     outputStack.push(event);
   }
-  events = Events.filter(events, redo);
-  Events.setRecordUndo(false);
+  events = eventUtils.filter(events, redo);
+  eventUtils.setRecordUndo(false);
   try {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
       event.run(redo);
     }
   } finally {
-    Events.setRecordUndo(true);
+    eventUtils.setRecordUndo(true);
   }
 };
 
@@ -652,7 +658,7 @@ Workspace.prototype.clearUndo = function() {
   this.undoStack_.length = 0;
   this.redoStack_.length = 0;
   // Stop any events already in the firing queue from being undoable.
-  Events.clearPendingUndo();
+  eventUtils.clearPendingUndo();
 };
 
 /**

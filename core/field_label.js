@@ -11,8 +11,12 @@
  */
 'use strict';
 
+/**
+ * Non-editable, non-serializable text field.  Used for titles,
+ *    labels, etc.
+ * @class
+ */
 goog.module('Blockly.FieldLabel');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
@@ -32,6 +36,7 @@ const utils = goog.require('Blockly.utils');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldLabel
  */
 const FieldLabel = function(opt_value, opt_class, opt_config) {
   /**

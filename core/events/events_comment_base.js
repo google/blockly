@@ -10,14 +10,21 @@
  */
 'use strict';
 
+/**
+ * Base class for comment events.
+ * @class
+ */
 goog.module('Blockly.Events.CommentBase');
-goog.module.declareLegacyNamespace();
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
-const Events = goog.require('Blockly.Events');
+/* eslint-disable-next-line no-unused-vars */
+const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
+/* eslint-disable-next-line no-unused-vars */
+const CommentDelete = goog.requireType('Blockly.Events.CommentDelete');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utilsXml = goog.require('Blockly.utils.xml');
 
@@ -28,6 +35,7 @@ const utilsXml = goog.require('Blockly.utils.xml');
  *     corresponds to.  Undefined for a blank event.
  * @extends {AbstractEvents}
  * @constructor
+ * @alias Blockly.Events.CommentBase
  */
 const CommentBase = function(opt_comment) {
   /**
@@ -54,13 +62,13 @@ const CommentBase = function(opt_comment) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Events.getGroup();
+  this.group = eventUtils.getGroup();
 
   /**
    * Sets whether the event should be added to the undo stack.
    * @type {boolean}
    */
-  this.recordUndo = Events.getRecordUndo();
+  this.recordUndo = eventUtils.getRecordUndo();
 };
 object.inherits(CommentBase, AbstractEvents);
 
@@ -87,7 +95,7 @@ CommentBase.prototype.fromJson = function(json) {
 
 /**
  * Helper function for Comment[Create|Delete]
- * @param {!Events.CommentCreate|!Events.CommentDelete} event
+ * @param {!CommentCreate|!CommentDelete} event
  *     The event to run.
  * @param {boolean} create if True then Create, if False then Delete
  */

@@ -317,5 +317,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Izcelt funkcijas definīciju",
 	"PROCEDURES_CREATE_DO": "Izveidot '%1' izsaukumu",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ja pirmā vērtība ir \"patiesa\", tad atgriezt otro vērtību.",
-	"PROCEDURES_IFRETURN_WARNING": "Brīdinājums: Šo bloku var izmantot tikai funkcijas definīcijā."
+	"PROCEDURES_IFRETURN_WARNING": "Brīdinājums: Šo bloku var izmantot tikai funkcijas definīcijā.",
+	"DIALOG_OK": "Labi",
+	"DIALOG_CANCEL": "Atcelt"
 }

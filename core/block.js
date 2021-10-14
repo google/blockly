@@ -10,25 +10,25 @@
  */
 'use strict';
 
+/**
+ * The class representing one block.
+ * @class
+ */
 goog.module('Blockly.Block');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const ASTNode = goog.require('Blockly.ASTNode');
-const Blocks = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const Comment = goog.requireType('Blockly.Comment');
 const Connection = goog.require('Blockly.Connection');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
-const IDeletable = goog.requireType('Blockly.IDeletable');
+const IDeletable = goog.require('Blockly.IDeletable');
 const Input = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Mutator = goog.requireType('Blockly.Mutator');
@@ -38,13 +38,17 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
+const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Blocks} = goog.require('Blockly.blocks');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -67,6 +71,7 @@ goog.require('Blockly.Events.BlockMove');
  * @implements {IASTNodeLocation}
  * @implements {IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
+ * @alias Blockly.Block
  */
 const Block = function(workspace, prototypeName, opt_id) {
   const Generator = goog.module.get('Blockly.Generator');
@@ -221,31 +226,31 @@ const Block = function(workspace, prototypeName, opt_id) {
   // All events fired should be part of the same group.
   // Any events fired during init should not be undoable,
   // so that block creation is atomic.
-  const existingGroup = Events.getGroup();
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
-  const initialUndoFlag = Events.getRecordUndo();
+  const initialUndoFlag = eventUtils.getRecordUndo();
 
   try {
     // Call an initialization function, if it exists.
     if (typeof this.init == 'function') {
-      Events.setRecordUndo(false);
+      eventUtils.setRecordUndo(false);
       this.init();
-      Events.setRecordUndo(initialUndoFlag);
+      eventUtils.setRecordUndo(initialUndoFlag);
     }
 
     // Fire a create event.
-    if (Events.isEnabled()) {
-      Events.fire(new (Events.get(Events.BLOCK_CREATE))(this));
+    if (eventUtils.isEnabled()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
     }
 
   } finally {
     if (!existingGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
     // In case init threw, recordUndo flag should still be reset.
-    Events.setRecordUndo(initialUndoFlag);
+    eventUtils.setRecordUndo(initialUndoFlag);
   }
 
   // Record initial inline state.
@@ -331,17 +336,33 @@ Block.prototype.onchange;
 
 /**
  * An optional serialization method for defining how to serialize the
- * mutation state. This must be coupled with defining `domToMutation`.
+ * mutation state to XML. This must be coupled with defining `domToMutation`.
  * @type {?function(...):!Element}
  */
 Block.prototype.mutationToDom;
 
 /**
  * An optional deserialization method for defining how to deserialize the
- * mutation state. This must be coupled with defining `mutationToDom`.
+ * mutation state from XML. This must be coupled with defining `mutationToDom`.
  * @type {?function(!Element)}
  */
 Block.prototype.domToMutation;
+
+/**
+ * An optional serialization method for defining how to serialize the block's
+ * extra state (eg mutation state) to something JSON compatible. This must be
+ * coupled with defining `loadExtraState`.
+ * @type {?function(): *}
+ */
+Block.prototype.saveExtraState;
+
+/**
+ * An optional serialization method for defining how to deserialize the block's
+ * extra state (eg mutation state) from something JSON compatible. This must be
+ * coupled with defining `saveExtraState`.
+ * @type {?function(*)}
+ */
+Block.prototype.loadExtraState;
 
 /**
  * An optional property for suppressing adding STATEMENT_PREFIX and
@@ -376,10 +397,10 @@ Block.prototype.dispose = function(healStack) {
   }
 
   this.unplug(healStack);
-  if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.BLOCK_DELETE))(this));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
   }
-  Events.disable();
+  eventUtils.disable();
 
   try {
     // This block is now at the top of the workspace.
@@ -396,8 +417,8 @@ Block.prototype.dispose = function(healStack) {
     // well as corruption of the connection database.  Therefore we must
     // methodically step through the blocks and carefully disassemble them.
 
-    if (Blockly.selected == this) {
-      Blockly.selected = null;
+    if (common.getSelected() == this) {
+      common.setSelected(null);
     }
 
     // First, dispose of all my children.
@@ -416,7 +437,7 @@ Block.prototype.dispose = function(healStack) {
       connection.dispose();
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
     this.disposed = true;
   }
 };
@@ -508,7 +529,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == connectionTypes.INPUT_VALUE &&
+    if (thisConnection && thisConnection.type == ConnectionType.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -673,7 +694,7 @@ Block.prototype.getPreviousBlock = function() {
 Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == connectionTypes.NEXT_STATEMENT) {
+        input.connection.type == ConnectionType.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -1057,7 +1078,7 @@ Block.prototype.getField = function(name) {
 
 /**
  * Return all variables referenced by this block.
- * @return {!Array<string>} List of variable names.
+ * @return {!Array<string>} List of variable ids.
  */
 Block.prototype.getVars = function() {
   const vars = [];
@@ -1171,7 +1192,7 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
             'connection.');
       }
       this.previousConnection =
-          this.makeConnection_(connectionTypes.PREVIOUS_STATEMENT);
+          this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -1199,8 +1220,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          this.makeConnection_(connectionTypes.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection_(ConnectionType.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1234,8 +1254,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
             'Remove previous connection prior to adding output ' +
             'connection.');
       }
-      this.outputConnection =
-          this.makeConnection_(connectionTypes.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1255,7 +1274,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
  */
 Block.prototype.setInputsInline = function(newBoolean) {
   if (this.inputsInline != newBoolean) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
   }
@@ -1318,9 +1337,10 @@ Block.prototype.isEnabled = function() {
  */
 Block.prototype.setEnabled = function(enabled) {
   if (this.isEnabled() != enabled) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
-        this, 'disabled', null, this.disabled, !enabled));
+    const oldValue = this.disabled;
     this.disabled = !enabled;
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this, 'disabled', null, oldValue, !enabled));
   }
 };
 
@@ -1355,7 +1375,7 @@ Block.prototype.isCollapsed = function() {
  */
 Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
   }
@@ -1567,8 +1587,10 @@ Block.prototype.jsonInit = function(json) {
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
-    const rawValue = json['enableContextMenu'];
-    this.contextMenu = !!rawValue;
+    this.contextMenu = !!json['enableContextMenu'];
+  }
+  if (json['suppressPrefixSuffix'] !== undefined) {
+    this.suppressPrefixSuffix = !!json['suppressPrefixSuffix'];
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
@@ -2026,7 +2048,7 @@ Block.prototype.setCommentText = function(text) {
   if (this.commentModel.text == text) {
     return;
   }
-  Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
       this, 'comment', null, this.commentModel.text, text));
   this.commentModel.text = text;
   this.comment = text;  // For backwards compatibility.
@@ -2069,10 +2091,10 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = new (Events.get(Events.BLOCK_MOVE))(this);
+  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**
@@ -2138,4 +2160,4 @@ Block.prototype.toDevString = function() {
   return msg;
 };
 
-exports = Block;
+exports.Block = Block;

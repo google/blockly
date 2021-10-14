@@ -10,11 +10,12 @@
  */
 'use strict';
 
+/**
+ * Object representing an icon on a block.
+ * @class
+ */
 goog.module('Blockly.Icon');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Bubble = goog.requireType('Blockly.Bubble');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -23,6 +24,8 @@ const Svg = goog.require('Blockly.utils.Svg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -30,6 +33,7 @@ const utils = goog.require('Blockly.utils');
  * @param {BlockSvg} block The block associated with this icon.
  * @constructor
  * @abstract
+ * @alias Blockly.Icon
  */
 const Icon = function(block) {
   /**
@@ -135,7 +139,7 @@ Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !utils.isRightButton(e)) {
+  if (!this.block_.isInFlyout && !browserEvents.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };

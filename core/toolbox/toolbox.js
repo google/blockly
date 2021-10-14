@@ -10,20 +10,20 @@
  */
 'use strict';
 
+/**
+ * Toolbox from whence to create blocks.
+ * @class
+ */
 goog.module('Blockly.Toolbox');
-goog.module.declareLegacyNamespace();
 
-const Blockly = goog.require('Blockly');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const BlockSvg = goog.require('Blockly.BlockSvg');
 const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 const DeleteArea = goog.require('Blockly.DeleteArea');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
+const IAutoHideable = goog.require('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
 const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,13 +31,13 @@ const IDraggable = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IKeyboardAccessible = goog.requireType('Blockly.IKeyboardAccessible');
+const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
 /* eslint-disable-next-line no-unused-vars */
 const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const IStyleable = goog.requireType('Blockly.IStyleable');
+const IStyleable = goog.require('Blockly.IStyleable');
 /* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
+const IToolbox = goog.require('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 const Options = goog.require('Blockly.Options');
@@ -49,13 +49,14 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
 const common = goog.require('Blockly.common');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-const utils = goog.require('Blockly.utils');
 const toolbox = goog.require('Blockly.utils.toolbox');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 
@@ -71,6 +72,7 @@ goog.require('Blockly.Events.ToolboxItemSelect');
  * @implements {IStyleable}
  * @implements {IToolbox}
  * @extends {DeleteArea}
+ * @alias Blockly.Toolbox
  */
 const Toolbox = function(workspace) {
   Toolbox.superClass_.constructor.call(this);
@@ -314,7 +316,7 @@ Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
  * @protected
  */
 Toolbox.prototype.onClick_ = function(e) {
-  if (utils.isRightButton(e) || e.target == this.HtmlDiv) {
+  if (browserEvents.isRightButton(e) || e.target == this.HtmlDiv) {
     // Close flyout.
     common.getMainWorkspace().hideChaff(false);
   } else {
@@ -793,7 +795,7 @@ Toolbox.prototype.handleToolboxItemResize = function() {
 
   // Even though the div hasn't changed size, the visible workspace
   // surface of the workspace has, so we may need to reposition everything.
-  Blockly.svgResize(workspace);
+  common.svgResize(workspace);
 };
 
 /**
@@ -991,9 +993,9 @@ Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   if (oldItem == newItem) {
     newElement = null;
   }
-  const event = new (Events.get(Events.TOOLBOX_ITEM_SELECT))(
+  const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
       oldElement, newElement, this.workspace_.id);
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

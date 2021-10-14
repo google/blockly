@@ -12,8 +12,13 @@
  */
 'use strict';
 
+/**
+ * Dropdown input field.  Used for editable titles and variables.
+ * In the interests of a consistent UI, the toolbox shares some functions and
+ * properties with the context menu.
+ * @class
+ */
 goog.module('Blockly.FieldDropdown');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
@@ -45,6 +50,7 @@ const utilsString = goog.require('Blockly.utils.string');
  * @extends {Field}
  * @constructor
  * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
+ * @alias Blockly.FieldDropdown
  */
 const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   if (typeof menuGenerator != 'function') {
@@ -171,6 +177,22 @@ FieldDropdown.prototype.fromXml = function(fieldElement) {
 };
 
 /**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state to apply to the dropdown field.
+ * @override
+ * @package
+ */
+FieldDropdown.prototype.loadState = function(state) {
+  if (this.loadLegacyState(FieldDropdown, state)) {
+    return;
+  }
+  if (this.isOptionListDynamic()) {
+    this.getOptions(false);
+  }
+  this.setValue(state);
+};
+
+/**
  * Serializable fields are saved by the XML renderer, non-serializable fields
  * are not. Editable fields should also be serializable.
  * @type {boolean}
@@ -293,6 +315,9 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
   } else {
     this.menu_.openingCoords = null;
   }
+
+  // Remove any pre-existing elements in the dropdown.
+  Blockly.DropDownDiv.clearContent();
   // Element gets created in render.
   this.menu_.render(DropDownDiv.getContentDiv());
   const menuElement = /** @type {!Element} */ (this.menu_.getElement());

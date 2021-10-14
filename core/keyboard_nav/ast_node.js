@@ -10,11 +10,13 @@
  */
 'use strict';
 
+/**
+ * The class representing an AST node.
+ * Used to traverse the Blockly AST.
+ * @class
+ */
 goog.module('Blockly.ASTNode');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
@@ -28,7 +30,9 @@ const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWith
 const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -40,6 +44,7 @@ const connectionTypes = goog.require('Blockly.connectionTypes');
  * @param {!IASTNodeLocation} location The position in the AST.
  * @param {!ASTNode.Params=} opt_params Optional dictionary of options.
  * @constructor
+ * @alias Blockly.ASTNode
  */
 const ASTNode = function(type, location, opt_params) {
   if (!location) {
@@ -155,16 +160,16 @@ ASTNode.createConnectionNode = function(connection) {
     return null;
   }
   const type = connection.type;
-  if (type == connectionTypes.INPUT_VALUE) {
+  if (type == ConnectionType.INPUT_VALUE) {
     return ASTNode.createInputNode(connection.getParentInput());
   } else if (
-      type == connectionTypes.NEXT_STATEMENT && connection.getParentInput()) {
+      type == ConnectionType.NEXT_STATEMENT && connection.getParentInput()) {
     return ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == connectionTypes.NEXT_STATEMENT) {
+  } else if (type == ConnectionType.NEXT_STATEMENT) {
     return new ASTNode(ASTNode.types.NEXT, connection);
-  } else if (type == connectionTypes.OUTPUT_VALUE) {
+  } else if (type == ConnectionType.OUTPUT_VALUE) {
     return new ASTNode(ASTNode.types.OUTPUT, connection);
-  } else if (type == connectionTypes.PREVIOUS_STATEMENT) {
+  } else if (type == ConnectionType.PREVIOUS_STATEMENT) {
     return new ASTNode(ASTNode.types.PREVIOUS, connection);
   }
   return null;
@@ -707,4 +712,4 @@ ASTNode.prototype.out = function() {
   return null;
 };
 
-exports = ASTNode;
+exports.ASTNode = ASTNode;

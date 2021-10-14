@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Class for a finished loading workspace event.
+ * @class
+ */
 goog.module('Blockly.Events.FinishedLoading');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
-const EventsAbstract = goog.require('Blockly.Events.Abstract');
+const Abstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -28,8 +31,9 @@ const registry = goog.require('Blockly.registry');
  * Finished loading events do not record undo or redo.
  * @param {!Workspace=} opt_workspace The workspace that has finished
  *    loading.  Undefined for a blank event.
- * @extends {EventsAbstract}
+ * @extends {Abstract}
  * @constructor
+ * @alias Blockly.Events.FinishedLoading
  */
 const FinishedLoading = function(opt_workspace) {
   /**
@@ -50,18 +54,18 @@ const FinishedLoading = function(opt_workspace) {
    * perspective, and should be undone together.
    * @type {string}
    */
-  this.group = Events.getGroup();
+  this.group = eventUtils.getGroup();
 
   // Workspace events do not undo or redo.
   this.recordUndo = false;
 };
-object.inherits(FinishedLoading, EventsAbstract);
+object.inherits(FinishedLoading, Abstract);
 
 /**
  * Type of this event.
  * @type {string}
  */
-FinishedLoading.prototype.type = Events.FINISHED_LOADING;
+FinishedLoading.prototype.type = eventUtils.FINISHED_LOADING;
 
 /**
  * Encode the event as JSON.
@@ -91,6 +95,6 @@ FinishedLoading.prototype.fromJson = function(json) {
 };
 
 registry.register(
-    registry.Type.EVENT, Events.FINISHED_LOADING, FinishedLoading);
+    registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
 
 exports = FinishedLoading;

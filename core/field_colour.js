@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Colour input field.
+ * @class
+ */
 goog.module('Blockly.FieldColour');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
@@ -43,6 +46,7 @@ goog.require('Blockly.Events.BlockChange');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldColour
  */
 const FieldColour = function(opt_value, opt_validator, opt_config) {
   FieldColour.superClass_.constructor.call(

@@ -10,15 +10,21 @@
  */
 'use strict';
 
+/**
+ * Class for a block change event.
+ * @class
+ */
 goog.module('Blockly.Events.BlockChange');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-const Events = goog.require('Blockly.Events');
+const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -29,8 +35,9 @@ const registry = goog.require('Blockly.registry');
  * @param {?string=} opt_name Name of input or field affected, or null.
  * @param {*=} opt_oldValue Previous value of element.
  * @param {*=} opt_newValue New value of element.
- * @extends {Events.BlockBase}
+ * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockChange
  */
 const BlockChange = function(
     opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
@@ -43,13 +50,13 @@ const BlockChange = function(
   this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
 };
-object.inherits(BlockChange, Events.BlockBase);
+object.inherits(BlockChange, BlockBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-BlockChange.prototype.type = Events.BLOCK_CHANGE;
+BlockChange.prototype.type = eventUtils.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -125,17 +132,15 @@ BlockChange.prototype.run = function(forward) {
       block.setInputsInline(!!value);
       break;
     case 'mutation': {
-      let oldMutation = '';
-      if (block.mutationToDom) {
-        const oldMutationDom = block.mutationToDom();
-        oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);
+      const oldState = BlockChange.getExtraBlockState_(
+          /** @type {!BlockSvg} */ (block));
+      if (block.loadExtraState) {
+        block.loadExtraState(JSON.parse(/** @type {string} */ (value) || '{}'));
+      } else if (block.domToMutation) {
+        block.domToMutation(
+            Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      if (block.domToMutation) {
-        const dom = Xml.textToDom(/** @type {string} */
-                                  (value) || '<mutation/>');
-        block.domToMutation(dom);
-      }
-      Events.fire(new BlockChange(block, 'mutation', null, oldMutation, value));
+      eventUtils.fire(new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:
@@ -143,6 +148,26 @@ BlockChange.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.CHANGE, BlockChange);
+// TODO (#5397): Encapsulate this in the BlocklyMutationChange event when
+//    refactoring change events.
+/**
+ * Returns the extra state of the given block (either as XML or a JSO, depending
+ * on the block's definition).
+ * @param {!BlockSvg} block The block to get the extra state of.
+ * @return {string} A stringified version of the extra state of the given block.
+ * @package
+ */
+BlockChange.getExtraBlockState_ = function(block) {
+  if (block.saveExtraState) {
+    const state = block.saveExtraState();
+    return state ? JSON.stringify(state) : '';
+  } else if (block.mutationToDom) {
+    const state = block.mutationToDom();
+    return state ? Xml.domToText(state) : '';
+  }
+  return '';
+};
+
+registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
 
 exports = BlockChange;

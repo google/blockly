@@ -12,14 +12,19 @@
 
 'use strict';
 
+/**
+ * Interface for a workspace component that can be registered with
+ * the ComponentManager.
+ * @namespace Blockly.IComponent
+ */
 goog.module('Blockly.IComponent');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * The interface for a workspace component that can be registered with the
  * ComponentManager.
  * @interface
+ * @alias Blockly.IComponent
  */
 const IComponent = function() {};
 

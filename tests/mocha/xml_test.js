@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.xml');
+
+const {addBlockTypeToCleanup, assertVariableValues, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('XML', function() {
   var assertSimpleFieldDom = function(fieldDom, name, text) {
     chai.assert.equal(text, fieldDom.textContent);
@@ -446,30 +451,6 @@ suite('XML', function() {
   suite('domToBlock', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "variables_get",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR"
-          }
-        ]
-      },
-      {
-        "type": "variables_set",
-        "message0": "%1 %2",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR"
-          },
-          {
-            "type": "input_value",
-            "name": "VALUE"
-          }
-        ]
-      }]);
     });
     teardown(function() {
       workspaceTeardown.call(this, this.workspace);

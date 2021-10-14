@@ -11,8 +11,12 @@
  */
 'use strict';
 
+/**
+ * The namespace used to keep track of keyboard shortcuts and the
+ * key codes used to execute those shortcuts.
+ * @class
+ */
 goog.module('Blockly.ShortcutRegistry');
-goog.module.declareLegacyNamespace();
 
 const KeyCodes = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
@@ -25,6 +29,7 @@ const object = goog.require('Blockly.utils.object');
  * singleton. You should not create a new instance, and only access this class
  * from ShortcutRegistry.registry.
  * @constructor
+ * @alias Blockly.ShortcutRegistry
  */
 const ShortcutRegistry = function() {
   // Singleton instance should be registered once.

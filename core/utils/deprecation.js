@@ -12,11 +12,11 @@
 'use strict';
 
 /**
- * @name Blockly.utils.deprecation
- * @namespace
+ * Helper function for warning developers about deprecations.
+ * This method is not specific to Blockly.
+ * @namespace Blockly.utils.deprecation
  */
 goog.module('Blockly.utils.deprecation');
-goog.module.declareLegacyNamespace();
 
 
 /**
@@ -28,6 +28,8 @@ goog.module.declareLegacyNamespace();
  *     deprecation date.
  * @param {string=} opt_use The name of a function or property to use instead,
  *     if any.
+ * @alias Blockly.utils.deprecation.warn
+ * @package
  */
 const warn = function(name, deprecationDate, deletionDate, opt_use) {
   let msg = name + ' was deprecated on ' + deprecationDate +
@@ -37,5 +39,4 @@ const warn = function(name, deprecationDate, deletionDate, opt_use) {
   }
   console.warn(msg);
 };
-/** @package */
 exports.warn = warn;

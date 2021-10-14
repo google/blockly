@@ -11,31 +11,34 @@
 'use strict';
 
 
+/**
+ * Methods for graphically rendering a marker as SVG.
+ * @class
+ */
 goog.module('Blockly.blockRendering.MarkerSvg');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
-/* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.MarkerMove');
 
@@ -66,6 +69,7 @@ const HEIGHT_MULTIPLIER = 3 / 4;
  *     the renderer.
  * @param {!Marker} marker The marker to draw.
  * @constructor
+ * @alias Blockly.blockRendering.MarkerSvg
  */
 const MarkerSvg = function(workspace, constants, marker) {
   /**
@@ -217,9 +221,9 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
     this.showWithBlock_(curNode);
   } else if (curNode.getType() == ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == connectionTypes.INPUT_VALUE) {
+  } else if (connectionType == ConnectionType.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == connectionTypes.NEXT_STATEMENT) {
+  } else if (connectionType == ConnectionType.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
   } else if (curNode.getType() == ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);
@@ -558,9 +562,9 @@ MarkerSvg.prototype.hide = function() {
  */
 MarkerSvg.prototype.fireMarkerEvent_ = function(oldNode, curNode) {
   const curBlock = curNode.getSourceBlock();
-  const event = new (Events.get(Events.MARKER_MOVE))(
+  const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
       curBlock, this.isCursor(), oldNode, curNode);
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**

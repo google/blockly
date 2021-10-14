@@ -10,17 +10,15 @@
  */
 'use strict';
 
+/**
+ * Class that controls updates to connections during drags.
+ * @class
+ */
 goog.module('Blockly.InsertionMarkerManager');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ComponentManager = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,9 +28,13 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -41,9 +43,10 @@ const internalConstants = goog.require('Blockly.internalConstants');
  * unhiglighting it as needed during a drag.
  * @param {!BlockSvg} block The top block in the stack being dragged.
  * @constructor
+ * @alias Blockly.InsertionMarkerManager
  */
 const InsertionMarkerManager = function(block) {
-  Blockly.selected = block;
+  common.setSelected(block);
 
   /**
    * The top block in the stack being dragged.
@@ -177,7 +180,7 @@ InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
 InsertionMarkerManager.prototype.dispose = function() {
   this.availableConnections_.length = 0;
 
-  Events.disable();
+  eventUtils.disable();
   try {
     if (this.firstMarker_) {
       this.firstMarker_.dispose();
@@ -186,7 +189,7 @@ InsertionMarkerManager.prototype.dispose = function() {
       this.lastMarker_.dispose();
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 };
 
@@ -228,9 +231,9 @@ InsertionMarkerManager.prototype.wouldConnectBlock = function() {
 InsertionMarkerManager.prototype.applyConnections = function() {
   if (this.closestConnection_) {
     // Don't fire events for insertion markers.
-    Events.disable();
+    eventUtils.disable();
     this.hidePreview_();
-    Events.enable();
+    eventUtils.enable();
     // Connect two blocks together.
     this.localConnection_.connect(this.closestConnection_);
     if (this.topBlock_.rendered) {
@@ -265,10 +268,10 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 
   if (shouldUpdate) {
     // Don't fire events for insertion marker creation or movement.
-    Events.disable();
+    eventUtils.disable();
     this.maybeHidePreview_(candidate);
     this.maybeShowPreview_(candidate);
-    Events.enable();
+    eventUtils.enable();
   }
 };
 
@@ -283,12 +286,17 @@ InsertionMarkerManager.prototype.update = function(dxy, dragTarget) {
 InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
   const imType = sourceBlock.type;
 
-  Events.disable();
+  eventUtils.disable();
   let result;
   try {
     result = this.workspace_.newBlock(imType);
     result.setInsertionMarker(true);
-    if (sourceBlock.mutationToDom) {
+    if (sourceBlock.saveExtraState) {
+      const state = sourceBlock.saveExtraState();
+      if (state) {
+        result.loadExtraState(state);
+      }
+    } else if (sourceBlock.mutationToDom) {
       const oldMutationDom = sourceBlock.mutationToDom();
       if (oldMutationDom) {
         result.domToMutation(oldMutationDom);
@@ -324,7 +332,7 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
     result.initSvg();
     result.getSvgRoot().setAttribute('visibility', 'hidden');
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 
   return result;
@@ -347,11 +355,11 @@ InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
     if (this.lastMarker_) {
-      Events.disable();
+      eventUtils.disable();
       try {
         this.lastMarker_.dispose();
       } finally {
-        Events.enable();
+        eventUtils.enable();
       }
     }
     this.lastMarker_ = this.createMarkerBlock_(lastOnStack.getSourceBlock());
@@ -657,7 +665,7 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   const isFirstInStatementStack =
       (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
 
-  const isFirstInOutputStack = imConn.type == connectionTypes.INPUT_VALUE &&
+  const isFirstInOutputStack = imConn.type == ConnectionType.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -666,7 +674,7 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   }
   // Inside of a C-block, first statement connection.
   else if (
-      imConn.type == connectionTypes.NEXT_STATEMENT && imConn != markerNext) {
+      imConn.type == ConnectionType.NEXT_STATEMENT && imConn != markerNext) {
     const innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 

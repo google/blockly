@@ -11,8 +11,11 @@
 
 'use strict';
 
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @class
+ */
 goog.module('Blockly.geras.PathObject');
-goog.module.declareLegacyNamespace();
 
 const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,6 +38,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @extends {BasePathObject}
  * @package
+ * @alias Blockly.geras.PathObject
  */
 const PathObject = function(root, style, constants) {
   /**

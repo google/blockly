@@ -11,20 +11,24 @@
  */
 'use strict';
 
+/**
+ * The class representing a cursor.
+ * Used primarily for keyboard navigation.
+ * @class
+ */
 goog.module('Blockly.Cursor');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Marker = goog.require('Blockly.Marker');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Marker} = goog.require('Blockly.Marker');
 
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @constructor
  * @extends {Marker}
+ * @alias Blockly.Cursor
  */
 const Cursor = function() {
   Cursor.superClass_.constructor.call(this);
@@ -136,4 +140,4 @@ Cursor.prototype.out = function() {
 
 registry.register(registry.Type.CURSOR, registry.DEFAULT, Cursor);
 
-exports = Cursor;
+exports.Cursor = Cursor;

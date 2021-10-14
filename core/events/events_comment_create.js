@@ -10,14 +10,17 @@
  */
 'use strict';
 
+/**
+ * Class for comment creation event.
+ * @class
+ */
 goog.module('Blockly.Events.CommentCreate');
-goog.module.declareLegacyNamespace();
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -28,6 +31,7 @@ const registry = goog.require('Blockly.registry');
  *     Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentCreate
  */
 const CommentCreate = function(opt_comment) {
   CommentCreate.superClass_.constructor.call(this, opt_comment);
@@ -43,7 +47,7 @@ object.inherits(CommentCreate, CommentBase);
  * Type of this event.
  * @type {string}
  */
-CommentCreate.prototype.type = Events.COMMENT_CREATE;
+CommentCreate.prototype.type = eventUtils.COMMENT_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -73,6 +77,6 @@ CommentCreate.prototype.run = function(forward) {
   CommentBase.CommentCreateDeleteHelper(this, forward);
 };
 
-registry.register(registry.Type.EVENT, Events.COMMENT_CREATE, CommentCreate);
+registry.register(registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
 
 exports = CommentCreate;

@@ -16,11 +16,15 @@
 'use strict';
 
 /**
- * @name Blockly.Tooltip
- * @namespace
+ * Library to create tooltips for Blockly.
+ * First, call init() after onload.
+ * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
+ * If the tooltip is a string, then that message will be displayed.
+ * If the tooltip is an SVG element, then that object's tooltip will be used.
+ * Third, call bindMouseEvents(e) passing the SVG element.
+ * @namespace Blockly.Tooltip
  */
 goog.module('Blockly.Tooltip');
-goog.module.declareLegacyNamespace();
 
 const blocklyString = goog.require('Blockly.utils.string');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -34,6 +38,7 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  * returns either a string, or another arbitrarily nested function which
  * eventually unwinds to a string.
  * @typedef {string|{tooltip}|function(): (string|!Function)}
+ * @alias Blockly.Tooltip.TipInfo
  */
 let TipInfo;
 exports.TipInfo = TipInfo;
@@ -43,20 +48,31 @@ exports.TipInfo = TipInfo;
  * @type {boolean}
  */
 let visible = false;
-/** @deprecated September 2021 */
-exports.visible;
 
+/**
+ * Returns whether or not a tooltip is showing
+ * @returns {boolean} True if a tooltip is showing
+ * @alias Blockly.Tooltip.isVisible
+ */
 const isVisible = function() {
   return visible;
 };
 exports.isVisible = isVisible;
 
 Object.defineProperties(exports, {
+  /**
+   * Is a tooltip currently showing?
+   * @name Blockly.Tooltip.visible
+   * @type {boolean}
+   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
+   *     2021)
+   * @suppress {checkTypes}
+   */
   visible: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.isVisible()');
+          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.isVisible()');
       return isVisible();
     }
   }
@@ -70,6 +86,7 @@ let blocked = false;
 
 /**
  * Maximum width (in characters) of a tooltip.
+ * @alias Blockly.Tooltip.LIMIT
  */
 const LIMIT = 50;
 exports.LIMIT = LIMIT;
@@ -109,30 +126,35 @@ let poisonedElement = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
+ * @alias Blockly.Tooltip.OFFSET_X
  */
 const OFFSET_X = 0;
 exports.OFFSET_X = OFFSET_X;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
+ * @alias Blockly.Tooltip.OFFSET_Y
  */
 const OFFSET_Y = 10;
 exports.OFFSET_Y = OFFSET_Y;
 
 /**
  * Radius mouse can move before killing tooltip.
+ * @alias Blockly.Tooltip.RADIUS_OK
  */
 const RADIUS_OK = 10;
 exports.RADIUS_OK = RADIUS_OK;
 
 /**
  * Delay before tooltip appears.
+ * @alias Blockly.Tooltip.HOVER_MS
  */
 const HOVER_MS = 750;
 exports.HOVER_MS = HOVER_MS;
 
 /**
  * Horizontal padding between tooltip and screen edge.
+ * @alias Blockly.Tooltip.MARGINS
  */
 const MARGINS = 5;
 exports.MARGINS = MARGINS;
@@ -142,20 +164,31 @@ exports.MARGINS = MARGINS;
  * @type {Element}
  */
 let DIV = null;
-/** @deprecated September 2021 */
-exports.DIV = DIV;
 
+/**
+ * Returns the HTML tooltip container.
+ * @returns {Element} The HTML tooltip container.
+ * @alias Blockly.Tooltip.getDiv
+ */
 const getDiv = function() {
   return DIV;
 };
 exports.getDiv = getDiv;
 
 Object.defineProperties(exports, {
+  /**
+   * The HTML container.  Set once by createDom.
+   * @name Blockly.Tooltip.DIV
+   * @type {Element}
+   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   DIV: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.getDiv()');
+          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.getDiv()');
       return getDiv();
     }
   }
@@ -165,6 +198,7 @@ Object.defineProperties(exports, {
  * Returns the tooltip text for the given element.
  * @param {?Object} object The object to get the tooltip text of.
  * @return {string} The tooltip text of the element.
+ * @alias Blockly.Tooltip.getTooltipOfObject
  */
 const getTooltipOfObject = function(object) {
   const obj = getTargetObject(object);
@@ -202,6 +236,7 @@ const getTargetObject = function(obj) {
 
 /**
  * Create the tooltip div and inject it onto the page.
+ * @alias Blockly.Tooltip.createDom
  */
 const createDom = function() {
   if (DIV) {
@@ -218,6 +253,7 @@ exports.createDom = createDom;
 /**
  * Binds the required mouse events onto an SVG element.
  * @param {!Element} element SVG element onto which tooltip is to be bound.
+ * @alias Blockly.Tooltip.bindMouseEvents
  */
 const bindMouseEvents = function(element) {
   element.mouseOverWrapper_ =
@@ -235,6 +271,7 @@ exports.bindMouseEvents = bindMouseEvents;
 /**
  * Unbinds tooltip mouse events from the SVG element.
  * @param {!Element} element SVG element onto which tooltip is bound.
+ * @alias Blockly.Tooltip.unbindMouseEvents
  */
 const unbindMouseEvents = function(element) {
   if (!element) {
@@ -323,17 +360,19 @@ const onMouseMove = function(e) {
 
 /**
  * Dispose of the tooltip.
+ * @alias Blockly.Tooltip.dispose
+ * @package
  */
 const dispose = function() {
   element = null;
   poisonedElement = null;
   hide();
 };
-/** @package */
 exports.dispose = dispose;
 
 /**
  * Hide the tooltip.
+ * @alias Blockly.Tooltip.hide
  */
 const hide = function() {
   if (visible) {
@@ -351,22 +390,24 @@ exports.hide = hide;
 /**
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
+ * @alias Blockly.Tooltip.block
+ * @package
  */
 const block = function() {
   hide();
   blocked = true;
 };
-/** @package */
 exports.block = block;
 
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
+ * @alias Blockly.Tooltip.unblock
+ * @package
  */
 const unblock = function() {
   blocked = false;
 };
-/** @package */
 exports.unblock = unblock;
 
 /**

@@ -11,13 +11,17 @@
  */
 'use strict';
 
+/**
+ * The class representing a basic cursor.
+ * Used to demo switching between different cursors.
+ * @class
+ */
 goog.module('Blockly.BasicCursor');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Cursor = goog.require('Blockly.Cursor');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Cursor} = goog.require('Blockly.Cursor');
 
 
 /**
@@ -26,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  * previous.
  * @constructor
  * @extends {Cursor}
+ * @alias Blockly.BasicCursor
  */
 const BasicCursor = function() {
   BasicCursor.superClass_.constructor.call(this);
@@ -217,4 +222,4 @@ BasicCursor.prototype.getRightMostChild_ = function(node) {
 registry.register(
     registry.Type.CURSOR, BasicCursor.registrationName, BasicCursor);
 
-exports = BasicCursor;
+exports.BasicCursor = BasicCursor;

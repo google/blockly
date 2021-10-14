@@ -10,8 +10,12 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
+/**
+ * Zelos specific objects representing inputs with connections on
+ * a rendered block.
+ * @class
+ */
 goog.module('Blockly.zelos.StatementInput');
-goog.module.declareLegacyNamespace();
 
 const BaseStatementInput = goog.require('Blockly.blockRendering.StatementInput');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseStatementInput}
+ * @alias Blockly.zelos.StatementInput
  */
 const StatementInput = function(constants, input) {
   StatementInput.superClass_.constructor.call(this, constants, input);

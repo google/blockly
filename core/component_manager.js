@@ -11,8 +11,11 @@
 
 'use strict';
 
+/**
+ * Manager for all items registered with the workspace.
+ * @class
+ */
 goog.module('Blockly.ComponentManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
@@ -24,11 +27,13 @@ const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
 const IDragTarget = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const IPositionable = goog.requireType('Blockly.IPositionable');
+const utils = goog.require('Blockly.utils');
 
 
 /**
  * Manager for all items registered with the workspace.
  * @constructor
+ * @alias Blockly.ComponentManager
  */
 const ComponentManager = function() {
   /**
@@ -99,8 +104,7 @@ ComponentManager.prototype.removeComponent = function(id) {
   }
   for (let i = 0; i < componentInfo.capabilities.length; i++) {
     const capability = String(componentInfo.capabilities[i]).toLowerCase();
-    this.capabilityToComponentIds_[capability].splice(
-        this.capabilityToComponentIds_[capability].indexOf(id), 1);
+    utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
   }
   delete this.componentData_[id];
 };
@@ -148,10 +152,8 @@ ComponentManager.prototype.removeCapability = function(id, capability) {
     return;
   }
   capability = String(capability).toLowerCase();
-  this.componentData_[id].capabilities.splice(
-      this.componentData_[id].capabilities.indexOf(capability), 1);
-  this.capabilityToComponentIds_[capability].splice(
-      this.capabilityToComponentIds_[capability].indexOf(id), 1);
+  utils.arrayRemove(this.componentData_[id].capabilities, capability);
+  utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
 };
 
 /**

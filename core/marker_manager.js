@@ -10,21 +10,26 @@
  */
 'use strict';
 
+/**
+ * Object in charge of managing markers and the cursor.
+ * @class
+ */
 goog.module('Blockly.MarkerManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const Cursor = goog.requireType('Blockly.Cursor');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
-/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
  * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
  * @constructor
+ * @alias Blockly.MarkerManager
+ * @package
  */
 const MarkerManager = function(workspace) {
   /**
@@ -194,5 +199,4 @@ MarkerManager.prototype.dispose = function() {
   }
 };
 
-/** @package */
 exports = MarkerManager;

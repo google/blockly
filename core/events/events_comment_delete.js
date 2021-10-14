@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Class for comment deletion event.
+ * @class
+ */
 goog.module('Blockly.Events.CommentDelete');
-goog.module.declareLegacyNamespace();
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -27,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *     Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentDelete
  */
 const CommentDelete = function(opt_comment) {
   CommentDelete.superClass_.constructor.call(this, opt_comment);
@@ -42,7 +46,7 @@ object.inherits(CommentDelete, CommentBase);
  * Type of this event.
  * @type {string}
  */
-CommentDelete.prototype.type = Events.COMMENT_DELETE;
+CommentDelete.prototype.type = eventUtils.COMMENT_DELETE;
 
 /**
  * Encode the event as JSON.
@@ -70,6 +74,6 @@ CommentDelete.prototype.run = function(forward) {
   CommentBase.CommentCreateDeleteHelper(this, !forward);
 };
 
-registry.register(registry.Type.EVENT, Events.COMMENT_DELETE, CommentDelete);
+registry.register(registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
 
 exports = CommentDelete;

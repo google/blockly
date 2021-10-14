@@ -11,20 +11,25 @@
  */
 'use strict';
 
+/**
+ * The class representing a cursor that is used to navigate
+ * between tab navigable fields.
+ * @class
+ */
 goog.module('Blockly.TabNavigateCursor');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const BasicCursor = goog.require('Blockly.BasicCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const object = goog.require('Blockly.utils.object');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
 
 
 /**
  * A cursor for navigating between tab navigable fields.
  * @constructor
  * @extends {BasicCursor}
+ * @alias Blockly.TabNavigateCursor
  */
 const TabNavigateCursor = function() {
   TabNavigateCursor.superClass_.constructor.call(this);
@@ -50,4 +55,4 @@ TabNavigateCursor.prototype.validNode_ = function(node) {
   return isValid;
 };
 
-exports = TabNavigateCursor;
+exports.TabNavigateCursor = TabNavigateCursor;

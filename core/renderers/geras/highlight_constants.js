@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Objects for rendering highlights on blocks.
+ * @class
+ */
 goog.module('Blockly.geras.HighlightConstantProvider');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -27,6 +30,7 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
  *   constants provider.
  * @constructor
  * @package
+ * @alias Blockly.geras.HighlightConstantProvider
  */
 const HighlightConstantProvider = function(constants) {
   /**

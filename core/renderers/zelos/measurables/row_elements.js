@@ -10,8 +10,12 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
+/**
+ * Zelos specific objects representing elements in a row of a
+ * rendered block.
+ * @class
+ */
 goog.module('Blockly.zelos.RightConnectionShape');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -28,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.zelos.RightConnectionShape
  */
 const RightConnectionShape = function(constants) {
   RightConnectionShape.superClass_.constructor.call(this, constants);

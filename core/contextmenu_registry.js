@@ -11,16 +11,15 @@
 'use strict';
 
 /**
- * @name ContextMenuRegistry
- * @namespace
+ * Registry for context menu option items.
+ * @class
  */
 goog.module('Blockly.ContextMenuRegistry');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -29,6 +28,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
  * from ContextMenuRegistry.registry.
  * @constructor
  * @private
+ * @alias Blockly.ContextMenuRegistry
  */
 const ContextMenuRegistry = function() {
   // Singleton instance should be registered once.

@@ -11,11 +11,14 @@
 
 'use strict';
 
+/**
+ * The interface for a selectable toolbox item.
+ * @namespace Blockly.ISelectableToolboxItem
+ */
 goog.module('Blockly.ISelectableToolboxItem');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
+const IToolboxItem = goog.require('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 
@@ -24,6 +27,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
  * Interface for an item in the toolbox that can be selected.
  * @extends {IToolboxItem}
  * @interface
+ * @alias Blockly.ISelectableToolboxItem
  */
 const ISelectableToolboxItem = function() {};
 

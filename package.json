@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "6.20210701.0",
+  "version": "7.20211209.0-beta.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -36,6 +36,7 @@
     "checkin:built": "gulp checkinBuilt",
     "checkin:typings": "gulp checkinTypings",
     "deployDemos": "gulp deployDemos",
+    "deployDemos:beta": "gulp deployDemosBeta",
     "format": "git-clang-format",
     "format:sortrequires": "gulp sortRequires",
     "generate:langfiles": "gulp generateLangfiles",
@@ -47,7 +48,7 @@
     "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",
-    "start": "http-server ./ -o /tests/playground.html",
+    "start": "http-server ./ -o /tests/playground.html -c-1",
     "test": "tests/run_all_tests.sh",
     "test:generators": "tests/scripts/run_generators.sh",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest",
@@ -66,9 +67,9 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@blockly/block-test": "^1.0.0",
-    "@blockly/dev-tools": "^2.6.0",
+    "@blockly/dev-tools": "^2.6.1",
     "@blockly/theme-modern": "^2.1.1",
-    "@wdio/selenium-standalone-service": "^6.11.0",
+    "@wdio/selenium-standalone-service": "^7.10.1",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.5.0",
@@ -85,9 +86,9 @@
     "gulp-shell": "^0.8.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-umd": "^2.0.0",
-    "http-server": "^0.12.3",
+    "http-server": "^13.0.2",
     "js-green-licenses": "^3.0.0",
-    "mocha": "^8.1.1",
+    "mocha": "^9.1.1",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
     "selenium-standalone": "^7.1.0",

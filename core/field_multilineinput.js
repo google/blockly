@@ -12,8 +12,11 @@
  */
 'use strict';
 
+/**
+ * Text Area field.
+ * @class
+ */
 goog.module('Blockly.FieldMultilineInput');
-goog.module.declareLegacyNamespace();
 
 const Css = goog.require('Blockly.Css');
 const Field = goog.require('Blockly.Field');
@@ -43,6 +46,7 @@ const utils = goog.require('Blockly.utils');
  *    for a list of properties this parameter supports.
  * @extends {FieldTextInput}
  * @constructor
+ * @alias Blockly.FieldMultilineInput
  */
 const FieldMultilineInput = function(opt_value, opt_validator, opt_config) {
   FieldMultilineInput.superClass_.constructor.call(
@@ -120,6 +124,32 @@ FieldMultilineInput.prototype.toXml = function(fieldElement) {
  */
 FieldMultilineInput.prototype.fromXml = function(fieldElement) {
   this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
+};
+
+/**
+ * Saves this field's value.
+ * @return {*} The state of this field.
+ * @package
+ */
+FieldMultilineInput.prototype.saveState = function() {
+  const legacyState = this.saveLegacyState(FieldMultilineInput);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValue();
+};
+
+/**
+ * Sets the field's value based on the given state.
+ * @param {*} state The state of the variable to assign to this variable field.
+ * @override
+ * @package
+ */
+FieldMultilineInput.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Field, state)) {
+    return;
+  }
+  this.setValue(state);
 };
 
 /**

@@ -11,8 +11,12 @@
  */
 'use strict';
 
+/**
+ * Objects representing inline inputs with connections on a
+ * rendered block.
+ * @class
+ */
 goog.module('Blockly.geras.InlineInput');
-goog.module.declareLegacyNamespace();
 
 const BaseInlineInput = goog.require('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
@@ -32,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseInlineInput}
+ * @alias Blockly.geras.InlineInput
  */
 const InlineInput = function(constants, input) {
   InlineInput.superClass_.constructor.call(this, constants, input);

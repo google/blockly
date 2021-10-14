@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.toolbox');
+
+const {defineStackBlock, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJson, getXmlArray} = goog.require('Blockly.test.toolboxHelpers');
+
+
 suite('Toolbox', function() {
 
   setup(function() {
@@ -488,7 +494,7 @@ suite('Toolbox', function() {
   suite('parseMethods', function() {
     setup(function() {
       this.categoryToolboxJSON = getCategoryJSON();
-      this.simpleToolboxJSON = getSimpleJSON();
+      this.simpleToolboxJSON = getSimpleJson();
     });
 
     function checkValue(actual, expected, value) {

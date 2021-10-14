@@ -11,16 +11,16 @@
 'use strict';
 
 /**
- * @name Blockly.utils.idGenerator
- * @namespace
+ * Generators for unique IDs.
+ * @namespace Blockly.utils.idGenerator
  */
 goog.module('Blockly.utils.idGenerator');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * Namespace object for internal implementations we want to be able to
  * stub in tests.
+ * @ignore
  */
 const internal = {};
 exports.TEST_ONLY = internal;
@@ -40,6 +40,7 @@ let nextId = 0;
  * primarily be used for IDs that end up in the DOM.
  *
  * @return {string} The next unique identifier.
+ * @alias Blockly.utils.idGenerator.getNextUniqueId
  */
 const getNextUniqueId = function() {
   return 'blockly-' + (nextId++).toString(36);
@@ -75,6 +76,7 @@ internal.genUid = function() {
  * Generate a random unique ID.
  * @see internal.genUid
  * @return {string} A globally unique ID string.
+ * @alias Blockly.utils.idGenerator.genUid
  */
 const genUid = function() {
   return internal.genUid();

@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing a hat in a row of a rendered
+ * block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Hat');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -28,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Hat
  */
 const Hat = function(constants) {
   Hat.superClass_.constructor.call(this, constants);

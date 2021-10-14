@@ -19,7 +19,6 @@ goog.provide('Blockly.Blocks.variables');  // Deprecated.
 goog.provide('Blockly.Constants.Variables');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 

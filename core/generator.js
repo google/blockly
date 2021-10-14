@@ -11,11 +11,13 @@
  */
 'use strict';
 
+/**
+ * Utility functions for generating executable code from
+ * Blockly code.
+ * @class
+ */
 goog.module('Blockly.Generator');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const Names = goog.requireType('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
@@ -23,12 +25,15 @@ const Workspace = goog.requireType('Blockly.Workspace');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const internalConstants = goog.require('Blockly.internalConstants');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
  * Class for a code generator that translates the blocks into a language.
  * @param {string} name Language name of this generator.
  * @constructor
+ * @alias Blockly.Generator
  */
 const Generator = function(name) {
   this.name_ = name;
@@ -411,27 +416,33 @@ Generator.prototype.functionNames_;
  */
 Generator.prototype.nameDB_;
 
-Object.defineProperty(Generator.prototype, 'variableDB_', {
+Object.defineProperties(Generator.prototype, {
   /**
-   * Getter.
+   * A database of variable names.
+   * @name Blockly.Generator.prototype.variableDB_
+   * @type {!Names|undefined}
+   * @protected
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @this {Generator}
-   * @return {!Names|undefined} Name database.
+   * @suppress {checkTypes}
    */
-  get: function() {
-    deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
-    return this.nameDB_;
+  variableDB_: {
+    /**
+     * @this {Generator}
+     * @return {!Names|undefined} Name database.
+     */
+    get: function() {
+      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+      return this.nameDB_;
+    },
+    /**
+     * @this {Generator}
+     * @param {!Names|undefined} nameDb New name database.
+     */
+    set: function(nameDb) {
+      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+      this.nameDB_ = nameDb;
+    },
   },
-  /**
-   * Setter.
-   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @this {Generator}
-   * @param {!Names|undefined} nameDb New name database.
-   */
-  set: function(nameDb) {
-    deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
-    this.nameDB_ = nameDb;
-  }
 });
 
 /**

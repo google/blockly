@@ -11,8 +11,11 @@
 
 'use strict';
 
+/**
+ * The interface for a metrics manager.
+ * @namespace Blockly.IMetricsManager
+ */
 goog.module('Blockly.IMetricsManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Metrics = goog.requireType('Blockly.utils.Metrics');
@@ -25,6 +28,7 @@ const Size = goog.requireType('Blockly.utils.Size');
 /**
  * Interface for a metrics manager.
  * @interface
+ * @alias Blockly.IMetricsManager
  */
 const IMetricsManager = function() {};
 

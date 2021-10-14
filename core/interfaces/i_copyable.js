@@ -11,11 +11,14 @@
 
 'use strict';
 
+/**
+ * The interface for an object that is copyable.
+ * @namespace Blockly.ICopyable
+ */
 goog.module('Blockly.ICopyable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const ISelectable = goog.requireType('Blockly.ISelectable');
+const ISelectable = goog.require('Blockly.ISelectable');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 
@@ -23,19 +26,21 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * @extends {ISelectable}
  * @interface
+ * @alias Blockly.ICopyable
  */
 const ICopyable = function() {};
 
 /**
  * Encode for copying.
  * @return {?ICopyable.CopyData} Copy metadata.
+ * @package
  */
 ICopyable.prototype.toCopyData;
 
 /**
  * Copy Metadata.
  * @typedef {{
- *            xml:!Element,
+ *            saveInfo:(!Object|!Element),
  *            source:WorkspaceSvg,
  *            typeCounts:?Object
  *          }}

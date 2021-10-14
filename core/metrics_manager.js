@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Calculates and reports workspace metrics.
+ * @class
+ */
 goog.module('Blockly.MetricsManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const IFlyout = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
+const IMetricsManager = goog.require('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const IToolbox = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
@@ -34,6 +37,7 @@ const toolboxUtils = goog.require('Blockly.utils.toolbox');
  *     for.
  * @implements {IMetricsManager}
  * @constructor
+ * @alias Blockly.MetricsManager
  */
 const MetricsManager = function(workspace) {
   /**

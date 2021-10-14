@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * An object representing the top row of a rendered block.
+ * @class
+ */
 goog.module('Blockly.zelos.TopRow');
-goog.module.declareLegacyNamespace();
 
 const BaseTopRow = goog.require('Blockly.blockRendering.TopRow');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +34,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseTopRow}
+ * @alias Blockly.zelos.TopRow
  */
 const TopRow = function(constants) {
   TopRow.superClass_.constructor.call(this, constants);

@@ -10,25 +10,28 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a marker as SVG.
+ * @class
+ */
 goog.module('Blockly.zelos.MarkerSvg');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const ASTNode = goog.requireType('Blockly.ASTNode');
 const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ASTNode} = goog.requireType('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**
@@ -39,6 +42,7 @@ const object = goog.require('Blockly.utils.object');
  * @param {!Marker} marker The marker to draw.
  * @constructor
  * @extends {BaseMarkerSvg}
+ * @alias Blockly.zelos.MarkerSvg
  */
 const MarkerSvg = function(workspace, constants, marker) {
   MarkerSvg.superClass_.constructor.call(this, workspace, constants, marker);

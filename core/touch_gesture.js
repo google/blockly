@@ -11,8 +11,12 @@
  */
 'use strict';
 
+/**
+ * The class extends Gesture to support pinch to zoom
+ * for both pointer and touch events.
+ * @class
+ */
 goog.module('Blockly.TouchGesture');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Gesture = goog.require('Blockly.Gesture');
@@ -21,7 +25,6 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 
 
 /*
@@ -36,6 +39,7 @@ const utils = goog.require('Blockly.utils');
  *     this gesture and has a reference to it.
  * @extends {Gesture}
  * @constructor
+ * @alias Blockly.TouchGesture
  */
 const TouchGesture = function(e, creatorWorkspace) {
   TouchGesture.superClass_.constructor.call(this, e, creatorWorkspace);
@@ -284,7 +288,7 @@ TouchGesture.prototype.handlePinch_ = function(e) {
         gestureScale * TouchGesture.ZOOM_IN_MULTIPLIER :
         gestureScale * TouchGesture.ZOOM_OUT_MULTIPLIER;
     const workspace = this.startWorkspace_;
-    const position = utils.mouseToSvg(
+    const position = browserEvents.mouseToSvg(
         e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
     workspace.zoom(position.x, position.y, delta);
   }

@@ -10,12 +10,16 @@
  */
 'use strict';
 
+/**
+ * Blockly's internal clipboard for managing copy-paste.
+ * @namespace Blockly.clipboard
+ */
 goog.module('Blockly.clipboard');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const ICopyable = goog.requireType('Blockly.ICopyable');
+const eventUtils = goog.require('Blockly.Events.utils');
+
 
 /**
  * Metadata about the object that is currently on the clipboard.
@@ -26,55 +30,52 @@ let copyData = null;
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
+ * @alias Blockly.clipboard.copy
+ * @package
  */
 const copy = function(toCopy) {
   copyData = toCopy.toCopyData();
 };
-/** @package */
 exports.copy = copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
+ * @alias Blockly.clipboard.paste
+ * @package
  */
 const paste = function() {
-  if (!copyData.xml) {
+  if (!copyData) {
     return false;
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
-  var workspace = copyData.source;
+  let workspace = copyData.source;
   if (workspace.isFlyout) {
     workspace = workspace.targetWorkspace;
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
-    Events.setGroup(true);
-    workspace.paste(copyData.xml);
-    Events.setGroup(false);
+    eventUtils.setGroup(true);
+    workspace.paste(copyData.saveInfo);
+    eventUtils.setGroup(false);
     return true;
   }
   return false;
 };
-/** @package */
 exports.paste = paste;
 
 /**
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     duplicated.
+ * @alias Blockly.clipboard.duplicate
+ * @package
  */
 const duplicate = function(toDuplicate) {
-  // Save the clipboard.
   const oldCopyData = copyData;
-
-  // Create a duplicate via a copy/paste operation.
   copy(toDuplicate);
-  // copy() replaced the value of copyData.
-  toDuplicate.workspace.paste(copyData.xml);
-
-  // Restore the clipboard.
+  toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
 };
-/** @package */
 exports.duplicate = duplicate;

@@ -10,14 +10,17 @@
  */
 'use strict';
 
+/**
+ * Class for comment move event.
+ * @class
+ */
 goog.module('Blockly.Events.CommentMove');
-goog.module.declareLegacyNamespace();
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -28,6 +31,7 @@ const registry = goog.require('Blockly.registry');
  *     moved.  Undefined for a blank event.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentMove
  */
 const CommentMove = function(opt_comment) {
   CommentMove.superClass_.constructor.call(this, opt_comment);
@@ -74,7 +78,7 @@ CommentMove.prototype.recordNew = function() {
  * Type of this event.
  * @type {string}
  */
-CommentMove.prototype.type = Events.COMMENT_MOVE;
+CommentMove.prototype.type = eventUtils.COMMENT_MOVE;
 
 /**
  * Override the location before the move.  Use this if you don't create the
@@ -147,6 +151,6 @@ CommentMove.prototype.run = function(forward) {
   comment.moveBy(target.x - current.x, target.y - current.y);
 };
 
-registry.register(registry.Type.EVENT, Events.COMMENT_MOVE, CommentMove);
+registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);
 
 exports = CommentMove;

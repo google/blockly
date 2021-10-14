@@ -12,17 +12,22 @@
 
 'use strict';
 
+/**
+ * The interface for a component that is automatically hidden
+ * when WorkspaceSvg.hideChaff is called.
+ * @namespace Blockly.IAutoHideable
+ */
 goog.module('Blockly.IAutoHideable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
+const IComponent = goog.require('Blockly.IComponent');
 
 
 /**
  * Interface for a component that can be automatically hidden.
  * @extends {IComponent}
  * @interface
+ * @alias Blockly.IAutoHideable
  */
 const IAutoHideable = function() {};
 

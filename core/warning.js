@@ -10,21 +10,24 @@
  */
 'use strict';
 
+/**
+ * Object representing a warning.
+ * @class
+ */
 goog.module('Blockly.Warning');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Bubble = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Icon = goog.require('Blockly.Icon');
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -34,6 +37,7 @@ goog.require('Blockly.Events.BubbleOpen');
  * @param {!Block} block The block associated with this warning.
  * @extends {Icon}
  * @constructor
+ * @alias Blockly.Warning
  */
 const Warning = function(block) {
   Warning.superClass_.constructor.call(this, block);
@@ -90,8 +94,8 @@ Warning.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     return;
   }
-  Events.fire(
-      new (Events.get(Events.BUBBLE_OPEN))(this.block_, visible, 'warning'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
   } else {

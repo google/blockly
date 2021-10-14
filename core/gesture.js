@@ -11,14 +11,15 @@
  */
 'use strict';
 
+/**
+ * The class representing an in-progress gesture, usually a drag
+ * or a tap.
+ * @class
+ */
 goog.module('Blockly.Gesture');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BubbleDragger = goog.require('Blockly.BubbleDragger');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,9 +36,12 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
-const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */
@@ -56,6 +60,7 @@ goog.require('Blockly.Events.Click');
  * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
  *     this gesture and has a reference to it.
  * @constructor
+ * @alias Blockly.Gesture
  */
 const Gesture = function(e, creatorWorkspace) {
   /**
@@ -332,8 +337,8 @@ Gesture.prototype.updateIsDraggingFromFlyout_ = function() {
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     // Start the event group now, so that the same event group is used for block
     // creation and block dragging.
-    if (!Events.getGroup()) {
-      Events.setGroup(true);
+    if (!eventUtils.getGroup()) {
+      eventUtils.setGroup(true);
     }
     // The start block is no longer relevant, because this is a drag.
     this.startBlock_ = null;
@@ -474,7 +479,7 @@ Gesture.prototype.startDraggingBubble_ = function() {
  * @package
  */
 Gesture.prototype.doStart = function(e) {
-  if (utils.isTargetInput(e)) {
+  if (browserEvents.isTargetInput(e)) {
     this.cancel();
     return;
   }
@@ -501,7 +506,7 @@ Gesture.prototype.doStart = function(e) {
     this.targetBlock_.select();
   }
 
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     this.handleRightClick(e);
     return;
   }
@@ -664,7 +669,8 @@ Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  Events.fire(new (Events.get(Events.CLICK))(null, ws.id, 'workspace'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**
@@ -746,20 +752,20 @@ Gesture.prototype.doBlockClick_ = function() {
   // Block click in an autoclosing flyout.
   if (this.flyout_ && this.flyout_.autoClose) {
     if (this.targetBlock_.isEnabled()) {
-      if (!Events.getGroup()) {
-        Events.setGroup(true);
+      if (!eventUtils.getGroup()) {
+        eventUtils.setGroup(true);
       }
       const newBlock = this.flyout_.createBlock(this.targetBlock_);
       newBlock.scheduleSnapAndBump();
     }
   } else {
     // Clicks events are on the start block, even if it was a shadow.
-    const event = new (Events.get(Events.CLICK))(
+    const event = new (eventUtils.get(eventUtils.CLICK))(
         this.startBlock_, this.startWorkspace_.id, 'block');
-    Events.fire(event);
+    eventUtils.fire(event);
   }
   this.bringBlockToFront_();
-  Events.setGroup(false);
+  eventUtils.setGroup(false);
 };
 
 /**
@@ -770,8 +776,8 @@ Gesture.prototype.doBlockClick_ = function() {
  */
 Gesture.prototype.doWorkspaceClick_ = function(_e) {
   const ws = this.creatorWorkspace_;
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (common.getSelected()) {
+    common.getSelected().unselect();
   }
   this.fireWorkspaceClick_(this.startWorkspace_ || ws);
 };

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Azountas",
+			"Ch.zarafidis",
 			"Espertus",
 			"Evropi",
 			"GR",
@@ -194,7 +195,7 @@
 	"MATH_IS_DIVISIBLE_BY": "είναι διαιρετός από το",
 	"MATH_IS_TOOLTIP": "Ελέγχει αν ένας αριθμός είναι άρτιος, περιττός, πρώτος, ακέραιος, θετικός, αρνητικός, ή αν είναι διαιρετός από έναν ορισμένο αριθμό. Επιστρέφει αληθής ή ψευδής.",
 	"MATH_CHANGE_HELPURL": "https://el.wikipedia.org/wiki/%CE%A0%CF%81%CF%8C%CF%83%CE%B8%CE%B5%CF%83%CE%B7",
-	"MATH_CHANGE_TITLE": "άλλαξε %1 από %2",
+	"MATH_CHANGE_TITLE": "άλλαξε %1 αυξάνοντας κατά %2",
 	"MATH_CHANGE_TOOLTIP": "Προσθέτει έναν αριθμό στη μεταβλητή «%1».",
 	"MATH_ROUND_HELPURL": "https://en.wikipedia.org/wiki/Rounding",
 	"MATH_ROUND_TOOLTIP": "Στρογγυλοποιεί έναν αριθμό προς τα πάνω ή προς τα κάτω.",
@@ -373,7 +374,7 @@
 	"LISTS_REVERSE_TOOLTIP": "Α",
 	"VARIABLES_GET_TOOLTIP": "Επιστρέφει την τιμή αυτής της μεταβλητής.",
 	"VARIABLES_GET_CREATE_SET": "Δημιούργησε «όρισε %1»",
-	"VARIABLES_SET": "όρισε %1 μέχρι το %2",
+	"VARIABLES_SET": "ανάθεσε στην %1 το %2",
 	"VARIABLES_SET_TOOLTIP": "Ορίζει αυτή τη μεταβλητή να είναι ίση με την είσοδο.",
 	"VARIABLES_SET_CREATE_GET": "Δημιούργησε «πάρε %1»",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
@@ -402,5 +403,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Πείτε κάτι...",
 	"WORKSPACE_ARIA_LABEL": "Χώρος εργασίας Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ."
+	"COLLAPSED_WARNINGS_WARNING": "Υπάρχουν προειδοποιήσεις για συμπτυγμένα μπλοκ.",
+	"DIALOG_OK": "Εντάξει",
+	"DIALOG_CANCEL": "Ακύρωση"
 }

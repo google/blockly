@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Image field.  Used for pictures, icons, etc.
+ * @class
+ */
 goog.module('Blockly.FieldImage');
-goog.module.declareLegacyNamespace();
 
 const Field = goog.require('Blockly.Field');
 const Size = goog.require('Blockly.utils.Size');
@@ -38,6 +41,7 @@ const utils = goog.require('Blockly.utils');
  *    for a list of properties this parameter supports.
  * @extends {Field}
  * @constructor
+ * @alias Blockly.FieldImage
  */
 const FieldImage = function(
     src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {

@@ -11,18 +11,13 @@
 'use strict';
 
 /**
- * @name Blockly.Procedures
- * @namespace
+ * Utility functions for handling procedures.
+ * @namespace Blockly.Procedures
  */
 goog.module('Blockly.Procedures');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-const Blocks = goog.require('Blockly.Blocks');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const Msg = goog.require('Blockly.Msg');
@@ -32,7 +27,11 @@ const Workspace = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Blocks} = goog.require('Blockly.blocks');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -40,6 +39,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * The default argument for a procedures_mutatorarg block.
  * @type {string}
+ * @alias Blockly.Procedures.DEFAULT_ARG
  */
 const DEFAULT_ARG = 'x';
 exports.DEFAULT_ARG = DEFAULT_ARG;
@@ -51,6 +51,7 @@ exports.DEFAULT_ARG = DEFAULT_ARG;
  *    renameProcedure: function(string,string),
  *    getProcedureDef: function():!Array
  * }}
+ * @alias Blockly.Procedures.ProcedureBlock
  */
 let ProcedureBlock;
 exports.ProcedureBlock = ProcedureBlock;
@@ -62,6 +63,7 @@ exports.ProcedureBlock = ProcedureBlock;
  *     first contains procedures without return variables, the second with.
  *     Each procedure is defined by a three-element list of name, parameter
  *     list, and return value boolean.
+ * @alias Blockly.Procedures.allProcedures
  */
 const allProcedures = function(root) {
   const proceduresNoReturn =
@@ -97,6 +99,7 @@ const procTupleComparator = function(ta, tb) {
  * @param {string} name Proposed procedure name.
  * @param {!Block} block Block to disambiguate.
  * @return {string} Non-colliding name.
+ * @alias Blockly.Procedures.findLegalName
  */
 const findLegalName = function(name, block) {
   if (block.isInFlyout) {
@@ -137,6 +140,7 @@ const isLegalName = function(name, workspace, opt_exclude) {
  * @param {Block=} opt_exclude Optional block to exclude from
  *     comparisons (one doesn't want to collide with oneself).
  * @return {boolean} True if the name is used, otherwise return false.
+ * @alias Blockly.Procedures.isNameUsed
  */
 const isNameUsed = function(name, workspace, opt_exclude) {
   const blocks = workspace.getAllBlocks(false);
@@ -162,6 +166,7 @@ exports.isNameUsed = isNameUsed;
  * @param {string} name The proposed new name.
  * @return {string} The accepted name.
  * @this {Field}
+ * @alias Blockly.Procedures.rename
  */
 const rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
@@ -190,6 +195,7 @@ exports.rename = rename;
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!Workspace} workspace The workspace containing procedures.
  * @return {!Array<!Element>} Array of XML block elements.
+ * @alias Blockly.Procedures.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
   const xmlList = [];
@@ -203,7 +209,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -217,7 +223,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -297,9 +303,11 @@ const updateMutatorFlyout = function(workspace) {
  * Listens for when a procedure mutator is opened. Then it triggers a flyout
  * update and adds a mutator change listener to the mutator workspace.
  * @param {!Abstract} e The event that triggered this listener.
+ * @alias Blockly.Procedures.mutatorOpenListener
+ * @package
  */
 const mutatorOpenListener = function(e) {
-  if (!(e.type == Events.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
+  if (!(e.type == eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
         e.isOpen)) {
     return;
   }
@@ -313,7 +321,6 @@ const mutatorOpenListener = function(e) {
   updateMutatorFlyout(workspace);
   workspace.addChangeListener(mutatorChangeListener);
 };
-/** @package */
 exports.mutatorOpenListener = mutatorOpenListener;
 
 /**
@@ -322,8 +329,8 @@ exports.mutatorOpenListener = mutatorOpenListener;
  * @param {!Abstract} e The event that triggered this listener.
  */
 const mutatorChangeListener = function(e) {
-  if (e.type != Events.BLOCK_CREATE && e.type != Events.BLOCK_DELETE &&
-      e.type != Events.BLOCK_CHANGE) {
+  if (e.type != eventUtils.BLOCK_CREATE && e.type != eventUtils.BLOCK_DELETE &&
+      e.type != eventUtils.BLOCK_CHANGE) {
     return;
   }
   const workspaceId = /** @type {string} */ (e.workspaceId);
@@ -337,6 +344,7 @@ const mutatorChangeListener = function(e) {
  * @param {string} name Name of procedure.
  * @param {!Workspace} workspace The workspace to find callers in.
  * @return {!Array<!Block>} Array of caller blocks.
+ * @alias Blockly.Procedures.getCallers
  */
 const getCallers = function(name, workspace) {
   const callers = [];
@@ -360,9 +368,10 @@ exports.getCallers = getCallers;
  * When a procedure definition changes its parameters, find and edit all its
  * callers.
  * @param {!Block} defBlock Procedure definition block.
+ * @alias Blockly.Procedures.mutateCallers
  */
 const mutateCallers = function(defBlock) {
-  const oldRecordUndo = Events.getRecordUndo();
+  const oldRecordUndo = eventUtils.getRecordUndo();
   const procedureBlock = /** @type {!ProcedureBlock} */ (defBlock);
   const name = procedureBlock.getProcedureDef()[0];
   const xmlElement = defBlock.mutationToDom(true);
@@ -377,10 +386,10 @@ const mutateCallers = function(defBlock) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
-      Events.setRecordUndo(false);
-      Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+      eventUtils.setRecordUndo(false);
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           caller, 'mutation', null, oldMutation, newMutation));
-      Events.setRecordUndo(oldRecordUndo);
+      eventUtils.setRecordUndo(oldRecordUndo);
     }
   }
 };
@@ -391,6 +400,7 @@ exports.mutateCallers = mutateCallers;
  * @param {string} name Name of procedure.
  * @param {!Workspace} workspace The workspace to search.
  * @return {?Block} The procedure definition block, or null not found.
+ * @alias Blockly.Procedures.getDefinition
  */
 const getDefinition = function(name, workspace) {
   // Do not assume procedure is a top block. Some languages allow nested

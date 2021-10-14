@@ -13,34 +13,71 @@
 'use strict';
 
 /**
- * @name Blockly.utils
- * @namespace
+ * Utility methods.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils
  */
 goog.module('Blockly.utils');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
+const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const Metrics = goog.require('Blockly.utils.Metrics');
 const Msg = goog.require('Blockly.Msg');
 const Rect = goog.require('Blockly.utils.Rect');
+const Size = goog.require('Blockly.utils.Size');
+const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const {globalThis} = goog.require('Blockly.utils.global');
+const dom = goog.require('Blockly.utils.dom');
+const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const internalConstants = goog.require('Blockly.internalConstants');
+const math = goog.require('Blockly.utils.math');
+const object = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const style = goog.require('Blockly.utils.style');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
+const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const xmlUtils = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
+
+exports.aria = aria;
+exports.colour = colourUtils;
+exports.Coordinate = Coordinate;
+exports.deprecation = deprecation;
+exports.dom = dom;
+exports.global = global.globalThis;
+exports.idGenerator = idGenerator;
+exports.KeyCodes = KeyCodes;
+exports.math = math;
+exports.Metrics = Metrics;
+exports.object = object;
+exports.Rect = Rect;
+exports.Size = Size;
+exports.string = stringUtils;
+exports.style = style;
+exports.Svg = Svg;
+exports.svgPaths = svgPaths;
+exports.toolbox = toolbox;
+exports.userAgent = userAgent;
+exports.xml = xmlUtils;
 
 /**
- * Don't do anything for this event, just halt propagation.
+ * Halts the propagation of the event without doing anything else.
  * @param {!Event} e An event.
+ * @deprecated
+ * @alias Blockly.utils.noEvent
  */
 const noEvent = function(e) {
+  deprecation.warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
@@ -48,17 +85,17 @@ const noEvent = function(e) {
 exports.noEvent = noEvent;
 
 /**
- * Is this event targeting a text input widget?
+ * Returns true if this event is targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.
+ * @deprecated Use Blockly.browserEvents.isTargetInput instead.
+ * @alias Blockly.utils.isTargetInput
  */
 const isTargetInput = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' ||
-      e.target.type == 'number' || e.target.type == 'email' ||
-      e.target.type == 'password' || e.target.type == 'search' ||
-      e.target.type == 'tel' || e.target.type == 'url' ||
-      e.target.isContentEditable ||
-      (e.target.dataset && e.target.dataset.isTextInput == 'true');
+  deprecation.warn(
+      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isTargetInput');
+  return browserEvents.isTargetInput(e);
 };
 exports.isTargetInput = isTargetInput;
 
@@ -67,6 +104,7 @@ exports.isTargetInput = isTargetInput;
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Coordinate} Object with .x and .y properties.
+ * @alias Blockly.utils.getRelativeXY
  */
 const getRelativeXY = function(element) {
   const xy = new Coordinate(0, 0);
@@ -111,6 +149,7 @@ exports.getRelativeXY = getRelativeXY;
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!Coordinate} Object with .x and .y properties.
+ * @alias Blockly.utils.getInjectionDivXY_
  */
 const getInjectionDivXY = function(element) {
   let x = 0;
@@ -151,62 +190,51 @@ getRelativeXY.XY_STYLE_REGEX_ =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
- * Is this event a right-click?
+ * Returns true this event is a right-click.
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
+ * @deprecated Use Blockly.browserEvents.isRightButton instead.
+ * @alias Blockly.utils.isRightButton
  */
 const isRightButton = function(e) {
-  if (e.ctrlKey && userAgent.MAC) {
-    // Control-clicking on Mac OS X is treated as a right-click.
-    // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
-    return true;
-  }
-  return e.button == 2;
+  deprecation.warn(
+      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isRightButton');
+  return browserEvents.isRightButton(e);
 };
 exports.isRightButton = isRightButton;
 
 /**
- * Return the converted coordinates of the given mouse event.
+ * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.
  * @param {!Element} svg SVG element.
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
+ * @deprecated Use Blockly.browserEvents.mouseToSvg instead;
+ * @alias Blockly.utils.mouseToSvg
  */
 const mouseToSvg = function(e, svg, matrix) {
-  const svgPoint = svg.createSVGPoint();
-  svgPoint.x = e.clientX;
-  svgPoint.y = e.clientY;
-
-  if (!matrix) {
-    matrix = svg.getScreenCTM().inverse();
-  }
-  return svgPoint.matrixTransform(matrix);
+  deprecation.warn(
+      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.mouseToSvg');
+  return browserEvents.mouseToSvg(e, svg, matrix);
 };
 exports.mouseToSvg = mouseToSvg;
 
 /**
- * Get the scroll delta of a mouse event in pixel units.
+ * Returns the scroll delta of a mouse event in pixel units.
  * @param {!Event} e Mouse event.
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
+ * @deprecated Use Blockly.browserEvents.getScrollDeltaPixels instead.
+ * @alias Blockly.utils.getScrollDeltaPixels
  */
 const getScrollDeltaPixels = function(e) {
-  switch (e.deltaMode) {
-    case 0x00:  // Pixel mode.
-    default:
-      return {x: e.deltaX, y: e.deltaY};
-    case 0x01:  // Line mode.
-      return {
-        x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER
-      };
-    case 0x02:  // Page mode.
-      return {
-        x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER
-      };
-  }
+  deprecation.warn(
+      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.getScrollDeltaPixels');
+  return browserEvents.getScrollDeltaPixels(e);
 };
 exports.getScrollDeltaPixels = getScrollDeltaPixels;
 
@@ -219,6 +247,7 @@ exports.getScrollDeltaPixels = getScrollDeltaPixels;
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
  * @return {!Array<string|number>} Array of strings and numbers.
+ * @alias Blockly.utils.tokenizeInterpolation
  */
 const tokenizeInterpolation = function(message) {
   return tokenizeInterpolation_(message, true);
@@ -232,6 +261,7 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
  * @param {string|?} message Message, which may be a string that contains
  *     string table references.
  * @return {string} String with message references replaced.
+ * @alias Blockly.utils.replaceMessageReferences
  */
 const replaceMessageReferences = function(message) {
   if (typeof message != 'string') {
@@ -250,6 +280,7 @@ exports.replaceMessageReferences = replaceMessageReferences;
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
+ * @alias Blockly.utils.checkMessageReferences
  */
 const checkMessageReferences = function(message) {
   let validSoFar = true;
@@ -413,6 +444,7 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
  * Generate a unique ID.
  * @return {string} A globally unique ID string.
  * @deprecated Use Blockly.utils.idGenerator.genUid instead.
+ * @alias Blockly.utils.genUid
  */
 const genUid = function() {
   deprecation.warn(
@@ -426,6 +458,7 @@ exports.genUid = genUid;
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
  * @return {boolean} True if 3D transforms are supported.
+ * @alias Blockly.utils.is3dSupported
  */
 const is3dSupported = function() {
   if (is3dSupported.cached_ !== undefined) {
@@ -433,7 +466,7 @@ const is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!globalThis['getComputedStyle']) {
+  if (!global.globalThis['getComputedStyle']) {
     return false;
   }
 
@@ -453,7 +486,7 @@ const is3dSupported = function() {
   for (let t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = globalThis['getComputedStyle'](el);
+      const computedStyle = global.globalThis['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not
@@ -477,6 +510,7 @@ exports.is3dSupported = is3dSupported;
  * Calls a function after the page has loaded, possibly immediately.
  * @param {function()} fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @alias Blockly.utils.runAfterPageLoad
  */
 const runAfterPageLoad = function(fn) {
   if (typeof document != 'object') {
@@ -501,6 +535,8 @@ exports.runAfterPageLoad = runAfterPageLoad;
  * scroll into account.
  * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
+ * @alias Blockly.utils.getViewportBBox
+ * @package
  */
 const getViewportBBox = function() {
   // Pixels, in window coordinates.
@@ -509,31 +545,31 @@ const getViewportBBox = function() {
       scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
       scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 };
-/** @package */
 exports.getViewportBBox = getViewportBBox;
 
 /**
  * Removes the first occurrence of a particular value from an array.
- * @param {!Array} arr Array from which to remove
- *     value.
- * @param {*} obj Object to remove.
+ * @param {!Array} arr Array from which to remove value.
+ * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
+ * @alias Blockly.utils.arrayRemove
+ * @package
  */
-const arrayRemove = function(arr, obj) {
-  const i = arr.indexOf(obj);
+const arrayRemove = function(arr, value) {
+  const i = arr.indexOf(value);
   if (i == -1) {
     return false;
   }
   arr.splice(i, 1);
   return true;
 };
-/** @package */
 exports.arrayRemove = arrayRemove;
 
 /**
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
  * @return {!Coordinate} Object with values 'x' and 'y'.
+ * @alias Blockly.utils.getDocumentScroll
  */
 const getDocumentScroll = function() {
   const el = document.documentElement;
@@ -557,6 +593,7 @@ exports.getDocumentScroll = getDocumentScroll;
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
  * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @alias Blockly.utils.getBlockTypeCounts
  */
 const getBlockTypeCounts = function(block, opt_stripFollowing) {
   const typeCountsMap = Object.create(null);
@@ -585,6 +622,8 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  * @param {!Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
  * @return {!Coordinate} The workspace coordinates.
+ * @alias Blockly.utils.screenToWsCoordinates
+ * @package
  */
 const screenToWsCoordinates = function(ws, screenCoordinates) {
   const screenX = screenCoordinates.x;
@@ -613,7 +652,6 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
-/** @package */
 exports.screenToWsCoordinates = screenToWsCoordinates;
 
 /**
@@ -624,6 +662,7 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
  * @return {{hue: ?number, hex: string}} An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
+ * @alias Blockly.utils.parseBlockColour
  */
 const parseBlockColour = function(colour) {
   const dereferenced =

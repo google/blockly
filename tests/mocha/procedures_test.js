@@ -4,8 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.require('Blockly.Blocks.procedures');
+goog.module('Blockly.test.procedures');
+
+goog.require('Blockly');
 goog.require('Blockly.Msg');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
+
 
 suite('Procedures', function() {
   setup(function() {

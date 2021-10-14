@@ -10,11 +10,12 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @class
+ */
 goog.module('Blockly.blockRendering.RenderInfo');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -47,7 +48,8 @@ const TopRow = goog.require('Blockly.blockRendering.TopRow');
 const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
 const inputTypes = goog.require('Blockly.inputTypes');
-
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -61,6 +63,7 @@ const inputTypes = goog.require('Blockly.inputTypes');
  * @param {!BlockSvg} block The block to measure.
  * @constructor
  * @package
+ * @alias Blockly.blockRendering.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   this.block_ = block;

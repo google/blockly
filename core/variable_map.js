@@ -10,20 +10,24 @@
  */
 'use strict';
 
+/**
+ * Object representing a map of variables and their types.
+ * @class
+ */
 goog.module('Blockly.VariableMap');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 const Names = goog.require('Blockly.Names');
 const VariableModel = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const dialog = goog.require('Blockly.dialog');
+const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
 /** @suppress {extraRequire} */
@@ -36,6 +40,7 @@ goog.require('Blockly.Events.VarRename');
  * variables are the type indicated by the key.
  * @param {!Workspace} workspace The workspace this map belongs to.
  * @constructor
+ * @alias Blockly.VariableMap
  */
 const VariableMap = function(workspace) {
   /**
@@ -73,7 +78,7 @@ VariableMap.prototype.renameVariable = function(variable, newName) {
   const type = variable.type;
   const conflictVar = this.getVariable(newName, type);
   const blocks = this.workspace.getAllBlocks(false);
-  Events.setGroup(true);
+  eventUtils.setGroup(true);
   try {
     // The IDs may match if the rename is a simple case change (name1 -> Name1).
     if (!conflictVar || conflictVar.getId() == variable.getId()) {
@@ -82,7 +87,7 @@ VariableMap.prototype.renameVariable = function(variable, newName) {
       this.renameVariableWithConflict_(variable, newName, conflictVar, blocks);
     }
   } finally {
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }
 };
 
@@ -112,7 +117,8 @@ VariableMap.prototype.renameVariableById = function(id, newName) {
  */
 VariableMap.prototype.renameVariableAndUses_ = function(
     variable, newName, blocks) {
-  Events.fire(new (Events.get(Events.VAR_RENAME))(variable, newName));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName));
   variable.name = newName;
   for (let i = 0; i < blocks.length; i++) {
     blocks[i].updateVarName(variable);
@@ -149,11 +155,9 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
   }
 
   // Finally delete the original variable, which is now unreferenced.
-  Events.fire(new (Events.get(Events.VAR_DELETE))(variable));
+  eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
   // And remove it from the list.
-  const variableList = this.getVariablesOfType(type);
-  const variableIndex = variableList.indexOf(variable);
-  this.variableMap_[type].splice(variableIndex, 1);
+  utils.arrayRemove(this.variableMap_[type], variable);
 };
 
 /* End functions for renaming variables. */
@@ -206,11 +210,13 @@ VariableMap.prototype.createVariable = function(name, opt_type, opt_id) {
  * @param {!VariableModel} variable Variable to delete.
  */
 VariableMap.prototype.deleteVariable = function(variable) {
+  const variableId = variable.getId();
   const variableList = this.variableMap_[variable.type];
-  for (let i = 0, tempVar; (tempVar = variableList[i]); i++) {
-    if (tempVar.getId() == variable.getId()) {
+  for (let i = 0; i < variableList.length; i++) {
+    const tempVar = variableList[i];
+    if (tempVar.getId() == variableId) {
       variableList.splice(i, 1);
-      Events.fire(new (Events.get(Events.VAR_DELETE))(variable));
+      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
       return;
     }
   }
@@ -267,9 +273,9 @@ VariableMap.prototype.deleteVariableById = function(id) {
  * @package
  */
 VariableMap.prototype.deleteVariableInternal = function(variable, uses) {
-  const existingGroup = Events.getGroup();
+  const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
-    Events.setGroup(true);
+    eventUtils.setGroup(true);
   }
   try {
     for (let i = 0; i < uses.length; i++) {
@@ -278,7 +284,7 @@ VariableMap.prototype.deleteVariableInternal = function(variable, uses) {
     this.deleteVariable(variable);
   } finally {
     if (!existingGroup) {
-      Events.setGroup(false);
+      eventUtils.setGroup(false);
     }
   }
 };

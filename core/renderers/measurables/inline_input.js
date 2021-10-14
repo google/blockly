@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Class representing inline inputs with connections on a rendered
+ * block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.InlineInput');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -32,6 +36,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {InputConnection}
+ * @alias Blockly.blockRendering.InlineInput
  */
 const InlineInput = function(constants, input) {
   InlineInput.superClass_.constructor.call(this, constants, input);

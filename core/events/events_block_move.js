@@ -10,17 +10,20 @@
  */
 'use strict';
 
+/**
+ * Class for a block move event.
+ * @class
+ */
 goog.module('Blockly.Events.BlockMove');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -29,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  *     event.
  * @extends {BlockBase}
  * @constructor
+ * @alias Blockly.Events.BlockMove
  */
 const BlockMove = function(opt_block) {
   BlockMove.superClass_.constructor.call(this, opt_block);
@@ -51,7 +55,7 @@ object.inherits(BlockMove, BlockBase);
  * Type of this event.
  * @type {string}
  */
-BlockMove.prototype.type = Events.BLOCK_MOVE;
+BlockMove.prototype.type = eventUtils.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.
@@ -172,7 +176,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == connectionTypes.PREVIOUS_STATEMENT) {
+    } else if (connectionType == ConnectionType.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {
@@ -183,6 +187,6 @@ BlockMove.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.MOVE, BlockMove);
+registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
 exports = BlockMove;

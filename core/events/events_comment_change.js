@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Class for comment change event.
+ * @class
+ */
 goog.module('Blockly.Events.CommentChange');
-goog.module.declareLegacyNamespace();
 
 const CommentBase = goog.require('Blockly.Events.CommentBase');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -29,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  * @param {string=} opt_newContents New contents of the comment.
  * @extends {CommentBase}
  * @constructor
+ * @alias Blockly.Events.CommentChange
  */
 const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
   CommentChange.superClass_.constructor.call(this, opt_comment);
@@ -47,7 +51,7 @@ object.inherits(CommentChange, CommentBase);
  * Type of this event.
  * @type {string}
  */
-CommentChange.prototype.type = Events.COMMENT_CHANGE;
+CommentChange.prototype.type = eventUtils.COMMENT_CHANGE;
 
 /**
  * Encode the event as JSON.
@@ -94,6 +98,6 @@ CommentChange.prototype.run = function(forward) {
   comment.setContent(contents);
 };
 
-registry.register(registry.Type.EVENT, Events.COMMENT_CHANGE, CommentChange);
+registry.register(registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
 
 exports = CommentChange;

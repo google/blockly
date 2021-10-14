@@ -10,12 +10,15 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of element select action.
+ * @class
+ */
 goog.module('Blockly.Events.Selected');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
 const object = goog.require('Blockly.utils.object');
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 
 
@@ -29,6 +32,7 @@ const registry = goog.require('Blockly.registry');
  *    Null if no element previously selected. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.Selected
  */
 const Selected = function(opt_oldElementId, opt_newElementId, opt_workspaceId) {
   Selected.superClass_.constructor.call(this, opt_workspaceId);
@@ -51,7 +55,7 @@ object.inherits(Selected, UiBase);
  * Type of this event.
  * @type {string}
  */
-Selected.prototype.type = Events.SELECTED;
+Selected.prototype.type = eventUtils.SELECTED;
 
 /**
  * Encode the event as JSON.
@@ -74,6 +78,6 @@ Selected.prototype.fromJson = function(json) {
   this.newElementId = json['newElementId'];
 };
 
-registry.register(registry.Type.EVENT, Events.SELECTED, Selected);
+registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);
 
 exports = Selected;

@@ -19,7 +19,6 @@ goog.provide('Blockly.Blocks.math');  // Deprecated
 goog.provide('Blockly.Constants.Math');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldNumber');
@@ -446,6 +445,7 @@ Blockly.Extensions.register('math_op_tooltip',
 Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   /**
    * Create XML to represent whether the 'divisorInput' should be present.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -457,6 +457,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
   },
   /**
    * Parse XML to restore the 'divisorInput'.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
@@ -464,6 +465,12 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
     var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
     this.updateShape_(divisorInput);
   },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
+
   /**
    * Modify this block to have (or not have) an input for 'is divisible by'.
    * @param {boolean} divisorInput True if this block has a divisor input.
@@ -531,6 +538,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   },
   /**
    * Create XML to represent the output type.
+   * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
    */
@@ -541,12 +549,18 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   },
   /**
    * Parse XML to restore the output type.
+   * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
-  }
+  },
+  
+  // This block does not need JSO serialization hooks (saveExtraState and
+  // loadExtraState) because the state of this object is already encoded in the
+  // dropdown values.
+  // XML hooks are kept for backwards compatibility.
 };
 
 /**

@@ -11,8 +11,12 @@
  */
 'use strict';
 
+/**
+ * Methods for adding highlights on block, for rendering in
+ * compatibility mode.
+ * @class
+ */
 goog.module('Blockly.geras.Highlighter');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -41,6 +45,7 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
  *     information needed to render this block.
  * @package
  * @constructor
+ * @alias Blockly.geras.Highlighter
  */
 const Highlighter = function(info) {
   this.info_ = info;

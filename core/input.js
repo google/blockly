@@ -10,13 +10,12 @@
  */
 'use strict';
 
+/**
+ * Object representing an input (value, statement, or dummy).
+ * @class
+ */
 goog.module('Blockly.Input');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -26,6 +25,10 @@ const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const inputTypes = goog.require('Blockly.inputTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 
@@ -37,6 +40,7 @@ goog.require('Blockly.FieldLabel');
  * @param {!Block} block The block containing this input.
  * @param {Connection} connection Optional connection for this input.
  * @constructor
+ * @alias Blockly.Input
  */
 const Input = function(type, name, block, connection) {
   if (type != inputTypes.DUMMY && !name) {

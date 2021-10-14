@@ -10,15 +10,18 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of bubble open.
+ * @class
+ */
 goog.module('Blockly.Events.BubbleOpen');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -32,6 +35,7 @@ const registry = goog.require('Blockly.registry');
  *    or 'warning'. Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.BubbleOpen
  */
 const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
@@ -56,7 +60,7 @@ object.inherits(BubbleOpen, UiBase);
  * Type of this event.
  * @type {string}
  */
-BubbleOpen.prototype.type = Events.BUBBLE_OPEN;
+BubbleOpen.prototype.type = eventUtils.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -81,6 +85,6 @@ BubbleOpen.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.BUBBLE_OPEN, BubbleOpen);
+registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
 
 exports = BubbleOpen;

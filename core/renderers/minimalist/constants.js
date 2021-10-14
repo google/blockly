@@ -10,8 +10,12 @@
  */
 'use strict';
 
+/**
+ * An object that provides constants for rendering blocks in the
+ * minimalist renderer.
+ * @class
+ */
 goog.module('Blockly.minimalist.ConstantProvider');
-goog.module.declareLegacyNamespace();
 
 const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
@@ -22,6 +26,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @package
  * @extends {BaseConstantProvider}
+ * @alias Blockly.minimalist.ConstantProvider
  */
 const ConstantProvider = function() {
   ConstantProvider.superClass_.constructor.call(this);

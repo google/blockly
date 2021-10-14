@@ -10,21 +10,28 @@
  */
 'use strict';
 
+/**
+ * Utilities for bumping objects back into worksapce bounds.
+ * @namespace Blockly.bumpObjects
+ */
 goog.module('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
-const Events = goog.require('Blockly.Events');
+const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
+const ViewportChange = goog.requireType('Blockly.Events.ViewportChange');
+/* eslint-disable-next-line no-unused-vars */
 const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const eventUtils = goog.require('Blockly.Events.utils');
 const mathUtils = goog.require('Blockly.utils.math');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -34,6 +41,7 @@ const mathUtils = goog.require('Blockly.utils.math');
  *    in workspace coordinates.
  * @param {!IBoundedElement} object The object to bump.
  * @return {boolean} True if block was bumped.
+ * @alias Blockly.bumpObjects.bumpIntoBounds
  */
 const bumpObjectIntoBounds = function(workspace, scrollMetrics, object) {
   // Compute new top/left position for object.
@@ -81,7 +89,8 @@ exports.bumpIntoBounds = bumpObjectIntoBounds;
 /**
  * Creates a handler for bumping objects when they cross fixed bounds.
  * @param {!WorkspaceSvg} workspace The workspace to handle.
- * @return {function(Events.Abstract)} The event handler.
+ * @return {function(Abstract)} The event handler.
+ * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 const bumpIntoBoundsHandler = function(workspace) {
   return function(e) {
@@ -90,7 +99,7 @@ const bumpIntoBoundsHandler = function(workspace) {
       return;
     }
 
-    if (Events.BUMP_EVENTS.indexOf(e.type) !== -1) {
+    if (eventUtils.BUMP_EVENTS.indexOf(e.type) !== -1) {
       const scrollMetricsInWsCoords = metricsManager.getScrollMetrics(true);
 
       // Triggered by move/create event
@@ -99,8 +108,8 @@ const bumpIntoBoundsHandler = function(workspace) {
         return;
       }
       // Handle undo.
-      const oldGroup = Events.getGroup();
-      Events.setGroup(e.group);
+      const oldGroup = eventUtils.getGroup();
+      eventUtils.setGroup(e.group);
 
       const wasBumped = bumpObjectIntoBounds(
           workspace, scrollMetricsInWsCoords,
@@ -112,10 +121,10 @@ const bumpIntoBoundsHandler = function(workspace) {
             ' event group. This may break undo.');
       }
       if (oldGroup !== null) {
-        Events.setGroup(oldGroup);
+        eventUtils.setGroup(oldGroup);
       }
-    } else if (e.type === Events.VIEWPORT_CHANGE) {
-      const viewportEvent = /** @type {!Events.ViewportChange} */ (e);
+    } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
+      const viewportEvent = /** @type {!ViewportChange} */ (e);
       if (viewportEvent.scale > viewportEvent.oldScale) {
         bumpTopObjectsIntoBounds(workspace);
       }
@@ -128,22 +137,22 @@ exports.bumpIntoBoundsHandler = bumpIntoBoundsHandler;
  * Extracts the object from the given event.
  * @param {!WorkspaceSvg} workspace The workspace the event originated
  *    from.
- * @param {!Events.BumpEvent} e An event containing an object.
+ * @param {!eventUtils.BumpEvent} e An event containing an object.
  * @return {?BlockSvg|?WorkspaceCommentSvg} The extracted
  *    object.
  */
 const extractObjectFromEvent = function(workspace, e) {
   let object = null;
   switch (e.type) {
-    case Events.BLOCK_CREATE:
-    case Events.BLOCK_MOVE:
+    case eventUtils.BLOCK_CREATE:
+    case eventUtils.BLOCK_MOVE:
       object = workspace.getBlockById(e.blockId);
       if (object) {
         object = object.getRootBlock();
       }
       break;
-    case Events.COMMENT_CREATE:
-    case Events.COMMENT_MOVE:
+    case eventUtils.COMMENT_CREATE:
+    case eventUtils.COMMENT_MOVE:
       object = (
           /** @type {?WorkspaceCommentSvg} */
           (workspace.getCommentById(e.commentId)));
@@ -155,6 +164,7 @@ const extractObjectFromEvent = function(workspace, e) {
 /**
  * Bumps the top objects in the given workspace into bounds.
  * @param {!WorkspaceSvg} workspace The workspace.
+ * @alias Blockly.bumpObjects.bumpTopObjectsIntoBounds
  */
 const bumpTopObjectsIntoBounds = function(workspace) {
   const metricsManager = workspace.getMetricsManager();

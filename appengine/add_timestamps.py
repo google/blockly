@@ -33,7 +33,7 @@ See the current project: `gcloud config get-value project`
 
 Start a venv: `python3 -m venv venv && source venv/bin/activate`
 Inside your vm run `pip install google-cloud-ndb`
-Run the script: `python add_timestamps.py`
+Run the script: `python3 add_timestamps.py`
 """
 
 __author__ = "fenichel@google.com (Rachel Fenichel)"

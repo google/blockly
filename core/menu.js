@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Blockly menu similar to Closure's goog.ui.Menu
+ * @class
+ */
 goog.module('Blockly.Menu');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +31,7 @@ const style = goog.require('Blockly.utils.style');
 /**
  * A basic menu class.
  * @constructor
+ * @alias Blockly.Menu
  */
 const Menu = function() {
   /**
@@ -136,16 +140,16 @@ Menu.prototype.render = function(container) {
   }
 
   // Add event handlers.
-  this.mouseOverHandler_ =
-      browserEvents.conditionalBind(element, 'mouseover', this, this.handleMouseOver_, true);
-  this.clickHandler_ =
-      browserEvents.conditionalBind(element, 'click', this, this.handleClick_, true);
+  this.mouseOverHandler_ = browserEvents.conditionalBind(
+      element, 'mouseover', this, this.handleMouseOver_, true);
+  this.clickHandler_ = browserEvents.conditionalBind(
+      element, 'click', this, this.handleClick_, true);
   this.mouseEnterHandler_ = browserEvents.conditionalBind(
       element, 'mouseenter', this, this.handleMouseEnter_, true);
   this.mouseLeaveHandler_ = browserEvents.conditionalBind(
       element, 'mouseleave', this, this.handleMouseLeave_, true);
-  this.onKeyDownHandler_ =
-      browserEvents.conditionalBind(element, 'keydown', this, this.handleKeyEvent_);
+  this.onKeyDownHandler_ = browserEvents.conditionalBind(
+      element, 'keydown', this, this.handleKeyEvent_);
 
   container.appendChild(element);
 };
@@ -465,7 +469,7 @@ Menu.prototype.handleKeyEvent_ = function(e) {
 Menu.prototype.getSize = function() {
   const menuDom = this.getElement();
   const menuSize = style.getSize(/** @type {!Element} */
-                           (menuDom));
+                                 (menuDom));
   // Recalculate height for the total content, not only box height.
   menuSize.height = menuDom.scrollHeight;
   return menuSize;

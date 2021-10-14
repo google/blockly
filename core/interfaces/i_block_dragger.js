@@ -11,18 +11,22 @@
 
 'use strict';
 
+/**
+ * The interface for a block dragger.
+ * @namespace Blockly.IBlockDragger
+ */
 goog.module('Blockly.IBlockDragger');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
  * A block dragger interface.
  * @interface
+ * @alias Blockly.IBlockDragger
  */
 const IBlockDragger = function() {};
 

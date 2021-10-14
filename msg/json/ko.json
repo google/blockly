@@ -418,5 +418,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "경고: 이 블럭은, 함수 정의 블럭 안에서만 사용할 수 있습니다.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "말해 보세요...",
 	"WORKSPACE_ARIA_LABEL": "Blockly 워크스페이스",
-	"COLLAPSED_WARNINGS_WARNING": "접힌 블록이 경고를 포함하고 있습니다."
+	"COLLAPSED_WARNINGS_WARNING": "접힌 블록이 경고를 포함하고 있습니다.",
+	"DIALOG_OK": "확인",
+	"DIALOG_CANCEL": "취소"
 }

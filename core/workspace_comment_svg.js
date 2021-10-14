@@ -10,22 +10,21 @@
  */
 'use strict';
 
+/**
+ * Object representing a code comment on a rendered workspace.
+ * @class
+ */
 goog.module('Blockly.WorkspaceCommentSvg');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const Blockly = goog.require('Blockly');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
+const IBoundedElement = goog.require('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
+const IBubble = goog.require('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const ICopyable = goog.require('Blockly.ICopyable');
 const Rect = goog.require('Blockly.utils.Rect');
 const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
@@ -33,9 +32,13 @@ const Touch = goog.require('Blockly.Touch');
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
@@ -80,6 +83,7 @@ const TEXTAREA_OFFSET = 2;
  * @implements {IBubble}
  * @implements {ICopyable}
  * @constructor
+ * @alias Blockly.WorkspaceCommentSvg
  */
 const WorkspaceCommentSvg = function(
     workspace, content, height, width, opt_id) {
@@ -133,7 +137,8 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = utils.is3dSupported() && !!workspace.getBlockDragSurface();
+  this.useDragSurface_ =
+      utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
@@ -167,22 +172,22 @@ WorkspaceCommentSvg.prototype.dispose = function() {
     return;
   }
   // If this comment is being dragged, unlink the mouse events.
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
 
-  if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.COMMENT_DELETE))(this));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
   }
 
   dom.removeNode(this.svgGroup_);
   // Dispose of any rendered components
   this.disposeInternal_();
 
-  Events.disable();
+  eventUtils.disable();
   WorkspaceCommentSvg.superClass_.dispose.call(this);
-  Events.enable();
+  eventUtils.enable();
 };
 
 /**
@@ -254,24 +259,24 @@ WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
  * @package
  */
 WorkspaceCommentSvg.prototype.select = function() {
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     return;
   }
   let oldId = null;
-  if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+  if (common.getSelected()) {
+    oldId = common.getSelected().id;
     // Unselect any previously selected block.
-    Events.disable();
+    eventUtils.disable();
     try {
-      Blockly.selected.unselect();
+      common.getSelected().unselect();
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
   }
-  const event =
-      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
-  Events.fire(event);
-  Blockly.selected = this;
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
+  eventUtils.fire(event);
+  common.setSelected(this);
   this.addSelect();
 };
 
@@ -280,13 +285,13 @@ WorkspaceCommentSvg.prototype.select = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.unselect = function() {
-  if (Blockly.selected != this) {
+  if (common.getSelected() != this) {
     return;
   }
-  const event =
-      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
-  Events.fire(event);
-  Blockly.selected = null;
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
+  eventUtils.fire(event);
+  common.setSelected(null);
   this.removeSelect();
   this.blurFocus();
 };
@@ -343,8 +348,9 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   let x = 0;
   let y = 0;
 
-  const dragSurfaceGroup =
-      this.useDragSurface_ ? this.workspace.getBlockDragSurface().getGroup() : null;
+  const dragSurfaceGroup = this.useDragSurface_ ?
+      this.workspace.getBlockDragSurface().getGroup() :
+      null;
 
   let element = this.getSvgRoot();
   if (element) {
@@ -377,13 +383,13 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.moveBy = function(dx, dy) {
-  const event = new (Events.get(Events.COMMENT_MOVE))(this);
+  const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(this);
   // TODO: Do I need to look up the relative to surface XY position here?
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.xy_ = new Coordinate(xy.x + dx, xy.y + dy);
   event.recordNew();
-  Events.fire(event);
+  eventUtils.fire(event);
   this.workspace.resizeContents();
 };
 
@@ -607,7 +613,7 @@ WorkspaceCommentSvg.prototype.setAutoLayout = function(_enable) {
  * @package
  */
 WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
-  Events.disable();
+  eventUtils.disable();
   let comment;
   try {
     const info = WorkspaceComment.parseAttributes(xmlComment);
@@ -629,7 +635,7 @@ WorkspaceCommentSvg.fromXml = function(xmlComment, workspace, opt_wsWidth) {
       }
     }
   } finally {
-    Events.enable();
+    eventUtils.enable();
   }
 
   WorkspaceComment.fireCreateEvent(
@@ -665,7 +671,11 @@ WorkspaceCommentSvg.prototype.toXmlWithXY = function(opt_noId) {
  * @package
  */
 WorkspaceCommentSvg.prototype.toCopyData = function() {
-  return {xml: this.toXmlWithXY(), source: this.workspace, typeCounts: null};
+  return {
+    saveInfo: this.toXmlWithXY(),
+    source: this.workspace,
+    typeCounts: null
+  };
 };
 
 /**
@@ -853,7 +863,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
  */
 WorkspaceCommentSvg.prototype.resizeMouseDown_ = function(e) {
   this.unbindDragEvents_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

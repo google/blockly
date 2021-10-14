@@ -10,8 +10,12 @@
  * @author fenichel@google.com (Rachel Fenichel)
  */
 
+/**
+ * Objects representing an icon in a row of a rendered
+ * block.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Icon');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyIcon = goog.requireType('Blockly.Icon');
@@ -31,6 +35,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Icon
  */
 const Icon = function(constants, icon) {
   Icon.superClass_.constructor.call(this, constants);

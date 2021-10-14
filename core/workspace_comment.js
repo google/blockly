@@ -10,14 +10,17 @@
  */
 'use strict';
 
+/**
+ * Object representing a code comment on the workspace.
+ * @class
+ */
 goog.module('Blockly.WorkspaceComment');
-goog.module.declareLegacyNamespace();
 
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Workspace = goog.requireType('Blockly.Workspace');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
+const eventUtils = goog.require('Blockly.Events.utils');
 const xml = goog.require('Blockly.utils.xml');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentChange');
@@ -38,6 +41,7 @@ goog.require('Blockly.Events.CommentMove');
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
  * @constructor
+ * @alias Blockly.WorkspaceComment
  */
 const WorkspaceComment = function(workspace, content, height, width, opt_id) {
   /** @type {string} */
@@ -129,8 +133,8 @@ WorkspaceComment.prototype.dispose = function() {
     return;
   }
 
-  if (Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.COMMENT_DELETE))(this));
+  if (eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
   }
 
   // Remove from the list of top comments and the comment database.
@@ -194,10 +198,10 @@ WorkspaceComment.prototype.getXY = function() {
  * @package
  */
 WorkspaceComment.prototype.moveBy = function(dx, dy) {
-  const event = new (Events.get(Events.COMMENT_MOVE))(this);
+  const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(this);
   this.xy_.translate(dx, dy);
   event.recordNew();
-  Events.fire(event);
+  eventUtils.fire(event);
 };
 
 /**
@@ -269,8 +273,8 @@ WorkspaceComment.prototype.getContent = function() {
  */
 WorkspaceComment.prototype.setContent = function(content) {
   if (this.content_ != content) {
-    Events.fire(
-        new (Events.get(Events.COMMENT_CHANGE))(this, this.content_, content));
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
+        this, this.content_, content));
     this.content_ = content;
   }
 };
@@ -313,16 +317,16 @@ WorkspaceComment.prototype.toXml = function(opt_noId) {
  * @package
  */
 WorkspaceComment.fireCreateEvent = function(comment) {
-  if (Events.isEnabled()) {
-    const existingGroup = Events.getGroup();
+  if (eventUtils.isEnabled()) {
+    const existingGroup = eventUtils.getGroup();
     if (!existingGroup) {
-      Events.setGroup(true);
+      eventUtils.setGroup(true);
     }
     try {
-      Events.fire(new (Events.get(Events.COMMENT_CREATE))(comment));
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
     } finally {
       if (!existingGroup) {
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }
     }
   }

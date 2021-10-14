@@ -9,8 +9,11 @@
  */
 'use strict';
 
+/**
+ * The class representing a theme.
+ * @class
+ */
 goog.module('Blockly.Theme');
-goog.module.declareLegacyNamespace();
 
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -27,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  * @param {!Theme.ComponentStyle=} opt_componentStyles A map of Blockly
  *     component names to style value.
  * @constructor
+ * @alias Blockly.Theme
  */
 const Theme = function(
     name, opt_blockStyles, opt_categoryStyles, opt_componentStyles) {

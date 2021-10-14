@@ -4,11 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.generator');
+
 goog.require('Blockly.Dart');
 goog.require('Blockly.JavaScript');
 goog.require('Blockly.Lua');
 goog.require('Blockly.PHP');
 goog.require('Blockly.Python');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Generator', function() {
   setup(function() {
@@ -90,6 +94,7 @@ suite('Generator', function() {
         var generator = testCase[0];
         var name = testCase[1];
         test(name, function() {
+          generator.init(this.workspace);
           this.blockToCodeTest(generator, false, true, 'row_block');
           this.blockToCodeTest(
               generator, false, false, 'row_blockstack_block', 'thisOnly=false');

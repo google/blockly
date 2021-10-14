@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Class for a variable creation event.
+ * @class
+ */
 goog.module('Blockly.Events.VarCreate');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const VarBase = goog.require('Blockly.Events.VarBase');
 /* eslint-disable-next-line no-unused-vars */
 const VariableModel = goog.requireType('Blockly.VariableModel');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -27,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *     for a blank event.
  * @extends {VarBase}
  * @constructor
+ * @alias Blockly.Events.VarCreate
  */
 const VarCreate = function(opt_variable) {
   VarCreate.superClass_.constructor.call(this, opt_variable);
@@ -43,7 +47,7 @@ object.inherits(VarCreate, VarBase);
  * Type of this event.
  * @type {string}
  */
-VarCreate.prototype.type = Events.VAR_CREATE;
+VarCreate.prototype.type = eventUtils.VAR_CREATE;
 
 /**
  * Encode the event as JSON.
@@ -79,6 +83,6 @@ VarCreate.prototype.run = function(forward) {
   }
 };
 
-registry.register(registry.Type.EVENT, Events.VAR_CREATE, VarCreate);
+registry.register(registry.Type.EVENT, eventUtils.VAR_CREATE, VarCreate);
 
 exports = VarCreate;

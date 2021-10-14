@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * Utility functions for positioning UI elements.
+ * @namespace Blockly.uiPosition
+ */
 goog.module('Blockly.uiPosition');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
@@ -27,23 +30,25 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 /**
  * Enum for vertical positioning.
  * @enum {number}
+ * @alias Blockly.uiPosition.verticalPosition
+ * @package
  */
 const verticalPosition = {
   TOP: 0,
   BOTTOM: 1
 };
-/** @package */
 exports.verticalPosition = verticalPosition;
 
 /**
  * Enum for horizontal positioning.
  * @enum {number}
+ * @alias Blockly.uiPosition.horizontalPosition
+ * @package
  */
 const horizontalPosition = {
   LEFT: 0,
   RIGHT: 1
 };
-/** @package */
 exports.horizontalPosition = horizontalPosition;
 
 /**
@@ -52,20 +57,22 @@ exports.horizontalPosition = horizontalPosition;
  *   horizontal: !horizontalPosition,
  *   vertical: !verticalPosition
  * }}
+ * @alias Blockly.uiPosition.Position
+ * @package
  */
 let Position;
-/** @package */
 exports.Position = Position;
 
 /**
  * Enum for bump rules to use for dealing with collisions.
  * @enum {number}
+ * @alias Blockly.uiPosition.bumpDirection
+ * @package
  */
 const bumpDirection = {
   UP: 0,
   DOWN: 1
 };
-/** @package */
 exports.bumpDirection = bumpDirection;
 
 /**
@@ -82,6 +89,8 @@ exports.bumpDirection = bumpDirection;
  * @param {!MetricsManager.UiMetrics} metrics The workspace UI metrics.
  * @param {!WorkspaceSvg} workspace The workspace.
  * @return {!Rect} The suggested start position.
+ * @alias Blockly.uiPosition.getStartPositionRect
+ * @package
  */
 const getStartPositionRect = function(
     position, size, horizontalPadding, verticalPadding, metrics, workspace) {
@@ -115,7 +124,6 @@ const getStartPositionRect = function(
   }
   return new Rect(top, top + size.height, left, left + size.width);
 };
-/** @package */
 exports.getStartPositionRect = getStartPositionRect;
 
 /**
@@ -126,6 +134,8 @@ exports.getStartPositionRect = getStartPositionRect;
  * @param {!WorkspaceSvg} workspace The workspace.
  * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
  * @return {!Position} The suggested corner position.
+ * @alias Blockly.uiPosition.getCornerOppositeToolbox
+ * @package
  */
 const getCornerOppositeToolbox = function(workspace, metrics) {
   const leftCorner =
@@ -137,7 +147,6 @@ const getCornerOppositeToolbox = function(workspace, metrics) {
   const vPosition = topCorner ? verticalPosition.TOP : verticalPosition.BOTTOM;
   return {horizontal: hPosition, vertical: vPosition};
 };
-/** @package */
 exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
 
 /**
@@ -151,6 +160,8 @@ exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
  * @param {!Array<!Rect>} savedPositions List of rectangles that
  *    represent the positions of UI elements already placed.
  * @return {!Rect} The suggested position rectangle.
+ * @alias Blockly.uiPosition.bumpPositionRect
+ * @package
  */
 const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
   let top = startRect.top;
@@ -175,5 +186,4 @@ const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
   }
   return boundingRect;
 };
-/** @package */
 exports.bumpPositionRect = bumpPositionRect;

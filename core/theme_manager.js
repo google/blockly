@@ -12,8 +12,12 @@
  */
 'use strict';
 
+/**
+ * Object in charge of storing and updating a workspace theme
+ *     and UI components.
+ * @class
+ */
 goog.module('Blockly.ThemeManager');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
@@ -22,6 +26,7 @@ const Workspace = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
+const utils = goog.require('Blockly.utils');
 
 
 /**
@@ -30,6 +35,7 @@ const dom = goog.require('Blockly.utils.dom');
  * @param {!Theme} theme The workspace theme.
  * @constructor
  * @package
+ * @alias Blockly.ThemeManager
  */
 const ThemeManager = function(workspace, theme) {
   /**
@@ -134,11 +140,9 @@ ThemeManager.prototype.subscribeWorkspace = function(workspace) {
  * @package
  */
 ThemeManager.prototype.unsubscribeWorkspace = function(workspace) {
-  const index = this.subscribedWorkspaces_.indexOf(workspace);
-  if (index < 0) {
+  if (!utils.arrayRemove(this.subscribedWorkspaces_, workspace)) {
     throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
   }
-  this.subscribedWorkspaces_.splice(index, 1);
 };
 
 /**

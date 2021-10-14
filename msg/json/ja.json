@@ -416,5 +416,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "警告: このブロックは、関数定義内でのみ使用できます。",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "ここへ入力",
 	"WORKSPACE_ARIA_LABEL": "Blocklyワークスペース",
-	"COLLAPSED_WARNINGS_WARNING": "つぶしたブロックには警告が入っています。"
+	"COLLAPSED_WARNINGS_WARNING": "つぶしたブロックには警告が入っています。",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "キャンセル"
 }

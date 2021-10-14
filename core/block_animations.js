@@ -10,13 +10,16 @@
  */
 'use strict';
 
+/**
+ * Methods animating a block on connection and disconnection.
+ * @namespace Blockly.blockAnimations
+ */
 goog.module('Blockly.blockAnimations');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -34,6 +37,8 @@ let disconnectGroup = null;
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param {!BlockSvg} block The block being disposed of.
+ * @alias Blockly.blockAnimations.disposeUiEffect
+ * @package
  */
 const disposeUiEffect = function(block) {
   const workspace = block.workspace;
@@ -51,7 +56,6 @@ const disposeUiEffect = function(block) {
   // Start the animation.
   disposeUiStep(clone, workspace.RTL, new Date, workspace.scale);
 };
-/** @package */
 exports.disposeUiEffect = disposeUiEffect;
 
 /**
@@ -84,6 +88,8 @@ const disposeUiStep = function(clone, rtl, start, workspaceScale) {
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
  * @param {!BlockSvg} block The block being connected.
+ * @alias Blockly.blockAnimations.connectionUiEffect
+ * @package
  */
 const connectionUiEffect = function(block) {
   const workspace = block.workspace;
@@ -115,7 +121,6 @@ const connectionUiEffect = function(block) {
   // Start the animation.
   connectionUiStep(ripple, new Date, scale);
 };
-/** @package */
 exports.connectionUiEffect = connectionUiEffect;
 
 /**
@@ -139,6 +144,8 @@ const connectionUiStep = function(ripple, start, scale) {
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
  * @param {!BlockSvg} block The block being disconnected.
+ * @alias Blockly.blockAnimations.disconnectUiEffect
+ * @package
  */
 const disconnectUiEffect = function(block) {
   block.workspace.getAudioManager().play('disconnect');
@@ -156,7 +163,6 @@ const disconnectUiEffect = function(block) {
   // Start the animation.
   disconnectUiStep(block.getSvgRoot(), magnitude, new Date);
 };
-/** @package */
 exports.disconnectUiEffect = disconnectUiEffect;
 
 /**
@@ -186,6 +192,8 @@ const disconnectUiStep = function(group, magnitude, start) {
 
 /**
  * Stop the disconnect UI animation immediately.
+ * @alias Blockly.blockAnimations.disconnectUiStop
+ * @package
  */
 const disconnectUiStop = function() {
   if (disconnectGroup) {
@@ -196,5 +204,4 @@ const disconnectUiStop = function() {
     disconnectGroup = null;
   }
 };
-/** @package */
 exports.disconnectUiStop = disconnectUiStop;

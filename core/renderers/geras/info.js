@@ -11,12 +11,14 @@
  */
 'use strict';
 
+/**
+ * Old (compatibility) renderer.
+ * Geras: spirit of old age.
+ * @class
+ */
 goog.module('Blockly.geras.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.blockRendering.Field');
@@ -30,6 +32,8 @@ const StatementInput = goog.require('Blockly.geras.StatementInput');
 const Types = goog.require('Blockly.blockRendering.Types');
 const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -44,6 +48,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @package
  * @extends {BaseRenderInfo}
+ * @alias Blockly.geras.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);

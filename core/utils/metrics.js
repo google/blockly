@@ -11,15 +11,15 @@
 'use strict';
 
 /**
- * @name Blockly.utils.Metrics
- * @namespace
+ * Workspace metrics definitions.
+ * @namespace Blockly.utils.Metrics
  */
 goog.module('Blockly.utils.Metrics');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * @record
+ * @alias Blockly.utils.Metrics
  */
 const Metrics = function() {};
 

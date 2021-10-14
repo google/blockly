@@ -11,15 +11,19 @@
  */
 'use strict';
 
+/**
+ * (Deprecated) Events fired as a result of UI actions in
+ * Blockly's editor.
+ * @class
+ */
 goog.module('Blockly.Events.Ui');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -33,6 +37,7 @@ const registry = goog.require('Blockly.registry');
  * @extends {UiBase}
  * @deprecated December 2020. Instead use a more specific UI event.
  * @constructor
+ * @alias Blockly.Events.Ui
  */
 const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   const workspaceId = opt_block ? opt_block.workspace.id : undefined;
@@ -49,7 +54,7 @@ object.inherits(Ui, UiBase);
  * Type of this event.
  * @type {string}
  */
-Ui.prototype.type = Events.UI;
+Ui.prototype.type = eventUtils.UI;
 
 /**
  * Encode the event as JSON.
@@ -78,6 +83,6 @@ Ui.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-registry.register(registry.Type.EVENT, Events.UI, Ui);
+registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 
 exports = Ui;

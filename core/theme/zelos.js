@@ -9,16 +9,16 @@
  */
 'use strict';
 
+/**
+ * Zelos theme.
+ * @namespace Blockly.Themes.Zelos
+ */
 goog.module('Blockly.Themes.Zelos');
-goog.module.declareLegacyNamespace();
 
 const Theme = goog.require('Blockly.Theme');
 
 
-// Temporary holding object.
-let Zelos = {};
-
-Zelos.defaultBlockStyles = {
+let defaultBlockStyles = {
   'colour_blocks': {
     'colourPrimary': '#CF63CF',
     'colourSecondary': '#C94FC9',
@@ -72,7 +72,7 @@ Zelos.defaultBlockStyles = {
   }
 };
 
-Zelos.categoryStyles = {
+let categoryStyles = {
   'colour_category': {'colour': '#CF63CF'},
   'list_category': {'colour': '#9966FF'},
   'logic_category': {'colour': '#4C97FF'},
@@ -84,6 +84,11 @@ Zelos.categoryStyles = {
   'variable_dynamic_category': {'colour': '#FF8C1A'}
 };
 
-Zelos = new Theme('zelos', Zelos.defaultBlockStyles, Zelos.categoryStyles);
+/**
+ * Zelos theme.
+ * @type {Theme}
+ * @alias Blockly.Themes.Zelos
+ */
+const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);
 
 exports = Zelos;

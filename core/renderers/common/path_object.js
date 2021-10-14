@@ -11,21 +11,24 @@
 
 'use strict';
 
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @class
+ */
 goog.module('Blockly.blockRendering.PathObject');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const Connection = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
+const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
 const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -39,6 +42,7 @@ const dom = goog.require('Blockly.utils.dom');
  * @constructor
  * @implements {IPathObject}
  * @package
+ * @alias Blockly.blockRendering.PathObject
  */
 const PathObject = function(root, style, constants) {
   /**

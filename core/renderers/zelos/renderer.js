@@ -10,19 +10,18 @@
  */
 'use strict';
 
+/**
+ * Zelos renderer.
+ * @class
+ */
 goog.module('Blockly.zelos.Renderer');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const ConstantProvider = goog.require('Blockly.zelos.ConstantProvider');
 const Drawer = goog.require('Blockly.zelos.Drawer');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerSvg = goog.require('Blockly.zelos.MarkerSvg');
 const PathObject = goog.require('Blockly.zelos.PathObject');
 const RenderInfo = goog.require('Blockly.zelos.RenderInfo');
@@ -31,8 +30,12 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**
@@ -41,6 +44,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @extends {BaseRenderer}
+ * @alias Blockly.zelos.Renderer
  */
 const Renderer = function(name) {
   Renderer.superClass_.constructor.call(this, name);
@@ -115,8 +119,8 @@ Renderer.prototype.makePathObject = function(root, style) {
  * @override
  */
 Renderer.prototype.shouldHighlightConnection = function(conn) {
-  return conn.type != connectionTypes.INPUT_VALUE &&
-      conn.type !== connectionTypes.OUTPUT_VALUE;
+  return conn.type != ConnectionType.INPUT_VALUE &&
+      conn.type !== ConnectionType.OUTPUT_VALUE;
 };
 
 /**
@@ -124,7 +128,7 @@ Renderer.prototype.shouldHighlightConnection = function(conn) {
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == connectionTypes.OUTPUT_VALUE) {
+  if (local.type == ConnectionType.OUTPUT_VALUE) {
     if (!closest.isConnected()) {
       return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
     }

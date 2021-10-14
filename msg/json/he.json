@@ -208,6 +208,7 @@
 	"MATH_RANDOM_INT_HELPURL": "https://he.wikipedia.org/wiki/מחולל_מספרים_אקראיים",
 	"MATH_RANDOM_INT_TITLE": "מספר שלם אקראי בין %1 ל-%2 (כולל)",
 	"MATH_RANDOM_INT_TOOLTIP": "החזרת מספר שלם, חיובי ואקראי בין שני הגבולות שהוגדרו, כולל.",
+	"MATH_RANDOM_FLOAT_HELPURL": "https://he.wikipedia.org/wiki/מחולל_מספרים_אקראיים",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "שבר אקראי",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "מחזיר שבר אקראי בין 0.0 (כולל) עד 1.0 (כולל).",
 	"MATH_ATAN2_TOOLTIP": "מחזיר את הארכטנגנס של נקודה (X, Y) במעלות מ־‎-180 עד 180.",
@@ -364,5 +365,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "אזהרה: קוביה זו עשויה לשמש רק בתוך הגדרה של פונקציה.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "נא להזין הערה...",
 	"WORKSPACE_ARIA_LABEL": "סביבת העבודה בלוקלי",
-	"COLLAPSED_WARNINGS_WARNING": "קוביות מצומצמות מכילות אזהרות."
+	"COLLAPSED_WARNINGS_WARNING": "קוביות מצומצמות מכילות אזהרות.",
+	"DIALOG_OK": "אישור",
+	"DIALOG_CANCEL": "ביטול"
 }

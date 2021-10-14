@@ -12,11 +12,15 @@
 
 'use strict';
 
+/**
+ * The interface for a component that has a handler for when a
+ * block is dropped on top of it.
+ * @namespace Blockly.IDragTarget
+ */
 goog.module('Blockly.IDragTarget');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
+const IComponent = goog.require('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
 const IDraggable = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,6 +32,7 @@ const Rect = goog.requireType('Blockly.utils.Rect');
  * dragged over or dropped on top of it.
  * @extends {IComponent}
  * @interface
+ * @alias Blockly.IDragTarget
  */
 const IDragTarget = function() {};
 

@@ -10,11 +10,14 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of trashcan flyout open and close.
+ * @class
+ */
 goog.module('Blockly.Events.TrashcanOpen');
-goog.module.declareLegacyNamespace();
 
-const Events = goog.require('Blockly.Events');
 const UiBase = goog.require('Blockly.Events.UiBase');
+const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
@@ -27,6 +30,7 @@ const registry = goog.require('Blockly.registry');
  *    Undefined for a blank event.
  * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.TrashcanOpen
  */
 const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
   TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
@@ -43,7 +47,7 @@ object.inherits(TrashcanOpen, UiBase);
  * Type of this event.
  * @type {string}
  */
-TrashcanOpen.prototype.type = Events.TRASHCAN_OPEN;
+TrashcanOpen.prototype.type = eventUtils.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.
@@ -64,6 +68,6 @@ TrashcanOpen.prototype.fromJson = function(json) {
   this.isOpen = json['isOpen'];
 };
 
-registry.register(registry.Type.EVENT, Events.TRASHCAN_OPEN, TrashcanOpen);
+registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);
 
 exports = TrashcanOpen;

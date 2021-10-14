@@ -10,16 +10,15 @@
  */
 'use strict';
 
+/**
+ * Object representing a UI bubble.
+ * @class
+ */
 goog.module('Blockly.Bubble');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockDragSurfaceSvg = goog.requireType('Blockly.BlockDragSurfaceSvg');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
+const IBubble = goog.require('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const MetricsManager = goog.requireType('Blockly.MetricsManager');
 const Scrollbar = goog.require('Blockly.Scrollbar');
@@ -32,7 +31,10 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Workspace');
 
@@ -49,6 +51,7 @@ goog.require('Blockly.Workspace');
  * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
  * @implements {IBubble}
  * @constructor
+ * @alias Blockly.Bubble
  */
 const Bubble = function(
     workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {
@@ -379,7 +382,7 @@ Bubble.prototype.setDeleteStyle = function(_enable) {
 Bubble.prototype.resizeMouseDown_ = function(e) {
   this.promote();
   Bubble.unbindDragEvents_();
-  if (utils.isRightButton(e)) {
+  if (browserEvents.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

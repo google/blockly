@@ -11,13 +11,17 @@
 
 'use strict';
 
+/**
+ * The interface for an object that a style can be added to.
+ * @namespace Blockly.IStyleable
+ */
 goog.module('Blockly.IStyleable');
-goog.module.declareLegacyNamespace();
 
 
 /**
  * Interface for an object that a style can be added to.
  * @interface
+ * @alias Blockly.IStyleable
  */
 const IStyleable = function() {};
 

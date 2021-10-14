@@ -12,29 +12,29 @@
  */
 'use strict';
 
+/**
+ * Field.  Used for editable titles, variables, etc.
+ * This is an abstract class that defines the UI on the block.  Actual
+ * instances would be FieldTextInput, FieldDropdown, etc.
+ * @class
+ */
 goog.module('Blockly.Field');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
+const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
+const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
-const IKeyboardAccessible = goog.requireType('Blockly.IKeyboardAccessible');
+const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
 /* eslint-disable-next-line no-unused-vars */
 const Input = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.requireType('Blockly.IRegistrable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
 const MarkerManager = goog.require('Blockly.MarkerManager');
 const Rect = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
@@ -45,11 +45,18 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const Xml = goog.require('Blockly.Xml');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -71,6 +78,7 @@ goog.require('Blockly.Gesture');
  * @implements {IASTNodeLocationWithBlock}
  * @implements {IKeyboardAccessible}
  * @implements {IRegistrable}
+ * @alias Blockly.Field
  */
 const Field = function(value, opt_validator, opt_config) {
   /**
@@ -430,6 +438,79 @@ Field.prototype.fromXml = function(fieldElement) {
 Field.prototype.toXml = function(fieldElement) {
   fieldElement.textContent = this.getValue();
   return fieldElement;
+};
+
+/**
+ * Saves this fields value as something which can be serialized to JSON. Should
+ * only be called by the serialization system.
+ * @param {boolean=} _doFullSerialization If true, this signals to the field
+ *     that if it normally just saves a reference to some state (eg variable
+ *     fields) it should instead serialize the full state of the thing being
+ *     referenced.
+ * @return {*} JSON serializable state.
+ * @package
+ */
+Field.prototype.saveState = function(_doFullSerialization) {
+  const legacyState = this.saveLegacyState(Field);
+  if (legacyState !== null) {
+    return legacyState;
+  }
+  return this.getValue();
+};
+
+/**
+ * Sets the field's state based on the given state value. Should only be called
+ * by the serialization system.
+ * @param {*} state The state we want to apply to the field.
+ * @package
+ */
+Field.prototype.loadState = function(state) {
+  if (this.loadLegacyState(Field, state)) {
+    return;
+  }
+  this.setValue(state);
+};
+
+/**
+ * Returns a stringified version of the XML state, if it should be used.
+ * Otherwise this returns null, to signal the field should use its own
+ * serialization.
+ * @param {*} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @return {?string} The stringified version of the XML state, or null.
+ * @protected
+ */
+Field.prototype.saveLegacyState = function(callingClass) {
+  if (callingClass.prototype.saveState === this.saveState &&
+      callingClass.prototype.toXml !== this.toXml) {
+    const elem = utilsXml.createElement('field');
+    elem.setAttribute('name', this.name || '');
+    const text = Xml.domToText(this.toXml(elem));
+    return text.replace(
+        ' xmlns="https://developers.google.com/blockly/xml"', '');
+  }
+  // Either they called this on purpose from their saveState, or they have
+  // no implementations of either hook. Just do our thing.
+  return null;
+};
+
+/**
+ * Loads the given state using either the old XML hoooks, if they should be
+ * used. Returns true to indicate loading has been handled, false otherwise.
+ * @param {*} callingClass The class calling this method.
+ *     Used to see if `this` has overridden any relevant hooks.
+ * @param {*} state The state to apply to the field.
+ * @return {boolean} Whether the state was applied or not.
+ */
+Field.prototype.loadLegacyState = function(callingClass, state) {
+  if (callingClass.prototype.loadState === this.loadState &&
+      callingClass.prototype.fromXml !== this.fromXml) {
+    this.fromXml(Xml.textToDom(/** @type {string} */ (state)));
+    return true;
+  }
+  // Either they called this on purpose from their loadState, or they have
+  // no implementations of either hook. Just do our thing.
+  return false;
 };
 
 /**
@@ -877,11 +958,11 @@ Field.prototype.setValue = function(newValue) {
     return;
   }
 
-  if (source && Events.isEnabled()) {
-    Events.fire(new (Events.get(Events.BLOCK_CHANGE))(
+  this.doValueUpdate_(newValue);
+  if (source && eventUtils.isEnabled()) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         source, 'field', this.name || null, oldValue, newValue));
   }
-  this.doValueUpdate_(newValue);
   if (this.isDirty_) {
     this.forceRerender();
   }

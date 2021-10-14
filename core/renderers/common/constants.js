@@ -10,8 +10,11 @@
  */
 'use strict';
 
+/**
+ * An object that provides constants for rendering blocks.
+ * @class
+ */
 goog.module('Blockly.blockRendering.ConstantProvider');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
@@ -19,18 +22,19 @@ const Svg = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
  * An object that provides constants for rendering blocks.
  * @constructor
  * @package
+ * @alias Blockly.blockRendering.ConstantProvider
  */
 const ConstantProvider = function() {
   /**
@@ -959,11 +963,11 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
  */
 ConstantProvider.prototype.shapeFor = function(connection) {
   switch (connection.type) {
-    case connectionTypes.INPUT_VALUE:
-    case connectionTypes.OUTPUT_VALUE:
+    case ConnectionType.INPUT_VALUE:
+    case ConnectionType.OUTPUT_VALUE:
       return this.PUZZLE_TAB;
-    case connectionTypes.PREVIOUS_STATEMENT:
-    case connectionTypes.NEXT_STATEMENT:
+    case ConnectionType.PREVIOUS_STATEMENT:
+    case ConnectionType.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown connection type');

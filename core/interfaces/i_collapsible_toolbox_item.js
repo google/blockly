@@ -11,11 +11,14 @@
 
 'use strict';
 
+/**
+ * The interface for a collapsible toolbox item.
+ * @namespace Blockly.ICollapsibleToolboxItem
+ */
 goog.module('Blockly.ICollapsibleToolboxItem');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
+const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
 
@@ -24,6 +27,7 @@ const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
  * Interface for an item in the toolbox that can be collapsed.
  * @extends {ISelectableToolboxItem}
  * @interface
+ * @alias Blockly.ICollapsibleToolboxItem
  */
 const ICollapsibleToolboxItem = function() {};
 

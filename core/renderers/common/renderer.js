@@ -10,13 +10,12 @@
  */
 'use strict';
 
+/**
+ * Base renderer.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Renderer');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.require('Blockly.Connection');
 const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -24,11 +23,9 @@ const Debug = goog.requireType('Blockly.blockRendering.Debug');
 const Drawer = goog.require('Blockly.blockRendering.Drawer');
 const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.requireType('Blockly.IRegistrable');
+const IRegistrable = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
 const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-/* eslint-disable-next-line no-unused-vars */
-const Marker = goog.requireType('Blockly.Marker');
 const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
 const PathObject = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */
@@ -38,9 +35,15 @@ const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
 const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const blockRendering = goog.require('Blockly.blockRendering');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Marker} = goog.requireType('Blockly.Marker');
 
 
 /**
@@ -49,6 +52,7 @@ const object = goog.require('Blockly.utils.object');
  * @package
  * @constructor
  * @implements {IRegistrable}
+ * @alias Blockly.blockRendering.Renderer
  */
 const Renderer = function(name) {
   /**
@@ -248,7 +252,7 @@ Renderer.prototype.shouldHighlightConnection = function(_conn) {
 Renderer.prototype.orphanCanConnectAtEnd = function(
     topBlock, orphanBlock, localType) {
   const orphanConnection =
-      (localType === connectionTypes.OUTPUT_VALUE ?
+      (localType === ConnectionType.OUTPUT_VALUE ?
            orphanBlock.outputConnection :
            orphanBlock.previousConnection);
   return !!Connection.getConnectionForOrphanedConnection(
@@ -269,8 +273,8 @@ Renderer.prototype.orphanCanConnectAtEnd = function(
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == connectionTypes.OUTPUT_VALUE ||
-      local.type == connectionTypes.PREVIOUS_STATEMENT) {
+  if (local.type == ConnectionType.OUTPUT_VALUE ||
+      local.type == ConnectionType.PREVIOUS_STATEMENT) {
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,
@@ -289,7 +293,7 @@ Renderer.prototype.getConnectionPreviewMethod = function(
  * @package
  */
 Renderer.prototype.render = function(block) {
-  if (blockRendering.isDebuggerEnabled() && !block.renderingDebugger) {
+  if (debug.isDebuggerEnabled() && !block.renderingDebugger) {
     block.renderingDebugger = this.makeDebugger_();
   }
   const info = this.makeRenderInfo_(block);

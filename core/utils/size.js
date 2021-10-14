@@ -13,11 +13,12 @@
 'use strict';
 
 /**
- * @name Size
- * @namespace
+ * Utility methods for size calculation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @class
  */
 goog.module('Blockly.utils.Size');
-goog.module.declareLegacyNamespace();
 
 
 /**
@@ -26,6 +27,7 @@ goog.module.declareLegacyNamespace();
  * @param {number} height Height.
  * @struct
  * @constructor
+ * @alias Blockly.utils.Size
  */
 const Size = function(width, height) {
   /**

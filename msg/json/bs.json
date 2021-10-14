@@ -153,5 +153,7 @@
 	"LISTS_INLIST": "na spisku",
 	"LISTS_INDEX_OF_FIRST": "pronađi prvo pojavljivanje stavke",
 	"LISTS_INDEX_OF_LAST": "pronađi posljednje pojavljivanje stavke",
-	"PROCEDURES_MUTATORARG_TITLE": "ime ulaza:"
+	"PROCEDURES_MUTATORARG_TITLE": "ime ulaza:",
+	"DIALOG_OK": "U redu",
+	"DIALOG_CANCEL": "Otkaži"
 }

@@ -11,8 +11,11 @@
 
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @class
+ */
 goog.module('Blockly.blockRendering.Measurable');
-goog.module.declareLegacyNamespace();
 
 /* eslint-disable-next-line no-unused-vars */
 const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -27,6 +30,7 @@ const Types = goog.require('Blockly.blockRendering.Types');
  *   constants provider.
  * @package
  * @constructor
+ * @alias Blockly.blockRendering.Measurable
  */
 const Measurable = function(constants) {
   this.width = 0;

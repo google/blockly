@@ -10,14 +10,16 @@
  */
 'use strict';
 
+/**
+ * Methods for dragging a workspace visually.
+ * @class
+ */
 goog.module('Blockly.WorkspaceDragger');
-goog.module.declareLegacyNamespace();
 
-// TODO(#5073): Add Blockly require after fixing circular dependency.
-// goog.require('Blockly');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const common = goog.require('Blockly.common');
 
 
 /**
@@ -28,6 +30,7 @@ const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
  * commands based on events.
  * @param {!WorkspaceSvg} workspace The workspace to drag.
  * @constructor
+ * @alias Blockly.WorkspaceDragger
  */
 const WorkspaceDragger = function(workspace) {
   /**
@@ -73,8 +76,8 @@ WorkspaceDragger.prototype.dispose = function() {
  * @package
  */
 WorkspaceDragger.prototype.startDrag = function() {
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (common.getSelected()) {
+    common.getSelected().unselect();
   }
   this.workspace_.setupDragSurface();
 };

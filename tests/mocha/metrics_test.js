@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Test for the metrics manager.
- * @author aschmiedt@google.com (Abby Schmiedt)
- */
-'use strict';
+goog.module('Blockly.test.metrics');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Metrics', function() {
   var SCROLL_X = 10;

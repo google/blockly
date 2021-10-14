@@ -12,11 +12,10 @@
 'use strict';
 
 /**
- * @name Blockly.utils.svgPaths
- * @namespace
+ * Methods for creating parts of SVG path strings.  See
+ * @namespace Blockly.utils.svgPaths
  */
 goog.module('Blockly.utils.svgPaths');
-goog.module.declareLegacyNamespace();
 
 
 /**
@@ -27,6 +26,7 @@ goog.module.declareLegacyNamespace();
  * @param {number} x The x coordinate.
  * @param {number} y The y coordinate.
  * @return {string} A string of the format ' x,y '
+ * @alias Blockly.utils.svgPaths.point
  */
 const point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
@@ -44,6 +44,7 @@ exports.point = point;
  *     the format ' x, y '.
  * @return {string} A string defining one or more Bezier curves.  See the MDN
  *     documentation for exact format.
+ * @alias Blockly.utils.svgPaths.curve
  */
 const curve = function(command, points) {
   return ' ' + command + points.join('');
@@ -58,6 +59,7 @@ exports.curve = curve;
  * @param {number} x The absolute x coordinate.
  * @param {number} y The absolute y coordinate.
  * @return {string} A string of the format ' M x,y '
+ * @alias Blockly.utils.svgPaths.moveTo
  */
 const moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
@@ -72,6 +74,7 @@ exports.moveTo = moveTo;
  * @param {number} dx The relative x coordinate.
  * @param {number} dy The relative y coordinate.
  * @return {string} A string of the format ' m dx,dy '
+ * @alias Blockly.utils.svgPaths.moveBy
  */
 const moveBy = function(dx, dy) {
   return ' m ' + dx + ',' + dy + ' ';
@@ -86,6 +89,7 @@ exports.moveBy = moveBy;
  * @param {number} dx The relative x coordinate.
  * @param {number} dy The relative y coordinate.
  * @return {string} A string of the format ' l dx,dy '
+ * @alias Blockly.utils.svgPaths.lineTo
  */
 const lineTo = function(dx, dy) {
   return ' l ' + dx + ',' + dy + ' ';
@@ -101,6 +105,7 @@ exports.lineTo = lineTo;
  *     draw lines to, in order.  The points are represented as strings of the
  *     format ' dx,dy '.
  * @return {string} A string of the format ' l (dx,dy)+ '
+ * @alias Blockly.utils.svgPaths.line
  */
 const line = function(points) {
   return ' l' + points.join('');
@@ -118,6 +123,7 @@ exports.line = line;
  * @param {number} val The coordinate to pass to the command.  It may be
  *     absolute or relative.
  * @return {string} A string of the format ' command val '
+ * @alias Blockly.utils.svgPaths.lineOnAxis
  */
 const lineOnAxis = function(command, val) {
   return ' ' + command + ' ' + val + ' ';
@@ -136,6 +142,7 @@ exports.lineOnAxis = lineOnAxis;
  *     specified either in absolute or relative coordinates depending on the
  *     command.
  * @return {string} A string of the format 'command radius radius flags point'
+ * @alias Blockly.utils.svgPaths.arc
  */
 const arc = function(command, flags, radius, point) {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;

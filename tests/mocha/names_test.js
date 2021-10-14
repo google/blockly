@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Blockly names tests.
- * @author samelh@google.com (Sam El-Husseini)
- */
-'use strict';
+goog.module('Blockly.test.names');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Names', function() {
   setup(function() {

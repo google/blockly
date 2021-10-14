@@ -77,8 +77,7 @@ var JSCOMP_ERROR = [
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
-  // 'missingRequire', As of Jan 8 2021, this enables the strict require check.
-  // Disabling this until we have fixed all the require issues.
+  'missingRequire',
   'missingReturn',
   // 'missingSourcesWarnings',
   'moduleLoad',
@@ -119,7 +118,7 @@ function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
   options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
   options.language_in = 'ECMASCRIPT6_STRICT',
   options.language_out = 'ECMASCRIPT5_STRICT';
-  options.rewrite_polyfills = false;
+  options.rewrite_polyfills = true;
   options.hide_warnings_for = 'node_modules';
   if (opt_warnings_as_error || opt_strict_typechecker) {
     options.jscomp_error = JSCOMP_ERROR;
@@ -337,13 +336,25 @@ function buildDeps(done) {
   const closurePath = argv.closureLibrary ?
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
+
   const roots = [
     closurePath,
     'core',
     'blocks',
   ];
+
+  const testRoots = [
+    ...roots,
+    'generators',
+    'tests/mocha'
+  ];
+
   const args = roots.map(root => `--root '${root}' `).join('');
   execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
+
+  const testArgs = testRoots.map(root => `--root '${root}' `).join('');
+  execSync(`closure-make-deps ${testArgs} > tests/deps.mocha.js`,
+      {stdio: 'inherit'});
   done();
 };
 
@@ -353,7 +364,7 @@ function buildDeps(done) {
  */
 function generateLangfiles(done) {
   // Run js_to_json.py
-  const jsToJsonCmd = `python scripts/i18n/js_to_json.py \
+  const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
       --output_dir ${path.join('msg', 'json')} \
       --quiet`;
@@ -385,13 +396,13 @@ function buildLangfiles(done) {
   // Create output directory.
   const outputDir = path.join(BUILD_DIR, 'msg', 'js');
   fs.mkdirSync(outputDir, {recursive: true});
-  
+
   // Run create_messages.py.
   let json_files = fs.readdirSync(path.join('msg', 'json'));
   json_files = json_files.filter(file => file.endsWith('json') &&
       !(new RegExp(/(keys|synonyms|qqq|constants)\.json$/).test(file)));
   json_files = json_files.map(file => path.join('msg', 'json', file));
-  const createMessagesCmd = `python ./scripts/i18n/create_messages.py \
+  const createMessagesCmd = `python3 ./scripts/i18n/create_messages.py \
   --source_lang_file ${path.join('msg', 'json', 'en.json')} \
   --source_synonym_file ${path.join('msg', 'json', 'synonyms.json')} \
   --source_constants_file ${path.join('msg', 'json', 'constants.json')} \

@@ -11,12 +11,14 @@
  */
 'use strict';
 
+/**
+ * New (evolving) renderer.
+ * Thrasos: spirit of boldness.
+ * @class
+ */
 goog.module('Blockly.thrasos.RenderInfo');
-goog.module.declareLegacyNamespace();
 
 const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.blockRendering.Field');
 const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
@@ -24,6 +26,8 @@ const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
 const Renderer = goog.requireType('Blockly.thrasos.Renderer');
 const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**
@@ -38,6 +42,7 @@ const object = goog.require('Blockly.utils.object');
  * @constructor
  * @package
  * @extends {BaseRenderInfo}
+ * @alias Blockly.thrasos.RenderInfo
  */
 const RenderInfo = function(renderer, block) {
   RenderInfo.superClass_.constructor.call(this, renderer, block);

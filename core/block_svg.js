@@ -10,11 +10,12 @@
  */
 'use strict';
 
+/**
+ * Methods for graphically rendering a block as SVG.
+ * @class
+ */
 goog.module('Blockly.BlockSvg');
-goog.module.declareLegacyNamespace();
 
-const ASTNode = goog.require('Blockly.ASTNode');
-const Block = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
 /* eslint-disable-next-line no-unused-vars */
@@ -24,18 +25,17 @@ const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const Field = goog.requireType('Blockly.Field');
 const FieldLabel = goog.require('Blockly.FieldLabel');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
+const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
+const IBoundedElement = goog.require('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const ICopyable = goog.require('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const IDraggable = goog.require('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
 /* eslint-disable-next-line no-unused-vars */
@@ -49,7 +49,6 @@ const Mutator = goog.requireType('Blockly.Mutator');
 const Rect = goog.require('Blockly.utils.Rect');
 const RenderedConnection = goog.require('Blockly.RenderedConnection');
 const Svg = goog.require('Blockly.utils.Svg');
-const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
 /* eslint-disable-next-line no-unused-vars */
 const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -57,18 +56,21 @@ const Tooltip = goog.require('Blockly.Tooltip');
 const Warning = goog.requireType('Blockly.Warning');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const Xml = goog.require('Blockly.Xml');
 const blockAnimations = goog.require('Blockly.blockAnimations');
+const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const connectionTypes = goog.require('Blockly.connectionTypes');
 const constants = goog.require('Blockly.constants');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Block} = goog.require('Blockly.Block');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -91,6 +93,7 @@ goog.require('Blockly.Touch');
  * @implements {ICopyable}
  * @implements {IDraggable}
  * @constructor
+ * @alias Blockly.BlockSvg
  */
 const BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
@@ -275,35 +278,6 @@ BlockSvg.prototype.getColourTertiary = function() {
 };
 
 /**
- * Get the shadow colour of a block.
- * @return {?string} #RRGGBB string.
- * @deprecated Use style.colourSecondary. (2020 January 21)
- */
-BlockSvg.prototype.getColourShadow = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourShadow', 'January 2020', 'January 2021',
-      'style.colourSecondary');
-  return this.getColourSecondary();
-};
-
-/**
- * Get the border colour(s) of a block.
- * @return {{colourDark, colourLight, colourBorder}} An object containing
- *     colour values for the border(s) of the block. If the block is using a
- *     style the colourBorder will be defined and equal to the tertiary colour
- *     of the style (#RRGGBB string). Otherwise the colourDark and colourLight
- *     attributes will be defined (#RRGGBB strings).
- * @deprecated Use style.colourTertiary. (2020 January 21)
- */
-BlockSvg.prototype.getColourBorder = function() {
-  deprecation.warn(
-      'BlockSvg.prototype.getColourBorder', 'January 2020', 'January 2021',
-      'style.colourTertiary');
-  const colourTertiary = this.getColourTertiary();
-  return {colourBorder: colourTertiary, colourLight: null, colourDark: null};
-};
-
-/**
  * Selects this block. Highlights the block visually and fires a select event
  * if the block is not already selected.
  */
@@ -313,24 +287,24 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     return;
   }
   let oldId = null;
-  if (Blockly.selected) {
-    oldId = Blockly.selected.id;
+  if (common.getSelected()) {
+    oldId = common.getSelected().id;
     // Unselect any previously selected block.
-    Events.disable();
+    eventUtils.disable();
     try {
-      Blockly.selected.unselect();
+      common.getSelected().unselect();
     } finally {
-      Events.enable();
+      eventUtils.enable();
     }
   }
-  const event =
-      new (Events.get(Events.SELECTED))(oldId, this.id, this.workspace.id);
-  Events.fire(event);
-  Blockly.selected = this;
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
+  eventUtils.fire(event);
+  common.setSelected(this);
   this.addSelect();
 };
 
@@ -339,14 +313,14 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (Blockly.selected != this) {
+  if (common.getSelected() != this) {
     return;
   }
-  const event =
-      new (Events.get(Events.SELECTED))(this.id, null, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
-  Events.fire(event);
-  Blockly.selected = null;
+  eventUtils.fire(event);
+  common.setSelected(null);
   this.removeSelect();
 };
 
@@ -484,17 +458,17 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const eventsEnabled = Events.isEnabled();
+  const eventsEnabled = eventUtils.isEnabled();
   let event;
   if (eventsEnabled) {
-    event = new (Events.get(Events.BLOCK_MOVE))(this);
+    event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
   }
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.moveConnections(dx, dy);
   if (eventsEnabled) {
     event.recordNew();
-    Events.fire(event);
+    eventUtils.fire(event);
   }
   this.workspace.resizeContents();
 };
@@ -645,8 +619,8 @@ BlockSvg.prototype.getBoundingRectangle = function() {
  */
 BlockSvg.prototype.markDirty = function() {
   this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
-      .getRenderer()
-      .getConstants();
+                                  .getRenderer()
+                                  .getConstants();
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -925,7 +899,7 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
   // contents once the block is disposed.
   const blockWorkspace = this.workspace;
   // If this block is being dragged, unlink the mouse events.
-  if (Blockly.selected == this) {
+  if (common.getSelected() == this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
@@ -963,6 +937,30 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
 };
 
 /**
+ * Delete a block and hide chaff when doing so. The block will not be deleted if
+ * it's in a flyout. This is called from the context menu and keyboard shortcuts
+ * as the full delete action. If you are disposing of a block from the workspace
+ * and don't need to perform flyout checks, handle event grouping, or hide
+ * chaff, then use `block.dispose()` directly.
+ * @package
+ */
+BlockSvg.prototype.checkAndDelete = function() {
+  if (this.workspace.isFlyout) {
+    return;
+  }
+  eventUtils.setGroup(true);
+  this.workspace.hideChaff();
+  if (this.outputConnection) {
+    // Do not attempt to heal rows
+    // (https://github.com/google/blockly/issues/4832)
+    this.dispose(false, true);
+  } else {
+    this.dispose(/* heal */ true, true);
+  }
+  eventUtils.setGroup(false);
+};
+
+/**
  * Encode a block for copying.
  * @return {?ICopyable.CopyData} Copy metadata, or null if the block is
  *     an insertion marker.
@@ -972,15 +970,9 @@ BlockSvg.prototype.toCopyData = function() {
   if (this.isInsertionMarker_) {
     return null;
   }
-  const xml = /** @type {!Element} */ (Xml.blockToDom(this, true));
-  // Copy only the selected block and internal blocks.
-  Xml.deleteNext(xml);
-  // Encode start position in XML.
-  const xy = this.getRelativeToSurfaceXY();
-  xml.setAttribute('x', this.RTL ? -xy.x : xy.x);
-  xml.setAttribute('y', xy.y);
   return {
-    xml: xml,
+    saveInfo: /** @type {!blocks.State} */ (
+        blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
     typeCounts: utils.getBlockTypeCounts(this, true)
   };
@@ -1581,18 +1573,18 @@ BlockSvg.prototype.bumpNeighbours = function() {
 BlockSvg.prototype.scheduleSnapAndBump = function() {
   const block = this;
   // Ensure that any snap and bump are part of this move's event group.
-  const group = Events.getGroup();
+  const group = eventUtils.getGroup();
 
   setTimeout(function() {
-    Events.setGroup(group);
+    eventUtils.setGroup(group);
     block.snapToGrid();
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }, internalConstants.BUMP_DELAY / 2);
 
   setTimeout(function() {
-    Events.setGroup(group);
+    eventUtils.setGroup(group);
     block.bumpNeighbours();
-    Events.setGroup(false);
+    eventUtils.setGroup(false);
   }, internalConstants.BUMP_DELAY);
 };
 
@@ -1610,8 +1602,8 @@ BlockSvg.prototype.positionNearConnection = function(
     sourceConnection, targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == connectionTypes.NEXT_STATEMENT ||
-      sourceConnection.type == connectionTypes.INPUT_VALUE) {
+  if (sourceConnection.type == ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type == ConnectionType.INPUT_VALUE) {
     const dx = targetConnection.x - sourceConnection.x;
     const dy = targetConnection.y - sourceConnection.y;
 
@@ -1788,4 +1780,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports = BlockSvg;
+exports.BlockSvg = BlockSvg;

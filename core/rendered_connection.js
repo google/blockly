@@ -10,26 +10,30 @@
  */
 'use strict';
 
+/**
+ * Components for creating connections between blocks.
+ * @class
+ */
 goog.module('Blockly.RenderedConnection');
-goog.module.declareLegacyNamespace();
 
-/* eslint-disable-next-line no-unused-vars */
-const Block = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const BlockSvg = goog.requireType('Blockly.BlockSvg');
 const Connection = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
 const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Events = goog.require('Blockly.Events');
 const Svg = goog.require('Blockly.utils.Svg');
-const connectionTypes = goog.require('Blockly.connectionTypes');
+const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
@@ -38,6 +42,7 @@ const utils = goog.require('Blockly.utils');
  * @param {number} type The type of the connection.
  * @extends {Connection}
  * @constructor
+ * @alias Blockly.RenderedConnection
  */
 const RenderedConnection = function(source, type) {
   RenderedConnection.superClass_.constructor.call(this, source, type);
@@ -175,7 +180,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     reverse = true;
   }
   // Raise it to the top for extra visibility.
-  const selected = Blockly.selected == rootBlock;
+  const selected = common.getSelected() == rootBlock;
   selected || rootBlock.addSelect();
   let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
             Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
@@ -295,20 +300,18 @@ RenderedConnection.prototype.highlight = function() {
   const sourceBlockSvg = /** @type {!BlockSvg} */ (this.sourceBlock_);
   const renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
   const shape = renderConstants.shapeFor(this);
-  if (this.type == connectionTypes.INPUT_VALUE ||
-      this.type == connectionTypes.OUTPUT_VALUE) {
+  if (this.type == ConnectionType.INPUT_VALUE ||
+      this.type == ConnectionType.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-    steps = svgPaths.moveBy(0, -yLen) +
-        svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
-        svgPaths.lineOnAxis('v', yLen);
+    steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
+        shape.pathDown + svgPaths.lineOnAxis('v', yLen);
   } else {
     const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
-    steps = svgPaths.moveBy(-xLen, 0) +
-        svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
-        svgPaths.lineOnAxis('h', xLen);
+    steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
+        shape.pathLeft + svgPaths.lineOnAxis('h', xLen);
   }
   const xy = this.sourceBlock_.getRelativeToSurfaceXY();
   const x = this.x - xy.x;
@@ -398,8 +401,8 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   const renderList = [];
-  if (this.type != connectionTypes.INPUT_VALUE &&
-      this.type != connectionTypes.NEXT_STATEMENT) {
+  if (this.type != ConnectionType.INPUT_VALUE &&
+      this.type != ConnectionType.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
@@ -459,13 +462,13 @@ RenderedConnection.prototype.isConnectionAllowed = function(
  */
 RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
   const block = this.getSourceBlock();
-  if (Events.getRecordUndo()) {
-    const group = Events.getGroup();
+  if (eventUtils.getRecordUndo()) {
+    const group = eventUtils.getGroup();
     setTimeout(function() {
       if (!block.isDisposed() && !block.getParent()) {
-        Events.setGroup(group);
+        eventUtils.setGroup(group);
         this.bumpAwayFrom(otherConnection);
-        Events.setGroup(false);
+        eventUtils.setGroup(false);
       }
     }.bind(this), internalConstants.BUMP_DELAY);
   }
@@ -505,7 +508,6 @@ RenderedConnection.prototype.respawnShadow_ = function() {
   RenderedConnection.superClass_.respawnShadow_.call(this);
   const blockShadow = this.targetBlock();
   if (!blockShadow) {
-    // This connection must not have a shadowDom_.
     return;
   }
   blockShadow.initSvg();
@@ -551,8 +553,8 @@ RenderedConnection.prototype.connect_ = function(childConnection) {
     childBlock.updateDisabled();
   }
   if (parentRendered && childRendered) {
-    if (parentConnection.type == connectionTypes.NEXT_STATEMENT ||
-        parentConnection.type == connectionTypes.PREVIOUS_STATEMENT) {
+    if (parentConnection.type == ConnectionType.NEXT_STATEMENT ||
+        parentConnection.type == ConnectionType.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
       // Rendering a child will render its parent.
       childBlock.render();

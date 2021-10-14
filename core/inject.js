@@ -10,10 +10,12 @@
  */
 'use strict';
 
+/**
+ * Functions for injecting Blockly into a web page.
+ * @namespace Blockly.inject
+ */
 goog.module('Blockly.inject');
-goog.module.declareLegacyNamespace();
 
-const BlockDragSurfaceSvg = goog.require('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Css = goog.require('Blockly.Css');
@@ -24,6 +26,7 @@ const Options = goog.require('Blockly.Options');
 const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
 const Touch = goog.require('Blockly.Touch');
 const Tooltip = goog.require('Blockly.Tooltip');
+const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const Svg = goog.require('Blockly.utils.Svg');
 const Workspace = goog.require('Blockly.Workspace');
 const WorkspaceDragSurfaceSvg = goog.require('Blockly.WorkspaceDragSurfaceSvg');
@@ -35,7 +38,7 @@ const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 
 
 /**
@@ -44,6 +47,7 @@ const utils = goog.require('Blockly.utils');
  *     or a CSS selector.
  * @param {BlocklyOptions=} opt_options Optional dictionary of options.
  * @return {!WorkspaceSvg} Newly created main workspace.
+ * @alias Blockly.inject
  */
 const inject = function(container, opt_options) {
   if (typeof container == 'string') {
@@ -79,7 +83,7 @@ const inject = function(container, opt_options) {
   // correct.
   common.setMainWorkspace(workspace);
 
-  Blockly.svgResize(workspace);
+  common.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
     common.setMainWorkspace(workspace);
@@ -187,7 +191,7 @@ const createMainWorkspace = function(
       bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
-  Blockly.svgResize(mainWorkspace);
+  common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
   DropDownDiv.createDom();
   Tooltip.createDom();
@@ -206,7 +210,7 @@ const init = function(mainWorkspace) {
   browserEvents.conditionalBind(
       /** @type {!Element} */ (svg.parentNode), 'contextmenu', null,
       function(e) {
-        if (!utils.isTargetInput(e)) {
+        if (!browserEvents.isTargetInput(e)) {
           e.preventDefault();
         }
       });
@@ -214,7 +218,7 @@ const init = function(mainWorkspace) {
   const workspaceResizeHandler =
       browserEvents.conditionalBind(window, 'resize', null, function() {
         mainWorkspace.hideChaff(true);
-        Blockly.svgResize(mainWorkspace);
+        common.svgResize(mainWorkspace);
         goog.module.get('Blockly.bumpObjects')
             .bumpTopObjectsIntoBounds(mainWorkspace);
       });
@@ -264,6 +268,29 @@ const init = function(mainWorkspace) {
 };
 
 /**
+ * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
+ * is not visible.
+ * @param {!KeyboardEvent} e Key down event.
+ */
+// TODO (https://github.com/google/blockly/issues/1998) handle cases where there
+// are multiple workspaces and non-main workspaces are able to accept input.
+const onKeyDown = function(e) {
+  const mainWorkspace = common.getMainWorkspace();
+  if (!mainWorkspace) {
+    return;
+  }
+
+  if (browserEvents.isTargetInput(e) ||
+      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
+    // When focused on an HTML text input widget, don't trap any keys.
+    // Ignore keypresses on rendered workspaces that have been explicitly
+    // hidden.
+    return;
+  }
+  ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
+};
+
+/**
  * Whether event handlers have been bound. Document event handlers will only
  * be bound once, even if Blockly is destroyed and reinjected.
  * @type {boolean}
@@ -290,7 +317,7 @@ const bindDocumentEvents = function() {
         }
       }
     });
-    browserEvents.conditionalBind(document, 'keydown', null, Blockly.onKeyDown);
+    browserEvents.conditionalBind(document, 'keydown', null, onKeyDown);
     // longStop needs to run to stop the context menu from showing up.  It
     // should run regardless of what other touch event handlers have run.
     browserEvents.bind(document, 'touchend', null, Touch.longStop);
@@ -300,8 +327,8 @@ const bindDocumentEvents = function() {
       browserEvents.conditionalBind(
           window, 'orientationchange', document, function() {
             // TODO (#397): Fix for multiple Blockly workspaces.
-            Blockly.svgResize(/** @type {!WorkspaceSvg} */
-                              (common.getMainWorkspace()));
+            common.svgResize(/** @type {!WorkspaceSvg} */
+                             (common.getMainWorkspace()));
           });
     }
   }

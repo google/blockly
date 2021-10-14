@@ -42,7 +42,7 @@ Blockly.Python['controls_repeat'] = Blockly.Python['controls_repeat_ext'];
 
 Blockly.Python['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') === 'UNTIL';
   var argument0 = Blockly.Python.valueToCode(block, 'BOOL',
       until ? Blockly.Python.ORDER_LOGICAL_NOT :
       Blockly.Python.ORDER_NONE) || 'False';
@@ -107,14 +107,14 @@ Blockly.Python['controls_for'] = function(block) {
       if (argument0 <= argument1) {
         // Count up.
         argument1++;
-        if (argument0 == 0 && increment == 1) {
+        if (argument0 === 0 && increment === 1) {
           // If starting index is 0, omit it.
           range = argument1;
         } else {
           range = argument0 + ', ' + argument1;
         }
         // If increment isn't 1, it must be explicit.
-        if (increment != 1) {
+        if (increment !== 1) {
           range += ', ' + increment;
         }
       } else {
@@ -154,7 +154,7 @@ Blockly.Python['controls_for'] = function(block) {
     var endVar = scrub(argument1, '_end');
     var incVar = scrub(increment, '_inc');
 
-    if (typeof startVar == 'number' && typeof endVar == 'number') {
+    if (typeof startVar === 'number' && typeof endVar === 'number') {
       if (startVar < endVar) {
         range = defineUpRange();
       } else {

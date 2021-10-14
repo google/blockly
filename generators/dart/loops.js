@@ -47,7 +47,7 @@ Blockly.Dart['controls_repeat'] = Blockly.Dart['controls_repeat_ext'];
 
 Blockly.Dart['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') === 'UNTIL';
   var argument0 = Blockly.Dart.valueToCode(block, 'BOOL',
       until ? Blockly.Dart.ORDER_UNARY_PREFIX :
       Blockly.Dart.ORDER_NONE) || 'false';
@@ -80,7 +80,7 @@ Blockly.Dart['controls_for'] = function(block) {
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
     var step = Math.abs(Number(increment));
-    if (step == 1) {
+    if (step === 1) {
       code += up ? '++' : '--';
     } else {
       code += (up ? ' += ' : ' -= ') + step;

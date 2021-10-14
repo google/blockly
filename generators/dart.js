@@ -218,7 +218,7 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
+      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);

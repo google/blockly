@@ -26,7 +26,7 @@ function BlockLibraryStorage(blockLibraryName, opt_blocks) {
   if (!opt_blocks) {
     // Initialize this.blocks by loading from local storage.
     this.loadFromLocalStorage();
-    if (this.blocks == null) {
+    if (this.blocks === null) {
       this.blocks = Object.create(null);
       // The line above is equivalent of {} except that this object is TRULY
       // empty. It doesn't have built-in attributes/functions such as length or

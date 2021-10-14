@@ -55,7 +55,7 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     this.appendHiddenWorkspaceToDom_(xmlDom);
   } else {
     // Toolbox has categories.
-    // Assert that selected != null
+    // Assert that selected !== null
     if (!this.model.getSelected()) {
       throw Error('Selected is null when the toolbox is empty.');
     }
@@ -69,19 +69,19 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
     // groups in the flyout.
     for (var i = 0; i < toolboxList.length; i++) {
       var element = toolboxList[i];
-      if (element.type == ListElement.TYPE_SEPARATOR) {
+      if (element.type === ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
         var nextElement = Blockly.utils.xml.createElement('sep');
-      } else if (element.type == ListElement.TYPE_CATEGORY) {
+      } else if (element.type === ListElement.TYPE_CATEGORY) {
         // If the next element is a category.
         var nextElement = Blockly.utils.xml.createElement('category');
         nextElement.setAttribute('name', element.name);
         // Add a colour attribute if one exists.
-        if (element.colour != null) {
+        if (element.colour !== null) {
           nextElement.setAttribute('colour', element.colour);
         }
         // Add a custom attribute if one exists.
-        if (element.custom != null) {
+        if (element.custom !== null) {
           nextElement.setAttribute('custom', element.custom);
         }
         // Load that category to hidden workspace, setting user-generated shadow
@@ -129,10 +129,10 @@ WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
     }
     var str = '';
     for (var key in obj) {
-      if (key == 'grid' || key == 'zoom') {
+      if (key === 'grid' || key === 'zoom') {
         var temp = tabChar + key + ' : {\n' + addAttributes(obj[key],
             tabChar + '\t') + tabChar + '}, \n';
-      } else if (typeof obj[key] == 'string') {
+      } else if (typeof obj[key] === 'string') {
         var temp = tabChar + key + ' : \'' + obj[key] + '\', \n';
       } else {
         var temp = tabChar + key + ' : ' + obj[key] + ', \n';

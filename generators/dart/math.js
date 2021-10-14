@@ -21,10 +21,10 @@ Blockly.Dart['math_number'] = function(block) {
   // Numeric value.
   var code = Number(block.getFieldValue('NUM'));
   var order;
-  if (code == Infinity) {
+  if (code === Infinity) {
     code = 'double.infinity';
     order = Blockly.Dart.ORDER_UNARY_POSTFIX;
-  } else if (code == -Infinity) {
+  } else if (code === -Infinity) {
     code = '-double.infinity';
     order = Blockly.Dart.ORDER_UNARY_PREFIX;
   } else {
@@ -67,11 +67,11 @@ Blockly.Dart['math_single'] = function(block) {
   var operator = block.getFieldValue('OP');
   var code;
   var arg;
-  if (operator == 'NEG') {
+  if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     arg = Blockly.Dart.valueToCode(block, 'NUM',
         Blockly.Dart.ORDER_UNARY_PREFIX) || '0';
-    if (arg[0] == '-') {
+    if (arg[0] === '-') {
       // --3 is not legal in Dart.
       arg = ' ' + arg;
     }
@@ -80,10 +80,10 @@ Blockly.Dart['math_single'] = function(block) {
   }
   Blockly.Dart.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  if (operator == 'ABS' || operator.substring(0, 5) == 'ROUND') {
+  if (operator === 'ABS' || operator.substring(0, 5) === 'ROUND') {
     arg = Blockly.Dart.valueToCode(block, 'NUM',
         Blockly.Dart.ORDER_UNARY_POSTFIX) || '0';
-  } else if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+  } else if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
     arg = Blockly.Dart.valueToCode(block, 'NUM',
         Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
   } else {
@@ -163,7 +163,7 @@ Blockly.Dart['math_constant'] = function(block) {
     'INFINITY': ['double.infinity', Blockly.Dart.ORDER_ATOMIC]
   };
   var constant = block.getFieldValue('CONSTANT');
-  if (constant != 'INFINITY') {
+  if (constant !== 'INFINITY') {
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
   }
@@ -180,7 +180,7 @@ Blockly.Dart['math_number_property'] = function(block) {
   }
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
-  if (dropdown_property == 'PRIME') {
+  if (dropdown_property === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
@@ -301,7 +301,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       break;
     case 'AVERAGE':
       // This operation exclude null and values that are not int or float:
-      //   math_mean([null,null,"aString",1,9]) == 5.0.
+      //   math_mean([null,null,"aString",1,9]) -> 5.0
       var functionName = Blockly.Dart.provideFunction_(
           'math_mean',
           ['num ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
@@ -343,7 +343,7 @@ Blockly.Dart['math_on_list'] = function(block) {
           'import \'dart:math\' as Math;';
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
-      // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
+      // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
       var functionName = Blockly.Dart.provideFunction_(
           'math_modes',
           ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +

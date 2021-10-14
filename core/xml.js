@@ -226,14 +226,14 @@ const blockToDom = function(block, opt_noId) {
       } else if (input.type === inputTypes.STATEMENT) {
         container = utilsXml.createElement('statement');
       }
-      const shadow = input.connection.getShadowDom();
-      if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(cloneShadow(shadow, opt_noId));
+      const childShadow = input.connection.getShadowDom();
+      if (childShadow && (!childBlock || !childBlock.isShadow())) {
+        container.appendChild(cloneShadow(childShadow, opt_noId));
       }
       if (childBlock) {
-        const elem = blockToDom(childBlock, opt_noId);
-        if (elem.nodeType === dom.NodeType.ELEMENT_NODE) {
-          container.appendChild(elem);
+        const childElem = blockToDom(childBlock, opt_noId);
+        if (childElem.nodeType === dom.NodeType.ELEMENT_NODE) {
+          container.appendChild(childElem);
           empty = false;
         }
       }
@@ -266,16 +266,16 @@ const blockToDom = function(block, opt_noId) {
   const nextBlock = block.getNextBlock();
   let container;
   if (nextBlock) {
-    const elem = blockToDom(nextBlock, opt_noId);
-    if (elem.nodeType === dom.NodeType.ELEMENT_NODE) {
+    const nextElem = blockToDom(nextBlock, opt_noId);
+    if (nextElem.nodeType === dom.NodeType.ELEMENT_NODE) {
       container = utilsXml.createElement('next');
-      container.appendChild(elem);
+      container.appendChild(nextElem);
       element.appendChild(container);
     }
   }
-  const shadow = block.nextConnection && block.nextConnection.getShadowDom();
-  if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(cloneShadow(shadow, opt_noId));
+  const nextShadow = block.nextConnection && block.nextConnection.getShadowDom();
+  if (nextShadow && (!nextBlock || !nextBlock.isShadow())) {
+    container.appendChild(cloneShadow(nextShadow, opt_noId));
   }
 
   return element;

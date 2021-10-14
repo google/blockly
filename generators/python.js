@@ -271,7 +271,7 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
+      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
@@ -288,8 +288,8 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
 };
 
 /**
- * Gets a property and adjusts the value, taking into account indexing, and
- * casts to an integer.
+ * Gets a property and adjusts the value, taking into account indexing.
+ * If a static int, casts to an integer, otherwise returns a code string.
  * @param {!Blockly.Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.

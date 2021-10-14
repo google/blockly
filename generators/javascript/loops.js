@@ -48,7 +48,7 @@ Blockly.JavaScript['controls_repeat'] =
 
 Blockly.JavaScript['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') === 'UNTIL';
   var argument0 = Blockly.JavaScript.valueToCode(block, 'BOOL',
       until ? Blockly.JavaScript.ORDER_LOGICAL_NOT :
       Blockly.JavaScript.ORDER_NONE) || 'false';
@@ -81,7 +81,7 @@ Blockly.JavaScript['controls_for'] = function(block) {
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
     var step = Math.abs(Number(increment));
-    if (step == 1) {
+    if (step === 1) {
       code += up ? '++' : '--';
     } else {
       code += (up ? ' += ' : ' -= ') + step;

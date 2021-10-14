@@ -90,7 +90,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       var id = this.getFieldValue('VAR');
       var variableModel = this.workspace.getVariableById(id);
       var varType = variableModel.type;
-      if (this.type == 'variables_get_dynamic') {
+      if (this.type === 'variables_get_dynamic') {
         opposite_type = 'variables_set_dynamic';
         contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
       } else {
@@ -111,8 +111,8 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     } else {
-      if (this.type == 'variables_get_dynamic' ||
-       this.type == 'variables_get_reporter_dynamic') {
+      if (this.type === 'variables_get_dynamic' ||
+       this.type === 'variables_get_reporter_dynamic') {
         var renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,
@@ -138,7 +138,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   onchange: function(_e) {
     var id = this.getFieldValue('VAR');
     var variableModel = Blockly.Variables.getVariable(this.workspace, id);
-    if (this.type == 'variables_get_dynamic') {
+    if (this.type === 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
       this.getInput('VALUE').connection.setCheck(variableModel.type);

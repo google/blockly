@@ -31,7 +31,7 @@ goog.addDependency('../../core/constants.js', ['Blockly.constants'], [], {'lang'
 goog.addDependency('../../core/contextmenu.js', ['Blockly.ContextMenu'], ['Blockly.Events', 'Blockly.Events.BlockCreate', 'Blockly.Menu', 'Blockly.MenuItem', 'Blockly.Msg', 'Blockly.WidgetDiv', 'Blockly.Xml', 'Blockly.browserEvents', 'Blockly.internalConstants', 'Blockly.utils', 'Blockly.utils.Coordinate', 'Blockly.utils.Rect', 'Blockly.utils.aria', 'Blockly.utils.dom', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/contextmenu_items.js', ['Blockly.ContextMenuItems'], ['Blockly', 'Blockly.ContextMenuRegistry', 'Blockly.Events', 'Blockly.Msg', 'Blockly.clipboard', 'Blockly.dialog', 'Blockly.inputTypes', 'Blockly.utils.idGenerator', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/contextmenu_registry.js', ['Blockly.ContextMenuRegistry'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/css.js', ['Blockly.Css'], [], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/css.js', ['Blockly.Css'], ['Blockly.utils.deprecation'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/delete_area.js', ['Blockly.DeleteArea'], ['Blockly.BlockSvg', 'Blockly.DragTarget', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/dialog.js', ['Blockly.dialog'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/drag_target.js', ['Blockly.DragTarget'], [], {'lang': 'es6', 'module': 'goog'});

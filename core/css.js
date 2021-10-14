@@ -17,6 +17,8 @@
 goog.module('Blockly.Css');
 goog.module.declareLegacyNamespace();
 
+const deprecation = goog.require('Blockly.utils.deprecation');
+
 
 /**
  * Has CSS already been injected?
@@ -28,14 +30,23 @@ let injected = false;
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
- * @param {string} cssContent Multiline CSS string.
+ * @param {string|!Array<string>} cssContent Multiline CSS string or an array of
+ *    single lines of CSS.
  */
 const register = function(cssContent) {
   if (injected) {
     throw Error('CSS already injected');
   }
-  // Add new cssContent in the global content.
-  content += ('\n' + cssContent);
+
+  if (Array.isArray(cssContent)) {
+    deprecation.warn(
+      'Registering CSS by passing an array of strings', 'September 2021',
+      'September 2022', 'css.register passing a multiline string');
+    content += ('\n' + cssContent.join('\n'));
+  } else {
+    // Add new cssContent in the global content.
+    content += ('\n' + cssContent);
+  }
 };
 exports.register = register;
 

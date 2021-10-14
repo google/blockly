@@ -540,7 +540,7 @@ FieldAngle.prototype.wrapValue_ = function(value) {
 /**
  * CSS for angle field.  See css.js for use.
  */
-Blockly.Css.register(`
+Css.register(`
   .blocklyAngleCircle {
     stroke: #444;
     stroke-width: 1;

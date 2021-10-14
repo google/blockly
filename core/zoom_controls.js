@@ -499,18 +499,18 @@ ZoomControls.prototype.fireZoomEvent_ = function() {
 /**
  * CSS for zoom controls.  See css.js for use.
  */
-Css.register([
-  `.blocklyZoom>image, .blocklyZoom>svg>image {
-  opacity: .4;
-}`,
+Css.register(`
+  .blocklyZoom>image, .blocklyZoom>svg>image {
+    opacity: .4;
+  }
 
-  `.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
-  opacity: .6;
-}`,
+  .blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
+    opacity: .6;
+  }
 
-  `.blocklyZoom>image:active, .blocklyZoom>svg>image:active {
-  opacity: .8;
-}`
-]);
+  .blocklyZoom>image:active, .blocklyZoom>svg>image:active {
+    opacity: .8;
+  }
+`);
 
 exports = ZoomControls;

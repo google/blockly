@@ -1080,68 +1080,64 @@ WorkspaceCommentSvg.prototype.blurFocus = function() {
 /**
  * CSS for workspace comment.  See css.js for use.
  */
-Css.register([
-  // clang-format off
-  /* eslint-disable indent */
-  '.blocklyCommentForeignObject {',
-    'position: relative;',
-    'z-index: 0;',
-  '}',
+Css.register(`
+  .blocklyCommentForeignObject {
+    position: relative;
+    z-index: 0;
+  }
 
-  '.blocklyCommentRect {',
-    'fill: #E7DE8E;',
-    'stroke: #bcA903;',
-    'stroke-width: 1px;',
-  '}',
+  .blocklyCommentRect {
+    fill: #E7DE8E;
+    stroke: #bcA903;
+    stroke-width: 1px;
+  }
 
-  '.blocklyCommentTarget {',
-    'fill: transparent;',
-    'stroke: #bcA903;',
-  '}',
+  .blocklyCommentTarget {
+    fill: transparent;
+    stroke: #bcA903;
+  }
 
-  '.blocklyCommentTargetFocused {',
-    'fill: none;',
-  '}',
+  .blocklyCommentTargetFocused {
+    fill: none;
+  }
 
-  '.blocklyCommentHandleTarget {',
-    'fill: none;',
-  '}',
+  .blocklyCommentHandleTarget {
+    fill: none;
+  }
 
-  '.blocklyCommentHandleTargetFocused {',
-    'fill: transparent;',
-  '}',
+  .blocklyCommentHandleTargetFocused {
+    fill: transparent;
+  }
 
-  '.blocklyFocused>.blocklyCommentRect {',
-    'fill: #B9B272;',
-    'stroke: #B9B272;',
-  '}',
+  .blocklyFocused>.blocklyCommentRect {
+    fill: #B9B272;
+    stroke: #B9B272;
+  }
 
-  '.blocklySelected>.blocklyCommentTarget {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
+  .blocklySelected>.blocklyCommentTarget {
+    stroke: #fc3;
+    stroke-width: 3px;
+  }
 
-  '.blocklyCommentDeleteIcon {',
-    'cursor: pointer;',
-    'fill: #000;',
-    'display: none;',
-  '}',
+  .blocklyCommentDeleteIcon {
+    cursor: pointer;
+    fill: #000;
+    display: none;
+  }
 
-  '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block;',
-  '}',
+  .blocklySelected > .blocklyCommentDeleteIcon {
+    display: block;
+  }
 
-  '.blocklyDeleteIconShape {',
-    'fill: #000;',
-    'stroke: #000;',
-    'stroke-width: 1px;',
-  '}',
+  .blocklyDeleteIconShape {
+    fill: #000;
+    stroke: #000;
+    stroke-width: 1px;
+  }
 
-  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
-    'stroke: #fc3;',
-  '}'
-  /* eslint-enable indent */
-  // clang-format on
-]);
+  .blocklyDeleteIconShape.blocklyDeleteIconHighlighted {
+    stroke: #fc3;
+  }
+`);
 
 exports = WorkspaceCommentSvg;

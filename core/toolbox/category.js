@@ -645,79 +645,79 @@ ToolboxCategory.prototype.dispose = function() {
 /**
  * CSS for Toolbox.  See css.js for use.
  */
-Css.register([
-  `.blocklyTreeRow:not(.blocklyTreeSelected):hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}`,
+Css.register(`
+  .blocklyTreeRow:not(.blocklyTreeSelected):hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 
-  `.blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
-  margin: 1px 5px 1px 0;
-}`,
+  .blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
+    margin: 1px 5px 1px 0;
+  }
 
-  `.blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
-  margin: 1px 0 1px 5px;
-}`,
+  .blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
+    margin: 1px 0 1px 5px;
+  }
 
-  `.blocklyTreeRow {
-  height: 22px;
-  line-height: 22px;
-  margin-bottom: 3px;
-  padding-right: 8px;
-  white-space: nowrap;
-}`,
+  .blocklyTreeRow {
+    height: 22px;
+    line-height: 22px;
+    margin-bottom: 3px;
+    padding-right: 8px;
+    white-space: nowrap;
+  }
 
-  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
-  margin-left: 8px;
-  padding-right: 0;
-}`,
+  .blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {
+    margin-left: 8px;
+    padding-right: 0;
+  }
 
-  `.blocklyTreeIcon {
-  background-image: url(<<<PATH>>>/sprites.png);
-  height: 16px;
-  vertical-align: middle;
-  visibility: hidden;
-  width: 16px;
-}`,
+  .blocklyTreeIcon {
+    background-image: url(<<<PATH>>>/sprites.png);
+    height: 16px;
+    vertical-align: middle;
+    visibility: hidden;
+    width: 16px;
+  }
 
-  `.blocklyTreeIconClosed {
-  background-position: -32px -1px;
-}`,
+  .blocklyTreeIconClosed {
+    background-position: -32px -1px;
+  }
 
-  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
-  background-position: 0 -1px;
-}`,
+  .blocklyToolboxDiv[dir="RTL"] .blocklyTreeIconClosed {
+    background-position: 0 -1px;
+  }
 
-  `.blocklyTreeSelected>.blocklyTreeIconClosed {
-  background-position: -32px -17px;
-}`,
+  .blocklyTreeSelected>.blocklyTreeIconClosed {
+    background-position: -32px -17px;
+  }
 
-  `.blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
-  background-position: 0 -17px;
-}`,
+  .blocklyToolboxDiv[dir="RTL"] .blocklyTreeSelected>.blocklyTreeIconClosed {
+    background-position: 0 -17px;
+  }
 
-  `.blocklyTreeIconOpen {
-  background-position: -16px -1px;
-}`,
+  .blocklyTreeIconOpen {
+    background-position: -16px -1px;
+  }
 
-  `.blocklyTreeSelected>.blocklyTreeIconOpen {
-  background-position: -16px -17px;
-}`,
+  .blocklyTreeSelected>.blocklyTreeIconOpen {
+    background-position: -16px -17px;
+  }
 
-  `.blocklyTreeLabel {
-  cursor: default;
-  font: 16px sans-serif;
-  padding: 0 3px;
-  vertical-align: middle;
-}`,
+  .blocklyTreeLabel {
+    cursor: default;
+    font: 16px sans-serif;
+    padding: 0 3px;
+    vertical-align: middle;
+  }
 
-  `.blocklyToolboxDelete .blocklyTreeLabel {
-  cursor: url("<<<PATH>>>/handdelete.cur"), auto;
-}`,
+  .blocklyToolboxDelete .blocklyTreeLabel {
+    cursor: url("<<<PATH>>>/handdelete.cur"), auto;
+  }
 
-  `.blocklyTreeSelected .blocklyTreeLabel {
-  color: #fff;
-}`
-]);
+  .blocklyTreeSelected .blocklyTreeLabel {
+    color: #fff;
+  }
+`);
 
 registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,

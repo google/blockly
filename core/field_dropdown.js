@@ -317,7 +317,7 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
   }
 
   // Remove any pre-existing elements in the dropdown.
-  Blockly.DropDownDiv.clearContent();
+  DropDownDiv.clearContent();
   // Element gets created in render.
   this.menu_.render(DropDownDiv.getContentDiv());
   const menuElement = /** @type {!Element} */ (this.menu_.getElement());

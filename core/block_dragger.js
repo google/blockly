@@ -60,7 +60,7 @@ const BlockDragger = function(block, workspace) {
    * @type {!WorkspaceSvg}
    * @protected
    */
-  this.workspace_ = workspace;
+  this.workspace_ = workspace;   
 
   /**
    * Object that keeps track of connections on dragged blocks.

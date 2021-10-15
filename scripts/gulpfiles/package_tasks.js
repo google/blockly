@@ -142,9 +142,9 @@ function packageBrowser() {
         amd: './blocks',
         cjs: './blocks',
       },{
-        name: 'BlocklyJS',
-        amd: './javascript',
-        cjs: './javascript',
+        name: 'BlocklyArduino',
+        amd: './arduino',
+        cjs: './arduino',
       }]))
     .pipe(gulp.rename('browser.js'))
     .pipe(gulp.dest(packageDistribution));
@@ -191,21 +191,6 @@ function packageNode() {
       },{
         name: 'BlocklyArduino',
         cjs: './arduino',
-      },{
-        name: 'BlocklyJS',
-        cjs: './javascript',
-      },{
-        name: 'BlocklyPython',
-        cjs: './python',
-      },{
-        name: 'BlocklyPHP',
-        cjs: './php',
-      },{
-        name: 'BlocklyLua',
-        cjs: './lua',
-      }, {
-        name: 'BlocklyDart',
-        cjs: './dart',
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(packageDistribution));

@@ -21,4 +21,4 @@ Object.keys(BlocklyBlocks).forEach(function (k) {
   Blockly.Blocks[k] = BlocklyBlocks[k];
 });
 
-Blockly.JavaScript = BlocklyJS;
+Blockly.Arduino = BlocklyArduino;

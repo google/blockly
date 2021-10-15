@@ -155,15 +155,15 @@ Type.SERIALIZER = new Type('serializer');
  * @alias Blockly.registry.register
  */
 const register = function(type, name, registryItem, opt_allowOverrides) {
-  if ((!(type instanceof Type) && typeof type != 'string') ||
-      String(type).trim() == '') {
+  if ((!(type instanceof Type) && typeof type !== 'string') ||
+      String(type).trim() === '') {
     throw Error(
         'Invalid type "' + type + '". The type must be a' +
         ' non-empty string or a Blockly.registry.Type.');
   }
   type = String(type).toLowerCase();
 
-  if ((typeof name != 'string') || (name.trim() == '')) {
+  if ((typeof name !== 'string') || (name.trim() === '')) {
     throw Error(
         'Invalid name "' + name + '". The name must be a' +
         ' non-empty string.');
@@ -204,7 +204,7 @@ exports.register = register;
 const validate = function(type, registryItem) {
   switch (type) {
     case String(Type.FIELD):
-      if (typeof registryItem.fromJson != 'function') {
+      if (typeof registryItem.fromJson !== 'function') {
         throw Error('Type "' + type + '" must have a fromJson function');
       }
       break;
@@ -374,7 +374,7 @@ const getClassFromOptions = function(type, options, opt_throwIfMissing) {
   const plugin = options.plugins[typeName] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
-  if (typeof plugin == 'function') {
+  if (typeof plugin === 'function') {
     return plugin;
   }
   return getClass(type, plugin, opt_throwIfMissing);

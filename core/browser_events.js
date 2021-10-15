@@ -146,7 +146,7 @@ const bind = function(node, name, thisObject, func) {
     if (name in Touch.TOUCH_MAP) {
       const touchWrapFunc = function(e) {
         // Punt on multitouch events.
-        if (e.changedTouches && e.changedTouches.length == 1) {
+        if (e.changedTouches && e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
           const touchPoint = e.changedTouches[0];
           e.clientX = touchPoint.clientX;
@@ -195,12 +195,12 @@ exports.unbind = unbind;
  * @alias Blockly.browserEvents.isTargetInput
  */
 const isTargetInput = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' ||
-      e.target.type == 'number' || e.target.type == 'email' ||
-      e.target.type == 'password' || e.target.type == 'search' ||
-      e.target.type == 'tel' || e.target.type == 'url' ||
+  return e.target.type === 'textarea' || e.target.type === 'text' ||
+      e.target.type === 'number' || e.target.type === 'email' ||
+      e.target.type === 'password' || e.target.type === 'search' ||
+      e.target.type === 'tel' || e.target.type === 'url' ||
       e.target.isContentEditable ||
-      (e.target.dataset && e.target.dataset.isTextInput == 'true');
+      (e.target.dataset && e.target.dataset.isTextInput === 'true');
 };
 exports.isTargetInput = isTargetInput;
 
@@ -216,7 +216,7 @@ const isRightButton = function(e) {
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
   }
-  return e.button == 2;
+  return e.button === 2;
 };
 exports.isRightButton = isRightButton;
 

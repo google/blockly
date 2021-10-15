@@ -188,7 +188,7 @@ exports.isVisible = isVisible;
  * @alias Blockly.WidgetDiv.hideIfOwner
  */
 const hideIfOwner = function(oldOwner) {
-  if (owner == oldOwner) {
+  if (owner === oldOwner) {
     hide();
   }
 };

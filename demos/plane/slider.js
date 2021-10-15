@@ -71,7 +71,7 @@ var Slider = function(x, y, width, svgParent, opt_changeFunc) {
   this.setValue(0.5);
 
   // Find the root SVG object.
-  while (svgParent && svgParent.nodeName.toLowerCase() != 'svg') {
+  while (svgParent && svgParent.nodeName.toLowerCase() !== 'svg') {
     svgParent = svgParent.parentNode;
   }
   this.SVG_ = svgParent;
@@ -100,8 +100,8 @@ Slider.startKnobX_ = 0;
  * @private
  */
 Slider.prototype.knobMouseDown_ = function(e) {
-  if (e.type == 'touchstart') {
-    if (e.changedTouches.length != 1) {
+  if (e.type === 'touchstart') {
+    if (e.changedTouches.length !== 1) {
       return;
     }
     Slider.touchToMouse_(e)
@@ -142,7 +142,7 @@ Slider.mouseOver_ = function(e) {
   var node = e.target;
   // Find the root SVG object.
   do {
-    if (node == Slider.activeSlider_.SVG_) {
+    if (node === Slider.activeSlider_.SVG_) {
       return;
     }
   } while (node = node.parentNode);
@@ -159,8 +159,8 @@ Slider.knobMouseMove_ = function(e) {
   if (!thisSlider) {
     return;
   }
-  if (e.type == 'touchmove') {
-    if (e.changedTouches.length != 1) {
+  if (e.type === 'touchmove') {
+    if (e.changedTouches.length !== 1) {
       return;
     }
     Slider.touchToMouse_(e)
@@ -177,8 +177,8 @@ Slider.knobMouseMove_ = function(e) {
  * @private
  */
 Slider.prototype.rectMouseDown_ = function(e) {
-  if (e.type == 'touchstart') {
-    if (e.changedTouches.length != 1) {
+  if (e.type === 'touchstart') {
+    if (e.changedTouches.length !== 1) {
       return;
     }
     Slider.touchToMouse_(e)

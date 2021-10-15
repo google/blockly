@@ -123,7 +123,7 @@ exports.createSvgElement = createSvgElement;
  */
 const addClass = function(element, className) {
   let classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1) {
     return false;
   }
   if (classes) {
@@ -159,12 +159,12 @@ exports.removeClasses = removeClasses;
  */
 const removeClass = function(element, className) {
   const classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') === -1) {
     return false;
   }
   const classList = classes.split(/\s+/);
   for (let i = 0; i < classList.length; i++) {
-    if (!classList[i] || classList[i] == className) {
+    if (!classList[i] || classList[i] === className) {
       classList.splice(i, 1);
       i--;
     }
@@ -188,7 +188,7 @@ exports.removeClass = removeClass;
  */
 const hasClass = function(element, className) {
   const classes = element.getAttribute('class');
-  return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
+  return (' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1;
 };
 exports.hasClass = hasClass;
 

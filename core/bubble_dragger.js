@@ -145,7 +145,7 @@ BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 
   const oldWouldDeleteBubble = this.wouldDeleteBubble_;
   this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
-  if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
+  if (oldWouldDeleteBubble !== this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBubbleDrag_();
   }

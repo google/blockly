@@ -70,7 +70,7 @@ VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
   const viewMetrics = metricsManager.getViewMetrics();
   const absoluteMetrics = metricsManager.getAbsoluteMetrics();
 
-  if (typeof xyRatio.y == 'number') {
+  if (typeof xyRatio.y === 'number') {
     this.workspace_.scrollY =
         -(scrollMetrics.top +
           (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
@@ -95,17 +95,17 @@ VerticalFlyout.prototype.getX = function() {
   let x = 0;
 
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
-  if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
+  if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_) {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
-      if (this.toolboxPosition_ == toolbox.Position.LEFT) {
+      if (this.toolboxPosition_ === toolbox.Position.LEFT) {
         x = toolboxMetrics.width;
       } else {
         x = viewMetrics.width - this.width_;
       }
       // Simple (flyout-only) toolbox.
     } else {
-      if (this.toolboxPosition_ == toolbox.Position.LEFT) {
+      if (this.toolboxPosition_ === toolbox.Position.LEFT) {
         x = 0;
       } else {
         // The simple flyout does not cover the workspace.
@@ -114,7 +114,7 @@ VerticalFlyout.prototype.getX = function() {
     }
     // Trashcan flyout is opposite the main flyout.
   } else {
-    if (this.toolboxPosition_ == toolbox.Position.LEFT) {
+    if (this.toolboxPosition_ === toolbox.Position.LEFT) {
       x = 0;
     } else {
       // Because the anchor point of the flyout is on the left, but we want
@@ -169,7 +169,7 @@ VerticalFlyout.prototype.position = function() {
  * @private
  */
 VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  const atRight = this.toolboxPosition_ == toolbox.Position.RIGHT;
+  const atRight = this.toolboxPosition_ === toolbox.Position.RIGHT;
   const totalWidth = width + this.CORNER_RADIUS;
 
   // Decide whether to start on the left or right.
@@ -238,7 +238,7 @@ VerticalFlyout.prototype.layout_ = function(contents, gaps) {
   let cursorY = margin;
 
   for (let i = 0, item; (item = contents[i]); i++) {
-    if (item.type == 'block') {
+    if (item.type === 'block') {
       const block = item.block;
       const allBlocks = block.getDescendants(false);
       for (let j = 0, child; (child = allBlocks[j]); j++) {
@@ -259,7 +259,7 @@ VerticalFlyout.prototype.layout_ = function(contents, gaps) {
       this.addBlockListeners_(root, block, rect);
 
       cursorY += blockHW.height + gaps[i];
-    } else if (item.type == 'button') {
+    } else if (item.type === 'button') {
       this.initFlyoutButton_(item.button, cursorX, cursorY);
       cursorY += item.button.height + gaps[i];
     }
@@ -310,7 +310,7 @@ VerticalFlyout.prototype.getClientRect = function() {
   const BIG_NUM = 1000000000;
   const left = flyoutRect.left;
 
-  if (this.toolboxPosition_ == toolbox.Position.LEFT) {
+  if (this.toolboxPosition_ === toolbox.Position.LEFT) {
     const width = flyoutRect.width;
     return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
   } else {  // Right
@@ -341,7 +341,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
   flyoutWidth *= this.workspace_.scale;
   flyoutWidth += Scrollbar.scrollbarThickness;
 
-  if (this.width_ != flyoutWidth) {
+  if (this.width_ !== flyoutWidth) {
     for (let i = 0, block; (block = blocks[i]); i++) {
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
@@ -366,8 +366,8 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
       }
     }
 
-    if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == toolbox.Position.LEFT &&
+    if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+        this.toolboxPosition_ === toolbox.Position.LEFT &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie

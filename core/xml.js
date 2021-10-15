@@ -217,23 +217,23 @@ const blockToDom = function(block, opt_noId) {
     const input = block.inputList[i];
     let container;
     let empty = true;
-    if (input.type == inputTypes.DUMMY) {
+    if (input.type === inputTypes.DUMMY) {
       continue;
     } else {
       const childBlock = input.connection.targetBlock();
-      if (input.type == inputTypes.VALUE) {
+      if (input.type === inputTypes.VALUE) {
         container = utilsXml.createElement('value');
-      } else if (input.type == inputTypes.STATEMENT) {
+      } else if (input.type === inputTypes.STATEMENT) {
         container = utilsXml.createElement('statement');
       }
-      const shadow = input.connection.getShadowDom();
-      if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(cloneShadow(shadow, opt_noId));
+      const childShadow = input.connection.getShadowDom();
+      if (childShadow && (!childBlock || !childBlock.isShadow())) {
+        container.appendChild(cloneShadow(childShadow, opt_noId));
       }
       if (childBlock) {
-        const elem = blockToDom(childBlock, opt_noId);
-        if (elem.nodeType == dom.NodeType.ELEMENT_NODE) {
-          container.appendChild(elem);
+        const childElem = blockToDom(childBlock, opt_noId);
+        if (childElem.nodeType === dom.NodeType.ELEMENT_NODE) {
+          container.appendChild(childElem);
           empty = false;
         }
       }
@@ -243,8 +243,8 @@ const blockToDom = function(block, opt_noId) {
       element.appendChild(container);
     }
   }
-  if (block.inputsInline != undefined &&
-      block.inputsInline != block.inputsInlineDefault) {
+  if (block.inputsInline !== undefined &&
+      block.inputsInline !== block.inputsInlineDefault) {
     element.setAttribute('inline', block.inputsInline);
   }
   if (block.isCollapsed()) {
@@ -266,16 +266,16 @@ const blockToDom = function(block, opt_noId) {
   const nextBlock = block.getNextBlock();
   let container;
   if (nextBlock) {
-    const elem = blockToDom(nextBlock, opt_noId);
-    if (elem.nodeType == dom.NodeType.ELEMENT_NODE) {
+    const nextElem = blockToDom(nextBlock, opt_noId);
+    if (nextElem.nodeType === dom.NodeType.ELEMENT_NODE) {
       container = utilsXml.createElement('next');
-      container.appendChild(elem);
+      container.appendChild(nextElem);
       element.appendChild(container);
     }
   }
-  const shadow = block.nextConnection && block.nextConnection.getShadowDom();
-  if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(cloneShadow(shadow, opt_noId));
+  const nextShadow = block.nextConnection && block.nextConnection.getShadowDom();
+  if (nextShadow && (!nextBlock || !nextBlock.isShadow())) {
+    container.appendChild(cloneShadow(nextShadow, opt_noId));
   }
 
   return element;
@@ -294,7 +294,7 @@ const cloneShadow = function(shadow, opt_noId) {
   let node = shadow;
   let textNode;
   while (node) {
-    if (opt_noId && node.nodeName == 'shadow') {
+    if (opt_noId && node.nodeName === 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
       node.removeAttribute('id');
@@ -305,8 +305,8 @@ const cloneShadow = function(shadow, opt_noId) {
       while (node && !node.nextSibling) {
         textNode = node;
         node = node.parentNode;
-        if (textNode.nodeType == dom.NodeType.TEXT_NODE &&
-            textNode.data.trim() == '' && node.firstChild != textNode) {
+        if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
+            textNode.data.trim() === '' && node.firstChild !== textNode) {
           // Prune whitespace after a tag.
           dom.removeNode(textNode);
         }
@@ -314,8 +314,8 @@ const cloneShadow = function(shadow, opt_noId) {
       if (node) {
         textNode = node;
         node = node.nextSibling;
-        if (textNode.nodeType == dom.NodeType.TEXT_NODE &&
-            textNode.data.trim() == '') {
+        if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
+            textNode.data.trim() === '') {
           // Prune whitespace before a tag.
           dom.removeNode(textNode);
         }
@@ -357,11 +357,11 @@ const domToPrettyText = function(dom) {
   let indent = '';
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
-    if (line[0] == '/') {
+    if (line[0] === '/') {
       indent = indent.substring(2);
     }
     lines[i] = indent + '<' + line;
-    if (line[0] != '/' && line.slice(-2) != '/>') {
+    if (line[0] !== '/' && line.slice(-2) !== '/>') {
       indent += '  ';
     }
   }
@@ -450,8 +450,8 @@ const domToWorkspace = function(xml, workspace) {
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
       const xmlChildElement = /** @type {!Element} */ (xmlChild);
-      if (name == 'block' ||
-          (name == 'shadow' && !eventUtils.getRecordUndo())) {
+      if (name === 'block' ||
+          (name === 'shadow' && !eventUtils.getRecordUndo())) {
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
@@ -467,9 +467,9 @@ const domToWorkspace = function(xml, workspace) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
         variablesFirst = false;
-      } else if (name == 'shadow') {
+      } else if (name === 'shadow') {
         throw TypeError('Shadow block cannot be a top-level block.');
-      } else if (name == 'comment') {
+      } else if (name === 'comment') {
         if (workspace.rendered) {
           const WorkspaceCommentSvg =
               goog.module.get('Blockly.WorkspaceCommentSvg');
@@ -492,7 +492,7 @@ const domToWorkspace = function(xml, workspace) {
             WorkspaceComment.fromXml(xmlChildElement, workspace);
           }
         }
-      } else if (name == 'variables') {
+      } else if (name === 'variables') {
         if (variablesFirst) {
           domToVariables(xmlChildElement, workspace);
         } else {
@@ -536,7 +536,7 @@ const appendDomToWorkspace = function(xml, workspace) {
   }
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
-  if (bbox && bbox.top != bbox.bottom) {  // check if any previous block
+  if (bbox && bbox.top !== bbox.bottom) {  // check if any previous block
     let offsetY = 0;                      // offset to add to y of the new block
     let offsetX = 0;
     const farY = bbox.bottom;                             // bottom position
@@ -654,7 +654,7 @@ exports.domToBlock = domToBlock;
 const domToVariables = function(xmlVariables, workspace) {
   for (let i = 0; i < xmlVariables.childNodes.length; i++) {
     const xmlChild = xmlVariables.childNodes[i];
-    if (xmlChild.nodeType != dom.NodeType.ELEMENT_NODE) {
+    if (xmlChild.nodeType !== dom.NodeType.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
     const type = xmlChild.getAttribute('type');
@@ -691,7 +691,7 @@ const mapSupportedXmlTags = function(xmlBlock) {
       {mutation: [], comment: [], data: [], field: [], input: [], next: []};
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
     const xmlChild = xmlBlock.childNodes[i];
-    if (xmlChild.nodeType == dom.NodeType.TEXT_NODE) {
+    if (xmlChild.nodeType === dom.NodeType.TEXT_NODE) {
       // Ignore any text at the <block> level.  It's all whitespace anyway.
       continue;
     }
@@ -764,7 +764,7 @@ const applyCommentTagNodes = function(xmlChildren, block) {
   for (let i = 0; i < xmlChildren.length; i++) {
     const xmlChild = xmlChildren[i];
     const text = xmlChild.textContent;
-    const pinned = xmlChild.getAttribute('pinned') == 'true';
+    const pinned = xmlChild.getAttribute('pinned') === 'true';
     const width = parseInt(xmlChild.getAttribute('w'), 10);
     const height = parseInt(xmlChild.getAttribute('h'), 10);
 
@@ -817,10 +817,10 @@ const findChildBlocks = function(xmlNode) {
   const childBlockInfo = {childBlockElement: null, childShadowElement: null};
   for (let i = 0; i < xmlNode.childNodes.length; i++) {
     const xmlChild = xmlNode.childNodes[i];
-    if (xmlChild.nodeType == dom.NodeType.ELEMENT_NODE) {
-      if (xmlChild.nodeName.toLowerCase() == 'block') {
+    if (xmlChild.nodeType === dom.NodeType.ELEMENT_NODE) {
+      if (xmlChild.nodeName.toLowerCase() === 'block') {
         childBlockInfo.childBlockElement = /** @type {!Element} */ (xmlChild);
-      } else if (xmlChild.nodeName.toLowerCase() == 'shadow') {
+      } else if (xmlChild.nodeName.toLowerCase() === 'shadow') {
         childBlockInfo.childShadowElement = /** @type {!Element} */ (xmlChild);
       }
     }
@@ -956,29 +956,29 @@ const domToBlockHeadless = function(
 
   const inline = xmlBlock.getAttribute('inline');
   if (inline) {
-    block.setInputsInline(inline == 'true');
+    block.setInputsInline(inline === 'true');
   }
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    block.setEnabled(disabled != 'true' && disabled != 'disabled');
+    block.setEnabled(disabled !== 'true' && disabled !== 'disabled');
   }
   const deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {
-    block.setDeletable(deletable == 'true');
+    block.setDeletable(deletable === 'true');
   }
   const movable = xmlBlock.getAttribute('movable');
   if (movable) {
-    block.setMovable(movable == 'true');
+    block.setMovable(movable === 'true');
   }
   const editable = xmlBlock.getAttribute('editable');
   if (editable) {
-    block.setEditable(editable == 'true');
+    block.setEditable(editable === 'true');
   }
   const collapsed = xmlBlock.getAttribute('collapsed');
   if (collapsed) {
-    block.setCollapsed(collapsed == 'true');
+    block.setCollapsed(collapsed === 'true');
   }
-  if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
+  if (xmlBlock.nodeName.toLowerCase() === 'shadow') {
     // Ensure all children are also shadows.
     const children = block.getChildren(false);
     for (let i = 0; i < children.length; i++) {
@@ -1021,7 +1021,7 @@ const domToField = function(block, fieldName, xml) {
 const deleteNext = function(xmlBlock) {
   for (let i = 0; i < xmlBlock.childNodes.length; i++) {
     const child = xmlBlock.childNodes[i];
-    if (child.nodeName.toLowerCase() == 'next') {
+    if (child.nodeName.toLowerCase() === 'next') {
       xmlBlock.removeChild(child);
       break;
     }

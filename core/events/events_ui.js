@@ -44,9 +44,9 @@ const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   Ui.superClass_.constructor.call(this, workspaceId);
 
   this.blockId = opt_block ? opt_block.id : null;
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+  this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
+  this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
 };
 object.inherits(Ui, UiBase);
 

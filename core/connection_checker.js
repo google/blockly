@@ -51,7 +51,7 @@ const ConnectionChecker = function() {};
  */
 ConnectionChecker.prototype.canConnect = function(
     a, b, isDragging, opt_distance) {
-  return this.canConnectWithReason(a, b, isDragging, opt_distance) ==
+  return this.canConnectWithReason(a, b, isDragging, opt_distance) ===
       Connection.CAN_CONNECT;
 };
 
@@ -71,7 +71,7 @@ ConnectionChecker.prototype.canConnect = function(
 ConnectionChecker.prototype.canConnectWithReason = function(
     a, b, isDragging, opt_distance) {
   const safety = this.doSafetyChecks(a, b);
-  if (safety != Connection.CAN_CONNECT) {
+  if (safety !== Connection.CAN_CONNECT) {
     return safety;
   }
 
@@ -149,9 +149,9 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
     blockB = a.getSourceBlock();
     blockA = b.getSourceBlock();
   }
-  if (blockA == blockB) {
+  if (blockA === blockB) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (b.type != internalConstants.OPPOSITE_TYPE[a.type]) {
+  } else if (b.type !== internalConstants.OPPOSITE_TYPE[a.type]) {
     return Connection.REASON_WRONG_TYPE;
   } else if (blockA.workspace !== blockB.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;
@@ -180,7 +180,7 @@ ConnectionChecker.prototype.doTypeChecks = function(a, b) {
   }
   // Find any intersection in the check lists.
   for (let i = 0; i < checkArrayOne.length; i++) {
-    if (checkArrayTwo.indexOf(checkArrayOne[i]) != -1) {
+    if (checkArrayTwo.indexOf(checkArrayOne[i]) !== -1) {
       return true;
     }
   }
@@ -245,7 +245,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) !== -1) {
     return false;
   }
 
@@ -269,7 +269,7 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) !== -1) {
     return false;
   }
 

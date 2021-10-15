@@ -134,8 +134,8 @@ BlockMove.prototype.currentLocation_ = function() {
  * @return {boolean} False if something changed.
  */
 BlockMove.prototype.isNull = function() {
-  return this.oldParentId == this.newParentId &&
-      this.oldInputName == this.newInputName &&
+  return this.oldParentId === this.newParentId &&
+      this.oldInputName === this.newInputName &&
       Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
 
@@ -176,7 +176,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == ConnectionType.PREVIOUS_STATEMENT) {
+    } else if (connectionType === ConnectionType.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {

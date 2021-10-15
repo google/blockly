@@ -105,7 +105,7 @@ BlockCreate.prototype.run = function(forward) {
       const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
-      } else if (id == this.blockId) {
+      } else if (id === this.blockId) {
         // Only complain about root-level block.
         console.warn('Can\'t uncreate non-existent block: ' + id);
       }

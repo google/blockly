@@ -49,13 +49,13 @@ const Coordinate = function(x, y) {
  * @return {boolean} True iff the coordinates are equal, or if both are null.
  */
 Coordinate.equals = function(a, b) {
-  if (a == b) {
+  if (a === b) {
     return true;
   }
   if (!a || !b) {
     return false;
   }
-  return a.x == b.x && a.y == b.y;
+  return a.x === b.x && a.y === b.y;
 };
 
 /**

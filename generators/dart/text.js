@@ -26,7 +26,7 @@ Blockly.Dart['text'] = function(block) {
 Blockly.Dart['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Dart.multiline_quote_(block.getFieldValue('TEXT'));
-  var order = code.indexOf('+') != -1 ? Blockly.Dart.ORDER_ADDITIVE :
+  var order = code.indexOf('+') !== -1 ? Blockly.Dart.ORDER_ADDITIVE :
       Blockly.Dart.ORDER_ATOMIC;
   return [code, order];
 };
@@ -77,7 +77,7 @@ Blockly.Dart['text_isEmpty'] = function(block) {
 
 Blockly.Dart['text_indexOf'] = function(block) {
   // Search the text for a substring.
-  var operator = block.getFieldValue('END') == 'FIRST' ?
+  var operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   var substring = Blockly.Dart.valueToCode(block, 'FIND',
       Blockly.Dart.ORDER_NONE) || '\'\'';
@@ -94,7 +94,7 @@ Blockly.Dart['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var textOrder = (where == 'FIRST' || where == 'FROM_START') ?
+  var textOrder = (where === 'FIRST' || where === 'FROM_START') ?
       Blockly.Dart.ORDER_UNARY_POSTFIX : Blockly.Dart.ORDER_NONE;
   var text = Blockly.Dart.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
@@ -138,11 +138,11 @@ Blockly.Dart['text_getSubstring'] = function(block) {
   // Get substring.
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-  var requiresLengthCall = (where1 != 'FROM_END' && where2 == 'FROM_START');
+  var requiresLengthCall = (where1 !== 'FROM_END' && where2 === 'FROM_START');
   var textOrder = requiresLengthCall ? Blockly.Dart.ORDER_UNARY_POSTFIX :
       Blockly.Dart.ORDER_NONE;
   var text = Blockly.Dart.valueToCode(block, 'STRING', textOrder) || '\'\'';
-  if (where1 == 'FIRST' && where2 == 'LAST') {
+  if (where1 === 'FIRST' && where2 === 'LAST') {
     var code = text;
     return [code, Blockly.Dart.ORDER_NONE];
   } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
@@ -177,7 +177,7 @@ Blockly.Dart['text_getSubstring'] = function(block) {
       default:
         throw Error('Unhandled option (text_getSubstring).');
     }
-    if (where2 == 'LAST') {
+    if (where2 === 'LAST') {
       var code = text + '.substring(' + at1 + ')';
     } else {
       var code = text + '.substring(' + at1 + ', ' + at2 + ')';
@@ -282,7 +282,7 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
         Blockly.Dart.ORDER_NONE) || '\'\'';
   }
   var code = 'Html.window.prompt(' + msg + ', \'\')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';

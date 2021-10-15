@@ -47,13 +47,13 @@ exports.TEST_ONLY = {allExtensions};
  * @alias Blockly.Extensions.register
  */
 const register = function(name, initFn) {
-  if ((typeof name != 'string') || (name.trim() == '')) {
+  if ((typeof name !== 'string') || (name.trim() === '')) {
     throw Error('Error: Invalid extension name "' + name + '"');
   }
   if (allExtensions[name]) {
     throw Error('Error: Extension "' + name + '" is already registered.');
   }
-  if (typeof initFn != 'function') {
+  if (typeof initFn !== 'function') {
     throw Error('Error: Extension "' + name + '" must be a function');
   }
   allExtensions[name] = initFn;
@@ -69,7 +69,7 @@ exports.register = register;
  * @alias Blockly.Extensions.registerMixin
  */
 const registerMixin = function(name, mixinObj) {
-  if (!mixinObj || typeof mixinObj != 'object') {
+  if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
   }
   register(name, function() {
@@ -98,7 +98,7 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   checkHasMutatorProperties(errorPrefix, mixinObj);
   var hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
-  if (opt_helperFn && (typeof opt_helperFn != 'function')) {
+  if (opt_helperFn && (typeof opt_helperFn !== 'function')) {
     throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
@@ -159,7 +159,7 @@ exports.isRegistered = isRegistered;
  */
 const apply = function(name, block, isMutator) {
   const extensionFn = allExtensions[name];
-  if (typeof extensionFn != 'function') {
+  if (typeof extensionFn !== 'function') {
     throw Error('Error: Extension "' + name + '" not found.');
   }
   let mutatorProperties;
@@ -266,9 +266,9 @@ const checkHasFunctionPair = function(object, name1, name2, errorPrefix) {
   var has2 = object[name2] !== undefined;
 
   if (has1 && has2) {
-    if (typeof object[name1] != 'function') {
+    if (typeof object[name1] !== 'function') {
       throw Error(errorPrefix + name1 + ' must be a function.');
-    } else if (typeof object[name2] != 'function') {
+    } else if (typeof object[name2] !== 'function') {
       throw Error(errorPrefix + name2 + ' must be a function.');
     }
     return true;
@@ -339,11 +339,11 @@ const getMutatorProperties = function(block) {
  */
 const mutatorPropertiesMatch = function(oldProperties, block) {
   const newProperties = getMutatorProperties(block);
-  if (newProperties.length != oldProperties.length) {
+  if (newProperties.length !== oldProperties.length) {
     return false;
   }
   for (let i = 0; i < newProperties.length; i++) {
-    if (oldProperties[i] != newProperties[i]) {
+    if (oldProperties[i] !== newProperties[i]) {
       return false;
     }
   }
@@ -378,7 +378,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   // Wait for load, in case Blockly.Msg is not yet populated.
   // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document == 'object') {  // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
       for (let key in lookupTable) {
         // Will print warnings if reference is missing.
@@ -392,7 +392,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
    * @this {Block}
    */
   const extensionFn = function() {
-    if (this.type && blockTypesChecked.indexOf(this.type) == -1) {
+    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
@@ -400,12 +400,12 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
     this.setTooltip(function() {
       const value = String(this.getFieldValue(dropdownName));
       let tooltip = lookupTable[value];
-      if (tooltip == null) {
-        if (blockTypesChecked.indexOf(this.type) == -1) {
+      if (tooltip === null) {
+        if (blockTypesChecked.indexOf(this.type) === -1) {
           // Warn for missing values on generated tooltips.
           let warning = 'No tooltip mapping for value ' + value + ' of field ' +
               dropdownName;
-          if (this.type != null) {
+          if (this.type !== null) {
             warning += (' of block type ' + this.type);
           }
           console.warn(warning + '.');
@@ -434,7 +434,7 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
     const options = dropdown.getOptions();
     for (let i = 0; i < options.length; ++i) {
       const optionKey = options[i][1];  // label, then value
-      if (lookupTable[optionKey] == null) {
+      if (lookupTable[optionKey] === null) {
         console.warn(
             'No tooltip mapping for value ' + optionKey + ' of field ' +
             dropdownName + ' of block type ' + block.type);
@@ -458,7 +458,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Wait for load, in case Blockly.Msg is not yet populated.
   // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document == 'object') {  // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
       utils.checkMessageReferences(msgTemplate);

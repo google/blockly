@@ -159,7 +159,7 @@ const getInjectionDivXY = function(element) {
     x = x + xy.x;
     y = y + xy.y;
     const classes = element.getAttribute('class') || '';
-    if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+    if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
       break;
     }
     element = /** @type {!Element} */ (element.parentNode);
@@ -264,11 +264,11 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
  * @alias Blockly.utils.replaceMessageReferences
  */
 const replaceMessageReferences = function(message) {
-  if (typeof message != 'string') {
+  if (typeof message !== 'string') {
     return message;
   }
   const interpolatedResult = tokenizeInterpolation_(message, false);
-  // When parseInterpolationTokens == false, interpolatedResult should be at
+  // When parseInterpolationTokens === false, interpolatedResult should be at
   // most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
@@ -292,7 +292,7 @@ const checkMessageReferences = function(message) {
   const m = message.match(/%{BKY_[A-Z]\w*}/ig);
   for (let i = 0; i < m.length; i++) {
     const msgKey = m[i].toUpperCase();
-    if (msgTable[msgKey.slice(6, -1)] == undefined) {
+    if (msgTable[msgKey.slice(6, -1)] === undefined) {
       console.warn('No message string for ' + m[i] + ' in ' + message);
       validSoFar = false;  // Continue to report other errors.
     }
@@ -325,8 +325,8 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   let number = null;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
-    if (state == 0) {
-      if (c == '%') {
+    if (state === 0) {
+      if (c === '%') {
         const text = buffer.join('');
         if (text) {
           tokens.push(text);
@@ -336,8 +336,8 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
       } else {
         buffer.push(c);  // Regular char.
       }
-    } else if (state == 1) {
-      if (c == '%') {
+    } else if (state === 1) {
+      if (c === '%') {
         buffer.push(c);  // Escaped %: %%
         state = 0;
       } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
@@ -348,13 +348,13 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
           tokens.push(text);
         }
         buffer.length = 0;
-      } else if (c == '{') {
+      } else if (c === '{') {
         state = 3;
       } else {
         buffer.push('%', c);  // Not recognized. Return as literal.
         state = 0;
       }
-    } else if (state == 2) {
+    } else if (state === 2) {
       if ('0' <= c && c <= '9') {
         number += c;  // Multi-digit number.
       } else {
@@ -362,13 +362,13 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
         i--;  // Parse this char again.
         state = 0;
       }
-    } else if (state == 3) {  // String table reference
-      if (c == '') {
+    } else if (state === 3) {  // String table reference
+      if (c === '') {
         // Premature end before closing '}'
         buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
         i--;                        // Parse this char again.
         state = 0;                  // and parse as string literal.
-      } else if (c != '}') {
+      } else if (c !== '}') {
         buffer.push(c);
       } else {
         const rawKey = buffer.join('');
@@ -384,7 +384,7 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
               null;
           if (bklyKey && bklyKey in Msg) {
             const rawValue = Msg[bklyKey];
-            if (typeof rawValue == 'string') {
+            if (typeof rawValue === 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(
                   tokens,
@@ -420,7 +420,7 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   const mergedTokens = [];
   buffer.length = 0;
   for (let i = 0; i < tokens.length; ++i) {
-    if (typeof tokens[i] == 'string') {
+    if (typeof tokens[i] === 'string') {
       buffer.push(tokens[i]);
     } else {
       text = buffer.join('');
@@ -513,15 +513,15 @@ exports.is3dSupported = is3dSupported;
  * @alias Blockly.utils.runAfterPageLoad
  */
 const runAfterPageLoad = function(fn) {
-  if (typeof document != 'object') {
+  if (typeof document !== 'object') {
     throw Error('runAfterPageLoad() requires browser document.');
   }
-  if (document.readyState == 'complete') {
+  if (document.readyState === 'complete') {
     fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     const readyStateCheckInterval = setInterval(function() {
-      if (document.readyState == 'complete') {
+      if (document.readyState === 'complete') {
         clearInterval(readyStateCheckInterval);
         fn();
       }
@@ -557,7 +557,7 @@ exports.getViewportBBox = getViewportBBox;
  */
 const arrayRemove = function(arr, value) {
   const i = arr.indexOf(value);
-  if (i == -1) {
+  if (i === -1) {
     return false;
   }
   arr.splice(i, 1);
@@ -574,7 +574,7 @@ exports.arrayRemove = arrayRemove;
 const getDocumentScroll = function() {
   const el = document.documentElement;
   const win = window;
-  if (userAgent.IE && win.pageYOffset != el.scrollTop) {
+  if (userAgent.IE && win.pageYOffset !== el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
@@ -666,7 +666,7 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
  */
 const parseBlockColour = function(colour) {
   const dereferenced =
-      (typeof colour == 'string') ? replaceMessageReferences(colour) : colour;
+      (typeof colour === 'string') ? replaceMessageReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
@@ -683,7 +683,7 @@ const parseBlockColour = function(colour) {
       return {hue: null, hex: hex};
     } else {
       let errorMsg = 'Invalid colour: "' + dereferenced + '"';
-      if (colour != dereferenced) {
+      if (colour !== dereferenced) {
         errorMsg += ' (from "' + colour + '")';
       }
       throw Error(errorMsg);

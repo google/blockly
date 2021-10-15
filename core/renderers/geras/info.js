@@ -71,7 +71,7 @@ RenderInfo.prototype.populateBottomRow_ = function() {
   RenderInfo.superClass_.populateBottomRow_.call(this);
 
   const followsStatement = this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1].type ==
+      this.block_.inputList[this.block_.inputList.length - 1].type ===
           inputTypes.STATEMENT;
 
   // The minimum height of the bottom row is smaller in Geras than in other
@@ -89,16 +89,16 @@ RenderInfo.prototype.populateBottomRow_ = function() {
  */
 RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == inputTypes.VALUE) {
+  if (this.isInline && input.type === inputTypes.VALUE) {
     activeRow.elements.push(new InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
-  } else if (input.type == inputTypes.STATEMENT) {
+  } else if (input.type === inputTypes.STATEMENT) {
     activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-  } else if (input.type == inputTypes.VALUE) {
+  } else if (input.type === inputTypes.VALUE) {
     activeRow.elements.push(new ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
-  } else if (input.type == inputTypes.DUMMY) {
+  } else if (input.type === inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight =
@@ -106,7 +106,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.hasDummyInput = true;
   }
   // Ignore row alignment if inline.
-  if (!this.isInline && activeRow.align == null) {
+  if (!this.isInline && activeRow.align === null) {
     activeRow.align = input.align;
   }
 };
@@ -278,7 +278,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between two fields of the same editability.
   if (Types.isField(prev) && next && Types.isField(next) &&
-      ((/** @type {Field} */ (prev)).isEditable ==
+      ((/** @type {Field} */ (prev)).isEditable ===
        (/** @type {Field} */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
@@ -435,7 +435,7 @@ RenderInfo.prototype.finalize_ = function() {
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
     const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
-    if (row == this.bottomRow &&
+    if (row === this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
       const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;

@@ -596,7 +596,7 @@ Workspace.prototype.isCapacityAvailable = function(typeCountsMap) {
  * @return {boolean} True if it has block limits, false otherwise.
  */
 Workspace.prototype.hasBlockLimits = function() {
-  return this.options.maxBlocks != Infinity || !!this.options.maxInstances;
+  return this.options.maxBlocks !== Infinity || !!this.options.maxInstances;
 };
 
 /**
@@ -631,7 +631,7 @@ Workspace.prototype.undo = function(redo) {
   let events = [inputEvent];
   // Do another undo/redo if the next one is of the same group.
   while (inputStack.length && inputEvent.group &&
-         inputEvent.group == inputStack[inputStack.length - 1].group) {
+         inputEvent.group === inputStack[inputStack.length - 1].group) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.

@@ -50,7 +50,7 @@ const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
  * @alias Blockly.inject
  */
 const inject = function(container, opt_options) {
-  if (typeof container == 'string') {
+  if (typeof container === 'string') {
     container =
         document.getElementById(container) || document.querySelector(container);
   }
@@ -235,7 +235,7 @@ const init = function(mainWorkspace) {
       // Build a fixed flyout with the root blocks.
       flyout.init(mainWorkspace);
       flyout.show(options.languageTree);
-      if (typeof flyout.scrollToStart == 'function') {
+      if (typeof flyout.scrollToStart === 'function') {
         flyout.scrollToStart();
       }
     }

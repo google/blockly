@@ -90,7 +90,7 @@ BlockExporterTools.prototype.getBlockDefinitions =
   }
 
   // Surround json with [] and comma separate items.
-  if (definitionFormat == "JSON") {
+  if (definitionFormat === "JSON") {
     return "[" + blockCode.join(",\n") + "]";
   }
   return blockCode.join("\n\n");

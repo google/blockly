@@ -213,7 +213,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between two fields of the same editability.
   if (Types.isField(prev) && next && Types.isField(next) &&
-      ((/** @type {Field} */ (prev)).isEditable ==
+      ((/** @type {Field} */ (prev)).isEditable ===
        (/** @type {Field} */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
@@ -303,7 +303,7 @@ RenderInfo.prototype.finalize_ = function() {
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
     const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
-    if (row == this.bottomRow &&
+    if (row === this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
       const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;

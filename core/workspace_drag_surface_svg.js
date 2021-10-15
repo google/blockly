@@ -138,7 +138,7 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 
   // If there is a previous sibling, put the blockCanvas back right afterwards,
   // otherwise insert it as the first child node in newSurface.
-  if (this.previousSibling_ != null) {
+  if (this.previousSibling_ !== null) {
     dom.insertAfter(blockCanvas, this.previousSibling_);
   } else {
     newSurface.insertBefore(blockCanvas, newSurface.firstChild);

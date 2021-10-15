@@ -64,7 +64,7 @@ exports.mixin = mixin;
  */
 const deepMerge = function(target, source) {
   for (const x in source) {
-    if (source[x] != null && typeof source[x] === 'object') {
+    if (source[x] !== null && typeof source[x] === 'object') {
       target[x] = deepMerge(target[x] || Object.create(null), source[x]);
     } else {
       target[x] = source[x];

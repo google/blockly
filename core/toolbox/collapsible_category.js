@@ -119,7 +119,7 @@ CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
       // Separators can exist as either a flyout item or a toolbox item so
       // decide where it goes based on the type of the previous item.
       if (!registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
-          (itemDef['kind'].toLowerCase() == ToolboxSeparator.registrationName &&
+          (itemDef['kind'].toLowerCase() === ToolboxSeparator.registrationName &&
            prevIsFlyoutItem)) {
         const flyoutItem = /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);
@@ -144,7 +144,7 @@ CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
 
   // Categories that are collapsible are created using a class registered under
   // a diffferent name.
-  if (registryName.toUpperCase() == 'CATEGORY' &&
+  if (registryName.toUpperCase() === 'CATEGORY' &&
       toolbox.isCategoryCollapsible(categoryDef)) {
     registryName = CollapsibleToolboxCategory.registrationName;
   }
@@ -161,7 +161,7 @@ CollapsibleToolboxCategory.prototype.init = function() {
   CollapsibleToolboxCategory.superClass_.init.call(this);
 
   this.setExpanded(
-      this.toolboxItemDef_['expanded'] == 'true' ||
+      this.toolboxItemDef_['expanded'] === 'true' ||
       this.toolboxItemDef_['expanded']);
 };
 
@@ -223,7 +223,7 @@ CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
  * @public
  */
 CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) {
-  if (this.expanded_ == isExpanded) {
+  if (this.expanded_ === isExpanded) {
     return;
   }
   this.expanded_ = isExpanded;
@@ -252,7 +252,7 @@ CollapsibleToolboxCategory.prototype.setVisible_ = function(isVisible) {
   }
   this.isHidden_ = !isVisible;
 
-  if (this.parentToolbox_.getSelectedItem() == this) {
+  if (this.parentToolbox_.getSelectedItem() === this) {
     this.parentToolbox_.clearSelection();
   }
 };

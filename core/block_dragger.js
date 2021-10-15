@@ -243,7 +243,7 @@ BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
   const oldWouldDeleteBlock = this.wouldDeleteBlock_;
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-  if (oldWouldDeleteBlock != this.wouldDeleteBlock_) {
+  if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBlockDrag_();
   }
@@ -386,9 +386,9 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
     const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
                                                       'blocklyToolboxGrab';
 
-    if (isEnd && typeof toolbox.removeStyle == 'function') {
+    if (isEnd && typeof toolbox.removeStyle === 'function') {
       toolbox.removeStyle(style);
-    } else if (!isEnd && typeof toolbox.addStyle == 'function') {
+    } else if (!isEnd && typeof toolbox.addStyle === 'function') {
       toolbox.addStyle(style);
     }
   }

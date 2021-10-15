@@ -89,7 +89,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   customContextMenu: function(options) {
     if (!this.isInFlyout) {
       // Getter blocks have the option to create a setter block, and vice versa.
-      if (this.type == 'variables_get') {
+      if (this.type === 'variables_get') {
         var opposite_type = 'variables_set';
         var contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
       } else {
@@ -110,7 +110,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       options.push(option);
       // Getter blocks have the option to rename or delete that variable.
     } else {
-      if (this.type == 'variables_get' || this.type == 'variables_get_reporter') {
+      if (this.type === 'variables_get' || this.type === 'variables_get_reporter') {
         var renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,

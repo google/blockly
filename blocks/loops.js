@@ -254,7 +254,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     }
     var variable = this.getField('VAR').getVariable();
     var varName = variable.name;
-    if (!this.isCollapsed() && varName != null) {
+    if (!this.isCollapsed() && varName !== null) {
       var option = {enabled: true};
       option.text =
           Blockly.Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName);
@@ -310,7 +310,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     // Is the block nested in a loop?
     do {
       if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES
-          .indexOf(block.type) != -1) {
+          .indexOf(block.type) !== -1) {
         return block;
       }
       block = block.getSurroundParent();
@@ -329,7 +329,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     //   * It's at the start of a drag.
     //   * It's not a move event.
     if (!this.workspace.isDragging || this.workspace.isDragging() ||
-        e.type != Blockly.Events.BLOCK_MOVE) {
+        e.type !== Blockly.Events.BLOCK_MOVE) {
       return;
     }
     var enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN

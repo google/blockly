@@ -77,7 +77,7 @@ const rawUpper = rawUserAgent.toUpperCase();
  * @return {boolean} True if name is present.
  */
 function has(name) {
-  return rawUpper.indexOf(name.toUpperCase()) != -1;
+  return rawUpper.indexOf(name.toUpperCase()) !== -1;
 }
 
 // Browsers.  Logic from:

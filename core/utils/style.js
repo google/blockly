@@ -32,7 +32,7 @@ const Size = goog.require('Blockly.utils.Size');
  * @alias Blockly.utils.style.getSize
  */
 const getSize = function(element) {
-  if (getStyle(element, 'display') != 'none') {
+  if (getStyle(element, 'display') !== 'none') {
     return getSizeWithDisplay(element);
   }
 
@@ -196,7 +196,7 @@ exports.setElementShown = setElementShown;
  * @alias Blockly.utils.style.isRightToLeft
  */
 const isRightToLeft = function(el) {
-  return 'rtl' == getStyle(el, 'direction');
+  return 'rtl' === getStyle(el, 'direction');
 };
 exports.isRightToLeft = isRightToLeft;
 

@@ -131,7 +131,7 @@ MenuItem.prototype.createDom = function() {
   }
 
   let contentDom = /** @type {!HTMLElement} */ (this.content_);
-  if (typeof this.content_ == 'string') {
+  if (typeof this.content_ === 'string') {
     contentDom = document.createTextNode(this.content_);
   }
   content.appendChild(contentDom);

@@ -42,8 +42,8 @@ const parse = function(str) {
     // e.g. 'red'
     return hex;
   }
-  hex = str.substring(0, 2) == '0x' ? '#' + str.substring(2) : str;
-  hex = hex[0] == '#' ? hex : '#' + hex;
+  hex = str.substring(0, 2) === '0x' ? '#' + str.substring(2) : str;
+  hex = hex[0] === '#' ? hex : '#' + hex;
   if (/^#[0-9a-f]{6}$/.test(hex)) {
     // e.g. '#00ff88'
     return hex;
@@ -117,7 +117,7 @@ const hsvToHex = function(h, s, v) {
   let red = 0;
   let green = 0;
   let blue = 0;
-  if (s == 0) {
+  if (s === 0) {
     red = v;
     green = v;
     blue = v;

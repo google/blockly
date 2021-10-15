@@ -87,7 +87,7 @@ TopRow.prototype.hasLeftSquareCorner = function(block) {
   const prevBlock = block.getPreviousBlock();
 
   return !!block.outputConnection || hasHat ||
-      (prevBlock ? prevBlock.getNextBlock() == block : false);
+      (prevBlock ? prevBlock.getNextBlock() === block : false);
 };
 
 /**

@@ -635,7 +635,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
     // Disconnect blocks that existed prior to this change if they don't match.
     if ((blockA || blockB) && parentConnection) {
       for (var i = 0; i < 2; i++) {
-        var block = (i == 1) ? blockA : blockB;
+        var block = (i === 1) ? blockA : blockB;
         if (block &&
             !block.workspace.connectionChecker.doTypeChecks(
                 block.outputConnection, parentConnection)) {

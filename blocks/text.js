@@ -266,9 +266,9 @@ Blockly.Blocks['text_getSubstring'] = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
+    var isAt1 = this.getInput('AT1').type === Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
-    var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
+    var isAt2 = this.getInput('AT2').type === Blockly.INPUT_VALUE;
     container.setAttribute('at2', isAt2);
     return container;
   },
@@ -279,8 +279,8 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
-    var isAt1 = (xmlElement.getAttribute('at1') == 'true');
-    var isAt2 = (xmlElement.getAttribute('at2') == 'true');
+    var isAt1 = (xmlElement.getAttribute('at1') === 'true');
+    var isAt2 = (xmlElement.getAttribute('at2') === 'true');
     this.updateAt_(1, isAt1);
     this.updateAt_(2, isAt2);
   },
@@ -314,17 +314,17 @@ Blockly.Blocks['text_getSubstring'] = {
       this.appendDummyInput('AT' + n);
     }
     // Move tail, if present, to end of block.
-    if (n == 2 && Blockly.Msg['TEXT_GET_SUBSTRING_TAIL']) {
+    if (n === 2 && Blockly.Msg['TEXT_GET_SUBSTRING_TAIL']) {
       this.removeInput('TAIL', true);
       this.appendDummyInput('TAIL')
           .appendField(Blockly.Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
     var menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
         function(value) {
-          var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+          var newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a
           // closure.
-          if (newAt != isAt) {
+          if (newAt !== isAt) {
             var block = this.getSourceBlock();
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
@@ -337,7 +337,7 @@ Blockly.Blocks['text_getSubstring'] = {
 
     this.getInput('AT' + n)
         .appendField(menu, 'WHERE' + n);
-    if (n == 1) {
+    if (n === 1) {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
         this.moveInputBefore('ORDINAL1', 'AT2');
@@ -432,7 +432,7 @@ Blockly.Blocks['text_prompt_ext'] = {
         .appendField(dropdown, 'TYPE');
     this.setOutput(true, 'String');
     this.setTooltip(function() {
-      return (thisBlock.getFieldValue('TYPE') == 'TEXT') ?
+      return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_TEXT'] :
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
@@ -444,7 +444,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this {Blockly.Block}
    */
   updateType_: function(newOp) {
-    this.outputConnection.setCheck(newOp == 'NUMBER' ? 'Number' : 'String');
+    this.outputConnection.setCheck(newOp === 'NUMBER' ? 'Number' : 'String');
   },
   /**
    * Create XML to represent the output type.
@@ -500,7 +500,7 @@ Blockly.Blocks['text_prompt'] = {
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
     this.setTooltip(function() {
-      return (thisBlock.getFieldValue('TYPE') == 'TEXT') ?
+      return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_TEXT'] :
           Blockly.Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
@@ -643,7 +643,7 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
   quoteField_: function(fieldName) {
     for (var i = 0, input; (input = this.inputList[i]); i++) {
       for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (fieldName == field.name) {
+        if (fieldName === field.name) {
           input.insertFieldAt(j, this.newQuote_(true));
           input.insertFieldAt(j + 2, this.newQuote_(false));
           return;
@@ -763,7 +763,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.itemCount_; i++) {
       var connection = this.getInput('ADD' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
+      if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
     }
@@ -808,7 +808,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
       if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i)
             .setAlign(Blockly.ALIGN_RIGHT);
-        if (i == 0) {
+        if (i === 0) {
           input.appendField(Blockly.Msg['TEXT_JOIN_TITLE_CREATEWITH']);
         }
       }
@@ -880,7 +880,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
   domToMutation: function(xmlElement) {
     // Note: Until January 2013 this block did not have mutations,
     // so 'at' defaults to true.
-    var isAt = (xmlElement.getAttribute('at') != 'false');
+    var isAt = (xmlElement.getAttribute('at') !== 'false');
     this.updateAt_(isAt);
   },
   
@@ -924,8 +924,8 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   var dropdown = this.getField('WHERE');
   dropdown.setValidator(function(value) {
-    var newAt = (value == 'FROM_START') || (value == 'FROM_END');
-    if (newAt != this.isAt_) {
+    var newAt = (value === 'FROM_START') || (value === 'FROM_END');
+    if (newAt !== this.isAt_) {
       var block = this.getSourceBlock();
       block.updateAt_(newAt);
     }
@@ -936,8 +936,8 @@ Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   this.setTooltip(function() {
     var where = thisBlock.getFieldValue('WHERE');
     var tooltip = Blockly.Msg['TEXT_CHARAT_TOOLTIP'];
-    if (where == 'FROM_START' || where == 'FROM_END') {
-      var msg = (where == 'FROM_START') ?
+    if (where === 'FROM_START' || where === 'FROM_END') {
+      var msg = (where === 'FROM_START') ?
           Blockly.Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
           Blockly.Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
       if (msg) {

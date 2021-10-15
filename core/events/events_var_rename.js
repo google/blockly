@@ -40,7 +40,7 @@ const VarRename = function(opt_variable, newName) {
   }
 
   this.oldName = opt_variable.name;
-  this.newName = typeof newName == 'undefined' ? '' : newName;
+  this.newName = typeof newName === 'undefined' ? '' : newName;
 };
 object.inherits(VarRename, VarBase);
 

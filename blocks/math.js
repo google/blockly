@@ -451,7 +451,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    */
   mutationToDom: function() {
     var container = Blockly.utils.xml.createElement('mutation');
-    var divisorInput = (this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY');
+    var divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
   },
@@ -462,7 +462,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
-    var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
+    var divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
     this.updateShape_(divisorInput);
   },
   
@@ -500,7 +500,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(function(option) {
-    var divisorInput = (option == 'DIVISIBLE_BY');
+    var divisorInput = (option === 'DIVISIBLE_BY');
     this.getSourceBlock().updateShape_(divisorInput);
   });
 };
@@ -530,7 +530,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   updateType_: function(newOp) {
-    if (newOp == 'MODE') {
+    if (newOp === 'MODE') {
       this.outputConnection.setCheck('Array');
     } else {
       this.outputConnection.setCheck('Number');

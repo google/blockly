@@ -119,7 +119,7 @@ Renderer.prototype.makePathObject = function(root, style) {
  * @override
  */
 Renderer.prototype.shouldHighlightConnection = function(conn) {
-  return conn.type != ConnectionType.INPUT_VALUE &&
+  return conn.type !== ConnectionType.INPUT_VALUE &&
       conn.type !== ConnectionType.OUTPUT_VALUE;
 };
 
@@ -128,7 +128,7 @@ Renderer.prototype.shouldHighlightConnection = function(conn) {
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == ConnectionType.OUTPUT_VALUE) {
+  if (local.type === ConnectionType.OUTPUT_VALUE) {
     if (!closest.isConnected()) {
       return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
     }

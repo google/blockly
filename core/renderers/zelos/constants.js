@@ -650,7 +650,7 @@ ConstantProvider.prototype.shapeFor = function(connection) {
     case ConnectionType.OUTPUT_VALUE:
       outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
-      if (outputShape != null) {
+      if (outputShape !== null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL:
             return this.HEXAGONAL;
@@ -661,13 +661,13 @@ ConstantProvider.prototype.shapeFor = function(connection) {
         }
       }
       // Includes doesn't work in IE.
-      if (checks && checks.indexOf('Boolean') != -1) {
+      if (checks && checks.indexOf('Boolean') !== -1) {
         return this.HEXAGONAL;
       }
-      if (checks && checks.indexOf('Number') != -1) {
+      if (checks && checks.indexOf('Number') !== -1) {
         return this.ROUNDED;
       }
-      if (checks && checks.indexOf('String') != -1) {
+      if (checks && checks.indexOf('String') !== -1) {
         return this.ROUNDED;
       }
       return this.ROUNDED;

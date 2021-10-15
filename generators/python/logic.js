@@ -33,7 +33,7 @@ Blockly.Python['controls_if'] = function(block) {
           Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block),
           Blockly.Python.INDENT) + branchCode;
     }
-    code += (n == 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
+    code += (n === 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
     ++n;
   } while (block.getInput('IF' + n));
 
@@ -72,8 +72,8 @@ Blockly.Python['logic_compare'] = function(block) {
 
 Blockly.Python['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
-  var order = (operator == 'and') ? Blockly.Python.ORDER_LOGICAL_AND :
+  var operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
+  var order = (operator === 'and') ? Blockly.Python.ORDER_LOGICAL_AND :
       Blockly.Python.ORDER_LOGICAL_OR;
   var argument0 = Blockly.Python.valueToCode(block, 'A', order);
   var argument1 = Blockly.Python.valueToCode(block, 'B', order);
@@ -83,7 +83,7 @@ Blockly.Python['logic_operation'] = function(block) {
     argument1 = 'False';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == 'and') ? 'True' : 'False';
+    var defaultArgument = (operator === 'and') ? 'True' : 'False';
     if (!argument0) {
       argument0 = defaultArgument;
     }
@@ -105,7 +105,7 @@ Blockly.Python['logic_negate'] = function(block) {
 
 Blockly.Python['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'True' : 'False';
+  var code = (block.getFieldValue('BOOL') === 'TRUE') ? 'True' : 'False';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

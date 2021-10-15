@@ -94,8 +94,8 @@ ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
   yPos = conn.y;
   // Walk forward and back on the y axis looking for the connection.
   let pointer = bestGuess;
-  while (pointer >= 0 && this.connections_[pointer].y == yPos) {
-    if (this.connections_[pointer] == conn) {
+  while (pointer >= 0 && this.connections_[pointer].y === yPos) {
+    if (this.connections_[pointer] === conn) {
       return pointer;
     }
     pointer--;
@@ -103,8 +103,8 @@ ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
 
   pointer = bestGuess;
   while (pointer < this.connections_.length &&
-         this.connections_[pointer].y == yPos) {
-    if (this.connections_[pointer] == conn) {
+         this.connections_[pointer].y === yPos) {
+    if (this.connections_[pointer] === conn) {
       return pointer;
     }
     pointer++;
@@ -147,7 +147,7 @@ ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
  */
 ConnectionDB.prototype.removeConnection = function(connection, yPos) {
   const index = this.findIndexOfConnection_(connection, yPos);
-  if (index == -1) {
+  if (index === -1) {
     throw Error('Unable to find connection in connectionDB.');
   }
   this.connections_.splice(index, 1);

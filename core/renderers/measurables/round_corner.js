@@ -38,7 +38,7 @@ const object = goog.require('Blockly.utils.object');
 const RoundCorner = function(constants, opt_position) {
   RoundCorner.superClass_.constructor.call(this, constants);
   this.type =
-      ((!opt_position || opt_position == 'left') ? Types.LEFT_ROUND_CORNER :
+      ((!opt_position || opt_position === 'left') ? Types.LEFT_ROUND_CORNER :
                                                    Types.RIGHT_ROUND_CORNER) |
       Types.CORNER;
   this.width = this.constants_.CORNER_RADIUS;

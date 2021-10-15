@@ -139,7 +139,7 @@ MarkerSvg.prototype.getMarker = function() {
  * @return {boolean} True if the marker is a cursor, false otherwise.
  */
 MarkerSvg.prototype.isCursor = function() {
-  return this.marker_.type == 'cursor';
+  return this.marker_.type === 'cursor';
 };
 
 /**
@@ -217,21 +217,21 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
   const curNodeAsConnection =
       /** @type {!Connection} */ (curNode.getLocation());
   const connectionType = curNodeAsConnection.type;
-  if (curNode.getType() == ASTNode.types.BLOCK) {
+  if (curNode.getType() === ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
-  } else if (curNode.getType() == ASTNode.types.OUTPUT) {
+  } else if (curNode.getType() === ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == ConnectionType.INPUT_VALUE) {
+  } else if (connectionType === ConnectionType.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == ConnectionType.NEXT_STATEMENT) {
+  } else if (connectionType === ConnectionType.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
-  } else if (curNode.getType() == ASTNode.types.PREVIOUS) {
+  } else if (curNode.getType() === ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);
-  } else if (curNode.getType() == ASTNode.types.FIELD) {
+  } else if (curNode.getType() === ASTNode.types.FIELD) {
     this.showWithField_(curNode);
-  } else if (curNode.getType() == ASTNode.types.WORKSPACE) {
+  } else if (curNode.getType() === ASTNode.types.WORKSPACE) {
     this.showWithCoordinates_(curNode);
-  } else if (curNode.getType() == ASTNode.types.STACK) {
+  } else if (curNode.getType() === ASTNode.types.STACK) {
     this.showWithStack_(curNode);
   }
 };

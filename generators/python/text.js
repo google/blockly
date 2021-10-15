@@ -24,7 +24,7 @@ Blockly.Python['text'] = function(block) {
 Blockly.Python['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Python.multiline_quote_(block.getFieldValue('TEXT'));
-  var order = code.indexOf('+') != -1 ? Blockly.Python.ORDER_ADDITIVE :
+  var order = code.indexOf('+') !== -1 ? Blockly.Python.ORDER_ADDITIVE :
       Blockly.Python.ORDER_ATOMIC;
   return [code, order];
 };
@@ -113,7 +113,7 @@ Blockly.Python['text_isEmpty'] = function(block) {
 Blockly.Python['text_indexOf'] = function(block) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
-  var operator = block.getFieldValue('END') == 'FIRST' ? 'find' : 'rfind';
+  var operator = block.getFieldValue('END') === 'FIRST' ? 'find' : 'rfind';
   var substring = Blockly.Python.valueToCode(block, 'FIND',
       Blockly.Python.ORDER_NONE) || '\'\'';
   var text = Blockly.Python.valueToCode(block, 'VALUE',
@@ -129,7 +129,7 @@ Blockly.Python['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var textOrder = (where == 'RANDOM') ? Blockly.Python.ORDER_NONE :
+  var textOrder = (where === 'RANDOM') ? Blockly.Python.ORDER_NONE :
       Blockly.Python.ORDER_MEMBER;
   var text = Blockly.Python.valueToCode(block, 'VALUE', textOrder) || '\'\'';
   switch (where) {
@@ -169,7 +169,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
   switch (where1) {
     case 'FROM_START':
       var at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
-      if (at1 == '0') {
+      if (at1 === 0) {
         at1 = '';
       }
       break;
@@ -193,7 +193,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       if (!Blockly.isNumber(String(at2))) {
         Blockly.Python.definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
-      } else if (at2 == '0') {
+      } else if (at2 === 0) {
         at2 = '';
       }
       break;
@@ -260,7 +260,7 @@ Blockly.Python['text_prompt_ext'] = function(block) {
         Blockly.Python.ORDER_NONE) || '\'\'';
   }
   var code = functionName + '(' + msg + ')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = 'float(' + code + ')';
   }

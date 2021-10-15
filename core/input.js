@@ -43,7 +43,7 @@ goog.require('Blockly.FieldLabel');
  * @alias Blockly.Input
  */
 const Input = function(type, name, block, connection) {
-  if (type != inputTypes.DUMMY && !name) {
+  if (type !== inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
@@ -110,12 +110,12 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
   // Falsy field values don't generate a field, unless the field is an empty
   // string and named.
-  if (!field && !(field == '' && opt_name)) {
+  if (!field && !(field === '' && opt_name)) {
     return index;
   }
 
   // Generate a FieldLabel when given a plain text field.
-  if (typeof field == 'string') {
+  if (typeof field === 'string') {
     field = /** @type {!Field} **/ (fieldRegistry.fromJson({
       'type': 'field_label',
       'text': field,
@@ -199,7 +199,7 @@ Input.prototype.setVisible = function(visible) {
   // because this function is package. If this function goes back to being a
   // public API tests (lots of tests) should be added.
   let renderList = [];
-  if (this.visible_ == visible) {
+  if (this.visible_ === visible) {
     return renderList;
   }
   this.visible_ = visible;

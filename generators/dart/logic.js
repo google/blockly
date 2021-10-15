@@ -62,7 +62,7 @@ Blockly.Dart['logic_compare'] = function(block) {
     'GTE': '>='
   };
   var operator = OPERATORS[block.getFieldValue('OP')];
-  var order = (operator == '==' || operator == '!=') ?
+  var order = (operator === '==' || operator === '!=') ?
       Blockly.Dart.ORDER_EQUALITY : Blockly.Dart.ORDER_RELATIONAL;
   var argument0 = Blockly.Dart.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.Dart.valueToCode(block, 'B', order) || '0';
@@ -72,8 +72,8 @@ Blockly.Dart['logic_compare'] = function(block) {
 
 Blockly.Dart['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.Dart.ORDER_LOGICAL_AND :
+  var operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
+  var order = (operator === '&&') ? Blockly.Dart.ORDER_LOGICAL_AND :
       Blockly.Dart.ORDER_LOGICAL_OR;
   var argument0 = Blockly.Dart.valueToCode(block, 'A', order);
   var argument1 = Blockly.Dart.valueToCode(block, 'B', order);
@@ -83,7 +83,7 @@ Blockly.Dart['logic_operation'] = function(block) {
     argument1 = 'false';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    var defaultArgument = (operator === '&&') ? 'true' : 'false';
     if (!argument0) {
       argument0 = defaultArgument;
     }
@@ -105,7 +105,7 @@ Blockly.Dart['logic_negate'] = function(block) {
 
 Blockly.Dart['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
+  var code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 

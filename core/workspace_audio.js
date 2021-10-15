@@ -139,7 +139,7 @@ WorkspaceAudio.prototype.play = function(name, opt_volume) {
   if (sound) {
     // Don't play one sound on top of another.
     const now = new Date;
-    if (this.lastSound_ != null &&
+    if (this.lastSound_ !== null &&
         now - this.lastSound_ < internalConstants.SOUND_LIMIT) {
       return;
     }

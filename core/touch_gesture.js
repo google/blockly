@@ -241,7 +241,7 @@ TouchGesture.prototype.handleTouchStart = function(e) {
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
   const pointers = Object.keys(this.cachedPoints_);
   // If two pointers are down, store info
-  if (pointers.length == 2) {
+  if (pointers.length === 2) {
     const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
     const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
     this.startDistance_ = Coordinate.distance(point0, point1);

@@ -45,10 +45,10 @@ const BlockChange = function(
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.name = typeof opt_name == 'undefined' ? '' : opt_name;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+  this.name = typeof opt_name === 'undefined' ? '' : opt_name;
+  this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
+  this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
 };
 object.inherits(BlockChange, BlockBase);
 
@@ -90,7 +90,7 @@ BlockChange.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 BlockChange.prototype.isNull = function() {
-  return this.oldValue == this.newValue;
+  return this.oldValue === this.newValue;
 };
 
 /**

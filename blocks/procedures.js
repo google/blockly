@@ -132,13 +132,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.arguments_ = [];
     this.argumentVarModels_ = [];
     for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() == 'arg') {
+      if (childNode.nodeName.toLowerCase() === 'arg') {
         var varName = childNode.getAttribute('name');
         var varId = childNode.getAttribute('varid') || childNode.getAttribute('varId');
         this.arguments_.push(varName);
         var variable = Blockly.Variables.getOrCreateVariablePackage(
             this.workspace, varId, varName, '');
-        if (variable != null) {
+        if (variable !== null) {
           this.argumentVarModels_.push(variable);
         } else {
           console.log('Failed to create a variable with name ' + varName + ', ignoring.');
@@ -242,7 +242,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     var containerBlock = Blockly.Xml.domToBlock(containerBlockNode, workspace);
 
-    if (this.type == 'procedures_defreturn') {
+    if (this.type === 'procedures_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
     } else {
       containerBlock.removeInput('STATEMENT_INPUT');
@@ -279,8 +279,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Show/hide the statement input.
     var hasStatements = containerBlock.getFieldValue('STATEMENTS');
     if (hasStatements !== null) {
-      hasStatements = hasStatements == 'TRUE';
-      if (this.hasStatements_ != hasStatements) {
+      hasStatements = hasStatements === 'TRUE';
+      if (this.hasStatements_ !== hasStatements) {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
@@ -339,7 +339,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   renameVarById: function(oldId, newId) {
     var oldVariable = this.workspace.getVariableById(oldId);
-    if (oldVariable.type != '') {
+    if (oldVariable.type !== '') {
       // Procedure arguments always have the empty type.
       return;
     }
@@ -348,7 +348,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     var change = false;
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      if (this.argumentVarModels_[i].getId() == oldId) {
+      if (this.argumentVarModels_[i].getId() === oldId) {
         this.arguments_[i] = newVar.name;
         this.argumentVarModels_[i] = newVar;
         change = true;
@@ -371,7 +371,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var newName = variable.name;
     var change = false;
     for (var i = 0; i < this.argumentVarModels_.length; i++) {
-      if (this.argumentVarModels_[i].getId() == variable.getId()) {
+      if (this.argumentVarModels_[i].getId() === variable.getId()) {
         var oldName = this.arguments_[i];
         this.arguments_[i] = newName;
         change = true;
@@ -395,7 +395,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (this.mutator && this.mutator.isVisible()) {
       var blocks = this.mutator.workspace_.getAllBlocks(false);
       for (var i = 0, block; (block = blocks[i]); i++) {
-        if (block.type == 'procedures_mutatorarg' &&
+        if (block.type === 'procedures_mutatorarg' &&
             Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
           block.setFieldValue(newName, 'NAME');
         }
@@ -586,12 +586,12 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     var blocks = workspace.getAllBlocks(false);
     var caselessName = varName.toLowerCase();
     for (var i = 0; i < blocks.length; i++) {
-      if (blocks[i].id == this.getSourceBlock().id) {
+      if (blocks[i].id === this.getSourceBlock().id) {
         continue;
       }
       // Other blocks values may not be set yet when this is loaded.
       var otherVar = blocks[i].getFieldValue('NAME');
-      if (otherVar && otherVar.toLowerCase() == caselessName) {
+      if (otherVar && otherVar.toLowerCase() === caselessName) {
         return null;
       }
     }
@@ -603,7 +603,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
 
     var model = outerWs.getVariable(varName, '');
-    if (model && model.name != varName) {
+    if (model && model.name !== varName) {
       // Rename the variable (case change)
       outerWs.renameVariableById(model.getId(), varName);
     }
@@ -631,7 +631,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     }
     for (var i = 0; i < this.createdVariables_.length; i++) {
       var model = this.createdVariables_[i];
-      if (model.name != newText) {
+      if (model.name !== newText) {
         outerWs.deleteVariableById(model.getId());
       }
     }
@@ -716,12 +716,12 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
     // Test arguments (arrays of strings) for changes. '\n' is not a valid
     // argument name character, so it is a valid delimiter here.
-    if (paramNames.join('\n') == this.arguments_.join('\n')) {
+    if (paramNames.join('\n') === this.arguments_.join('\n')) {
       // No change.
       this.quarkIds_ = paramIds;
       return;
     }
-    if (paramIds.length != paramNames.length) {
+    if (paramIds.length !== paramNames.length) {
       throw RangeError('paramNames and paramIds must be the same length.');
     }
     this.setCollapsed(false);
@@ -740,7 +740,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         var connection = input.connection.targetConnection;
         this.quarkConnections_[this.quarkIds_[i]] = connection;
         if (mutatorOpen && connection &&
-            paramIds.indexOf(this.quarkIds_[i]) == -1) {
+            paramIds.indexOf(this.quarkIds_[i]) === -1) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
           connection.getSourceBlock().bumpNeighbours();
@@ -853,7 +853,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     var args = [];
     var paramIds = [];
     for (var i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
-      if (childNode.nodeName.toLowerCase() == 'arg') {
+      if (childNode.nodeName.toLowerCase() === 'arg') {
         args.push(childNode.getAttribute('name'));
         paramIds.push(childNode.getAttribute('paramId'));
       }
@@ -919,15 +919,15 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       // Events not generated by user. Skip handling.
       return;
     }
-    if (event.type == Blockly.Events.BLOCK_CREATE &&
-        event.ids.indexOf(this.id) != -1) {
+    if (event.type === Blockly.Events.BLOCK_CREATE &&
+        event.ids.indexOf(this.id) !== -1) {
       // Look for the case where a procedure call was created (usually through
       // paste) and there is no matching definition.  In this case, create
       // an empty definition block with the correct signature.
       var name = this.getProcedureCall();
       var def = Blockly.Procedures.getDefinition(name, this.workspace);
-      if (def && (def.type != this.defType_ ||
-          JSON.stringify(def.getVars()) != JSON.stringify(this.arguments_))) {
+      if (def && (def.type !== this.defType_ ||
+          JSON.stringify(def.getVars()) !== JSON.stringify(this.arguments_))) {
         // The signatures don't match.
         def = null;
       }
@@ -968,7 +968,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         Blockly.Events.setGroup(false);
       }
-    } else if (event.type == Blockly.Events.BLOCK_DELETE) {
+    } else if (event.type === Blockly.Events.BLOCK_DELETE) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
       // the orphan.
@@ -979,10 +979,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         this.dispose(true);
         Blockly.Events.setGroup(false);
       }
-    } else if (event.type == Blockly.Events.CHANGE && event.element == 'disabled') {
+    } else if (event.type === Blockly.Events.CHANGE && event.element === 'disabled') {
       var name = this.getProcedureCall();
       var def = Blockly.Procedures.getDefinition(name, this.workspace);
-      if (def && def.id == event.blockId) {
+      if (def && def.id === event.blockId) {
         // in most cases the old group should be ''
         var oldGroup = Blockly.Events.getGroup();
         if (oldGroup) {
@@ -1102,7 +1102,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
    */
   domToMutation: function(xmlElement) {
     var value = xmlElement.getAttribute('value');
-    this.hasReturnValue_ = (value == 1);
+    this.hasReturnValue_ = (value === '1');
     if (!this.hasReturnValue_) {
       this.removeInput('VALUE');
       this.appendDummyInput('VALUE')
@@ -1129,7 +1129,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
     // Is the block nested in a procedure?
     var block = this;
     do {
-      if (this.FUNCTION_TYPES.indexOf(block.type) != -1) {
+      if (this.FUNCTION_TYPES.indexOf(block.type) !== -1) {
         legal = true;
         break;
       }
@@ -1137,12 +1137,12 @@ Blockly.Blocks['procedures_ifreturn'] = {
     } while (block);
     if (legal) {
       // If needed, toggle whether this block has a return value.
-      if (block.type == 'procedures_defnoreturn' && this.hasReturnValue_) {
+      if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE')
             .appendField(Blockly.Msg['PROCEDURES_DEFRETURN_RETURN']);
         this.hasReturnValue_ = false;
-      } else if (block.type == 'procedures_defreturn' &&
+      } else if (block.type === 'procedures_defreturn' &&
                  !this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendValueInput('VALUE')

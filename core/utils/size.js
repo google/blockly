@@ -51,13 +51,13 @@ const Size = function(width, height) {
  *     heights, or if both are null.
  */
 Size.equals = function(a, b) {
-  if (a == b) {
+  if (a === b) {
     return true;
   }
   if (!a || !b) {
     return false;
   }
-  return a.width == b.width && a.height == b.height;
+  return a.width === b.width && a.height === b.height;
 };
 
 exports = Size;

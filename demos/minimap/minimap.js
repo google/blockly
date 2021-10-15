@@ -168,7 +168,7 @@ Minimap.setDraggerHeight = function() {
   var draggerHeight = (workspaceMetrics.viewHeight / Minimap.workspace.scale) *
       Minimap.minimap.scale;
   // It's zero when first block is placed.
-  if (draggerHeight == 0) {
+  if (draggerHeight === 0) {
     return;
   }
   Minimap.mapDragger.setAttribute('height', draggerHeight);
@@ -182,7 +182,7 @@ Minimap.setDraggerWidth = function() {
   var draggerWidth = (workspaceMetrics.viewWidth / Minimap.workspace.scale) *
       Minimap.minimap.scale;
   // It's zero when first block is placed.
-  if (draggerWidth == 0) {
+  if (draggerWidth === 0) {
     return;
   }
   Minimap.mapDragger.setAttribute('width', draggerWidth);

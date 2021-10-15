@@ -179,8 +179,8 @@ MetricsManager.prototype.getAbsoluteMetrics = function() {
   const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  const atLeft = toolboxPosition == toolboxUtils.Position.LEFT;
-  const atTop = toolboxPosition == toolboxUtils.Position.TOP;
+  const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
+  const atTop = toolboxPosition === toolboxUtils.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
@@ -220,21 +220,21 @@ MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == toolboxUtils.Position.TOP ||
-        toolboxPosition == toolboxUtils.Position.BOTTOM) {
+    if (toolboxPosition === toolboxUtils.Position.TOP ||
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
     } else if (
-        toolboxPosition == toolboxUtils.Position.LEFT ||
-        toolboxPosition == toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == toolboxUtils.Position.TOP ||
-        toolboxPosition == toolboxUtils.Position.BOTTOM) {
+    if (toolboxPosition === toolboxUtils.Position.TOP ||
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
     } else if (
-        toolboxPosition == toolboxUtils.Position.LEFT ||
-        toolboxPosition == toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }

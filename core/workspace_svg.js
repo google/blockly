@@ -795,14 +795,14 @@ WorkspaceSvg.prototype.getSvgXY = function(element) {
   do {
     // Loop through this block and every parent.
     const xy = utils.getRelativeXY(element);
-    if (element == this.getCanvas() || element == this.getBubbleCanvas()) {
+    if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
       // After the SVG canvas, don't scale the coordinates.
       scale = 1;
     }
     x += xy.x * scale;
     y += xy.y * scale;
     element = /** @type {!SVGElement} */ (element.parentNode);
-  } while (element && element != this.getParentSvg());
+  } while (element && element !== this.getParentSvg());
   return new Coordinate(x, y);
 };
 
@@ -844,7 +844,7 @@ WorkspaceSvg.prototype.getInjectionDiv = function() {
     let element = this.svgGroup_;
     while (element) {
       const classes = element.getAttribute('class') || '';
-      if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+      if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
         this.injectionDiv_ = element;
         break;
       }
@@ -901,7 +901,7 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
-    if (opt_backgroundClass == 'blocklyMainBackground' && this.grid_) {
+    if (opt_backgroundClass === 'blocklyMainBackground' && this.grid_) {
       this.svgBackground_.style.fill =
           'url(#' + this.grid_.getPatternId() + ')';
     } else {
@@ -1271,7 +1271,7 @@ WorkspaceSvg.prototype.getParentSvg = function() {
   if (!this.cachedParentSvg_) {
     let element = this.svgGroup_;
     while (element) {
-      if (element.tagName == 'svg') {
+      if (element.tagName === 'svg') {
         this.cachedParentSvg_ = element;
         break;
       }
@@ -1293,7 +1293,7 @@ WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   const scale = this.scale;
   const top = -this.scrollY;
   const left = -this.scrollX;
-  if (scale == this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
+  if (scale === this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
       Math.abs(left - this.oldLeft_) < 1) {
     // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
     // negligible changes in viewport top/left.
@@ -1502,7 +1502,7 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
     // Using Set here would be great, but at the cost of IE10 support.
     if (!state) {
       utils.arrayRemove(this.highlightedBlocks_, block);
-    } else if (this.highlightedBlocks_.indexOf(block) == -1) {
+    } else if (this.highlightedBlocks_.indexOf(block) === -1) {
       this.highlightedBlocks_.push(block);
     }
     block.setHighlighted(state);
@@ -1529,7 +1529,7 @@ WorkspaceSvg.prototype.paste = function(state) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
   } else {
     const xmlBlock = /** @type {!Element} */ (state);
-    if (xmlBlock.tagName.toLowerCase() == 'comment') {
+    if (xmlBlock.tagName.toLowerCase() === 'comment') {
       this.pasteWorkspaceComment_(xmlBlock);
     } else {
       this.pasteBlock_(xmlBlock, null);
@@ -1791,7 +1791,7 @@ WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 WorkspaceSvg.prototype.isDragging = function() {
-  return this.currentGesture_ != null && this.currentGesture_.isDragging();
+  return this.currentGesture_ !== null && this.currentGesture_.isDragging();
 };
 
 /**
@@ -2079,7 +2079,7 @@ WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   const speed = this.options.zoomOptions.scaleSpeed;
   let scaleChange = Math.pow(speed, amount);
   const newScale = this.scale * scaleChange;
-  if (this.scale == newScale) {
+  if (this.scale === newScale) {
     return;  // No change in zoom.
   }
 
@@ -2407,12 +2407,12 @@ WorkspaceSvg.prototype.scroll = function(x, y) {
 WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   const metrics = this.getMetrics();
 
-  if (typeof xyRatio.x == 'number') {
+  if (typeof xyRatio.x === 'number') {
     this.scrollX =
         -(metrics.scrollLeft +
           (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
-  if (typeof xyRatio.y == 'number') {
+  if (typeof xyRatio.y === 'number') {
     this.scrollY =
         -(metrics.scrollTop +
           (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
@@ -2547,7 +2547,7 @@ WorkspaceSvg.prototype.clear = function() {
  *     given button is clicked.
  */
 WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw TypeError('Button callbacks must be functions.');
   }
   this.flyoutButtonCallbacks_[key] = func;
@@ -2582,7 +2582,7 @@ WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  *     call when the given toolbox category is opened.
  */
 WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw TypeError('Toolbox category callbacks must be functions.');
   }
   this.toolboxCategoryCallbacks_[key] = func;
@@ -2618,8 +2618,8 @@ WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  */
 WorkspaceSvg.prototype.getGesture = function(e) {
   const isStart =
-      (e.type == 'mousedown' || e.type == 'touchstart' ||
-       e.type == 'pointerdown');
+      (e.type === 'mousedown' || e.type === 'touchstart' ||
+       e.type === 'pointerdown');
 
   const gesture = this.currentGesture_;
   if (gesture) {

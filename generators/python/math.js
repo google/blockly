@@ -22,10 +22,10 @@ Blockly.Python['math_number'] = function(block) {
   // Numeric value.
   var code = Number(block.getFieldValue('NUM'));
   var order;
-  if (code == Infinity) {
+  if (code === Infinity) {
     code = 'float("inf")';
     order = Blockly.Python.ORDER_FUNCTION_CALL;
-  } else if (code == -Infinity) {
+  } else if (code === -Infinity) {
     code = '-float("inf")';
     order = Blockly.Python.ORDER_UNARY_SIGN;
   } else {
@@ -63,14 +63,14 @@ Blockly.Python['math_single'] = function(block) {
   var operator = block.getFieldValue('OP');
   var code;
   var arg;
-  if (operator == 'NEG') {
+  if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     code = Blockly.Python.valueToCode(block, 'NUM',
         Blockly.Python.ORDER_UNARY_SIGN) || '0';
     return ['-' + code, Blockly.Python.ORDER_UNARY_SIGN];
   }
   Blockly.Python.definitions_['import_math'] = 'import math';
-  if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+  if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
     arg = Blockly.Python.valueToCode(block, 'NUM',
         Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
   } else {
@@ -150,7 +150,7 @@ Blockly.Python['math_constant'] = function(block) {
     'INFINITY': ['float(\'inf\')', Blockly.Python.ORDER_ATOMIC]
   };
   var constant = block.getFieldValue('CONSTANT');
-  if (constant != 'INFINITY') {
+  if (constant !== 'INFINITY') {
     Blockly.Python.definitions_['import_math'] = 'import math';
   }
   return CONSTANTS[constant];
@@ -163,7 +163,7 @@ Blockly.Python['math_number_property'] = function(block) {
       Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
-  if (dropdown_property == 'PRIME') {
+  if (dropdown_property === 'PRIME') {
     Blockly.Python.definitions_['import_math'] = 'import math';
     Blockly.Python.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
@@ -211,7 +211,7 @@ Blockly.Python['math_number_property'] = function(block) {
       var divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
           Blockly.Python.ORDER_MULTIPLICATIVE);
       // If 'divisor' is some code that evals to 0, Python will raise an error.
-      if (!divisor || divisor == '0') {
+      if (!divisor || divisor === '0') {
         return ['False', Blockly.Python.ORDER_ATOMIC];
       }
       code = number_to_check + ' % ' + divisor + ' == 0';
@@ -258,8 +258,8 @@ Blockly.Python['math_on_list'] = function(block) {
           'from numbers import Number';
       var functionName = Blockly.Python.provideFunction_(
           'math_mean',
-          // This operation excludes null and values that aren't int or float:',
-          // math_mean([null, null, "aString", 1, 9]) == 5.0.',
+          // This operation excludes null and values that aren't int or float:
+          // math_mean([null, null, "aString", 1, 9]) -> 5.0
           ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
            '  localList = [e for e in myList if isinstance(e, Number)]',
            '  if not localList: return',
@@ -272,7 +272,7 @@ Blockly.Python['math_on_list'] = function(block) {
       var functionName = Blockly.Python.provideFunction_(
           'math_median',
           // This operation excludes null values:
-          // math_median([null, null, 1, 3]) == 2.0.
+          // math_median([null, null, 1, 3]) -> 2.0
           ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
            '  localList = sorted([e for e in myList if isinstance(e, Number)])',
            '  if not localList: return',
@@ -288,7 +288,7 @@ Blockly.Python['math_on_list'] = function(block) {
           'math_modes',
           // As a list of numbers can contain more than one mode,
           // the returned result is provided as an array.
-          // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
+          // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
           ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(some_list):',
            '  modes = []',
            '  # Using a lists of [item, count] to keep count rather than dict',

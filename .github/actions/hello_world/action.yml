@@ -5,9 +5,9 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
-  outputs:
-    time: # id of ouput
-      description: 'The time we greeted you'
-  runs:
-    using: 'node12'
-    main: 'index.js'
+outputs:
+  time: # id of ouput
+    description: 'The time we greeted you'
+runs:
+  using: 'node12'
+  main: 'index.js'

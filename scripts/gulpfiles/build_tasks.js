@@ -91,7 +91,6 @@ var JSCOMP_ERROR = [
   // 'strictPrimitiveOperators',
   'suspiciousCode',
   'typeInvalidation',
-  'undefinedNames',
   'undefinedVars',
   'underscore',
   'unknownDefines',

@@ -11,4 +11,4 @@ jobs:
         ref: 'test_action'
 
     - name: Hello world action step
-      uses: ./.github/actions/hellow_world
+      uses: ./.github/actions/hello_world

@@ -7,7 +7,7 @@ If you don't want this, use `yarn build:not:langfiles`. Look at package.json for
 
 ## Publishing a new version of the leaphy-blockly package to npm
 
-In a python-enabled terminal, run `yarn publish`. Enter a version number that does not exist yet. Wait. Boom!
+In a python-enabled terminal, run `yarn publish`. Enter a version number that does not exist yet. Wait. You will be prompted for npm credentials. You will get an error that the version already exists. But it will be deployed to npm. 
 
 
 # Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)

@@ -82,7 +82,7 @@ function checkBranch(done) {
 
 // Sanity check that the dist folder exists, and that certain files are in the dist folder.
 function checkDist(done) {
-  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'core', 'blocks', 'generators'];
+  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'core', 'blocks', 'generators', 'node.js'];
   // Check that dist exists.
   if (fs.existsSync(RELEASE_DIR)) {
     // Sanity check that certain files exist in dist.

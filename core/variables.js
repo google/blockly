@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for handling variables.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

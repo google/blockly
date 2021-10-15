@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for the toolbox and flyout.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

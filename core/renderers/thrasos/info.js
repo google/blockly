@@ -7,7 +7,6 @@
 /**
  * @fileoverview New (evolving) renderer.
  * Thrasos: spirit of boldness.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

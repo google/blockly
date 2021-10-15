@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a Blockly field that can be registered.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Registry for context menu option items.
- * @author maribethb@google.com (Maribeth Bottorff)
  */
 'use strict';
 

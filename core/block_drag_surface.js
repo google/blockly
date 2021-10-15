@@ -11,7 +11,6 @@
  * blocks are put back in into the SVG they came from. This helps
  * performance by avoiding repainting the entire SVG on every mouse move
  * while dragging blocks.
- * @author picklesrus
  */
 
 'use strict';

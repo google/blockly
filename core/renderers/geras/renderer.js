@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Geras renderer.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

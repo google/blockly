@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object that controls settings for the workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

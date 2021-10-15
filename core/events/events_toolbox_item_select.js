@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of selecting an item on the toolbox.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

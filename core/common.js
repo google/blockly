@@ -7,7 +7,6 @@
 /**
  * @fileoverview Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Touch handling for Blockly.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

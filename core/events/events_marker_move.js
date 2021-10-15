@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of a marker move.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

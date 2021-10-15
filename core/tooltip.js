@@ -11,7 +11,6 @@
  * If the tooltip is a string, then that message will be displayed.
  * If the tooltip is an SVG element, then that object's tooltip will be used.
  * Third, call bindMouseEvents(e) passing the SVG element.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

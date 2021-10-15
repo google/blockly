@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an AST node location SVG.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

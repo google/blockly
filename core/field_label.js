@@ -7,7 +7,6 @@
 /**
  * @fileoverview Non-editable, non-serializable text field.  Used for titles,
  *    labels, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

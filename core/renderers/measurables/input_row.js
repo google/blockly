@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object representing a row that holds one or more inputs on a
  * rendered block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for list blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 

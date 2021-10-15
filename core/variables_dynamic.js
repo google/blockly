@@ -7,7 +7,6 @@
 /**
  * @fileoverview Utility functions for handling typed variables.
  *
- * @author duzc2dtw@gmail.com (Du Tian Wei)
  */
 'use strict';
 

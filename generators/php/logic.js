@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for logic blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 

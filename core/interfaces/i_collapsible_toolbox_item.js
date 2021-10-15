@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a collapsible toolbox item.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

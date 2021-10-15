@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a bubble.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

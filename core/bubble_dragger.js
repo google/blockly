@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for dragging a bubble visually.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

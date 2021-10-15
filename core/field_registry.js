@@ -8,7 +8,6 @@
  * @fileoverview Fields can be created based on a JSON definition. This file
  *    contains methods for registering those JSON definitions, and building the
  *    fields based on JSON.
- * @author bekawestberg@gmail.com (Beka Westberg)
  */
 'use strict';
 

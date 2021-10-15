@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Minimap demo.
- * @author karnpurohit@gmail.com (Karan Purohit)
  */
 'use strict';
 

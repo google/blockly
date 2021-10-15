@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object representing a mutator dialog.  A mutator allows the
  * user to change the shape of a block using a nested blocks editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

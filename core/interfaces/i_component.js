@@ -7,7 +7,6 @@
 /**
  * @fileoverview Interface for a workspace component that can be registered with
  * the ComponentManager.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

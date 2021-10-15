@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object representing the top row of a rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

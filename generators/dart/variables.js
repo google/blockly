@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Dart for variable blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

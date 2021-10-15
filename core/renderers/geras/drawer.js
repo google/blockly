@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Renderer that preserves the look and feel of Blockly pre-2019.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

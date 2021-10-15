@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Python for colour blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Old (compatibility) renderer.
  * Geras: spirit of old age.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Components for the variable model.
- * @author marisaleung@google.com (Marisa Leung)
  */
 'use strict';
 

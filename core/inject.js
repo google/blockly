@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Functions for injecting Blockly into a web page.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

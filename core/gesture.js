@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing an in-progress gesture, usually a drag
  * or a tap.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

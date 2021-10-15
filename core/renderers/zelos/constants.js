@@ -7,7 +7,6 @@
 /**
  * @fileoverview An object that provides constants for rendering blocks in Zelos
  * mode.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

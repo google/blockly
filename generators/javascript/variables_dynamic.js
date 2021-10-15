@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for dynamic variable blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

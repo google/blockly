@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Horizontal flyout tray containing blocks which may be created.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

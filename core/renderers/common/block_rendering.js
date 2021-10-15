@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Namespace for block rendering functionality.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object representing a bottom row on a rendered block.
  * of its subcomponents.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

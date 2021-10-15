@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly's internal clipboard for managing copy-paste.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Helper functions for generating PHP for blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 

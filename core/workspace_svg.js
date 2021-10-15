@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a workspace rendered as SVG.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

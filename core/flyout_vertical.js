@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Layout code for a vertical variant of the flyout.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

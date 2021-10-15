@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An enum for the possible types of inputs.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';

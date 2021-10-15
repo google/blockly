@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for an AST node location that has an associated
  * block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

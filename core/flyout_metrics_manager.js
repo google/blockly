@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Calculates and reports flyout workspace metrics.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

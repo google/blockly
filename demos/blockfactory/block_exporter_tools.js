@@ -10,7 +10,6 @@
  * toolbox XML for the exporter's workspace.  Depends on the FactoryUtils for
  * its code generation functions.
  *
- * @author quachtina96 (Tina Quach)
  */
 'use strict';
 

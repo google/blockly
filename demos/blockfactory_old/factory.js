@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Block Factory application.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

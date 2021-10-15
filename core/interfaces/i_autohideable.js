@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for a component that is automatically hidden
  * when WorkspaceSvg.hideChaff is called.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

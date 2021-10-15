@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of element select action.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

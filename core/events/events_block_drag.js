@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a block drag.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

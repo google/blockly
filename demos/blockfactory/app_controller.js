@@ -9,7 +9,6 @@
  * Factory, Block Library, and Block Exporter functionality into a single web
  * app.
  *
- * @author quachtina96 (Tina Quach)
  */
 
 /**

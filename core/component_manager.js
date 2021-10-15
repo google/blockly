@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Manager for all items registered with the workspace.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

@@ -11,7 +11,6 @@
  * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
  * only, no outside references, no functions, no trailing commas, etc. The one
  * exception is end-of-line comments, which the scraper will remove.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 

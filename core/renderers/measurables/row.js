@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a single row on a rendered block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

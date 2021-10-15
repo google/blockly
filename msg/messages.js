@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview English strings.
- * @author fraser@google.com (Neil Fraser)
  *
  * After modifying this file, run:
  *

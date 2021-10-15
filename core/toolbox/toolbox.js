@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Toolbox from whence to create blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

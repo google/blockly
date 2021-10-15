@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing inline inputs with connections on a
  * rendered block.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

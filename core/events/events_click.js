@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of UI click in Blockly's editor.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Browser event handling.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

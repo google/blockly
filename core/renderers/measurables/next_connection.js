@@ -7,7 +7,6 @@
 /**
  * @fileoverview Class representing the space a next connection takes up during
  * rendering.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

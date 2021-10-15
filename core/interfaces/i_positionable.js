@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a positionable UI element.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

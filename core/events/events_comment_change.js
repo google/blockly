@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for comment change event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

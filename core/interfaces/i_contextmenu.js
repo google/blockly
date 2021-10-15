@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that supports a right-click.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

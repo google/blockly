@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Measurable types.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

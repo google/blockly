@@ -17,7 +17,6 @@
  * - changing a category name
  * - moving the position of a category.
  *
- * @author Emma Dauterman (evd2014)
  */
 
 /**

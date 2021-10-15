@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block delete event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

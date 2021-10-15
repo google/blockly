@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview XML reader and writer.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

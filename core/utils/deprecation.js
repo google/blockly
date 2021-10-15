@@ -7,7 +7,6 @@
 /**
  * @fileoverview Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

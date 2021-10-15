@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Abstract class for a variable event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

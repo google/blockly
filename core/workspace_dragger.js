@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for dragging a workspace visually.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

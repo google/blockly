@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview A toolbox category used to organize blocks in the toolbox.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

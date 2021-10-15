@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly menu item similar to Closure's goog.ui.MenuItem
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

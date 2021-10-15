@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a flyout.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';

@@ -10,7 +10,6 @@
  * keydown events and Blockly events, and configures the initial setup of
  * the page.
  *
- * @author Emma Dauterman (evd2014)
  */
 
 /**

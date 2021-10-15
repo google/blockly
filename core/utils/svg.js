@@ -7,7 +7,6 @@
 /**
  * @fileoverview Defines the Svg class. Its constants enumerate
  * all SVG tag names used by Blockly.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

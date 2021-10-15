@@ -8,7 +8,6 @@
  * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be FieldTextInput, FieldDropdown, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

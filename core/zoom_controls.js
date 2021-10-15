@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a zoom icons.
- * @author carloslfu@gmail.com (Carlos Galarza)
  */
 'use strict';
 

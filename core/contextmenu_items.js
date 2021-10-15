@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Registers default context menu items.
- * @author maribethb@google.com (Maribeth Bottorff)
  */
 'use strict';
 

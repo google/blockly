@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for text blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 

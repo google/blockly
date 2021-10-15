@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a block dragger.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';

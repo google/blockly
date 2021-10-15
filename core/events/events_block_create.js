@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block creation event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a block as SVG.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

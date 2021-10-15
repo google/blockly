@@ -7,8 +7,6 @@
 /**
  * @fileoverview Object in charge of storing and updating a workspace theme
  *     and UI components.
- * @author aschmiedt@google.com (Abby Schmiedt)
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

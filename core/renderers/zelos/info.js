@@ -7,7 +7,6 @@
 /**
  * @fileoverview Makecode/scratch-style renderer.
  * Zelos: spirit of eager rivalry, emulation, envy, jealousy, and zeal.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

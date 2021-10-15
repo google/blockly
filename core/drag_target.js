@@ -7,7 +7,6 @@
 /**
  * @fileoverview The abstract class for a component with custom behaviour when a
  * block or bubble is dragged over or dropped on top of it.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

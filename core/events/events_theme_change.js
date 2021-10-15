@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of a theme update.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

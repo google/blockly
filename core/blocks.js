@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview A mapping of block type names to block prototype objects.
- * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
 

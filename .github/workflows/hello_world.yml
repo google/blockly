@@ -7,4 +7,4 @@ jobs:
     steps:
     - name: Hello world action step
       id: hello
-      uses: ./.github/actions/hello_world
+      uses: ./.github/actions/

@@ -8,8 +8,7 @@ jobs:
     - name: Check Out Blockly
       uses: actions/checkout@v2
       with:
-        ref: 'develop'
+        ref: 'test_action'
 
     - name: Hello world action step
-      id: hello
-      uses: ./.github/actions/
+      uses: ./.github/actions/hellow_world

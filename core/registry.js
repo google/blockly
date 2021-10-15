@@ -40,7 +40,7 @@ const Theme = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
+const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
 

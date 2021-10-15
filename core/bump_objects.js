@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utilities for bumping objects back into worksapce bounds.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for an object that encapsulates logic for
  * checking whether a potential connection is safe and valid.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class that controls updates to connections during drags.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

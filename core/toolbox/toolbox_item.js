@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An item in the toolbox.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

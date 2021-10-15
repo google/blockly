@@ -6,8 +6,6 @@
 
 /**
  * @fileoverview A separator used for separating toolbox categories.
- * @author aschmiedt@google.com (Abby Schmiedt)
- * @author maribethb@google.com (Maribeth Bottorff)
  */
 'use strict';
 

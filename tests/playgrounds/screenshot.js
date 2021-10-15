@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Download screenshot.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

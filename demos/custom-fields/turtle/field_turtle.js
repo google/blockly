@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview A field used to customize a turtle.
- * @author bekawestberg@gmail.com (Beka Westberg)
  */
 'use strict';
 

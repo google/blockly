@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that is draggable.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

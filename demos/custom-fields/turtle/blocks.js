@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Turtle field demo blocks.
- * @author bekawestberg@gmail.com (Beka Westberg)
  */
 
 Blockly.Blocks['turtle_basic'] = {

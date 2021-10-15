@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for objects that handle keyboard shortcuts.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

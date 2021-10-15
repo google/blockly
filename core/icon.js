@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing an icon on a block.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

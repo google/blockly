@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Base renderer.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

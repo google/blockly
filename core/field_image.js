@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Image field.  Used for pictures, icons, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

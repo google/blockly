@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a basic cursor.
  * Used to demo switching between different cursors.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

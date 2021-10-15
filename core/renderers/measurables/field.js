@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing a field in a row of a rendered
  * block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

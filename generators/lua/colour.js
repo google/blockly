@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for colour blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 

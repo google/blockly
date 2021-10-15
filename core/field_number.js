@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Number input field
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

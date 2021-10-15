@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Registers default keyboard shortcuts.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

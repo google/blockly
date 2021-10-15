@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a spacer between two rows.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

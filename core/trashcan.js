@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a trash can icon.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

@@ -6,9 +6,6 @@
 
 /**
  * @fileoverview Text Area field.
- * @author fraser@google.com (Neil Fraser)
- * @author Andrew Mee
- * @author acbart@udel.edu (Austin Cory Bart)
  */
 'use strict';
 

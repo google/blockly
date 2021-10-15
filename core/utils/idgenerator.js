@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generators for unique IDs.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

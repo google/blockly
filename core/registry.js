@@ -7,7 +7,6 @@
 /**
  * @fileoverview This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

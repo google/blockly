@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a code comment on a rendered workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

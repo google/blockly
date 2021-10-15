@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An enum for the possible types of connections.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';

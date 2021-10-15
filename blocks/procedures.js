@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Procedure blocks for Blockly.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

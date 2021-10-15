@@ -7,7 +7,6 @@
 /**
  * @fileoverview Methods for adding highlights on block, for rendering in
  * compatibility mode.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for positioning UI elements.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

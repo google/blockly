@@ -8,7 +8,6 @@
 /**
  * @fileoverview A div that floats on top of the workspace, for drop-down menus.
  * The drop-down can be kept inside the workspace, animate in/out, etc.
- * @author tmickel@mit.edu (Tim Mickel)
  */
 
 'use strict';

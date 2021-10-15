@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Classes for all types of variable events.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

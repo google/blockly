@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for loop blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 

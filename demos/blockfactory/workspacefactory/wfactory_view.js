@@ -11,7 +11,6 @@
  * each category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
  *
- * @author Emma Dauterman (edauterman)
  */
 
 

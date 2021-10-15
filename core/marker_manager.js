@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object in charge of managing markers and the cursor.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a code comment.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

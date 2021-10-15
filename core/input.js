@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing an input (value, statement, or dummy).
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

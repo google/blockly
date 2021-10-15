@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Empty name space for the Message singleton.
- * @author scr@google.com (Sheridan Rawlins)
  */
 'use strict';
 

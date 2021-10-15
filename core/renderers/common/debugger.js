@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for rendering debug graphics.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

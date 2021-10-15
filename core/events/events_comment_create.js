@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for comment creation event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

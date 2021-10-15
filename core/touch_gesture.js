@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
- * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 

@@ -14,7 +14,6 @@
  *  - clear their block library
  * Depends on BlockFactory functions defined in factory.js.
  *
- * @author quachtina96 (Tina Quach)
  */
 'use strict';
 

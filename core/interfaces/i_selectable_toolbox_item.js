@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a selectable toolbox item.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';

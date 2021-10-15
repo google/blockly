@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Loading and saving blocks with localStorage and cloud storage.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview The namespace used to keep track of keyboard shortcuts and the
  * key codes used to execute those shortcuts.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

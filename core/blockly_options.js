@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object that defines user-specified options for the workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

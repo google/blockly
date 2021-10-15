@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The class representing one block.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

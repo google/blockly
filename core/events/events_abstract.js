@@ -7,7 +7,6 @@
 /**
  * @fileoverview Abstract class for events fired as a result of actions in
  * Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

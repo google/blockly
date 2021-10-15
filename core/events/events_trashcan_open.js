@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of trashcan flyout open and close.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 

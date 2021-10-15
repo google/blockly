@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility methods for objects.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

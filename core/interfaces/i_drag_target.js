@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for a component that has a handler for when a
  * block is dropped on top of it.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';

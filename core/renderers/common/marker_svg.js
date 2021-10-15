@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a marker as SVG.
- * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 

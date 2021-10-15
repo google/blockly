@@ -8,7 +8,6 @@
  * @fileoverview Dropdown input field.  Used for editable titles and variables.
  * In the interests of a consistent UI, the toolbox shares some functions and
  * properties with the context menu.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

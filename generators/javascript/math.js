@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for math blocks.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 

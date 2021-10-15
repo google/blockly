@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Code demo.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

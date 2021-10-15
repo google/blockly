@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Zelos renderer.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

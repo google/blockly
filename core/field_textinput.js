@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Text input field.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

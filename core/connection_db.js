@@ -8,7 +8,6 @@
  * @fileoverview A database of all the rendered connections that could
  *    possibly be connected to (i.e. not collapsed, etc).
  *    Sorted by y coordinate.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

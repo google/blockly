@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a finished loading workspace event.
- * @author BeksOmega
  */
 'use strict';
 

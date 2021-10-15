@@ -7,7 +7,6 @@
 /**
  * @fileoverview Utility functions for generating executable code from
  * Blockly code.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

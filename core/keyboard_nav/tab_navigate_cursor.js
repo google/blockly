@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a cursor that is used to navigate
  * between tab navigable fields.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 

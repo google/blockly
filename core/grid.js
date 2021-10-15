@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object for configuring and updating a workspace grid in
  * Blockly.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

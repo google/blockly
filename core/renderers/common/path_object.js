@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object that owns a block's rendering SVG elements.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';

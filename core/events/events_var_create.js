@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a variable creation event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a bounded element.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods animating a block on connection and disconnection.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

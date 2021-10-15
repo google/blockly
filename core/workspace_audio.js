@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object in charge of loading, storing, and playing audio for a
  *     workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

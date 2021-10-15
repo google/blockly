@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Flyout tray containing blocks which may be created.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

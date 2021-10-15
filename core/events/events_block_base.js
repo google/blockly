@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Base class for all types of block events.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

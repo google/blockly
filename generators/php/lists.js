@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for list blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 
 /**

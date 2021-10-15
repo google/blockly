@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a pair of scrollbars.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

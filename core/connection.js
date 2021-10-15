@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Components for creating connections between blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

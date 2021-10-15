@@ -7,7 +7,6 @@
 /**
  * @fileoverview Class representing inline inputs with connections on a rendered
  * block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**

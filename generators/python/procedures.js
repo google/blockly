@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Python for procedure blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

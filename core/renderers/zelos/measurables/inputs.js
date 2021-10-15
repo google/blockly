@@ -7,7 +7,6 @@
 /**
  * @fileoverview Zelos specific objects representing inputs with connections on
  * a rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 /**

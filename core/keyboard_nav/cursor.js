@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

@@ -11,7 +11,6 @@
  * Depends on a hidden workspace created in the generator to load saved XML in
  * order to generate toolbox XML.
  *
- * @author Emma Dauterman (evd2014)
  */
 
 

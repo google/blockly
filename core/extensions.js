@@ -9,7 +9,6 @@
  *      adding dynamic behavior such as onchange handlers and mutators. These
  *      are applied using Block.applyExtension(), or the JSON "extensions"
  *      array attribute.
- * @author Anm@anm.me (Andrew n marshall)
  */
 'use strict';
 

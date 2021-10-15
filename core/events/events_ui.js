@@ -7,7 +7,6 @@
 /**
  * @fileoverview (Deprecated) Events fired as a result of UI actions in
  * Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

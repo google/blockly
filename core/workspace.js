@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a workspace.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

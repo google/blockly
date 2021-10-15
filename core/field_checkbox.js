@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Checkbox field.  Checked or not checked.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

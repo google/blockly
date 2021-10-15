@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Python for variable blocks.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 

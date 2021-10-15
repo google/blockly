@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Helper functions for generating Lua for blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  * Based on Ellen Spertus's blocky-lua project.
  */
 'use strict';

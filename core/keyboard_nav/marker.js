@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Functionality for the right-click context menus.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

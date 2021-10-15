@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

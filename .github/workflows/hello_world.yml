@@ -14,3 +14,5 @@ jobs:
 
     - name: Hello world action step
       uses: ./.github/actions/hello_world
+      with:
+        repo-token: "${{ secrets.YOUR_TOKEN }}"

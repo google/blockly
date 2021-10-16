@@ -1,10 +1,9 @@
 name: 'my-action'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet: # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
+  repo-token:
+    description: 'A token for the repository'
+    default: '${{ github.token }}'
 outputs:
   time: # id of ouput
     description: 'The time we greeted you'

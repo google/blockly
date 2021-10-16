@@ -3,18 +3,20 @@ const github = require('@actions/github');
 
 try {
 
-  console.log(`Reviewer: ${github.context.payload.pull_request.requested_reviewers}`)
+  const reviewers = github.context.payload.pull_request.requested_reviewers;
+  const number = github.context.payload.pull_request.number;
+  console.log(`${number}`);
   const token = core.getInput("repo-token", { required: true });
   console.log(`Token: ${token}`);
 
   const octokit = github.getOctokit(token);
   console.log(octokit);
-  // const result = await octokit.rest.issues.addAssignees({
-  //   owner: github.context.repo.owner,
-  //   repo: github.context.repo.repo,
-  //   issue_number: number,
-  //   assignees: [author]
-  // });
+  const result = await octokit.rest.issues.addAssignees({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: number,
+    assignees: reviewers
+  });
 
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);

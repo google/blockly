@@ -11,7 +11,7 @@ try {
 
   const octokit = github.getOctokit(token);
   console.log(octokit);
-  const result = await octokit.rest.issues.addAssignees({
+  const result = octokit.rest.issues.addAssignees({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: number,

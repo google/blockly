@@ -16,6 +16,7 @@
 goog.module('Blockly.ContextMenuItems');
 
 const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
+const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
@@ -128,10 +129,20 @@ exports.registerCleanup = registerCleanup;
 const toggleOption_ = function(shouldCollapse, topBlocks) {
   const DELAY = 10;
   let ms = 0;
+  let timeoutCounter = 0;
+  const timeoutFn = function(block) {
+    timeoutCounter--;
+    block.setCollapsed(shouldCollapse);
+    if (timeoutCounter === 0) {
+      Events.setGroup(false);
+    }
+  };
+  Events.setGroup(true);
   for (let i = 0; i < topBlocks.length; i++) {
     let block = topBlocks[i];
     while (block) {
-      setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
+      timeoutCounter++;
+      setTimeout(timeoutFn.bind(null, block), ms);
       block = block.getNextBlock();
       ms += DELAY;
     }

@@ -1559,7 +1559,9 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
     } else if (jsonBlock) {
       block = blocks.append(jsonBlock, this);
       blockX = jsonBlock['x'] || 10;
-      blockX = this.getWidth() - blockX;
+      if (this.RTL) {
+        blockX = this.getWidth() - blockX;
+      }
       blockY = jsonBlock['y'] || 10;
     }
 

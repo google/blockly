@@ -9,10 +9,18 @@ changelog:
   categories:
     - title: Breaking Changes 🛠
       labels:
-        - api_change
+        - breaking change
+    - title: New Features
+      labels:
+        - "PR: feature"
+    - title: Bug fixes
+      labels:
+        - "PR: fix"
     - title: Cleanup ♻️
       labels:
-        - type: cleanup
+        - "PR: chore"
+        - "PR: docs"
+        - "PR: refactor"
     - title: Other Changes
       labels:
         - "*"

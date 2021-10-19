@@ -4,8 +4,9 @@ const github = require('@actions/github');
 try {
 
   const reviewers = github.context.payload.pull_request.requested_reviewers;
-  const number = github.context.payload.pull_request.number;
-  console.log(`Reviewers: ${reviewers}, owner: ${github.context.repo.owner}, repo: ${github.context.repo.repo}`);
+  const { assignees, number, user: { login: author, type } } = github.context.payload.pull_request;
+  console.log(`Reviewers: ${reviewers}, assignees: ${assignees}, repo: ${author}`);
+
   const token = core.getInput("repo-token", { required: true });
   console.log(`Token: ${token}`);
 

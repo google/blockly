@@ -5,7 +5,7 @@ try {
 
   const reviewers = github.context.payload.pull_request.requested_reviewers;
   const { assignees, number, user: { login: author, type } } = github.context.payload.pull_request;
-  console.log(`Reviewers: ${reviewers.}, assignees: ${assignees}, repo: ${author}`);
+  console.log(`Reviewers: ${reviewers[0].login}, assignees: ${assignees}, repo: ${author}`);
 
   const token = core.getInput("repo-token", { required: true });
   console.log(`Token: ${token}`);

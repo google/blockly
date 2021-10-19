@@ -1,29 +1,25 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
+const { context, getOctokit } = require('@actions/github');
 
 try {
+  if (context.payload.pull_request === undefined) {
+    throw new Error("Can't get pull_request payload. Check a request reviewer event was triggered.");
+  }
 
-  const reviewers = github.context.payload.pull_request.requested_reviewers;
-  const { assignees, number, user: { login: author, type } } = github.context.payload.pull_request;
-  console.log(`Reviewers: ${reviewers[0].login}, assignees: ${assignees}, repo: ${author}`);
+  const reviewers = context.payload.pull_request.requested_reviewers;
+  const reviewerNames = reviewers.map(reviewer => reviewer.login);
 
+  const {number:issue_number} = context.payload.pull_request;
   const token = core.getInput("repo-token", { required: true });
-  console.log(`Token: ${token}`);
 
-  const octokit = github.getOctokit(token);
-  console.log(octokit);
+  const octokit = getOctokit(token);
+
   const result = octokit.rest.issues.addAssignees({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    issue_number: number,
-    assignees: [reviewers[0].login]
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    issue_number: issue_number,
+    assignees: reviewerNames
   });
-
-  const time = (new Date()).toTimeString();
-  core.setOutput("time", time);
-
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
 }

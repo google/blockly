@@ -1,12 +1,9 @@
 name: 'my-action'
-description: 'Greet someone and record the time'
+description: 'Add the requested reviewer as an assignee.'
 inputs:
   repo-token:
     description: 'A token for the repository'
     default: '${{ github.token }}'
-outputs:
-  time: # id of ouput
-    description: 'The time we greeted you'
 runs:
   using: 'node12'
   main: 'index.js'

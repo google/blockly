@@ -1,3 +1,9 @@
+/**
+ * Notes:
+ *   It only adds assignees. It does not remove assignees.
+ *   Not able to test yet with how it works with auto adding a reviewer.
+ *   Presumably it works the same as manually adding a reviewer, but you never know.
+ */
 const core = require('@actions/core');
 const { context, getOctokit } = require('@actions/github');
 
@@ -7,6 +13,7 @@ try {
   }
 
   const reviewers = context.payload.pull_request.requested_reviewers;
+  // Assignees takes in a list of logins rather than the reviewer object.
   const reviewerNames = reviewers.map(reviewer => reviewer.login);
 
   const {number:issue_number} = context.payload.pull_request;

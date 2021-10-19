@@ -10,9 +10,9 @@ jobs:
     - name: Check Out Blockly
       uses: actions/checkout@v2
       with:
-        ref: 'test_action'
+        ref: 'test_action' #This checks out the test_action branch.
 
     - name: Hello world action step
-      uses: ./.github/actions/hello_world
+      uses: ./.github/actions/hello_world # This references actions in the same repo.
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"

@@ -15,11 +15,21 @@
  */
 goog.module('Blockly.Toolbox');
 
+const Css = goog.require('Blockly.Css');
+const Touch = goog.require('Blockly.Touch');
+const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const Css = goog.require('Blockly.Css');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
@@ -36,26 +46,16 @@ const {ISelectableToolboxItem} = goog.requireType('Blockly.ISelectableToolboxIte
 /* eslint-disable-next-line no-unused-vars */
 const {IStyleable} = goog.require('Blockly.IStyleable');
 /* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.require('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
 const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.require('Blockly.IToolbox');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {Options} = goog.require('Blockly.Options');
 const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
-const Touch = goog.require('Blockly.Touch');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const object = goog.require('Blockly.utils.object');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 

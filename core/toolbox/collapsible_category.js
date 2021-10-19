@@ -15,19 +15,19 @@
  */
 goog.module('Blockly.CollapsibleToolboxCategory');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
-const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
-const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
+const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 
 
 /**

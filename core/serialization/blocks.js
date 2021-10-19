@@ -17,7 +17,13 @@
 goog.module('Blockly.serialization.blocks');
 goog.module.declareLegacyNamespace();
 
+const Xml = goog.require('Blockly.Xml');
+const eventUtils = goog.require('Blockly.Events.utils');
+const priorities = goog.require('Blockly.serialization.priorities');
+const serializationRegistry = goog.require('Blockly.serialization.registry');
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 // eslint-disable-next-line no-unused-vars
 const {Connection} = goog.requireType('Blockly.Connection');
 // eslint-disable-next-line no-unused-vars
@@ -25,13 +31,7 @@ const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 const {Size} = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
 const {inputTypes} = goog.require('Blockly.inputTypes');
-const priorities = goog.require('Blockly.serialization.priorities');
-const serializationRegistry = goog.require('Blockly.serialization.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
 
 
 // TODO(#5160): Remove this once lint is fixed.

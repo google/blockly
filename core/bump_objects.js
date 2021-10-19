@@ -17,6 +17,10 @@ goog.module('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const eventUtils = goog.require('Blockly.Events.utils');
+const mathUtils = goog.require('Blockly.utils.math');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {IBoundedElement} = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,10 +31,6 @@ const {ViewportChange} = goog.requireType('Blockly.Events.ViewportChange');
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const eventUtils = goog.require('Blockly.Events.utils');
-const mathUtils = goog.require('Blockly.utils.math');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 
 
 /**

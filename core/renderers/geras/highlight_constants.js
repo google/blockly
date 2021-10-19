@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.geras.HighlightConstantProvider');
 
+const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
 
 
 /**

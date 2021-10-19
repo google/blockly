@@ -16,12 +16,12 @@
 goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
+const Variables = goog.require('Blockly.Variables');
+const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
-const Variables = goog.require('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const internalConstants = goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.requireType('Blockly.Procedures');
 

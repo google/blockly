@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.Menu');
 
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {MenuItem} = goog.requireType('Blockly.MenuItem');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-/* eslint-disable-next-line no-unused-vars */
-const {Size} = goog.requireType('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
 
 
 /**

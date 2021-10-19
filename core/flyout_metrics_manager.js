@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.FlyoutMetricsManager');
 
+const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
 const {MetricsManager} = goog.require('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const object = goog.require('Blockly.utils.object');
 
 
 /**

@@ -17,10 +17,10 @@
  */
 goog.module('Blockly.ShortcutRegistry');
 
+const object = goog.require('Blockly.utils.object');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const object = goog.require('Blockly.utils.object');
 
 
 /**

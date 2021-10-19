@@ -16,13 +16,13 @@
  */
 goog.module('Blockly.blockRendering.Connection');
 
+const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 const {Types} = goog.require('Blockly.blockRendering.Types');
-const object = goog.require('Blockly.utils.object');
 
 
 /**

@@ -17,14 +17,14 @@
  */
 goog.module('Blockly.ThemeManager');
 
+const dom = goog.require('Blockly.utils.dom');
+const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-/* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**

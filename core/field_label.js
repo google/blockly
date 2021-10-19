@@ -17,11 +17,11 @@
  */
 goog.module('Blockly.FieldLabel');
 
-const {Field} = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {Field} = goog.require('Blockly.Field');
 
 
 /**

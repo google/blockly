@@ -16,14 +16,14 @@
  */
 goog.module('Blockly.zelos.PathObject');
 
-const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
 const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
-const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
 
 
 /**

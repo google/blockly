@@ -16,6 +16,7 @@
  */
 goog.module('Blockly.ComponentManager');
 
+const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
@@ -26,7 +27,6 @@ const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const {IPositionable} = goog.requireType('Blockly.IPositionable');
-const utils = goog.require('Blockly.utils');
 
 
 /**

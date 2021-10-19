@@ -15,6 +15,9 @@
  */
 goog.module('Blockly.Options');
 
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {Classic} = goog.require('Blockly.Themes.Classic');
@@ -23,9 +26,6 @@ const {Metrics} = goog.requireType('Blockly.utils.Metrics');
 const {Theme} = goog.require('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
 
 
 /**

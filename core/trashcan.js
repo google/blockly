@@ -18,6 +18,16 @@ goog.module('Blockly.Trashcan');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
+const blocks = goog.requireType('Blockly.serialization.blocks');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const internalConstants = goog.require('Blockly.internalConstants');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const uiPosition = goog.require('Blockly.uiPosition');
+/* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
@@ -37,16 +47,6 @@ const {Size} = goog.require('Blockly.utils.Size');
 const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
-const blocks = goog.requireType('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
-const object = goog.require('Blockly.utils.object');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const uiPosition = goog.require('Blockly.uiPosition');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 

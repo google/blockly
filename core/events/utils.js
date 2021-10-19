@@ -19,20 +19,20 @@ goog.module('Blockly.Events.utils');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockCreate} = goog.requireType('Blockly.Events.BlockCreate');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockCreate} = goog.requireType('Blockly.Events.BlockCreate');
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
 
 
 /**

@@ -14,12 +14,12 @@
  */
 goog.module('Blockly.blockRendering.SpacerRow');
 
+const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 const {Row} = goog.require('Blockly.blockRendering.Row');
 const {Types} = goog.require('Blockly.blockRendering.Types');
-const object = goog.require('Blockly.utils.object');
 
 
 /**

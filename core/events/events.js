@@ -16,6 +16,8 @@
 goog.module('Blockly.Events');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const eventUtils = goog.require('Blockly.Events.utils');
 const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 const {BlockCreate} = goog.require('Blockly.Events.BlockCreate');
@@ -35,15 +37,13 @@ const {Selected} = goog.require('Blockly.Events.Selected');
 const {ThemeChange} = goog.require('Blockly.Events.ThemeChange');
 const {ToolboxItemSelect} = goog.require('Blockly.Events.ToolboxItemSelect');
 const {TrashcanOpen} = goog.require('Blockly.Events.TrashcanOpen');
-const {Ui} = goog.require('Blockly.Events.Ui');
 const {UiBase} = goog.require('Blockly.Events.UiBase');
+const {Ui} = goog.require('Blockly.Events.Ui');
 const {VarBase} = goog.require('Blockly.Events.VarBase');
 const {VarCreate} = goog.require('Blockly.Events.VarCreate');
 const {VarDelete} = goog.require('Blockly.Events.VarDelete');
 const {VarRename} = goog.require('Blockly.Events.VarRename');
 const {ViewportChange} = goog.require('Blockly.Events.ViewportChange');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const eventUtils = goog.require('Blockly.Events.utils');
 
 
 // Events.

@@ -17,6 +17,16 @@
  */
 goog.module('Blockly.Gesture');
 
+const Tooltip = goog.require('Blockly.Tooltip');
+const Touch = goog.require('Blockly.Touch');
+const blockAnimations = goog.require('Blockly.blockAnimations');
+const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
+const eventUtils = goog.require('Blockly.Events.utils');
+const internalConstants = goog.require('Blockly.internalConstants');
+const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -27,20 +37,10 @@ const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
 const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
-const Tooltip = goog.require('Blockly.Tooltip');
-const Touch = goog.require('Blockly.Touch');
-const {Workspace} = goog.require('Blockly.Workspace');
+const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
-const blockAnimations = goog.require('Blockly.blockAnimations');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */

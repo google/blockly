@@ -19,9 +19,19 @@ goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const internalConstants = goog.require('Blockly.internalConstants');
+const object = goog.require('Blockly.utils.object');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const xml = goog.require('Blockly.utils.xml');
 const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 const {Bubble} = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
@@ -30,19 +40,9 @@ const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {Icon} = goog.require('Blockly.Icon');
 const {Options} = goog.require('Blockly.Options');
 const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
-const object = goog.require('Blockly.utils.object');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const xml = goog.require('Blockly.utils.xml');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 

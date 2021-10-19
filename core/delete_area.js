@@ -18,13 +18,13 @@
  */
 goog.module('Blockly.DeleteArea');
 
+const object = goog.require('Blockly.utils.object');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {DragTarget} = goog.require('Blockly.DragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const {IDeleteArea} = goog.require('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {IDraggable} = goog.requireType('Blockly.IDraggable');
-const object = goog.require('Blockly.utils.object');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
 
 
 /**

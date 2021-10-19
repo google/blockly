@@ -17,11 +17,22 @@ goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const Extensions = goog.require('Blockly.Extensions');
+const Tooltip = goog.require('Blockly.Tooltip');
+const common = goog.require('Blockly.common');
+const constants = goog.require('Blockly.constants');
+const eventUtils = goog.require('Blockly.Events.utils');
+const fieldRegistry = goog.require('Blockly.fieldRegistry');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const object = goog.require('Blockly.utils.object');
+const utils = goog.require('Blockly.utils');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.require('Blockly.Connection');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const Extensions = goog.require('Blockly.Extensions');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -32,22 +43,11 @@ const {Input} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
 const {Size} = goog.require('Blockly.utils.Size');
-const Tooltip = goog.require('Blockly.Tooltip');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const eventUtils = goog.require('Blockly.Events.utils');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
 const {inputTypes} = goog.require('Blockly.inputTypes');
-const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {Blocks} = goog.require('Blockly.blocks');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */

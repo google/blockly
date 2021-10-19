@@ -16,10 +16,6 @@
 goog.module('Blockly.FieldAngle');
 
 const Css = goog.require('Blockly.Css');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {Svg} = goog.require('Blockly.utils.Svg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -27,6 +23,10 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const math = goog.require('Blockly.utils.math');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**

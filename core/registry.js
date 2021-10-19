@@ -20,6 +20,8 @@ goog.module('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
+const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
@@ -30,6 +32,8 @@ const {IFlyout} = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const {IMetricsManager} = goog.requireType('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
+const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
+/* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
@@ -39,10 +43,6 @@ const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
 const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const {ToolboxItem} = goog.requireType('Blockly.ToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
-/* eslint-disable-next-line no-unused-vars */
-const {Cursor} = goog.requireType('Blockly.Cursor');
 
 
 /**

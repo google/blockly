@@ -15,14 +15,7 @@
  */
 goog.module('Blockly.FieldVariable');
 
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-/* eslint-disable-next-line no-unused-vars */
-const {Menu} = goog.requireType('Blockly.Menu');
-/* eslint-disable-next-line no-unused-vars */
-const {MenuItem} = goog.requireType('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
-const {Size} = goog.require('Blockly.utils.Size');
-const {VariableModel} = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -31,6 +24,13 @@ const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
+/* eslint-disable-next-line no-unused-vars */
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
+/* eslint-disable-next-line no-unused-vars */
+const {Menu} = goog.requireType('Blockly.Menu');
+const {Size} = goog.require('Blockly.utils.Size');
+const {VariableModel} = goog.require('Blockly.VariableModel');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 

@@ -15,6 +15,21 @@
  */
 goog.module('Blockly.Flyout');
 
+const Tooltip = goog.require('Blockly.Tooltip');
+const Variables = goog.require('Blockly.Variables');
+const Xml = goog.require('Blockly.Xml');
+const blocks = goog.require('Blockly.serialization.blocks');
+const browserEvents = goog.require('Blockly.browserEvents');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+const object = goog.require('Blockly.utils.object');
+const toolbox = goog.require('Blockly.utils.toolbox');
+const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
@@ -27,24 +42,7 @@ const {IFlyout} = goog.require('Blockly.IFlyout');
 const {Options} = goog.requireType('Blockly.Options');
 const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const {Svg} = goog.require('Blockly.utils.Svg');
-const Tooltip = goog.require('Blockly.Tooltip');
-const Variables = goog.require('Blockly.Variables');
 const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
-const Xml = goog.require('Blockly.Xml');
-const blocks = goog.require('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.blockRendering');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -53,6 +51,8 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Gesture');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
+/** @suppress {extraRequire} */
+goog.require('Blockly.blockRendering');
 
 
 /**

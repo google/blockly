@@ -15,13 +15,13 @@
  */
 goog.module('Blockly.Events.CommentMove');
 
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
 const {CommentBase} = goog.require('Blockly.Events.CommentBase');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
-const eventUtils = goog.require('Blockly.Events.utils');
-const object = goog.require('Blockly.utils.object');
-const registry = goog.require('Blockly.registry');
 
 
 /**

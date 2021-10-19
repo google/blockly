@@ -15,15 +15,15 @@
  */
 goog.module('Blockly.Events.MarkerMove');
 
-const {UiBase} = goog.require('Blockly.Events.UiBase');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**

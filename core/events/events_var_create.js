@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.Events.VarCreate');
 
-const {VarBase} = goog.require('Blockly.Events.VarBase');
-/* eslint-disable-next-line no-unused-vars */
-const {VariableModel} = goog.requireType('Blockly.VariableModel');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {VarBase} = goog.require('Blockly.Events.VarBase');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 
 
 /**

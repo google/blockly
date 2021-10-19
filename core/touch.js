@@ -15,11 +15,11 @@
  */
 goog.module('Blockly.Touch');
 
+const internalConstants = goog.require('Blockly.internalConstants');
+const utilsString = goog.require('Blockly.utils.string');
 /* eslint-disable-next-line no-unused-vars */
 const {Gesture} = goog.requireType('Blockly.Gesture');
-const internalConstants = goog.require('Blockly.internalConstants');
 const {globalThis} = goog.require('Blockly.utils.global');
-const utilsString = goog.require('Blockly.utils.string');
 
 
 /**

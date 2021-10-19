@@ -18,11 +18,11 @@
 goog.module('Blockly.serialization.workspaces');
 goog.module.declareLegacyNamespace();
  
-// eslint-disable-next-line no-unused-vars
-const {Workspace} = goog.require('Blockly.Workspace');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
+// eslint-disable-next-line no-unused-vars
+const {Workspace} = goog.require('Blockly.Workspace');
  
 
 /**

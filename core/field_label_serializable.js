@@ -19,10 +19,10 @@
  */
 goog.module('Blockly.FieldLabelSerializable');
 
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
 
 
 /**

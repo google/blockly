@@ -19,15 +19,15 @@
  */
 goog.module('Blockly.WidgetDiv');
 
+const common = goog.require('Blockly.common');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {Rect} = goog.requireType('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const {Size} = goog.requireType('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const dom = goog.require('Blockly.utils.dom');
 
 
 /**

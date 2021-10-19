@@ -16,7 +16,7 @@ try {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: number,
-    assignees: reviewers
+    assignees: [author]
   });
 
   const time = (new Date()).toTimeString();

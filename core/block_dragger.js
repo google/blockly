@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.BlockDragger');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.require('Blockly.IBlockDragger');
+const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimation = goog.require('Blockly.blockAnimations');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');

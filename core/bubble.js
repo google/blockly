@@ -15,17 +15,17 @@
  */
 goog.module('Blockly.Bubble');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.require('Blockly.IBubble');
+const {IBubble} = goog.require('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
@@ -938,4 +938,4 @@ Bubble.createNonEditableBubble = function(paragraphElement, block, iconXY) {
   return bubble;
 };
 
-exports = Bubble;
+exports.Bubble = Bubble;

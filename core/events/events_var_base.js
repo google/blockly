@@ -17,7 +17,7 @@ goog.module('Blockly.Events.VarBase');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -66,4 +66,4 @@ VarBase.prototype.fromJson = function(json) {
   this.varId = json['varId'];
 };
 
-exports = VarBase;
+exports.VarBase = VarBase;

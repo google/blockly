@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.FieldImage');
 
-const Field = goog.require('Blockly.Field');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Field} = goog.require('Blockly.Field');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
@@ -292,4 +292,4 @@ FieldImage.prototype.getText_ = function() {
 
 fieldRegistry.register('field_image', FieldImage);
 
-exports = FieldImage;
+exports.FieldImage = FieldImage;

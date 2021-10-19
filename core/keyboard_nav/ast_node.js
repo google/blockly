@@ -18,18 +18,18 @@
 goog.module('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Connection} = goog.requireType('Blockly.Connection');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
+const {IASTNodeLocation} = goog.requireType('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
+const {IASTNodeLocationWithBlock} = goog.requireType('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
+const {Input} = goog.requireType('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');

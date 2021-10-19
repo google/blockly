@@ -19,12 +19,12 @@
  */
 goog.module('Blockly.FieldDropdown');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const Menu = goog.require('Blockly.Menu');
-const MenuItem = goog.require('Blockly.MenuItem');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {Menu} = goog.require('Blockly.Menu');
+const {MenuItem} = goog.require('Blockly.MenuItem');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -773,4 +773,4 @@ const validateOptions = function(options) {
 
 fieldRegistry.register('field_dropdown', FieldDropdown);
 
-exports = FieldDropdown;
+exports.FieldDropdown = FieldDropdown;

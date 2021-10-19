@@ -17,9 +17,9 @@
 goog.module('Blockly.blockRendering.Hat');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -42,4 +42,4 @@ const Hat = function(constants) {
 };
 object.inherits(Hat, Measurable);
 
-exports = Hat;
+exports.Hat = Hat;

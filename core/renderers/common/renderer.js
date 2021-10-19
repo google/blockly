@@ -15,25 +15,25 @@
  */
 goog.module('Blockly.blockRendering.Renderer');
 
-const Connection = goog.require('Blockly.Connection');
-const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
+const {Connection} = goog.require('Blockly.Connection');
+const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const Debug = goog.requireType('Blockly.blockRendering.Debug');
-const Drawer = goog.require('Blockly.blockRendering.Drawer');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
+const {Debug} = goog.requireType('Blockly.blockRendering.Debug');
+const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
 /* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
-const PathObject = goog.require('Blockly.blockRendering.PathObject');
+const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
+const {MarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
+const {PathObject} = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {RenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
@@ -182,7 +182,7 @@ Renderer.prototype.makeDrawer_ = function(block, info) {
  * @protected
  */
 Renderer.prototype.makeDebugger_ = function() {
-  const Debug = goog.module.get('Blockly.blockRendering.Debug');
+  const {Debug} = goog.module.get('Blockly.blockRendering.Debug');
   if (!Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
@@ -300,4 +300,4 @@ Renderer.prototype.render = function(block) {
   this.makeDrawer_(block, info).draw();
 };
 
-exports = Renderer;
+exports.Renderer = Renderer;

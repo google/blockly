@@ -23,4 +23,4 @@ goog.module('Blockly.IASTNodeLocation');
  */
 const IASTNodeLocation = function() {};
 
-exports = IASTNodeLocation;
+exports.IASTNodeLocation = IASTNodeLocation;

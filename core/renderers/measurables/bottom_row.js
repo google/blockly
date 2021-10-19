@@ -17,11 +17,11 @@
 goog.module('Blockly.blockRendering.BottomRow');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const NextConnection = goog.requireType('Blockly.blockRendering.NextConnection');
-const Row = goog.require('Blockly.blockRendering.Row');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {NextConnection} = goog.requireType('Blockly.blockRendering.NextConnection');
+const {Row} = goog.require('Blockly.blockRendering.Row');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -132,4 +132,4 @@ BottomRow.prototype.endsWithElemSpacer = function() {
   return false;
 };
 
-exports = BottomRow;
+exports.BottomRow = BottomRow;

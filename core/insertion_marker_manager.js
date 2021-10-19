@@ -15,17 +15,17 @@
  */
 goog.module('Blockly.InsertionMarkerManager');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
@@ -757,4 +757,4 @@ InsertionMarkerManager.prototype.getInsertionMarkers = function() {
   return result;
 };
 
-exports = InsertionMarkerManager;
+exports.InsertionMarkerManager = InsertionMarkerManager;

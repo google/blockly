@@ -17,10 +17,10 @@ goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
-const VariableMap = goog.requireType('Blockly.VariableMap');
+const {VariableMap} = goog.requireType('Blockly.VariableMap');
 const Variables = goog.require('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const internalConstants = goog.require('Blockly.internalConstants');
 /** @suppress {extraRequire} */
 goog.requireType('Blockly.Procedures');
@@ -242,4 +242,4 @@ Names.equals = function(name1, name2) {
   return name1.toLowerCase() === name2.toLowerCase();
 };
 
-exports = Names;
+exports.Names = Names;

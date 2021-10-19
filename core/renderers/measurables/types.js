@@ -17,9 +17,9 @@
 goog.module('Blockly.blockRendering.Types');
 
 /* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
-const Row = goog.requireType('Blockly.blockRendering.Row');
+const {Row} = goog.requireType('Blockly.blockRendering.Row');
 
 
 /**
@@ -350,4 +350,4 @@ Types.isInputRow = function(row) {
   return row.type & Types.INPUT_ROW;
 };
 
-exports = Types;
+exports.Types = Types;

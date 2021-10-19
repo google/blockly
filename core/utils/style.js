@@ -19,8 +19,8 @@
  */
 goog.module('Blockly.utils.style');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Size = goog.require('Blockly.utils.Size');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Size} = goog.require('Blockly.utils.Size');
 
 
 /**

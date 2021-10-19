@@ -16,13 +16,13 @@
 goog.module('Blockly.CollapsibleToolboxCategory');
 
 /* eslint-disable-next-line no-unused-vars */
-const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
+const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
-const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
-const ToolboxSeparator = goog.require('Blockly.ToolboxSeparator');
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
+const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
@@ -308,4 +308,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
     CollapsibleToolboxCategory);
 
-exports = CollapsibleToolboxCategory;
+exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;

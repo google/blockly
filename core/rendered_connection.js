@@ -15,11 +15,11 @@
  */
 goog.module('Blockly.RenderedConnection');
 
-const Connection = goog.require('Blockly.Connection');
+const {Connection} = goog.require('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Svg = goog.require('Blockly.utils.Svg');
+const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
@@ -589,4 +589,4 @@ RenderedConnection.prototype.onCheckChanged_ = function() {
   }
 };
 
-exports = RenderedConnection;
+exports.RenderedConnection = RenderedConnection;

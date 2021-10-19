@@ -18,9 +18,9 @@ goog.module('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionState} = goog.requireType('Blockly.serialization.blocks');
 /* eslint-disable-next-line no-unused-vars */
-const ToolboxCategory = goog.requireType('Blockly.ToolboxCategory');
+const {ToolboxCategory} = goog.requireType('Blockly.ToolboxCategory');
 /* eslint-disable-next-line no-unused-vars */
-const ToolboxSeparator = goog.requireType('Blockly.ToolboxSeparator');
+const {ToolboxSeparator} = goog.requireType('Blockly.ToolboxSeparator');
 const Xml = goog.require('Blockly.Xml');
 const userAgent = goog.require('Blockly.utils.userAgent');
 

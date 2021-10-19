@@ -169,4 +169,4 @@ const KeyCodes = {
   PHANTOM: 255
 };
 
-exports = KeyCodes;
+exports.KeyCodes = KeyCodes;

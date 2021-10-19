@@ -16,12 +16,12 @@
 goog.module('Blockly.ContextMenu');
 
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Menu = goog.require('Blockly.Menu');
-const MenuItem = goog.require('Blockly.MenuItem');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Menu} = goog.require('Blockly.Menu');
+const {MenuItem} = goog.require('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
-const Rect = goog.require('Blockly.utils.Rect');
+const {Rect} = goog.require('Blockly.utils.Rect');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
@@ -36,7 +36,7 @@ const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 

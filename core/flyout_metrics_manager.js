@@ -16,10 +16,10 @@
 goog.module('Blockly.FlyoutMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-const MetricsManager = goog.require('Blockly.MetricsManager');
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+const {MetricsManager} = goog.require('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -103,4 +103,4 @@ FlyoutMetricsManager.prototype.getScrollMetrics = function(
   };
 };
 
-exports = FlyoutMetricsManager;
+exports.FlyoutMetricsManager = FlyoutMetricsManager;

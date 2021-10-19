@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.BlockChange');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
@@ -169,4 +169,4 @@ BlockChange.getExtraBlockState_ = function(block) {
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
 
-exports = BlockChange;
+exports.BlockChange = BlockChange;

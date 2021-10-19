@@ -16,12 +16,12 @@
  */
 goog.module('Blockly.geras.PathObject');
 
-const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
+const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.geras.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
+const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
@@ -178,4 +178,4 @@ PathObject.prototype.updateDisabled_ = function(disabled) {
   }
 };
 
-exports = PathObject;
+exports.PathObject = PathObject;

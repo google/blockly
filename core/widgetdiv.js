@@ -20,11 +20,11 @@
 goog.module('Blockly.WidgetDiv');
 
 /* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
+const {Size} = goog.requireType('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');

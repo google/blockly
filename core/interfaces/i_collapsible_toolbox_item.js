@@ -17,9 +17,9 @@
 goog.module('Blockly.ICollapsibleToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
+const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
 
 
 /**
@@ -50,4 +50,4 @@ ICollapsibleToolboxItem.prototype.isExpanded;
  */
 ICollapsibleToolboxItem.prototype.toggleExpanded;
 
-exports = ICollapsibleToolboxItem;
+exports.ICollapsibleToolboxItem = ICollapsibleToolboxItem;

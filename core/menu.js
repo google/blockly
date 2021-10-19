@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.Menu');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const MenuItem = goog.requireType('Blockly.MenuItem');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
+const {Size} = goog.requireType('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -474,4 +474,4 @@ Menu.prototype.getSize = function() {
   return menuSize;
 };
 
-exports = Menu;
+exports.Menu = Menu;

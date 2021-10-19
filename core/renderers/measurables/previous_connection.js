@@ -16,12 +16,12 @@
  */
 goog.module('Blockly.blockRendering.PreviousConnection');
 
-const Connection = goog.require('Blockly.blockRendering.Connection');
+const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -46,4 +46,4 @@ const PreviousConnection = function(constants, connectionModel) {
 };
 object.inherits(PreviousConnection, Connection);
 
-exports = PreviousConnection;
+exports.PreviousConnection = PreviousConnection;

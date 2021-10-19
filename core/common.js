@@ -18,13 +18,13 @@
 goog.module('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

@@ -18,25 +18,25 @@ goog.module('Blockly.Trashcan');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const DeleteArea = goog.require('Blockly.DeleteArea');
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.require('Blockly.IAutoHideable');
+const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const {IDraggable} = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.require('Blockly.IPositionable');
+const {IPositionable} = goog.require('Blockly.IPositionable');
 /* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Options = goog.require('Blockly.Options');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Options} = goog.require('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const blocks = goog.requireType('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -739,4 +739,4 @@ Trashcan.prototype.cleanBlockJson_ = function(json) {
   return JSON.stringify(json);
 };
 
-exports = Trashcan;
+exports.Trashcan = Trashcan;

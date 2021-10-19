@@ -19,20 +19,20 @@ goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const BlockChange = goog.require('Blockly.Events.BlockChange');
+const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const Bubble = goog.require('Blockly.Bubble');
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {Bubble} = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Icon = goog.require('Blockly.Icon');
-const Options = goog.require('Blockly.Options');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+const {Options} = goog.require('Blockly.Options');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
+const {Workspace} = goog.requireType('Blockly.Workspace');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -540,4 +540,4 @@ Mutator.findParentWs = function(workspace) {
   return outerWs;
 };
 
-exports = Mutator;
+exports.Mutator = Mutator;

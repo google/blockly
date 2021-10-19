@@ -17,13 +17,13 @@
 goog.module('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyField = goog.requireType('Blockly.Field');
+const {Field: BlocklyField} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {Input} = goog.requireType('Blockly.Input');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -53,4 +53,4 @@ const Field = function(constants, field, parentInput) {
 };
 object.inherits(Field, Measurable);
 
-exports = Field;
+exports.Field = Field;

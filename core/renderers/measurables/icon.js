@@ -17,11 +17,11 @@
 goog.module('Blockly.blockRendering.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyIcon = goog.requireType('Blockly.Icon');
+const {Icon: BlocklyIcon} = goog.requireType('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -48,4 +48,4 @@ const Icon = function(constants, icon) {
 };
 object.inherits(Icon, Measurable);
 
-exports = Icon;
+exports.Icon = Icon;

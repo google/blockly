@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.ThemeChange');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -68,4 +68,4 @@ ThemeChange.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);
 
-exports = ThemeChange;
+exports.ThemeChange = ThemeChange;

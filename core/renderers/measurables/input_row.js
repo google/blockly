@@ -17,9 +17,9 @@
 goog.module('Blockly.blockRendering.InputRow');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Row = goog.require('Blockly.blockRendering.Row');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Row} = goog.require('Blockly.blockRendering.Row');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -79,4 +79,4 @@ InputRow.prototype.endsWithElemSpacer = function() {
   return !this.hasExternalInput && !this.hasStatement;
 };
 
-exports = InputRow;
+exports.InputRow = InputRow;

@@ -17,11 +17,11 @@
  */
 goog.module('Blockly.geras.InlineInput');
 
-const BaseInlineInput = goog.require('Blockly.blockRendering.InlineInput');
+const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
+const {Input} = goog.requireType('Blockly.Input');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -49,4 +49,4 @@ const InlineInput = function(constants, input) {
 };
 object.inherits(InlineInput, BaseInlineInput);
 
-exports = InlineInput;
+exports.InlineInput = InlineInput;

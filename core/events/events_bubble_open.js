@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.BubbleOpen');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -86,4 +86,4 @@ BubbleOpen.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
 
-exports = BubbleOpen;
+exports.BubbleOpen = BubbleOpen;

@@ -15,18 +15,18 @@
  */
 goog.module('Blockly.BubbleDragger');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
+const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
@@ -288,4 +288,4 @@ BubbleDragger.prototype.moveToDragSurface_ = function() {
   this.dragSurface_.setBlocksAndShow(this.draggingBubble_.getSvgRoot());
 };
 
-exports = BubbleDragger;
+exports.BubbleDragger = BubbleDragger;

@@ -15,11 +15,11 @@
  */
 goog.module('Blockly.FlyoutButton');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
@@ -336,4 +336,4 @@ Css.register(`
   }
 `);
 
-exports = FlyoutButton;
+exports.FlyoutButton = FlyoutButton;

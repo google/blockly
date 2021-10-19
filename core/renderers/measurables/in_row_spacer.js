@@ -17,9 +17,9 @@
 goog.module('Blockly.blockRendering.InRowSpacer');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -42,4 +42,4 @@ const InRowSpacer = function(constants, width) {
 };
 object.inherits(InRowSpacer, Measurable);
 
-exports = InRowSpacer;
+exports.InRowSpacer = InRowSpacer;

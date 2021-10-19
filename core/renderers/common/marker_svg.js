@@ -17,18 +17,18 @@
 goog.module('Blockly.blockRendering.MarkerSvg');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
+const {IASTNodeLocationSvg} = goog.requireType('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -681,4 +681,4 @@ MarkerSvg.prototype.dispose = function() {
   }
 };
 
-exports = MarkerSvg;
+exports.MarkerSvg = MarkerSvg;

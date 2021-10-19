@@ -26,4 +26,4 @@ goog.module('Blockly.IRegistrable');
  */
 const IRegistrable = function() {};
 
-exports = IRegistrable;
+exports.IRegistrable = IRegistrable;

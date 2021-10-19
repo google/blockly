@@ -18,19 +18,19 @@ goog.module('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
-const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
+const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-const Options = goog.require('Blockly.Options');
-const VariableMap = goog.require('Blockly.VariableMap');
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+const {Options} = goog.require('Blockly.Options');
+const {VariableMap} = goog.require('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const eventUtils = goog.require('Blockly.Events.utils');
 const math = goog.require('Blockly.utils.math');
@@ -812,4 +812,4 @@ Workspace.getAll = function() {
   return workspaces;
 };
 
-exports = Workspace;
+exports.Workspace = Workspace;

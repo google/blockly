@@ -17,12 +17,12 @@ goog.module('Blockly.ToolboxCategory');
 
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
-const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
+const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
+const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 const aria = goog.require('Blockly.utils.aria');
 const colourUtils = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
@@ -722,4 +722,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,
     ToolboxCategory);
 
-exports = ToolboxCategory;
+exports.ToolboxCategory = ToolboxCategory;

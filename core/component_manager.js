@@ -17,15 +17,15 @@
 goog.module('Blockly.ComponentManager');
 
 /* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
+const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
+const {IComponent} = goog.requireType('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
+const {IPositionable} = goog.requireType('Blockly.IPositionable');
 const utils = goog.require('Blockly.utils');
 
 
@@ -253,4 +253,4 @@ ComponentManager.Capability.DELETE_AREA =
 ComponentManager.Capability.AUTOHIDEABLE =
     new ComponentManager.Capability('autohideable');
 
-exports = ComponentManager;
+exports.ComponentManager = ComponentManager;

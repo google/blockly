@@ -17,19 +17,19 @@
  */
 goog.module('Blockly.geras.RenderInfo');
 
-const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.blockRendering.Field');
-const InlineInput = goog.require('Blockly.geras.InlineInput');
+const {Field} = goog.requireType('Blockly.blockRendering.Field');
+const {InlineInput} = goog.require('Blockly.geras.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
-const InputRow = goog.requireType('Blockly.blockRendering.InputRow');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
+const {InputRow} = goog.requireType('Blockly.blockRendering.InputRow');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.geras.Renderer');
-const StatementInput = goog.require('Blockly.geras.StatementInput');
-const Types = goog.require('Blockly.blockRendering.Types');
-const inputTypes = goog.require('Blockly.inputTypes');
+const {Renderer} = goog.requireType('Blockly.geras.Renderer');
+const {StatementInput} = goog.require('Blockly.geras.StatementInput');
+const {Types} = goog.require('Blockly.blockRendering.Types');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -462,4 +462,4 @@ RenderInfo.prototype.finalize_ = function() {
   this.startY = this.topRow.capline;
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

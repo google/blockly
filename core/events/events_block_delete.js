@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.BlockDelete');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -126,4 +126,4 @@ BlockDelete.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);
 
-exports = BlockDelete;
+exports.BlockDelete = BlockDelete;

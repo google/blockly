@@ -15,8 +15,8 @@
  */
 goog.module('Blockly.thrasos.Renderer');
 
-const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
-const RenderInfo = goog.require('Blockly.thrasos.RenderInfo');
+const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+const {RenderInfo} = goog.require('Blockly.thrasos.RenderInfo');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
@@ -50,4 +50,4 @@ Renderer.prototype.makeRenderInfo_ = function(block) {
 
 blockRendering.register('thrasos', Renderer);
 
-exports = Renderer;
+exports.Renderer = Renderer;

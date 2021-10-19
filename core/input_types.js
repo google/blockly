@@ -33,4 +33,4 @@ const inputTypes = {
   DUMMY: 5
 };
 
-exports = inputTypes;
+exports.inputTypes = inputTypes;

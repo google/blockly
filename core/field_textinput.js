@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.FieldTextInput');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const Msg = goog.require('Blockly.Msg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dialog = goog.require('Blockly.dialog');
@@ -581,4 +581,4 @@ FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
 
 fieldRegistry.register('field_input', FieldTextInput);
 
-exports = FieldTextInput;
+exports.FieldTextInput = FieldTextInput;

@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.FieldVariable');
 
-const FieldDropdown = goog.require('Blockly.FieldDropdown');
+const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 /* eslint-disable-next-line no-unused-vars */
-const Menu = goog.requireType('Blockly.Menu');
+const {Menu} = goog.requireType('Blockly.Menu');
 /* eslint-disable-next-line no-unused-vars */
-const MenuItem = goog.requireType('Blockly.MenuItem');
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
-const Size = goog.require('Blockly.utils.Size');
-const VariableModel = goog.require('Blockly.VariableModel');
+const {Size} = goog.require('Blockly.utils.Size');
+const {VariableModel} = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -517,4 +517,4 @@ FieldVariable.prototype.referencesVariables = function() {
 
 fieldRegistry.register('field_variable', FieldVariable);
 
-exports = FieldVariable;
+exports.FieldVariable = FieldVariable;

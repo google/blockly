@@ -15,21 +15,21 @@
  */
 goog.module('Blockly.Flyout');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DeleteArea = goog.require('Blockly.DeleteArea');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
-const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
+const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.require('Blockly.IFlyout');
+const {IFlyout} = goog.require('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Options} = goog.requireType('Blockly.Options');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -663,7 +663,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  * @private
  */
 Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
-  const FlyoutButton = goog.module.get('Blockly.FlyoutButton');
+  const {FlyoutButton} = goog.module.get('Blockly.FlyoutButton');
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
@@ -1193,4 +1193,4 @@ Flyout.prototype.getX;
  */
 Flyout.prototype.getY;
 
-exports = Flyout;
+exports.Flyout = Flyout;

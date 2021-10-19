@@ -34,4 +34,4 @@ const IComponent = function() {};
  */
 IComponent.id;
 
-exports = IComponent;
+exports.IComponent = IComponent;

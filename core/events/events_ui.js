@@ -17,7 +17,7 @@
  */
 goog.module('Blockly.Events.Ui');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -84,4 +84,4 @@ Ui.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 
-exports = Ui;
+exports.Ui = Ui;

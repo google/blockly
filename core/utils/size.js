@@ -59,4 +59,4 @@ Size.equals = function(a, b) {
   return a.width === b.width && a.height === b.height;
 };
 
-exports = Size;
+exports.Size = Size;

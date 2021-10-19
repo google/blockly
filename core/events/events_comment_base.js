@@ -17,11 +17,11 @@ goog.module('Blockly.Events.CommentBase');
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
+const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
-const CommentDelete = goog.requireType('Blockly.Events.CommentDelete');
+const {CommentDelete} = goog.requireType('Blockly.Events.CommentDelete');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
@@ -115,4 +115,4 @@ CommentBase.CommentCreateDeleteHelper = function(event, create) {
   }
 };
 
-exports = CommentBase;
+exports.CommentBase = CommentBase;

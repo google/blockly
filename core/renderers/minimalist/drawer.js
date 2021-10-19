@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.minimalist.Drawer');
 
-const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
+const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
 /* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.minimalist.RenderInfo');
+const {RenderInfo} = goog.requireType('Blockly.minimalist.RenderInfo');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -38,4 +38,4 @@ const Drawer = function(block, info) {
 };
 object.inherits(Drawer, BaseDrawer);
 
-exports = Drawer;
+exports.Drawer = Drawer;

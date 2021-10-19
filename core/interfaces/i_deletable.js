@@ -30,4 +30,4 @@ const IDeletable = function() {};
  */
 IDeletable.prototype.isDeletable;
 
-exports = IDeletable;
+exports.IDeletable = IDeletable;

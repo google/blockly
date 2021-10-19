@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.FieldNumber');
 
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
@@ -318,4 +318,4 @@ FieldNumber.prototype.widgetCreate_ = function() {
 
 fieldRegistry.register('field_number', FieldNumber);
 
-exports = FieldNumber;
+exports.FieldNumber = FieldNumber;

@@ -18,11 +18,11 @@
 goog.module('Blockly.ThemeManager');
 
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
 
@@ -204,4 +204,4 @@ ThemeManager.prototype.dispose = function() {
   this.componentDB_ = null;
 };
 
-exports = ThemeManager;
+exports.ThemeManager = ThemeManager;

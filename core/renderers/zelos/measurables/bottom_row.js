@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.zelos.BottomRow');
 
-const BaseBottomRow = goog.require('Blockly.blockRendering.BottomRow');
+const {BottomRow: BaseBottomRow} = goog.require('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -62,4 +62,4 @@ BottomRow.prototype.hasRightSquareCorner = function(block) {
       !block.nextConnection;
 };
 
-exports = BottomRow;
+exports.BottomRow = BottomRow;

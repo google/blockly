@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.Click');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -80,4 +80,4 @@ Click.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.CLICK, Click);
 
-exports = Click;
+exports.Click = Click;

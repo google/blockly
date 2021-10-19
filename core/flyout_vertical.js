@@ -16,13 +16,13 @@
 goog.module('Blockly.VerticalFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Flyout = goog.require('Blockly.Flyout');
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Flyout} = goog.require('Blockly.Flyout');
 /* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-const Rect = goog.require('Blockly.utils.Rect');
-const Scrollbar = goog.require('Blockly.Scrollbar');
+const {Options} = goog.requireType('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
@@ -386,4 +386,4 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
 registry.register(
     registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
 
-exports = VerticalFlyout;
+exports.VerticalFlyout = VerticalFlyout;

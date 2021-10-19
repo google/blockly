@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.geras.Drawer');
 
-const BaseDrawer = goog.require('Blockly.blockRendering.Drawer');
-const Highlighter = goog.require('Blockly.geras.Highlighter');
+const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
+const {Highlighter} = goog.require('Blockly.geras.Highlighter');
 /* eslint-disable-next-line no-unused-vars */
-const PathObject = goog.requireType('Blockly.geras.PathObject');
+const {PathObject} = goog.requireType('Blockly.geras.PathObject');
 /* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
+const {RenderInfo} = goog.requireType('Blockly.geras.RenderInfo');
 const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -209,4 +209,4 @@ Drawer.prototype.positionNextConnection_ = function() {
   }
 };
 
-exports = Drawer;
+exports.Drawer = Drawer;

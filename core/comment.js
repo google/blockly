@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.Comment');
 
-const Bubble = goog.require('Blockly.Bubble');
+const {Bubble} = goog.require('Blockly.Bubble');
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Icon = goog.require('Blockly.Icon');
+const {Icon} = goog.require('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Size} = goog.requireType('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -414,4 +414,4 @@ Css.register(`
   }
 `);
 
-exports = Comment;
+exports.Comment = Comment;

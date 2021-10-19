@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.FieldCheckbox');
 
-const Field = goog.require('Blockly.Field');
+const {Field} = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
@@ -240,4 +240,4 @@ FieldCheckbox.prototype.convertValueToBool_ = function(value) {
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
 
-exports = FieldCheckbox;
+exports.FieldCheckbox = FieldCheckbox;

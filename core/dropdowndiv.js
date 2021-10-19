@@ -18,13 +18,13 @@
  */
 goog.module('Blockly.DropDownDiv');
 
-const Rect = goog.require('Blockly.utils.Rect');
+const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
+const {Size} = goog.requireType('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
@@ -759,6 +759,7 @@ DropDownDiv.repositionForWindowResize = function() {
     DropDownDiv.hide();
   }
 };
-exports = DropDownDiv;
 
-exports.TEST_ONLY = internal;
+DropDownDiv.TEST_ONLY = internal;
+
+exports.DropDownDiv = DropDownDiv;

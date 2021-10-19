@@ -17,22 +17,22 @@
  */
 goog.module('Blockly.Gesture');
 
-const BubbleDragger = goog.require('Blockly.BubbleDragger');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
+const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
 /* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
+const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
-const Workspace = goog.require('Blockly.Workspace');
+const {Workspace} = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
@@ -1007,4 +1007,4 @@ Gesture.inProgress = function() {
   return false;
 };
 
-exports = Gesture;
+exports.Gesture = Gesture;

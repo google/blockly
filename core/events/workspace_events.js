@@ -17,7 +17,7 @@ goog.module('Blockly.Events.FinishedLoading');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -96,4 +96,4 @@ FinishedLoading.prototype.fromJson = function(json) {
 registry.register(
     registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
 
-exports = FinishedLoading;
+exports.FinishedLoading = FinishedLoading;

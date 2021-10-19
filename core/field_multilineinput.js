@@ -16,10 +16,10 @@
 goog.module('Blockly.FieldMultilineInput');
 
 const Css = goog.require('Blockly.Css');
-const Field = goog.require('Blockly.Field');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Field} = goog.require('Blockly.Field');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
@@ -446,4 +446,4 @@ Css.register(`
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
-exports = FieldMultilineInput;
+exports.FieldMultilineInput = FieldMultilineInput;

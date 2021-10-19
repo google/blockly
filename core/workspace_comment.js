@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.WorkspaceComment');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const eventUtils = goog.require('Blockly.Events.utils');
 const xml = goog.require('Blockly.utils.xml');
@@ -387,4 +387,4 @@ WorkspaceComment.parseAttributes = function(xml) {
   };
 };
 
-exports = WorkspaceComment;
+exports.WorkspaceComment = WorkspaceComment;

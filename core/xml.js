@@ -16,19 +16,19 @@
 goog.module('Blockly.Xml');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-const Size = goog.require('Blockly.utils.Size');
+const {Field} = goog.requireType('Blockly.Field');
+const {Size} = goog.require('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const inputTypes = goog.require('Blockly.inputTypes');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -418,7 +418,8 @@ exports.clearWorkspaceAndLoadFromXml = clearWorkspaceAndLoadFromXml;
  * @alias Blockly.Xml.domToWorkspace
  */
 const domToWorkspace = function(xml, workspace) {
-  if (xml instanceof goog.module.get('Blockly.Workspace')) {
+  const {Workspace} = goog.module.get('Blockly.Workspace');
+  if (xml instanceof Workspace) {
     const swap = xml;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */
@@ -470,7 +471,7 @@ const domToWorkspace = function(xml, workspace) {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name === 'comment') {
         if (workspace.rendered) {
-          const WorkspaceCommentSvg =
+          const {WorkspaceCommentSvg} =
               goog.module.get('Blockly.WorkspaceCommentSvg');
           if (!WorkspaceCommentSvg) {
             console.warn(
@@ -482,7 +483,7 @@ const domToWorkspace = function(xml, workspace) {
                 /** @type {!WorkspaceSvg} */ (workspace), width);
           }
         } else {
-          const WorkspaceComment = goog.module.get('Blockly.WorkspaceComment');
+          const {WorkspaceComment} = goog.module.get('Blockly.WorkspaceComment');
           if (!WorkspaceComment) {
             console.warn(
                 'Missing require for Blockly.WorkspaceComment, ' +
@@ -578,7 +579,8 @@ exports.appendDomToWorkspace = appendDomToWorkspace;
  * @alias Blockly.Xml.domToBlock
  */
 const domToBlock = function(xmlBlock, workspace) {
-  if (xmlBlock instanceof goog.module.get('Blockly.Workspace')) {
+  const {Workspace} = goog.module.get('Blockly.Workspace');
+  if (xmlBlock instanceof Workspace) {
     const swap = xmlBlock;
     // Closure Compiler complains here because the arguments are reversed.
     /** @suppress {checkTypes} */

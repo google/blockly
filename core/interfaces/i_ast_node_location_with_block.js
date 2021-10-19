@@ -19,7 +19,7 @@
 goog.module('Blockly.IASTNodeLocationWithBlock');
 
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
@@ -38,4 +38,4 @@ const IASTNodeLocationWithBlock = function() {};
  */
 IASTNodeLocationWithBlock.prototype.getSourceBlock;
 
-exports = IASTNodeLocationWithBlock;
+exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;

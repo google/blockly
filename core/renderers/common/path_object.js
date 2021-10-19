@@ -17,14 +17,14 @@
 goog.module('Blockly.blockRendering.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
-const Svg = goog.require('Blockly.utils.Svg');
+const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -277,4 +277,4 @@ PathObject.prototype.updateShapeForInputHighlight = function(_conn, _enable) {
   // NOP
 };
 
-exports = PathObject;
+exports.PathObject = PathObject;

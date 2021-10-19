@@ -20,9 +20,9 @@
 goog.module('Blockly.fieldRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const IRegistrableField = goog.requireType('Blockly.IRegistrableField');
+const {IRegistrableField} = goog.requireType('Blockly.IRegistrableField');
 const registry = goog.require('Blockly.registry');
 
 

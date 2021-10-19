@@ -16,20 +16,20 @@
 goog.module('Blockly.inject');
 
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const Css = goog.require('Blockly.Css');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Grid = goog.require('Blockly.Grid');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Grid} = goog.require('Blockly.Grid');
 const Msg = goog.require('Blockly.Msg');
-const Options = goog.require('Blockly.Options');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
+const {Options} = goog.require('Blockly.Options');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const Touch = goog.require('Blockly.Touch');
 const Tooltip = goog.require('Blockly.Tooltip');
-const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
-const Svg = goog.require('Blockly.utils.Svg');
-const Workspace = goog.require('Blockly.Workspace');
-const WorkspaceDragSurfaceSvg = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
+const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {Workspace} = goog.require('Blockly.Workspace');
+const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -381,4 +381,4 @@ const loadSounds = function(pathToMedia, workspace) {
       document, 'touchstart', null, unbindSounds, true));
 };
 
-exports = inject;
+exports.inject = inject;

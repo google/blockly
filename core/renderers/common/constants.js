@@ -16,10 +16,10 @@
 goog.module('Blockly.blockRendering.ConstantProvider');
 
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
@@ -1224,4 +1224,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

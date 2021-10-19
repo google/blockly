@@ -16,12 +16,12 @@
 goog.module('Blockly.Scrollbar');
 
 const Touch = goog.require('Blockly.Touch');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Svg = goog.require('Blockly.utils.Svg');
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
@@ -842,4 +842,4 @@ Scrollbar.prototype.setOrigin = function(x, y) {
   this.origin_ = new Coordinate(x, y);
 };
 
-exports = Scrollbar;
+exports.Scrollbar = Scrollbar;

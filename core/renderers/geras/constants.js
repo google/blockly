@@ -17,7 +17,7 @@
  */
 goog.module('Blockly.geras.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
 
 
@@ -71,4 +71,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ]);
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

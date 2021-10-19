@@ -19,9 +19,9 @@
 goog.module('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
@@ -159,4 +159,4 @@ IPathObject.prototype.updateMovable;
  */
 IPathObject.prototype.updateReplacementFade;
 
-exports = IPathObject;
+exports.IPathObject = IPathObject;

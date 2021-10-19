@@ -16,9 +16,9 @@
 goog.module('Blockly.Variables');
 
 const Msg = goog.require('Blockly.Msg');
-const VariableModel = goog.require('Blockly.VariableModel');
+const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const dialog = goog.require('Blockly.dialog');
 const utilsXml = goog.require('Blockly.utils.xml');

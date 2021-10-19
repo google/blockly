@@ -15,8 +15,8 @@
  */
 goog.module('Blockly.Events.BlockMove');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -188,4 +188,4 @@ BlockMove.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
-exports = BlockMove;
+exports.BlockMove = BlockMove;

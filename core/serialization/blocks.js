@@ -19,15 +19,15 @@ goog.module.declareLegacyNamespace();
 
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 // eslint-disable-next-line no-unused-vars
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
-const Size = goog.require('Blockly.utils.Size');
+const {Size} = goog.require('Blockly.utils.Size');
 // eslint-disable-next-line no-unused-vars
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
-const inputTypes = goog.require('Blockly.inputTypes');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
 /* eslint-disable-next-line no-unused-vars */

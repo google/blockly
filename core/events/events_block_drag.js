@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Events.BlockDrag');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -85,4 +85,4 @@ BlockDrag.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);
 
-exports = BlockDrag;
+exports.BlockDrag = BlockDrag;

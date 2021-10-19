@@ -18,9 +18,9 @@
 goog.module('Blockly.Generator');
 
 /* eslint-disable-next-line no-unused-vars */
-const Names = goog.requireType('Blockly.Names');
+const {Names} = goog.requireType('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -549,4 +549,4 @@ Generator.prototype.scrubNakedValue = function(line) {
   return line;
 };
 
-exports = Generator;
+exports.Generator = Generator;

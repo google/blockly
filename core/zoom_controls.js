@@ -15,18 +15,18 @@
  */
 goog.module('Blockly.ZoomControls');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.require('Blockly.IPositionable');
+const {IPositionable} = goog.require('Blockly.IPositionable');
 /* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -512,4 +512,4 @@ Css.register(`
   }
 `);
 
-exports = ZoomControls;
+exports.ZoomControls = ZoomControls;

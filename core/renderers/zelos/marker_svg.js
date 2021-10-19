@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.zelos.MarkerSvg');
 
-const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
+const {MarkerSvg: BaseMarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
@@ -162,4 +162,4 @@ MarkerSvg.prototype.applyColour_ = function(curNode) {
   }
 };
 
-exports = MarkerSvg;
+exports.MarkerSvg = MarkerSvg;

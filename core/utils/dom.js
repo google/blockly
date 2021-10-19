@@ -20,7 +20,7 @@
 goog.module('Blockly.utils.dom');
 
 /* eslint-disable-next-line no-unused-vars */
-const Svg = goog.requireType('Blockly.utils.Svg');
+const {Svg} = goog.requireType('Blockly.utils.Svg');
 const userAgent = goog.require('Blockly.utils.userAgent');
 
 

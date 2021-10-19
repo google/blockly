@@ -16,7 +16,7 @@
 goog.module('Blockly.clipboard');
 
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
 const eventUtils = goog.require('Blockly.Events.utils');
 
 

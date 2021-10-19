@@ -18,13 +18,13 @@ goog.module('Blockly.Procedures');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 const Msg = goog.require('Blockly.Msg');
-const Names = goog.require('Blockly.Names');
+const {Names} = goog.require('Blockly.Names');
 const Variables = goog.require('Blockly.Variables');
-const Workspace = goog.require('Blockly.Workspace');
+const {Workspace} = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');

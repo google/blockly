@@ -16,10 +16,10 @@
 goog.module('Blockly.FieldColour');
 
 const Css = goog.require('Blockly.Css');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Size = goog.require('Blockly.utils.Size');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Size} = goog.require('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colour = goog.require('Blockly.utils.colour');
@@ -640,4 +640,4 @@ Css.register(`
 
 fieldRegistry.register('field_colour', FieldColour);
 
-exports = FieldColour;
+exports.FieldColour = FieldColour;

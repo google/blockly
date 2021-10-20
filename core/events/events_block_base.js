@@ -66,4 +66,4 @@ BlockBase.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-exports = BlockBase;
+exports.BlockBase = BlockBase;

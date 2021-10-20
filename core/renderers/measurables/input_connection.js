@@ -14,13 +14,13 @@
  */
 goog.module('Blockly.blockRendering.InputConnection');
 
-const Connection = goog.require('Blockly.blockRendering.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+const {Connection} = goog.require('Blockly.blockRendering.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -59,4 +59,4 @@ const InputConnection = function(constants, input) {
 };
 object.inherits(InputConnection, Connection);
 
-exports = InputConnection;
+exports.InputConnection = InputConnection;

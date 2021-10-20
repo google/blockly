@@ -19,43 +19,43 @@
  */
 goog.module('Blockly.Field');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
-const MarkerManager = goog.require('Blockly.MarkerManager');
-const Rect = goog.require('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+/* eslint-disable-next-line no-unused-vars */
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -1213,4 +1213,4 @@ Field.prototype.updateMarkers_ = function() {
   }
 };
 
-exports = Field;
+exports.Field = Field;

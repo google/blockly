@@ -16,14 +16,14 @@
 goog.module('Blockly.ToolboxSeparator');
 
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 
 
 /**
@@ -121,4 +121,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
     ToolboxSeparator);
 
-exports = ToolboxSeparator;
+exports.ToolboxSeparator = ToolboxSeparator;

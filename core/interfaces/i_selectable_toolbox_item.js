@@ -17,9 +17,9 @@
 goog.module('Blockly.ISelectableToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.require('Blockly.IToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
 
 
 /**
@@ -70,4 +70,4 @@ ISelectableToolboxItem.prototype.getClickTarget;
  */
 ISelectableToolboxItem.prototype.onClick;
 
-exports = ISelectableToolboxItem;
+exports.ISelectableToolboxItem = ISelectableToolboxItem;

@@ -17,13 +17,13 @@
  */
 goog.module('Blockly.zelos.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utilsColour = goog.require('Blockly.utils.colour');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -946,4 +946,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

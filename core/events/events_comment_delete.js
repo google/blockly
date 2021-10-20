@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.Events.CommentDelete');
 
-const CommentBase = goog.require('Blockly.Events.CommentBase');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -75,4 +75,4 @@ CommentDelete.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
 
-exports = CommentDelete;
+exports.CommentDelete = CommentDelete;

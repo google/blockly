@@ -104,7 +104,7 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   // Sanity checks passed.
   register(name, function() {
     if (hasMutatorDialog) {
-      const Mutator = goog.module.get('Blockly.Mutator');
+      const {Mutator} = goog.module.get('Blockly.Mutator');
       if (!Mutator) {
         throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
       }

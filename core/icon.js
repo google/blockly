@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.Icon');
 
-/* eslint-disable-next-line no-unused-vars */
-const Bubble = goog.requireType('Blockly.Bubble');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Bubble} = goog.requireType('Blockly.Bubble');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -213,4 +213,4 @@ Icon.prototype.drawIcon_;
  */
 Icon.prototype.setVisible;
 
-exports = Icon;
+exports.Icon = Icon;

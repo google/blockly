@@ -30,4 +30,4 @@ const IMovable = function() {};
  */
 IMovable.prototype.isMovable;
 
-exports = IMovable;
+exports.IMovable = IMovable;

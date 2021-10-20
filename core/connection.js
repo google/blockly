@@ -15,12 +15,6 @@
  */
 goog.module('Blockly.Connection');
 
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -28,10 +22,16 @@ const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 
 
 /**
@@ -808,4 +808,4 @@ Connection.prototype.serializeShadow_ = function(shadow) {
   this.shadowState_ = blocks.save(shadow);
 };
 
-exports = Connection;
+exports.Connection = Connection;

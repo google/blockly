@@ -231,4 +231,4 @@ Theme.defineTheme = function(name, themeObj) {
   return theme;
 };
 
-exports = Theme;
+exports.Theme = Theme;

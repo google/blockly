@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.Events.BlockCreate');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
@@ -114,4 +114,4 @@ BlockCreate.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
 
-exports = BlockCreate;
+exports.BlockCreate = BlockCreate;

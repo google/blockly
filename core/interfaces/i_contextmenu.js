@@ -29,4 +29,4 @@ const IContextMenu = function() {};
  */
 IContextMenu.prototype.showContextMenu;
 
-exports = IContextMenu;
+exports.IContextMenu = IContextMenu;

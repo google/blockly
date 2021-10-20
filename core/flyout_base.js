@@ -15,21 +15,8 @@
  */
 goog.module('Blockly.Flyout');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DeleteArea = goog.require('Blockly.DeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
-const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.require('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
-const Svg = goog.require('Blockly.utils.Svg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -40,11 +27,22 @@ const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.blockRendering');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.require('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {Options} = goog.requireType('Blockly.Options');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -53,6 +51,8 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Gesture');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
+/** @suppress {extraRequire} */
+goog.require('Blockly.blockRendering');
 
 
 /**
@@ -663,7 +663,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  * @private
  */
 Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
-  const FlyoutButton = goog.module.get('Blockly.FlyoutButton');
+  const {FlyoutButton} = goog.module.get('Blockly.FlyoutButton');
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
@@ -1193,4 +1193,4 @@ Flyout.prototype.getX;
  */
 Flyout.prototype.getY;
 
-exports = Flyout;
+exports.Flyout = Flyout;

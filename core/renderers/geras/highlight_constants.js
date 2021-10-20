@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.geras.HighlightConstantProvider');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 
 
 /**
@@ -287,4 +287,4 @@ HighlightConstantProvider.prototype.makeStartHat = function() {
   };
 };
 
-exports = HighlightConstantProvider;
+exports.HighlightConstantProvider = HighlightConstantProvider;

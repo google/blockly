@@ -17,16 +17,16 @@
  */
 goog.module('Blockly.thrasos.RenderInfo');
 
-const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.blockRendering.Field');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.thrasos.Renderer');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.blockRendering.Field');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.thrasos.Renderer');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -326,4 +326,4 @@ RenderInfo.prototype.finalize_ = function() {
   this.startY = this.topRow.capline;
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

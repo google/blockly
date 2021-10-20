@@ -181,4 +181,4 @@ Svg.TEXT = new Svg('text');
  */
 Svg.TSPAN = new Svg('tspan');
 
-exports = Svg;
+exports.Svg = Svg;

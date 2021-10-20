@@ -19,15 +19,7 @@
  */
 goog.module('Blockly.utils');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Metrics = goog.require('Blockly.utils.Metrics');
 const Msg = goog.require('Blockly.Msg');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
@@ -46,6 +38,14 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Metrics} = goog.require('Blockly.utils.Metrics');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 exports.aria = aria;

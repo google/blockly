@@ -16,10 +16,6 @@
 goog.module('Blockly.VariableMap');
 
 const Msg = goog.require('Blockly.Msg');
-const Names = goog.require('Blockly.Names');
-const VariableModel = goog.require('Blockly.VariableModel');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -27,6 +23,10 @@ const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Names} = goog.require('Blockly.Names');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarDelete');
 /** @suppress {extraRequire} */
@@ -423,4 +423,4 @@ VariableMap.prototype.getVariableUsesById = function(id) {
   return uses;
 };
 
-exports = VariableMap;
+exports.VariableMap = VariableMap;

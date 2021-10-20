@@ -15,19 +15,19 @@
  */
 goog.module('Blockly.ContextMenuItems');
 
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**

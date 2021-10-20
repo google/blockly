@@ -15,26 +15,26 @@
  */
 goog.module('Blockly.zelos.Renderer');
 
-const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-const ConstantProvider = goog.require('Blockly.zelos.ConstantProvider');
-const Drawer = goog.require('Blockly.zelos.Drawer');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-const MarkerSvg = goog.require('Blockly.zelos.MarkerSvg');
-const PathObject = goog.require('Blockly.zelos.PathObject');
-const RenderInfo = goog.require('Blockly.zelos.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
+const {Drawer} = goog.require('Blockly.zelos.Drawer');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
+const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+const {PathObject} = goog.require('Blockly.zelos.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
+const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -145,4 +145,4 @@ Renderer.prototype.getConnectionPreviewMethod = function(
 
 blockRendering.register('zelos', Renderer);
 
-exports = Renderer;
+exports.Renderer = Renderer;

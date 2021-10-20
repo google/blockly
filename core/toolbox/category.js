@@ -16,13 +16,6 @@
 goog.module('Blockly.ToolboxCategory');
 
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const aria = goog.require('Blockly.utils.aria');
 const colourUtils = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
@@ -30,6 +23,13 @@ const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 
 
 /**
@@ -722,4 +722,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,
     ToolboxCategory);
 
-exports = ToolboxCategory;
+exports.ToolboxCategory = ToolboxCategory;

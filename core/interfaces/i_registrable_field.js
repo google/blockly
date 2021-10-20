@@ -17,7 +17,7 @@
 goog.module('Blockly.IRegistrableField');
 
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 
 
 /**
@@ -36,4 +36,4 @@ let IRegistrableField = {};
  */
 IRegistrableField.fromJson;
 
-exports = IRegistrableField;
+exports.IRegistrableField = IRegistrableField;

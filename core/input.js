@@ -15,19 +15,19 @@
  */
 goog.module('Blockly.Input');
 
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const constants = goog.require('Blockly.constants');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const inputTypes = goog.require('Blockly.inputTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 
@@ -312,4 +312,4 @@ Input.prototype.dispose = function() {
   this.sourceBlock_ = null;
 };
 
-exports = Input;
+exports.Input = Input;

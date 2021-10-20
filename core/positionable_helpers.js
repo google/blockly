@@ -15,15 +15,15 @@
  */
 goog.module('Blockly.uiPosition');
 
-/* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Rect = goog.require('Blockly.utils.Rect');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**

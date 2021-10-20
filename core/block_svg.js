@@ -15,46 +15,9 @@
  */
 goog.module('Blockly.BlockSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
-/* eslint-disable-next-line no-unused-vars */
-const Comment = goog.requireType('Blockly.Comment');
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.require('Blockly.ICopyable');
-/* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.require('Blockly.IDraggable');
-/* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-/* eslint-disable-next-line no-unused-vars */
-const Icon = goog.requireType('Blockly.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const MarkerManager = goog.require('Blockly.MarkerManager');
 const Msg = goog.require('Blockly.Msg');
-/* eslint-disable-next-line no-unused-vars */
-const Mutator = goog.requireType('Blockly.Mutator');
-const Rect = goog.require('Blockly.utils.Rect');
-const RenderedConnection = goog.require('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
-/* eslint-disable-next-line no-unused-vars */
-const Warning = goog.requireType('Blockly.Warning');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -68,8 +31,45 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {Comment} = goog.requireType('Blockly.Comment');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Debug: BlockRenderingDebug} = goog.requireType('Blockly.blockRendering.Debug');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.require('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
+const {IDraggable} = goog.require('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
+/* eslint-disable-next-line no-unused-vars */
+const {Icon} = goog.requireType('Blockly.Icon');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
+/* eslint-disable-next-line no-unused-vars */
+const {Mutator} = goog.requireType('Blockly.Mutator');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {Warning} = goog.requireType('Blockly.Warning');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -1028,7 +1028,7 @@ BlockSvg.prototype.getCommentIcon = function() {
  * @param {?string} text The text, or null to delete.
  */
 BlockSvg.prototype.setCommentText = function(text) {
-  const Comment = goog.module.get('Blockly.Comment');
+  const {Comment} = goog.module.get('Blockly.Comment');
   if (!Comment) {
     throw Error('Missing require for Blockly.Comment');
   }
@@ -1066,7 +1066,7 @@ BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 BlockSvg.prototype.setWarningText = function(text, opt_id) {
-  const Warning = goog.module.get('Blockly.Warning');
+  const {Warning} = goog.module.get('Blockly.Warning');
   if (!Warning) {
     throw Error('Missing require for Blockly.Warning');
   }

@@ -15,10 +15,10 @@
  */
 goog.module('Blockly.WorkspaceDragger');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -113,4 +113,4 @@ WorkspaceDragger.prototype.drag = function(currentDragDeltaXY) {
   }
 };
 
-exports = WorkspaceDragger;
+exports.WorkspaceDragger = WorkspaceDragger;

@@ -17,8 +17,8 @@
  */
 goog.module('Blockly.minimalist.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 
 
 /**
@@ -33,4 +33,4 @@ const ConstantProvider = function() {
 };
 object.inherits(ConstantProvider, BaseConstantProvider);
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

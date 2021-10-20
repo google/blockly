@@ -19,7 +19,7 @@ goog.module('Blockly.Events.Abstract');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -107,7 +107,8 @@ Abstract.prototype.run = function(_forward) {
 Abstract.prototype.getEventWorkspace_ = function() {
   let workspace;
   if (this.workspaceId) {
-    workspace = goog.module.get('Blockly.Workspace').getById(this.workspaceId);
+    const {Workspace} = goog.module.get('Blockly.Workspace');
+    workspace = Workspace.getById(this.workspaceId);
   }
   if (!workspace) {
     throw Error(

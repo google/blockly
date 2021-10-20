@@ -22,11 +22,11 @@
  */
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -184,4 +184,4 @@ WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
   this.SVG_.style.display = 'block';
 };
 
-exports = WorkspaceDragSurfaceSvg;
+exports.WorkspaceDragSurfaceSvg = WorkspaceDragSurfaceSvg;

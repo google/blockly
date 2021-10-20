@@ -17,11 +17,11 @@
 goog.module('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
 /* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
+const {Size} = goog.requireType('Blockly.utils.Size');
 
 
 /**
@@ -151,4 +151,4 @@ IMetricsManager.prototype.getContentMetrics;
  */
 IMetricsManager.prototype.getMetrics;
 
-exports = IMetricsManager;
+exports.IMetricsManager = IMetricsManager;

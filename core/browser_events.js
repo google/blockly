@@ -16,9 +16,9 @@
 goog.module('Blockly.browserEvents');
 
 const Touch = goog.require('Blockly.Touch');
-const {globalThis} = goog.require('Blockly.utils.global');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**

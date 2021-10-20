@@ -16,27 +16,27 @@
  */
 goog.module('Blockly.zelos.RenderInfo');
 
-const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-const BottomRow = goog.require('Blockly.zelos.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
-const FieldImage = goog.require('Blockly.FieldImage');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.zelos.Renderer');
-const RightConnectionShape = goog.require('Blockly.zelos.RightConnectionShape');
-const StatementInput = goog.require('Blockly.zelos.StatementInput');
-const TopRow = goog.require('Blockly.zelos.TopRow');
-const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
-const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {FieldImage} = goog.require('Blockly.FieldImage');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+/* eslint-disable-next-line no-unused-vars */
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
+const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
+const {TopRow} = goog.require('Blockly.zelos.TopRow');
+const {Types} = goog.require('Blockly.blockRendering.Types');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
@@ -599,4 +599,4 @@ RenderInfo.prototype.finalize_ = function() {
   }
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

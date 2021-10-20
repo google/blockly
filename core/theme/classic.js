@@ -17,7 +17,7 @@
  */
 goog.module('Blockly.Themes.Classic');
 
-const Theme = goog.require('Blockly.Theme');
+const {Theme} = goog.require('Blockly.Theme');
 
 
 let defaultBlockStyles = {
@@ -54,4 +54,4 @@ let categoryStyles = {
 const Classic =
     new Theme('classic', defaultBlockStyles, categoryStyles);
 
-exports = Classic;
+exports.Classic = Classic;

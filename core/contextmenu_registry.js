@@ -16,9 +16,9 @@
 goog.module('Blockly.ContextMenuRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -171,4 +171,4 @@ ContextMenuRegistry.prototype.getContextMenuOptions = function(
 // Creates and assigns the singleton instance.
 new ContextMenuRegistry();
 
-exports = ContextMenuRegistry;
+exports.ContextMenuRegistry = ContextMenuRegistry;

@@ -19,7 +19,7 @@
 goog.module('Blockly.IAutoHideable');
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.require('Blockly.IComponent');
+const {IComponent} = goog.require('Blockly.IComponent');
 
 
 /**
@@ -37,4 +37,4 @@ const IAutoHideable = function() {};
  */
 IAutoHideable.prototype.autoHide;
 
-exports = IAutoHideable;
+exports.IAutoHideable = IAutoHideable;

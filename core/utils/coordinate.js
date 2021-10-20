@@ -133,4 +133,4 @@ Coordinate.prototype.translate = function(tx, ty) {
   return this;
 };
 
-exports = Coordinate;
+exports.Coordinate = Coordinate;

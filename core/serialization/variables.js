@@ -18,12 +18,12 @@
 goog.module('Blockly.serialization.variables');
 goog.module.declareLegacyNamespace();
 
+const priorities = goog.require('Blockly.serialization.priorities');
+const serializationRegistry = goog.require('Blockly.serialization.registry');
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 // eslint-disable-next-line no-unused-vars
-const Workspace = goog.requireType('Blockly.Workspace');
-const priorities = goog.require('Blockly.serialization.priorities');
-const serializationRegistry = goog.require('Blockly.serialization.registry');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**

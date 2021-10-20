@@ -19,13 +19,13 @@
  */
 goog.module('Blockly.ConnectionDB');
 
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 
@@ -306,4 +306,4 @@ ConnectionDB.init = function(checker) {
   return dbList;
 };
 
-exports = ConnectionDB;
+exports.ConnectionDB = ConnectionDB;

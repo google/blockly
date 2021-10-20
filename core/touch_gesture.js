@@ -17,13 +17,13 @@
  */
 goog.module('Blockly.TouchGesture');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Gesture = goog.require('Blockly.Gesture');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Gesture} = goog.require('Blockly.Gesture');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /*
@@ -327,4 +327,4 @@ TouchGesture.prototype.getTouchPoint = function(e) {
       (e.pageY ? e.pageY : e.changedTouches[0].pageY));
 };
 
-exports = TouchGesture;
+exports.TouchGesture = TouchGesture;

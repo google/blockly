@@ -59,4 +59,4 @@ object.inherits(UiBase, Abstract);
  */
 UiBase.prototype.isUiEvent = true;
 
-exports = UiBase;
+exports.UiBase = UiBase;

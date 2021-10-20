@@ -15,18 +15,18 @@
  */
 goog.module('Blockly.Warning');
 
-const Bubble = goog.require('Blockly.Bubble');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Icon = goog.require('Blockly.Icon');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Bubble} = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -166,4 +166,4 @@ Warning.prototype.dispose = function() {
   Icon.prototype.dispose.call(this);
 };
 
-exports = Warning;
+exports.Warning = Warning;

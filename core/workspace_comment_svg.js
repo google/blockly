@@ -16,20 +16,8 @@
 goog.module('Blockly.WorkspaceCommentSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
-/* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.require('Blockly.IBubble');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.require('Blockly.ICopyable');
-const Rect = goog.require('Blockly.utils.Rect');
-const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -38,6 +26,18 @@ const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const {IBubble} = goog.require('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.require('Blockly.ICopyable');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
@@ -1139,4 +1139,4 @@ Css.register(`
   }
 `);
 
-exports = WorkspaceCommentSvg;
+exports.WorkspaceCommentSvg = WorkspaceCommentSvg;

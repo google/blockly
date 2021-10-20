@@ -17,10 +17,10 @@
  */
 goog.module('Blockly.ShortcutRegistry');
 
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const object = goog.require('Blockly.utils.object');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -354,4 +354,4 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
 // Creates and assigns the singleton instance.
 new ShortcutRegistry();
 
-exports = ShortcutRegistry;
+exports.ShortcutRegistry = ShortcutRegistry;

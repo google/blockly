@@ -36,4 +36,4 @@ IStyleable.prototype.addStyle;
  */
 IStyleable.prototype.removeStyle;
 
-exports = IStyleable;
+exports.IStyleable = IStyleable;

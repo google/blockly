@@ -15,8 +15,8 @@
  */
 goog.module('Blockly.thrasos');
 
-const RenderInfo = goog.require('Blockly.thrasos.RenderInfo');
-const Renderer = goog.require('Blockly.thrasos.Renderer');
+const {RenderInfo} = goog.require('Blockly.thrasos.RenderInfo');
+const {Renderer} = goog.require('Blockly.thrasos.Renderer');
 
 exports.RenderInfo = RenderInfo;
 exports.Renderer = Renderer;

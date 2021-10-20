@@ -17,9 +17,9 @@
 goog.module('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
@@ -63,4 +63,4 @@ IBlockDragger.prototype.endDrag;
  */
 IBlockDragger.prototype.getInsertionMarkers;
 
-exports = IBlockDragger;
+exports.IBlockDragger = IBlockDragger;

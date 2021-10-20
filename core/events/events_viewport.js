@@ -15,10 +15,10 @@
  */
 goog.module('Blockly.Events.ViewportChange');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -102,4 +102,4 @@ ViewportChange.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
 
-exports = ViewportChange;
+exports.ViewportChange = ViewportChange;

@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.Themes.Zelos');
 
-const Theme = goog.require('Blockly.Theme');
+const {Theme} = goog.require('Blockly.Theme');
 
 
 let defaultBlockStyles = {
@@ -91,4 +91,4 @@ let categoryStyles = {
  */
 const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);
 
-exports = Zelos;
+exports.Zelos = Zelos;

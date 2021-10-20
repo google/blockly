@@ -283,4 +283,4 @@ MenuItem.prototype.onAction = function(fn, obj) {
   this.actionHandler_ = fn.bind(obj);
 };
 
-exports = MenuItem;
+exports.MenuItem = MenuItem;

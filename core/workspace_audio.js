@@ -17,11 +17,11 @@
  */
 goog.module('Blockly.WorkspaceAudio');
 
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const {globalThis} = goog.require('Blockly.utils.global');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
@@ -160,4 +160,4 @@ WorkspaceAudio.prototype.play = function(name, opt_volume) {
   }
 };
 
-exports = WorkspaceAudio;
+exports.WorkspaceAudio = WorkspaceAudio;

@@ -25,4 +25,4 @@ goog.module('Blockly.BlocklyOptions');
  */
 const BlocklyOptions = function() {};
 
-exports = BlocklyOptions;
+exports.BlocklyOptions = BlocklyOptions;

@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.ScrollbarPair');
 
-/* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -321,4 +321,4 @@ ScrollbarPair.prototype.resizeView = function(hostMetrics) {
   }
 };
 
-exports = ScrollbarPair;
+exports.ScrollbarPair = ScrollbarPair;

@@ -151,4 +151,4 @@ Metrics.prototype.flyoutWidth;
  */
 Metrics.prototype.flyoutHeight;
 
-exports = Metrics;
+exports.Metrics = Metrics;

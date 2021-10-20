@@ -17,16 +17,16 @@
  */
 goog.module('Blockly.geras.Highlighter');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const HighlightConstantProvider = goog.requireType('Blockly.geras.HighlightConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.geras.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
-const Types = goog.require('Blockly.blockRendering.Types');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {HighlightConstantProvider} = goog.requireType('Blockly.geras.HighlightConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo} = goog.requireType('Blockly.geras.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.geras.Renderer');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -256,4 +256,4 @@ Highlighter.prototype.drawInlineInput = function(input) {
   }
 };
 
-exports = Highlighter;
+exports.Highlighter = Highlighter;

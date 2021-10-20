@@ -336,16 +336,43 @@ Blockly.FieldDropdown.prototype.dropdownCreate_ = function() {
 
   var options = this.getOptions(false);
   this.selectedMenuItem_ = null;
+
   for (var i = 0; i < options.length; i++) {
     var content = options[i][0];  // Human-readable text or image.
     var value = options[i][1];    // Language-neutral value.
     if (typeof content == 'object') {
-      // An image, not text.
+      var container = document.createElement('div');
+      container.classList.add('blocklyMenuItemValue');
+
       var image = new Image(content['width'], content['height']);
       image.src = content['src'];
       image.alt = content['alt'] || '';
-      content = image;
+
+      container.appendChild(image);
+
+      if (content['text']) {
+        var span = document.createElement('span');
+        span.classList.add('blocklyMenuItemText');
+
+        if (typeof content['text'] === 'string') {
+          span.innerText = content['text'];
+        } else {
+          var bElement = document.createElement('b');
+          bElement.innerText = content['text']['title'] + ': ';
+
+          var descriptionSpan = document.createElement('span');
+          descriptionSpan.innerText = content['text']['description'];
+
+          span.appendChild(bElement);
+          span.appendChild(descriptionSpan);
+        }
+
+        container.appendChild(span);
+      }
+
+      content = container;
     }
+
     var menuItem = new Blockly.MenuItem(content, value);
     menuItem.setRole(Blockly.utils.aria.Role.OPTION);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
@@ -566,9 +593,14 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
  * @protected
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
+  if (!this.textContent_ || !this.imageElement_) {
+    return
+  }
   // Hide both elements.
+
   this.textContent_.nodeValue = '';
   this.imageElement_.style.display = 'none';
+
 
   // Show correct element.
   var option = this.selectedOption_ && this.selectedOption_[0];

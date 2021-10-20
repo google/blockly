@@ -462,6 +462,9 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDropdownMenu {',
+    'max-height: 300px;', // @todo: spec for maximum height.
+    'overflow-y: auto;',
+    'overflow-x: hidden;',
     'border-radius: 2px;',
     'padding: 0 !important;',
   '}',
@@ -500,6 +503,7 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .blocklyMenu {',
     'background: inherit;',  /* Compatibility with gapi, reset from goog-menu */
     'border: inherit;',  /* Compatibility with gapi, reset from goog-menu */
+    'position: relative;',
     'font: normal 13px "Helvetica Neue", Helvetica, sans-serif;',
     'outline: none;',
     'position: relative;',  /* Compatibility with gapi, reset from goog-menu */
@@ -515,7 +519,8 @@ Blockly.Css.CONTENT = [
     'margin: 0;',
      /* 7em on the right for shortcut. */
     'min-width: 7em;',
-    'padding: 6px 15px;',
+    'padding: 5px 15px;',
+    'margin-bottom: 2px;',
     'white-space: nowrap;',
   '}',
 
@@ -542,6 +547,10 @@ Blockly.Css.CONTENT = [
     'float: left;',
     'margin-left: -24px;',
     'position: static;',  /* Scroll with the menu. */
+  '}',
+
+  '.blocklyMenuItemText {',
+    'margin-left: 5px',
   '}',
 
   '.blocklyMenuItemRtl .blocklyMenuItemCheckbox {',

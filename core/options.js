@@ -131,6 +131,8 @@ Blockly.Options = function(options) {
   this.hasCategories = hasCategories;
   /** @type {!Blockly.Options.MoveOptions} */
   this.moveOptions = Blockly.Options.parseMoveOptions_(options, hasCategories);
+  /** @type {boolean} */
+  this.showModuleBar = options['showModuleBar'];
   /** @deprecated  January 2019 */
   this.hasScrollbars = !!this.moveOptions.scrollbars;
   /** @type {boolean} */

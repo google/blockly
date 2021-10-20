@@ -66,6 +66,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
+ * @param {string=} moduleId Optional module ID.  Use this ID if provided, otherwise use active module.
  * @extends {Blockly.Block}
  * @implements {Blockly.IASTNodeLocationSvg}
  * @implements {Blockly.IBoundedElement}
@@ -73,7 +74,7 @@ goog.requireType('Blockly.WorkspaceSvg');
  * @implements {Blockly.IDraggable}
  * @constructor
  */
-Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
+Blockly.BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
   // Create core elements for the block.
   /**
    * @type {!SVGGElement}
@@ -131,7 +132,7 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   svgPath.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(svgPath);
   Blockly.BlockSvg.superClass_.constructor.call(this,
-      workspace, prototypeName, opt_id);
+      workspace, prototypeName, opt_id, moduleId);
 
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
@@ -204,7 +205,7 @@ Blockly.BlockSvg.prototype.compose;
  * An optional method for defining custom block context menu items.
  * @type {?function(!Array<!Object>)}
  */
-Blockly.BlockSvg.prototype.customContextMenu;
+Blockly.BlockSvg.prototype.customContextMenu
 
 /**
  * An property used internally to reference the block's rendering debugger.
@@ -307,6 +308,11 @@ Blockly.BlockSvg.prototype.select = function() {
   if (Blockly.selected == this) {
     return;
   }
+  // Skip select block from another module
+  if (!this.InActiveModule()) {
+    return;
+  }
+
   var oldId = null;
   if (Blockly.selected) {
     oldId = Blockly.selected.id;
@@ -759,6 +765,16 @@ Blockly.BlockSvg.prototype.generateContextMenu = function() {
   var menuOptions = Blockly.ContextMenuRegistry.registry.getContextMenuOptions(
       Blockly.ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
+  if (this.workspace.options.showModuleBar && this.isMovable() && this.workspace.getModuleManager().getAllModules().length > 1) {
+    var block = this
+
+    this.workspace.getModuleManager().getAllModules().forEach(function (module) {
+      if (block.getModuleId() !== module.getId()) {
+        menuOptions.push(Blockly.ContextMenu.blockMoveToModuleOption(block, module));
+      }
+    });
+  }
+
   // Allow the block to add or modify menuOptions.
   if (this.customContextMenu) {
     this.customContextMenu(menuOptions);
@@ -893,6 +909,60 @@ Blockly.BlockSvg.prototype.getSvgRoot = function() {
 };
 
 /**
+ * Remove render of this block.
+ * @suppress {checkTypes}
+ */
+Blockly.BlockSvg.prototype.removeRender = function() {
+  if (!this.rendered) {
+    return;
+  }
+
+  Blockly.Tooltip.dispose();
+  Blockly.Tooltip.unbindMouseEvents(this.pathObject.svgPath);
+  Blockly.utils.dom.startTextWidthCache();
+
+  // If this block is being dragged, unlink the mouse events.
+  if (Blockly.selected === this) {
+    this.unselect();
+    this.workspace.cancelCurrentGesture();
+  }
+  // If this block has a context menu open, close it.
+  if (Blockly.ContextMenu.currentBlock === this) {
+    Blockly.ContextMenu.hide();
+  }
+
+  var icons = this.getIcons();
+  for (var i = 0, icon; (icon = icons[i]); i++) {
+    icon.setVisible(false);
+  }
+
+  // Stop rerendering.
+  this.rendered = false;
+
+  // Clear pending warnings.
+  if (this.warningTextDb_) {
+    for (var n in this.warningTextDb_) {
+      clearTimeout(this.warningTextDb_[n]);
+    }
+    this.warningTextDb_ = null;
+  }
+
+  // Disable connections tracking and remove parent node from dom
+  if (!this.getParent()) {
+    this.setConnectionTracking(false);
+    Blockly.utils.dom.removeNode(this.svgGroup_);
+    this.workspace.removeTopBoundedElement(this);
+  }
+
+  Blockly.utils.dom.stopTextWidthCache();
+
+  // Remove render of all my children.
+  for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+    this.childBlocks_[i].removeRender();
+  }
+};
+
+/**
  * Dispose of this block.
  * @param {boolean=} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
@@ -959,7 +1029,8 @@ Blockly.BlockSvg.prototype.toCopyData = function() {
   if (this.isInsertionMarker_) {
     return null;
   }
-  var xml = /** @type {!Element} */ (Blockly.Xml.blockToDom(this, true));
+
+  var xml = /** @type {!Element} */ Blockly.Xml.blockToDom(this, true, true);
   // Copy only the selected block and internal blocks.
   Blockly.Xml.deleteNext(xml);
   // Encode start position in XML.

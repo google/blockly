@@ -3,6 +3,7 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "أضف تعليقًا";
+Blockly.Msg["BLOCK_MOVE_TO_MODULE"] = "Move to '%1'";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "لايمكن حذف متغير \"%1\" بسبب انه جزء من الدالة \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تغيير قيمة:";
 Blockly.Msg["CLEAN_UP"] = "ترتيب القطع";
@@ -58,8 +59,10 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "اكرّر حتى";
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "اكرّر طالما";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "بما ان القيمة صحيحة, نفّذ بعض الأوامر.";
+Blockly.Msg["DEFAULT_MODULE_NAME"] = "General";  // untranslated
 Blockly.Msg["DELETE_ALL_BLOCKS"] = "حذف %1 قطعة؟";
 Blockly.Msg["DELETE_BLOCK"] = "احذف القطعة";
+Blockly.Msg["DELETE_MODULE"] = "Delete";  // untranslated
 Blockly.Msg["DELETE_VARIABLE"] = "حذف المتغير %1";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "حذف%1 1 استخدامات المتغير '%2'؟";
 Blockly.Msg["DELETE_X_BLOCKS"] = "احذف %1 قطع";
@@ -74,6 +77,7 @@ Blockly.Msg["EXPAND_BLOCK"] = "وسٌّع القطعة";
 Blockly.Msg["EXTERNAL_INPUTS"] = "ادخال خارجي";
 Blockly.Msg["HELP"] = "مساعدة";
 Blockly.Msg["INLINE_INPUTS"] = "ادخال خطي";
+Blockly.Msg["LAST_MODULE_DELETE_RESTRICTION"] = "Can't delete the last module.";  // untranslated
 Blockly.Msg["LISTS_CREATE_EMPTY_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#create-empty-list";
 Blockly.Msg["LISTS_CREATE_EMPTY_TITLE"] = "إنشئ قائمة فارغة";
 Blockly.Msg["LISTS_CREATE_EMPTY_TOOLTIP"] = "تقوم بإرجاع قائمة، طولها 0, لا تحتوي على أية سجلات البيانات";
@@ -272,11 +276,15 @@ Blockly.Msg["MATH_TRIG_TOOLTIP_COS"] = "يرجع جيب التمام لدرجة 
 Blockly.Msg["MATH_TRIG_TOOLTIP_SIN"] = "يرجع جيب التمام لدرجة (لا زواية نصف قطرية).";
 Blockly.Msg["MATH_TRIG_TOOLTIP_TAN"] = "يرجع الظل لدرجة (لا دائرة نصف قطرية).";
 Blockly.Msg["NEW_COLOUR_VARIABLE"] = "انشاء متغير لوني...";
+Blockly.Msg["NEW_MODULE"] = "Create";  // untranslated
+Blockly.Msg["NEW_MODULE_TITLE"] = "Name:";  // untranslated
 Blockly.Msg["NEW_NUMBER_VARIABLE"] = "انشاء متغير رقمي...";
 Blockly.Msg["NEW_STRING_VARIABLE"] = "انشاء متغير نصي...";
 Blockly.Msg["NEW_VARIABLE"] = "إنشاء متغير...";
 Blockly.Msg["NEW_VARIABLE_TITLE"] = "اسم المتغير الجديد:";
 Blockly.Msg["NEW_VARIABLE_TYPE_TITLE"] = "نوع متغير جديد:";
+Blockly.Msg["NOT_EMPTY_MODULE_DELETE_RESTRICTION"] = "Can't delete not empty module. Delete all module blocks first.";  // untranslated
+Blockly.Msg["OBSOLETE_WARNING"] = "Warning: This block is obsolete. Use a similar new one.";  // untranslated
 Blockly.Msg["ORDINAL_NUMBER_SUFFIX"] = "";  // untranslated
 Blockly.Msg["PROCEDURES_ALLOW_STATEMENTS"] = "اسمح بالبيانات";
 Blockly.Msg["PROCEDURES_BEFORE_PARAMS"] = "مع:";
@@ -305,7 +313,10 @@ Blockly.Msg["PROCEDURES_MUTATORARG_TOOLTIP"] = "أضف مدخلا إلى الو�
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TITLE"] = "المدخلات";
 Blockly.Msg["PROCEDURES_MUTATORCONTAINER_TOOLTIP"] = "إضافة أو إزالة أو إعادة ترتيب المدخلات لهذه المهمة.";
 Blockly.Msg["REDO"] = "إعادة";
+Blockly.Msg["REMOVED_WARNING"] = "Warning: This block is removed. Use a similar new one.";  // untranslated
 Blockly.Msg["REMOVE_COMMENT"] = "أزل التعليق";
+Blockly.Msg["RENAME_MODULE"] = "Rename";  // untranslated
+Blockly.Msg["RENAME_MODULE_TITLE"] = "Rename to:";  // untranslated
 Blockly.Msg["RENAME_VARIABLE"] = "إعادة تسمية المتغير...";
 Blockly.Msg["RENAME_VARIABLE_TITLE"] = "إعادة تسمية كافة المتغيرات '%1' إلى:";
 Blockly.Msg["TEXT_APPEND_HELPURL"] = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated

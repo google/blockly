@@ -21,6 +21,7 @@ goog.require('Blockly.registry');
 goog.require('Blockly.utils');
 goog.require('Blockly.utils.math');
 goog.require('Blockly.VariableMap');
+goog.require('Blockly.ModuleManager');
 
 goog.requireType('Blockly.Block');
 goog.requireType('Blockly.ConnectionDB');
@@ -109,6 +110,15 @@ Blockly.Workspace = function(opt_options) {
    */
   this.variableMap_ = new Blockly.VariableMap(this);
 
+
+  /**
+   * A map from module type to list of module names.  The lists contain all
+   * of the named modules in the workspace.
+   * @type {!Blockly.ModuleManager}
+   * @private
+   */
+  this.moduleManager_ = new Blockly.ModuleManager(this);
+
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
    * workspace.  For instance, the "get item in list" block refers to an "item"
@@ -180,6 +190,16 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  * @private
  */
 Blockly.Workspace.prototype.sortObjects_ = function(a, b) {
+  // Order by module
+  if (a.getModuleOrder && b.getModuleOrder) {
+    var aOrder = a.getModuleOrder();
+    var bOrder = b.getModuleOrder();
+
+    if (aOrder !== bOrder) {
+      return aOrder - bOrder;
+    }
+  }
+
   var aXY = a.getRelativeToSurfaceXY();
   var bXY = b.getRelativeToSurfaceXY();
   return (aXY.y + Blockly.Workspace.prototype.sortObjects_.offset * aXY.x) -
@@ -208,11 +228,21 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  * Finds the top-level blocks and returns them.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
+ * @param {boolean} [inActiveModule] filter blocks by active module if true.
  * @return {!Array<!Blockly.Block>} The top-level block objects.
  */
-Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
-  // Copy the topBlocks_ list.
-  var blocks = [].concat(this.topBlocks_);
+Blockly.Workspace.prototype.getTopBlocks = function(ordered, inActiveModule) {
+  var blocks = [];
+  if (inActiveModule) {
+    for (var i = 0, block; (block = this.topBlocks_[i]); i++) {
+      if (block.InActiveModule()) {
+        blocks.push(block);
+      }
+    }
+  } else {
+    blocks = [].concat(this.topBlocks_);
+  }
+
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset =
         Math.sin(Blockly.utils.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
@@ -327,19 +357,20 @@ Blockly.Workspace.prototype.getTopComments = function(ordered) {
  * Find all blocks in workspace.  Blocks are optionally sorted
  * by position; top to bottom (with slight LTR or RTL bias).
  * @param {boolean} ordered Sort the list if true.
+ * @param {boolean} [inActiveModule] filter blocks by active module if true.
  * @return {!Array<!Blockly.Block>} Array of blocks.
  */
-Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
+Blockly.Workspace.prototype.getAllBlocks = function(ordered, inActiveModule) {
   if (ordered) {
     // Slow, but ordered.
-    var topBlocks = this.getTopBlocks(true);
+    var topBlocks = this.getTopBlocks(true, inActiveModule);
     var blocks = [];
     for (var i = 0; i < topBlocks.length; i++) {
       blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
     }
   } else {
     // Fast, but in no particular order.
-    var blocks = this.getTopBlocks(false);
+    var blocks = this.getTopBlocks(false, inActiveModule);
     for (var i = 0; i < blocks.length; i++) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
@@ -355,7 +386,7 @@ Blockly.Workspace.prototype.getAllBlocks = function(ordered) {
 };
 
 /**
- * Dispose of all blocks and comments in workspace.
+ * Dispose of all modules, blocks and comments in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {
   this.isClearing = true;
@@ -364,6 +395,7 @@ Blockly.Workspace.prototype.clear = function() {
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
+
     while (this.topBlocks_.length) {
       this.topBlocks_[0].dispose(false);
     }
@@ -377,6 +409,9 @@ Blockly.Workspace.prototype.clear = function() {
     if (this.potentialVariableMap_) {
       this.potentialVariableMap_.clear();
     }
+
+
+    this.getModuleManager().clear();
   } finally {
     this.isClearing = false;
   }
@@ -483,7 +518,15 @@ Blockly.Workspace.prototype.getAllVariableNames = function() {
   return this.variableMap_.getAllVariableNames();
 };
 
-/* End functions that are just pass-throughs to the variable map. */
+/**
+ * Return module manager.
+ * @return {Blockly.ModuleManager} The module manager.
+ */
+Blockly.Workspace.prototype.getModuleManager = function() {
+  return this.moduleManager_;
+};
+
+/* End functions that are just pass-throughs to the module map. */
 
 /**
  * Returns the horizontal offset of the workspace.
@@ -501,10 +544,11 @@ Blockly.Workspace.prototype.getWidth = function() {
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
+ * @param {string=} moduleId Optional module ID.  Use this ID if provided, otherwise use active module.
  * @return {!Blockly.Block} The created block.
  */
-Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
-  return new Blockly.Block(this, prototypeName, opt_id);
+Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id, moduleId) {
+  return new Blockly.Block(this, prototypeName, opt_id, moduleId);
 };
 
 /**
@@ -613,6 +657,7 @@ Blockly.Workspace.prototype.undo = function(redo) {
     outputStack.push(event);
   }
   events = Blockly.Events.filter(events, redo);
+
   Blockly.Events.recordUndo = false;
   try {
     for (var i = 0, event; (event = events[i]); i++) {

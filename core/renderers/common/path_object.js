@@ -144,6 +144,8 @@ Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
 
   this.updateShadow_(block.isShadow());
   this.updateDisabled_(!block.isEnabled() || block.getInheritedDisabled());
+  this.updateObsolete_(block.isObsolete());
+  this.updateRemoved_(block.isRemoved());
 };
 
 /**
@@ -212,6 +214,34 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
   if (disabled) {
     this.svgPath.setAttribute('fill',
         'url(#' + this.constants.disabledPatternId + ')');
+  }
+};
+
+/**
+ * Updates the look of the block to reflect a disabled state.
+ * @param {boolean} obsolete True if obsolete.
+ * @protected
+ */
+Blockly.blockRendering.PathObject.prototype.updateObsolete_ = function(
+    obsolete) {
+  this.setClass_('blocklyObsolete', obsolete);
+  if (obsolete) {
+    this.svgPath.setAttribute('fill',
+        'url(#' + this.constants.obsoletePatternId + ')');
+  }
+};
+
+/**
+ * Updates the look of the block to reflect a disabled state.
+ * @param {boolean} removed True if removed.
+ * @protected
+ */
+Blockly.blockRendering.PathObject.prototype.updateRemoved_ = function(
+    removed) {
+  this.setClass_('blocklyRemoved', removed);
+  if (removed) {
+    this.svgPath.setAttribute('fill',
+        'url(#' + this.constants.removedPatternId + ')');
   }
 };
 

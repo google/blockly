@@ -111,6 +111,37 @@ Blockly.Events.VAR_DELETE = 'var_delete';
 Blockly.Events.VAR_RENAME = 'var_rename';
 
 /**
+ * Name of event that creates a module.
+ * @const
+ */
+Blockly.Events.MODULE_CREATE = 'module_create';
+
+/**
+ * Name of event that deletes a module.
+ * @const
+ */
+Blockly.Events.MODULE_DELETE = 'module_delete';
+
+/**
+ * Name of event that activate a module.
+ * @const
+ */
+Blockly.Events.MODULE_ACTIVATE = 'module_activate';
+
+/**
+ * Name of event that renames a module.
+ * @const
+ */
+Blockly.Events.MODULE_RENAME = 'module_rename';
+
+/**
+ * Name of event that move block to module
+ * @const
+ */
+Blockly.Events.MOVE_BLOCK_TO_MODULE = 'move_block_to_module';
+
+
+/**
  * Name of generic event that records a UI change.
  * @const
  */

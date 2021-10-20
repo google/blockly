@@ -299,7 +299,7 @@ Blockly.Toolbox.prototype.attachEvents_ = function(container,
  * @protected
  */
 Blockly.Toolbox.prototype.onClick_ = function(e) {
-  if (Blockly.utils.isRightButton(e) || e.target == this.HtmlDiv) {
+  if (Blockly.utils.isRightButton(e) || e.target == this.htmlContainer_) {
     // Close flyout.
     Blockly.hideChaff(false);
   } else {

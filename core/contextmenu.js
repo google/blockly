@@ -192,6 +192,8 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     Blockly.Events.disable();
     try {
       var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
+      // Remove module from block
+      newBlock.removeAttribute('module');
       // Move the new block next to the old block.
       var xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
@@ -232,6 +234,22 @@ Blockly.ContextMenu.commentDeleteOption = function(comment) {
     }
   };
   return deleteOption;
+};
+
+/**
+ * Make a context menu option for duplicating the current block.
+ * @param {!Blockly.BlockSvg} block The block where the right-click originated.
+ * @param {!Blockly.ModuleModel} module The module to move block.
+ * @package
+ */
+Blockly.ContextMenu.blockMoveToModuleOption = function(block, module) {
+  return {
+    text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', module.name),
+    enabled: block.isMovable(),
+    callback: function() {
+      block.workspace.getModuleManager().moveBlockToModule(block, module);
+    }
+  };
 };
 
 /**

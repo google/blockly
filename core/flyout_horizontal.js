@@ -254,6 +254,9 @@ Blockly.HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
         // block.
         child.isInFlyout = true;
       }
+      if (block.isObsolete() || block.isRemoved()) {
+        continue;
+      }
       block.render();
       var root = block.getSvgRoot();
       var blockHW = block.getHeightWidth();

@@ -22,8 +22,12 @@ var { getPackageJson } = require('./helper_tasks');
 const blocklyRoot = '../../';
 
 // The destination path where all the NPM distribution files will go.
-const packageDistribution = 'dist';
+let packageDistribution = 'dist';
 
+const outputArgIndex = process.argv.indexOf("--output");
+if (outputArgIndex > -1 && process.argv[outputArgIndex + 1]) {
+    packageDistribution = process.argv[outputArgIndex + 1];
+}
 
 /**
  * A helper method for wrapping a file into a Universal Module Definition.

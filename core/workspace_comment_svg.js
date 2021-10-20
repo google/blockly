@@ -593,7 +593,10 @@ Blockly.WorkspaceCommentSvg.fromXml = function(
 
     var comment = new Blockly.WorkspaceCommentSvg(
         workspace, info.content, info.h, info.w, info.id);
-    if (workspace.rendered) {
+
+    comment.moduleId_ = info.module;
+
+    if (workspace.rendered && comment.InActiveModule()) {
       comment.initSvg(true);
       comment.render(false);
     }

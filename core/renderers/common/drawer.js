@@ -317,6 +317,10 @@ Blockly.blockRendering.Drawer.prototype.layoutField_ = function(fieldInfo) {
     var svgGroup = fieldInfo.icon.iconGroup_;
   }
 
+  if (!svgGroup) {
+    return
+  }
+
   var yPos = fieldInfo.centerline - fieldInfo.height / 2;
   var xPos = fieldInfo.xPos;
   var scale = '';

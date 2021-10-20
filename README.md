@@ -1,3 +1,60 @@
+# Varwin Blockly
+
+Это форк Google Blockly с доработками для [Varwin](https://varwin.com/).  
+Основная фича Varwin Blockly: "Модули" (`/core/module.*`), которая сильно затрагивает core blockly.
+
+# Алгоритм обновления репозитория
+
+1. Подтягиваем изменения из `google/blockly`. (Github сам предложит это сделать, если обнаружит новые коммиты в master `google/blockly`)
+2. Если есть конфликты, будет создан PR для мерджа
+3. Переходим на ветку слияния и решаем все конфликты
+4. Выполняем 
+```bash
+npm run build
+```
+6. Запускаем локальный playground, которые лежит в `tests/playground.html`
+7. Если обнаруживаются ошибки, то переходим к пункту 3 и решаем возникшие проблемы. Обратите внимание на раздел с частыми проблемами ниже
+8. Выполняем
+```bash
+npm run prepare
+```
+10. Переходим в директорию `dist`
+11. Выполняем npm publish
+
+# Как удобно тестировать Varwin Blockly сразу в RMS
+
+Можно вызывать `gulp package` с аргументом `--output "path"` где `path` это путь до папки `blockly` в `node_modules` RMS.  
+Учитывайте, что путь должен быть относительно корня репозитория Varwin Blockly.
+
+Т.е.
+1. Делаем правки в Varwin Blockly
+2. Вызываем 
+```bash
+  npm run build
+```
+3. Вызываем
+```bash
+  gulp package --output "~/node_modules/blockly/"
+```
+6. Запускаем сборку RMS (или hot reload сам подтянет node_modules)
+
+# Частые проблемы
+
+### Playground не может найти файлы
+
+Идем в файл `/blockly_uncompresed.js` и исправляем пути до файлов.
+
+### Build падает с ошибкой "No supported platform for closure-compiler found"
+
+Можно попробовать установить не поддерживаемый пакет `google-closure-compiler-js`.  
+Затем залезть в `node_modules/google-closure-compiler/lib/utils.js` и в методе `getFirstSupportedPlatform` всегда возвращать  
+`"google-closure-compiler-js"`.
+
+Так пакет будет собираться средствами node.js, но это медленнее, зато работает. Пока что.
+
+
+=======
+
 # Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)
 
 Google's Blockly is a library that adds a visual code editor to web and mobile apps. The Blockly editor uses interlocking, graphical blocks to represent code concepts like variables, logical expressions, loops, and more. It allows users to apply programming principles without having to worry about syntax or the intimidation of a blinking cursor on the command line.  All code is free and open source.

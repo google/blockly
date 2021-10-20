@@ -39,18 +39,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": [{
       "type": "input_value",
       "name": "TIMES",
-      "check": "Number"
+      "check": "Number",
     }],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
     "args1": [{
       "type": "input_statement",
-      "name": "DO"
+      "name": "DO",
     }],
     "previousStatement": null,
     "nextStatement": null,
     "style": "loop_blocks",
     "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
   },
   // Block for repeat n times (internal number).
   // The 'controls_repeat_ext' block is preferred as it is more flexible.
@@ -62,18 +62,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "name": "TIMES",
       "value": 10,
       "min": 0,
-      "precision": 1
+      "precision": 1,
     }],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
     "args1": [{
       "type": "input_statement",
-      "name": "DO"
+      "name": "DO",
     }],
     "previousStatement": null,
     "nextStatement": null,
     "style": "loop_blocks",
     "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}",
   },
   // Block for 'do while/until' loop.
   {
@@ -85,25 +85,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "MODE",
         "options": [
           ["%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_WHILE}", "WHILE"],
-          ["%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}", "UNTIL"]
-        ]
+          ["%{BKY_CONTROLS_WHILEUNTIL_OPERATOR_UNTIL}", "UNTIL"],
+        ],
       },
       {
         "type": "input_value",
         "name": "BOOL",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
     "args1": [{
       "type": "input_statement",
-      "name": "DO"
+      "name": "DO",
     }],
     "previousStatement": null,
     "nextStatement": null,
     "style": "loop_blocks",
     "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
-    "extensions": ["controls_whileUntil_tooltip"]
+    "extensions": ["controls_whileUntil_tooltip"],
   },
   // Block for 'for' loop.
   {
@@ -113,31 +113,31 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": null
+        "variable": null,
       },
       {
         "type": "input_value",
         "name": "FROM",
         "check": "Number",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "TO",
         "check": "Number",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "BY",
         "check": "Number",
-        "align": "RIGHT"
-      }
+        "align": "RIGHT",
+      },
     ],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
     "args1": [{
       "type": "input_statement",
-      "name": "DO"
+      "name": "DO",
     }],
     "inputsInline": true,
     "previousStatement": null,
@@ -146,8 +146,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_FOR_HELPURL}",
     "extensions": [
       "contextMenu_newGetVariableBlock",
-      "controls_for_tooltip"
-    ]
+      "controls_for_tooltip",
+    ],
   },
   // Block for 'for each' loop.
   {
@@ -157,18 +157,18 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": null
+        "variable": null,
       },
       {
         "type": "input_value",
         "name": "LIST",
-        "check": "Array"
-      }
+        "check": "Array",
+      },
     ],
     "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
     "args1": [{
       "type": "input_statement",
-      "name": "DO"
+      "name": "DO",
     }],
     "previousStatement": null,
     "nextStatement": null,
@@ -176,8 +176,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_FOREACH_HELPURL}",
     "extensions": [
       "contextMenu_newGetVariableBlock",
-      "controls_forEach_tooltip"
-    ]
+      "controls_forEach_tooltip",
+    ],
   },
   // Block for flow statements: continue, break.
   {
@@ -188,8 +188,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "name": "FLOW",
       "options": [
         ["%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK}", "BREAK"],
-        ["%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}", "CONTINUE"]
-      ]
+        ["%{BKY_CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE}", "CONTINUE"],
+      ],
     }],
     "previousStatement": null,
     "style": "loop_blocks",
@@ -197,9 +197,9 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "suppressPrefixSuffix": true,
     "extensions": [
       "controls_flow_tooltip",
-      "controls_flow_in_loop_check"
-    ]
-  }
+      "controls_flow_in_loop_check",
+    ],
+  },
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
@@ -210,7 +210,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
  */
 Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS = {
   'WHILE': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE}',
-  'UNTIL': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL}'
+  'UNTIL': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL}',
 };
 
 Blockly.Extensions.register('controls_whileUntil_tooltip',
@@ -225,7 +225,7 @@ Blockly.Extensions.register('controls_whileUntil_tooltip',
  */
 Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS = {
   'BREAK': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK}',
-  'CONTINUE': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}'
+  'CONTINUE': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}',
 };
 
 Blockly.Extensions.register('controls_flow_tooltip',
@@ -264,7 +264,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
-  }
+  },
 };
 
 Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
@@ -297,7 +297,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
     'controls_repeat_ext',
     'controls_forEach',
     'controls_for',
-    'controls_whileUntil'
+    'controls_whileUntil',
   ],
 
   /**
@@ -342,7 +342,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
       this.setEnabled(enabled);
       Blockly.Events.setGroup(group);
     }
-  }
+  },
 };
 
 Blockly.Extensions.registerMixin('controls_flow_in_loop_check',

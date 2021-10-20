@@ -293,7 +293,7 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
   this.svgArrow_ = dom.createSvgElement(
       Svg.IMAGE, {
         'height': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
-        'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px'
+        'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
       },
       this.fieldGroup_);
   this.svgArrow_.setAttributeNS(

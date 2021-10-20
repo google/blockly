@@ -96,8 +96,8 @@ Object.defineProperties(exports, {
           'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
           'Blockly.WidgetDiv.getDiv()');
       return getDiv();
-    }
-  }
+    },
+  },
 });
 
 /**

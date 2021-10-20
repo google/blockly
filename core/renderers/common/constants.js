@@ -785,7 +785,7 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
 
   const mainPath = svgPaths.line([
     svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
-    svgPaths.point(width, height / 4)
+    svgPaths.point(width, height / 4),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -801,7 +801,7 @@ ConstantProvider.prototype.makeStartHat = function() {
 
   const mainPath = svgPaths.curve('c', [
     svgPaths.point(30, -height), svgPaths.point(70, -height),
-    svgPaths.point(width, 0)
+    svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -837,7 +837,7 @@ ConstantProvider.prototype.makePuzzleTab = function() {
                'c',
                [
                  svgPaths.point(0, forward * control1Y),
-                 svgPaths.point(-width, back * control2Y), endPoint1
+                 svgPaths.point(-width, back * control2Y), endPoint1,
                ]) +
         svgPaths.curve(
             's', [svgPaths.point(width, back * control3Y), endPoint2]);
@@ -853,7 +853,7 @@ ConstantProvider.prototype.makePuzzleTab = function() {
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
+    pathUp: pathUp,
   };
 };
 
@@ -871,7 +871,7 @@ ConstantProvider.prototype.makeNotch = function() {
     return svgPaths.line([
       svgPaths.point(dir * outerWidth, height),
       svgPaths.point(dir * innerWidth, 0),
-      svgPaths.point(dir * outerWidth, -height)
+      svgPaths.point(dir * outerWidth, -height),
     ]);
   }
   const pathLeft = makeMainPath(1);
@@ -882,7 +882,7 @@ ConstantProvider.prototype.makeNotch = function() {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -904,7 +904,7 @@ ConstantProvider.prototype.makeInsideCorners = function() {
     width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
-    pathBottom: innerBottomLeftCorner
+    pathBottom: innerBottomLeftCorner,
   };
 };
 
@@ -948,7 +948,7 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
     topRight: topRight,
     bottomRight: bottomRight,
     bottomLeft: bottomLeft,
-    rightHeight: radius
+    rightHeight: radius,
   };
 };
 
@@ -1017,7 +1017,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'specularConstant': 0.5,
         'specularExponent': 10,
         'lighting-color': 'white',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1028,7 +1028,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1039,7 +1039,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'k1': 0,
         'k2': 1,
         'k3': 1,
-        'k4': 0
+        'k4': 0,
       },
       embossFilter);
   this.embossFilterId = embossFilter.id;
@@ -1057,7 +1057,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
-        'height': 10
+        'height': 10,
       },
       this.defs_);
   dom.createSvgElement(
@@ -1085,7 +1085,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'height': '160%',
           'width': '180%',
           y: '-30%',
-          x: '-40%'
+          x: '-40%',
         },
         this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -1105,7 +1105,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'in': 'outColor',
           'in2': 'outBlur',
           'operator': 'in',
-          'result': 'outGlow'
+          'result': 'outGlow',
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;

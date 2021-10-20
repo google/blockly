@@ -190,7 +190,7 @@ HighlightConstantProvider.prototype.makeOutsideCorner = function() {
     },
     bottomLeft: function() {
       return bottomLeftPath;
-    }
+    },
   };
 };
 
@@ -215,7 +215,7 @@ HighlightConstantProvider.prototype.makePuzzleTab = function() {
       svgPaths.curve(
           'q',
           [
-            svgPaths.point(-width * 0.05, 10), svgPaths.point(width * 0.3, 9.5)
+            svgPaths.point(-width * 0.05, 10), svgPaths.point(width * 0.3, 9.5),
           ]) +
       svgPaths.moveBy(width * 0.67, -1.9) +
       svgPaths.lineOnAxis('v', verticalOverlap);
@@ -237,7 +237,7 @@ HighlightConstantProvider.prototype.makePuzzleTab = function() {
     },
     pathDown: function(rtl) {
       return rtl ? highlightRtlDown : highlightLtrDown;
-    }
+    },
   };
 };
 
@@ -273,17 +273,17 @@ HighlightConstantProvider.prototype.makeStartHat = function() {
   const hatHeight = this.constantProvider.START_HAT.height;
   const pathRtl = svgPaths.moveBy(25, -8.7) + svgPaths.curve('c', [
     svgPaths.point(29.7, -6.2), svgPaths.point(57.2, -0.5),
-    svgPaths.point(75, 8.7)
+    svgPaths.point(75, 8.7),
   ]);
 
   const pathLtr = svgPaths.curve('c', [
     svgPaths.point(17.8, -9.2), svgPaths.point(45.3, -14.9),
-    svgPaths.point(75, -8.7)
+    svgPaths.point(75, -8.7),
   ]) + svgPaths.moveTo(100.5, hatHeight + 0.5);
   return {
     path: function(rtl) {
       return rtl ? pathRtl : pathLtr;
-    }
+    },
   };
 };
 

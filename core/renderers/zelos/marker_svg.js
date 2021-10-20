@@ -134,7 +134,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
       Svg.CIRCLE, {
         'r': this.constants_.CURSOR_RADIUS,
         'style': 'display: none',
-        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
       this.markerSvg_);
 

@@ -63,7 +63,7 @@ class VariableSerializer {
     for (const variable of workspace.getAllVariables()) {
       const state = {
         'name': variable.name,
-        'id': variable.getId()
+        'id': variable.getId(),
       };
       if (variable.type) {
         state['type'] = variable.type;

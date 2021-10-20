@@ -189,7 +189,7 @@ FieldImage.prototype.initView = function() {
       Svg.IMAGE, {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
-        'alt': this.altText_
+        'alt': this.altText_,
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(

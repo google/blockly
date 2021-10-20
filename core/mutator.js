@@ -111,7 +111,7 @@ Mutator.prototype.drawIcon_ = function(group) {
         'rx': '4',
         'ry': '4',
         'height': '16',
-        'width': '16'
+        'width': '16',
       },
       group);
   // Gear teeth.
@@ -124,7 +124,7 @@ Mutator.prototype.drawIcon_ = function(group) {
             '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
             '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
             '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
       },
       group);
   // Axle hole.
@@ -182,7 +182,7 @@ Mutator.prototype.createEditor_ = function() {
         'rtl': this.block_.RTL,
         'horizontalLayout': false,
         'renderer': this.block_.workspace.options.renderer,
-        'rendererOverrides': this.block_.workspace.options.rendererOverrides
+        'rendererOverrides': this.block_.workspace.options.rendererOverrides,
       }));
   workspaceOptions.toolboxPosition =
       this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;

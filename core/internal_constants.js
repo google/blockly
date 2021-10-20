@@ -144,7 +144,7 @@ exports.HSV_VALUE = HSV_VALUE;
 const SPRITE = {
   width: 96,
   height: 124,
-  url: 'sprites.png'
+  url: 'sprites.png',
 };
 exports.SPRITE = SPRITE;
 

@@ -30,7 +30,7 @@ const ConnectionType = {
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
   NEXT_STATEMENT: 3,
   // An up-facing block stack.  E.g. 'break out of loop'.
-  PREVIOUS_STATEMENT: 4
+  PREVIOUS_STATEMENT: 4,
 };
 
 exports.ConnectionType = ConnectionType;

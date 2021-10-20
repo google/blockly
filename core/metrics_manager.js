@@ -128,7 +128,7 @@ MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
-    position: this.workspace_.toolboxPosition
+    position: this.workspace_.toolboxPosition,
   };
 };
 
@@ -147,7 +147,7 @@ MetricsManager.prototype.getToolboxMetrics = function() {
   return {
     width: toolboxDimensions.width,
     height: toolboxDimensions.height,
-    position: this.workspace_.toolboxPosition
+    position: this.workspace_.toolboxPosition,
   };
 };
 
@@ -395,7 +395,7 @@ MetricsManager.prototype.getUiMetrics = function() {
   return {
     viewMetrics: this.getViewMetrics(),
     absoluteMetrics: this.getAbsoluteMetrics(),
-    toolboxMetrics: this.getToolboxMetrics()
+    toolboxMetrics: this.getToolboxMetrics(),
   };
 };
 
@@ -472,7 +472,7 @@ MetricsManager.prototype.getMetrics = function() {
     toolboxPosition: toolboxMetrics.position,
 
     flyoutWidth: flyoutMetrics.width,
-    flyoutHeight: flyoutMetrics.height
+    flyoutHeight: flyoutMetrics.height,
   };
 };
 

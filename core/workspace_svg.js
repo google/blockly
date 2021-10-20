@@ -1100,7 +1100,7 @@ WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'rendererOverrides': this.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {

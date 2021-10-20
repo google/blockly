@@ -109,7 +109,7 @@ BlockDragSurfaceSvg.prototype.createDom = function() {
         'xmlns:html': dom.HTML_NS,
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
-        'class': 'blocklyBlockDragSurface'
+        'class': 'blocklyBlockDragSurface',
       },
       this.container_);
   this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.SVG_);

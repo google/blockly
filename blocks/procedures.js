@@ -168,7 +168,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           // We don't need to serialize the name, but just in case we decide
           // to separate params from variables.
           'name': this.argumentVarModels_[i].name,
-          'id': this.argumentVarModels_[i].getId()
+          'id': this.argumentVarModels_[i].getId(),
         });
       }
     }
@@ -445,7 +445,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
   },
-  callType_: 'procedures_callnoreturn'
+  callType_: 'procedures_callnoreturn',
 };
 
 Blockly.Blocks['procedures_defreturn'] = {
@@ -505,7 +505,7 @@ Blockly.Blocks['procedures_defreturn'] = {
   updateVarName: Blockly.Blocks['procedures_defnoreturn'].updateVarName,
   displayRenamedVar_: Blockly.Blocks['procedures_defnoreturn'].displayRenamedVar_,
   customContextMenu: Blockly.Blocks['procedures_defnoreturn'].customContextMenu,
-  callType_: 'procedures_callreturn'
+  callType_: 'procedures_callreturn',
 };
 
 Blockly.Blocks['procedures_mutatorcontainer'] = {
@@ -634,7 +634,7 @@ Blockly.Blocks['procedures_mutatorarg'] = {
         outerWs.deleteVariableById(model.getId());
       }
     }
-  }
+  },
 };
 
 Blockly.Blocks['procedures_callnoreturn'] = {
@@ -1026,7 +1026,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     };
     options.push(option);
   },
-  defType_: 'procedures_defnoreturn'
+  defType_: 'procedures_defnoreturn',
 };
 
 Blockly.Blocks['procedures_callreturn'] = {
@@ -1062,7 +1062,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
   customContextMenu:
       Blockly.Blocks['procedures_callnoreturn'].customContextMenu,
-  defType_: 'procedures_defreturn'
+  defType_: 'procedures_defreturn',
 };
 
 Blockly.Blocks['procedures_ifreturn'] = {
@@ -1164,5 +1164,5 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * To add a new function type add this to your code:
    * Blockly.Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
    */
-  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn']
+  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn'],
 };

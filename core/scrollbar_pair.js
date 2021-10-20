@@ -64,7 +64,7 @@ const ScrollbarPair = function(
         Svg.RECT, {
           'height': Scrollbar.scrollbarThickness,
           'width': Scrollbar.scrollbarThickness,
-          'class': 'blocklyScrollbarBackground'
+          'class': 'blocklyScrollbarBackground',
         },
         null);
     dom.insertAfter(this.corner_, workspace.getBubbleCanvas());

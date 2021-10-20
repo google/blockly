@@ -37,14 +37,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
-      }
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+      },
     ],
     "output": null,
     "style": "variable_blocks",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableSetterGetter"]
+    "extensions": ["contextMenu_variableSetterGetter"],
   },
   // Block for variable setter.
   {
@@ -54,20 +54,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
       },
       {
         "type": "input_value",
-        "name": "VALUE"
-      }
+        "name": "VALUE",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "style": "variable_blocks",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableSetterGetter"]
-  }
+    "extensions": ["contextMenu_variableSetterGetter"],
+  },
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
@@ -113,19 +113,19 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
         var renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,
-          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
         };
         var name = this.getField('VAR').getText();
         var deleteOption = {
           text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
           enabled: true,
-          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
         };
         options.unshift(renameOption);
         options.unshift(deleteOption);
       }
     }
-  }
+  },
 };
 
 /**

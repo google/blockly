@@ -232,8 +232,8 @@ Toolbox.prototype.init = function() {
     capabilities: [
       ComponentManager.Capability.AUTOHIDEABLE,
       ComponentManager.Capability.DELETE_AREA,
-      ComponentManager.Capability.DRAG_TARGET
-    ]
+      ComponentManager.Capability.DRAG_TARGET,
+    ],
   });
 };
 
@@ -397,7 +397,7 @@ Toolbox.prototype.createFlyout_ = function() {
         'rendererOverrides': workspace.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   // Options takes in either 'end' or 'start'. This has already been parsed to
   // be either 0 or 1, so set it after.

@@ -299,7 +299,7 @@ const commentDeleteOption = function(comment) {
       eventUtils.setGroup(true);
       comment.dispose();
       eventUtils.setGroup(false);
-    }
+    },
   };
   return deleteOption;
 };
@@ -319,7 +319,7 @@ const commentDuplicateOption = function(comment) {
     enabled: true,
     callback: function() {
       clipboard.duplicate(comment);
-    }
+    },
   };
   return duplicateOption;
 };
@@ -382,7 +382,7 @@ const workspaceCommentOption = function(ws, e) {
   const wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
-    enabled: !userAgent.IE
+    enabled: !userAgent.IE,
   };
   wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {

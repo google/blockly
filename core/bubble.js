@@ -253,7 +253,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
   this.bubbleGroup_ = dom.createSvgElement(Svg.G, {}, null);
   let filter = {
     'filter': 'url(#' +
-        this.workspace_.getRenderer().getConstants().embossFilterId + ')'
+        this.workspace_.getRenderer().getConstants().embossFilterId + ')',
   };
   if (userAgent.JAVA_FX) {
     // Multiple reports that JavaFX can't handle filters.
@@ -268,7 +268,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
         'x': 0,
         'y': 0,
         'rx': Bubble.BORDER_WIDTH,
-        'ry': Bubble.BORDER_WIDTH
+        'ry': Bubble.BORDER_WIDTH,
       },
       bubbleEmboss);
   if (hasResize) {
@@ -287,7 +287,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
           'x1': resizeSize / 3,
           'y1': resizeSize - 1,
           'x2': resizeSize - 1,
-          'y2': resizeSize / 3
+          'y2': resizeSize / 3,
         },
         this.resizeGroup_);
     dom.createSvgElement(
@@ -296,7 +296,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
           'x1': resizeSize * 2 / 3,
           'y1': resizeSize - 1,
           'x2': resizeSize - 1,
-          'y2': resizeSize * 2 / 3
+          'y2': resizeSize * 2 / 3,
         },
         this.resizeGroup_);
   } else {
@@ -473,7 +473,7 @@ Bubble.prototype.layoutBubble_ = function() {
   const topPosition = {
     x: optimalLeft,
     y: -this.height_ -
-        this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT
+        this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT,
   };
   const startPosition = {x: -this.width_ - 30, y: optimalTop};
   const endPosition = {x: bbox.width, y: optimalTop};
@@ -531,12 +531,12 @@ Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
   const bubbleMin = {
     x: this.workspace_.RTL ? (this.anchorXY_.x - relativeMin.x - this.width_) :
                              (relativeMin.x + this.anchorXY_.x),
-    y: relativeMin.y + this.anchorXY_.y
+    y: relativeMin.y + this.anchorXY_.y,
   };
   // The position of the bottom-right corner of the bubble in workspace units.
   const bubbleMax = {
     x: bubbleMin.x + this.width_,
-    y: bubbleMin.y + this.height_
+    y: bubbleMin.y + this.height_,
   };
 
   // We could adjust these values to account for the scrollbars, but the
@@ -549,7 +549,7 @@ Bubble.prototype.getOverlap_ = function(relativeMin, viewMetrics) {
   // The position of the bottom-right corner of the workspace.
   const workspaceMax = {
     x: viewMetrics.left + viewMetrics.width,
-    y: viewMetrics.top + viewMetrics.height
+    y: viewMetrics.top + viewMetrics.height,
   };
 
   const overlapWidth = Math.min(bubbleMax.x, workspaceMax.x) -
@@ -896,7 +896,7 @@ Bubble.textToDom = function(text) {
   const paragraph = dom.createSvgElement(
       Svg.TEXT, {
         'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-        'y': Bubble.BORDER_WIDTH
+        'y': Bubble.BORDER_WIDTH,
       },
       null);
   const lines = text.split('\n');

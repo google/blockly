@@ -30,7 +30,7 @@ let defaultBlockStyles = {
   'text_blocks': {'colourPrimary': '160'},
   'variable_blocks': {'colourPrimary': '330'},
   'variable_dynamic_blocks': {'colourPrimary': '310'},
-  'hat_blocks': {'colourPrimary': '330', 'hat': 'cap'}
+  'hat_blocks': {'colourPrimary': '330', 'hat': 'cap'},
 };
 
 let categoryStyles = {
@@ -42,7 +42,7 @@ let categoryStyles = {
   'procedure_category': {'colour': '290'},
   'text_category': {'colour': '160'},
   'variable_category': {'colour': '330'},
-  'variable_dynamic_category': {'colour': '310'}
+  'variable_dynamic_category': {'colour': '310'},
 };
 
 /**

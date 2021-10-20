@@ -383,7 +383,7 @@ WorkspaceComment.parseAttributes = function(xml) {
     // @type {number}
     y: parseInt(xml.getAttribute('y'), 10),
     // @type {string}
-    content: xml.textContent
+    content: xml.textContent,
   };
 };
 

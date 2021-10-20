@@ -105,7 +105,7 @@ const Trashcan = function(workspace) {
         'rendererOverrides': this.workspace_.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
@@ -297,7 +297,7 @@ Trashcan.prototype.createDom = function() {
         'x': -SPRITE_LEFT,
         'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
       },
       this.svgGroup_);
   body.setAttributeNS(
@@ -313,7 +313,7 @@ Trashcan.prototype.createDom = function() {
         'x': -SPRITE_LEFT,
         'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
       },
       this.svgGroup_);
   this.svgLid_.setAttributeNS(
@@ -350,8 +350,8 @@ Trashcan.prototype.init = function() {
       ComponentManager.Capability.AUTOHIDEABLE,
       ComponentManager.Capability.DELETE_AREA,
       ComponentManager.Capability.DRAG_TARGET,
-      ComponentManager.Capability.POSITIONABLE
-    ]
+      ComponentManager.Capability.POSITIONABLE,
+    ],
   });
   this.initialized_ = true;
   this.setLidOpen(false);

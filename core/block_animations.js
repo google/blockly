@@ -114,7 +114,7 @@ const connectionUiEffect = function(block) {
         'r': 0,
         'fill': 'none',
         'stroke': '#888',
-        'stroke-width': 10
+        'stroke-width': 10,
       },
       workspace.getParentSvg());
   // Start the animation.

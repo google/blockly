@@ -60,13 +60,13 @@ if (globalThis['PointerEvent']) {
     'mouseover': ['pointerover'],
     'mouseup': ['pointerup', 'pointercancel'],
     'touchend': ['pointerup'],
-    'touchcancel': ['pointercancel']
+    'touchcancel': ['pointercancel'],
   };
 } else if (TOUCH_ENABLED) {
   TOUCH_MAP = {
     'mousedown': ['touchstart'],
     'mousemove': ['touchmove'],
-    'mouseup': ['touchend', 'touchcancel']
+    'mouseup': ['touchend', 'touchcancel'],
   };
 }
 exports.TOUCH_MAP = TOUCH_MAP;
@@ -269,7 +269,7 @@ const splitEventByTouches = function(e) {
         },
         preventDefault: function() {
           e.preventDefault();
-        }
+        },
       };
       events[i] = newEvent;
     }

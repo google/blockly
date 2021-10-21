@@ -449,8 +449,8 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
-    var divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
+    const container = Blockly.utils.xml.createElement('mutation');
+    const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
   },
@@ -461,10 +461,10 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
-    var divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
+    const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
     this.updateShape_(divisorInput);
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.
@@ -478,7 +478,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    */
   updateShape_: function(divisorInput) {
     // Add or remove a Value Input.
-    var inputExists = this.getInput('DIVISOR');
+    const inputExists = this.getInput('DIVISOR');
     if (divisorInput) {
       if (!inputExists) {
         this.appendValueInput('DIVISOR')
@@ -499,7 +499,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(function(option) {
-    var divisorInput = (option === 'DIVISIBLE_BY');
+    const divisorInput = (option === 'DIVISIBLE_BY');
     this.getSourceBlock().updateShape_(divisorInput);
   });
 };
@@ -542,7 +542,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
+    const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
   },
@@ -555,7 +555,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.

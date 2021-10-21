@@ -419,23 +419,24 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   saveConnections: function(containerBlock) {
     let clauseBlock = containerBlock.nextConnection.targetBlock();
     let i = 1;
-    let inputDo;
     while (clauseBlock) {
       switch (clauseBlock.type) {
-        case 'controls_if_elseif':
+        case 'controls_if_elseif': {
           const inputIf = this.getInput('IF' + i);
-          inputDo = this.getInput('DO' + i);
+          const inputDo = this.getInput('DO' + i);
           clauseBlock.valueConnection_ =
               inputIf && inputIf.connection.targetConnection;
           clauseBlock.statementConnection_ =
               inputDo && inputDo.connection.targetConnection;
           i++;
           break;
-        case 'controls_if_else':
-          inputDo = this.getInput('ELSE');
+        }
+        case 'controls_if_else': {
+          const inputDo = this.getInput('ELSE');
           clauseBlock.statementConnection_ =
               inputDo && inputDo.connection.targetConnection;
           break;
+        }
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }

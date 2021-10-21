@@ -785,31 +785,29 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    */
   updateShape_: function() {
     for (let i = 0; i < this.arguments_.length; i++) {
-      let field = this.getField('ARGNAME' + i);
-      if (field) {
+      const argField = this.getField('ARGNAME' + i);
+      if (argField) {
         // Ensure argument name is up to date.
         // The argument name field is deterministic based on the mutation,
         // no need to fire a change event.
         Blockly.Events.disable();
         try {
-          field.setValue(this.arguments_[i]);
+          argField.setValue(this.arguments_[i]);
         } finally {
           Blockly.Events.enable();
         }
       } else {
         // Add new input.
-        field = new Blockly.FieldLabel(this.arguments_[i]);
+        const newField = new Blockly.FieldLabel(this.arguments_[i]);
         const input = this.appendValueInput('ARG' + i)
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(field, 'ARGNAME' + i);
+                          .setAlign(Blockly.ALIGN_RIGHT)
+                          .appendField(newField, 'ARGNAME' + i);
         input.init();
       }
     }
     // Remove deleted inputs.
-    let i = this.itemCount_;
-    while (this.getInput('ARG' + i)) {
+    for (let i = this.itemCount_; this.getInput('ARG' + i); i++) {
       this.removeInput('ARG' + i);
-      i++;
     }
     // Add 'with:' if there are parameters, remove otherwise.
     const topRow = this.getInput('TOPROW');

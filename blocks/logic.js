@@ -456,13 +456,11 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     if (this.getInput('ELSE')) {
       elseStatementConnection = this.getInput('ELSE').connection.targetConnection;
     }
-    let i = 1;
-    while (this.getInput('IF' + i)) {
+    for (let i = 1; this.getInput('IF' + i); i++) {
       const inputIf = this.getInput('IF' + i);
       const inputDo = this.getInput('DO' + i);
       valueConnections.push(inputIf.connection.targetConnection);
       statementConnections.push(inputDo.connection.targetConnection);
-      i++;
     }
     this.updateShape_();
     this.reconnectChildBlocks_(valueConnections, statementConnections,
@@ -478,14 +476,12 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     if (this.getInput('ELSE')) {
       this.removeInput('ELSE');
     }
-    let i = 1;
-    while (this.getInput('IF' + i)) {
+    for (let i = 1; this.getInput('IF' + i); i++) {
       this.removeInput('IF' + i);
       this.removeInput('DO' + i);
-      i++;
     }
     // Rebuild block.
-    for (i = 1; i <= this.elseifCount_; i++) {
+    for (let i = 1; i <= this.elseifCount_; i++) {
       this.appendValueInput('IF' + i)
           .setCheck('Boolean')
           .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSEIF']);

@@ -780,13 +780,10 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    */
   saveConnections: function(containerBlock) {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
-    let i = 0;
-    while (itemBlock) {
+    for (let i = 0; itemBlock = itemBlock.nextConnection &&
+            itemBlock.nextConnection.targetBlock(); i++) {
       const input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      i++;
-      itemBlock = itemBlock.nextConnection &&
-          itemBlock.nextConnection.targetBlock();
     }
   },
   /**
@@ -813,10 +810,8 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
       }
     }
     // Remove deleted inputs.
-    let i = this.itemCount_;
-    while (this.getInput('ADD' + i)) {
+    for (let i = this.itemCount_; this.getInput('ADD' + i); i++) {
       this.removeInput('ADD' + i);
-      i++;
     }
   }
 };

@@ -94,7 +94,7 @@ const Options = function(options) {
         toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
   } else {
     toolboxPosition = (toolboxAtStart === rtl) ? toolbox.Position.RIGHT :
-                                                toolbox.Position.LEFT;
+                                                 toolbox.Position.LEFT;
   }
 
   let hasCss = options['css'];

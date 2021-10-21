@@ -73,6 +73,7 @@ CommentDelete.prototype.run = function(forward) {
   CommentBase.CommentCreateDeleteHelper(this, !forward);
 };
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
+registry.register(
+    registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
 
 exports.CommentDelete = CommentDelete;

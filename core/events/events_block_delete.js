@@ -59,8 +59,8 @@ const BlockDelete = function(opt_block) {
    * JSON representation of the block that was just deleted.
    * @type {!blocks.State}
    */
-  this.oldJson = /** @type {!blocks.State} */ (blocks.save(
-      opt_block, {addCoordinates: true}));
+  this.oldJson = /** @type {!blocks.State} */ (
+      blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockDelete, BlockBase);
 
@@ -95,7 +95,7 @@ BlockDelete.prototype.fromJson = function(json) {
   this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   this.wasShadow =
-    json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
+      json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
   this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];

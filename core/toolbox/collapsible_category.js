@@ -118,7 +118,8 @@ CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
       // Separators can exist as either a flyout item or a toolbox item so
       // decide where it goes based on the type of the previous item.
       if (!registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
-          (itemDef['kind'].toLowerCase() === ToolboxSeparator.registrationName &&
+          (itemDef['kind'].toLowerCase() ===
+               ToolboxSeparator.registrationName &&
            prevIsFlyoutItem)) {
         const flyoutItem = /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);

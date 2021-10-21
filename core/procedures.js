@@ -328,7 +328,8 @@ exports.mutatorOpenListener = mutatorOpenListener;
  * @param {!Abstract} e The event that triggered this listener.
  */
 const mutatorChangeListener = function(e) {
-  if (e.type !== eventUtils.BLOCK_CREATE && e.type !== eventUtils.BLOCK_DELETE &&
+  if (e.type !== eventUtils.BLOCK_CREATE &&
+      e.type !== eventUtils.BLOCK_DELETE &&
       e.type !== eventUtils.BLOCK_CHANGE) {
     return;
   }

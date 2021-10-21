@@ -784,7 +784,8 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
   const width = this.JAGGED_TEETH_WIDTH;
 
   const mainPath = svgPaths.line([
-    svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
+    svgPaths.point(width, height / 4),
+    svgPaths.point(-width * 2, height / 2),
     svgPaths.point(width, height / 4),
   ]);
   return {height: height, width: width, path: mainPath};
@@ -800,7 +801,8 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath = svgPaths.curve('c', [
-    svgPaths.point(30, -height), svgPaths.point(70, -height),
+    svgPaths.point(30, -height),
+    svgPaths.point(70, -height),
     svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
@@ -837,7 +839,8 @@ ConstantProvider.prototype.makePuzzleTab = function() {
                'c',
                [
                  svgPaths.point(0, forward * control1Y),
-                 svgPaths.point(-width, back * control2Y), endPoint1,
+                 svgPaths.point(-width, back * control2Y),
+                 endPoint1,
                ]) +
         svgPaths.curve(
             's', [svgPaths.point(width, back * control3Y), endPoint2]);

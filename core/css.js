@@ -39,8 +39,8 @@ const register = function(cssContent) {
 
   if (Array.isArray(cssContent)) {
     deprecation.warn(
-      'Registering CSS by passing an array of strings', 'September 2021',
-      'September 2022', 'css.register passing a multiline string');
+        'Registering CSS by passing an array of strings', 'September 2021',
+        'September 2022', 'css.register passing a multiline string');
     content += ('\n' + cssContent.join('\n'));
   } else {
     // Add new cssContent in the global content.

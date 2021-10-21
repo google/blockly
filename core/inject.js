@@ -343,19 +343,22 @@ const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [
-        pathToMedia + 'click.mp3', pathToMedia + 'click.wav',
+        pathToMedia + 'click.mp3',
+        pathToMedia + 'click.wav',
         pathToMedia + 'click.ogg',
       ],
       'click');
   audioMgr.load(
       [
-        pathToMedia + 'disconnect.wav', pathToMedia + 'disconnect.mp3',
+        pathToMedia + 'disconnect.wav',
+        pathToMedia + 'disconnect.mp3',
         pathToMedia + 'disconnect.ogg',
       ],
       'disconnect');
   audioMgr.load(
       [
-        pathToMedia + 'delete.mp3', pathToMedia + 'delete.ogg',
+        pathToMedia + 'delete.mp3',
+        pathToMedia + 'delete.ogg',
         pathToMedia + 'delete.wav',
       ],
       'delete');

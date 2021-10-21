@@ -1123,7 +1123,8 @@ Block.prototype.getVarModels = function() {
 Block.prototype.updateVarName = function(variable) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.referencesVariables() && variable.getId() === field.getValue()) {
+      if (field.referencesVariables() &&
+          variable.getId() === field.getValue()) {
         field.refreshVariableName();
       }
     }

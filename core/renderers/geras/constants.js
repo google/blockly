@@ -64,8 +64,7 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
     selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none;',
+    'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
     '}',
     /* eslint-enable indent */
   ]);

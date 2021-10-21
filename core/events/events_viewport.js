@@ -100,6 +100,7 @@ ViewportChange.prototype.fromJson = function(json) {
   this.oldScale = json['oldScale'];
 };
 
-registry.register(registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
+registry.register(
+    registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
 
 exports.ViewportChange = ViewportChange;

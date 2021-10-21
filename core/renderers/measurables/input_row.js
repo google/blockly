@@ -59,7 +59,8 @@ InputRow.prototype.measure = function() {
     if (Types.isInput(elem)) {
       if (Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
+      } else if (
+          Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
         connectedBlockWidths +=
             (elem.connectedBlockWidth - elem.connectionWidth);
       }

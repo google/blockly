@@ -806,6 +806,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       }
     }
     // Remove deleted inputs.
+    let i = this.itemCount_;
     while (this.getInput('ARG' + i)) {
       this.removeInput('ARG' + i);
       i++;

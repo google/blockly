@@ -250,6 +250,7 @@ Blockly.Blocks['lists_create_with'] = {
       }
     }
     // Remove deleted inputs.
+    let i = this.itemCount_;
     while (this.getInput('ADD' + i)) {
       this.removeInput('ADD' + i);
       i++;

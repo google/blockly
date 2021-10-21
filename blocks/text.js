@@ -813,6 +813,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
       }
     }
     // Remove deleted inputs.
+    let i = this.itemCount_;
     while (this.getInput('ADD' + i)) {
       this.removeInput('ADD' + i);
       i++;

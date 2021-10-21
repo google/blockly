@@ -95,7 +95,7 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   checkHasMutatorProperties(errorPrefix, mixinObj);
-  var hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
+  const hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
   if (opt_helperFn && (typeof opt_helperFn !== 'function')) {
     throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
@@ -261,8 +261,8 @@ const checkMutatorDialog = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkHasFunctionPair = function(object, name1, name2, errorPrefix) {
-  var has1 = object[name1] !== undefined;
-  var has2 = object[name2] !== undefined;
+  const has1 = object[name1] !== undefined;
+  const has2 = object[name2] !== undefined;
 
   if (has1 && has2) {
     if (typeof object[name1] !== 'function') {
@@ -285,8 +285,8 @@ const checkHasFunctionPair = function(object, name1, name2, errorPrefix) {
  * @param {!Object} object The object to inspect.
  */
 const checkHasMutatorProperties = function(errorPrefix, object) {
-  var hasXmlHooks = checkXmlHooks(object, errorPrefix);
-  var hasJsonHooks = checkJsonHooks(object, errorPrefix);
+  const hasXmlHooks = checkXmlHooks(object, errorPrefix);
+  const hasJsonHooks = checkJsonHooks(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
     throw Error(
         errorPrefix +

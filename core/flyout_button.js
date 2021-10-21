@@ -148,7 +148,7 @@ FlyoutButton.prototype.createDom = function() {
           'rx': 4,
           'ry': 4,
           'x': 1,
-          'y': 1
+          'y': 1,
         },
         this.svgGroup_);
   }
@@ -158,7 +158,7 @@ FlyoutButton.prototype.createDom = function() {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
                                  'blocklyFlyoutButtonBackground',
         'rx': 4,
-        'ry': 4
+        'ry': 4,
       },
       this.svgGroup_);
 
@@ -167,7 +167,7 @@ FlyoutButton.prototype.createDom = function() {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
         'y': 0,
-        'text-anchor': 'middle'
+        'text-anchor': 'middle',
       },
       this.svgGroup_);
   let text = utils.replaceMessageReferences(this.text_);

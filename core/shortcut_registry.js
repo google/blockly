@@ -57,7 +57,7 @@ ShortcutRegistry.modifierKeys = {
   'Shift': KeyCodes.SHIFT,
   'Control': KeyCodes.CTRL,
   'Alt': KeyCodes.ALT,
-  'Meta': KeyCodes.META
+  'Meta': KeyCodes.META,
 };
 
 /**

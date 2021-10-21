@@ -206,7 +206,7 @@ ZoomControls.prototype.init = function() {
   this.workspace_.getComponentManager().addComponent({
     component: this,
     weight: 2,
-    capabilities: [ComponentManager.Capability.POSITIONABLE]
+    capabilities: [ComponentManager.Capability.POSITIONABLE],
   });
   this.initialized_ = true;
 };
@@ -340,7 +340,7 @@ ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
         'height': internalConstants.SPRITE.height,
         'x': -64,
         'y': -92,
-        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
       },
       this.zoomOutGroup_);
   zoomoutSvg.setAttributeNS(
@@ -386,7 +386,7 @@ ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
         'height': internalConstants.SPRITE.height,
         'x': -32,
         'y': -92,
-        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
       },
       this.zoomInGroup_);
   zoominSvg.setAttributeNS(
@@ -444,7 +444,7 @@ ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
         'width': internalConstants.SPRITE.width,
         'height': internalConstants.SPRITE.height,
         'y': -92,
-        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
       },
       this.zoomResetGroup_);
   zoomresetSvg.setAttributeNS(

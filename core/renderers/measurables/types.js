@@ -52,7 +52,7 @@ const Types = {
   ROW: 1 << 20,                  // Row.
   TOP_ROW: 1 << 21,              // Top Row.
   BOTTOM_ROW: 1 << 22,           // Bottom Row.
-  INPUT_ROW: 1 << 23             // Input Row.
+  INPUT_ROW: 1 << 23,             // Input Row.
 };
 
 /**

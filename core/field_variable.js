@@ -472,7 +472,7 @@ FieldVariable.dropdownCreate = function() {
   if (Msg['DELETE_VARIABLE']) {
     options.push([
       Msg['DELETE_VARIABLE'].replace('%1', name),
-      internalConstants.DELETE_VARIABLE_ID
+      internalConstants.DELETE_VARIABLE_ID,
     ]);
   }
 

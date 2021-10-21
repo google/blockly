@@ -223,7 +223,7 @@ PathObject.prototype.getOutlinePath_ = function(name) {
           'class': 'blocklyOutlinePath',
           // IE doesn't like paths without the data definition, set empty
           // default
-          'd': ''
+          'd': '',
         },
         this.svgRoot);
   }

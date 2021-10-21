@@ -1833,7 +1833,7 @@ Block.prototype.inputFromJson_ = function(element, warningPrefix) {
     'LEFT': constants.ALIGN.LEFT,
     'RIGHT': constants.ALIGN.RIGHT,
     'CENTRE': constants.ALIGN.CENTRE,
-    'CENTER': constants.ALIGN.CENTRE
+    'CENTER': constants.ALIGN.CENTRE,
   };
 
   let input = null;

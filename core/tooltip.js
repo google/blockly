@@ -73,8 +73,8 @@ Object.defineProperties(exports, {
           'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
           'Blockly.Tooltip.isVisible()');
       return isVisible();
-    }
-  }
+    },
+  },
 });
 
 /**
@@ -189,8 +189,8 @@ Object.defineProperties(exports, {
           'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
           'Blockly.Tooltip.getDiv()');
       return getDiv();
-    }
-  }
+    },
+  },
 });
 
 /**

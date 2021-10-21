@@ -216,7 +216,7 @@ const getBorderBox = function(element) {
     top: parseFloat(top),
     right: parseFloat(right),
     bottom: parseFloat(bottom),
-    left: parseFloat(left)
+    left: parseFloat(left),
   };
 };
 exports.getBorderBox = getBorderBox;

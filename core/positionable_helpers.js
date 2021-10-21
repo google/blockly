@@ -34,7 +34,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  */
 const verticalPosition = {
   TOP: 0,
-  BOTTOM: 1
+  BOTTOM: 1,
 };
 exports.verticalPosition = verticalPosition;
 
@@ -46,7 +46,7 @@ exports.verticalPosition = verticalPosition;
  */
 const horizontalPosition = {
   LEFT: 0,
-  RIGHT: 1
+  RIGHT: 1,
 };
 exports.horizontalPosition = horizontalPosition;
 
@@ -70,7 +70,7 @@ exports.Position = Position;
  */
 const bumpDirection = {
   UP: 0,
-  DOWN: 1
+  DOWN: 1,
 };
 exports.bumpDirection = bumpDirection;
 

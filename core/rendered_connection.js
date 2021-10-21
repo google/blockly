@@ -99,7 +99,7 @@ object.inherits(RenderedConnection, Connection);
 RenderedConnection.TrackedState = {
   WILL_TRACK: -1,
   UNTRACKED: 0,
-  TRACKED: 1
+  TRACKED: 1,
 };
 
 /**
@@ -320,7 +320,7 @@ RenderedConnection.prototype.highlight = function() {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
         transform: 'translate(' + x + ',' + y + ')' +
-            (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')
+            (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
       this.sourceBlock_.getSvgRoot());
 };

@@ -206,7 +206,7 @@ Object.defineProperties(exports, {
           'Blockly.alert', 'September 2021', 'September 2022',
           'Blockly.dialog.alert()');
       return dialog.alert;
-    }
+    },
   },
   /**
    * Wrapper to window.confirm() that app developers may override to
@@ -227,7 +227,7 @@ Object.defineProperties(exports, {
           'Blockly.confirm', 'September 2021', 'September 2022',
           'Blockly.dialog.confirm()');
       return dialog.confirm;
-    }
+    },
   },
   /**
    * The main workspace most recently used.
@@ -249,7 +249,7 @@ Object.defineProperties(exports, {
           'Blockly.mainWorkspace', 'September 2021', 'September 2022',
           'Blockly.getMainWorkspace()');
       return common.getMainWorkspace();
-    }
+    },
   },
   /**
    * Wrapper to window.prompt() that app developers may override to
@@ -273,7 +273,7 @@ Object.defineProperties(exports, {
           'Blockly.prompt', 'September 2021', 'September 2022',
           'Blockly.dialog.prompt()');
       return dialog.prompt;
-    }
+    },
   },
   /**
    * Currently selected block.
@@ -295,7 +295,7 @@ Object.defineProperties(exports, {
           'Blockly.selected', 'September 2021', 'September 2022',
           'Blockly.common.setSelected()');
       common.setSelected(newSelection);
-    }
+    },
   },
 });
 

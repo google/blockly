@@ -166,7 +166,7 @@ const KeyCodes = {
   // they're all using Dell Inspiron laptops, so we suspect that this
   // indicates a hardware/bios problem.
   // http://en.community.dell.com/support-forums/laptop/f/3518/p/19285957/19523128.aspx
-  PHANTOM: 255
+  PHANTOM: 255,
 };
 
 exports.KeyCodes = KeyCodes;

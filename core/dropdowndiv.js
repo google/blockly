@@ -425,7 +425,7 @@ internal.getBoundsInfo = function() {
     top: boundPosition.y,
     bottom: boundPosition.y + boundSize.height,
     width: boundSize.width,
-    height: boundSize.height
+    height: boundSize.height,
   };
 };
 
@@ -495,7 +495,7 @@ const getPositionBelowMetrics = function(
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
     arrowAtTop: true,
-    arrowVisible: true
+    arrowVisible: true,
   };
 };
 
@@ -530,7 +530,7 @@ const getPositionAboveMetrics = function(
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
     arrowAtTop: false,
-    arrowVisible: true
+    arrowVisible: true,
   };
 };
 
@@ -557,7 +557,7 @@ const getPositionTopOfPageMetrics = function(sourceX, boundsInfo, divSize) {
     arrowAtTop: null,
     arrowX: null,
     arrowY: null,
-    arrowVisible: false
+    arrowVisible: false,
   };
 };
 

@@ -303,7 +303,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
         'version': '1.1',
         'height': (FieldAngle.HALF * 2) + 'px',
         'width': (FieldAngle.HALF * 2) + 'px',
-        'style': 'touch-action: none'
+        'style': 'touch-action: none',
       },
       null);
   const circle = dom.createSvgElement(
@@ -311,7 +311,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
         'cx': FieldAngle.HALF,
         'cy': FieldAngle.HALF,
         'r': FieldAngle.RADIUS,
-        'class': 'blocklyAngleCircle'
+        'class': 'blocklyAngleCircle',
       },
       svg);
   this.gauge_ =
@@ -320,7 +320,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
       Svg.LINE, {
         'x1': FieldAngle.HALF,
         'y1': FieldAngle.HALF,
-        'class': 'blocklyAngleLine'
+        'class': 'blocklyAngleLine',
       },
       svg);
   // Draw markers around the edge.
@@ -334,7 +334,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
           'y2': FieldAngle.HALF,
           'class': 'blocklyAngleMarks',
           'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
-              FieldAngle.HALF + ')'
+              FieldAngle.HALF + ')',
         },
         svg);
   }

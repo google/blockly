@@ -119,7 +119,7 @@ const WorkspaceCommentSvg = function(
     'x': 0,
     'y': 0,
     'rx': BORDER_RADIUS,
-    'ry': BORDER_RADIUS
+    'ry': BORDER_RADIUS,
   });
   this.svgGroup_.appendChild(this.svgRect_);
 
@@ -673,7 +673,7 @@ WorkspaceCommentSvg.prototype.toCopyData = function() {
   return {
     saveInfo: this.toXmlWithXY(),
     source: this.workspace,
-    typeCounts: null
+    typeCounts: null,
   };
 };
 
@@ -710,7 +710,7 @@ WorkspaceCommentSvg.prototype.render = function() {
     'x': 0,
     'y': 0,
     'rx': BORDER_RADIUS,
-    'ry': BORDER_RADIUS
+    'ry': BORDER_RADIUS,
   });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
@@ -762,7 +762,7 @@ WorkspaceCommentSvg.prototype.createEditor_ = function() {
       Svg.FOREIGNOBJECT, {
         'x': 0,
         'y': WorkspaceCommentSvg.TOP_OFFSET,
-        'class': 'blocklyCommentForeignObject'
+        'class': 'blocklyCommentForeignObject',
       },
       null);
   const body = document.createElementNS(dom.HTML_NS, 'body');
@@ -807,7 +807,7 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
         'x1': RESIZE_SIZE / 3,
         'y1': RESIZE_SIZE - 1,
         'x2': RESIZE_SIZE - 1,
-        'y2': RESIZE_SIZE / 3
+        'y2': RESIZE_SIZE / 3,
       },
       this.resizeGroup_);
   dom.createSvgElement(
@@ -816,7 +816,7 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
         'x1': RESIZE_SIZE * 2 / 3,
         'y1': RESIZE_SIZE - 1,
         'x2': RESIZE_SIZE - 1,
-        'y2': RESIZE_SIZE * 2 / 3
+        'y2': RESIZE_SIZE * 2 / 3,
       },
       this.resizeGroup_);
 };
@@ -840,7 +840,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'x2': '10',
         'y2': '5',
         'stroke': '#fff',
-        'stroke-width': '2'
+        'stroke-width': '2',
       },
       this.deleteGroup_);
   dom.createSvgElement(
@@ -850,7 +850,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'x2': '10',
         'y2': '10',
         'stroke': '#fff',
-        'stroke-width': '2'
+        'stroke-width': '2',
       },
       this.deleteGroup_);
 };

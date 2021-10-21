@@ -40,14 +40,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "BOOL",
         "options": [
           ["%{BKY_LOGIC_BOOLEAN_TRUE}", "TRUE"],
-          ["%{BKY_LOGIC_BOOLEAN_FALSE}", "FALSE"]
-        ]
-      }
+          ["%{BKY_LOGIC_BOOLEAN_FALSE}", "FALSE"],
+        ],
+      },
     ],
     "output": "Boolean",
     "style": "logic_blocks",
     "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}"
+    "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}",
   },
   // Block for if/elseif/else condition.
   {
@@ -57,15 +57,15 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "IF0",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
     "args1": [
       {
         "type": "input_statement",
-        "name": "DO0"
-      }
+        "name": "DO0",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
@@ -73,7 +73,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
     "suppressPrefixSuffix": true,
     "mutator": "controls_if_mutator",
-    "extensions": ["controls_if_tooltip"]
+    "extensions": ["controls_if_tooltip"],
   },
   // If/else block that does not use a mutator.
   {
@@ -83,22 +83,22 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "IF0",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
     "args1": [
       {
         "type": "input_statement",
-        "name": "DO0"
-      }
+        "name": "DO0",
+      },
     ],
     "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
     "args2": [
       {
         "type": "input_statement",
-        "name": "ELSE"
-      }
+        "name": "ELSE",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
@@ -106,7 +106,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
     "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
     "suppressPrefixSuffix": true,
-    "extensions": ["controls_if_tooltip"]
+    "extensions": ["controls_if_tooltip"],
   },
   // Block for comparison operator.
   {
@@ -115,7 +115,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": [
       {
         "type": "input_value",
-        "name": "A"
+        "name": "A",
       },
       {
         "type": "field_dropdown",
@@ -126,19 +126,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["\u200F<", "LT"],
           ["\u200F\u2264", "LTE"],
           ["\u200F>", "GT"],
-          ["\u200F\u2265", "GTE"]
-        ]
+          ["\u200F\u2265", "GTE"],
+        ],
       },
       {
         "type": "input_value",
-        "name": "B"
-      }
+        "name": "B",
+      },
     ],
     "inputsInline": true,
     "output": "Boolean",
     "style": "logic_blocks",
     "helpUrl": "%{BKY_LOGIC_COMPARE_HELPURL}",
-    "extensions": ["logic_compare", "logic_op_tooltip"]
+    "extensions": ["logic_compare", "logic_op_tooltip"],
   },
   // Block for logical operations: 'and', 'or'.
   {
@@ -148,27 +148,27 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "A",
-        "check": "Boolean"
+        "check": "Boolean",
       },
       {
         "type": "field_dropdown",
         "name": "OP",
         "options": [
           ["%{BKY_LOGIC_OPERATION_AND}", "AND"],
-          ["%{BKY_LOGIC_OPERATION_OR}", "OR"]
-        ]
+          ["%{BKY_LOGIC_OPERATION_OR}", "OR"],
+        ],
       },
       {
         "type": "input_value",
         "name": "B",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "inputsInline": true,
     "output": "Boolean",
     "style": "logic_blocks",
     "helpUrl": "%{BKY_LOGIC_OPERATION_HELPURL}",
-    "extensions": ["logic_op_tooltip"]
+    "extensions": ["logic_op_tooltip"],
   },
   // Block for negation.
   {
@@ -178,13 +178,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "BOOL",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "output": "Boolean",
     "style": "logic_blocks",
     "tooltip": "%{BKY_LOGIC_NEGATE_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_NEGATE_HELPURL}"
+    "helpUrl": "%{BKY_LOGIC_NEGATE_HELPURL}",
   },
   // Block for null data type.
   {
@@ -193,7 +193,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": null,
     "style": "logic_blocks",
     "tooltip": "%{BKY_LOGIC_NULL_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}"
+    "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}",
   },
   // Block for ternary operator.
   {
@@ -203,29 +203,29 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "IF",
-        "check": "Boolean"
-      }
+        "check": "Boolean",
+      },
     ],
     "message1": "%{BKY_LOGIC_TERNARY_IF_TRUE} %1",
     "args1": [
       {
         "type": "input_value",
-        "name": "THEN"
-      }
+        "name": "THEN",
+      },
     ],
     "message2": "%{BKY_LOGIC_TERNARY_IF_FALSE} %1",
     "args2": [
       {
         "type": "input_value",
-        "name": "ELSE"
-      }
+        "name": "ELSE",
+      },
     ],
     "output": null,
     "style": "logic_blocks",
     "tooltip": "%{BKY_LOGIC_TERNARY_TOOLTIP}",
     "helpUrl": "%{BKY_LOGIC_TERNARY_HELPURL}",
-    "extensions": ["logic_ternary"]
-  }
+    "extensions": ["logic_ternary"],
+  },
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
 Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
@@ -236,7 +236,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
     "nextStatement": null,
     "enableContextMenu": false,
     "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}"
+    "tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}",
   },
   // Block representing the else-if statement in the controls_if mutator.
   {
@@ -246,7 +246,7 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
     "nextStatement": null,
     "enableContextMenu": false,
     "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}"
+    "tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}",
   },
   // Block representing the else statement in the controls_if mutator.
   {
@@ -255,8 +255,8 @@ Blockly.defineBlocksWithJsonArray([ // Mutator blocks. Do not extract.
     "previousStatement": null,
     "enableContextMenu": false,
     "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}"
-  }
+    "tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}",
+  },
 ]);
 
 /**
@@ -277,7 +277,7 @@ Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
 
   // logic_operation
   'AND': '%{BKY_LOGIC_OPERATION_TOOLTIP_AND}',
-  'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}'
+  'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}',
 };
 
 Blockly.Extensions.register('logic_op_tooltip',
@@ -512,7 +512,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
       Blockly.Mutator.reconnect(statementConnections[i], this, 'DO' + i);
     }
     Blockly.Mutator.reconnect(elseStatementConnection, this, 'ELSE');
-  }
+  },
 };
 
 Blockly.Extensions.registerMutator('controls_if_mutator',
@@ -593,7 +593,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
     }
     this.prevBlocks_[0] = this.getInputTargetBlock('A');
     this.prevBlocks_[1] = this.getInputTargetBlock('B');
-  }
+  },
 };
 
 /**
@@ -652,7 +652,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
       }
     }
     this.prevParentConnection_ = parentConnection;
-  }
+  },
 };
 
 Blockly.Extensions.registerMixin('logic_ternary',

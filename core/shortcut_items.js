@@ -38,7 +38,7 @@ const names = {
   CUT: 'cut',
   PASTE: 'paste',
   UNDO: 'undo',
-  REDO: 'redo'
+  REDO: 'redo',
 };
 exports.names = names;
 
@@ -56,7 +56,7 @@ const registerEscape = function() {
     callback: function(workspace) {
       workspace.hideChaff();
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(escapeAction);
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
@@ -87,7 +87,7 @@ const registerDelete = function() {
       }
       (/** @type {!BlockSvg} */ (common.getSelected())).checkAndDelete();
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(deleteShortcut);
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name);
@@ -116,7 +116,7 @@ const registerCopy = function() {
       workspace.hideChaff();
       clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(copyShortcut);
 
@@ -157,7 +157,7 @@ const registerCut = function() {
       clipboard.copy(selected);
       (/** @type {!BlockSvg} */ (selected)).checkAndDelete();
       return true;
-    }
+    },
   };
 
   ShortcutRegistry.registry.register(cutShortcut);
@@ -189,7 +189,7 @@ const registerPaste = function() {
     },
     callback: function() {
       return clipboard.paste();
-    }
+    },
   };
 
   ShortcutRegistry.registry.register(pasteShortcut);
@@ -224,7 +224,7 @@ const registerUndo = function() {
       workspace.hideChaff();
       workspace.undo(false);
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(undoShortcut);
 
@@ -259,7 +259,7 @@ const registerRedo = function() {
       workspace.hideChaff();
       workspace.undo(true);
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(redoShortcut);
 

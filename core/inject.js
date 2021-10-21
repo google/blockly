@@ -124,7 +124,7 @@ const createDom = function(container, options) {
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklySvg',
-        'tabindex': '0'
+        'tabindex': '0',
       },
       container);
   /*
@@ -344,19 +344,19 @@ const loadSounds = function(pathToMedia, workspace) {
   audioMgr.load(
       [
         pathToMedia + 'click.mp3', pathToMedia + 'click.wav',
-        pathToMedia + 'click.ogg'
+        pathToMedia + 'click.ogg',
       ],
       'click');
   audioMgr.load(
       [
         pathToMedia + 'disconnect.wav', pathToMedia + 'disconnect.mp3',
-        pathToMedia + 'disconnect.ogg'
+        pathToMedia + 'disconnect.ogg',
       ],
       'disconnect');
   audioMgr.load(
       [
         pathToMedia + 'delete.mp3', pathToMedia + 'delete.ogg',
-        pathToMedia + 'delete.wav'
+        pathToMedia + 'delete.wav',
       ],
       'delete');
 

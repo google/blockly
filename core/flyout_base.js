@@ -332,8 +332,8 @@ Flyout.prototype.init = function(targetWorkspace) {
     weight: 1,
     capabilities: [
       ComponentManager.Capability.DELETE_AREA,
-      ComponentManager.Capability.DRAG_TARGET
-    ]
+      ComponentManager.Capability.DRAG_TARGET,
+    ],
   });
 };
 
@@ -991,7 +991,7 @@ Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
         'x': x,
         'y': y,
         'height': blockHW.height,
-        'width': blockHW.width
+        'width': blockHW.width,
       },
       null);
   rect.tooltip = block;

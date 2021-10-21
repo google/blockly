@@ -143,6 +143,6 @@ Object.defineProperties(exports, {
           'Blockly.Events.setRecordUndo()');
       eventUtils.setRecordUndo(record);
     },
-  }
+  },
 });
 

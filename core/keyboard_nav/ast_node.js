@@ -102,7 +102,7 @@ ASTNode.types = {
   NEXT: 'next',
   PREVIOUS: 'previous',
   STACK: 'stack',
-  WORKSPACE: 'workspace'
+  WORKSPACE: 'workspace',
 };
 
 /**

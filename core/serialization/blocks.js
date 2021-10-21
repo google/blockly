@@ -106,7 +106,7 @@ const save = function(
 
   const state = {
     'type': block.type,
-    'id': block.id
+    'id': block.id,
   };
 
   if (addCoordinates) {
@@ -196,7 +196,7 @@ const saveIcons = function(block, state) {
         'pinned': block.commentModel.pinned,
         'height': Math.round(block.commentModel.size.height),
         'width': Math.round(block.commentModel.size.width),
-      }
+      },
     };
   }
 };
@@ -335,7 +335,7 @@ const appendInternal = function(
     {
       parentConnection = undefined,
       isShadow = false,
-      recordUndo = false
+      recordUndo = false,
     } = {}
 ) {
   const prevRecordUndo = eventUtils.getRecordUndo();
@@ -666,7 +666,7 @@ class BlockSerializer {
     if (blockStates.length) {
       return {
         'languageVersion': 0, // Currently unused.
-        'blocks': blockStates
+        'blocks': blockStates,
       };
     }
     return null;

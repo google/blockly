@@ -133,7 +133,7 @@ const initIconData = function(block) {
         // coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
-        icon: icons[j]
+        icon: icons[j],
       };
       dragIconData.push(data);
     }

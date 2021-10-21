@@ -68,7 +68,7 @@ const Role = {
   TREE: 'tree',
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
-  TREEITEM: 'treeitem'
+  TREEITEM: 'treeitem',
 };
 exports.Role = Role;
 
@@ -135,7 +135,7 @@ const State = {
   VALUEMAX: 'valuemax',
 
   // ARIA property for slider minimum value. Value: number.
-  VALUEMIN: 'valuemin'
+  VALUEMIN: 'valuemin',
 };
 exports.State = State;
 

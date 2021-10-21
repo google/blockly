@@ -238,7 +238,7 @@ FieldMultilineInput.prototype.render_ = function() {
           'class': 'blocklyText blocklyMultilineText',
           x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
           y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-          dy: this.getConstants().FIELD_TEXT_BASELINE
+          dy: this.getConstants().FIELD_TEXT_BASELINE,
         },
         this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));

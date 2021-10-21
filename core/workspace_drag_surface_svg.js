@@ -78,7 +78,7 @@ WorkspaceDragSurfaceSvg.prototype.createDom = function() {
         'xmlns:html': dom.HTML_NS,
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
-        'class': 'blocklyWsDragSurface blocklyOverflowVisible'
+        'class': 'blocklyWsDragSurface blocklyOverflowVisible',
       },
       null);
   this.container_.appendChild(this.SVG_);

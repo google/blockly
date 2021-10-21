@@ -255,12 +255,12 @@ const getScrollDeltaPixels = function(e) {
     case 0x01:  // Line mode.
       return {
         x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER
+        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER,
       };
     case 0x02:  // Page mode.
       return {
         x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER
+        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER,
       };
   }
 };

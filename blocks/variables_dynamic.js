@@ -35,13 +35,13 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_variable",
       "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
     }],
     "output": null,
     "style": "variable_dynamic_blocks",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"]
+    "extensions": ["contextMenu_variableDynamicSetterGetter"],
   },
   // Block for variable setter.
   {
@@ -50,20 +50,20 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_variable",
       "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
     },
     {
       "type": "input_value",
-      "name": "VALUE"
-    }
+      "name": "VALUE",
+    },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "style": "variable_dynamic_blocks",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"]
-  }
+    "extensions": ["contextMenu_variableDynamicSetterGetter"],
+  },
 ]); // END JSON EXTRACT (Do not delete this comment.)
 
 /**
@@ -115,13 +115,13 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
         var renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,
-          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
         };
         var name = this.getField('VAR').getText();
         var deleteOption = {
           text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
           enabled: true,
-          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
         };
         options.unshift(renameOption);
         options.unshift(deleteOption);
@@ -142,7 +142,7 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     } else {
       this.getInput('VALUE').connection.setCheck(variableModel.type);
     }
-  }
+  },
 };
 
 /**

@@ -120,7 +120,7 @@ Comment.prototype.drawIcon_ = function(group) {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
             '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-            '-1.201,0.998 -1.201,1.528 -1.204,2.19z'
+            '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
       },
       group);
   // Dot of question mark.
@@ -130,7 +130,7 @@ Comment.prototype.drawIcon_ = function(group) {
         'x': '6.8',
         'y': '10.78',
         'height': '2',
-        'width': '2'
+        'width': '2',
       },
       group);
 };

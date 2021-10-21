@@ -973,7 +973,7 @@ BlockSvg.prototype.toCopyData = function() {
     saveInfo: /** @type {!blocks.State} */ (
         blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
-    typeCounts: utils.getBlockTypeCounts(this, true)
+    typeCounts: utils.getBlockTypeCounts(this, true),
   };
 };
 

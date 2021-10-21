@@ -476,7 +476,7 @@ const is3dSupported = function() {
     'OTransform': '-o-transform',
     'msTransform': '-ms-transform',
     'MozTransform': '-moz-transform',
-    'transform': 'transform'
+    'transform': 'transform',
   };
 
   // Add it to the body to get the computed style.
@@ -673,7 +673,7 @@ const parseBlockColour = function(colour) {
       hue: hue,
       hex: colourUtils.hsvToHex(
           hue, internalConstants.HSV_SATURATION,
-          internalConstants.HSV_VALUE * 255)
+          internalConstants.HSV_VALUE * 255),
     };
   } else {
     const hex = colourUtils.parse(dereferenced);

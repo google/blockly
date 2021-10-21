@@ -24,7 +24,7 @@ goog.module('Blockly.constants');
 const ALIGN = {
   LEFT: -1,
   CENTRE: 0,
-  RIGHT: 1
+  RIGHT: 1,
 };
 exports.ALIGN = ALIGN;
 

@@ -81,7 +81,7 @@ Debug.config = {
   connections: true,
   blockBounds: true,
   connectedBlockBounds: true,
-  render: true
+  render: true,
 };
 
 /**
@@ -125,7 +125,7 @@ Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
         'stroke': isNegativeSpacing ? 'black' : 'blue',
         'fill': 'blue',
         'fill-opacity': '0.5',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 };
@@ -159,7 +159,7 @@ Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
         'stroke': 'pink',
         'fill': isNegativeSpacing ? 'black' : 'pink',
         'fill-opacity': '0.5',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 };
@@ -186,7 +186,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
           'height': elem.height,
           'stroke': 'black',
           'fill': 'none',
-          'stroke-width': '1px'
+          'stroke-width': '1px',
         },
         this.svgRoot_));
 
@@ -201,7 +201,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
             'height': '0.1px',
             'stroke': 'red',
             'fill': 'none',
-            'stroke-width': '0.5px'
+            'stroke-width': '0.5px',
           },
           this.svgRoot_));
     }
@@ -279,7 +279,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
         'height': row.height,
         'stroke': 'red',
         'fill': 'none',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 
@@ -298,7 +298,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
           'stroke': this.randomColour_,
           'fill': 'none',
           'stroke-width': '1px',
-          'stroke-dasharray': '3,3'
+          'stroke-dasharray': '3,3',
         },
         this.svgRoot_));
   }
@@ -351,7 +351,7 @@ Debug.prototype.drawBoundingBox = function(info) {
         'stroke': 'black',
         'fill': 'none',
         'stroke-width': '1px',
-        'stroke-dasharray': '5,5'
+        'stroke-dasharray': '5,5',
       },
       this.svgRoot_));
 
@@ -368,7 +368,7 @@ Debug.prototype.drawBoundingBox = function(info) {
           'stroke': '#DF57BC',
           'fill': 'none',
           'stroke-width': '1px',
-          'stroke-dasharray': '3,3'
+          'stroke-dasharray': '3,3',
         },
         this.svgRoot_));
   }

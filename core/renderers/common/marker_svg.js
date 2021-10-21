@@ -577,7 +577,7 @@ MarkerSvg.prototype.getBlinkProperties_ = function() {
     'attributeName': 'fill',
     'dur': '1s',
     'values': this.colour_ + ';transparent;transparent;',
-    'repeatCount': 'indefinite'
+    'repeatCount': 'indefinite',
   };
 };
 
@@ -601,7 +601,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   this.markerSvg_ = dom.createSvgElement(
       Svg.G, {
         'width': this.constants_.CURSOR_WS_WIDTH,
-        'height': this.constants_.WS_CURSOR_HEIGHT
+        'height': this.constants_.WS_CURSOR_HEIGHT,
       },
       this.svgGroup_);
 
@@ -611,7 +611,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
       Svg.RECT, {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
-        'style': 'display: none'
+        'style': 'display: none',
       },
       this.markerSvg_);
 
@@ -621,7 +621,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
         'class': 'blocklyVerticalMarker',
         'rx': 10,
         'ry': 10,
-        'style': 'display: none'
+        'style': 'display: none',
       },
       this.markerSvg_);
 
@@ -636,7 +636,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
         'transform': '',
         'style': 'display: none',
         'fill': 'none',
-        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
       this.markerSvg_);
 

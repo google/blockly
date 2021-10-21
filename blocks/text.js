@@ -264,10 +264,10 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
-    var isAt1 = this.getInput('AT1').type === Blockly.INPUT_VALUE;
+    const container = Blockly.utils.xml.createElement('mutation');
+    const isAt1 = this.getInput('AT1').type === Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
-    var isAt2 = this.getInput('AT2').type === Blockly.INPUT_VALUE;
+    const isAt2 = this.getInput('AT2').type === Blockly.INPUT_VALUE;
     container.setAttribute('at2', isAt2);
     return container;
   },
@@ -278,12 +278,12 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
-    var isAt1 = (xmlElement.getAttribute('at1') === 'true');
-    var isAt2 = (xmlElement.getAttribute('at2') === 'true');
+    const isAt1 = (xmlElement.getAttribute('at1') === 'true');
+    const isAt2 = (xmlElement.getAttribute('at2') === 'true');
     this.updateAt_(1, isAt1);
     this.updateAt_(2, isAt2);
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.
@@ -318,13 +318,13 @@ Blockly.Blocks['text_getSubstring'] = {
       this.appendDummyInput('TAIL')
           .appendField(Blockly.Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
-    var menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
+    const menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
         function(value) {
-          var newAt = (value === 'FROM_START') || (value === 'FROM_END');
+          const newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a
           // closure.
           if (newAt !== isAt) {
-            var block = this.getSourceBlock();
+            const block = this.getSourceBlock();
             block.updateAt_(n, newAt);
             // This menu has been destroyed and replaced.
             // Update the replacement.
@@ -351,7 +351,7 @@ Blockly.Blocks['text_changeCase'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var OPERATORS = [
+    const OPERATORS = [
       [Blockly.Msg['TEXT_CHANGECASE_OPERATOR_UPPERCASE'], 'UPPERCASE'],
       [Blockly.Msg['TEXT_CHANGECASE_OPERATOR_LOWERCASE'], 'LOWERCASE'],
       [Blockly.Msg['TEXT_CHANGECASE_OPERATOR_TITLECASE'], 'TITLECASE'],
@@ -372,7 +372,7 @@ Blockly.Blocks['text_trim'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var OPERATORS = [
+    const OPERATORS = [
       [Blockly.Msg['TEXT_TRIM_OPERATOR_BOTH'], 'BOTH'],
       [Blockly.Msg['TEXT_TRIM_OPERATOR_LEFT'], 'LEFT'],
       [Blockly.Msg['TEXT_TRIM_OPERATOR_RIGHT'], 'RIGHT'],
@@ -416,15 +416,15 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    var TYPES = [
+    const TYPES = [
       [Blockly.Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
       [Blockly.Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
     ];
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
     this.setStyle('text_blocks');
     // Assign 'this' to a variable for use in the closures below.
-    var thisBlock = this;
-    var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
+    const thisBlock = this;
+    const dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
       thisBlock.updateType_(newOp);
     });
     this.appendValueInput('TEXT')
@@ -452,7 +452,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
+    const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('type', this.getFieldValue('TYPE'));
     return container;
   },
@@ -465,7 +465,7 @@ Blockly.Blocks['text_prompt_ext'] = {
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('type'));
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.
@@ -480,16 +480,16 @@ Blockly.Blocks['text_prompt'] = {
    */
   init: function() {
     this.mixin(Blockly.Constants.Text.QUOTE_IMAGE_MIXIN);
-    var TYPES = [
+    const TYPES = [
       [Blockly.Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
       [Blockly.Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
     ];
 
     // Assign 'this' to a variable for use in the closures below.
-    var thisBlock = this;
+    const thisBlock = this;
     this.setHelpUrl(Blockly.Msg['TEXT_PROMPT_HELPURL']);
     this.setStyle('text_blocks');
-    var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
+    const dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
       thisBlock.updateType_(newOp);
     });
     this.appendDummyInput()
@@ -640,8 +640,8 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @this {Blockly.Block}
    */
   quoteField_: function(fieldName) {
-    for (var i = 0, input; (input = this.inputList[i]); i++) {
-      for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
         if (fieldName === field.name) {
           input.insertFieldAt(j, this.newQuote_(true));
           input.insertFieldAt(j + 2, this.newQuote_(false));
@@ -661,8 +661,8 @@ Blockly.Constants.Text.QUOTE_IMAGE_MIXIN = {
    * @this {Blockly.Block}
    */
   newQuote_: function(open) {
-    var isLeft = this.RTL ? !open : open;
-    var dataUri = isLeft ?
+    const isLeft = this.RTL ? !open : open;
+    const dataUri = isLeft ?
       this.QUOTE_IMAGE_LEFT_DATAURI :
       this.QUOTE_IMAGE_RIGHT_DATAURI;
     return new Blockly.FieldImage(
@@ -696,7 +696,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
+    const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
@@ -734,11 +734,11 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   decompose: function(workspace) {
-    var containerBlock = workspace.newBlock('text_create_join_container');
+    const containerBlock = workspace.newBlock('text_create_join_container');
     containerBlock.initSvg();
-    var connection = containerBlock.getInput('STACK').connection;
-    for (var i = 0; i < this.itemCount_; i++) {
-      var itemBlock = workspace.newBlock('text_create_join_item');
+    let connection = containerBlock.getInput('STACK').connection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const itemBlock = workspace.newBlock('text_create_join_item');
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;
@@ -751,17 +751,17 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   compose: function(containerBlock) {
-    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
-    var connections = [];
+    const connections = [];
     while (itemBlock && !itemBlock.isInsertionMarker()) {
       connections.push(itemBlock.valueConnection_);
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
     }
     // Disconnect any children that don't belong.
-    for (var i = 0; i < this.itemCount_; i++) {
-      var connection = this.getInput('ADD' + i).connection.targetConnection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const connection = this.getInput('ADD' + i).connection.targetConnection;
       if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
@@ -769,7 +769,7 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
     this.itemCount_ = connections.length;
     this.updateShape_();
     // Reconnect any child blocks.
-    for (var i = 0; i < this.itemCount_; i++) {
+    for (let i = 0; i < this.itemCount_; i++) {
       Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
   },
@@ -779,14 +779,14 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   saveConnections: function(containerBlock) {
-    var itemBlock = containerBlock.getInputTargetBlock('STACK');
-    var i = 0;
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let i = 0;
     while (itemBlock) {
-      var input = this.getInput('ADD' + i);
+      const input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
       i++;
-      itemBlock = itemBlock.nextConnection &&
-          itemBlock.nextConnection.targetBlock();
     }
   },
   /**
@@ -803,9 +803,9 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
           .appendField(this.newQuote_(false));
     }
     // Add new inputs.
-    for (var i = 0; i < this.itemCount_; i++) {
+    for (let i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        var input = this.appendValueInput('ADD' + i)
+        const input = this.appendValueInput('ADD' + i)
             .setAlign(Blockly.ALIGN_RIGHT);
         if (i === 0) {
           input.appendField(Blockly.Msg['TEXT_JOIN_TITLE_CREATEWITH']);
@@ -813,9 +813,8 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
       }
     }
     // Remove deleted inputs.
-    while (this.getInput('ADD' + i)) {
+    for (let i = this.itemCount_; this.getInput('ADD' + i); i++) {
       this.removeInput('ADD' + i);
-      i++;
     }
   },
 };
@@ -845,7 +844,7 @@ Blockly.Extensions.register('text_append_tooltip',
  */
 Blockly.Constants.Text.TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
   // Assign 'this' to a variable for use in the tooltip closure below.
-  var thisBlock = this;
+  const thisBlock = this;
   this.setTooltip(function() {
     return Blockly.Msg['TEXT_INDEXOF_TOOLTIP'].replace('%1',
         thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
@@ -866,7 +865,7 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
+    const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('at', !!this.isAt_);
     return container;
   },
@@ -879,10 +878,10 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
   domToMutation: function(xmlElement) {
     // Note: Until January 2013 this block did not have mutations,
     // so 'at' defaults to true.
-    var isAt = (xmlElement.getAttribute('at') !== 'false');
+    const isAt = (xmlElement.getAttribute('at') !== 'false');
     this.updateAt_(isAt);
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.
@@ -921,22 +920,22 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
  * @this {Blockly.Block}
  */
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
-  var dropdown = this.getField('WHERE');
+  const dropdown = this.getField('WHERE');
   dropdown.setValidator(function(value) {
-    var newAt = (value === 'FROM_START') || (value === 'FROM_END');
+    const newAt = (value === 'FROM_START') || (value === 'FROM_END');
     if (newAt !== this.isAt_) {
-      var block = this.getSourceBlock();
+      const block = this.getSourceBlock();
       block.updateAt_(newAt);
     }
   });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.
-  var thisBlock = this;
+  const thisBlock = this;
   this.setTooltip(function() {
-    var where = thisBlock.getFieldValue('WHERE');
-    var tooltip = Blockly.Msg['TEXT_CHARAT_TOOLTIP'];
+    const where = thisBlock.getFieldValue('WHERE');
+    let tooltip = Blockly.Msg['TEXT_CHARAT_TOOLTIP'];
     if (where === 'FROM_START' || where === 'FROM_END') {
-      var msg = (where === 'FROM_START') ?
+      const msg = (where === 'FROM_START') ?
           Blockly.Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
           Blockly.Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
       if (msg) {

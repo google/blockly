@@ -251,14 +251,14 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
     if (this.isInFlyout) {
       return;
     }
-    var variable = this.getField('VAR').getVariable();
-    var varName = variable.name;
+    const variable = this.getField('VAR').getVariable();
+    const varName = variable.name;
     if (!this.isCollapsed() && varName !== null) {
-      var option = {enabled: true};
+      const option = {enabled: true};
       option.text =
           Blockly.Msg['VARIABLES_SET_CREATE_GET'].replace('%1', varName);
-      var xmlField = Blockly.Variables.generateVariableFieldDom(variable);
-      var xmlBlock = Blockly.utils.xml.createElement('block');
+      const xmlField = Blockly.Variables.generateVariableFieldDom(variable);
+      const xmlBlock = Blockly.utils.xml.createElement('block');
       xmlBlock.setAttribute('type', 'variables_get');
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -331,12 +331,12 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
         e.type !== Blockly.Events.BLOCK_MOVE) {
       return;
     }
-    var enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
+    const enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
         .getSurroundLoop(this);
     this.setWarningText(enabled ? null :
         Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
     if (!this.isInFlyout) {
-      var group = Blockly.Events.getGroup();
+      const group = Blockly.Events.getGroup();
       // Makes it so the move and the disable event get undone together.
       Blockly.Events.setGroup(e.group);
       this.setEnabled(enabled);

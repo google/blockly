@@ -84,11 +84,11 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   customContextMenu: function(options) {
     // Getter blocks have the option to create a setter block, and vice versa.
     if (!this.isInFlyout) {
-      var opposite_type;
-      var contextMenuMsg;
-      var id = this.getFieldValue('VAR');
-      var variableModel = this.workspace.getVariableById(id);
-      var varType = variableModel.type;
+      let opposite_type;
+      let contextMenuMsg;
+      const id = this.getFieldValue('VAR');
+      const variableModel = this.workspace.getVariableById(id);
+      const varType = variableModel.type;
       if (this.type === 'variables_get_dynamic') {
         opposite_type = 'variables_set_dynamic';
         contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
@@ -97,14 +97,14 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
         contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
       }
 
-      var option = {enabled: this.workspace.remainingCapacity() > 0};
-      var name = this.getField('VAR').getText();
+      const option = {enabled: this.workspace.remainingCapacity() > 0};
+      const name = this.getField('VAR').getText();
       option.text = contextMenuMsg.replace('%1', name);
-      var xmlField = Blockly.utils.xml.createElement('field');
+      const xmlField = Blockly.utils.xml.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.setAttribute('variabletype', varType);
       xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
-      var xmlBlock = Blockly.utils.xml.createElement('block');
+      const xmlBlock = Blockly.utils.xml.createElement('block');
       xmlBlock.setAttribute('type', opposite_type);
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -112,13 +112,13 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
     } else {
       if (this.type === 'variables_get_dynamic' ||
        this.type === 'variables_get_reporter_dynamic') {
-        var renameOption = {
+        const renameOption = {
           text: Blockly.Msg.RENAME_VARIABLE,
           enabled: true,
           callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
         };
-        var name = this.getField('VAR').getText();
-        var deleteOption = {
+        const name = this.getField('VAR').getText();
+        const deleteOption = {
           text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
           enabled: true,
           callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
@@ -135,8 +135,8 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
    * @this {Blockly.Block}
    */
   onchange: function(_e) {
-    var id = this.getFieldValue('VAR');
-    var variableModel = Blockly.Variables.getVariable(this.workspace, id);
+    const id = this.getFieldValue('VAR');
+    const variableModel = Blockly.Variables.getVariable(this.workspace, id);
     if (this.type === 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
@@ -153,8 +153,8 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
   */
 Blockly.Constants.VariablesDynamic.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
-    var workspace = block.workspace;
-    var variable = block.getField('VAR').getVariable();
+    const workspace = block.workspace;
+    const variable = block.getField('VAR').getVariable();
     Blockly.Variables.renameVariable(workspace, variable);
   };
 };
@@ -167,8 +167,8 @@ Blockly.Constants.VariablesDynamic.RENAME_OPTION_CALLBACK_FACTORY = function(blo
  */
 Blockly.Constants.VariablesDynamic.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
-    var workspace = block.workspace;
-    var variable = block.getField('VAR').getVariable();
+    const workspace = block.workspace;
+    const variable = block.getField('VAR').getVariable();
     workspace.deleteVariableById(variable.getId());
     workspace.refreshToolboxSelection();
   };

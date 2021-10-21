@@ -45,7 +45,7 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * }}
  * @alias Blockly.serialization.blocks.ConnectionState
  */
-var ConnectionState;
+let ConnectionState;
 exports.ConnectionState = ConnectionState;
 
 /**
@@ -67,7 +67,7 @@ exports.ConnectionState = ConnectionState;
  * }}
  * @alias Blockly.serialization.blocks.State
  */
-var State;
+let State;
 exports.State = State;
 
 /**

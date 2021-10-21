@@ -2688,8 +2688,8 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
   WidgetDiv.hide();
   DropDownDiv.hideWithoutAnimation();
 
-  var onlyClosePopups = !!opt_onlyClosePopups;
-  var autoHideables = this.getComponentManager().getComponents(
+  const onlyClosePopups = !!opt_onlyClosePopups;
+  const autoHideables = this.getComponentManager().getComponents(
       ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));

@@ -35,7 +35,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * }}
  * @alias Blockly.serialization.variables.State
  */
-var State;
+let State;
 exports.State = State;
 
 /**

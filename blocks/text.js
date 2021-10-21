@@ -780,10 +780,13 @@ Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN = {
    */
   saveConnections: function(containerBlock) {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
-    for (let i = 0; itemBlock = itemBlock.nextConnection &&
-            itemBlock.nextConnection.targetBlock(); i++) {
+    let i = 0;
+    while (itemBlock) {
       const input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      i++;
     }
   },
   /**

@@ -246,7 +246,7 @@ FieldMultilineInput.prototype.render_ = function() {
   }
 
   if (this.isBeingEdited_) {
-    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (this.isOverflowedY_) {
       dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
     } else {
@@ -265,7 +265,7 @@ FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
-    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (!this.isTextValid_) {
       dom.addClass(htmlInput, 'blocklyInvalidInput');
       aria.setState(htmlInput, aria.State.INVALID, true);
@@ -284,7 +284,7 @@ FieldMultilineInput.prototype.updateSize_ = function() {
   const nodes = this.textGroup_.childNodes;
   let totalWidth = 0;
   let totalHeight = 0;
-  for (var i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < nodes.length; i++) {
     const tspan = /** @type {!Element} */ (nodes[i]);
     const textWidth = dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
@@ -306,7 +306,7 @@ FieldMultilineInput.prototype.updateSize_ = function() {
     const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
     const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
 
-    for (var i = 0; i < actualEditorLines.length; i++) {
+    for (let i = 0; i < actualEditorLines.length; i++) {
       if (actualEditorLines[i].length > this.maxDisplayLength) {
         actualEditorLines[i] =
             actualEditorLines[i].substring(0, this.maxDisplayLength);

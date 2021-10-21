@@ -413,9 +413,11 @@ const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
   div.appendChild(block);
 
   document.body.appendChild(div);
-  let result;
+  const result = {
+    height: 0,
+    baseline: 0,
+  };
   try {
-    result = {};
     div.style.alignItems = 'baseline';
     result.baseline = block.offsetTop - span.offsetTop;
     div.style.alignItems = 'flex-end';

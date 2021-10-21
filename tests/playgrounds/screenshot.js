@@ -48,7 +48,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
 
   // Go through all text areas and set their value.
   const textAreas = document.getElementsByTagName("textarea");
-  for (const i = 0; i < textAreas.length; i++) {
+  for (let i = 0; i < textAreas.length; i++) {
     textAreas[i].innerHTML = textAreas[i].value;
   }
 
@@ -83,7 +83,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
   style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);
 
-  const svgAsXML = (new XMLSerializer).serializeToString(svg);
+  let svgAsXML = (new XMLSerializer).serializeToString(svg);
   svgAsXML = svgAsXML.replace(/&nbsp/g, '&#160');
   const data = 'data:image/svg+xml,' + encodeURIComponent(svgAsXML);
 

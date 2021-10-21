@@ -272,7 +272,8 @@ const blockToDom = function(block, opt_noId) {
       element.appendChild(container);
     }
   }
-  const nextShadow = block.nextConnection && block.nextConnection.getShadowDom();
+  const nextShadow =
+      block.nextConnection && block.nextConnection.getShadowDom();
   if (nextShadow && (!nextBlock || !nextBlock.isShadow())) {
     container.appendChild(cloneShadow(nextShadow, opt_noId));
   }
@@ -483,7 +484,8 @@ const domToWorkspace = function(xml, workspace) {
                 /** @type {!WorkspaceSvg} */ (workspace), width);
           }
         } else {
-          const {WorkspaceComment} = goog.module.get('Blockly.WorkspaceComment');
+          const {WorkspaceComment} =
+              goog.module.get('Blockly.WorkspaceComment');
           if (!WorkspaceComment) {
             console.warn(
                 'Missing require for Blockly.WorkspaceComment, ' +
@@ -537,7 +539,7 @@ const appendDomToWorkspace = function(xml, workspace) {
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
   if (bbox && bbox.top !== bbox.bottom) {  // check if any previous block
-    let offsetY = 0;                      // offset to add to y of the new block
+    let offsetY = 0;  // offset to add to y of the new block
     let offsetX = 0;
     const farY = bbox.bottom;                             // bottom position
     const topX = workspace.RTL ? bbox.right : bbox.left;  // x of bounding box

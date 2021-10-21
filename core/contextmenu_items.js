@@ -604,7 +604,7 @@ const registerHelp = function() {
                              scope) {
       const block = scope.block;
       const url = (typeof block.helpUrl === 'function') ? block.helpUrl() :
-                                                         block.helpUrl;
+                                                          block.helpUrl;
       if (url) {
         return 'enabled';
       }

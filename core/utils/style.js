@@ -258,7 +258,8 @@ exports.scrollIntoContainerView = scrollIntoContainerView;
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  * @alias Blockly.utils.style.getContainerOffsetToScrollInto
  */
-const getContainerOffsetToScrollInto = function(element, container, opt_center) {
+const getContainerOffsetToScrollInto = function(
+    element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.

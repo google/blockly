@@ -72,7 +72,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  *     to register.
  * @throws {Error} if a renderer with the same name has already been registered.
  */
- const register = function(name, rendererClass) {
+const register = function(name, rendererClass) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 };
 exports.register = register;

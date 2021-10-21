@@ -51,7 +51,6 @@ let categoryStyles = {
  * @type {Theme}
  * @alias Blockly.Themes.Classic
  */
-const Classic =
-    new Theme('classic', defaultBlockStyles, categoryStyles);
+const Classic = new Theme('classic', defaultBlockStyles, categoryStyles);
 
 exports.Classic = Classic;

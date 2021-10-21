@@ -91,15 +91,12 @@ exports.State = State;
  *     could not be serialied (eg it was an insertion marker).
  * @alias Blockly.serialization.blocks.save
  */
-const save = function(
-    block,
-    {
-      addCoordinates = false,
-      addInputBlocks = true,
-      addNextBlocks = true,
-      doFullSerialization = true,
-    } = {}
-) {
+const save = function(block, {
+  addCoordinates = false,
+  addInputBlocks = true,
+  addNextBlocks = true,
+  doFullSerialization = true,
+} = {}) {
   if (block.isInsertionMarker()) {
     return null;
   }
@@ -176,8 +173,10 @@ const saveExtraState = function(block, state) {
   } else if (block.mutationToDom) {
     const extraState = block.mutationToDom();
     if (extraState !== null) {
-      state['extraState'] = Xml.domToText(extraState).replace(
-          ' xmlns="https://developers.google.com/blockly/xml"', '');
+      state['extraState'] =
+          Xml.domToText(extraState)
+              .replace(
+                  ' xmlns="https://developers.google.com/blockly/xml"', '');
     }
   }
 };
@@ -262,8 +261,8 @@ const saveNextBlocks = function(block, state, doFullSerialization) {
   if (!block.nextConnection) {
     return;
   }
-  const connectionState = saveConnection(
-      block.nextConnection, doFullSerialization);
+  const connectionState =
+      saveConnection(block.nextConnection, doFullSerialization);
   if (connectionState) {
     state['next'] = connectionState;
   }
@@ -329,15 +328,11 @@ exports.append = append;
  * @alias Blockly.serialization.blocks.appendInternal
  * @package
  */
-const appendInternal = function(
-    state,
-    workspace,
-    {
-      parentConnection = undefined,
-      isShadow = false,
-      recordUndo = false,
-    } = {}
-) {
+const appendInternal = function(state, workspace, {
+  parentConnection = undefined,
+  isShadow = false,
+  recordUndo = false,
+} = {}) {
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
   const existingGroup = eventUtils.getGroup();
@@ -382,14 +377,10 @@ exports.appendInternal = appendInternal;
  *       False by default.
  * @return {!Block} The block that was just appended.
  */
-const appendPrivate = function(
-    state,
-    workspace,
-    {
-      parentConnection = undefined,
-      isShadow = false,
-    } = {}
-) {
+const appendPrivate = function(state, workspace, {
+  parentConnection = undefined,
+  isShadow = false,
+} = {}) {
   if (!state['type']) {
     throw new MissingBlockType(state);
   }
@@ -486,7 +477,7 @@ const tryToConnectParent = function(parentConnection, child, state) {
       throw new MissingConnection('output', child, state);
     }
     connected = parentConnection.connect(childConnection);
-  } else { // Statement type.
+  } else {  // Statement type.
     childConnection = child.previousConnection;
     if (!childConnection) {
       throw new MissingConnection('previous', child, state);
@@ -500,12 +491,10 @@ const tryToConnectParent = function(parentConnection, child, state) {
         checker.getErrorMessage(
             checker.canConnectWithReason(
                 childConnection, parentConnection, false),
-            childConnection,
-            parentConnection),
-        parentConnection.type === inputTypes.VALUE ?
-            'output connection' : 'previous connection',
-        child,
-        state);
+            childConnection, parentConnection),
+        parentConnection.type === inputTypes.VALUE ? 'output connection' :
+                                                     'previous connection',
+        child, state);
   }
 };
 
@@ -606,8 +595,7 @@ const loadConnection = function(connection, connectionState) {
   }
   if (connectionState['block']) {
     appendPrivate(
-        connectionState['block'],
-        connection.getSourceBlock().workspace,
+        connectionState['block'], connection.getSourceBlock().workspace,
         {parentConnection: connection});
   }
 };
@@ -657,15 +645,15 @@ class BlockSerializer {
   save(workspace) {
     const blockStates = [];
     for (const block of workspace.getTopBlocks(false)) {
-      const state = saveBlock(
-          block, {addCoordinates: true, doFullSerialization: false});
+      const state =
+          saveBlock(block, {addCoordinates: true, doFullSerialization: false});
       if (state) {
         blockStates.push(state);
       }
     }
     if (blockStates.length) {
       return {
-        'languageVersion': 0, // Currently unused.
+        'languageVersion': 0,  // Currently unused.
         'blocks': blockStates,
       };
     }

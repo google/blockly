@@ -38,7 +38,7 @@ const SquareCorner = function(constants, opt_position) {
   SquareCorner.superClass_.constructor.call(this, constants);
   this.type =
       ((!opt_position || opt_position === 'left') ? Types.LEFT_SQUARE_CORNER :
-                                                   Types.RIGHT_SQUARE_CORNER) |
+                                                    Types.RIGHT_SQUARE_CORNER) |
       Types.CORNER;
   this.height = this.constants_.NO_PADDING;
   this.width = this.constants_.NO_PADDING;

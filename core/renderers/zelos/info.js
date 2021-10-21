@@ -271,8 +271,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
     activeRow.rightAlignedDummyInput = input;
   } else if (input.type === inputTypes.STATEMENT) {
     // Handle statements without next connections correctly.
-    activeRow.elements.push(
-        new StatementInput(this.constants_, input));
+    activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
 
     if (activeRow.align === null) {
@@ -327,7 +326,7 @@ RenderInfo.prototype.adjustXPosition_ = function() {
     const nextSpacer = this.rows[i + 1];
 
     const hasPrevNotch = i === 2 ? !!this.topRow.hasPreviousConnection :
-                                  !!prevSpacer.followsStatement;
+                                   !!prevSpacer.followsStatement;
     const hasNextNotch = i + 2 >= this.rows.length - 1 ?
         !!this.bottomRow.hasNextConnection :
         !!nextSpacer.precedesStatement;
@@ -505,7 +504,8 @@ RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
       return 0;
     }
     // Special case for hexagonal output.
-    if (outerShape === constants.SHAPES.HEXAGONAL && outerShape !== innerShape) {
+    if (outerShape === constants.SHAPES.HEXAGONAL &&
+        outerShape !== innerShape) {
       return 0;
     }
     return connectionWidth -

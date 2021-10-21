@@ -97,6 +97,7 @@ CommentChange.prototype.run = function(forward) {
   comment.setContent(contents);
 };
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
+registry.register(
+    registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
 
 exports.CommentChange = CommentChange;

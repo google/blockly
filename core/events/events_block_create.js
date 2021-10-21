@@ -50,8 +50,8 @@ const BlockCreate = function(opt_block) {
    * JSON representation of the block that was just created.
    * @type {!blocks.State}
    */
-  this.json = /** @type {!blocks.State} */ (blocks.save(
-      opt_block, {addCoordinates: true}));
+  this.json = /** @type {!blocks.State} */ (
+      blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockCreate, BlockBase);
 

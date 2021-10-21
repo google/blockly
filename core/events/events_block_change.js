@@ -139,7 +139,8 @@ BlockChange.prototype.run = function(forward) {
         block.domToMutation(
             Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      eventUtils.fire(new BlockChange(block, 'mutation', null, oldState, value));
+      eventUtils.fire(
+          new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:

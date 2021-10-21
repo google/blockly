@@ -147,8 +147,7 @@ MarkerSvg.prototype.isCursor = function() {
  * @package
  */
 MarkerSvg.prototype.createDom = function() {
-  const className =
-      this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
+  const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
 
   this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': className}, null);
 

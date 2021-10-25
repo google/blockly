@@ -11,7 +11,7 @@ suite('Block JSON initialization', function() {
   suite('validateTokens_', function() {
     setup(function() {
       this.assertError = function(tokens, count, error) {
-        var block = {
+        let block = {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
@@ -21,7 +21,7 @@ suite('Block JSON initialization', function() {
       };
 
       this.assertNoError = function(tokens, count) {
-        var block = {
+        let block = {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
@@ -68,7 +68,7 @@ suite('Block JSON initialization', function() {
   suite('interpolateArguments_', function() {
     setup(function() {
       this.assertInterpolation = function(tokens, args, lastAlign, elements) {
-        var block = {
+        let block = {
           type: 'test',
           interpolateArguments_: Blockly.Block.prototype.interpolateArguments_,
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
@@ -304,7 +304,7 @@ suite('Block JSON initialization', function() {
           });
 
       this.assertField = function(json, expectedType) {
-        var block = {
+        let block = {
           type: 'test',
           fieldFromJson_: Blockly.Block.prototype.fieldFromJson_,
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
@@ -432,12 +432,12 @@ suite('Block JSON initialization', function() {
 
   suite('inputFromJson_', function() {
     setup(function() {
-      var Input = function(type) {
+      let Input = function(type) {
         this.type = type;
         this.setCheck = sinon.fake();
         this.setAlign = sinon.fake();
       };
-      var Block = function() {
+      let Block = function() {
         this.type = 'test';
         this.appendDummyInput = sinon.fake.returns(new Input());
         this.appendValueInput = sinon.fake.returns(new Input());
@@ -446,8 +446,8 @@ suite('Block JSON initialization', function() {
       };
 
       this.assertInput = function(json, type, check, align) {
-        var block = new Block();
-        var input = block.inputFromJson_(json);
+        let block = new Block();
+        let input = block.inputFromJson_(json);
         switch (type) {
           case 'input_dummy':
             chai.assert.isTrue(block.appendDummyInput.calledOnce,

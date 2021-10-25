@@ -47,27 +47,27 @@ suite('Abstract Fields', function() {
     /* Test Backwards Compatibility */
     test('Editable Default(true), Serializable Default(false)', function() {
       // An old default field should be serialized.
-      var field = new FieldDefault();
-      var stub = sinon.stub(console, 'warn');
+      let field = new FieldDefault();
+      let stub = sinon.stub(console, 'warn');
       chai.assert.isTrue(field.isSerializable());
       sinon.assert.calledOnce(stub);
       stub.restore();
     });
     test('Editable False, Serializable Default(false)', function() {
       // An old non-editable field should not be serialized.
-      var field = new FieldFalseDefault();
+      let field = new FieldFalseDefault();
       chai.assert.isFalse(field.isSerializable());
     });
     /* Test Other Cases */
     test('Editable Default(true), Serializable True', function() {
       // A field that is both editable and serializable should be serialized.
-      var field = new FieldDefaultTrue();
+      let field = new FieldDefaultTrue();
       chai.assert.isTrue(field.isSerializable());
     });
     test('Editable False, Serializable True', function() {
       // A field that is not editable, but overrides serializable to true
       // should be serialized (e.g. field_label_serializable)
-      var field = new FieldFalseTrue();
+      let field = new FieldFalseTrue();
       chai.assert.isTrue(field.isSerializable());
     });
   });
@@ -596,22 +596,22 @@ suite('Abstract Fields', function() {
 
     suite('Tooltip', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.Field('value', null, {
+        let field = new Blockly.Field('value', null, {
           tooltip: 'test tooltip',
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
       test('JS Constructor - Dynamic', function() {
-        var returnTooltip = function() {
+        let returnTooltip = function() {
           return 'dynamic tooltip text';
         };
-        var field = new Blockly.Field('value', null, {
+        let field = new Blockly.Field('value', null, {
           tooltip: returnTooltip
         });
         chai.assert.equal(field.tooltip_, returnTooltip);
       });
       test('JSON Definition', function() {
-        var field = CustomField.fromJson({
+        let field = CustomField.fromJson({
           tooltip: "test tooltip"
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
@@ -622,13 +622,13 @@ suite('Abstract Fields', function() {
           Blockly.Msg['TOOLTIP'] = 'test tooltip';
         });
         test('JS Constructor', function() {
-          var field = new Blockly.Field('value', null, {
+          let field = new Blockly.Field('value', null, {
             tooltip: '%{BKY_TOOLTIP}',
           });
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
         test('JSON Definition', function() {
-          var field = CustomField.fromJson({
+          let field = CustomField.fromJson({
             tooltip: "%{BKY_TOOLTIP}"
           });
           chai.assert.equal(field.tooltip_, 'test tooltip');
@@ -646,53 +646,53 @@ suite('Abstract Fields', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               field.setTooltip('tooltip');
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
             },
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
         test('After Append', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
               field.setTooltip('tooltip');
             },
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
         test('After Block Creation', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
             },
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           field.setTooltip('tooltip');
           chai.assert.equal(field.getClickTarget_().tooltip, 'tooltip');
         });
@@ -700,7 +700,7 @@ suite('Abstract Fields', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               field.setTooltip(this.tooltipFunc);
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
@@ -710,19 +710,19 @@ suite('Abstract Fields', function() {
               return this.getFieldValue('TOOLTIP');
             }
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.tooltipFunc);
         });
         test('Element', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               field.setTooltip(this.element);
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
@@ -731,47 +731,47 @@ suite('Abstract Fields', function() {
               tooltip: 'tooltip'
             }
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block.element);
         });
         test('Null', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               field.setTooltip(null);
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
             },
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
         });
         test('Undefined', function() {
           addBlockTypeToCleanup(this.sharedCleanup, 'tooltip');
           Blockly.Blocks['tooltip'] = {
             init: function() {
-              var field = new Blockly.FieldTextInput('default');
+              let field = new Blockly.FieldTextInput('default');
               this.appendDummyInput()
                   .appendField(field, 'TOOLTIP');
             },
           };
-          var block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+          let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
               '  <block type="tooltip"></block>' +
               '</xml>'
           ).children[0], this.workspace);
-          var field = block.getField('TOOLTIP');
+          let field = block.getField('TOOLTIP');
           chai.assert.equal(field.getClickTarget_().tooltip, block);
         });
       });

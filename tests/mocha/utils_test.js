@@ -18,10 +18,10 @@ suite('Utils', function() {
   });
 
   test('genUid', function() {
-    var uuids = {};
+    let uuids = {};
     chai.assert.equal([1, 2, 3].indexOf(4), -1);
-    for (var i = 0; i < 1000; i++) {
-      var uuid = Blockly.utils.idGenerator.genUid();
+    for (let i = 0; i < 1000; i++) {
+      let uuid = Blockly.utils.idGenerator.genUid();
       chai.assert.isFalse(uuid in uuids, 'UUID different: ' + uuid);
       uuids[uuid] = true;
     }
@@ -191,7 +191,7 @@ suite('Utils', function() {
     Blockly.Msg.STRING_REF_WITH_ARG = 'test %1 string';
     Blockly.Msg.STRING_REF_WITH_SUBREF = 'test %{bky_subref} string';
 
-    var resultString = Blockly.utils.replaceMessageReferences('');
+    let resultString = Blockly.utils.replaceMessageReferences('');
     chai.assert.equal(resultString, '', 'Empty string produces empty string');
 
     resultString = Blockly.utils.replaceMessageReferences('%%');
@@ -229,7 +229,7 @@ suite('Utils', function() {
   });
 
   test('arrayRemove', function() {
-    var arr = [1, 2, 3, 2];
+    let arr = [1, 2, 3, 2];
     chai.assert.isFalse(Blockly.utils.arrayRemove(arr, 0), 'Remove Not found');
     chai.assert.equal(arr.join(','), '1,2,3,2', 'Remove Not found result');
     chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item');
@@ -239,8 +239,8 @@ suite('Utils', function() {
   });
 
   test('XY_REGEX_', function() {
-    var regex = Blockly.utils.getRelativeXY.XY_REGEX_;
-    var m;
+    let regex = Blockly.utils.getRelativeXY.XY_REGEX_;
+    let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);
 
@@ -266,8 +266,8 @@ suite('Utils', function() {
   });
 
   test('XY_STYLE_REGEX_', function() {
-    var regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
-    var m;
+    let regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
+    let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);
 
@@ -314,7 +314,7 @@ suite('Utils', function() {
 
   suite('DOM', function() {
     test('addClass', function() {
-      var p = document.createElement('p');
+      let p = document.createElement('p');
       Blockly.utils.dom.addClass(p, 'one');
       chai.assert.equal(p.className, 'one', 'Adding "one"');
       Blockly.utils.dom.addClass(p, 'one');
@@ -328,7 +328,7 @@ suite('Utils', function() {
     });
 
     test('hasClass', function() {
-      var p = document.createElement('p');
+      let p = document.createElement('p');
       p.className = ' one three  two three  ';
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'one'), 'Has "one"');
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'two'), 'Has "two"');
@@ -338,7 +338,7 @@ suite('Utils', function() {
     });
 
     test('removeClass', function() {
-      var p = document.createElement('p');
+      let p = document.createElement('p');
       p.className = ' one three  two three  ';
       Blockly.utils.dom.removeClass(p, 'two');
       chai.assert.equal(p.className, 'one three three', 'Removing "two"');
@@ -364,7 +364,7 @@ suite('Utils', function() {
     });
 
     test('shortest string length', function() {
-      var len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 3, 'Length of "one"');
       len = Blockly.utils.string.shortestStringLength('one,two,three,four,five,'.split(','));
       chai.assert.equal(len, 0, 'Length of ""');
@@ -375,7 +375,7 @@ suite('Utils', function() {
     });
 
     test('comment word prefix', function() {
-      var len = Blockly.utils.string.commonWordPrefix('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.commonWordPrefix('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No prefix');
       len = Blockly.utils.string.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
       chai.assert.equal(len, 0, 'No word prefix');
@@ -398,7 +398,7 @@ suite('Utils', function() {
     });
 
     test('comment word suffix', function() {
-      var len = Blockly.utils.string.commonWordSuffix('one,two,three,four,five'.split(','));
+      let len = Blockly.utils.string.commonWordSuffix('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 0, 'No suffix');
       len = Blockly.utils.string.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
       chai.assert.equal(len, 0, 'No word suffix');
@@ -419,7 +419,7 @@ suite('Utils', function() {
 
   suite('Math', function() {
     test('toRadians', function() {
-      var quarter = Math.PI / 2;
+      let quarter = Math.PI / 2;
       chai.assert.equal(Blockly.utils.math.toRadians(-90), -quarter, '-90');
       chai.assert.equal(Blockly.utils.math.toRadians(0), 0, '0');
       chai.assert.equal(Blockly.utils.math.toRadians(90), quarter, '90');
@@ -430,7 +430,7 @@ suite('Utils', function() {
     });
 
     test('toDegrees', function() {
-      var quarter = Math.PI / 2;
+      let quarter = Math.PI / 2;
       chai.assert.equal(Blockly.utils.math.toDegrees(-quarter), -90, '-90');
       chai.assert.equal(Blockly.utils.math.toDegrees(0), 0, '0');
       chai.assert.equal(Blockly.utils.math.toDegrees(quarter), 90, '90');

@@ -275,7 +275,10 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   const preventMove = !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
-  let newLoc, delta;
+  /** @type {Coordinate} */
+  let newLoc;
+  /** @type {Coordinate} */
+  let delta;
   if (preventMove) {
     newLoc = this.startXY_;
   } else {

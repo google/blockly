@@ -141,14 +141,14 @@ suite('JSON Block Definitions', function() {
       chai.assert.equal(block.inputList.length, 2);
 
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
-      var textField = block.inputList[0].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, textField.constructor);
-      chai.assert.equal(MESSAGE0, textField.getText());
+      const firstTextField = block.inputList[0].fieldRow[0];
+      chai.assert.equal(Blockly.FieldLabel, firstTextField.constructor);
+      chai.assert.equal(MESSAGE0, firstTextField.getText());
 
       chai.assert.equal(block.inputList[1].fieldRow.length, 1);
-      var textField = block.inputList[1].fieldRow[0];
-      chai.assert.equal(Blockly.FieldLabel, textField.constructor);
-      chai.assert.equal(MESSAGE1, textField.getText());
+      const secondTextField = block.inputList[1].fieldRow[0];
+      chai.assert.equal(Blockly.FieldLabel, secondTextField.constructor);
+      chai.assert.equal(MESSAGE1, secondTextField.getText());
     });
 
     test('Message string is dereferenced', function() {

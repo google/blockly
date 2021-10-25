@@ -49,7 +49,7 @@ function testAWorkspace() {
     let blocks = [];
     // Turn off events to avoid testing XML at the same time.
     eventUtils.disable();
-    for (var i = 0, id; (id = ids[i]); i++) {
+    for (let i = 0, id; (id = ids[i]); i++) {
       let block = new Blockly.Block(workspace, 'get_var_block');
       block.inputList[0].fieldRow[0].setValue(id);
       blocks.push(block);
@@ -644,7 +644,7 @@ function testAWorkspace() {
       let expectedString = '\n' + Blockly.Xml.domToPrettyText(expected) + '\n';
 
       chai.assert.equal(actual.tagName, expected.tagName);
-      for (var i = 0, attr; (attr = expected.attributes[i]); i++) {
+      for (let i = 0, attr; (attr = expected.attributes[i]); i++) {
         chai.assert.equal(actual.getAttribute(attr.name), attr.value,
             `expected attribute ${attr.name} on ${actualString} to match ` +
             `${expectedString}`);
@@ -652,7 +652,7 @@ function testAWorkspace() {
       chai.assert.equal(actual.childElementCount, expected.childElementCount,
           `expected node ${actualString} to have the same children as node ` +
           `${expectedString}`);
-      for (var i = 0; i < expected.childElementCount; i++) {
+      for (let i = 0; i < expected.childElementCount; i++) {
         assertNodesEqual(actual.children[i], expected.children[i]);
       }
     }

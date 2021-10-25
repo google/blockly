@@ -117,10 +117,11 @@ suite('Theme', function() {
 
   test('Set Theme', function() {
     defineThemeTestBlocks();
+    let workspace;
     try {
       let blockStyles = createBlockStyles();
       let theme = new Blockly.Theme('themeName', blockStyles);
-      var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+      workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
       let blockA = workspace.newBlock('stack_block');
 
       blockA.setStyle = function() {this.styleName_ = 'styleTwo';};

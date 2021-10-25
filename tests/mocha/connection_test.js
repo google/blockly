@@ -105,7 +105,7 @@ suite('Connection', function() {
       chai.assert.notExists(block,
           `expected block ${block && block.id} to not be attached to next connection`);
     }
-    
+
     function assertSerialization(block, jso, xmlText) {
       const actualJso = Blockly.serialization.blocks
           .save(block, {addNextBlocks: true});
@@ -156,21 +156,21 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block" id="id0"/>'
               ), workspace);
               return block;
             }
-  
+
             function createStackBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block" id="id0"/>'
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -200,7 +200,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -248,7 +248,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -278,7 +278,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -326,7 +326,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -354,7 +354,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -398,7 +398,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Add - With Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
@@ -411,7 +411,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlocks(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block" id="id0">' +
@@ -422,7 +422,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStackBlocks(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block" id="id0">' +
@@ -433,7 +433,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -465,7 +465,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -516,7 +516,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -548,7 +548,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -600,7 +600,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -630,7 +630,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlocks(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -677,7 +677,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Add - With Shadow Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
@@ -686,32 +686,32 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block" id="id0"/>'
               ), workspace);
               return block;
             }
-  
+
             function createStackBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block" id="id0"/>'
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="1"/>'
               );
-              parent.getInput('INPUT').connection.setShadowDom(xml);
+              parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="2"/>'
               );
-              parent.getInput('INPUT').connection.setShadowDom(xml);
+              parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertSerialization(
                   parent,
@@ -735,28 +735,28 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="1">' +
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="a"/>' +
                   '  </value>' +
                   '</shadow>'
               );
-              parent.getInput('INPUT').connection.setShadowDom(xml);
+              parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="2">' +
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="b"/>' +
                   '  </value>' +
                   '</shadow>'
               );
-              parent.getInput('INPUT').connection.setShadowDom(xml);
+              parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'b');
@@ -794,18 +794,18 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="1"/>'
               );
-              parent.getInput('NAME').connection.setShadowDom(xml);
+              parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="2"/>'
               );
-              parent.getInput('NAME').connection.setShadowDom(xml);
+              parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertSerialization(
                   parent,
@@ -829,28 +829,28 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="1">' +
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="a"/>' +
                   '  </statement>' +
                   '</shadow>'
               );
-              parent.getInput('NAME').connection.setShadowDom(xml);
+              parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true, 'a');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="2">' +
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="b"/>' +
                   '  </statement>' +
                   '</shadow>'
               );
-              parent.getInput('NAME').connection.setShadowDom(xml);
+              parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true, 'b');
@@ -888,18 +888,18 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="1"/>'
               );
-              parent.nextConnection.setShadowDom(xml);
+              parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="2"/>'
               );
-              parent.nextConnection.setShadowDom(xml);
+              parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
               assertSerialization(
                   parent,
@@ -921,27 +921,27 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlock(this.workspace);
-              var xml = Blockly.Xml.textToDom(
+              let xml1 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="1">' +
                   '  <next>' +
                   '    <shadow type="stack_block" id="a"/>' +
                   '  </next>' +
                   '</shadow>'
               );
-              parent.nextConnection.setShadowDom(xml);
+              parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
               assertNextHasBlock(parent.getNextBlock(), true, 'a');
-              var xml = Blockly.Xml.textToDom(
+              let xml2 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="2">' +
                   '  <next>' +
                   '    <shadow type="stack_block" id="b"/>' +
                   '  </next>' +
                   '</shadow>'
               );
-              parent.nextConnection.setShadowDom(xml);
+              parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
               assertNextHasBlock(parent.getNextBlock(), true, 'b');
               assertSerialization(
@@ -975,7 +975,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Remove - No Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
@@ -988,7 +988,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block" id="id0">' +
@@ -999,7 +999,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStackBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block" id="id0">' +
@@ -1010,7 +1010,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowDom(null);
@@ -1026,7 +1026,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowDom(null);
@@ -1042,7 +1042,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowDom(null);
@@ -1059,7 +1059,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Remove - Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
@@ -1073,7 +1073,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block" id="id0">' +
@@ -1085,7 +1085,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStackBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block" id="id0">' +
@@ -1097,7 +1097,7 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowDom(null);
@@ -1115,7 +1115,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowDom(null);
@@ -1133,7 +1133,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowDom(null);
@@ -1152,7 +1152,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Add - Connect & Disconnect - Remove', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
@@ -1161,21 +1161,21 @@ suite('Connection', function() {
               ), workspace);
               return block;
             }
-  
+
             function createStatementBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="statement_block"/>'
               ), workspace);
               return block;
             }
-  
+
             function createStackBlock(workspace) {
               let block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
                   '<block type="stack_block"/>'
               ), workspace);
               return block;
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1191,7 +1191,7 @@ suite('Connection', function() {
               parent.getInput('INPUT').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'INPUT');
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1215,7 +1215,7 @@ suite('Connection', function() {
               parent.getInput('INPUT').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'INPUT');
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1232,7 +1232,7 @@ suite('Connection', function() {
               parent.getInput('NAME').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'NAME');
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1257,7 +1257,7 @@ suite('Connection', function() {
               parent.getInput('NAME').connection.setShadowDom(null);
               assertInputNotHasBlock(parent, 'NAME');
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1273,7 +1273,7 @@ suite('Connection', function() {
               parent.nextConnection.setShadowDom(null);
               assertNextNotHasBlock(parent);
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlock(this.workspace);
               let xml = Blockly.Xml.textToDom(
@@ -1355,12 +1355,12 @@ suite('Connection', function() {
               return Blockly.serialization.blocks.append(
                   {'type': 'row_block', 'id': 'id0'}, workspace);
             }
-  
+
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'statement_block', 'id': 'id0'}, workspace);
             }
-  
+
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'stack_block', 'id': 'id0'}, workspace);
@@ -1615,7 +1615,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStatementBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -1632,7 +1632,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStackBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -1647,7 +1647,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             test('Value', function() {
               let parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection
@@ -1677,7 +1677,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection.setShadowState(
@@ -1734,7 +1734,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection
@@ -1764,7 +1764,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection.setShadowState(
@@ -1822,7 +1822,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlocks(this.workspace);
               parent.nextConnection
@@ -1850,7 +1850,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlocks(this.workspace);
               parent.nextConnection.setShadowState(
@@ -1901,24 +1901,24 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Add - With Shadow Connected', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'row_block', 'id': 'id0'}, workspace);
             }
-  
+
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'statement_block', 'id': 'id0'}, workspace);
             }
-  
+
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'stack_block', 'id': 'id0'}, workspace);
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection
@@ -1949,7 +1949,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowState(
@@ -2020,7 +2020,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection
@@ -2051,7 +2051,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowState(
@@ -2122,7 +2122,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection
@@ -2151,7 +2151,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowState(
@@ -2213,7 +2213,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Remove - No Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
@@ -2232,7 +2232,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStatementBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -2249,7 +2249,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStackBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -2264,7 +2264,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             test('Value', function() {
               let parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection.setShadowState(null);
@@ -2280,7 +2280,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection.setShadowState(null);
@@ -2296,7 +2296,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlocks(this.workspace);
               parent.nextConnection.setShadowState(null);
@@ -2313,7 +2313,7 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Remove - Block Connected', function() {
             // These are defined separately in each suite.
             function createRowBlocks(workspace) {
@@ -2336,7 +2336,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStatementBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -2357,7 +2357,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             function createStackBlocks(workspace) {
               return Blockly.serialization.blocks.append(
                   {
@@ -2376,7 +2376,7 @@ suite('Connection', function() {
                   },
                   workspace);
             }
-  
+
             test('Value', function() {
               let parent = createRowBlocks(this.workspace);
               parent.getInput('INPUT').connection.setShadowState(null);
@@ -2394,7 +2394,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlocks(this.workspace);
               parent.getInput('NAME').connection.setShadowState(null);
@@ -2412,7 +2412,7 @@ suite('Connection', function() {
                   '</block>'
               );
             });
-  
+
             test('Next', function() {
               let parent = createStackBlocks(this.workspace);
               parent.nextConnection.setShadowState(null);
@@ -2431,24 +2431,24 @@ suite('Connection', function() {
               );
             });
           });
-  
+
           suite('Add - Connect & Disconnect - Remove', function() {
             // These are defined separately in each suite.
             function createRowBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'row_block'}, workspace);
             }
-  
+
             function createStatementBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'statement_block'}, workspace);
             }
-  
+
             function createStackBlock(workspace) {
               return Blockly.serialization.blocks.append(
                   {'type': 'stack_block'}, workspace);
             }
-  
+
             test('Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection
@@ -2462,7 +2462,7 @@ suite('Connection', function() {
               parent.getInput('INPUT').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'INPUT');
             });
-  
+
             test('Multiple Value', function() {
               let parent = createRowBlock(this.workspace);
               parent.getInput('INPUT').connection.setShadowState({
@@ -2488,7 +2488,7 @@ suite('Connection', function() {
               parent.getInput('INPUT').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'INPUT');
             });
-  
+
             test('Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection
@@ -2503,7 +2503,7 @@ suite('Connection', function() {
               parent.getInput('NAME').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'NAME');
             });
-  
+
             test('Multiple Statement', function() {
               let parent = createStatementBlock(this.workspace);
               parent.getInput('NAME').connection.setShadowState({
@@ -2530,7 +2530,7 @@ suite('Connection', function() {
               parent.getInput('NAME').connection.setShadowState(null);
               assertInputNotHasBlock(parent, 'NAME');
             });
-  
+
             test('Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowState({'type': 'stack_block'});
@@ -2542,7 +2542,7 @@ suite('Connection', function() {
               parent.nextConnection.setShadowState(null);
               assertNextNotHasBlock(parent);
             });
-  
+
             test('Multiple Next', function() {
               let parent = createStackBlock(this.workspace);
               parent.nextConnection.setShadowState({

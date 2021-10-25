@@ -43,9 +43,10 @@ suite('Events', function() {
     // Blockly.Event constructors, not the block constructors.
     // Set the group id to avoid an extra call to genUid.
     eventUtils.disable();
+    let block;
     try {
       eventUtils.setGroup('unused');
-      var block = new Blockly.Block(
+      block = new Blockly.Block(
           workspace, 'simple_test_block');
     } finally {
       eventUtils.setGroup(false);
@@ -961,9 +962,10 @@ suite('Events', function() {
     });
 
     test('Block dispose triggers Delete', function() {
+      let workspaceSvg;
       try {
         let toolbox = document.getElementById('toolbox-categories');
-        var workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+        workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
         let TEST_BLOCK_ID = 'test_block_id';
         let genUidStub = createGenUidStubWithReturns(
             [TEST_BLOCK_ID, 'test_group_id']);

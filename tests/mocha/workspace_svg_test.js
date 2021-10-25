@@ -13,7 +13,7 @@ const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
 suite('WorkspaceSvg', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    var toolbox = document.getElementById('toolbox-categories');
+    let toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     Blockly.defineBlocksWithJsonArray([{
       'type': 'simple_test_block',
@@ -37,12 +37,12 @@ suite('WorkspaceSvg', function() {
   });
 
   test('dispose of WorkspaceSvg without dom throws no error', function() {
-    var ws = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+    let ws = new Blockly.WorkspaceSvg(new Blockly.Options({}));
     ws.dispose();
   });
 
   test('appendDomToWorkspace alignment', function() {
-    var dom = Blockly.Xml.textToDom(
+    let dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '  <block type="math_random_float" inline="true" x="21" y="23">' +
         '  </block>' +
@@ -53,7 +53,7 @@ suite('WorkspaceSvg', function() {
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
     chai.assert.equal(this.workspace.getAllBlocks(false).length, 2,
         'Block count');
-    var blocks = this.workspace.getAllBlocks(false);
+    let blocks = this.workspace.getAllBlocks(false);
     chai.assert.equal(blocks[0].getRelativeToSurfaceXY().x, 21,
         'Block 1 position x');
     chai.assert.equal(blocks[0].getRelativeToSurfaceXY().y, 23,
@@ -67,7 +67,7 @@ suite('WorkspaceSvg', function() {
   });
 
   test('Replacing shadow disposes svg', function() {
-    var dom = Blockly.Xml.textToDom(
+    let dom = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         '<block type="test_val_in">' +
         '<value name="NAME">' +
@@ -77,15 +77,15 @@ suite('WorkspaceSvg', function() {
         '</xml>');
 
     Blockly.Xml.appendDomToWorkspace(dom, this.workspace);
-    var blocks = this.workspace.getAllBlocks(false);
+    let blocks = this.workspace.getAllBlocks(false);
     chai.assert.equal(blocks.length, 2, 'Block count');
-    var shadowBlock = blocks[1];
+    let shadowBlock = blocks[1];
     chai.assert.exists(shadowBlock.getSvgRoot());
 
-    var block = this.workspace.newBlock('simple_test_block');
+    let block = this.workspace.newBlock('simple_test_block');
     block.initSvg();
 
-    var inputConnection =
+    let inputConnection =
         this.workspace.getTopBlocks()[0].getInput('NAME').connection;
     inputConnection.connect(block.outputConnection);
     chai.assert.exists(block.getSvgRoot());
@@ -152,7 +152,7 @@ suite('WorkspaceSvg', function() {
       this.workspace.variableMap_ = this.targetWorkspace.getVariableMap();
 
       Blockly.Events.disable();
-      var block = new Blockly.Block(this.workspace, 'get_var_block');
+      let block = new Blockly.Block(this.workspace, 'get_var_block');
       block.inputList[0].fieldRow[0].setValue('1');
       Blockly.Events.enable();
 
@@ -176,8 +176,8 @@ suite('WorkspaceSvg', function() {
     }
     function assertViewportEventFired(eventsFireStub, changeListenerSpy,
         workspace, expectedEventCount = 1) {
-      var metrics = workspace.getMetrics();
-      var expectedProperties = {
+      let metrics = workspace.getMetrics();
+      let expectedProperties = {
         scale: workspace.scale,
         oldScale: 1,
         viewTop: metrics.viewTop,
@@ -233,7 +233,7 @@ suite('WorkspaceSvg', function() {
             this.clock);
       });
       test('zoomToFit', function() {
-        var block = this.workspace.newBlock('stack_block');
+        let block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
         runViewportEventTest(() => this.workspace.zoomToFit(),
@@ -243,7 +243,7 @@ suite('WorkspaceSvg', function() {
     });
     suite('scroll', function() {
       test('centerOnBlock', function() {
-        var block = this.workspace.newBlock('stack_block');
+        let block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
         runViewportEventTest(() => this.workspace.zoomToFit(block.id),
@@ -263,7 +263,7 @@ suite('WorkspaceSvg', function() {
     });
     suite('Blocks triggering viewport changes', function() {
       test('block move that triggers scroll', function() {
-        var block = this.workspace.newBlock('stack_block');
+        let block = this.workspace.newBlock('stack_block');
         block.initSvg();
         block.render();
         this.clock.runAll();
@@ -285,7 +285,7 @@ suite('WorkspaceSvg', function() {
                 '<block type="controls_if" x="288" y="238"></block>' +
                 '</xml>'),
             this.workspace);
-        var xmlDom = Blockly.Xml.textToDom(
+        let xmlDom = Blockly.Xml.textToDom(
             '<block type="controls_if" x="188" y="163"></block>');
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
@@ -309,7 +309,7 @@ suite('WorkspaceSvg', function() {
                 '<block type="controls_if" x="75" y="75"></block>' +
                 '</xml>'),
             this.workspace);
-        var xmlDom = Blockly.Xml.textToDom(
+        let xmlDom = Blockly.Xml.textToDom(
             '<block type="controls_if" x="0" y="0"></block>');
         this.clock.runAll();
         resetEventHistory(this.eventsFireStub, this.changeListenerSpy);
@@ -323,7 +323,7 @@ suite('WorkspaceSvg', function() {
       });
       test.skip('domToWorkspace multiple blocks triggers one viewport event', function() {
         // TODO: Un-skip after adding filtering for consecutive viewport events.
-        var addingMultipleBlocks = () => {
+        let addingMultipleBlocks = () => {
           Blockly.Xml.domToWorkspace(
               Blockly.Xml.textToDom(
                   '<xml xmlns="https://developers.google.com/blockly/xml">' +

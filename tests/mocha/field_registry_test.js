@@ -38,7 +38,7 @@ suite('Field Registry', function() {
       }, 'Invalid name');
     });
     test('No fromJson', function() {
-      var fromJson = CustomFieldType.fromJson;
+      let fromJson = CustomFieldType.fromJson;
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
@@ -46,7 +46,7 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
-      var fromJson = CustomFieldType.fromJson;
+      let fromJson = CustomFieldType.fromJson;
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
@@ -58,24 +58,24 @@ suite('Field Registry', function() {
     test('Simple', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
 
-      var json = {
+      let json = {
         type: 'field_custom_test',
         value: 'ok'
       };
 
-      var field = Blockly.fieldRegistry.fromJson(json);
+      let field = Blockly.fieldRegistry.fromJson(json);
 
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
     });
     test('Not Registered', function() {
-      var json = {
+      let json = {
         type: 'field_custom_test',
         value: 'ok'
       };
 
-      var spy = sinon.stub(console, 'warn');
-      var field = Blockly.fieldRegistry.fromJson(json);
+      let spy = sinon.stub(console, 'warn');
+      let field = Blockly.fieldRegistry.fromJson(json);
       chai.assert.isNull(field);
       chai.assert.isTrue(spy.called);
       spy.restore();
@@ -83,12 +83,12 @@ suite('Field Registry', function() {
     test('Case Different', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
 
-      var json = {
+      let json = {
         type: 'FIELD_CUSTOM_TEST',
         value: 'ok'
       };
 
-      var field = Blockly.fieldRegistry.fromJson(json);
+      let field = Blockly.fieldRegistry.fromJson(json);
       
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');

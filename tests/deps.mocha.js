@@ -315,7 +315,7 @@ goog.addDependency('../../tests/mocha/.mocharc.js', [], []);
 goog.addDependency('../../tests/mocha/astnode_test.js', ['Blockly.test.astNode'], ['Blockly.ASTNode', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_change_event_test.js', ['Blockly.test.blockChangeEvent'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_create_event_test.js', ['Blockly.test.blockCreateEvent'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../tests/mocha/block_json_test.js', ['Blockly.test.blockJson'], [], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/block_json_test.js', ['Blockly.test.blockJson'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_test.js', ['Blockly.test.blocks'], ['Blockly.Events.utils', 'Blockly.blocks', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/comment_test.js', ['Blockly.test.comments'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/connection_checker_test.js', ['Blockly.test.connectionChecker'], ['Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});

@@ -180,7 +180,7 @@ exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 function getXmlArray() {
-  var block = Blockly.Xml.textToDom(
+  let block = Blockly.Xml.textToDom(
       `<block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
@@ -194,9 +194,9 @@ function getXmlArray() {
           </block>
         </value>
       </block>`);
-  var separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
-  var button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
-  var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
+  let separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
+  let button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
+  let label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
 exports.getXmlArray = getXmlArray;
@@ -214,8 +214,8 @@ function getInjectedToolbox() {
    * Category: NestedCategory
    *   Category: NestedItemOne
    */
-  var toolboxXml = document.getElementById('toolbox-test');
-  var workspace = Blockly.inject('blocklyDiv',
+  let toolboxXml = document.getElementById('toolbox-test');
+  let workspace = Blockly.inject('blocklyDiv',
       {
         toolbox: toolboxXml
       });
@@ -224,8 +224,8 @@ function getInjectedToolbox() {
 exports.getInjectedToolbox = getInjectedToolbox;
 
 function getBasicToolbox() {
-  var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-  var toolbox = new Blockly.Toolbox(workspace);
+  let workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+  let toolbox = new Blockly.Toolbox(workspace);
   toolbox.HtmlDiv = document.createElement('div');
   toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
@@ -233,9 +233,9 @@ function getBasicToolbox() {
 exports.getBasicToolbox = getBasicToolbox;
 
 function getCollapsibleItem(toolbox) {
-  var contents = toolbox.contents_;
-  for (var i = 0; i < contents.length; i++) {
-    var item = contents[i];
+  let contents = toolbox.contents_;
+  for (let i = 0; i < contents.length; i++) {
+    let item = contents[i];
     if (item.isCollapsible()) {
       return item;
     }
@@ -244,9 +244,9 @@ function getCollapsibleItem(toolbox) {
 exports.getCollapsibleItem = getCollapsibleItem;
 
 function getNonCollapsibleItem(toolbox) {
-  var contents = toolbox.contents_;
-  for (var i = 0; i < contents.length; i++) {
-    var item = contents[i];
+  let contents = toolbox.contents_;
+  for (let i = 0; i < contents.length; i++) {
+    let item = contents[i];
     if (!item.isCollapsible()) {
       return item;
     }

@@ -83,7 +83,7 @@ suite('Comments', function() {
           this.block.id);
     });
     test('Not Editable -> Editable', function() {
-      var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+      let editableStub = sinon.stub(this.block, 'isEditable').returns(false);
 
       this.comment.setVisible(true);
 
@@ -103,7 +103,7 @@ suite('Comments', function() {
       sinon.restore();
     });
     function assertBubbleSize(comment, height, width) {
-      var size = comment.getBubbleSize();
+      let size = comment.getBubbleSize();
       chai.assert.equal(size.height, height);
       chai.assert.equal(size.width, width);
     }
@@ -112,7 +112,7 @@ suite('Comments', function() {
     }
     test('Set Size While Visible', function() {
       this.comment.setVisible(true);
-      var bubbleSizeSpy = sinon.spy(this.comment.bubble_, 'setBubbleSize');
+      let bubbleSizeSpy = sinon.spy(this.comment.bubble_, 'setBubbleSize');
 
       assertBubbleSizeDefault(this.comment);
       this.comment.setBubbleSize(100, 100);

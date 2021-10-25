@@ -14,7 +14,7 @@ suite('Context Menu Items', function() {
     sharedTestSetup.call(this);
 
     // Creates a WorkspaceSVG
-    var toolbox = document.getElementById('toolbox-categories');
+    let toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
 
     // Declare a new registry to ensure default options are called.
@@ -38,7 +38,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Disabled when nothing to undo', function() {
-        var precondition = this.undoOption.preconditionFn(this.scope);
+        let precondition = this.undoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'disabled',
             'Should be disabled when there is nothing to undo');
       });
@@ -46,7 +46,7 @@ suite('Context Menu Items', function() {
       test('Enabled when something to undo', function() {
         // Create a new block, which should be undoable.
         this.workspace.newBlock('text');
-        var precondition = this.undoOption.preconditionFn(this.scope);
+        let precondition = this.undoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'enabled',
             'Should be enabled when there are actions to undo');
       });
@@ -72,7 +72,7 @@ suite('Context Menu Items', function() {
       test('Disabled when nothing to redo', function() {
         // Create a new block. There should be something to undo, but not redo.
         this.workspace.newBlock('text');
-        var precondition = this.redoOption.preconditionFn(this.scope);
+        let precondition = this.redoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'disabled',
             'Should be disabled when there is nothing to redo');
       });
@@ -81,7 +81,7 @@ suite('Context Menu Items', function() {
         // Create a new block, then undo it, which means there is something to redo.
         this.workspace.newBlock('text');
         this.workspace.undo(false);
-        var precondition = this.redoOption.preconditionFn(this.scope);
+        let precondition = this.redoOption.preconditionFn(this.scope);
         chai.assert.equal(precondition, 'enabled',
             'Should be enabled when there are actions to redo');
       });
@@ -142,7 +142,7 @@ suite('Context Menu Items', function() {
 
       test('Enabled when uncollapsed blocks', function() {
         this.workspace.newBlock('text');
-        var block2 = this.workspace.newBlock('text');
+        let block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
         chai.assert.equal(this.collapseOption.preconditionFn(this.scope), 'enabled',
             'Should be enabled when any blocks are expanded');
@@ -155,7 +155,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Hidden when no collapse option', function() {
-        var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
+        let workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
         try {
@@ -168,8 +168,8 @@ suite('Context Menu Items', function() {
 
       test('Collapses all blocks', function() {
         // All blocks should be collapsed, even if some already were.
-        var block1 = this.workspace.newBlock('text');
-        var block2 = this.workspace.newBlock('text');
+        let block1 = this.workspace.newBlock('text');
+        let block2 = this.workspace.newBlock('text');
         // Need to render block to properly collapse it.
         block1.initSvg();
         block1.render();
@@ -196,7 +196,7 @@ suite('Context Menu Items', function() {
 
       test('Enabled when collapsed blocks', function() {
         this.workspace.newBlock('text');
-        var block2 = this.workspace.newBlock('text');
+        let block2 = this.workspace.newBlock('text');
         block2.setCollapsed(true);
 
         chai.assert.equal(this.expandOption.preconditionFn(this.scope), 'enabled',
@@ -210,7 +210,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Hidden when no collapse option', function() {
-        var workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
+        let workspaceWithOptions = new Blockly.Workspace(new Blockly.Options({collapse: false}));
         this.scope.workspace = workspaceWithOptions;
 
         try {
@@ -223,8 +223,8 @@ suite('Context Menu Items', function() {
 
       test('Expands all blocks', function() {
         // All blocks should be expanded, even if some already were.
-        var block1 = this.workspace.newBlock('text');
-        var block2 = this.workspace.newBlock('text');
+        let block1 = this.workspace.newBlock('text');
+        let block2 = this.workspace.newBlock('text');
         // Need to render block to properly collapse it.
         block2.initSvg();
         block2.render();
@@ -260,7 +260,7 @@ suite('Context Menu Items', function() {
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        var confirmStub = sinon.stub(
+        let confirmStub = sinon.stub(
           Blockly.dialog, 'confirm').callsArgWith(1, true);
 
         this.workspace.newBlock('text');
@@ -273,7 +273,7 @@ suite('Context Menu Items', function() {
 
       test('Does not delete blocks if not confirmed', function() {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        var confirmStub = sinon.stub(
+        let confirmStub = sinon.stub(
           Blockly.dialog, 'confirm').callsArgWith(1, false);
 
         this.workspace.newBlock('text');
@@ -285,7 +285,7 @@ suite('Context Menu Items', function() {
       });
 
       test('No dialog for single block', function() {
-        var confirmStub = sinon.stub(Blockly.dialog, 'confirm');
+        let confirmStub = sinon.stub(Blockly.dialog, 'confirm');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
@@ -335,7 +335,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Calls duplicate', function() {
-        var spy = sinon.spy(Blockly.clipboard, 'duplicate');
+        let spy = sinon.spy(Blockly.clipboard, 'duplicate');
 
         this.duplicateOption.callback(this.scope);
 
@@ -358,7 +358,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Hidden for IE', function() {
-        var oldState = Blockly.utils.userAgent.IE;
+        let oldState = Blockly.utils.userAgent.IE;
         try {
           Blockly.utils.userAgent.IE = true;
           chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');

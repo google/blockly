@@ -292,7 +292,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
     for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false);
+        block.dispose(true);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't uncreate non-existent block: " + id);
@@ -381,7 +381,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
     for (var i = 0, id; (id = this.ids[i]); i++) {
       var block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false);
+        block.dispose(true);
       } else if (id == this.blockId) {
         // Only complain about root-level block.
         console.warn("Can't delete non-existent block: " + id);

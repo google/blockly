@@ -177,7 +177,6 @@ Blockly.FieldColour.prototype.initView = function() {
       this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
   if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
     this.createBorderRect_();
-    this.borderRect_.style['fillOpacity'] = '1';
   } else {
     this.clickTarget_ = this.sourceBlock_.getSvgRoot();
   }

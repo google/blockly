@@ -722,7 +722,7 @@ Trashcan.prototype.cleanBlockJson_ = function(json) {
     }
 
     const inputs = json['inputs'];
-    for (var name in inputs) {
+    for (const name in inputs) {
       const input = inputs[name];
       cleanRec(input['block']);
       cleanRec(input['shadow']);

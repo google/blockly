@@ -432,7 +432,7 @@ ASTNode.prototype.findPrevForField_ = function() {
  * @private
  */
 ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
-  var curLocation = this.getLocation();
+  let curLocation = this.getLocation();
   if (curLocation.getSourceBlock) {
     curLocation = /** @type {!IASTNodeLocationWithBlock} */ (curLocation)
                       .getSourceBlock();

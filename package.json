@@ -91,7 +91,7 @@
     "mocha": "^9.1.1",
     "readline-sync": "^1.4.10",
     "rimraf": "^3.0.2",
-    "selenium-standalone": "^7.1.0",
+    "selenium-standalone": "^8.0.3",
     "through2": "^4.0.2",
     "typescript": "^4.3.2",
     "typescript-closure-tools": "^0.0.7",

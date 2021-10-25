@@ -1,0 +1,27 @@
+name: test-clang-format
+on: [pull_request]
+
+jobs:
+  clang-formatter:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: DoozyX/clang-format-lint-action@v0.12
+      with:
+        source: 'core'
+        extensions: 'js'
+        clangFormatVersion: 12
+        style: Google
+
+    - uses: actions/github-script@v5
+      if: failure()
+      with:
+        script: |
+          console.log(context.issue.number)
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'It looks like some of your files have not been formatted properly. Please run `npm run format`.'
+          })

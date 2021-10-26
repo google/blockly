@@ -1313,24 +1313,24 @@ suite('Blocks', function() {
   suite('Collapsing and Expanding', function() {
     function assertCollapsed(block, opt_string) {
       chai.assert.isTrue(block.isCollapsed());
-      for (var i = 0, input; (input = block.inputList[i]); i++) {
+      for (let i = 0, input; (input = block.inputList[i]); i++) {
         if (input.name == Blockly.Block.COLLAPSED_INPUT_NAME) {
           continue;
         }
         chai.assert.isFalse(input.isVisible());
-        for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+        for (let j = 0, field; (field = input.fieldRow[j]); j++) {
           chai.assert.isFalse(field.isVisible());
         }
       }
       let icons = block.getIcons();
-      for (var i = 0, icon; (icon = icons[i]); i++) {
+      for (let i = 0, icon; (icon = icons[i]); i++) {
         chai.assert.isFalse(icon.isVisible());
       }
 
-      var input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
+      const input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
       chai.assert.isNotNull(input);
       chai.assert.isTrue(input.isVisible());
-      var field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
+      const field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
       chai.assert.isNotNull(field);
       chai.assert.isTrue(field.isVisible());
 
@@ -1340,16 +1340,16 @@ suite('Blocks', function() {
     }
     function assertNotCollapsed(block) {
       chai.assert.isFalse(block.isCollapsed());
-      for (var i = 0, input; (input = block.inputList[i]); i++) {
+      for (let i = 0, input; (input = block.inputList[i]); i++) {
         chai.assert.isTrue(input.isVisible());
-        for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+        for (let j = 0, field; (field = input.fieldRow[j]); j++) {
           chai.assert.isTrue(field.isVisible());
         }
       }
 
-      var input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
+      const input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
       chai.assert.isNull(input);
-      var field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
+      const field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
       chai.assert.isNull(field);
     }
     function isBlockHidden(block) {

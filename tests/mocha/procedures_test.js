@@ -139,7 +139,7 @@ suite('Procedures', function() {
       test('Nested caller', function() {
         this.barDef.setEnabled(false);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isFalse(this.barCalls[i].isEnabled(),
               'Callers are disabled when their definition is disabled ' +
               '(bar call ' + i + ')');
@@ -151,7 +151,7 @@ suite('Procedures', function() {
 
         this.fooDef.setEnabled(false);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isFalse(this.fooCalls[i].isEnabled(),
               'Callers are disabled when their definition is disabled ' +
               '(foo call ' + i + ')');
@@ -159,7 +159,7 @@ suite('Procedures', function() {
 
         this.barDef.setEnabled(true);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isTrue(this.barCalls[i].isEnabled(),
               'Callers are reenabled with their definition ' +
               '(bar call ' + i + ')');
@@ -747,7 +747,7 @@ suite('Procedures', function() {
           this.barDef.setEnabled(false);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isFalse(this.barCalls[i].isEnabled(),
                 'Callers are disabled when their definition is disabled (call ' +
                 i + ')');
@@ -755,7 +755,7 @@ suite('Procedures', function() {
           let firedEvents = this.workspaceSvg.undoStack_;
           chai.assert.equal(firedEvents.length, 3,
               'An event was fired for the definition and each caller');
-          for (var i = 0; i < 3; i++) {
+          for (let i = 0; i < 3; i++) {
             chai.assert.equal(firedEvents[i].group, 'g1',
                 'Disable events are in the same group (event ' + i + ')');
           }
@@ -765,14 +765,14 @@ suite('Procedures', function() {
           this.barDef.setEnabled(true);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isTrue(this.barCalls[i].isEnabled(),
                 'Callers are enabled when their definition is enabled (call ' +
                 i + ')');
           }
           chai.assert.equal(firedEvents.length, 3,
               'An event was fired for the definition and each caller');
-          for (var i = 0; i < 3; i++) {
+          for (let i = 0; i < 3; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',
                 'Enable events are in the same group (event ' + i + ')');
           }
@@ -784,7 +784,7 @@ suite('Procedures', function() {
           this.barDef.setEnabled(false);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isFalse(this.barCalls[i].isEnabled(),
                 'Callers are disabled when their definition is disabled (call ' +
                 i + ')');
@@ -792,7 +792,7 @@ suite('Procedures', function() {
           let firedEvents = this.workspaceSvg.undoStack_;
           chai.assert.equal(firedEvents.length, 2,
               'An event was fired for the definition and the enabled caller');
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.equal(firedEvents[i].group, 'g1',
                 'Disable events are in the same group (event ' + i + ')');
           }
@@ -808,7 +808,7 @@ suite('Procedures', function() {
               'Caller returns to previous enabled state when the definition is enabled');
           chai.assert.equal(firedEvents.length, 2,
               'An event was fired for the definition and the enabled caller');
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',
                 'Enable events are in the same group (event ' + i + ')');
           }
@@ -889,11 +889,11 @@ suite('Procedures', function() {
             }
             function assertArgs(argArray) {
               chai.assert.equal(this.defBlock.arguments_.length, argArray.length);
-              for (var i = 0; i < argArray.length; i++) {
+              for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
               }
               chai.assert.equal(this.callBlock.arguments_.length, argArray.length);
-              for (var i = 0; i < argArray.length; i++) {
+              for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
               }
             }

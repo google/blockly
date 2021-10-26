@@ -460,7 +460,7 @@ suite('XML', function() {
         this.workspace.createVariable('name1', '', 'id1');
         let blocksArray =
             Blockly.Variables.flyoutCategoryBlocks(this.workspace);
-        for (var i = 0, xml; (xml = blocksArray[i]); i++) {
+        for (let i = 0, xml; (xml = blocksArray[i]); i++) {
           Blockly.Xml.domToBlock(xml, this.workspace);
         }
       });
@@ -470,7 +470,7 @@ suite('XML', function() {
         this.workspace.createVariable('name3', 'Colour', 'id3');
         let blocksArray =
             Blockly.VariablesDynamic.flyoutCategoryBlocks(this.workspace);
-        for (var i = 0, xml; (xml = blocksArray[i]); i++) {
+        for (let i = 0, xml; (xml = blocksArray[i]); i++) {
           Blockly.Xml.domToBlock(xml, this.workspace);
         }
       });
@@ -764,7 +764,7 @@ suite('XML', function() {
         block.commentModel.pinned = true;
 
         this.clock.runAll();
-        
+
         assertRoundTrip(this.headlessWorkspace, this.renderedWorkspace);
       });
     });

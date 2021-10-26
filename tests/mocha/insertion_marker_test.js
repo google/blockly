@@ -208,7 +208,7 @@ suite('InsertionMarkers', function() {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         let block = this.workspace.getBlockById('insertion');
         block.setInsertionMarker(true);
-        var xml = Blockly.Xml.workspaceToDom(this.workspace);
+        let xml = Blockly.Xml.workspaceToDom(this.workspace);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         xml = Blockly.Xml.domToText(xml);
         chai.assert.equal(xml, expectXml);

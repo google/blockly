@@ -53,6 +53,12 @@ const Abstract = function() {
    * @type {boolean}
    */
   this.recordUndo = eventUtils.getRecordUndo();
+
+  /**
+   * Specifies the type of the event
+   * @type {string|undefined}
+   */
+  this.type = undefined;
 };
 
 /**

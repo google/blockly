@@ -18,6 +18,8 @@ goog.provide('Blockly.Msg');
 
 goog.require('Blockly.utils.global');
 
+goog.module('null');
+
 
 /**
  * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,

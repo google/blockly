@@ -1327,10 +1327,10 @@ suite('Blocks', function() {
         chai.assert.isFalse(icon.isVisible());
       }
 
-      let input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
+      const input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
       chai.assert.isNotNull(input);
       chai.assert.isTrue(input.isVisible());
-      let field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
+      const field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
       chai.assert.isNotNull(field);
       chai.assert.isTrue(field.isVisible());
 
@@ -1347,9 +1347,9 @@ suite('Blocks', function() {
         }
       }
 
-      let input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
+      const input = block.getInput(Blockly.Block.COLLAPSED_INPUT_NAME);
       chai.assert.isNull(input);
-      let field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
+      const field = block.getField(Blockly.Block.COLLAPSED_FIELD_NAME);
       chai.assert.isNull(field);
     }
     function isBlockHidden(block) {

@@ -702,15 +702,14 @@ suite('Connection', function() {
             }
 
             test('Value', function() {
-              let parent = createRowBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
+              const parent = createRowBlock(this.workspace);
+              const xml1 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="1"/>'
               );
               parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
-              let xml2 = Blockly.Xml.textToDom(
-                  '<shadow type="row_block" id="2"/>'
-              );
+              const xml2 =
+                  Blockly.Xml.textToDom('<shadow type="row_block" id="2"/>');
               parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertSerialization(
@@ -737,25 +736,23 @@ suite('Connection', function() {
             });
 
             test('Multiple Value', function() {
-              let parent = createRowBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
+              const parent = createRowBlock(this.workspace);
+              const xml1 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="1">' +
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="a"/>' +
                   '  </value>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.getInput('INPUT').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'INPUT', true, '1');
               assertInputHasBlock(
                   parent.getInputTargetBlock('INPUT'), 'INPUT', true, 'a');
-              let xml2 = Blockly.Xml.textToDom(
+              const xml2 = Blockly.Xml.textToDom(
                   '<shadow type="row_block" id="2">' +
                   '  <value name="INPUT">' +
                   '    <shadow type="row_block" id="b"/>' +
                   '  </value>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.getInput('INPUT').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'INPUT', true, '2');
               assertInputHasBlock(
@@ -796,15 +793,13 @@ suite('Connection', function() {
             });
 
             test('Statement', function() {
-              let parent = createStatementBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block" id="1"/>'
-              );
+              const parent = createStatementBlock(this.workspace);
+              const xml1 = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="1"/>');
               parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
-              let xml2 = Blockly.Xml.textToDom(
-                  '<shadow type="statement_block" id="2"/>'
-              );
+              const xml2 = Blockly.Xml.textToDom(
+                  '<shadow type="statement_block" id="2"/>');
               parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertSerialization(
@@ -831,25 +826,23 @@ suite('Connection', function() {
             });
 
             test('Multiple Statement', function() {
-              let parent = createStatementBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
+              const parent = createStatementBlock(this.workspace);
+              const xml1 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="1">' +
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="a"/>' +
                   '  </statement>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.getInput('NAME').connection.setShadowDom(xml1);
               assertInputHasBlock(parent, 'NAME', true, '1');
               assertInputHasBlock(
                   parent.getInputTargetBlock('NAME'), 'NAME', true, 'a');
-              let xml2 = Blockly.Xml.textToDom(
+              const xml2 = Blockly.Xml.textToDom(
                   '<shadow type="statement_block" id="2">' +
                   '  <statement name="NAME">' +
                   '    <shadow type="statement_block" id="b"/>' +
                   '  </statement>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.getInput('NAME').connection.setShadowDom(xml2);
               assertInputHasBlock(parent, 'NAME', true, '2');
               assertInputHasBlock(
@@ -890,15 +883,13 @@ suite('Connection', function() {
             });
 
             test('Next', function() {
-              let parent = createStackBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block" id="1"/>'
-              );
+              const parent = createStackBlock(this.workspace);
+              const xml1 =
+                  Blockly.Xml.textToDom('<shadow type="stack_block" id="1"/>');
               parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
-              let xml2 = Blockly.Xml.textToDom(
-                  '<shadow type="stack_block" id="2"/>'
-              );
+              const xml2 =
+                  Blockly.Xml.textToDom('<shadow type="stack_block" id="2"/>');
               parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
               assertSerialization(
@@ -923,24 +914,22 @@ suite('Connection', function() {
             });
 
             test('Multiple Next', function() {
-              let parent = createStackBlock(this.workspace);
-              let xml1 = Blockly.Xml.textToDom(
+              const parent = createStackBlock(this.workspace);
+              const xml1 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="1">' +
                   '  <next>' +
                   '    <shadow type="stack_block" id="a"/>' +
                   '  </next>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.nextConnection.setShadowDom(xml1);
               assertNextHasBlock(parent, true, '1');
               assertNextHasBlock(parent.getNextBlock(), true, 'a');
-              let xml2 = Blockly.Xml.textToDom(
+              const xml2 = Blockly.Xml.textToDom(
                   '<shadow type="stack_block" id="2">' +
                   '  <next>' +
                   '    <shadow type="stack_block" id="b"/>' +
                   '  </next>' +
-                  '</shadow>'
-              );
+                  '</shadow>');
               parent.nextConnection.setShadowDom(xml2);
               assertNextHasBlock(parent, true, '2');
               assertNextHasBlock(parent.getNextBlock(), true, 'b');

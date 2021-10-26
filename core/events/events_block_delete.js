@@ -113,7 +113,7 @@ BlockDelete.prototype.run = function(forward) {
       const id = this.ids[i];
       const block = workspace.getBlockById(id);
       if (block) {
-        block.dispose(false);
+        block.dispose(true);
       } else if (id === this.blockId) {
         // Only complain about root-level block.
         console.warn('Can\'t delete non-existent block: ' + id);

@@ -113,7 +113,7 @@ Blockly.Lua.init = function(workspace) {
  */
 Blockly.Lua.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var definitions = Blockly.utils.object.values(this.definitions_);
+  const definitions = Blockly.utils.object.values(this.definitions_);
   // Call Blockly.Generator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;
@@ -156,7 +156,7 @@ Blockly.Lua.quote_ = function(string) {
  * @protected
  */
 Blockly.Lua.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(this.quote_);
+  const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // .. '\n' ..
   return lines.join(' .. \'\\n\' ..\n');
@@ -173,20 +173,20 @@ Blockly.Lua.multiline_quote_ = function(string) {
  * @protected
  */
 Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
-  var commentCode = '';
+  let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
-    var comment = block.getCommentText();
+    let comment = block.getCommentText();
     if (comment) {
       comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
       commentCode += this.prefixLines(comment, '-- ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var i = 0; i < block.inputList.length; i++) {
+    for (let i = 0; i < block.inputList.length; i++) {
       if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
-        var childBlock = block.inputList[i].connection.targetBlock();
+        const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
           if (comment) {
@@ -196,7 +196,7 @@ Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
       }
     }
   }
-  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };

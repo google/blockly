@@ -155,17 +155,17 @@ Blockly.Python.init = function(workspace) {
   this.nameDB_.populateVariables(workspace);
   this.nameDB_.populateProcedures(workspace);
 
-  var defvars = [];
+  const defvars = [];
   // Add developer variables (not created or named by the user).
-  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
-  for (var i = 0; i < devVarList.length; i++) {
+  const devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (let i = 0; i < devVarList.length; i++) {
     defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
   }
 
   // Add user variables, but only ones that are being used.
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0; i < variables.length; i++) {
+  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
     defvars.push(this.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
   }
@@ -181,10 +181,10 @@ Blockly.Python.init = function(workspace) {
  */
 Blockly.Python.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var imports = [];
-  var definitions = [];
-  for (var name in this.definitions_) {
-    var def = this.definitions_[name];
+  const imports = [];
+  const definitions = [];
+  for (let name in this.definitions_) {
+    const def = this.definitions_[name];
     if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
       imports.push(def);
     } else {
@@ -196,7 +196,7 @@ Blockly.Python.finish = function(code) {
   this.isInitialized = false;
 
   this.nameDB_.reset();
-  var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+  const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
@@ -222,7 +222,7 @@ Blockly.Python.quote_ = function(string) {
                  .replace(/\n/g, '\\\n');
 
   // Follow the CPython behaviour of repr() for a non-byte string.
-  var quote = '\'';
+  let quote = '\'';
   if (string.indexOf('\'') !== -1) {
     if (string.indexOf('"') === -1) {
       quote = '"';
@@ -241,7 +241,7 @@ Blockly.Python.quote_ = function(string) {
  * @protected
  */
 Blockly.Python.multiline_quote_ = function(string) {
-  var lines = string.split(/\n/g).map(this.quote_);
+  const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
   return lines.join(' + \'\\n\' + \n');
@@ -258,20 +258,20 @@ Blockly.Python.multiline_quote_ = function(string) {
  * @protected
  */
 Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
-  var commentCode = '';
+  let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
-    var comment = block.getCommentText();
+    let comment = block.getCommentText();
     if (comment) {
       comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
       commentCode += this.prefixLines(comment + '\n', '# ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var i = 0; i < block.inputList.length; i++) {
+    for (let i = 0; i < block.inputList.length; i++) {
       if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
-        var childBlock = block.inputList[i].connection.targetBlock();
+        const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
           if (comment) {
@@ -281,8 +281,8 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
       }
     }
   }
-  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -296,13 +296,13 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
  * @return {string|number}
  */
 Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
-  var delta = opt_delta || 0;
+  let delta = opt_delta || 0;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
-  var atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
-  var at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
+  const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  const atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
+  let at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.

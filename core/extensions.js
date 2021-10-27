@@ -216,8 +216,8 @@ const checkNoMutatorProperties = function(mutationName, block) {
  *     not actually a function.
  */
 const checkXmlHooks = function(object, errorPrefix) {
-  return checkHasFunctionPair(
-      object, 'mutationToDom', 'domToMutation', errorPrefix);
+  return checkHasFunctionPair(object.mutationToDom, object.domToMutation,
+      errorPrefix + ' mutationToDom/domToMutation');
 };
 
 /**
@@ -231,8 +231,8 @@ const checkXmlHooks = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkJsonHooks = function(object, errorPrefix) {
-  return checkHasFunctionPair(
-      object, 'saveExtraState', 'loadExtraState', errorPrefix);
+  return checkHasFunctionPair(object.saveExtraState, object.loadExtraState,
+      errorPrefix + ' saveExtraState/loadExtraState');
 };
 
 /**
@@ -245,38 +245,31 @@ const checkJsonHooks = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkMutatorDialog = function(object, errorPrefix) {
-  return checkHasFunctionPair(object, 'compose', 'decompose', errorPrefix);
+  return checkHasFunctionPair(object.compose, object.decompose,
+      errorPrefix + ' compose/decompose');
 };
 
 /**
- * Checks that the given object has both or neither of the given functions, and
- * that they are indeed functions.
- * @param {!Object} object The object to check.
- * @param {string} name1 The name of the first function in the pair.
- * @param {string} name2 The name of the second function in the pair.
+ * Checks that both or neither of the given functions exist and that they are
+ * indeed functions.
+ * @param {*} func1 The first function in the pair.
+ * @param {*} func2 The second function in the pair.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions. False if it has
+ * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
  * @throws {Error} If the object has only one of the functions, or either is
  *     not actually a function.
  */
-const checkHasFunctionPair = function(object, name1, name2, errorPrefix) {
-  const has1 = object[name1] !== undefined;
-  const has2 = object[name2] !== undefined;
-
-  if (has1 && has2) {
-    if (typeof object[name1] !== 'function') {
-      throw Error(errorPrefix + name1 + ' must be a function.');
-    } else if (typeof object[name2] !== 'function') {
-      throw Error(errorPrefix + name2 + ' must be a function.');
+const checkHasFunctionPair = function(func1, func2, errorPrefix) {
+  if (func1 && func2) {
+    if (typeof func1 !== 'function' || typeof func2 !== 'function') {
+      throw Error(errorPrefix + ' must be a function');
     }
     return true;
-  } else if (!has1 && !has2) {
+  } else if (!func1 && !func2) {
     return false;
   }
-  throw Error(
-      errorPrefix + 'Must have both or neither of "' + name1 + '" and "' +
-      name2 + '"');
+  throw Error(errorPrefix + 'Must have both or neither functions');
 };
 
 /**

@@ -216,7 +216,8 @@ const checkNoMutatorProperties = function(mutationName, block) {
  *     not actually a function.
  */
 const checkXmlHooks = function(object, errorPrefix) {
-  return checkHasFunctionPair(object.mutationToDom, object.domToMutation,
+  return checkHasFunctionPair(
+      object.mutationToDom, object.domToMutation,
       errorPrefix + ' mutationToDom/domToMutation');
 };
 
@@ -231,7 +232,8 @@ const checkXmlHooks = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkJsonHooks = function(object, errorPrefix) {
-  return checkHasFunctionPair(object.saveExtraState, object.loadExtraState,
+  return checkHasFunctionPair(
+      object.saveExtraState, object.loadExtraState,
       errorPrefix + ' saveExtraState/loadExtraState');
 };
 
@@ -245,7 +247,8 @@ const checkJsonHooks = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkMutatorDialog = function(object, errorPrefix) {
-  return checkHasFunctionPair(object.compose, object.decompose,
+  return checkHasFunctionPair(
+      object.compose, object.decompose,
       errorPrefix + ' compose/decompose');
 };
 

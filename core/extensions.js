@@ -248,8 +248,7 @@ const checkJsonHooks = function(object, errorPrefix) {
  */
 const checkMutatorDialog = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object.compose, object.decompose,
-      errorPrefix + ' compose/decompose');
+      object.compose, object.decompose, errorPrefix + ' compose/decompose');
 };
 
 /**

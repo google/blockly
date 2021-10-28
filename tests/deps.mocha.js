@@ -307,9 +307,9 @@ goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'],
 goog.addDependency('../../generators/python/logic.js', ['Blockly.Python.logic'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/math.js', ['Blockly.Python.math'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python']);
-goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python']);
-goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Python']);
+goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/variables_dynamic.js', ['Blockly.Python.variablesDynamic'], ['Blockly.Python', 'Blockly.Python.variables']);
 goog.addDependency('../../tests/mocha/.mocharc.js', [], []);
 goog.addDependency('../../tests/mocha/astnode_test.js', ['Blockly.test.astNode'], ['Blockly.ASTNode', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});

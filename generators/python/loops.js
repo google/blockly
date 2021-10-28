@@ -16,12 +16,13 @@ goog.require('Blockly.Python');
 
 Blockly.Python['controls_repeat_ext'] = function(block) {
   // Repeat n times.
+  let repeats;
   if (block.getField('TIMES')) {
     // Internal number.
-    var repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
+    repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
   } else {
     // External number.
-    var repeats = Blockly.Python.valueToCode(block, 'TIMES',
+    repeats = Blockly.Python.valueToCode(block, 'TIMES',
         Blockly.Python.ORDER_NONE) || '0';
   }
   if (Blockly.isNumber(repeats)) {
@@ -29,11 +30,11 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
   } else {
     repeats = 'int(' + repeats + ')';
   }
-  var branch = Blockly.Python.statementToCode(block, 'DO');
+  let branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
-  var loopVar = Blockly.Python.nameDB_.getDistinctName(
+  const loopVar = Blockly.Python.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
-  var code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
+  const code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
   return code;
 };
 
@@ -41,11 +42,11 @@ Blockly.Python['controls_repeat'] = Blockly.Python['controls_repeat_ext'];
 
 Blockly.Python['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') === 'UNTIL';
-  var argument0 = Blockly.Python.valueToCode(block, 'BOOL',
+  const until = block.getFieldValue('MODE') === 'UNTIL';
+  let argument0 = Blockly.Python.valueToCode(block, 'BOOL',
       until ? Blockly.Python.ORDER_LOGICAL_NOT :
       Blockly.Python.ORDER_NONE) || 'False';
-  var branch = Blockly.Python.statementToCode(block, 'DO');
+  let branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
   if (until) {
     argument0 = 'not ' + argument0;
@@ -55,22 +56,22 @@ Blockly.Python['controls_whileUntil'] = function(block) {
 
 Blockly.Python['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Python.nameDB_.getName(
+  const variable0 = Blockly.Python.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var argument0 = Blockly.Python.valueToCode(block, 'FROM',
+  let argument0 = Blockly.Python.valueToCode(block, 'FROM',
       Blockly.Python.ORDER_NONE) || '0';
-  var argument1 = Blockly.Python.valueToCode(block, 'TO',
+  let argument1 = Blockly.Python.valueToCode(block, 'TO',
       Blockly.Python.ORDER_NONE) || '0';
-  var increment = Blockly.Python.valueToCode(block, 'BY',
+  let increment = Blockly.Python.valueToCode(block, 'BY',
       Blockly.Python.ORDER_NONE) || '1';
-  var branch = Blockly.Python.statementToCode(block, 'DO');
+  let branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
 
-  var code = '';
-  var range;
+  let code = '';
+  let range;
 
   // Helper functions.
-  var defineUpRange = function() {
+  const defineUpRange = function() {
     return Blockly.Python.provideFunction_(
         'upRange',
         ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
@@ -79,7 +80,7 @@ Blockly.Python['controls_for'] = function(block) {
          '    yield start',
          '    start += abs(step)']);
   };
-  var defineDownRange = function() {
+  const defineDownRange = function() {
     return Blockly.Python.provideFunction_(
         'downRange',
         ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
@@ -89,7 +90,7 @@ Blockly.Python['controls_for'] = function(block) {
          '    start -= abs(step)']);
   };
   // Arguments are legal Python code (numbers or strings returned by scrub()).
-  var generateUpDownRange = function(start, end, inc) {
+  const generateUpDownRange = function(start, end, inc) {
     return '(' + start + ' <= ' + end + ') and ' +
         defineUpRange() + '(' + start + ', ' + end + ', ' + inc + ') or ' +
         defineDownRange() + '(' + start + ', ' + end + ', ' + inc + ')';
@@ -133,7 +134,7 @@ Blockly.Python['controls_for'] = function(block) {
     }
   } else {
     // Cache non-trivial values to variables to prevent repeated look-ups.
-    var scrub = function(arg, suffix) {
+    const scrub = function(arg, suffix) {
       if (Blockly.isNumber(arg)) {
         // Simple number.
         arg = Number(arg);
@@ -142,16 +143,16 @@ Blockly.Python['controls_for'] = function(block) {
         arg = 'float(' + arg + ')';
       } else {
         // It's complicated.
-        var varName = Blockly.Python.nameDB_.getDistinctName(
+        const varName = Blockly.Python.nameDB_.getDistinctName(
             variable0 + suffix, Blockly.VARIABLE_CATEGORY_NAME);
         code += varName + ' = float(' + arg + ')\n';
         arg = varName;
       }
       return arg;
     };
-    var startVar = scrub(argument0, '_start');
-    var endVar = scrub(argument1, '_end');
-    var incVar = scrub(increment, '_inc');
+    const startVar = scrub(argument0, '_start');
+    const endVar = scrub(argument1, '_end');
+    const incVar = scrub(increment, '_inc');
 
     if (typeof startVar === 'number' && typeof endVar === 'number') {
       if (startVar < endVar) {
@@ -171,19 +172,19 @@ Blockly.Python['controls_for'] = function(block) {
 
 Blockly.Python['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Python.nameDB_.getName(
+  const variable0 = Blockly.Python.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var argument0 = Blockly.Python.valueToCode(block, 'LIST',
+  const argument0 = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_RELATIONAL) || '[]';
-  var branch = Blockly.Python.statementToCode(block, 'DO');
+  let branch = Blockly.Python.statementToCode(block, 'DO');
   branch = Blockly.Python.addLoopTrap(branch, block) || Blockly.Python.PASS;
-  var code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;
+  const code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;
   return code;
 };
 
 Blockly.Python['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  var xfix = '';
+  let xfix = '';
   if (Blockly.Python.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
     xfix += Blockly.Python.injectId(Blockly.Python.STATEMENT_PREFIX, block);
@@ -194,7 +195,7 @@ Blockly.Python['controls_flow_statements'] = function(block) {
     xfix += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
   }
   if (Blockly.Python.STATEMENT_PREFIX) {
-    var loop = Blockly.Constants.Loops
+    const loop = Blockly.Constants.Loops
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end

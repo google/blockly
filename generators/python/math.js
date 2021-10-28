@@ -327,11 +327,10 @@ Blockly.Python['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     }
-    case 'RANDOM':{
+    case 'RANDOM':
       Blockly.Python.definitions_['import_random'] = 'import random';
       code = 'random.choice(' + list + ')';
       break;
-    }
     default:
       throw Error('Unknown operator: ' + func);
   }

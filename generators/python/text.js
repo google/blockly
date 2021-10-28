@@ -52,9 +52,8 @@ Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
   switch (block.itemCount_) {
-    case 0: {
+    case 0:
       return ['\'\'', Blockly.Python.ORDER_ATOMIC];
-    }
     case 1: {
       const element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';

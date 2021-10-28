@@ -103,7 +103,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
   const list = Blockly.Python.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
-    case 'FIRST': {
+    case 'FIRST':
       if (mode === 'GET') {
         const code = list + '[0]';
         return [code, Blockly.Python.ORDER_MEMBER];
@@ -114,8 +114,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
         return list + '.pop(0)\n';
       }
       break;
-    }
-    case 'LAST': {
+    case 'LAST':
       if (mode === 'GET') {
         const code = list + '[-1]';
         return [code, Blockly.Python.ORDER_MEMBER];
@@ -126,7 +125,6 @@ Blockly.Python['lists_getIndex'] = function(block) {
         return list + '.pop()\n';
       }
       break;
-    }
     case 'FROM_START': {
       const at = Blockly.Python.getAdjustedInt(block, 'AT');
       if (mode === 'GET') {
@@ -153,7 +151,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
       }
       break;
     }
-    case 'RANDOM': {
+    case 'RANDOM':
       Blockly.Python.definitions_['import_random'] = 'import random';
       if (mode === 'GET') {
         const code = 'random.choice(' + list + ')';
@@ -172,7 +170,6 @@ Blockly.Python['lists_getIndex'] = function(block) {
         }
       }
       break;
-    }
   }
   throw Error('Unhandled combination (lists_getIndex).');
 };
@@ -200,22 +197,20 @@ Blockly.Python['lists_setIndex'] = function(block) {
   }
 
   switch (where) {
-    case 'FIRST': {
+    case 'FIRST':
       if (mode === 'SET') {
         return list + '[0] = ' + value + '\n';
       } else if (mode === 'INSERT') {
         return list + '.insert(0, ' + value + ')\n';
       }
       break;
-    }
-    case 'LAST': {
+    case 'LAST':
         if (mode === 'SET') {
           return list + '[-1] = ' + value + '\n';
         } else if (mode === 'INSERT') {
           return list + '.append(' + value + ')\n';
         }
       break;
-    }
     case 'FROM_START': {
       const at = Blockly.Python.getAdjustedInt(block, 'AT');
         if (mode === 'SET') {
@@ -261,32 +256,28 @@ Blockly.Python['lists_getSublist'] = function(block) {
   const where2 = block.getFieldValue('WHERE2');
   let at1;
   switch (where1) {
-    case 'FROM_START': {
+    case 'FROM_START':
       at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
       if (at1 === 0) {
         at1 = '';
       }
       break;
-    }
-    case 'FROM_END': {
+    case 'FROM_END':
       at1 = Blockly.Python.getAdjustedInt(block, 'AT1', 1, true);
       break;
-    }
-    case 'FIRST': {
+    case 'FIRST':
       at1 = '';
       break;
-    }
     default:
       throw Error('Unhandled option (lists_getSublist)');
   }
 
   let at2;
   switch (where2) {
-    case 'FROM_START': {
+    case 'FROM_START':
       at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 1);
       break;
-    }
-    case 'FROM_END': {
+    case 'FROM_END':
       at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 0, true);
       // Ensure that if the result calculated is 0 that sub-sequence will
       // include all elements as expected.
@@ -297,11 +288,9 @@ Blockly.Python['lists_getSublist'] = function(block) {
         at2 = '';
       }
       break;
-    }
-    case 'LAST': {
+    case 'LAST':
       at2 = '';
       break;
-    }
     default:
       throw Error('Unhandled option (lists_getSublist)');
   }

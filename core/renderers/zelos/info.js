@@ -339,7 +339,7 @@ RenderInfo.prototype.adjustXPosition_ = function() {
         !row.hasStatement) {
       let xCursor = row.xPos;
       let prevInRowSpacer = null;
-      for (let j = 0; i < row.elements.length; j++) {
+      for (let j = 0; j < row.elements.length; j++) {
         const elem = row.elements[j];
         if (Types.isSpacer(elem)) {
           prevInRowSpacer = elem;

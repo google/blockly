@@ -299,7 +299,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {string}
    * @package
    */
-  this.FIELD_BORDER_RECT_COLOUR = '#fff';
+  this.FIELD_BORDER_RECT_COLOUR = 'rgba(255, 255, 255, 0.6)';
 
   /**
    * A field's text element's dominant baseline.
@@ -1277,7 +1277,6 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyNonEditableText>rect,',
     selector + ' .blocklyEditableText>rect {',
       'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
-      'fill-opacity: .6;',
       'stroke: none;',
     '}',
     selector + ' .blocklyNonEditableText>text,',

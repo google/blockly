@@ -39,6 +39,10 @@ Blockly.utils.colour.parse = function(str) {
   }
   hex = str.substring(0, 2) == '0x' ? '#' + str.substring(2) : str;
   hex = hex[0] == '#' ? hex : '#' + hex;
+  if (/^#[0-9a-f]{8}$/.test(hex)) {
+    // e.g. '#00ff0024' with alpha
+    return hex;
+  }
   if (/^#[0-9a-f]{6}$/.test(hex)) {
     // e.g. '#00ff88'
     return hex;

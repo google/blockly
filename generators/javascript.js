@@ -138,17 +138,17 @@ Blockly.JavaScript.init = function(workspace) {
   this.nameDB_.populateVariables(workspace);
   this.nameDB_.populateProcedures(workspace);
 
-  var defvars = [];
+  const defvars = [];
   // Add developer variables (not created or named by the user).
-  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
-  for (var i = 0; i < devVarList.length; i++) {
+  const devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (let i = 0; i < devVarList.length; i++) {
     defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
   // Add user variables, but only ones that are being used.
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0; i < variables.length; i++) {
+  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
     defvars.push(this.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME));
   }
@@ -167,7 +167,7 @@ Blockly.JavaScript.init = function(workspace) {
  */
 Blockly.JavaScript.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var definitions = Blockly.utils.object.values(this.definitions_);
+  const definitions = Blockly.utils.object.values(this.definitions_);
   // Call Blockly.Generator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;
@@ -212,7 +212,7 @@ Blockly.JavaScript.quote_ = function(string) {
 Blockly.JavaScript.multiline_quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
-  var lines = string.split(/\n/g).map(this.quote_);
+  const lines = string.split(/\n/g).map(this.quote_);
   return lines.join(' + \'\\n\' +\n');
 };
 
@@ -227,20 +227,20 @@ Blockly.JavaScript.multiline_quote_ = function(string) {
  * @protected
  */
 Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
-  var commentCode = '';
+  let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
-    var comment = block.getCommentText();
+    let comment = block.getCommentText();
     if (comment) {
       comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
       commentCode += this.prefixLines(comment + '\n', '// ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var i = 0; i < block.inputList.length; i++) {
+    for (let i = 0; i < block.inputList.length; i++) {
       if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
-        var childBlock = block.inputList[i].connection.targetBlock();
+        const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
           if (comment) {
@@ -250,8 +250,8 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
       }
     }
   }
-  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -266,24 +266,27 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
  */
 Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
-  var delta = opt_delta || 0;
-  var order = opt_order || this.ORDER_NONE;
+  let delta = opt_delta || 0;
+  let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+
+  let innerOrder;
+  let outerOrder = order;
   if (delta > 0) {
-    var at = this.valueToCode(block, atId,
-        this.ORDER_ADDITION) || defaultAtIndex;
+    outerOrder = this.ORDER_ADDITION;
+    innerOrder = this.ORDER_ADDITION;
   } else if (delta < 0) {
-    var at = this.valueToCode(block, atId,
-        this.ORDER_SUBTRACTION) || defaultAtIndex;
+    outerOrder = this.ORDER_SUBTRACTION;
+    innerOrder = this.ORDER_SUBTRACTION;
   } else if (opt_negate) {
-    var at = this.valueToCode(block, atId,
-        this.ORDER_UNARY_NEGATION) || defaultAtIndex;
-  } else {
-    var at = this.valueToCode(block, atId, order) || defaultAtIndex;
+    outerOrder = this.ORDER_UNARY_NEGATION;
+    innerOrder = this.ORDER_UNARY_NEGATION;
   }
+
+  let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
@@ -295,10 +298,8 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = this.ORDER_ADDITION;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = this.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
       if (delta) {
@@ -306,7 +307,6 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = this.ORDER_UNARY_NEGATION;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);

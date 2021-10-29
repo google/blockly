@@ -1,0 +1,19 @@
+name: Assign requested reviewers
+
+on:
+  pull_request:
+    types: [review_requested]
+
+jobs:
+  requested-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out Blockly
+      uses: actions/checkout@v2
+
+    - name: Assign requested reviewer
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const {assign} = require('./.github/workflows/scripts/assign_reviewers.js')
+          assign(github, context, core)

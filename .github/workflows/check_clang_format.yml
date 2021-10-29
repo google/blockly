@@ -1,4 +1,5 @@
-name: test-clang-format
+name: Check clang format
+
 on: [pull_request]
 
 jobs:

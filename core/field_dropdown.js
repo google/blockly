@@ -450,25 +450,25 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   for (var i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  var shortest = Blockly.utils.string.shortestStringLength(strings);
-  var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
-  if (!prefixLength && !suffixLength) {
-    return;
-  }
-  if (shortest <= prefixLength + suffixLength) {
-    // One or more strings will entirely vanish if we proceed.  Abort.
-    return;
-  }
-  if (prefixLength) {
-    this.prefixField = strings[0].substring(0, prefixLength - 1);
-  }
-  if (suffixLength) {
-    this.suffixField = strings[0].substr(1 - suffixLength);
-  }
+  // var shortest = Blockly.utils.string.shortestStringLength(strings);
+  // var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
+  // var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
+  // if (!prefixLength && !suffixLength) {
+  //   return;
+  // }
+  // if (shortest <= prefixLength + suffixLength) {
+  //   // One or more strings will entirely vanish if we proceed.  Abort.
+  //   return;
+  // }
+  // if (prefixLength) {
+  //   this.prefixField = strings[0].substring(0, prefixLength - 1);
+  // }
+  // if (suffixLength) {
+  //   this.suffixField = strings[0].substr(1 - suffixLength);
+  // }
 
-  this.menuGenerator_ = Blockly.FieldDropdown.applyTrim_(options, prefixLength,
-      suffixLength);
+  // this.menuGenerator_ = Blockly.FieldDropdown.applyTrim_(options, prefixLength,
+  //     suffixLength);
 };
 
 /**
@@ -594,7 +594,7 @@ Blockly.FieldDropdown.prototype.applyColour = function() {
  */
 Blockly.FieldDropdown.prototype.render_ = function() {
   if (!this.textContent_ || !this.imageElement_) {
-    return
+    return;
   }
   // Hide both elements.
 

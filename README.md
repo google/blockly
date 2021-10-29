@@ -19,7 +19,8 @@ npm run build
 npm run prepare
 ```
 10. Переходим в директорию `dist`
-11. Выполняем npm publish
+11. В `/dist/package.json` проверяем название пакета и повышаем версию
+12. Выполняем npm publish
 
 # Как удобно тестировать Varwin Blockly сразу в RMS
 

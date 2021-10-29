@@ -5,7 +5,7 @@
  * See https://github.com/google/blockly/issues/5643 for more information on
  * why this was added.
  */
-module.exports = ({github, context, core}) => {
+exports.assign = function(github, context, core) {
   try {
     if (context.payload.pull_request === undefined) {
       throw new Error("Can't get pull_request payload. Check a request reviewer event was triggered.");

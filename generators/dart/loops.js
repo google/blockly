@@ -15,21 +15,22 @@ goog.require('Blockly.Dart');
 
 
 Blockly.Dart['controls_repeat_ext'] = function(block) {
+  let repeats;
   // Repeat n times.
   if (block.getField('TIMES')) {
     // Internal number.
-    var repeats = String(Number(block.getFieldValue('TIMES')));
+    repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    var repeats = Blockly.Dart.valueToCode(block, 'TIMES',
+    repeats = Blockly.Dart.valueToCode(block, 'TIMES',
         Blockly.Dart.ORDER_ASSIGNMENT) || '0';
   }
-  var branch = Blockly.Dart.statementToCode(block, 'DO');
+  let branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
-  var code = '';
-  var loopVar = Blockly.Dart.nameDB_.getDistinctName(
+  let code = '';
+  const loopVar = Blockly.Dart.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
-  var endVar = repeats;
+  let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
     endVar = Blockly.Dart.nameDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
@@ -46,11 +47,11 @@ Blockly.Dart['controls_repeat'] = Blockly.Dart['controls_repeat_ext'];
 
 Blockly.Dart['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') === 'UNTIL';
-  var argument0 = Blockly.Dart.valueToCode(block, 'BOOL',
+  const until = block.getFieldValue('MODE') === 'UNTIL';
+  let argument0 = Blockly.Dart.valueToCode(block, 'BOOL',
       until ? Blockly.Dart.ORDER_UNARY_PREFIX :
       Blockly.Dart.ORDER_NONE) || 'false';
-  var branch = Blockly.Dart.statementToCode(block, 'DO');
+  let branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
   if (until) {
     argument0 = '!' + argument0;
@@ -60,25 +61,25 @@ Blockly.Dart['controls_whileUntil'] = function(block) {
 
 Blockly.Dart['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Dart.nameDB_.getName(
+  const variable0 = Blockly.Dart.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var argument0 = Blockly.Dart.valueToCode(block, 'FROM',
+  const argument0 = Blockly.Dart.valueToCode(block, 'FROM',
       Blockly.Dart.ORDER_ASSIGNMENT) || '0';
-  var argument1 = Blockly.Dart.valueToCode(block, 'TO',
+  const argument1 = Blockly.Dart.valueToCode(block, 'TO',
       Blockly.Dart.ORDER_ASSIGNMENT) || '0';
-  var increment = Blockly.Dart.valueToCode(block, 'BY',
+  const increment = Blockly.Dart.valueToCode(block, 'BY',
       Blockly.Dart.ORDER_ASSIGNMENT) || '1';
-  var branch = Blockly.Dart.statementToCode(block, 'DO');
+  let branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
-  var code;
+  let code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = Number(argument0) <= Number(argument1);
+    const up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
-    var step = Math.abs(Number(increment));
+    const step = Math.abs(Number(increment));
     if (step === 1) {
       code += up ? '++' : '--';
     } else {
@@ -88,13 +89,13 @@ Blockly.Dart['controls_for'] = function(block) {
   } else {
     code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
-    var startVar = argument0;
+    let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
       startVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
-    var endVar = argument1;
+    let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
       endVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
@@ -102,7 +103,7 @@ Blockly.Dart['controls_for'] = function(block) {
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    var incVar = Blockly.Dart.nameDB_.getDistinctName(
+    const incVar = Blockly.Dart.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'num ' + incVar + ' = ';
     if (Blockly.isNumber(increment)) {
@@ -125,20 +126,20 @@ Blockly.Dart['controls_for'] = function(block) {
 
 Blockly.Dart['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Dart.nameDB_.getName(
+  const variable0 = Blockly.Dart.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var argument0 = Blockly.Dart.valueToCode(block, 'LIST',
+  const argument0 = Blockly.Dart.valueToCode(block, 'LIST',
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';
-  var branch = Blockly.Dart.statementToCode(block, 'DO');
+  let branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
-  var code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
+  const code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
 };
 
 Blockly.Dart['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  var xfix = '';
+  let xfix = '';
   if (Blockly.Dart.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
     xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
@@ -149,7 +150,7 @@ Blockly.Dart['controls_flow_statements'] = function(block) {
     xfix += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_SUFFIX, block);
   }
   if (Blockly.Dart.STATEMENT_PREFIX) {
-    var loop = Blockly.Constants.Loops
+    const loop = Blockly.Constants.Loops
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end

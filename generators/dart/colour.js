@@ -18,7 +18,7 @@ Blockly.Dart.addReservedWords('Math');
 
 Blockly.Dart['colour_picker'] = function(block) {
   // Colour picker.
-  var code = Blockly.Dart.quote_(block.getFieldValue('COLOUR'));
+  const code = Blockly.Dart.quote_(block.getFieldValue('COLOUR'));
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
@@ -26,7 +26,7 @@ Blockly.Dart['colour_random'] = function(block) {
   // Generate a random colour.
   Blockly.Dart.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  var functionName = Blockly.Dart.provideFunction_(
+  const functionName = Blockly.Dart.provideFunction_(
       'colour_random',
       ['String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '() {',
        '  String hex = \'0123456789abcdef\';',
@@ -35,22 +35,22 @@ Blockly.Dart['colour_random'] = function(block) {
        '      \'${hex[rnd.nextInt(16)]}${hex[rnd.nextInt(16)]}\'',
        '      \'${hex[rnd.nextInt(16)]}${hex[rnd.nextInt(16)]}\';',
        '}']);
-  var code = functionName + '()';
+  const code = functionName + '()';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  var red = Blockly.Dart.valueToCode(block, 'RED',
+  const red = Blockly.Dart.valueToCode(block, 'RED',
       Blockly.Dart.ORDER_NONE) || 0;
-  var green = Blockly.Dart.valueToCode(block, 'GREEN',
+  const green = Blockly.Dart.valueToCode(block, 'GREEN',
       Blockly.Dart.ORDER_NONE) || 0;
-  var blue = Blockly.Dart.valueToCode(block, 'BLUE',
+  const blue = Blockly.Dart.valueToCode(block, 'BLUE',
       Blockly.Dart.ORDER_NONE) || 0;
 
   Blockly.Dart.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  var functionName = Blockly.Dart.provideFunction_(
+  const functionName = Blockly.Dart.provideFunction_(
       'colour_rgb',
       ['String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
           '(num r, num g, num b) {',
@@ -68,22 +68,22 @@ Blockly.Dart['colour_rgb'] = function(block) {
        '  bs = bs.substring(bs.length - 2);',
        '  return \'#$rs$gs$bs\';',
        '}']);
-  var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
+  const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['colour_blend'] = function(block) {
   // Blend two colours together.
-  var c1 = Blockly.Dart.valueToCode(block, 'COLOUR1',
+  const c1 = Blockly.Dart.valueToCode(block, 'COLOUR1',
       Blockly.Dart.ORDER_NONE) || '\'#000000\'';
-  var c2 = Blockly.Dart.valueToCode(block, 'COLOUR2',
+  const c2 = Blockly.Dart.valueToCode(block, 'COLOUR2',
       Blockly.Dart.ORDER_NONE) || '\'#000000\'';
-  var ratio = Blockly.Dart.valueToCode(block, 'RATIO',
+  const ratio = Blockly.Dart.valueToCode(block, 'RATIO',
       Blockly.Dart.ORDER_NONE) || 0.5;
 
   Blockly.Dart.definitions_['import_dart_math'] =
       'import \'dart:math\' as Math;';
-  var functionName = Blockly.Dart.provideFunction_(
+  const functionName = Blockly.Dart.provideFunction_(
       'colour_blend',
       ['String ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
           '(String c1, String c2, num ratio) {',
@@ -108,6 +108,6 @@ Blockly.Dart['colour_blend'] = function(block) {
        '  bs = bs.substring(bs.length - 2);',
        '  return \'#$rs$gs$bs\';',
        '}']);
-  var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
+  const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };

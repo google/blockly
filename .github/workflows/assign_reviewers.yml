@@ -15,5 +15,5 @@ jobs:
       uses: actions/github-script@v5
       with:
         script: |
-          const script = require('./.github/workflows/scripts/assign_reviewers.js')
-          script({github, context, core})
+          const {assign} = require('./.github/workflows/scripts/assign_reviewers.js')
+          assign(github, context, core)

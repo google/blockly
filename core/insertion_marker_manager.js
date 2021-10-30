@@ -40,7 +40,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /**
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
- * unhiglighting it as needed during a drag.
+ * unhighlighting it as needed during a drag.
  * @param {!BlockSvg} block The top block in the stack being dragged.
  * @constructor
  * @alias Blockly.InsertionMarkerManager

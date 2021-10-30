@@ -143,7 +143,7 @@ CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
   const categoryDef = /** @type {!toolbox.CategoryInfo} */ (itemDef);
 
   // Categories that are collapsible are created using a class registered under
-  // a diffferent name.
+  // a different name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       toolbox.isCategoryCollapsible(categoryDef)) {
     registryName = CollapsibleToolboxCategory.registrationName;

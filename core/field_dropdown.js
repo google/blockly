@@ -742,7 +742,7 @@ const validateOptions = function(options) {
     throw TypeError('FieldDropdown options must not be an empty array.');
   }
   let foundError = false;
-  for (let i = 0; i < options.length; ++i) {
+  for (let i = 0; i < options.length; i++) {
     const tuple = options[i];
     if (!Array.isArray(tuple)) {
       foundError = true;

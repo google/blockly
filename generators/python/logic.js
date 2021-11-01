@@ -33,7 +33,7 @@ Blockly.Python['controls_if'] = function(block) {
           Blockly.Python.INDENT) + branchCode;
     }
     code += (n === 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.Python.STATEMENT_SUFFIX) {

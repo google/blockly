@@ -33,7 +33,7 @@ Blockly.Lua['controls_if'] = function(block) {
     }
     code += (n > 0 ? 'else' : '') +
         'if ' + conditionCode + ' then\n' + branchCode;
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.Lua.STATEMENT_SUFFIX) {

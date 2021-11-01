@@ -1612,7 +1612,7 @@ Block.prototype.jsonInit = function(json) {
 
   const extensionNames = json['extensions'];
   if (Array.isArray(extensionNames)) {
-    for (let j = 0; j < extensionNames.length; ++j) {
+    for (let j = 0; j < extensionNames.length; j++) {
       Extensions.apply(extensionNames[j], this, false);
     }
   }

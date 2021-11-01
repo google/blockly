@@ -426,7 +426,7 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   const dropdown = block.getField(dropdownName);
   if (!dropdown.isOptionListDynamic()) {
     const options = dropdown.getOptions();
-    for (let i = 0; i < options.length; ++i) {
+    for (let i = 0; i < options.length; i++) {
       const optionKey = options[i][1];  // label, then value
       if (lookupTable[optionKey] === null) {
         console.warn(

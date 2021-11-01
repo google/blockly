@@ -358,9 +358,6 @@ VariableMap.prototype.getVariablesOfType = function(type) {
 VariableMap.prototype.getVariableTypes = function(ws) {
   const variableMap = {};
   object.mixin(variableMap, this.variableMap_);
-  if (ws && ws.getPotentialVariableMap()) {
-    object.mixin(variableMap, ws.getPotentialVariableMap().variableMap_);
-  }
   const types = Object.keys(variableMap);
   let hasEmpty = false;
   for (let i = 0; i < types.length; i++) {

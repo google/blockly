@@ -322,11 +322,6 @@ Flyout.prototype.init = function(targetWorkspace) {
   this.workspace_.getGesture =
       this.targetWorkspace.getGesture.bind(this.targetWorkspace);
 
-  // Get variables from the main workspace rather than the target workspace.
-  this.workspace_.setVariableMap(this.targetWorkspace.getVariableMap());
-
-  this.workspace_.createPotentialVariableMap();
-
   targetWorkspace.getComponentManager().addComponent({
     component: this,
     weight: 1,
@@ -800,9 +795,6 @@ Flyout.prototype.clearOldBlocks_ = function() {
     button.dispose();
   }
   this.buttons_.length = 0;
-
-  // Clear potential variables from the previous showing.
-  this.workspace_.getPotentialVariableMap().clear();
 };
 
 /**

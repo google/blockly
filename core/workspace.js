@@ -129,18 +129,6 @@ const Workspace = function(opt_options) {
    * @private
    */
   this.variableMap_ = new VariableMap(this);
-
-  /**
-   * Blocks in the flyout can refer to variables that don't exist in the main
-   * workspace.  For instance, the "get item in list" block refers to an "item"
-   * variable regardless of whether the variable has been created yet.
-   * A FieldVariable must always refer to a VariableModel.  We reconcile
-   * these by tracking "potential" variables in the flyout.  These variables
-   * become real when references to them are dragged into the main workspace.
-   * @type {?VariableMap}
-   * @private
-   */
-  this.potentialVariableMap_ = null;
 };
 
 /**
@@ -397,9 +385,6 @@ Workspace.prototype.clear = function() {
       eventUtils.setGroup(false);
     }
     this.variableMap_.clear();
-    if (this.potentialVariableMap_) {
-      this.potentialVariableMap_.clear();
-    }
   } finally {
     this.isClearing = false;
   }
@@ -754,24 +739,6 @@ Workspace.prototype.allInputsFilled = function(opt_shadowBlocksAreFilled) {
     }
   }
   return true;
-};
-
-/**
- * Return the variable map that contains "potential" variables.
- * These exist in the flyout but not in the workspace.
- * @return {?VariableMap} The potential variable map.
- * @package
- */
-Workspace.prototype.getPotentialVariableMap = function() {
-  return this.potentialVariableMap_;
-};
-
-/**
- * Create and store the potential variable map for this workspace.
- * @package
- */
-Workspace.prototype.createPotentialVariableMap = function() {
-  this.potentialVariableMap_ = new VariableMap(this);
 };
 
 /**

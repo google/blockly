@@ -472,15 +472,11 @@ exports.getOrCreateVariablePackage = getOrCreateVariablePackage;
  * @alias Blockly.Variables.getVariable
  */
 const getVariable = function(workspace, id, opt_name, opt_type) {
-  const potentialVariableMap = workspace.getPotentialVariableMap();
   let variable = null;
   // Try to just get the variable, by ID if possible.
   if (id) {
-    // Look in the real variable map before checking the potential variable map.
+    // Look in the variable map
     variable = workspace.getVariableById(id);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariableById(id);
-    }
     if (variable) {
       return variable;
     }
@@ -493,9 +489,6 @@ const getVariable = function(workspace, id, opt_name, opt_type) {
     }
     // Otherwise look up by name and type.
     variable = workspace.getVariable(opt_name, opt_type);
-    if (!variable && potentialVariableMap) {
-      variable = potentialVariableMap.getVariable(opt_name, opt_type);
-    }
   }
   return variable;
 };
@@ -512,18 +505,17 @@ exports.getVariable = getVariable;
  *     or name + type combination.
  */
 const createVariable = function(workspace, id, opt_name, opt_type) {
-  const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
     const ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
     opt_name = exports.generateUniqueName(ws);
   }
 
-  // Create a potential variable if in the flyout.
+  // Create a variable directly in the variable map if in the flyout.
   let variable = null;
-  if (potentialVariableMap) {
-    variable = potentialVariableMap.createVariable(opt_name, opt_type, id);
-  } else {  // In the main workspace, create a real variable.
+  if (workspace.isFlyout) {
+    variable = workspace.getVariableMap().createVariable(opt_name, opt_type, id);
+  } else {  // In the main workspace, create a variable to trigger a refresh.
     variable = workspace.createVariable(opt_name, opt_type, id);
   }
   return variable;

@@ -25,5 +25,6 @@ jobs:
       with:
         script: |
           // Not sure yet how to find out which PR triggered the run, so
-          // dump the whole context object to try to find useful information.
-          console.log('%o', context);
+          // dump the whole github.event object to try to find useful
+          // information.
+          console.log('%o', github.event);

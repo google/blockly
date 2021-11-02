@@ -135,7 +135,7 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
   // Add the field to the field row.
   this.fieldRow.splice(index, 0, field);
-  ++index;
+  index++;
   if (field.suffixField) {
     // Add any suffix.
     index = this.insertFieldAt(index, field.suffixField);

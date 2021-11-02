@@ -34,7 +34,7 @@ Blockly.JavaScript['controls_if'] = function(block) {
     }
     code += (n > 0 ? ' else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.JavaScript.STATEMENT_SUFFIX) {

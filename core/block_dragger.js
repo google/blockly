@@ -66,8 +66,7 @@ const BlockDragger = function(block, workspace) {
    * @type {!InsertionMarkerManager}
    * @protected
    */
-  this.draggedConnectionManager_ =
-      new InsertionMarkerManager(this.draggingBlock_);
+  this.draggedConnectionManager_ = new InsertionMarkerManager(this.draggingBlock_);
 
   /**
    * Which drag area the mouse pointer is over, if any.

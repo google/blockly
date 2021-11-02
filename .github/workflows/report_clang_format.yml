@@ -16,8 +16,6 @@ on:
     types:
       - completed
 
-on: [pull_request]
-
 jobs:
   on-failure:
     runs-on: ubuntu-latest

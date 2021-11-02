@@ -22,14 +22,14 @@ const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
-const ShortcutItems = goog.require('Blockly.ShortcutItems');
+   const ShortcutItems = goog.require('Blockly.ShortcutItems');
 const Themes = goog.require('Blockly.Themes');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
 const Variables = goog.require('Blockly.Variables');
 const VariablesDynamic = goog.require('Blockly.VariablesDynamic');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Xml = goog.require('Blockly.Xml');
+const Xml = goog.require('Blockly.Xml')
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blockRendering = goog.require('Blockly.blockRendering');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -181,12 +181,13 @@ goog.require('Blockly.Events.VarCreate');
  * @define {string}
  * @alias Blockly.VERSION
  */
-exports.VERSION = 'uncompiled';
+exports.VERSION =      'uncompiled';
 
 // Add a getter and setter pair for Blockly.alert, Blockly.confirm,
 // Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
 // compatibility.
-Object.defineProperties(exports, {
+Object.defineProperties(exports,
+{
   /**
    * Wrapper to window.alert() that app developers may override to
    * provide alternatives to the modal browser window.

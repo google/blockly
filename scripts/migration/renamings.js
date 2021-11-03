@@ -206,6 +206,17 @@ const renamings = {
       },
     },
   },
+  '7.20211209.0-beta.0': {
+    'Blockly.Blocks.colour': {module: 'Blockly.blocks.colour'},
+    // Blockly.Blocks.lists not previously provided.
+    'Blockly.Blocks.logic': {module: 'Blockly.blocks.logic'},
+    'Blockly.Blocks.loops': {module: 'Blockly.blocks.loops'},
+    'Blockly.Blocks.math': {module: 'Blockly.blocks.math'},
+    'Blockly.Blocks.procedures': {module: 'Blockly.blocks.procedures'},
+    'Blockly.Blocks.texts': {module: 'Blockly.blocks.texts'},
+    'Blockly.Blocks.variables': {module: 'Blockly.blocks.variables'},
+    // Blockly.Blocks.variablesDynamic not previously provided.
+  }
 };
 
 exports.renamings = renamings;

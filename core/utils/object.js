@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility methods for objects.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -64,7 +63,7 @@ exports.mixin = mixin;
  */
 const deepMerge = function(target, source) {
   for (const x in source) {
-    if (source[x] != null && typeof source[x] === 'object') {
+    if (source[x] !== null && typeof source[x] === 'object') {
       target[x] = deepMerge(target[x] || Object.create(null), source[x]);
     } else {
       target[x] = source[x];

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block change event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,15 +15,15 @@
  */
 goog.module('Blockly.Events.BlockChange');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
@@ -45,10 +44,10 @@ const BlockChange = function(
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.name = typeof opt_name == 'undefined' ? '' : opt_name;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+  this.name = typeof opt_name === 'undefined' ? '' : opt_name;
+  this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
+  this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
 };
 object.inherits(BlockChange, BlockBase);
 
@@ -90,7 +89,7 @@ BlockChange.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 BlockChange.prototype.isNull = function() {
-  return this.oldValue == this.newValue;
+  return this.oldValue === this.newValue;
 };
 
 /**
@@ -140,7 +139,8 @@ BlockChange.prototype.run = function(forward) {
         block.domToMutation(
             Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
       }
-      eventUtils.fire(new BlockChange(block, 'mutation', null, oldState, value));
+      eventUtils.fire(
+          new BlockChange(block, 'mutation', null, oldState, value));
       break;
     }
     default:
@@ -170,4 +170,4 @@ BlockChange.getExtraBlockState_ = function(block) {
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
 
-exports = BlockChange;
+exports.BlockChange = BlockChange;

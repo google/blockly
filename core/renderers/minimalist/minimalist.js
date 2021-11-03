@@ -15,10 +15,10 @@
  */
 goog.module('Blockly.minimalist');
 
-const ConstantProvider = goog.require('Blockly.minimalist.ConstantProvider');
-const Drawer = goog.require('Blockly.minimalist.Drawer');
-const RenderInfo = goog.require('Blockly.minimalist.RenderInfo');
-const Renderer = goog.require('Blockly.minimalist.Renderer');
+const {ConstantProvider} = goog.require('Blockly.minimalist.ConstantProvider');
+const {Drawer} = goog.require('Blockly.minimalist.Drawer');
+const {RenderInfo} = goog.require('Blockly.minimalist.RenderInfo');
+const {Renderer} = goog.require('Blockly.minimalist.Renderer');
 
 exports.ConstantProvider = ConstantProvider;
 exports.Drawer = Drawer;

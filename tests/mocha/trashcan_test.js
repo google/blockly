@@ -12,16 +12,16 @@ const eventUtils = goog.require('Blockly.Events.utils');
 
 suite("Trashcan", function() {
   function fireDeleteEvent(workspace, xmlString) {
-    var xml = Blockly.Xml.textToDom(
+    let xml = Blockly.Xml.textToDom(
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString + '</xml>');
     xml = xml.children[0];
-    var block = Blockly.Xml.domToBlock(xml, workspace);
-    var event = new Blockly.Events.BlockDelete(block);
+    let block = Blockly.Xml.domToBlock(xml, workspace);
+    let event = new Blockly.Events.BlockDelete(block);
     eventUtils.fire(event);
   }
   function fireNonDeleteEvent(workspace, oldXml) {
-    var event = new Blockly.Events.Abstract();
+    let event = new Blockly.Events.Abstract();
     event.type = 'test_field_block';
     event.workspaceId = workspace.id;
     if (oldXml) {
@@ -60,7 +60,7 @@ suite("Trashcan", function() {
       chai.assert.equal(this.trashcan.contents_.length, 0);
     });
     test("Non-Delete w/ oldXml", function() {
-      var xml = Blockly.Xml.textToDom(
+      let xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="test_field_block"/>' +
           '</xml>'
@@ -86,7 +86,7 @@ suite("Trashcan", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
       // Stub flyout interaction.
-      var showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
+      let showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
 
       simulateClick(this.trashcan.svgGroup_);
 
@@ -101,7 +101,7 @@ suite("Trashcan", function() {
     test("Click outside trashcan - fires trashcanClose", function() {
       sinon.stub(this.trashcan.flyout, 'isVisible').returns(true);
       // Stub flyout interaction.
-      var hideFlyoutStub = sinon.stub(this.trashcan.flyout, "hide");
+      let hideFlyoutStub = sinon.stub(this.trashcan.flyout, "hide");
 
       simulateClick(this.workspace.svgGroup_);
 

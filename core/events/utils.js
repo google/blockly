@@ -19,20 +19,20 @@ goog.module('Blockly.Events.utils');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const BlockMove = goog.requireType('Blockly.Events.BlockMove');
-/* eslint-disable-next-line no-unused-vars */
-const BlockCreate = goog.requireType('Blockly.Events.BlockMove');
-/* eslint-disable-next-line no-unused-vars */
-const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
-/* eslint-disable-next-line no-unused-vars */
-const CommentMove = goog.requireType('Blockly.Events.CommentMove');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockCreate} = goog.requireType('Blockly.Events.BlockCreate');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
+/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
+/* eslint-disable-next-line no-unused-vars */
+const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -337,7 +337,7 @@ const fireNow = function() {
     if (!event.workspaceId) {
       continue;
     }
-    const Workspace = goog.module.get('Blockly.Workspace');
+    const {Workspace} = goog.module.get('Blockly.Workspace');
     const eventWorkspace = Workspace.getById(event.workspaceId);
     if (eventWorkspace) {
       eventWorkspace.fireChangeListener(event);
@@ -375,24 +375,24 @@ const filter = function(queueIn, forward) {
         // move events.
         hash[key] = {event: event, index: i};
         mergedQueue.push(event);
-      } else if (event.type == MOVE && lastEntry.index == i - 1) {
+      } else if (event.type === MOVE && lastEntry.index === i - 1) {
         // Merge move events.
         lastEvent.newParentId = event.newParentId;
         lastEvent.newInputName = event.newInputName;
         lastEvent.newCoordinate = event.newCoordinate;
         lastEntry.index = i;
       } else if (
-          event.type == CHANGE && event.element == lastEvent.element &&
-          event.name == lastEvent.name) {
+          event.type === CHANGE && event.element === lastEvent.element &&
+          event.name === lastEvent.name) {
         // Merge change events.
         lastEvent.newValue = event.newValue;
-      } else if (event.type == VIEWPORT_CHANGE) {
+      } else if (event.type === VIEWPORT_CHANGE) {
         // Merge viewport change events.
         lastEvent.viewTop = event.viewTop;
         lastEvent.viewLeft = event.viewLeft;
         lastEvent.scale = event.scale;
         lastEvent.oldScale = event.oldScale;
-      } else if (event.type == CLICK && lastEvent.type == BUBBLE_OPEN) {
+      } else if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
       } else {
         // Collision: newer events should merge into this event to maintain
@@ -413,7 +413,7 @@ const filter = function(queueIn, forward) {
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
   for (let i = 1, event; (event = queue[i]); i++) {
-    if (event.type == CHANGE && event.element == 'mutation') {
+    if (event.type === CHANGE && event.element === 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
     }
   }
@@ -458,7 +458,7 @@ exports.enable = enable;
  * @alias Blockly.Events.utils.isEnabled
  */
 const isEnabled = function() {
-  return disabled == 0;
+  return disabled === 0;
 };
 exports.isEnabled = isEnabled;
 
@@ -479,7 +479,7 @@ exports.getGroup = getGroup;
  * @alias Blockly.Events.utils.setGroup
  */
 const setGroup = function(state) {
-  if (typeof state == 'boolean') {
+  if (typeof state === 'boolean') {
     group = state ? idGenerator.genUid() : '';
   } else {
     group = state;
@@ -545,11 +545,11 @@ exports.get = get;
  * @alias Blockly.Events.utils.disableOrphans
  */
 const disableOrphans = function(event) {
-  if (event.type == MOVE || event.type == CREATE) {
+  if (event.type === MOVE || event.type === CREATE) {
     if (!event.workspaceId) {
       return;
     }
-    const Workspace = goog.module.get('Blockly.Workspace');
+    const {Workspace} = goog.module.get('Blockly.Workspace');
     const eventWorkspace = Workspace.getById(event.workspaceId);
     let block = eventWorkspace.getBlockById(event.blockId);
     if (block) {
@@ -581,5 +581,5 @@ exports.disableOrphans = disableOrphans;
 
 exports.TEST_ONLY = {
   FIRE_QUEUE,
-  fireNow
+  fireNow,
 };

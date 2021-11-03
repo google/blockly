@@ -20,7 +20,7 @@ suite('Multiline Input Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  let invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -28,7 +28,7 @@ suite('Multiline Input Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
+  let validValueTestCases = [
     {title: 'Empty string', value: '', expectedValue: ''},
     {title: 'String no newline', value: 'value', expectedValue: 'value'},
     {title: 'String with newline', value: 'bark bark\n bark bark bark\n bark bar bark bark\n', expectedValue: 'bark bark\n bark bark bark\n bark bar bark bark\n'},
@@ -38,7 +38,7 @@ suite('Multiline Input Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  var addArgsAndJson = function(testCase) {
+  let addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -49,12 +49,12 @@ suite('Multiline Input Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = '';
+  let defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldMultilineInput} field The field to check.
    */
-  var assertFieldDefault = function(field) {
+  let assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -62,7 +62,7 @@ suite('Multiline Input Fields', function() {
    * @param {!Blockly.FieldMultilineInput} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
+  let validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue);
   };
 
@@ -88,7 +88,7 @@ suite('Multiline Input Fields', function() {
       });
     });
     suite('Value -> New Value', function() {
-      var initialValue = 'oldValue';
+      let initialValue = 'oldValue';
       setup(function() {
         this.field = new Blockly.FieldMultilineInput(initialValue);
       });
@@ -108,8 +108,8 @@ suite('Multiline Input Fields', function() {
     });
     const createBlockFn = (value) => {
       return (workspace) => {
-        var block = workspace.newBlock('text_multiline');
-        var textField = block.getField('TEXT');
+        let block = workspace.newBlock('text_multiline');
+        let textField = block.getField('TEXT');
         textField.setValue(value);
         return block;
       };

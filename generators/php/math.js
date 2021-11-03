@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for math blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 
@@ -20,9 +19,9 @@ Blockly.PHP['math_number'] = function(block) {
   var code = Number(block.getFieldValue('NUM'));
   var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
-  if (code == Infinity) {
+  if (code === Infinity) {
     code = 'INF';
-  } else if (code == -Infinity) {
+  } else if (code === -Infinity) {
     code = '-INF';
   }
   return [code, order];
@@ -51,18 +50,18 @@ Blockly.PHP['math_single'] = function(block) {
   var operator = block.getFieldValue('OP');
   var code;
   var arg;
-  if (operator == 'NEG') {
+  if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     arg = Blockly.PHP.valueToCode(block, 'NUM',
         Blockly.PHP.ORDER_UNARY_NEGATION) || '0';
-    if (arg[0] == '-') {
+    if (arg[0] === '-') {
       // --3 is not legal in JS.
       arg = ' ' + arg;
     }
     code = '-' + arg;
     return [code, Blockly.PHP.ORDER_UNARY_NEGATION];
   }
-  if (operator == 'SIN' || operator == 'COS' || operator == 'TAN') {
+  if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
     arg = Blockly.PHP.valueToCode(block, 'NUM',
         Blockly.PHP.ORDER_DIVISION) || '0';
   } else {
@@ -150,7 +149,7 @@ Blockly.PHP['math_number_property'] = function(block) {
       Blockly.PHP.ORDER_MODULUS) || '0';
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
-  if (dropdown_property == 'PRIME') {
+  if (dropdown_property === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     var functionName = Blockly.PHP.provideFunction_(
         'math_isPrime',

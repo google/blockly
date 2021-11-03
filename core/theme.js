@@ -168,7 +168,7 @@ Theme.prototype.setCategoryStyle = function(categoryStyleName, categoryStyle) {
  */
 Theme.prototype.getComponentStyle = function(componentName) {
   const style = this.componentStyles[componentName];
-  if (style && typeof style == 'string' &&
+  if (style && typeof style === 'string' &&
       this.getComponentStyle(/** @type {string} */ (style))) {
     return this.getComponentStyle(/** @type {string} */ (style));
   }
@@ -211,7 +211,7 @@ Theme.defineTheme = function(name, themeObj) {
   const theme = new Theme(name);
   let base = themeObj['base'];
   if (base) {
-    if (typeof base == 'string') {
+    if (typeof base === 'string') {
       base = registry.getObject(registry.Type.THEME, base);
     }
     if (base instanceof Theme) {
@@ -224,11 +224,11 @@ Theme.defineTheme = function(name, themeObj) {
   object.deepMerge(theme.categoryStyles, themeObj['categoryStyles']);
   object.deepMerge(theme.componentStyles, themeObj['componentStyles']);
   object.deepMerge(theme.fontStyle, themeObj['fontStyle']);
-  if (themeObj['startHats'] != null) {
+  if (themeObj['startHats'] !== null) {
     theme.startHats = themeObj['startHats'];
   }
 
   return theme;
 };
 
-exports = Theme;
+exports.Theme = Theme;

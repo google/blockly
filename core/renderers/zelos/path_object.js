@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object that owns a block's rendering SVG elements.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -17,14 +16,14 @@
  */
 goog.module('Blockly.zelos.PathObject');
 
-const BasePathObject = goog.require('Blockly.blockRendering.PathObject');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -224,7 +223,7 @@ PathObject.prototype.getOutlinePath_ = function(name) {
           'class': 'blocklyOutlinePath',
           // IE doesn't like paths without the data definition, set empty
           // default
-          'd': ''
+          'd': '',
         },
         this.svgRoot);
   }
@@ -244,4 +243,4 @@ PathObject.prototype.removeOutlinePath_ = function(name) {
   delete this.outlines_[name];
 };
 
-exports = PathObject;
+exports.PathObject = PathObject;

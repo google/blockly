@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing statement inputs with connections on a
  * rendered block.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -18,12 +17,12 @@
  */
 goog.module('Blockly.geras.StatementInput');
 
-const BaseStatementInput = goog.require('Blockly.blockRendering.StatementInput');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {StatementInput: BaseStatementInput} = goog.require('Blockly.blockRendering.StatementInput');
 
 
 /**
@@ -49,4 +48,4 @@ const StatementInput = function(constants, input) {
 };
 object.inherits(StatementInput, BaseStatementInput);
 
-exports = StatementInput;
+exports.StatementInput = StatementInput;

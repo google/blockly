@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly menu similar to Closure's goog.ui.Menu
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -16,16 +15,16 @@
  */
 goog.module('Blockly.Menu');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const MenuItem = goog.requireType('Blockly.MenuItem');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
 
 
 /**
@@ -244,11 +243,11 @@ Menu.prototype.getMenuItem_ = function(elem) {
   // a menu item's div, or some element within the menu item.
   // Walk up parents until one meets either the menu's root element, or
   // a menu item's div.
-  while (elem && elem != menuElem) {
+  while (elem && elem !== menuElem) {
     if (dom.hasClass(elem, 'blocklyMenuItem')) {
       // Having found a menu item's div, locate that menu item in this menu.
       for (let i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
-        if (menuItem.getElement() == elem) {
+        if (menuItem.getElement() === elem) {
           return menuItem;
         }
       }
@@ -351,7 +350,7 @@ Menu.prototype.handleMouseOver_ = function(e) {
 
   if (menuItem) {
     if (menuItem.isEnabled()) {
-      if (this.highlightedItem_ != menuItem) {
+      if (this.highlightedItem_ !== menuItem) {
         this.setHighlighted(menuItem);
       }
     } else {
@@ -369,7 +368,7 @@ Menu.prototype.handleClick_ = function(e) {
   const oldCoords = this.openingCoords;
   // Clear out the saved opening coords immediately so they're not used twice.
   this.openingCoords = null;
-  if (oldCoords && typeof e.clientX == 'number') {
+  if (oldCoords && typeof e.clientX === 'number') {
     const newCoords = new Coordinate(e.clientX, e.clientY);
     if (Coordinate.distance(oldCoords, newCoords) < 1) {
       // This menu was opened by a mousedown and we're handling the consequent
@@ -475,4 +474,4 @@ Menu.prototype.getSize = function() {
   return menuSize;
 };
 
-exports = Menu;
+exports.Menu = Menu;

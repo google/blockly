@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for an object that owns a block's rendering SVG
  * elements.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';
@@ -20,11 +19,11 @@
 goog.module('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -160,4 +159,4 @@ IPathObject.prototype.updateMovable;
  */
 IPathObject.prototype.updateReplacementFade;
 
-exports = IPathObject;
+exports.IPathObject = IPathObject;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Components for creating connections between blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,12 +15,6 @@
  */
 goog.module('Blockly.Connection');
 
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -29,10 +22,16 @@ const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 
 
 /**
@@ -198,8 +197,8 @@ Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Connection.prototype.isSuperior = function() {
-  return this.type == ConnectionType.INPUT_VALUE ||
-      this.type == ConnectionType.NEXT_STATEMENT;
+  return this.type === ConnectionType.INPUT_VALUE ||
+      this.type === ConnectionType.NEXT_STATEMENT;
 };
 
 /**
@@ -241,7 +240,7 @@ Connection.prototype.checkConnection = function(target) {
       'the workspace\'s connection checker');
   const checker = this.getConnectionChecker();
   const reason = checker.canConnectWithReason(this, target, false);
-  if (reason != Connection.CAN_CONNECT) {
+  if (reason !== Connection.CAN_CONNECT) {
     throw new Error(checker.getErrorMessage(reason, this, target));
   }
 };
@@ -287,7 +286,7 @@ Connection.prototype.onFailedConnect = function(_otherConnection) {
  * @return {boolean} Whether the the blocks are now connected or not.
  */
 Connection.prototype.connect = function(otherConnection) {
-  if (this.targetConnection == otherConnection) {
+  if (this.targetConnection === otherConnection) {
     // Already connected together.  NOP.
     return true;
   }
@@ -412,7 +411,7 @@ Connection.prototype.disconnect = function() {
   if (!otherConnection) {
     throw Error('Source connection not connected.');
   }
-  if (otherConnection.targetConnection != this) {
+  if (otherConnection.targetConnection !== this) {
     throw Error('Target connection not connected to source connection.');
   }
   let parentBlock, childBlock, parentConnection;
@@ -655,16 +654,16 @@ Connection.prototype.toString = function() {
     return 'Orphan Connection';
   }
   let msg;
-  if (block.outputConnection == this) {
+  if (block.outputConnection === this) {
     msg = 'Output Connection of ';
-  } else if (block.previousConnection == this) {
+  } else if (block.previousConnection === this) {
     msg = 'Previous Connection of ';
-  } else if (block.nextConnection == this) {
+  } else if (block.nextConnection === this) {
     msg = 'Next Connection of ';
   } else {
     let parentInput = null;
     for (let i = 0, input; (input = block.inputList[i]); i++) {
-      if (input.connection == this) {
+      if (input.connection === this) {
         parentInput = input;
         break;
       }
@@ -771,14 +770,14 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
   if (shadowDom) {
     blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {
-      if (this.type == ConnectionType.INPUT_VALUE) {
+      if (this.type === ConnectionType.INPUT_VALUE) {
         if (!blockShadow.outputConnection) {
           throw new Error('Shadow block is missing an output connection');
         }
         if (!this.connect(blockShadow.outputConnection)) {
           throw new Error('Could not connect shadow block to connection');
         }
-      } else if (this.type == ConnectionType.NEXT_STATEMENT) {
+      } else if (this.type === ConnectionType.NEXT_STATEMENT) {
         if (!blockShadow.previousConnection) {
           throw new Error('Shadow block is missing previous connection');
         }
@@ -809,4 +808,4 @@ Connection.prototype.serializeShadow_ = function(shadow) {
   this.shadowState_ = blocks.save(shadow);
 };
 
-exports = Connection;
+exports.Connection = Connection;

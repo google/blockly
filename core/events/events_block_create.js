@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block creation event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.Events.BlockCreate');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
@@ -51,8 +50,8 @@ const BlockCreate = function(opt_block) {
    * JSON representation of the block that was just created.
    * @type {!blocks.State}
    */
-  this.json = /** @type {!blocks.State} */ (blocks.save(
-      opt_block, {addCoordinates: true}));
+  this.json = /** @type {!blocks.State} */ (
+      blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockCreate, BlockBase);
 
@@ -105,7 +104,7 @@ BlockCreate.prototype.run = function(forward) {
       const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
-      } else if (id == this.blockId) {
+      } else if (id === this.blockId) {
         // Only complain about root-level block.
         console.warn('Can\'t uncreate non-existent block: ' + id);
       }
@@ -115,4 +114,4 @@ BlockCreate.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
 
-exports = BlockCreate;
+exports.BlockCreate = BlockCreate;

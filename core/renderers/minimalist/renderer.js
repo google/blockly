@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.minimalist.Renderer');
 
-/* eslint-disable-next-line no-unused-vars */
-const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
-const ConstantProvider = goog.require('Blockly.minimalist.ConstantProvider');
-const Drawer = goog.require('Blockly.minimalist.Drawer');
-const RenderInfo = goog.require('Blockly.minimalist.RenderInfo');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConstantProvider} = goog.require('Blockly.minimalist.ConstantProvider');
+const {Drawer} = goog.require('Blockly.minimalist.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+const {RenderInfo} = goog.require('Blockly.minimalist.RenderInfo');
+const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
 
 
 /**
@@ -76,4 +76,4 @@ Renderer.prototype.makeDrawer_ = function(block, info) {
 
 blockRendering.register('minimalist', Renderer);
 
-exports = Renderer;
+exports.Renderer = Renderer;

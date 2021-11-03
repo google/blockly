@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,11 +15,6 @@
  */
 goog.module('Blockly.blockRendering.ConstantProvider');
 
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
@@ -28,6 +22,11 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -614,7 +613,7 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
   this.setComponentConstants_(theme);
 
   this.ADD_START_HATS =
-      theme.startHats != null ? theme.startHats : this.ADD_START_HATS;
+      theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
 };
 
 /**
@@ -624,15 +623,15 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle && theme.fontStyle['family'] !== undefined ?
       theme.fontStyle['family'] :
       this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle && theme.fontStyle['weight'] !== undefined ?
       theme.fontStyle['weight'] :
       this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle && theme.fontStyle['size'] !== undefined ?
       theme.fontStyle['size'] :
       this.FIELD_TEXT_FONTSIZE;
 
@@ -686,7 +685,7 @@ ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
  */
 ConstantProvider.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+      (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
            this.getBlockStyleForColour(blockStyleName.substring(5)).style :
            this.createBlockStyle_('#000000'));
 };
@@ -785,8 +784,9 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
   const width = this.JAGGED_TEETH_WIDTH;
 
   const mainPath = svgPaths.line([
-    svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
-    svgPaths.point(width, height / 4)
+    svgPaths.point(width, height / 4),
+    svgPaths.point(-width * 2, height / 2),
+    svgPaths.point(width, height / 4),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -801,8 +801,9 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath = svgPaths.curve('c', [
-    svgPaths.point(30, -height), svgPaths.point(70, -height),
-    svgPaths.point(width, 0)
+    svgPaths.point(30, -height),
+    svgPaths.point(70, -height),
+    svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -838,7 +839,8 @@ ConstantProvider.prototype.makePuzzleTab = function() {
                'c',
                [
                  svgPaths.point(0, forward * control1Y),
-                 svgPaths.point(-width, back * control2Y), endPoint1
+                 svgPaths.point(-width, back * control2Y),
+                 endPoint1,
                ]) +
         svgPaths.curve(
             's', [svgPaths.point(width, back * control3Y), endPoint2]);
@@ -854,7 +856,7 @@ ConstantProvider.prototype.makePuzzleTab = function() {
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
+    pathUp: pathUp,
   };
 };
 
@@ -872,7 +874,7 @@ ConstantProvider.prototype.makeNotch = function() {
     return svgPaths.line([
       svgPaths.point(dir * outerWidth, height),
       svgPaths.point(dir * innerWidth, 0),
-      svgPaths.point(dir * outerWidth, -height)
+      svgPaths.point(dir * outerWidth, -height),
     ]);
   }
   const pathLeft = makeMainPath(1);
@@ -883,7 +885,7 @@ ConstantProvider.prototype.makeNotch = function() {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -905,7 +907,7 @@ ConstantProvider.prototype.makeInsideCorners = function() {
     width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
-    pathBottom: innerBottomLeftCorner
+    pathBottom: innerBottomLeftCorner,
   };
 };
 
@@ -949,7 +951,7 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
     topRight: topRight,
     bottomRight: bottomRight,
     bottomLeft: bottomLeft,
-    rightHeight: radius
+    rightHeight: radius,
   };
 };
 
@@ -1018,7 +1020,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'specularConstant': 0.5,
         'specularExponent': 10,
         'lighting-color': 'white',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1029,7 +1031,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1040,7 +1042,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'k1': 0,
         'k2': 1,
         'k3': 1,
-        'k4': 0
+        'k4': 0,
       },
       embossFilter);
   this.embossFilterId = embossFilter.id;
@@ -1058,7 +1060,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
-        'height': 10
+        'height': 10,
       },
       this.defs_);
   dom.createSvgElement(
@@ -1086,7 +1088,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'height': '160%',
           'width': '180%',
           y: '-30%',
-          x: '-40%'
+          x: '-40%',
         },
         this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -1106,7 +1108,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'in': 'outColor',
           'in2': 'outBlur',
           'operator': 'in',
-          'result': 'outGlow'
+          'result': 'outGlow',
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;
@@ -1225,4 +1227,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

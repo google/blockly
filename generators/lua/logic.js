@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for logic blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
@@ -34,7 +33,7 @@ Blockly.Lua['controls_if'] = function(block) {
     }
     code += (n > 0 ? 'else' : '') +
         'if ' + conditionCode + ' then\n' + branchCode;
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.Lua.STATEMENT_SUFFIX) {
@@ -72,8 +71,8 @@ Blockly.Lua['logic_compare'] = function(block) {
 
 Blockly.Lua['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
-  var order = (operator == 'and') ? Blockly.Lua.ORDER_AND :
+  var operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
+  var order = (operator === 'and') ? Blockly.Lua.ORDER_AND :
       Blockly.Lua.ORDER_OR;
   var argument0 = Blockly.Lua.valueToCode(block, 'A', order);
   var argument1 = Blockly.Lua.valueToCode(block, 'B', order);
@@ -83,7 +82,7 @@ Blockly.Lua['logic_operation'] = function(block) {
     argument1 = 'false';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == 'and') ? 'true' : 'false';
+    var defaultArgument = (operator === 'and') ? 'true' : 'false';
     if (!argument0) {
       argument0 = defaultArgument;
     }
@@ -105,7 +104,7 @@ Blockly.Lua['logic_negate'] = function(block) {
 
 Blockly.Lua['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
+  var code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Blockly.Lua.ORDER_ATOMIC];
 };
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object representing a row that holds one or more inputs on a
  * rendered block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -17,11 +16,11 @@
  */
 goog.module('Blockly.blockRendering.InputRow');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Row = goog.require('Blockly.blockRendering.Row');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Row} = goog.require('Blockly.blockRendering.Row');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -60,7 +59,8 @@ InputRow.prototype.measure = function() {
     if (Types.isInput(elem)) {
       if (Types.isStatementInput(elem)) {
         connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (Types.isExternalInput(elem) && elem.connectedBlockWidth != 0) {
+      } else if (
+          Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
         connectedBlockWidths +=
             (elem.connectedBlockWidth - elem.connectionWidth);
       }
@@ -80,4 +80,4 @@ InputRow.prototype.endsWithElemSpacer = function() {
   return !this.hasExternalInput && !this.hasStatement;
 };
 
-exports = InputRow;
+exports.InputRow = InputRow;

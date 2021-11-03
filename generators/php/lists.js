@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for list blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 
 /**
@@ -98,7 +97,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
     var errorIndex = ' -1';
     var indexAdjustment = '';
   }
-  if (block.getFieldValue('END') == 'FIRST') {
+  if (block.getFieldValue('END') === 'FIRST') {
     // indexOf
     var functionName = Blockly.PHP.provideFunction_(
         'indexOf',
@@ -135,34 +134,34 @@ Blockly.PHP['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   switch (where) {
     case 'FIRST':
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_MEMBER) || 'array()';
         var code = list + '[0]';
         return [code, Blockly.PHP.ORDER_MEMBER];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var code = 'array_shift(' + list + ')';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         return 'array_shift(' + list + ');\n';
       }
       break;
     case 'LAST':
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var code = 'end(' + list + ')';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var code = 'array_pop(' + list + ')';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         return 'array_pop(' + list + ');\n';
@@ -170,39 +169,39 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       break;
     case 'FROM_START':
       var at = Blockly.PHP.getAdjusted(block, 'AT');
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_MEMBER) || 'array()';
         var code = list + '[' + at + ']';
         return [code, Blockly.PHP.ORDER_MEMBER];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var code = 'array_splice(' + list + ', ' + at + ', 1)[0]';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         return 'array_splice(' + list + ', ' + at + ', 1);\n';
       }
       break;
     case 'FROM_END':
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var at = Blockly.PHP.getAdjusted(block, 'AT', 1, true);
         var code = 'array_slice(' + list + ', ' + at + ', 1)[0]';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
+      } else if (mode === 'GET_REMOVE' || mode === 'REMOVE') {
         var list = Blockly.PHP.valueToCode(block, 'VALUE',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         var at = Blockly.PHP.getAdjusted(block, 'AT', 1, false,
             Blockly.PHP.ORDER_SUBTRACTION);
         code = 'array_splice(' + list +
             ', count(' + list + ') - ' + at + ', 1)[0]';
-        if (mode == 'GET_REMOVE') {
+        if (mode === 'GET_REMOVE') {
           return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-        } else if (mode == 'REMOVE') {
+        } else if (mode === 'REMOVE') {
           return code + ';\n';
         }
       }
@@ -210,7 +209,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
     case 'RANDOM':
       var list = Blockly.PHP.valueToCode(block, 'VALUE',
               Blockly.PHP.ORDER_NONE) || 'array()';
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_get_random_item',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -219,7 +218,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
              '}']);
         code = functionName + '(' + list + ')';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_get_remove_random_item',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -230,7 +229,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
              '}']);
         code = functionName + '(' + list + ')';
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_remove_random_item',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -265,11 +264,11 @@ Blockly.PHP['lists_setIndex'] = function(block) {
   }
   switch (where) {
     case 'FIRST':
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         var list = Blockly.PHP.valueToCode(block, 'LIST',
                 Blockly.PHP.ORDER_MEMBER) || 'array()';
         return list + '[0] = ' + value + ';\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         var list = Blockly.PHP.valueToCode(block, 'LIST',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         return 'array_unshift(' + list + ', ' + value + ');\n';
@@ -278,7 +277,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     case 'LAST':
       var list = Blockly.PHP.valueToCode(block, 'LIST',
               Blockly.PHP.ORDER_NONE) || 'array()';
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_set_last_item',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -286,17 +285,17 @@ Blockly.PHP['lists_setIndex'] = function(block) {
              '  $list[count($list) - 1] = $value;',
              '}']);
         return functionName + '(' + list + ', ' + value + ');\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         return 'array_push(' + list + ', ' + value + ');\n';
       }
       break;
     case 'FROM_START':
       var at = Blockly.PHP.getAdjusted(block, 'AT');
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         var list = Blockly.PHP.valueToCode(block, 'LIST',
                 Blockly.PHP.ORDER_MEMBER) || 'array()';
         return list + '[' + at + '] = ' + value + ';\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         var list = Blockly.PHP.valueToCode(block, 'LIST',
                 Blockly.PHP.ORDER_NONE) || 'array()';
         return 'array_splice(' + list + ', ' + at + ', 0, ' + value + ');\n';
@@ -306,7 +305,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       var list = Blockly.PHP.valueToCode(block, 'LIST',
               Blockly.PHP.ORDER_NONE) || 'array()';
       var at = Blockly.PHP.getAdjusted(block, 'AT', 1);
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_set_from_end',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -314,7 +313,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
              '  $list[count($list) - $at] = $value;',
              '}']);
         return functionName + '(' + list + ', ' + at + ', ' + value + ');\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         var functionName = Blockly.PHP.provideFunction_(
             'lists_insert_from_end',
             ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -331,10 +330,10 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       var xVar = Blockly.PHP.nameDB_.getDistinctName(
           'tmp_x', Blockly.VARIABLE_CATEGORY_NAME);
       code += xVar + ' = rand(0, count(' + list + ')-1);\n';
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         code += list + '[' + xVar + '] = ' + value + ';\n';
         return code;
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         code += 'array_splice(' + list + ', ' + xVar + ', 0, ' + value +
             ');\n';
         return code;
@@ -350,10 +349,10 @@ Blockly.PHP['lists_getSublist'] = function(block) {
       Blockly.PHP.ORDER_NONE) || 'array()';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-  if (where1 == 'FIRST' && where2 == 'LAST') {
+  if (where1 === 'FIRST' && where2 === 'LAST') {
     var code = list;
   } else if (list.match(/^\$\w+$/) ||
-      (where1 != 'FROM_END' && where2 == 'FROM_START')) {
+      (where1 !== 'FROM_END' && where2 === 'FROM_START')) {
     // If the list is a simple value or doesn't require a call for length, don't
     // generate a helper function.
     switch (where1) {
@@ -453,7 +452,7 @@ Blockly.PHP['lists_sort'] = function(block) {
        '    "IGNORE_CASE" => "strcasecmp"',
        '  );',
        '  $sortCmp = $sortCmpFuncs[$type];',
-       '  $list2 = $list;', // Clone list.
+       '  $list2 = $list;',  // Clone list.
        '  usort($list2, $sortCmp);',
        '  if ($direction == -1) {',
        '    $list2 = array_reverse($list2);',
@@ -472,12 +471,12 @@ Blockly.PHP['lists_split'] = function(block) {
   var value_delim = Blockly.PHP.valueToCode(block, 'DELIM',
       Blockly.PHP.ORDER_NONE) || '\'\'';
   var mode = block.getFieldValue('MODE');
-  if (mode == 'SPLIT') {
+  if (mode === 'SPLIT') {
     if (!value_input) {
       value_input = '\'\'';
     }
     var functionName = 'explode';
-  } else if (mode == 'JOIN') {
+  } else if (mode === 'JOIN') {
     if (!value_input) {
       value_input = 'array()';
     }

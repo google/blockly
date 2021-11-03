@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for logic blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 
@@ -34,7 +33,7 @@ Blockly.PHP['controls_if'] = function(block) {
     }
     code += (n > 0 ? ' else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.PHP.STATEMENT_SUFFIX) {
@@ -62,7 +61,7 @@ Blockly.PHP['logic_compare'] = function(block) {
     'GTE': '>='
   };
   var operator = OPERATORS[block.getFieldValue('OP')];
-  var order = (operator == '==' || operator == '!=') ?
+  var order = (operator === '==' || operator === '!=') ?
       Blockly.PHP.ORDER_EQUALITY : Blockly.PHP.ORDER_RELATIONAL;
   var argument0 = Blockly.PHP.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'B', order) || '0';
@@ -72,8 +71,8 @@ Blockly.PHP['logic_compare'] = function(block) {
 
 Blockly.PHP['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.PHP.ORDER_LOGICAL_AND :
+  var operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
+  var order = (operator === '&&') ? Blockly.PHP.ORDER_LOGICAL_AND :
       Blockly.PHP.ORDER_LOGICAL_OR;
   var argument0 = Blockly.PHP.valueToCode(block, 'A', order);
   var argument1 = Blockly.PHP.valueToCode(block, 'B', order);
@@ -83,7 +82,7 @@ Blockly.PHP['logic_operation'] = function(block) {
     argument1 = 'false';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    var defaultArgument = (operator === '&&') ? 'true' : 'false';
     if (!argument0) {
       argument0 = defaultArgument;
     }
@@ -106,7 +105,7 @@ Blockly.PHP['logic_negate'] = function(block) {
 
 Blockly.PHP['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
+  var code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for loop blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
@@ -34,7 +33,7 @@ Blockly.Lua.CONTINUE_STATEMENT = 'goto continue\n';
  * @private
  */
 Blockly.Lua.addContinueLabel_ = function(branch) {
-  if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) != -1) {
+  if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) !== -1) {
     // False positives are possible (e.g. a string literal), but are harmless.
     return branch + Blockly.Lua.INDENT + '::continue::\n';
   } else {
@@ -71,7 +70,7 @@ Blockly.Lua['controls_repeat'] = Blockly.Lua['controls_repeat_ext'];
 
 Blockly.Lua['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') === 'UNTIL';
   var argument0 = Blockly.Lua.valueToCode(block, 'BOOL',
       until ? Blockly.Lua.ORDER_UNARY :
       Blockly.Lua.ORDER_NONE) || 'false';

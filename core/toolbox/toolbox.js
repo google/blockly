@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Toolbox from whence to create blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,47 +15,47 @@
  */
 goog.module('Blockly.Toolbox');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
-const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
-const DeleteArea = goog.require('Blockly.DeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.require('Blockly.IAutoHideable');
-/* eslint-disable-next-line no-unused-vars */
-const ICollapsibleToolboxItem = goog.requireType('Blockly.ICollapsibleToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
-/* eslint-disable-next-line no-unused-vars */
-const ISelectableToolboxItem = goog.requireType('Blockly.ISelectableToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const IStyleable = goog.require('Blockly.IStyleable');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.require('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
-const Options = goog.require('Blockly.Options');
-const Rect = goog.require('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const keyCodes = goog.require('Blockly.utils.KeyCodes');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+/* eslint-disable-next-line no-unused-vars */
+const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IDraggable} = goog.requireType('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+/* eslint-disable-next-line no-unused-vars */
+const {ISelectableToolboxItem} = goog.requireType('Blockly.ISelectableToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IStyleable} = goog.require('Blockly.IStyleable');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.require('Blockly.IToolbox');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Options} = goog.require('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
 
@@ -233,8 +232,8 @@ Toolbox.prototype.init = function() {
     capabilities: [
       ComponentManager.Capability.AUTOHIDEABLE,
       ComponentManager.Capability.DELETE_AREA,
-      ComponentManager.Capability.DRAG_TARGET
-    ]
+      ComponentManager.Capability.DRAG_TARGET,
+    ],
   });
 };
 
@@ -316,7 +315,7 @@ Toolbox.prototype.attachEvents_ = function(container, contentsContainer) {
  * @protected
  */
 Toolbox.prototype.onClick_ = function(e) {
-  if (browserEvents.isRightButton(e) || e.target == this.HtmlDiv) {
+  if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
     // Close flyout.
     common.getMainWorkspace().hideChaff(false);
   } else {
@@ -343,20 +342,20 @@ Toolbox.prototype.onClick_ = function(e) {
 Toolbox.prototype.onKeyDown_ = function(e) {
   let handled = false;
   switch (e.keyCode) {
-    case keyCodes.DOWN:
+    case KeyCodes.DOWN:
       handled = this.selectNext_();
       break;
-    case keyCodes.UP:
+    case KeyCodes.UP:
       handled = this.selectPrevious_();
       break;
-    case keyCodes.LEFT:
+    case KeyCodes.LEFT:
       handled = this.selectParent_();
       break;
-    case keyCodes.RIGHT:
+    case KeyCodes.RIGHT:
       handled = this.selectChild_();
       break;
-    case keyCodes.ENTER:
-    case keyCodes.SPACE:
+    case KeyCodes.ENTER:
+    case KeyCodes.SPACE:
       if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
         const collapsibleItem =
             /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
@@ -398,7 +397,7 @@ Toolbox.prototype.createFlyout_ = function() {
         'rendererOverrides': workspace.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   // Options takes in either 'end' or 'start'. This has already been parsed to
   // be either 0 or 1, so set it after.
@@ -465,7 +464,7 @@ Toolbox.prototype.createToolboxItem_ = function(toolboxItemDef, fragment) {
 
   // Categories that are collapsible are created using a class registered under
   // a different name.
-  if (registryName.toUpperCase() == 'CATEGORY' &&
+  if (registryName.toUpperCase() === 'CATEGORY' &&
       toolbox.isCategoryCollapsible(
           /** @type {!toolbox.CategoryInfo} */ (toolboxItemDef))) {
     registryName = CollapsibleToolboxCategory.registrationName;
@@ -559,11 +558,11 @@ Toolbox.prototype.getClientRect = function() {
 
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (this.toolboxPosition == toolbox.Position.TOP) {
+  if (this.toolboxPosition === toolbox.Position.TOP) {
     return new Rect(-BIG_NUM, bottom, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == toolbox.Position.BOTTOM) {
+  } else if (this.toolboxPosition === toolbox.Position.BOTTOM) {
     return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
-  } else if (this.toolboxPosition == toolbox.Position.LEFT) {
+  } else if (this.toolboxPosition === toolbox.Position.LEFT) {
     return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
   } else {  // Right
     return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
@@ -759,13 +758,13 @@ Toolbox.prototype.position = function() {
     toolboxDiv.style.width = '100%';
     this.height_ = toolboxDiv.offsetHeight;
     this.width_ = workspaceMetrics.viewWidth;
-    if (this.toolboxPosition == toolbox.Position.TOP) {
+    if (this.toolboxPosition === toolbox.Position.TOP) {
       toolboxDiv.style.top = '0';
     } else {  // Bottom
       toolboxDiv.style.bottom = '0';
     }
   } else {
-    if (this.toolboxPosition == toolbox.Position.RIGHT) {
+    if (this.toolboxPosition === toolbox.Position.RIGHT) {
       toolboxDiv.style.right = '0';
     } else {  // Left
       toolboxDiv.style.left = '0';
@@ -785,10 +784,10 @@ Toolbox.prototype.handleToolboxItemResize = function() {
   // to the new absolute edge (ie toolbox edge).
   const workspace = this.workspace_;
   const rect = this.HtmlDiv.getBoundingClientRect();
-  const newX = this.toolboxPosition == toolbox.Position.LEFT ?
+  const newX = this.toolboxPosition === toolbox.Position.LEFT ?
       workspace.scrollX + rect.width :
       workspace.scrollX;
-  const newY = this.toolboxPosition == toolbox.Position.TOP ?
+  const newY = this.toolboxPosition === toolbox.Position.TOP ?
       workspace.scrollY + rect.height :
       workspace.scrollY;
   workspace.translate(newX, newY);
@@ -874,11 +873,11 @@ Toolbox.prototype.setSelectedItem = function(newItem) {
   }
   newItem = /** @type {ISelectableToolboxItem} */ (newItem);
 
-  if (this.shouldDeselectItem_(oldItem, newItem) && oldItem != null) {
+  if (this.shouldDeselectItem_(oldItem, newItem) && oldItem !== null) {
     this.deselectItem_(oldItem);
   }
 
-  if (this.shouldSelectItem_(oldItem, newItem) && newItem != null) {
+  if (this.shouldSelectItem_(oldItem, newItem) && newItem !== null) {
     this.selectItem_(oldItem, newItem);
   }
 
@@ -898,7 +897,7 @@ Toolbox.prototype.setSelectedItem = function(newItem) {
 Toolbox.prototype.shouldDeselectItem_ = function(oldItem, newItem) {
   // Deselect the old item unless the old item is collapsible and has been
   // previously clicked on.
-  return oldItem != null && (!oldItem.isCollapsible() || oldItem != newItem);
+  return oldItem !== null && (!oldItem.isCollapsible() || oldItem !== newItem);
 };
 
 /**
@@ -912,7 +911,7 @@ Toolbox.prototype.shouldDeselectItem_ = function(oldItem, newItem) {
  */
 Toolbox.prototype.shouldSelectItem_ = function(oldItem, newItem) {
   // Select the new item unless the old item equals the new item.
-  return newItem != null && newItem != oldItem;
+  return newItem !== null && newItem !== oldItem;
 };
 
 /**
@@ -969,7 +968,7 @@ Toolbox.prototype.selectItemByPosition = function(position) {
  * @protected
  */
 Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if ((oldItem == newItem && !newItem.isCollapsible()) || !newItem ||
+  if ((oldItem === newItem && !newItem.isCollapsible()) || !newItem ||
       !newItem.getContents().length) {
     this.flyout_.hide();
   } else {
@@ -990,7 +989,7 @@ Toolbox.prototype.fireSelectEvent_ = function(oldItem, newItem) {
   const oldElement = oldItem && oldItem.getName();
   let newElement = newItem && newItem.getName();
   // In this case the toolbox closes, so the newElement should be null.
-  if (oldItem == newItem) {
+  if (oldItem === newItem) {
     newElement = null;
   }
   const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
@@ -1116,28 +1115,39 @@ Toolbox.prototype.dispose = function() {
 /**
  * CSS for Toolbox.  See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
-  '.blocklyToolboxDelete {', 'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
-  '}',
+Css.register(`
+  .blocklyToolboxDelete {
+    cursor: url("<<<PATH>>>/handdelete.cur"), auto;
+  }
 
-  '.blocklyToolboxGrab {', 'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
-  'cursor: grabbing;', 'cursor: -webkit-grabbing;', '}',
+  .blocklyToolboxGrab {
+    cursor: url("<<<PATH>>>/handclosed.cur"), auto;
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
+  }
 
   /* Category tree in Toolbox. */
-  '.blocklyToolboxDiv {', 'background-color: #ddd;', 'overflow-x: visible;',
-  'overflow-y: auto;', 'padding: 4px 0 4px 0;', 'position: absolute;',
-  'z-index: 70;', /* so blocks go under toolbox when dragging */
-  '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
-  '}',
+  .blocklyToolboxDiv {
+    background-color: #ddd;
+    overflow-x: visible;
+    overflow-y: auto;
+    padding: 4px 0 4px 0;
+    position: absolute;
+    z-index: 70;  /* so blocks go under toolbox when dragging */
+    -webkit-tap-highlight-color: transparent;  /* issue #1345 */
+  }
 
-  '.blocklyToolboxContents {', 'display: flex;', 'flex-wrap: wrap;',
-  'flex-direction: column;', '}',
+  .blocklyToolboxContents {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
 
-  '.blocklyToolboxContents:focus {', 'outline: none;', '}',
-  /* eslint-enable indent */
-]);
+  .blocklyToolboxContents:focus {
+    outline: none;
+  }
+`);
 
 registry.register(registry.Type.TOOLBOX, registry.DEFAULT, Toolbox);
 
-exports = Toolbox;
+exports.Toolbox = Toolbox;

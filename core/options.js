@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object that controls settings for the workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,17 +15,17 @@
  */
 goog.module('Blockly.Options');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const Classic = goog.require('Blockly.Themes.Classic');
-/* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Theme = goog.require('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {Classic} = goog.require('Blockly.Themes.Classic');
+/* eslint-disable-next-line no-unused-vars */
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Theme} = goog.require('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -94,8 +93,8 @@ const Options = function(options) {
     toolboxPosition =
         toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
   } else {
-    toolboxPosition = (toolboxAtStart == rtl) ? toolbox.Position.RIGHT :
-                                                toolbox.Position.LEFT;
+    toolboxPosition = (toolboxAtStart === rtl) ? toolbox.Position.RIGHT :
+                                                 toolbox.Position.LEFT;
   }
 
   let hasCss = options['css'];
@@ -261,7 +260,7 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
   const moveOptions = {};
   if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
     moveOptions.scrollbars = hasCategories;
-  } else if (typeof move['scrollbars'] == 'object') {
+  } else if (typeof move['scrollbars'] === 'object') {
     moveOptions.scrollbars = {};
     moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
     moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
@@ -281,7 +280,7 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
 
   if (!moveOptions.scrollbars || move['wheel'] === undefined) {
     // Defaults to true if single-direction scroll is enabled.
-    moveOptions.wheel = typeof moveOptions.scrollbars == 'object';
+    moveOptions.wheel = typeof moveOptions.scrollbars === 'object';
   } else {
     moveOptions.wheel = !!move['wheel'];
   }
@@ -373,7 +372,7 @@ Options.parseGridOptions_ = function(options) {
  */
 Options.parseThemeOptions_ = function(options) {
   const theme = options['theme'] || Classic;
-  if (typeof theme == 'string') {
+  if (typeof theme === 'string') {
     return /** @type {!Theme} */ (
         registry.getObject(registry.Type.THEME, theme));
   } else if (theme instanceof Theme) {
@@ -383,4 +382,4 @@ Options.parseThemeOptions_ = function(options) {
       theme.name || ('builtin' + idGenerator.getNextUniqueId()), theme);
 };
 
-exports = Options;
+exports.Options = Options;

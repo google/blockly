@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for variable blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a cursor.
  * Used primarily for keyboard navigation.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -54,8 +53,8 @@ Cursor.prototype.next = function() {
 
   let newNode = curNode.next();
   while (newNode && newNode.next() &&
-         (newNode.getType() == ASTNode.types.NEXT ||
-          newNode.getType() == ASTNode.types.BLOCK)) {
+         (newNode.getType() === ASTNode.types.NEXT ||
+          newNode.getType() === ASTNode.types.BLOCK)) {
     newNode = newNode.next();
   }
 
@@ -78,8 +77,8 @@ Cursor.prototype.in = function() {
   }
   // If we are on a previous or output connection, go to the block level before
   // performing next operation.
-  if (curNode.getType() == ASTNode.types.PREVIOUS ||
-      curNode.getType() == ASTNode.types.OUTPUT) {
+  if (curNode.getType() === ASTNode.types.PREVIOUS ||
+      curNode.getType() === ASTNode.types.OUTPUT) {
     curNode = curNode.next();
   }
   const newNode = curNode.in();
@@ -104,8 +103,8 @@ Cursor.prototype.prev = function() {
   let newNode = curNode.prev();
 
   while (newNode && newNode.prev() &&
-         (newNode.getType() == ASTNode.types.NEXT ||
-          newNode.getType() == ASTNode.types.BLOCK)) {
+         (newNode.getType() === ASTNode.types.NEXT ||
+          newNode.getType() === ASTNode.types.BLOCK)) {
     newNode = newNode.prev();
   }
 
@@ -128,7 +127,7 @@ Cursor.prototype.out = function() {
   }
   let newNode = curNode.out();
 
-  if (newNode && newNode.getType() == ASTNode.types.BLOCK) {
+  if (newNode && newNode.getType() === ASTNode.types.BLOCK) {
     newNode = newNode.prev() || newNode;
   }
 

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly's internal clipboard for managing copy-paste.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,9 +15,9 @@
  */
 goog.module('Blockly.clipboard');
 
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
 const eventUtils = goog.require('Blockly.Events.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
 
 
 /**

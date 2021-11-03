@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing an icon in a row of a rendered
  * block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -17,13 +16,13 @@
  */
 goog.module('Blockly.blockRendering.Icon');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyIcon = goog.requireType('Blockly.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Icon: BlocklyIcon} = goog.requireType('Blockly.Icon');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -49,4 +48,4 @@ const Icon = function(constants, icon) {
 };
 object.inherits(Icon, Measurable);
 
-exports = Icon;
+exports.Icon = Icon;

@@ -20,7 +20,7 @@ suite('Label Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  let invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -28,7 +28,7 @@ suite('Label Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
+  let validValueTestCases = [
     {title: 'String', value: 'value', expectedValue: 'value'},
     {title: 'Boolean true', value: true, expectedValue: 'true'},
     {title: 'Boolean false', value: false, expectedValue: 'false'},
@@ -36,7 +36,7 @@ suite('Label Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  var addArgsAndJson = function(testCase) {
+  let addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -47,12 +47,12 @@ suite('Label Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = '';
+  let defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldLabel} field The field to check.
    */
-  var assertFieldDefault = function(field) {
+  let assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -60,7 +60,7 @@ suite('Label Fields', function() {
    * @param {!Blockly.FieldLabel} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
+  let validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue);
   };
 
@@ -86,7 +86,7 @@ suite('Label Fields', function() {
       });
     });
     suite('Value -> New Value', function() {
-      var initialValue = 'oldValue';
+      let initialValue = 'oldValue';
       setup(function() {
         this.field = new Blockly.FieldLabel(initialValue);
       });
@@ -123,43 +123,43 @@ suite('Label Fields', function() {
     }
 
     test('JS Constructor', function() {
-      var field = new Blockly.FieldLabel('text', 'testClass');
+      let field = new Blockly.FieldLabel('text', 'testClass');
       assertHasClass(field, 'testClass');
     });
     test('JSON Definition', function() {
-      var field = Blockly.FieldLabel.fromJson({
+      let field = Blockly.FieldLabel.fromJson({
         class: 'testClass'
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Simple', function() {
-      var field = new Blockly.FieldLabel('text', null, {
+      let field = new Blockly.FieldLabel('text', null, {
         class: 'testClass'
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Ignore', function() {
-      var field = new Blockly.FieldLabel('text', 'paramClass', {
+      let field = new Blockly.FieldLabel('text', 'paramClass', {
         class: 'configClass'
       });
       assertDoesNotHaveClass(field, 'paramClass');
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - \'\'', function() {
-      var field = new Blockly.FieldLabel('text', '', {
+      let field = new Blockly.FieldLabel('text', '', {
         class: 'configClass'
       });
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - Config \'\'', function() {
-      var field = new Blockly.FieldLabel('text', 'paramClass', {
+      let field = new Blockly.FieldLabel('text', 'paramClass', {
         class: ''
       });
       assertDoesNotHaveClass(field, 'paramClass');
     });
     suite('setClass', function() {
       test('setClass', function() {
-        var field = new Blockly.FieldLabel();
+        let field = new Blockly.FieldLabel();
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
             Blockly.utils.Svg.G, {}, null);
         field.constants_ = {
@@ -172,12 +172,12 @@ suite('Label Fields', function() {
             field.textElement_, 'testClass'));
       });
       test('setClass Before Initialization', function() {
-        var field = new Blockly.FieldLabel();
+        let field = new Blockly.FieldLabel();
         field.setClass('testClass');
         assertHasClass(field, 'testClass');
       });
       test('Remove Class', function() {
-        var field = new Blockly.FieldLabel('text', null, {
+        let field = new Blockly.FieldLabel('text', null, {
           class: 'testClass'
         });
         assertHasClass(field, 'testClass');

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Download screenshot.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -18,18 +17,18 @@
  * @param {!Function} callback Callback.
  */
 function svgToPng_(data, width, height, callback) {
-  var canvas = document.createElement("canvas");
-  var context = canvas.getContext("2d");
-  var img = new Image();
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  const img = new Image();
 
-  var pixelDensity = 10;
+  const pixelDensity = 10;
   canvas.width = width * pixelDensity;
   canvas.height = height * pixelDensity;
   img.onload = function() {
     context.drawImage(
         img, 0, 0, width, height, 0, 0, canvas.width, canvas.height);
     try {
-      var dataUri = canvas.toDataURL('image/png');
+      const dataUri = canvas.toDataURL('image/png');
       callback(dataUri);
     } catch (err) {
       console.warn('Error converting the workspace svg to a png');
@@ -48,22 +47,22 @@ function svgToPng_(data, width, height, callback) {
 function workspaceToSvg_(workspace, callback, customCss) {
 
   // Go through all text areas and set their value.
-  var textAreas = document.getElementsByTagName("textarea");
-  for (var i = 0; i < textAreas.length; i++) {
+  const textAreas = document.getElementsByTagName("textarea");
+  for (let i = 0; i < textAreas.length; i++) {
     textAreas[i].innerHTML = textAreas[i].value;
   }
 
-  var bBox = workspace.getBlocksBoundingBox();
-  var x = bBox.x || bBox.left;
-  var y = bBox.y || bBox.top;
-  var width = bBox.width || bBox.right - x;
-  var height = bBox.height || bBox.bottom - y;
+  const bBox = workspace.getBlocksBoundingBox();
+  const x = bBox.x || bBox.left;
+  const y = bBox.y || bBox.top;
+  const width = bBox.width || bBox.right - x;
+  const height = bBox.height || bBox.bottom - y;
 
-  var blockCanvas = workspace.getCanvas();
-  var clone = blockCanvas.cloneNode(true);
+  const blockCanvas = workspace.getCanvas();
+  const clone = blockCanvas.cloneNode(true);
   clone.removeAttribute('transform');
-  
-  var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.appendChild(clone);
   svg.setAttribute('viewBox',
@@ -76,17 +75,17 @@ function workspaceToSvg_(workspace, callback, customCss) {
   svg.setAttribute('height', height);
   svg.setAttribute("style", 'background-color: transparent');
 
-  var css = [].slice.call(document.head.querySelectorAll('style'))
+  const css = [].slice.call(document.head.querySelectorAll('style'))
       .filter(function(el) { return /\.blocklySvg/.test(el.innerText) ||
         (el.id.indexOf('blockly-') === 0); }).map(function(el) {
         return el.innerText; }).join('\n');
-  var style = document.createElement('style');
+  const style = document.createElement('style');
   style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);
 
-  var svgAsXML = (new XMLSerializer).serializeToString(svg);
+  let svgAsXML = (new XMLSerializer).serializeToString(svg);
   svgAsXML = svgAsXML.replace(/&nbsp/g, '&#160');
-  var data = 'data:image/svg+xml,' + encodeURIComponent(svgAsXML);
+  const data = 'data:image/svg+xml,' + encodeURIComponent(svgAsXML);
 
   svgToPng_(data, width, height, callback);
 }
@@ -97,7 +96,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
  */
 Blockly.downloadScreenshot = function(workspace) {
   workspaceToSvg_(workspace, function(datauri) {
-    var a = document.createElement('a');
+    const a = document.createElement('a');
     a.download = 'screenshot.png';
     a.target = '_self';
     a.href = datauri;

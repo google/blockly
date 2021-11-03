@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for text blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -24,7 +23,7 @@ Blockly.JavaScript['text'] = function(block) {
 Blockly.JavaScript['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.JavaScript.multiline_quote_(block.getFieldValue('TEXT'));
-  var order = code.indexOf('+') != -1 ? Blockly.JavaScript.ORDER_ADDITION :
+  var order = code.indexOf('+') !== -1 ? Blockly.JavaScript.ORDER_ADDITION :
       Blockly.JavaScript.ORDER_ATOMIC;
   return [code, order];
 };
@@ -105,7 +104,7 @@ Blockly.JavaScript['text_isEmpty'] = function(block) {
 
 Blockly.JavaScript['text_indexOf'] = function(block) {
   // Search the text for a substring.
-  var operator = block.getFieldValue('END') == 'FIRST' ?
+  var operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   var substring = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
@@ -123,7 +122,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var textOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
+  var textOrder = (where === 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
       Blockly.JavaScript.ORDER_MEMBER;
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       textOrder) || '\'\'';
@@ -166,11 +165,11 @@ Blockly.JavaScript['text_charAt'] = function(block) {
  * @private
  */
 Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {
-  if (where == 'FIRST') {
+  if (where === 'FIRST') {
     return '0';
-  } else if (where == 'FROM_END') {
+  } else if (where === 'FROM_END') {
     return stringName + '.length - 1 - ' + opt_at;
-  } else if (where == 'LAST') {
+  } else if (where === 'LAST') {
     return stringName + '.length - 1';
   } else {
     return opt_at;
@@ -181,13 +180,13 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-  var requiresLengthCall = (where1 != 'FROM_END' && where1 != 'LAST' &&
-      where2 != 'FROM_END' && where2 != 'LAST');
+  var requiresLengthCall = (where1 !== 'FROM_END' && where1 !== 'LAST' &&
+      where2 !== 'FROM_END' && where2 !== 'LAST');
   var textOrder = requiresLengthCall ? Blockly.JavaScript.ORDER_MEMBER :
       Blockly.JavaScript.ORDER_NONE;
   var text = Blockly.JavaScript.valueToCode(block, 'STRING',
       textOrder) || '\'\'';
-  if (where1 == 'FIRST' && where2 == 'LAST') {
+  if (where1 === 'FIRST' && where2 === 'LAST') {
     var code = text;
     return [code, Blockly.JavaScript.ORDER_NONE];
   } else if (text.match(/^'?\w+'?$/) || requiresLengthCall) {
@@ -236,8 +235,8 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         '(sequence' +
         // The value for 'FROM_END' and'FROM_START' depends on `at` so
         // we add it as a parameter.
-        ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', at1' : '') +
-        ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', at2' : '') +
+        ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '') +
+        ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '') +
         ') {',
           '  var start = ' + getIndex_('sequence', where1, 'at1') + ';',
           '  var end = ' + getIndex_('sequence', where2, 'at2') + ' + 1;',
@@ -246,8 +245,8 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
     var code = functionName + '(' + text +
         // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
         // pass it.
-        ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', ' + at1 : '') +
-        ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', ' + at2 : '') +
+        ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', ' + at1 : '') +
+        ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', ' + at2 : '') +
         ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -314,7 +313,7 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
   }
   var code = 'window.prompt(' + msg + ')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = 'Number(' + code + ')';
   }

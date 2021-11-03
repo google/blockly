@@ -18,21 +18,21 @@
 goog.module('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.requireType('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocation} = goog.requireType('Blockly.IASTNodeLocation');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -102,7 +102,7 @@ ASTNode.types = {
   NEXT: 'next',
   PREVIOUS: 'previous',
   STACK: 'stack',
-  WORKSPACE: 'workspace'
+  WORKSPACE: 'workspace',
 };
 
 /**
@@ -160,16 +160,16 @@ ASTNode.createConnectionNode = function(connection) {
     return null;
   }
   const type = connection.type;
-  if (type == ConnectionType.INPUT_VALUE) {
+  if (type === ConnectionType.INPUT_VALUE) {
     return ASTNode.createInputNode(connection.getParentInput());
   } else if (
-      type == ConnectionType.NEXT_STATEMENT && connection.getParentInput()) {
+      type === ConnectionType.NEXT_STATEMENT && connection.getParentInput()) {
     return ASTNode.createInputNode(connection.getParentInput());
-  } else if (type == ConnectionType.NEXT_STATEMENT) {
+  } else if (type === ConnectionType.NEXT_STATEMENT) {
     return new ASTNode(ASTNode.types.NEXT, connection);
-  } else if (type == ConnectionType.OUTPUT_VALUE) {
+  } else if (type === ConnectionType.OUTPUT_VALUE) {
     return new ASTNode(ASTNode.types.OUTPUT, connection);
-  } else if (type == ConnectionType.PREVIOUS_STATEMENT) {
+  } else if (type === ConnectionType.PREVIOUS_STATEMENT) {
     return new ASTNode(ASTNode.types.PREVIOUS, connection);
   }
   return null;
@@ -432,7 +432,7 @@ ASTNode.prototype.findPrevForField_ = function() {
  * @private
  */
 ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
-  var curLocation = this.getLocation();
+  let curLocation = this.getLocation();
   if (curLocation.getSourceBlock) {
     curLocation = /** @type {!IASTNodeLocationWithBlock} */ (curLocation)
                       .getSourceBlock();
@@ -444,10 +444,10 @@ ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
   const topBlocks = curRoot.workspace.getTopBlocks(true);
   for (let i = 0; i < topBlocks.length; i++) {
     const topBlock = topBlocks[i];
-    if (curRoot.id == topBlock.id) {
+    if (curRoot.id === topBlock.id) {
       const offset = forward ? 1 : -1;
       const resultIndex = i + offset;
-      if (resultIndex == -1 || resultIndex == topBlocks.length) {
+      if (resultIndex === -1 || resultIndex === topBlocks.length) {
         return null;
       }
       return ASTNode.createStackNode(topBlocks[resultIndex]);

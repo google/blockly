@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for colour blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 

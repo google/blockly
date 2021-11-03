@@ -35,6 +35,7 @@ module.exports = {
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
   checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
   checkinBuilt: buildTasks.checkinBuilt,
+  clangFormat: buildTasks.format,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   cleanBuildDir: buildTasks.cleanBuildDir,
   cleanReleaseDir: packageTasks.cleanReleaseDir,

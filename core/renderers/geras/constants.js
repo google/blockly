@@ -7,7 +7,6 @@
 /**
  * @fileoverview An object that provides constants for rendering blocks in Geras
  * mode.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -18,8 +17,8 @@
  */
 goog.module('Blockly.geras.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 
 
 /**
@@ -65,11 +64,10 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
     // Insertion marker.
     selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
     selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none;',
+    'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
     '}',
     /* eslint-enable indent */
   ]);
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

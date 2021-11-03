@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a marker as SVG.
- * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -16,14 +15,6 @@
  */
 goog.module('Blockly.zelos.MarkerSvg');
 
-const BaseMarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,7 +22,15 @@ const {ASTNode} = goog.requireType('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {MarkerSvg: BaseMarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -135,7 +134,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
       Svg.CIRCLE, {
         'r': this.constants_.CURSOR_RADIUS,
         'style': 'display: none',
-        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
       this.markerSvg_);
 
@@ -163,4 +162,4 @@ MarkerSvg.prototype.applyColour_ = function(curNode) {
   }
 };
 
-exports = MarkerSvg;
+exports.MarkerSvg = MarkerSvg;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for dragging a bubble visually.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,22 +15,22 @@
  */
 goog.module('Blockly.BubbleDragger');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
-/* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IBubble} = goog.requireType('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Bubble');
 /** @suppress {extraRequire} */
@@ -145,7 +144,7 @@ BubbleDragger.prototype.dragBubble = function(e, currentDragDeltaXY) {
 
   const oldWouldDeleteBubble = this.wouldDeleteBubble_;
   this.wouldDeleteBubble_ = this.shouldDelete_(this.dragTarget_);
-  if (oldWouldDeleteBubble != this.wouldDeleteBubble_) {
+  if (oldWouldDeleteBubble !== this.wouldDeleteBubble_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBubbleDrag_();
   }
@@ -289,4 +288,4 @@ BubbleDragger.prototype.moveToDragSurface_ = function() {
   this.dragSurface_.setBlocksAndShow(this.draggingBubble_.getSvgRoot());
 };
 
-exports = BubbleDragger;
+exports.BubbleDragger = BubbleDragger;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Manager for all items registered with the workspace.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -17,17 +16,17 @@
  */
 goog.module('Blockly.ComponentManager');
 
-/* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
-/* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
-/* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
+/* eslint-disable-next-line no-unused-vars */
+const {IComponent} = goog.requireType('Blockly.IComponent');
+/* eslint-disable-next-line no-unused-vars */
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const {IPositionable} = goog.requireType('Blockly.IPositionable');
 
 
 /**
@@ -254,4 +253,4 @@ ComponentManager.Capability.DELETE_AREA =
 ComponentManager.Capability.AUTOHIDEABLE =
     new ComponentManager.Capability('autohideable');
 
-exports = ComponentManager;
+exports.ComponentManager = ComponentManager;

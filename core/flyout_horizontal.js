@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Horizontal flyout tray containing blocks which may be created.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,19 +15,19 @@
  */
 goog.module('Blockly.HorizontalFlyout');
 
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Flyout = goog.require('Blockly.Flyout');
-/* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-const Rect = goog.require('Blockly.utils.Rect');
-const Scrollbar = goog.require('Blockly.Scrollbar');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Flyout} = goog.require('Blockly.Flyout');
+/* eslint-disable-next-line no-unused-vars */
+const {Options} = goog.requireType('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
 
 
 /**
@@ -62,7 +61,7 @@ HorizontalFlyout.prototype.setMetrics_ = function(xyRatio) {
   const viewMetrics = metricsManager.getViewMetrics();
   const absoluteMetrics = metricsManager.getAbsoluteMetrics();
 
-  if (typeof xyRatio.x == 'number') {
+  if (typeof xyRatio.x === 'number') {
     this.workspace_.scrollX =
         -(scrollMetrics.left +
           (scrollMetrics.width - viewMetrics.width) * xyRatio.x);
@@ -96,9 +95,9 @@ HorizontalFlyout.prototype.getY = function() {
   const toolboxMetrics = metricsManager.getToolboxMetrics();
 
   let y = 0;
-  const atTop = this.toolboxPosition_ == toolbox.Position.TOP;
+  const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
   // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
-  if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_) {
+  if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_) {
     // If there is a category toolbox.
     if (this.targetWorkspace.getToolbox()) {
       if (atTop) {
@@ -163,7 +162,7 @@ HorizontalFlyout.prototype.position = function() {
  * @private
  */
 HorizontalFlyout.prototype.setBackgroundPath_ = function(width, height) {
-  const atTop = this.toolboxPosition_ == toolbox.Position.TOP;
+  const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
   // Start at top left.
   const path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
@@ -251,7 +250,7 @@ HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
   }
 
   for (let i = 0, item; (item = contents[i]); i++) {
-    if (item.type == 'block') {
+    if (item.type === 'block') {
       const block = item.block;
       const allBlocks = block.getDescendants(false);
       for (let j = 0, child; (child = allBlocks[j]); j++) {
@@ -278,7 +277,7 @@ HorizontalFlyout.prototype.layout_ = function(contents, gaps) {
       cursorX += (blockHW.width + gaps[i]);
 
       this.addBlockListeners_(root, block, rect);
-    } else if (item.type == 'button') {
+    } else if (item.type === 'button') {
       this.initFlyoutButton_(item.button, cursorX, cursorY);
       cursorX += (item.button.width + gaps[i]);
     }
@@ -330,7 +329,7 @@ HorizontalFlyout.prototype.getClientRect = function() {
   const BIG_NUM = 1000000000;
   const top = flyoutRect.top;
 
-  if (this.toolboxPosition_ == toolbox.Position.TOP) {
+  if (this.toolboxPosition_ === toolbox.Position.TOP) {
     const height = flyoutRect.height;
     return new Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
   } else {  // Bottom.
@@ -358,15 +357,15 @@ HorizontalFlyout.prototype.reflowInternal_ = function() {
   flyoutHeight *= this.workspace_.scale;
   flyoutHeight += Scrollbar.scrollbarThickness;
 
-  if (this.height_ != flyoutHeight) {
+  if (this.height_ !== flyoutHeight) {
     for (let i = 0, block; (block = blocks[i]); i++) {
       if (block.flyoutRect_) {
         this.moveRectToBlock_(block.flyoutRect_, block);
       }
     }
 
-    if (this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-        this.toolboxPosition_ == toolbox.Position.TOP &&
+    if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+        this.toolboxPosition_ === toolbox.Position.TOP &&
         !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie
@@ -387,4 +386,4 @@ registry.register(
     registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, registry.DEFAULT,
     HorizontalFlyout);
 
-exports = HorizontalFlyout;
+exports.HorizontalFlyout = HorizontalFlyout;

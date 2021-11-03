@@ -7,7 +7,6 @@
 /**
  * @fileoverview An object that provides constants for rendering blocks in Zelos
  * mode.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,13 +17,13 @@
  */
 goog.module('Blockly.zelos.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utilsColour = goog.require('Blockly.utils.colour');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -217,22 +216,22 @@ const ConstantProvider = function() {
       0: 5 * this.GRID_UNIT,  // Field in hexagon.
       1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
       2: 5 * this.GRID_UNIT,  // Round in hexagon.
-      3: 5 * this.GRID_UNIT   // Square in hexagon.
+      3: 5 * this.GRID_UNIT,  // Square in hexagon.
     },
     2: {
       // Outer shape: round.
       0: 3 * this.GRID_UNIT,  // Field in round.
       1: 3 * this.GRID_UNIT,  // Hexagon in round.
       2: 1 * this.GRID_UNIT,  // Round in round.
-      3: 2 * this.GRID_UNIT   // Square in round.
+      3: 2 * this.GRID_UNIT,  // Square in round.
     },
     3: {
       // Outer shape: square.
       0: 2 * this.GRID_UNIT,  // Field in square.
       1: 2 * this.GRID_UNIT,  // Hexagon in square.
       2: 2 * this.GRID_UNIT,  // Round in square.
-      3: 2 * this.GRID_UNIT   // Square in square.
-    }
+      3: 2 * this.GRID_UNIT,  // Square in square.
+    },
   };
 
   /**
@@ -456,8 +455,9 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath = svgPaths.curve('c', [
-    svgPaths.point(25, -height), svgPaths.point(71, -height),
-    svgPaths.point(width, 0)
+    svgPaths.point(25, -height),
+    svgPaths.point(71, -height),
+    svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -650,7 +650,7 @@ ConstantProvider.prototype.shapeFor = function(connection) {
     case ConnectionType.OUTPUT_VALUE:
       outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
-      if (outputShape != null) {
+      if (outputShape !== null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL:
             return this.HEXAGONAL;
@@ -661,13 +661,13 @@ ConstantProvider.prototype.shapeFor = function(connection) {
         }
       }
       // Includes doesn't work in IE.
-      if (checks && checks.indexOf('Boolean') != -1) {
+      if (checks && checks.indexOf('Boolean') !== -1) {
         return this.HEXAGONAL;
       }
-      if (checks && checks.indexOf('Number') != -1) {
+      if (checks && checks.indexOf('Number') !== -1) {
         return this.ROUNDED;
       }
-      if (checks && checks.indexOf('String') != -1) {
+      if (checks && checks.indexOf('String') !== -1) {
         return this.ROUNDED;
       }
       return this.ROUNDED;
@@ -699,7 +699,7 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 2, 0),
               svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
-              svgPaths.point(dir * curveWidth, quarterHeight)
+              svgPaths.point(dir * curveWidth, quarterHeight),
             ]) +
         svgPaths.line([svgPaths.point(dir * curveWidth, halfHeight)]) +
         svgPaths.curve(
@@ -707,7 +707,7 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
               svgPaths.point(dir * curveWidth / 2, quarterHeight),
-              svgPaths.point(dir * curveWidth, quarterHeight)
+              svgPaths.point(dir * curveWidth, quarterHeight),
             ]) +
         svgPaths.lineOnAxis('h', dir * innerWidth) +
         svgPaths.curve(
@@ -715,13 +715,13 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 2, 0),
               svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
-              svgPaths.point(dir * curveWidth, -quarterHeight)
+              svgPaths.point(dir * curveWidth, -quarterHeight),
             ]) +
         svgPaths.line([svgPaths.point(dir * curveWidth, -halfHeight)]) +
         svgPaths.curve('c', [
           svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
           svgPaths.point(dir * curveWidth / 2, -quarterHeight),
-          svgPaths.point(dir * curveWidth, -quarterHeight)
+          svgPaths.point(dir * curveWidth, -quarterHeight),
         ]));
   }
 
@@ -733,7 +733,7 @@ ConstantProvider.prototype.makeNotch = function() {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -763,7 +763,7 @@ ConstantProvider.prototype.makeInsideCorners = function() {
     rightWidth: radius,
     rightHeight: radius,
     pathTopRight: innerTopRightCorner,
-    pathBottomRight: innerBottomRightCorner
+    pathBottomRight: innerBottomRightCorner,
   };
 };
 
@@ -800,7 +800,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'height': '160%',
         'width': '180%',
         y: '-30%',
-        x: '-40%'
+        x: '-40%',
       },
       defs);
   dom.createSvgElement(
@@ -819,7 +819,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       Svg.FEFLOOD, {
         'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
-        'result': 'outColor'
+        'result': 'outColor',
       },
       selectedGlowFilter);
   dom.createSvgElement(
@@ -827,7 +827,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'outColor',
         'in2': 'outBlur',
         'operator': 'in',
-        'result': 'outGlow'
+        'result': 'outGlow',
       },
       selectedGlowFilter);
   this.selectedGlowFilterId = selectedGlowFilter.id;
@@ -841,7 +841,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'height': '160%',
         'width': '180%',
         y: '-30%',
-        x: '-40%'
+        x: '-40%',
       },
       defs);
   dom.createSvgElement(
@@ -860,7 +860,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       Svg.FEFLOOD, {
         'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
-        'result': 'outColor'
+        'result': 'outColor',
       },
       replacementGlowFilter);
   dom.createSvgElement(
@@ -868,7 +868,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'outColor',
         'in2': 'outBlur',
         'operator': 'in',
-        'result': 'outGlow'
+        'result': 'outGlow',
       },
       replacementGlowFilter);
   dom.createSvgElement(
@@ -947,4 +947,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

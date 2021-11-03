@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a single row on a rendered block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -16,14 +15,14 @@
 goog.module('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const InputConnection = goog.requireType('Blockly.blockRendering.InputConnection');
+const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
-const InRowSpacer = goog.requireType('Blockly.blockRendering.InRowSpacer');
+const {InputConnection} = goog.requireType('Blockly.blockRendering.InputConnection');
 /* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -229,4 +228,4 @@ Row.prototype.getLastSpacer = function() {
   return null;
 };
 
-exports = Row;
+exports.Row = Row;

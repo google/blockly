@@ -7,7 +7,6 @@
 /**
  * @fileoverview Module that provides constants for use inside Blockly. Do not
  * use these constants outside of the core library.
- * @author fenichel@google.com (Rachel Fenichel)
  * @package
  */
 'use strict';
@@ -145,7 +144,7 @@ exports.HSV_VALUE = HSV_VALUE;
 const SPRITE = {
   width: 96,
   height: 124,
-  url: 'sprites.png'
+  url: 'sprites.png',
 };
 exports.SPRITE = SPRITE;
 

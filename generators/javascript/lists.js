@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for list blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -67,7 +66,7 @@ Blockly.JavaScript['lists_isEmpty'] = function(block) {
 
 Blockly.JavaScript['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  var operator = block.getFieldValue('END') == 'FIRST' ?
+  var operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   var item = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
@@ -85,54 +84,54 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var listOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
+  var listOrder = (where === 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
       Blockly.JavaScript.ORDER_MEMBER;
   var list = Blockly.JavaScript.valueToCode(block, 'VALUE', listOrder) || '[]';
 
   switch (where) {
     case ('FIRST'):
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var code = list + '[0]';
         return [code, Blockly.JavaScript.ORDER_MEMBER];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var code = list + '.shift()';
         return [code, Blockly.JavaScript.ORDER_MEMBER];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         return list + '.shift();\n';
       }
       break;
     case ('LAST'):
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var code = list + '.slice(-1)[0]';
         return [code, Blockly.JavaScript.ORDER_MEMBER];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var code = list + '.pop()';
         return [code, Blockly.JavaScript.ORDER_MEMBER];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         return list + '.pop();\n';
       }
       break;
     case ('FROM_START'):
       var at = Blockly.JavaScript.getAdjusted(block, 'AT');
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var code = list + '[' + at + ']';
         return [code, Blockly.JavaScript.ORDER_MEMBER];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var code = list + '.splice(' + at + ', 1)[0]';
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         return list + '.splice(' + at + ', 1);\n';
       }
       break;
     case ('FROM_END'):
       var at = Blockly.JavaScript.getAdjusted(block, 'AT', 1, true);
-      if (mode == 'GET') {
+      if (mode === 'GET') {
         var code = list + '.slice(' + at + ')[0]';
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-      } else if (mode == 'GET_REMOVE') {
+      } else if (mode === 'GET_REMOVE') {
         var code = list + '.splice(' + at + ', 1)[0]';
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         return list + '.splice(' + at + ', 1);';
       }
       break;
@@ -148,10 +147,10 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
            '    return list[x];',
            '  }',
            '}']);
-      code = functionName + '(' + list + ', ' + (mode != 'GET') + ')';
-      if (mode == 'GET' || mode == 'GET_REMOVE') {
+      code = functionName + '(' + list + ', ' + (mode !== 'GET') + ')';
+      if (mode === 'GET' || mode === 'GET_REMOVE') {
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-      } else if (mode == 'REMOVE') {
+      } else if (mode === 'REMOVE') {
         return code + ';\n';
       }
       break;
@@ -182,26 +181,26 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
   }
   switch (where) {
     case ('FIRST'):
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         return list + '[0] = ' + value + ';\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         return list + '.unshift(' + value + ');\n';
       }
       break;
     case ('LAST'):
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         var code = cacheList();
         code += list + '[' + list + '.length - 1] = ' + value + ';\n';
         return code;
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         return list + '.push(' + value + ');\n';
       }
       break;
     case ('FROM_START'):
       var at = Blockly.JavaScript.getAdjusted(block, 'AT');
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         return list + '[' + at + '] = ' + value + ';\n';
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         return list + '.splice(' + at + ', 0, ' + value + ');\n';
       }
       break;
@@ -209,10 +208,10 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
       var at = Blockly.JavaScript.getAdjusted(block, 'AT', 1, false,
           Blockly.JavaScript.ORDER_SUBTRACTION);
       var code = cacheList();
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         code += list + '[' + list + '.length - ' + at + '] = ' + value + ';\n';
         return code;
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         code += list + '.splice(' + list + '.length - ' + at + ', 0, ' + value +
             ');\n';
         return code;
@@ -224,10 +223,10 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
           'tmpX', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
-      if (mode == 'SET') {
+      if (mode === 'SET') {
         code += list + '[' + xVar + '] = ' + value + ';\n';
         return code;
-      } else if (mode == 'INSERT') {
+      } else if (mode === 'INSERT') {
         code += list + '.splice(' + xVar + ', 0, ' + value + ');\n';
         return code;
       }
@@ -245,11 +244,11 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
  * @private
  */
 Blockly.JavaScript.lists.getIndex_ = function(listName, where, opt_at) {
-  if (where == 'FIRST') {
+  if (where === 'FIRST') {
     return '0';
-  } else if (where == 'FROM_END') {
+  } else if (where === 'FROM_END') {
     return listName + '.length - 1 - ' + opt_at;
-  } else if (where == 'LAST') {
+  } else if (where === 'LAST') {
     return listName + '.length - 1';
   } else {
     return opt_at;
@@ -262,10 +261,10 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-  if (where1 == 'FIRST' && where2 == 'LAST') {
+  if (where1 === 'FIRST' && where2 === 'LAST') {
     var code = list + '.slice(0)';
   } else if (list.match(/^\w+$/) ||
-      (where1 != 'FROM_END' && where2 == 'FROM_START')) {
+      (where1 !== 'FROM_END' && where2 === 'FROM_START')) {
     // If the list is a variable or doesn't require a call for length, don't
     // generate a helper function.
     switch (where1) {
@@ -311,8 +310,8 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
             '(sequence' +
             // The value for 'FROM_END' and'FROM_START' depends on `at` so
             // we add it as a parameter.
-            ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', at1' : '') +
-            ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', at2' : '') +
+            ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '') +
+            ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '') +
             ') {',
           '  var start = ' + getIndex_('sequence', where1, 'at1') + ';',
           '  var end = ' + getIndex_('sequence', where2, 'at2') + ' + 1;',
@@ -321,8 +320,8 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
     var code = functionName + '(' + list +
         // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
         // pass it.
-        ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', ' + at1 : '') +
-        ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', ' + at2 : '') +
+        ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', ' + at1 : '') +
+        ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', ' + at2 : '') +
         ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -362,12 +361,12 @@ Blockly.JavaScript['lists_split'] = function(block) {
   var delimiter = Blockly.JavaScript.valueToCode(block, 'DELIM',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var mode = block.getFieldValue('MODE');
-  if (mode == 'SPLIT') {
+  if (mode === 'SPLIT') {
     if (!input) {
       input = '\'\'';
     }
     var functionName = 'split';
-  } else if (mode == 'JOIN') {
+  } else if (mode === 'JOIN') {
     if (!input) {
       input = '[]';
     }

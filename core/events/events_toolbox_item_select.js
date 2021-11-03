@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of selecting an item on the toolbox.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.Events.ToolboxItemSelect');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -81,4 +80,4 @@ ToolboxItemSelect.prototype.fromJson = function(json) {
 registry.register(
     registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
-exports = ToolboxItemSelect;
+exports.ToolboxItemSelect = ToolboxItemSelect;

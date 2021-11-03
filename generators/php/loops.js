@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating PHP for loop blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 
@@ -47,7 +46,7 @@ Blockly.PHP['controls_repeat'] = Blockly.PHP['controls_repeat_ext'];
 
 Blockly.PHP['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') === 'UNTIL';
   var argument0 = Blockly.PHP.valueToCode(block, 'BOOL',
       until ? Blockly.PHP.ORDER_LOGICAL_NOT :
       Blockly.PHP.ORDER_NONE) || 'false';
@@ -80,7 +79,7 @@ Blockly.PHP['controls_for'] = function(block) {
         variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
     var step = Math.abs(Number(increment));
-    if (step == 1) {
+    if (step === 1) {
       code += up ? '++' : '--';
     } else {
       code += (up ? ' += ' : ' -= ') + step;

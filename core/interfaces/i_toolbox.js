@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a toolbox.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';
@@ -18,15 +17,15 @@
 goog.module('Blockly.IToolbox');
 
 /* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
-/* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -140,4 +139,4 @@ IToolbox.prototype.getSelectedItem;
  */
 IToolbox.prototype.dispose;
 
-exports = IToolbox;
+exports.IToolbox = IToolbox;

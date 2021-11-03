@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Angle input field.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -17,10 +16,6 @@
 goog.module('Blockly.FieldAngle');
 
 const Css = goog.require('Blockly.Css');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Svg = goog.require('Blockly.utils.Svg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -28,6 +23,10 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const math = goog.require('Blockly.utils.math');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -218,27 +217,27 @@ FieldAngle.prototype.configure_ = function(config) {
 
   // Allow individual settings to override the mode setting.
   const clockwise = config['clockwise'];
-  if (typeof clockwise == 'boolean') {
+  if (typeof clockwise === 'boolean') {
     this.clockwise_ = clockwise;
   }
 
   // If these are passed as null then we should leave them on the default.
   let offset = config['offset'];
-  if (offset != null) {
+  if (offset !== null) {
     offset = Number(offset);
     if (!isNaN(offset)) {
       this.offset_ = offset;
     }
   }
   let wrap = config['wrap'];
-  if (wrap != null) {
+  if (wrap !== null) {
     wrap = Number(wrap);
     if (!isNaN(wrap)) {
       this.wrap_ = wrap;
     }
   }
   let round = config['round'];
-  if (round != null) {
+  if (round !== null) {
     round = Number(round);
     if (!isNaN(round)) {
       this.round_ = round;
@@ -304,7 +303,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
         'version': '1.1',
         'height': (FieldAngle.HALF * 2) + 'px',
         'width': (FieldAngle.HALF * 2) + 'px',
-        'style': 'touch-action: none'
+        'style': 'touch-action: none',
       },
       null);
   const circle = dom.createSvgElement(
@@ -312,7 +311,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
         'cx': FieldAngle.HALF,
         'cy': FieldAngle.HALF,
         'r': FieldAngle.RADIUS,
-        'class': 'blocklyAngleCircle'
+        'class': 'blocklyAngleCircle',
       },
       svg);
   this.gauge_ =
@@ -321,7 +320,7 @@ FieldAngle.prototype.dropdownCreate_ = function() {
       Svg.LINE, {
         'x1': FieldAngle.HALF,
         'y1': FieldAngle.HALF,
-        'class': 'blocklyAngleLine'
+        'class': 'blocklyAngleLine',
       },
       svg);
   // Draw markers around the edge.
@@ -331,11 +330,11 @@ FieldAngle.prototype.dropdownCreate_ = function() {
           'x1': FieldAngle.HALF + FieldAngle.RADIUS,
           'y1': FieldAngle.HALF,
           'x2':
-              FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 == 0 ? 10 : 5),
+              FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 === 0 ? 10 : 5),
           'y2': FieldAngle.HALF,
           'class': 'blocklyAngleMarks',
           'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
-              FieldAngle.HALF + ')'
+              FieldAngle.HALF + ')',
         },
         svg);
   }
@@ -430,7 +429,7 @@ FieldAngle.prototype.displayMouseOrKeyboardValue_ = function(angle) {
     angle = Math.round(angle / this.round_) * this.round_;
   }
   angle = this.wrapValue_(angle);
-  if (angle != this.value_) {
+  if (angle !== this.value_) {
     this.setEditorValue_(angle);
   }
 };
@@ -540,30 +539,33 @@ FieldAngle.prototype.wrapValue_ = function(value) {
 /**
  * CSS for angle field.  See css.js for use.
  */
-Css.register([
-  `.blocklyAngleCircle {
-  stroke: #444;
-  stroke-width: 1;
-  fill: #ddd;
-  fill-opacity: .8;
-}`,
-  `.blocklyAngleMarks {
-  stroke: #444;
-  stroke-width: 1;
-}`,
-  `.blocklyAngleGauge {
-  fill: #f88;
-  fill-opacity: .8;
-  pointer-events: none;
-}`,
-  `.blocklyAngleLine {
-  stroke: #f00;
-  stroke-width: 2;
-  stroke-linecap: round;
-  pointer-events: none;
-}`
-]);
+Css.register(`
+  .blocklyAngleCircle {
+    stroke: #444;
+    stroke-width: 1;
+    fill: #ddd;
+    fill-opacity: .8;
+  }
+
+  .blocklyAngleMarks {
+    stroke: #444;
+    stroke-width: 1;
+  }
+
+  .blocklyAngleGauge {
+    fill: #f88;
+    fill-opacity: .8;
+    pointer-events: none;
+  }
+
+  .blocklyAngleLine {
+    stroke: #f00;
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+`);
 
 fieldRegistry.register('field_angle', FieldAngle);
 
-exports = FieldAngle;
+exports.FieldAngle = FieldAngle;

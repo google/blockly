@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Block Factory application.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -34,7 +33,7 @@ function formatChange() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual') {
+  if (document.getElementById('format').value === 'Manual') {
     Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -97,7 +96,7 @@ function formatJson_(blockType, rootBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var fields = getFieldsJson_(contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
-        if (typeof fields[i] == 'string') {
+        if (typeof fields[i] === 'string') {
           message.push(fields[i].replace(/%/g, '%%'));
         } else {
           args.push(fields[i]);
@@ -107,7 +106,7 @@ function formatJson_(blockType, rootBlock) {
 
       var input = {type: contentsBlock.type};
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
       var check = JSON.parse(getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
@@ -115,7 +114,7 @@ function formatJson_(blockType, rootBlock) {
         input.check = check;
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         input.align = align;
       }
       args.push(input);
@@ -126,11 +125,11 @@ function formatJson_(blockType, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Remove last input if dummy and not empty.
-  if (lastInput && lastInput.type == 'input_dummy') {
+  if (lastInput && lastInput.type === 'input_dummy') {
     var fields = lastInput.getInputTargetBlock('FIELDS');
-    if (fields && getFieldsJson_(fields).join('').trim() != '') {
+    if (fields && getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         JS.lastDummyAlign0 = align;
       }
       args.pop();
@@ -142,9 +141,9 @@ function formatJson_(blockType, rootBlock) {
     JS.args0 = args;
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     JS.inputsInline = false;
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     JS.inputsInline = true;
   }
   // Generate output, or next/previous connections.
@@ -199,7 +198,7 @@ function formatJavaScript_(blockType, rootBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy') {
         name = escapeString(contentsBlock.getFieldValue('INPUTNAME'));
       }
       code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
@@ -208,7 +207,7 @@ function formatJavaScript_(blockType, rootBlock) {
         code.push('        .setCheck(' + check + ')');
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
       var fields = getFieldsJs_(contentsBlock.getInputTargetBlock('FIELDS'));
@@ -222,9 +221,9 @@ function formatJavaScript_(blockType, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     code.push('    this.setInputsInline(false);');
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     code.push('    this.setInputsInline(true);');
   }
   // Generate output, or next/previous connections.
@@ -305,11 +304,11 @@ function getFieldsJs_(block) {
             Number(block.getFieldValue('PRECISION'))
           ];
           // Remove any trailing arguments that aren't needed.
-          if (args[3] == 0) {
+          if (args[3] === 0) {
             args.pop();
-            if (args[2] == Infinity) {
+            if (args[2] === Infinity) {
               args.pop();
-              if (args[1] == -Infinity) {
+              if (args[1] === -Infinity) {
                 args.pop();
               }
             }
@@ -424,7 +423,7 @@ function getFieldsJson_(block) {
           fields.push({
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            checked: block.getFieldValue('CHECKED') == 'TRUE'
+            checked: block.getFieldValue('CHECKED') === 'TRUE'
           });
           break;
         case 'field_colour':
@@ -489,11 +488,11 @@ function escapeString(string) {
  */
 function getOptTypesFrom(block, name) {
   var types = getTypesFrom_(block, name);
-  if (types.length == 0) {
+  if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') != -1) {
+  } else if (types.indexOf('null') !== -1) {
     return 'null';
-  } else if (types.length == 1) {
+  } else if (types.length === 1) {
     return types[0];
   } else {
     return '[' + types.join(', ') + ']';
@@ -512,9 +511,9 @@ function getTypesFrom_(block, name) {
   var types;
   if (!typeBlock || typeBlock.disabled) {
     types = [];
-  } else if (typeBlock.type == 'type_other') {
+  } else if (typeBlock.type === 'type_other') {
     types = [escapeString(typeBlock.getFieldValue('TYPE'))];
-  } else if (typeBlock.type == 'type_group') {
+  } else if (typeBlock.type === 'type_group') {
     types = [];
     for (var i = 0; i < typeBlock.typeCount_; i++) {
       types = types.concat(getTypesFrom_(typeBlock, 'TYPE' + i));
@@ -569,7 +568,7 @@ function updateGenerator(block) {
                   " = block.getFieldValue('" + name + "');");
       } else if (field instanceof Blockly.FieldCheckbox) {
         code.push(makeVar('checkbox', name) +
-                  " = block.getFieldValue('" + name + "') == 'TRUE';");
+                  " = block.getFieldValue('" + name + "') === 'TRUE';");
       } else if (field instanceof Blockly.FieldDropdown) {
         code.push(makeVar('dropdown', name) +
                   " = block.getFieldValue('" + name + "');");
@@ -583,11 +582,11 @@ function updateGenerator(block) {
     }
     var name = input.name;
     if (name) {
-      if (input.type == Blockly.INPUT_VALUE) {
+      if (input.type === Blockly.INPUT_VALUE) {
         code.push(makeVar('value', name) +
                   " = Blockly." + language + ".valueToCode(block, '" + name +
                   "', Blockly." + language + ".ORDER_ATOMIC);");
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
+      } else if (input.type === Blockly.NEXT_STATEMENT) {
         code.push(makeVar('statements', name) +
                   " = Blockly." + language + ".statementToCode(block, '" +
                   name + "');");
@@ -626,11 +625,11 @@ var oldDir = null;
 function updatePreview() {
   // Toggle between LTR/RTL if needed (also used in first display).
   var newDir = document.getElementById('direction').value;
-  if (oldDir != newDir) {
+  if (oldDir !== newDir) {
     if (previewWorkspace) {
       previewWorkspace.dispose();
     }
-    var rtl = newDir == 'rtl';
+    var rtl = newDir === 'rtl';
     previewWorkspace = Blockly.inject('preview',
         {rtl: rtl,
          media: '../../media/',
@@ -641,7 +640,7 @@ function updatePreview() {
 
   // Fetch the code and determine its format (JSON or JavaScript).
   var format = document.getElementById('format').value;
-  if (format == 'Manual') {
+  if (format === 'Manual') {
     var code = document.getElementById('languageTA').value;
     // If the code is JSON, it will parse, otherwise treat as JS.
     try {
@@ -668,14 +667,14 @@ function updatePreview() {
       Blockly.Blocks[prop] = backupBlocks[prop];
     }
 
-    if (format == 'JSON') {
+    if (format === 'JSON') {
       var json = JSON.parse(code);
       Blockly.Blocks[json.type || UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }
       };
-    } else if (format == 'JavaScript') {
+    } else if (format === 'JavaScript') {
       eval(code);
     } else {
       throw 'Unknown format: ' + format;
@@ -684,8 +683,8 @@ function updatePreview() {
     // Look for a block on Blockly.Blocks that does not match the backup.
     var blockType = null;
     for (var type in Blockly.Blocks) {
-      if (typeof Blockly.Blocks[type].init == 'function' &&
-          Blockly.Blocks[type] != backupBlocks[type]) {
+      if (typeof Blockly.Blocks[type].init === 'function' &&
+          Blockly.Blocks[type] !== backupBlocks[type]) {
         blockType = type;
         break;
       }
@@ -730,7 +729,7 @@ function injectCode(code, id) {
 function getRootBlock() {
   var blocks = mainWorkspace.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'factory_base') {
+    if (block.type === 'factory_base') {
       return block;
     }
   }
@@ -742,7 +741,7 @@ function getRootBlock() {
  */
 function disableEnableLink() {
   var linkButton = document.getElementById('linkButton');
-  linkButton.disabled = document.getElementById('format').value == 'Manual';
+  linkButton.disabled = document.getElementById('format').value === 'Manual';
 }
 
 /**

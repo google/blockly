@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Calculates and reports workspace metrics.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -16,19 +15,19 @@
  */
 goog.module('Blockly.MetricsManager');
 
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IMetricsManager = goog.require('Blockly.IMetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Size = goog.require('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const registry = goog.require('Blockly.registry');
 const toolboxUtils = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IMetricsManager} = goog.require('Blockly.IMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Size} = goog.require('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -129,7 +128,7 @@ MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
-    position: this.workspace_.toolboxPosition
+    position: this.workspace_.toolboxPosition,
   };
 };
 
@@ -148,7 +147,7 @@ MetricsManager.prototype.getToolboxMetrics = function() {
   return {
     width: toolboxDimensions.width,
     height: toolboxDimensions.height,
-    position: this.workspace_.toolboxPosition
+    position: this.workspace_.toolboxPosition,
   };
 };
 
@@ -179,8 +178,8 @@ MetricsManager.prototype.getAbsoluteMetrics = function() {
   const toolboxPosition =
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-  const atLeft = toolboxPosition == toolboxUtils.Position.LEFT;
-  const atTop = toolboxPosition == toolboxUtils.Position.TOP;
+  const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
+  const atTop = toolboxPosition === toolboxUtils.Position.TOP;
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
   } else if (doesFlyoutExist && atLeft) {
@@ -220,21 +219,21 @@ MetricsManager.prototype.getViewMetrics = function(
       doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition == toolboxUtils.Position.TOP ||
-        toolboxPosition == toolboxUtils.Position.BOTTOM) {
+    if (toolboxPosition === toolboxUtils.Position.TOP ||
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
     } else if (
-        toolboxPosition == toolboxUtils.Position.LEFT ||
-        toolboxPosition == toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
   } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition == toolboxUtils.Position.TOP ||
-        toolboxPosition == toolboxUtils.Position.BOTTOM) {
+    if (toolboxPosition === toolboxUtils.Position.TOP ||
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
     } else if (
-        toolboxPosition == toolboxUtils.Position.LEFT ||
-        toolboxPosition == toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }
@@ -396,7 +395,7 @@ MetricsManager.prototype.getUiMetrics = function() {
   return {
     viewMetrics: this.getViewMetrics(),
     absoluteMetrics: this.getAbsoluteMetrics(),
-    toolboxMetrics: this.getToolboxMetrics()
+    toolboxMetrics: this.getToolboxMetrics(),
   };
 };
 
@@ -473,11 +472,11 @@ MetricsManager.prototype.getMetrics = function() {
     toolboxPosition: toolboxMetrics.position,
 
     flyoutWidth: flyoutMetrics.width,
-    flyoutHeight: flyoutMetrics.height
+    flyoutHeight: flyoutMetrics.height,
   };
 };
 
 registry.register(
     registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
 
-exports = MetricsManager;
+exports.MetricsManager = MetricsManager;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating JavaScript for colour blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

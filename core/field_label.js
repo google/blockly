@@ -7,7 +7,6 @@
 /**
  * @fileoverview Non-editable, non-serializable text field.  Used for titles,
  *    labels, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -18,11 +17,11 @@
  */
 goog.module('Blockly.FieldLabel');
 
-const Field = goog.require('Blockly.Field');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {Field} = goog.require('Blockly.Field');
 
 
 /**
@@ -136,4 +135,4 @@ FieldLabel.prototype.setClass = function(cssClass) {
 
 fieldRegistry.register('field_label', FieldLabel);
 
-exports = FieldLabel;
+exports.FieldLabel = FieldLabel;

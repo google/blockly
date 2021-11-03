@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An enum for the possible types of inputs.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';
@@ -31,7 +30,7 @@ const inputTypes = {
   // A down-facing block stack.  E.g. 'if-do' or 'else'.
   STATEMENT: ConnectionType.NEXT_STATEMENT,
   // A dummy input.  Used to add field(s) with no input.
-  DUMMY: 5
+  DUMMY: 5,
 };
 
-exports = inputTypes;
+exports.inputTypes = inputTypes;

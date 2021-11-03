@@ -333,7 +333,7 @@ WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
 };
 
 /**
- * Sets the tabs for modes according to which mode the user is currenly
+ * Sets the tabs for modes according to which mode the user is currently
  * editing in.
  * @param {string} mode The mode being switched to
  *   (WorkspaceFactoryController.MODE_TOOLBOX or WorkspaceFactoryController.MODE_PRELOAD).

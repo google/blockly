@@ -75,7 +75,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
 // toolbox.
 WorkspaceFactoryController.MODE_TOOLBOX = 'toolbox';
 // Pre-loaded workspace editing mode. Changes the user makes to the workspace
-// udpates the pre-loaded blocks.
+// updates the pre-loaded blocks.
 WorkspaceFactoryController.MODE_PRELOAD = 'preload';
 
 /**

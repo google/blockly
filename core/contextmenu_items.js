@@ -232,7 +232,7 @@ exports.registerExpand = registerExpand;
  * @param {!BlockSvg} block to delete.
  * @param {!Array<!BlockSvg>} deleteList list of blocks that can be deleted.
  *     This will be
- *    modifed in place with the given block and its descendants.
+ *    modified in place with the given block and its descendants.
  * @private
  */
 const addDeletableBlocks_ = function(block, deleteList) {

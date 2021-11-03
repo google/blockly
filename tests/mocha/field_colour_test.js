@@ -254,7 +254,7 @@ suite('Colour Fields', function() {
       test('Constants', function() {
         let columns = Blockly.FieldColour.COLUMNS;
         // Note: Developers shouldn't actually do this. IMO they should edit
-        // the file and tehn recompile. But this is fine for testing.
+        // the file and then recompile. But this is fine for testing.
         Blockly.FieldColour.COLUMNS = 3;
         let field = new Blockly.FieldColour();
 

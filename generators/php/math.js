@@ -16,8 +16,8 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['math_number'] = function(block) {
   // Numeric value.
-  var code = Number(block.getFieldValue('NUM'));
-  var order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
+  let code = Number(block.getFieldValue('NUM'));
+  const order = code >= 0 ? Blockly.PHP.ORDER_ATOMIC :
               Blockly.PHP.ORDER_UNARY_NEGATION;
   if (code === Infinity) {
     code = 'INF';
@@ -29,27 +29,27 @@ Blockly.PHP['math_number'] = function(block) {
 
 Blockly.PHP['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
-  var OPERATORS = {
+  const OPERATORS = {
     'ADD': [' + ', Blockly.PHP.ORDER_ADDITION],
     'MINUS': [' - ', Blockly.PHP.ORDER_SUBTRACTION],
     'MULTIPLY': [' * ', Blockly.PHP.ORDER_MULTIPLICATION],
     'DIVIDE': [' / ', Blockly.PHP.ORDER_DIVISION],
     'POWER': [' ** ', Blockly.PHP.ORDER_POWER]
   };
-  var tuple = OPERATORS[block.getFieldValue('OP')];
-  var operator = tuple[0];
-  var order = tuple[1];
-  var argument0 = Blockly.PHP.valueToCode(block, 'A', order) || '0';
-  var argument1 = Blockly.PHP.valueToCode(block, 'B', order) || '0';
-  var code = argument0 + operator + argument1;
+  const tuple = OPERATORS[block.getFieldValue('OP')];
+  const operator = tuple[0];
+  const order = tuple[1];
+  const argument0 = Blockly.PHP.valueToCode(block, 'A', order) || '0';
+  const argument1 = Blockly.PHP.valueToCode(block, 'B', order) || '0';
+  const code = argument0 + operator + argument1;
   return [code, order];
 };
 
 Blockly.PHP['math_single'] = function(block) {
   // Math operators with single operand.
-  var operator = block.getFieldValue('OP');
-  var code;
-  var arg;
+  const operator = block.getFieldValue('OP');
+  let code;
+  let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     arg = Blockly.PHP.valueToCode(block, 'NUM',
@@ -131,7 +131,7 @@ Blockly.PHP['math_single'] = function(block) {
 
 Blockly.PHP['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  var CONSTANTS = {
+  const CONSTANTS = {
     'PI': ['M_PI', Blockly.PHP.ORDER_ATOMIC],
     'E': ['M_E', Blockly.PHP.ORDER_ATOMIC],
     'GOLDEN_RATIO': ['(1 + sqrt(5)) / 2', Blockly.PHP.ORDER_DIVISION],
@@ -145,13 +145,13 @@ Blockly.PHP['math_constant'] = function(block) {
 Blockly.PHP['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  var number_to_check = Blockly.PHP.valueToCode(block, 'NUMBER_TO_CHECK',
+  const number_to_check = Blockly.PHP.valueToCode(block, 'NUMBER_TO_CHECK',
       Blockly.PHP.ORDER_MODULUS) || '0';
-  var dropdown_property = block.getFieldValue('PROPERTY');
-  var code;
+  const dropdown_property = block.getFieldValue('PROPERTY');
+  let code;
   if (dropdown_property === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    var functionName = Blockly.PHP.provideFunction_(
+    const functionName = Blockly.PHP.provideFunction_(
         'math_isPrime',
         ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($n) {',
          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
@@ -191,20 +191,21 @@ Blockly.PHP['math_number_property'] = function(block) {
     case 'NEGATIVE':
       code = number_to_check + ' < 0';
       break;
-    case 'DIVISIBLE_BY':
-      var divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
+    case 'DIVISIBLE_BY': {
+      const divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
           Blockly.PHP.ORDER_MODULUS) || '0';
       code = number_to_check + ' % ' + divisor + ' == 0';
       break;
+    }
   }
   return [code, Blockly.PHP.ORDER_EQUALITY];
 };
 
 Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.
-  var argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
+  const argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
       Blockly.PHP.ORDER_ADDITION) || '0';
-  var varName = Blockly.PHP.nameDB_.getName(
+  const varName = Blockly.PHP.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' += ' + argument0 + ';\n';
 };
@@ -216,8 +217,9 @@ Blockly.PHP['math_trig'] = Blockly.PHP['math_single'];
 
 Blockly.PHP['math_on_list'] = function(block) {
   // Math functions for lists.
-  var func = block.getFieldValue('OP');
-  var list, code;
+  const func = block.getFieldValue('OP');
+  let list;
+  let code;
   switch (func) {
     case 'SUM':
       list = Blockly.PHP.valueToCode(block, 'LIST',
@@ -234,8 +236,8 @@ Blockly.PHP['math_on_list'] = function(block) {
           Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
       code = 'max(' + list + ')';
       break;
-    case 'AVERAGE':
-      var functionName = Blockly.PHP.provideFunction_(
+    case 'AVERAGE': {
+      const functionName = Blockly.PHP.provideFunction_(
           'math_mean',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($myList) {',
@@ -245,8 +247,9 @@ Blockly.PHP['math_on_list'] = function(block) {
           Blockly.PHP.ORDER_NONE) || 'array()';
       code = functionName + '(' + list + ')';
       break;
-    case 'MEDIAN':
-      var functionName = Blockly.PHP.provideFunction_(
+    }
+    case 'MEDIAN': {
+      const functionName = Blockly.PHP.provideFunction_(
           'math_median',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($arr) {',
@@ -259,11 +262,12 @@ Blockly.PHP['math_on_list'] = function(block) {
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
-    case 'MODE':
+    }
+    case 'MODE': {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      var functionName = Blockly.PHP.provideFunction_(
+      const functionName = Blockly.PHP.provideFunction_(
           'math_modes',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($values) {',
@@ -277,8 +281,9 @@ Blockly.PHP['math_on_list'] = function(block) {
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
-    case 'STD_DEV':
-      var functionName = Blockly.PHP.provideFunction_(
+    }
+    case 'STD_DEV': {
+      const functionName = Blockly.PHP.provideFunction_(
           'math_standard_deviation',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($numbers) {',
@@ -293,8 +298,9 @@ Blockly.PHP['math_on_list'] = function(block) {
               Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
-    case 'RANDOM':
-      var functionName = Blockly.PHP.provideFunction_(
+    }
+    case 'RANDOM': {
+      const functionName = Blockly.PHP.provideFunction_(
           'math_random_list',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($list) {',
@@ -305,6 +311,7 @@ Blockly.PHP['math_on_list'] = function(block) {
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
+    }
     default:
       throw Error('Unknown operator: ' + func);
   }
@@ -313,34 +320,34 @@ Blockly.PHP['math_on_list'] = function(block) {
 
 Blockly.PHP['math_modulo'] = function(block) {
   // Remainder computation.
-  var argument0 = Blockly.PHP.valueToCode(block, 'DIVIDEND',
+  const argument0 = Blockly.PHP.valueToCode(block, 'DIVIDEND',
       Blockly.PHP.ORDER_MODULUS) || '0';
-  var argument1 = Blockly.PHP.valueToCode(block, 'DIVISOR',
+  const argument1 = Blockly.PHP.valueToCode(block, 'DIVISOR',
       Blockly.PHP.ORDER_MODULUS) || '0';
-  var code = argument0 + ' % ' + argument1;
+  const code = argument0 + ' % ' + argument1;
   return [code, Blockly.PHP.ORDER_MODULUS];
 };
 
 Blockly.PHP['math_constrain'] = function(block) {
   // Constrain a number between two limits.
-  var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
+  const argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_NONE) || '0';
-  var argument1 = Blockly.PHP.valueToCode(block, 'LOW',
+  const argument1 = Blockly.PHP.valueToCode(block, 'LOW',
       Blockly.PHP.ORDER_NONE) || '0';
-  var argument2 = Blockly.PHP.valueToCode(block, 'HIGH',
+  const argument2 = Blockly.PHP.valueToCode(block, 'HIGH',
       Blockly.PHP.ORDER_NONE) || 'Infinity';
-  var code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
+  const code = 'min(max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  var argument0 = Blockly.PHP.valueToCode(block, 'FROM',
+  const argument0 = Blockly.PHP.valueToCode(block, 'FROM',
       Blockly.PHP.ORDER_NONE) || '0';
-  var argument1 = Blockly.PHP.valueToCode(block, 'TO',
+  const argument1 = Blockly.PHP.valueToCode(block, 'TO',
       Blockly.PHP.ORDER_NONE) || '0';
-  var functionName = Blockly.PHP.provideFunction_(
+  const functionName = Blockly.PHP.provideFunction_(
       'math_random_int',
       ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($a, $b) {',
@@ -349,7 +356,7 @@ Blockly.PHP['math_random_int'] = function(block) {
        '  }',
        '  return rand($a, $b);',
        '}']);
-  var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
+  const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -360,9 +367,9 @@ Blockly.PHP['math_random_float'] = function(block) {
 
 Blockly.PHP['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  var argument0 = Blockly.PHP.valueToCode(block, 'X',
+  const argument0 = Blockly.PHP.valueToCode(block, 'X',
       Blockly.PHP.ORDER_NONE) || '0';
-  var argument1 = Blockly.PHP.valueToCode(block, 'Y',
+  const argument1 = Blockly.PHP.valueToCode(block, 'Y',
       Blockly.PHP.ORDER_NONE) || '0';
   return ['atan2(' + argument1 + ', ' + argument0 + ') / pi() * 180',
       Blockly.PHP.ORDER_DIVISION];

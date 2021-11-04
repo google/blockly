@@ -159,12 +159,13 @@ exports.shouldHandleEvent = shouldHandleEvent;
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
 const getTouchIdentifierFromEvent = function(e) {
-  return e.pointerId !== undefined ? e.pointerId :
+  return e.pointerId !== undefined ?
+      e.pointerId :
       (e.changedTouches && e.changedTouches[0] &&
        e.changedTouches[0].identifier !== undefined &&
        e.changedTouches[0].identifier !== null) ?
-                                     e.changedTouches[0].identifier :
-                                     'mouse';
+      e.changedTouches[0].identifier :
+      'mouse';
 };
 exports.getTouchIdentifierFromEvent = getTouchIdentifierFromEvent;
 

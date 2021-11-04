@@ -15,6 +15,7 @@ jobs:
         source: 'core'
         extensions: 'js'
         clangFormatVersion: 13
+        style: file
 
     # The Report clang format workflow (report_clang_format.yml) will
     # run (if required) after this one to post a comment to the PR.

@@ -20,7 +20,7 @@ goog.module('Blockly.Themes.Classic');
 const {Theme} = goog.require('Blockly.Theme');
 
 
-let defaultBlockStyles = {
+const defaultBlockStyles = {
   'colour_blocks': {'colourPrimary': '20'},
   'list_blocks': {'colourPrimary': '260'},
   'logic_blocks': {'colourPrimary': '210'},
@@ -33,7 +33,7 @@ let defaultBlockStyles = {
   'hat_blocks': {'colourPrimary': '330', 'hat': 'cap'},
 };
 
-let categoryStyles = {
+const categoryStyles = {
   'colour_category': {'colour': '20'},
   'list_category': {'colour': '260'},
   'logic_category': {'colour': '210'},

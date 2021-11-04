@@ -813,7 +813,9 @@ Field.prototype.getSize = function() {
  * @package
  */
 Field.prototype.getScaledBBox = function() {
-  let scaledWidth, scaledHeight, xy;
+  let scaledWidth;
+  let scaledHeight;
+  let xy;
   if (!this.borderRect_) {
     // Browsers are inconsistent in what they return for a bounding box.
     // - Webkit / Blink: fill-box / object bounding box

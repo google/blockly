@@ -29,7 +29,7 @@ const {Field} = goog.requireType('Blockly.Field');
  * }}
  * @alias Blockly.IRegistrableField
  */
-let IRegistrableField = {};
+const IRegistrableField = {};
 
 /**
  * @typedef {function(!Object): Field}

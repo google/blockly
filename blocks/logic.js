@@ -523,7 +523,6 @@ Blockly.Extensions.registerMutator('controls_if_mutator',
  * @package
  */
 Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
-
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
       return Blockly.Msg['CONTROLS_IF_TOOLTIP_1'];

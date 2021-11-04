@@ -397,10 +397,9 @@ BlockSvg.prototype.setParent = function(newParent) {
     const newXY = this.getRelativeToSurfaceXY();
     // Move the connections to match the child's new position.
     this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
-  }
-  // If we are losing a parent, we want to move our DOM element to the
-  // root of the workspace.
-  else if (oldParent) {
+  } else if (oldParent) {
+    // If we are losing a parent, we want to move our DOM element to the
+    // root of the workspace.
     this.workspace.getCanvas().appendChild(svgRoot);
     this.translate(oldXY.x, oldXY.y);
   }

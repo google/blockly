@@ -236,9 +236,9 @@ FieldMultilineInput.prototype.render_ = function() {
     const span = dom.createSvgElement(
         Svg.TEXT, {
           'class': 'blocklyText blocklyMultilineText',
-          x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-          y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-          dy: this.getConstants().FIELD_TEXT_BASELINE,
+          'x': this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+          'y': y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+          'dy': this.getConstants().FIELD_TEXT_BASELINE,
         },
         this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));

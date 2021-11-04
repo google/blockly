@@ -87,14 +87,14 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    */
   customContextMenu: function(options) {
     if (!this.isInFlyout) {
-      let opposite_type;
+      let oppositeType;
       let contextMenuMsg;
       // Getter blocks have the option to create a setter block, and vice versa.
       if (this.type === 'variables_get') {
-        opposite_type = 'variables_set';
+        oppositeType = 'variables_set';
         contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
       } else {
-        opposite_type = 'variables_get';
+        oppositeType = 'variables_get';
         contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
       }
 
@@ -105,7 +105,7 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       xmlField.setAttribute('name', 'VAR');
       xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
       const xmlBlock = Blockly.utils.xml.createElement('block');
-      xmlBlock.setAttribute('type', opposite_type);
+      xmlBlock.setAttribute('type', oppositeType);
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);

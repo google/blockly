@@ -63,7 +63,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "width": 12,
       "height": 17,
       "alt": '\u00B6',
-    },{
+    },
+    {
       "type": "field_multilinetext",
       "name": "TEXT",
       "text": "",
@@ -200,7 +201,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%{BKY_TEXT_CHARAT_TITLE}", // "in text %1 %2"
     "args0": [
       {
-        "type":"input_value",
+        "type": "input_value",
         "name": "VALUE",
         "check": "String",
       },

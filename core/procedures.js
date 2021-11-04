@@ -238,6 +238,13 @@ const flyoutCategory = function(workspace) {
     xmlList[xmlList.length - 1].setAttribute('gap', 24);
   }
 
+  /**
+   * Add items to xmlList for each listed procedure.
+   * @param {!Array<!Array>} procedureList A list of procedures, each of which
+   *     is defined by a three-element list of name, parameter list, and return
+   *     value boolean.
+   * @param {string} templateName The type of the block to generate.
+   */
   function populateProcedures(procedureList, templateName) {
     for (let i = 0; i < procedureList.length; i++) {
       const name = procedureList[i][0];

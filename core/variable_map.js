@@ -339,9 +339,9 @@ VariableMap.prototype.getVariableById = function(id) {
  */
 VariableMap.prototype.getVariablesOfType = function(type) {
   type = type || '';
-  const variable_list = this.variableMap_[type];
-  if (variable_list) {
-    return variable_list.slice();
+  const variableList = this.variableMap_[type];
+  if (variableList) {
+    return variableList.slice();
   }
   return [];
 };
@@ -379,11 +379,11 @@ VariableMap.prototype.getVariableTypes = function(ws) {
  * @return {!Array<!VariableModel>} List of variable models.
  */
 VariableMap.prototype.getAllVariables = function() {
-  let all_variables = [];
+  let allVariables = [];
   for (const key in this.variableMap_) {
-    all_variables = all_variables.concat(this.variableMap_[key]);
+    allVariables = allVariables.concat(this.variableMap_[key]);
   }
-  return all_variables;
+  return allVariables;
 };
 
 /**

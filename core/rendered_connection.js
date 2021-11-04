@@ -319,7 +319,7 @@ RenderedConnection.prototype.highlight = function() {
       Svg.PATH, {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
-        transform: 'translate(' + x + ',' + y + ')' +
+        'transform': 'translate(' + x + ',' + y + ')' +
             (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
       this.sourceBlock_.getSvgRoot());

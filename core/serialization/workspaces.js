@@ -62,7 +62,8 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
 
   const deserializers =
       Object.entries(serializerMap).sort(([, {priority: priorityA}], [
-                                           , {priority: priorityB},
+                                           ,
+                                           {priority: priorityB},
                                          ]) => priorityB - priorityA);
 
   const prevRecordUndo = eventUtils.getRecordUndo();

@@ -14,7 +14,7 @@ jobs:
       with:
         source: 'core'
         extensions: 'js'
-        clangFormatVersion: 12
+        clangFormatVersion: 13
         style: Google
 
     # The Report clang format workflow (report_clang_format.yml) will

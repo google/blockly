@@ -418,6 +418,10 @@ suite('Toolbox', function() {
     test('No new item -> Should close flyout', function() {
       testHideFlyout(this.toolbox, null, null);
     });
+    test('Old item but no new item -> Should close flyout', function() {
+      let oldItem = getNonCollapsibleItem(this.toolbox);
+      testHideFlyout(this.toolbox, oldItem, null);
+    });
     test('Select collapsible item -> Should close flyout', function() {
       let newItem = getCollapsibleItem(this.toolbox);
       testHideFlyout(this.toolbox, null, newItem);

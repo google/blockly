@@ -14,7 +14,10 @@ jobs:
       with:
         source: 'core'
         extensions: 'js'
-        clangFormatVersion: 11
+        # This should be as close as possible to the version that the npm
+        # package supports. This can be found by running:
+        # npx clang-format --version.
+        clangFormatVersion: 13
         style: file
 
     # The Report clang format workflow (report_clang_format.yml) will

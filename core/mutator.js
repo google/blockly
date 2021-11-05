@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object representing a mutator dialog.  A mutator allows the
  * user to change the shape of a block using a nested blocks editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,30 +19,30 @@ goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-const BlockChange = goog.require('Blockly.Events.BlockChange');
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const Bubble = goog.require('Blockly.Bubble');
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Icon = goog.require('Blockly.Icon');
-const Options = goog.require('Blockly.Options');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const xml = goog.require('Blockly.utils.xml');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Bubble} = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+const {Options} = goog.require('Blockly.Options');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -112,7 +111,7 @@ Mutator.prototype.drawIcon_ = function(group) {
         'rx': '4',
         'ry': '4',
         'height': '16',
-        'width': '16'
+        'width': '16',
       },
       group);
   // Gear teeth.
@@ -125,7 +124,7 @@ Mutator.prototype.drawIcon_ = function(group) {
             '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
             '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
             '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z'
+            '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
       },
       group);
   // Axle hole.
@@ -183,7 +182,7 @@ Mutator.prototype.createEditor_ = function() {
         'rtl': this.block_.RTL,
         'horizontalLayout': false,
         'renderer': this.block_.workspace.options.renderer,
-        'rendererOverrides': this.block_.workspace.options.rendererOverrides
+        'rendererOverrides': this.block_.workspace.options.rendererOverrides,
       }));
   workspaceOptions.toolboxPosition =
       this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
@@ -295,12 +294,12 @@ Mutator.prototype.onBubbleMove_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Mutator.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     // No change.
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'mutator'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'mutator'));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Bubble(
@@ -378,8 +377,8 @@ Mutator.prototype.setVisible = function(visible) {
  */
 Mutator.prototype.workspaceChanged_ = function(e) {
   if (!(e.isUiEvent ||
-      (e.type == eventUtils.CHANGE && e.element == 'disabled') ||
-      e.type == eventUtils.CREATE)) {
+        (e.type === eventUtils.CHANGE && e.element === 'disabled') ||
+        e.type === eventUtils.CREATE)) {
     this.updateWorkspace_();
   }
 };
@@ -418,7 +417,7 @@ Mutator.prototype.updateWorkspace_ = function() {
   }
 
   // When the mutator's workspace changes, update the source block.
-  if (this.rootBlock_.workspace == this.workspace_) {
+  if (this.rootBlock_.workspace === this.workspace_) {
     eventUtils.setGroup(true);
     const block = /** @type {!BlockSvg} */ (this.block_);
     const oldExtraState = BlockChange.getExtraBlockState_(block);
@@ -440,7 +439,7 @@ Mutator.prototype.updateWorkspace_ = function() {
     }
 
     const newExtraState = BlockChange.getExtraBlockState_(block);
-    if (oldExtraState != newExtraState) {
+    if (oldExtraState !== newExtraState) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
@@ -505,8 +504,8 @@ Mutator.reconnect = function(connectionChild, block, inputName) {
   }
   const connectionParent = block.getInput(inputName).connection;
   const currentParent = connectionChild.targetBlock();
-  if ((!currentParent || currentParent == block) &&
-      connectionParent.targetConnection != connectionChild) {
+  if ((!currentParent || currentParent === block) &&
+      connectionParent.targetConnection !== connectionChild) {
     if (connectionParent.isConnected()) {
       // There's already something connected here.  Get rid of it.
       connectionParent.disconnect();
@@ -541,4 +540,4 @@ Mutator.findParentWs = function(workspace) {
   return outerWs;
 };
 
-exports = Mutator;
+exports.Mutator = Mutator;

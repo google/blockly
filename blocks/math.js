@@ -11,7 +11,6 @@
  * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
  * only, no outside references, no functions, no trailing commas, etc. The one
  * exception is end-of-line comments, which the scraper will remove.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
@@ -39,13 +38,13 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "args0": [{
       "type": "field_number",
       "name": "NUM",
-      "value": 0
+      "value": 0,
     }],
     "output": "Number",
     "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
-    "extensions": ["parent_tooltip_when_inline"]
+    "extensions": ["parent_tooltip_when_inline"],
   },
 
   // Block for basic arithmetic operator.
@@ -56,7 +55,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "A",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "field_dropdown",
@@ -66,20 +65,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["%{BKY_MATH_SUBTRACTION_SYMBOL}", "MINUS"],
           ["%{BKY_MATH_MULTIPLICATION_SYMBOL}", "MULTIPLY"],
           ["%{BKY_MATH_DIVISION_SYMBOL}", "DIVIDE"],
-          ["%{BKY_MATH_POWER_SYMBOL}", "POWER"]
-        ]
+          ["%{BKY_MATH_POWER_SYMBOL}", "POWER"],
+        ],
       },
       {
         "type": "input_value",
         "name": "B",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "inputsInline": true,
     "output": "Number",
     "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
   },
 
   // Block for advanced math operators with single operand.
@@ -97,19 +96,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ['ln', 'LN'],
           ['log10', 'LOG10'],
           ['e^', 'EXP'],
-          ['10^', 'POW10']
-        ]
+          ['10^', 'POW10'],
+        ],
       },
       {
         "type": "input_value",
         "name": "NUM",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "output": "Number",
     "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
   },
 
   // Block for trigonometry operators.
@@ -126,19 +125,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["%{BKY_MATH_TRIG_TAN}", "TAN"],
           ["%{BKY_MATH_TRIG_ASIN}", "ASIN"],
           ["%{BKY_MATH_TRIG_ACOS}", "ACOS"],
-          ["%{BKY_MATH_TRIG_ATAN}", "ATAN"]
-        ]
+          ["%{BKY_MATH_TRIG_ATAN}", "ATAN"],
+        ],
       },
       {
         "type": "input_value",
         "name": "NUM",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "output": "Number",
     "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
   },
 
   // Block for constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
@@ -155,14 +154,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["\u03c6", "GOLDEN_RATIO"],
           ["sqrt(2)", "SQRT2"],
           ["sqrt(\u00bd)", "SQRT1_2"],
-          ["\u221e", "INFINITY"]
-        ]
-      }
+          ["\u221e", "INFINITY"],
+        ],
+      },
     ],
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}",
   },
 
   // Block for checking if a number is even, odd, prime, whole, positive,
@@ -174,7 +173,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "NUMBER_TO_CHECK",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "field_dropdown",
@@ -186,15 +185,15 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["%{BKY_MATH_IS_WHOLE}", "WHOLE"],
           ["%{BKY_MATH_IS_POSITIVE}", "POSITIVE"],
           ["%{BKY_MATH_IS_NEGATIVE}", "NEGATIVE"],
-          ["%{BKY_MATH_IS_DIVISIBLE_BY}", "DIVISIBLE_BY"]
-        ]
-      }
+          ["%{BKY_MATH_IS_DIVISIBLE_BY}", "DIVISIBLE_BY"],
+        ],
+      },
     ],
     "inputsInline": true,
     "output": "Boolean",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_IS_TOOLTIP}",
-    "mutator": "math_is_divisibleby_mutator"
+    "mutator": "math_is_divisibleby_mutator",
   },
 
   // Block for adding to a variable in place.
@@ -205,19 +204,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": "%{BKY_MATH_CHANGE_TITLE_ITEM}"
+        "variable": "%{BKY_MATH_CHANGE_TITLE_ITEM}",
       },
       {
         "type": "input_value",
         "name": "DELTA",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "style": "variable_blocks",
     "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
-    "extensions": ["math_change_tooltip"]
+    "extensions": ["math_change_tooltip"],
   },
 
   // Block for rounding functions.
@@ -231,19 +230,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           ["%{BKY_MATH_ROUND_OPERATOR_ROUND}", "ROUND"],
           ["%{BKY_MATH_ROUND_OPERATOR_ROUNDUP}", "ROUNDUP"],
-          ["%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}", "ROUNDDOWN"]
-        ]
+          ["%{BKY_MATH_ROUND_OPERATOR_ROUNDDOWN}", "ROUNDDOWN"],
+        ],
       },
       {
         "type": "input_value",
         "name": "NUM",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "output": "Number",
     "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
-    "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
+    "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}",
   },
 
   // Block for evaluating a list of numbers to return sum, average, min, max,
@@ -263,20 +262,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
           ["%{BKY_MATH_ONLIST_OPERATOR_MEDIAN}", "MEDIAN"],
           ["%{BKY_MATH_ONLIST_OPERATOR_MODE}", "MODE"],
           ["%{BKY_MATH_ONLIST_OPERATOR_STD_DEV}", "STD_DEV"],
-          ["%{BKY_MATH_ONLIST_OPERATOR_RANDOM}", "RANDOM"]
-        ]
+          ["%{BKY_MATH_ONLIST_OPERATOR_RANDOM}", "RANDOM"],
+        ],
       },
       {
         "type": "input_value",
         "name": "LIST",
-        "check": "Array"
-      }
+        "check": "Array",
+      },
     ],
     "output": "Number",
     "style": "math_blocks",
     "helpUrl": "%{BKY_MATH_ONLIST_HELPURL}",
     "mutator": "math_modes_of_list_mutator",
-    "extensions": ["math_op_tooltip"]
+    "extensions": ["math_op_tooltip"],
   },
 
   // Block for remainder of a division.
@@ -287,19 +286,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "DIVIDEND",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "input_value",
         "name": "DIVISOR",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "inputsInline": true,
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_MODULO_HELPURL}"
+    "helpUrl": "%{BKY_MATH_MODULO_HELPURL}",
   },
 
   // Block for constraining a number between two limits.
@@ -310,24 +309,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "VALUE",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "input_value",
         "name": "LOW",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "input_value",
         "name": "HIGH",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "inputsInline": true,
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}"
+    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}",
   },
 
   // Block for random integer between [X] and [Y].
@@ -338,19 +337,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "FROM",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "input_value",
         "name": "TO",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "inputsInline": true,
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}",
   },
 
   // Block for random integer between [X] and [Y].
@@ -360,7 +359,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
+    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}",
   },
 
   // Block for calculating atan2 of [X] and [Y].
@@ -371,20 +370,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "input_value",
         "name": "X",
-        "check": "Number"
+        "check": "Number",
       },
       {
         "type": "input_value",
         "name": "Y",
-        "check": "Number"
-      }
+        "check": "Number",
+      },
     ],
     "inputsInline": true,
     "output": "Number",
     "style": "math_blocks",
     "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
-  }
+    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}",
+  },
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
 /**
@@ -427,7 +426,7 @@ Blockly.Constants.Math.TOOLTIPS_BY_OP = {
   'MEDIAN': '%{BKY_MATH_ONLIST_TOOLTIP_MEDIAN}',
   'MODE': '%{BKY_MATH_ONLIST_TOOLTIP_MODE}',
   'STD_DEV': '%{BKY_MATH_ONLIST_TOOLTIP_STD_DEV}',
-  'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}'
+  'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}',
 };
 
 Blockly.Extensions.register('math_op_tooltip',
@@ -450,8 +449,8 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
-    var divisorInput = (this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY');
+    const container = Blockly.utils.xml.createElement('mutation');
+    const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
   },
@@ -462,10 +461,10 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   domToMutation: function(xmlElement) {
-    var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
+    const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
     this.updateShape_(divisorInput);
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.
@@ -479,7 +478,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    */
   updateShape_: function(divisorInput) {
     // Add or remove a Value Input.
-    var inputExists = this.getInput('DIVISOR');
+    const inputExists = this.getInput('DIVISOR');
     if (divisorInput) {
       if (!inputExists) {
         this.appendValueInput('DIVISOR')
@@ -488,7 +487,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
     } else if (inputExists) {
       this.removeInput('DIVISOR');
     }
-  }
+  },
 };
 
 /**
@@ -500,7 +499,7 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(function(option) {
-    var divisorInput = (option == 'DIVISIBLE_BY');
+    const divisorInput = (option === 'DIVISIBLE_BY');
     this.getSourceBlock().updateShape_(divisorInput);
   });
 };
@@ -530,7 +529,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   updateType_: function(newOp) {
-    if (newOp == 'MODE') {
+    if (newOp === 'MODE') {
       this.outputConnection.setCheck('Array');
     } else {
       this.outputConnection.setCheck('Number');
@@ -543,7 +542,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
    * @this {Blockly.Block}
    */
   mutationToDom: function() {
-    var container = Blockly.utils.xml.createElement('mutation');
+    const container = Blockly.utils.xml.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
   },
@@ -556,7 +555,7 @@ Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN = {
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
   },
-  
+
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
   // dropdown values.

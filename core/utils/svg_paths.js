@@ -7,7 +7,6 @@
 /**
  * @fileoverview Methods for creating parts of SVG path strings.  See
  * developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 

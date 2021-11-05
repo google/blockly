@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a code comment on a rendered workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -17,20 +16,8 @@
 goog.module('Blockly.WorkspaceCommentSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
-/* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.require('Blockly.IBubble');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.require('Blockly.ICopyable');
-const Rect = goog.require('Blockly.utils.Rect');
-const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -39,6 +26,18 @@ const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const {IBubble} = goog.require('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.require('Blockly.ICopyable');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
@@ -120,7 +119,7 @@ const WorkspaceCommentSvg = function(
     'x': 0,
     'y': 0,
     'rx': BORDER_RADIUS,
-    'ry': BORDER_RADIUS
+    'ry': BORDER_RADIUS,
   });
   this.svgGroup_.appendChild(this.svgRect_);
 
@@ -137,7 +136,8 @@ const WorkspaceCommentSvg = function(
    * @type {boolean}
    * @private
    */
-  this.useDragSurface_ = utils.is3dSupported() && !!workspace.getBlockDragSurface();
+  this.useDragSurface_ =
+      utils.is3dSupported() && !!workspace.getBlockDragSurface();
 
   WorkspaceCommentSvg.superClass_.constructor.call(
       this, workspace, content, height, width, opt_id);
@@ -171,7 +171,7 @@ WorkspaceCommentSvg.prototype.dispose = function() {
     return;
   }
   // If this comment is being dragged, unlink the mouse events.
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
@@ -258,7 +258,7 @@ WorkspaceCommentSvg.prototype.showContextMenu = function(e) {
  * @package
  */
 WorkspaceCommentSvg.prototype.select = function() {
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     return;
   }
   let oldId = null;
@@ -272,8 +272,8 @@ WorkspaceCommentSvg.prototype.select = function() {
       eventUtils.enable();
     }
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
@@ -284,11 +284,11 @@ WorkspaceCommentSvg.prototype.select = function() {
  * @package
  */
 WorkspaceCommentSvg.prototype.unselect = function() {
-  if (common.getSelected() != this) {
+  if (common.getSelected() !== this) {
     return;
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(null);
   this.removeSelect();
@@ -347,8 +347,9 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
   let x = 0;
   let y = 0;
 
-  const dragSurfaceGroup =
-      this.useDragSurface_ ? this.workspace.getBlockDragSurface().getGroup() : null;
+  const dragSurfaceGroup = this.useDragSurface_ ?
+      this.workspace.getBlockDragSurface().getGroup() :
+      null;
 
   let element = this.getSvgRoot();
   if (element) {
@@ -360,15 +361,15 @@ WorkspaceCommentSvg.prototype.getRelativeToSurfaceXY = function() {
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
         const surfaceTranslation =
             this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
       element = element.parentNode;
-    } while (element && element != this.workspace.getBubbleCanvas() &&
-             element != dragSurfaceGroup);
+    } while (element && element !== this.workspace.getBubbleCanvas() &&
+             element !== dragSurfaceGroup);
   }
   this.xy_ = new Coordinate(x, y);
   return this.xy_;
@@ -672,7 +673,7 @@ WorkspaceCommentSvg.prototype.toCopyData = function() {
   return {
     saveInfo: this.toXmlWithXY(),
     source: this.workspace,
-    typeCounts: null
+    typeCounts: null,
   };
 };
 
@@ -709,7 +710,7 @@ WorkspaceCommentSvg.prototype.render = function() {
     'x': 0,
     'y': 0,
     'rx': BORDER_RADIUS,
-    'ry': BORDER_RADIUS
+    'ry': BORDER_RADIUS,
   });
   this.svgGroup_.appendChild(this.svgRectTarget_);
 
@@ -761,7 +762,7 @@ WorkspaceCommentSvg.prototype.createEditor_ = function() {
       Svg.FOREIGNOBJECT, {
         'x': 0,
         'y': WorkspaceCommentSvg.TOP_OFFSET,
-        'class': 'blocklyCommentForeignObject'
+        'class': 'blocklyCommentForeignObject',
       },
       null);
   const body = document.createElementNS(dom.HTML_NS, 'body');
@@ -806,7 +807,7 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
         'x1': RESIZE_SIZE / 3,
         'y1': RESIZE_SIZE - 1,
         'x2': RESIZE_SIZE - 1,
-        'y2': RESIZE_SIZE / 3
+        'y2': RESIZE_SIZE / 3,
       },
       this.resizeGroup_);
   dom.createSvgElement(
@@ -815,7 +816,7 @@ WorkspaceCommentSvg.prototype.addResizeDom_ = function() {
         'x1': RESIZE_SIZE * 2 / 3,
         'y1': RESIZE_SIZE - 1,
         'x2': RESIZE_SIZE - 1,
-        'y2': RESIZE_SIZE * 2 / 3
+        'y2': RESIZE_SIZE * 2 / 3,
       },
       this.resizeGroup_);
 };
@@ -839,7 +840,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'x2': '10',
         'y2': '5',
         'stroke': '#fff',
-        'stroke-width': '2'
+        'stroke-width': '2',
       },
       this.deleteGroup_);
   dom.createSvgElement(
@@ -849,7 +850,7 @@ WorkspaceCommentSvg.prototype.addDeleteDom_ = function() {
         'x2': '10',
         'y2': '10',
         'stroke': '#fff',
-        'stroke-width': '2'
+        'stroke-width': '2',
       },
       this.deleteGroup_);
 };
@@ -1078,68 +1079,64 @@ WorkspaceCommentSvg.prototype.blurFocus = function() {
 /**
  * CSS for workspace comment.  See css.js for use.
  */
-Css.register([
-  // clang-format off
-  /* eslint-disable indent */
-  '.blocklyCommentForeignObject {',
-    'position: relative;',
-    'z-index: 0;',
-  '}',
+Css.register(`
+  .blocklyCommentForeignObject {
+    position: relative;
+    z-index: 0;
+  }
 
-  '.blocklyCommentRect {',
-    'fill: #E7DE8E;',
-    'stroke: #bcA903;',
-    'stroke-width: 1px;',
-  '}',
+  .blocklyCommentRect {
+    fill: #E7DE8E;
+    stroke: #bcA903;
+    stroke-width: 1px;
+  }
 
-  '.blocklyCommentTarget {',
-    'fill: transparent;',
-    'stroke: #bcA903;',
-  '}',
+  .blocklyCommentTarget {
+    fill: transparent;
+    stroke: #bcA903;
+  }
 
-  '.blocklyCommentTargetFocused {',
-    'fill: none;',
-  '}',
+  .blocklyCommentTargetFocused {
+    fill: none;
+  }
 
-  '.blocklyCommentHandleTarget {',
-    'fill: none;',
-  '}',
+  .blocklyCommentHandleTarget {
+    fill: none;
+  }
 
-  '.blocklyCommentHandleTargetFocused {',
-    'fill: transparent;',
-  '}',
+  .blocklyCommentHandleTargetFocused {
+    fill: transparent;
+  }
 
-  '.blocklyFocused>.blocklyCommentRect {',
-    'fill: #B9B272;',
-    'stroke: #B9B272;',
-  '}',
+  .blocklyFocused>.blocklyCommentRect {
+    fill: #B9B272;
+    stroke: #B9B272;
+  }
 
-  '.blocklySelected>.blocklyCommentTarget {',
-    'stroke: #fc3;',
-    'stroke-width: 3px;',
-  '}',
+  .blocklySelected>.blocklyCommentTarget {
+    stroke: #fc3;
+    stroke-width: 3px;
+  }
 
-  '.blocklyCommentDeleteIcon {',
-    'cursor: pointer;',
-    'fill: #000;',
-    'display: none;',
-  '}',
+  .blocklyCommentDeleteIcon {
+    cursor: pointer;
+    fill: #000;
+    display: none;
+  }
 
-  '.blocklySelected > .blocklyCommentDeleteIcon {',
-    'display: block;',
-  '}',
+  .blocklySelected > .blocklyCommentDeleteIcon {
+    display: block;
+  }
 
-  '.blocklyDeleteIconShape {',
-    'fill: #000;',
-    'stroke: #000;',
-    'stroke-width: 1px;',
-  '}',
+  .blocklyDeleteIconShape {
+    fill: #000;
+    stroke: #000;
+    stroke-width: 1px;
+  }
 
-  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
-    'stroke: #fc3;',
-  '}'
-  /* eslint-enable indent */
-  // clang-format on
-]);
+  .blocklyDeleteIconShape.blocklyDeleteIconHighlighted {
+    stroke: #fc3;
+  }
+`);
 
-exports = WorkspaceCommentSvg;
+exports.WorkspaceCommentSvg = WorkspaceCommentSvg;

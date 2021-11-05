@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a flyout.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';
@@ -18,17 +17,17 @@
 goog.module('Blockly.IFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
-/* eslint-disable-next-line no-unused-vars */
-const Svg = goog.requireType('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+/* eslint-disable-next-line no-unused-vars */
+const {Svg} = goog.requireType('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -199,4 +198,4 @@ IFlyout.prototype.position;
  */
 IFlyout.prototype.isDragTowardWorkspace;
 
-exports = IFlyout;
+exports.IFlyout = IFlyout;

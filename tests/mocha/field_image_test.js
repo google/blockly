@@ -20,7 +20,7 @@ suite('Image Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  let invalidValueTestCases = [
     {title: 'Undefined Src', value: undefined, args: [undefined, 1, 1]},
     {title: 'Undefined Size', value: 'src', args: ['src', undefined, undefined]},
     {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
@@ -30,7 +30,7 @@ suite('Image Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueCreationTestCases = [
+  let validValueCreationTestCases = [
     {title: 'With Alt', value: 'src', expectedValue: 'src',
       args: ['src', 1, 1, 'alt'], expectedText: 'alt'},
     {title: 'Without Alt', value: 'src', expectedValue: 'src',
@@ -40,7 +40,7 @@ suite('Image Fields', function() {
    * Adds json property to test cases based on args property.
    * @param {!Array<!FieldCreationTestCase>} testCase The test case to modify.
    */
-  var addJson = function(testCase) {
+  let addJson = function(testCase) {
     testCase.json = {'src': testCase.args[0], 'width': testCase.args[1],
       'height': testCase.args[2]};
     if (testCase.args[3]) {
@@ -55,7 +55,7 @@ suite('Image Fields', function() {
    * @param {!Blockly.FieldImage} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
+  let validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
   };
 
@@ -71,7 +71,7 @@ suite('Image Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldValueTestCase>}
    */
-  var validValueSetValueTestCases = [
+  let validValueSetValueTestCases = [
     {title: 'Good src', value: 'newSrc', expectedValue: 'newSrc',
       expectedText: 'alt'},
   ];
@@ -92,27 +92,27 @@ suite('Image Fields', function() {
         };
       });
       test('JS Constructor', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
+        let field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
         chai.assert.equal(field.clickHandler_, this.onClick);
       });
       test('setOnClickHandler', function() {
-        var field = new Blockly.FieldImage('src', 10, 10);
+        let field = new Blockly.FieldImage('src', 10, 10);
         field.setOnClickHandler(this.onClick);
         chai.assert.equal(field.clickHandler_, this.onClick);
       });
       test('Remove Click Handler', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
+        let field = new Blockly.FieldImage('src', 10, 10, null, this.onClick);
         field.setOnClickHandler(null);
         chai.assert.isNull(field.clickHandler_);
       });
     });
     suite('Alt', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, 'alt');
+        let field = new Blockly.FieldImage('src', 10, 10, 'alt');
         chai.assert.equal(field.altText_, 'alt');
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldImage.fromJson({
+        let field = Blockly.FieldImage.fromJson({
           src: 'src',
           width: 10,
           height: 10,
@@ -138,25 +138,25 @@ suite('Image Fields', function() {
         });
       });
       test('JS Configuration - Simple', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
+        let field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
           alt: 'alt'
         });
         chai.assert.equal(field.altText_, 'alt');
       });
       test('JS Configuration - Ignore', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
+        let field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
           alt: 'configAlt'
         });
         chai.assert.equal(field.altText_, 'configAlt');
       });
       test('JS Configuration - Ignore - \'\'', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, '', null, null, {
+        let field = new Blockly.FieldImage('src', 10, 10, '', null, null, {
           alt: 'configAlt'
         });
         chai.assert.equal(field.altText_, 'configAlt');
       });
       test('JS Configuration - Ignore - Config \'\'', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
+        let field = new Blockly.FieldImage('src', 10, 10, 'alt', null, null, {
           alt: ''
         });
         chai.assert.equal(field.altText_, '');
@@ -164,11 +164,11 @@ suite('Image Fields', function() {
     });
     suite('Flip RTL', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, null, true);
+        let field = new Blockly.FieldImage('src', 10, 10, null, null, true);
         chai.assert.isTrue(field.getFlipRtl());
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldImage.fromJson({
+        let field = Blockly.FieldImage.fromJson({
           src: 'src',
           width: 10,
           height: 10,
@@ -177,19 +177,19 @@ suite('Image Fields', function() {
         chai.assert.isTrue(field.getFlipRtl());
       });
       test('JS Configuration - Simple', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
+        let field = new Blockly.FieldImage('src', 10, 10, null, null, null, {
           flipRtl: true
         });
         chai.assert.isTrue(field.getFlipRtl());
       });
       test('JS Configuration - Ignore - True', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, null, true, {
+        let field = new Blockly.FieldImage('src', 10, 10, null, null, true, {
           flipRtl: false
         });
         chai.assert.isFalse(field.getFlipRtl());
       });
       test('JS Configuration - Ignore - False', function() {
-        var field = new Blockly.FieldImage('src', 10, 10, null, null, false, {
+        let field = new Blockly.FieldImage('src', 10, 10, null, null, false, {
           flipRtl: true
         });
         chai.assert.isTrue(field.getFlipRtl());

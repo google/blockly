@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for handling variables.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -17,13 +16,13 @@
 goog.module('Blockly.Variables');
 
 const Msg = goog.require('Blockly.Msg');
-const VariableModel = goog.require('Blockly.VariableModel');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const Xml = goog.require('Blockly.Xml');
 const dialog = goog.require('Blockly.dialog');
 const utilsXml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -224,7 +223,7 @@ const generateUniqueNameFromOptions = function(startChar, usedNames) {
   while (true) {
     let inUse = false;
     for (let i = 0; i < usedNames.length; i++) {
-      if (usedNames[i].toLowerCase() == potName) {
+      if (usedNames[i].toLowerCase() === potName) {
         inUse = true;
         break;
       }
@@ -234,7 +233,7 @@ const generateUniqueNameFromOptions = function(startChar, usedNames) {
     }
 
     letterIndex++;
-    if (letterIndex == letters.length) {
+    if (letterIndex === letters.length) {
       // Reached the end of the character sequence so back to 'i'.
       letterIndex = 0;
       suffix = Number(suffix) + 1;
@@ -272,7 +271,7 @@ const createVariableButtonHandler = function(
         const existing = nameUsedWithAnyType(text, workspace);
         if (existing) {
           let msg;
-          if (existing.type == type) {
+          if (existing.type === type) {
             msg = Msg['VARIABLE_ALREADY_EXISTS'].replace('%1', existing.name);
           } else {
             msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
@@ -360,7 +359,7 @@ const promptName = function(promptText, defaultText, callback) {
     // Beyond this, all names are legal.
     if (newVar) {
       newVar = newVar.replace(/[\s\xa0]+/g, ' ').trim();
-      if (newVar == Msg['RENAME_VARIABLE'] || newVar == Msg['NEW_VARIABLE']) {
+      if (newVar === Msg['RENAME_VARIABLE'] || newVar === Msg['NEW_VARIABLE']) {
         // Ok, not ALL names are legal...
         newVar = null;
       }
@@ -385,7 +384,7 @@ const nameUsedWithOtherType = function(name, type, workspace) {
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() == name && variable.type != type) {
+    if (variable.name.toLowerCase() === name && variable.type !== type) {
       return variable;
     }
   }
@@ -406,7 +405,7 @@ const nameUsedWithAnyType = function(name, workspace) {
 
   name = name.toLowerCase();
   for (let i = 0, variable; (variable = allVariables[i]); i++) {
-    if (variable.name.toLowerCase() == name) {
+    if (variable.name.toLowerCase() === name) {
       return variable;
     }
   }
@@ -489,7 +488,7 @@ const getVariable = function(workspace, id, opt_name, opt_type) {
   // If there was no ID, or there was an ID but it didn't match any variables,
   // look up by name and type.
   if (opt_name) {
-    if (opt_type == undefined) {
+    if (opt_type === undefined) {
       throw Error('Tried to look up a variable by name without a type');
     }
     // Otherwise look up by name and type.
@@ -546,12 +545,12 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
 const getAddedVariables = function(workspace, originalVariables) {
   const allCurrentVariables = workspace.getAllVariables();
   const addedVariables = [];
-  if (originalVariables.length != allCurrentVariables.length) {
+  if (originalVariables.length !== allCurrentVariables.length) {
     for (let i = 0; i < allCurrentVariables.length; i++) {
       const variable = allCurrentVariables[i];
       // For any variable that is present in allCurrentVariables but not
       // present in originalVariables, add the variable to addedVariables.
-      if (originalVariables.indexOf(variable) == -1) {
+      if (originalVariables.indexOf(variable) === -1) {
         addedVariables.push(variable);
       }
     }

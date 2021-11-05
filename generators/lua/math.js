@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for math blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
@@ -46,18 +45,18 @@ Blockly.Lua['math_single'] = function(block) {
   var operator = block.getFieldValue('OP');
   var code;
   var arg;
-  if (operator == 'NEG') {
+  if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     arg = Blockly.Lua.valueToCode(block, 'NUM',
         Blockly.Lua.ORDER_UNARY) || '0';
     return ['-' + arg, Blockly.Lua.ORDER_UNARY];
   }
-  if (operator == 'POW10') {
+  if (operator === 'POW10') {
     arg = Blockly.Lua.valueToCode(block, 'NUM',
         Blockly.Lua.ORDER_EXPONENTIATION) || '0';
     return ['10 ^ ' + arg, Blockly.Lua.ORDER_EXPONENTIATION];
   }
-  if (operator == 'ROUND') {
+  if (operator === 'ROUND') {
     arg = Blockly.Lua.valueToCode(block, 'NUM',
         Blockly.Lua.ORDER_ADDITIVE) || '0';
   } else {
@@ -134,7 +133,7 @@ Blockly.Lua['math_number_property'] = function(block) {
       Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
-  if (dropdown_property == 'PRIME') {
+  if (dropdown_property === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     var functionName = Blockly.Lua.provideFunction_(
         'math_isPrime',
@@ -180,7 +179,7 @@ Blockly.Lua['math_number_property'] = function(block) {
           Blockly.Lua.ORDER_MULTIPLICATIVE);
       // If 'divisor' is some code that evals to 0, Lua will produce a nan.
       // Let's produce nil if we can determine this at compile-time.
-      if (!divisor || divisor == '0') {
+      if (!divisor || divisor === '0') {
         return ['nil', Blockly.Lua.ORDER_ATOMIC];
       }
       // The normal trick to implement ?: with and/or doesn't work here:

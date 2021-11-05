@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a zoom icons.
- * @author carloslfu@gmail.com (Carlos Galarza)
  */
 'use strict';
 
@@ -16,23 +15,23 @@
  */
 goog.module('Blockly.ZoomControls');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.require('Blockly.IPositionable');
-/* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const uiPosition = goog.require('Blockly.uiPosition');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+/* eslint-disable-next-line no-unused-vars */
+const {IPositionable} = goog.require('Blockly.IPositionable');
+/* eslint-disable-next-line no-unused-vars */
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Click');
 
@@ -207,7 +206,7 @@ ZoomControls.prototype.init = function() {
   this.workspace_.getComponentManager().addComponent({
     component: this,
     weight: 2,
-    capabilities: [ComponentManager.Capability.POSITIONABLE]
+    capabilities: [ComponentManager.Capability.POSITIONABLE],
   });
   this.initialized_ = true;
 };
@@ -341,7 +340,7 @@ ZoomControls.prototype.createZoomOutSvg_ = function(rnd) {
         'height': internalConstants.SPRITE.height,
         'x': -64,
         'y': -92,
-        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
       },
       this.zoomOutGroup_);
   zoomoutSvg.setAttributeNS(
@@ -387,7 +386,7 @@ ZoomControls.prototype.createZoomInSvg_ = function(rnd) {
         'height': internalConstants.SPRITE.height,
         'x': -32,
         'y': -92,
-        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
       },
       this.zoomInGroup_);
   zoominSvg.setAttributeNS(
@@ -445,7 +444,7 @@ ZoomControls.prototype.createZoomResetSvg_ = function(rnd) {
         'width': internalConstants.SPRITE.width,
         'height': internalConstants.SPRITE.height,
         'y': -92,
-        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
       },
       this.zoomResetGroup_);
   zoomresetSvg.setAttributeNS(
@@ -491,26 +490,26 @@ ZoomControls.prototype.resetZoom_ = function(e) {
  * @private
  */
 ZoomControls.prototype.fireZoomEvent_ = function() {
-  const uiEvent =
-      new (eventUtils.get(eventUtils.CLICK))(null, this.workspace_.id, 'zoom_controls');
+  const uiEvent = new (eventUtils.get(eventUtils.CLICK))(
+      null, this.workspace_.id, 'zoom_controls');
   eventUtils.fire(uiEvent);
 };
 
 /**
  * CSS for zoom controls.  See css.js for use.
  */
-Css.register([
-  `.blocklyZoom>image, .blocklyZoom>svg>image {
-  opacity: .4;
-}`,
+Css.register(`
+  .blocklyZoom>image, .blocklyZoom>svg>image {
+    opacity: .4;
+  }
 
-  `.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
-  opacity: .6;
-}`,
+  .blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {
+    opacity: .6;
+  }
 
-  `.blocklyZoom>image:active, .blocklyZoom>svg>image:active {
-  'opacity: .8;
-}`
-]);
+  .blocklyZoom>image:active, .blocklyZoom>svg>image:active {
+    opacity: .8;
+  }
+`);
 
-exports = ZoomControls;
+exports.ZoomControls = ZoomControls;

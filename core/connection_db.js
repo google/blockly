@@ -8,7 +8,6 @@
  * @fileoverview A database of all the rendered connections that could
  *    possibly be connected to (i.e. not collapsed, etc).
  *    Sorted by y coordinate.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,13 +19,13 @@
  */
 goog.module('Blockly.ConnectionDB');
 
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /** @suppress {extraRequire} */
 goog.require('Blockly.constants');
 
@@ -94,8 +93,8 @@ ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
   yPos = conn.y;
   // Walk forward and back on the y axis looking for the connection.
   let pointer = bestGuess;
-  while (pointer >= 0 && this.connections_[pointer].y == yPos) {
-    if (this.connections_[pointer] == conn) {
+  while (pointer >= 0 && this.connections_[pointer].y === yPos) {
+    if (this.connections_[pointer] === conn) {
       return pointer;
     }
     pointer--;
@@ -103,8 +102,8 @@ ConnectionDB.prototype.findIndexOfConnection_ = function(conn, yPos) {
 
   pointer = bestGuess;
   while (pointer < this.connections_.length &&
-         this.connections_[pointer].y == yPos) {
-    if (this.connections_[pointer] == conn) {
+         this.connections_[pointer].y === yPos) {
+    if (this.connections_[pointer] === conn) {
       return pointer;
     }
     pointer++;
@@ -147,7 +146,7 @@ ConnectionDB.prototype.calculateIndexForYPos_ = function(yPos) {
  */
 ConnectionDB.prototype.removeConnection = function(connection, yPos) {
   const index = this.findIndexOfConnection_(connection, yPos);
-  if (index == -1) {
+  if (index === -1) {
     throw Error('Unable to find connection in connectionDB.');
   }
   this.connections_.splice(index, 1);
@@ -307,4 +306,4 @@ ConnectionDB.init = function(checker) {
   return dbList;
 };
 
-exports = ConnectionDB;
+exports.ConnectionDB = ConnectionDB;

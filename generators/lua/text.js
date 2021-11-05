@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for text blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
@@ -24,21 +23,21 @@ Blockly.Lua['text'] = function(block) {
 Blockly.Lua['text_multiline'] = function(block) {
   // Text value.
   var code = Blockly.Lua.multiline_quote_(block.getFieldValue('TEXT'));
-  var order = code.indexOf('..') != -1 ? Blockly.Lua.ORDER_CONCATENATION :
+  var order = code.indexOf('..') !== -1 ? Blockly.Lua.ORDER_CONCATENATION :
       Blockly.Lua.ORDER_ATOMIC;
   return [code, order];
 };
 
 Blockly.Lua['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_ === 0) {
     return ['\'\'', Blockly.Lua.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
+  } else if (block.itemCount_ === 1) {
     var element = Blockly.Lua.valueToCode(block, 'ADD0',
         Blockly.Lua.ORDER_NONE) || '\'\'';
     var code = 'tostring(' + element + ')';
     return [code, Blockly.Lua.ORDER_HIGH];
-  } else if (block.itemCount_ == 2) {
+  } else if (block.itemCount_ === 2) {
     var element0 = Blockly.Lua.valueToCode(block, 'ADD0',
         Blockly.Lua.ORDER_CONCATENATION) || '\'\'';
     var element1 = Blockly.Lua.valueToCode(block, 'ADD1',
@@ -85,7 +84,7 @@ Blockly.Lua['text_indexOf'] = function(block) {
       Blockly.Lua.ORDER_NONE) || '\'\'';
   var text = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '\'\'';
-  if (block.getFieldValue('END') == 'FIRST') {
+  if (block.getFieldValue('END') === 'FIRST') {
     var functionName = Blockly.Lua.provideFunction_(
         'firstIndexOf',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
@@ -118,13 +117,13 @@ Blockly.Lua['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var atOrder = (where == 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
+  var atOrder = (where === 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
       Blockly.Lua.ORDER_NONE;
   var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
   var text = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '\'\'';
   var code;
-  if (where == 'RANDOM') {
+  if (where === 'RANDOM') {
     var functionName = Blockly.Lua.provideFunction_(
         'text_random_letter',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(str)',
@@ -133,14 +132,14 @@ Blockly.Lua['text_charAt'] = function(block) {
          'end']);
     code = functionName + '(' + text + ')';
   } else {
-    if (where == 'FIRST') {
+    if (where === 'FIRST') {
       var start = '1';
-    } else if (where == 'LAST') {
+    } else if (where === 'LAST') {
       var start = '-1';
     } else {
-      if (where == 'FROM_START') {
+      if (where === 'FROM_START') {
         var start = at;
-      } else if (where == 'FROM_END') {
+      } else if (where === 'FROM_END') {
         var start = '-' + at;
       } else {
         throw Error('Unhandled option (text_charAt).');
@@ -169,14 +168,14 @@ Blockly.Lua['text_getSubstring'] = function(block) {
 
   // Get start index.
   var where1 = block.getFieldValue('WHERE1');
-  var at1Order = (where1 == 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
+  var at1Order = (where1 === 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
       Blockly.Lua.ORDER_NONE;
   var at1 = Blockly.Lua.valueToCode(block, 'AT1', at1Order) || '1';
-  if (where1 == 'FIRST') {
+  if (where1 === 'FIRST') {
     var start = 1;
-  } else if (where1 == 'FROM_START') {
+  } else if (where1 === 'FROM_START') {
     var start = at1;
-  } else if (where1 == 'FROM_END') {
+  } else if (where1 === 'FROM_END') {
     var start = '-' + at1;
   } else {
     throw Error('Unhandled option (text_getSubstring)');
@@ -184,14 +183,14 @@ Blockly.Lua['text_getSubstring'] = function(block) {
 
   // Get end index.
   var where2 = block.getFieldValue('WHERE2');
-  var at2Order = (where2 == 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
+  var at2Order = (where2 === 'FROM_END') ? Blockly.Lua.ORDER_UNARY :
       Blockly.Lua.ORDER_NONE;
   var at2 = Blockly.Lua.valueToCode(block, 'AT2', at2Order) || '1';
-  if (where2 == 'LAST') {
+  if (where2 === 'LAST') {
     var end = -1;
-  } else if (where2 == 'FROM_START') {
+  } else if (where2 === 'FROM_START') {
     var end = at2;
-  } else if (where2 == 'FROM_END') {
+  } else if (where2 === 'FROM_END') {
     var end = '-' + at2;
   } else {
     throw Error('Unhandled option (text_getSubstring)');
@@ -205,11 +204,11 @@ Blockly.Lua['text_changeCase'] = function(block) {
   var operator = block.getFieldValue('CASE');
   var text = Blockly.Lua.valueToCode(block, 'TEXT',
       Blockly.Lua.ORDER_NONE) || '\'\'';
-  if (operator == 'UPPERCASE') {
+  if (operator === 'UPPERCASE') {
     var functionName = 'string.upper';
-  } else if (operator == 'LOWERCASE') {
+  } else if (operator === 'LOWERCASE') {
     var functionName = 'string.lower';
-  } else if (operator == 'TITLECASE') {
+  } else if (operator === 'TITLECASE') {
     var functionName = Blockly.Lua.provideFunction_(
         'text_titlecase',
         // There are shorter versions at
@@ -278,7 +277,7 @@ Blockly.Lua['text_prompt_ext'] = function(block) {
        'end']);
   var code = functionName + '(' + msg + ')';
 
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = 'tonumber(' + code + ', 10)';
   }

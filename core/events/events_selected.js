@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of element select action.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.Events.Selected');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
-const object = goog.require('Blockly.utils.object');
 const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -80,4 +79,4 @@ Selected.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);
 
-exports = Selected;
+exports.Selected = Selected;

@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a basic cursor.
  * Used to demo switching between different cursors.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -174,9 +173,9 @@ BasicCursor.prototype.getPreviousNode_ = function(node, isValid) {
 BasicCursor.prototype.validNode_ = function(node) {
   let isValid = false;
   const type = node && node.getType();
-  if (type == ASTNode.types.OUTPUT || type == ASTNode.types.INPUT ||
-      type == ASTNode.types.FIELD || type == ASTNode.types.NEXT ||
-      type == ASTNode.types.PREVIOUS || type == ASTNode.types.WORKSPACE) {
+  if (type === ASTNode.types.OUTPUT || type === ASTNode.types.INPUT ||
+      type === ASTNode.types.FIELD || type === ASTNode.types.NEXT ||
+      type === ASTNode.types.PREVIOUS || type === ASTNode.types.WORKSPACE) {
     isValid = true;
   }
   return isValid;

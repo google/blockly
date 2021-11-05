@@ -8,7 +8,6 @@
  * @fileoverview Dropdown input field.  Used for editable titles and variables.
  * In the interests of a consistent UI, the toolbox shares some functions and
  * properties with the context menu.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,12 +19,6 @@
  */
 goog.module('Blockly.FieldDropdown');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const Menu = goog.require('Blockly.Menu');
-const MenuItem = goog.require('Blockly.MenuItem');
-const Svg = goog.require('Blockly.utils.Svg');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -33,6 +26,12 @@ const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const utilsString = goog.require('Blockly.utils.string');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {MenuItem} = goog.require('Blockly.MenuItem');
+const {Menu} = goog.require('Blockly.Menu');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -53,7 +52,7 @@ const utilsString = goog.require('Blockly.utils.string');
  * @alias Blockly.FieldDropdown
  */
 const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
-  if (typeof menuGenerator != 'function') {
+  if (typeof menuGenerator !== 'function') {
     validateOptions(menuGenerator);
   }
 
@@ -294,7 +293,7 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
   this.svgArrow_ = dom.createSvgElement(
       Svg.IMAGE, {
         'height': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
-        'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px'
+        'width': this.getConstants().FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
       },
       this.fieldGroup_);
   this.svgArrow_.setAttributeNS(
@@ -315,6 +314,9 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
   } else {
     this.menu_.openingCoords = null;
   }
+
+  // Remove any pre-existing elements in the dropdown.
+  DropDownDiv.clearContent();
   // Element gets created in render.
   this.menu_.render(DropDownDiv.getContentDiv());
   const menuElement = /** @type {!Element} */ (this.menu_.getElement());
@@ -358,7 +360,7 @@ FieldDropdown.prototype.dropdownCreate_ = function() {
   for (let i = 0; i < options.length; i++) {
     let content = options[i][0];  // Human-readable text or image.
     const value = options[i][1];  // Language-neutral value.
-    if (typeof content == 'object') {
+    if (typeof content === 'object') {
       // An image, not text.
       const image = new Image(content['width'], content['height']);
       image.src = content['src'];
@@ -370,8 +372,8 @@ FieldDropdown.prototype.dropdownCreate_ = function() {
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setCheckable(true);
     menu.addChild(menuItem);
-    menuItem.setChecked(value == this.value_);
-    if (value == this.value_) {
+    menuItem.setChecked(value === this.value_);
+    if (value === this.value_) {
       this.selectedMenuItem_ = menuItem;
     }
     menuItem.onAction(this.handleMenuActionEvent_, this);
@@ -426,10 +428,10 @@ FieldDropdown.prototype.trimOptions_ = function() {
   // Localize label text and image alt text.
   for (let i = 0; i < options.length; i++) {
     const label = options[i][0];
-    if (typeof label == 'string') {
+    if (typeof label === 'string') {
       options[i][0] = utils.replaceMessageReferences(label);
     } else {
-      if (label.alt != null) {
+      if (label.alt !== null) {
         options[i][0].alt = utils.replaceMessageReferences(label.alt);
       }
       hasImages = true;
@@ -489,7 +491,7 @@ FieldDropdown.applyTrim_ = function(options, prefixLength, suffixLength) {
  *     Otherwise false.
  */
 FieldDropdown.prototype.isOptionListDynamic = function() {
-  return typeof this.menuGenerator_ == 'function';
+  return typeof this.menuGenerator_ === 'function';
 };
 
 /**
@@ -522,7 +524,7 @@ FieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {
   const options = this.getOptions(true);
   for (let i = 0, option; (option = options[i]); i++) {
     // Options are tuples of human-readable text and language-neutral values.
-    if (option[1] == opt_newValue) {
+    if (option[1] === opt_newValue) {
       isValueValid = true;
       break;
     }
@@ -549,7 +551,7 @@ FieldDropdown.prototype.doValueUpdate_ = function(newValue) {
   FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
   const options = this.getOptions(true);
   for (let i = 0, option; (option = options[i]); i++) {
-    if (option[1] == this.value_) {
+    if (option[1] === this.value_) {
       this.selectedOption_ = option;
     }
   }
@@ -591,7 +593,7 @@ FieldDropdown.prototype.render_ = function() {
 
   // Show correct element.
   const option = this.selectedOption_ && this.selectedOption_[0];
-  if (option && typeof option == 'object') {
+  if (option && typeof option === 'object') {
     this.renderSelectedImage_(
         /** @type {!FieldDropdown.ImageProperties} */ (option));
   } else {
@@ -721,7 +723,7 @@ FieldDropdown.prototype.getText_ = function() {
     return null;
   }
   const option = this.selectedOption_[0];
-  if (typeof option == 'object') {
+  if (typeof option === 'object') {
     return option['alt'];
   }
   return option;
@@ -740,7 +742,7 @@ const validateOptions = function(options) {
     throw TypeError('FieldDropdown options must not be an empty array.');
   }
   let foundError = false;
-  for (let i = 0; i < options.length; ++i) {
+  for (let i = 0; i < options.length; i++) {
     const tuple = options[i];
     if (!Array.isArray(tuple)) {
       foundError = true;
@@ -748,15 +750,15 @@ const validateOptions = function(options) {
           'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
               'array. Found: ',
           tuple);
-    } else if (typeof tuple[1] != 'string') {
+    } else if (typeof tuple[1] !== 'string') {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
               'a string. Found ' + tuple[1] + ' in: ',
           tuple);
     } else if (
-        tuple[0] && (typeof tuple[0] != 'string') &&
-        (typeof tuple[0].src != 'string')) {
+        tuple[0] && (typeof tuple[0] !== 'string') &&
+        (typeof tuple[0].src !== 'string')) {
       foundError = true;
       console.error(
           'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
@@ -771,4 +773,4 @@ const validateOptions = function(options) {
 
 fieldRegistry.register('field_dropdown', FieldDropdown);
 
-exports = FieldDropdown;
+exports.FieldDropdown = FieldDropdown;

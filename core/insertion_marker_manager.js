@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class that controls updates to connections during drags.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,17 +15,6 @@
  */
 goog.module('Blockly.InsertionMarkerManager');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
@@ -34,13 +22,24 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
- * unhiglighting it as needed during a drag.
+ * unhighlighting it as needed during a drag.
  * @param {!BlockSvg} block The top block in the stack being dragged.
  * @constructor
  * @alias Blockly.InsertionMarkerManager
@@ -307,7 +306,7 @@ InsertionMarkerManager.prototype.createMarkerBlock_ = function(sourceBlock) {
     // child blocks here.
     for (let i = 0; i < sourceBlock.inputList.length; i++) {
       const sourceInput = sourceBlock.inputList[i];
-      if (sourceInput.name == constants.COLLAPSED_INPUT_NAME) {
+      if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
         continue;  // Ignore the collapsed input.
       }
       const resultInput = result.inputList[i];
@@ -351,7 +350,7 @@ InsertionMarkerManager.prototype.initAvailableConnections_ = function() {
   const available = this.topBlock_.getConnections_(false);
   // Also check the last connection on this stack
   const lastOnStack = this.topBlock_.lastConnectionInStack(true);
-  if (lastOnStack && lastOnStack != this.topBlock_.nextConnection) {
+  if (lastOnStack && lastOnStack !== this.topBlock_.nextConnection) {
     available.push(lastOnStack);
     this.lastOnStack_ = lastOnStack;
     if (this.lastMarker_) {
@@ -389,8 +388,8 @@ InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
     // Decide whether the new connection has higher priority.
     if (this.localConnection_ && this.closestConnection_) {
       // The connection was the same as the current connection.
-      if (this.closestConnection_ == candidateClosest &&
-          this.localConnection_ == candidateLocal) {
+      if (this.closestConnection_ === candidateClosest &&
+          this.localConnection_ === candidateLocal) {
         return false;
       }
       const xDiff = this.localConnection_.x + dxy.x - this.closestConnection_.x;
@@ -511,7 +510,7 @@ InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate) {
   }
 
   // Something went wrong and we're trying to connect to an invalid connection.
-  if (closest == this.closestConnection_ ||
+  if (closest === this.closestConnection_ ||
       closest.getSourceBlock().isInsertionMarker()) {
     console.log('Trying to connect to an insertion marker');
     return;
@@ -571,8 +570,8 @@ InsertionMarkerManager.prototype.maybeHidePreview_ = function(candidate) {
     // If there's a new preview and there was an preview before, and either
     // connection has changed, remove the old preview.
     const hadPreview = this.closestConnection_ && this.localConnection_;
-    const closestChanged = this.closestConnection_ != candidate.closest;
-    const localChanged = this.localConnection_ != candidate.local;
+    const closestChanged = this.closestConnection_ !== candidate.closest;
+    const localChanged = this.localConnection_ !== candidate.local;
 
     // Also hide if we had a preview before but now we're going to delete
     // instead.
@@ -617,11 +616,11 @@ InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
   const local = this.localConnection_;
   const closest = this.closestConnection_;
 
-  const isLastInStack = this.lastOnStack_ && local == this.lastOnStack_;
+  const isLastInStack = this.lastOnStack_ && local === this.lastOnStack_;
   const imBlock = isLastInStack ? this.lastMarker_ : this.firstMarker_;
   const imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);
 
-  if (imConn == this.markerConnection_) {
+  if (imConn === this.markerConnection_) {
     throw Error(
         'Made it to showInsertionMarker_ even though the marker isn\'t ' +
         'changing');
@@ -663,9 +662,9 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   const markerOutput = imBlock.outputConnection;
 
   const isFirstInStatementStack =
-      (imConn == markerNext && !(markerPrev && markerPrev.targetConnection));
+      (imConn === markerNext && !(markerPrev && markerPrev.targetConnection));
 
-  const isFirstInOutputStack = imConn.type == ConnectionType.INPUT_VALUE &&
+  const isFirstInOutputStack = imConn.type === ConnectionType.INPUT_VALUE &&
       !(markerOutput && markerOutput.targetConnection);
   // The insertion marker is the first block in a stack.  Unplug won't do
   // anything in that case.  Instead, unplug the following block.
@@ -674,7 +673,7 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   }
   // Inside of a C-block, first statement connection.
   else if (
-      imConn.type == ConnectionType.NEXT_STATEMENT && imConn != markerNext) {
+      imConn.type === ConnectionType.NEXT_STATEMENT && imConn !== markerNext) {
     const innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 
@@ -758,4 +757,4 @@ InsertionMarkerManager.prototype.getInsertionMarkers = function() {
   return result;
 };
 
-exports = InsertionMarkerManager;
+exports.InsertionMarkerManager = InsertionMarkerManager;

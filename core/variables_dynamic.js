@@ -7,7 +7,6 @@
 /**
  * @fileoverview Utility functions for handling typed variables.
  *
- * @author duzc2dtw@gmail.com (Du Tian Wei)
  */
 'use strict';
 
@@ -19,12 +18,12 @@
 goog.module('Blockly.VariablesDynamic');
 
 const Msg = goog.require('Blockly.Msg');
-const VariableModel = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const xml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 const onCreateVariableButtonClick_String = function(button) {

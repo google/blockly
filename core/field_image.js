@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Image field.  Used for pictures, icons, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,13 +15,13 @@
  */
 goog.module('Blockly.FieldImage');
 
-const Field = goog.require('Blockly.Field');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
+const {Field} = goog.require('Blockly.Field');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -108,7 +107,7 @@ const FieldImage = function(
    */
   this.clickHandler_ = null;
 
-  if (typeof opt_onClick == 'function') {
+  if (typeof opt_onClick === 'function') {
     this.clickHandler_ = opt_onClick;
   }
 
@@ -190,7 +189,7 @@ FieldImage.prototype.initView = function() {
       Svg.IMAGE, {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
-        'alt': this.altText_
+        'alt': this.altText_,
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(
@@ -215,7 +214,7 @@ FieldImage.prototype.updateSize_ = function() {
  * @protected
  */
 FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+  if (typeof opt_newValue !== 'string') {
     return null;
   }
   return opt_newValue;
@@ -250,7 +249,7 @@ FieldImage.prototype.getFlipRtl = function() {
  * @public
  */
 FieldImage.prototype.setAlt = function(alt) {
-  if (alt == this.altText_) {
+  if (alt === this.altText_) {
     return;
   }
   this.altText_ = alt || '';
@@ -293,4 +292,4 @@ FieldImage.prototype.getText_ = function() {
 
 fieldRegistry.register('field_image', FieldImage);
 
-exports = FieldImage;
+exports.FieldImage = FieldImage;

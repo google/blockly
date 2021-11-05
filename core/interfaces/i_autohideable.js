@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for a component that is automatically hidden
  * when WorkspaceSvg.hideChaff is called.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -20,7 +19,7 @@
 goog.module('Blockly.IAutoHideable');
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.require('Blockly.IComponent');
+const {IComponent} = goog.require('Blockly.IComponent');
 
 
 /**
@@ -38,4 +37,4 @@ const IAutoHideable = function() {};
  */
 IAutoHideable.prototype.autoHide;
 
-exports = IAutoHideable;
+exports.IAutoHideable = IAutoHideable;

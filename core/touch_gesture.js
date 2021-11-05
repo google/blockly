@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
- * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -18,13 +17,13 @@
  */
 goog.module('Blockly.TouchGesture');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Gesture = goog.require('Blockly.Gesture');
 const Touch = goog.require('Blockly.Touch');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const object = goog.require('Blockly.utils.object');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Gesture} = goog.require('Blockly.Gesture');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /*
@@ -241,7 +240,7 @@ TouchGesture.prototype.handleTouchStart = function(e) {
   this.cachedPoints_[pointerId] = this.getTouchPoint(e);
   const pointers = Object.keys(this.cachedPoints_);
   // If two pointers are down, store info
-  if (pointers.length == 2) {
+  if (pointers.length === 2) {
     const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
     const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
     this.startDistance_ = Coordinate.distance(point0, point1);
@@ -328,4 +327,4 @@ TouchGesture.prototype.getTouchPoint = function(e) {
       (e.pageY ? e.pageY : e.changedTouches[0].pageY));
 };
 
-exports = TouchGesture;
+exports.TouchGesture = TouchGesture;

@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for DOM manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,9 +19,9 @@
  */
 goog.module('Blockly.utils.dom');
 
-/* eslint-disable-next-line no-unused-vars */
-const Svg = goog.requireType('Blockly.utils.Svg');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {Svg} = goog.requireType('Blockly.utils.Svg');
 
 
 /**
@@ -59,7 +58,7 @@ const NodeType = {
   ELEMENT_NODE: 1,
   TEXT_NODE: 3,
   COMMENT_NODE: 8,
-  DOCUMENT_POSITION_CONTAINED_BY: 16
+  DOCUMENT_POSITION_CONTAINED_BY: 16,
 };
 exports.NodeType = NodeType;
 
@@ -123,7 +122,7 @@ exports.createSvgElement = createSvgElement;
  */
 const addClass = function(element, className) {
   let classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1) {
     return false;
   }
   if (classes) {
@@ -159,12 +158,12 @@ exports.removeClasses = removeClasses;
  */
 const removeClass = function(element, className) {
   const classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') === -1) {
     return false;
   }
   const classList = classes.split(/\s+/);
   for (let i = 0; i < classList.length; i++) {
-    if (!classList[i] || classList[i] == className) {
+    if (!classList[i] || classList[i] === className) {
       classList.splice(i, 1);
       i--;
     }
@@ -188,7 +187,7 @@ exports.removeClass = removeClass;
  */
 const hasClass = function(element, className) {
   const classes = element.getAttribute('class');
-  return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
+  return (' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1;
 };
 exports.hasClass = hasClass;
 
@@ -414,8 +413,11 @@ const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
   div.appendChild(block);
 
   document.body.appendChild(div);
+  const result = {
+    height: 0,
+    baseline: 0,
+  };
   try {
-    var result = {};
     div.style.alignItems = 'baseline';
     result.baseline = block.offsetTop - span.offsetTop;
     div.style.alignItems = 'flex-end';

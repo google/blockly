@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.helpers');
 
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
 
@@ -20,7 +20,7 @@ const {Blocks} = goog.require('Blockly.blocks');
  * @param {!string} id The expected id of the variable.
  */
 function assertVariableValues(container, name, type, id) {
-  var variable = container.getVariableById(id);
+  let variable = container.getVariableById(id);
   chai.assert.isDefined(variable);
   chai.assert.equal(variable.name, name);
   chai.assert.equal(variable.type, type);
@@ -38,7 +38,7 @@ function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {
     messages = [messages];
   }
-  var warnings = testHelpers.captureWarnings(innerFunc);
+  let warnings = testHelpers.captureWarnings(innerFunc);
   chai.assert.lengthOf(warnings, messages.length);
   messages.forEach((message, i) => {
     chai.assert.match(warnings[i], message);
@@ -101,7 +101,7 @@ function workspaceTeardown(workspace) {
     workspace.dispose();
     this.clock.runAll();  // Run all remaining queued setTimeout calls.
   } catch (e) {
-    var testRef = this.currentTest || this.test;
+    let testRef = this.currentTest || this.test;
     console.error(testRef.fullTitle() + '\n', e);
   }
 }
@@ -115,7 +115,7 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(eventUtils, 'fire');
+  let stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -158,7 +158,7 @@ exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
  * @private
  */
 function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  var stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
+  let stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
   stub.callsFake(function(jsonArray) {
     if (jsonArray) {
       jsonArray.forEach((jsonBlock) => {
@@ -215,7 +215,7 @@ exports.sharedTestSetup = sharedTestSetup;
  * outermost suite using sharedTestTeardown.call(this).
  */
 function sharedTestTeardown() {
-  var testRef = this.currentTest || this.test;
+  let testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
     console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
   }
@@ -250,11 +250,11 @@ function sharedTestTeardown() {
     this.sharedSetupSandbox_.restore();
     sinon.restore();
 
-    var blockTypes = this.sharedCleanup.blockTypesCleanup_;
+    let blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
       delete Blocks[blockTypes[i]];
     }
-    var messages = this.sharedCleanup.messagesCleanup_;
+    let messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {
       delete Blockly.Msg[messages[i]];
     }
@@ -274,9 +274,9 @@ exports.sharedTestTeardown = sharedTestTeardown;
  * @return {!SinonStub} The created stub.
  */
 function createGenUidStubWithReturns(returnIds) {
-  var stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
+  let stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
   if (Array.isArray(returnIds)) {
-    for (var i = 0; i < returnIds.length; i++) {
+    for (let i = 0; i < returnIds.length; i++) {
       stub.onCall(i).returns(returnIds[i]);
     }
   } else {
@@ -305,7 +305,7 @@ exports.createFireChangeListenerSpy = createFireChangeListenerSpy;
  * @private
  */
 function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
-  var value = Blockly.Xml.domToText(xmlValue);
+  let value = Blockly.Xml.domToText(xmlValue);
   if (expectedValue instanceof Node) {
     expectedValue = Blockly.Xml.domToText(expectedValue);
   }
@@ -321,8 +321,8 @@ function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
  */
 function assertXmlProperties_(obj, expectedXmlProperties) {
   Object.keys(expectedXmlProperties).map((key) => {
-    var value = obj[key];
-    var expectedValue = expectedXmlProperties[key];
+    let value = obj[key];
+    let expectedValue = expectedXmlProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value,
           'Expected ' + key + ' property to be undefined');
@@ -356,7 +356,7 @@ function isXmlProperty_(key) {
  */
 function assertEventEquals(event, expectedType,
     expectedWorkspaceId, expectedBlockId, expectedProperties, isUiEvent = false, message) {
-  var prependMessage = message ? message + ' ' : '';
+  let prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
   chai.assert.equal(event.type, expectedType,
       prependMessage + 'type');
@@ -365,8 +365,8 @@ function assertEventEquals(event, expectedType,
   chai.assert.equal(event.blockId, expectedBlockId,
       prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
-    var value = event[key];
-    var expectedValue = expectedProperties[key];
+    let value = event[key];
+    let expectedValue = expectedProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value, prependMessage + key);
       return;
@@ -405,7 +405,7 @@ function assertEventFired(spy, instanceType, expectedProperties,
     workspaceId: expectedWorkspaceId,
     blockId: expectedBlockId,
   }, expectedProperties);
-  var expectedEvent =
+  let expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
 }
@@ -430,7 +430,7 @@ function assertEventNotFired(spy, instanceType, expectedProperties,
   if (expectedBlockId !== undefined) {
     expectedProperties.blockId = expectedBlockId;
   }
-  var expectedEvent =
+  let expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.neverCalledWith(spy, expectedEvent);
 }
@@ -444,8 +444,8 @@ exports.assertEventNotFired = assertEventNotFired;
  * @private
  */
 function splitByXmlProperties_(properties) {
-  var xmlProperties = {};
-  var nonXmlProperties = {};
+  let xmlProperties = {};
+  let nonXmlProperties = {};
   Object.keys(properties).forEach((key) => {
     if (isXmlProperty_(key)) {
       xmlProperties[key] = properties[key];
@@ -471,14 +471,14 @@ function splitByXmlProperties_(properties) {
  */
 function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
-  var nthCall = spy.getCall(n);
-  var splitProperties = splitByXmlProperties_(expectedProperties);
-  var nonXmlProperties = splitProperties[0];
-  var xmlProperties = splitProperties[1];
+  let nthCall = spy.getCall(n);
+  let splitProperties = splitByXmlProperties_(expectedProperties);
+  let nonXmlProperties = splitProperties[0];
+  let xmlProperties = splitProperties[1];
 
   assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
       expectedBlockId);
-  var eventArg = nthCall.firstArg;
+  let eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);
 }
 exports.assertNthCallEventArgEquals = assertNthCallEventArgEquals;
@@ -568,7 +568,7 @@ function defineMutatorBlocks() {
     hasInput: false,
 
     mutationToDom: function() {
-      var mutation = Blockly.utils.xml.createElement('mutation');
+      let mutation = Blockly.utils.xml.createElement('mutation');
       mutation.setAttribute('hasInput', this.hasInput);
       return mutation;
     },
@@ -579,7 +579,7 @@ function defineMutatorBlocks() {
     },
 
     decompose: function(workspace) {
-      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      let topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
@@ -613,7 +613,7 @@ function defineMutatorBlocks() {
     },
 
     decompose: function(workspace) {
-      var topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      let topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
@@ -653,7 +653,7 @@ function createTestBlock() {
 exports.createTestBlock = createTestBlock;
 
 function createRenderedBlock(workspaceSvg, type) {
-  var block = workspaceSvg.newBlock(type);
+  let block = workspaceSvg.newBlock(type);
   block.initSvg();
   block.render();
   return block;
@@ -692,7 +692,7 @@ exports.dispatchPointerEvent = dispatchPointerEvent;
  * @return {!KeyboardEvent} The mocked keydown event.
  */
 function createKeyDownEvent(keyCode, modifiers) {
-  var event = {
+  let event = {
     keyCode: keyCode,
   };
   if (modifiers && modifiers.length > 0) {

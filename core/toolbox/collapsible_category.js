@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview A toolbox category used to organize blocks in the toolbox.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -16,19 +15,19 @@
  */
 goog.module('Blockly.CollapsibleToolboxCategory');
 
-/* eslint-disable-next-line no-unused-vars */
-const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const IToolboxItem = goog.requireType('Blockly.IToolboxItem');
-const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
-const ToolboxSeparator = goog.require('Blockly.ToolboxSeparator');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
+const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 
 
 /**
@@ -119,7 +118,8 @@ CollapsibleToolboxCategory.prototype.parseContents_ = function(categoryDef) {
       // Separators can exist as either a flyout item or a toolbox item so
       // decide where it goes based on the type of the previous item.
       if (!registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
-          (itemDef['kind'].toLowerCase() == ToolboxSeparator.registrationName &&
+          (itemDef['kind'].toLowerCase() ===
+               ToolboxSeparator.registrationName &&
            prevIsFlyoutItem)) {
         const flyoutItem = /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);
@@ -143,7 +143,7 @@ CollapsibleToolboxCategory.prototype.createToolboxItem_ = function(itemDef) {
   const categoryDef = /** @type {!toolbox.CategoryInfo} */ (itemDef);
 
   // Categories that are collapsible are created using a class registered under
-  // a diffferent name.
+  // a different name.
   if (registryName.toUpperCase() == 'CATEGORY' &&
       toolbox.isCategoryCollapsible(categoryDef)) {
     registryName = CollapsibleToolboxCategory.registrationName;
@@ -161,7 +161,7 @@ CollapsibleToolboxCategory.prototype.init = function() {
   CollapsibleToolboxCategory.superClass_.init.call(this);
 
   this.setExpanded(
-      this.toolboxItemDef_['expanded'] == 'true' ||
+      this.toolboxItemDef_['expanded'] === 'true' ||
       this.toolboxItemDef_['expanded']);
 };
 
@@ -223,7 +223,7 @@ CollapsibleToolboxCategory.prototype.createSubCategoriesDom_ = function(
  * @public
  */
 CollapsibleToolboxCategory.prototype.setExpanded = function(isExpanded) {
-  if (this.expanded_ == isExpanded) {
+  if (this.expanded_ === isExpanded) {
     return;
   }
   this.expanded_ = isExpanded;
@@ -252,7 +252,7 @@ CollapsibleToolboxCategory.prototype.setVisible_ = function(isVisible) {
   }
   this.isHidden_ = !isVisible;
 
-  if (this.parentToolbox_.getSelectedItem() == this) {
+  if (this.parentToolbox_.getSelectedItem() === this) {
     this.parentToolbox_.clearSelection();
   }
 };
@@ -309,4 +309,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
     CollapsibleToolboxCategory);
 
-exports = CollapsibleToolboxCategory;
+exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a block as SVG.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,40 +15,40 @@
  */
 goog.module('Blockly.blockRendering.RenderInfo');
 
-const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
-const Field = goog.require('Blockly.blockRendering.Field');
-const Hat = goog.require('Blockly.blockRendering.Hat');
-const Icon = goog.require('Blockly.blockRendering.Icon');
-const InlineInput = goog.require('Blockly.blockRendering.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const InputRow = goog.require('Blockly.blockRendering.InputRow');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
-/* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
-const NextConnection = goog.require('Blockly.blockRendering.NextConnection');
-const OutputConnection = goog.require('Blockly.blockRendering.OutputConnection');
-const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnection');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
-const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
-/* eslint-disable-next-line no-unused-vars */
-const Row = goog.requireType('Blockly.blockRendering.Row');
-const SpacerRow = goog.require('Blockly.blockRendering.SpacerRow');
-const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');
-const StatementInput = goog.require('Blockly.blockRendering.StatementInput');
-const TopRow = goog.require('Blockly.blockRendering.TopRow');
-const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
-const inputTypes = goog.require('Blockly.inputTypes');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
+const {Field} = goog.require('Blockly.blockRendering.Field');
+const {Hat} = goog.require('Blockly.blockRendering.Hat');
+const {Icon} = goog.require('Blockly.blockRendering.Icon');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+const {InlineInput} = goog.require('Blockly.blockRendering.InlineInput');
+const {InputRow} = goog.require('Blockly.blockRendering.InputRow');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {JaggedEdge} = goog.require('Blockly.blockRendering.JaggedEdge');
+/* eslint-disable-next-line no-unused-vars */
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+const {NextConnection} = goog.require('Blockly.blockRendering.NextConnection');
+const {OutputConnection} = goog.require('Blockly.blockRendering.OutputConnection');
+const {PreviousConnection} = goog.require('Blockly.blockRendering.PreviousConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
+const {RoundCorner} = goog.require('Blockly.blockRendering.RoundCorner');
+/* eslint-disable-next-line no-unused-vars */
+const {Row} = goog.requireType('Blockly.blockRendering.Row');
+const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
+const {SquareCorner} = goog.require('Blockly.blockRendering.SquareCorner');
+const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
+const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
+const {Types} = goog.require('Blockly.blockRendering.Types');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
@@ -292,7 +291,7 @@ RenderInfo.prototype.populateTopRow_ = function() {
   }
 
   const precedesStatement = this.block_.inputList.length &&
-      this.block_.inputList[0].type == inputTypes.STATEMENT;
+      this.block_.inputList[0].type === inputTypes.STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
   // greater height it will be overwritten in the compute pass.
@@ -316,7 +315,7 @@ RenderInfo.prototype.populateBottomRow_ = function() {
   this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
   const followsStatement = this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1].type ==
+      this.block_.inputList[this.block_.inputList.length - 1].type ===
           inputTypes.STATEMENT;
 
   // This is the minimum height for the row. If one of its elements has a
@@ -362,16 +361,16 @@ RenderInfo.prototype.populateBottomRow_ = function() {
  */
 RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // Non-dummy inputs have visual representations onscreen.
-  if (this.isInline && input.type == inputTypes.VALUE) {
+  if (this.isInline && input.type === inputTypes.VALUE) {
     activeRow.elements.push(new InlineInput(this.constants_, input));
     activeRow.hasInlineInput = true;
-  } else if (input.type == inputTypes.STATEMENT) {
+  } else if (input.type === inputTypes.STATEMENT) {
     activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
-  } else if (input.type == inputTypes.VALUE) {
+  } else if (input.type === inputTypes.VALUE) {
     activeRow.elements.push(new ExternalValueInput(this.constants_, input));
     activeRow.hasExternalInput = true;
-  } else if (input.type == inputTypes.DUMMY) {
+  } else if (input.type === inputTypes.DUMMY) {
     // Dummy inputs have no visual representation, but the information is still
     // important.
     activeRow.minHeight = Math.max(
@@ -381,7 +380,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
             this.constants_.DUMMY_INPUT_MIN_HEIGHT);
     activeRow.hasDummyInput = true;
   }
-  if (activeRow.align == null) {
+  if (activeRow.align === null) {
     activeRow.align = input.align;
   }
 };
@@ -400,12 +399,12 @@ RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == inputTypes.STATEMENT ||
-      lastInput.type == inputTypes.STATEMENT) {
+  if (input.type === inputTypes.STATEMENT ||
+      lastInput.type === inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == inputTypes.VALUE || input.type == inputTypes.DUMMY) {
+  if (input.type === inputTypes.VALUE || input.type === inputTypes.DUMMY) {
     return !this.isInline;
   }
   return false;
@@ -579,14 +578,14 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   }
 
   // Decide where the extra padding goes.
-  if (row.align == constants.ALIGN.LEFT) {
+  if (row.align === constants.ALIGN.LEFT) {
     // Add padding to the end of the row.
     lastSpacer.width += missingSpace;
-  } else if (row.align == constants.ALIGN.CENTRE) {
+  } else if (row.align === constants.ALIGN.CENTRE) {
     // Split the padding between the beginning and end of the row.
     firstSpacer.width += missingSpace / 2;
     lastSpacer.width += missingSpace / 2;
-  } else if (row.align == constants.ALIGN.RIGHT) {
+  } else if (row.align === constants.ALIGN.RIGHT) {
     // Add padding at the beginning of the row.
     firstSpacer.width += missingSpace;
   } else {
@@ -632,7 +631,7 @@ RenderInfo.prototype.addRowSpacing_ = function() {
 
   for (let r = 0; r < oldRows.length; r++) {
     this.rows.push(oldRows[r]);
-    if (r != oldRows.length - 1) {
+    if (r !== oldRows.length - 1) {
       this.rows.push(this.makeSpacerRow_(oldRows[r], oldRows[r + 1]));
     }
   }
@@ -765,4 +764,4 @@ RenderInfo.prototype.finalize_ = function() {
   this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

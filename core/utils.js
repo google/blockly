@@ -8,7 +8,6 @@
  * @fileoverview Utility methods.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,15 +19,7 @@
  */
 goog.module('Blockly.utils');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Metrics = goog.require('Blockly.utils.Metrics');
 const Msg = goog.require('Blockly.Msg');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
@@ -47,6 +38,14 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Metrics} = goog.require('Blockly.utils.Metrics');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 exports.aria = aria;
@@ -77,8 +76,7 @@ exports.xml = xmlUtils;
  * @alias Blockly.utils.noEvent
  */
 const noEvent = function(e) {
-  deprecation.warn(
-    'Blockly.utils.noEvent', 'September 2021', 'September 2022');
+  deprecation.warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
@@ -94,8 +92,8 @@ exports.noEvent = noEvent;
  */
 const isTargetInput = function(e) {
   deprecation.warn(
-    'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.isTargetInput');
+      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isTargetInput');
   return browserEvents.isTargetInput(e);
 };
 exports.isTargetInput = isTargetInput;
@@ -160,7 +158,7 @@ const getInjectionDivXY = function(element) {
     x = x + xy.x;
     y = y + xy.y;
     const classes = element.getAttribute('class') || '';
-    if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+    if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
       break;
     }
     element = /** @type {!Element} */ (element.parentNode);
@@ -199,8 +197,8 @@ getRelativeXY.XY_STYLE_REGEX_ =
  */
 const isRightButton = function(e) {
   deprecation.warn(
-    'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.isRightButton');
+      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.isRightButton');
   return browserEvents.isRightButton(e);
 };
 exports.isRightButton = isRightButton;
@@ -217,8 +215,8 @@ exports.isRightButton = isRightButton;
  */
 const mouseToSvg = function(e, svg, matrix) {
   deprecation.warn(
-    'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.mouseToSvg');
+      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.mouseToSvg');
   return browserEvents.mouseToSvg(e, svg, matrix);
 };
 exports.mouseToSvg = mouseToSvg;
@@ -233,8 +231,8 @@ exports.mouseToSvg = mouseToSvg;
  */
 const getScrollDeltaPixels = function(e) {
   deprecation.warn(
-    'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
-    'Blockly.browserEvents.getScrollDeltaPixels');
+      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
+      'Blockly.browserEvents.getScrollDeltaPixels');
   return browserEvents.getScrollDeltaPixels(e);
 };
 exports.getScrollDeltaPixels = getScrollDeltaPixels;
@@ -265,11 +263,11 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
  * @alias Blockly.utils.replaceMessageReferences
  */
 const replaceMessageReferences = function(message) {
-  if (typeof message != 'string') {
+  if (typeof message !== 'string') {
     return message;
   }
   const interpolatedResult = tokenizeInterpolation_(message, false);
-  // When parseInterpolationTokens == false, interpolatedResult should be at
+  // When parseInterpolationTokens === false, interpolatedResult should be at
   // most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
@@ -293,7 +291,7 @@ const checkMessageReferences = function(message) {
   const m = message.match(/%{BKY_[A-Z]\w*}/ig);
   for (let i = 0; i < m.length; i++) {
     const msgKey = m[i].toUpperCase();
-    if (msgTable[msgKey.slice(6, -1)] == undefined) {
+    if (msgTable[msgKey.slice(6, -1)] === undefined) {
       console.warn('No message string for ' + m[i] + ' in ' + message);
       validSoFar = false;  // Continue to report other errors.
     }
@@ -326,8 +324,8 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   let number = null;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
-    if (state == 0) {
-      if (c == '%') {
+    if (state === 0) {
+      if (c === '%') {
         const text = buffer.join('');
         if (text) {
           tokens.push(text);
@@ -337,8 +335,8 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
       } else {
         buffer.push(c);  // Regular char.
       }
-    } else if (state == 1) {
-      if (c == '%') {
+    } else if (state === 1) {
+      if (c === '%') {
         buffer.push(c);  // Escaped %: %%
         state = 0;
       } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
@@ -349,13 +347,13 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
           tokens.push(text);
         }
         buffer.length = 0;
-      } else if (c == '{') {
+      } else if (c === '{') {
         state = 3;
       } else {
         buffer.push('%', c);  // Not recognized. Return as literal.
         state = 0;
       }
-    } else if (state == 2) {
+    } else if (state === 2) {
       if ('0' <= c && c <= '9') {
         number += c;  // Multi-digit number.
       } else {
@@ -363,13 +361,13 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
         i--;  // Parse this char again.
         state = 0;
       }
-    } else if (state == 3) {  // String table reference
-      if (c == '') {
+    } else if (state === 3) {  // String table reference
+      if (c === '') {
         // Premature end before closing '}'
         buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
         i--;                        // Parse this char again.
         state = 0;                  // and parse as string literal.
-      } else if (c != '}') {
+      } else if (c !== '}') {
         buffer.push(c);
       } else {
         const rawKey = buffer.join('');
@@ -385,7 +383,7 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
               null;
           if (bklyKey && bklyKey in Msg) {
             const rawValue = Msg[bklyKey];
-            if (typeof rawValue == 'string') {
+            if (typeof rawValue === 'string') {
               // Attempt to dereference substrings, too, appending to the end.
               Array.prototype.push.apply(
                   tokens,
@@ -420,8 +418,8 @@ const tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   // Merge adjacent text tokens into a single string.
   const mergedTokens = [];
   buffer.length = 0;
-  for (let i = 0; i < tokens.length; ++i) {
-    if (typeof tokens[i] == 'string') {
+  for (let i = 0; i < tokens.length; i++) {
+    if (typeof tokens[i] === 'string') {
       buffer.push(tokens[i]);
     } else {
       text = buffer.join('');
@@ -478,7 +476,7 @@ const is3dSupported = function() {
     'OTransform': '-o-transform',
     'msTransform': '-ms-transform',
     'MozTransform': '-moz-transform',
-    'transform': 'transform'
+    'transform': 'transform',
   };
 
   // Add it to the body to get the computed style.
@@ -514,15 +512,15 @@ exports.is3dSupported = is3dSupported;
  * @alias Blockly.utils.runAfterPageLoad
  */
 const runAfterPageLoad = function(fn) {
-  if (typeof document != 'object') {
+  if (typeof document !== 'object') {
     throw Error('runAfterPageLoad() requires browser document.');
   }
-  if (document.readyState == 'complete') {
+  if (document.readyState === 'complete') {
     fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     const readyStateCheckInterval = setInterval(function() {
-      if (document.readyState == 'complete') {
+      if (document.readyState === 'complete') {
         clearInterval(readyStateCheckInterval);
         fn();
       }
@@ -558,7 +556,7 @@ exports.getViewportBBox = getViewportBBox;
  */
 const arrayRemove = function(arr, value) {
   const i = arr.indexOf(value);
-  if (i == -1) {
+  if (i === -1) {
     return false;
   }
   arr.splice(i, 1);
@@ -575,7 +573,7 @@ exports.arrayRemove = arrayRemove;
 const getDocumentScroll = function() {
   const el = document.documentElement;
   const win = window;
-  if (userAgent.IE && win.pageYOffset != el.scrollTop) {
+  if (userAgent.IE && win.pageYOffset !== el.scrollTop) {
     // The keyboard on IE10 touch devices shifts the page using the pageYOffset
     // without modifying scrollTop. For this case, we want the body scroll
     // offsets.
@@ -667,7 +665,7 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
  */
 const parseBlockColour = function(colour) {
   const dereferenced =
-      (typeof colour == 'string') ? replaceMessageReferences(colour) : colour;
+      (typeof colour === 'string') ? replaceMessageReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
@@ -675,7 +673,7 @@ const parseBlockColour = function(colour) {
       hue: hue,
       hex: colourUtils.hsvToHex(
           hue, internalConstants.HSV_SATURATION,
-          internalConstants.HSV_VALUE * 255)
+          internalConstants.HSV_VALUE * 255),
     };
   } else {
     const hex = colourUtils.parse(dereferenced);
@@ -684,7 +682,7 @@ const parseBlockColour = function(colour) {
       return {hue: null, hex: hex};
     } else {
       let errorMsg = 'Invalid colour: "' + dereferenced + '"';
-      if (colour != dereferenced) {
+      if (colour !== dereferenced) {
         errorMsg += ' (from "' + colour + '")';
       }
       throw Error(errorMsg);

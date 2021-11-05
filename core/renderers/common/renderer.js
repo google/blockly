@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Base renderer.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,34 +15,34 @@
  */
 goog.module('Blockly.blockRendering.Renderer');
 
-const Connection = goog.require('Blockly.Connection');
-const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Debug = goog.requireType('Blockly.blockRendering.Debug');
-const Drawer = goog.require('Blockly.blockRendering.Drawer');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-/* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
-/* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
-const PathObject = goog.require('Blockly.blockRendering.PathObject');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Connection} = goog.require('Blockly.Connection');
+const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Debug} = goog.requireType('Blockly.blockRendering.Debug');
+const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
+/* eslint-disable-next-line no-unused-vars */
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
+const {MarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+const {PathObject} = goog.require('Blockly.blockRendering.PathObject');
+const {RenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -183,7 +182,7 @@ Renderer.prototype.makeDrawer_ = function(block, info) {
  * @protected
  */
 Renderer.prototype.makeDebugger_ = function() {
-  const Debug = goog.module.get('Blockly.blockRendering.Debug');
+  const {Debug} = goog.module.get('Blockly.blockRendering.Debug');
   if (!Debug) {
     throw Error('Missing require for Blockly.blockRendering.Debug');
   }
@@ -273,8 +272,8 @@ Renderer.prototype.orphanCanConnectAtEnd = function(
  */
 Renderer.prototype.getConnectionPreviewMethod = function(
     closest, local, topBlock) {
-  if (local.type == ConnectionType.OUTPUT_VALUE ||
-      local.type == ConnectionType.PREVIOUS_STATEMENT) {
+  if (local.type === ConnectionType.OUTPUT_VALUE ||
+      local.type === ConnectionType.PREVIOUS_STATEMENT) {
     if (!closest.isConnected() ||
         this.orphanCanConnectAtEnd(
             topBlock,
@@ -301,4 +300,4 @@ Renderer.prototype.render = function(block) {
   this.makeDrawer_(block, info).draw();
 };
 
-exports = Renderer;
+exports.Renderer = Renderer;

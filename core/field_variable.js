@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Variable input field.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,14 +15,7 @@
  */
 goog.module('Blockly.FieldVariable');
 
-const FieldDropdown = goog.require('Blockly.FieldDropdown');
-/* eslint-disable-next-line no-unused-vars */
-const Menu = goog.requireType('Blockly.Menu');
-/* eslint-disable-next-line no-unused-vars */
-const MenuItem = goog.requireType('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
-const Size = goog.require('Blockly.utils.Size');
-const VariableModel = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -32,6 +24,13 @@ const object = goog.require('Blockly.utils.object');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
+/* eslint-disable-next-line no-unused-vars */
+const {MenuItem} = goog.requireType('Blockly.MenuItem');
+/* eslint-disable-next-line no-unused-vars */
+const {Menu} = goog.requireType('Blockly.Menu');
+const {Size} = goog.require('Blockly.utils.Size');
+const {VariableModel} = goog.require('Blockly.VariableModel');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -152,7 +151,7 @@ FieldVariable.prototype.initModel = function() {
 FieldVariable.prototype.shouldAddBorderRect_ = function() {
   return FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
       (!this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-       this.sourceBlock_.type != 'variables_get');
+       this.sourceBlock_.type !== 'variables_get');
 };
 
 /**
@@ -172,7 +171,7 @@ FieldVariable.prototype.fromXml = function(fieldElement) {
       this.sourceBlock_.workspace, id, variableName, variableType);
 
   // This should never happen :)
-  if (variableType != null && variableType !== variable.type) {
+  if (variableType !== null && variableType !== variable.type) {
     throw Error(
         'Serialized variable type with id \'' + variable.getId() +
         '\' had type ' + variable.type + ', and ' +
@@ -217,9 +216,7 @@ FieldVariable.prototype.saveState = function(doFullSerialization) {
   }
   // Make sure the variable is initialized.
   this.initModel();
-  const state = {
-    'id': this.variable_.getId()
-  };
+  const state = {'id': this.variable_.getId()};
   if (doFullSerialization) {
     state['name'] = this.variable_.name;
     state['type'] = this.variable_.type;
@@ -239,9 +236,7 @@ FieldVariable.prototype.loadState = function(state) {
   }
   // This is necessary so that blocks in the flyout can have custom var names.
   const variable = Variables.getOrCreateVariablePackage(
-      this.sourceBlock_.workspace,
-      state['id'] || null,
-      state['name'],
+      this.sourceBlock_.workspace, state['id'] || null, state['name'],
       state['type'] || '');
   this.setValue(variable.getId());
 };
@@ -356,7 +351,7 @@ FieldVariable.prototype.typeIsAllowed_ = function(type) {
     return true;  // If it's null, all types are valid.
   }
   for (let i = 0; i < typeList.length; i++) {
-    if (type == typeList[i]) {
+    if (type === typeList[i]) {
       return true;
     }
   }
@@ -379,7 +374,7 @@ FieldVariable.prototype.getVariableTypes_ = function() {
     }
   }
   variableTypes = variableTypes || [''];
-  if (variableTypes.length == 0) {
+  if (variableTypes.length === 0) {
     // Throw an error if variableTypes is an empty list.
     const name = this.getText();
     throw Error(
@@ -405,14 +400,14 @@ FieldVariable.prototype.setTypes_ = function(
   const defaultType = opt_defaultType || '';
   let variableTypes;
   // Set the allowable variable types.  Null means all types on the workspace.
-  if (opt_variableTypes == null || opt_variableTypes == undefined) {
+  if (opt_variableTypes === null || opt_variableTypes === undefined) {
     variableTypes = null;
   } else if (Array.isArray(opt_variableTypes)) {
     variableTypes = opt_variableTypes;
     // Make sure the default type is valid.
     let isInArray = false;
     for (let i = 0; i < variableTypes.length; i++) {
-      if (variableTypes[i] == defaultType) {
+      if (variableTypes[i] === defaultType) {
         isInArray = true;
       }
     }
@@ -477,7 +472,7 @@ FieldVariable.dropdownCreate = function() {
   if (Msg['DELETE_VARIABLE']) {
     options.push([
       Msg['DELETE_VARIABLE'].replace('%1', name),
-      internalConstants.DELETE_VARIABLE_ID
+      internalConstants.DELETE_VARIABLE_ID,
     ]);
   }
 
@@ -496,11 +491,11 @@ FieldVariable.prototype.onItemSelected_ = function(menu, menuItem) {
   const id = menuItem.getValue();
   // Handle special cases.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    if (id == internalConstants.RENAME_VARIABLE_ID) {
+    if (id === internalConstants.RENAME_VARIABLE_ID) {
       // Rename variable.
       Variables.renameVariable(this.sourceBlock_.workspace, this.variable_);
       return;
-    } else if (id == internalConstants.DELETE_VARIABLE_ID) {
+    } else if (id === internalConstants.DELETE_VARIABLE_ID) {
       // Delete variable.
       this.sourceBlock_.workspace.deleteVariableById(this.variable_.getId());
       return;
@@ -522,4 +517,4 @@ FieldVariable.prototype.referencesVariables = function() {
 
 fieldRegistry.register('field_variable', FieldVariable);
 
-exports = FieldVariable;
+exports.FieldVariable = FieldVariable;

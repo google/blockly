@@ -18,7 +18,7 @@ suite('Extensions', function() {
   teardown(function() {
     sharedTestTeardown.call(this);
     for (let i = 0; i < this.extensionsCleanup_.length; i++) {
-      var extension = this.extensionsCleanup_[i];
+      let extension = this.extensionsCleanup_[i];
       delete Blockly.Extensions.TEST_ONLY.allExtensions[extension];
     }
   });
@@ -29,7 +29,7 @@ suite('Extensions', function() {
 
     chai.assert.isUndefined(
         Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_before']);
-    var beforeCallback = sinon.spy();
+    let beforeCallback = sinon.spy();
     // Extension defined before the block type is defined.
     Blockly.Extensions.register('extensions_test_before', beforeCallback);
 
@@ -41,7 +41,7 @@ suite('Extensions', function() {
 
     chai.assert.isUndefined(
         Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test_after']);
-    var afterCallback = sinon.spy();
+    let afterCallback = sinon.spy();
     // Extension defined after the block type (but before instantiation).
     Blockly.Extensions.register('extensions_test_after', afterCallback);
 
@@ -54,7 +54,7 @@ suite('Extensions', function() {
     sinon.assert.notCalled(beforeCallback);
     sinon.assert.notCalled(afterCallback);
 
-    var block = new Blockly.Block(this.workspace, 'extension_test_block');
+    let block = new Blockly.Block(this.workspace, 'extension_test_block');
 
     sinon.assert.calledOnce(beforeCallback);
     sinon.assert.calledOnce(afterCallback);
@@ -63,8 +63,8 @@ suite('Extensions', function() {
   });
 
   test('Parent tooltip when inline', function() {
-    var defaultTooltip = "defaultTooltip";
-    var parentTooltip = "parentTooltip";
+    let defaultTooltip = "defaultTooltip";
+    let parentTooltip = "parentTooltip";
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "test_parent_tooltip_when_inline",
@@ -86,7 +86,7 @@ suite('Extensions', function() {
       }
     ]);
 
-    var block =
+    let block =
         new Blockly.Block(this.workspace, 'test_parent_tooltip_when_inline');
 
     // Tooltip is dynamic after extension initialization.
@@ -94,7 +94,7 @@ suite('Extensions', function() {
     chai.assert.equal(block.tooltip(), defaultTooltip);
 
     // Tooltip is normal before connected to parent.
-    var parent = new Blockly.Block(this.workspace, 'test_parent');
+    let parent = new Blockly.Block(this.workspace, 'test_parent');
     chai.assert.equal(parent.tooltip, parentTooltip);
     chai.assert.notExists(parent.inputsInline);
 
@@ -117,7 +117,7 @@ suite('Extensions', function() {
     test('Basic', function() {
       this.extensionsCleanup_.push('mixin_test');
 
-      var testMixin = {
+      let testMixin = {
         field: 'FIELD',
         method: function() {
           console.log('TEXT_MIXIN method()');
@@ -139,7 +139,7 @@ suite('Extensions', function() {
         "extensions": ["mixin_test"]
       }]);
 
-      var block = new Blockly.Block(this.workspace, 'test_block_mixin');
+      let block = new Blockly.Block(this.workspace, 'test_block_mixin');
 
       chai.assert.equal(testMixin.field, block.field);
       chai.assert.equal(testMixin.method, block.method);
@@ -174,7 +174,7 @@ suite('Extensions', function() {
               }
             });
 
-        var block = new Blockly.Block(this.workspace, 'mutator_test_block');
+        let block = new Blockly.Block(this.workspace, 'mutator_test_block');
 
         // Make sure all of the functions were installed correctly.
         chai.assert.equal(block.domToMutation(), 'domToMutationFn');
@@ -197,7 +197,7 @@ suite('Extensions', function() {
         Blockly.Events.disable();
         chai.assert.isUndefined(
             Blockly.Extensions.TEST_ONLY.allExtensions['extensions_test']);
-        var helperFunctionSpy = sinon.spy();
+        let helperFunctionSpy = sinon.spy();
         Blockly.Extensions.registerMutator('extensions_test',
             {
               domToMutation: function() {
@@ -210,7 +210,7 @@ suite('Extensions', function() {
             helperFunctionSpy
         );
 
-        var _ = new Blockly.Block(this.workspace, 'mutator_test_block');
+        let _ = new Blockly.Block(this.workspace, 'mutator_test_block');
 
         sinon.assert.calledOnce(helperFunctionSpy);
       });
@@ -239,7 +239,7 @@ suite('Extensions', function() {
               }
             });
 
-        var block = new Blockly.Block(this.workspace, 'mutator_test_block');
+        let block = new Blockly.Block(this.workspace, 'mutator_test_block');
 
         // Make sure all of the functions were installed correctly.
         chai.assert.equal(block.domToMutation(), 'domToMutationFn');
@@ -260,16 +260,16 @@ suite('Extensions', function() {
 
       chai.assert.isUndefined(
           Blockly.Extensions.TEST_ONLY.allExtensions['missing_extension']);
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'missing_extension_block');
+        let _ = new Blockly.Block(workspace, 'missing_extension_block');
       });
     });
 
     test('Mixin overwrites local value', function() {
       this.extensionsCleanup_.push('mixin_bad_inputList');
 
-      var TEST_MIXIN_BAD_INPUTLIST = {
+      let TEST_MIXIN_BAD_INPUTLIST = {
         inputList: 'bad inputList'  // Defined in constructor
       };
 
@@ -288,16 +288,16 @@ suite('Extensions', function() {
         "extensions": ["mixin_bad_inputList"]
       }]);
 
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'test_block_bad_inputList');
+        let _ = new Blockly.Block(workspace, 'test_block_bad_inputList');
       }, /inputList/);
     });
 
     test('Mixin overwrites prototype', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
 
-      var TEST_MIXIN_BAD_COLOUR = {
+      let TEST_MIXIN_BAD_COLOUR = {
         colour_: 'bad colour_' // Defined on prototype
       };
 
@@ -316,9 +316,9 @@ suite('Extensions', function() {
         "extensions": ["mixin_bad_colour_"]
       }]);
 
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'test_block_bad_colour');
+        let _ = new Blockly.Block(workspace, 'test_block_bad_colour');
       }, /colour_/);
     });
 
@@ -346,9 +346,9 @@ suite('Extensions', function() {
             }
           });
 
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'mutator_test_block');
+        let _ = new Blockly.Block(workspace, 'mutator_test_block');
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(
@@ -379,9 +379,9 @@ suite('Extensions', function() {
             }
           });
 
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'mutator_test_block');
+        let _ = new Blockly.Block(workspace, 'mutator_test_block');
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(
@@ -406,9 +406,9 @@ suite('Extensions', function() {
         return 'extensions_test_fn';
       });
 
-      var workspace = this.workspace;
+      let workspace = this.workspace;
       chai.assert.throws(function() {
-        var _ = new Blockly.Block(workspace, 'mutator_test_block');
+        let _ = new Blockly.Block(workspace, 'mutator_test_block');
       });
       // Should have failed on apply, not on register.
       chai.assert.isNotNull(

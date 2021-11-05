@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Functions for injecting Blockly into a web page.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,21 +15,10 @@
  */
 goog.module('Blockly.inject');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
 const Css = goog.require('Blockly.Css');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Grid = goog.require('Blockly.Grid');
 const Msg = goog.require('Blockly.Msg');
-const Options = goog.require('Blockly.Options');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
-const Touch = goog.require('Blockly.Touch');
 const Tooltip = goog.require('Blockly.Tooltip');
-const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
-const Svg = goog.require('Blockly.utils.Svg');
-const Workspace = goog.require('Blockly.Workspace');
-const WorkspaceDragSurfaceSvg = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
+const Touch = goog.require('Blockly.Touch');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -39,6 +27,17 @@ const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Grid} = goog.require('Blockly.Grid');
+const {Options} = goog.require('Blockly.Options');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
+const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
 
 
 /**
@@ -50,7 +49,7 @@ const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
  * @alias Blockly.inject
  */
 const inject = function(container, opt_options) {
-  if (typeof container == 'string') {
+  if (typeof container === 'string') {
     container =
         document.getElementById(container) || document.querySelector(container);
   }
@@ -125,7 +124,7 @@ const createDom = function(container, options) {
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
         'class': 'blocklySvg',
-        'tabindex': '0'
+        'tabindex': '0',
       },
       container);
   /*
@@ -235,7 +234,7 @@ const init = function(mainWorkspace) {
       // Build a fixed flyout with the root blocks.
       flyout.init(mainWorkspace);
       flyout.show(options.languageTree);
-      if (typeof flyout.scrollToStart == 'function') {
+      if (typeof flyout.scrollToStart === 'function') {
         flyout.scrollToStart();
       }
     }
@@ -344,20 +343,23 @@ const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
       [
-        pathToMedia + 'click.mp3', pathToMedia + 'click.wav',
-        pathToMedia + 'click.ogg'
+        pathToMedia + 'click.mp3',
+        pathToMedia + 'click.wav',
+        pathToMedia + 'click.ogg',
       ],
       'click');
   audioMgr.load(
       [
-        pathToMedia + 'disconnect.wav', pathToMedia + 'disconnect.mp3',
-        pathToMedia + 'disconnect.ogg'
+        pathToMedia + 'disconnect.wav',
+        pathToMedia + 'disconnect.mp3',
+        pathToMedia + 'disconnect.ogg',
       ],
       'disconnect');
   audioMgr.load(
       [
-        pathToMedia + 'delete.mp3', pathToMedia + 'delete.ogg',
-        pathToMedia + 'delete.wav'
+        pathToMedia + 'delete.mp3',
+        pathToMedia + 'delete.ogg',
+        pathToMedia + 'delete.wav',
       ],
       'delete');
 
@@ -382,4 +384,4 @@ const loadSounds = function(pathToMedia, workspace) {
       document, 'touchstart', null, unbindSounds, true));
 };
 
-exports = inject;
+exports.inject = inject;

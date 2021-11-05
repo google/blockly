@@ -7,7 +7,6 @@
 /**
  * @fileoverview Makecode/scratch-style renderer.
  * Zelos: spirit of eager rivalry, emulation, envy, jealousy, and zeal.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -17,27 +16,27 @@
  */
 goog.module('Blockly.zelos.RenderInfo');
 
-const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-const BottomRow = goog.require('Blockly.zelos.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.zelos.ConstantProvider');
-const FieldImage = goog.require('Blockly.FieldImage');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.zelos.Renderer');
-const RightConnectionShape = goog.require('Blockly.zelos.RightConnectionShape');
-const StatementInput = goog.require('Blockly.zelos.StatementInput');
-const TopRow = goog.require('Blockly.zelos.TopRow');
-const Types = goog.require('Blockly.blockRendering.Types');
 const constants = goog.require('Blockly.constants');
-const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {FieldImage} = goog.require('Blockly.FieldImage');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+/* eslint-disable-next-line no-unused-vars */
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
+const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
+const {TopRow} = goog.require('Blockly.zelos.TopRow');
+const {Types} = goog.require('Blockly.blockRendering.Types');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
@@ -131,12 +130,12 @@ RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == inputTypes.STATEMENT ||
-      lastInput.type == inputTypes.STATEMENT) {
+  if (input.type === inputTypes.STATEMENT ||
+      lastInput.type === inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == inputTypes.VALUE || input.type == inputTypes.DUMMY) {
+  if (input.type === inputTypes.VALUE || input.type === inputTypes.DUMMY) {
     return !this.isInline || this.isMultiRow;
   }
   return false;
@@ -266,17 +265,16 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // If we have two dummy inputs on the same row, one aligned left and the other
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
-  if (input.type == inputTypes.DUMMY && activeRow.hasDummyInput &&
-      activeRow.align == constants.ALIGN.LEFT &&
-      input.align == constants.ALIGN.RIGHT) {
+  if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
+      activeRow.align === constants.ALIGN.LEFT &&
+      input.align === constants.ALIGN.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
-  } else if (input.type == inputTypes.STATEMENT) {
+  } else if (input.type === inputTypes.STATEMENT) {
     // Handle statements without next connections correctly.
-    activeRow.elements.push(
-        new StatementInput(this.constants_, input));
+    activeRow.elements.push(new StatementInput(this.constants_, input));
     activeRow.hasStatement = true;
 
-    if (activeRow.align == null) {
+    if (activeRow.align === null) {
       activeRow.align = input.align;
     }
     return;
@@ -296,7 +294,7 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
         alignmentDivider = elem;
       }
       if (Types.isField(elem) &&
-          elem.parentInput == row.rightAlignedDummyInput) {
+          elem.parentInput === row.rightAlignedDummyInput) {
         break;
       }
     }
@@ -327,8 +325,8 @@ RenderInfo.prototype.adjustXPosition_ = function() {
     const row = this.rows[i];
     const nextSpacer = this.rows[i + 1];
 
-    const hasPrevNotch = i == 2 ? !!this.topRow.hasPreviousConnection :
-                                  !!prevSpacer.followsStatement;
+    const hasPrevNotch = i === 2 ? !!this.topRow.hasPreviousConnection :
+                                   !!prevSpacer.followsStatement;
     const hasNextNotch = i + 2 >= this.rows.length - 1 ?
         !!this.bottomRow.hasNextConnection :
         !!nextSpacer.precedesStatement;
@@ -337,11 +335,11 @@ RenderInfo.prototype.adjustXPosition_ = function() {
       row.measure();
       minXPos = row.width - row.getLastInput().width + notchTotalWidth;
     } else if (
-        hasPrevNotch && (i == 2 || hasNextNotch) && Types.isInputRow(row) &&
+        hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
         !row.hasStatement) {
       let xCursor = row.xPos;
       let prevInRowSpacer = null;
-      for (let j = 0; i < row.elements.length; j++) {
+      for (let j = 0; j < row.elements.length; j++) {
         const elem = row.elements[j];
         if (Types.isSpacer(elem)) {
           prevInRowSpacer = elem;
@@ -506,14 +504,15 @@ RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
       return 0;
     }
     // Special case for hexagonal output.
-    if (outerShape == constants.SHAPES.HEXAGONAL && outerShape != innerShape) {
+    if (outerShape === constants.SHAPES.HEXAGONAL &&
+        outerShape !== innerShape) {
       return 0;
     }
     return connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
   } else if (Types.isField(elem)) {
     // Special case for text inputs.
-    if (outerShape == constants.SHAPES.ROUND &&
+    if (outerShape === constants.SHAPES.ROUND &&
         elem.field instanceof FieldTextInput) {
       return connectionWidth - (2.75 * constants.GRID_UNIT);
     }
@@ -542,7 +541,7 @@ RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
     const row = this.rows[i];
     const nextSpacer = this.rows[i + 1];
 
-    const firstRow = i == 2;
+    const firstRow = i === 2;
     const hasPrevNotch = firstRow ? !!this.topRow.hasPreviousConnection :
                                     !!prevSpacer.followsStatement;
     const hasNextNotch = i + 2 >= this.rows.length - 1 ?
@@ -550,7 +549,7 @@ RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
         !!nextSpacer.precedesStatement;
 
     if (hasPrevNotch) {
-      const hasSingleTextOrImageField = row.elements.length == 3 &&
+      const hasSingleTextOrImageField = row.elements.length === 3 &&
           (row.elements[1].field instanceof FieldLabel ||
            row.elements[1].field instanceof FieldImage);
       if (!firstRow && hasSingleTextOrImageField) {
@@ -600,4 +599,4 @@ RenderInfo.prototype.finalize_ = function() {
   }
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

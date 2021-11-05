@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Colour input field.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -17,10 +16,6 @@
 goog.module('Blockly.FieldColour');
 
 const Css = goog.require('Blockly.Css');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Size = goog.require('Blockly.utils.Size');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colour = goog.require('Blockly.utils.colour');
@@ -28,6 +23,10 @@ const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Size} = goog.require('Blockly.utils.Size');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -213,7 +212,7 @@ FieldColour.prototype.applyColour = function() {
  * @protected
  */
 FieldColour.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+  if (typeof opt_newValue !== 'string') {
     return null;
   }
   return colour.parse(opt_newValue);
@@ -256,25 +255,85 @@ FieldColour.prototype.getText = function() {
  */
 FieldColour.COLOURS = [
   // grays
-  '#ffffff', '#cccccc', '#c0c0c0', '#999999', '#666666', '#333333', '#000000',
+  '#ffffff',
+  '#cccccc',
+  '#c0c0c0',
+  '#999999',
+  '#666666',
+  '#333333',
+  '#000000',
   // reds
-  '#ffcccc', '#ff6666', '#ff0000', '#cc0000', '#990000', '#660000', '#330000',
+  '#ffcccc',
+  '#ff6666',
+  '#ff0000',
+  '#cc0000',
+  '#990000',
+  '#660000',
+  '#330000',
   // oranges
-  '#ffcc99', '#ff9966', '#ff9900', '#ff6600', '#cc6600', '#993300', '#663300',
+  '#ffcc99',
+  '#ff9966',
+  '#ff9900',
+  '#ff6600',
+  '#cc6600',
+  '#993300',
+  '#663300',
   // yellows
-  '#ffff99', '#ffff66', '#ffcc66', '#ffcc33', '#cc9933', '#996633', '#663333',
+  '#ffff99',
+  '#ffff66',
+  '#ffcc66',
+  '#ffcc33',
+  '#cc9933',
+  '#996633',
+  '#663333',
   // olives
-  '#ffffcc', '#ffff33', '#ffff00', '#ffcc00', '#999900', '#666600', '#333300',
+  '#ffffcc',
+  '#ffff33',
+  '#ffff00',
+  '#ffcc00',
+  '#999900',
+  '#666600',
+  '#333300',
   // greens
-  '#99ff99', '#66ff99', '#33ff33', '#33cc00', '#009900', '#006600', '#003300',
+  '#99ff99',
+  '#66ff99',
+  '#33ff33',
+  '#33cc00',
+  '#009900',
+  '#006600',
+  '#003300',
   // turquoises
-  '#99ffff', '#33ffff', '#66cccc', '#00cccc', '#339999', '#336666', '#003333',
+  '#99ffff',
+  '#33ffff',
+  '#66cccc',
+  '#00cccc',
+  '#339999',
+  '#336666',
+  '#003333',
   // blues
-  '#ccffff', '#66ffff', '#33ccff', '#3366ff', '#3333ff', '#000099', '#000066',
+  '#ccffff',
+  '#66ffff',
+  '#33ccff',
+  '#3366ff',
+  '#3333ff',
+  '#000099',
+  '#000066',
   // purples
-  '#ccccff', '#9999ff', '#6666cc', '#6633ff', '#6600cc', '#333399', '#330099',
+  '#ccccff',
+  '#9999ff',
+  '#6666cc',
+  '#6633ff',
+  '#6600cc',
+  '#333399',
+  '#330099',
   // violets
-  '#ffccff', '#ff99ff', '#cc66cc', '#cc33cc', '#993399', '#663366', '#330033'
+  '#ffccff',
+  '#ff99ff',
+  '#cc66cc',
+  '#cc33cc',
+  '#993399',
+  '#663366',
+  '#330033',
 ];
 
 /**
@@ -540,7 +599,7 @@ FieldColour.prototype.dropdownCreate_ = function() {
   aria.setState(table, aria.State.COLCOUNT, columns);
   let row;
   for (let i = 0; i < colours.length; i++) {
-    if (i % columns == 0) {
+    if (i % columns === 0) {
       row = document.createElement('tr');
       aria.setRole(row, aria.Role.ROW);
       table.appendChild(row);
@@ -553,9 +612,9 @@ FieldColour.prototype.dropdownCreate_ = function() {
     cell.setAttribute('data-index', i);
     aria.setRole(cell, aria.Role.GRIDCELL);
     aria.setState(cell, aria.State.LABEL, colours[i]);
-    aria.setState(cell, aria.State.SELECTED, colours[i] == selectedColour);
+    aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);
     cell.style.backgroundColor = colours[i];
-    if (colours[i] == selectedColour) {
+    if (colours[i] === selectedColour) {
       cell.className = 'blocklyColourSelected';
       this.highlightedIndex_ = i;
     }
@@ -608,39 +667,37 @@ FieldColour.prototype.dropdownDispose_ = function() {
 /**
  * CSS for colour picker.  See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
-  '.blocklyColourTable {',
-    'border-collapse: collapse;',
-    'display: block;',
-    'outline: none;',
-    'padding: 1px;',
-  '}',
+Css.register(`
+  .blocklyColourTable {
+    border-collapse: collapse;
+    display: block;
+    outline: none;
+    padding: 1px;
+  }
 
-  '.blocklyColourTable>tr>td {',
-    'border: .5px solid #888;',
-    'box-sizing: border-box;',
-    'cursor: pointer;',
-    'display: inline-block;',
-    'height: 20px;',
-    'padding: 0;',
-    'width: 20px;',
-  '}',
+  .blocklyColourTable>tr>td {
+    border: .5px solid #888;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    padding: 0;
+    width: 20px;
+  }
 
-  '.blocklyColourTable>tr>td.blocklyColourHighlighted {',
-    'border-color: #eee;',
-    'box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);',
-    'position: relative;',
-  '}',
+  .blocklyColourTable>tr>td.blocklyColourHighlighted {
+    border-color: #eee;
+    box-shadow: 2px 2px 7px 2px rgba(0,0,0,.3);
+    position: relative;
+  }
 
-  '.blocklyColourSelected, .blocklyColourSelected:hover {',
-    'border-color: #eee !important;',
-    'outline: 1px solid #333;',
-    'position: relative;',
-  '}'
-  /* eslint-enable indent */
-]);
+  .blocklyColourSelected, .blocklyColourSelected:hover {
+    border-color: #eee !important;
+    outline: 1px solid #333;
+    position: relative;
+  }
+`);
 
 fieldRegistry.register('field_colour', FieldColour);
 
-exports = FieldColour;
+exports.FieldColour = FieldColour;

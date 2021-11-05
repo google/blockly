@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing a square corner in a row of a rendered
  * block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -17,11 +16,11 @@
  */
 goog.module('Blockly.blockRendering.SquareCorner');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -38,12 +37,12 @@ const object = goog.require('Blockly.utils.object');
 const SquareCorner = function(constants, opt_position) {
   SquareCorner.superClass_.constructor.call(this, constants);
   this.type =
-      ((!opt_position || opt_position == 'left') ? Types.LEFT_SQUARE_CORNER :
-                                                   Types.RIGHT_SQUARE_CORNER) |
+      ((!opt_position || opt_position === 'left') ? Types.LEFT_SQUARE_CORNER :
+                                                    Types.RIGHT_SQUARE_CORNER) |
       Types.CORNER;
   this.height = this.constants_.NO_PADDING;
   this.width = this.constants_.NO_PADDING;
 };
 object.inherits(SquareCorner, Measurable);
 
-exports = SquareCorner;
+exports.SquareCorner = SquareCorner;

@@ -7,7 +7,6 @@
 /**
  * @fileoverview New (evolving) renderer.
  * Thrasos: spirit of boldness.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,16 +17,16 @@
  */
 goog.module('Blockly.thrasos.RenderInfo');
 
-const BaseRenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.blockRendering.Field');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.thrasos.Renderer');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.blockRendering.Field');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.thrasos.Renderer');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -213,7 +212,7 @@ RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 
   // Spacing between two fields of the same editability.
   if (Types.isField(prev) && next && Types.isField(next) &&
-      ((/** @type {Field} */ (prev)).isEditable ==
+      ((/** @type {Field} */ (prev)).isEditable ===
        (/** @type {Field} */ (next)).isEditable)) {
     return this.constants_.LARGE_PADDING;
   }
@@ -303,7 +302,7 @@ RenderInfo.prototype.finalize_ = function() {
         Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     // Add padding to the bottom row if block height is less than minimum
     const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
-    if (row == this.bottomRow &&
+    if (row === this.bottomRow &&
         heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
       // But the hat height shouldn't be part of this.
       const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
@@ -327,4 +326,4 @@ RenderInfo.prototype.finalize_ = function() {
   this.startY = this.topRow.capline;
 };
 
-exports = RenderInfo;
+exports.RenderInfo = RenderInfo;

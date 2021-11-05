@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that a style can be added to.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';
@@ -37,4 +36,4 @@ IStyleable.prototype.addStyle;
  */
 IStyleable.prototype.removeStyle;
 
-exports = IStyleable;
+exports.IStyleable = IStyleable;

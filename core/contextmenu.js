@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Functionality for the right-click context menus.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,13 +15,7 @@
  */
 goog.module('Blockly.ContextMenu');
 
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Menu = goog.require('Blockly.Menu');
-const MenuItem = goog.require('Blockly.MenuItem');
 const Msg = goog.require('Blockly.Msg');
-const Rect = goog.require('Blockly.utils.Rect');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
@@ -36,8 +29,14 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {MenuItem} = goog.require('Blockly.MenuItem');
+const {Menu} = goog.require('Blockly.Menu');
+const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 
@@ -81,14 +80,14 @@ Object.defineProperties(exports, {
   currentBlock: {
     get: function() {
       deprecation.warn(
-        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.getCurrentBlock()');
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
       return getCurrentBlock();
     },
     set: function(block) {
       deprecation.warn(
-        'Blockly.ContextMenu.currentBlock', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.setCurrentBlock(block)');
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
       setCurrentBlock(block);
     },
   },
@@ -210,9 +209,7 @@ const createWidget_ = function(menu) {
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
-      /** @type {!EventTarget} */ (menuDom),
-      'contextmenu',
-      null,
+      /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
       haltPropagation);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
@@ -302,7 +299,7 @@ const commentDeleteOption = function(comment) {
       eventUtils.setGroup(true);
       comment.dispose();
       eventUtils.setGroup(false);
-    }
+    },
   };
   return deleteOption;
 };
@@ -322,7 +319,7 @@ const commentDuplicateOption = function(comment) {
     enabled: true,
     callback: function() {
       clipboard.duplicate(comment);
-    }
+    },
   };
   return duplicateOption;
 };
@@ -349,8 +346,7 @@ const workspaceCommentOption = function(ws, e) {
   const addWsComment = function() {
     const comment = new WorkspaceCommentSvg(
         ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
-        WorkspaceCommentSvg.DEFAULT_SIZE,
-        WorkspaceCommentSvg.DEFAULT_SIZE);
+        WorkspaceCommentSvg.DEFAULT_SIZE, WorkspaceCommentSvg.DEFAULT_SIZE);
 
     const injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they
@@ -386,7 +382,7 @@ const workspaceCommentOption = function(ws, e) {
   const wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
-    enabled: !userAgent.IE
+    enabled: !userAgent.IE,
   };
   wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {

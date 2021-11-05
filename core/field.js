@@ -8,7 +8,6 @@
  * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be FieldTextInput, FieldDropdown, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,43 +19,43 @@
  */
 goog.module('Blockly.Field');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const IRegistrable = goog.require('Blockly.IRegistrable');
-const MarkerManager = goog.require('Blockly.MarkerManager');
-const Rect = goog.require('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
+const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const browserEvents = goog.require('Blockly.browserEvents');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+/* eslint-disable-next-line no-unused-vars */
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -287,7 +286,7 @@ Field.prototype.SERIALIZABLE = false;
  */
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
-  if (typeof tooltip == 'string') {
+  if (typeof tooltip === 'string') {
     tooltip = utils.replaceMessageReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
@@ -382,7 +381,7 @@ Field.prototype.createBorderRect_ = function() {
         'y': 0,
         'height': this.size_.height,
         'width': this.size_.width,
-        'class': 'blocklyFieldRect'
+        'class': 'blocklyFieldRect',
       },
       this.fieldGroup_);
 };
@@ -443,9 +442,10 @@ Field.prototype.toXml = function(fieldElement) {
 /**
  * Saves this fields value as something which can be serialized to JSON. Should
  * only be called by the serialization system.
- * @param {boolean=} _doFullSerialization If true, this signals to the field that
- *     if it normally just saves a reference to some state (eg variable fields)
- *     it should instead serialize the full state of the thing being referenced.
+ * @param {boolean=} _doFullSerialization If true, this signals to the field
+ *     that if it normally just saves a reference to some state (eg variable
+ *     fields) it should instead serialize the full state of the thing being
+ *     referenced.
  * @return {*} JSON serializable state.
  * @package
  */
@@ -482,8 +482,8 @@ Field.prototype.loadState = function(state) {
 Field.prototype.saveLegacyState = function(callingClass) {
   if (callingClass.prototype.saveState === this.saveState &&
       callingClass.prototype.toXml !== this.toXml) {
-    const elem = utilsXml.createElement("field");
-    elem.setAttribute("name", this.name || '');
+    const elem = utilsXml.createElement('field');
+    elem.setAttribute('name', this.name || '');
     const text = Xml.domToText(this.toXml(elem));
     return text.replace(
         ' xmlns="https://developers.google.com/blockly/xml"', '');
@@ -626,7 +626,7 @@ Field.prototype.isVisible = function() {
  * @package
  */
 Field.prototype.setVisible = function(visible) {
-  if (this.visible_ == visible) {
+  if (this.visible_ === visible) {
     return;
   }
   this.visible_ = visible;
@@ -714,7 +714,7 @@ Field.prototype.showEditor = function(opt_e) {
  */
 Field.prototype.updateSize_ = function(opt_margin) {
   const constants = this.getConstants();
-  const xOffset = opt_margin != undefined ?
+  const xOffset = opt_margin !== undefined ?
       opt_margin :
       (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
   let totalWidth = xOffset * 2;
@@ -794,7 +794,7 @@ Field.prototype.getSize = function() {
   if (this.isDirty_) {
     this.render_();
     this.isDirty_ = false;
-  } else if (this.visible_ && this.size_.width == 0) {
+  } else if (this.visible_ && this.size_.width === 0) {
     // If the field is not visible the width will be 0 as well, one of the
     // problems with the old system.
     console.warn(
@@ -1213,4 +1213,4 @@ Field.prototype.updateMarkers_ = function() {
   }
 };
 
-exports = Field;
+exports.Field = Field;

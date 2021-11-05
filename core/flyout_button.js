@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a button in the flyout.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,17 +15,17 @@
  */
 goog.module('Blockly.FlyoutButton');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 const utils = goog.require('Blockly.utils');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -149,7 +148,7 @@ FlyoutButton.prototype.createDom = function() {
           'rx': 4,
           'ry': 4,
           'x': 1,
-          'y': 1
+          'y': 1,
         },
         this.svgGroup_);
   }
@@ -159,7 +158,7 @@ FlyoutButton.prototype.createDom = function() {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelBackground' :
                                  'blocklyFlyoutButtonBackground',
         'rx': 4,
-        'ry': 4
+        'ry': 4,
       },
       this.svgGroup_);
 
@@ -168,7 +167,7 @@ FlyoutButton.prototype.createDom = function() {
         'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0,
         'y': 0,
-        'text-anchor': 'middle'
+        'text-anchor': 'middle',
       },
       this.svgGroup_);
   let text = utils.replaceMessageReferences(this.text_);
@@ -312,31 +311,29 @@ FlyoutButton.prototype.onMouseUp_ = function(e) {
 };
 
 /**
- * CSS for buttons and labels.  See css.js for use.
+ * CSS for buttons and labels. See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
-  '.blocklyFlyoutButton {',
-    'fill: #888;',
-    'cursor: default;',
-  '}',
+Css.register(`
+  .blocklyFlyoutButton {
+    fill: #888;
+    cursor: default;
+  }
 
-  '.blocklyFlyoutButtonShadow {',
-    'fill: #666;',
-  '}',
+  .blocklyFlyoutButtonShadow {
+    fill: #666;
+  }
 
-  '.blocklyFlyoutButton:hover {',
-    'fill: #aaa;',
-  '}',
+  .blocklyFlyoutButton:hover {
+    fill: #aaa;
+  }
 
-  '.blocklyFlyoutLabel {',
-    'cursor: default;',
-  '}',
+  .blocklyFlyoutLabel {
+    cursor: default;
+  }
 
-  '.blocklyFlyoutLabelBackground {',
-    'opacity: 0;',
-  '}',
-  /* eslint-enable indent */
-]);
+  .blocklyFlyoutLabelBackground {
+    opacity: 0;
+  }
+`);
 
-exports = FlyoutButton;
+exports.FlyoutButton = FlyoutButton;

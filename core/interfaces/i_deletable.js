@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that is deletable.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -31,4 +30,4 @@ const IDeletable = function() {};
  */
 IDeletable.prototype.isDeletable;
 
-exports = IDeletable;
+exports.IDeletable = IDeletable;

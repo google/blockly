@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a code comment.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,25 +15,25 @@
  */
 goog.module('Blockly.Comment');
 
-const Bubble = goog.require('Blockly.Bubble');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
 const Css = goog.require('Blockly.Css');
-const Icon = goog.require('Blockly.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Bubble} = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -121,7 +120,7 @@ Comment.prototype.drawIcon_ = function(group) {
         'class': 'blocklyIconSymbol',
         'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
             '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-            '-1.201,0.998 -1.201,1.528 -1.204,2.19z'
+            '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
       },
       group);
   // Dot of question mark.
@@ -131,7 +130,7 @@ Comment.prototype.drawIcon_ = function(group) {
         'x': '6.8',
         'y': '10.78',
         'height': '2',
-        'width': '2'
+        'width': '2',
       },
       group);
 };
@@ -184,7 +183,7 @@ Comment.prototype.createEditor_ = function() {
       });
   this.onChangeWrapper_ =
       browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
-        if (this.cachedText_ != this.model_.text) {
+        if (this.cachedText_ !== this.model_.text) {
           eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
@@ -247,11 +246,11 @@ Comment.prototype.resizeTextarea_ = function() {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Comment.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'comment'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'comment'));
   this.model_.pinned = visible;
   if (visible) {
     this.createBubble_();
@@ -402,12 +401,17 @@ Comment.prototype.dispose = function() {
 /**
  * CSS for block comment.  See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
-  '.blocklyCommentTextarea {', 'background-color: #fef49c;', 'border: 0;',
-  'outline: 0;', 'margin: 0;', 'padding: 3px;', 'resize: none;',
-  'display: block;', 'text-overflow: hidden;', '}'
-  /* eslint-enable indent */
-]);
+Css.register(`
+  .blocklyCommentTextarea {
+    background-color: #fef49c;
+    border: 0;
+    display: block;
+    margin: 0;
+    outline: 0;
+    padding: 3px;
+    resize: none;
+    text-overflow: hidden;
+  }
+`);
 
-exports = Comment;
+exports.Comment = Comment;

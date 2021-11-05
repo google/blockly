@@ -9,7 +9,6 @@
  *      adding dynamic behavior such as onchange handlers and mutators. These
  *      are applied using Block.applyExtension(), or the JSON "extensions"
  *      array attribute.
- * @author Anm@anm.me (Andrew n marshall)
  */
 'use strict';
 
@@ -47,13 +46,13 @@ exports.TEST_ONLY = {allExtensions};
  * @alias Blockly.Extensions.register
  */
 const register = function(name, initFn) {
-  if ((typeof name != 'string') || (name.trim() == '')) {
+  if ((typeof name !== 'string') || (name.trim() === '')) {
     throw Error('Error: Invalid extension name "' + name + '"');
   }
   if (allExtensions[name]) {
     throw Error('Error: Extension "' + name + '" is already registered.');
   }
-  if (typeof initFn != 'function') {
+  if (typeof initFn !== 'function') {
     throw Error('Error: Extension "' + name + '" must be a function');
   }
   allExtensions[name] = initFn;
@@ -69,7 +68,7 @@ exports.register = register;
  * @alias Blockly.Extensions.registerMixin
  */
 const registerMixin = function(name, mixinObj) {
-  if (!mixinObj || typeof mixinObj != 'object') {
+  if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
   }
   register(name, function() {
@@ -96,16 +95,16 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   checkHasMutatorProperties(errorPrefix, mixinObj);
-  var hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
+  const hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
-  if (opt_helperFn && (typeof opt_helperFn != 'function')) {
+  if (opt_helperFn && (typeof opt_helperFn !== 'function')) {
     throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
   register(name, function() {
     if (hasMutatorDialog) {
-      const Mutator = goog.module.get('Blockly.Mutator');
+      const {Mutator} = goog.module.get('Blockly.Mutator');
       if (!Mutator) {
         throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
       }
@@ -127,7 +126,7 @@ exports.registerMutator = registerMutator;
  * @alias Blockly.Extensions.unregister
  */
 const unregister = function(name) {
-  if (allExtensions[name]) {
+  if (isRegistered(name)) {
     delete allExtensions[name];
   } else {
     console.warn(
@@ -135,6 +134,18 @@ const unregister = function(name) {
   }
 };
 exports.unregister = unregister;
+
+/**
+ * Returns whether an extension is registered with the given name.
+ * @param {string} name The name of the extension to check for.
+ * @return {boolean} True if the extension is registered.  False if it is
+ *     not registered.
+ * @alias Blockly.Extensions.isRegistered
+ */
+const isRegistered = function(name) {
+  return !!allExtensions[name];
+};
+exports.isRegistered = isRegistered;
 
 /**
  * Applies an extension method to a block. This should only be called during
@@ -147,7 +158,7 @@ exports.unregister = unregister;
  */
 const apply = function(name, block, isMutator) {
   const extensionFn = allExtensions[name];
-  if (typeof extensionFn != 'function') {
+  if (typeof extensionFn !== 'function') {
     throw Error('Error: Extension "' + name + '" not found.');
   }
   let mutatorProperties;
@@ -206,7 +217,8 @@ const checkNoMutatorProperties = function(mutationName, block) {
  */
 const checkXmlHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object, 'mutationToDom', 'domToMutation', errorPrefix);
+      object.mutationToDom, object.domToMutation,
+      errorPrefix + ' mutationToDom/domToMutation');
 };
 
 /**
@@ -221,7 +233,8 @@ const checkXmlHooks = function(object, errorPrefix) {
  */
 const checkJsonHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object, 'saveExtraState', 'loadExtraState', errorPrefix);
+      object.saveExtraState, object.loadExtraState,
+      errorPrefix + ' saveExtraState/loadExtraState');
 };
 
 /**
@@ -234,39 +247,32 @@ const checkJsonHooks = function(object, errorPrefix) {
  *     not actually a function.
  */
 const checkMutatorDialog = function(object, errorPrefix) {
-  return checkHasFunctionPair(object, 'compose', 'decompose', errorPrefix);
+  return checkHasFunctionPair(
+      object.compose, object.decompose, errorPrefix + ' compose/decompose');
 };
 
 /**
- * Checks that the given object has both or neither of the given functions, and
- * that they are indeed functions.
- * @param {!Object} object The object to check.
- * @param {string} name1 The name of the first function in the pair.
- * @param {string} name2 The name of the second function in the pair.
+ * Checks that both or neither of the given functions exist and that they are
+ * indeed functions.
+ * @param {*} func1 The first function in the pair.
+ * @param {*} func2 The second function in the pair.
  * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions. False if it has
+ * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
  * @throws {Error} If the object has only one of the functions, or either is
  *     not actually a function.
  */
-const checkHasFunctionPair =
-  function(object, name1, name2, errorPrefix) {
-    var has1 = object[name1] !== undefined;
-    var has2 = object[name2] !== undefined;
-
-    if (has1 && has2) {
-      if (typeof object[name1] != 'function') {
-        throw Error(errorPrefix + name1 + ' must be a function.');
-      } else if (typeof object[name2] != 'function') {
-        throw Error(errorPrefix + name2 + ' must be a function.');
-      }
-      return true;
-    } else if (!has1 && !has2) {
-      return false;
+const checkHasFunctionPair = function(func1, func2, errorPrefix) {
+  if (func1 && func2) {
+    if (typeof func1 !== 'function' || typeof func2 !== 'function') {
+      throw Error(errorPrefix + ' must be a function');
     }
-    throw Error(errorPrefix +
-      'Must have both or neither of "' + name1 + '" and "' + name2 + '"');
-  };
+    return true;
+  } else if (!func1 && !func2) {
+    return false;
+  }
+  throw Error(errorPrefix + 'Must have both or neither functions');
+};
 
 /**
  * Checks that the given object required mutator properties.
@@ -274,10 +280,11 @@ const checkHasFunctionPair =
  * @param {!Object} object The object to inspect.
  */
 const checkHasMutatorProperties = function(errorPrefix, object) {
-  var hasXmlHooks = checkXmlHooks(object, errorPrefix);
-  var hasJsonHooks = checkJsonHooks(object, errorPrefix);
+  const hasXmlHooks = checkXmlHooks(object, errorPrefix);
+  const hasJsonHooks = checkJsonHooks(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
-    throw Error(errorPrefix +
+    throw Error(
+        errorPrefix +
         'Mutations must contain either XML hooks, or JSON hooks, or both');
   }
   // A block with a mutator isn't required to have a mutation dialog, but
@@ -326,11 +333,11 @@ const getMutatorProperties = function(block) {
  */
 const mutatorPropertiesMatch = function(oldProperties, block) {
   const newProperties = getMutatorProperties(block);
-  if (newProperties.length != oldProperties.length) {
+  if (newProperties.length !== oldProperties.length) {
     return false;
   }
   for (let i = 0; i < newProperties.length; i++) {
-    if (oldProperties[i] != newProperties[i]) {
+    if (oldProperties[i] !== newProperties[i]) {
       return false;
     }
   }
@@ -365,7 +372,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   // Wait for load, in case Blockly.Msg is not yet populated.
   // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document == 'object') {  // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
       for (let key in lookupTable) {
         // Will print warnings if reference is missing.
@@ -379,7 +386,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
    * @this {Block}
    */
   const extensionFn = function() {
-    if (this.type && blockTypesChecked.indexOf(this.type) == -1) {
+    if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
@@ -387,12 +394,12 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
     this.setTooltip(function() {
       const value = String(this.getFieldValue(dropdownName));
       let tooltip = lookupTable[value];
-      if (tooltip == null) {
-        if (blockTypesChecked.indexOf(this.type) == -1) {
+      if (tooltip === null) {
+        if (blockTypesChecked.indexOf(this.type) === -1) {
           // Warn for missing values on generated tooltips.
           let warning = 'No tooltip mapping for value ' + value + ' of field ' +
               dropdownName;
-          if (this.type != null) {
+          if (this.type !== null) {
             warning += (' of block type ' + this.type);
           }
           console.warn(warning + '.');
@@ -419,9 +426,9 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   const dropdown = block.getField(dropdownName);
   if (!dropdown.isOptionListDynamic()) {
     const options = dropdown.getOptions();
-    for (let i = 0; i < options.length; ++i) {
+    for (let i = 0; i < options.length; i++) {
       const optionKey = options[i][1];  // label, then value
-      if (lookupTable[optionKey] == null) {
+      if (lookupTable[optionKey] === null) {
         console.warn(
             'No tooltip mapping for value ' + optionKey + ' of field ' +
             dropdownName + ' of block type ' + block.type);
@@ -445,7 +452,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Wait for load, in case Blockly.Msg is not yet populated.
   // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document == 'object') {  // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
       utils.checkMessageReferences(msgTemplate);

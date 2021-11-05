@@ -7,7 +7,6 @@
 /**
  * @fileoverview (Deprecated) Events fired as a result of UI actions in
  * Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -18,12 +17,12 @@
  */
 goog.module('Blockly.Events.Ui');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -44,9 +43,9 @@ const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   Ui.superClass_.constructor.call(this, workspaceId);
 
   this.blockId = opt_block ? opt_block.id : null;
-  this.element = typeof opt_element == 'undefined' ? '' : opt_element;
-  this.oldValue = typeof opt_oldValue == 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue == 'undefined' ? '' : opt_newValue;
+  this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+  this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
+  this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
 };
 object.inherits(Ui, UiBase);
 
@@ -85,4 +84,4 @@ Ui.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 
-exports = Ui;
+exports.Ui = Ui;

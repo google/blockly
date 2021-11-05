@@ -8,7 +8,6 @@
  * @fileoverview ARIA-related constants and utilities.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -69,7 +68,7 @@ const Role = {
   TREE: 'tree',
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
-  TREEITEM: 'treeitem'
+  TREEITEM: 'treeitem',
 };
 exports.Role = Role;
 
@@ -136,7 +135,7 @@ const State = {
   VALUEMAX: 'valuemax',
 
   // ARIA property for slider minimum value. Value: number.
-  VALUEMIN: 'valuemin'
+  VALUEMIN: 'valuemin',
 };
 exports.State = State;
 

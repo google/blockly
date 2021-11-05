@@ -40,7 +40,7 @@ suite('Tooltip', function() {
       delete Blockly.Blocks["test_block"];
     });
 
-    var tooltipText = 'testTooltip';
+    let tooltipText = 'testTooltip';
 
     function assertTooltip(obj) {
       chai.assert.equal(obj.getTooltip(), tooltipText);

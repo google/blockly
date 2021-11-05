@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Bootstrap code to load Blockly in uncompiled mode.
- * @author cpcallen@google.com (Christopher Allen)
  */
 'use strict';
 

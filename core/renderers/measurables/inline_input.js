@@ -7,7 +7,6 @@
 /**
  * @fileoverview Class representing inline inputs with connections on a rendered
  * block.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -17,13 +16,13 @@
  */
 goog.module('Blockly.blockRendering.InlineInput');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -68,4 +67,4 @@ const InlineInput = function(constants, input) {
 };
 object.inherits(InlineInput, InputConnection);
 
-exports = InlineInput;
+exports.InlineInput = InlineInput;

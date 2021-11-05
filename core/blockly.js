@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The top level namespace used to access the Blockly library.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -17,117 +16,20 @@
 goog.module('Blockly');
 goog.module.declareLegacyNamespace();
 
-const BlocklyOptions = goog.require('Blockly.BlocklyOptions');
-const Bubble = goog.require('Blockly.Bubble');
-const BubbleDragger = goog.require('Blockly.BubbleDragger');
-const CollapsibleToolboxCategory = goog.require('Blockly.CollapsibleToolboxCategory');
-const Comment = goog.require('Blockly.Comment');
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const ConnectionChecker = goog.require('Blockly.ConnectionChecker');
-const ConnectionDB = goog.require('Blockly.ConnectionDB');
-const Connection = goog.require('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuItems = goog.require('Blockly.ContextMenuItems');
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
 const Css = goog.require('Blockly.Css');
-const DeleteArea = goog.require('Blockly.DeleteArea');
-const DragTarget = goog.require('Blockly.DragTarget');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
-const Field = goog.require('Blockly.Field');
-const FieldAngle = goog.require('Blockly.FieldAngle');
-const FieldCheckbox = goog.require('Blockly.FieldCheckbox');
-const FieldColour = goog.require('Blockly.FieldColour');
-const FieldDropdown = goog.require('Blockly.FieldDropdown');
-const FieldImage = goog.require('Blockly.FieldImage');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-const FieldLabelSerializable = goog.require('Blockly.FieldLabelSerializable');
-const FieldMultilineInput = goog.require('Blockly.FieldMultilineInput');
-const FieldNumber = goog.require('Blockly.FieldNumber');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const FieldVariable = goog.require('Blockly.FieldVariable');
-const Flyout = goog.require('Blockly.Flyout');
-const FlyoutButton = goog.require('Blockly.FlyoutButton');
-const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
-const Generator = goog.require('Blockly.Generator');
-const Gesture = goog.require('Blockly.Gesture');
-const Grid = goog.require('Blockly.Grid');
-const HorizontalFlyout = goog.require('Blockly.HorizontalFlyout');
-const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
-const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
-const IASTNodeLocationWithBlock = goog.require('Blockly.IASTNodeLocationWithBlock');
-const IAutoHideable = goog.require('Blockly.IAutoHideable');
-const IBlockDragger = goog.require('Blockly.IBlockDragger');
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
-const IBubble = goog.require('Blockly.IBubble');
-const ICollapsibleToolboxItem = goog.require('Blockly.ICollapsibleToolboxItem');
-const IComponent = goog.require('Blockly.IComponent');
-const IConnectionChecker = goog.require('Blockly.IConnectionChecker');
-const IContextMenu = goog.require('Blockly.IContextMenu');
-const Icon = goog.require('Blockly.Icon');
-const ICopyable = goog.require('Blockly.ICopyable');
-const IDeletable = goog.require('Blockly.IDeletable');
-const IDeleteArea = goog.require('Blockly.IDeleteArea');
-const IDragTarget = goog.require('Blockly.IDragTarget');
-const IDraggable = goog.require('Blockly.IDraggable');
-const IFlyout = goog.require('Blockly.IFlyout');
-const IKeyboardAccessible = goog.require('Blockly.IKeyboardAccessible');
-const IMetricsManager = goog.require('Blockly.IMetricsManager');
-const IMovable = goog.require('Blockly.IMovable');
-const Input = goog.require('Blockly.Input');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-const IPositionable = goog.require('Blockly.IPositionable');
-const IRegistrable = goog.require('Blockly.IRegistrable');
-const IRegistrableField = goog.require('Blockly.IRegistrableField');
-const ISelectable = goog.require('Blockly.ISelectable');
-const ISelectableToolboxItem = goog.require('Blockly.ISelectableToolboxItem');
-const IStyleable = goog.require('Blockly.IStyleable');
-const IToolbox = goog.require('Blockly.IToolbox');
-const IToolboxItem = goog.require('Blockly.IToolboxItem');
-const Marker = goog.require('Blockly.Marker');
-const MarkerManager = goog.require('Blockly.MarkerManager');
-const Menu = goog.require('Blockly.Menu');
-const MenuItem = goog.require('Blockly.MenuItem');
-const MetricsManager = goog.require('Blockly.MetricsManager');
-const Mutator = goog.require('Blockly.Mutator');
-const Names = goog.require('Blockly.Names');
-const Options = goog.require('Blockly.Options');
 const Procedures = goog.require('Blockly.Procedures');
-const RenderedConnection = goog.require('Blockly.RenderedConnection');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
 const ShortcutItems = goog.require('Blockly.ShortcutItems');
-const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
-const Size = goog.require('Blockly.utils.Size');
-const TabNavigateCursor = goog.require('Blockly.TabNavigateCursor');
-const Theme = goog.require('Blockly.Theme');
 const Themes = goog.require('Blockly.Themes');
-const ThemeManager = goog.require('Blockly.ThemeManager');
-const Toolbox = goog.require('Blockly.Toolbox');
-const ToolboxCategory = goog.require('Blockly.ToolboxCategory');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
-const ToolboxSeparator = goog.require('Blockly.ToolboxSeparator');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
-const TouchGesture = goog.require('Blockly.TouchGesture');
-const Trashcan = goog.require('Blockly.Trashcan');
-const VariableMap = goog.require('Blockly.VariableMap');
-const VariableModel = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
 const VariablesDynamic = goog.require('Blockly.VariablesDynamic');
-const VerticalFlyout = goog.require('Blockly.VerticalFlyout');
-const Warning = goog.require('Blockly.Warning');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Workspace = goog.require('Blockly.Workspace');
-const WorkspaceAudio = goog.require('Blockly.WorkspaceAudio');
-const WorkspaceComment = goog.require('Blockly.WorkspaceComment');
-const WorkspaceCommentSvg = goog.require('Blockly.WorkspaceCommentSvg');
-const WorkspaceDragSurfaceSvg = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
-const ZoomControls = goog.require('Blockly.ZoomControls');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blockRendering = goog.require('Blockly.blockRendering');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -140,8 +42,6 @@ const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const geras = goog.require('Blockly.geras');
-const inject = goog.require('Blockly.inject');
-const inputTypes = goog.require('Blockly.inputTypes');
 const internalConstants = goog.require('Blockly.internalConstants');
 const minimalist = goog.require('Blockly.minimalist');
 const registry = goog.require('Blockly.registry');
@@ -152,14 +52,113 @@ const utils = goog.require('Blockly.utils');
 const zelos = goog.require('Blockly.zelos');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
-const {Block} = goog.require('Blockly.Block');
-const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+const {BlockDragger} = goog.require('Blockly.BlockDragger');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
+const {BlocklyOptions} = goog.require('Blockly.BlocklyOptions');
 const {Blocks} = goog.require('Blockly.blocks');
+const {Block} = goog.require('Blockly.Block');
+const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
+const {Bubble} = goog.require('Blockly.Bubble');
+const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
+const {Comment} = goog.require('Blockly.Comment');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
+const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Connection} = goog.require('Blockly.Connection');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Cursor} = goog.require('Blockly.Cursor');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
+const {DragTarget} = goog.require('Blockly.DragTarget');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {FieldAngle} = goog.require('Blockly.FieldAngle');
+const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
+const {FieldColour} = goog.require('Blockly.FieldColour');
+const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
+const {FieldImage} = goog.require('Blockly.FieldImage');
+const {FieldLabelSerializable} = goog.require('Blockly.FieldLabelSerializable');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const {FieldMultilineInput} = goog.require('Blockly.FieldMultilineInput');
+const {FieldNumber} = goog.require('Blockly.FieldNumber');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {FieldVariable} = goog.require('Blockly.FieldVariable');
+const {Field} = goog.require('Blockly.Field');
+const {FlyoutButton} = goog.require('Blockly.FlyoutButton');
+const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
+const {Flyout} = goog.require('Blockly.Flyout');
+const {Generator} = goog.require('Blockly.Generator');
+const {Gesture} = goog.require('Blockly.Gesture');
+const {Grid} = goog.require('Blockly.Grid');
+const {HorizontalFlyout} = goog.require('Blockly.HorizontalFlyout');
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
+const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+const {IBubble} = goog.require('Blockly.IBubble');
+const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
+const {IComponent} = goog.require('Blockly.IComponent');
+const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
+const {IContextMenu} = goog.require('Blockly.IContextMenu');
+const {ICopyable} = goog.require('Blockly.ICopyable');
+const {IDeletable} = goog.require('Blockly.IDeletable');
+const {IDeleteArea} = goog.require('Blockly.IDeleteArea');
+const {IDragTarget} = goog.require('Blockly.IDragTarget');
+const {IDraggable} = goog.require('Blockly.IDraggable');
+const {IFlyout} = goog.require('Blockly.IFlyout');
+const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+const {IMetricsManager} = goog.require('Blockly.IMetricsManager');
+const {IMovable} = goog.require('Blockly.IMovable');
+const {IPositionable} = goog.require('Blockly.IPositionable');
+const {IRegistrableField} = goog.require('Blockly.IRegistrableField');
+const {IRegistrable} = goog.require('Blockly.IRegistrable');
+const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
+const {ISelectable} = goog.require('Blockly.ISelectable');
+const {IStyleable} = goog.require('Blockly.IStyleable');
+const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
+const {IToolbox} = goog.require('Blockly.IToolbox');
+const {Icon} = goog.require('Blockly.Icon');
+const {Input} = goog.require('Blockly.Input');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
+const {Marker} = goog.require('Blockly.Marker');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
+const {MenuItem} = goog.require('Blockly.MenuItem');
+const {Menu} = goog.require('Blockly.Menu');
+const {MetricsManager} = goog.require('Blockly.MetricsManager');
+const {Mutator} = goog.require('Blockly.Mutator');
+const {Names} = goog.require('Blockly.Names');
+const {Options} = goog.require('Blockly.Options');
+const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+const {Size} = goog.require('Blockly.utils.Size');
+const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
+const {ThemeManager} = goog.require('Blockly.ThemeManager');
+const {Theme} = goog.require('Blockly.Theme');
+const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
+const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
+const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
+const {Toolbox} = goog.require('Blockly.Toolbox');
+const {TouchGesture} = goog.require('Blockly.TouchGesture');
+const {Trashcan} = goog.require('Blockly.Trashcan');
+const {VariableMap} = goog.require('Blockly.VariableMap');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+const {VerticalFlyout} = goog.require('Blockly.VerticalFlyout');
+const {Warning} = goog.require('Blockly.Warning');
+const {WorkspaceAudio} = goog.require('Blockly.WorkspaceAudio');
+const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
+const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
+const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
+const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
+const {ZoomControls} = goog.require('Blockly.ZoomControls');
 const {globalThis} = goog.require('Blockly.utils.global');
+const {inject} = goog.require('Blockly.inject');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -170,16 +169,6 @@ goog.require('Blockly.Events.Ui');
 goog.require('Blockly.Events.UiBase');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
-/** @suppress {extraRequire} */
-goog.require('Blockly.inject');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Procedures');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Touch');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Variables');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Xml');
 
 
 /**
@@ -217,7 +206,7 @@ Object.defineProperties(exports, {
           'Blockly.alert', 'September 2021', 'September 2022',
           'Blockly.dialog.alert()');
       return dialog.alert;
-    }
+    },
   },
   /**
    * Wrapper to window.confirm() that app developers may override to
@@ -238,7 +227,7 @@ Object.defineProperties(exports, {
           'Blockly.confirm', 'September 2021', 'September 2022',
           'Blockly.dialog.confirm()');
       return dialog.confirm;
-    }
+    },
   },
   /**
    * The main workspace most recently used.
@@ -260,7 +249,7 @@ Object.defineProperties(exports, {
           'Blockly.mainWorkspace', 'September 2021', 'September 2022',
           'Blockly.getMainWorkspace()');
       return common.getMainWorkspace();
-    }
+    },
   },
   /**
    * Wrapper to window.prompt() that app developers may override to
@@ -284,7 +273,7 @@ Object.defineProperties(exports, {
           'Blockly.prompt', 'September 2021', 'September 2022',
           'Blockly.dialog.prompt()');
       return dialog.prompt;
-    }
+    },
   },
   /**
    * Currently selected block.
@@ -306,7 +295,7 @@ Object.defineProperties(exports, {
           'Blockly.selected', 'September 2021', 'September 2022',
           'Blockly.common.setSelected()');
       common.setSelected(newSelection);
-    }
+    },
   },
 });
 
@@ -413,7 +402,7 @@ const defineBlocksWithJsonArray = function(jsonArray) {
           'Skipping.');
     } else {
       const typename = elem.type;
-      if (typename == null || typename === '') {
+      if (!typename) {
         console.warn(
             'Block definition #' + i +
             ' in JSON array is missing a type attribute. Skipping.');
@@ -459,7 +448,7 @@ exports.setParentContainer = common.setParentContainer;
  * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
  * @alias Blockly.hueToHex
  */
- exports.hueToHex = colour.hueToHex;
+exports.hueToHex = colour.hueToHex;
 
 /**
  * @see browserEvents.bind
@@ -500,7 +489,7 @@ exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
 /**
  * @see common.svgResize
  */
- exports.svgResize = common.svgResize;
+exports.svgResize = common.svgResize;
 
 /**
  * Aliases for constants used for connection and input types.
@@ -743,7 +732,23 @@ exports.zelos = zelos;
 // declareLegacyNamespace only copies normal data properties, not
 // accessors.  This can be removed once all remaining calls to
 // declareLegacyNamspace have been removed.
-if (globalThis.Blockly && typeof globalThis.Blockly === 'object') {
+//
+// This is only needed in uncompiled mode (see
+// google/blockly-samples#902); in compiled mode the exports object is
+// already the value of globalThis.Blockly.  Because
+// closure/goog/base.js is not included in the compiler input, we
+// can't use goog.global['COMPILED'] to check if we are running in
+// compiled mode.  Instead, use existence of globalThis.goog itself
+// for this purpose.
+//
+// Note that this code will still attempt to redefine accessors on a
+// previously-imported copy of the Blockly library if both are
+// imported in uncompiled mode.  This will fail with TypeError as the
+// accessors are nonconfigurable (which is good, as otherwise one
+// accessors on one copy would call get/set functions on the other
+// copy!)
+if (globalThis.goog && globalThis.Blockly &&
+    typeof globalThis.Blockly === 'object' && globalThis.Blockly !== exports) {
   const descriptors = Object.getOwnPropertyDescriptors(exports);
   const accessors = {};
   for (const key in descriptors) {

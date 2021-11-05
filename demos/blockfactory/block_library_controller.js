@@ -14,7 +14,6 @@
  *  - clear their block library
  * Depends on BlockFactory functions defined in factory.js.
  *
- * @author quachtina96 (Tina Quach)
  */
 'use strict';
 
@@ -111,7 +110,7 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
   // If user has not changed the name of the starter block.
-  if (blockType == 'block_type') {
+  if (blockType === 'block_type') {
     // Do not save block if it has the default type, 'block_type'.
     var msg = 'You cannot save a block under the name "block_type". Try ' +
         'changing the name before saving. Then, click on the "Block Library"' +
@@ -151,7 +150,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
  */
 BlockLibraryController.prototype.has = function(blockType) {
   var blockLibrary = this.storage.blocks;
-  return (blockType in blockLibrary && blockLibrary[blockType] != null);
+  return (blockType in blockLibrary && blockLibrary[blockType] !== null);
 };
 
 /**

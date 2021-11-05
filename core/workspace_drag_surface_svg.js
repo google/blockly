@@ -9,7 +9,6 @@
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS translation instead of SVG so the
  * blocks are never repainted during drag improving performance.
- * @author katelyn@google.com (Katelyn Mann)
  */
 
 'use strict';
@@ -23,11 +22,11 @@
  */
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -79,7 +78,7 @@ WorkspaceDragSurfaceSvg.prototype.createDom = function() {
         'xmlns:html': dom.HTML_NS,
         'xmlns:xlink': dom.XLINK_NS,
         'version': '1.1',
-        'class': 'blocklyWsDragSurface blocklyOverflowVisible'
+        'class': 'blocklyWsDragSurface blocklyOverflowVisible',
       },
       null);
   this.container_.appendChild(this.SVG_);
@@ -138,7 +137,7 @@ WorkspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 
   // If there is a previous sibling, put the blockCanvas back right afterwards,
   // otherwise insert it as the first child node in newSurface.
-  if (this.previousSibling_ != null) {
+  if (this.previousSibling_ !== null) {
     dom.insertAfter(blockCanvas, this.previousSibling_);
   } else {
     newSurface.insertBefore(blockCanvas, newSurface.firstChild);
@@ -185,4 +184,4 @@ WorkspaceDragSurfaceSvg.prototype.setContentsAndShow = function(
   this.SVG_.style.display = 'block';
 };
 
-exports = WorkspaceDragSurfaceSvg;
+exports.WorkspaceDragSurfaceSvg = WorkspaceDragSurfaceSvg;

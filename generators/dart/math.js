@@ -172,18 +172,58 @@ Blockly.Dart['math_constant'] = function(block) {
 Blockly.Dart['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const number_to_check = Blockly.Dart.valueToCode(block, 'NUMBER_TO_CHECK',
-      Blockly.Dart.ORDER_MULTIPLICATIVE);
-  if (!number_to_check) {
-    return ['false', Blockly.Dart.ORDER_ATOMIC];
-  }
-  const dropdown_property = block.getFieldValue('PROPERTY');
-  let code;
-  if (dropdown_property === 'PRIME') {
+  const PROPERTIES = {
+
+    'EVEN': [' % 2 == 0', Blockly.Dart.ORDER_MULTIPLICATIVE,
+
+        Blockly.Dart.ORDER_EQUALITY],
+
+    'ODD': [' % 2 == 1', Blockly.Dart.ORDER_MULTIPLICATIVE,
+
+        Blockly.Dart.ORDER_EQUALITY],
+
+    'WHOLE': [' % 1 == 0', Blockly.Dart.ORDER_MULTIPLICATIVE,
+
+        Blockly.Dart.ORDER_EQUALITY],
+
+    'POSITIVE': [' > 0', Blockly.Dart.ORDER_RELATIONAL,
+
+        Blockly.Dart.ORDER_RELATIONAL],
+
+    'NEGATIVE': [' < 0', Blockly.Dart.ORDER_RELATIONAL,
+
+        Blockly.Dart.ORDER_RELATIONAL],
+
+    'DIVISIBLE_BY': [null, Blockly.Dart.ORDER_MULTIPLICATIVE,
+
+        Blockly.Dart.ORDER_EQUALITY],
+
+    'PRIME': [null, Blockly.Dart.ORDER_NONE,
+
+        Blockly.Dart.ORDER_UNARY_POSTFIX]
+
+  } 
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+
+  const tuple = PROPERTIES[dropdownProperty];
+
+  const suffix = tuple[0];
+
+  const inputOrder = tuple[1];
+
+  const outputOrder = tuple[2];
+
+  const numberToCheck = Blockly.Dart.valueToCode(block, 'NUMBER_TO_CHECK',
+
+      inputOrder) || '0';
+
+      let code;
+
+  if (dropdownProperty == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
-    const functionName = Blockly.Dart.provideFunction_(
+        const functionName = Blockly.Dart.provideFunction_(
         'math_isPrime',
         ['bool ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
@@ -204,35 +244,25 @@ Blockly.Dart['math_number_property'] = function(block) {
          '  }',
          '  return true;',
          '}']);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+
+    code = functionName + '(' + numberToCheck + ')';
+
+  } else if (dropdownProperty == 'DIVISIBLE_BY') {
+
+    const divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
+
+        Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
+
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+
+  } else {
+
+    code = numberToCheck + suffix;
+
   }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 == 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 == 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 == 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY':
-      const divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
-          Blockly.Dart.ORDER_MULTIPLICATIVE);
-      if (!divisor) {
-        return ['false', Blockly.Dart.ORDER_ATOMIC];
-      }
-      code = number_to_check + ' % ' + divisor + ' == 0';
-      break;
-  }
-  return [code, Blockly.Dart.ORDER_EQUALITY];
+
+  return [code, outputOrder];
+
 };
 
 Blockly.Dart['math_change'] = function(block) {

@@ -75,12 +75,11 @@ function workspaceToSvg_(workspace, callback, customCss) {
   svg.setAttribute("style", 'background-color: transparent');
 
   const css = [].slice.call(document.head.querySelectorAll('style'))
-      .filter(function(el) {
-        return /\.blocklySvg/.test(el.innerText) ||
-        (el.id.indexOf('blockly-') === 0);
-      }).map(function(el) {
-        return el.innerText;
-      }).join('\n');
+                  .filter(
+                      (el) => /\.blocklySvg/.test(el.innerText) ||
+                          (el.id.indexOf('blockly-') === 0))
+                  .map((el) => el.innerText)
+                  .join('\n');
   const style = document.createElement('style');
   style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);

@@ -427,7 +427,7 @@ function test_constant() {
 
 function mathIsPrime(n) {
   // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
-  if (n === 2 || n === 3) {
+  if (n == 2 || n == 3) {
     return true;
   }
   // False if n is NaN, negative, is 1, or not whole.

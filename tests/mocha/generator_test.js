@@ -66,8 +66,8 @@ suite('Generator', function() {
         "output": null,
         "nextStatement": null
       }]);
-      let rowBlock = this.workspace.newBlock('row_block');
-      let stackBlock = this.workspace.newBlock('stack_block');
+      const rowBlock = this.workspace.newBlock('row_block');
+      const stackBlock = this.workspace.newBlock('stack_block');
 
       this.blockToCodeTest = function(
           generator, blockDisabled, opt_thisOnly,
@@ -77,12 +77,12 @@ suite('Generator', function() {
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
         rowBlock.disabled = blockDisabled;
 
-        let code = generator.blockToCode(rowBlock, opt_thisOnly);
+        const code = generator.blockToCode(rowBlock, opt_thisOnly);
         chai.assert.equal(code, expectedCode, opt_message);
       };
     });
 
-    let testCase = [
+    const testCase = [
       [Blockly.Dart, 'Dart'],
       [Blockly.JavaScript, 'JavaScript'],
       [Blockly.Lua, 'Lua'],
@@ -91,8 +91,8 @@ suite('Generator', function() {
 
     suite('Trivial', function() {
       testCase.forEach(function(testCase) {
-        let generator = testCase[0];
-        let name = testCase[1];
+        const generator = testCase[0];
+        const name = testCase[1];
         test(name, function() {
           generator.init(this.workspace);
           this.blockToCodeTest(generator, false, true, 'row_block');
@@ -104,8 +104,8 @@ suite('Generator', function() {
 
     suite('Disabled block', function() {
       testCase.forEach(function(testCase) {
-        let generator = testCase[0];
-        let name = testCase[1];
+        const generator = testCase[0];
+        const name = testCase[1];
         test(name, function() {
           this.blockToCodeTest(generator, true, true, '');
           this.blockToCodeTest(generator, true, false, 'stack_block', 'thisOnly=false');
@@ -126,9 +126,9 @@ suite('Generator', function() {
           "previousStatement": null,
           "nextStatement": null
         }]);
-        let blockA = this.workspace.newBlock('test_loop_block');
-        let blockB = this.workspace.newBlock('test_loop_block');
-        let blockC = this.workspace.newBlock('test_loop_block');
+        const blockA = this.workspace.newBlock('test_loop_block');
+        const blockB = this.workspace.newBlock('test_loop_block');
+        const blockC = this.workspace.newBlock('test_loop_block');
         this.loopTest = function(
             generator, opt_thisOnly, expectedCode, opt_message) {
           generator.test_loop_block = function(block){
@@ -137,14 +137,14 @@ suite('Generator', function() {
           blockA.getInput('DO').connection.connect(blockB.previousConnection);
           blockA.nextConnection.connect(blockC.previousConnection);
 
-          let code = generator.blockToCode(blockA, opt_thisOnly);
+          const code = generator.blockToCode(blockA, opt_thisOnly);
           chai.assert.equal(code, expectedCode, opt_message);
         };
       });
 
       testCase.forEach(function(testCase) {
-        let generator = testCase[0];
-        let name = testCase[1];
+        const generator = testCase[0];
+        const name = testCase[1];
         test(name, function() {
           this.loopTest(generator, true, '{  {}}');
           this.loopTest(generator, false, '{  {}}{}', 'thisOnly=false');

@@ -20,7 +20,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -28,7 +28,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let validValueTestCases = [
+  const validValueTestCases = [
     {title: 'String', value: 'value', expectedValue: 'value'},
     {title: 'Boolean true', value: true, expectedValue: 'true'},
     {title: 'Boolean false', value: false, expectedValue: 'false'},
@@ -36,7 +36,7 @@ suite('Text Input Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  let addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -47,12 +47,12 @@ suite('Text Input Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  let defaultFieldValue = '';
+  const defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldTextInput} field The field to check.
    */
-  let assertFieldDefault = function(field) {
+  const assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue);
   };
   /**
@@ -60,7 +60,7 @@ suite('Text Input Fields', function() {
    * @param {!Blockly.FieldTextInput} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  let validTestCaseAssertField = function(field, testCase) {
+  const validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue);
   };
 
@@ -86,7 +86,7 @@ suite('Text Input Fields', function() {
       });
     });
     suite('Value -> New Value', function() {
-      let initialValue = 'oldValue';
+      const initialValue = 'oldValue';
       setup(function() {
         this.field = new Blockly.FieldTextInput(initialValue);
       });
@@ -111,7 +111,7 @@ suite('Text Input Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    let testSuites = [
+    const testSuites = [
       {title: 'Null Validator',
         validator:
             function() {
@@ -151,7 +151,7 @@ suite('Text Input Fields', function() {
     suite('Spellcheck', function() {
       setup(function() {
         this.prepField = function(field) {
-          let workspace = {
+          const workspace = {
             getScale: function() {
               return 1;
             },
@@ -190,29 +190,29 @@ suite('Text Input Fields', function() {
         }
       });
       test('Default', function() {
-        let field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         this.assertSpellcheck(field, true);
       });
       test('JS Constructor', function() {
-        let field = new Blockly.FieldTextInput('test', null, {
+        const field = new Blockly.FieldTextInput('test', null, {
           spellcheck: false
         });
         this.assertSpellcheck(field, false);
       });
       test('JSON Definition', function() {
-        let field = Blockly.FieldTextInput.fromJson({
+        const field = Blockly.FieldTextInput.fromJson({
           text: 'test',
           spellcheck: false
         });
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Hidden', function() {
-        let field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         field.setSpellcheck(false);
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Shown', function() {
-        let field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         this.prepField(field);
         field.showEditor_();
         field.setSpellcheck(false);

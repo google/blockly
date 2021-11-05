@@ -204,8 +204,8 @@ suite('InsertionMarkers', function() {
   });
   suite('Serialization', function() {
     setup(function() {
-      this.assertXml = function(xml, expectXml) {
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
+      this.assertXml = function(xmlIn, expectXml) {
+        Blockly.Xml.domToWorkspace(xmlIn, this.workspace);
         let block = this.workspace.getBlockById('insertion');
         block.setInsertionMarker(true);
         let xml = Blockly.Xml.workspaceToDom(this.workspace);

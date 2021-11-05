@@ -407,7 +407,6 @@ suite('Toolbox', function() {
 
     function testHideFlyout(toolbox, oldItem, newItem) {
       let updateFlyoutStub = sinon.stub(toolbox.flyout_, 'hide');
-      const newItem = getNonCollapsibleItem(toolbox);
       toolbox.updateFlyout_(oldItem, newItem);
       sinon.assert.called(updateFlyoutStub);
     }

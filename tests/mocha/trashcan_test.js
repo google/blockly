@@ -16,12 +16,12 @@ suite("Trashcan", function() {
         '<xml xmlns="https://developers.google.com/blockly/xml">' +
         xmlString + '</xml>');
     xml = xml.children[0];
-    let block = Blockly.Xml.domToBlock(xml, workspace);
-    let event = new Blockly.Events.BlockDelete(block);
+    const block = Blockly.Xml.domToBlock(xml, workspace);
+    const event = new Blockly.Events.BlockDelete(block);
     eventUtils.fire(event);
   }
   function fireNonDeleteEvent(workspace, oldXml) {
-    let event = new Blockly.Events.Abstract();
+    const event = new Blockly.Events.Abstract();
     event.type = 'test_field_block';
     event.workspaceId = workspace.id;
     if (oldXml) {
@@ -86,7 +86,7 @@ suite("Trashcan", function() {
       fireDeleteEvent(this.workspace, '<block type="test_field_block"/>');
       chai.assert.equal(this.trashcan.contents_.length, 1);
       // Stub flyout interaction.
-      let showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
+      const showFlyoutStub = sinon.stub(this.trashcan.flyout, "show");
 
       simulateClick(this.trashcan.svgGroup_);
 
@@ -101,7 +101,7 @@ suite("Trashcan", function() {
     test("Click outside trashcan - fires trashcanClose", function() {
       sinon.stub(this.trashcan.flyout, 'isVisible').returns(true);
       // Stub flyout interaction.
-      let hideFlyoutStub = sinon.stub(this.trashcan.flyout, "hide");
+      const hideFlyoutStub = sinon.stub(this.trashcan.flyout, "hide");
 
       simulateClick(this.workspace.svgGroup_);
 

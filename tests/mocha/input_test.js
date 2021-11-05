@@ -39,13 +39,13 @@ suite('Inputs', function() {
   suite('Insert Field At', function() {
     suite('Index Bounds', function() {
       test('< 0', function() {
-        let field = new Blockly.FieldLabel('field');
+        const field = new Blockly.FieldLabel('field');
         chai.assert.throws(function() {
           this.dummy.insertFieldAt(-1, field);
         });
       });
       test('> length', function() {
-        let field = new Blockly.FieldLabel('field');
+        const field = new Blockly.FieldLabel('field');
         chai.assert.throws(function() {
           this.dummy.insertFieldAt(1, field);
         });
@@ -54,7 +54,7 @@ suite('Inputs', function() {
     suite('Values', function() {
       // We're mostly just testing that it doesn't throw errors.
       test('Field', function() {
-        let field = new Blockly.FieldLabel('field');
+        const field = new Blockly.FieldLabel('field');
         this.dummy.insertFieldAt(0, field);
         chai.assert.equal(this.dummy.fieldRow[0], field);
       });
@@ -91,25 +91,25 @@ suite('Inputs', function() {
     });
     suite('Prefixes and Suffixes', function() {
       test('Prefix', function() {
-        let field = new Blockly.FieldLabel('field');
-        let prefix = new Blockly.FieldLabel('prefix');
+        const field = new Blockly.FieldLabel('field');
+        const prefix = new Blockly.FieldLabel('prefix');
         field.prefixField = prefix;
 
         this.dummy.appendField(field);
         chai.assert.deepEqual(this.dummy.fieldRow, [prefix, field]);
       });
       test('Suffix', function() {
-        let field = new Blockly.FieldLabel('field');
-        let suffix = new Blockly.FieldLabel('suffix');
+        const field = new Blockly.FieldLabel('field');
+        const suffix = new Blockly.FieldLabel('suffix');
         field.suffixField = suffix;
 
         this.dummy.appendField(field);
         chai.assert.deepEqual(this.dummy.fieldRow, [field, suffix]);
       });
       test('Prefix and Suffix', function() {
-        let field = new Blockly.FieldLabel('field');
-        let prefix = new Blockly.FieldLabel('prefix');
-        let suffix = new Blockly.FieldLabel('suffix');
+        const field = new Blockly.FieldLabel('field');
+        const prefix = new Blockly.FieldLabel('prefix');
+        const suffix = new Blockly.FieldLabel('suffix');
         field.prefixField = prefix;
         field.suffixField = suffix;
 
@@ -117,7 +117,7 @@ suite('Inputs', function() {
         chai.assert.deepEqual(this.dummy.fieldRow, [prefix, field, suffix]);
       });
       test('Dropdown - Prefix', function() {
-        let field = new Blockly.FieldDropdown(
+        const field = new Blockly.FieldDropdown(
             [
               ['prefix option1', 'OPTION1'],
               ['prefix option2', 'OPTION2']
@@ -128,7 +128,7 @@ suite('Inputs', function() {
         chai.assert.equal(this.dummy.fieldRow.length, 2);
       });
       test('Dropdown - Suffix', function() {
-        let field = new Blockly.FieldDropdown(
+        const field = new Blockly.FieldDropdown(
             [
               ['option1 suffix', 'OPTION1'],
               ['option2 suffix', 'OPTION2']
@@ -139,7 +139,7 @@ suite('Inputs', function() {
         chai.assert.equal(this.dummy.fieldRow.length, 2);
       });
       test('Dropdown - Prefix and Suffix', function() {
-        let field = new Blockly.FieldDropdown(
+        const field = new Blockly.FieldDropdown(
             [
               ['prefix option1 suffix', 'OPTION1'],
               ['prefix option2 suffix', 'OPTION2']
@@ -152,9 +152,9 @@ suite('Inputs', function() {
     });
     suite('Field Initialization', function() {
       test('Rendered', function() {
-        let field = new Blockly.FieldLabel('field');
-        let setBlockSpy = sinon.spy(field, 'setSourceBlock');
-        let initSpy = sinon.spy(field, 'init');
+        const field = new Blockly.FieldLabel('field');
+        const setBlockSpy = sinon.spy(field, 'setSourceBlock');
+        const initSpy = sinon.spy(field, 'init');
 
         this.dummy.insertFieldAt(0, field);
         sinon.assert.calledOnce(setBlockSpy);
@@ -169,9 +169,9 @@ suite('Inputs', function() {
       // TODO: InsertFieldAt does not properly handle initialization in
       //  headless mode.
       test.skip('Headless', function() {
-        let field = new Blockly.FieldLabel('field');
-        let setBlockSpy = sinon.spy(field, 'setSourceBlock');
-        let initModelSpy = sinon.spy(field, 'initModel');
+        const field = new Blockly.FieldLabel('field');
+        const setBlockSpy = sinon.spy(field, 'setSourceBlock');
+        const initModelSpy = sinon.spy(field, 'initModel');
 
         this.block.rendered = false;
 
@@ -194,8 +194,8 @@ suite('Inputs', function() {
       });
     });
     test('Rendered', function() {
-      let field = new Blockly.FieldLabel('field');
-      let disposeSpy = sinon.spy(field, 'dispose');
+      const field = new Blockly.FieldLabel('field');
+      const disposeSpy = sinon.spy(field, 'dispose');
       this.dummy.appendField(field, 'FIELD');
 
       this.renderStub.resetHistory();
@@ -207,8 +207,8 @@ suite('Inputs', function() {
       sinon.assert.calledOnce(this.bumpNeighboursStub);
     });
     test('Headless', function() {
-      let field = new Blockly.FieldLabel('field');
-      let disposeSpy = sinon.spy(field, 'dispose');
+      const field = new Blockly.FieldLabel('field');
+      const disposeSpy = sinon.spy(field, 'dispose');
       this.dummy.appendField(field, 'FIELD');
 
       this.renderStub.resetHistory();

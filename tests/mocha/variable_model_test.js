@@ -20,7 +20,7 @@ suite('Variable Model', function() {
   });
 
   test('Trivial', function() {
-    let variable = new Blockly.VariableModel(
+    const variable = new Blockly.VariableModel(
         this.workspace, 'test', 'test_type', 'test_id');
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
@@ -28,19 +28,19 @@ suite('Variable Model', function() {
   });
 
   test('Null type', function() {
-    let variable = new Blockly.VariableModel(
+    const variable = new Blockly.VariableModel(
         this.workspace, 'test', null, 'test_id');
     chai.assert.equal(variable.type, '');
   });
 
   test('Undefined type', function() {
-    let variable = new Blockly.VariableModel(
+    const variable = new Blockly.VariableModel(
         this.workspace, 'test', undefined, 'test_id');
     chai.assert.equal(variable.type, '');
   });
 
   test('Null id', function() {
-    let variable = new Blockly.VariableModel(
+    const variable = new Blockly.VariableModel(
         this.workspace, 'test', 'test_type', null);
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
@@ -48,7 +48,7 @@ suite('Variable Model', function() {
   });
 
   test('Undefined id', function() {
-    let variable = new Blockly.VariableModel(
+    const variable = new Blockly.VariableModel(
         this.workspace, 'test', 'test_type', undefined);
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, 'test_type');
@@ -56,7 +56,7 @@ suite('Variable Model', function() {
   });
 
   test('Only name provided', function() {
-    let variable = new Blockly.VariableModel(this.workspace, 'test');
+    const variable = new Blockly.VariableModel(this.workspace, 'test');
     chai.assert.equal(variable.name, 'test');
     chai.assert.equal(variable.type, '');
     chai.assert.exists(variable.id_);

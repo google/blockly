@@ -20,7 +20,7 @@ suite('Colour Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -35,7 +35,7 @@ suite('Colour Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
 
-  let validValueTestCases = [
+  const validValueTestCases = [
     {title: '#AAAAAA', value: '#AAAAAA', expectedValue: '#aaaaaa',
       expectedText: '#aaa'},
     {title: '#aaaaaa', value: '#aaaaaa', expectedValue: '#aaaaaa',
@@ -57,7 +57,7 @@ suite('Colour Fields', function() {
     {title: 'red', value: 'red', expectedValue: '#ff0000',
       expectedText: '#f00'},
   ];
-  let addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'colour': testCase.value};
   };
@@ -68,15 +68,15 @@ suite('Colour Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  let defaultFieldValue = Blockly.FieldColour.COLOURS[0];
+  const defaultFieldValue = Blockly.FieldColour.COLOURS[0];
   /**
    * The expected default text for the field being tested.
    * @type {*}
    */
-  let defaultTextValue = (
+  const defaultTextValue = (
     function() {
       let expectedText = defaultFieldValue;
-      let m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
+      const m = defaultFieldValue.match(/^#(.)\1(.)\2(.)\3$/);
       if (m) {
         expectedText = '#' + m[1] + m[2] + m[3];
       }
@@ -86,7 +86,7 @@ suite('Colour Fields', function() {
    * Asserts that the field property values are set to default.
    * @param {FieldTemplate} field The field to check.
    */
-  let assertFieldDefault = function(field) {
+  const assertFieldDefault = function(field) {
     testHelpers.assertFieldValue(field, defaultFieldValue, defaultTextValue);
   };
   /**
@@ -94,7 +94,7 @@ suite('Colour Fields', function() {
    * @param {!Blockly.FieldAngle} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  let validTestCaseAssertField = function(field, testCase) {
+  const validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(
         field, testCase.expectedValue, testCase.expectedText);
   };
@@ -138,7 +138,7 @@ suite('Colour Fields', function() {
     setup(function() {
       this.field = new Blockly.FieldColour('#aaaaaa');
     });
-    let testSuites = [
+    const testSuites = [
       {title: 'Null Validator',
         validator:
             function() {
@@ -194,13 +194,13 @@ suite('Colour Fields', function() {
         }
       }
       test('Constants', function() {
-        let colours = Blockly.FieldColour.COLOURS;
-        let titles = Blockly.FieldColour.TITLES;
+        const colours = Blockly.FieldColour.COLOURS;
+        const titles = Blockly.FieldColour.TITLES;
         // Note: Developers shouldn't actually do this. IMO they should
         // change the file and then recompile. But this is fine for testing.
         Blockly.FieldColour.COLOURS = ['#aaaaaa'];
         Blockly.FieldColour.TITLES = ['grey'];
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
 
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
 
@@ -208,14 +208,14 @@ suite('Colour Fields', function() {
         Blockly.FieldColour.TITLES = titles;
       });
       test('JS Constructor', function() {
-        let field = new Blockly.FieldColour('#aaaaaa', null, {
+        const field = new Blockly.FieldColour('#aaaaaa', null, {
           colourOptions: ['#aaaaaa'],
           colourTitles: ['grey']
         });
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
       });
       test('JSON Definition', function() {
-        let field = Blockly.FieldColour.fromJson({
+        const field = Blockly.FieldColour.fromJson({
           colour: '#aaaaaa',
           colourOptions: ['#aaaaaa'],
           colourTitles: ['grey']
@@ -223,24 +223,24 @@ suite('Colour Fields', function() {
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
       });
       test('setColours', function() {
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
         field.setColours(['#aaaaaa'], ['grey']);
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
       });
       test('Titles Undefined', function() {
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
         field.setColours(['#aaaaaa']);
         assertColoursAndTitles(field, ['#aaaaaa'], ['#aaaaaa']);
       });
       test('Some Titles Undefined', function() {
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
         field.setColours(['#aaaaaa', '#ff0000'], ['grey']);
         assertColoursAndTitles(field,
             ['#aaaaaa', '#ff0000'], ['grey', '#ff0000']);
       });
       // This is kinda derpy behavior, but I wanted to document it.
       test('Overwriting Colours While Leaving Titles', function() {
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
         field.setColours(['#aaaaaa'], ['grey']);
         field.setColours(['#ff0000']);
         assertColoursAndTitles(field, ['#ff0000'], ['grey']);
@@ -252,31 +252,31 @@ suite('Colour Fields', function() {
         chai.assert.equal(field.picker_.firstChild.children.length, columns);
       }
       test('Constants', function() {
-        let columns = Blockly.FieldColour.COLUMNS;
+        const columns = Blockly.FieldColour.COLUMNS;
         // Note: Developers shouldn't actually do this. IMO they should edit
         // the file and then recompile. But this is fine for testing.
         Blockly.FieldColour.COLUMNS = 3;
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
 
         assertColumns(field, 3);
 
         Blockly.FieldColour.COLUMNS = columns;
       });
       test('JS Constructor', function() {
-        let field = new Blockly.FieldColour('#ffffff', null, {
+        const field = new Blockly.FieldColour('#ffffff', null, {
           columns: 3
         });
         assertColumns(field, 3);
       });
       test('JSON Definition', function() {
-        let field = Blockly.FieldColour.fromJson({
+        const field = Blockly.FieldColour.fromJson({
           'colour': '#ffffff',
           'columns': 3
         });
         assertColumns(field, 3);
       });
       test('setColumns', function() {
-        let field = new Blockly.FieldColour();
+        const field = new Blockly.FieldColour();
         field.setColumns(3);
         assertColumns(field, 3);
       });

@@ -407,7 +407,6 @@ suite('Toolbox', function() {
 
     function testHideFlyout(toolbox, oldItem, newItem) {
       let updateFlyoutStub = sinon.stub(toolbox.flyout_, 'hide');
-      const newItem = getNonCollapsibleItem(toolbox);
       toolbox.updateFlyout_(oldItem, newItem);
       sinon.assert.called(updateFlyoutStub);
     }
@@ -418,6 +417,10 @@ suite('Toolbox', function() {
     });
     test('No new item -> Should close flyout', function() {
       testHideFlyout(this.toolbox, null, null);
+    });
+    test('Old item but no new item -> Should close flyout', function() {
+      let oldItem = getNonCollapsibleItem(this.toolbox);
+      testHideFlyout(this.toolbox, oldItem, null);
     });
     test('Select collapsible item -> Should close flyout', function() {
       let newItem = getCollapsibleItem(this.toolbox);

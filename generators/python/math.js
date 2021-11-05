@@ -159,7 +159,7 @@ Blockly.Python['math_constant'] = function(block) {
 Blockly.Python['math_number_property'] = function(block) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
-  const OPERATORS = {
+  const PROPERTIES = {
     'EVEN': [' % 2 == 0', Blockly.Python.ORDER_MULTIPLICATIVE,
         Blockly.Python.ORDER_RELATIONAL],
     'ODD': [' % 2 == 1', Blockly.Python.ORDER_MULTIPLICATIVE,
@@ -176,7 +176,7 @@ Blockly.Python['math_number_property'] = function(block) {
         Blockly.Python.ORDER_FUNCTION_CALL]
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
-  const tuple = OPERATORS[dropdownProperty];
+  const tuple = PROPERTIES[dropdownProperty];
   const suffix = tuple[0];
   const inputOrder = tuple[1];
   const outputOrder = tuple[2];
@@ -213,13 +213,13 @@ Blockly.Python['math_number_property'] = function(block) {
     const divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
     Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Python will raise an error.
-      if (!divisor | | divisor == '0') {
-        return ['False', Blockly.Python.ORDER_ATOMIC];
-      }
+    if (!divisor | | divisor == '0') {
+      return ['False', Blockly.Python.ORDER_ATOMIC];
+    }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
     code = numberToCheck + suffix;
-  }
+  };
   return [code, outputOrder];
 };
 

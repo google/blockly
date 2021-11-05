@@ -148,11 +148,11 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Blockly.JavaScript.ORDER_MODULUS,
+    'EVEN': [' % 2 === 0', Blockly.JavaScript.ORDER_MODULUS,
         Blockly.JavaScript.ORDER_EQUALITY],
-    'ODD': [' % 2 == 1', Blockly.JavaScript.ORDER_MODULUS,
+    'ODD': [' % 2 === 1', Blockly.JavaScript.ORDER_MODULUS,
         Blockly.JavaScript.ORDER_EQUALITY],
-    'WHOLE': [' % 1 == 0', Blockly.JavaScript.ORDER_MODULUS,
+    'WHOLE': [' % 1 === 0', Blockly.JavaScript.ORDER_MODULUS,
         Blockly.JavaScript.ORDER_EQUALITY],
     'POSITIVE': [' > 0', Blockly.JavaScript.ORDER_RELATIONAL,
         Blockly.JavaScript.ORDER_RELATIONAL],
@@ -182,13 +182,13 @@ Blockly.JavaScript['math_number_property'] = function(block) {
          '  }',
          '  // False if n is NaN, negative, is 1, or not whole.',
          '  // And false if n is divisible by 2 or 3.',
-         '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
-            ' n % 3 == 0) {',
+         '  if (isNaN(n) || n <= 1 || n % 1 !== 0 || n % 2 === 0 ||' +
+            ' n % 3 === 0) {',
          '    return false;',
          '  }',
          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
          '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-         '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+         '    if (n % (x - 1) === 0 || n % (x + 1) === 0) {',
          '      return false;',
          '    }',
          '  }',
@@ -198,7 +198,7 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
         Blockly.JavaScript.ORDER_MODULUS) || '0';
-    code = numberToCheck + ' % ' + divisor + ' == 0';
+    code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
     code = numberToCheck + suffix;
   }

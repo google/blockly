@@ -168,7 +168,7 @@ Blockly.Lua['math_number_property'] = function(block) {
   const numberToCheck = Blockly.Lua.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
-  if (dropdownProperty == 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = Blockly.Lua.provideFunction_(
         'math_isPrime',
@@ -192,7 +192,7 @@ Blockly.Lua['math_number_property'] = function(block) {
          'end']);
          code = functionName + '(' + numberToCheck + ')';
 
-        } else if (dropdownProperty == 'DIVISIBLE_BY') {
+        } else if (dropdownProperty === 'DIVISIBLE_BY') {
           
           const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
               Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';

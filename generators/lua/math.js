@@ -158,7 +158,6 @@ Blockly.Lua['math_number_property'] = function(block) {
         Blockly.Lua.ORDER_RELATIONAL],
     'PRIME': [null, Blockly.Lua.ORDER_NONE,
         Blockly.Lua.ORDER_HIGH]
-
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
@@ -191,22 +190,20 @@ Blockly.Lua['math_number_property'] = function(block) {
          '  return true',
          'end']);
          code = functionName + '(' + numberToCheck + ')';
-
-        } else if (dropdownProperty === 'DIVISIBLE_BY') {
-          
-          const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
-              Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-           // If 'divisor' is some code that evals to 0, Lua will produce a nan.
-           // Let's produce nil if we can determine this at compile-time.
-           if (!divisor || divisor == '0') {
-           return ['nil', Blockly.Lua.ORDER_ATOMIC];
-      }
-          code = numberToCheck + ' % ' + divisor + ' == 0';
-        } else {
-          code = numberToCheck + suffix;
-        }
-        return [code, outputOrder];
-      };
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {     
+    const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
+        Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
+    // If 'divisor' is some code that evals to 0, Lua will produce a nan.
+    // Let's produce nil if we can determine this at compile-time.
+    if (divisor == '0') {
+      return ['nil', Blockly.Lua.ORDER_ATOMIC];
+    }
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+  } else {
+    code = numberToCheck + suffix;
+  }
+  return [code, outputOrder];
+};
 
 Blockly.Lua['math_change'] = function(block) {
   // Add to a variable in place.

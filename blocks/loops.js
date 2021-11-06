@@ -6,11 +6,6 @@
 
 /**
  * @fileoverview Loop blocks for Blockly.
- *
- * This file is scraped to extract a .json file of block definitions. The array
- * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
- * only, no outside references, no functions, no trailing commas, etc. The one
- * exception is end-of-line comments, which the scraper will remove.
  */
 'use strict';
 
@@ -31,7 +26,7 @@ goog.require('Blockly.Warning');
  */
 Blockly.Constants.Loops.HUE = 120;
 
-Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   // Block for repeat n times (external number).
   {
     "type": "controls_repeat_ext",
@@ -200,7 +195,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "controls_flow_in_loop_check",
     ],
   },
-]);  // END JSON EXTRACT (Do not delete this comment.)
+]);
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.

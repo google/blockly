@@ -28,9 +28,9 @@ suite('Mutator', function() {
     });
 
     test('No change', function() {
-      let block = createRenderedBlock(this.workspace, 'xml_block');
+      const block = createRenderedBlock(this.workspace, 'xml_block');
       block.mutator.setVisible(true);
-      let mutatorWorkspace = block.mutator.getWorkspace();
+      const mutatorWorkspace = block.mutator.getWorkspace();
       // Trigger mutator change listener.
       createRenderedBlock(mutatorWorkspace, 'checkbox_block');
       chai.assert.isTrue(
@@ -41,9 +41,9 @@ suite('Mutator', function() {
     });
 
     test('XML', function() {
-      let block = createRenderedBlock(this.workspace, 'xml_block');
+      const block = createRenderedBlock(this.workspace, 'xml_block');
       block.mutator.setVisible(true);
-      let mutatorWorkspace = block.mutator.getWorkspace();
+      const mutatorWorkspace = block.mutator.getWorkspace();
       mutatorWorkspace.getBlockById('check_block')
           .setFieldValue('TRUE', 'CHECK');
       chai.assert.isTrue(
@@ -55,9 +55,9 @@ suite('Mutator', function() {
     });
 
     test('JSO', function() {
-      let block = createRenderedBlock(this.workspace, 'jso_block');
+      const block = createRenderedBlock(this.workspace, 'jso_block');
       block.mutator.setVisible(true);
-      let mutatorWorkspace = block.mutator.getWorkspace();
+      const mutatorWorkspace = block.mutator.getWorkspace();
       mutatorWorkspace.getBlockById('check_block')
           .setFieldValue('TRUE', 'CHECK');
       chai.assert.isTrue(

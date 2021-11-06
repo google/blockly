@@ -968,7 +968,7 @@ Toolbox.prototype.selectItemByPosition = function(position) {
  * @protected
  */
 Toolbox.prototype.updateFlyout_ = function(oldItem, newItem) {
-  if ((oldItem === newItem && !newItem.isCollapsible()) || !newItem ||
+  if (!newItem || (oldItem === newItem && !newItem.isCollapsible()) ||
       !newItem.getContents().length) {
     this.flyout_.hide();
   } else {

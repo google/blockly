@@ -33,7 +33,7 @@ suite('Key Down', function() {
    * @param {string=} opt_name An optional name for the test case.
    */
   function runReadOnlyTest(keyEvent, opt_name) {
-    let name = opt_name ? opt_name : 'Not called when readOnly is true';
+    const name = opt_name ? opt_name : 'Not called when readOnly is true';
     test(name, function() {
       this.workspace.options.readOnly = true;
       document.dispatchEvent(keyEvent);
@@ -53,7 +53,7 @@ suite('Key Down', function() {
     });
     runReadOnlyTest(createKeyDownEvent(Blockly.utils.KeyCodes.ESC));
     test('Not called when focus is on an HTML input', function() {
-      let event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC);
+      const event = createKeyDownEvent(Blockly.utils.KeyCodes.ESC);
       const input = document.createElement('textarea');
       input.dispatchEvent(event);
       sinon.assert.notCalled(this.hideChaffSpy);
@@ -72,15 +72,15 @@ suite('Key Down', function() {
       setSelectedBlock(this.workspace);
       this.deleteSpy = sinon.spy(Blockly.common.getSelected(), 'dispose');
     });
-    let testCases = [
+    const testCases = [
       ['Delete', createKeyDownEvent(Blockly.utils.KeyCodes.DELETE)],
       ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE)]
     ];
     // Delete a block.
     suite('Simple', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.hideChaffSpy);
@@ -91,8 +91,8 @@ suite('Key Down', function() {
     // Do not delete a block if workspace is in readOnly mode.
     suite('Not called when readOnly is true', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         runReadOnlyTest(keyEvent, testCaseName);
       });
     });
@@ -105,7 +105,7 @@ suite('Key Down', function() {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
-    let testCases = [
+    const testCases = [
       ['Control C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL])],
       ['Meta C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META])],
       ['Alt C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT])]
@@ -113,8 +113,8 @@ suite('Key Down', function() {
     // Copy a block.
     suite('Simple', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.copySpy);
@@ -125,16 +125,16 @@ suite('Key Down', function() {
     // Do not copy a block if a workspace is in readonly mode.
     suite('Not called when readOnly is true', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         runReadOnlyTest(keyEvent, testCaseName);
       });
     });
     // Do not copy a block if a gesture is in progress.
     suite('Gesture in progress', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
           document.dispatchEvent(keyEvent);
@@ -146,8 +146,8 @@ suite('Key Down', function() {
     // Do not copy a block if is is not deletable.
     suite('Block is not deletable', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.common.getSelected(), 'isDeletable').returns(false);
           document.dispatchEvent(keyEvent);
@@ -159,8 +159,8 @@ suite('Key Down', function() {
     // Do not copy a block if it is not movable.
     suite('Block is not movable', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.common.getSelected(), 'isMovable').returns(false);
           document.dispatchEvent(keyEvent);
@@ -177,7 +177,7 @@ suite('Key Down', function() {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
-    let testCases = [
+    const testCases = [
       ['Control Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL])],
       ['Meta Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META])],
       ['Alt Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT])]
@@ -185,8 +185,8 @@ suite('Key Down', function() {
     // Undo.
     suite('Simple', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.undoSpy);
@@ -198,8 +198,8 @@ suite('Key Down', function() {
     // Do not undo if a gesture is in progress.
     suite('Gesture in progress', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
           document.dispatchEvent(keyEvent);
@@ -211,8 +211,8 @@ suite('Key Down', function() {
     // Do not undo if the workspace is in readOnly mode.
     suite('Not called when readOnly is true', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         runReadOnlyTest(keyEvent, testCaseName);
       });
     });
@@ -224,7 +224,7 @@ suite('Key Down', function() {
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });
-    let testCases = [
+    const testCases = [
       ['Control Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])],
       ['Meta Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT])],
       ['Alt Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])]
@@ -232,8 +232,8 @@ suite('Key Down', function() {
     // Undo.
     suite('Simple', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           document.dispatchEvent(keyEvent);
           sinon.assert.calledOnce(this.redoSpy);
@@ -245,8 +245,8 @@ suite('Key Down', function() {
     // Do not undo if a gesture is in progress.
     suite('Gesture in progress', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         test(testCaseName, function() {
           sinon.stub(Blockly.Gesture, 'inProgress').returns(true);
           document.dispatchEvent(keyEvent);
@@ -258,8 +258,8 @@ suite('Key Down', function() {
     // Do not undo if the workspace is in readOnly mode.
     suite('Not called when readOnly is true', function() {
       testCases.forEach(function(testCase) {
-        let testCaseName = testCase[0];
-        let keyEvent = testCase[1];
+        const testCaseName = testCase[0];
+        const keyEvent = testCase[1];
         runReadOnlyTest(keyEvent, testCaseName);
       });
     });

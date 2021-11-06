@@ -147,17 +147,37 @@ Blockly.JavaScript['math_constant'] = function(block) {
 Blockly.JavaScript['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const number_to_check = Blockly.JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
-      Blockly.JavaScript.ORDER_MODULUS) || '0';
-  const dropdown_property = block.getFieldValue('PROPERTY');
+  const PROPERTIES = {
+    'EVEN': [' % 2 === 0', Blockly.JavaScript.ORDER_MODULUS,
+        Blockly.JavaScript.ORDER_EQUALITY],
+    'ODD': [' % 2 === 1', Blockly.JavaScript.ORDER_MODULUS,
+        Blockly.JavaScript.ORDER_EQUALITY],
+    'WHOLE': [' % 1 === 0', Blockly.JavaScript.ORDER_MODULUS,
+        Blockly.JavaScript.ORDER_EQUALITY],
+    'POSITIVE': [' > 0', Blockly.JavaScript.ORDER_RELATIONAL,
+        Blockly.JavaScript.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Blockly.JavaScript.ORDER_RELATIONAL,
+        Blockly.JavaScript.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, Blockly.JavaScript.ORDER_MODULUS,
+        Blockly.JavaScript.ORDER_EQUALITY],
+    'PRIME': [null, Blockly.JavaScript.ORDER_NONE,
+        Blockly.JavaScript.ORDER_FUNCTION_CALL]
+  };
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+  const tuple = PROPERTIES[dropdownProperty];
+  const suffix = tuple[0];
+  const inputOrder = tuple[1];
+  const outputOrder = tuple[2];
+  const numberToCheck = Blockly.JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
-  if (dropdown_property === 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = Blockly.JavaScript.provideFunction_(
         'mathIsPrime',
         ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-         '  if (n === 2 || n === 3) {',
+         '  if (n == 2 || n == 3) {',
          '    return true;',
          '  }',
          '  // False if n is NaN, negative, is 1, or not whole.',
@@ -174,33 +194,15 @@ Blockly.JavaScript['math_number_property'] = function(block) {
          '  }',
          '  return true;',
          '}']);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    code = functionName + '(' + numberToCheck + ')';
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
+    const divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
+        Blockly.JavaScript.ORDER_MODULUS) || '0';
+    code = numberToCheck + ' % ' + divisor + ' === 0';
+  } else {
+    code = numberToCheck + suffix;
   }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 === 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 === 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 === 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY': {
-      const divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
-          Blockly.JavaScript.ORDER_MODULUS) || '0';
-      code = number_to_check + ' % ' + divisor + ' === 0';
-      break;
-    }
-  }
-  return [code, Blockly.JavaScript.ORDER_EQUALITY];
+  return [code, outputOrder];
 };
 
 Blockly.JavaScript['math_change'] = function(block) {

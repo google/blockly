@@ -27,7 +27,7 @@ suite('Connection checker', function() {
     }
 
     test('Target Null', function() {
-      let connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
+      const connection = new Blockly.Connection({}, Blockly.INPUT_VALUE);
       assertReasonHelper(
           this.checker,
           connection,
@@ -35,9 +35,9 @@ suite('Connection checker', function() {
           Blockly.Connection.REASON_TARGET_NULL);
     });
     test('Target Self', function() {
-      let block = {workspace: 1};
-      let connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
-      let connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
+      const block = {workspace: 1};
+      const connection1 = new Blockly.Connection(block, Blockly.INPUT_VALUE);
+      const connection2 = new Blockly.Connection(block, Blockly.OUTPUT_VALUE);
 
       assertReasonHelper(
           this.checker,
@@ -46,9 +46,9 @@ suite('Connection checker', function() {
           Blockly.Connection.REASON_SELF_CONNECTION);
     });
     test('Different Workspaces', function() {
-      let connection1 = new Blockly.Connection(
+      const connection1 = new Blockly.Connection(
           {workspace: 1}, Blockly.INPUT_VALUE);
-      let connection2 = new Blockly.Connection(
+      const connection2 = new Blockly.Connection(
           {workspace: 2}, Blockly.OUTPUT_VALUE);
 
       assertReasonHelper(
@@ -61,10 +61,10 @@ suite('Connection checker', function() {
       setup(function() {
         // We have to declare each separately so that the connections belong
         // on different blocks.
-        let prevBlock = { isShadow: function() {}};
-        let nextBlock = { isShadow: function() {}};
-        let outBlock = { isShadow: function() {}};
-        let inBlock = { isShadow: function() {}};
+        const prevBlock = { isShadow: function() {}};
+        const nextBlock = { isShadow: function() {}};
+        const outBlock = { isShadow: function() {}};
+        const inBlock = { isShadow: function() {}};
         this.previous = new Blockly.Connection(
             prevBlock, Blockly.PREVIOUS_STATEMENT);
         this.next = new Blockly.Connection(
@@ -161,10 +161,10 @@ suite('Connection checker', function() {
     });
     suite('Shadows', function() {
       test('Previous Shadow', function() {
-        let prevBlock = { isShadow: function() { return true; }};
-        let nextBlock = { isShadow: function() { return false; }};
-        let prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        let next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        const prevBlock = { isShadow: function() { return true; }};
+        const nextBlock = { isShadow: function() { return false; }};
+        const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -173,10 +173,10 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Next Shadow', function() {
-        let prevBlock = { isShadow: function() { return false; }};
-        let nextBlock = { isShadow: function() { return true; }};
-        let prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        let next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        const prevBlock = { isShadow: function() { return false; }};
+        const nextBlock = { isShadow: function() { return true; }};
+        const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -185,10 +185,10 @@ suite('Connection checker', function() {
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Prev and Next Shadow', function() {
-        let prevBlock = { isShadow: function() { return true; }};
-        let nextBlock = { isShadow: function() { return true; }};
-        let prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        let next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        const prevBlock = { isShadow: function() { return true; }};
+        const nextBlock = { isShadow: function() { return true; }};
+        const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -197,10 +197,10 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Output Shadow', function() {
-        let outBlock = { isShadow: function() { return true; }};
-        let inBlock = { isShadow: function() { return false; }};
-        let outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        let inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        const outBlock = { isShadow: function() { return true; }};
+        const inBlock = { isShadow: function() { return false; }};
+        const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,
@@ -209,10 +209,10 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Input Shadow', function() {
-        let outBlock = { isShadow: function() { return false; }};
-        let inBlock = { isShadow: function() { return true; }};
-        let outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        let inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        const outBlock = { isShadow: function() { return false; }};
+        const inBlock = { isShadow: function() { return true; }};
+        const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,
@@ -221,10 +221,10 @@ suite('Connection checker', function() {
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Output and Input Shadow', function() {
-        let outBlock = { isShadow: function() { return true; }};
-        let inBlock = { isShadow: function() { return true; }};
-        let outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        let inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        const outBlock = { isShadow: function() { return true; }};
+        const inBlock = { isShadow: function() { return true; }};
+        const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,

@@ -16,19 +16,19 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['colour_picker'] = function(block) {
   // Colour picker.
-  var code = Blockly.Lua.quote_(block.getFieldValue('COLOUR'));
+  const code = Blockly.Lua.quote_(block.getFieldValue('COLOUR'));
   return [code, Blockly.Lua.ORDER_ATOMIC];
 };
 
 Blockly.Lua['colour_random'] = function(block) {
   // Generate a random colour.
-  var code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
+  const code = 'string.format("#%06x", math.random(0, 2^24 - 1))';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'colour_rgb',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b)',
        '  r = math.floor(math.min(100, math.max(0, r)) * 2.55 + .5)',
@@ -36,19 +36,19 @@ Blockly.Lua['colour_rgb'] = function(block) {
        '  b = math.floor(math.min(100, math.max(0, b)) * 2.55 + .5)',
        '  return string.format("#%02x%02x%02x", r, g, b)',
        'end']);
-  var r = Blockly.Lua.valueToCode(block, 'RED',
+  const r = Blockly.Lua.valueToCode(block, 'RED',
       Blockly.Lua.ORDER_NONE) || 0;
-  var g = Blockly.Lua.valueToCode(block, 'GREEN',
+  const g = Blockly.Lua.valueToCode(block, 'GREEN',
       Blockly.Lua.ORDER_NONE) || 0;
-  var b = Blockly.Lua.valueToCode(block, 'BLUE',
+  const b = Blockly.Lua.valueToCode(block, 'BLUE',
       Blockly.Lua.ORDER_NONE) || 0;
-  var code = functionName + '(' + r + ', ' + g + ', ' + b + ')';
+  const code = functionName + '(' + r + ', ' + g + ', ' + b + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['colour_blend'] = function(block) {
   // Blend two colours together.
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'colour_blend',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
            '(colour1, colour2, ratio)',
@@ -64,12 +64,12 @@ Blockly.Lua['colour_blend'] = function(block) {
        '  local b = math.floor(b1 * (1 - ratio) + b2 * ratio + .5)',
        '  return string.format("#%02x%02x%02x", r, g, b)',
        'end']);
-  var colour1 = Blockly.Lua.valueToCode(block, 'COLOUR1',
+  const colour1 = Blockly.Lua.valueToCode(block, 'COLOUR1',
       Blockly.Lua.ORDER_NONE) || '\'#000000\'';
-  var colour2 = Blockly.Lua.valueToCode(block, 'COLOUR2',
+  const colour2 = Blockly.Lua.valueToCode(block, 'COLOUR2',
       Blockly.Lua.ORDER_NONE) || '\'#000000\'';
-  var ratio = Blockly.Lua.valueToCode(block, 'RATIO',
+  const ratio = Blockly.Lua.valueToCode(block, 'RATIO',
       Blockly.Lua.ORDER_NONE) || 0;
-  var code = functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
+  const code = functionName + '(' + colour1 + ', ' + colour2 + ', ' + ratio + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

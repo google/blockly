@@ -173,21 +173,17 @@ Blockly.Lua['math_number_property'] = function(block) {
         Blockly.Lua.ORDER_HIGH]
 
   }
-  const dropdownProperty = block.getFieldValue('PROPERTY');
-
+  const dropdownProperty =     
+block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
-
   const suffix = tuple[0];
-
   const inputOrder = tuple[1];
-
   const outputOrder = tuple[2];
-
-  const numberToCheck = Blockly.Lua.valueToCode(block, 'NUMBER_TO_CHECK',
-
-      inputOrder) || '0';
-
-      let code;
+  const numberToCheck = 
+Blockly.Lua.valueToCode(block,
+'NUMBER_TO_CHECK',
+        inputOrder) || '0';
+  let code;
   if (dropdownProperty == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = Blockly.Lua.provideFunction_(
@@ -210,24 +206,19 @@ Blockly.Lua['math_number_property'] = function(block) {
          '  end',
          '  return true',
          'end']);
-         code = functionName + '(' + numberToCheck + ')';
+     code = functionName + '(' + numberToCheck + ')';
 
         } else if (dropdownProperty == 'DIVISIBLE_BY') {
       
-          const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
-      
-              Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-      
-          code = numberToCheck + ' % ' + divisor + ' == 0';
-      
+          const divisor = 
+Blockly.Lua.valueToCode(block, 'DIVISOR',
+      Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
+   code = numberToCheck + ' % ' + divisor + ' == 
+0';
         } else {
-      
           code = numberToCheck + suffix;
-      
-        }
-      
+        } 
         return [code, outputOrder];
-      
       };
 
 Blockly.Lua['math_change'] = function(block) {

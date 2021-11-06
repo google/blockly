@@ -18,7 +18,7 @@ suite('Names', function() {
   });
 
   test('Safe name', function() {
-    let varDB = new Blockly.Names('window,door');
+    const varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.safeName_(''), 'unnamed', 'SafeName empty.');
     chai.assert.equal(varDB.safeName_('foobar'), 'foobar', 'SafeName ok.');
     chai.assert.equal(varDB.safeName_('9lives'), 'my_9lives', 'SafeName number start.');
@@ -28,7 +28,7 @@ suite('Names', function() {
   });
 
   test('Get name', function() {
-    let varDB = new Blockly.Names('window,door');
+    const varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name add #1.');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1.');
     chai.assert.equal(varDB.getName('Foo bar', 'var'), 'Foo_bar2', 'Name add #2.');
@@ -43,7 +43,7 @@ suite('Names', function() {
   });
 
   test('Get distinct name', function() {
-    let varDB = new Blockly.Names('window,door');
+    const varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.getDistinctName('Foo.bar', 'var'), 'Foo_bar',
         'Name distinct #1.');
     chai.assert.equal(varDB.getDistinctName('Foo.bar', 'var'), 'Foo_bar2',

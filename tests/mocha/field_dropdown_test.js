@@ -30,7 +30,7 @@ suite('Dropdown Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let invalidValueCreationTestCases = [
+  const invalidValueCreationTestCases = [
     {title: 'Undefined', args: [undefined]},
     {title: 'Array Items not Arrays', args: [undefined]},
     {title: 'Array Items with Invalid IDs',
@@ -42,7 +42,7 @@ suite('Dropdown Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let validValueCreationTestCases = [
+  const validValueCreationTestCases = [
     {title: 'Text Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
       args: [[['a', 'A'], ['b', 'B'], ['c', 'C']]]},
     {title: 'Image Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
@@ -62,7 +62,7 @@ suite('Dropdown Fields', function() {
           [{ src:'scrC', alt:'c' }, 'C']];
       }]},
   ];
-  let addJson = function(testCase) {
+  const addJson = function(testCase) {
     testCase.json = {'options': testCase.args[0]};
   };
   invalidValueCreationTestCases.forEach(addJson);
@@ -73,7 +73,7 @@ suite('Dropdown Fields', function() {
    * @param {!Blockly.FieldDropdown} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  let validTestCaseAssertField = function(field, testCase) {
+  const validTestCaseAssertField = function(field, testCase) {
     testHelpers.assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
   };
 
@@ -89,7 +89,7 @@ suite('Dropdown Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  let invalidValueSetValueTestCases = [
+  const invalidValueSetValueTestCases = [
     {title: 'Null', value: null},
     {title: 'Undefined', value: undefined},
     {title: 'Invalid ID', value: 'bad'},
@@ -98,7 +98,7 @@ suite('Dropdown Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldValueTestCase>}
    */
-  let validValueSetValueTestCases = [
+  const validValueSetValueTestCases = [
     {title: 'Valid ID', value: 'B', expectedValue: 'B', expectedText: 'b'},
   ];
 

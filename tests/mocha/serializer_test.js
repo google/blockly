@@ -41,7 +41,7 @@ function SerializerTestSuite(title) {
 }
 SerializerTestSuite.prototype = new testHelpers.TestSuite();
 
-let Serializer = new SerializerTestSuite('Serializer');
+const Serializer = new SerializerTestSuite('Serializer');
 
 // TODO: Make sure all of these properties are documented ad exported properly.
 Serializer.Empty = new SerializerTestCase('Empty',
@@ -1776,7 +1776,7 @@ Serializer.testSuites = [
   Serializer.Mutations,
 ];
 
-let runSerializerTestSuite = (serializer, deserializer, testSuite) => {
+const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
   const workspaces = Blockly.serialization.workspaces;
 
   const createTestFunction = function(test) {
@@ -1788,7 +1788,7 @@ let runSerializerTestSuite = (serializer, deserializer, testSuite) => {
         this.workspace.clear();
         workspaces.load(deserializer(save), this.workspace);
       }
-      let newXml = Blockly.Xml.workspaceToDom(this.workspace);
+      const newXml = Blockly.Xml.workspaceToDom(this.workspace);
       chai.assert.equal(Blockly.Xml.domToText(newXml), test.xml);
     };
   };

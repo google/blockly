@@ -16,35 +16,34 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['math_number'] = function(block) {
   // Numeric value.
-  var code = Number(block.getFieldValue('NUM'));
-  var order = code < 0 ? Blockly.Lua.ORDER_UNARY :
+  const code = Number(block.getFieldValue('NUM'));
+  const order = code < 0 ? Blockly.Lua.ORDER_UNARY :
               Blockly.Lua.ORDER_ATOMIC;
   return [code, order];
 };
 
 Blockly.Lua['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
-  var OPERATORS = {
+  const OPERATORS = {
     ADD: [' + ', Blockly.Lua.ORDER_ADDITIVE],
     MINUS: [' - ', Blockly.Lua.ORDER_ADDITIVE],
     MULTIPLY: [' * ', Blockly.Lua.ORDER_MULTIPLICATIVE],
     DIVIDE: [' / ', Blockly.Lua.ORDER_MULTIPLICATIVE],
     POWER: [' ^ ', Blockly.Lua.ORDER_EXPONENTIATION]
   };
-  var tuple = OPERATORS[block.getFieldValue('OP')];
-  var operator = tuple[0];
-  var order = tuple[1];
-  var argument0 = Blockly.Lua.valueToCode(block, 'A', order) || '0';
-  var argument1 = Blockly.Lua.valueToCode(block, 'B', order) || '0';
-  var code = argument0 + operator + argument1;
+  const tuple = OPERATORS[block.getFieldValue('OP')];
+  const operator = tuple[0];
+  const order = tuple[1];
+  const argument0 = Blockly.Lua.valueToCode(block, 'A', order) || '0';
+  const argument1 = Blockly.Lua.valueToCode(block, 'B', order) || '0';
+  const code = argument0 + operator + argument1;
   return [code, order];
 };
 
 Blockly.Lua['math_single'] = function(block) {
   // Math operators with single operand.
-  var operator = block.getFieldValue('OP');
-  var code;
-  var arg;
+  const operator = block.getFieldValue('OP');
+  let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
     arg = Blockly.Lua.valueToCode(block, 'NUM',
@@ -63,6 +62,8 @@ Blockly.Lua['math_single'] = function(block) {
     arg = Blockly.Lua.valueToCode(block, 'NUM',
         Blockly.Lua.ORDER_NONE) || '0';
   }
+
+  let code;
   switch (operator) {
     case 'ABS':
       code = 'math.abs(' + arg + ')';
@@ -115,7 +116,7 @@ Blockly.Lua['math_single'] = function(block) {
 
 Blockly.Lua['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  var CONSTANTS = {
+  const CONSTANTS = {
     PI: ['math.pi', Blockly.Lua.ORDER_HIGH],
     E: ['math.exp(1)', Blockly.Lua.ORDER_HIGH],
     GOLDEN_RATIO: ['(1 + math.sqrt(5)) / 2', Blockly.Lua.ORDER_MULTIPLICATIVE],
@@ -173,16 +174,13 @@ Blockly.Lua['math_number_property'] = function(block) {
         Blockly.Lua.ORDER_HIGH]
 
   }
-  const dropdownProperty =     
-block.getFieldValue('PROPERTY');
+  const dropdownProperty = block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
   const suffix = tuple[0];
   const inputOrder = tuple[1];
   const outputOrder = tuple[2];
-  const numberToCheck = 
-Blockly.Lua.valueToCode(block,
-'NUMBER_TO_CHECK',
-        inputOrder) || '0';
+  const numberToCheck = Blockly.Lua.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
   if (dropdownProperty == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -206,26 +204,26 @@ Blockly.Lua.valueToCode(block,
          '  end',
          '  return true',
          'end']);
-     code = functionName + '(' + numberToCheck + ')';
+         code = functionName + '(' + numberToCheck + ')';
 
         } else if (dropdownProperty == 'DIVISIBLE_BY') {
       
-          const divisor = 
-Blockly.Lua.valueToCode(block, 'DIVISOR',
-      Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-   code = numberToCheck + ' % ' + divisor + ' == 
-0';
+          const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
+      
+              Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
+      
+          code = numberToCheck + ' % ' + divisor + ' == 0';
         } else {
           code = numberToCheck + suffix;
-        } 
+        }
         return [code, outputOrder];
       };
 
 Blockly.Lua['math_change'] = function(block) {
   // Add to a variable in place.
-  var argument0 = Blockly.Lua.valueToCode(block, 'DELTA',
+  const argument0 = Blockly.Lua.valueToCode(block, 'DELTA',
       Blockly.Lua.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Lua.nameDB_.getName(
+  const varName = Blockly.Lua.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = ' + varName + ' + ' + argument0 + '\n';
 };
@@ -237,10 +235,10 @@ Blockly.Lua['math_trig'] = Blockly.Lua['math_single'];
 
 Blockly.Lua['math_on_list'] = function(block) {
   // Math functions for lists.
-  var func = block.getFieldValue('OP');
-  var list = Blockly.Lua.valueToCode(block, 'LIST',
+  const func = block.getFieldValue('OP');
+  const list = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';
-  var functionName;
+  let functionName;
 
   // Functions needed in more than one case.
   function provideSum() {
@@ -405,34 +403,34 @@ Blockly.Lua['math_on_list'] = function(block) {
 
 Blockly.Lua['math_modulo'] = function(block) {
   // Remainder computation.
-  var argument0 = Blockly.Lua.valueToCode(block, 'DIVIDEND',
+  const argument0 = Blockly.Lua.valueToCode(block, 'DIVIDEND',
       Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-  var argument1 = Blockly.Lua.valueToCode(block, 'DIVISOR',
+  const argument1 = Blockly.Lua.valueToCode(block, 'DIVISOR',
       Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-  var code = argument0 + ' % ' + argument1;
+  const code = argument0 + ' % ' + argument1;
   return [code, Blockly.Lua.ORDER_MULTIPLICATIVE];
 };
 
 Blockly.Lua['math_constrain'] = function(block) {
   // Constrain a number between two limits.
-  var argument0 = Blockly.Lua.valueToCode(block, 'VALUE',
+  const argument0 = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '0';
-  var argument1 = Blockly.Lua.valueToCode(block, 'LOW',
+  const argument1 = Blockly.Lua.valueToCode(block, 'LOW',
       Blockly.Lua.ORDER_NONE) || '-math.huge';
-  var argument2 = Blockly.Lua.valueToCode(block, 'HIGH',
+  const argument2 = Blockly.Lua.valueToCode(block, 'HIGH',
       Blockly.Lua.ORDER_NONE) || 'math.huge';
-  var code = 'math.min(math.max(' + argument0 + ', ' + argument1 + '), ' +
+  const code = 'math.min(math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  var argument0 = Blockly.Lua.valueToCode(block, 'FROM',
+  const argument0 = Blockly.Lua.valueToCode(block, 'FROM',
       Blockly.Lua.ORDER_NONE) || '0';
-  var argument1 = Blockly.Lua.valueToCode(block, 'TO',
+  const argument1 = Blockly.Lua.valueToCode(block, 'TO',
       Blockly.Lua.ORDER_NONE) || '0';
-  var code = 'math.random(' + argument0 + ', ' + argument1 + ')';
+  const code = 'math.random(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
@@ -443,9 +441,9 @@ Blockly.Lua['math_random_float'] = function(block) {
 
 Blockly.Lua['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  var argument0 = Blockly.Lua.valueToCode(block, 'X',
+  const argument0 = Blockly.Lua.valueToCode(block, 'X',
       Blockly.Lua.ORDER_NONE) || '0';
-  var argument1 = Blockly.Lua.valueToCode(block, 'Y',
+  const argument1 = Blockly.Lua.valueToCode(block, 'Y',
       Blockly.Lua.ORDER_NONE) || '0';
   return ['math.deg(math.atan2(' + argument1 + ', ' + argument0 + '))',
       Blockly.Lua.ORDER_HIGH];

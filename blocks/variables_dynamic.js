@@ -6,11 +6,6 @@
 
 /**
  * @fileoverview Variable blocks for Blockly.
-
- * This file is scraped to extract a .json file of block definitions. The array
- * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
- * only, no outside references, no functions, no trailing commas, etc. The one
- * exception is end-of-line comments, which the scraper will remove.
  */
 'use strict';
 
@@ -27,7 +22,7 @@ goog.require('Blockly.FieldVariable');
  */
 Blockly.Constants.VariablesDynamic.HUE = 310;
 
-Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   // Block for variable getter.
   {
     "type": "variables_get_dynamic",
@@ -64,7 +59,7 @@ Blockly.defineBlocksWithJsonArray([ // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
     "extensions": ["contextMenu_variableDynamicSetterGetter"],
   },
-]); // END JSON EXTRACT (Do not delete this comment.)
+]);
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this

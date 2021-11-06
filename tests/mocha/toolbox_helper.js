@@ -180,7 +180,7 @@ exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 function getXmlArray() {
-  let block = Blockly.Xml.textToDom(
+  const block = Blockly.Xml.textToDom(
       `<block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
@@ -194,9 +194,9 @@ function getXmlArray() {
           </block>
         </value>
       </block>`);
-  let separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
-  let button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
-  let label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
+  const separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
+  const button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
+  const label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
 exports.getXmlArray = getXmlArray;
@@ -214,8 +214,8 @@ function getInjectedToolbox() {
    * Category: NestedCategory
    *   Category: NestedItemOne
    */
-  let toolboxXml = document.getElementById('toolbox-test');
-  let workspace = Blockly.inject('blocklyDiv',
+  const toolboxXml = document.getElementById('toolbox-test');
+  const workspace = Blockly.inject('blocklyDiv',
       {
         toolbox: toolboxXml
       });
@@ -224,8 +224,8 @@ function getInjectedToolbox() {
 exports.getInjectedToolbox = getInjectedToolbox;
 
 function getBasicToolbox() {
-  let workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-  let toolbox = new Blockly.Toolbox(workspace);
+  const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+  const toolbox = new Blockly.Toolbox(workspace);
   toolbox.HtmlDiv = document.createElement('div');
   toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
@@ -233,9 +233,9 @@ function getBasicToolbox() {
 exports.getBasicToolbox = getBasicToolbox;
 
 function getCollapsibleItem(toolbox) {
-  let contents = toolbox.contents_;
+  const contents = toolbox.contents_;
   for (let i = 0; i < contents.length; i++) {
-    let item = contents[i];
+    const item = contents[i];
     if (item.isCollapsible()) {
       return item;
     }
@@ -244,9 +244,9 @@ function getCollapsibleItem(toolbox) {
 exports.getCollapsibleItem = getCollapsibleItem;
 
 function getNonCollapsibleItem(toolbox) {
-  let contents = toolbox.contents_;
+  const contents = toolbox.contents_;
   for (let i = 0; i < contents.length; i++) {
-    let item = contents[i];
+    const item = contents[i];
     if (!item.isCollapsible()) {
       return item;
     }

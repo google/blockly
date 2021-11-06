@@ -20,7 +20,7 @@ const {Blocks} = goog.require('Blockly.blocks');
  * @param {!string} id The expected id of the variable.
  */
 function assertVariableValues(container, name, type, id) {
-  let variable = container.getVariableById(id);
+  const variable = container.getVariableById(id);
   chai.assert.isDefined(variable);
   chai.assert.equal(variable.name, name);
   chai.assert.equal(variable.type, type);
@@ -38,7 +38,7 @@ function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {
     messages = [messages];
   }
-  let warnings = testHelpers.captureWarnings(innerFunc);
+  const warnings = testHelpers.captureWarnings(innerFunc);
   chai.assert.lengthOf(warnings, messages.length);
   messages.forEach((message, i) => {
     chai.assert.match(warnings[i], message);
@@ -101,7 +101,7 @@ function workspaceTeardown(workspace) {
     workspace.dispose();
     this.clock.runAll();  // Run all remaining queued setTimeout calls.
   } catch (e) {
-    let testRef = this.currentTest || this.test;
+    const testRef = this.currentTest || this.test;
     console.error(testRef.fullTitle() + '\n', e);
   }
 }
@@ -115,7 +115,7 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  let stub = sinon.stub(eventUtils, 'fire');
+  const stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -158,7 +158,7 @@ exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
  * @private
  */
 function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  let stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
+  const stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
   stub.callsFake(function(jsonArray) {
     if (jsonArray) {
       jsonArray.forEach((jsonBlock) => {
@@ -215,7 +215,7 @@ exports.sharedTestSetup = sharedTestSetup;
  * outermost suite using sharedTestTeardown.call(this).
  */
 function sharedTestTeardown() {
-  let testRef = this.currentTest || this.test;
+  const testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
     console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
   }
@@ -250,11 +250,11 @@ function sharedTestTeardown() {
     this.sharedSetupSandbox_.restore();
     sinon.restore();
 
-    let blockTypes = this.sharedCleanup.blockTypesCleanup_;
+    const blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
       delete Blocks[blockTypes[i]];
     }
-    let messages = this.sharedCleanup.messagesCleanup_;
+    const messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {
       delete Blockly.Msg[messages[i]];
     }
@@ -274,7 +274,7 @@ exports.sharedTestTeardown = sharedTestTeardown;
  * @return {!SinonStub} The created stub.
  */
 function createGenUidStubWithReturns(returnIds) {
-  let stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
+  const stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
   if (Array.isArray(returnIds)) {
     for (let i = 0; i < returnIds.length; i++) {
       stub.onCall(i).returns(returnIds[i]);
@@ -305,7 +305,7 @@ exports.createFireChangeListenerSpy = createFireChangeListenerSpy;
  * @private
  */
 function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
-  let value = Blockly.Xml.domToText(xmlValue);
+  const value = Blockly.Xml.domToText(xmlValue);
   if (expectedValue instanceof Node) {
     expectedValue = Blockly.Xml.domToText(expectedValue);
   }
@@ -321,8 +321,8 @@ function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
  */
 function assertXmlProperties_(obj, expectedXmlProperties) {
   Object.keys(expectedXmlProperties).map((key) => {
-    let value = obj[key];
-    let expectedValue = expectedXmlProperties[key];
+    const value = obj[key];
+    const expectedValue = expectedXmlProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value,
           'Expected ' + key + ' property to be undefined');
@@ -365,8 +365,8 @@ function assertEventEquals(event, expectedType,
   chai.assert.equal(event.blockId, expectedBlockId,
       prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
-    let value = event[key];
-    let expectedValue = expectedProperties[key];
+    const value = event[key];
+    const expectedValue = expectedProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value, prependMessage + key);
       return;
@@ -405,7 +405,7 @@ function assertEventFired(spy, instanceType, expectedProperties,
     workspaceId: expectedWorkspaceId,
     blockId: expectedBlockId,
   }, expectedProperties);
-  let expectedEvent =
+  const expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
 }
@@ -430,7 +430,7 @@ function assertEventNotFired(spy, instanceType, expectedProperties,
   if (expectedBlockId !== undefined) {
     expectedProperties.blockId = expectedBlockId;
   }
-  let expectedEvent =
+  const expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.neverCalledWith(spy, expectedEvent);
 }
@@ -444,8 +444,8 @@ exports.assertEventNotFired = assertEventNotFired;
  * @private
  */
 function splitByXmlProperties_(properties) {
-  let xmlProperties = {};
-  let nonXmlProperties = {};
+  const xmlProperties = {};
+  const nonXmlProperties = {};
   Object.keys(properties).forEach((key) => {
     if (isXmlProperty_(key)) {
       xmlProperties[key] = properties[key];
@@ -471,14 +471,14 @@ function splitByXmlProperties_(properties) {
  */
 function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
-  let nthCall = spy.getCall(n);
-  let splitProperties = splitByXmlProperties_(expectedProperties);
-  let nonXmlProperties = splitProperties[0];
-  let xmlProperties = splitProperties[1];
+  const nthCall = spy.getCall(n);
+  const splitProperties = splitByXmlProperties_(expectedProperties);
+  const nonXmlProperties = splitProperties[0];
+  const xmlProperties = splitProperties[1];
 
   assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
       expectedBlockId);
-  let eventArg = nthCall.firstArg;
+  const eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);
 }
 exports.assertNthCallEventArgEquals = assertNthCallEventArgEquals;
@@ -568,7 +568,7 @@ function defineMutatorBlocks() {
     hasInput: false,
 
     mutationToDom: function() {
-      let mutation = Blockly.utils.xml.createElement('mutation');
+      const mutation = Blockly.utils.xml.createElement('mutation');
       mutation.setAttribute('hasInput', this.hasInput);
       return mutation;
     },
@@ -579,7 +579,7 @@ function defineMutatorBlocks() {
     },
 
     decompose: function(workspace) {
-      let topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      const topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
@@ -613,7 +613,7 @@ function defineMutatorBlocks() {
     },
 
     decompose: function(workspace) {
-      let topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      const topBlock = workspace.newBlock('checkbox_block', 'check_block');
       topBlock.initSvg();
       topBlock.render();
       return topBlock;
@@ -653,7 +653,7 @@ function createTestBlock() {
 exports.createTestBlock = createTestBlock;
 
 function createRenderedBlock(workspaceSvg, type) {
-  let block = workspaceSvg.newBlock(type);
+  const block = workspaceSvg.newBlock(type);
   block.initSvg();
   block.render();
   return block;
@@ -692,7 +692,7 @@ exports.dispatchPointerEvent = dispatchPointerEvent;
  * @return {!KeyboardEvent} The mocked keydown event.
  */
 function createKeyDownEvent(keyCode, modifiers) {
-  let event = {
+  const event = {
     keyCode: keyCode,
   };
   if (modifiers && modifiers.length > 0) {

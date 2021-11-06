@@ -63,7 +63,7 @@ suite('Flyout', function() {
       });
       suite('toolbox flyout', function() {
         setup(function() {
-          let toolbox = document.getElementById('toolbox-categories');
+          const toolbox = document.getElementById('toolbox-categories');
           this.workspace = Blockly.inject('blocklyDiv',
               {
                 toolbox: toolbox
@@ -170,7 +170,7 @@ suite('Flyout', function() {
       });
       suite('toolbox flyout', function() {
         setup(function() {
-          let toolbox = document.getElementById('toolbox-categories');
+          const toolbox = document.getElementById('toolbox-categories');
           this.workspace = Blockly.inject('blocklyDiv',
               {
                 toolbox: toolbox,
@@ -247,21 +247,21 @@ suite('Flyout', function() {
     });
 
     function checkFlyoutInfo(flyoutSpy) {
-      let flyoutInfo = flyoutSpy.returnValues[0];
-      let contents = flyoutInfo.contents;
-      let gaps = flyoutInfo.gaps;
+      const flyoutInfo = flyoutSpy.returnValues[0];
+      const contents = flyoutInfo.contents;
+      const gaps = flyoutInfo.gaps;
 
-      let expectedGaps = [20, 24, 24];
+      const expectedGaps = [20, 24, 24];
       chai.assert.deepEqual(gaps, expectedGaps);
 
       chai.assert.equal(contents.length, 3, 'Contents');
 
       chai.assert.equal(contents[0].type, 'block', 'Contents');
-      let block = contents[0]['block'];
+      const block = contents[0]['block'];
       chai.assert.instanceOf(block, Blockly.BlockSvg);
       chai.assert.equal(block.getFieldValue('OP'), 'NEQ');
-      let childA = block.getInputTargetBlock('A');
-      let childB = block.getInputTargetBlock('B');
+      const childA = block.getInputTargetBlock('A');
+      const childB = block.getInputTargetBlock('B');
       chai.assert.isTrue(childA.isShadow());
       chai.assert.isFalse(childB.isShadow());
       chai.assert.equal(childA.getFieldValue('NUM'), 1);
@@ -281,7 +281,7 @@ suite('Flyout', function() {
       });
 
       test('NodeList', function() {
-        let nodeList = document.getElementById('toolbox-simple').childNodes;
+        const nodeList = document.getElementById('toolbox-simple').childNodes;
         this.flyout.show(nodeList);
         checkFlyoutInfo(this.createFlyoutSpy);
       });
@@ -352,14 +352,14 @@ suite('Flyout', function() {
         this.flyout = this.workspace.getFlyout();
 
         this.assertDisabled = function(disabled) {
-          let block = this.flyout.getWorkspace().getTopBlocks(false)[0];
+          const block = this.flyout.getWorkspace().getTopBlocks(false)[0];
           chai.assert.equal(!block.isEnabled(), disabled);
         };
       });
 
       suite('XML', function() {
         test('True string', function() {
-          let xml = Blockly.Xml.textToDom(
+          const xml = Blockly.Xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="true"></block>' +
               '</xml>'
@@ -369,7 +369,7 @@ suite('Flyout', function() {
         });
 
         test('False string', function() {
-          let xml = Blockly.Xml.textToDom(
+          const xml = Blockly.Xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="false"></block>' +
               '</xml>'
@@ -380,7 +380,7 @@ suite('Flyout', function() {
 
         test('Disabled string', function() {
           // The XML system supports this for some reason!?
-          let xml = Blockly.Xml.textToDom(
+          const xml = Blockly.Xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="disabled"></block>' +
               '</xml>'
@@ -390,7 +390,7 @@ suite('Flyout', function() {
         });
 
         test('Different string', function() {
-          let xml = Blockly.Xml.textToDom(
+          const xml = Blockly.Xml.textToDom(
               '<xml>' +
               '<block type="text_print" disabled="random"></block>' +
               '</xml>'
@@ -402,7 +402,7 @@ suite('Flyout', function() {
 
       suite('JSON', function() {
         test('All undefined', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -413,7 +413,7 @@ suite('Flyout', function() {
         });
 
         test('Enabled true', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -425,7 +425,7 @@ suite('Flyout', function() {
         });
 
         test('Enabled false', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -437,7 +437,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled true string', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -449,7 +449,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled false string', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -461,7 +461,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled string', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -473,7 +473,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled true value', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -485,7 +485,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled false value', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -497,7 +497,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled different string', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',
@@ -509,7 +509,7 @@ suite('Flyout', function() {
         });
 
         test('Disabled empty string', function() {
-          let json = [
+          const json = [
             {
               'kind': 'block',
               'type': 'text_print',

@@ -27,7 +27,7 @@ goog.require('Blockly.Mutator');
  */
 Blockly.Constants.Text.HUE = 160;
 
-Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   // Block for text value
   {
     "type": "text",
@@ -222,7 +222,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "mutator": "text_charAt_mutator",
   },
-]);  // END JSON EXTRACT (Do not delete this comment.)
+]);
 
 Blockly.Blocks['text_getSubstring'] = {
   /**

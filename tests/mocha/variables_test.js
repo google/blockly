@@ -44,7 +44,7 @@ suite('Variables', function() {
   function createTestVarBlock(workspace, variable_id) {
     // Turn off events to avoid testing XML at the same time.
     Blockly.Events.disable();
-    let block = new Blockly.Block(workspace, 'get_var_block');
+    const block = new Blockly.Block(workspace, 'get_var_block');
     block.inputList[0].fieldRow[0].setValue(variable_id);
     Blockly.Events.enable();
     return block;
@@ -56,7 +56,7 @@ suite('Variables', function() {
       createTestVarBlock(this.workspace, '2');
       createTestVarBlock(this.workspace, '3');
 
-      let result = Blockly.Variables.allUsedVarModels(this.workspace);
+      const result = Blockly.Variables.allUsedVarModels(this.workspace);
       chai.assert.equal(result.length, 3,
           'Expected three variables in the list of used variables');
     });
@@ -64,7 +64,7 @@ suite('Variables', function() {
     test('Some unused', function() {
       createTestVarBlock(this.workspace, '2');
 
-      let result = Blockly.Variables.allUsedVarModels(this.workspace);
+      const result = Blockly.Variables.allUsedVarModels(this.workspace);
       chai.assert.equal(result.length, 1,
           'Expected one variable in the list of used variables');
       chai.assert.equal(result[0].getId(), '2',
@@ -75,7 +75,7 @@ suite('Variables', function() {
       createTestVarBlock(this.workspace, '2');
       createTestVarBlock(this.workspace, '2');
 
-      let result = Blockly.Variables.allUsedVarModels(this.workspace);
+      const result = Blockly.Variables.allUsedVarModels(this.workspace);
       // Using the same variable multiple times should not change the number of
       // elements in the list.
       chai.assert.equal(result.length, 1,
@@ -85,7 +85,7 @@ suite('Variables', function() {
     });
 
     test('All unused', function() {
-      let result = Blockly.Variables.allUsedVarModels(this.workspace);
+      const result = Blockly.Variables.allUsedVarModels(this.workspace);
       chai.assert.equal(result.length, 0,
           'Expected no variables in the list of used variables');
     });
@@ -93,12 +93,12 @@ suite('Variables', function() {
 
   suite('getVariable', function() {
     test('By id', function() {
-      let var1 = this.workspace.createVariable('name1', 'type1', 'id1');
-      let var2 = this.workspace.createVariable('name2', 'type1', 'id2');
-      let var3 = this.workspace.createVariable('name3', 'type2', 'id3');
-      let result1 = Blockly.Variables.getVariable(this.workspace, 'id1');
-      let result2 = Blockly.Variables.getVariable(this.workspace, 'id2');
-      let result3 = Blockly.Variables.getVariable(this.workspace, 'id3');
+      const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
+      const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
+      const var3 = this.workspace.createVariable('name3', 'type2', 'id3');
+      const result1 = Blockly.Variables.getVariable(this.workspace, 'id1');
+      const result2 = Blockly.Variables.getVariable(this.workspace, 'id2');
+      const result3 = Blockly.Variables.getVariable(this.workspace, 'id3');
 
       chai.assert.equal(var1, result1);
       chai.assert.equal(var2, result2);
@@ -106,14 +106,14 @@ suite('Variables', function() {
     });
 
     test('By name and type', function() {
-      let var1 = this.workspace.createVariable('name1', 'type1', 'id1');
-      let var2 = this.workspace.createVariable('name2', 'type1', 'id2');
-      let var3 = this.workspace.createVariable('name3', 'type2', 'id3');
-      let result1 =
+      const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
+      const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
+      const var3 = this.workspace.createVariable('name3', 'type2', 'id3');
+      const result1 =
           Blockly.Variables.getVariable(this.workspace, null, 'name1', 'type1');
-      let result2 =
+      const result2 =
           Blockly.Variables.getVariable(this.workspace, null, 'name2', 'type1');
-      let result3 =
+      const result3 =
           Blockly.Variables.getVariable(this.workspace, null, 'name3', 'type2');
 
       // Searching by name + type is correct.
@@ -123,14 +123,14 @@ suite('Variables', function() {
     });
 
     test('Bad id with name and type fallback', function() {
-      let var1 = this.workspace.createVariable('name1', 'type1', 'id1');
-      let var2 = this.workspace.createVariable('name2', 'type1', 'id2');
-      let var3 = this.workspace.createVariable('name3', 'type2', 'id3');
-      let result1 =
+      const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
+      const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
+      const var3 = this.workspace.createVariable('name3', 'type2', 'id3');
+      const result1 =
           Blockly.Variables.getVariable(this.workspace, 'badId', 'name1', 'type1');
-      let result2 =
+      const result2 =
           Blockly.Variables.getVariable(this.workspace, 'badId', 'name2', 'type1');
-      let result3 =
+      const result3 =
           Blockly.Variables.getVariable(this.workspace, 'badId', 'name3', 'type2');
 
       // Searching by ID failed, but falling back onto name + type is correct.

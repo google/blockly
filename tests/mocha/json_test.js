@@ -22,7 +22,7 @@ suite('JSON Block Definitions', function() {
   suite('defineBlocksWithJsonArray', function() {
     test('Basic block', function() {
       /**  Ensure a block can be instantiated from a JSON definition.  */
-      let BLOCK_TYPE = 'test_json_minimal';
+      const BLOCK_TYPE = 'test_json_minimal';
       let block;
       assertNoWarnings(() => {
         Blockly.defineBlocksWithJsonArray([{
@@ -36,12 +36,12 @@ suite('JSON Block Definitions', function() {
     });
 
     test('Null or undefined type id', function() {
-      let BLOCK_TYPE1 = 'test_json_before_bad_blocks';
-      let BLOCK_TYPE2 = 'test_json_after_bad_blocks';
+      const BLOCK_TYPE1 = 'test_json_before_bad_blocks';
+      const BLOCK_TYPE2 = 'test_json_after_bad_blocks';
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
-      let blockTypeCount = Object.keys(Blockly.Blocks).length;
+      const blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
@@ -58,12 +58,12 @@ suite('JSON Block Definitions', function() {
     });
 
     test('Null item', function() {
-      let BLOCK_TYPE1 = 'test_block_before_null';
-      let BLOCK_TYPE2 = 'test_block_after_null';
+      const BLOCK_TYPE1 = 'test_block_before_null';
+      const BLOCK_TYPE2 = 'test_block_after_null';
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
-      let blockTypeCount = Object.keys(Blockly.Blocks).length;
+      const blockTypeCount = Object.keys(Blockly.Blocks).length;
 
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
@@ -85,12 +85,12 @@ suite('JSON Block Definitions', function() {
     });
 
     test('Undefined item', function() {
-      let BLOCK_TYPE1 = 'test_block_before_undefined';
-      let BLOCK_TYPE2 = 'test_block_after_undefined';
+      const BLOCK_TYPE1 = 'test_block_before_undefined';
+      const BLOCK_TYPE2 = 'test_block_after_undefined';
 
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE1]);
       chai.assert.isUndefined(Blockly.Blocks[BLOCK_TYPE2]);
-      let blockTypeCount = Object.keys(Blockly.Blocks).length;
+      const blockTypeCount = Object.keys(Blockly.Blocks).length;
       assertWarnings(() => {
         Blockly.defineBlocksWithJsonArray([
           {
@@ -111,33 +111,33 @@ suite('JSON Block Definitions', function() {
     });
 
     test('message0 creates input', function() {
-      let BLOCK_TYPE = 'test_json_message0';
-      let MESSAGE0 = 'message0';
+      const BLOCK_TYPE = 'test_json_message0';
+      const MESSAGE0 = 'message0';
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0
       }]);
 
-      let block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
+      const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
-      let textField = block.inputList[0].fieldRow[0];
+      const textField = block.inputList[0].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE0, textField.getText());
     });
 
     test('message1 and message0 creates two inputs', function() {
       /**  Ensure message1 creates a new input.  */
-      let BLOCK_TYPE = 'test_json_message1';
-      let MESSAGE0 = 'message0';
-      let MESSAGE1 = 'message1';
+      const BLOCK_TYPE = 'test_json_message1';
+      const MESSAGE0 = 'message0';
+      const MESSAGE1 = 'message1';
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0,
         "message1": MESSAGE1
       }]);
 
-      let block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
+      const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 2);
 
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
@@ -152,9 +152,9 @@ suite('JSON Block Definitions', function() {
     });
 
     test('Message string is dereferenced', function() {
-      let BLOCK_TYPE = 'test_json_message0_i18n';
-      let MESSAGE0 = '%{BKY_MESSAGE}';
-      let MESSAGE = 'message';
+      const BLOCK_TYPE = 'test_json_message0_i18n';
+      const MESSAGE0 = '%{BKY_MESSAGE}';
+      const MESSAGE = 'message';
 
       addMessageToCleanup(this.sharedCleanup, 'MESSAGE');
       Blockly.Msg['MESSAGE'] = MESSAGE;
@@ -163,21 +163,21 @@ suite('JSON Block Definitions', function() {
         "message0": MESSAGE0
       }]);
 
-      let block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
+      const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
-      let textField = block.inputList[0].fieldRow[0];
+      const textField = block.inputList[0].fieldRow[0];
       chai.assert.equal(Blockly.FieldLabel, textField.constructor);
       chai.assert.equal(MESSAGE, textField.getText());
     });
 
     test('Dropdown', function() {
-      let BLOCK_TYPE = 'test_json_dropdown';
-      let FIELD_NAME = 'FIELD_NAME';
-      let LABEL0 = 'LABEL0';
-      let VALUE0 = 'VALUE0';
-      let LABEL1 = 'LABEL1';
-      let VALUE1 = 'VALUE1';
+      const BLOCK_TYPE = 'test_json_dropdown';
+      const FIELD_NAME = 'FIELD_NAME';
+      const LABEL0 = 'LABEL0';
+      const VALUE0 = 'VALUE0';
+      const LABEL1 = 'LABEL1';
+      const VALUE1 = 'VALUE1';
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
         "message0": "%1",
@@ -193,15 +193,15 @@ suite('JSON Block Definitions', function() {
         ]
       }]);
 
-      let block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
+      const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
-      let dropdown = block.inputList[0].fieldRow[0];
+      const dropdown = block.inputList[0].fieldRow[0];
       chai.assert.equal(dropdown, block.getField(FIELD_NAME));
       chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);
       chai.assert.equal(VALUE0, dropdown.getValue());
 
-      let options = dropdown.getOptions();
+      const options = dropdown.getOptions();
       chai.assert.equal(LABEL0, options[0][0]);
       chai.assert.equal(VALUE0, options[0][1]);
       chai.assert.equal(LABEL1, options[1][0]);
@@ -210,31 +210,31 @@ suite('JSON Block Definitions', function() {
 
 
     test('Dropdown with images', function() {
-      let BLOCK_TYPE = 'test_json_dropdown';
-      let FIELD_NAME = 'FIELD_NAME';
-      let IMAGE1_ALT_TEXT = 'Localized message.';
+      const BLOCK_TYPE = 'test_json_dropdown';
+      const FIELD_NAME = 'FIELD_NAME';
+      const IMAGE1_ALT_TEXT = 'Localized message.';
       addMessageToCleanup(this.sharedCleanup, 'ALT_TEXT');
       Blockly.Msg['ALT_TEXT'] = IMAGE1_ALT_TEXT;
-      let IMAGE0 = {
+      const IMAGE0 = {
         'width': 12,
         'height': 34,
         'src': 'http://image0.src',
         'alt': 'IMAGE0 alt text'
       };
-      let VALUE0 = 'VALUE0';
-      let IMAGE1 = {
+      const VALUE0 = 'VALUE0';
+      const IMAGE1 = {
         'width': 56,
         'height': 78,
         'src': 'http://image1.src',
         'alt': '%{BKY_ALT_TEXT}'
       };
-      let VALUE1 = 'VALUE1';
-      let IMAGE2 = {
+      const VALUE1 = 'VALUE1';
+      const IMAGE2 = {
         'width': 90,
         'height': 123,
         'src': 'http://image2.src'
       };
-      let VALUE2 = 'VALUE2';
+      const VALUE2 = 'VALUE2';
 
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
@@ -252,10 +252,10 @@ suite('JSON Block Definitions', function() {
         ]
       }]);
 
-      let block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
+      const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       chai.assert.equal(block.inputList.length, 1);
       chai.assert.equal(block.inputList[0].fieldRow.length, 1);
-      let dropdown = block.inputList[0].fieldRow[0];
+      const dropdown = block.inputList[0].fieldRow[0];
       chai.assert.equal(dropdown, block.getField(FIELD_NAME));
       chai.assert.equal(Blockly.FieldDropdown, dropdown.constructor);
       chai.assert.equal(VALUE0, dropdown.getValue());
@@ -266,18 +266,18 @@ suite('JSON Block Definitions', function() {
         chai.assert.equal(actualImage.src, expectedImage.src);
       }
 
-      let options = dropdown.getOptions();
-      let image0 = options[0][0];
+      const options = dropdown.getOptions();
+      const image0 = options[0][0];
       assertImageEquals(IMAGE0, image0);
       chai.assert.equal(IMAGE0.alt, image0.alt);
       chai.assert.equal(options[0][1], VALUE0);
 
-      let image1 = options[1][0];
+      const image1 = options[1][0];
       assertImageEquals(IMAGE1, image1);
       chai.assert.equal(IMAGE1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
       chai.assert.equal(VALUE1, options[1][1]);
 
-      let image2 = options[2][0];
+      const image2 = options[2][0];
       assertImageEquals(IMAGE1, image1);
       chai.assert.notExists(image2.alt);  // No alt specified.
       chai.assert.equal(VALUE2, options[2][1]);

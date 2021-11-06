@@ -35,22 +35,22 @@ function testAWorkspace() {
   });
 
   function assertBlockVarModelName(workspace, blockIndex, name) {
-    let block = workspace.topBlocks_[blockIndex];
+    const block = workspace.topBlocks_[blockIndex];
     chai.assert.exists(block, 'Block at topBlocks_[' + blockIndex + ']');
-    let varModel = block.getVarModels()[0];
+    const varModel = block.getVarModels()[0];
     chai.assert.exists(varModel,
         'VariableModel for block at topBlocks_[' + blockIndex + ']');
-    let blockVarName = varModel.name;
+    const blockVarName = varModel.name;
     chai.assert.equal(blockVarName, name,
         'VariableModel name for block at topBlocks_[' + blockIndex + ']');
   }
 
   function createVarBlocksNoEvents(workspace, ids) {
-    let blocks = [];
+    const blocks = [];
     // Turn off events to avoid testing XML at the same time.
     eventUtils.disable();
     for (let i = 0, id; (id = ids[i]); i++) {
-      let block = new Blockly.Block(workspace, 'get_var_block');
+      const block = new Blockly.Block(workspace, 'get_var_block');
       block.inputList[0].fieldRow[0].setValue(id);
       blocks.push(block);
     }
@@ -67,7 +67,7 @@ function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      let varMapLength =
+      const varMapLength =
           Object.keys(this.workspace.variableMap_.variableMap_).length;
       chai.assert.equal(varMapLength, 0);
     });
@@ -78,7 +78,7 @@ function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      let varMapLength =
+      const varMapLength =
           Object.keys(this.workspace.variableMap_.variableMap_).length;
       chai.assert.equal(varMapLength, 0);
     });
@@ -95,12 +95,12 @@ function testAWorkspace() {
 
     test('deleteVariableById(id2) one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
-      let stub =
+      const stub =
           sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
       this.workspace.deleteVariableById('id2');
 
       sinon.assert.notCalled(stub);
-      let variable = this.workspace.getVariableById('id2');
+      const variable = this.workspace.getVariableById('id2');
       chai.assert.isNull(variable);
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertBlockVarModelName(this.workspace, 0, 'name1');
@@ -108,12 +108,12 @@ function testAWorkspace() {
 
     test('deleteVariableById(id1) multiple usages confirm', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
-      let stub =
+      const stub =
           sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
-      let variable = this.workspace.getVariableById('id1');
+      const variable = this.workspace.getVariableById('id1');
       chai.assert.isNull(variable);
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertBlockVarModelName(this.workspace, 0, 'name2');
@@ -121,7 +121,7 @@ function testAWorkspace() {
 
     test('deleteVariableById(id1) multiple usages cancel', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
-      let stub =
+      const stub =
           sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, false);
       this.workspace.deleteVariableById('id1');
 
@@ -176,7 +176,7 @@ function testAWorkspace() {
         // The second variable should remain unchanged.
         assertVariableValues(this.workspace, 'name2', 'type1', 'id2');
         // The first variable should have been deleted.
-        let variable = this.workspace.getVariableById('id1');
+        const variable = this.workspace.getVariableById('id1');
         chai.assert.isNull(variable);
         // There should only be one variable left.
         chai.assert.equal(this.workspace.getAllVariables().length, 1);
@@ -210,7 +210,7 @@ function testAWorkspace() {
         // The second variable should be updated.
         assertVariableValues(this.workspace, 'Name2', 'type1', 'id2');
         // The first variable should have been deleted.
-        let variable = this.workspace.getVariableById('id1');
+        const variable = this.workspace.getVariableById('id1');
         chai.assert.isNull(variable);
         // There should only be one variable left.
         chai.assert.equal(this.workspace.getAllVariables().length, 1);
@@ -249,7 +249,7 @@ function testAWorkspace() {
     });
 
     test('Flat workspace one block after dispose', function() {
-      let blockA = this.workspace.newBlock('');
+      const blockA = this.workspace.newBlock('');
       this.workspace.newBlock('');
       blockA.dispose();
       chai.assert.equal(this.workspace.getTopBlocks(true).length, 1);
@@ -283,7 +283,7 @@ function testAWorkspace() {
     });
 
     test('Flat workspace one block after dispose', function() {
-      let blockA = this.workspace.newBlock('');
+      const blockA = this.workspace.newBlock('');
       this.workspace.newBlock('');
       blockA.dispose();
       chai.assert.equal(this.workspace.getTopBlocks(false).length, 1);
@@ -319,7 +319,7 @@ function testAWorkspace() {
     });
 
     test('Flat workspace one block after dispose', function() {
-      let blockA = this.workspace.newBlock('');
+      const blockA = this.workspace.newBlock('');
       this.workspace.newBlock('');
       blockA.dispose();
       chai.assert.equal(this.workspace.getAllBlocks(true).length, 1);
@@ -486,26 +486,26 @@ function testAWorkspace() {
 
     test('Under block limit and no instance limit', function() {
       this.workspace.options.maxBlocks = 3;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isTrue(this.workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('At block limit and no instance limit', function() {
       this.workspace.options.maxBlocks = 2;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('Over block limit of 0 and no instance limit', function() {
       this.workspace.options.maxBlocks = 0;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
     });
 
     test('Over block limit but under instance limit', function() {
       this.workspace.options.maxBlocks = 1;
       this.workspace.options.maxInstances['get_var_block'] = 3;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 1 and maxInstances limit 3');
     });
@@ -513,7 +513,7 @@ function testAWorkspace() {
     test('Over block limit of 0 but under instance limit', function() {
       this.workspace.options.maxBlocks = 0;
       this.workspace.options.maxInstances['get_var_block'] = 3;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 0 and maxInstances limit 3');
     });
@@ -521,7 +521,7 @@ function testAWorkspace() {
     test('Over block limit but at instance limit', function() {
       this.workspace.options.maxBlocks = 1;
       this.workspace.options.maxInstances['get_var_block'] = 2;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 1 and maxInstances limit 2');
     });
@@ -529,7 +529,7 @@ function testAWorkspace() {
     test('Over block limit and over instance limit', function() {
       this.workspace.options.maxBlocks = 1;
       this.workspace.options.maxInstances['get_var_block'] = 1;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 1 and maxInstances limit 1');
     });
@@ -537,7 +537,7 @@ function testAWorkspace() {
     test('Over block limit of 0 and over instance limit', function() {
       this.workspace.options.maxBlocks = 0;
       this.workspace.options.maxInstances['get_var_block'] = 1;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 0 and maxInstances limit 1');
     });
@@ -545,7 +545,7 @@ function testAWorkspace() {
     test('Over block limit and over instance limit of 0', function() {
       this.workspace.options.maxBlocks = 1;
       this.workspace.options.maxInstances['get_var_block'] = 0;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap),
           'With maxBlocks limit 1 and maxInstances limit 0');
     });
@@ -553,7 +553,7 @@ function testAWorkspace() {
     test('Over block limit of 0 and over instance limit of 0', function() {
       this.workspace.options.maxBlocks = 0;
       this.workspace.options.maxInstances['get_var_block'] = 0;
-      let typeCountsMap = {'get_var_block': 1};
+      const typeCountsMap = {'get_var_block': 1};
       chai.assert.isFalse(this.workspace.isCapacityAvailable(typeCountsMap));
     });
   });
@@ -640,8 +640,8 @@ function testAWorkspace() {
      * @param {!Element} expected the expected node.
      */
     function assertNodesEqual(actual, expected) {
-      let actualString = '\n' + Blockly.Xml.domToPrettyText(actual) + '\n';
-      let expectedString = '\n' + Blockly.Xml.domToPrettyText(expected) + '\n';
+      const actualString = '\n' + Blockly.Xml.domToPrettyText(actual) + '\n';
+      const expectedString = '\n' + Blockly.Xml.domToPrettyText(expected) + '\n';
 
       chai.assert.equal(actual.tagName, expected.tagName);
       for (let i = 0, attr; (attr = expected.attributes[i]); i++) {
@@ -698,11 +698,11 @@ function testAWorkspace() {
       });
 
       function testUndoDelete(xmlText) {
-        let xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.Xml.textToDom(xmlText);
         Blockly.Xml.domToBlock(xml, this.workspace);
         this.workspace.getTopBlocks()[0].dispose(false);
         this.workspace.undo();
-        let newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
         assertNodesEqual(newXml.firstChild, xml);
       }
 
@@ -821,20 +821,20 @@ function testAWorkspace() {
       });
 
       function testUndoConnect(xmlText, parentId, childId, func) {
-        let xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.Xml.textToDom(xmlText);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
 
-        let parent = this.workspace.getBlockById(parentId);
-        let child = this.workspace.getBlockById(childId);
+        const parent = this.workspace.getBlockById(parentId);
+        const child = this.workspace.getBlockById(childId);
         func.call(this, parent, child);
         this.workspace.undo();
 
-        let newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
         assertNodesEqual(newXml, xml);
       }
 
       test('Stack', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1"></block>' +
             '  <block type="stack_block" id="2"></block>' +
@@ -846,7 +846,7 @@ function testAWorkspace() {
       });
 
       test('Row', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1"></block>' +
             '  <block type="row_block" id="2"></block>' +
@@ -858,7 +858,7 @@ function testAWorkspace() {
       });
 
       test('Statement', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1"></block>' +
             '  <block type="stack_block" id="2"></block>' +
@@ -871,7 +871,7 @@ function testAWorkspace() {
       });
 
       test('Stack w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1">' +
             '    <next>' +
@@ -887,7 +887,7 @@ function testAWorkspace() {
       });
 
       test('Row w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1">' +
             '    <value name="INPUT">' +
@@ -903,7 +903,7 @@ function testAWorkspace() {
       });
 
       test('Statement w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1">' +
             '    <statement name="STATEMENT">' +
@@ -920,7 +920,7 @@ function testAWorkspace() {
       });
 
       test('Stack w/ shadow', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1">' +
             '    <next>' +
@@ -936,7 +936,7 @@ function testAWorkspace() {
       });
 
       test('Row w/ shadow', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1">' +
             '    <value name="INPUT">' +
@@ -952,7 +952,7 @@ function testAWorkspace() {
       });
 
       test('Statement w/ shadow', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1">' +
             '    <statement name="STATEMENT">' +
@@ -1011,10 +1011,10 @@ function testAWorkspace() {
       });
 
       function testUndoDisconnect(xmlText, childId) {
-        let xml = Blockly.Xml.textToDom(xmlText);
+        const xml = Blockly.Xml.textToDom(xmlText);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
 
-        let child = this.workspace.getBlockById(childId);
+        const child = this.workspace.getBlockById(childId);
         if (child.outputConnection) {
           child.outputConnection.disconnect();
         } else {
@@ -1022,12 +1022,12 @@ function testAWorkspace() {
         }
         this.workspace.undo();
 
-        let newXml = Blockly.Xml.workspaceToDom(this.workspace);
+        const newXml = Blockly.Xml.workspaceToDom(this.workspace);
         assertNodesEqual(newXml, xml);
       }
 
       test('Stack', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1">' +
             '    <next>' +
@@ -1039,7 +1039,7 @@ function testAWorkspace() {
       });
 
       test('Row', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1">' +
             '    <value name="INPUT">' +
@@ -1051,7 +1051,7 @@ function testAWorkspace() {
       });
 
       test('Statement', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1">' +
             '    <statement name="STATEMENT">' +
@@ -1063,7 +1063,7 @@ function testAWorkspace() {
       });
 
       test('Stack w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1">' +
             '    <next>' +
@@ -1079,7 +1079,7 @@ function testAWorkspace() {
       });
 
       test('Row w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1">' +
             '    <value name="INPUT">' +
@@ -1095,7 +1095,7 @@ function testAWorkspace() {
       });
 
       test('Statement w/ child', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1">' +
             '    <statement name="STATEMENT">' +
@@ -1113,7 +1113,7 @@ function testAWorkspace() {
       test('Stack w/ shadow', function() {
         // TODO: For some reason on next connections shadows are
         //   serialized second.
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="stack_block" id="1">' +
             '    <next>' +
@@ -1129,7 +1129,7 @@ function testAWorkspace() {
       });
 
       test('Row w/ shadow', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="row_block" id="1">' +
             '    <value name="INPUT">' +
@@ -1145,7 +1145,7 @@ function testAWorkspace() {
       });
 
       test('Statement w/ shadow', function() {
-        let xml =
+        const xml =
             '<xml>' +
             '  <block type="statement_block" id="1">' +
             '    <statement name="STATEMENT">' +
@@ -1296,13 +1296,13 @@ function testAWorkspace() {
         test('Delete same variable twice no usages', function() {
           this.workspace.createVariable('name1', 'type1', 'id1');
           this.workspace.deleteVariableById('id1');
-          let workspace = this.workspace;
+          const workspace = this.workspace;
           assertWarnings(() => {
             workspace.deleteVariableById('id1');
           }, /Can't delete/);
 
           // Check the undoStack only recorded one delete event.
-          let undoStack = this.workspace.undoStack_;
+          const undoStack = this.workspace.undoStack_;
           chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
           chai.assert.notEqual(undoStack[undoStack.length - 2].type, 'var_delete');
 
@@ -1323,13 +1323,13 @@ function testAWorkspace() {
           this.workspace.createVariable('name1', 'type1', 'id1');
           createVarBlocksNoEvents(this.workspace, ['id1']);
           this.workspace.deleteVariableById('id1');
-          let workspace = this.workspace;
+          const workspace = this.workspace;
           assertWarnings(() => {
             workspace.deleteVariableById('id1');
           }, /Can't delete/);
 
           // Check the undoStack only recorded one delete event.
-          let undoStack = this.workspace.undoStack_;
+          const undoStack = this.workspace.undoStack_;
           chai.assert.equal(undoStack[undoStack.length - 1].type, 'var_delete');
           chai.assert.equal(undoStack[undoStack.length - 2].type, 'delete');
           chai.assert.notEqual(undoStack[undoStack.length - 3].type, 'var_delete');

@@ -18,6 +18,7 @@ var fs = require('fs');
 var execSync = require('child_process').execSync;
 var through2 = require('through2');
 
+const clangFormat = require('clang-format');
 const clangFormatter = require('gulp-clang-format');
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
@@ -516,7 +517,7 @@ function cleanBuildDir(done) {
  */
 function format() {
   return gulp.src(['core/**/*.js'], {base: '.'})
-      .pipe(clangFormatter.format('file'))
+      .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
 };
 

@@ -144,33 +144,19 @@ Blockly.Lua['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-
     'EVEN': [' % 2 == 0', Blockly.Lua.ORDER_MULTIPLICATIVE,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'ODD': [' % 2 == 1', Blockly.Lua.ORDER_MULTIPLICATIVE,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'WHOLE': [' % 1 == 0', Blockly.Lua.ORDER_MULTIPLICATIVE,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'POSITIVE': [' > 0', Blockly.Lua.ORDER_RELATIONAL,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'NEGATIVE': [' < 0', Blockly.Lua.ORDER_RELATIONAL,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'DIVISIBLE_BY': [null, Blockly.Lua.ORDER_MULTIPLICATIVE,
-
         Blockly.Lua.ORDER_RELATIONAL],
-
     'PRIME': [null, Blockly.Lua.ORDER_NONE,
-
         Blockly.Lua.ORDER_HIGH]
 
   }
@@ -207,9 +193,8 @@ Blockly.Lua['math_number_property'] = function(block) {
          code = functionName + '(' + numberToCheck + ')';
 
         } else if (dropdownProperty == 'DIVISIBLE_BY') {
-      
+          
           const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
-      
               Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
       
           code = numberToCheck + ' % ' + divisor + ' == 0';

@@ -212,7 +212,7 @@ suite('JSO Serialization', function() {
       test('Xml hooks', function() {
         const block = this.workspace.newBlock('row_block');
         block.mutationToDom = function() {
-          let container = Blockly.utils.xml.createElement('mutation');
+          const container = Blockly.utils.xml.createElement('mutation');
           container.setAttribute('value', 'some value');
           return container;
         };
@@ -703,28 +703,28 @@ suite('JSO Serialization', function() {
     suite('Do full serialization', function() {
       suite('True', function() {
         test('Single block', function() {
-          let block = this.workspace.newBlock('variables_get');
-          let jso = Blockly.serialization.blocks.save(block);
+          const block = this.workspace.newBlock('variables_get');
+          const jso = Blockly.serialization.blocks.save(block);
           chai.assert.deepEqual(
               jso['fields']['VAR'], {'id': 'id2', 'name': 'item', 'type': ''});
         });
 
         test('Input block', function() {
-          let block = this.workspace.newBlock('row_block');
-          let childBlock = this.workspace.newBlock('variables_get');
+          const block = this.workspace.newBlock('row_block');
+          const childBlock = this.workspace.newBlock('variables_get');
           block.getInput('INPUT').connection.connect(
               childBlock.outputConnection);
-          let jso = Blockly.serialization.blocks.save(block);
+          const jso = Blockly.serialization.blocks.save(block);
           chai.assert.deepEqual(
               jso['inputs']['INPUT']['block']['fields']['VAR'],
               {'id': 'id4', 'name': 'item', 'type': ''});
         });
 
         test('Next block', function() {
-          let block = this.workspace.newBlock('stack_block');
-          let childBlock = this.workspace.newBlock('variables_set');
+          const block = this.workspace.newBlock('stack_block');
+          const childBlock = this.workspace.newBlock('variables_set');
           block.nextConnection.connect(childBlock.previousConnection);
-          let jso = Blockly.serialization.blocks.save(block);
+          const jso = Blockly.serialization.blocks.save(block);
           chai.assert.deepEqual(
               jso['next']['block']['fields']['VAR'],
               {'id': 'id4', 'name': 'item', 'type': ''});
@@ -733,8 +733,8 @@ suite('JSO Serialization', function() {
 
       suite('False', function() {
         test('Single block', function() {
-          let block = this.workspace.newBlock('variables_get');
-          let jso = Blockly.serialization.blocks.save(
+          const block = this.workspace.newBlock('variables_get');
+          const jso = Blockly.serialization.blocks.save(
               block, {doFullSerialization: false});
           chai.assert.deepEqual(jso['fields']['VAR'], {'id': 'id2'});
           chai.assert.isUndefined(jso['fields']['VAR']['name']);
@@ -742,11 +742,11 @@ suite('JSO Serialization', function() {
         });
 
         test('Input block', function() {
-          let block = this.workspace.newBlock('row_block');
-          let childBlock = this.workspace.newBlock('variables_get');
+          const block = this.workspace.newBlock('row_block');
+          const childBlock = this.workspace.newBlock('variables_get');
           block.getInput('INPUT').connection.connect(
               childBlock.outputConnection);
-          let jso = Blockly.serialization.blocks.save(
+          const jso = Blockly.serialization.blocks.save(
               block, {doFullSerialization: false});
           chai.assert.deepEqual(
               jso['inputs']['INPUT']['block']['fields']['VAR'], {'id': 'id4'});
@@ -757,10 +757,10 @@ suite('JSO Serialization', function() {
         });
 
         test('Next block', function() {
-          let block = this.workspace.newBlock('stack_block');
-          let childBlock = this.workspace.newBlock('variables_set');
+          const block = this.workspace.newBlock('stack_block');
+          const childBlock = this.workspace.newBlock('variables_set');
           block.nextConnection.connect(childBlock.previousConnection);
-          let jso = Blockly.serialization.blocks.save(
+          const jso = Blockly.serialization.blocks.save(
               block, {doFullSerialization: false});
           chai.assert.deepEqual(
               jso['next']['block']['fields']['VAR'], {'id': 'id4'});

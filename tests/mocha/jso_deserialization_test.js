@@ -690,7 +690,7 @@ suite('JSO Deserialization', function() {
         init: function() { },
 
         mutationToDom: function() {
-          let container = Blockly.utils.xml.createElement('mutation');
+          const container = Blockly.utils.xml.createElement('mutation');
           container.setAttribute('value', 'some value');
           return container;
         },

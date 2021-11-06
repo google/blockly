@@ -18,10 +18,10 @@ suite('Utils', function() {
   });
 
   test('genUid', function() {
-    let uuids = {};
+    const uuids = {};
     chai.assert.equal([1, 2, 3].indexOf(4), -1);
     for (let i = 0; i < 1000; i++) {
-      let uuid = Blockly.utils.idGenerator.genUid();
+      const uuid = Blockly.utils.idGenerator.genUid();
       chai.assert.isFalse(uuid in uuids, 'UUID different: ' + uuid);
       uuids[uuid] = true;
     }
@@ -229,7 +229,7 @@ suite('Utils', function() {
   });
 
   test('arrayRemove', function() {
-    let arr = [1, 2, 3, 2];
+    const arr = [1, 2, 3, 2];
     chai.assert.isFalse(Blockly.utils.arrayRemove(arr, 0), 'Remove Not found');
     chai.assert.equal(arr.join(','), '1,2,3,2', 'Remove Not found result');
     chai.assert.isTrue(Blockly.utils.arrayRemove(arr, 2), 'Remove item');
@@ -239,7 +239,7 @@ suite('Utils', function() {
   });
 
   test('XY_REGEX_', function() {
-    let regex = Blockly.utils.getRelativeXY.XY_REGEX_;
+    const regex = Blockly.utils.getRelativeXY.XY_REGEX_;
     let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);
@@ -266,7 +266,7 @@ suite('Utils', function() {
   });
 
   test('XY_STYLE_REGEX_', function() {
-    let regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
+    const regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
     let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);
@@ -314,7 +314,7 @@ suite('Utils', function() {
 
   suite('DOM', function() {
     test('addClass', function() {
-      let p = document.createElement('p');
+      const p = document.createElement('p');
       Blockly.utils.dom.addClass(p, 'one');
       chai.assert.equal(p.className, 'one', 'Adding "one"');
       Blockly.utils.dom.addClass(p, 'one');
@@ -328,7 +328,7 @@ suite('Utils', function() {
     });
 
     test('hasClass', function() {
-      let p = document.createElement('p');
+      const p = document.createElement('p');
       p.className = ' one three  two three  ';
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'one'), 'Has "one"');
       chai.assert.isTrue(Blockly.utils.dom.hasClass(p, 'two'), 'Has "two"');
@@ -338,7 +338,7 @@ suite('Utils', function() {
     });
 
     test('removeClass', function() {
-      let p = document.createElement('p');
+      const p = document.createElement('p');
       p.className = ' one three  two three  ';
       Blockly.utils.dom.removeClass(p, 'two');
       chai.assert.equal(p.className, 'one three three', 'Removing "two"');
@@ -419,7 +419,7 @@ suite('Utils', function() {
 
   suite('Math', function() {
     test('toRadians', function() {
-      let quarter = Math.PI / 2;
+      const quarter = Math.PI / 2;
       chai.assert.equal(Blockly.utils.math.toRadians(-90), -quarter, '-90');
       chai.assert.equal(Blockly.utils.math.toRadians(0), 0, '0');
       chai.assert.equal(Blockly.utils.math.toRadians(90), quarter, '90');
@@ -430,7 +430,7 @@ suite('Utils', function() {
     });
 
     test('toDegrees', function() {
-      let quarter = Math.PI / 2;
+      const quarter = Math.PI / 2;
       chai.assert.equal(Blockly.utils.math.toDegrees(-quarter), -90, '-90');
       chai.assert.equal(Blockly.utils.math.toDegrees(0), 0, '0');
       chai.assert.equal(Blockly.utils.math.toDegrees(quarter), 90, '90');

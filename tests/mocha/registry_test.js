@@ -10,7 +10,7 @@ const {assertWarnings, sharedTestSetup, sharedTestTeardown} = goog.require('Bloc
 
 
 suite('Registry', function() {
-  let TestClass = function() {};
+  const TestClass = function() {};
   TestClass.prototype.testMethod = function() {
     return 'something';
   };
@@ -238,19 +238,19 @@ suite('Registry', function() {
     });
 
     test('Simple - Plugin name given', function() {
-      let testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('Simple - Plugin class given', function() {
       this.options.plugins['test'] = TestClass;
-      let testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('No Plugin Name Given', function() {
       delete this.options['plugins']['test'];
-      let testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), this.defaultClass);
     });
 

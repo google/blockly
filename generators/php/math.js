@@ -146,52 +146,30 @@ Blockly.PHP['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-
     'EVEN': [' % 2 == 0', Blockly.PHP.ORDER_MODULUS,
-
         Blockly.PHP.ORDER_EQUALITY],
-
     'ODD': [' % 2 == 1', Blockly.PHP.ORDER_MODULUS,
-
         Blockly.PHP.ORDER_EQUALITY],
-
     'WHOLE': [' % 1 == 0', Blockly.PHP.ORDER_MODULUS,
-
         Blockly.PHP.ORDER_EQUALITY],
-
     'POSITIVE': [' > 0', Blockly.PHP.ORDER_RELATIONAL,
-
         Blockly.PHP.ORDER_RELATIONAL],
-
     'NEGATIVE': [' < 0', Blockly.PHP.ORDER_RELATIONAL,
-
         Blockly.PHP.ORDER_RELATIONAL],
-
     'DIVISIBLE_BY': [null, Blockly.PHP.ORDER_MODULUS,
-
         Blockly.PHP.ORDER_EQUALITY],
-
     'PRIME': [null, Blockly.PHP.ORDER_NONE,
-
         Blockly.PHP.ORDER_FUNCTION_CALL]
-
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
-
   const tuple = PROPERTIES[dropdownProperty];
-
   const suffix = tuple[0];
-
   const inputOrder = tuple[1];
-
   const outputOrder = tuple[2];
-
   const numberToCheck = Blockly.PHP.valueToCode(block, 'NUMBER_TO_CHECK',
-
       inputOrder) || '0';
-
-      let code;
-  if (dropdownProperty == 'PRIME') {
+  let code;
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = Blockly.PHP.provideFunction_(
         'math_isPrime',
@@ -215,24 +193,15 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  return true;',
          '}']);
          code = functionName + '(' + numberToCheck + ')';
-
-        } else if (dropdownProperty == 'DIVISIBLE_BY') {
-      
-          const divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
-      
-              Blockly.PHP.ORDER_MODULUS) || '0';
-      
-          code = numberToCheck + ' % ' + divisor + ' == 0';
-      
-        } else {
-      
-          code = numberToCheck + suffix;
-      
-        }
-      
-        return [code, outputOrder];
-      
-      };
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
+    const divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
+        Blockly.PHP.ORDER_MODULUS) || '0';
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+  } else {
+    code = numberToCheck + suffix;
+  }
+  return [code, outputOrder];
+};
 
 Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.

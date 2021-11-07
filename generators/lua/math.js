@@ -195,7 +195,7 @@ Blockly.Lua['math_number_property'] = function(block) {
         Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Lua will produce a nan.
     // Let's produce nil if we can determine this at compile-time.
-    if (divisor == '0') {
+    if (divisor === '0') {
       return ['nil', Blockly.Lua.ORDER_ATOMIC];
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';

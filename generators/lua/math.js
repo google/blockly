@@ -127,14 +127,47 @@ Blockly.Lua['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
+Blockly.Lua['math_constant'] = function(block) {
+  // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
+  var CONSTANTS = {
+    PI: ['math.pi', Blockly.Lua.ORDER_HIGH],
+    E: ['math.exp(1)', Blockly.Lua.ORDER_HIGH],
+    GOLDEN_RATIO: ['(1 + math.sqrt(5)) / 2', Blockly.Lua.ORDER_MULTIPLICATIVE],
+    SQRT2: ['math.sqrt(2)', Blockly.Lua.ORDER_HIGH],
+    SQRT1_2: ['math.sqrt(1 / 2)', Blockly.Lua.ORDER_HIGH],
+    INFINITY: ['math.huge', Blockly.Lua.ORDER_HIGH]
+  };
+  return CONSTANTS[block.getFieldValue('CONSTANT')];
+};
+
 Blockly.Lua['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const number_to_check = Blockly.Lua.valueToCode(block, 'NUMBER_TO_CHECK',
-      Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
-  const dropdown_property = block.getFieldValue('PROPERTY');
+  const PROPERTIES = {
+    'EVEN': [' % 2 == 0', Blockly.Lua.ORDER_MULTIPLICATIVE,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'ODD': [' % 2 == 1', Blockly.Lua.ORDER_MULTIPLICATIVE,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'WHOLE': [' % 1 == 0', Blockly.Lua.ORDER_MULTIPLICATIVE,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'POSITIVE': [' > 0', Blockly.Lua.ORDER_RELATIONAL,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Blockly.Lua.ORDER_RELATIONAL,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, Blockly.Lua.ORDER_MULTIPLICATIVE,
+        Blockly.Lua.ORDER_RELATIONAL],
+    'PRIME': [null, Blockly.Lua.ORDER_NONE,
+        Blockly.Lua.ORDER_HIGH]
+  }
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+  const tuple = PROPERTIES[dropdownProperty];
+  const suffix = tuple[0];
+  const inputOrder = tuple[1];
+  const outputOrder = tuple[2];
+  const numberToCheck = Blockly.Lua.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
-  if (dropdown_property === 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = Blockly.Lua.provideFunction_(
         'math_isPrime',
@@ -156,41 +189,20 @@ Blockly.Lua['math_number_property'] = function(block) {
          '  end',
          '  return true',
          'end']);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.Lua.ORDER_HIGH];
-  }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 == 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 == 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 == 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY': {
-      const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
-          Blockly.Lua.ORDER_MULTIPLICATIVE);
-      // If 'divisor' is some code that evals to 0, Lua will produce a nan.
-      // Let's produce nil if we can determine this at compile-time.
-      if (!divisor || divisor === '0') {
-        return ['nil', Blockly.Lua.ORDER_ATOMIC];
-      }
-      // The normal trick to implement ?: with and/or doesn't work here:
-      //   divisor == 0 and nil or number_to_check % divisor == 0
-      // because nil is false, so allow a runtime failure. :-(
-      code = number_to_check + ' % ' + divisor + ' == 0';
-      break;
+         code = functionName + '(' + numberToCheck + ')';
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {     
+    const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
+        Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';
+    // If 'divisor' is some code that evals to 0, Lua will produce a nan.
+    // Let's produce nil if we can determine this at compile-time.
+    if (divisor === '0') {
+      return ['nil', Blockly.Lua.ORDER_ATOMIC];
     }
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+  } else {
+    code = numberToCheck + suffix;
   }
-  return [code, Blockly.Lua.ORDER_RELATIONAL];
+  return [code, outputOrder];
 };
 
 Blockly.Lua['math_change'] = function(block) {

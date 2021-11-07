@@ -183,7 +183,7 @@ Blockly.Python['math_number_property'] = function(block) {
   const numberToCheck = Blockly.Python.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
-  if (dropdownProperty == 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     Blockly.Python.definitions_['import_math'] = 'import math';
     Blockly.Python.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';

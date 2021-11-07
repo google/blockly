@@ -150,7 +150,7 @@ Blockly.PHP['math_number_property'] = function(block) {
         Blockly.PHP.ORDER_EQUALITY],
     'ODD': [' % 2 == 1', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
-    'WHOLE': [' % 1 != 0', Blockly.PHP.ORDER_MODULUS,
+    'WHOLE': [' % 1 !== 0', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
     'POSITIVE': [' > 0', Blockly.PHP.ORDER_RELATIONAL,
         Blockly.PHP.ORDER_RELATIONAL],

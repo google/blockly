@@ -214,7 +214,7 @@ Blockly.Python['math_number_property'] = function(block) {
     const divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
     Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Python will raise an error.
-    if (!divisor || divisor === '0') {
+    if (divisor === '0') {
       return ['False', Blockly.Python.ORDER_ATOMIC];
     }
     code = numberToCheck + ' % ' + divisor + ' == 0';

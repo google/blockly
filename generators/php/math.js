@@ -200,7 +200,7 @@ Blockly.PHP['math_number_property'] = function(block) {
     if (divisor === '0') {
       return ['false', Blockly.PHP.ORDER_ATOMIC];
     }
-    code = numberToCheck + ' % ' + divisor + ' === 0';
+    code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
     code = prefix + numberToCheck + suffix;
   }

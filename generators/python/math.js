@@ -184,31 +184,32 @@ Blockly.Python['math_number_property'] = function(block) {
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
+    // Prime is a special case as it is not a one-liner test.
     Blockly.Python.definitions_['import_math'] = 'import math';
     Blockly.Python.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
     const functionName = Blockly.Python.provideFunction_(
-    'math_isPrime',
-    ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
-     '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-     '  # If n is not a number but a string, try parsing it.',
-     '  if not isinstance(n, Number):',
-     '    try:',
-     '      n = float(n)',
-     '    except:',
-     '      return False',
-     '  if n == 2 or n == 3:',
-     '    return True',
-     '  # False if n is negative, is 1, or not whole,' +
-     ' or if n is divisible by 2 or 3.',
-     '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
-     '    return False',
-     '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-     '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
-     '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
-     '      return False',
-     '  return True']);
-    code = functionName + '(' + numberToCheck + ')';
+      'math_isPrime',
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
+       '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+       '  # If n is not a number but a string, try parsing it.',
+       '  if not isinstance(n, Number):',
+       '    try:',
+       '      n = float(n)',
+       '    except:',
+       '      return False',
+       '  if n == 2 or n == 3:',
+       '    return True',
+       '  # False if n is negative, is 1, or not whole,' +
+       ' or if n is divisible by 2 or 3.',
+       '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
+       '    return False',
+       '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+       '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
+       '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
+       '      return False',
+       '  return True']);
+       code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
     Blockly.Python.ORDER_MULTIPLICATIVE) || '0';

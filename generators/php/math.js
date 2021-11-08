@@ -146,9 +146,9 @@ Blockly.PHP['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': ['', ' % 2 === 0', Blockly.PHP.ORDER_MODULUS,
+    'EVEN': ['', ' % 2 == 0', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
-    'ODD': ['', ' % 2 === 1', Blockly.PHP.ORDER_MODULUS,
+    'ODD': ['', ' % 2 == 1', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
     'WHOLE': ['is_int(', ')', Blockly.PHP.ORDER_NONE,
         Blockly.PHP.ORDER_FUNCTION_CALL],

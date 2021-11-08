@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a positionable UI element.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -18,11 +17,11 @@
 goog.module('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.require('Blockly.IComponent');
+const {IComponent} = goog.require('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 
 
 /**
@@ -49,4 +48,4 @@ IPositionable.prototype.position;
  */
 IPositionable.prototype.getBoundingRectangle;
 
-exports = IPositionable;
+exports.IPositionable = IPositionable;

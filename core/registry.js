@@ -7,7 +7,6 @@
 /**
  * @fileoverview This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -21,29 +20,29 @@ goog.module('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const ToolboxItem = goog.requireType('Blockly.ToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const ISerializer = goog.requireType('Blockly.serialization.ISerializer');
-/* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IMetricsManager} = goog.requireType('Blockly.IMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {Options} = goog.requireType('Blockly.Options');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {ToolboxItem} = goog.requireType('Blockly.ToolboxItem');
 
 
 /**
@@ -155,15 +154,15 @@ Type.SERIALIZER = new Type('serializer');
  * @alias Blockly.registry.register
  */
 const register = function(type, name, registryItem, opt_allowOverrides) {
-  if ((!(type instanceof Type) && typeof type != 'string') ||
-      String(type).trim() == '') {
+  if ((!(type instanceof Type) && typeof type !== 'string') ||
+      String(type).trim() === '') {
     throw Error(
         'Invalid type "' + type + '". The type must be a' +
         ' non-empty string or a Blockly.registry.Type.');
   }
   type = String(type).toLowerCase();
 
-  if ((typeof name != 'string') || (name.trim() == '')) {
+  if ((typeof name !== 'string') || (name.trim() === '')) {
     throw Error(
         'Invalid name "' + name + '". The name must be a' +
         ' non-empty string.');
@@ -204,7 +203,7 @@ exports.register = register;
 const validate = function(type, registryItem) {
   switch (type) {
     case String(Type.FIELD):
-      if (typeof registryItem.fromJson != 'function') {
+      if (typeof registryItem.fromJson !== 'function') {
         throw Error('Type "' + type + '" must have a fromJson function');
       }
       break;
@@ -374,7 +373,7 @@ const getClassFromOptions = function(type, options, opt_throwIfMissing) {
   const plugin = options.plugins[typeName] || DEFAULT;
 
   // If the user passed in a plugin class instead of a registered plugin name.
-  if (typeof plugin == 'function') {
+  if (typeof plugin === 'function') {
     return plugin;
   }
   return getClass(type, plugin, opt_throwIfMissing);

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Geras renderer.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,22 +15,22 @@
  */
 goog.module('Blockly.geras.Renderer');
 
-const BaseRenderer = goog.require('Blockly.blockRendering.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const BaseRenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const BaseConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const ConstantProvider = goog.require('Blockly.geras.ConstantProvider');
-const Drawer = goog.require('Blockly.geras.Drawer');
-const HighlightConstantProvider = goog.require('Blockly.geras.HighlightConstantProvider');
-const PathObject = goog.require('Blockly.geras.PathObject');
-const RenderInfo = goog.require('Blockly.geras.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const blockRendering = goog.require('Blockly.blockRendering');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.require('Blockly.geras.ConstantProvider');
+const {Drawer} = goog.require('Blockly.geras.Drawer');
+const {HighlightConstantProvider} = goog.require('Blockly.geras.HighlightConstantProvider');
+const {PathObject} = goog.require('Blockly.geras.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+const {RenderInfo} = goog.require('Blockly.geras.RenderInfo');
+const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -149,4 +148,4 @@ Renderer.prototype.getHighlightConstants = function() {
 
 blockRendering.register('geras', Renderer);
 
-exports = Renderer;
+exports.Renderer = Renderer;

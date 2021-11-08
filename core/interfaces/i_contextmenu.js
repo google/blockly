@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that supports a right-click.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -30,4 +29,4 @@ const IContextMenu = function() {};
  */
 IContextMenu.prototype.showContextMenu;
 
-exports = IContextMenu;
+exports.IContextMenu = IContextMenu;

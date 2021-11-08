@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Number input field
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.FieldNumber');
 
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
 const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 
 
 /**
@@ -231,14 +230,14 @@ FieldNumber.prototype.setPrecision = function(precision) {
 FieldNumber.prototype.setPrecisionInternal_ = function(precision) {
   this.precision_ = Number(precision) || 0;
   let precisionString = String(this.precision_);
-  if (precisionString.indexOf('e') != -1) {
+  if (precisionString.indexOf('e') !== -1) {
     // String() is fast.  But it turns .0000001 into '1e-7'.
     // Use the much slower toLocaleString to access all the digits.
     precisionString =
         this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
   }
   const decimalIndex = precisionString.indexOf('.');
-  if (decimalIndex == -1) {
+  if (decimalIndex === -1) {
     // If the precision is 0 (float) allow any number of decimals,
     // otherwise allow none.
     this.decimalPlaces_ = precision ? 0 : null;
@@ -292,7 +291,7 @@ FieldNumber.prototype.doClassValidation_ = function(opt_newValue) {
     n = Math.round(n / this.precision_) * this.precision_;
   }
   // Clean up floating point errors.
-  if (this.decimalPlaces_ != null) {
+  if (this.decimalPlaces_ !== null) {
     n = Number(n.toFixed(this.decimalPlaces_));
   }
   return n;
@@ -319,4 +318,4 @@ FieldNumber.prototype.widgetCreate_ = function() {
 
 fieldRegistry.register('field_number', FieldNumber);
 
-exports = FieldNumber;
+exports.FieldNumber = FieldNumber;

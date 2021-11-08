@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly menu item similar to Closure's goog.ui.MenuItem
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -131,7 +130,7 @@ MenuItem.prototype.createDom = function() {
   }
 
   let contentDom = /** @type {!HTMLElement} */ (this.content_);
-  if (typeof this.content_ == 'string') {
+  if (typeof this.content_ === 'string') {
     contentDom = document.createTextNode(this.content_);
   }
   content.appendChild(contentDom);
@@ -284,4 +283,4 @@ MenuItem.prototype.onAction = function(fn, obj) {
   this.actionHandler_ = fn.bind(obj);
 };
 
-exports = MenuItem;
+exports.MenuItem = MenuItem;

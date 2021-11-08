@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for a component that can delete a block or bubble
  * that is dropped on top of it.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -20,9 +19,9 @@
 goog.module('Blockly.IDeleteArea');
 
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const {IDragTarget} = goog.require('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.require('Blockly.IDragTarget');
+const {IDraggable} = goog.requireType('Blockly.IDraggable');
 
 
 /**
@@ -48,4 +47,4 @@ const IDeleteArea = function() {};
  */
 IDeleteArea.prototype.wouldDelete;
 
-exports = IDeleteArea;
+exports.IDeleteArea = IDeleteArea;

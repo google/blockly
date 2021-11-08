@@ -7,7 +7,6 @@
 /**
  * @fileoverview The namespace used to keep track of keyboard shortcuts and the
  * key codes used to execute those shortcuts.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -18,10 +17,10 @@
  */
 goog.module('Blockly.ShortcutRegistry');
 
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const object = goog.require('Blockly.utils.object');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -58,7 +57,7 @@ ShortcutRegistry.modifierKeys = {
   'Shift': KeyCodes.SHIFT,
   'Control': KeyCodes.CTRL,
   'Alt': KeyCodes.ALT,
-  'Meta': KeyCodes.META
+  'Meta': KeyCodes.META,
 };
 
 /**
@@ -166,7 +165,7 @@ ShortcutRegistry.prototype.removeKeyMapping = function(
   const shortcutIdx = shortcutNames.indexOf(shortcutName);
   if (shortcutIdx > -1) {
     shortcutNames.splice(shortcutIdx, 1);
-    if (shortcutNames.length == 0) {
+    if (shortcutNames.length === 0) {
       delete this.keyMap_[keyCode];
     }
     return true;
@@ -290,13 +289,13 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
   let serializedKey = '';
   for (const modifier in ShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {
-      if (serializedKey != '') {
+      if (serializedKey !== '') {
         serializedKey += '+';
       }
       serializedKey += modifier;
     }
   }
-  if (serializedKey != '' && e.keyCode) {
+  if (serializedKey !== '' && e.keyCode) {
     serializedKey = serializedKey + '+' + e.keyCode;
   } else if (e.keyCode) {
     serializedKey = e.keyCode.toString();
@@ -336,7 +335,7 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
     for (const modifier in ShortcutRegistry.modifierKeys) {
       const modifierKeyCode = ShortcutRegistry.modifierKeys[modifier];
       if (modifiers.indexOf(modifierKeyCode) > -1) {
-        if (serializedKey != '') {
+        if (serializedKey !== '') {
           serializedKey += '+';
         }
         serializedKey += modifier;
@@ -344,7 +343,7 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
     }
   }
 
-  if (serializedKey != '' && keyCode) {
+  if (serializedKey !== '' && keyCode) {
     serializedKey = serializedKey + '+' + keyCode;
   } else if (keyCode) {
     serializedKey = keyCode.toString();
@@ -355,4 +354,4 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
 // Creates and assigns the singleton instance.
 new ShortcutRegistry();
 
-exports = ShortcutRegistry;
+exports.ShortcutRegistry = ShortcutRegistry;

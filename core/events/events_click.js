@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of UI click in Blockly's editor.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.Events.Click');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -81,4 +80,4 @@ Click.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.CLICK, Click);
 
-exports = Click;
+exports.Click = Click;

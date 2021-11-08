@@ -8,7 +8,6 @@
 /**
  * @fileoverview A div that floats on top of the workspace, for drop-down menus.
  * The drop-down can be kept inside the workspace, animate in/out, etc.
- * @author tmickel@mit.edu (Tim Mickel)
  */
 
 'use strict';
@@ -19,19 +18,19 @@
  */
 goog.module('Blockly.DropDownDiv');
 
-const Rect = goog.require('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const math = goog.require('Blockly.utils.math');
 const style = goog.require('Blockly.utils.style');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -426,7 +425,7 @@ internal.getBoundsInfo = function() {
     top: boundPosition.y,
     bottom: boundPosition.y + boundSize.height,
     width: boundSize.width,
-    height: boundSize.height
+    height: boundSize.height,
   };
 };
 
@@ -496,7 +495,7 @@ const getPositionBelowMetrics = function(
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
     arrowAtTop: true,
-    arrowVisible: true
+    arrowVisible: true,
   };
 };
 
@@ -531,7 +530,7 @@ const getPositionAboveMetrics = function(
     arrowX: xCoords.arrowX,
     arrowY: arrowY,
     arrowAtTop: false,
-    arrowVisible: true
+    arrowVisible: true,
   };
 };
 
@@ -558,7 +557,7 @@ const getPositionTopOfPageMetrics = function(sourceX, boundsInfo, divSize) {
     arrowAtTop: null,
     arrowX: null,
     arrowY: null,
-    arrowVisible: false
+    arrowVisible: false,
   };
 };
 
@@ -760,6 +759,7 @@ DropDownDiv.repositionForWindowResize = function() {
     DropDownDiv.hide();
   }
 };
-exports = DropDownDiv;
 
-exports.TEST_ONLY = internal;
+DropDownDiv.TEST_ONLY = internal;
+
+exports.DropDownDiv = DropDownDiv;

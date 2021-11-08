@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Helper functions for generating Dart for blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -96,17 +95,17 @@ Blockly.Dart.init = function(workspace) {
   this.nameDB_.populateVariables(workspace);
   this.nameDB_.populateProcedures(workspace);
 
-  var defvars = [];
+  const defvars = [];
   // Add developer variables (not created or named by the user).
-  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
-  for (var i = 0; i < devVarList.length; i++) {
+  const devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  for (let i = 0; i < devVarList.length; i++) {
     defvars.push(this.nameDB_.getName(devVarList[i],
         Blockly.Names.DEVELOPER_VARIABLE_TYPE));
   }
 
   // Add user variables, but only ones that are being used.
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0; i < variables.length; i++) {
+  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
     defvars.push(this.nameDB_.getName(variables[i].getId(),
         Blockly.VARIABLE_CATEGORY_NAME));
   }
@@ -132,10 +131,10 @@ Blockly.Dart.finish = function(code) {
   code = 'main() {\n' + code + '}';
 
   // Convert the definitions dictionary into a list.
-  var imports = [];
-  var definitions = [];
-  for (var name in this.definitions_) {
-    var def = this.definitions_[name];
+  const imports = [];
+  const definitions = [];
+  for (let name in this.definitions_) {
+    const def = this.definitions_[name];
     if (def.match(/^import\s/)) {
       imports.push(def);
     } else {
@@ -147,7 +146,7 @@ Blockly.Dart.finish = function(code) {
   this.isInitialized = false;
 
   this.nameDB_.reset();
-  var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+  const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
@@ -184,7 +183,7 @@ Blockly.Dart.quote_ = function(string) {
  * @protected
  */
 Blockly.Dart.multiline_quote_ = function (string) {
-  var lines = string.split(/\n/g).map(this.quote_);
+  const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
   return lines.join(' + \'\\n\' + \n');
@@ -201,11 +200,11 @@ Blockly.Dart.multiline_quote_ = function (string) {
  * @protected
  */
 Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
-  var commentCode = '';
+  let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
-    var comment = block.getCommentText();
+    let comment = block.getCommentText();
     if (comment) {
       comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
@@ -217,9 +216,9 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
-        var childBlock = block.inputList[i].connection.targetBlock();
+    for (let i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
+        const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
           if (comment) {
@@ -229,8 +228,8 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
       }
     }
   }
-  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
@@ -245,22 +244,28 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
  */
 Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
-  var delta = opt_delta || 0;
-  var order = opt_order || this.ORDER_NONE;
+  let delta = opt_delta || 0;
+  let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+
+  /** @type {number} */
+  let outerOrder;
+  let innerOrder;
   if (delta) {
-    var at = this.valueToCode(block, atId,
-        this.ORDER_ADDITIVE) || defaultAtIndex;
+    outerOrder = this.ORDER_ADDITIVE;
+    innerOrder = this.ORDER_ADDITIVE;
   } else if (opt_negate) {
-    var at = this.valueToCode(block, atId,
-        this.ORDER_UNARY_PREFIX) || defaultAtIndex;
+    outerOrder = this.ORDER_UNARY_PREFIX;
+    innerOrder = this.ORDER_UNARY_PREFIX;
   } else {
-    var at = this.valueToCode(block, atId, order) ||
-        defaultAtIndex;
+    outerOrder = order;
   }
+
+  /** @type {string|number} */
+  let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
@@ -272,10 +277,8 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = this.ORDER_ADDITIVE;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = this.ORDER_ADDITIVE;
     }
     if (opt_negate) {
       if (delta) {
@@ -283,7 +286,6 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = this.ORDER_UNARY_PREFIX;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);

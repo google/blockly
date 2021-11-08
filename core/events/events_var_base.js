@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Abstract class for a variable event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -17,9 +16,9 @@
 goog.module('Blockly.Events.VarBase');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 
 
 /**
@@ -32,7 +31,7 @@ const object = goog.require('Blockly.utils.object');
  */
 const VarBase = function(opt_variable) {
   VarBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_variable == 'undefined';
+  this.isBlank = typeof opt_variable === 'undefined';
 
   /**
    * The variable id for the variable this event pertains to.
@@ -67,4 +66,4 @@ VarBase.prototype.fromJson = function(json) {
   this.varId = json['varId'];
 };
 
-exports = VarBase;
+exports.VarBase = VarBase;

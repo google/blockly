@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object for configuring and updating a workspace grid in
  * Blockly.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,9 +17,9 @@
  */
 goog.module('Blockly.Grid');
 
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -221,4 +220,4 @@ Grid.createDom = function(rnd, gridOptions, defs) {
   return gridPattern;
 };
 
-exports = Grid;
+exports.Grid = Grid;

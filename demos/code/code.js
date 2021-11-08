@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Code demo.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -33,6 +32,7 @@ Code.LANGUAGE_NAME = {
   'fa': 'فارسی',
   'fr': 'Français',
   'he': 'עברית',
+  'hr': 'Hrvatski',
   'hrx': 'Hunsrik',
   'hu': 'Magyar',
   'ia': 'Interlingua',
@@ -106,7 +106,7 @@ Code.getLang = function() {
  * @return {boolean} True if RTL, false if LTR.
  */
 Code.isRtl = function() {
-  return Code.LANGUAGE_RTL.indexOf(Code.LANG) != -1;
+  return Code.LANGUAGE_RTL.indexOf(Code.LANG) !== -1;
 };
 
 /**
@@ -184,7 +184,7 @@ Code.changeCodingLanguage = function() {
  * @param {!Function} func Event handler to bind.
  */
 Code.bindClick = function(el, func) {
-  if (typeof el == 'string') {
+  if (typeof el === 'string') {
     el = document.getElementById(el);
   }
   el.addEventListener('click', func, true);
@@ -321,7 +321,7 @@ Code.tabClick = function(clickedName) {
   Code.renderContent();
   // The code menu tab is on if the blocks tab is off.
   var codeMenuTab = document.getElementById('tab_code');
-  if (clickedName == 'blocks') {
+  if (clickedName === 'blocks') {
     Code.workspace.setVisible(true);
     codeMenuTab.className = 'taboff';
   } else {
@@ -330,7 +330,7 @@ Code.tabClick = function(clickedName) {
   // Sync the menu's value with the clicked tab value if needed.
   var codeMenu = document.getElementById('code_menu');
   for (var i = 0; i < codeMenu.options.length; i++) {
-    if (codeMenu.options[i].value == clickedName) {
+    if (codeMenu.options[i].value === clickedName) {
       codeMenu.selectedIndex = i;
       break;
     }
@@ -344,29 +344,29 @@ Code.tabClick = function(clickedName) {
 Code.renderContent = function() {
   var content = document.getElementById('content_' + Code.selected);
   // Initialize the pane.
-  if (content.id == 'content_xml') {
+  if (content.id === 'content_xml') {
     var xmlTextarea = document.getElementById('content_xml');
     var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
     var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
-  } else if (content.id == 'content_json') {
+  } else if (content.id === 'content_json') {
     var jsonTextarea = document.getElementById('content_json');
     jsonTextarea.value = JSON.stringify(
         Blockly.serialization.workspaces.save(Code.workspace), null, 2);
     jsonTextarea.focus();
-  } else if (content.id == 'content_javascript') {
+  } else if (content.id === 'content_javascript') {
     Code.attemptCodeGeneration(Blockly.JavaScript);
-  } else if (content.id == 'content_python') {
+  } else if (content.id === 'content_python') {
     Code.attemptCodeGeneration(Blockly.Python);
-  } else if (content.id == 'content_php') {
+  } else if (content.id === 'content_php') {
     Code.attemptCodeGeneration(Blockly.PHP);
-  } else if (content.id == 'content_dart') {
+  } else if (content.id === 'content_dart') {
     Code.attemptCodeGeneration(Blockly.Dart);
-  } else if (content.id == 'content_lua') {
+  } else if (content.id === 'content_lua') {
     Code.attemptCodeGeneration(Blockly.Lua);
   }
-  if (typeof PR == 'object') {
+  if (typeof PR === 'object') {
     PR.prettyPrint();
   }
 };
@@ -396,13 +396,13 @@ Code.checkAllGeneratorFunctionsDefined = function(generator) {
   for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
     if (!generator[blockType]) {
-      if (missingBlockGenerators.indexOf(blockType) == -1) {
+      if (missingBlockGenerators.indexOf(blockType) === -1) {
         missingBlockGenerators.push(blockType);
       }
     }
   }
 
-  var valid = missingBlockGenerators.length == 0;
+  var valid = missingBlockGenerators.length === 0;
   if (!valid) {
     var msg = 'The generator code for the following blocks not specified for ' +
         generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
@@ -450,7 +450,7 @@ Code.init = function() {
   // TODO: Clean up the message files so this is done explicitly instead of
   // through this for-loop.
   for (var messageKey in MSG) {
-    if (messageKey.indexOf('cat') == 0) {
+    if (messageKey.indexOf('cat') === 0) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }
@@ -552,7 +552,7 @@ Code.initLanguage = function() {
     var tuple = languages[i];
     var lang = tuple[tuple.length - 1];
     var option = new Option(tuple[0], lang);
-    if (lang == Code.LANG) {
+    if (lang === Code.LANG) {
       option.selected = true;
     }
     languageMenu.options.add(option);
@@ -584,7 +584,7 @@ Code.initLanguage = function() {
  */
 Code.runJS = function(event) {
   // Prevent code from being executed twice on touchscreens.
-  if (event.type == 'touchend') {
+  if (event.type === 'touchend') {
     event.preventDefault();
   }
 

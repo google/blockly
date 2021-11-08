@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an AST node location SVG.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,7 +17,7 @@
 goog.module('Blockly.IASTNodeLocationSvg');
 
 /* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.require('Blockly.IASTNodeLocation');
+const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
 
 
 /**
@@ -43,4 +42,4 @@ IASTNodeLocationSvg.prototype.setMarkerSvg;
  */
 IASTNodeLocationSvg.prototype.setCursorSvg;
 
-exports = IASTNodeLocationSvg;
+exports.IASTNodeLocationSvg = IASTNodeLocationSvg;

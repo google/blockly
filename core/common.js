@@ -7,7 +7,6 @@
 /**
  * @fileoverview Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -19,13 +18,13 @@
 goog.module('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -136,11 +135,11 @@ const svgResize = function(workspace) {
   }
   const width = div.offsetWidth;
   const height = div.offsetHeight;
-  if (cachedSize.width != width) {
+  if (cachedSize.width !== width) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (cachedSize.height != height) {
+  if (cachedSize.height !== height) {
     svg.setAttribute('height', height + 'px');
     mainWorkspace.setCachedParentSvgSize(null, height);
   }

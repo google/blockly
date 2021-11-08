@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a finished loading workspace event.
- * @author BeksOmega
  */
 'use strict';
 
@@ -17,11 +16,11 @@
 goog.module('Blockly.Events.FinishedLoading');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -40,7 +39,7 @@ const FinishedLoading = function(opt_workspace) {
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
-  this.isBlank = typeof opt_workspace == 'undefined';
+  this.isBlank = typeof opt_workspace === 'undefined';
 
   /**
    * The workspace identifier for this event.
@@ -97,4 +96,4 @@ FinishedLoading.prototype.fromJson = function(json) {
 registry.register(
     registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
 
-exports = FinishedLoading;
+exports.FinishedLoading = FinishedLoading;

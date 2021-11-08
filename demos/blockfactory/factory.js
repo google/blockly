@@ -11,7 +11,6 @@
  * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
  * for its code generation functions.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
  */
 'use strict';
 
@@ -86,8 +85,8 @@ BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
-  if (document.getElementById('format').value == 'Manual-JSON' ||
-      document.getElementById('format').value == 'Manual-JS') {
+  if (document.getElementById('format').value === 'Manual-JSON' ||
+      document.getElementById('format').value === 'Manual-JS') {
     Blockly.common.getMainWorkspace().hideChaff();
     mask.style.display = 'block';
     languagePre.style.display = 'none';
@@ -123,9 +122,9 @@ BlockFactory.updateLanguage = function() {
 
   if (!BlockFactory.updateBlocksFlag) {
     var format = document.getElementById('format').value;
-    if (format == 'Manual-JSON') {
+    if (format === 'Manual-JSON') {
       format = 'JSON';
-    } else if (format == 'Manual-JS') {
+    } else if (format === 'Manual-JS') {
       format = 'JavaScript';
     }
 
@@ -159,11 +158,11 @@ BlockFactory.updateGenerator = function(block) {
 BlockFactory.updatePreview = function() {
   // Toggle between LTR/RTL if needed (also used in first display).
   var newDir = document.getElementById('direction').value;
-  if (BlockFactory.oldDir != newDir) {
+  if (BlockFactory.oldDir !== newDir) {
     if (BlockFactory.previewWorkspace) {
       BlockFactory.previewWorkspace.dispose();
     }
-    var rtl = newDir == 'rtl';
+    var rtl = newDir === 'rtl';
     BlockFactory.previewWorkspace = Blockly.inject('preview',
         {rtl: rtl,
          media: '../../media/',
@@ -190,14 +189,14 @@ BlockFactory.updatePreview = function() {
       delete Blockly.Blocks[key];
     }
 
-    if (format == 'JSON') {
+    if (format === 'JSON') {
       var json = JSON.parse(code);
       Blockly.Blocks[json.type || BlockFactory.UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }
       };
-    } else if (format == 'JavaScript') {
+    } else if (format === 'JavaScript') {
       try {
         eval(code);
       } catch (e) {
@@ -229,11 +228,11 @@ BlockFactory.updatePreview = function() {
     // Warn user only if their block type is already exists in Blockly's
     // standard library.
     var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
-    if (StandardCategories.coreBlockTypes.indexOf(blockType) != -1) {
+    if (StandardCategories.coreBlockTypes.indexOf(blockType) !== -1) {
       rootBlock.setWarningText('A core Blockly block already exists ' +
           'under this name.');
 
-    } else if (blockType == 'block_type') {
+    } else if (blockType === 'block_type') {
       // Warn user to let them know they can't save a block under the default
       // name 'block_type'
       rootBlock.setWarningText('You cannot save a block with the default ' +
@@ -284,7 +283,7 @@ BlockFactory.disableEnableLink = function() {
   var linkButton = document.getElementById('linkButton');
   var saveBlockButton = document.getElementById('localSaveButton');
   var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
-  var disabled = document.getElementById('format').value.substr(0, 6) == 'Manual';
+  var disabled = document.getElementById('format').value.substr(0, 6) === 'Manual';
   linkButton.disabled = disabled;
   saveBlockButton.disabled = disabled;
   saveToLibButton.disabled = disabled;
@@ -308,11 +307,11 @@ BlockFactory.isStarterBlock = function() {
       // The starter block does not have blocks nested into the factory_base block.
       rootBlock.getChildren().length > 0 ||
       // The starter block's name is the default, 'block_type'.
-      rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
+      rootBlock.getFieldValue('NAME').trim().toLowerCase() !== 'block_type' ||
       // The starter block has no connections.
-      rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
+      rootBlock.getFieldValue('CONNECTIONS') !== 'NONE' ||
       // The starter block has automatic inputs.
-      rootBlock.getFieldValue('INLINE') != 'AUTO'
+      rootBlock.getFieldValue('INLINE') !== 'AUTO'
       );
 };
 

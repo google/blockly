@@ -8,7 +8,6 @@
  * @fileoverview Utilities for element styles.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -20,8 +19,8 @@
  */
 goog.module('Blockly.utils.style');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Size = goog.require('Blockly.utils.Size');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Size} = goog.require('Blockly.utils.Size');
 
 
 /**
@@ -32,7 +31,7 @@ const Size = goog.require('Blockly.utils.Size');
  * @alias Blockly.utils.style.getSize
  */
 const getSize = function(element) {
-  if (getStyle(element, 'display') != 'none') {
+  if (getStyle(element, 'display') !== 'none') {
     return getSizeWithDisplay(element);
   }
 
@@ -196,7 +195,7 @@ exports.setElementShown = setElementShown;
  * @alias Blockly.utils.style.isRightToLeft
  */
 const isRightToLeft = function(el) {
-  return 'rtl' == getStyle(el, 'direction');
+  return 'rtl' === getStyle(el, 'direction');
 };
 exports.isRightToLeft = isRightToLeft;
 
@@ -217,7 +216,7 @@ const getBorderBox = function(element) {
     top: parseFloat(top),
     right: parseFloat(right),
     bottom: parseFloat(bottom),
-    left: parseFloat(left)
+    left: parseFloat(left),
   };
 };
 exports.getBorderBox = getBorderBox;
@@ -259,7 +258,8 @@ exports.scrollIntoContainerView = scrollIntoContainerView;
  *     in form of goog.math.Coordinate(scrollLeft, scrollTop).
  * @alias Blockly.utils.style.getContainerOffsetToScrollInto
  */
-const getContainerOffsetToScrollInto = function(element, container, opt_center) {
+const getContainerOffsetToScrollInto = function(
+    element, container, opt_center) {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.

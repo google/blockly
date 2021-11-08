@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Classes for all types of variable events.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.Events.VarDelete');
 
-const VarBase = goog.require('Blockly.Events.VarBase');
-/* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {VarBase} = goog.require('Blockly.Events.VarBase');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
 
 
 /**
@@ -85,4 +84,4 @@ VarDelete.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_DELETE, VarDelete);
 
-exports = VarDelete;
+exports.VarDelete = VarDelete;

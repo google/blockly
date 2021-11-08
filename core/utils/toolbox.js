@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for the toolbox and flyout.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -16,14 +15,14 @@
  */
 goog.module('Blockly.utils.toolbox');
 
+const Xml = goog.require('Blockly.Xml');
+const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionState} = goog.requireType('Blockly.serialization.blocks');
 /* eslint-disable-next-line no-unused-vars */
-const ToolboxCategory = goog.requireType('Blockly.ToolboxCategory');
+const {ToolboxCategory} = goog.requireType('Blockly.ToolboxCategory');
 /* eslint-disable-next-line no-unused-vars */
-const ToolboxSeparator = goog.requireType('Blockly.ToolboxSeparator');
-const Xml = goog.require('Blockly.Xml');
-const userAgent = goog.require('Blockly.utils.userAgent');
+const {ToolboxSeparator} = goog.requireType('Blockly.ToolboxSeparator');
 
 /**
  * The information needed to create a block in the toolbox.
@@ -228,7 +227,7 @@ const Position = {
   TOP: 0,
   BOTTOM: 1,
   LEFT: 2,
-  RIGHT: 3
+  RIGHT: 3,
 };
 exports.Position = Position;
 
@@ -246,7 +245,7 @@ const convertToolboxDefToJson = function(toolboxDef) {
     return null;
   }
 
-  if (toolboxDef instanceof Element || typeof toolboxDef == 'string') {
+  if (toolboxDef instanceof Element || typeof toolboxDef === 'string') {
     toolboxDef = parseToolboxTree(toolboxDef);
     toolboxDef = convertToToolboxJson(toolboxDef);
   }
@@ -268,8 +267,8 @@ const validateToolbox = function(toolboxJson) {
   const toolboxContents = toolboxJson['contents'];
 
   if (toolboxKind) {
-    if (toolboxKind != FLYOUT_TOOLBOX_KIND &&
-        toolboxKind != CATEGORY_TOOLBOX_KIND) {
+    if (toolboxKind !== FLYOUT_TOOLBOX_KIND &&
+        toolboxKind !== CATEGORY_TOOLBOX_KIND) {
       throw Error(
           'Invalid toolbox kind ' + toolboxKind + '.' +
           ' Please supply either ' + FLYOUT_TOOLBOX_KIND + ' or ' +
@@ -323,11 +322,11 @@ const hasCategories = function(toolboxJson) {
 
   const toolboxKind = toolboxJson['kind'];
   if (toolboxKind) {
-    return toolboxKind == CATEGORY_TOOLBOX_KIND;
+    return toolboxKind === CATEGORY_TOOLBOX_KIND;
   }
 
   const categories = toolboxJson['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() == 'CATEGORY';
+    return item['kind'].toUpperCase() === 'CATEGORY';
   });
   return !!categories.length;
 };
@@ -347,7 +346,7 @@ const isCategoryCollapsible = function(categoryInfo) {
   }
 
   const categories = categoryInfo['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() == 'CATEGORY';
+    return item['kind'].toUpperCase() === 'CATEGORY';
   });
   return !!categories.length;
 };
@@ -395,7 +394,7 @@ const xmlToJsonArray = function(toolboxDef) {
     obj['kind'] = tagName;
 
     // Store the XML for a block.
-    if (tagName == 'BLOCK') {
+    if (tagName === 'BLOCK') {
       obj['blockxml'] = child;
     } else if (child.childNodes && child.childNodes.length > 0) {
       // Get the contents of a category
@@ -435,7 +434,7 @@ const addAttributes = function(node, obj) {
  */
 const parseToolboxTree = function(toolboxDef) {
   if (toolboxDef) {
-    if (typeof toolboxDef != 'string') {
+    if (typeof toolboxDef !== 'string') {
       if (userAgent.IE && toolboxDef.outerHTML) {
         // In this case the tree will not have been properly built by the
         // browser. The HTML will be contained in the element, but it will
@@ -446,9 +445,9 @@ const parseToolboxTree = function(toolboxDef) {
         toolboxDef = null;
       }
     }
-    if (typeof toolboxDef == 'string') {
+    if (typeof toolboxDef === 'string') {
       toolboxDef = Xml.textToDom(toolboxDef);
-      if (toolboxDef.nodeName.toLowerCase() != 'xml') {
+      if (toolboxDef.nodeName.toLowerCase() !== 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }
     }

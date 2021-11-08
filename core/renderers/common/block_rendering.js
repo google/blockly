@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Namespace for block rendering functionality.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,41 +15,41 @@
  */
 goog.module('Blockly.blockRendering');
 
-const BottomRow = goog.require('Blockly.blockRendering.BottomRow');
-const Connection = goog.require('Blockly.blockRendering.Connection');
-const ConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
-const Debug = goog.require('Blockly.blockRendering.Debug');
-const Drawer = goog.require('Blockly.blockRendering.Drawer');
-const ExternalValueInput = goog.require('Blockly.blockRendering.ExternalValueInput');
-const Field = goog.require('Blockly.blockRendering.Field');
-const Hat = goog.require('Blockly.blockRendering.Hat');
-const Icon = goog.require('Blockly.blockRendering.Icon');
-const InRowSpacer = goog.require('Blockly.blockRendering.InRowSpacer');
-const InlineInput = goog.require('Blockly.blockRendering.InlineInput');
-const InputConnection = goog.require('Blockly.blockRendering.InputConnection');
-const InputRow = goog.require('Blockly.blockRendering.InputRow');
-const IPathObject = goog.require('Blockly.blockRendering.IPathObject');
-const JaggedEdge = goog.require('Blockly.blockRendering.JaggedEdge');
-const MarkerSvg = goog.require('Blockly.blockRendering.MarkerSvg');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const NextConnection = goog.require('Blockly.blockRendering.NextConnection');
-const OutputConnection = goog.require('Blockly.blockRendering.OutputConnection');
-const PathObject = goog.require('Blockly.blockRendering.PathObject');
-const PreviousConnection = goog.require('Blockly.blockRendering.PreviousConnection');
-const Renderer = goog.require('Blockly.blockRendering.Renderer');
-const RenderInfo = goog.require('Blockly.blockRendering.RenderInfo');
-const RoundCorner = goog.require('Blockly.blockRendering.RoundCorner');
-const Row = goog.require('Blockly.blockRendering.Row');
-const SpacerRow = goog.require('Blockly.blockRendering.SpacerRow');
-const SquareCorner = goog.require('Blockly.blockRendering.SquareCorner');
-const StatementInput = goog.require('Blockly.blockRendering.StatementInput');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-const TopRow = goog.require('Blockly.blockRendering.TopRow');
-const Types = goog.require('Blockly.blockRendering.Types');
 const debug = goog.require('Blockly.blockRendering.debug');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const registry = goog.require('Blockly.registry');
+const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
+const {Connection} = goog.require('Blockly.blockRendering.Connection');
+const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+const {Debug} = goog.require('Blockly.blockRendering.Debug');
+const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
+const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
+const {Field} = goog.require('Blockly.blockRendering.Field');
+const {Hat} = goog.require('Blockly.blockRendering.Hat');
+const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
+const {Icon} = goog.require('Blockly.blockRendering.Icon');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+const {InlineInput} = goog.require('Blockly.blockRendering.InlineInput');
+const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
+const {InputRow} = goog.require('Blockly.blockRendering.InputRow');
+const {JaggedEdge} = goog.require('Blockly.blockRendering.JaggedEdge');
+const {MarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {NextConnection} = goog.require('Blockly.blockRendering.NextConnection');
+const {OutputConnection} = goog.require('Blockly.blockRendering.OutputConnection');
+const {PathObject} = goog.require('Blockly.blockRendering.PathObject');
+const {PreviousConnection} = goog.require('Blockly.blockRendering.PreviousConnection');
+const {RenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+const {Renderer} = goog.require('Blockly.blockRendering.Renderer');
+const {RoundCorner} = goog.require('Blockly.blockRendering.RoundCorner');
+const {Row} = goog.require('Blockly.blockRendering.Row');
+const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
+const {SquareCorner} = goog.require('Blockly.blockRendering.SquareCorner');
+const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 /**
  * Returns whether the debugger is turned on.
@@ -73,7 +72,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  *     to register.
  * @throws {Error} if a renderer with the same name has already been registered.
  */
- const register = function(name, rendererClass) {
+const register = function(name, rendererClass) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 };
 exports.register = register;

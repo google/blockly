@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a code comment on the workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.WorkspaceComment');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
 const eventUtils = goog.require('Blockly.Events.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 const xml = goog.require('Blockly.utils.xml');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentChange');
 /** @suppress {extraRequire} */
@@ -272,9 +271,9 @@ WorkspaceComment.prototype.getContent = function() {
  * @package
  */
 WorkspaceComment.prototype.setContent = function(content) {
-  if (this.content_ != content) {
-    eventUtils.fire(
-        new (eventUtils.get(eventUtils.COMMENT_CHANGE))(this, this.content_, content));
+  if (this.content_ !== content) {
+    eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
+        this, this.content_, content));
     this.content_ = content;
   }
 };
@@ -384,8 +383,8 @@ WorkspaceComment.parseAttributes = function(xml) {
     // @type {number}
     y: parseInt(xml.getAttribute('y'), 10),
     // @type {string}
-    content: xml.textContent
+    content: xml.textContent,
   };
 };
 
-exports = WorkspaceComment;
+exports.WorkspaceComment = WorkspaceComment;

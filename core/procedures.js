@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for handling procedures.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -18,20 +17,20 @@ goog.module('Blockly.Procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
 const Msg = goog.require('Blockly.Msg');
-const Names = goog.require('Blockly.Names');
 const Variables = goog.require('Blockly.Variables');
-const Workspace = goog.require('Blockly.Workspace');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
+const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Blocks} = goog.require('Blockly.blocks');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+const {Names} = goog.require('Blockly.Names');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -146,7 +145,7 @@ const isNameUsed = function(name, workspace, opt_exclude) {
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i] == opt_exclude) {
+    if (blocks[i] === opt_exclude) {
       continue;
     }
     if (blocks[i].getProcedureDef) {
@@ -176,7 +175,7 @@ const rename = function(name) {
       name,
       /** @type {!Block} */ (this.getSourceBlock()));
   const oldName = this.getValue();
-  if (oldName != name && oldName != legalName) {
+  if (oldName !== name && oldName !== legalName) {
     // Rename any callers.
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
@@ -209,7 +208,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -223,7 +222,7 @@ const flyoutCategory = function(workspace) {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -307,14 +306,14 @@ const updateMutatorFlyout = function(workspace) {
  * @package
  */
 const mutatorOpenListener = function(e) {
-  if (!(e.type == eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
+  if (!(e.type === eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
         e.isOpen)) {
     return;
   }
   const workspaceId = /** @type {string} */ (e.workspaceId);
   const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
   const type = block.type;
-  if (type != 'procedures_defnoreturn' && type != 'procedures_defreturn') {
+  if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
   }
   const workspace = block.mutator.getWorkspace();
@@ -329,8 +328,9 @@ exports.mutatorOpenListener = mutatorOpenListener;
  * @param {!Abstract} e The event that triggered this listener.
  */
 const mutatorChangeListener = function(e) {
-  if (e.type != eventUtils.BLOCK_CREATE && e.type != eventUtils.BLOCK_DELETE &&
-      e.type != eventUtils.BLOCK_CHANGE) {
+  if (e.type !== eventUtils.BLOCK_CREATE &&
+      e.type !== eventUtils.BLOCK_DELETE &&
+      e.type !== eventUtils.BLOCK_CHANGE) {
     return;
   }
   const workspaceId = /** @type {string} */ (e.workspaceId);
@@ -382,7 +382,7 @@ const mutateCallers = function(defBlock) {
     caller.domToMutation(xmlElement);
     const newMutationDom = caller.mutationToDom();
     const newMutation = newMutationDom && Xml.domToText(newMutationDom);
-    if (oldMutation != newMutation) {
+    if (oldMutation !== newMutation) {
       // Fire a mutation on every caller block.  But don't record this as an
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.

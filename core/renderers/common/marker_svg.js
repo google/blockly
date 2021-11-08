@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a marker as SVG.
- * @author samelh@microsoft.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -17,19 +16,6 @@
  */
 goog.module('Blockly.blockRendering.MarkerSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -38,7 +24,20 @@ const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.requireType('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.MarkerMove');
 
@@ -139,7 +138,7 @@ MarkerSvg.prototype.getMarker = function() {
  * @return {boolean} True if the marker is a cursor, false otherwise.
  */
 MarkerSvg.prototype.isCursor = function() {
-  return this.marker_.type == 'cursor';
+  return this.marker_.type === 'cursor';
 };
 
 /**
@@ -148,8 +147,7 @@ MarkerSvg.prototype.isCursor = function() {
  * @package
  */
 MarkerSvg.prototype.createDom = function() {
-  const className =
-      this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
+  const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
 
   this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': className}, null);
 
@@ -217,21 +215,21 @@ MarkerSvg.prototype.showAtLocation_ = function(curNode) {
   const curNodeAsConnection =
       /** @type {!Connection} */ (curNode.getLocation());
   const connectionType = curNodeAsConnection.type;
-  if (curNode.getType() == ASTNode.types.BLOCK) {
+  if (curNode.getType() === ASTNode.types.BLOCK) {
     this.showWithBlock_(curNode);
-  } else if (curNode.getType() == ASTNode.types.OUTPUT) {
+  } else if (curNode.getType() === ASTNode.types.OUTPUT) {
     this.showWithOutput_(curNode);
-  } else if (connectionType == ConnectionType.INPUT_VALUE) {
+  } else if (connectionType === ConnectionType.INPUT_VALUE) {
     this.showWithInput_(curNode);
-  } else if (connectionType == ConnectionType.NEXT_STATEMENT) {
+  } else if (connectionType === ConnectionType.NEXT_STATEMENT) {
     this.showWithNext_(curNode);
-  } else if (curNode.getType() == ASTNode.types.PREVIOUS) {
+  } else if (curNode.getType() === ASTNode.types.PREVIOUS) {
     this.showWithPrevious_(curNode);
-  } else if (curNode.getType() == ASTNode.types.FIELD) {
+  } else if (curNode.getType() === ASTNode.types.FIELD) {
     this.showWithField_(curNode);
-  } else if (curNode.getType() == ASTNode.types.WORKSPACE) {
+  } else if (curNode.getType() === ASTNode.types.WORKSPACE) {
     this.showWithCoordinates_(curNode);
-  } else if (curNode.getType() == ASTNode.types.STACK) {
+  } else if (curNode.getType() === ASTNode.types.STACK) {
     this.showWithStack_(curNode);
   }
 };
@@ -578,7 +576,7 @@ MarkerSvg.prototype.getBlinkProperties_ = function() {
     'attributeName': 'fill',
     'dur': '1s',
     'values': this.colour_ + ';transparent;transparent;',
-    'repeatCount': 'indefinite'
+    'repeatCount': 'indefinite',
   };
 };
 
@@ -602,7 +600,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
   this.markerSvg_ = dom.createSvgElement(
       Svg.G, {
         'width': this.constants_.CURSOR_WS_WIDTH,
-        'height': this.constants_.WS_CURSOR_HEIGHT
+        'height': this.constants_.WS_CURSOR_HEIGHT,
       },
       this.svgGroup_);
 
@@ -612,7 +610,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
       Svg.RECT, {
         'width': this.constants_.CURSOR_WS_WIDTH,
         'height': this.constants_.WS_CURSOR_HEIGHT,
-        'style': 'display: none'
+        'style': 'display: none',
       },
       this.markerSvg_);
 
@@ -622,7 +620,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
         'class': 'blocklyVerticalMarker',
         'rx': 10,
         'ry': 10,
-        'style': 'display: none'
+        'style': 'display: none',
       },
       this.markerSvg_);
 
@@ -637,7 +635,7 @@ MarkerSvg.prototype.createDomInternal_ = function() {
         'transform': '',
         'style': 'display: none',
         'fill': 'none',
-        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH
+        'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
       },
       this.markerSvg_);
 
@@ -682,4 +680,4 @@ MarkerSvg.prototype.dispose = function() {
   }
 };
 
-exports = MarkerSvg;
+exports.MarkerSvg = MarkerSvg;

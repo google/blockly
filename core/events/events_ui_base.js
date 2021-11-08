@@ -7,7 +7,6 @@
 /**
  * @fileoverview Base class for events fired as a result of UI actions in
  * Blockly's editor.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -41,7 +40,7 @@ const UiBase = function(opt_workspaceId) {
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {boolean}
    */
-  this.isBlank = typeof opt_workspaceId == 'undefined';
+  this.isBlank = typeof opt_workspaceId === 'undefined';
 
   /**
    * The workspace identifier for this event.
@@ -60,4 +59,4 @@ object.inherits(UiBase, Abstract);
  */
 UiBase.prototype.isUiEvent = true;
 
-exports = UiBase;
+exports.UiBase = UiBase;

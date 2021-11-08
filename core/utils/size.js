@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for size calculation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -51,13 +50,13 @@ const Size = function(width, height) {
  *     heights, or if both are null.
  */
 Size.equals = function(a, b) {
-  if (a == b) {
+  if (a === b) {
     return true;
   }
   if (!a || !b) {
     return false;
   }
-  return a.width == b.width && a.height == b.height;
+  return a.width === b.width && a.height === b.height;
 };
 
-exports = Size;
+exports.Size = Size;

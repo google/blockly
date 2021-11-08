@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a warning.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,18 +15,18 @@
  */
 goog.module('Blockly.Warning');
 
-const Bubble = goog.require('Blockly.Bubble');
-/* eslint-disable-next-line no-unused-vars */
-const Coordinate = goog.requireType('Blockly.utils.Coordinate');
-const Icon = goog.require('Blockly.Icon');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Bubble} = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -62,7 +61,7 @@ Warning.prototype.drawIcon_ = function(group) {
   dom.createSvgElement(
       Svg.PATH, {
         'class': 'blocklyIconShape',
-        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
+        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
       },
       group);
   // Can't use a real '!' text character since different browsers and operating
@@ -71,7 +70,7 @@ Warning.prototype.drawIcon_ = function(group) {
   dom.createSvgElement(
       Svg.PATH, {
         'class': 'blocklyIconSymbol',
-        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
+        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
       },
       group);
   // Dot of exclamation point.
@@ -81,7 +80,7 @@ Warning.prototype.drawIcon_ = function(group) {
         'x': '7',
         'y': '11',
         'height': '2',
-        'width': '2'
+        'width': '2',
       },
       group);
 };
@@ -91,11 +90,11 @@ Warning.prototype.drawIcon_ = function(group) {
  * @param {boolean} visible True if the bubble should be visible.
  */
 Warning.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+  if (visible === this.isVisible()) {
     return;
   }
-  eventUtils.fire(
-      new (eventUtils.get(eventUtils.BUBBLE_OPEN))(this.block_, visible, 'warning'));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+      this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
   } else {
@@ -133,7 +132,7 @@ Warning.prototype.disposeBubble_ = function() {
  *     multiple warnings.
  */
 Warning.prototype.setText = function(text, id) {
-  if (this.text_[id] == text) {
+  if (this.text_[id] === text) {
     return;
   }
   if (text) {
@@ -167,4 +166,4 @@ Warning.prototype.dispose = function() {
   Icon.prototype.dispose.call(this);
 };
 
-exports = Warning;
+exports.Warning = Warning;

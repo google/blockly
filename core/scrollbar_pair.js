@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a pair of scrollbars.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,14 +15,14 @@
  */
 goog.module('Blockly.ScrollbarPair');
 
-/* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -65,7 +64,7 @@ const ScrollbarPair = function(
         Svg.RECT, {
           'height': Scrollbar.scrollbarThickness,
           'width': Scrollbar.scrollbarThickness,
-          'class': 'blocklyScrollbarBackground'
+          'class': 'blocklyScrollbarBackground',
         },
         null);
     dom.insertAfter(this.corner_, workspace.getBubbleCanvas());
@@ -115,25 +114,25 @@ ScrollbarPair.prototype.resize = function() {
   let resizeH = false;
   let resizeV = false;
   if (!this.oldHostMetrics_ ||
-      this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
-      this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
-      this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop ||
-      this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
+      this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
+      this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
+      this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop ||
+      this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft) {
     // The window has been resized or repositioned.
     resizeH = true;
     resizeV = true;
   } else {
     // Has the content been resized or moved?
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.scrollWidth != hostMetrics.scrollWidth ||
-        this.oldHostMetrics_.viewLeft != hostMetrics.viewLeft ||
-        this.oldHostMetrics_.scrollLeft != hostMetrics.scrollLeft) {
+        this.oldHostMetrics_.scrollWidth !== hostMetrics.scrollWidth ||
+        this.oldHostMetrics_.viewLeft !== hostMetrics.viewLeft ||
+        this.oldHostMetrics_.scrollLeft !== hostMetrics.scrollLeft) {
       resizeH = true;
     }
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.scrollHeight != hostMetrics.scrollHeight ||
-        this.oldHostMetrics_.viewTop != hostMetrics.viewTop ||
-        this.oldHostMetrics_.scrollTop != hostMetrics.scrollTop) {
+        this.oldHostMetrics_.scrollHeight !== hostMetrics.scrollHeight ||
+        this.oldHostMetrics_.viewTop !== hostMetrics.viewTop ||
+        this.oldHostMetrics_.scrollTop !== hostMetrics.scrollTop) {
       resizeV = true;
     }
   }
@@ -156,13 +155,13 @@ ScrollbarPair.prototype.resize = function() {
   if (this.hScroll && this.vScroll) {
     // Reposition the corner square.
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
-        this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
+        this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
+        this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft) {
       this.corner_.setAttribute('x', this.vScroll.position.x);
     }
     if (!this.oldHostMetrics_ ||
-        this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
-        this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
+        this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
+        this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop) {
       this.corner_.setAttribute('y', this.hScroll.position.y);
     }
   }
@@ -322,4 +321,4 @@ ScrollbarPair.prototype.resizeView = function(hostMetrics) {
   }
 };
 
-exports = ScrollbarPair;
+exports.ScrollbarPair = ScrollbarPair;

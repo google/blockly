@@ -7,7 +7,6 @@
 /**
  * @fileoverview Class representing the space a next connection takes up during
  * rendering.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 /**
@@ -17,13 +16,13 @@
  */
 goog.module('Blockly.blockRendering.NextConnection');
 
-const Connection = goog.require('Blockly.blockRendering.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+const {Connection} = goog.require('Blockly.blockRendering.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -46,4 +45,4 @@ const NextConnection = function(constants, connectionModel) {
 };
 object.inherits(NextConnection, Connection);
 
-exports = NextConnection;
+exports.NextConnection = NextConnection;

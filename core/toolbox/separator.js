@@ -6,8 +6,6 @@
 
 /**
  * @fileoverview A separator used for separating toolbox categories.
- * @author aschmiedt@google.com (Abby Schmiedt)
- * @author maribethb@google.com (Maribeth Bottorff)
  */
 'use strict';
 
@@ -18,14 +16,14 @@
 goog.module('Blockly.ToolboxSeparator');
 
 const Css = goog.require('Blockly.Css');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-const ToolboxItem = goog.require('Blockly.ToolboxItem');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 
 
 /**
@@ -102,24 +100,25 @@ ToolboxSeparator.prototype.dispose = function() {
 /**
  * CSS for Toolbox.  See css.js for use.
  */
-Css.register([
-  `.blocklyTreeSeparator {
-  border-bottom: solid #e5e5e5 1px;
-  height: 0;
-  margin: 5px 0;
-}`,
-  `.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
-  border-right: solid #e5e5e5 1px;
-  border-bottom: none;
-  height: auto;
-  margin: 0 5px 0 5px;
-  padding: 5px 0;
-  width: 0;
-}`,
-]);
+Css.register(`
+  .blocklyTreeSeparator {
+    border-bottom: solid #e5e5e5 1px;
+    height: 0;
+    margin: 5px 0;
+  }
+
+  .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
+    border-right: solid #e5e5e5 1px;
+    border-bottom: none;
+    height: auto;
+    margin: 0 5px 0 5px;
+    padding: 5px 0;
+    width: 0;
+  }
+`);
 
 registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
     ToolboxSeparator);
 
-exports = ToolboxSeparator;
+exports.ToolboxSeparator = ToolboxSeparator;

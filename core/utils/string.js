@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for string manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -30,7 +29,7 @@ goog.module('Blockly.utils.string');
  * @alias Blockly.utils.string.startsWith
  */
 const startsWith = function(str, prefix) {
-  return str.lastIndexOf(prefix, 0) == 0;
+  return str.lastIndexOf(prefix, 0) === 0;
 };
 exports.startsWith = startsWith;
 
@@ -63,7 +62,7 @@ exports.shortestStringLength = shortestStringLength;
 const commonWordPrefix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
-  } else if (array.length == 1) {
+  } else if (array.length === 1) {
     return array[0].length;
   }
   let wordPrefix = 0;
@@ -72,17 +71,17 @@ const commonWordPrefix = function(array, opt_shortest) {
   for (len = 0; len < max; len++) {
     const letter = array[0][len];
     for (let i = 1; i < array.length; i++) {
-      if (letter != array[i][len]) {
+      if (letter !== array[i][len]) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    if (letter === ' ') {
       wordPrefix = len + 1;
     }
   }
   for (let i = 1; i < array.length; i++) {
     const letter = array[i][len];
-    if (letter && letter != ' ') {
+    if (letter && letter !== ' ') {
       return wordPrefix;
     }
   }
@@ -101,7 +100,7 @@ exports.commonWordPrefix = commonWordPrefix;
 const commonWordSuffix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
-  } else if (array.length == 1) {
+  } else if (array.length === 1) {
     return array[0].length;
   }
   let wordPrefix = 0;
@@ -110,17 +109,17 @@ const commonWordSuffix = function(array, opt_shortest) {
   for (len = 0; len < max; len++) {
     const letter = array[0].substr(-len - 1, 1);
     for (let i = 1; i < array.length; i++) {
-      if (letter != array[i].substr(-len - 1, 1)) {
+      if (letter !== array[i].substr(-len - 1, 1)) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    if (letter === ' ') {
       wordPrefix = len + 1;
     }
   }
   for (let i = 1; i < array.length; i++) {
     const letter = array[i].charAt(array[i].length - len - 1);
-    if (letter && letter != ' ') {
+    if (letter && letter !== ' ') {
       return wordPrefix;
     }
   }
@@ -226,9 +225,9 @@ const wrapScore = function(words, wordBreaks, limit) {
     score -= Math.pow(maxLength - lineLengths[i], 1.5);
     // Optimize for structure.
     // Add score to line endings after punctuation.
-    if ('.?!'.indexOf(linePunctuation[i]) != -1) {
+    if ('.?!'.indexOf(linePunctuation[i]) !== -1) {
       score += limit / 3;
-    } else if (',;)]}'.indexOf(linePunctuation[i]) != -1) {
+    } else if (',;)]}'.indexOf(linePunctuation[i]) !== -1) {
       score += limit / 4;
     }
   }
@@ -257,7 +256,7 @@ const wrapMutate = function(words, wordBreaks, limit) {
   let bestBreaks;
   // Try shifting every line break forward or backward.
   for (let i = 0; i < wordBreaks.length - 1; i++) {
-    if (wordBreaks[i] == wordBreaks[i + 1]) {
+    if (wordBreaks[i] === wordBreaks[i + 1]) {
       continue;
     }
     const mutatedWordBreaks = [].concat(wordBreaks);

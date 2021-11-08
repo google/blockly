@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for positioning UI elements.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -16,15 +15,15 @@
  */
 goog.module('Blockly.uiPosition');
 
-/* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Rect = goog.require('Blockly.utils.Rect');
-const Scrollbar = goog.require('Blockly.Scrollbar');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Scrollbar} = goog.require('Blockly.Scrollbar');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -35,7 +34,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
  */
 const verticalPosition = {
   TOP: 0,
-  BOTTOM: 1
+  BOTTOM: 1,
 };
 exports.verticalPosition = verticalPosition;
 
@@ -47,7 +46,7 @@ exports.verticalPosition = verticalPosition;
  */
 const horizontalPosition = {
   LEFT: 0,
-  RIGHT: 1
+  RIGHT: 1,
 };
 exports.horizontalPosition = horizontalPosition;
 
@@ -71,7 +70,7 @@ exports.Position = Position;
  */
 const bumpDirection = {
   UP: 0,
-  DOWN: 1
+  DOWN: 1,
 };
 exports.bumpDirection = bumpDirection;
 
@@ -103,7 +102,7 @@ const getStartPositionRect = function(
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Scrollbar.scrollbarThickness;
     }
-  } else {  // position.horizontal == horizontalPosition.RIGHT
+  } else {  // position.horizontal === horizontalPosition.RIGHT
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
         size.width - horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
@@ -114,7 +113,7 @@ const getStartPositionRect = function(
   let top = 0;
   if (position.vertical === verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
-  } else {  // position.vertical == verticalPosition.BOTTOM
+  } else {  // position.vertical === verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
         size.height - verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
@@ -176,7 +175,7 @@ const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
     if (boundingRect.intersects(otherEl)) {
       if (bumpDir === bumpDirection.UP) {
         top = otherEl.top - height - margin;
-      } else {  // bumpDir == bumpDirection.DOWN
+      } else {  // bumpDir === bumpDirection.DOWN
         top = otherEl.bottom + margin;
       }
       // Recheck other savedPositions

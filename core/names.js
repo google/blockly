@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Utility functions for handling variable and procedure names.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -17,12 +16,12 @@
 goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
-/* eslint-disable-next-line no-unused-vars */
-const VariableMap = goog.requireType('Blockly.VariableMap');
 const Variables = goog.require('Blockly.Variables');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const internalConstants = goog.require('Blockly.internalConstants');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableMap} = goog.requireType('Blockly.VariableMap');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.requireType('Blockly.Procedures');
 
@@ -145,7 +144,7 @@ Names.prototype.populateProcedures = function(workspace) {
  */
 Names.prototype.getName = function(nameOrId, realm) {
   let name = nameOrId;
-  if (realm == internalConstants.VARIABLE_CATEGORY_NAME) {
+  if (realm === internalConstants.VARIABLE_CATEGORY_NAME) {
     const varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
@@ -154,8 +153,8 @@ Names.prototype.getName = function(nameOrId, realm) {
   }
   const normalizedName = name.toLowerCase();
 
-  const isVar = realm == internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm == Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
+      realm === Names.DEVELOPER_VARIABLE_TYPE;
 
   const prefix = isVar ? this.variablePrefix_ : '';
   if (!(realm in this.db_)) {
@@ -201,8 +200,8 @@ Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  const isVar = realm == internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm == Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
+      realm === Names.DEVELOPER_VARIABLE_TYPE;
   const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;
 };
@@ -224,7 +223,7 @@ Names.prototype.safeName_ = function(name) {
     // https://github.com/google/blockly/issues/1654
     name = encodeURI(name.replace(/ /g, '_')).replace(/[^\w]/g, '_');
     // Most languages don't allow names with leading numbers.
-    if ('0123456789'.indexOf(name[0]) != -1) {
+    if ('0123456789'.indexOf(name[0]) !== -1) {
       name = 'my_' + name;
     }
   }
@@ -240,7 +239,7 @@ Names.prototype.safeName_ = function(name) {
  */
 Names.equals = function(name1, name2) {
   // name1.localeCompare(name2) is slower.
-  return name1.toLowerCase() == name2.toLowerCase();
+  return name1.toLowerCase() === name2.toLowerCase();
 };
 
-exports = Names;
+exports.Names = Names;

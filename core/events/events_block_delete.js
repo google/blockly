@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block delete event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.Events.BlockDelete');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
@@ -60,8 +59,8 @@ const BlockDelete = function(opt_block) {
    * JSON representation of the block that was just deleted.
    * @type {!blocks.State}
    */
-  this.oldJson = /** @type {!blocks.State} */ (blocks.save(
-      opt_block, {addCoordinates: true}));
+  this.oldJson = /** @type {!blocks.State} */ (
+      blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockDelete, BlockBase);
 
@@ -96,7 +95,7 @@ BlockDelete.prototype.fromJson = function(json) {
   this.oldXml = Xml.textToDom(json['oldXml']);
   this.ids = json['ids'];
   this.wasShadow =
-    json['wasShadow'] || this.oldXml.tagName.toLowerCase() == 'shadow';
+      json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
   this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
   if (json['recordUndo'] !== undefined) {
     this.recordUndo = json['recordUndo'];
@@ -115,7 +114,7 @@ BlockDelete.prototype.run = function(forward) {
       const block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false);
-      } else if (id == this.blockId) {
+      } else if (id === this.blockId) {
         // Only complain about root-level block.
         console.warn('Can\'t delete non-existent block: ' + id);
       }
@@ -127,4 +126,4 @@ BlockDelete.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);
 
-exports = BlockDelete;
+exports.BlockDelete = BlockDelete;

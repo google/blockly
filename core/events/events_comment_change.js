@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for comment change event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,12 +15,12 @@
  */
 goog.module('Blockly.Events.CommentChange');
 
-const CommentBase = goog.require('Blockly.Events.CommentBase');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -41,9 +40,9 @@ const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
   }
 
   this.oldContents_ =
-      typeof opt_oldContents == 'undefined' ? '' : opt_oldContents;
+      typeof opt_oldContents === 'undefined' ? '' : opt_oldContents;
   this.newContents_ =
-      typeof opt_newContents == 'undefined' ? '' : opt_newContents;
+      typeof opt_newContents === 'undefined' ? '' : opt_newContents;
 };
 object.inherits(CommentChange, CommentBase);
 
@@ -79,7 +78,7 @@ CommentChange.prototype.fromJson = function(json) {
  * @return {boolean} False if something changed.
  */
 CommentChange.prototype.isNull = function() {
-  return this.oldContents_ == this.newContents_;
+  return this.oldContents_ === this.newContents_;
 };
 
 /**
@@ -98,6 +97,7 @@ CommentChange.prototype.run = function(forward) {
   comment.setContent(contents);
 };
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
+registry.register(
+    registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
 
-exports = CommentChange;
+exports.CommentChange = CommentChange;

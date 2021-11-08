@@ -68,37 +68,37 @@ suite('Theme', function() {
   }
 
   function stringifyAndCompare(val1, val2) {
-    var stringVal1 = JSON.stringify(val1);
-    var stringVal2 = JSON.stringify(val2);
+    const stringVal1 = JSON.stringify(val1);
+    const stringVal2 = JSON.stringify(val2);
     chai.assert.equal(stringVal1, stringVal2);
   }
 
   test('Set All BlockStyles', function() {
-    var theme = new Blockly.Theme('test', createBlockStyles());
+    const theme = new Blockly.Theme('test', createBlockStyles());
     stringifyAndCompare(createBlockStyles(), theme.blockStyles);
-    var blockStyles = createMultipleBlockStyles();
-    for (var key in blockStyles) {
+    const blockStyles = createMultipleBlockStyles();
+    for (const key in blockStyles) {
       theme.blockStyles[key] = blockStyles[key];
     }
     stringifyAndCompare(createMultipleBlockStyles(), theme.blockStyles);
   });
 
   test('Get All BlockStyles', function() {
-    var theme = new Blockly.Theme('test', createMultipleBlockStyles());
-    var allBlocks = theme.blockStyles;
+    const theme = new Blockly.Theme('test', createMultipleBlockStyles());
+    const allBlocks = theme.blockStyles;
     stringifyAndCompare(createMultipleBlockStyles(), allBlocks);
   });
 
   test('Get BlockStyles', function() {
-    var theme = new Blockly.Theme('test', createBlockStyles());
-    var blockStyle = theme.blockStyles['styleOne'];
+    const theme = new Blockly.Theme('test', createBlockStyles());
+    const blockStyle = theme.blockStyles['styleOne'];
 
     stringifyAndCompare(blockStyle, createBlockStyles().styleOne);
   });
 
   test('Set BlockStyle Update', function() {
-    var theme = new Blockly.Theme('test', createBlockStyles());
-    var blockStyle = createBlockStyles();
+    const theme = new Blockly.Theme('test', createBlockStyles());
+    const blockStyle = createBlockStyles();
     blockStyle.styleOne.colourPrimary = '#00ff00';
 
     theme.blockStyles['styleOne'] = blockStyle.styleOne;
@@ -107,8 +107,8 @@ suite('Theme', function() {
   });
 
   test('Set BlockStyle Add', function() {
-    var theme = new Blockly.Theme('test', createBlockStyles());
-    var blockStyle = createMultipleBlockStyles();
+    const theme = new Blockly.Theme('test', createBlockStyles());
+    const blockStyle = createMultipleBlockStyles();
 
     theme.blockStyles['styleTwo'] = blockStyle.styleTwo;
 
@@ -117,14 +117,15 @@ suite('Theme', function() {
 
   test('Set Theme', function() {
     defineThemeTestBlocks();
+    let workspace;
     try {
-      var blockStyles = createBlockStyles();
-      var theme = new Blockly.Theme('themeName', blockStyles);
-      var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-      var blockA = workspace.newBlock('stack_block');
+      const blockStyles = createBlockStyles();
+      const theme = new Blockly.Theme('themeName', blockStyles);
+      workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+      const blockA = workspace.newBlock('stack_block');
 
       blockA.setStyle = function() {this.styleName_ = 'styleTwo';};
-      var refreshToolboxSelectionStub =
+      const refreshToolboxSelectionStub =
           sinon.stub(workspace, 'refreshToolboxSelection');
       blockA.styleName_ = 'styleOne';
 
@@ -157,8 +158,8 @@ suite('Theme', function() {
     });
 
     test('Null', function() {
-      var inputStyle = null;
-      var expectedOutput = {
+      const inputStyle = null;
+      const expectedOutput = {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
@@ -169,8 +170,8 @@ suite('Theme', function() {
     });
 
     test('Empty', function() {
-      var inputStyle = {};
-      var expectedOutput = {
+      const inputStyle = {};
+      const expectedOutput = {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
@@ -181,10 +182,10 @@ suite('Theme', function() {
     });
 
     test('Incomplete hex', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "#012345"
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#012345",
         "colourSecondary": "#99a7b5",
         "colourTertiary": "#4d657d",
@@ -195,13 +196,13 @@ suite('Theme', function() {
     });
 
     test('Complete hex', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
         "hat": 'cap'
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
@@ -212,12 +213,12 @@ suite('Theme', function() {
     });
 
     test('Complete hue', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "20",
         "colourSecondary": "40",
         "colourTertiary": "60",
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#a5745b",
         "colourSecondary": "#a58c5b",
         "colourTertiary": "#a5a55b",
@@ -228,10 +229,10 @@ suite('Theme', function() {
     });
 
     test('Incomplete hue', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "20",
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#a5745b",
         "colourSecondary": "#dbc7bd",
         "colourTertiary": "#c09e8c",
@@ -242,12 +243,12 @@ suite('Theme', function() {
     });
 
     test('Complete css colour name', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "red",
         "colourSecondary": "white",
         "colourTertiary": "blue"
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#ff0000",
         "colourSecondary": "#ffffff",
         "colourTertiary": "#0000ff",
@@ -258,10 +259,10 @@ suite('Theme', function() {
     });
 
     test('Incomplete css colour name', function() {
-      var inputStyle = {
+      const inputStyle = {
         "colourPrimary": "black",
       };
-      var expectedOutput = {
+      const expectedOutput = {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",

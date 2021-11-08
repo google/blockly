@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for comment move event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,13 +15,13 @@
  */
 goog.module('Blockly.Events.CommentMove');
 
-const CommentBase = goog.require('Blockly.Events.CommentBase');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -153,4 +152,4 @@ CommentMove.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);
 
-exports = CommentMove;
+exports.CommentMove = CommentMove;

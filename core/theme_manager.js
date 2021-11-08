@@ -7,8 +7,6 @@
 /**
  * @fileoverview Object in charge of storing and updating a workspace theme
  *     and UI components.
- * @author aschmiedt@google.com (Abby Schmiedt)
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -19,14 +17,14 @@
  */
 goog.module('Blockly.ThemeManager');
 
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const dom = goog.require('Blockly.utils.dom');
 const utils = goog.require('Blockly.utils');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -206,4 +204,4 @@ ThemeManager.prototype.dispose = function() {
   this.componentDB_ = null;
 };
 
-exports = ThemeManager;
+exports.ThemeManager = ThemeManager;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Components for creating connections between blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,11 +15,6 @@
  */
 goog.module('Blockly.RenderedConnection');
 
-const Connection = goog.require('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const ConnectionDB = goog.requireType('Blockly.ConnectionDB');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Svg = goog.require('Blockly.utils.Svg');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
@@ -30,10 +24,15 @@ const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Connection} = goog.require('Blockly.Connection');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -100,7 +99,7 @@ object.inherits(RenderedConnection, Connection);
 RenderedConnection.TrackedState = {
   WILL_TRACK: -1,
   UNTRACKED: 0,
-  TRACKED: 1
+  TRACKED: 1,
 };
 
 /**
@@ -111,7 +110,7 @@ RenderedConnection.TrackedState = {
  */
 RenderedConnection.prototype.dispose = function() {
   RenderedConnection.superClass_.dispose.call(this);
-  if (this.trackedState_ == RenderedConnection.TrackedState.TRACKED) {
+  if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
   }
 };
@@ -207,10 +206,10 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
  * @param {number} y New absolute y coordinate, in workspace coordinates.
  */
 RenderedConnection.prototype.moveTo = function(x, y) {
-  if (this.trackedState_ == RenderedConnection.TrackedState.WILL_TRACK) {
+  if (this.trackedState_ === RenderedConnection.TrackedState.WILL_TRACK) {
     this.db_.addConnection(this, y);
     this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
-  } else if (this.trackedState_ == RenderedConnection.TrackedState.TRACKED) {
+  } else if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
     this.db_.addConnection(this, y);
   }
@@ -264,7 +263,7 @@ RenderedConnection.prototype.getOffsetInBlock = function() {
 RenderedConnection.prototype.tighten = function() {
   const dx = this.targetConnection.x - this.x;
   const dy = this.targetConnection.y - this.y;
-  if (dx != 0 || dy != 0) {
+  if (dx !== 0 || dy !== 0) {
     const block = this.targetBlock();
     const svgRoot = block.getSvgRoot();
     if (!svgRoot) {
@@ -300,20 +299,18 @@ RenderedConnection.prototype.highlight = function() {
   const sourceBlockSvg = /** @type {!BlockSvg} */ (this.sourceBlock_);
   const renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
   const shape = renderConstants.shapeFor(this);
-  if (this.type == ConnectionType.INPUT_VALUE ||
-      this.type == ConnectionType.OUTPUT_VALUE) {
+  if (this.type === ConnectionType.INPUT_VALUE ||
+      this.type === ConnectionType.OUTPUT_VALUE) {
     // Vertical line, puzzle tab, vertical line.
     const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
-    steps = svgPaths.moveBy(0, -yLen) +
-        svgPaths.lineOnAxis('v', yLen) + shape.pathDown +
-        svgPaths.lineOnAxis('v', yLen);
+    steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
+        shape.pathDown + svgPaths.lineOnAxis('v', yLen);
   } else {
     const xLen =
         renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
     // Horizontal line, notch, horizontal line.
-    steps = svgPaths.moveBy(-xLen, 0) +
-        svgPaths.lineOnAxis('h', xLen) + shape.pathLeft +
-        svgPaths.lineOnAxis('h', xLen);
+    steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
+        shape.pathLeft + svgPaths.lineOnAxis('h', xLen);
   }
   const xy = this.sourceBlock_.getRelativeToSurfaceXY();
   const x = this.x - xy.x;
@@ -323,7 +320,7 @@ RenderedConnection.prototype.highlight = function() {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
         transform: 'translate(' + x + ',' + y + ')' +
-            (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')
+            (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
       this.sourceBlock_.getSvgRoot());
 };
@@ -343,9 +340,9 @@ RenderedConnection.prototype.unhighlight = function() {
  */
 RenderedConnection.prototype.setTracking = function(doTracking) {
   if ((doTracking &&
-       this.trackedState_ == RenderedConnection.TrackedState.TRACKED) ||
+       this.trackedState_ === RenderedConnection.TrackedState.TRACKED) ||
       (!doTracking &&
-       this.trackedState_ == RenderedConnection.TrackedState.UNTRACKED)) {
+       this.trackedState_ === RenderedConnection.TrackedState.UNTRACKED)) {
     return;
   }
   if (this.sourceBlock_.isInFlyout) {
@@ -357,7 +354,7 @@ RenderedConnection.prototype.setTracking = function(doTracking) {
     this.trackedState_ = RenderedConnection.TrackedState.TRACKED;
     return;
   }
-  if (this.trackedState_ == RenderedConnection.TrackedState.TRACKED) {
+  if (this.trackedState_ === RenderedConnection.TrackedState.TRACKED) {
     this.db_.removeConnection(this, this.y);
   }
   this.trackedState_ = RenderedConnection.TrackedState.UNTRACKED;
@@ -403,8 +400,8 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
   const renderList = [];
-  if (this.type != ConnectionType.INPUT_VALUE &&
-      this.type != ConnectionType.NEXT_STATEMENT) {
+  if (this.type !== ConnectionType.INPUT_VALUE &&
+      this.type !== ConnectionType.NEXT_STATEMENT) {
     // Only spider down.
     return renderList;
   }
@@ -555,8 +552,8 @@ RenderedConnection.prototype.connect_ = function(childConnection) {
     childBlock.updateDisabled();
   }
   if (parentRendered && childRendered) {
-    if (parentConnection.type == ConnectionType.NEXT_STATEMENT ||
-        parentConnection.type == ConnectionType.PREVIOUS_STATEMENT) {
+    if (parentConnection.type === ConnectionType.NEXT_STATEMENT ||
+        parentConnection.type === ConnectionType.PREVIOUS_STATEMENT) {
       // Child block may need to square off its corners if it is in a stack.
       // Rendering a child will render its parent.
       childBlock.render();
@@ -592,4 +589,4 @@ RenderedConnection.prototype.onCheckChanged_ = function() {
   }
 };
 
-exports = RenderedConnection;
+exports.RenderedConnection = RenderedConnection;

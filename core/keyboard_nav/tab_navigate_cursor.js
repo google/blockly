@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a cursor that is used to navigate
  * between tab navigable fields.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -18,11 +17,11 @@
  */
 goog.module('Blockly.TabNavigateCursor');
 
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
 const object = goog.require('Blockly.utils.object');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
 
 
 /**
@@ -47,7 +46,7 @@ TabNavigateCursor.prototype.validNode_ = function(node) {
   const type = node && node.getType();
   if (node) {
     const location = /** @type {Field} */ (node.getLocation());
-    if (type == ASTNode.types.FIELD && location && location.isTabNavigable() &&
+    if (type === ASTNode.types.FIELD && location && location.isTabNavigable() &&
         location.isClickable()) {
       isValid = true;
     }

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Objects representing inline inputs with connections on a
  * rendered block.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -18,12 +17,12 @@
  */
 goog.module('Blockly.geras.InlineInput');
 
-const BaseInlineInput = goog.require('Blockly.blockRendering.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
 
 
 /**
@@ -50,4 +49,4 @@ const InlineInput = function(constants, input) {
 };
 object.inherits(InlineInput, BaseInlineInput);
 
-exports = InlineInput;
+exports.InlineInput = InlineInput;

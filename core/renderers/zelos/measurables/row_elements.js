@@ -7,7 +7,6 @@
 /**
  * @fileoverview Zelos specific objects representing elements in a row of a
  * rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 /**
@@ -17,11 +16,11 @@
  */
 goog.module('Blockly.zelos.RightConnectionShape');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const Measurable = goog.require('Blockly.blockRendering.Measurable');
-const Types = goog.require('Blockly.blockRendering.Types');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -43,4 +42,4 @@ const RightConnectionShape = function(constants) {
 };
 object.inherits(RightConnectionShape, Measurable);
 
-exports = RightConnectionShape;
+exports.RightConnectionShape = RightConnectionShape;

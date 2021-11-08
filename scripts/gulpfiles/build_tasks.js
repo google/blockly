@@ -18,6 +18,8 @@ var fs = require('fs');
 var execSync = require('child_process').execSync;
 var through2 = require('through2');
 
+const clangFormat = require('clang-format');
+const clangFormatter = require('gulp-clang-format');
 var closureCompiler = require('google-closure-compiler').gulp();
 var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
@@ -91,7 +93,6 @@ var JSCOMP_ERROR = [
   // 'strictPrimitiveOperators',
   'suspiciousCode',
   'typeInvalidation',
-  'undefinedNames',
   'undefinedVars',
   'underscore',
   'unknownDefines',
@@ -511,6 +512,15 @@ function cleanBuildDir(done) {
   rimraf(BUILD_DIR, done);
 }
 
+/**
+ * Runs clang format on all files in the core directory.
+ */
+function format() {
+  return gulp.src(['core/**/*.js'], {base: '.'})
+      .pipe(clangFormatter.format('file', clangFormat))
+      .pipe(gulp.dest('.'));
+};
+
 module.exports = {
   build: build,
   deps: buildDeps,
@@ -519,6 +529,7 @@ module.exports = {
   generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
   compressed: buildCompressed,
+  format: format,
   generators: buildGenerators,
   checkinBuilt: checkinBuilt,
   cleanBuildDir: cleanBuildDir,

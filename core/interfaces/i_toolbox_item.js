@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a toolbox item.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';
@@ -50,7 +49,7 @@ IToolboxItem.prototype.getId;
 
 /**
  * Gets the parent if the toolbox item is nested.
- * @return {?Blockly.IToolboxItem} The parent toolbox item, or null if
+ * @return {?IToolboxItem} The parent toolbox item, or null if
  *     this toolbox item is not nested.
  * @public
  */
@@ -83,4 +82,4 @@ IToolboxItem.prototype.isCollapsible;
  */
 IToolboxItem.prototype.dispose;
 
-exports = IToolboxItem;
+exports.IToolboxItem = IToolboxItem;

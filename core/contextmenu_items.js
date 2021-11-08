@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Registers default context menu items.
- * @author maribethb@google.com (Maribeth Bottorff)
  */
 'use strict';
 
@@ -16,18 +15,19 @@
  */
 goog.module('Blockly.ContextMenuItems');
 
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
+const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const clipboard = goog.require('Blockly.clipboard');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const inputTypes = goog.require('Blockly.inputTypes');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
@@ -129,10 +129,20 @@ exports.registerCleanup = registerCleanup;
 const toggleOption_ = function(shouldCollapse, topBlocks) {
   const DELAY = 10;
   let ms = 0;
+  let timeoutCounter = 0;
+  const timeoutFn = function(block) {
+    timeoutCounter--;
+    block.setCollapsed(shouldCollapse);
+    if (timeoutCounter === 0) {
+      Events.setGroup(false);
+    }
+  };
+  Events.setGroup(true);
   for (let i = 0; i < topBlocks.length; i++) {
     let block = topBlocks[i];
     while (block) {
-      setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
+      timeoutCounter++;
+      setTimeout(timeoutFn.bind(null, block), ms);
       block = block.getNextBlock();
       ms += DELAY;
     }
@@ -222,7 +232,7 @@ exports.registerExpand = registerExpand;
  * @param {!BlockSvg} block to delete.
  * @param {!Array<!BlockSvg>} deleteList list of blocks that can be deleted.
  *     This will be
- *    modifed in place with the given block and its descendants.
+ *    modified in place with the given block and its descendants.
  * @private
  */
 const addDeletableBlocks_ = function(block, deleteList) {
@@ -287,7 +297,7 @@ const registerDeleteAll = function() {
         return;
       }
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
-      if (deletableBlocksLength == 1) {
+      if (deletableBlocksLength === 1) {
         return Msg['DELETE_BLOCK'];
       } else {
         return Msg['DELETE_X_BLOCKS'].replace(
@@ -441,8 +451,8 @@ const registerInline = function() {
         for (let i = 1; i < block.inputList.length; i++) {
           // Only display this option if there are two value or dummy inputs
           // next to each other.
-          if (block.inputList[i - 1].type != inputTypes.STATEMENT &&
-              block.inputList[i].type != inputTypes.STATEMENT) {
+          if (block.inputList[i - 1].type !== inputTypes.STATEMENT &&
+              block.inputList[i].type !== inputTypes.STATEMENT) {
             return 'enabled';
           }
         }
@@ -555,7 +565,7 @@ const registerDelete = function() {
         // Blocks in the current stack would survive this block's deletion.
         descendantCount -= nextBlock.getDescendants(false).length;
       }
-      return (descendantCount == 1) ?
+      return (descendantCount === 1) ?
           Msg['DELETE_BLOCK'] :
           Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
     },
@@ -593,8 +603,8 @@ const registerHelp = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       const block = scope.block;
-      const url = (typeof block.helpUrl == 'function') ? block.helpUrl() :
-                                                         block.helpUrl;
+      const url = (typeof block.helpUrl === 'function') ? block.helpUrl() :
+                                                          block.helpUrl;
       if (url) {
         return 'enabled';
       }

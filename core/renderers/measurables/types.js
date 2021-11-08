@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Measurable types.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,9 +17,9 @@
 goog.module('Blockly.blockRendering.Types');
 
 /* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
-const Row = goog.requireType('Blockly.blockRendering.Row');
+const {Row} = goog.requireType('Blockly.blockRendering.Row');
 
 
 /**
@@ -53,7 +52,7 @@ const Types = {
   ROW: 1 << 20,                  // Row.
   TOP_ROW: 1 << 21,              // Top Row.
   BOTTOM_ROW: 1 << 22,           // Bottom Row.
-  INPUT_ROW: 1 << 23             // Input Row.
+  INPUT_ROW: 1 << 23,            // Input Row.
 };
 
 /**
@@ -351,4 +350,4 @@ Types.isInputRow = function(row) {
   return row.type & Types.INPUT_ROW;
 };
 
-exports = Types;
+exports.Types = Types;

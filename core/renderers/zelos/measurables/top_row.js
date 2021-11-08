@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object representing the top row of a rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.zelos.TopRow');
 
-const BaseTopRow = goog.require('Blockly.blockRendering.TopRow');
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
 
 
 /**
@@ -68,4 +67,4 @@ TopRow.prototype.hasRightSquareCorner = function(block) {
       !block.nextConnection;
 };
 
-exports = TopRow;
+exports.TopRow = TopRow;

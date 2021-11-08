@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for dragging a block visually.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,14 +15,6 @@
  */
 goog.module('Blockly.BlockDragger');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.require('Blockly.IBlockDragger');
-/* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-const InsertionMarkerManager = goog.require('Blockly.InsertionMarkerManager');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimation = goog.require('Blockly.blockAnimations');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
@@ -32,6 +23,14 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
+/* eslint-disable-next-line no-unused-vars */
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
@@ -134,7 +133,7 @@ const initIconData = function(block) {
         // coordinates).
         location: icons[j].getIconLocation(),
         // Blockly.Icon
-        icon: icons[j]
+        icon: icons[j],
       };
       dragIconData.push(data);
     }
@@ -243,7 +242,7 @@ BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
   const oldWouldDeleteBlock = this.wouldDeleteBlock_;
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
-  if (oldWouldDeleteBlock != this.wouldDeleteBlock_) {
+  if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBlockDrag_();
   }
@@ -276,12 +275,16 @@ BlockDragger.prototype.endDrag = function(e, currentDragDeltaXY) {
 
   const preventMove = !!this.dragTarget_ &&
       this.dragTarget_.shouldPreventMove(this.draggingBlock_);
+  /** @type {Coordinate} */
+  let newLoc;
+  /** @type {Coordinate} */
+  let delta;
   if (preventMove) {
-    var newLoc = this.startXY_;
+    newLoc = this.startXY_;
   } else {
     const newValues = this.getNewLocationAfterDrag_(currentDragDeltaXY);
-    var delta = newValues.delta;
-    var newLoc = newValues.newLocation;
+    delta = newValues.delta;
+    newLoc = newValues.newLocation;
   }
   this.draggingBlock_.moveOffDragSurface(newLoc);
 
@@ -386,9 +389,9 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
     const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
                                                       'blocklyToolboxGrab';
 
-    if (isEnd && typeof toolbox.removeStyle == 'function') {
+    if (isEnd && typeof toolbox.removeStyle === 'function') {
       toolbox.removeStyle(style);
-    } else if (!isEnd && typeof toolbox.addStyle == 'function') {
+    } else if (!isEnd && typeof toolbox.addStyle === 'function') {
       toolbox.addStyle(style);
     }
   }
@@ -400,7 +403,8 @@ BlockDragger.prototype.updateToolboxStyle_ = function(isEnd) {
  * @protected
  */
 BlockDragger.prototype.fireMoveEvent_ = function() {
-  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
+  const event =
+      new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
   event.oldCoordinate = this.startXY_;
   event.recordNew();
   eventUtils.fire(event);

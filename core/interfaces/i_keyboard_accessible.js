@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for objects that handle keyboard shortcuts.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,7 +17,7 @@
 goog.module('Blockly.IKeyboardAccessible');
 
 /* eslint-disable-next-line no-unused-vars */
-const ShortcutRegistry = goog.requireType('Blockly.ShortcutRegistry');
+const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
 
 
 /**
@@ -36,4 +35,4 @@ const IKeyboardAccessible = function() {};
  */
 IKeyboardAccessible.prototype.onShortcut;
 
-exports = IKeyboardAccessible;
+exports.IKeyboardAccessible = IKeyboardAccessible;

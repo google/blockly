@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that is draggable.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -18,7 +17,7 @@
 goog.module('Blockly.IDraggable');
 
 /* eslint-disable-next-line no-unused-vars */
-const IDeletable = goog.require('Blockly.IDeletable');
+const {IDeletable} = goog.require('Blockly.IDeletable');
 
 
 /**
@@ -29,4 +28,4 @@ const IDeletable = goog.require('Blockly.IDeletable');
  */
 const IDraggable = function() {};
 
-exports = IDraggable;
+exports.IDraggable = IDraggable;

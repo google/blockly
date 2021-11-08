@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for comment creation event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,13 +15,13 @@
  */
 goog.module('Blockly.Events.CommentCreate');
 
-const CommentBase = goog.require('Blockly.Events.CommentBase');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -77,6 +76,7 @@ CommentCreate.prototype.run = function(forward) {
   CommentBase.CommentCreateDeleteHelper(this, forward);
 };
 
-registry.register(registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
+registry.register(
+    registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
 
-exports = CommentCreate;
+exports.CommentCreate = CommentCreate;

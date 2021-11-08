@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that is copyable.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,9 +17,9 @@
 goog.module('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
-const ISelectable = goog.require('Blockly.ISelectable');
+const {ISelectable} = goog.require('Blockly.ISelectable');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -47,4 +46,4 @@ ICopyable.prototype.toCopyData;
  */
 ICopyable.CopyData;
 
-exports = ICopyable;
+exports.ICopyable = ICopyable;

@@ -11,7 +11,6 @@
  * each category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
  *
- * @author Emma Dauterman (edauterman)
  */
 
 
@@ -35,7 +34,7 @@ WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
   var count = table.rows.length;
 
   // Delete help label and enable category buttons if it's the first category.
-  if (count == 0) {
+  if (count === 0) {
     document.getElementById('categoryHeader').textContent = 'Your categories:';
   }
 
@@ -95,7 +94,7 @@ WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
 WorkspaceFactoryView.prototype.updateState = function(selectedIndex, selected) {
   // Disable/enable editing buttons as necessary.
   document.getElementById('button_editCategory').disabled = selectedIndex < 0 ||
-      selected.type != ListElement.TYPE_CATEGORY;
+      selected.type !== ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled = selectedIndex <= 0;
   var table = document.getElementById('categoryTable');
@@ -135,7 +134,7 @@ WorkspaceFactoryView.prototype.setCategoryTabSelection =
  * @param {!Function} func Function to be executed on click.
  */
 WorkspaceFactoryView.prototype.bindClick = function(el, func) {
-  if (typeof el == 'string') {
+  if (typeof el === 'string') {
     el = document.getElementById(el);
   }
   el.addEventListener('click', func, true);
@@ -233,7 +232,7 @@ WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
 
-  if (count == 0) {
+  if (count === 0) {
     document.getElementById('categoryHeader').textContent = 'Your categories:';
   }
   // Create separator.
@@ -271,9 +270,9 @@ WorkspaceFactoryView.prototype.disableWorkspace = function(disable) {
  * @return {boolean} True if the workspace should be disabled, false otherwise.
  */
 WorkspaceFactoryView.prototype.shouldDisableWorkspace = function(category) {
-  return category != null && category.type != ListElement.TYPE_FLYOUT &&
-      (category.type == ListElement.TYPE_SEPARATOR ||
-      category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
+  return category !== null && category.type !== ListElement.TYPE_FLYOUT &&
+      (category.type === ListElement.TYPE_SEPARATOR ||
+      category.custom === 'VARIABLE' || category.custom === 'PROCEDURE');
 };
 
 /**
@@ -334,19 +333,19 @@ WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
 };
 
 /**
- * Sets the tabs for modes according to which mode the user is currenly
+ * Sets the tabs for modes according to which mode the user is currently
  * editing in.
  * @param {string} mode The mode being switched to
  *   (WorkspaceFactoryController.MODE_TOOLBOX or WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
-  document.getElementById('tab_preload').className = mode ==
+  document.getElementById('tab_preload').className = mode ===
       WorkspaceFactoryController.MODE_PRELOAD ? 'tabon' : 'taboff';
-  document.getElementById('preload_div').style.display = mode ==
+  document.getElementById('preload_div').style.display = mode ===
       WorkspaceFactoryController.MODE_PRELOAD ? 'block' : 'none';
-  document.getElementById('tab_toolbox').className = mode ==
+  document.getElementById('tab_toolbox').className = mode ===
       WorkspaceFactoryController.MODE_TOOLBOX ? 'tabon' : 'taboff';
-  document.getElementById('toolbox_div').style.display = mode ==
+  document.getElementById('toolbox_div').style.display = mode ===
       WorkspaceFactoryController.MODE_TOOLBOX ? 'block' : 'none';
 };
 
@@ -356,7 +355,7 @@ WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
  *   WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
-  if (mode == WorkspaceFactoryController.MODE_TOOLBOX) {
+  if (mode === WorkspaceFactoryController.MODE_TOOLBOX) {
     var helpText = 'Drag blocks into the workspace to configure the toolbox ' +
         'in your custom workspace.';
   } else {

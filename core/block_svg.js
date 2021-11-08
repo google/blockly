@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a block as SVG.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,46 +15,9 @@
  */
 goog.module('Blockly.BlockSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlockRenderingDebug = goog.requireType('Blockly.blockRendering.Debug');
-/* eslint-disable-next-line no-unused-vars */
-const Comment = goog.requireType('Blockly.Comment');
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.require('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.require('Blockly.IBoundedElement');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.require('Blockly.ICopyable');
-/* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.require('Blockly.IDraggable');
-/* eslint-disable-next-line no-unused-vars */
-const IPathObject = goog.requireType('Blockly.blockRendering.IPathObject');
-/* eslint-disable-next-line no-unused-vars */
-const Icon = goog.requireType('Blockly.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
-const MarkerManager = goog.require('Blockly.MarkerManager');
 const Msg = goog.require('Blockly.Msg');
-/* eslint-disable-next-line no-unused-vars */
-const Mutator = goog.requireType('Blockly.Mutator');
-const Rect = goog.require('Blockly.utils.Rect');
-const RenderedConnection = goog.require('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const Tooltip = goog.require('Blockly.Tooltip');
-/* eslint-disable-next-line no-unused-vars */
-const Warning = goog.requireType('Blockly.Warning');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -69,8 +31,45 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {Comment} = goog.requireType('Blockly.Comment');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Debug: BlockRenderingDebug} = goog.requireType('Blockly.blockRendering.Debug');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.require('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
+const {IDraggable} = goog.require('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
+/* eslint-disable-next-line no-unused-vars */
+const {Icon} = goog.requireType('Blockly.Icon');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
+/* eslint-disable-next-line no-unused-vars */
+const {Mutator} = goog.requireType('Blockly.Mutator');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
 const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+/* eslint-disable-next-line no-unused-vars */
+const {Warning} = goog.requireType('Blockly.Warning');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -287,7 +286,7 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     return;
   }
   let oldId = null;
@@ -301,8 +300,8 @@ BlockSvg.prototype.select = function() {
       eventUtils.enable();
     }
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      oldId, this.id, this.workspace.id);
   eventUtils.fire(event);
   common.setSelected(this);
   this.addSelect();
@@ -313,11 +312,11 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (common.getSelected() != this) {
+  if (common.getSelected() !== this) {
     return;
   }
-  const event =
-      new (eventUtils.get(eventUtils.SELECTED))(this.id, null, this.workspace.id);
+  const event = new (eventUtils.get(eventUtils.SELECTED))(
+      this.id, null, this.workspace.id);
   event.workspaceId = this.workspace.id;
   eventUtils.fire(event);
   common.setSelected(null);
@@ -376,7 +375,7 @@ BlockSvg.prototype.getIcons = function() {
  */
 BlockSvg.prototype.setParent = function(newParent) {
   const oldParent = this.parentBlock_;
-  if (newParent == oldParent) {
+  if (newParent === oldParent) {
     return;
   }
 
@@ -436,15 +435,15 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
       if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface().getCurrentBlock() == element) {
+          this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
         const surfaceTranslation =
             this.workspace.getBlockDragSurface().getSurfaceTranslation();
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
       element = /** @type {!SVGElement} */ (element.parentNode);
-    } while (element && element != this.workspace.getCanvas() &&
-             element != dragSurfaceGroup);
+    } while (element && element !== this.workspace.getCanvas() &&
+             element !== dragSurfaceGroup);
   }
   return new Coordinate(x, y);
 };
@@ -619,8 +618,8 @@ BlockSvg.prototype.getBoundingRectangle = function() {
  */
 BlockSvg.prototype.markDirty = function() {
   this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
-      .getRenderer()
-      .getConstants();
+                                  .getRenderer()
+                                  .getConstants();
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     input.markDirty();
   }
@@ -631,7 +630,7 @@ BlockSvg.prototype.markDirty = function() {
  * @param {boolean} collapsed True if collapsed.
  */
 BlockSvg.prototype.setCollapsed = function(collapsed) {
-  if (this.collapsed_ == collapsed) {
+  if (this.collapsed_ === collapsed) {
     return;
   }
   BlockSvg.superClass_.setCollapsed.call(this, collapsed);
@@ -655,7 +654,7 @@ BlockSvg.prototype.updateCollapsed_ = function() {
   const collapsedFieldName = constants.COLLAPSED_FIELD_NAME;
 
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name != collapsedInputName) {
+    if (input.name !== collapsedInputName) {
       input.setVisible(!collapsed);
     }
   }
@@ -728,7 +727,7 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
  */
 BlockSvg.prototype.showHelp = function() {
   const url =
-      (typeof this.helpUrl == 'function') ? this.helpUrl() : this.helpUrl;
+      (typeof this.helpUrl === 'function') ? this.helpUrl() : this.helpUrl;
   if (url) {
     window.open(url);
   }
@@ -860,7 +859,7 @@ BlockSvg.prototype.setShadow = function(shadow) {
  * @package
  */
 BlockSvg.prototype.setInsertionMarker = function(insertionMarker) {
-  if (this.isInsertionMarker_ == insertionMarker) {
+  if (this.isInsertionMarker_ === insertionMarker) {
     return;  // No change.
   }
   this.isInsertionMarker_ = insertionMarker;
@@ -899,12 +898,12 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
   // contents once the block is disposed.
   const blockWorkspace = this.workspace;
   // If this block is being dragged, unlink the mouse events.
-  if (common.getSelected() == this) {
+  if (common.getSelected() === this) {
     this.unselect();
     this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
-  if (ContextMenu.getCurrentBlock() == this) {
+  if (ContextMenu.getCurrentBlock() === this) {
     ContextMenu.hide();
   }
 
@@ -971,10 +970,10 @@ BlockSvg.prototype.toCopyData = function() {
     return null;
   }
   return {
-    saveInfo: /** @type {!blocks.State} */(blocks.save(
-        this, {addCoordinates: true, addNextBlocks: false})),
+    saveInfo: /** @type {!blocks.State} */ (
+        blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
-    typeCounts: utils.getBlockTypeCounts(this, true)
+    typeCounts: utils.getBlockTypeCounts(this, true),
   };
 };
 
@@ -1029,17 +1028,17 @@ BlockSvg.prototype.getCommentIcon = function() {
  * @param {?string} text The text, or null to delete.
  */
 BlockSvg.prototype.setCommentText = function(text) {
-  const Comment = goog.module.get('Blockly.Comment');
+  const {Comment} = goog.module.get('Blockly.Comment');
   if (!Comment) {
     throw Error('Missing require for Blockly.Comment');
   }
-  if (this.commentModel.text == text) {
+  if (this.commentModel.text === text) {
     return;
   }
   BlockSvg.superClass_.setCommentText.call(this, text);
 
-  const shouldHaveComment = text != null;
-  if (!!this.commentIcon_ == shouldHaveComment) {
+  const shouldHaveComment = text !== null;
+  if (!!this.commentIcon_ === shouldHaveComment) {
     // If the comment's state of existence is correct, but the text is new
     // that means we're just updating a comment.
     this.commentIcon_.updateText();
@@ -1067,7 +1066,7 @@ BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 BlockSvg.prototype.setWarningText = function(text, opt_id) {
-  const Warning = goog.module.get('Blockly.Warning');
+  const {Warning} = goog.module.get('Blockly.Warning');
   if (!Warning) {
     throw Error('Missing require for Blockly.Warning');
   }
@@ -1105,7 +1104,7 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
   }
 
   let changedState = false;
-  if (typeof text == 'string') {
+  if (typeof text === 'string') {
     // Bubble up to add a warning on top-most collapsed block.
     let parent = this.getSurroundParent();
     let collapsedParent = null;
@@ -1137,7 +1136,7 @@ BlockSvg.prototype.setWarningText = function(text, opt_id) {
       if (!newText) {
         this.warning.dispose();
       }
-      changedState = oldText != newText;
+      changedState = oldText !== newText;
     }
   }
   if (changedState && this.rendered) {
@@ -1172,7 +1171,7 @@ BlockSvg.prototype.setMutator = function(mutator) {
  * @param {boolean} enabled True if enabled.
  */
 BlockSvg.prototype.setEnabled = function(enabled) {
-  if (this.isEnabled() != enabled) {
+  if (this.isEnabled() !== enabled) {
     BlockSvg.superClass_.setEnabled.call(this, enabled);
     if (this.rendered && !this.getInheritedDisabled()) {
       this.updateDisabled();
@@ -1552,7 +1551,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
       // either one of them is unconnected, then there could be confusion.
       if (!connection.isConnected() || !otherConnection.isConnected()) {
         // Only bump blocks if they are from different tree structures.
-        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+        if (otherConnection.getSourceBlock().getRootBlock() !== rootBlock) {
           // Always bump the inferior block.
           if (connection.isSuperior()) {
             otherConnection.bumpAwayFrom(connection);
@@ -1602,8 +1601,8 @@ BlockSvg.prototype.positionNearConnection = function(
     sourceConnection, targetConnection) {
   // We only need to position the new block if it's before the existing one,
   // otherwise its position is set by the previous block.
-  if (sourceConnection.type == ConnectionType.NEXT_STATEMENT ||
-      sourceConnection.type == ConnectionType.INPUT_VALUE) {
+  if (sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
+      sourceConnection.type === ConnectionType.INPUT_VALUE) {
     const dx = targetConnection.x - sourceConnection.x;
     const dy = targetConnection.y - sourceConnection.y;
 

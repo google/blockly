@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Lua for list blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
@@ -22,18 +21,18 @@ Blockly.Lua['lists_create_empty'] = function(block) {
 
 Blockly.Lua['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var elements = new Array(block.itemCount_);
-  for (var i = 0; i < block.itemCount_; i++) {
+  const elements = new Array(block.itemCount_);
+  for (let i = 0; i < block.itemCount_; i++) {
     elements[i] = Blockly.Lua.valueToCode(block, 'ADD' + i,
         Blockly.Lua.ORDER_NONE) || 'None';
   }
-  var code = '{' + elements.join(', ') + '}';
+  const code = '{' + elements.join(', ') + '}';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'create_list_repeated',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(item, count)',
        '  local t = {}',
@@ -42,37 +41,38 @@ Blockly.Lua['lists_repeat'] = function(block) {
        '  end',
        '  return t',
        'end']);
-  var element = Blockly.Lua.valueToCode(block, 'ITEM',
+  const element = Blockly.Lua.valueToCode(block, 'ITEM',
       Blockly.Lua.ORDER_NONE) || 'None';
-  var repeatCount = Blockly.Lua.valueToCode(block, 'NUM',
+  const repeatCount = Blockly.Lua.valueToCode(block, 'NUM',
       Blockly.Lua.ORDER_NONE) || '0';
-  var code = functionName + '(' + element + ', ' + repeatCount + ')';
+  const code = functionName + '(' + element + ', ' + repeatCount + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_length'] = function(block) {
   // String or array length.
-  var list = Blockly.Lua.valueToCode(block, 'VALUE',
+  const list = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_UNARY) || '{}';
   return ['#' + list, Blockly.Lua.ORDER_UNARY];
 };
 
 Blockly.Lua['lists_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  var list = Blockly.Lua.valueToCode(block, 'VALUE',
+  const list = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_UNARY) || '{}';
-  var code = '#' + list + ' == 0';
+  const code = '#' + list + ' == 0';
   return [code, Blockly.Lua.ORDER_RELATIONAL];
 };
 
 Blockly.Lua['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  var item = Blockly.Lua.valueToCode(block, 'FIND',
+  const item = Blockly.Lua.valueToCode(block, 'FIND',
       Blockly.Lua.ORDER_NONE) || '\'\'';
-  var list = Blockly.Lua.valueToCode(block, 'VALUE',
+  const list = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '{}';
-  if (block.getFieldValue('END') == 'FIRST') {
-    var functionName = Blockly.Lua.provideFunction_(
+  let functionName;
+  if (block.getFieldValue('END') === 'FIRST') {
+    functionName = Blockly.Lua.provideFunction_(
         'first_index',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t, elem)',
          '  for k, v in ipairs(t) do',
@@ -83,7 +83,7 @@ Blockly.Lua['lists_indexOf'] = function(block) {
          '  return 0',
          'end']);
   } else {
-    var functionName = Blockly.Lua.provideFunction_(
+    functionName = Blockly.Lua.provideFunction_(
         'last_index',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t, elem)',
          '  for i = #t, 1, -1 do',
@@ -94,7 +94,7 @@ Blockly.Lua['lists_indexOf'] = function(block) {
          '  return 0',
          'end']);
   }
-  var code = functionName + '(' + list + ', ' + item + ')';
+  const code = functionName + '(' + list + ', ' + item + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
@@ -107,13 +107,13 @@ Blockly.Lua['lists_indexOf'] = function(block) {
  * @private
  */
 Blockly.Lua.lists.getIndex_ = function(listName, where, opt_at) {
-  if (where == 'FIRST') {
+  if (where === 'FIRST') {
     return '1';
-  } else if (where == 'FROM_END') {
+  } else if (where === 'FROM_END') {
     return '#' + listName + ' + 1 - ' + opt_at;
-  } else if (where == 'LAST') {
+  } else if (where === 'LAST') {
     return '#' + listName;
-  } else if (where == 'RANDOM') {
+  } else if (where === 'RANDOM') {
     return 'math.random(#' + listName + ')';
   } else {
     return opt_at;
@@ -123,75 +123,76 @@ Blockly.Lua.lists.getIndex_ = function(listName, where, opt_at) {
 Blockly.Lua['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
-  var mode = block.getFieldValue('MODE') || 'GET';
-  var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_HIGH) ||
+  const mode = block.getFieldValue('MODE') || 'GET';
+  const where = block.getFieldValue('WHERE') || 'FROM_START';
+  const list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_HIGH) ||
       '({})';
-  var getIndex_ = Blockly.Lua.lists.getIndex_;
+  const getIndex_ = Blockly.Lua.lists.getIndex_;
 
   // If `list` would be evaluated more than once (which is the case for LAST,
   // FROM_END, and RANDOM) and is non-trivial, make sure to access it only once.
-  if ((where == 'LAST' || where == 'FROM_END' || where == 'RANDOM') &&
+  if ((where === 'LAST' || where === 'FROM_END' || where === 'RANDOM') &&
       !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
-    if (mode == 'REMOVE') {
+    if (mode === 'REMOVE') {
       // We can use multiple statements.
-      var atOrder = (where == 'FROM_END') ? Blockly.Lua.ORDER_ADDITIVE :
+      const atOrder = (where === 'FROM_END') ? Blockly.Lua.ORDER_ADDITIVE :
           Blockly.Lua.ORDER_NONE;
-      var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
-      var listVar = Blockly.Lua.nameDB_.getDistinctName(
+      let at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
+      const listVar = Blockly.Lua.nameDB_.getDistinctName(
           'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
       at = getIndex_(listVar, where, at);
-      var code = listVar + ' = ' + list + '\n' +
+      const code = listVar + ' = ' + list + '\n' +
           'table.remove(' + listVar + ', ' + at + ')\n';
       return code;
     } else {
       // We need to create a procedure to avoid reevaluating values.
-      var at = Blockly.Lua.valueToCode(block, 'AT', Blockly.Lua.ORDER_NONE) ||
+      const at = Blockly.Lua.valueToCode(block, 'AT', Blockly.Lua.ORDER_NONE) ||
           '1';
-      if (mode == 'GET') {
-        var functionName = Blockly.Lua.provideFunction_(
+      let functionName;
+      if (mode === 'GET') {
+        functionName = Blockly.Lua.provideFunction_(
             'list_get_' + where.toLowerCase(),
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                ((where == 'FROM_END' || where == 'FROM_START') ?
+                ((where === 'FROM_END' || where === 'FROM_START') ?
                     ', at)' : ')'),
              '  return t[' + getIndex_('t', where, 'at') + ']',
              'end']);
-      } else {  //  mode == 'GET_REMOVE'
-        var functionName = Blockly.Lua.provideFunction_(
+      } else {  // `mode` === 'GET_REMOVE'
+        functionName = Blockly.Lua.provideFunction_(
             'list_remove_' + where.toLowerCase(),
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                ((where == 'FROM_END' || where == 'FROM_START') ?
+                ((where === 'FROM_END' || where === 'FROM_START') ?
                     ', at)' : ')'),
              '  return table.remove(t, ' + getIndex_('t', where, 'at') + ')',
              'end']);
       }
-      var code = functionName + '(' + list +
+      const code = functionName + '(' + list +
           // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
           // pass it.
-          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') +
+          ((where === 'FROM_END' || where === 'FROM_START') ? ', ' + at : '') +
           ')';
       return [code, Blockly.Lua.ORDER_HIGH];
     }
   } else {
     // Either `list` is a simple variable, or we only need to refer to `list`
     // once.
-    var atOrder = (mode == 'GET' && where == 'FROM_END') ?
+    const atOrder = (mode === 'GET' && where === 'FROM_END') ?
         Blockly.Lua.ORDER_ADDITIVE : Blockly.Lua.ORDER_NONE;
-    var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
+    let at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
     at = getIndex_(list, where, at);
-    if (mode == 'GET') {
-      var code = list + '[' + at + ']';
+    if (mode === 'GET') {
+      const code = list + '[' + at + ']';
       return [code, Blockly.Lua.ORDER_HIGH];
     } else {
-      var code = 'table.remove(' + list + ', ' + at + ')';
-      if (mode == 'GET_REMOVE') {
+      const code = 'table.remove(' + list + ', ' + at + ')';
+      if (mode === 'GET_REMOVE') {
         return [code, Blockly.Lua.ORDER_HIGH];
-      } else {  // `mode` == 'REMOVE'
+      } else {  // `mode` === 'REMOVE'
         return code + '\n';
       }
     }
@@ -201,35 +202,35 @@ Blockly.Lua['lists_getIndex'] = function(block) {
 Blockly.Lua['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
-  var list = Blockly.Lua.valueToCode(block, 'LIST',
+  let list = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_HIGH) || '{}';
-  var mode = block.getFieldValue('MODE') || 'SET';
-  var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var at = Blockly.Lua.valueToCode(block, 'AT',
+  const mode = block.getFieldValue('MODE') || 'SET';
+  const where = block.getFieldValue('WHERE') || 'FROM_START';
+  const at = Blockly.Lua.valueToCode(block, 'AT',
       Blockly.Lua.ORDER_ADDITIVE) || '1';
-  var value = Blockly.Lua.valueToCode(block, 'TO',
+  const value = Blockly.Lua.valueToCode(block, 'TO',
       Blockly.Lua.ORDER_NONE) || 'None';
-  var getIndex_ = Blockly.Lua.lists.getIndex_;
+  const getIndex_ = Blockly.Lua.lists.getIndex_;
 
-  var code = '';
+  let code = '';
   // If `list` would be evaluated more than once (which is the case for LAST,
   // FROM_END, and RANDOM) and is non-trivial, make sure to access it only once.
-  if ((where == 'LAST' || where == 'FROM_END' || where == 'RANDOM') &&
+  if ((where === 'LAST' || where === 'FROM_END' || where === 'RANDOM') &&
       !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
     // We can use multiple statements.
-    var listVar = Blockly.Lua.nameDB_.getDistinctName(
+    const listVar = Blockly.Lua.nameDB_.getDistinctName(
         'tmp_list', Blockly.VARIABLE_CATEGORY_NAME);
     code = listVar + ' = ' + list + '\n';
     list = listVar;
   }
-  if (mode == 'SET') {
+  if (mode === 'SET') {
     code += list + '[' + getIndex_(list, where, at) + '] = ' + value;
-  } else {  // `mode` == 'INSERT'
+  } else {  // `mode` === 'INSERT'
     // LAST is a special case, because we want to insert
     // *after* not *before*, the existing last element.
     code += 'table.insert(' + list + ', ' +
-        (getIndex_(list, where, at) + (where == 'LAST' ? ' + 1' : '')) +
+        (getIndex_(list, where, at) + (where === 'LAST' ? ' + 1' : '')) +
         ', ' + value + ')';
   }
   return code + '\n';
@@ -237,23 +238,23 @@ Blockly.Lua['lists_setIndex'] = function(block) {
 
 Blockly.Lua['lists_getSublist'] = function(block) {
   // Get sublist.
-  var list = Blockly.Lua.valueToCode(block, 'LIST',
+  const list = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';
-  var where1 = block.getFieldValue('WHERE1');
-  var where2 = block.getFieldValue('WHERE2');
-  var at1 = Blockly.Lua.valueToCode(block, 'AT1',
+  const where1 = block.getFieldValue('WHERE1');
+  const where2 = block.getFieldValue('WHERE2');
+  const at1 = Blockly.Lua.valueToCode(block, 'AT1',
       Blockly.Lua.ORDER_NONE) || '1';
-  var at2 = Blockly.Lua.valueToCode(block, 'AT2',
+  const at2 = Blockly.Lua.valueToCode(block, 'AT2',
       Blockly.Lua.ORDER_NONE) || '1';
-  var getIndex_ = Blockly.Lua.lists.getIndex_;
+  const getIndex_ = Blockly.Lua.lists.getIndex_;
 
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'list_sublist_' + where1.toLowerCase() + '_' + where2.toLowerCase(),
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(source' +
           // The value for 'FROM_END' and'FROM_START' depends on `at` so
           // we add it as a parameter.
-          ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', at1' : '') +
-          ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', at2' : '') +
+          ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '') +
+          ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '') +
           ')',
        '  local t = {}',
        '  local start = ' + getIndex_('source', where1, 'at1'),
@@ -263,23 +264,23 @@ Blockly.Lua['lists_getSublist'] = function(block) {
        '  end',
        '  return t',
        'end']);
-  var code = functionName + '(' + list +
+  const code = functionName + '(' + list +
       // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
       // pass it.
-      ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', ' + at1 : '') +
-      ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', ' + at2 : '') +
+      ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', ' + at1 : '') +
+      ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', ' + at2 : '') +
       ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var list = Blockly.Lua.valueToCode(
+  const list = Blockly.Lua.valueToCode(
       block, 'LIST', Blockly.Lua.ORDER_NONE) || '{}';
-  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
-  var type = block.getFieldValue('TYPE');
+  const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  const type = block.getFieldValue('TYPE');
 
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'list_sort',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
           '(list, typev, direction)',
@@ -303,20 +304,20 @@ Blockly.Lua['lists_sort'] = function(block) {
        '  return t',
        'end']);
 
-  var code = functionName +
+  const code = functionName +
       '(' + list + ',"' + type + '", ' + direction + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
-  var input = Blockly.Lua.valueToCode(block, 'INPUT',
+  let input = Blockly.Lua.valueToCode(block, 'INPUT',
       Blockly.Lua.ORDER_NONE);
-  var delimiter = Blockly.Lua.valueToCode(block, 'DELIM',
+  const delimiter = Blockly.Lua.valueToCode(block, 'DELIM',
       Blockly.Lua.ORDER_NONE) || '\'\'';
-  var mode = block.getFieldValue('MODE');
-  var functionName;
-  if (mode == 'SPLIT') {
+  const mode = block.getFieldValue('MODE');
+  let functionName;
+  if (mode === 'SPLIT') {
     if (!input) {
       input = '\'\'';
     }
@@ -338,7 +339,7 @@ Blockly.Lua['lists_split'] = function(block) {
          '  end',
          '  return t',
          'end']);
-  } else if (mode == 'JOIN') {
+  } else if (mode === 'JOIN') {
     if (!input) {
       input = '{}';
     }
@@ -346,15 +347,15 @@ Blockly.Lua['lists_split'] = function(block) {
   } else {
     throw Error('Unknown mode: ' + mode);
   }
-  var code = functionName + '(' + input + ', ' + delimiter + ')';
+  const code = functionName + '(' + input + ', ' + delimiter + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_reverse'] = function(block) {
   // Block for reversing a list.
-  var list = Blockly.Lua.valueToCode(block, 'LIST',
+  const list = Blockly.Lua.valueToCode(block, 'LIST',
       Blockly.Lua.ORDER_NONE) || '{}';
-  var functionName = Blockly.Lua.provideFunction_(
+  const functionName = Blockly.Lua.provideFunction_(
       'list_reverse',
       ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(input)',
        '  local reversed = {}',
@@ -363,6 +364,6 @@ Blockly.Lua['lists_reverse'] = function(block) {
        '  end',
        '  return reversed',
        'end']);
-  var code = functionName + '(' + list + ')';
+  const code = functionName + '(' + list + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };

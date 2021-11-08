@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for a component that has a handler for when a
  * block is dropped on top of it.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -20,11 +19,11 @@
 goog.module('Blockly.IDragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.require('Blockly.IComponent');
+const {IComponent} = goog.require('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
+const {IDraggable} = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 
 
 /**
@@ -86,4 +85,4 @@ IDragTarget.prototype.onDrop;
  */
 IDragTarget.prototype.shouldPreventMove;
 
-exports = IDragTarget;
+exports.IDragTarget = IDragTarget;

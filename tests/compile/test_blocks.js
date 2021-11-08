@@ -12,8 +12,6 @@
 goog.provide('Blockly.Constants.TestBlocks');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
-
 
 Blockly.defineBlocksWithJsonArray([
     {

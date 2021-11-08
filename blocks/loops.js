@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.loops');  // Deprecated
+goog.provide('Blockly.blocks.loops');
 goog.provide('Blockly.Constants.Loops');
 
 goog.require('Blockly');

@@ -316,7 +316,10 @@ FieldTextInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
  */
 FieldTextInput.prototype.showPromptEditor_ = function() {
   dialog.prompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
-    this.setValue(this.getValueFromEditorText_(text));
+    // Text is null if user pressed cancel button.
+    if (text !== null) {
+      this.setValue(this.getValueFromEditorText_(text));
+    }
   }.bind(this));
 };
 

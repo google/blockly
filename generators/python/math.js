@@ -156,68 +156,71 @@ Blockly.Python['math_constant'] = function(block) {
 };
 
 Blockly.Python['math_number_property'] = function(block) {
-  // Check if a number is even, odd, prime, whole, positive, or negative
-  // or if it is divisible by certain number. Returns true or false.
-  const number_to_check = Blockly.Python.valueToCode(block, 'NUMBER_TO_CHECK',
-      Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
-  const dropdown_property = block.getFieldValue('PROPERTY');
+   // Check if a number is even, odd, prime, whole, positive, or negative
+   // or if it is divisible by certain number. Returns true or false.
+  const PROPERTIES = {
+    'EVEN': [' % 2 == 0', Blockly.Python.ORDER_MULTIPLICATIVE,
+        Blockly.Python.ORDER_RELATIONAL],
+    'ODD': [' % 2 == 1', Blockly.Python.ORDER_MULTIPLICATIVE,
+        Blockly.Python.ORDER_RELATIONAL],
+    'WHOLE': [' % 1 == 0', Blockly.Python.ORDER_MULTIPLICATIVE,
+        Blockly.Python.ORDER_RELATIONAL],
+    'POSITIVE': [' > 0', Blockly.Python.ORDER_RELATIONAL,
+        Blockly.Python.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Blockly.Python.ORDER_RELATIONAL,
+        Blockly.Python.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, Blockly.Python.ORDER_MULTIPLICATIVE,
+        Blockly.Python.ORDER_RELATIONAL],
+    'PRIME': [null, Blockly.Python.ORDER_NONE,
+        Blockly.Python.ORDER_FUNCTION_CALL]
+  }
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+  const tuple = PROPERTIES[dropdownProperty];
+  const suffix = tuple[0];
+  const inputOrder = tuple[1];
+  const outputOrder = tuple[2];
+  const numberToCheck = Blockly.Python.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
-  if (dropdown_property === 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
+    // Prime is a special case as it is not a one-liner test.
     Blockly.Python.definitions_['import_math'] = 'import math';
     Blockly.Python.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
     const functionName = Blockly.Python.provideFunction_(
-        'math_isPrime',
-        ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
-         '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-         '  # If n is not a number but a string, try parsing it.',
-         '  if not isinstance(n, Number):',
-         '    try:',
-         '      n = float(n)',
-         '    except:',
-         '      return False',
-         '  if n == 2 or n == 3:',
-         '    return True',
-         '  # False if n is negative, is 1, or not whole,' +
-             ' or if n is divisible by 2 or 3.',
-         '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
-         '    return False',
-         '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-         '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
-         '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
-         '      return False',
-         '  return True']);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
-  }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 == 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 == 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 == 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY': {
-      const divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
-          Blockly.Python.ORDER_MULTIPLICATIVE);
-      // If 'divisor' is some code that evals to 0, Python will raise an error.
-      if (!divisor || divisor === '0') {
-        return ['False', Blockly.Python.ORDER_ATOMIC];
-      }
-      code = number_to_check + ' % ' + divisor + ' == 0';
-      break;
+      'math_isPrime',
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
+       '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+       '  # If n is not a number but a string, try parsing it.',
+       '  if not isinstance(n, Number):',
+       '    try:',
+       '      n = float(n)',
+       '    except:',
+       '      return False',
+       '  if n == 2 or n == 3:',
+       '    return True',
+       '  # False if n is negative, is 1, or not whole,' +
+       ' or if n is divisible by 2 or 3.',
+       '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
+       '    return False',
+       '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+       '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
+       '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
+       '      return False',
+       '  return True']);
+       code = functionName + '(' + numberToCheck + ')';
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
+    const divisor = Blockly.Python.valueToCode(block, 'DIVISOR',
+        Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
+    // If 'divisor' is some code that evals to 0, Python will raise an error.
+    if (divisor === '0') {
+      return ['False', Blockly.Python.ORDER_ATOMIC];
     }
-  }
-  return [code, Blockly.Python.ORDER_RELATIONAL];
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+  } else {
+    code = numberToCheck + suffix;
+  };
+  return [code, outputOrder];
 };
 
 Blockly.Python['math_change'] = function(block) {

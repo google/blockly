@@ -173,53 +173,30 @@ Blockly.Dart['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-
     'EVEN': [' % 2 == 0', Blockly.Dart.ORDER_MULTIPLICATIVE,
-
         Blockly.Dart.ORDER_EQUALITY],
-
     'ODD': [' % 2 == 1', Blockly.Dart.ORDER_MULTIPLICATIVE,
-
         Blockly.Dart.ORDER_EQUALITY],
-
     'WHOLE': [' % 1 == 0', Blockly.Dart.ORDER_MULTIPLICATIVE,
-
         Blockly.Dart.ORDER_EQUALITY],
-
     'POSITIVE': [' > 0', Blockly.Dart.ORDER_RELATIONAL,
-
         Blockly.Dart.ORDER_RELATIONAL],
-
     'NEGATIVE': [' < 0', Blockly.Dart.ORDER_RELATIONAL,
-
         Blockly.Dart.ORDER_RELATIONAL],
-
     'DIVISIBLE_BY': [null, Blockly.Dart.ORDER_MULTIPLICATIVE,
-
         Blockly.Dart.ORDER_EQUALITY],
-
     'PRIME': [null, Blockly.Dart.ORDER_NONE,
-
         Blockly.Dart.ORDER_UNARY_POSTFIX]
-
   } 
   const dropdownProperty = block.getFieldValue('PROPERTY');
-
   const tuple = PROPERTIES[dropdownProperty];
-
   const suffix = tuple[0];
-
   const inputOrder = tuple[1];
-
   const outputOrder = tuple[2];
-
   const numberToCheck = Blockly.Dart.valueToCode(block, 'NUMBER_TO_CHECK',
-
       inputOrder) || '0';
-
-      let code;
-
-  if (dropdownProperty == 'PRIME') {
+  let code;
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
@@ -244,25 +221,18 @@ Blockly.Dart['math_number_property'] = function(block) {
          '  }',
          '  return true;',
          '}']);
-
     code = functionName + '(' + numberToCheck + ')';
-
-  } else if (dropdownProperty == 'DIVISIBLE_BY') {
-
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
-
         Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
-
+    if (!divisor) {
+        return ['false', Blockly.Dart.ORDER_ATOMIC];
+      }
     code = numberToCheck + ' % ' + divisor + ' == 0';
-
   } else {
-
     code = numberToCheck + suffix;
-
   }
-
   return [code, outputOrder];
-
 };
 
 Blockly.Dart['math_change'] = function(block) {

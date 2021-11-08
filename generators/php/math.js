@@ -146,26 +146,27 @@ Blockly.PHP['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Blockly.PHP.ORDER_MODULUS,
+    'EVEN': ['', ' % 2 === 0', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
-    'ODD': [' % 2 == 1', Blockly.PHP.ORDER_MODULUS,
+    'ODD': ['', ' % 2 === 1', Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
-    'WHOLE': ['is_int(' + number_to_check + ')', Blockly.PHP.ORDER_MODULUS,
-        Blockly.PHP.ORDER_EQUALITY],
-    'POSITIVE': [' > 0', Blockly.PHP.ORDER_RELATIONAL,
+    'WHOLE': ['is_int(', ')', Blockly.PHP.ORDER_NONE,
+        Blockly.PHP.ORDER_FUNCTION_CALL],
+    'POSITIVE': ['', ' > 0', Blockly.PHP.ORDER_RELATIONAL,
         Blockly.PHP.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Blockly.PHP.ORDER_RELATIONAL,
+    'NEGATIVE': ['', ' < 0', Blockly.PHP.ORDER_RELATIONAL,
         Blockly.PHP.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Blockly.PHP.ORDER_MODULUS,
+    'DIVISIBLE_BY': [null, null, Blockly.PHP.ORDER_MODULUS,
         Blockly.PHP.ORDER_EQUALITY],
-    'PRIME': [null, Blockly.PHP.ORDER_NONE,
+    'PRIME': [null, null, Blockly.PHP.ORDER_NONE,
         Blockly.PHP.ORDER_FUNCTION_CALL]
-  }
+  };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
-  const suffix = tuple[0];
-  const inputOrder = tuple[1];
-  const outputOrder = tuple[2];
+  const prefix = tuple[0];
+  const suffix = tuple[1];
+  const inputOrder = tuple[2];
+  const outputOrder = tuple[3];
   const numberToCheck = Blockly.PHP.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
@@ -180,13 +181,13 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  }',
          '  // False if n is NaN, negative, is 1, or not whole.',
          '  // And false if n is divisible by 2 or 3.',
-         '  if (!is_numeric($n) || $n <= 1 || $n % 1 != 0 || $n % 2 == 0 ||' +
-            ' $n % 3 == 0) {',
+         '  if (!is_numeric($n) || $n <= 1 || $n % 1 !== 0 || $n % 2 === 0 ||' +
+            ' $n % 3 === 0) {',
          '    return false;',
          '  }',
          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
          '  for ($x = 6; $x <= sqrt($n) + 1; $x += 6) {',
-         '    if ($n % ($x - 1) == 0 || $n % ($x + 1) == 0) {',
+         '    if ($n % ($x - 1) === 0 || $n % ($x + 1) === 0) {',
          '      return false;',
          '    }',
          '  }',
@@ -196,9 +197,12 @@ Blockly.PHP['math_number_property'] = function(block) {
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
         Blockly.PHP.ORDER_MODULUS) || '0';
-    code = numberToCheck + ' % ' + divisor + ' == 0';
+    if (divisor === '0') {
+      return ['false', Blockly.PHP.ORDER_ATOMIC];
+    }
+    code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
-    code = numberToCheck + suffix;
+    code = prefix + numberToCheck + suffix;
   }
   return [code, outputOrder];
 };

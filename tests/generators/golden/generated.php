@@ -426,12 +426,12 @@ function math_isPrime($n) {
   }
   // False if n is NaN, negative, is 1, or not whole.
   // And false if n is divisible by 2 or 3.
-  if (!is_numeric($n) || $n <= 1 || $n % 1 !== 0 || $n % 2 === 0 || $n % 3 === 0) {
+  if (!is_numeric($n) || $n <= 1 || $n % 1 != 0 || $n % 2 == 0 || $n % 3 == 0) {
     return false;
   }
   // Check all the numbers of form 6k +/- 1, up to sqrt(n).
   for ($x = 6; $x <= sqrt($n) + 1; $x += 6) {
-    if ($n % ($x - 1) === 0 || $n % ($x + 1) === 0) {
+    if ($n % ($x - 1) == 0 || $n % ($x + 1) == 0) {
       return false;
     }
   }

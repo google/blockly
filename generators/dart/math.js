@@ -226,8 +226,8 @@ Blockly.Dart['math_number_property'] = function(block) {
     const divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
         Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
     if (divisor === '0') {
-        return ['false', Blockly.Dart.ORDER_ATOMIC];
-      }
+      return ['false', Blockly.Dart.ORDER_ATOMIC];
+    }
     code = numberToCheck + ' % ' + divisor + ' == 0';
   } else {
     code = numberToCheck + suffix;

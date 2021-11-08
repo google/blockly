@@ -225,7 +225,7 @@ Blockly.Dart['math_number_property'] = function(block) {
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.Dart.valueToCode(block, 'DIVISOR',
         Blockly.Dart.ORDER_MULTIPLICATIVE) || '0';
-    if (!divisor) {
+    if (divisor === '0') {
         return ['false', Blockly.Dart.ORDER_ATOMIC];
       }
     code = numberToCheck + ' % ' + divisor + ' == 0';

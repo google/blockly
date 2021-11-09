@@ -187,7 +187,7 @@ Blockly.Dart['math_number_property'] = function(block) {
         Blockly.Dart.ORDER_EQUALITY],
     'PRIME': [null, Blockly.Dart.ORDER_NONE,
         Blockly.Dart.ORDER_UNARY_POSTFIX]
-  } 
+  };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
   const suffix = tuple[0];
@@ -200,7 +200,7 @@ Blockly.Dart['math_number_property'] = function(block) {
     // Prime is a special case as it is not a one-liner test.
     Blockly.Dart.definitions_['import_dart_math'] =
         'import \'dart:math\' as Math;';
-        const functionName = Blockly.Dart.provideFunction_(
+    const functionName = Blockly.Dart.provideFunction_(
         'math_isPrime',
         ['bool ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',

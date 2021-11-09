@@ -155,12 +155,20 @@ suite('Text Input Fields', function() {
             getScale: function() {
               return 1;
             },
-            getRenderer: function() {return {
-              getClassName: function() {return '';},
-            };},
-            getTheme: function() {return {
-              getClassName: function() {return '';},
-            };},
+            getRenderer: function() {
+              return {
+                getClassName: function() {
+                  return '';
+                },
+              };
+            },
+            getTheme: function() {
+              return {
+                getClassName: function() {
+                  return '';
+                },
+              };
+            },
             markFocused: function() {},
           };
           field.sourceBlock_ = {
@@ -225,7 +233,7 @@ suite('Text Input Fields', function() {
     setup(function() {
       this.workspace = new Blockly.Workspace();
       defineRowBlock();
-      
+
       this.assertValue = (value) => {
         const block = this.workspace.newBlock('row_block');
         const field = new Blockly.FieldTextInput(value);

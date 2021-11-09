@@ -809,7 +809,7 @@ suite('Events', function() {
 
     test('Forward', function() {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
-      const events = [ new Blockly.Events.BlockCreate(block) ];
+      const events = [new Blockly.Events.BlockCreate(block)];
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);
@@ -824,7 +824,7 @@ suite('Events', function() {
 
     test('Backward', function() {
       const block = this.workspace.newBlock('field_variable_test_block', '1');
-      const events = [ new Blockly.Events.BlockCreate(block) ];
+      const events = [new Blockly.Events.BlockCreate(block)];
       addMoveEvent(events, block, 1, 1);
       addMoveEvent(events, block, 2, 2);
       addMoveEvent(events, block, 3, 3);

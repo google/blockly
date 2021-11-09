@@ -1,20 +1,20 @@
 # Varwin Blockly
 
-Это форк Google Blockly с доработками для [Varwin](https://varwin.com/).  
-Основная фича Varwin Blockly: "Модули" (`/core/module.*`), которая сильно затрагивает core blockly.
+This is a fork of Google Blockly with modifications for [Varwin](https://varwin.com/).  
+The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 
-# Алгоритм обновления репозитория
+# Algorithm for updating the repository
 
-1. Подтягиваем изменения из `google/blockly`. (Github сам предложит это сделать, если обнаружит новые коммиты в master `google/blockly`)
-2. Если есть конфликты, будет создан PR для мерджа
-3. Переходим на ветку слияния и решаем все конфликты
-4. Выполняем 
+1. Pulling changes from `google/blockly` (Github will offer to do this itself if it finds new commits in master `google/blockly`)
+2. If there are conflicts, a PR will be created for the merge
+3. Go to the merge branch and resolve all conflicts
+4. Run 
 ```bash
 npm run build
 ```
-6. Запускаем локальный playground, которые лежит в `tests/playground.html`
-7. Если обнаруживаются ошибки, то переходим к пункту 3 и решаем возникшие проблемы. Обратите внимание на раздел с частыми проблемами ниже
-8. Выполняем
+6. Run the local playground, which is located in `tests/playground.html`
+7. If errors are found, then go to step 3 and solve the problems that have arisen. Pay attention to the section with common problems below.
+8. Run
 ```bash
 npm run prepare
 ```
@@ -22,37 +22,38 @@ npm run prepare
 11. В `/dist/package.json` проверяем название пакета и повышаем версию
 12. Выполняем npm publish
 
-# Как удобно тестировать Varwin Blockly сразу в RMS
 
-Можно вызывать `gulp package` с аргументом `--output "path"` где `path` это путь до папки `blockly` в `node_modules` RMS.  
-Учитывайте, что путь должен быть относительно корня репозитория Varwin Blockly.
+# How convenient it is to test Varwin Blockly right away in RMS
 
-Т.е.
-1. Делаем правки в Varwin Blockly
-2. Вызываем 
+You can call `gulp package` with the argument `--output "path"` where `path` is the path to the `blockly` folder in `node_modules` RMS.
+Note that the path must be relative to the root of the Varwin Blockly repository.
+
+Those.
+1. Making edits in Varwin Blockly
+2. Run
 ```bash
   npm run build
 ```
-3. Вызываем
+3. Run
 ```bash
   gulp package --output "~/node_modules/blockly/"
 ```
-6. Запускаем сборку RMS (или hot reload сам подтянет node_modules)
+6. Run the RMS build (or hot reload will pull up node_modules by itself)
 
-# Частые проблемы
 
-### Playground не может найти файлы
+# Frequent problems
 
-Идем в файл `/blockly_uncompresed.js` и исправляем пути до файлов.
+### Playground cannot find files
 
-### Build падает с ошибкой "No supported platform for closure-compiler found"
+Go to the file `/blockly_uncompresed.js` and fix the paths to the files.
 
-Можно попробовать установить не поддерживаемый пакет `google-closure-compiler-js`.  
-Затем залезть в `node_modules/google-closure-compiler/lib/utils.js` и в методе `getFirstSupportedPlatform` всегда возвращать  
+### Build crashes with the error "No supported platform for closure-compiler found"
+
+You can try installing the unsupported package `google-closure-compiler-js`.
+Then go into `node_modules/google-closure-compiler/lib/utils.js` and always return in the `getFirstSupportedPlatform` method
 `"google-closure-compiler-js"`.
 
-Так пакет будет собираться средствами node.js, но это медленнее, зато работает. Пока что.
-
+This will build the package using node.js, but it's slower, but it works. For now.
 
 =======
 

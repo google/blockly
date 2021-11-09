@@ -10,7 +10,7 @@ const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatc
 
 
 suite('Gesture', function() {
-  function testGestureIsFieldClick(block, isFieldClick, eventsFireStub){
+  function testGestureIsFieldClick(block, isFieldClick, eventsFireStub) {
     const field = block.getField('NAME');
     const eventTarget = field.getClickTarget_();
     chai.assert.exists(eventTarget,

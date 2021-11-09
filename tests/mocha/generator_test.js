@@ -72,8 +72,8 @@ suite('Generator', function() {
       this.blockToCodeTest = function(
           generator, blockDisabled, opt_thisOnly,
           expectedCode, opt_message) {
-        generator.row_block = function(_){return 'row_block';};
-        generator.stack_block = function(_){return 'stack_block';};
+        generator.row_block = function(_) {return 'row_block';};
+        generator.stack_block = function(_) {return 'stack_block';};
         rowBlock.nextConnection.connect(stackBlock.previousConnection);
         rowBlock.disabled = blockDisabled;
 
@@ -131,7 +131,7 @@ suite('Generator', function() {
         const blockC = this.workspace.newBlock('test_loop_block');
         this.loopTest = function(
             generator, opt_thisOnly, expectedCode, opt_message) {
-          generator.test_loop_block = function(block){
+          generator.test_loop_block = function(block) {
             return '{' + generator.statementToCode(block, 'DO') + '}';
           };
           blockA.getInput('DO').connection.connect(blockB.previousConnection);

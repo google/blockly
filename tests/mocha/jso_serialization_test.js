@@ -391,14 +391,14 @@ suite('JSO Serialization', function() {
           const block = this.createBlockWithChild(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
-              jso, inputName, {'block': { 'type': blockType, 'id': 'id2'}});
+              jso, inputName, {'block': {'type': blockType, 'id': 'id2'}});
         };
   
         this.assertShadow = function(blockType, inputName) {
           const block = this.createBlockWithShadow(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
-              jso, inputName, {'shadow': { 'type': blockType, 'id': 'test'}});
+              jso, inputName, {'shadow': {'type': blockType, 'id': 'test'}});
         };
   
         this.assertOverwrittenShadow = function(blockType, inputName) {
@@ -620,14 +620,14 @@ suite('JSO Serialization', function() {
             const jso =
                 Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
-                jso['next'], {'block': { 'type': 'stack_block', 'id': 'id2'}});
+                jso['next'], {'block': {'type': 'stack_block', 'id': 'id2'}});
           });
   
           test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
-                jso['next'], {'shadow': { 'type': 'stack_block', 'id': 'test'}});
+                jso['next'], {'shadow': {'type': 'stack_block', 'id': 'test'}});
           });
   
           test('Overwritten shadow', function() {

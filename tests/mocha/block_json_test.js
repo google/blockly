@@ -82,7 +82,7 @@ suite('Block JSON initialization', function() {
 
     test('Strings to labels', function() {
       this.assertInterpolation(
-          ['test1', 'test2', 'test3', { 'type': 'input_dummy'}],
+          ['test1', 'test2', 'test3', {'type': 'input_dummy'}],
           [],
           undefined,
           [
@@ -106,7 +106,7 @@ suite('Block JSON initialization', function() {
 
     test('Ignore empty strings', function() {
       this.assertInterpolation(
-          ['test1', '', '    ', { 'type': 'input_dummy'}],
+          ['test1', '', '    ', {'type': 'input_dummy'}],
           [],
           undefined,
           [
@@ -122,7 +122,7 @@ suite('Block JSON initialization', function() {
 
     test('Insert args', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           [
             {
               'type': 'field_number',
@@ -159,7 +159,7 @@ suite('Block JSON initialization', function() {
 
     test('String args to labels', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           ['test1', 'test2', 'test3'],
           undefined,
           [
@@ -183,7 +183,7 @@ suite('Block JSON initialization', function() {
 
     test('Ignore empty string args', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           ['test1', '     ', '     '],
           undefined,
           [

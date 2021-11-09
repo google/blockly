@@ -54,7 +54,7 @@ suite('Gesture', function() {
   });
 
   test('Constructor', function() {
-    const e = { id: 'dummy_test_event'};
+    const e = {id: 'dummy_test_event'};
     const gesture = new Blockly.Gesture(e, this.workspace);
     chai.assert.equal(gesture.mostRecentEvent_, e);
     chai.assert.equal(gesture.creatorWorkspace_, this.workspace);

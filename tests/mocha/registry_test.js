@@ -225,7 +225,7 @@ suite('Registry', function() {
       };
       this.options = {
         'plugins': {
-          'test' : 'test_name',
+          'test': 'test_name',
         },
       };
       Blockly.registry.register('test', 'test_name', TestClass);

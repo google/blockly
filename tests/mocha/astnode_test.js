@@ -657,7 +657,7 @@ suite('ASTNode', function() {
       });
       test('fromStackToWorkspace', function() {
         const stub = sinon.stub(this.blocks.statementInput4,
-            "getRelativeToSurfaceXY").returns({x: 10, y:10});
+            "getRelativeToSurfaceXY").returns({x: 10, y: 10});
         const node = ASTNode.createStackNode(this.blocks.statementInput4);
         const outNode = node.out();
         chai.assert.equal(outNode.getType(), ASTNode.types.WORKSPACE);

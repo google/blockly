@@ -90,7 +90,7 @@ suite('Toolbox', function() {
         },
       ];
       chai.assert.throws(function() {
-        toolbox.render({'contents' : badToolboxDef});
+        toolbox.render({'contents': badToolboxDef});
       }, 'Toolbox cannot have both blocks and categories in the root level.');
     });
     // TODO: Uncomment once implemented.
@@ -100,7 +100,7 @@ suite('Toolbox', function() {
       chai.assert.isTrue(selectedNode.selected_);
     });
     test('JSON toolbox definition -> Should create toolbox with contents', function() {
-      const jsonDef = {'contents' : [
+      const jsonDef = {'contents': [
         {
           "kind": "category",
           "contents": [

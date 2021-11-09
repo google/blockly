@@ -47,9 +47,9 @@ suite('Dropdown Fields', function() {
       args: [[['a', 'A'], ['b', 'B'], ['c', 'C']]]},
     {title: 'Image Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
       args: [[
-        [{src:'scrA', alt:'a'}, 'A'],
-        [{src:'scrB', alt:'b'}, 'B'],
-        [{src:'scrC', alt:'c'}, 'C']]]},
+        [{src: 'scrA', alt: 'a'}, 'A'],
+        [{src: 'scrB', alt: 'b'}, 'B'],
+        [{src: 'scrC', alt: 'c'}, 'C']]]},
     {title: 'Dynamic Text Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
       args: [() => {
         return [['a', 'A'], ['b', 'B'], ['c', 'C']];
@@ -57,9 +57,9 @@ suite('Dropdown Fields', function() {
     {title: 'Dynamic Image Dropdown', value: 'A', expectedValue: 'A', expectedText: 'a',
       args: [() => {
         return [
-          [{src:'scrA', alt:'a'}, 'A'],
-          [{src:'scrB', alt:'b'}, 'B'],
-          [{src:'scrC', alt:'c'}, 'C']];
+          [{src: 'scrA', alt: 'a'}, 'A'],
+          [{src: 'scrB', alt: 'b'}, 'B'],
+          [{src: 'scrC', alt: 'c'}, 'C']];
       }]},
   ];
   const addJson = function(testCase) {

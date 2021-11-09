@@ -1818,7 +1818,7 @@ suite('Blocks', function() {
             '<block type="empty_block"/>'
         ), this.workspace);
         this.workspace.setTheme(new Blockly.Theme('test', {
-          "styleOne" : {
+          "styleOne": {
             "colourPrimary": "#000000",
             "colourSecondary": "#999999",
             "colourTertiary": "#4d4d4d",

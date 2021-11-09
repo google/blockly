@@ -50,9 +50,9 @@ exports.getCategoryJSON = getCategoryJSON;
  *    for a simple toolbox.
  */
 function getSimpleJson() {
-  return {"contents":[
+  return {"contents": [
     {
-      "kind":"BLOCK",
+      "kind": "BLOCK",
       "blockxml":
         `<block type="logic_compare">
           <field name="OP">NEQ</field>
@@ -69,17 +69,17 @@ function getSimpleJson() {
         </block>`,
     },
     {
-      "kind":"SEP",
-      "gap":"20",
+      "kind": "SEP",
+      "gap": "20",
     },
     {
-      "kind":"BUTTON",
+      "kind": "BUTTON",
       "text": "insert",
       "callbackkey": "insertConnectionRows",
     },
     {
-      "kind":"LABEL",
-      "text":"tooltips",
+      "kind": "LABEL",
+      "text": "tooltips",
     },
   ]};
 }
@@ -89,7 +89,7 @@ function getProperSimpleJson() {
   return {
     "contents": [
       {
-        "kind":"BLOCK",
+        "kind": "BLOCK",
         "type": "logic_compare",
         "fields": {
           "OP": "NEQ",
@@ -114,17 +114,17 @@ function getProperSimpleJson() {
         },
       },
       {
-        "kind":"SEP",
-        "gap":"20",
+        "kind": "SEP",
+        "gap": "20",
       },
       {
-        "kind":"BUTTON",
+        "kind": "BUTTON",
         "text": "insert",
         "callbackkey": "insertConnectionRows",
       },
       {
-        "kind":"LABEL",
-        "text":"tooltips",
+        "kind": "LABEL",
+        "text": "tooltips",
       },
     ]};
 }

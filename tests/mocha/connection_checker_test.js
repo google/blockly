@@ -228,6 +228,44 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
     });
+    suite('Output and Previous', function() {
+      test('Output connected, adding previous', function() {
+        var outBlock = { isShadow: function() {}};
+        var inBlock = { isShadow: function() {}};
+        var outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
+        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        outBlock.outputConnection = outCon;
+        inBlock.inputConnection = inCon;
+        Blockly.Connection.connectReciprocally_(inCon, outCon);
+        var prevCon = new Blockly.Connection(outBlock, Blockly.PREVIOUS_STATEMENT);
+        var nextBlock = { isShadow: function() {}};
+        var nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+
+        assertReasonHelper(
+            this.checker,
+            prevCon,
+            nextCon,
+            Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT);
+      });
+      test('Previous connected, adding output', function() {
+        var prevBlock = { isShadow: function() {}};
+        var nextBlock = { isShadow: function() {}};
+        var prevCon = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
+        var nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        prevBlock.previousConnection = prevCon;
+        nextBlock.nextConnection = nextCon;
+        Blockly.Connection.connectReciprocally_(prevCon, nextCon);
+        var outCon = new Blockly.Connection(prevBlock, Blockly.OUTPUT_VALUE);
+        var inBlock = { isShadow: function() {}};
+        var inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+
+        assertReasonHelper(
+            this.checker,
+            outCon,
+            inCon,
+            Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT);
+      });
+    });
   });
   suite('Check Types', function() {
     setup(function() {

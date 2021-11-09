@@ -274,7 +274,7 @@ suite('WorkspaceSvg', function() {
         }, this.eventsFireStub, this.changeListenerSpy, this.workspace,
         this.clock, 2);
       });
-      test('domToWorkspace that doesn\'t trigger scroll' , function() {
+      test('domToWorkspace that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
             Blockly.Xml.textToDom(
@@ -298,7 +298,7 @@ suite('WorkspaceSvg', function() {
         assertEventNotFired(
             this.changeListenerSpy, Blockly.Events.ViewportChange, {});
       });
-      test('domToWorkspace at 0,0 that doesn\'t trigger scroll' , function() {
+      test('domToWorkspace at 0,0 that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
             Blockly.Xml.textToDom(

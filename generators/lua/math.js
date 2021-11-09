@@ -145,7 +145,7 @@ Blockly.Lua['math_number_property'] = function(block) {
         Blockly.Lua.ORDER_RELATIONAL],
     'PRIME': [null, Blockly.Lua.ORDER_NONE,
         Blockly.Lua.ORDER_HIGH]
-  }
+  };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const tuple = PROPERTIES[dropdownProperty];
   const suffix = tuple[0];

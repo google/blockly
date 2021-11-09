@@ -447,7 +447,8 @@ Blockly.Block.prototype.initModel = function() {
 Blockly.Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     this.unplugFromRow_(opt_healStack);
-  } else if (this.previousConnection) {
+  }
+  if (this.previousConnection) {
     this.unplugFromStack_(opt_healStack);
   }
 };
@@ -1162,10 +1163,6 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.previousConnection) {
-      if (this.outputConnection) {
-        throw Error('Remove output connection prior to adding previous ' +
-            'connection.');
-      }
       this.previousConnection =
           this.makeConnection_(Blockly.connectionTypes.PREVIOUS_STATEMENT);
     }
@@ -1223,10 +1220,6 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.outputConnection) {
-      if (this.previousConnection) {
-        throw Error('Remove previous connection prior to adding output ' +
-            'connection.');
-      }
       this.outputConnection =
           this.makeConnection_(Blockly.connectionTypes.OUTPUT_VALUE);
     }

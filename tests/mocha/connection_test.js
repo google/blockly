@@ -17,7 +17,7 @@ suite('Connection', function() {
     this.createConnection = function(type) {
       const block = {
         workspace: this.workspace,
-        isShadow: function() { return false; },
+        isShadow: function() {return false;},
       };
       const connection = new Blockly.Connection(block, type);
       return connection;

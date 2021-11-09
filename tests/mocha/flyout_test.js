@@ -308,7 +308,7 @@ suite('Flyout', function() {
           sinon.stub(
               this.flyout.workspace_.targetWorkspace,
               'getToolboxCategoryCallback')
-              .returns(function() { return val; });
+              .returns(function() {return val;});
           this.flyout.show('someString');
           checkFlyoutInfo(this.createFlyoutSpy);
         };
@@ -556,7 +556,7 @@ suite('Flyout', function() {
     });
 
     test('Recycling enabled', function() {
-      this.flyout.blockIsRecyclable_ = function() { return true; };
+      this.flyout.blockIsRecyclable_ = function() {return true;};
       this.flyout.show({
         'contents': [
           {

@@ -155,12 +155,12 @@ suite('Text Input Fields', function() {
             getScale: function() {
               return 1;
             },
-            getRenderer: function() { return {
-              getClassName: function() { return ''; },
-            }; },
-            getTheme: function() { return {
-              getClassName: function() { return ''; },
-            }; },
+            getRenderer: function() {return {
+              getClassName: function() {return '';},
+            };},
+            getTheme: function() {return {
+              getClassName: function() {return '';},
+            };},
             markFocused: function() {},
           };
           field.sourceBlock_ = {

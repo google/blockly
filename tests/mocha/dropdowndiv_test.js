@@ -28,9 +28,9 @@ suite('DropDownDiv', function() {
             height: 60,
           });
       this.clientHeightStub = sinon.stub(document.documentElement, 'clientHeight')
-          .get(function() { return 1000; });
+          .get(function() {return 1000;});
       this.clientTopStub = sinon.stub(document.documentElement, 'clientTop')
-          .get(function() { return 0; });
+          .get(function() {return 0;});
     });
     teardown(function() {
       sharedTestTeardown.call(this);
@@ -68,7 +68,7 @@ suite('DropDownDiv', function() {
       chai.assert.isFalse(metrics.arrowAtTop);
     });
     test('No Solution, Render At Top', function() {
-      this.clientHeightStub.get(function() { return 100; });
+      this.clientHeightStub.get(function() {return 100;});
       const metrics = Blockly.DropDownDiv.TEST_ONLY.getPositionMetrics(50, 60, 50, 50);
       // "Above" in value actually means below in render.
       chai.assert.equal(metrics.initialY, 0);

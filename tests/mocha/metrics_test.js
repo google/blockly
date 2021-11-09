@@ -31,8 +31,8 @@ suite('Metrics', function() {
       scale: scale,
       scrollX: SCROLL_X,
       scrollY: SCROLL_Y,
-      isMovableHorizontally: function() { return true; },
-      isMovableVertically: function() { return true; },
+      isMovableHorizontally: function() {return true;},
+      isMovableVertically: function() {return true;},
     };
   }
 

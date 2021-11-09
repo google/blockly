@@ -193,7 +193,7 @@ Blockly.PHP['math_number_property'] = function(block) {
          '  }',
          '  return true;',
          '}']);
-         code = functionName + '(' + numberToCheck + ')';
+    code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Blockly.PHP.valueToCode(block, 'DIVISOR',
         Blockly.PHP.ORDER_MODULUS) || '0';

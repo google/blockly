@@ -374,7 +374,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   // of document object, in which case skip the validation.
   if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
-      for (let key in lookupTable) {
+      for (const key in lookupTable) {
         // Will print warnings if reference is missing.
         utils.checkMessageReferences(lookupTable[key]);
       }

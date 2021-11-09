@@ -71,7 +71,7 @@ const inject = function(hasCss, pathToMedia) {
   }
   // Strip off any trailing slash (either Unix or Windows).
   const mediaPath = pathToMedia.replace(/[\\/]$/, '');
-  let cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
+  const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
   // Cleanup the collected css content after injecting it to the DOM.
   content = '';
 

@@ -414,7 +414,9 @@ Connection.prototype.disconnect = function() {
   if (otherConnection.targetConnection !== this) {
     throw Error('Target connection not connected to source connection.');
   }
-  let parentBlock, childBlock, parentConnection;
+  let parentBlock;
+  let childBlock;
+  let parentConnection;
   if (this.isSuperior()) {
     // Superior block.
     parentBlock = this.sourceBlock_;

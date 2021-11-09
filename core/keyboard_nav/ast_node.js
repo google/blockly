@@ -487,10 +487,9 @@ ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
   if (!block) {
     return null;
   }
-  let topBlock;
   // If the block doesn't have a previous connection then it is the top of the
   // substack.
-  topBlock = block.getTopStackBlock();
+  const topBlock = block.getTopStackBlock();
   const topConnection =
       topBlock.previousConnection || topBlock.outputConnection;
   // If the top connection has a parentInput, create an AST node pointing to

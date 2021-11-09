@@ -45,7 +45,6 @@ function svgToPng_(data, width, height, callback) {
  * @param {string=} customCss Custom CSS to append to the SVG.
  */
 function workspaceToSvg_(workspace, callback, customCss) {
-
   // Go through all text areas and set their value.
   const textAreas = document.getElementsByTagName("textarea");
   for (let i = 0; i < textAreas.length; i++) {
@@ -62,7 +61,7 @@ function workspaceToSvg_(workspace, callback, customCss) {
   const clone = blockCanvas.cloneNode(true);
   clone.removeAttribute('transform');
 
-  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.appendChild(clone);
   svg.setAttribute('viewBox',
@@ -76,9 +75,11 @@ function workspaceToSvg_(workspace, callback, customCss) {
   svg.setAttribute("style", 'background-color: transparent');
 
   const css = [].slice.call(document.head.querySelectorAll('style'))
-      .filter(function(el) { return /\.blocklySvg/.test(el.innerText) ||
-        (el.id.indexOf('blockly-') === 0); }).map(function(el) {
-        return el.innerText; }).join('\n');
+                  .filter(
+                      (el) => /\.blocklySvg/.test(el.innerText) ||
+                          (el.id.indexOf('blockly-') === 0))
+                  .map((el) => el.innerText)
+                  .join('\n');
   const style = document.createElement('style');
   style.innerHTML = css + '\n' + customCss;
   svg.insertBefore(style, svg.firstChild);

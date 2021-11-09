@@ -26,23 +26,23 @@ const {VariableModel} = goog.require('Blockly.VariableModel');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
-const onCreateVariableButtonClick_String = function(button) {
+const stringButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 };
-exports.onCreateVariableButtonClick_String = onCreateVariableButtonClick_String;
+exports.onCreateVariableButtonClick_String = stringButtonClickHandler;
 
-const onCreateVariableButtonClick_Number = function(button) {
+const numberButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 };
-exports.onCreateVariableButtonClick_Number = onCreateVariableButtonClick_Number;
+exports.onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
-const onCreateVariableButtonClick_Colour = function(button) {
+const colourButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 };
-exports.onCreateVariableButtonClick_Colour = onCreateVariableButtonClick_Colour;
+exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -67,11 +67,11 @@ const flyoutCategory = function(workspace) {
   xmlList.push(button);
 
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_STRING', onCreateVariableButtonClick_String);
+      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_NUMBER', onCreateVariableButtonClick_Number);
+      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_COLOUR', onCreateVariableButtonClick_Colour);
+      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
 
 
   const blockList = flyoutCategoryBlocks(workspace);

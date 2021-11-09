@@ -670,10 +670,9 @@ InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   // anything in that case.  Instead, unplug the following block.
   if (isFirstInStatementStack || isFirstInOutputStack) {
     imConn.targetBlock().unplug(false);
-  }
-  // Inside of a C-block, first statement connection.
-  else if (
+  } else if (
       imConn.type === ConnectionType.NEXT_STATEMENT && imConn !== markerNext) {
+    // Inside of a C-block, first statement connection.
     const innerConnection = imConn.targetConnection;
     innerConnection.getSourceBlock().unplug(false);
 

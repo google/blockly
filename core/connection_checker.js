@@ -140,7 +140,8 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   if (!a || !b) {
     return Connection.REASON_TARGET_NULL;
   }
-  let blockA, blockB;
+  let blockA;
+  let blockB;
   if (a.isSuperior()) {
     blockA = a.getSourceBlock();
     blockB = b.getSourceBlock();

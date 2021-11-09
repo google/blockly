@@ -18,7 +18,7 @@ goog.module('Blockly.Themes.Zelos');
 const {Theme} = goog.require('Blockly.Theme');
 
 
-let defaultBlockStyles = {
+const defaultBlockStyles = {
   'colour_blocks': {
     'colourPrimary': '#CF63CF',
     'colourSecondary': '#C94FC9',
@@ -72,7 +72,7 @@ let defaultBlockStyles = {
   },
 };
 
-let categoryStyles = {
+const categoryStyles = {
   'colour_category': {'colour': '#CF63CF'},
   'list_category': {'colour': '#9966FF'},
   'logic_category': {'colour': '#4C97FF'},

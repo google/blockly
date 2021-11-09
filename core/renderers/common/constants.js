@@ -817,11 +817,16 @@ ConstantProvider.prototype.makePuzzleTab = function() {
   const width = this.TAB_WIDTH;
   const height = this.TAB_HEIGHT;
 
-  // The main path for the puzzle tab is made out of a few curves (c and s).
-  // Those curves are defined with relative positions.  The 'up' and 'down'
-  // versions of the paths are the same, but the Y sign flips.  Forward and back
-  // are the signs to use to move the cursor in the direction that the path is
-  // being drawn.
+  /**
+   * Make the main path for the puzzle tab made out of a few curves (c and s).
+   * Those curves are defined with relative positions.  The 'up' and 'down'
+   * versions of the paths are the same, but the Y sign flips.  Forward and back
+   * are the signs to use to move the cursor in the direction that the path is
+   * being drawn.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @return {string} A path fragment describing a puzzle tab.
+   */
   function makeMainPath(up) {
     const forward = up ? -1 : 1;
     const back = -forward;
@@ -870,6 +875,13 @@ ConstantProvider.prototype.makeNotch = function() {
   const height = this.NOTCH_HEIGHT;
   const innerWidth = 3;
   const outerWidth = (width - innerWidth) / 2;
+
+  /**
+   * Make the main path for the notch.
+   * @param {number} dir Direction multiplier to apply to horizontal offsets
+   *     along the path. Either 1 or -1.
+   * @return {string} A path fragment describing a notch.
+   */
   function makeMainPath(dir) {
     return svgPaths.line([
       svgPaths.point(dir * outerWidth, height),
@@ -1087,8 +1099,8 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
-          y: '-30%',
-          x: '-40%',
+          'y': '-30%',
+          'x': '-40%',
         },
         this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood

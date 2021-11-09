@@ -75,7 +75,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this {Blockly.Block}
    */
   updateParams_: function() {
-
     // Merge the arguments into a human-readable list.
     let paramString = '';
     if (this.arguments_.length) {

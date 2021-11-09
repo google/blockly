@@ -144,7 +144,6 @@ suite('Registry', function() {
       });
 
       test('Name', function() {
-
         assertWarnings(() => {
           chai.assert.isNull(Blockly.registry.getObject('test', 'bad_name'));
         }, /Unable to find/);

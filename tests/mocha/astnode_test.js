@@ -166,7 +166,6 @@ suite('ASTNode', function() {
       const newASTNode = node.findFirstFieldOrInput_(this.blocks.statementInput4);
       chai.assert.equal(newASTNode.getLocation(), field);
     });
-
   });
 
   suite('NavigationFunctions', function() {

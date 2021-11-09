@@ -60,5 +60,4 @@ suite('Names', function() {
     chai.assert.isFalse(Blockly.Names.equals('Foo.bar', 'Foo_bar'), 'Name equals #2.');
     chai.assert.isTrue(Blockly.Names.equals('Foo.bar', 'FOO.BAR'), 'Name equals #3.');
   });
-
 });

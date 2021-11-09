@@ -633,7 +633,6 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
-
     /**
      * Assert that two nodes are equal.
      * @param {!Element} actual the actual node.
@@ -780,7 +779,6 @@ function testAWorkspace() {
     });
 
     suite('Undo Connect', function() {
-
       setup(function() {
         Blockly.defineBlocksWithJsonArray([
           {
@@ -970,7 +968,6 @@ function testAWorkspace() {
     });
 
     suite('Undo Disconnect', function() {
-
       setup(function() {
         Blockly.defineBlocksWithJsonArray([
           {
@@ -1364,7 +1361,6 @@ function testAWorkspace() {
 
           this.workspace.undo(true);
           assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
-
         });
 
         test('Reference exists with usages rename to name2', function() {

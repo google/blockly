@@ -10,7 +10,6 @@ const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('B
 
 
 suite('Tooltip', function() {
-
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();

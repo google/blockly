@@ -11,7 +11,6 @@ const {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDe
 
 
 suite('Toolbox', function() {
-
   setup(function() {
     sharedTestSetup.call(this);
     defineStackBlock();

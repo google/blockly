@@ -71,7 +71,6 @@ suite('Connection', function() {
   });
 
   suite('Set Shadow', function() {
-
     function assertBlockMatches(block, isShadow, opt_id) {
       chai.assert.equal(block.isShadow(), isShadow,
           `expected block ${block.id} to ${isShadow ? '' : 'not'} be a shadow`);

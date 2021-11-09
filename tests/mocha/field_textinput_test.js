@@ -156,20 +156,20 @@ suite('Text Input Fields', function() {
               return 1;
             },
             getRenderer: function() { return {
-              getClassName: function() { return ''; }
+              getClassName: function() { return ''; },
             }; },
             getTheme: function() { return {
-              getClassName: function() { return ''; }
+              getClassName: function() { return ''; },
             }; },
-            markFocused: function() {}
+            markFocused: function() {},
           };
           field.sourceBlock_ = {
-            workspace: workspace
+            workspace: workspace,
           };
           field.constants_ = {
             FIELD_TEXT_FONTSIZE: 11,
             FIELD_TEXT_FONTWEIGHT: 'normal',
-            FIELD_TEXT_FONTFAMILY: 'sans-serif'
+            FIELD_TEXT_FONTFAMILY: 'sans-serif',
           };
           field.clickTarget_ = document.createElement('div');
           Blockly.common.setMainWorkspace(workspace);
@@ -195,14 +195,14 @@ suite('Text Input Fields', function() {
       });
       test('JS Constructor', function() {
         const field = new Blockly.FieldTextInput('test', null, {
-          spellcheck: false
+          spellcheck: false,
         });
         this.assertSpellcheck(field, false);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldTextInput.fromJson({
           text: 'test',
-          spellcheck: false
+          spellcheck: false,
         });
         this.assertSpellcheck(field, false);
       });

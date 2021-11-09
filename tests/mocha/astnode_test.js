@@ -20,27 +20,27 @@ suite('ASTNode', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "input_value",
-          "name": "NAME"
+          "name": "NAME",
         },
         {
           "type": "input_statement",
-          "name": "NAME"
-        }
+          "name": "NAME",
+        },
       ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
+      "helpUrl": "",
     },
     {
       "type": "value_input",
@@ -48,12 +48,12 @@ suite('ASTNode', function() {
       "args0": [
         {
           "type": "input_value",
-          "name": "NAME"
-        }
+          "name": "NAME",
+        },
       ],
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
+      "helpUrl": "",
     },
     {
       "type": "field_input",
@@ -62,14 +62,14 @@ suite('ASTNode', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
-        }
+          "text": "default",
+        },
       ],
       "output": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
-    }
+      "helpUrl": "",
+    },
     ]);
     this.workspace = new Blockly.Workspace();
     this.cursor = this.workspace.cursor;
@@ -92,7 +92,7 @@ suite('ASTNode', function() {
       statementInput3: statementInput3,
       statementInput4: statementInput4,
       fieldWithOutput: fieldWithOutput,
-      valueInput: valueInput
+      valueInput: valueInput,
     };
   });
   teardown(function() {
@@ -177,7 +177,7 @@ suite('ASTNode', function() {
         "previousStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "start_block",
@@ -185,7 +185,7 @@ suite('ASTNode', function() {
         "nextStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "fields_and_input",
@@ -194,26 +194,26 @@ suite('ASTNode', function() {
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
-            "type": "input_dummy"
+            "type": "input_dummy",
           },
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
             "type": "input_value",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "previousStatement": null,
         "nextStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "two_fields",
@@ -222,12 +222,12 @@ suite('ASTNode', function() {
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
-          }
+            "text": "default",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "fields_and_input2",
@@ -235,48 +235,48 @@ suite('ASTNode', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "NAME"
+            "name": "NAME",
           },
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
             "type": "input_value",
-            "name": "NAME"
+            "name": "NAME",
           },
           {
             "type": "input_statement",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "dummy_input",
         "message0": "Hello",
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "dummy_inputValue",
         "message0": "Hello %1  %2",
         "args0": [
           {
-            "type": "input_dummy"
+            "type": "input_dummy",
           },
           {
             "type": "input_value",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "output_next",
@@ -285,7 +285,7 @@ suite('ASTNode', function() {
         "colour": 230,
         "tooltip": "",
         "helpUrl": "",
-        "nextStatement": null
+        "nextStatement": null,
       }]);
       const noNextConnection = this.workspace.newBlock('top_connection');
       const fieldAndInputs = this.workspace.newBlock('fields_and_input');

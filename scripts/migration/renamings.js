@@ -216,7 +216,7 @@ const renamings = {
     'Blockly.Blocks.texts': {module: 'Blockly.blocks.texts'},
     'Blockly.Blocks.variables': {module: 'Blockly.blocks.variables'},
     // Blockly.Blocks.variablesDynamic not previously provided.
-  }
+  },
 };
 
 exports.renamings = renamings;

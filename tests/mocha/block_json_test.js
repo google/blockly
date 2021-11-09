@@ -100,7 +100,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -116,7 +116,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -153,7 +153,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -177,7 +177,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -193,7 +193,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -217,7 +217,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -226,7 +226,7 @@ suite('Block JSON initialization', function() {
           [
             {
               'type': 'no_field_prefix_field',
-            }
+            },
           ],
           [],
           undefined,
@@ -236,7 +236,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -245,7 +245,7 @@ suite('Block JSON initialization', function() {
           [
             {
               'type': 'input_prefix_field',
-            }
+            },
           ],
           [],
           undefined,
@@ -255,7 +255,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -280,7 +280,7 @@ suite('Block JSON initialization', function() {
             {
               'type': 'input_dummy',
               'align': 'CENTER',
-            }
+            },
           ]);
     });
   });
@@ -361,7 +361,7 @@ suite('Block JSON initialization', function() {
         'type': 'field_undefined',
         'alt': {
           'type': 'field_number',
-          'name': 'FIELDNAME'
+          'name': 'FIELDNAME',
         },
       }, 'field_number');
     });
@@ -398,7 +398,7 @@ suite('Block JSON initialization', function() {
                 'type': 'field_undefined5',
                 'alt': {
                   'type': 'field_number',
-                  'name': 'FIELDNAME'
+                  'name': 'FIELDNAME',
                 },
               },
             },
@@ -409,7 +409,7 @@ suite('Block JSON initialization', function() {
 
     test('No alt', function() {
       this.assertField({
-        'type': 'field_undefined'
+        'type': 'field_undefined',
       }, null);
     });
 
@@ -418,7 +418,7 @@ suite('Block JSON initialization', function() {
         'type': 'field_undefined',
         'alt': {
           'type': 'field_undefined',
-        }
+        },
       }, null);
     });
 
@@ -524,7 +524,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': 'Integer'
+            'check': 'Integer',
           },
           'input_dummy',
           'Integer');
@@ -534,7 +534,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': ['Integer', 'Number']
+            'check': ['Integer', 'Number'],
           },
           'input_dummy',
           ['Integer', 'Number']);
@@ -544,7 +544,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': ''
+            'check': '',
           },
           'input_dummy');
     });

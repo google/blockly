@@ -60,7 +60,7 @@ suite('Field Registry', function() {
 
       const json = {
         type: 'field_custom_test',
-        value: 'ok'
+        value: 'ok',
       };
 
       const field = Blockly.fieldRegistry.fromJson(json);
@@ -71,7 +71,7 @@ suite('Field Registry', function() {
     test('Not Registered', function() {
       const json = {
         type: 'field_custom_test',
-        value: 'ok'
+        value: 'ok',
       };
 
       const spy = sinon.stub(console, 'warn');
@@ -85,7 +85,7 @@ suite('Field Registry', function() {
 
       const json = {
         type: 'FIELD_CUSTOM_TEST',
-        value: 'ok'
+        value: 'ok',
       };
 
       const field = Blockly.fieldRegistry.fromJson(json);

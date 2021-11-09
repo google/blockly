@@ -29,10 +29,10 @@ suite('Tooltip', function() {
           "args0": [
             {
               "type": "field_input",
-              "name": "FIELD"
-            }
-          ]
-        }
+              "name": "FIELD",
+            },
+          ],
+        },
       ]);
     });
 
@@ -67,7 +67,7 @@ suite('Tooltip', function() {
     function setFunctionReturningObjectTooltip(obj) {
       obj.setTooltip(() => {
         return {
-          tooltip: tooltipText
+          tooltip: tooltipText,
         };
       });
     }

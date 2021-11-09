@@ -237,7 +237,7 @@ suite('JSO Serialization', function() {
                   'pinned': false,
                   'height': 80,
                   'width': 160,
-                }
+                },
               },
           );
         });
@@ -256,7 +256,7 @@ suite('JSO Serialization', function() {
                   'pinned': true,
                   'height': 80,
                   'width': 160,
-                }
+                },
               },
           );
         });
@@ -276,7 +276,7 @@ suite('JSO Serialization', function() {
                   'pinned': false,
                   'height': 40,
                   'width': 320,
-                }
+                },
               },
           );
         });
@@ -411,12 +411,12 @@ suite('JSO Serialization', function() {
               {
                 'block': {
                   'type': blockType,
-                  'id': 'id2'
+                  'id': 'id2',
                 },
                 'shadow': {
                   'type': blockType,
-                  'id': 'test'
-                }
+                  'id': 'test',
+                },
               });
         };
 
@@ -448,7 +448,7 @@ suite('JSO Serialization', function() {
           const block = this.workspace.newBlock('text_print');
           block.getInput('TEXT').connection.setShadowState({
             'type': 'text',
-            'id': 'id'
+            'id': 'id',
           });
           block.getInputTargetBlock('TEXT').setFieldValue('new value', 'TEXT');
           const jso = Blockly.serialization.blocks.save(block);
@@ -460,9 +460,9 @@ suite('JSO Serialization', function() {
                   'type': 'text',
                   'id': 'id',
                   'fields': {
-                    'TEXT': 'new value'
-                  }
-                }
+                    'TEXT': 'new value',
+                  },
+                },
               });
         });
 
@@ -470,7 +470,7 @@ suite('JSO Serialization', function() {
           const block = this.workspace.newBlock('text_print');
           block.getInput('TEXT').connection.setShadowState({
             'type': 'text',
-            'id': 'id'
+            'id': 'id',
           });
           block.getInputTargetBlock('TEXT').setFieldValue('new value', 'TEXT');
           const childBlock = this.workspace.newBlock('text');
@@ -485,15 +485,15 @@ suite('JSO Serialization', function() {
                   'type': 'text',
                   'id': 'id',
                   'fields': {
-                    'TEXT': 'new value'
-                  }
+                    'TEXT': 'new value',
+                  },
                 },
                 'block': {
                   'type': 'text',
                   'id': 'id3',
                   'fields': {
-                    'TEXT': ''
-                  }
+                    'TEXT': '',
+                  },
                 },
               });
         });
@@ -562,10 +562,10 @@ suite('JSO Serialization', function() {
                     'next': {
                       'block': {
                         'type': 'stack_block',
-                        'id': 'id4'
-                      }
-                    }
-                  }
+                        'id': 'id4',
+                      },
+                    },
+                  },
                 }
             );
           });
@@ -638,12 +638,12 @@ suite('JSO Serialization', function() {
                 {
                   'block': {
                     'type': 'stack_block',
-                    'id': 'id2'
+                    'id': 'id2',
                   },
                   'shadow': {
                     'type': 'stack_block',
-                    'id': 'test'
-                  }
+                    'id': 'test',
+                  },
                 });
           });
 
@@ -665,11 +665,11 @@ suite('JSO Serialization', function() {
                       'NAME': {
                         'block': {
                           'type': 'stack_block',
-                          'id': 'id4'
-                        }
-                      }
-                    }
-                  }
+                          'id': 'id4',
+                        },
+                      },
+                    },
+                  },
                 }
             );
           });

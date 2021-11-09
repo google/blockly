@@ -23,7 +23,7 @@ suite('Connection Database', function() {
     };
     this.createConnection = function(x, y, type, opt_database) {
       const workspace = {
-        connectionDBList: []
+        connectionDBList: [],
       };
       workspace.connectionDBList[type] = opt_database || this.database;
       const connection = new Blockly.RenderedConnection(

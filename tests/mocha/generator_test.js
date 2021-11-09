@@ -52,7 +52,7 @@ suite('Generator', function() {
         "type": "stack_block",
         "message0": "",
         "previousStatement": null,
-        "nextStatement": null
+        "nextStatement": null,
       },
       {
         "type": "row_block",
@@ -60,11 +60,11 @@ suite('Generator', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "INPUT"
-          }
+            "name": "INPUT",
+          },
         ],
         "output": null,
-        "nextStatement": null
+        "nextStatement": null,
       }]);
       const rowBlock = this.workspace.newBlock('row_block');
       const stackBlock = this.workspace.newBlock('stack_block');
@@ -121,10 +121,10 @@ suite('Generator', function() {
           "message1": "%1",
           "args1": [{
             "type": "input_statement",
-            "name": "DO"
+            "name": "DO",
           }],
           "previousStatement": null,
-          "nextStatement": null
+          "nextStatement": null,
         }]);
         const blockA = this.workspace.newBlock('test_loop_block');
         const blockB = this.workspace.newBlock('test_loop_block');

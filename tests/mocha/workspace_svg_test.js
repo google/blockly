@@ -18,7 +18,7 @@ suite('WorkspaceSvg', function() {
     Blockly.defineBlocksWithJsonArray([{
       'type': 'simple_test_block',
       'message0': 'simple test block',
-      'output': null
+      'output': null,
     },
     {
       'type': 'test_val_in',
@@ -26,9 +26,9 @@ suite('WorkspaceSvg', function() {
       'args0': [
         {
           'type': 'input_value',
-          'name': 'NAME'
-        }
-      ]
+          'name': 'NAME',
+        },
+      ],
     }]);
   });
 
@@ -132,9 +132,9 @@ suite('WorkspaceSvg', function() {
           {
             "type": "field_variable",
             "name": "VAR",
-            "variableTypes": ["", "type1", "type2"]
-          }
-        ]
+            "variableTypes": ["", "type1", "type2"],
+          },
+        ],
       }]);
     });
 
@@ -181,7 +181,7 @@ suite('WorkspaceSvg', function() {
         scale: workspace.scale,
         oldScale: 1,
         viewTop: metrics.viewTop,
-        viewLeft: metrics.viewLeft
+        viewLeft: metrics.viewLeft,
       };
       assertSpyFiredViewportEvent(
           eventsFireStub, workspace, expectedProperties);

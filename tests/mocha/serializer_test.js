@@ -1599,7 +1599,7 @@ Serializer.Mutations.ListCreate.OneInput.testCases = [
 ];
 
 Serializer.Mutations.ListCreate.testSuites = [
-  Serializer.Mutations.ListCreate.OneInput
+  Serializer.Mutations.ListCreate.OneInput,
 ];
 
 Serializer.Mutations.Procedure = new SerializerTestSuite('Procedure');

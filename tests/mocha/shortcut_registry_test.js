@@ -46,7 +46,7 @@ suite('Keyboard Shortcut Registry Test', function() {
           const testShortcut = {'name': 'test_shortcut'};
           const otherShortcut = {
             'name': 'test_shortcut',
-            'callback': function() {}
+            'callback': function() {},
           };
 
           registry.registry_['test_shortcut'] = [testShortcut];
@@ -235,7 +235,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         },
         'precondition': function() {
           return true;
-        }
+        },
       };
       this.callBackStub =
           addShortcut(this.registry, this.testShortcut, Blockly.utils.KeyCodes.C, true);
@@ -264,7 +264,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         },
         'precondition': function() {
           return false;
-        }
+        },
       };
       const testShortcut2Stub =
           addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, false);
@@ -281,7 +281,7 @@ suite('Keyboard Shortcut Registry Test', function() {
         },
         'precondition': function() {
           return false;
-        }
+        },
       };
       const testShortcut2Stub =
           addShortcut(this.registry, testShortcut2, Blockly.utils.KeyCodes.C, true);

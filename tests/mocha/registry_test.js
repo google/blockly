@@ -203,7 +203,7 @@ suite('Registry', function() {
           Blockly.registry.getAllItems('test', true),
           {
             'test_name': {},
-            'casedNAME': {}
+            'casedNAME': {},
           });
     });
 
@@ -213,7 +213,7 @@ suite('Registry', function() {
           Blockly.registry.getAllItems('test', true),
           {
             'test_name': {},
-            'CASEDname': {}
+            'CASEDname': {},
           });
     });
   });
@@ -226,8 +226,8 @@ suite('Registry', function() {
       };
       this.options = {
         'plugins': {
-          'test' : 'test_name'
-        }
+          'test' : 'test_name',
+        },
       };
       Blockly.registry.register('test', 'test_name', TestClass);
       Blockly.registry.register('test', 'default', this.defaultClass);

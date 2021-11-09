@@ -254,7 +254,7 @@ suite('Variable Fields', function() {
         const field = Blockly.FieldVariable.fromJson({
           variable: 'test',
           variableTypes: ['Type1'],
-          defaultType: 'Type1'
+          defaultType: 'Type1',
         });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
         chai.assert.equal(field.defaultType_, 'Type1');
@@ -263,7 +263,7 @@ suite('Variable Fields', function() {
         const field = new Blockly.FieldVariable(
             'test', undefined, undefined, undefined, {
               variableTypes: ['Type1'],
-              defaultType: 'Type1'
+              defaultType: 'Type1',
             });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
         chai.assert.equal(field.defaultType_, 'Type1');
@@ -272,7 +272,7 @@ suite('Variable Fields', function() {
         const field = new Blockly.FieldVariable(
             'test', undefined, ['Type2'], 'Type2', {
               variableTypes: ['Type1'],
-              defaultType: 'Type1'
+              defaultType: 'Type1',
             });
         chai.assert.deepEqual(field.variableTypes, ['Type1']);
         chai.assert.equal(field.defaultType_, 'Type1');
@@ -362,8 +362,8 @@ suite('Variable Fields', function() {
           {
             "type": "field_variable",
             "name": "VAR",
-            "variable": "name1"
-          }
+            "variable": "name1",
+          },
         ],
       }]);
       this.variableBlock = new Blockly.Block(this.workspace,
@@ -458,9 +458,9 @@ suite('Variable Fields', function() {
         'type': 'variables_get',
         'fields': {
           'VAR': {
-            'id': 'id1'
-          }
-        }
+            'id': 'id1',
+          },
+        },
       },
       this.workspace);
       const variable = block.getField('VAR').getVariable();
@@ -475,8 +475,8 @@ suite('Variable Fields', function() {
         'fields': {
           'VAR': {
             'name': 'test',
-          }
-        }
+          },
+        },
       },
       this.workspace);
       const variable = block.getField('VAR').getVariable();
@@ -492,8 +492,8 @@ suite('Variable Fields', function() {
           'VAR': {
             'name': 'test',
             'type': 'string',
-          }
-        }
+          },
+        },
       },
       this.workspace);
       const variable = block.getField('VAR').getVariable();

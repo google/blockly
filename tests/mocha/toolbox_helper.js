@@ -17,29 +17,29 @@ function getCategoryJSON() {
     {
       "kind": "CATEGORY",
       "cssconfig": {
-        "container": "something"
+        "container": "something",
       },
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
+          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
         },
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>',
+        },
       ],
-      "name": "First"
+      "name": "First",
     },
     {
       "kind": "CATEGORY",
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+        },
       ],
-      "name": "Second"
+      "name": "Second",
     }]};
 }
 exports.getCategoryJSON = getCategoryJSON;
@@ -70,17 +70,17 @@ function getSimpleJson() {
     },
     {
       "kind":"SEP",
-      "gap":"20"
+      "gap":"20",
     },
     {
       "kind":"BUTTON",
       "text": "insert",
-      "callbackkey": "insertConnectionRows"
+      "callbackkey": "insertConnectionRows",
     },
     {
       "kind":"LABEL",
-      "text":"tooltips"
-    }
+      "text":"tooltips",
+    },
   ]};
 }
 exports.getSimpleJson = getSimpleJson;
@@ -100,32 +100,32 @@ function getProperSimpleJson() {
               "type": "math_number",
               "fields": {
                 "NUM": 1,
-              }
-            }
+              },
+            },
           },
           "B": {
             "block": {
               "type": "math_number",
               "fields": {
                 "NUM": 2,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
       {
         "kind":"SEP",
-        "gap":"20"
+        "gap":"20",
       },
       {
         "kind":"BUTTON",
         "text": "insert",
-        "callbackkey": "insertConnectionRows"
+        "callbackkey": "insertConnectionRows",
       },
       {
         "kind":"LABEL",
-        "text":"tooltips"
-      }
+        "text":"tooltips",
+      },
     ]};
 }
 exports.getProperSimpleJson = getProperSimpleJson;
@@ -140,7 +140,7 @@ function getDeeplyNestedJSON() {
     {
       "kind": "CATEGORY",
       "cssconfig": {
-        "container": "something"
+        "container": "something",
       },
       "contents": [{
         "kind": "CATEGORY",
@@ -149,28 +149,28 @@ function getDeeplyNestedJSON() {
           "contents": [
             {
               "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>'
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>',
             },
             {
               "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>'
-            }
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>',
+            },
           ],
-          "name": "NestedCategoryInner"
+          "name": "NestedCategoryInner",
         }],
         "name": "NestedCategoryMiddle",
       }],
-      "name": "NestedCategoryOuter"
+      "name": "NestedCategoryOuter",
     },
     {
       "kind": "CATEGORY",
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+        },
       ],
-      "name": "Second"
+      "name": "Second",
     }]};
 }
 exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
@@ -217,7 +217,7 @@ function getInjectedToolbox() {
   const toolboxXml = document.getElementById('toolbox-test');
   const workspace = Blockly.inject('blocklyDiv',
       {
-        toolbox: toolboxXml
+        toolbox: toolboxXml,
       });
   return workspace.getToolbox();
 }

@@ -74,7 +74,7 @@ suite('Toolbox', function() {
       const positionStub = sinon.stub(this.toolbox, 'position');
       this.toolbox.render({'contents': [
         {'kind': 'category', 'contents': []},
-        {'kind': 'category', 'contents': []}
+        {'kind': 'category', 'contents': []},
       ]});
       chai.assert.lengthOf(this.toolbox.contents_, 2);
       sinon.assert.called(positionStub);
@@ -84,11 +84,11 @@ suite('Toolbox', function() {
       const toolbox = this.toolbox;
       const badToolboxDef = [
         {
-          "kind": "block"
+          "kind": "block",
         },
         {
           "kind": "category",
-        }
+        },
       ];
       chai.assert.throws(function() {
         toolbox.render({'contents' : badToolboxDef});
@@ -107,25 +107,25 @@ suite('Toolbox', function() {
           "contents": [
             {
               "kind": "block",
-              "blockxml": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
+              "blockxml": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
             },
             {
               "kind": "label",
               "text": "Input/Output:",
-              "web-class": "ioLabel"
+              "web-class": "ioLabel",
             },
             {
               "kind": "button",
               "text": "insert",
               "callbackkey": "insertConnectionStacks",
-              "web-class": "ioLabel"
+              "web-class": "ioLabel",
             },
             {
               "kind": "sep",
-              "gap": "7"
-            }
-          ]
-        }
+              "gap": "7",
+            },
+          ],
+        },
       ]};
       this.toolbox.render(jsonDef);
       chai.assert.lengthOf(this.toolbox.contents_, 1);
@@ -150,7 +150,7 @@ suite('Toolbox', function() {
     test('Category clicked -> Should select category', function() {
       const categoryXml = document.getElementsByClassName('blocklyTreeRow')[0];
       const evt = {
-        'target': categoryXml
+        'target': categoryXml,
       };
       const item = this.toolbox.contentMap_[categoryXml.getAttribute('id')];
       const setSelectedSpy = sinon.spy(this.toolbox, 'setSelectedItem');
@@ -172,7 +172,7 @@ suite('Toolbox', function() {
     function createKeyDownMock(keyCode) {
       return {
         'keyCode': keyCode,
-        'preventDefault': function() {}
+        'preventDefault': function() {},
       };
     }
 
@@ -563,13 +563,13 @@ suite('Toolbox', function() {
           'contents': [
             {
               'kind': 'block',
-              'type': 'controls_if'
+              'type': 'controls_if',
             },
             {
               'kind': 'block',
-              'type': 'controls_if'
-            }
-          ]
+              'type': 'controls_if',
+            },
+          ],
         };
 
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);
@@ -586,13 +586,13 @@ suite('Toolbox', function() {
           'contents': [
             {
               'kind': 'category',
-              'name': 'a'
+              'name': 'a',
             },
             {
               'kind': 'category',
-              'name': 'b'
-            }
-          ]
+              'name': 'b',
+            },
+          ],
         };
 
         const toolboxDef = Blockly.utils.toolbox.convertToolboxDefToJson(toolbox);

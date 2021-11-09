@@ -18,13 +18,13 @@ suite('Blocks', function() {
     Blockly.defineBlocksWithJsonArray([
       {
         "type": "empty_block",
-        "message0": ""
+        "message0": "",
       },
       {
         "type": "stack_block",
         "message0": "",
         "previousStatement": null,
-        "nextStatement": null
+        "nextStatement": null,
       },
       {
         "type": "row_block",
@@ -32,10 +32,10 @@ suite('Blocks', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "INPUT"
-          }
+            "name": "INPUT",
+          },
         ],
-        "output": null
+        "output": null,
       },
       {
         "type": "statement_block",
@@ -43,11 +43,11 @@ suite('Blocks', function() {
         "args0": [
           {
             "type": "input_statement",
-            "name": "STATEMENT"
-          }
+            "name": "STATEMENT",
+          },
         ],
         "previousStatement": null,
-        "nextStatement": null
+        "nextStatement": null,
       }]);
   });
   teardown(function() {
@@ -73,7 +73,7 @@ suite('Blocks', function() {
     return {
       A: blockA,  /* Parent */
       B: blockB,  /* Middle */
-      C: blockC  /* Child */
+      C: blockC,  /* Child */
     };
   }
 
@@ -325,9 +325,9 @@ suite('Blocks', function() {
           "args0": [
             {
               "type": "input_value",
-              "name": "VALUE"
-            }
-          ]
+              "name": "VALUE",
+            },
+          ],
         },
       ]);
     });
@@ -1132,7 +1132,7 @@ suite('Blocks', function() {
         setup(function() {
           this.workspace = Blockly.inject('blocklyDiv', {
             comments: true,
-            scrollbars: true
+            scrollbars: true,
           });
           this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<block type="empty_block"/>'
@@ -1376,10 +1376,10 @@ suite('Blocks', function() {
             {
               "type": "field_variable",
               "name": "NAME",
-              "variable": "x"
-            }
+              "variable": "x",
+            },
           ],
-        }
+        },
       ]);
     });
     teardown(function() {
@@ -1822,8 +1822,8 @@ suite('Blocks', function() {
             "colourPrimary": "#000000",
             "colourSecondary": "#999999",
             "colourTertiary": "#4d4d4d",
-            "hat": ''
-          }
+            "hat": '',
+          },
         }), {});
       });
       teardown(function() {
@@ -1864,7 +1864,7 @@ suite('Blocks', function() {
           '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'repeat 10 times do ?'
+        toString: 'repeat 10 times do ?',
       },
       {
         name: 'nested statement blocks',
@@ -1878,7 +1878,7 @@ suite('Blocks', function() {
             '<block type="controls_if"></block>' +
           '</statement>' +
         '</block>',
-        toString: 'repeat 10 times do if ? do ?'
+        toString: 'repeat 10 times do if ? do ?',
       },
       {
         name: 'nested Boolean output blocks',
@@ -1894,7 +1894,7 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'if ((? and ?) = ?) do ?'
+        toString: 'if ((? and ?) = ?) do ?',
       },
       {
         name: 'output block',
@@ -1906,7 +1906,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'square root 9'
+        toString: 'square root 9',
       },
       {
         name: 'nested Number output blocks',
@@ -1936,7 +1936,7 @@ suite('Blocks', function() {
             '</shadow>' +
           '</value>' +
         '</block>',
-        toString: '(10 × 5) + 3'
+        toString: '(10 × 5) + 3',
       },
       {
         name: 'nested String output blocks',
@@ -1953,15 +1953,15 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'create text with “ Hello ” “ World ”'
+        toString: 'create text with “ Hello ” “ World ”',
       },
       {
         name: 'parentheses in string literal',
         xml: '<block type="text">' +
           '<field name="TEXT">foo ( bar ) baz</field>' +
         '</block>',
-        toString: '“ foo ( bar ) baz ”'
-      }
+        toString: '“ foo ( bar ) baz ”',
+      },
     ];
     // Create mocha test cases for each toString test.
     toStringTests.forEach(function(t) {
@@ -1978,7 +1978,7 @@ suite('Blocks', function() {
       Blockly.defineBlocksWithJsonArray([
         {
           "type": "init_test_block",
-          "message0": ""
+          "message0": "",
         },
       ]);
     });

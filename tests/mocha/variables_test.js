@@ -20,9 +20,9 @@ suite('Variables', function() {
         {
           "type": "field_variable",
           "name": "VAR",
-          "variableTypes": ["", "type1", "type2"]
-        }
-      ]
+          "variableTypes": ["", "type1", "type2"],
+        },
+      ],
     }]);
     this.workspace.createVariable('foo', 'type1', '1');
     this.workspace.createVariable('bar', 'type1', '2');

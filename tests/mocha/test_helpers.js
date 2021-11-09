@@ -201,7 +201,7 @@ function sharedTestSetup(options = {}) {
   }
   this.sharedCleanup = {
     blockTypesCleanup_: [],
-    messagesCleanup_: []
+    messagesCleanup_: [],
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
@@ -488,7 +488,7 @@ function defineStackBlock(name = 'stack_block') {
     "type": name,
     "message0": "",
     "previousStatement": null,
-    "nextStatement": null
+    "nextStatement": null,
   }]);
 }
 exports.defineStackBlock = defineStackBlock;
@@ -500,10 +500,10 @@ function defineRowBlock(name = 'row_block') {
     "args0": [
       {
         "type": "input_value",
-        "name": "INPUT"
-      }
+        "name": "INPUT",
+      },
     ],
-    "output": null
+    "output": null,
   }]);
 }
 exports.defineRowBlock = defineRowBlock;
@@ -515,14 +515,14 @@ function defineStatementBlock(name = 'statement_block') {
     "args0": [
       {
         "type": "input_statement",
-        "name": "NAME"
-      }
+        "name": "NAME",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   }]);
 }
 exports.defineStatementBlock = defineStatementBlock;
@@ -534,10 +534,10 @@ function defineBasicBlockWithField(name = 'test_field_block') {
     "args0": [
       {
         "type": "field_input",
-        "name": "NAME"
-      }
+        "name": "NAME",
+      },
     ],
-    "output": null
+    "output": null,
   }]);
 }
 exports.defineBasicBlockWithField = defineBasicBlockWithField;
@@ -546,11 +546,11 @@ function defineMutatorBlocks() {
   Blockly.defineBlocksWithJsonArray([
     {
       'type': 'xml_block',
-      'mutator': 'xml_mutator'
+      'mutator': 'xml_mutator',
     },
     {
       'type': 'jso_block',
-      'mutator': 'jso_mutator'
+      'mutator': 'jso_mutator',
     },
     {
       'type': 'checkbox_block',
@@ -558,10 +558,10 @@ function defineMutatorBlocks() {
       'args0': [
         {
           'type': 'field_checkbox',
-          'name': 'CHECK'
-        }
-      ]
-    }
+          'name': 'CHECK',
+        },
+      ],
+    },
   ]);
 
   const xmlMutator = {
@@ -596,7 +596,7 @@ function defineMutatorBlocks() {
       } else if (!this.hasInput && this.getInput('INPUT')) {
         this.removeInput('INPUT');
       }
-    }
+    },
   };
   Blockly.Extensions.registerMutator('xml_mutator', xmlMutator);
 
@@ -630,7 +630,7 @@ function defineMutatorBlocks() {
       } else if (!this.hasInput && this.getInput('INPUT')) {
         this.removeInput('INPUT');
       }
-    }
+    },
   };
   Blockly.Extensions.registerMutator('jso_mutator', jsoMutator);
 }
@@ -641,7 +641,7 @@ function createTestBlock() {
     id: 'test',
     rendered: false,
     workspace: {
-      rendered: false
+      rendered: false,
     },
     'isShadow': function() {
       return false;

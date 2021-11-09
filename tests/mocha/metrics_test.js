@@ -32,7 +32,7 @@ suite('Metrics', function() {
       scrollX: SCROLL_X,
       scrollY: SCROLL_Y,
       isMovableHorizontally: function() { return true; },
-      isMovableVertically: function() { return true; }
+      isMovableVertically: function() { return true; },
     };
   }
 

@@ -638,10 +638,10 @@ exports.defineMutatorBlocks = defineMutatorBlocks;
 
 function createTestBlock() {
   return {
-    id: 'test',
-    rendered: false,
-    workspace: {
-      rendered: false,
+    'id': 'test',
+    'rendered': false,
+    'workspace': {
+      'rendered': false,
     },
     'isShadow': function() {
       return false;

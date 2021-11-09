@@ -34,7 +34,7 @@ suite('Generator', function() {
     });
 
     test('One word', function() {
-      chai.assert.equal(this.generator.prefixLines('Hello', '@'), '@Hello') ;
+      chai.assert.equal(this.generator.prefixLines('Hello', '@'), '@Hello');
     });
 
     test('One line', function() {

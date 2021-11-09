@@ -1819,4 +1819,4 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
 };
 
 runSerializerTestSuite(null, null, Serializer);
-runSerializerTestSuite(state => state, state => state, Serializer);
+runSerializerTestSuite((state) => state, (state) => state, Serializer);

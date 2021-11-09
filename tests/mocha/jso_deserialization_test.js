@@ -91,7 +91,7 @@ suite('JSO Deserialization', function() {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every(call => call.args[0].group == group));
+        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
     });
 
@@ -179,7 +179,7 @@ suite('JSO Deserialization', function() {
         Blockly.serialization.workspaces.load(state, this.workspace);
         const calls = this.eventsFireStub.getCalls();
         const group = calls[0].args[0].group;
-        chai.assert.isTrue(calls.every(call => call.args[0].group == group));
+        chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
       });
 
       test('Var with block', function() {
@@ -314,7 +314,7 @@ suite('JSO Deserialization', function() {
           Blockly.serialization.workspaces.load(state, this.workspace);
           const calls = this.eventsFireStub.getCalls();
           const group = calls[0].args[0].group;
-          chai.assert.isTrue(calls.every(call => call.args[0].group == group));
+          chai.assert.isTrue(calls.every((call) => call.args[0].group == group));
         });
 
         test('With children', function() {

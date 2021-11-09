@@ -127,19 +127,6 @@ Blockly.Lua['math_constant'] = function(block) {
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-Blockly.Lua['math_constant'] = function(block) {
-  // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
-  var CONSTANTS = {
-    PI: ['math.pi', Blockly.Lua.ORDER_HIGH],
-    E: ['math.exp(1)', Blockly.Lua.ORDER_HIGH],
-    GOLDEN_RATIO: ['(1 + math.sqrt(5)) / 2', Blockly.Lua.ORDER_MULTIPLICATIVE],
-    SQRT2: ['math.sqrt(2)', Blockly.Lua.ORDER_HIGH],
-    SQRT1_2: ['math.sqrt(1 / 2)', Blockly.Lua.ORDER_HIGH],
-    INFINITY: ['math.huge', Blockly.Lua.ORDER_HIGH]
-  };
-  return CONSTANTS[block.getFieldValue('CONSTANT')];
-};
-
 Blockly.Lua['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
@@ -189,7 +176,7 @@ Blockly.Lua['math_number_property'] = function(block) {
          '  end',
          '  return true',
          'end']);
-         code = functionName + '(' + numberToCheck + ')';
+    code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {     
     const divisor = Blockly.Lua.valueToCode(block, 'DIVISOR',
         Blockly.Lua.ORDER_MULTIPLICATIVE) || '0';

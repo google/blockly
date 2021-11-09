@@ -32,7 +32,9 @@
         "es5/no-unicode-code-point-escape": ["off"],
         "es5/no-unicode-regex": ["off"],
         // Allow uncommented helper functions in tests.
-        "require-jsdoc": ["off"]
+        "require-jsdoc": ["off"],
+        // In mocha tests in suites, `this` is meaningful and useful.
+        "no-invalid-this": ["off"]
     },
     "extends": "../../.eslintrc.json"
 }

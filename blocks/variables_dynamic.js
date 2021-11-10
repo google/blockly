@@ -109,13 +109,13 @@ Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MI
       if (this.type === 'variables_get_dynamic' ||
        this.type === 'variables_get_reporter_dynamic') {
         const renameOption = {
-          text: Blockly.Msg.RENAME_VARIABLE,
+          text: Blockly.Msg['RENAME_VARIABLE'],
           enabled: true,
           callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
         };
         const name = this.getField('VAR').getText();
         const deleteOption = {
-          text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+          text: Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
           callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
         };

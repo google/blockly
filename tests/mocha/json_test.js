@@ -26,7 +26,7 @@ suite('JSON Block Definitions', function() {
       let block;
       assertNoWarnings(() => {
         Blockly.defineBlocksWithJsonArray([{
-          "type": BLOCK_TYPE
+          "type": BLOCK_TYPE,
         }]);
         block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
       });
@@ -69,12 +69,12 @@ suite('JSON Block Definitions', function() {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": BLOCK_TYPE1,
-            "message0": 'before'
+            "message0": 'before',
           },
           null,
           {
             "type": BLOCK_TYPE2,
-            "message0": 'after'
+            "message0": 'after',
           }]);
       }, /is null/);
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
@@ -95,12 +95,12 @@ suite('JSON Block Definitions', function() {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": BLOCK_TYPE1,
-            "message0": 'before'
+            "message0": 'before',
           },
           undefined,
           {
             "type": BLOCK_TYPE2,
-            "message0": 'after'
+            "message0": 'after',
           }]);
       }, /is undefined/);
       chai.assert.isNotNull(Blockly.Blocks[BLOCK_TYPE1],
@@ -115,7 +115,7 @@ suite('JSON Block Definitions', function() {
       const MESSAGE0 = 'message0';
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
-        "message0": MESSAGE0
+        "message0": MESSAGE0,
       }]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
@@ -134,7 +134,7 @@ suite('JSON Block Definitions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
         "message0": MESSAGE0,
-        "message1": MESSAGE1
+        "message1": MESSAGE1,
       }]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
@@ -160,7 +160,7 @@ suite('JSON Block Definitions', function() {
       Blockly.Msg['MESSAGE'] = MESSAGE;
       Blockly.defineBlocksWithJsonArray([{
         "type": BLOCK_TYPE,
-        "message0": MESSAGE0
+        "message0": MESSAGE0,
       }]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
@@ -187,10 +187,10 @@ suite('JSON Block Definitions', function() {
             "name": FIELD_NAME,
             "options": [
               [LABEL0, VALUE0],
-              [LABEL1, VALUE1]
-            ]
-          }
-        ]
+              [LABEL1, VALUE1],
+            ],
+          },
+        ],
       }]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);
@@ -219,20 +219,20 @@ suite('JSON Block Definitions', function() {
         'width': 12,
         'height': 34,
         'src': 'http://image0.src',
-        'alt': 'IMAGE0 alt text'
+        'alt': 'IMAGE0 alt text',
       };
       const VALUE0 = 'VALUE0';
       const IMAGE1 = {
         'width': 56,
         'height': 78,
         'src': 'http://image1.src',
-        'alt': '%{BKY_ALT_TEXT}'
+        'alt': '%{BKY_ALT_TEXT}',
       };
       const VALUE1 = 'VALUE1';
       const IMAGE2 = {
         'width': 90,
         'height': 123,
-        'src': 'http://image2.src'
+        'src': 'http://image2.src',
       };
       const VALUE2 = 'VALUE2';
 
@@ -246,10 +246,10 @@ suite('JSON Block Definitions', function() {
             "options": [
               [IMAGE0, VALUE0],
               [IMAGE1, VALUE1],
-              [IMAGE2, VALUE2]
-            ]
-          }
-        ]
+              [IMAGE2, VALUE2],
+            ],
+          },
+        ],
       }]);
 
       const block = new Blockly.Block(this.workspace_, BLOCK_TYPE);

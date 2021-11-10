@@ -19,9 +19,9 @@ function testAWorkspace() {
         {
           "type": "field_variable",
           "name": "VAR",
-          "variableTypes": ["", "type1", "type2"]
-        }
-      ]
+          "variableTypes": ["", "type1", "type2"],
+        },
+      ],
     }]);
   });
 
@@ -633,7 +633,6 @@ function testAWorkspace() {
   });
 
   suite('Undo/Redo', function() {
-
     /**
      * Assert that two nodes are equal.
      * @param {!Element} actual the actual node.
@@ -664,7 +663,7 @@ function testAWorkspace() {
             "type": "stack_block",
             "message0": "",
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           },
           {
             "type": "row_block",
@@ -672,10 +671,10 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_value",
-                "name": "INPUT"
-              }
+                "name": "INPUT",
+              },
             ],
-            "output": null
+            "output": null,
           },
           {
             "type": "statement_block",
@@ -683,11 +682,11 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_statement",
-                "name": "STATEMENT"
-              }
+                "name": "STATEMENT",
+              },
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           }]);
       });
 
@@ -780,14 +779,13 @@ function testAWorkspace() {
     });
 
     suite('Undo Connect', function() {
-
       setup(function() {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": "stack_block",
             "message0": "",
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           },
           {
             "type": "row_block",
@@ -795,10 +793,10 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_value",
-                "name": "INPUT"
-              }
+                "name": "INPUT",
+              },
             ],
-            "output": null
+            "output": null,
           },
           {
             "type": "statement_block",
@@ -806,11 +804,11 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_statement",
-                "name": "STATEMENT"
-              }
+                "name": "STATEMENT",
+              },
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           }]);
       });
 
@@ -970,14 +968,13 @@ function testAWorkspace() {
     });
 
     suite('Undo Disconnect', function() {
-
       setup(function() {
         Blockly.defineBlocksWithJsonArray([
           {
             "type": "stack_block",
             "message0": "",
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           },
           {
             "type": "row_block",
@@ -985,10 +982,10 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_value",
-                "name": "INPUT"
-              }
+                "name": "INPUT",
+              },
             ],
-            "output": null
+            "output": null,
           },
           {
             "type": "statement_block",
@@ -996,11 +993,11 @@ function testAWorkspace() {
             "args0": [
               {
                 "type": "input_statement",
-                "name": "STATEMENT"
-              }
+                "name": "STATEMENT",
+              },
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
           }]);
       });
 
@@ -1364,7 +1361,6 @@ function testAWorkspace() {
 
           this.workspace.undo(true);
           assertVariableValues(this.workspace, 'name2', 'type1', 'id1');
-
         });
 
         test('Reference exists with usages rename to name2', function() {

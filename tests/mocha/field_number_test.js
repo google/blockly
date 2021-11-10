@@ -252,14 +252,14 @@ suite('Number Fields', function() {
       test('JS Configuration - Simple', function() {
         const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              min: -10
+              min: -10,
             });
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('JS Configuration - Ignore', function() {
         const field = new Blockly.FieldNumber(
             undefined, -1, undefined, undefined, undefined, {
-              min: -10
+              min: -10,
             });
         assertNumberField(field, -10, Infinity, 0, 0);
       });
@@ -288,14 +288,14 @@ suite('Number Fields', function() {
       test('JS Configuration - Simple', function() {
         const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              max: 10
+              max: 10,
             });
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('JS Configuration - Ignore', function() {
         const field = new Blockly.FieldNumber(
             undefined, undefined, 1, undefined, undefined, {
-              max: 10
+              max: 10,
             });
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
@@ -324,14 +324,14 @@ suite('Number Fields', function() {
       test('JS Configuration - Simple', function() {
         const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              precision: 1
+              precision: 1,
             });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('JS Configuration - Ignore', function() {
         const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, .5, undefined, {
-              precision: 1
+              precision: 1,
             });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });

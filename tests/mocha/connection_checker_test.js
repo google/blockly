@@ -61,10 +61,10 @@ suite('Connection checker', function() {
       setup(function() {
         // We have to declare each separately so that the connections belong
         // on different blocks.
-        const prevBlock = { isShadow: function() {}};
-        const nextBlock = { isShadow: function() {}};
-        const outBlock = { isShadow: function() {}};
-        const inBlock = { isShadow: function() {}};
+        const prevBlock = {isShadow: function() {}};
+        const nextBlock = {isShadow: function() {}};
+        const outBlock = {isShadow: function() {}};
+        const inBlock = {isShadow: function() {}};
         this.previous = new Blockly.Connection(
             prevBlock, Blockly.PREVIOUS_STATEMENT);
         this.next = new Blockly.Connection(
@@ -161,8 +161,8 @@ suite('Connection checker', function() {
     });
     suite('Shadows', function() {
       test('Previous Shadow', function() {
-        const prevBlock = { isShadow: function() { return true; }};
-        const nextBlock = { isShadow: function() { return false; }};
+        const prevBlock = {isShadow: function() {return true;}};
+        const nextBlock = {isShadow: function() {return false;}};
         const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
@@ -173,8 +173,8 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Next Shadow', function() {
-        const prevBlock = { isShadow: function() { return false; }};
-        const nextBlock = { isShadow: function() { return true; }};
+        const prevBlock = {isShadow: function() {return false;}};
+        const nextBlock = {isShadow: function() {return true;}};
         const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
@@ -185,8 +185,8 @@ suite('Connection checker', function() {
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Prev and Next Shadow', function() {
-        const prevBlock = { isShadow: function() { return true; }};
-        const nextBlock = { isShadow: function() { return true; }};
+        const prevBlock = {isShadow: function() {return true;}};
+        const nextBlock = {isShadow: function() {return true;}};
         const prev = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         const next = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
@@ -197,8 +197,8 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Output Shadow', function() {
-        const outBlock = { isShadow: function() { return true; }};
-        const inBlock = { isShadow: function() { return false; }};
+        const outBlock = {isShadow: function() {return true;}};
+        const inBlock = {isShadow: function() {return false;}};
         const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
@@ -209,8 +209,8 @@ suite('Connection checker', function() {
             Blockly.Connection.CAN_CONNECT);
       });
       test('Input Shadow', function() {
-        const outBlock = { isShadow: function() { return false; }};
-        const inBlock = { isShadow: function() { return true; }};
+        const outBlock = {isShadow: function() {return false;}};
+        const inBlock = {isShadow: function() {return true;}};
         const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 
@@ -221,8 +221,8 @@ suite('Connection checker', function() {
             Blockly.Connection.REASON_SHADOW_PARENT);
       });
       test('Output and Input Shadow', function() {
-        const outBlock = { isShadow: function() { return true; }};
-        const inBlock = { isShadow: function() { return true; }};
+        const outBlock = {isShadow: function() {return true;}};
+        const inBlock = {isShadow: function() {return true;}};
         const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 

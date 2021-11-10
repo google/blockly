@@ -210,7 +210,7 @@ suite('Colour Fields', function() {
       test('JS Constructor', function() {
         const field = new Blockly.FieldColour('#aaaaaa', null, {
           colourOptions: ['#aaaaaa'],
-          colourTitles: ['grey']
+          colourTitles: ['grey'],
         });
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
       });
@@ -218,7 +218,7 @@ suite('Colour Fields', function() {
         const field = Blockly.FieldColour.fromJson({
           colour: '#aaaaaa',
           colourOptions: ['#aaaaaa'],
-          colourTitles: ['grey']
+          colourTitles: ['grey'],
         });
         assertColoursAndTitles(field, ['#aaaaaa'], ['grey']);
       });
@@ -264,14 +264,14 @@ suite('Colour Fields', function() {
       });
       test('JS Constructor', function() {
         const field = new Blockly.FieldColour('#ffffff', null, {
-          columns: 3
+          columns: 3,
         });
         assertColumns(field, 3);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldColour.fromJson({
           'colour': '#ffffff',
-          'columns': 3
+          'columns': 3,
         });
         assertColumns(field, 3);
       });

@@ -105,7 +105,7 @@ suite('Label Serializable Fields', function() {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
-        FIELD_TEXT_BASELINE_Y: 13
+        FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
       chai.assert.isTrue(Blockly.utils.dom.hasClass(
@@ -115,7 +115,7 @@ suite('Label Serializable Fields', function() {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
-        FIELD_TEXT_BASELINE_Y: 13
+        FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
       chai.assert.isFalse(Blockly.utils.dom.hasClass(
@@ -127,32 +127,32 @@ suite('Label Serializable Fields', function() {
     });
     test('JSON Definition', function() {
       const field = Blockly.FieldLabelSerializable.fromJson({
-        class: 'testClass'
+        class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Simple', function() {
       const field = new Blockly.FieldLabelSerializable('text', null, {
-        class: 'testClass'
+        class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Ignore', function() {
       const field = new Blockly.FieldLabelSerializable('text', 'paramClass', {
-        class: 'configClass'
+        class: 'configClass',
       });
       assertDoesNotHaveClass(field, 'paramClass');
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - \'\'', function() {
       const field = new Blockly.FieldLabelSerializable('text', '', {
-        class: 'configClass'
+        class: 'configClass',
       });
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - Config \'\'', function() {
       const field = new Blockly.FieldLabelSerializable('text', 'paramClass', {
-        class: ''
+        class: '',
       });
       assertDoesNotHaveClass(field, 'paramClass');
     });
@@ -162,7 +162,7 @@ suite('Label Serializable Fields', function() {
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
             Blockly.utils.Svg.G, {}, null);
         field.constants_ = {
-          FIELD_TEXT_BASELINE_Y: 13
+          FIELD_TEXT_BASELINE_Y: 13,
         };
         field.initView();
         field.setClass('testClass');
@@ -177,7 +177,7 @@ suite('Label Serializable Fields', function() {
       });
       test('Remove Class', function() {
         const field = new Blockly.FieldLabelSerializable('text', null, {
-          class: 'testClass'
+          class: 'testClass',
         });
         assertHasClass(field, 'testClass');
         field.setClass(null);

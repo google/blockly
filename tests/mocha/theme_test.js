@@ -24,7 +24,7 @@ suite('Theme', function() {
       "type": "stack_block",
       "message0": "",
       "previousStatement": null,
-      "nextStatement": null
+      "nextStatement": null,
     },
     {
       "type": "row_block",
@@ -32,10 +32,10 @@ suite('Theme', function() {
       "args0": [
         {
           "type": "input_value",
-          "name": "INPUT"
-        }
+          "name": "INPUT",
+        },
       ],
-      "output": null
+      "output": null,
     }]);
   }
 
@@ -45,8 +45,8 @@ suite('Theme', function() {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
-        "hat": 'cap'
-      }
+        "hat": 'cap',
+      },
     };
   }
 
@@ -56,14 +56,14 @@ suite('Theme', function() {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
-        "hat": 'cap'
+        "hat": 'cap',
       },
       "styleTwo": {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
-        "hat": ''
-      }
+        "hat": '',
+      },
     };
   }
 
@@ -163,7 +163,7 @@ suite('Theme', function() {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -175,7 +175,7 @@ suite('Theme', function() {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -183,13 +183,13 @@ suite('Theme', function() {
 
     test('Incomplete hex', function() {
       const inputStyle = {
-        "colourPrimary": "#012345"
+        "colourPrimary": "#012345",
       };
       const expectedOutput = {
         "colourPrimary": "#012345",
         "colourSecondary": "#99a7b5",
         "colourTertiary": "#4d657d",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -200,13 +200,13 @@ suite('Theme', function() {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
-        "hat": 'cap'
+        "hat": 'cap',
       };
       const expectedOutput = {
         "colourPrimary": "#aaaaaa",
         "colourSecondary": "#bbbbbb",
         "colourTertiary": "#cccccc",
-        "hat": 'cap'
+        "hat": 'cap',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -222,7 +222,7 @@ suite('Theme', function() {
         "colourPrimary": "#a5745b",
         "colourSecondary": "#a58c5b",
         "colourTertiary": "#a5a55b",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -236,7 +236,7 @@ suite('Theme', function() {
         "colourPrimary": "#a5745b",
         "colourSecondary": "#dbc7bd",
         "colourTertiary": "#c09e8c",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -246,13 +246,13 @@ suite('Theme', function() {
       const inputStyle = {
         "colourPrimary": "red",
         "colourSecondary": "white",
-        "colourTertiary": "blue"
+        "colourTertiary": "blue",
       };
       const expectedOutput = {
         "colourPrimary": "#ff0000",
         "colourSecondary": "#ffffff",
         "colourTertiary": "#0000ff",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
@@ -266,7 +266,7 @@ suite('Theme', function() {
         "colourPrimary": "#000000",
         "colourSecondary": "#999999",
         "colourTertiary": "#4d4d4d",
-        "hat": ''
+        "hat": '',
       };
       stringifyAndCompare(
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);

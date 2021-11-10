@@ -36,7 +36,7 @@ suite('Extensions', function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "extension_test_block",
       "message0": "extension_test_block",
-      "extensions": ["extensions_test_before", "extensions_test_after"]
+      "extensions": ["extensions_test_before", "extensions_test_after"],
     }]);
 
     chai.assert.isUndefined(
@@ -71,7 +71,7 @@ suite('Extensions', function() {
         "message0": "test_parent_tooltip_when_inline",
         "output": true,
         "tooltip": defaultTooltip,
-        "extensions": ["parent_tooltip_when_inline"]
+        "extensions": ["parent_tooltip_when_inline"],
       },
       {
         "type": "test_parent",
@@ -79,11 +79,11 @@ suite('Extensions', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "INPUT"
-          }
+            "name": "INPUT",
+          },
         ],
-        "tooltip": parentTooltip
-      }
+        "tooltip": parentTooltip,
+      },
     ]);
 
     const block =
@@ -121,7 +121,7 @@ suite('Extensions', function() {
         field: 'FIELD',
         method: function() {
           console.log('TEXT_MIXIN method()');
-        }
+        },
       };
 
       chai.assert.isUndefined(
@@ -136,7 +136,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_mixin",
         "message0": "test_block_mixin",
-        "extensions": ["mixin_test"]
+        "extensions": ["mixin_test"],
       }]);
 
       const block = new Blockly.Block(this.workspace, 'test_block_mixin');
@@ -152,7 +152,7 @@ suite('Extensions', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
-          "mutator": "mutator_test"
+          "mutator": "mutator_test",
         }]);
 
         // Events code calls mutationToDom and expects it to give back a meaningful
@@ -171,7 +171,7 @@ suite('Extensions', function() {
               },
               decompose: function() {
                 return 'decomposeFn';
-              }
+              },
             });
 
         const block = new Blockly.Block(this.workspace, 'mutator_test_block');
@@ -189,7 +189,7 @@ suite('Extensions', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
-          "mutator": ["extensions_test"]
+          "mutator": ["extensions_test"],
         }]);
 
         // Events code calls mutationToDom and expects it to give back a
@@ -205,7 +205,7 @@ suite('Extensions', function() {
               },
               mutationToDom: function() {
                 return 'mutationToDomFn';
-              }
+              },
             },
             helperFunctionSpy
         );
@@ -221,7 +221,7 @@ suite('Extensions', function() {
         Blockly.defineBlocksWithJsonArray([{
           "type": "mutator_test_block",
           "message0": "mutator_test_block",
-          "mutator": "mutator_test"
+          "mutator": "mutator_test",
         }]);
 
         // Events code calls mutationToDom and expects it to give back a
@@ -236,7 +236,7 @@ suite('Extensions', function() {
               },
               mutationToDom: function() {
                 return 'mutationToDomFn';
-              }
+              },
             });
 
         const block = new Blockly.Block(this.workspace, 'mutator_test_block');
@@ -255,7 +255,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "missing_extension_block",
         "message0": "missing_extension_block",
-        "extensions": ["missing_extension"]
+        "extensions": ["missing_extension"],
       }]);
 
       chai.assert.isUndefined(
@@ -270,7 +270,7 @@ suite('Extensions', function() {
       this.extensionsCleanup_.push('mixin_bad_inputList');
 
       const TEST_MIXIN_BAD_INPUTLIST = {
-        inputList: 'bad inputList'  // Defined in constructor
+        inputList: 'bad inputList',  // Defined in constructor
       };
 
       chai.assert.isUndefined(
@@ -285,7 +285,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_inputList",
         "message0": "test_block_bad_inputList",
-        "extensions": ["mixin_bad_inputList"]
+        "extensions": ["mixin_bad_inputList"],
       }]);
 
       const workspace = this.workspace;
@@ -298,7 +298,7 @@ suite('Extensions', function() {
       this.extensionsCleanup_.push('mixin_bad_colour_');
 
       const TEST_MIXIN_BAD_COLOUR = {
-        colour_: 'bad colour_' // Defined on prototype
+        colour_: 'bad colour_', // Defined on prototype
       };
 
       chai.assert.isUndefined(
@@ -313,7 +313,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "test_block_bad_colour",
         "message0": "test_block_bad_colour",
-        "extensions": ["mixin_bad_colour_"]
+        "extensions": ["mixin_bad_colour_"],
       }]);
 
       const workspace = this.workspace;
@@ -328,7 +328,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
-        "extensions": ["mutator_test"]
+        "extensions": ["mutator_test"],
       }]);
 
       // Events code calls mutationToDom and expects it to give back a
@@ -343,7 +343,7 @@ suite('Extensions', function() {
             },
             mutationToDom: function() {
               return 'mutationToDomFn';
-            }
+            },
           });
 
       const workspace = this.workspace;
@@ -361,7 +361,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
-        "extensions": ["mutator_test"]
+        "extensions": ["mutator_test"],
       }]);
 
       // Events code calls mutationToDom and expects it to give back a
@@ -376,7 +376,7 @@ suite('Extensions', function() {
             },
             mutationToDom: function() {
               return 'mutationToDomFn';
-            }
+            },
           });
 
       const workspace = this.workspace;
@@ -394,7 +394,7 @@ suite('Extensions', function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "mutator_test_block",
         "message0": "mutator_test_block",
-        "mutator": ["extensions_test"]
+        "mutator": ["extensions_test"],
       }]);
 
       // Events code calls mutationToDom and expects it to give back a
@@ -458,7 +458,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, /domToMutation/);
       });
@@ -476,7 +476,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, /mutationToDom/);
       });
@@ -494,7 +494,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, /saveExtraState/);
       });
@@ -512,7 +512,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, /loadExtraState/);
       });
@@ -527,7 +527,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, 'Mutations must contain either XML hooks, or JSON hooks, or both');
       });
@@ -545,7 +545,7 @@ suite('Extensions', function() {
                 },
                 decompose: function() {
                   return 'decomposeFn';
-                }
+                },
               });
         }, /compose/);
       });
@@ -563,7 +563,7 @@ suite('Extensions', function() {
                 },
                 compose: function() {
                   return 'composeFn';
-                }
+                },
               });
         }, /decompose/);
       });

@@ -15,7 +15,7 @@ suite('Inputs', function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "empty_block",
       "message0": "",
-      "args0": []
+      "args0": [],
     }]);
 
     this.workspace = Blockly.inject('blocklyDiv');
@@ -120,7 +120,7 @@ suite('Inputs', function() {
         const field = new Blockly.FieldDropdown(
             [
               ['prefix option1', 'OPTION1'],
-              ['prefix option2', 'OPTION2']
+              ['prefix option2', 'OPTION2'],
             ]
         );
 
@@ -131,7 +131,7 @@ suite('Inputs', function() {
         const field = new Blockly.FieldDropdown(
             [
               ['option1 suffix', 'OPTION1'],
-              ['option2 suffix', 'OPTION2']
+              ['option2 suffix', 'OPTION2'],
             ]
         );
 
@@ -142,7 +142,7 @@ suite('Inputs', function() {
         const field = new Blockly.FieldDropdown(
             [
               ['prefix option1 suffix', 'OPTION1'],
-              ['prefix option2 suffix', 'OPTION2']
+              ['prefix option2 suffix', 'OPTION2'],
             ]
         );
 

@@ -138,7 +138,7 @@ suite('Abstract Fields', function() {
       saveState() {
         return {
           default: super.saveState(),
-          val: 'custom value'
+          val: 'custom value',
         };
       }
 
@@ -606,13 +606,13 @@ suite('Abstract Fields', function() {
           return 'dynamic tooltip text';
         };
         const field = new Blockly.Field('value', null, {
-          tooltip: returnTooltip
+          tooltip: returnTooltip,
         });
         chai.assert.equal(field.tooltip_, returnTooltip);
       });
       test('JSON Definition', function() {
         const field = CustomField.fromJson({
-          tooltip: "test tooltip"
+          tooltip: "test tooltip",
         });
         chai.assert.equal(field.tooltip_, 'test tooltip');
       });
@@ -629,7 +629,7 @@ suite('Abstract Fields', function() {
         });
         test('JSON Definition', function() {
           const field = CustomField.fromJson({
-            tooltip: "%{BKY_TOOLTIP}"
+            tooltip: "%{BKY_TOOLTIP}",
           });
           chai.assert.equal(field.tooltip_, 'test tooltip');
         });
@@ -708,7 +708,7 @@ suite('Abstract Fields', function() {
 
             tooltipFunc: function() {
               return this.getFieldValue('TOOLTIP');
-            }
+            },
           };
           const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -728,8 +728,8 @@ suite('Abstract Fields', function() {
                   .appendField(field, 'TOOLTIP');
             },
             element: {
-              tooltip: 'tooltip'
-            }
+              tooltip: 'tooltip',
+            },
           };
           const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
               '<xml xmlns="https://developers.google.com/blockly/xml">' +

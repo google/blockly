@@ -23,7 +23,7 @@ suite('Connection Database', function() {
     };
     this.createConnection = function(x, y, type, opt_database) {
       const workspace = {
-        connectionDBList: []
+        connectionDBList: [],
       };
       workspace.connectionDBList[type] = opt_database || this.database;
       const connection = new Blockly.RenderedConnection(
@@ -68,7 +68,6 @@ suite('Connection Database', function() {
     this.database.addConnection(y3b, 3);
     chai.assert.sameOrderedMembers(
         this.database.connections_, [y1, y2, y3b, y3a, y4]);
-
   });
   test('Remove Connection', function() {
     const y2 = {y: 2};

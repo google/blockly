@@ -74,7 +74,7 @@ suite('Key Down', function() {
     });
     const testCases = [
       ['Delete', createKeyDownEvent(Blockly.utils.KeyCodes.DELETE)],
-      ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE)]
+      ['Backspace', createKeyDownEvent(Blockly.utils.KeyCodes.BACKSPACE)],
     ];
     // Delete a block.
     suite('Simple', function() {
@@ -108,7 +108,7 @@ suite('Key Down', function() {
     const testCases = [
       ['Control C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.CTRL])],
       ['Meta C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.META])],
-      ['Alt C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT])]
+      ['Alt C', createKeyDownEvent(Blockly.utils.KeyCodes.C, [Blockly.utils.KeyCodes.ALT])],
     ];
     // Copy a block.
     suite('Simple', function() {
@@ -180,7 +180,7 @@ suite('Key Down', function() {
     const testCases = [
       ['Control Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL])],
       ['Meta Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META])],
-      ['Alt Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT])]
+      ['Alt Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT])],
     ];
     // Undo.
     suite('Simple', function() {
@@ -227,7 +227,7 @@ suite('Key Down', function() {
     const testCases = [
       ['Control Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.CTRL, Blockly.utils.KeyCodes.SHIFT])],
       ['Meta Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.META, Blockly.utils.KeyCodes.SHIFT])],
-      ['Alt Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])]
+      ['Alt Shift Z', createKeyDownEvent(Blockly.utils.KeyCodes.Z, [Blockly.utils.KeyCodes.ALT, Blockly.utils.KeyCodes.SHIFT])],
     ];
     // Undo.
     suite('Simple', function() {

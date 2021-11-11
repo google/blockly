@@ -193,7 +193,7 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  * @param {!WorkspaceSvg} workspace The workspace to resize.
- * @alias Blockly.resizeSvgContents
+ * @alias Blockly.common.resizeSvgContents
  */
 const resizeSvgContents = function(workspace) {
   workspace.resizeContents();
@@ -205,7 +205,7 @@ exports.resizeSvgContents = resizeSvgContents;
  * @param {!SVGElement} svg SVG image.
  * @return {!Size} Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
- * @alias Blockly.svgSize
+ * @alias Blockly.common.svgSize
  */
 const svgSize = function(svg) {
   // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
@@ -224,7 +224,7 @@ exports.svgSize = svgSize;
  * Close tooltips, context menus, dropdown selections, etc.
  * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
- * @alias Blockly.hideChaff
+ * @alias Blockly.common.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
   // The deprecated name is `Blockly.hideChaff` because this function used to
@@ -251,7 +251,7 @@ const jsonInitFactory = function(jsonDef) {
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @alias Blockly.defineBlocksWithJsonArray
+ * @alias Blockly.common.defineBlocksWithJsonArray
  */
 const defineBlocksWithJsonArray = function(jsonArray) {
   for (let i = 0; i < jsonArray.length; i++) {

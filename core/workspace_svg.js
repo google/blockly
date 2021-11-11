@@ -34,6 +34,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
@@ -170,7 +171,7 @@ const WorkspaceSvg = function(
   }
 
   this.useWorkspaceDragSurface_ =
-      !!this.workspaceDragSurface_ && utils.is3dSupported();
+      !!this.workspaceDragSurface_ && svgMath.is3dSupported();
 
   /**
    * List of currently highlighted blocks.  Block highlighting is often used to
@@ -793,7 +794,7 @@ WorkspaceSvg.prototype.getSvgXY = function(element) {
   }
   do {
     // Loop through this block and every parent.
-    const xy = utils.getRelativeXY(element);
+    const xy = svgMath.getRelativeXY(element);
     if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
       // After the SVG canvas, don't scale the coordinates.
       scale = 1;
@@ -825,7 +826,7 @@ WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
  * @package
  */
 WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
-  return utils.getInjectionDivXY_(this.getCanvas());
+  return svgMath.getInjectionDivXY(this.getCanvas());
 };
 
 /**
@@ -1214,7 +1215,7 @@ WorkspaceSvg.prototype.resize = function() {
  */
 WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled = function() {
   /* eslint-disable indent */
-  const currScroll = utils.getDocumentScroll();
+  const currScroll = svgMath.getDocumentScroll();
   if (!Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
@@ -1385,7 +1386,7 @@ WorkspaceSvg.prototype.setupDragSurface = function() {
       /** @type {Element} */ (this.svgBlockCanvas_.previousSibling);
   const width = parseInt(this.getParentSvg().getAttribute('width'), 10);
   const height = parseInt(this.getParentSvg().getAttribute('height'), 10);
-  const coord = utils.getRelativeXY(this.getCanvas());
+  const coord = svgMath.getRelativeXY(this.getCanvas());
   this.workspaceDragSurface_.setContentsAndShow(
       this.getCanvas(), this.getBubbleCanvas(), previousElement, width, height,
       this.scale);

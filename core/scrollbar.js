@@ -18,7 +18,7 @@ goog.module('Blockly.Scrollbar');
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
@@ -691,7 +691,7 @@ Scrollbar.prototype.onMouseDownBar_ = function(e) {
       e, this.workspace_.getParentSvg(), this.workspace_.getInverseScreenCTM());
   const mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  const handleXY = utils.getInjectionDivXY_(this.svgHandle_);
+  const handleXY = svgMath.getInjectionDivXY(this.svgHandle_);
   const handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
   let handlePosition = this.handlePosition_;
 

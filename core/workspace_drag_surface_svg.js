@@ -23,7 +23,7 @@
 goog.module('Blockly.WorkspaceDragSurfaceSvg');
 
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {Svg} = goog.require('Blockly.utils.Svg');
@@ -111,7 +111,7 @@ WorkspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @package
  */
 WorkspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  return utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  return svgMath.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
 };
 
 /**

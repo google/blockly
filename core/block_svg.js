@@ -27,6 +27,7 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
@@ -145,7 +146,7 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.useDragSurface_ =
-      utils.is3dSupported() && !!workspace.getBlockDragSurface();
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
   const svgPath = this.pathObject.svgPath;
   svgPath.tooltip = this;
@@ -428,7 +429,7 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   if (element) {
     do {
       // Loop through this block and every parent.
-      const xy = utils.getRelativeXY(element);
+      const xy = svgMath.getRelativeXY(element);
       x += xy.x;
       y += xy.y;
       // If this element is the current element on the drag surface, include

@@ -21,7 +21,7 @@ const Xml = goog.require('Blockly.Xml');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
@@ -104,7 +104,7 @@ object.inherits(FieldVariable, FieldDropdown);
  * @nocollapse
  */
 FieldVariable.fromJson = function(options) {
-  const varName = utils.replaceMessageReferences(options['variable']);
+  const varName = parsing.replaceMessageReferences(options['variable']);
   // `this` might be a subclass of FieldVariable if that class doesn't override
   // the static fromJson method.
   return new this(varName, undefined, undefined, undefined, options);

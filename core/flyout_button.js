@@ -21,7 +21,7 @@ const dom = goog.require('Blockly.utils.dom');
 const style = goog.require('Blockly.utils.style');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
@@ -170,7 +170,7 @@ FlyoutButton.prototype.createDom = function() {
         'text-anchor': 'middle',
       },
       this.svgGroup_);
-  let text = utils.replaceMessageReferences(this.text_);
+  let text = parsing.replaceMessageReferences(this.text_);
   if (this.workspace_.RTL) {
     // Force text to be RTL by adding an RLM.
     text += '\u200F';

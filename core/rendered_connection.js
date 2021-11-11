@@ -22,7 +22,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -270,7 +270,7 @@ RenderedConnection.prototype.tighten = function() {
       throw Error('block is not rendered.');
     }
     // Workspace coordinates.
-    const xy = utils.getRelativeXY(svgRoot);
+    const xy = svgMath.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute(
         'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections(-dx, -dy);

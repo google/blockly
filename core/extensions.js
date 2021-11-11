@@ -21,6 +21,7 @@
  */
 goog.module('Blockly.Extensions');
 
+const parsing = goog.require('Blockly.utils.parsing');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -376,7 +377,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
     utils.runAfterPageLoad(function() {
       for (const key in lookupTable) {
         // Will print warnings if reference is missing.
-        utils.checkMessageReferences(lookupTable[key]);
+        parsing.checkMessageReferences(lookupTable[key]);
       }
     });
   }
@@ -405,7 +406,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
           console.warn(warning + '.');
         }
       } else {
-        tooltip = utils.replaceMessageReferences(tooltip);
+        tooltip = parsing.replaceMessageReferences(tooltip);
       }
       return tooltip;
     }.bind(this));
@@ -455,7 +456,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   if (typeof document === 'object') {  // Relies on document.readyState
     utils.runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
-      utils.checkMessageReferences(msgTemplate);
+      parsing.checkMessageReferences(msgTemplate);
     });
   }
 
@@ -466,7 +467,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   const extensionFn = function() {
     this.setTooltip(function() {
       const field = this.getField(fieldName);
-      return utils.replaceMessageReferences(msgTemplate)
+      return parsing.replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
     }.bind(this));
   };

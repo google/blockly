@@ -238,3 +238,8 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   return finalOffsetMainWs;
 };
 exports.screenToWsCoordinates = screenToWsCoordinates;
+
+exports.TEST_ONLY = {
+  XY_REGEX,
+  XY_STYLE_REGEX,
+};

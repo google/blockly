@@ -19,5 +19,5 @@ updates:
     commit-message:
       prefix: "chore(deps)"
     labels:
-      - "chore"
-      - "dependencies"
+      - "PR: chore"
+      - "PR: dependencies"

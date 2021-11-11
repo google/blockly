@@ -722,7 +722,8 @@ ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
     object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  const parsedColour = parsing.parseBlockColour(valid['colourPrimary'] || '#000');
+  const parsedColour =
+      parsing.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
       parsing.parseBlockColour(valid['colourSecondary']).hex :

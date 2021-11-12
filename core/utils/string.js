@@ -213,7 +213,7 @@ const wrapScore = function(words, wordBreaks, limit) {
       lineLengths[lineLengths.length - 1]++;
     }
   }
-  const maxLength = Math.max.apply(Math, lineLengths);
+  const maxLength = Math.max(...lineLengths);
 
   let score = 0;
   for (let i = 0; i < lineLengths.length; i++) {

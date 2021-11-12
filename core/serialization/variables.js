@@ -44,6 +44,9 @@ exports.State = State;
  * @alias Blockly.serialization.variables.VariableSerializer
  */
 class VariableSerializer {
+  /**
+   * @constructor
+   */
   constructor() {
     /**
      * The priority for deserializing variables.

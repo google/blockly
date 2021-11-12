@@ -319,7 +319,14 @@ Blockly.Blocks['text_getSubstring'] = {
       this.appendDummyInput('TAIL')
           .appendField(Blockly.Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
-    const menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
+    const menu = new Blockly.FieldDropdown(
+        this['WHERE_OPTIONS_' + n],
+        /**
+         * @param {*} value The input value.
+         * @this {Blockly.FieldDropdown}
+         * @returns {null|undefined} Null if the field has been replaced;
+         *     otherwise undefined.
+         */
         function(value) {
           const newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a
@@ -922,13 +929,18 @@ Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN = {
  */
 Blockly.Constants.Text.TEXT_CHARAT_EXTENSION = function() {
   const dropdown = this.getField('WHERE');
-  dropdown.setValidator(function(value) {
-    const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-    if (newAt !== this.isAt_) {
-      const block = this.getSourceBlock();
-      block.updateAt_(newAt);
-    }
-  });
+  dropdown.setValidator(
+    /**
+     * @param {*} value The input value.
+     * @this {Blockly.FieldDropdown}
+     */
+    function(value) {
+      const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+      if (newAt !== this.isAt_) {
+        const block = this.getSourceBlock();
+        block.updateAt_(newAt);
+      }
+    });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.
   const thisBlock = this;

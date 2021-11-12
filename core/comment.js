@@ -181,16 +181,26 @@ Comment.prototype.createEditor_ = function() {
       browserEvents.conditionalBind(textarea, 'wheel', this, function(e) {
         e.stopPropagation();
       });
-  this.onChangeWrapper_ =
-      browserEvents.conditionalBind(textarea, 'change', this, function(_e) {
+  this.onChangeWrapper_ = browserEvents.conditionalBind(
+      textarea, 'change', this,
+      /**
+       * @this {Comment}
+       * @param {Event} _e Unused event parameter.
+       */
+      function(_e) {
         if (this.cachedText_ !== this.model_.text) {
           eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
               this.block_, 'comment', null, this.cachedText_,
               this.model_.text));
         }
       });
-  this.onInputWrapper_ =
-      browserEvents.conditionalBind(textarea, 'input', this, function(_e) {
+  this.onInputWrapper_ = browserEvents.conditionalBind(
+      textarea, 'input', this,
+      /**
+       * @this {Comment}
+       * @param {Event} _e Unused event parameter.
+       */
+      function(_e) {
         this.model_.text = textarea.value;
       });
 

@@ -71,9 +71,12 @@ const registerMixin = function(name, mixinObj) {
   if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
   }
-  register(name, function() {
-    this.mixin(mixinObj);
-  });
+  register(
+      name,
+      /** @this {Block} */
+      function() {
+        this.mixin(mixinObj);
+      });
 };
 exports.registerMixin = registerMixin;
 
@@ -102,21 +105,24 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   }
 
   // Sanity checks passed.
-  register(name, function() {
-    if (hasMutatorDialog) {
-      const {Mutator} = goog.module.get('Blockly.Mutator');
-      if (!Mutator) {
-        throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
-      }
-      this.setMutator(new Mutator(opt_blockList || []));
-    }
-    // Mixin the object.
-    this.mixin(mixinObj);
+  register(
+      name,
+      /** @this {Block} */
+      function() {
+        if (hasMutatorDialog) {
+          const {Mutator} = goog.module.get('Blockly.Mutator');
+          if (!Mutator) {
+            throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
+          }
+          this.setMutator(new Mutator(opt_blockList || []));
+        }
+        // Mixin the object.
+        this.mixin(mixinObj);
 
-    if (opt_helperFn) {
-      opt_helperFn.apply(this);
-    }
-  });
+        if (opt_helperFn) {
+          opt_helperFn.apply(this);
+        }
+      });
 };
 exports.registerMutator = registerMutator;
 

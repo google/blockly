@@ -334,10 +334,16 @@ Blockly.Blocks['lists_getIndex'] = {
         ];
     this.setHelpUrl(Blockly.Msg['LISTS_GET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
-    const modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
-      const isStatement = (value === 'REMOVE');
-      this.getSourceBlock().updateStatement_(isStatement);
-    });
+    const modeMenu = new Blockly.FieldDropdown(MODE,
+      /**
+       * @param {*} value The input value.
+       * @this {Blockly.FieldDropdown}
+       */
+      function(value) {
+        const isStatement = (value === 'REMOVE');
+        this.getSourceBlock().updateStatement_(isStatement);
+      }
+    );
     this.appendValueInput('VALUE')
         .setCheck('Array')
         .appendField(Blockly.Msg['LISTS_GET_INDEX_INPUT_IN_LIST']);
@@ -484,18 +490,28 @@ Blockly.Blocks['lists_getIndex'] = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = new Blockly.FieldDropdown(this.WHERE_OPTIONS, function(value) {
-      const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt !== isAt) {
-        const block = this.getSourceBlock();
-        block.updateAt_(newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE');
-        return null;
-      }
-      return undefined;
-    });
+    const menu = new Blockly.FieldDropdown(
+        this.WHERE_OPTIONS,
+        /**
+         * @param {*} value The input value.
+         * @this {Blockly.FieldDropdown}
+         * @returns {null|undefined} Null if the field has been replaced;
+         *     otherwise undefined.
+         */
+        function(value) {
+          const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+          // The 'isAt' variable is available due to this function being a
+          // closure.
+          if (newAt !== isAt) {
+            const block = this.getSourceBlock();
+            block.updateAt_(newAt);
+            // This menu has been destroyed and replaced.  Update the
+            // replacement.
+            block.setFieldValue(value, 'WHERE');
+            return null;
+          }
+          return undefined;
+        });
     this.getInput('AT').appendField(menu, 'WHERE');
     if (Blockly.Msg['LISTS_GET_INDEX_TAIL']) {
       this.moveInputBefore('TAIL', null);
@@ -628,18 +644,28 @@ Blockly.Blocks['lists_setIndex'] = {
     } else {
       this.appendDummyInput('AT');
     }
-    const menu = new Blockly.FieldDropdown(this.WHERE_OPTIONS, function(value) {
-      const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt !== isAt) {
-        const block = this.getSourceBlock();
-        block.updateAt_(newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE');
-        return null;
-      }
-      return undefined;
-    });
+    const menu = new Blockly.FieldDropdown(
+        this.WHERE_OPTIONS,
+        /**
+         * @param {*} value The input value.
+         * @this {Blockly.FieldDropdown}
+         * @returns {null|undefined} Null if the field has been replaced;
+         *     otherwise undefined.
+         */
+        function(value) {
+          const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+          // The 'isAt' variable is available due to this function being a
+          // closure.
+          if (newAt !== isAt) {
+            const block = this.getSourceBlock();
+            block.updateAt_(newAt);
+            // This menu has been destroyed and replaced.  Update the
+            // replacement.
+            block.setFieldValue(value, 'WHERE');
+            return null;
+          }
+          return undefined;
+        });
     this.moveInputBefore('AT', 'TO');
     if (this.getInput('ORDINAL')) {
       this.moveInputBefore('ORDINAL', 'TO');
@@ -737,7 +763,14 @@ Blockly.Blocks['lists_getSublist'] = {
     } else {
       this.appendDummyInput('AT' + n);
     }
-    const menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
+    const menu = new Blockly.FieldDropdown(
+        this['WHERE_OPTIONS_' + n],
+        /**
+         * @param {*} value The input value.
+         * @this {Blockly.FieldDropdown}
+         * @returns {null|undefined} Null if the field has been replaced;
+         *     otherwise undefined.
+         */
         function(value) {
           const newAt = (value === 'FROM_START') || (value === 'FROM_END');
           // The 'isAt' variable is available due to this function being a

@@ -704,6 +704,10 @@ Trashcan.prototype.cleanBlockJson_ = function(json) {
   // Create a deep copy.
   json = /** @type {!blocks.State} */ (JSON.parse(JSON.stringify(json)));
 
+  /**
+   * Reshape JSON into a nicer format.
+   * @param {!blocks.State} json The JSON to clean.
+   */
   function cleanRec(json) {
     if (!json) {
       return;

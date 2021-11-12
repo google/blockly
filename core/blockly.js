@@ -382,6 +382,9 @@ exports.getMainWorkspace = common.getMainWorkspace;
  *     of jsonDef.
  */
 const jsonInitFactory = function(jsonDef) {
+  /**
+   * @this {Block}
+   */
   return function() {
     this.jsonInit(jsonDef);
   };

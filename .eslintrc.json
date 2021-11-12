@@ -60,7 +60,10 @@
         // Keep them for legacy reasons.
         "new-cap": ["off"],
         // Mostly use default rules for brace style, but allow single-line blocks.
-        "brace-style": ["error", "1tbs", { "allowSingleLine": true }]
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        // Blockly uses objects as maps, but uses Object.create(null) to
+        // instantiate them.
+        "guard-for-in": ["off"]
     },
     "env": {
         "es6": true,

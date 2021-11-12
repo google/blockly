@@ -29,6 +29,9 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.serialization.ISerializer.ISerializer
  */
 class ISerializer {
+  /**
+   * @constructor
+   */
   constructor() {
     /**
      * A priority value used to determine the order of deserializing state.

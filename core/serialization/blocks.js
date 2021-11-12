@@ -628,6 +628,9 @@ const saveBlock = save;
  * @alias Blockly.serialization.blocks.BlockSerializer
  */
 class BlockSerializer {
+  /**
+   * @constructor
+   * */
   constructor() {
     /**
      * The priority for deserializing blocks.

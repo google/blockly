@@ -44,9 +44,7 @@ exports.State = State;
  * @alias Blockly.serialization.variables.VariableSerializer
  */
 class VariableSerializer {
-  /**
-   * @constructor
-   */
+  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /**
      * The priority for deserializing variables.

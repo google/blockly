@@ -94,7 +94,7 @@ exports.getRelativeXY = getRelativeXY;
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!Coordinate} Object with .x and .y properties.
- * @alias Blockly.svgMath.getInjectionDivXY_
+ * @alias Blockly.svgMath.getInjectionDivXY
  */
 const getInjectionDivXY = function(element) {
   let x = 0;

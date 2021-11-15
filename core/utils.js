@@ -101,9 +101,16 @@ exports.isTargetInput = isTargetInput;
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Coordinate} Object with .x and .y properties.
+ * @deprecated
  * @alias Blockly.utils.getRelativeXY
  */
-exports.getRelativeXY = svgMath.getRelativeXY;
+const getRelativeXY = function(element) {
+  deprecation.warn(
+      'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
+      'Blockly.svgMath.getRelativeXY');
+  return svgMath.getRelativeXY(element);
+};
+exports.getRelativeXY = getRelativeXY;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -112,9 +119,16 @@ exports.getRelativeXY = svgMath.getRelativeXY;
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!Coordinate} Object with .x and .y properties.
+ * @deprecated
  * @alias Blockly.utils.getInjectionDivXY_
  */
-exports.getInjectionDivXY_ = svgMath.getInjectionDivXY;
+const getInjectionDivXY = function(element) {
+  deprecation.warn(
+      'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
+      'Blockly.svgMath.getInjectionDivXY');
+  return svgMath.getInjectionDivXY(element);
+};
+exports.getInjectionDivXY_ = getInjectionDivXY;
 
 /**
  * Returns true this event is a right-click.
@@ -174,9 +188,16 @@ exports.getScrollDeltaPixels = getScrollDeltaPixels;
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
  * @return {!Array<string|number>} Array of strings and numbers.
+ * @deprecated
  * @alias Blockly.utils.tokenizeInterpolation
  */
-exports.tokenizeInterpolation = parsing.tokenizeInterpolation;
+const tokenizeInterpolation = function(message) {
+  deprecation.warn(
+      'Blockly.utils.tokenizeInterpolation', 'December 2021', 'December 2022',
+      'Blockly.parsing.tokenizeInterpolation');
+  return parsing.tokenizeInterpolation(message);
+};
+exports.tokenizeInterpolation = tokenizeInterpolation;
 
 /**
  * Replaces string table references in a message, if the message is a string.
@@ -185,9 +206,16 @@ exports.tokenizeInterpolation = parsing.tokenizeInterpolation;
  * @param {string|?} message Message, which may be a string that contains
  *     string table references.
  * @return {string} String with message references replaced.
+ * @deprecated
  * @alias Blockly.utils.replaceMessageReferences
  */
-exports.replaceMessageReferences = parsing.replaceMessageReferences;
+const replaceMessageReferences = function(message) {
+  deprecation.warn(
+      'Blockly.utils.replaceMessageReferences', 'December 2021',
+      'December 2022', 'Blockly.parsing.replaceMessageReferences');
+  return parsing.replaceMessageReferences(message);
+};
+exports.replaceMessageReferences = replaceMessageReferences;
 
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
@@ -195,9 +223,16 @@ exports.replaceMessageReferences = parsing.replaceMessageReferences;
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
+ * @deprecated
  * @alias Blockly.utils.checkMessageReferences
  */
-exports.checkMessageReferences = parsing.checkMessageReferences;
+const checkMessageReferences = function(message) {
+  deprecation.warn(
+      'Blockly.utils.checkMessageReferences', 'December 2021', 'December 2022',
+      'Blockly.parsing.checkMessageReferences');
+  return parsing.checkMessageReferences(message);
+};
+exports.checkMessageReferences = checkMessageReferences;
 
 /**
  * Generate a unique ID.
@@ -217,9 +252,16 @@ exports.genUid = genUid;
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
  * @return {boolean} True if 3D transforms are supported.
+ * @deprecated
  * @alias Blockly.utils.is3dSupported
  */
-exports.is3dSupported = svgMath.is3dSupported;
+const is3dSupported = function() {
+  deprecation.warn(
+      'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
+      'Blockly.svgMath.is3dSupported');
+  return svgMath.is3dSupported();
+};
+exports.is3dSupported = is3dSupported;
 
 /**
  * Calls a function after the page has loaded, possibly immediately.
@@ -251,9 +293,16 @@ exports.runAfterPageLoad = runAfterPageLoad;
  * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
  * @alias Blockly.utils.getViewportBBox
+ * @deprecated
  * @package
  */
-exports.getViewportBBox = svgMath.getViewportBBox;
+const getViewportBBox = function() {
+  deprecation.warn(
+      'Blockly.utils.getViewportBBox', 'December 2021', 'December 2022',
+      'Blockly.svgMath.getViewportBBox');
+  return svgMath.getViewportBBox();
+};
+exports.getViewportBBox = getViewportBBox;
 
 /**
  * Removes the first occurrence of a particular value from an array.
@@ -277,9 +326,16 @@ exports.arrayRemove = arrayRemove;
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
  * @return {!Coordinate} Object with values 'x' and 'y'.
+ * @deprecated
  * @alias Blockly.utils.getDocumentScroll
  */
-exports.getDocumentScroll = svgMath.getDocumentScroll;
+const getDocumentScroll = function() {
+  deprecation.warn(
+      'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
+      'Blockly.svgMath.getDocumentScroll');
+  return svgMath.getDocumentScroll();
+};
+exports.getDocumentScroll = getDocumentScroll;
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of
@@ -317,9 +373,16 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  * @param {!WorkspaceSvg} ws The workspace to find the coordinates on.
  * @param {!Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
+ * @deprecated
  * @return {!Coordinate} The workspace coordinates.
  */
-exports.screenToWsCoordinates = svgMath.screenToWsCoordinates;
+const screenToWsCoordinates = function(ws, screenCoordinates) {
+  deprecation.warn(
+      'Blockly.utils.screenToWsCoordinates', 'December 2021', 'December 2022',
+      'Blockly.svgMath.screenToWsCoordinates');
+  return svgMath.screenToWsCoordinates(ws, screenCoordinates);
+};
+exports.screenToWsCoordinates = screenToWsCoordinates;
 
 /**
  * Parse a block colour from a number or string, as provided in a block
@@ -329,6 +392,13 @@ exports.screenToWsCoordinates = svgMath.screenToWsCoordinates;
  * @return {{hue: ?number, hex: string}} An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
+ * @deprecated
  * @alias Blockly.utils.parseBlockColour
  */
-exports.parseBlockColour = parsing.parseBlockColour;
+const parseBlockColour = function(colour) {
+  deprecation.warn(
+      'Blockly.utils.parseBlockColour', 'December 2021', 'December 2022',
+      'Blockly.parsing.parseBlockColour');
+  return parsing.parseBlockColour(colour);
+};
+exports.parseBlockColour = parseBlockColour;

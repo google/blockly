@@ -817,7 +817,7 @@ Block.prototype.getDescendants = function(ordered) {
   let blocks = [this];
   const childBlocks = this.getChildren(ordered);
   for (let child, i = 0; (child = childBlocks[i]); i++) {
-    blocks = [...blocks, ...child.getDescendants(ordered)];
+    blocks.push(...child.getDescendants(ordered));
   }
   return blocks;
 };

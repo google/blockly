@@ -537,11 +537,11 @@ Blockly.Blocks['procedures_mutatorarg'] = {
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
-    // TODO: Understand what this is in newShowEditorFn, and annotate properly.
+    /**
+     * @this {Blockly.FieldTextInput}
+     */
     const newShowEditorFn = function() {
-      /* eslint-disable-next-line no-invalid-this */
       this.createdVariables_ = [];
-      /* eslint-disable-next-line no-invalid-this */
       this.oldShowEditorFn_();
     };
     field.showEditor_ = newShowEditorFn;

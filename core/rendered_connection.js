@@ -419,7 +419,7 @@ RenderedConnection.prototype.startTrackingAll = function() {
       connections = block.getConnections_(true);
     }
     for (let i = 0; i < connections.length; i++) {
-      renderList = [...renderList, ...connections[i].startTrackingAll()];
+      renderList.push(...connections[i].startTrackingAll());
     }
     if (!renderList.length) {
       // Leaf block.

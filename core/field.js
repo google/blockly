@@ -25,9 +25,9 @@ const Xml = goog.require('Blockly.Xml');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -287,7 +287,7 @@ Field.prototype.SERIALIZABLE = false;
 Field.prototype.configure_ = function(config) {
   let tooltip = config['tooltip'];
   if (typeof tooltip === 'string') {
-    tooltip = utils.replaceMessageReferences(config['tooltip']);
+    tooltip = parsing.replaceMessageReferences(config['tooltip']);
   }
   tooltip && this.setTooltip(tooltip);
 

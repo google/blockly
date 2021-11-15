@@ -21,7 +21,8 @@
  */
 const renamings = {
   // Example entry:
-  '0.0.0': {  // These renaming were made after version 0.0.0 was published.
+  '0.0.0': {
+    // These renaming were made after version 0.0.0 was published.
     // Each entry is keyed by the original module name.
     'module.name.Old': {
       // If the module has been renamed, its new name will be listed.
@@ -51,7 +52,8 @@ const renamings = {
       // the exports subsection, which is a map from old export name
       // to object with info about the new export name.
       exports: {
-        oldExportName: {  // No need to quote this.
+        oldExportName: {
+          // No need to quote this.
 
           // If the export has been moved to a different module, that
           // module is listed.
@@ -153,7 +155,7 @@ const renamings = {
     },
     'Blockly.Blocks': {
       module: 'Blockly.blocks',
-      export: 'Blocks',  // Previous default export now named.
+      export: 'Blocks',        // Previous default export now named.
       path: 'Blockly.Blocks',  // But still on tree with original name.
     },
     'Blockly.ContextMenu': {
@@ -179,7 +181,7 @@ const renamings = {
     },
     'Blockly.connectionTypes': {
       module: 'Blockly.ConnectionType',
-      export: 'ConnectionType',  // Previous default export now named.
+      export: 'ConnectionType',        // Previous default export now named.
       path: 'Blockly.ConnectionType',  // Type reexported directly.
     },
     'Blockly.utils': {
@@ -192,7 +194,7 @@ const renamings = {
       },
     },
     'Blockly.utils.global': {
-      export: 'globalThis',  // Previous default export now named.
+      export: 'globalThis',          // Previous default export now named.
       path: 'Blockly.utils.global',  // But still exported under original name.
     },
     'Blockly.utils.IdGenerator': {
@@ -216,7 +218,22 @@ const renamings = {
     'Blockly.Blocks.texts': {module: 'Blockly.blocks.texts'},
     'Blockly.Blocks.variables': {module: 'Blockly.blocks.variables'},
     // Blockly.Blocks.variablesDynamic not previously provided.
-  },
+    'Blockly.utils': {
+      exports: {
+        screenToWsCoordinates: {module: 'Blockly.utils.svgMath'},
+        getDocumentScroll: {module: 'Blockly.utils.svgMath'},
+        getViewportBBox: {module: 'Blockly.utils.svgMath'},
+        is3dSupported: {module: 'Blockly.utils.svgMath'},
+        getRelativeXY: {module: 'Blockly.utils.svgMath'},
+        getInjectionDivXY_:
+            {module: 'Blockly.utils.svgMath', export: 'getInjectionDivXY'},
+        parseBlockColour: {module: 'Blockly.utils.parsing'},
+        checkMessageReferences: {module: 'Blockly.utils.parsing'},
+        replaceMessageReferences: {module: 'Blockly.utils.parsing'},
+        tokenizeInterpolation: {module: 'Blockly.utils.parsing'}
+      }
+    }
+  }
 };
 
 exports.renamings = renamings;

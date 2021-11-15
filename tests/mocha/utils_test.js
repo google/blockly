@@ -30,23 +30,23 @@ suite('Utils', function() {
   suite('tokenizeInterpolation', function() {
     suite('Basic', function() {
       test('Empty string', function() {
-        chai.assert.deepEqual(Blockly.utils.tokenizeInterpolation(''), []);
+        chai.assert.deepEqual(Blockly.utils.parsing.tokenizeInterpolation(''), []);
       });
 
       test('No interpolation', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('Hello'), ['Hello']);
+            Blockly.utils.parsing.tokenizeInterpolation('Hello'), ['Hello']);
       });
 
       test('Unescaped %', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('Hello%World'),
+            Blockly.utils.parsing.tokenizeInterpolation('Hello%World'),
             ['Hello%World']);
       });
 
       test('Escaped %', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('Hello%%World'),
+            Blockly.utils.parsing.tokenizeInterpolation('Hello%%World'),
             ['Hello%World']);
       });
     });
@@ -54,19 +54,19 @@ suite('Utils', function() {
     suite('Number interpolation', function() {
       test('Single-digit number interpolation', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('Hello%1World'),
+            Blockly.utils.parsing.tokenizeInterpolation('Hello%1World'),
             ['Hello', 1, 'World']);
       });
 
       test('Multi-digit number interpolation', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%123Hello%456World%789'),
+            Blockly.utils.parsing.tokenizeInterpolation('%123Hello%456World%789'),
             [123, 'Hello', 456, 'World', 789]);
       });
 
       test('Escaped number', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('Hello %%1 World'),
+            Blockly.utils.parsing.tokenizeInterpolation('Hello %%1 World'),
             ['Hello %1 World']);
       });
 
@@ -74,7 +74,7 @@ suite('Utils', function() {
         // No idea what this is supposed to tell you if it breaks. But might
         // as well keep it.
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%%%x%%0%00%01%'),
+            Blockly.utils.parsing.tokenizeInterpolation('%%%x%%0%00%01%'),
             ['%%x%0', 0, 1, '%']);
       });
     });
@@ -87,21 +87,21 @@ suite('Utils', function() {
       test('Simple interpolation', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_string_ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_string_ref}'),
             ['test string']);
       });
 
       test('Case', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{BkY_StRiNg_ReF}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{BkY_StRiNg_ReF}'),
             ['test string']);
       });
 
       test('Surrounding text', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation(
+            Blockly.utils.parsing.tokenizeInterpolation(
                 'before %{bky_string_ref} after'),
             ['before test string after']);
       });
@@ -109,7 +109,7 @@ suite('Utils', function() {
       test('With param', function() {
         Blockly.Msg.WITH_PARAM = 'before %1 after';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_with_param}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_with_param}'),
             ['before ', 1, ' after']);
       });
 
@@ -117,68 +117,68 @@ suite('Utils', function() {
         Blockly.Msg.STRING_REF = 'test string';
         Blockly.Msg.RECURSE = 'before %{bky_string_ref} after';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_recurse}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_recurse}'),
             ['before test string after']);
       });
 
       test('Number reference', function() {
         Blockly.Msg['1'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_1}'), ['test string']);
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_1}'), ['test string']);
       });
 
       test('Undefined reference', function() {
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_undefined}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_undefined}'),
             ['%{bky_undefined}']);
       });
 
       test('Not prefixed', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{string_ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{string_ref}'),
             ['%{string_ref}']);
       });
 
       test('Not prefixed, number', function() {
         Blockly.Msg['1'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{1}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{1}'),
             ['%{1}']);
       });
 
       test('Space in ref', function() {
         Blockly.Msg['string ref'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_string ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_string ref}'),
             ['%{bky_string ref}']);
       });
 
       test('Dash in ref', function() {
         Blockly.Msg['string-ref'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_string-ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_string-ref}'),
             ['%{bky_string-ref}']);
       });
 
       test('Period in ref', function() {
         Blockly.Msg['string.ref'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_string.ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_string.ref}'),
             ['%{bky_string.ref}']);
       });
 
       test('Ampersand in ref', function() {
         Blockly.Msg['string&ref'] = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_string&ref}'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_string&ref}'),
             ['%{bky_string&ref}']);
       });
 
       test('Unclosed reference', function() {
         Blockly.Msg.UNCLOSED = 'test string';
         chai.assert.deepEqual(
-            Blockly.utils.tokenizeInterpolation('%{bky_unclosed'),
+            Blockly.utils.parsing.tokenizeInterpolation('%{bky_unclosed'),
             ['%{bky_unclosed']);
       });
     });
@@ -191,40 +191,48 @@ suite('Utils', function() {
     Blockly.Msg.STRING_REF_WITH_ARG = 'test %1 string';
     Blockly.Msg.STRING_REF_WITH_SUBREF = 'test %{bky_subref} string';
 
-    let resultString = Blockly.utils.replaceMessageReferences('');
+    let resultString = Blockly.utils.parsing.replaceMessageReferences('');
     chai.assert.equal(resultString, '', 'Empty string produces empty string');
 
-    resultString = Blockly.utils.replaceMessageReferences('%%');
+    resultString = Blockly.utils.parsing.replaceMessageReferences('%%');
     chai.assert.equal(resultString, '%', 'Escaped %');
-    resultString = Blockly.utils.replaceMessageReferences('%%{bky_string_ref}');
+    resultString =
+        Blockly.utils.parsing.replaceMessageReferences('%%{bky_string_ref}');
     chai.assert.equal(resultString, '%{bky_string_ref}', 'Escaped %');
 
-    resultString = Blockly.utils.replaceMessageReferences('%a');
+    resultString = Blockly.utils.parsing.replaceMessageReferences('%a');
     chai.assert.equal(resultString, '%a', 'Unrecognized % escape code treated as literal');
 
-    resultString = Blockly.utils.replaceMessageReferences('%1');
+    resultString = Blockly.utils.parsing.replaceMessageReferences('%1');
     chai.assert.equal(resultString, '%1', 'Interpolation tokens ignored.');
-    resultString = Blockly.utils.replaceMessageReferences('%1 %2');
+    resultString = Blockly.utils.parsing.replaceMessageReferences('%1 %2');
     chai.assert.equal(resultString, '%1 %2', 'Interpolation tokens ignored.');
-    resultString = Blockly.utils.replaceMessageReferences('before %1 after');
+    resultString =
+        Blockly.utils.parsing.replaceMessageReferences('before %1 after');
     chai.assert.equal(resultString, 'before %1 after', 'Interpolation tokens ignored.');
 
     // Blockly.Msg.STRING_REF cases:
-    resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref}');
+    resultString =
+        Blockly.utils.parsing.replaceMessageReferences('%{bky_string_ref}');
     chai.assert.equal(resultString, 'test string', 'Message ref dereferenced.');
-    resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref} after');
+    resultString = Blockly.utils.parsing.replaceMessageReferences(
+        'before %{bky_string_ref} after');
     chai.assert.equal(resultString, 'before test string after', 'Message ref dereferenced.');
 
     // Blockly.Msg.STRING_REF_WITH_ARG cases:
-    resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref_with_arg}');
+    resultString = Blockly.utils.parsing.replaceMessageReferences(
+        '%{bky_string_ref_with_arg}');
     chai.assert.equal(resultString, 'test %1 string', 'Message ref dereferenced with argument preserved.');
-    resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref_with_arg} after');
+    resultString = Blockly.utils.parsing.replaceMessageReferences(
+        'before %{bky_string_ref_with_arg} after');
     chai.assert.equal(resultString, 'before test %1 string after', 'Message ref dereferenced with argument preserved.');
 
     // Blockly.Msg.STRING_REF_WITH_SUBREF cases:
-    resultString = Blockly.utils.replaceMessageReferences('%{bky_string_ref_with_subref}');
+    resultString = Blockly.utils.parsing.replaceMessageReferences(
+        '%{bky_string_ref_with_subref}');
     chai.assert.equal(resultString, 'test subref string', 'Message ref and subref dereferenced.');
-    resultString = Blockly.utils.replaceMessageReferences('before %{bky_string_ref_with_subref} after');
+    resultString = Blockly.utils.parsing.replaceMessageReferences(
+        'before %{bky_string_ref_with_subref} after');
     chai.assert.equal(resultString, 'before test subref string after', 'Message ref and subref dereferenced.');
   });
 
@@ -239,7 +247,7 @@ suite('Utils', function() {
   });
 
   test('XY_REGEX_', function() {
-    const regex = Blockly.utils.getRelativeXY.XY_REGEX_;
+    const regex = Blockly.utils.svgMath.TEST_ONLY.XY_REGEX;
     let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);
@@ -266,7 +274,7 @@ suite('Utils', function() {
   });
 
   test('XY_STYLE_REGEX_', function() {
-    const regex = Blockly.utils.getRelativeXY.XY_STYLE_REGEX_;
+    const regex = Blockly.utils.svgMath.TEST_ONLY.XY_STYLE_REGEX;
     let m;
     m = 'INVALID'.match(regex);
     chai.assert.isNull(m);

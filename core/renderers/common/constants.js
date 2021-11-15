@@ -20,7 +20,7 @@ const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
@@ -722,13 +722,14 @@ ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
     object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  const parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');
+  const parsedColour =
+      parsing.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
-      utils.parseBlockColour(valid['colourSecondary']).hex :
+      parsing.parseBlockColour(valid['colourSecondary']).hex :
       this.generateSecondaryColour_(valid.colourPrimary);
   valid.colourTertiary = valid['colourTertiary'] ?
-      utils.parseBlockColour(valid['colourTertiary']).hex :
+      parsing.parseBlockColour(valid['colourTertiary']).hex :
       this.generateTertiaryColour_(valid.colourPrimary);
 
   valid.hat = valid['hat'] || '';

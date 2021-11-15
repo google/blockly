@@ -20,7 +20,7 @@ goog.module('Blockly.FieldLabel');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
 
 
@@ -69,7 +69,7 @@ FieldLabel.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldLabel.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabel if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);

@@ -26,7 +26,7 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
@@ -169,7 +169,7 @@ const populate_ = function(options, rtl) {
  */
 const position_ = function(menu, e, rtl) {
   // Record windowSize and scrollOffset before adding menu.
-  const viewportBBox = utils.getViewportBBox();
+  const viewportBBox = svgMath.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
   const anchorBBox = new Rect(

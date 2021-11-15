@@ -17,7 +17,7 @@ goog.module('Blockly.Icon');
 
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -170,7 +170,7 @@ Icon.prototype.setIconLocation = function(xy) {
 Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   const blockXY = this.block_.getRelativeToSurfaceXY();
-  const iconXY = utils.getRelativeXY(
+  const iconXY = svgMath.getRelativeXY(
       /** @type {!SVGElement} */ (this.iconGroup_));
   const newXY = new Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,

@@ -25,6 +25,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');
@@ -1015,7 +1016,7 @@ Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Block.prototype.setColour = function(colour) {
-  const parsed = utils.parseBlockColour(colour);
+  const parsed = parsing.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
 };
@@ -1582,7 +1583,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['tooltip'] !== undefined) {
     const rawValue = json['tooltip'];
-    const localizedText = utils.replaceMessageReferences(rawValue);
+    const localizedText = parsing.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
@@ -1593,7 +1594,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
-    const localizedValue = utils.replaceMessageReferences(rawValue);
+    const localizedValue = parsing.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
   if (typeof json['extensions'] === 'string') {
@@ -1693,7 +1694,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  */
 Block.prototype.interpolate_ = function(
     message, args, lastDummyAlign, warningPrefix) {
-  const tokens = utils.tokenizeInterpolation(message);
+  const tokens = parsing.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 

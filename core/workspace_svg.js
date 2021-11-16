@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.WorkspaceSvg');
 
-const arrayUtils = goog.require('Blockly.utils.array');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
 const Procedures = goog.requireType('Blockly.Procedures');
@@ -26,6 +25,7 @@ const Variables = goog.requireType('Blockly.Variables');
 const VariablesDynamic = goog.requireType('Blockly.VariablesDynamic');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
+const arrayUtils = goog.require('Blockly.utils.array');
 const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');

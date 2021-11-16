@@ -15,8 +15,8 @@
  */
 goog.module('Blockly.VariableMap');
 
-const arrayUtils = goog.require('Blockly.utils.array');
 const Msg = goog.require('Blockly.Msg');
+const arrayUtils = goog.require('Blockly.utils.array');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');

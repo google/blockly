@@ -311,9 +311,16 @@ exports.svgSize = common.svgSize;
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @deprecated
  * @alias Blockly.resizeSvgContents
  */
-exports.resizeSvgContents = common.resizeSvgContents;
+const resizeSvgContents = function(workspace) {
+  deprecation.warn(
+      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
+      'Blockly.common.resizeSvgContents');
+  common.resizeSvgContents(workspace);
+};
+exports.resizeSvgContents = resizeSvgContents;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -346,7 +353,13 @@ exports.duplicate = clipboard.duplicate;
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  * @alias Blockly.hideChaff
  */
-exports.hideChaff = common.hideChaff;
+const hideChaff = function(opt_onlyClosePopups) {
+  deprecation.warn(
+      'Blockly.hideChaff', 'December 2021', 'December 2022',
+      'workspace.hideChaff');
+  common.hideChaff(opt_onlyClosePopups);
+};
+exports.hideChaff = hideChaff;
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on
@@ -385,9 +398,16 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
+ * @deprecated
  * @alias Blockly.isNumber
  */
-exports.isNumber = utils.math.isNumber;
+const isNumber = function(str) {
+  deprecation.warn(
+      'Blockly.isNumber', 'December 2021', 'December 2022',
+      'Blockly.utils.math.isNumber');
+  return utils.math.isNumber(str);
+};
+exports.isNumber = isNumber;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,

@@ -204,7 +204,7 @@ exports.resizeSvgContents = resizeSvgContents;
  * Returns the dimensions of the specified SVG image.
  * @param {!SVGElement} svg SVG image.
  * @return {!Size} Contains width and height properties.
- * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
+ * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
  * @alias Blockly.common.svgSize
  */
 const svgSize = function(svg) {

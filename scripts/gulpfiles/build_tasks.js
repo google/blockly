@@ -332,6 +332,8 @@ const buildGenerators = gulp.parallel(
 /**
  * This task updates tests/deps.js, used by blockly_uncompressed.js
  * when loading Blockly in uncompiled mode.
+ *
+ * Also updates tests/deps.mocha.js, used by the mocha test suite.
  */
 function buildDeps(done) {
   const closurePath = argv.closureLibrary ?
@@ -342,20 +344,21 @@ function buildDeps(done) {
     closurePath,
     'core',
     'blocks',
+    'generators',
   ];
 
   const testRoots = [
     ...roots,
-    'generators',
     'tests/mocha'
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
   execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
 
+  // Use grep to filter out the entries that are already in deps.js.
   const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${testArgs} > tests/deps.mocha.js`,
-      {stdio: 'inherit'});
+  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha'` +
+      ' > tests/deps.mocha.js', {stdio: 'inherit'});
   done();
 };
 

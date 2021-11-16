@@ -15,6 +15,7 @@
  */
 goog.module('Blockly.WorkspaceSvg');
 
+const arrayUtils = goog.require('Blockly.utils.array');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
 const Procedures = goog.requireType('Blockly.Procedures');
@@ -1501,7 +1502,7 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
     const state = (opt_state === undefined) || opt_state;
     // Using Set here would be great, but at the cost of IE10 support.
     if (!state) {
-      utils.arrayRemove(this.highlightedBlocks_, block);
+      arrayUtils.removeElem(this.highlightedBlocks_, block);
     } else if (this.highlightedBlocks_.indexOf(block) === -1) {
       this.highlightedBlocks_.push(block);
     }
@@ -2500,7 +2501,7 @@ WorkspaceSvg.prototype.addTopBoundedElement = function(element) {
  * @param {!IBoundedElement} element Bounded element to remove.
  */
 WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
-  utils.arrayRemove(this.topBoundedElements_, element);
+  arrayUtils.removeElem(this.topBoundedElements_, element);
 };
 
 /**

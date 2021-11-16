@@ -15,12 +15,12 @@
  */
 goog.module('Blockly.VariableMap');
 
+const arrayUtils = goog.require('Blockly.utils.array');
 const Msg = goog.require('Blockly.Msg');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Names} = goog.require('Blockly.Names');
@@ -156,7 +156,7 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
   // Finally delete the original variable, which is now unreferenced.
   eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
   // And remove it from the list.
-  utils.arrayRemove(this.variableMap_[type], variable);
+  arrayUtils.removeElem(this.variableMap_[type], variable);
 };
 
 /* End functions for renaming variables. */

@@ -16,6 +16,7 @@
 goog.module('Blockly.utils');
 
 const aria = goog.require('Blockly.utils.aria');
+const arrayUtils = goog.require('Blockly.utils.array');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -310,15 +311,13 @@ exports.getViewportBBox = getViewportBBox;
  * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
  * @alias Blockly.utils.arrayRemove
+ * @deprecated
  * @package
  */
 const arrayRemove = function(arr, value) {
-  const i = arr.indexOf(value);
-  if (i === -1) {
-    return false;
-  }
-  arr.splice(i, 1);
-  return true;
+  deprecation.warn(
+      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
+  return arrayUtils.removeElem(arr, value);
 };
 exports.arrayRemove = arrayRemove;
 

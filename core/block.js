@@ -17,6 +17,7 @@ goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const arrayUtils = goog.require('Blockly.utils.array');
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
 const common = goog.require('Blockly.common');
@@ -786,7 +787,7 @@ Block.prototype.setParent = function(newParent) {
 
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    utils.arrayRemove(this.parentBlock_.childBlocks_, this);
+    arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.

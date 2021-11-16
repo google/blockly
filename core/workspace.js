@@ -358,13 +358,13 @@ Workspace.prototype.getAllBlocks = function(ordered) {
     const topBlocks = this.getTopBlocks(true);
     blocks = [];
     for (let i = 0; i < topBlocks.length; i++) {
-      blocks.push(...topBlocks[i].getDescendants(true));
+      blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
     }
   } else {
     // Fast, but in no particular order.
     blocks = this.getTopBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
-      blocks.push(...blocks[i].getChildren(false));
+      blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
   }
 

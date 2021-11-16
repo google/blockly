@@ -814,10 +814,10 @@ Block.prototype.setParent = function(newParent) {
  * @return {!Array<!Block>} Flattened array of blocks.
  */
 Block.prototype.getDescendants = function(ordered) {
-  let blocks = [this];
+  const blocks = [this];
   const childBlocks = this.getChildren(ordered);
   for (let child, i = 0; (child = childBlocks[i]); i++) {
-    blocks.push(...child.getDescendants(ordered));
+    blocks.push.apply(blocks, child.getDescendants(ordered));
   }
   return blocks;
 };

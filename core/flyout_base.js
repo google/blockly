@@ -598,7 +598,8 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       const parsedDynamicContent = /** @type {!toolbox.FlyoutItemInfoArray} */
           (toolbox.convertFlyoutDefToJsonArray(flyoutDef));
       // Replace the element at i with the dynamic content it represents.
-      parsedContent.splice(i, 1, ...parsedDynamicContent);
+      parsedContent.splice.apply(
+          parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
     }
 

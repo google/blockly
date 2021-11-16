@@ -266,30 +266,6 @@ const is3dSupported = function() {
 exports.is3dSupported = is3dSupported;
 
 /**
- * Calls a function after the page has loaded, possibly immediately.
- * @param {function()} fn Function to run.
- * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @alias Blockly.utils.runAfterPageLoad
- */
-const runAfterPageLoad = function(fn) {
-  if (typeof document !== 'object') {
-    throw Error('runAfterPageLoad() requires browser document.');
-  }
-  if (document.readyState === 'complete') {
-    fn();  // Page has already loaded. Call immediately.
-  } else {
-    // Poll readyState.
-    const readyStateCheckInterval = setInterval(function() {
-      if (document.readyState === 'complete') {
-        clearInterval(readyStateCheckInterval);
-        fn();
-      }
-    }, 10);
-  }
-};
-exports.runAfterPageLoad = runAfterPageLoad;
-
-/**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
  * @return {!Rect} An object containing window width, height, and

@@ -231,7 +231,9 @@ const renamings = {
         checkMessageReferences: {module: 'Blockly.utils.parsing'},
         replaceMessageReferences: {module: 'Blockly.utils.parsing'},
         tokenizeInterpolation: {module: 'Blockly.utils.parsing'},
-        arrayRemove: {module: 'Blockly.utils.array', export: 'removeElem'}
+        arrayRemove: {module: 'Blockly.utils.array', export: 'removeElem'},
+        getBlockTypeCounts:
+            {module: 'Blockly.common', export: 'getBlockTypeCounts'}
       }
     }
   }

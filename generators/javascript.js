@@ -9,7 +9,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript');
+goog.module('Blockly.JavaScript');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Generator');
 goog.require('Blockly.inputTypes');
@@ -22,7 +23,7 @@ goog.require('Blockly.utils.string');
  * JavaScript code generator.
  * @type {!Blockly.Generator}
  */
-Blockly.JavaScript = new Blockly.Generator('JavaScript');
+const JavaScript = new Blockly.Generator('JavaScript');
 
 /**
  * List of illegal variable names.
@@ -31,7 +32,7 @@ Blockly.JavaScript = new Blockly.Generator('JavaScript');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.JavaScript.addReservedWords(
+JavaScript.addReservedWords(
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
     'break,case,catch,class,const,continue,debugger,default,delete,do,else,export,extends,finally,for,function,if,import,in,instanceof,new,return,super,switch,this,throw,try,typeof,var,void,while,with,yield,' +
     'enum,' +
@@ -47,84 +48,84 @@ Blockly.JavaScript.addReservedWords(
  * Order of operation ENUMs.
  * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
  */
-Blockly.JavaScript.ORDER_ATOMIC = 0;           // 0 "" ...
-Blockly.JavaScript.ORDER_NEW = 1.1;            // new
-Blockly.JavaScript.ORDER_MEMBER = 1.2;         // . []
-Blockly.JavaScript.ORDER_FUNCTION_CALL = 2;    // ()
-Blockly.JavaScript.ORDER_INCREMENT = 3;        // ++
-Blockly.JavaScript.ORDER_DECREMENT = 3;        // --
-Blockly.JavaScript.ORDER_BITWISE_NOT = 4.1;    // ~
-Blockly.JavaScript.ORDER_UNARY_PLUS = 4.2;     // +
-Blockly.JavaScript.ORDER_UNARY_NEGATION = 4.3; // -
-Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
-Blockly.JavaScript.ORDER_TYPEOF = 4.5;         // typeof
-Blockly.JavaScript.ORDER_VOID = 4.6;           // void
-Blockly.JavaScript.ORDER_DELETE = 4.7;         // delete
-Blockly.JavaScript.ORDER_AWAIT = 4.8;          // await
-Blockly.JavaScript.ORDER_EXPONENTIATION = 5.0; // **
-Blockly.JavaScript.ORDER_MULTIPLICATION = 5.1; // *
-Blockly.JavaScript.ORDER_DIVISION = 5.2;       // /
-Blockly.JavaScript.ORDER_MODULUS = 5.3;        // %
-Blockly.JavaScript.ORDER_SUBTRACTION = 6.1;    // -
-Blockly.JavaScript.ORDER_ADDITION = 6.2;       // +
-Blockly.JavaScript.ORDER_BITWISE_SHIFT = 7;    // << >> >>>
-Blockly.JavaScript.ORDER_RELATIONAL = 8;       // < <= > >=
-Blockly.JavaScript.ORDER_IN = 8;               // in
-Blockly.JavaScript.ORDER_INSTANCEOF = 8;       // instanceof
-Blockly.JavaScript.ORDER_EQUALITY = 9;         // == != === !==
-Blockly.JavaScript.ORDER_BITWISE_AND = 10;     // &
-Blockly.JavaScript.ORDER_BITWISE_XOR = 11;     // ^
-Blockly.JavaScript.ORDER_BITWISE_OR = 12;      // |
-Blockly.JavaScript.ORDER_LOGICAL_AND = 13;     // &&
-Blockly.JavaScript.ORDER_LOGICAL_OR = 14;      // ||
-Blockly.JavaScript.ORDER_CONDITIONAL = 15;     // ?:
-Blockly.JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
-Blockly.JavaScript.ORDER_YIELD = 17;           // yield
-Blockly.JavaScript.ORDER_COMMA = 18;           // ,
-Blockly.JavaScript.ORDER_NONE = 99;            // (...)
+JavaScript.ORDER_ATOMIC = 0;           // 0 "" ...
+JavaScript.ORDER_NEW = 1.1;            // new
+JavaScript.ORDER_MEMBER = 1.2;         // . []
+JavaScript.ORDER_FUNCTION_CALL = 2;    // ()
+JavaScript.ORDER_INCREMENT = 3;        // ++
+JavaScript.ORDER_DECREMENT = 3;        // --
+JavaScript.ORDER_BITWISE_NOT = 4.1;    // ~
+JavaScript.ORDER_UNARY_PLUS = 4.2;     // +
+JavaScript.ORDER_UNARY_NEGATION = 4.3; // -
+JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
+JavaScript.ORDER_TYPEOF = 4.5;         // typeof
+JavaScript.ORDER_VOID = 4.6;           // void
+JavaScript.ORDER_DELETE = 4.7;         // delete
+JavaScript.ORDER_AWAIT = 4.8;          // await
+JavaScript.ORDER_EXPONENTIATION = 5.0; // **
+JavaScript.ORDER_MULTIPLICATION = 5.1; // *
+JavaScript.ORDER_DIVISION = 5.2;       // /
+JavaScript.ORDER_MODULUS = 5.3;        // %
+JavaScript.ORDER_SUBTRACTION = 6.1;    // -
+JavaScript.ORDER_ADDITION = 6.2;       // +
+JavaScript.ORDER_BITWISE_SHIFT = 7;    // << >> >>>
+JavaScript.ORDER_RELATIONAL = 8;       // < <= > >=
+JavaScript.ORDER_IN = 8;               // in
+JavaScript.ORDER_INSTANCEOF = 8;       // instanceof
+JavaScript.ORDER_EQUALITY = 9;         // == != === !==
+JavaScript.ORDER_BITWISE_AND = 10;     // &
+JavaScript.ORDER_BITWISE_XOR = 11;     // ^
+JavaScript.ORDER_BITWISE_OR = 12;      // |
+JavaScript.ORDER_LOGICAL_AND = 13;     // &&
+JavaScript.ORDER_LOGICAL_OR = 14;      // ||
+JavaScript.ORDER_CONDITIONAL = 15;     // ?:
+JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
+JavaScript.ORDER_YIELD = 17;           // yield
+JavaScript.ORDER_COMMA = 18;           // ,
+JavaScript.ORDER_NONE = 99;            // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
  * @type {!Array<!Array<number>>}
  */
-Blockly.JavaScript.ORDER_OVERRIDES = [
+JavaScript.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar
   // (foo())[0] -> foo()[0]
-  [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_MEMBER],
+  [JavaScript.ORDER_FUNCTION_CALL, JavaScript.ORDER_MEMBER],
   // (foo())() -> foo()()
-  [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_FUNCTION_CALL],
+  [JavaScript.ORDER_FUNCTION_CALL, JavaScript.ORDER_FUNCTION_CALL],
   // (foo.bar).baz -> foo.bar.baz
   // (foo.bar)[0] -> foo.bar[0]
   // (foo[0]).bar -> foo[0].bar
   // (foo[0])[1] -> foo[0][1]
-  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_MEMBER],
+  [JavaScript.ORDER_MEMBER, JavaScript.ORDER_MEMBER],
   // (foo.bar)() -> foo.bar()
   // (foo[0])() -> foo[0]()
-  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL],
+  [JavaScript.ORDER_MEMBER, JavaScript.ORDER_FUNCTION_CALL],
 
   // !(!foo) -> !!foo
-  [Blockly.JavaScript.ORDER_LOGICAL_NOT, Blockly.JavaScript.ORDER_LOGICAL_NOT],
+  [JavaScript.ORDER_LOGICAL_NOT, JavaScript.ORDER_LOGICAL_NOT],
   // a * (b * c) -> a * b * c
-  [Blockly.JavaScript.ORDER_MULTIPLICATION, Blockly.JavaScript.ORDER_MULTIPLICATION],
+  [JavaScript.ORDER_MULTIPLICATION, JavaScript.ORDER_MULTIPLICATION],
   // a + (b + c) -> a + b + c
-  [Blockly.JavaScript.ORDER_ADDITION, Blockly.JavaScript.ORDER_ADDITION],
+  [JavaScript.ORDER_ADDITION, JavaScript.ORDER_ADDITION],
   // a && (b && c) -> a && b && c
-  [Blockly.JavaScript.ORDER_LOGICAL_AND, Blockly.JavaScript.ORDER_LOGICAL_AND],
+  [JavaScript.ORDER_LOGICAL_AND, JavaScript.ORDER_LOGICAL_AND],
   // a || (b || c) -> a || b || c
-  [Blockly.JavaScript.ORDER_LOGICAL_OR, Blockly.JavaScript.ORDER_LOGICAL_OR]
+  [JavaScript.ORDER_LOGICAL_OR, JavaScript.ORDER_LOGICAL_OR]
 ];
 
 /**
  * Whether the init method has been called.
  * @type {?boolean}
  */
-Blockly.JavaScript.isInitialized = false;
+JavaScript.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.JavaScript.init = function(workspace) {
+JavaScript.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
@@ -165,7 +166,7 @@ Blockly.JavaScript.init = function(workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.JavaScript.finish = function(code) {
+JavaScript.finish = function(code) {
   // Convert the definitions dictionary into a list.
   const definitions = Blockly.utils.object.values(this.definitions_);
   // Call Blockly.Generator's finish.
@@ -182,7 +183,7 @@ Blockly.JavaScript.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.JavaScript.scrubNakedValue = function(line) {
+JavaScript.scrubNakedValue = function(line) {
   return line + ';\n';
 };
 
@@ -193,7 +194,7 @@ Blockly.JavaScript.scrubNakedValue = function(line) {
  * @return {string} JavaScript string.
  * @protected
  */
-Blockly.JavaScript.quote_ = function(string) {
+JavaScript.quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
   string = string.replace(/\\/g, '\\\\')
@@ -209,7 +210,7 @@ Blockly.JavaScript.quote_ = function(string) {
  * @return {string} JavaScript string.
  * @protected
  */
-Blockly.JavaScript.multiline_quote_ = function(string) {
+JavaScript.multiline_quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
   const lines = string.split(/\n/g).map(this.quote_);
@@ -226,7 +227,7 @@ Blockly.JavaScript.multiline_quote_ = function(string) {
  * @return {string} JavaScript code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
+JavaScript.scrub_ = function(block, code, opt_thisOnly) {
   let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -264,7 +265,7 @@ Blockly.JavaScript.scrub_ = function(block, code, opt_thisOnly) {
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
+JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   let delta = opt_delta || 0;
   let order = opt_order || this.ORDER_NONE;
@@ -316,3 +317,5 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   return at;
 };
+
+exports = JavaScript;

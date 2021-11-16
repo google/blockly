@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.variablesDynamic');
+goog.module('Blockly.JavaScript.variablesDynamic');
 
 goog.require('Blockly.JavaScript');
 goog.require('Blockly.JavaScript.variables');

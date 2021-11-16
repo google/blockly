@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.loops');
+goog.module('Blockly.JavaScript.loops');
 
 goog.require('Blockly.JavaScript');
 

@@ -22,6 +22,7 @@ const colourUtils = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const extensions = goog.require('Blockly.Extensions');
 const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const math = goog.require('Blockly.utils.math');
@@ -366,3 +367,17 @@ const parseBlockColour = function(colour) {
   return parsing.parseBlockColour(colour);
 };
 exports.parseBlockColour = parseBlockColour;
+
+/**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @deprecated
+ * @alias Blockly.utils.runAfterPageLoad
+ */
+const runAfterPageLoad = function(fn) {
+  deprecation.warn(
+      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
+  extensions.runAfterPageLoad(fn);
+};
+exports.runAfterPageLoad = runAfterPageLoad;

@@ -233,7 +233,9 @@ const renamings = {
         tokenizeInterpolation: {module: 'Blockly.utils.parsing'},
         arrayRemove: {module: 'Blockly.utils.array', export: 'removeElem'},
         getBlockTypeCounts:
-            {module: 'Blockly.common', export: 'getBlockTypeCounts'}
+            {module: 'Blockly.common', export: 'getBlockTypeCounts'},
+        runAfterPageLoad:
+            {module: 'Blockly.Extensions', export: 'runAfterPageLoad'}
       }
     }
   }

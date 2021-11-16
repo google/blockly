@@ -348,6 +348,7 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
  * Calls a function after the page has loaded, possibly immediately.
  * @param {function()} fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @package
  */
 const runAfterPageLoad = function(fn) {
   if (typeof document !== 'object') {
@@ -365,6 +366,7 @@ const runAfterPageLoad = function(fn) {
     }, 10);
   }
 };
+exports.runAfterPageLoad = runAfterPageLoad;
 
 /**
  * Builds an extension function that will map a dropdown value to a tooltip

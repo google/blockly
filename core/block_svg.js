@@ -29,7 +29,6 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -973,7 +972,7 @@ BlockSvg.prototype.toCopyData = function() {
     saveInfo: /** @type {!blocks.State} */ (
         blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
-    typeCounts: utils.getBlockTypeCounts(this, true),
+    typeCounts: common.getBlockTypeCounts(this, true),
   };
 };
 

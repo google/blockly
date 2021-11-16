@@ -19,6 +19,7 @@ const aria = goog.require('Blockly.utils.aria');
 const arrayUtils = goog.require('Blockly.utils.array');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
+const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const global = goog.require('Blockly.utils.global');
@@ -344,26 +345,14 @@ exports.getDocumentScroll = getDocumentScroll;
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
  * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @deprecated
  * @alias Blockly.utils.getBlockTypeCounts
  */
 const getBlockTypeCounts = function(block, opt_stripFollowing) {
-  const typeCountsMap = Object.create(null);
-  const descendants = block.getDescendants(true);
-  if (opt_stripFollowing) {
-    const nextBlock = block.getNextBlock();
-    if (nextBlock) {
-      const index = descendants.indexOf(nextBlock);
-      descendants.splice(index, descendants.length - index);
-    }
-  }
-  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
-    if (typeCountsMap[checkBlock.type]) {
-      typeCountsMap[checkBlock.type]++;
-    } else {
-      typeCountsMap[checkBlock.type] = 1;
-    }
-  }
-  return typeCountsMap;
+  deprecation.warn(
+      'Blockly.utils.getBlockTypeCounts', 'December 2021', 'December 2022',
+      'Blockly.common.getBlockTypeCounts');
+  return common.getBlockTypeCounts(block, opt_stripFollowing);
 };
 exports.getBlockTypeCounts = getBlockTypeCounts;
 

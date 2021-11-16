@@ -230,7 +230,12 @@ const renamings = {
         parseBlockColour: {module: 'Blockly.utils.parsing'},
         checkMessageReferences: {module: 'Blockly.utils.parsing'},
         replaceMessageReferences: {module: 'Blockly.utils.parsing'},
-        tokenizeInterpolation: {module: 'Blockly.utils.parsing'}
+        tokenizeInterpolation: {module: 'Blockly.utils.parsing'},
+        arrayRemove: {module: 'Blockly.utils.array', export: 'removeElem'},
+        getBlockTypeCounts:
+            {module: 'Blockly.common', export: 'getBlockTypeCounts'},
+        runAfterPageLoad:
+            {module: 'Blockly.Extensions', export: 'runAfterPageLoad'}
       }
     }
   }

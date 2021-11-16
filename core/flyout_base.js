@@ -20,12 +20,12 @@ const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -40,6 +40,8 @@ const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
 const {IFlyout} = goog.require('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
+/* eslint-disable-next-line no-unused-vars */
+const {Rect} = goog.require('Blockly.utils.Rect');
 const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const {Svg} = goog.require('Blockly.utils.Svg');
 const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
@@ -1032,7 +1034,7 @@ Flyout.prototype.filterForCapacity_ = function() {
   for (let i = 0, block; (block = blocks[i]); i++) {
     if (this.permanentlyDisabled_.indexOf(block) === -1) {
       const enable = this.targetWorkspace.isCapacityAvailable(
-          utils.getBlockTypeCounts(block));
+          common.getBlockTypeCounts(block));
       while (block) {
         block.setEnabled(enable);
         block = block.getNextBlock();
@@ -1128,7 +1130,7 @@ Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {utils.Rect} The component's bounding box.
+ * @return {Rect} The component's bounding box.
  */
 Flyout.prototype.getClientRect;
 

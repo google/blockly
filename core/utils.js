@@ -16,10 +16,13 @@
 goog.module('Blockly.utils');
 
 const aria = goog.require('Blockly.utils.aria');
+const arrayUtils = goog.require('Blockly.utils.array');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
+const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+const extensions = goog.require('Blockly.Extensions');
 const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const math = goog.require('Blockly.utils.math');
@@ -264,30 +267,6 @@ const is3dSupported = function() {
 exports.is3dSupported = is3dSupported;
 
 /**
- * Calls a function after the page has loaded, possibly immediately.
- * @param {function()} fn Function to run.
- * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @alias Blockly.utils.runAfterPageLoad
- */
-const runAfterPageLoad = function(fn) {
-  if (typeof document !== 'object') {
-    throw Error('runAfterPageLoad() requires browser document.');
-  }
-  if (document.readyState === 'complete') {
-    fn();  // Page has already loaded. Call immediately.
-  } else {
-    // Poll readyState.
-    const readyStateCheckInterval = setInterval(function() {
-      if (document.readyState === 'complete') {
-        clearInterval(readyStateCheckInterval);
-        fn();
-      }
-    }, 10);
-  }
-};
-exports.runAfterPageLoad = runAfterPageLoad;
-
-/**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
  * @return {!Rect} An object containing window width, height, and
@@ -310,15 +289,13 @@ exports.getViewportBBox = getViewportBBox;
  * @param {*} value Value to remove.
  * @return {boolean} True if an element was removed.
  * @alias Blockly.utils.arrayRemove
+ * @deprecated
  * @package
  */
 const arrayRemove = function(arr, value) {
-  const i = arr.indexOf(value);
-  if (i === -1) {
-    return false;
-  }
-  arr.splice(i, 1);
-  return true;
+  deprecation.warn(
+      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
+  return arrayUtils.removeElem(arr, value);
 };
 exports.arrayRemove = arrayRemove;
 
@@ -345,26 +322,14 @@ exports.getDocumentScroll = getDocumentScroll;
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
  * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @deprecated
  * @alias Blockly.utils.getBlockTypeCounts
  */
 const getBlockTypeCounts = function(block, opt_stripFollowing) {
-  const typeCountsMap = Object.create(null);
-  const descendants = block.getDescendants(true);
-  if (opt_stripFollowing) {
-    const nextBlock = block.getNextBlock();
-    if (nextBlock) {
-      const index = descendants.indexOf(nextBlock);
-      descendants.splice(index, descendants.length - index);
-    }
-  }
-  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
-    if (typeCountsMap[checkBlock.type]) {
-      typeCountsMap[checkBlock.type]++;
-    } else {
-      typeCountsMap[checkBlock.type] = 1;
-    }
-  }
-  return typeCountsMap;
+  deprecation.warn(
+      'Blockly.utils.getBlockTypeCounts', 'December 2021', 'December 2022',
+      'Blockly.common.getBlockTypeCounts');
+  return common.getBlockTypeCounts(block, opt_stripFollowing);
 };
 exports.getBlockTypeCounts = getBlockTypeCounts;
 
@@ -402,3 +367,17 @@ const parseBlockColour = function(colour) {
   return parsing.parseBlockColour(colour);
 };
 exports.parseBlockColour = parseBlockColour;
+
+/**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @deprecated
+ * @alias Blockly.utils.runAfterPageLoad
+ */
+const runAfterPageLoad = function(fn) {
+  deprecation.warn(
+      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
+  extensions.runAfterPageLoad(fn);
+};
+exports.runAfterPageLoad = runAfterPageLoad;

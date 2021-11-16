@@ -17,13 +17,13 @@ goog.module('Blockly.Workspace');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const arrayUtils = goog.require('Blockly.utils.array');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const math = goog.require('Blockly.utils.math');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
@@ -220,7 +220,7 @@ Workspace.prototype.addTopBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTopBlock = function(block) {
-  if (!utils.arrayRemove(this.topBlocks_, block)) {
+  if (!arrayUtils.removeElem(this.topBlocks_, block)) {
     throw Error('Block not present in workspace\'s list of top-most blocks.');
   }
 };
@@ -260,7 +260,7 @@ Workspace.prototype.addTypedBlock = function(block) {
  * @param {!Block} block Block to remove.
  */
 Workspace.prototype.removeTypedBlock = function(block) {
-  utils.arrayRemove(this.typedBlocksDB_[block.type], block);
+  arrayUtils.removeElem(this.typedBlocksDB_[block.type], block);
   if (!this.typedBlocksDB_[block.type].length) {
     delete this.typedBlocksDB_[block.type];
   }
@@ -315,7 +315,7 @@ Workspace.prototype.addTopComment = function(comment) {
  * @package
  */
 Workspace.prototype.removeTopComment = function(comment) {
-  if (!utils.arrayRemove(this.topComments_, comment)) {
+  if (!arrayUtils.removeElem(this.topComments_, comment)) {
     throw Error(
         'Comment not present in workspace\'s list of top-most ' +
         'comments.');
@@ -678,7 +678,7 @@ Workspace.prototype.addChangeListener = function(func) {
  * @param {!Function} func Function to stop calling.
  */
 Workspace.prototype.removeChangeListener = function(func) {
-  utils.arrayRemove(this.listeners_, func);
+  arrayUtils.removeElem(this.listeners_, func);
 };
 
 /**

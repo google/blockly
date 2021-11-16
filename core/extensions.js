@@ -22,7 +22,6 @@
 goog.module('Blockly.Extensions');
 
 const parsing = goog.require('Blockly.utils.parsing');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Mutator');
@@ -346,6 +345,30 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
 };
 
 /**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @package
+ */
+const runAfterPageLoad = function(fn) {
+  if (typeof document !== 'object') {
+    throw Error('runAfterPageLoad() requires browser document.');
+  }
+  if (document.readyState === 'complete') {
+    fn();  // Page has already loaded. Call immediately.
+  } else {
+    // Poll readyState.
+    const readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === 'complete') {
+        clearInterval(readyStateCheckInterval);
+        fn();
+      }
+    }, 10);
+  }
+};
+exports.runAfterPageLoad = runAfterPageLoad;
+
+/**
  * Builds an extension function that will map a dropdown value to a tooltip
  * string.
  *
@@ -371,10 +394,10 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
 
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
-  // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
+  // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
   if (typeof document === 'object') {  // Relies on document.readyState
-    utils.runAfterPageLoad(function() {
+    runAfterPageLoad(function() {
       for (const key in lookupTable) {
         // Will print warnings if reference is missing.
         parsing.checkMessageReferences(lookupTable[key]);
@@ -451,10 +474,10 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
 const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
-  // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
+  // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
   if (typeof document === 'object') {  // Relies on document.readyState
-    utils.runAfterPageLoad(function() {
+    runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
       parsing.checkMessageReferences(msgTemplate);
     });

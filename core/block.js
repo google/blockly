@@ -19,6 +19,7 @@ goog.module('Blockly.Block');
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
+const arrayUtils = goog.require('Blockly.utils.array');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -26,7 +27,6 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
-const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
@@ -786,7 +786,7 @@ Block.prototype.setParent = function(newParent) {
 
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    utils.arrayRemove(this.parentBlock_.childBlocks_, this);
+    arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.
@@ -869,7 +869,7 @@ Block.prototype.isDuplicatable = function() {
     return true;
   }
   return this.workspace.isCapacityAvailable(
-      utils.getBlockTypeCounts(this, true));
+      common.getBlockTypeCounts(this, true));
 };
 
 /**

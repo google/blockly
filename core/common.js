@@ -22,6 +22,8 @@ const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
@@ -152,3 +154,34 @@ exports.svgResize = svgResize;
  * @type {!Array<!Connection>}
  */
 exports.draggingConnections = [];
+
+/**
+ * Get a map of all the block's descendants mapping their type to the number of
+ *    children with that type.
+ * @param {!Block} block The block to map.
+ * @param {boolean=} opt_stripFollowing Optionally ignore all following
+ *    statements (blocks that are not inside a value or statement input
+ *    of the block).
+ * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @alias Blockly.common.getBlockTypeCounts
+ */
+const getBlockTypeCounts = function(block, opt_stripFollowing) {
+  const typeCountsMap = Object.create(null);
+  const descendants = block.getDescendants(true);
+  if (opt_stripFollowing) {
+    const nextBlock = block.getNextBlock();
+    if (nextBlock) {
+      const index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+  }
+  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
+    if (typeCountsMap[checkBlock.type]) {
+      typeCountsMap[checkBlock.type]++;
+    } else {
+      typeCountsMap[checkBlock.type] = 1;
+    }
+  }
+  return typeCountsMap;
+};
+exports.getBlockTypeCounts = getBlockTypeCounts;

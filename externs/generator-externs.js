@@ -15,5 +15,10 @@ goog.provide('Blockly.inputTypes');
 goog.provide('Blockly.utils.global');
 goog.provide('Blockly.utils.object');
 goog.provide('Blockly.utils.string');
+goog.provide('Blockly.Names');
+goog.provide('Blockly.Variables');
+goog.provide('Blockly.Workspace');
+goog.provide('Blockly.Block');
+goog.provide('Blockly.Constants.Loops');
 
 var Blockly;

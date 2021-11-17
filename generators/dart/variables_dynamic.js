@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.variablesDynamic');
+goog.module('Blockly.Dart.variablesDynamic');
 
 goog.require('Blockly.Dart');
 goog.require('Blockly.Dart.variables');

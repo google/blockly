@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.logic');
+goog.module('Blockly.Dart.logic');
 
 goog.require('Blockly.Dart');
 

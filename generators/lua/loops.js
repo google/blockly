@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Lua.loops');
+goog.module('Blockly.Lua.loops');
 
 goog.require('Blockly.Lua');
 

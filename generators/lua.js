@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Lua');
+goog.module('Blockly.Lua');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Generator');
 goog.require('Blockly.inputTypes');
@@ -22,7 +23,7 @@ goog.require('Blockly.utils.string');
  * Lua code generator.
  * @type {!Blockly.Generator}
  */
-Blockly.Lua = new Blockly.Generator('Lua');
+const Lua = new Blockly.Generator('Lua');
 
 /**
  * List of illegal variable names.
@@ -31,7 +32,7 @@ Blockly.Lua = new Blockly.Generator('Lua');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Lua.addReservedWords(
+Lua.addReservedWords(
     // Special character
     '_,' +
     // From theoriginalbit's script:
@@ -61,18 +62,18 @@ Blockly.Lua.addReservedWords(
  * Order of operation ENUMs.
  * http://www.lua.org/manual/5.3/manual.html#3.4.8
  */
-Blockly.Lua.ORDER_ATOMIC = 0;          // literals
+Lua.ORDER_ATOMIC = 0;          // literals
 // The next level was not explicit in documentation and inferred by Ellen.
-Blockly.Lua.ORDER_HIGH = 1;            // Function calls, tables[]
-Blockly.Lua.ORDER_EXPONENTIATION = 2;  // ^
-Blockly.Lua.ORDER_UNARY = 3;           // not # - ~
-Blockly.Lua.ORDER_MULTIPLICATIVE = 4;  // * / %
-Blockly.Lua.ORDER_ADDITIVE = 5;        // + -
-Blockly.Lua.ORDER_CONCATENATION = 6;   // ..
-Blockly.Lua.ORDER_RELATIONAL = 7;      // < > <=  >= ~= ==
-Blockly.Lua.ORDER_AND = 8;             // and
-Blockly.Lua.ORDER_OR = 9;              // or
-Blockly.Lua.ORDER_NONE = 99;
+Lua.ORDER_HIGH = 1;            // Function calls, tables[]
+Lua.ORDER_EXPONENTIATION = 2;  // ^
+Lua.ORDER_UNARY = 3;           // not # - ~
+Lua.ORDER_MULTIPLICATIVE = 4;  // * / %
+Lua.ORDER_ADDITIVE = 5;        // + -
+Lua.ORDER_CONCATENATION = 6;   // ..
+Lua.ORDER_RELATIONAL = 7;      // < > <=  >= ~= ==
+Lua.ORDER_AND = 8;             // and
+Lua.ORDER_OR = 9;              // or
+Lua.ORDER_NONE = 99;
 
 /**
  * Note: Lua is not supporting zero-indexing since the language itself is
@@ -84,13 +85,13 @@ Blockly.Lua.ORDER_NONE = 99;
  * Whether the init method has been called.
  * @type {?boolean}
  */
-Blockly.Lua.isInitialized = false;
+Lua.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Lua.init = function(workspace) {
+Lua.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
@@ -111,7 +112,7 @@ Blockly.Lua.init = function(workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Lua.finish = function(code) {
+Lua.finish = function(code) {
   // Convert the definitions dictionary into a list.
   const definitions = Blockly.utils.object.values(this.definitions_);
   // Call Blockly.Generator's finish.
@@ -130,7 +131,7 @@ Blockly.Lua.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Lua.scrubNakedValue = function(line) {
+Lua.scrubNakedValue = function(line) {
   return 'local _ = ' + line + '\n';
 };
 
@@ -141,7 +142,7 @@ Blockly.Lua.scrubNakedValue = function(line) {
  * @return {string} Lua string.
  * @protected
  */
-Blockly.Lua.quote_ = function(string) {
+Lua.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/'/g, '\\\'');
@@ -155,7 +156,7 @@ Blockly.Lua.quote_ = function(string) {
  * @return {string} Lua string.
  * @protected
  */
-Blockly.Lua.multiline_quote_ = function(string) {
+Lua.multiline_quote_ = function(string) {
   const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // .. '\n' ..
@@ -172,7 +173,7 @@ Blockly.Lua.multiline_quote_ = function(string) {
  * @return {string} Lua code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
+Lua.scrub_ = function(block, code, opt_thisOnly) {
   let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -200,3 +201,5 @@ Blockly.Lua.scrub_ = function(block, code, opt_thisOnly) {
   const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+exports = Lua;

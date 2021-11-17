@@ -371,22 +371,6 @@ exports.hideChaff = hideChaff;
 exports.getMainWorkspace = common.getMainWorkspace;
 
 /**
-<<<<<<< HEAD
- * Helper function for defining a block from JSON.  The resulting function has
- * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function()} A function that calls jsonInit with the correct value
- *     of jsonDef.
- */
-const jsonInitFactory = function(jsonDef) {
-  return /** @this {Block} */ function() {
-    this.jsonInit(jsonDef);
-  };
-};
-
-/**
-=======
->>>>>>> 3a06cd866 (chore: move remaining function definitions out of blockly.js)
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.

@@ -11,12 +11,11 @@
 
 goog.module('Blockly.JavaScript.variablesDynamic');
 
-goog.require('Blockly.JavaScript');
-goog.require('Blockly.JavaScript.variables');
+const JavaScript = goog.require('Blockly.JavaScript');
+// Required for side effects.
+const variables = goog.require('Blockly.JavaScript.variables');
 
 
 // JavaScript is dynamically typed.
-Blockly.JavaScript['variables_get_dynamic'] =
-    Blockly.JavaScript['variables_get'];
-Blockly.JavaScript['variables_set_dynamic'] =
-    Blockly.JavaScript['variables_set'];
+JavaScript['variables_get_dynamic'] = JavaScript['variables_get'];
+JavaScript['variables_set_dynamic'] = JavaScript['variables_set'];

@@ -9,7 +9,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Python');
+goog.module('Blockly.Python');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Generator');
 goog.require('Blockly.inputTypes');
@@ -20,7 +21,7 @@ goog.require('Blockly.utils.string');
  * Python code generator.
  * @type {!Blockly.Generator}
  */
-Blockly.Python = new Blockly.Generator('Python');
+const Python = new Blockly.Generator('Python');
 
 /**
  * List of illegal variable names.
@@ -29,7 +30,7 @@ Blockly.Python = new Blockly.Generator('Python');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Python.addReservedWords(
+Python.addReservedWords(
     // import keyword
     // print(','.join(sorted(keyword.kwlist)))
     // https://docs.python.org/3/reference/lexical_analysis.html#keywords
@@ -75,68 +76,68 @@ Blockly.Python.addReservedWords(
  * Order of operation ENUMs.
  * http://docs.python.org/reference/expressions.html#summary
  */
-Blockly.Python.ORDER_ATOMIC = 0;            // 0 "" ...
-Blockly.Python.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
-Blockly.Python.ORDER_STRING_CONVERSION = 1; // `expression...`
-Blockly.Python.ORDER_MEMBER = 2.1;          // . []
-Blockly.Python.ORDER_FUNCTION_CALL = 2.2;   // ()
-Blockly.Python.ORDER_EXPONENTIATION = 3;    // **
-Blockly.Python.ORDER_UNARY_SIGN = 4;        // + -
-Blockly.Python.ORDER_BITWISE_NOT = 4;       // ~
-Blockly.Python.ORDER_MULTIPLICATIVE = 5;    // * / // %
-Blockly.Python.ORDER_ADDITIVE = 6;          // + -
-Blockly.Python.ORDER_BITWISE_SHIFT = 7;     // << >>
-Blockly.Python.ORDER_BITWISE_AND = 8;       // &
-Blockly.Python.ORDER_BITWISE_XOR = 9;       // ^
-Blockly.Python.ORDER_BITWISE_OR = 10;       // |
-Blockly.Python.ORDER_RELATIONAL = 11;       // in, not in, is, is not,
+Python.ORDER_ATOMIC = 0;            // 0 "" ...
+Python.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
+Python.ORDER_STRING_CONVERSION = 1; // `expression...`
+Python.ORDER_MEMBER = 2.1;          // . []
+Python.ORDER_FUNCTION_CALL = 2.2;   // ()
+Python.ORDER_EXPONENTIATION = 3;    // **
+Python.ORDER_UNARY_SIGN = 4;        // + -
+Python.ORDER_BITWISE_NOT = 4;       // ~
+Python.ORDER_MULTIPLICATIVE = 5;    // * / // %
+Python.ORDER_ADDITIVE = 6;          // + -
+Python.ORDER_BITWISE_SHIFT = 7;     // << >>
+Python.ORDER_BITWISE_AND = 8;       // &
+Python.ORDER_BITWISE_XOR = 9;       // ^
+Python.ORDER_BITWISE_OR = 10;       // |
+Python.ORDER_RELATIONAL = 11;       // in, not in, is, is not,
                                             //     <, <=, >, >=, <>, !=, ==
-Blockly.Python.ORDER_LOGICAL_NOT = 12;      // not
-Blockly.Python.ORDER_LOGICAL_AND = 13;      // and
-Blockly.Python.ORDER_LOGICAL_OR = 14;       // or
-Blockly.Python.ORDER_CONDITIONAL = 15;      // if else
-Blockly.Python.ORDER_LAMBDA = 16;           // lambda
-Blockly.Python.ORDER_NONE = 99;             // (...)
+Python.ORDER_LOGICAL_NOT = 12;      // not
+Python.ORDER_LOGICAL_AND = 13;      // and
+Python.ORDER_LOGICAL_OR = 14;       // or
+Python.ORDER_CONDITIONAL = 15;      // if else
+Python.ORDER_LAMBDA = 16;           // lambda
+Python.ORDER_NONE = 99;             // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
  * @type {!Array<!Array<number>>}
  */
-Blockly.Python.ORDER_OVERRIDES = [
+Python.ORDER_OVERRIDES = [
   // (foo()).bar -> foo().bar
   // (foo())[0] -> foo()[0]
-  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_MEMBER],
+  [Python.ORDER_FUNCTION_CALL, Python.ORDER_MEMBER],
   // (foo())() -> foo()()
-  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_FUNCTION_CALL],
+  [Python.ORDER_FUNCTION_CALL, Python.ORDER_FUNCTION_CALL],
   // (foo.bar).baz -> foo.bar.baz
   // (foo.bar)[0] -> foo.bar[0]
   // (foo[0]).bar -> foo[0].bar
   // (foo[0])[1] -> foo[0][1]
-  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_MEMBER],
+  [Python.ORDER_MEMBER, Python.ORDER_MEMBER],
   // (foo.bar)() -> foo.bar()
   // (foo[0])() -> foo[0]()
-  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL],
+  [Python.ORDER_MEMBER, Python.ORDER_FUNCTION_CALL],
 
   // not (not foo) -> not not foo
-  [Blockly.Python.ORDER_LOGICAL_NOT, Blockly.Python.ORDER_LOGICAL_NOT],
+  [Python.ORDER_LOGICAL_NOT, Python.ORDER_LOGICAL_NOT],
   // a and (b and c) -> a and b and c
-  [Blockly.Python.ORDER_LOGICAL_AND, Blockly.Python.ORDER_LOGICAL_AND],
+  [Python.ORDER_LOGICAL_AND, Python.ORDER_LOGICAL_AND],
   // a or (b or c) -> a or b or c
-  [Blockly.Python.ORDER_LOGICAL_OR, Blockly.Python.ORDER_LOGICAL_OR]
+  [Python.ORDER_LOGICAL_OR, Python.ORDER_LOGICAL_OR]
 ];
 
 /**
  * Whether the init method has been called.
  * @type {?boolean}
  */
-Blockly.Python.isInitialized = false;
+Python.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  * @this {Blockly.Generator}
  */
-Blockly.Python.init = function(workspace) {
+Python.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
@@ -179,7 +180,7 @@ Blockly.Python.init = function(workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Python.finish = function(code) {
+Python.finish = function(code) {
   // Convert the definitions dictionary into a list.
   const imports = [];
   const definitions = [];
@@ -206,7 +207,7 @@ Blockly.Python.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Python.scrubNakedValue = function(line) {
+Python.scrubNakedValue = function(line) {
   return line + '\n';
 };
 
@@ -216,7 +217,7 @@ Blockly.Python.scrubNakedValue = function(line) {
  * @return {string} Python string.
  * @protected
  */
-Blockly.Python.quote_ = function(string) {
+Python.quote_ = function(string) {
   // Can't use goog.string.quote since % must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n');
@@ -240,7 +241,7 @@ Blockly.Python.quote_ = function(string) {
  * @return {string} Python string.
  * @protected
  */
-Blockly.Python.multiline_quote_ = function(string) {
+Python.multiline_quote_ = function(string) {
   const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
@@ -257,7 +258,7 @@ Blockly.Python.multiline_quote_ = function(string) {
  * @return {string} Python code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
+Python.scrub_ = function(block, code, opt_thisOnly) {
   let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -295,7 +296,7 @@ Blockly.Python.scrub_ = function(block, code, opt_thisOnly) {
  * @param {boolean=} opt_negate Whether to negate the value.
  * @return {string|number}
  */
-Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
+Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   let delta = opt_delta || 0;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
@@ -325,3 +326,5 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   }
   return at;
 };
+
+exports = Python;

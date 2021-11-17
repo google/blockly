@@ -17,6 +17,7 @@
  */
 goog.module('Blockly.common');
 
+const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -185,3 +186,48 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
   return typeCountsMap;
 };
 exports.getBlockTypeCounts = getBlockTypeCounts;
+
+/**
+ * Helper function for defining a block from JSON.  The resulting function has
+ * the correct value of jsonDef at the point in code where jsonInit is called.
+ * @param {!Object} jsonDef The JSON definition of a block.
+ * @return {function()} A function that calls jsonInit with the correct value
+ *     of jsonDef.
+ */
+const jsonInitFactory = function(jsonDef) {
+  return function() {
+    this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @alias Blockly.common.defineBlocksWithJsonArray
+ */
+const defineBlocksWithJsonArray = function(jsonArray) {
+  for (let i = 0; i < jsonArray.length; i++) {
+    const elem = jsonArray[i];
+    if (!elem) {
+      console.warn(
+          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
+          'Skipping.');
+    } else {
+      const typename = elem.type;
+      if (!typename) {
+        console.warn(
+            'Block definition #' + i +
+            ' in JSON array is missing a type attribute. Skipping.');
+      } else {
+        if (Blocks[typename]) {
+          console.warn(
+              'Block definition #' + i + ' in JSON array' +
+              ' overwrites prior definition of "' + typename + '".');
+        }
+        Blocks[typename] = {init: jsonInitFactory(elem)};
+      }
+    }
+  }
+};
+exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;

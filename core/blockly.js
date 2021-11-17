@@ -45,6 +45,7 @@ const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
 const minimalist = goog.require('Blockly.minimalist');
 const registry = goog.require('Blockly.registry');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const thrasos = goog.require('Blockly.thrasos');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
@@ -134,7 +135,6 @@ const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
 const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const {Scrollbar} = goog.require('Blockly.Scrollbar');
 const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
-const {Size} = goog.require('Blockly.utils.Size');
 const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
 const {ThemeManager} = goog.require('Blockly.ThemeManager');
 const {Theme} = goog.require('Blockly.Theme');
@@ -153,7 +153,7 @@ const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
 const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
 const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
 const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+const {WorkspaceSvg, resizeSvgContents} = goog.require('Blockly.WorkspaceSvg');
 const {Workspace} = goog.require('Blockly.Workspace');
 const {ZoomControls} = goog.require('Blockly.ZoomControls');
 const {globalThis} = goog.require('Blockly.utils.global');
@@ -306,27 +306,22 @@ Object.defineProperties(exports, {
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  * @alias Blockly.svgSize
  */
-const svgSize = function(svg) {
-  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
-  // from setCachedParentSvgSize.
-  deprecation.warn(
-      'Blockly.svgSize', 'March 2021', 'March 2022',
-      'workspace.getCachedParentSvgSize');
-  svg = /** @type {?} */ (svg);
-  return new Size(svg.cachedWidth_, svg.cachedHeight_);
-};
-exports.svgSize = svgSize;
+exports.svgSize = svgMath.svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @deprecated
  * @alias Blockly.resizeSvgContents
  */
-const resizeSvgContents = function(workspace) {
-  workspace.resizeContents();
+const resizeSvgContentsLocal = function(workspace) {
+  deprecation.warn(
+      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
+      'Blockly.WorkspaceSvg.resizeSvgContents');
+  resizeSvgContents(workspace);
 };
-exports.resizeSvgContents = resizeSvgContents;
+exports.resizeSvgContents = resizeSvgContentsLocal;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -360,7 +355,9 @@ exports.duplicate = clipboard.duplicate;
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  deprecation.warn('Blockly.hideChaff', 'September 2021', 'September 2022');
+  deprecation.warn(
+      'Blockly.hideChaff', 'September 2021', 'September 2022',
+      'workspace.hideChaff');
   common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
@@ -375,61 +372,27 @@ exports.hideChaff = hideChaff;
 exports.getMainWorkspace = common.getMainWorkspace;
 
 /**
- * Helper function for defining a block from JSON.  The resulting function has
- * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function()} A function that calls jsonInit with the correct value
- *     of jsonDef.
- */
-const jsonInitFactory = function(jsonDef) {
-  return /** @this {Block} */ function() {
-    this.jsonInit(jsonDef);
-  };
-};
-
-/**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
  * @alias Blockly.defineBlocksWithJsonArray
  */
-const defineBlocksWithJsonArray = function(jsonArray) {
-  for (let i = 0; i < jsonArray.length; i++) {
-    const elem = jsonArray[i];
-    if (!elem) {
-      console.warn(
-          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
-          'Skipping.');
-    } else {
-      const typename = elem.type;
-      if (!typename) {
-        console.warn(
-            'Block definition #' + i +
-            ' in JSON array is missing a type attribute. Skipping.');
-      } else {
-        if (Blocks[typename]) {
-          console.warn(
-              'Block definition #' + i + ' in JSON array' +
-              ' overwrites prior definition of "' + typename + '".');
-        }
-        Blocks[typename] = {init: jsonInitFactory(elem)};
-      }
-    }
-  }
-};
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
+ * @deprecated
  * @alias Blockly.isNumber
  */
 const isNumber = function(str) {
-  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
+  deprecation.warn(
+      'Blockly.isNumber', 'December 2021', 'December 2022',
+      'Blockly.utils.string.isNumber');
+  return utils.string.isNumber(str);
 };
 exports.isNumber = isNumber;
-
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,

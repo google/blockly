@@ -237,7 +237,15 @@ const renamings = {
         runAfterPageLoad:
             {module: 'Blockly.Extensions', export: 'runAfterPageLoad'}
       }
-    }
+    },
+    'Blockly': {
+      exports: {
+        svgSize: {module: 'Blockly.utils.svgMath'},
+        resizeSvgContents: {module: 'Blockly.WorkspaecSvg'},
+        defineBlocksWithJsonArray: {module: 'Blockly.common'},
+        isNumber: {module: 'Blockly.utils.string'},
+      },
+    },
   }
 };
 

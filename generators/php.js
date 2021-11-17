@@ -12,17 +12,21 @@
 goog.module('Blockly.PHP');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Generator');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.string');
+const Blockly = goog.require('Blockly');
+const {Generator} = goog.require('Blockly.Generator');
+const {inputTypes} = goog.require('Blockly.inputTypes');
+const objectUtils = goog.require('Blockly.utils.object');
+const stringUtils = goog.require('Blockly.utils.string');
+const {Names} = goog.require('Blockly.Names');
+const {Workspace} = goog.requireType('Blockly.Workspace');
+const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
  * PHP code generator.
- * @type {!Blockly.Generator}
+ * @type {!Generator}
  */
-const PHP = new Blockly.Generator('PHP');
+const PHP = new Generator('PHP');
 
 /**
  * List of illegal variable names.
@@ -127,14 +131,14 @@ PHP.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
- * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {!Workspace} workspace Workspace to generate code from.
  */
 PHP.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
   if (!this.nameDB_) {
-    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_, '$');
+    this.nameDB_ = new Names(this.RESERVED_WORDS_, '$');
   } else {
     this.nameDB_.reset();
   }
@@ -153,7 +157,7 @@ PHP.init = function(workspace) {
  */
 PHP.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  const definitions = Blockly.utils.object.values(this.definitions_);
+  const definitions = objectUtils.values(this.definitions_);
   // Call Blockly.Generator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;
@@ -205,7 +209,7 @@ PHP.multiline_quote_ = function (string) {
  * Common tasks for generating PHP from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
+ * @param {!Block} block The current block.
  * @param {string} code The PHP code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} PHP code with comments and subsequent blocks added.
@@ -218,13 +222,13 @@ PHP.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     let comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
       commentCode += this.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (let i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
+      if (block.inputList[i].type === inputTypes.VALUE) {
         const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
@@ -242,7 +246,7 @@ PHP.scrub_ = function(block, code, opt_thisOnly) {
 
 /**
  * Gets a property and adjusts the value while taking into account indexing.
- * @param {!Blockly.Block} block The block.
+ * @param {!Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.
  * @param {boolean=} opt_negate Whether to negate the value.

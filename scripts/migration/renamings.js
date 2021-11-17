@@ -235,8 +235,8 @@ const renamings = {
         getBlockTypeCounts:
             {module: 'Blockly.common', export: 'getBlockTypeCounts'},
         runAfterPageLoad:
-            {module: 'Blockly.Extensions', export: 'runAfterPageLoad'}
-      }
+            {module: 'Blockly.Extensions', export: 'runAfterPageLoad'},
+      },
     },
     'Blockly': {
       exports: {
@@ -246,7 +246,7 @@ const renamings = {
         isNumber: {module: 'Blockly.utils.string'},
       },
     },
-  }
+  },
 };
 
 exports.renamings = renamings;

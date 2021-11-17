@@ -11,10 +11,11 @@
 
 goog.module('Blockly.Python.variablesDynamic');
 
-goog.require('Blockly.Python');
-goog.require('Blockly.Python.variables');
+const Python = goog.require('Blockly.Python');
+// Required for side effects.
+const variables = goog.require('Blockly.Python.variables');
 
 
 // Python is dynamically typed.
-Blockly.Python['variables_get_dynamic'] = Blockly.Python['variables_get'];
-Blockly.Python['variables_set_dynamic'] = Blockly.Python['variables_set'];
+Python['variables_get_dynamic'] = Python['variables_get'];
+Python['variables_set_dynamic'] = Python['variables_set'];

@@ -11,22 +11,23 @@
 
 goog.module('Blockly.Python.variables');
 
-goog.require('Blockly.Python');
+const Blockly = goog.require('Blockly');
+const Python = goog.require('Blockly.Python');
 
 
-Blockly.Python['variables_get'] = function(block) {
+Python['variables_get'] = function(block) {
   // Variable getter.
-  const code = Blockly.Python.nameDB_.getName(block.getFieldValue('VAR'),
+  const code = Python.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
-  return [code, Blockly.Python.ORDER_ATOMIC];
+  return [code, Python.ORDER_ATOMIC];
 };
 
-Blockly.Python['variables_set'] = function(block) {
+Python['variables_set'] = function(block) {
   // Variable setter.
   const argument0 =
-      Blockly.Python.valueToCode(block, 'VALUE', Blockly.Python.ORDER_NONE) ||
+      Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) ||
       '0';
-  const varName = Blockly.Python.nameDB_.getName(
+  const varName = Python.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = ' + argument0 + '\n';
 };

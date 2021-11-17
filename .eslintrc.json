@@ -76,6 +76,6 @@
         "exports": true
     },
     "extends": [
-        "eslint:recommended"
+        "eslint:recommended", "google"
     ]
 }

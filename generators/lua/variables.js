@@ -11,21 +11,22 @@
 
 goog.module('Blockly.Lua.variables');
 
-goog.require('Blockly.Lua');
+const Blockly = goog.require('Blockly');
+const Lua = goog.require('Blockly.Lua');
 
 
-Blockly.Lua['variables_get'] = function(block) {
+Lua['variables_get'] = function(block) {
   // Variable getter.
-  const code = Blockly.Lua.nameDB_.getName(block.getFieldValue('VAR'),
+  const code = Lua.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.VARIABLE_CATEGORY_NAME);
-  return [code, Blockly.Lua.ORDER_ATOMIC];
+  return [code, Lua.ORDER_ATOMIC];
 };
 
-Blockly.Lua['variables_set'] = function(block) {
+Lua['variables_set'] = function(block) {
   // Variable setter.
-  const argument0 = Blockly.Lua.valueToCode(block, 'VALUE',
-      Blockly.Lua.ORDER_NONE) || '0';
-  const varName = Blockly.Lua.nameDB_.getName(
+  const argument0 = Lua.valueToCode(block, 'VALUE',
+      Lua.ORDER_NONE) || '0';
+  const varName = Lua.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
   return varName + ' = ' + argument0 + '\n';
 };

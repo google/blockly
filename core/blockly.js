@@ -389,8 +389,8 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 const isNumber = function(str) {
   deprecation.warn(
       'Blockly.isNumber', 'December 2021', 'December 2022',
-      'Blockly.utils.math.isNumber');
-  return utils.math.isNumber(str);
+      'Blockly.utils.string.isNumber');
+  return utils.string.isNumber(str);
 };
 exports.isNumber = isNumber;
 

@@ -61,14 +61,3 @@ const clamp = function(lowerBound, number, upperBound) {
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
 exports.clamp = clamp;
-
-/**
- * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
- * @alias Blockly.isNumber
- */
-const isNumber = function(str) {
-  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
-};
-exports.isNumber = isNumber;

@@ -243,7 +243,7 @@ const renamings = {
         svgSize: {module: 'Blockly.utils.svgMath'},
         resizeSvgContents: {module: 'Blockly.WorkspaecSvg'},
         defineBlocksWithJsonArray: {module: 'Blockly.common'},
-        isNumber: {module: 'Blockly.utils.math'},
+        isNumber: {module: 'Blockly.utils.string'},
       },
     },
   }

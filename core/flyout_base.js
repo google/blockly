@@ -547,12 +547,14 @@ Flyout.prototype.show = function(flyoutDef) {
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
-  const deselectAll = function() {
-    const topBlocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = topBlocks[i]); i++) {
-      block.removeSelect();
-    }
-  };
+  const deselectAll =
+      /** @this {Flyout} */
+      function() {
+        const topBlocks = this.workspace_.getTopBlocks(false);
+        for (let i = 0, block; (block = topBlocks[i]); i++) {
+          block.removeSelect();
+        }
+      };
 
   this.listeners_.push(browserEvents.conditionalBind(
       this.svgBackground_, 'mouseover', this, deselectAll));
@@ -597,6 +599,7 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       const flyoutDef = this.getDynamicCategoryContents_(categoryName);
       const parsedDynamicContent = /** @type {!toolbox.FlyoutItemInfoArray} */
           (toolbox.convertFlyoutDefToJsonArray(flyoutDef));
+      // Replace the element at i with the dynamic content it represents.
       parsedContent.splice.apply(
           parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];

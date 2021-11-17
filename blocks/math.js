@@ -493,10 +493,16 @@ Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * @package
  */
 Blockly.Constants.Math.IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
-  this.getField('PROPERTY').setValidator(function(option) {
-    const divisorInput = (option === 'DIVISIBLE_BY');
-    this.getSourceBlock().updateShape_(divisorInput);
-  });
+  this.getField('PROPERTY').setValidator(
+    /**
+     * @this {Blockly.FieldDropdown}
+     * @param {*} option The selected dropdown option.
+     */
+    function(option) {
+      const divisorInput = (option === 'DIVISIBLE_BY');
+      this.getSourceBlock().updateShape_(divisorInput);
+    }
+  );
 };
 
 Blockly.Extensions.registerMutator('math_is_divisibleby_mutator',

@@ -399,7 +399,7 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // rendering takes place, since rendering requires knowing the dimensions
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
-  const renderList = [];
+  let renderList = [];
   if (this.type !== ConnectionType.INPUT_VALUE &&
       this.type !== ConnectionType.NEXT_STATEMENT) {
     // Only spider down.
@@ -423,7 +423,7 @@ RenderedConnection.prototype.startTrackingAll = function() {
     }
     if (!renderList.length) {
       // Leaf block.
-      renderList[0] = block;
+      renderList = [block];
     }
   }
   return renderList;

@@ -149,6 +149,8 @@ const populate_ = function(options, rtl) {
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
       const actionHandler = function(_menuItem) {
+        // TODO: Create a type for option that can be used in an @this tag.
+        /* eslint-disable-next-line no-invalid-this */
         const option = this;
         hide();
         option.callback(option.scope);

@@ -628,6 +628,7 @@ const saveBlock = save;
  * @alias Blockly.serialization.blocks.BlockSerializer
  */
 class BlockSerializer {
+  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /**
      * The priority for deserializing blocks.

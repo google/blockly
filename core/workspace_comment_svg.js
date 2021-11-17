@@ -781,6 +781,10 @@ WorkspaceCommentSvg.prototype.createEditor_ = function() {
   });
   browserEvents.conditionalBind(
       textarea, 'change', this,
+      /**
+       * @this {WorkspaceCommentSvg}
+       * @param {Event} e Unused event parameter
+       */
       function(
           /* eslint-disable no-unused-vars */ e
           /* eslint-enable no-unused-vars */) {

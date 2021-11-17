@@ -34,7 +34,8 @@
         // Allow uncommented helper functions in tests.
         "require-jsdoc": ["off"],
         // In mocha tests in suites, `this` is meaningful and useful.
-        "no-invalid-this": ["off"]
+        "no-invalid-this": ["off"],
+        "prefer-rest-params": ["off"]
     },
     "extends": "../../.eslintrc.json"
 }

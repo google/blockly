@@ -11,38 +11,38 @@
 
 goog.module('Blockly.JavaScript.colour');
 
-goog.require('Blockly.JavaScript');
+const JavaScript = goog.require('Blockly.JavaScript');
 
 
-Blockly.JavaScript['colour_picker'] = function(block) {
+JavaScript['colour_picker'] = function(block) {
   // Colour picker.
-  const code = Blockly.JavaScript.quote_(block.getFieldValue('COLOUR'));
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  const code = JavaScript.quote_(block.getFieldValue('COLOUR'));
+  return [code, JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['colour_random'] = function(block) {
+JavaScript['colour_random'] = function(block) {
   // Generate a random colour.
-  const functionName = Blockly.JavaScript.provideFunction_(
+  const functionName = JavaScript.provideFunction_(
       'colourRandom',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  var num = Math.floor(Math.random() * Math.pow(2, 24));',
         '  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);',
         '}']);
   const code = functionName + '()';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['colour_rgb'] = function(block) {
+JavaScript['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = Blockly.JavaScript.valueToCode(block, 'RED',
-      Blockly.JavaScript.ORDER_NONE) || 0;
-  const green = Blockly.JavaScript.valueToCode(block, 'GREEN',
-      Blockly.JavaScript.ORDER_NONE) || 0;
-  const blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
-      Blockly.JavaScript.ORDER_NONE) || 0;
-  const functionName = Blockly.JavaScript.provideFunction_(
+  const red = JavaScript.valueToCode(block, 'RED',
+      JavaScript.ORDER_NONE) || 0;
+  const green = JavaScript.valueToCode(block, 'GREEN',
+      JavaScript.ORDER_NONE) || 0;
+  const blue = JavaScript.valueToCode(block, 'BLUE',
+      JavaScript.ORDER_NONE) || 0;
+  const functionName = JavaScript.provideFunction_(
       'colourRgb',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(r, g, b) {',
        '  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;',
        '  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;',
@@ -53,20 +53,20 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
        '  return \'#\' + r + g + b;',
        '}']);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['colour_blend'] = function(block) {
+JavaScript['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = Blockly.JavaScript.valueToCode(block, 'COLOUR1',
-      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
-  const c2 = Blockly.JavaScript.valueToCode(block, 'COLOUR2',
-      Blockly.JavaScript.ORDER_NONE) || '\'#000000\'';
-  const ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
-      Blockly.JavaScript.ORDER_NONE) || 0.5;
-  const functionName = Blockly.JavaScript.provideFunction_(
+  const c1 = JavaScript.valueToCode(block, 'COLOUR1',
+      JavaScript.ORDER_NONE) || '\'#000000\'';
+  const c2 = JavaScript.valueToCode(block, 'COLOUR2',
+      JavaScript.ORDER_NONE) || '\'#000000\'';
+  const ratio = JavaScript.valueToCode(block, 'RATIO',
+      JavaScript.ORDER_NONE) || 0.5;
+  const functionName = JavaScript.provideFunction_(
       'colourBlend',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(c1, c2, ratio) {',
        '  ratio = Math.max(Math.min(Number(ratio), 1), 0);',
        '  var r1 = parseInt(c1.substring(1, 3), 16);',
@@ -84,5 +84,5 @@ Blockly.JavaScript['colour_blend'] = function(block) {
        '  return \'#\' + r + g + b;',
        '}']);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };

@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.variables');
+goog.module('Blockly.PHP.variables');
 
 goog.require('Blockly.PHP');
 

@@ -11,10 +11,11 @@
 
 goog.module('Blockly.Dart.variablesDynamic');
 
-goog.require('Blockly.Dart');
-goog.require('Blockly.Dart.variables');
+const Dart = goog.require('Blockly.Dart');
+// Required for side effects.
+const variables = goog.require('Blockly.Dart.variables');
 
 
 // Dart is dynamically typed.
-Blockly.Dart['variables_get_dynamic'] = Blockly.Dart['variables_get'];
-Blockly.Dart['variables_set_dynamic'] = Blockly.Dart['variables_set'];
+Dart['variables_get_dynamic'] = Dart['variables_get'];
+Dart['variables_set_dynamic'] = Dart['variables_set'];

@@ -2697,4 +2697,15 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };
 
+/**
+ * Size the workspace when the contents change.  This also updates
+ * scrollbars accordingly.
+ * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @alias Blockly.WorkspaceSvg.resizeSvgContents
+ */
+const resizeSvgContents = function(workspace) {
+  workspace.resizeContents();
+};
+exports.resizeSvgContents = resizeSvgContents;
+
 exports.WorkspaceSvg = WorkspaceSvg;

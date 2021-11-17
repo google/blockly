@@ -45,6 +45,7 @@ const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
 const minimalist = goog.require('Blockly.minimalist');
 const registry = goog.require('Blockly.registry');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const thrasos = goog.require('Blockly.thrasos');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
@@ -152,7 +153,7 @@ const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
 const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
 const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
 const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+const {WorkspaceSvg, resizeSvgContents} = goog.require('Blockly.WorkspaceSvg');
 const {Workspace} = goog.require('Blockly.Workspace');
 const {ZoomControls} = goog.require('Blockly.ZoomControls');
 const {globalThis} = goog.require('Blockly.utils.global');
@@ -305,7 +306,7 @@ Object.defineProperties(exports, {
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  * @alias Blockly.svgSize
  */
-exports.svgSize = common.svgSize;
+exports.svgSize = svgMath.svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
@@ -314,13 +315,13 @@ exports.svgSize = common.svgSize;
  * @deprecated
  * @alias Blockly.resizeSvgContents
  */
-const resizeSvgContents = function(workspace) {
+const resizeSvgContentsLocal = function(workspace) {
   deprecation.warn(
       'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
-      'Blockly.common.resizeSvgContents');
-  common.resizeSvgContents(workspace);
+      'Blockly.WorkspaceSvg.resizeSvgContents');
+  resizeSvgContents(workspace);
 };
-exports.resizeSvgContents = resizeSvgContents;
+exports.resizeSvgContents = resizeSvgContentsLocal;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -355,9 +356,9 @@ exports.duplicate = clipboard.duplicate;
  */
 const hideChaff = function(opt_onlyClosePopups) {
   deprecation.warn(
-      'Blockly.hideChaff', 'December 2021', 'December 2022',
+      'Blockly.hideChaff', 'September 2021', 'September 2022',
       'workspace.hideChaff');
-  common.hideChaff(opt_onlyClosePopups);
+  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
 

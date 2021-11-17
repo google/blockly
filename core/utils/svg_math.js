@@ -15,11 +15,13 @@
  */
 goog.module('Blockly.utils.svgMath');
 
+const deprecation = goog.require('Blockly.utils.deprecation');
 const global = goog.require('Blockly.utils.global');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
@@ -238,6 +240,27 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   return finalOffsetMainWs;
 };
 exports.screenToWsCoordinates = screenToWsCoordinates;
+
+/**
+ * Returns the dimensions of the specified SVG image.
+ * @param {!SVGElement} svg SVG image.
+ * @return {!Size} Contains width and height properties.
+ * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
+ * @alias Blockly.utils.svgMath.svgSize
+ */
+const svgSize = function(svg) {
+  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
+  // from setCachedParentSvgSize.
+  // The deprecated name is `Blockly.svgSize` because this function used to be
+  // declared in Blockly.js.
+  deprecation.warn(
+      'Blockly.svgSize', 'March 2021', 'March 2022',
+      'workspace.getCachedParentSvgSize');
+  svg = /** @type {?} */ (svg);
+  return new Size(svg.cachedWidth_, svg.cachedHeight_);
+};
+exports.svgSize = svgSize;
+
 
 exports.TEST_ONLY = {
   XY_REGEX,

@@ -17,13 +17,11 @@
  */
 goog.module('Blockly.common');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
-const {Size} = goog.require('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -188,51 +186,6 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
   return typeCountsMap;
 };
 exports.getBlockTypeCounts = getBlockTypeCounts;
-
-/**
- * Size the workspace when the contents change.  This also updates
- * scrollbars accordingly.
- * @param {!WorkspaceSvg} workspace The workspace to resize.
- * @alias Blockly.common.resizeSvgContents
- */
-const resizeSvgContents = function(workspace) {
-  workspace.resizeContents();
-};
-exports.resizeSvgContents = resizeSvgContents;
-
-/**
- * Returns the dimensions of the specified SVG image.
- * @param {!SVGElement} svg SVG image.
- * @return {!Size} Contains width and height properties.
- * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
- * @alias Blockly.common.svgSize
- */
-const svgSize = function(svg) {
-  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
-  // from setCachedParentSvgSize.
-  // The deprecated name is `Blockly.svgSize` because this function used to be
-  // declared in Blockly.js.
-  deprecation.warn(
-      'Blockly.svgSize', 'March 2021', 'March 2022',
-      'workspace.getCachedParentSvgSize');
-  svg = /** @type {?} */ (svg);
-  return new Size(svg.cachedWidth_, svg.cachedHeight_);
-};
-exports.svgSize = svgSize;
-
-/**
- * Close tooltips, context menus, dropdown selections, etc.
- * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
- * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
- * @alias Blockly.common.hideChaff
- */
-const hideChaff = function(opt_onlyClosePopups) {
-  // The deprecated name is `Blockly.hideChaff` because this function used to
-  // be declared in Blockly.js
-  deprecation.warn('Blockly.hideChaff', 'September 2021', 'September 2022');
-  getMainWorkspace().hideChaff(opt_onlyClosePopups);
-};
-exports.hideChaff = hideChaff;
 
 /**
  * Helper function for defining a block from JSON.  The resulting function has

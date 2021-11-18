@@ -195,7 +195,7 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
  *     of jsonDef.
  */
 const jsonInitFactory = function(jsonDef) {
-  return function() {
+  return /** @this {Block} */ function() {
     this.jsonInit(jsonDef);
   };
 };

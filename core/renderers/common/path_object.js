@@ -6,39 +6,47 @@
 
 /**
  * @fileoverview An object that owns a block's rendering SVG elements.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 
 'use strict';
 
-goog.provide('Blockly.blockRendering.PathObject');
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @class
+ */
+goog.module('Blockly.blockRendering.PathObject');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.blockRendering.IPathObject');
-goog.require('Blockly.Theme');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Connection');
+const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
- * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ * @param {!Theme.BlockStyle} style The style object to use for
  *     colouring.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The renderer's
+ * @param {!ConstantProvider} constants The renderer's
  *     constants.
  * @constructor
- * @implements {Blockly.blockRendering.IPathObject}
+ * @implements {IPathObject}
  * @package
+ * @alias Blockly.blockRendering.PathObject
  */
-Blockly.blockRendering.PathObject = function(root, style, constants) {
+const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.blockRendering.ConstantProvider}
+   * @type {!ConstantProvider}
    * @package
    */
   this.constants = constants;
@@ -50,13 +58,12 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
    * @type {!SVGElement}
    * @package
    */
-  this.svgPath = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
-      {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgPath =
+      dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The style object to use when colouring block paths.
-   * @type {!Blockly.Theme.BlockStyle}
+   * @type {!Theme.BlockStyle}
    * @package
    */
   this.style = style;
@@ -83,7 +90,7 @@ Blockly.blockRendering.PathObject = function(root, style, constants) {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
+PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
 };
 
@@ -91,7 +98,7 @@ Blockly.blockRendering.PathObject.prototype.setPath = function(pathString) {
  * Flip the SVG paths in RTL.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
+PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
 };
@@ -102,7 +109,7 @@ Blockly.blockRendering.PathObject.prototype.flipRTL = function() {
  *     block SVG group.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
+PathObject.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
     this.cursorSvg = null;
     return;
@@ -118,7 +125,7 @@ Blockly.blockRendering.PathObject.prototype.setCursorSvg = function(cursorSvg) {
  *     block SVG group.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
+PathObject.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
     this.markerSvg = null;
     return;
@@ -135,10 +142,10 @@ Blockly.blockRendering.PathObject.prototype.setMarkerSvg = function(markerSvg) {
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Blockly.Block} block The source block.
+ * @param {!Block} block The source block.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
+PathObject.prototype.applyColour = function(block) {
   this.svgPath.setAttribute('stroke', this.style.colourTertiary);
   this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
@@ -148,10 +155,10 @@ Blockly.blockRendering.PathObject.prototype.applyColour = function(block) {
 
 /**
  * Set the style.
- * @param {!Blockly.Theme.BlockStyle} blockStyle The block style to use.
+ * @param {!Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
+PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
 };
 
@@ -162,14 +169,11 @@ Blockly.blockRendering.PathObject.prototype.setStyle = function(blockStyle) {
  *     be removed.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.setClass_ = function(
-    className, add) {
+PathObject.prototype.setClass_ = function(className, add) {
   if (add) {
-    Blockly.utils.dom.addClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    dom.addClass(/** @type {!Element} */ (this.svgRoot), className);
   } else {
-    Blockly.utils.dom.removeClass(/** @type {!Element} */ (this.svgRoot),
-        className);
+    dom.removeClass(/** @type {!Element} */ (this.svgRoot), className);
   }
 };
 
@@ -179,11 +183,10 @@ Blockly.blockRendering.PathObject.prototype.setClass_ = function(
  * @param {boolean} enable True if highlighted.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
-    enable) {
+PathObject.prototype.updateHighlighted = function(enable) {
   if (enable) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.embossFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
   } else {
     this.svgPath.setAttribute('filter', 'none');
   }
@@ -194,7 +197,7 @@ Blockly.blockRendering.PathObject.prototype.updateHighlighted = function(
  * @param {boolean} shadow True if the block is a shadow block.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateShadow_ = function(shadow) {
+PathObject.prototype.updateShadow_ = function(shadow) {
   if (shadow) {
     this.svgPath.setAttribute('stroke', 'none');
     this.svgPath.setAttribute('fill', this.style.colourSecondary);
@@ -206,12 +209,11 @@ Blockly.blockRendering.PathObject.prototype.updateShadow_ = function(shadow) {
  * @param {boolean} disabled True if disabled.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
-    disabled) {
+PathObject.prototype.updateDisabled_ = function(disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
-    this.svgPath.setAttribute('fill',
-        'url(#' + this.constants.disabledPatternId + ')');
+    this.svgPath.setAttribute(
+        'fill', 'url(#' + this.constants.disabledPatternId + ')');
   }
 };
 
@@ -220,7 +222,7 @@ Blockly.blockRendering.PathObject.prototype.updateDisabled_ = function(
  * @param {boolean} enable True if selection is enabled, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
+PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
 };
 
@@ -230,8 +232,7 @@ Blockly.blockRendering.PathObject.prototype.updateSelected = function(enable) {
  *     area, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
-    enable) {
+PathObject.prototype.updateDraggingDelete = function(enable) {
   this.setClass_('blocklyDraggingDelete', enable);
 };
 
@@ -241,8 +242,7 @@ Blockly.blockRendering.PathObject.prototype.updateDraggingDelete = function(
  *     otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
-    enable) {
+PathObject.prototype.updateInsertionMarker = function(enable) {
   this.setClass_('blocklyInsertionMarker', enable);
 };
 
@@ -251,7 +251,7 @@ Blockly.blockRendering.PathObject.prototype.updateInsertionMarker = function(
  * @param {boolean} enable True if the block is movable, false otherwise.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
+PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
 
@@ -262,21 +262,19 @@ Blockly.blockRendering.PathObject.prototype.updateMovable = function(enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateReplacementFade =
-    function(enable) {
-    /* eslint-disable indent */
+PathObject.prototype.updateReplacementFade = function(enable) {
   this.setClass_('blocklyReplaceable', enable);
-}; /* eslint-enable indent */
+};
 
 /**
  * Add or remove styling that shows that if the dragging block is dropped, this
  * block will be connected to the input.
- * @param {Blockly.Connection} _conn The connection on the input to highlight.
+ * @param {Connection} _conn The connection on the input to highlight.
  * @param {boolean} _enable True if styling should be added.
  * @package
  */
-Blockly.blockRendering.PathObject.prototype.updateShapeForInputHighlight =
-    function(_conn, _enable) {
-    /* eslint-disable indent */
+PathObject.prototype.updateShapeForInputHighlight = function(_conn, _enable) {
   // NOP
-}; /* eslint-enable indent */
+};
+
+exports.PathObject = PathObject;

@@ -155,6 +155,7 @@ const rebuildAll = gulp.series(
   buildTasks.build,
   buildTasks.checkinBuilt,
   typings.typings,
+  typings.msgTypings,
   typings.checkinTypings,
   );
 

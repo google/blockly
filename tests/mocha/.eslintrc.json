@@ -7,48 +7,7 @@
     "globals": {
         "chai": false,
         "sinon": false,
-        "addBlockTypeToCleanup": true,
-        "addMessageToCleanup": true,
-        "assertArrayEquals": true,
-        "assertCallBlockStructure": true,
-        "assertDefBlockStructure": true,
-        "assertDeprecationWarningCall": true,
-        "assertEventEquals": true,
-        "assertEventFired": true,
-        "assertEventNotFired": true,
-        "assertNthCallEventArgEquals": true,
-        "assertSingleDeprecationWarningCall": true,
-        "assertVariableValues": true,
-        "assertNoWarnings": true,
-        "assertWarnings": true,
-        "captureWarnings": false,
-        "createDeprecationWarningStub": true,
-        "createKeyDownEvent": true,
-        "createRenderedBlock": true,
-        "createTestBlock": true,
-        "defineBasicBlockWithField": true,
-        "defineRowBlock": true,
-        "defineStackBlock": true,
-        "defineStatementBlock": true,
-        "dispatchPointerEvent": true,
-        "createFireChangeListenerSpy": true,
-        "createGenUidStubWithReturns": true,
-        "getBasicToolbox": true,
-        "getCategoryJSON": true,
-        "getChildItem": true,
-        "getCollapsibleItem": true,
-        "getDeeplyNestedJSON": true,
-        "getInjectedToolbox": true,
-        "getNonCollapsibleItem": true,
-        "getSeparator": true,
-        "getSimpleJSON": true,
-        "getXmlArray": true,
-        "sharedTestSetup": true,
-        "sharedTestTeardown": true,
-        "simulateClick": true,
-        "testAWorkspace": true,
-        "testHelpers": true,
-        "workspaceTeardown": true
+        "testHelpers": true
     },
     "rules": {
         "no-unused-vars": ["off"],
@@ -71,7 +30,12 @@
         "es5/no-template-literals": ["off"],
         "es5/no-typeof-symbol": ["off"],
         "es5/no-unicode-code-point-escape": ["off"],
-        "es5/no-unicode-regex": ["off"]
+        "es5/no-unicode-regex": ["off"],
+        // Allow uncommented helper functions in tests.
+        "require-jsdoc": ["off"],
+        // In mocha tests in suites, `this` is meaningful and useful.
+        "no-invalid-this": ["off"],
+        "prefer-rest-params": ["off"]
     },
     "extends": "../../.eslintrc.json"
 }

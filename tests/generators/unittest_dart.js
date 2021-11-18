@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Dart for unit test blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -116,11 +115,11 @@ Blockly.Dart['unittest_assertvalue'] = function(block) {
   var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
       Blockly.Dart.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
-  if (expected == 'TRUE') {
+  if (expected === 'TRUE') {
     expected = 'true';
-  } else if (expected == 'FALSE') {
+  } else if (expected === 'FALSE') {
     expected = 'false';
-  } else if (expected == 'NULL') {
+  } else if (expected === 'NULL') {
     expected = 'null';
   }
   return Blockly.Dart['unittest_main'].defineAssert_() +

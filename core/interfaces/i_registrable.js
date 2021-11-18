@@ -7,16 +7,23 @@
 /**
  * @fileoverview The interface for a Blockly component that can be registered.
  *    (Ex. Toolbox, Fields, Renderers)
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 
 'use strict';
 
-goog.provide('Blockly.IRegistrable');
+/**
+ * The interface for a Blockly component that can be registered.
+ *    (Ex. Toolbox, Fields, Renderers)
+ * @namespace Blockly.IRegistrable
+ */
+goog.module('Blockly.IRegistrable');
 
 
 /**
  * The interface for a Blockly component that can be registered.
  * @interface
+ * @alias Blockly.IRegistrable
  */
-Blockly.IRegistrable = function() {};
+const IRegistrable = function() {};
+
+exports.IRegistrable = IRegistrable;

@@ -6,20 +6,13 @@
 
 /**
  * @fileoverview Variable blocks for Blockly.
-
- * This file is scraped to extract a .json file of block definitions. The array
- * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
- * only, no outside references, no functions, no trailing commas, etc. The one
- * exception is end-of-line comments, which the scraper will remove.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.variables');  // Deprecated.
+goog.provide('Blockly.blocks.variables');
 goog.provide('Blockly.Constants.Variables');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 
@@ -30,7 +23,7 @@ goog.require('Blockly.FieldVariable');
  */
 Blockly.Constants.Variables.HUE = 330;
 
-Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   // Block for variable getter.
   {
     "type": "variables_get",
@@ -39,14 +32,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
-      }
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+      },
     ],
     "output": null,
     "style": "variable_blocks",
     "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
     "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableSetterGetter"]
+    "extensions": ["contextMenu_variableSetterGetter"],
   },
   // Block for variable setter.
   {
@@ -56,21 +49,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_variable",
         "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
       },
       {
         "type": "input_value",
-        "name": "VALUE"
-      }
+        "name": "VALUE",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "style": "variable_blocks",
     "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
     "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableSetterGetter"]
-  }
-]);  // END JSON EXTRACT (Do not delete this comment.)
+    "extensions": ["contextMenu_variableSetterGetter"],
+  },
+]);
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this
@@ -89,45 +82,47 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
    */
   customContextMenu: function(options) {
     if (!this.isInFlyout) {
+      let oppositeType;
+      let contextMenuMsg;
       // Getter blocks have the option to create a setter block, and vice versa.
-      if (this.type == 'variables_get') {
-        var opposite_type = 'variables_set';
-        var contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
+      if (this.type === 'variables_get') {
+        oppositeType = 'variables_set';
+        contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
       } else {
-        var opposite_type = 'variables_get';
-        var contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
+        oppositeType = 'variables_get';
+        contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
       }
 
-      var option = {enabled: this.workspace.remainingCapacity() > 0};
-      var name = this.getField('VAR').getText();
+      const option = {enabled: this.workspace.remainingCapacity() > 0};
+      const name = this.getField('VAR').getText();
       option.text = contextMenuMsg.replace('%1', name);
-      var xmlField = Blockly.utils.xml.createElement('field');
+      const xmlField = Blockly.utils.xml.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
-      var xmlBlock = Blockly.utils.xml.createElement('block');
-      xmlBlock.setAttribute('type', opposite_type);
+      const xmlBlock = Blockly.utils.xml.createElement('block');
+      xmlBlock.setAttribute('type', oppositeType);
       xmlBlock.appendChild(xmlField);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
       // Getter blocks have the option to rename or delete that variable.
     } else {
-      if (this.type == 'variables_get' || this.type == 'variables_get_reporter') {
-        var renameOption = {
-          text: Blockly.Msg.RENAME_VARIABLE,
+      if (this.type === 'variables_get' || this.type === 'variables_get_reporter') {
+        const renameOption = {
+          text: Blockly.Msg['RENAME_VARIABLE'],
           enabled: true,
-          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
         };
-        var name = this.getField('VAR').getText();
-        var deleteOption = {
-          text: Blockly.Msg.DELETE_VARIABLE.replace('%1', name),
+        const name = this.getField('VAR').getText();
+        const deleteOption = {
+          text: Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
-          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this)
+          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
         };
         options.unshift(renameOption);
         options.unshift(deleteOption);
       }
     }
-  }
+  },
 };
 
 /**
@@ -138,8 +133,8 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   */
 Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
-    var workspace = block.workspace;
-    var variable = block.getField('VAR').getVariable();
+    const workspace = block.workspace;
+    const variable = block.getField('VAR').getVariable();
     Blockly.Variables.renameVariable(workspace, variable);
   };
 };
@@ -152,8 +147,8 @@ Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
  */
 Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
   return function() {
-    var workspace = block.workspace;
-    var variable = block.getField('VAR').getVariable();
+    const workspace = block.workspace;
+    const variable = block.getField('VAR').getVariable();
     workspace.deleteVariableById(variable.getId());
     workspace.refreshToolboxSelection();
   };

@@ -6,34 +6,36 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.blockRendering.ConstantProvider');
+/**
+ * An object that provides constants for rendering blocks.
+ * @class
+ */
+goog.module('Blockly.blockRendering.ConstantProvider');
 
-goog.require('Blockly.connectionTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.utils.svgPaths');
-goog.require('Blockly.utils.userAgent');
-
-goog.requireType('Blockly.blockRendering.Debug');
-goog.requireType('Blockly.RenderedConnection');
-goog.requireType('Blockly.Theme');
+const colour = goog.require('Blockly.utils.colour');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+const svgPaths = goog.require('Blockly.utils.svgPaths');
+const userAgent = goog.require('Blockly.utils.userAgent');
+const parsing = goog.require('Blockly.utils.parsing');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
  * An object that provides constants for rendering blocks.
  * @constructor
  * @package
+ * @alias Blockly.blockRendering.ConstantProvider
  */
-Blockly.blockRendering.ConstantProvider = function() {
-
+const ConstantProvider = function() {
   /**
    * The size of an empty spacer.
    * @type {number}
@@ -216,15 +218,15 @@ Blockly.blockRendering.ConstantProvider = function() {
   this.EXTERNAL_VALUE_INPUT_PADDING = 2;
 
   /**
-   * The height of an empty statement input.  Note that in the old rendering this
-   * varies slightly depending on whether the block has external or inline inputs.
-   * In the new rendering this is consistent.  It seems unlikely that the old
-   * behaviour was intentional.
+   * The height of an empty statement input.  Note that in the old rendering
+   * this varies slightly depending on whether the block has external or inline
+   * inputs. In the new rendering this is consistent.  It seems unlikely that
+   * the old behaviour was intentional.
    * @type {number}
    */
   this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
 
-  this.START_POINT = Blockly.utils.svgPaths.moveBy(0, 0);
+  this.START_POINT = svgPaths.moveBy(0, 0);
 
   /**
    * Height of SVG path for jagged teeth at the end of collapsed blocks.
@@ -305,8 +307,7 @@ Blockly.blockRendering.ConstantProvider = function() {
    * A field's text element's dominant baseline.
    * @type {boolean}
    */
-  this.FIELD_TEXT_BASELINE_CENTER =
-      !Blockly.utils.userAgent.IE && !Blockly.utils.userAgent.EDGE;
+  this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
 
   /**
    * A dropdown field's border rect height.
@@ -351,17 +352,17 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @type {string}
    */
   this.FIELD_DROPDOWN_SVG_ARROW_DATAURI =
-    'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
-    'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
-    'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
-    'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
-    'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
-    'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
-    'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
-    'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
-    'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
-    'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
-    'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+      'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
+      'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
+      'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
+      'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
+      'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
+      'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
+      'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
+      'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
+      'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
+      'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
+      'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
 
   /**
    * Whether or not to show a box shadow around the widget div. This is only a
@@ -402,6 +403,14 @@ Blockly.blockRendering.ConstantProvider = function() {
    * @package
    */
   this.randomIdentifier = String(Math.random()).substring(2);
+
+  /**
+   * The defs tag that contains all filters and patterns for this Blockly
+   * instance.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.defs_ = null;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -527,18 +536,14 @@ Blockly.blockRendering.ConstantProvider = function() {
    * Enum for connection shapes.
    * @enum {number}
    */
-  this.SHAPES = {
-    PUZZLE: 1,
-    NOTCH: 2
-  };
+  this.SHAPES = {PUZZLE: 1, NOTCH: 2};
 };
 
 /**
  * Initialize shape objects based on the constants set in the constructor.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.init = function() {
-
+ConstantProvider.prototype.init = function() {
   /**
    * An object containing sizing and path information about collapsed block
    * indicators.
@@ -579,21 +584,19 @@ Blockly.blockRendering.ConstantProvider.prototype.init = function() {
 
 /**
  * Refresh constants properties that depend on the theme.
- * @param {!Blockly.Theme} theme The current workspace theme.
+ * @param {!Theme} theme The current workspace theme.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
-    theme) {
-
+ConstantProvider.prototype.setTheme = function(theme) {
   /**
    * The block styles map.
-   * @type {Object<string, !Blockly.Theme.BlockStyle>}
+   * @type {Object<string, !Theme.BlockStyle>}
    * @package
    */
   this.blockStyles = Object.create(null);
 
-  var blockStyles = theme.blockStyles;
-  for (var key in blockStyles) {
+  const blockStyles = theme.blockStyles;
+  for (const key in blockStyles) {
     this.blockStyles[key] = this.validatedBlockStyle_(blockStyles[key]);
   }
 
@@ -602,39 +605,38 @@ Blockly.blockRendering.ConstantProvider.prototype.setTheme = function(
 
 /**
  * Sets dynamic properties that depend on other values or theme properties.
- * @param {!Blockly.Theme} theme The current workspace theme.
+ * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.setDynamicProperties_ =
-    function(theme) {
-    /* eslint-disable indent */
+ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
   this.setFontConstants_(theme);
   this.setComponentConstants_(theme);
 
-  this.ADD_START_HATS = theme.startHats != null ? theme.startHats :
-      this.ADD_START_HATS;
-}; /* eslint-enable indent */
+  this.ADD_START_HATS =
+      theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
+};
 
 /**
  * Set constants related to fonts.
- * @param {!Blockly.Theme} theme The current workspace theme.
+ * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
-    theme) {
+ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] != undefined ?
-      theme.fontStyle['family'] : this.FIELD_TEXT_FONTFAMILY;
+      theme.fontStyle && theme.fontStyle['family'] !== undefined ?
+      theme.fontStyle['family'] :
+      this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
-      theme.fontStyle['weight'] : this.FIELD_TEXT_FONTWEIGHT;
+      theme.fontStyle && theme.fontStyle['weight'] !== undefined ?
+      theme.fontStyle['weight'] :
+      this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] != undefined ?
-      theme.fontStyle['size'] : this.FIELD_TEXT_FONTSIZE;
+      theme.fontStyle && theme.fontStyle['size'] !== undefined ?
+      theme.fontStyle['size'] :
+      this.FIELD_TEXT_FONTSIZE;
 
-  var fontMetrics = Blockly.utils.dom.measureFontMetrics('Hg',
-      this.FIELD_TEXT_FONTSIZE + 'pt',
-      this.FIELD_TEXT_FONTWEIGHT,
+  const fontMetrics = dom.measureFontMetrics(
+      'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
       this.FIELD_TEXT_FONTFAMILY);
 
   this.FIELD_TEXT_HEIGHT = fontMetrics.height;
@@ -643,68 +645,60 @@ Blockly.blockRendering.ConstantProvider.prototype.setFontConstants_ = function(
 
 /**
  * Set constants from a theme's component styles.
- * @param {!Blockly.Theme} theme The current workspace theme.
+ * @param {!Theme} theme The current workspace theme.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.setComponentConstants_ =
-    function(theme) {
-    /* eslint-disable indent */
-  this.CURSOR_COLOUR = theme.getComponentStyle('cursorColour') ||
-    this.CURSOR_COLOUR;
-  this.MARKER_COLOUR = theme.getComponentStyle('markerColour') ||
-    this.MARKER_COLOUR;
+ConstantProvider.prototype.setComponentConstants_ = function(theme) {
+  this.CURSOR_COLOUR =
+      theme.getComponentStyle('cursorColour') || this.CURSOR_COLOUR;
+  this.MARKER_COLOUR =
+      theme.getComponentStyle('markerColour') || this.MARKER_COLOUR;
   this.INSERTION_MARKER_COLOUR =
-    theme.getComponentStyle('insertionMarkerColour') ||
-    this.INSERTION_MARKER_COLOUR;
+      theme.getComponentStyle('insertionMarkerColour') ||
+      this.INSERTION_MARKER_COLOUR;
   this.INSERTION_MARKER_OPACITY =
-    Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
-    this.INSERTION_MARKER_OPACITY;
-}; /* eslint-enable indent */
+      Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
+      this.INSERTION_MARKER_OPACITY;
+};
 
 /**
  * Get or create a block style based on a single colour value.  Generate a name
  * for the style based on the colour.
  * @param {string} colour #RRGGBB colour string.
- * @return {{style: !Blockly.Theme.BlockStyle, name: string}} An object
+ * @return {{style: !Theme.BlockStyle, name: string}} An object
  *     containing the style and an autogenerated name for that style.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.getBlockStyleForColour =
-    function(colour) {
-    /* eslint-disable indent */
-  var name = 'auto_' + colour;
+ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
+  const name = 'auto_' + colour;
   if (!this.blockStyles[name]) {
     this.blockStyles[name] = this.createBlockStyle_(colour);
   }
   return {style: this.blockStyles[name], name: name};
-}; /* eslint-enable indent */
+};
 
 /**
  * Gets the BlockStyle for the given block style name.
  * @param {?string} blockStyleName The name of the block style.
- * @return {!Blockly.Theme.BlockStyle} The named block style, or a default style
+ * @return {!Theme.BlockStyle} The named block style, or a default style
  *     if no style with the given name was found.
  */
-Blockly.blockRendering.ConstantProvider.prototype.getBlockStyle = function(
-    blockStyleName) {
+ConstantProvider.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
-        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
-        this.createBlockStyle_('#000000'));
+      (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
+           this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+           this.createBlockStyle_('#000000'));
 };
 
 /**
  * Create a block style object based on the given colour.
  * @param {string} colour #RRGGBB colour string.
- * @return {!Blockly.Theme.BlockStyle} A populated block style based on the
+ * @return {!Theme.BlockStyle} A populated block style based on the
  *     given colour.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.createBlockStyle_ = function(
-    colour) {
-  return this.validatedBlockStyle_({
-    'colourPrimary': colour
-  });
+ConstantProvider.prototype.createBlockStyle_ = function(colour) {
+  return this.validatedBlockStyle_({'colourPrimary': colour});
 };
 
 /**
@@ -717,56 +711,50 @@ Blockly.blockRendering.ConstantProvider.prototype.createBlockStyle_ = function(
  *     hat:(string|undefined)
  * }} blockStyle A full or partial block style object.
 
- * @return {!Blockly.Theme.BlockStyle} A full block style object, with all
+ * @return {!Theme.BlockStyle} A full block style object, with all
  *     required properties populated.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.validatedBlockStyle_ =
-    function(blockStyle) {
-    /* eslint-disable indent */
+ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
   // Make a new object with all of the same properties.
-  var valid = /** @type {!Blockly.Theme.BlockStyle} */ ({});
+  const valid = /** @type {!Theme.BlockStyle} */ ({});
   if (blockStyle) {
-    Blockly.utils.object.mixin(valid, blockStyle);
+    object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  var parsedColour = Blockly.utils.parseBlockColour(
-      valid['colourPrimary'] || '#000');
+  const parsedColour =
+      parsing.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
-      Blockly.utils.parseBlockColour(valid['colourSecondary']).hex :
+      parsing.parseBlockColour(valid['colourSecondary']).hex :
       this.generateSecondaryColour_(valid.colourPrimary);
   valid.colourTertiary = valid['colourTertiary'] ?
-      Blockly.utils.parseBlockColour(valid['colourTertiary']).hex :
+      parsing.parseBlockColour(valid['colourTertiary']).hex :
       this.generateTertiaryColour_(valid.colourPrimary);
 
   valid.hat = valid['hat'] || '';
   return valid;
-}; /* eslint-enable indent */
+};
 
 /**
  * Generate a secondary colour from the passed in primary colour.
- * @param {string} colour Primary colour.
+ * @param {string} inputColour Primary colour.
  * @return {string} The generated secondary colour.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.generateSecondaryColour_ =
-    function(colour) {
-    /* eslint-disable indent */
-  return Blockly.utils.colour.blend('#fff', colour, 0.6) || colour;
-}; /* eslint-enable indent */
+ConstantProvider.prototype.generateSecondaryColour_ = function(inputColour) {
+  return colour.blend('#fff', inputColour, 0.6) || inputColour;
+};
 
 /**
  * Generate a tertiary colour from the passed in primary colour.
- * @param {string} colour Primary colour.
+ * @param {string} inputColour Primary colour.
  * @return {string} The generated tertiary colour.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.generateTertiaryColour_ =
-    function(colour) {
-    /* eslint-disable indent */
-  return Blockly.utils.colour.blend('#fff', colour, 0.3) || colour;
-}; /* eslint-enable indent */
+ConstantProvider.prototype.generateTertiaryColour_ = function(inputColour) {
+  return colour.blend('#fff', inputColour, 0.3) || inputColour;
+};
 
 
 /**
@@ -774,15 +762,15 @@ Blockly.blockRendering.ConstantProvider.prototype.generateTertiaryColour_ =
  * Delete all DOM elements that this provider created.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
+ConstantProvider.prototype.dispose = function() {
   if (this.embossFilter_) {
-    Blockly.utils.dom.removeNode(this.embossFilter_);
+    dom.removeNode(this.embossFilter_);
   }
   if (this.disabledPattern_) {
-    Blockly.utils.dom.removeNode(this.disabledPattern_);
+    dom.removeNode(this.disabledPattern_);
   }
   if (this.debugFilter_) {
-    Blockly.utils.dom.removeNode(this.debugFilter_);
+    dom.removeNode(this.debugFilter_);
   }
   this.cssNode_ = null;
 };
@@ -792,22 +780,16 @@ Blockly.blockRendering.ConstantProvider.prototype.dispose = function() {
  *     collapsed block indicators.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
-  var height = this.JAGGED_TEETH_HEIGHT;
-  var width = this.JAGGED_TEETH_WIDTH;
+ConstantProvider.prototype.makeJaggedTeeth = function() {
+  const height = this.JAGGED_TEETH_HEIGHT;
+  const width = this.JAGGED_TEETH_WIDTH;
 
-  var mainPath =
-      Blockly.utils.svgPaths.line(
-          [
-            Blockly.utils.svgPaths.point(width, height / 4),
-            Blockly.utils.svgPaths.point(-width * 2, height / 2),
-            Blockly.utils.svgPaths.point(width, height / 4)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  const mainPath = svgPaths.line([
+    svgPaths.point(width, height / 4),
+    svgPaths.point(-width * 2, height / 2),
+    svgPaths.point(width, height / 4),
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -815,22 +797,16 @@ Blockly.blockRendering.ConstantProvider.prototype.makeJaggedTeeth = function() {
  *     start hats.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeStartHat = function() {
-  var height = this.START_HAT_HEIGHT;
-  var width = this.START_HAT_WIDTH;
+ConstantProvider.prototype.makeStartHat = function() {
+  const height = this.START_HAT_HEIGHT;
+  const width = this.START_HAT_WIDTH;
 
-  var mainPath =
-      Blockly.utils.svgPaths.curve('c',
-          [
-            Blockly.utils.svgPaths.point(30, -height),
-            Blockly.utils.svgPaths.point(70, -height),
-            Blockly.utils.svgPaths.point(width, 0)
-          ]);
-  return {
-    height: height,
-    width: width,
-    path: mainPath
-  };
+  const mainPath = svgPaths.curve('c', [
+    svgPaths.point(30, -height),
+    svgPaths.point(70, -height),
+    svgPaths.point(width, 0),
+  ]);
+  return {height: height, width: width, path: mainPath};
 };
 
 /**
@@ -838,52 +814,55 @@ Blockly.blockRendering.ConstantProvider.prototype.makeStartHat = function() {
  *     puzzle tabs.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
-  var width = this.TAB_WIDTH;
-  var height = this.TAB_HEIGHT;
+ConstantProvider.prototype.makePuzzleTab = function() {
+  const width = this.TAB_WIDTH;
+  const height = this.TAB_HEIGHT;
 
-  // The main path for the puzzle tab is made out of a few curves (c and s).
-  // Those curves are defined with relative positions.  The 'up' and 'down'
-  // versions of the paths are the same, but the Y sign flips.  Forward and back
-  // are the signs to use to move the cursor in the direction that the path is
-  // being drawn.
+  /**
+   * Make the main path for the puzzle tab made out of a few curves (c and s).
+   * Those curves are defined with relative positions.  The 'up' and 'down'
+   * versions of the paths are the same, but the Y sign flips.  Forward and back
+   * are the signs to use to move the cursor in the direction that the path is
+   * being drawn.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @return {string} A path fragment describing a puzzle tab.
+   */
   function makeMainPath(up) {
-    var forward = up ? -1 : 1;
-    var back = -forward;
+    const forward = up ? -1 : 1;
+    const back = -forward;
 
-    var overlap = 2.5;
-    var halfHeight = height / 2;
-    var control1Y = halfHeight + overlap;
-    var control2Y = halfHeight + 0.5;
-    var control3Y = overlap;  // 2.5
+    const overlap = 2.5;
+    const halfHeight = height / 2;
+    const control1Y = halfHeight + overlap;
+    const control2Y = halfHeight + 0.5;
+    const control3Y = overlap;  // 2.5
 
-    var endPoint1 = Blockly.utils.svgPaths.point(-width, forward * halfHeight);
-    var endPoint2 = Blockly.utils.svgPaths.point(width, forward * halfHeight);
+    const endPoint1 = svgPaths.point(-width, forward * halfHeight);
+    const endPoint2 = svgPaths.point(width, forward * halfHeight);
 
-    return Blockly.utils.svgPaths.curve('c',
-        [
-          Blockly.utils.svgPaths.point(0, forward * control1Y),
-          Blockly.utils.svgPaths.point(-width, back * control2Y),
-          endPoint1
-        ]) +
-        Blockly.utils.svgPaths.curve('s',
-            [
-              Blockly.utils.svgPaths.point(width, back * control3Y),
-              endPoint2
-            ]);
+    return svgPaths.curve(
+               'c',
+               [
+                 svgPaths.point(0, forward * control1Y),
+                 svgPaths.point(-width, back * control2Y),
+                 endPoint1,
+               ]) +
+        svgPaths.curve(
+            's', [svgPaths.point(width, back * control3Y), endPoint2]);
   }
 
   // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
-  var pathUp = makeMainPath(true);
+  const pathUp = makeMainPath(true);
   // c 0,10  -8,-8  -8,7.5  s 8,-2.5  8,7.5
-  var pathDown = makeMainPath(false);
+  const pathDown = makeMainPath(false);
 
   return {
     type: this.SHAPES.PUZZLE,
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
+    pathUp: pathUp,
   };
 };
 
@@ -892,28 +871,34 @@ Blockly.blockRendering.ConstantProvider.prototype.makePuzzleTab = function() {
  *     notches.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
-  var width = this.NOTCH_WIDTH;
-  var height = this.NOTCH_HEIGHT;
-  var innerWidth = 3;
-  var outerWidth = (width - innerWidth) / 2;
+ConstantProvider.prototype.makeNotch = function() {
+  const width = this.NOTCH_WIDTH;
+  const height = this.NOTCH_HEIGHT;
+  const innerWidth = 3;
+  const outerWidth = (width - innerWidth) / 2;
+
+  /**
+   * Make the main path for the notch.
+   * @param {number} dir Direction multiplier to apply to horizontal offsets
+   *     along the path. Either 1 or -1.
+   * @return {string} A path fragment describing a notch.
+   */
   function makeMainPath(dir) {
-    return Blockly.utils.svgPaths.line(
-        [
-          Blockly.utils.svgPaths.point(dir * outerWidth, height),
-          Blockly.utils.svgPaths.point(dir * innerWidth, 0),
-          Blockly.utils.svgPaths.point(dir * outerWidth, -height)
-        ]);
+    return svgPaths.line([
+      svgPaths.point(dir * outerWidth, height),
+      svgPaths.point(dir * innerWidth, 0),
+      svgPaths.point(dir * outerWidth, -height),
+    ]);
   }
-  var pathLeft = makeMainPath(1);
-  var pathRight = makeMainPath(-1);
+  const pathLeft = makeMainPath(1);
+  const pathRight = makeMainPath(-1);
 
   return {
     type: this.SHAPES.NOTCH,
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -922,20 +907,20 @@ Blockly.blockRendering.ConstantProvider.prototype.makeNotch = function() {
  *     inside corners.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
+ConstantProvider.prototype.makeInsideCorners = function() {
+  const radius = this.CORNER_RADIUS;
 
-  var innerTopLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  const innerTopLeftCorner =
+      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
 
-  var innerBottomLeftCorner = Blockly.utils.svgPaths.arc('a', '0 0,0', radius,
-      Blockly.utils.svgPaths.point(radius, radius));
+  const innerBottomLeftCorner =
+      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
 
   return {
     width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
-    pathBottom: innerBottomLeftCorner
+    pathBottom: innerBottomLeftCorner,
   };
 };
 
@@ -944,64 +929,60 @@ Blockly.blockRendering.ConstantProvider.prototype.makeInsideCorners = function()
  *     outside corners.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.makeOutsideCorners = function() {
-  var radius = this.CORNER_RADIUS;
+ConstantProvider.prototype.makeOutsideCorners = function() {
+  const radius = this.CORNER_RADIUS;
   /**
    * SVG path for drawing the rounded top-left corner.
    * @const
    */
-  var topLeft =
-      Blockly.utils.svgPaths.moveBy(0, radius) +
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, -radius));
+  const topLeft = svgPaths.moveBy(0, radius) +
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, -radius));
 
   /**
    * SVG path for drawing the rounded top-right corner.
    * @const
    */
-  var topRight =
-      Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-          Blockly.utils.svgPaths.point(radius, radius));
+  const topRight =
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
 
   /**
    * SVG path for drawing the rounded bottom-left corner.
    * @const
    */
-  var bottomLeft = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, -radius));
+  const bottomLeft =
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, -radius));
 
   /**
    * SVG path for drawing the rounded bottom-right corner.
    * @const
    */
-  var bottomRight = Blockly.utils.svgPaths.arc('a', '0 0,1', radius,
-      Blockly.utils.svgPaths.point(-radius, radius));
+  const bottomRight =
+      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
 
   return {
     topLeft: topLeft,
     topRight: topRight,
     bottomRight: bottomRight,
     bottomLeft: bottomLeft,
-    rightHeight: radius
+    rightHeight: radius,
   };
 };
 
 /**
  * Get an object with connection shape and sizing information based on the type
  * of the connection.
- * @param {!Blockly.RenderedConnection} connection The connection to find a
+ * @param {!RenderedConnection} connection The connection to find a
  *     shape object for
  * @return {!Object} The shape object for the connection.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
-    connection) {
+ConstantProvider.prototype.shapeFor = function(connection) {
   switch (connection.type) {
-    case Blockly.connectionTypes.INPUT_VALUE:
-    case Blockly.connectionTypes.OUTPUT_VALUE:
+    case ConnectionType.INPUT_VALUE:
+    case ConnectionType.OUTPUT_VALUE:
       return this.PUZZLE_TAB;
-    case Blockly.connectionTypes.PREVIOUS_STATEMENT:
-    case Blockly.connectionTypes.NEXT_STATEMENT:
+    case ConnectionType.PREVIOUS_STATEMENT:
+    case ConnectionType.NEXT_STATEMENT:
       return this.NOTCH;
     default:
       throw Error('Unknown connection type');
@@ -1016,8 +997,7 @@ Blockly.blockRendering.ConstantProvider.prototype.shapeFor = function(
  * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
  * @package
  */
-Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
-    tagName, selector) {
+ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
   this.injectCSS_(tagName, selector);
 
   /*
@@ -1025,8 +1005,7 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
     ... filters go here ...
   </defs>
   */
-  var defs = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.DEFS, {}, svg);
+  this.defs_ = dom.createSvgElement(Svg.DEFS, {}, svg);
   /*
     <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
@@ -1041,45 +1020,44 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
                    k1="0" k2="1" k3="1" k4="0" />
     </filter>
   */
-  var embossFilter = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FILTER,
-      {'id': 'blocklyEmbossFilter' + this.randomIdentifier}, defs);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEGAUSSIANBLUR,
+  const embossFilter = dom.createSvgElement(
+      Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
+      this.defs_);
+  dom.createSvgElement(
+      Svg.FEGAUSSIANBLUR,
       {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
-  var feSpecularLighting = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FESPECULARLIGHTING,
-      {
+  const feSpecularLighting = dom.createSvgElement(
+      Svg.FESPECULARLIGHTING, {
         'in': 'blur',
         'surfaceScale': 1,
         'specularConstant': 0.5,
         'specularExponent': 10,
         'lighting-color': 'white',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FEPOINTLIGHT,
-      {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPOSITE,
-      {
+  dom.createSvgElement(
+      Svg.FEPOINTLIGHT, {'x': -5000, 'y': -10000, 'z': 20000},
+      feSpecularLighting);
+  dom.createSvgElement(
+      Svg.FECOMPOSITE, {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
-        'result': 'specOut'
-      }, embossFilter);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.FECOMPOSITE,
-      {
+        'result': 'specOut',
+      },
+      embossFilter);
+  dom.createSvgElement(
+      Svg.FECOMPOSITE, {
         'in': 'SourceGraphic',
         'in2': 'specOut',
         'operator': 'arithmetic',
         'k1': 0,
         'k2': 1,
         'k3': 1,
-        'k4': 0
-      }, embossFilter);
+        'k4': 0,
+      },
+      embossFilter);
   this.embossFilterId = embossFilter.id;
   this.embossFilter_ = embossFilter;
 
@@ -1090,59 +1068,60 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
-  var disabledPattern = Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATTERN,
-      {
+  const disabledPattern = dom.createSvgElement(
+      Svg.PATTERN, {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
-        'height': 10
-      }, defs);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
-      {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
-      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
+        'height': 10,
+      },
+      this.defs_);
+  dom.createSvgElement(
+      Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
+  dom.createSvgElement(
+      Svg.PATH, {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
+      disabledPattern);
   this.disabledPatternId = disabledPattern.id;
   this.disabledPattern_ = disabledPattern;
 
-  if (Blockly.blockRendering.Debug) {
-    var debugFilter = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FILTER,
-        {
+  this.createDebugFilter();
+};
+
+/**
+ * Create a filter for highlighting the currently rendering block during
+ * render debugging.
+ * @private
+ */
+ConstantProvider.prototype.createDebugFilter = function() {
+  // Only create the debug filter once.
+  if (!this.debugFilter_) {
+    const debugFilter = dom.createSvgElement(
+        Svg.FILTER, {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
-          y: '-30%',
-          x: '-40%'
+          'y': '-30%',
+          'x': '-40%',
         },
-        defs);
+        this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood
-    var debugComponentTransfer = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FECOMPONENTTRANSFER, {
-          'result': 'outBlur'
-        }, debugFilter);
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FEFUNCA,
-        {
-          'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'
-        },
+    const debugComponentTransfer = dom.createSvgElement(
+        Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);
+    dom.createSvgElement(
+        Svg.FEFUNCA,
+        {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
         debugComponentTransfer);
     // Color the highlight
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FEFLOOD,
-        {
-          'flood-color': '#ff0000',
-          'flood-opacity': 0.5,
-          'result': 'outColor'
-        },
+    dom.createSvgElement(
+        Svg.FEFLOOD,
+        {'flood-color': '#ff0000', 'flood-opacity': 0.5, 'result': 'outColor'},
         debugFilter);
-    Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.FECOMPOSITE,
-        {
-          'in': 'outColor', 'in2': 'outBlur',
-          'operator': 'in', 'result': 'outGlow'
+    dom.createSvgElement(
+        Svg.FECOMPOSITE, {
+          'in': 'outColor',
+          'in2': 'outBlur',
+          'operator': 'in',
+          'result': 'outGlow',
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;
@@ -1156,23 +1135,22 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
  * @param {string} selector The CSS selector to use.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
-    tagName, selector) {
-  var cssArray = this.getCSS_(selector);
-  var cssNodeId = 'blockly-renderer-style-' + tagName;
+ConstantProvider.prototype.injectCSS_ = function(tagName, selector) {
+  const cssArray = this.getCSS_(selector);
+  const cssNodeId = 'blockly-renderer-style-' + tagName;
   this.cssNode_ =
-    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
-  var text = cssArray.join('\n');
+      /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+  const text = cssArray.join('\n');
   if (this.cssNode_) {
     // Already injected, update if the theme changed.
     this.cssNode_.firstChild.textContent = text;
     return;
   }
   // Inject CSS tag at start of head.
-  var cssNode =
-    /** @type {!HTMLStyleElement} */ (document.createElement('style'));
+  const cssNode =
+      /** @type {!HTMLStyleElement} */ (document.createElement('style'));
   cssNode.id = cssNodeId;
-  var cssTextNode = document.createTextNode(text);
+  const cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
   this.cssNode_ = cssNode;
@@ -1184,9 +1162,10 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
  * @return {!Array<string>} Array of CSS strings.
  * @protected
  */
-Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
+ConstantProvider.prototype.getCSS_ = function(selector) {
   return [
     /* eslint-disable indent */
+    /* clang-format off */
     // Text.
     selector + ' .blocklyText, ',
     selector + ' .blocklyFlyoutLabelText {',
@@ -1256,6 +1235,9 @@ Blockly.blockRendering.ConstantProvider.prototype.getCSS_ = function(selector) {
       'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
       'stroke: none;',
     '}',
+    /* clang-format on */
     /* eslint-enable indent */
   ];
 };
+
+exports.ConstantProvider = ConstantProvider;

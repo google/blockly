@@ -6,20 +6,13 @@
 
 /**
  * @fileoverview Colour blocks for Blockly.
- *
- * This file is scraped to extract a .json file of block definitions. The array
- * passed to defineBlocksWithJsonArray(..) must be strict JSON: double quotes
- * only, no outside references, no functions, no trailing commas, etc. The one
- * exception is end-of-line comments, which the scraper will remove.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.colour');  // Deprecated
+goog.provide('Blockly.blocks.colour');
 goog.provide('Blockly.Constants.Colour');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldLabel');
 
@@ -30,7 +23,7 @@ goog.require('Blockly.FieldLabel');
  */
 Blockly.Constants.Colour.HUE = 20;
 
-Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+Blockly.defineBlocksWithJsonArray([
   // Block for colour picker.
   {
     "type": "colour_picker",
@@ -39,14 +32,14 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_colour",
         "name": "COLOUR",
-        "colour": "#ff0000"
-      }
+        "colour": "#ff0000",
+      },
     ],
     "output": "Colour",
     "helpUrl": "%{BKY_COLOUR_PICKER_HELPURL}",
     "style": "colour_blocks",
     "tooltip": "%{BKY_COLOUR_PICKER_TOOLTIP}",
-    "extensions": ["parent_tooltip_when_inline"]
+    "extensions": ["parent_tooltip_when_inline"],
   },
 
   // Block for random colour.
@@ -56,7 +49,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Colour",
     "helpUrl": "%{BKY_COLOUR_RANDOM_HELPURL}",
     "style": "colour_blocks",
-    "tooltip": "%{BKY_COLOUR_RANDOM_TOOLTIP}"
+    "tooltip": "%{BKY_COLOUR_RANDOM_TOOLTIP}",
   },
 
   // Block for composing a colour from RGB components.
@@ -68,25 +61,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "type": "input_value",
         "name": "RED",
         "check": "Number",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "GREEN",
         "check": "Number",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "BLUE",
         "check": "Number",
-        "align": "RIGHT"
-      }
+        "align": "RIGHT",
+      },
     ],
     "output": "Colour",
     "helpUrl": "%{BKY_COLOUR_RGB_HELPURL}",
     "style": "colour_blocks",
-    "tooltip": "%{BKY_COLOUR_RGB_TOOLTIP}"
+    "tooltip": "%{BKY_COLOUR_RGB_TOOLTIP}",
   },
 
   // Block for blending two colours together.
@@ -99,24 +92,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "type": "input_value",
         "name": "COLOUR1",
         "check": "Colour",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "COLOUR2",
         "check": "Colour",
-        "align": "RIGHT"
+        "align": "RIGHT",
       },
       {
         "type": "input_value",
         "name": "RATIO",
         "check": "Number",
-        "align": "RIGHT"
-      }
+        "align": "RIGHT",
+      },
     ],
     "output": "Colour",
     "helpUrl": "%{BKY_COLOUR_BLEND_HELPURL}",
     "style": "colour_blocks",
-    "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}"
-  }
-]);  // END JSON EXTRACT (Do not delete this comment.)
+    "tooltip": "%{BKY_COLOUR_BLEND_TOOLTIP}",
+  },
+]);

@@ -6,27 +6,35 @@
 
 /**
  * @fileoverview The interface for a component that is automatically hidden
- * when Blockly.hideChaff is called.
- * @author kozbial@google.com (Monica Kozbial)
+ * when WorkspaceSvg.hideChaff is called.
  */
 
 'use strict';
 
-goog.provide('Blockly.IAutoHideable');
+/**
+ * The interface for a component that is automatically hidden
+ * when WorkspaceSvg.hideChaff is called.
+ * @namespace Blockly.IAutoHideable
+ */
+goog.module('Blockly.IAutoHideable');
 
-goog.require('Blockly.IComponent');
+/* eslint-disable-next-line no-unused-vars */
+const {IComponent} = goog.require('Blockly.IComponent');
 
 
 /**
  * Interface for a component that can be automatically hidden.
- * @extends {Blockly.IComponent}
+ * @extends {IComponent}
  * @interface
+ * @alias Blockly.IAutoHideable
  */
-Blockly.IAutoHideable = function() {};
+const IAutoHideable = function() {};
 
 /**
- * Hides the component. Called in Blockly.hideChaff.
+ * Hides the component. Called in WorkspaceSvg.hideChaff.
  * @param {boolean} onlyClosePopups Whether only popups should be closed.
  *   Flyouts should not be closed if this is true.
  */
-Blockly.IAutoHideable.prototype.autoHide;
+IAutoHideable.prototype.autoHide;
+
+exports.IAutoHideable = IAutoHideable;

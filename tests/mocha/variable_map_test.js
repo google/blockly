@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.variableMap');
+
+const {assertVariableValues, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Variable Map', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -26,9 +31,9 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      var keys = Object.keys(this.variableMap.variableMap_);
+      let keys = Object.keys(this.variableMap.variableMap_);
       chai.assert.equal(keys.length, 1);
-      var varMapLength = this.variableMap.variableMap_[keys[0]].length;
+      let varMapLength = this.variableMap.variableMap_[keys[0]].length;
       chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type1');
@@ -46,9 +51,9 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      var keys = Object.keys(this.variableMap.variableMap_);
+      let keys = Object.keys(this.variableMap.variableMap_);
       chai.assert.equal(keys.length, 1);
-      var varMapLength = this.variableMap.variableMap_[keys[0]].length;
+      const varMapLength = this.variableMap.variableMap_[keys[0]].length;
       chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type2', 'id2');
@@ -100,7 +105,7 @@ suite('Variable Map', function() {
     suite('Error cases', function() {
       test('Id already exists', function() {
         this.variableMap.createVariable('name1', 'type1', 'id1');
-        var variableMap = this.variableMap;
+        const variableMap = this.variableMap;
         chai.assert.throws(function() {
           variableMap.createVariable('name2', 'type2', 'id1');
         }, /"id1".*in use/);
@@ -109,7 +114,7 @@ suite('Variable Map', function() {
 
       test('Mismatched id', function() {
         this.variableMap.createVariable('name1', 'type1', 'id1');
-        var variableMap = this.variableMap;
+        const variableMap = this.variableMap;
         chai.assert.throws(function() {
           variableMap.createVariable('name1', 'type1', 'id2');
         }, /"name1".*in use/);
@@ -118,7 +123,7 @@ suite('Variable Map', function() {
 
       test('Mismatched type', function() {
         this.variableMap.createVariable('name1', 'type1', 'id1');
-        var variableMap = this.variableMap;
+        const variableMap = this.variableMap;
         chai.assert.throws(function() {
           variableMap.createVariable('name1', 'type2', 'id1');
         });
@@ -130,12 +135,12 @@ suite('Variable Map', function() {
 
   suite('getVariable', function() {
     test('By name and type', function() {
-      var var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
-      var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
-      var var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
-      var result1 = this.variableMap.getVariable('name1', 'type1');
-      var result2 = this.variableMap.getVariable('name2', 'type1');
-      var result3 = this.variableMap.getVariable('name3', 'type2');
+      const var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
+      const var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
+      const var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
+      const result1 = this.variableMap.getVariable('name1', 'type1');
+      const result2 = this.variableMap.getVariable('name2', 'type1');
+      const result3 = this.variableMap.getVariable('name3', 'type2');
 
       // Searching by name + type is correct.
       chai.assert.equal(result1, var1);
@@ -149,19 +154,19 @@ suite('Variable Map', function() {
     });
 
     test('Not found', function() {
-      var result = this.variableMap.getVariable('name1');
+      const result = this.variableMap.getVariable('name1');
       chai.assert.isNull(result);
     });
   });
 
   suite('getVariableById', function() {
     test('Trivial', function() {
-      var var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
-      var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
-      var var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
-      var result1 = this.variableMap.getVariableById('id1');
-      var result2 = this.variableMap.getVariableById('id2');
-      var result3 = this.variableMap.getVariableById('id3');
+      const var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
+      const var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
+      const var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
+      const result1 = this.variableMap.getVariableById('id1');
+      const result2 = this.variableMap.getVariableById('id2');
+      const result3 = this.variableMap.getVariableById('id3');
 
       chai.assert.equal(result1, var1);
       chai.assert.equal(result2, var2);
@@ -169,7 +174,7 @@ suite('Variable Map', function() {
     });
 
     test('Not found', function() {
-      var result = this.variableMap.getVariableById('id1');
+      const result = this.variableMap.getVariableById('id1');
       chai.assert.isNull(result);
     });
   });
@@ -180,70 +185,70 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name2', 'type1', 'id2');
       this.variableMap.createVariable('name3', 'type2', 'id3');
       this.variableMap.createVariable('name4', 'type3', 'id4');
-      var resultArray = this.variableMap.getVariableTypes();
+      const resultArray = this.variableMap.getVariableTypes();
       // The empty string is always an option.
       chai.assert.deepEqual(resultArray, ['type1', 'type2', 'type3', '']);
     });
 
     test('None', function() {
       // The empty string is always an option.
-      var resultArray = this.variableMap.getVariableTypes();
+      const resultArray = this.variableMap.getVariableTypes();
       chai.assert.deepEqual(resultArray, ['']);
     });
   });
 
   suite('getVariablesOfType', function() {
     test('Trivial', function() {
-      var var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
-      var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
+      const var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
+      const var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
       this.variableMap.createVariable('name3', 'type2', 'id3');
       this.variableMap.createVariable('name4', 'type3', 'id4');
-      var resultArray1 = this.variableMap.getVariablesOfType('type1');
-      var resultArray2 = this.variableMap.getVariablesOfType('type5');
+      const resultArray1 = this.variableMap.getVariablesOfType('type1');
+      const resultArray2 = this.variableMap.getVariablesOfType('type5');
       chai.assert.deepEqual(resultArray1, [var1, var2]);
       chai.assert.deepEqual(resultArray2, []);
     });
 
     test('Null', function() {
-      var var1 = this.variableMap.createVariable('name1', '', 'id1');
-      var var2 = this.variableMap.createVariable('name2', '', 'id2');
-      var var3 = this.variableMap.createVariable('name3', '', 'id3');
+      const var1 = this.variableMap.createVariable('name1', '', 'id1');
+      const var2 = this.variableMap.createVariable('name2', '', 'id2');
+      const var3 = this.variableMap.createVariable('name3', '', 'id3');
       this.variableMap.createVariable('name4', 'type1', 'id4');
-      var resultArray = this.variableMap.getVariablesOfType(null);
+      const resultArray = this.variableMap.getVariablesOfType(null);
       chai.assert.deepEqual(resultArray, [var1, var2, var3]);
     });
 
     test('Empty string', function() {
-      var var1 = this.variableMap.createVariable('name1', null, 'id1');
-      var var2 = this.variableMap.createVariable('name2', null, 'id2');
-      var resultArray = this.variableMap.getVariablesOfType('');
+      const var1 = this.variableMap.createVariable('name1', null, 'id1');
+      const var2 = this.variableMap.createVariable('name2', null, 'id2');
+      const resultArray = this.variableMap.getVariablesOfType('');
       chai.assert.deepEqual(resultArray, [var1, var2]);
     });
 
     test('Deleted', function() {
-      var variable = this.variableMap.createVariable('name1', null, 'id1');
+      const variable = this.variableMap.createVariable('name1', null, 'id1');
       this.variableMap.deleteVariable(variable);
-      var resultArray = this.variableMap.getVariablesOfType('');
+      const resultArray = this.variableMap.getVariablesOfType('');
       chai.assert.deepEqual(resultArray, []);
     });
 
     test('Does not exist', function() {
-      var resultArray = this.variableMap.getVariablesOfType('type1');
+      const resultArray = this.variableMap.getVariablesOfType('type1');
       chai.assert.deepEqual(resultArray, []);
     });
   });
 
   suite('getAllVariables', function() {
     test('Trivial', function() {
-      var var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
-      var var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
-      var var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
-      var resultArray = this.variableMap.getAllVariables();
+      const var1 = this.variableMap.createVariable('name1', 'type1', 'id1');
+      const var2 = this.variableMap.createVariable('name2', 'type1', 'id2');
+      const var3 = this.variableMap.createVariable('name3', 'type2', 'id3');
+      const resultArray = this.variableMap.getAllVariables();
       chai.assert.deepEqual(resultArray, [var1, var2, var3]);
     });
 
     test('None', function() {
-      var resultArray = this.variableMap.getAllVariables();
+      const resultArray = this.variableMap.getAllVariables();
       chai.assert.deepEqual(resultArray, []);
     });
   });

@@ -18,7 +18,6 @@
  * The <code>exampleBlocklyBlock</code> is usually the block loaded into the
  * preview workspace after manually entering the block definition.
  *
- * @author JC-Orozco (Juan Carlos Orozco), AnmAtAnm (Andrew n marshall)
  */
 'use strict';
 

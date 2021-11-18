@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Generating Dart for logic blocks.
- * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
@@ -17,8 +16,8 @@ goog.require('Blockly.Dart');
 
 Blockly.Dart['controls_if'] = function(block) {
   // If/elseif/else condition.
-  var n = 0;
-  var code = '', branchCode, conditionCode;
+  let n = 0;
+  let code = '', branchCode, conditionCode;
   if (Blockly.Dart.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
     code += Blockly.Dart.injectId(Blockly.Dart.STATEMENT_PREFIX, block);
@@ -34,7 +33,7 @@ Blockly.Dart['controls_if'] = function(block) {
     }
     code += (n > 0 ? 'else ' : '') +
         'if (' + conditionCode + ') {\n' + branchCode + '}';
-    ++n;
+    n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Blockly.Dart.STATEMENT_SUFFIX) {
@@ -53,7 +52,7 @@ Blockly.Dart['controls_ifelse'] = Blockly.Dart['controls_if'];
 
 Blockly.Dart['logic_compare'] = function(block) {
   // Comparison operator.
-  var OPERATORS = {
+  const OPERATORS = {
     'EQ': '==',
     'NEQ': '!=',
     'LT': '<',
@@ -61,29 +60,29 @@ Blockly.Dart['logic_compare'] = function(block) {
     'GT': '>',
     'GTE': '>='
   };
-  var operator = OPERATORS[block.getFieldValue('OP')];
-  var order = (operator == '==' || operator == '!=') ?
+  const operator = OPERATORS[block.getFieldValue('OP')];
+  const order = (operator === '==' || operator === '!=') ?
       Blockly.Dart.ORDER_EQUALITY : Blockly.Dart.ORDER_RELATIONAL;
-  var argument0 = Blockly.Dart.valueToCode(block, 'A', order) || '0';
-  var argument1 = Blockly.Dart.valueToCode(block, 'B', order) || '0';
-  var code = argument0 + ' ' + operator + ' ' + argument1;
+  const argument0 = Blockly.Dart.valueToCode(block, 'A', order) || '0';
+  const argument1 = Blockly.Dart.valueToCode(block, 'B', order) || '0';
+  const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
 Blockly.Dart['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.Dart.ORDER_LOGICAL_AND :
+  const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
+  const order = (operator === '&&') ? Blockly.Dart.ORDER_LOGICAL_AND :
       Blockly.Dart.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.Dart.valueToCode(block, 'A', order);
-  var argument1 = Blockly.Dart.valueToCode(block, 'B', order);
+  let argument0 = Blockly.Dart.valueToCode(block, 'A', order);
+  let argument1 = Blockly.Dart.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
     argument1 = 'false';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    const defaultArgument = (operator === '&&') ? 'true' : 'false';
     if (!argument0) {
       argument0 = defaultArgument;
     }
@@ -91,21 +90,21 @@ Blockly.Dart['logic_operation'] = function(block) {
       argument1 = defaultArgument;
     }
   }
-  var code = argument0 + ' ' + operator + ' ' + argument1;
+  const code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
 Blockly.Dart['logic_negate'] = function(block) {
   // Negation.
-  var order = Blockly.Dart.ORDER_UNARY_PREFIX;
-  var argument0 = Blockly.Dart.valueToCode(block, 'BOOL', order) || 'true';
-  var code = '!' + argument0;
+  const order = Blockly.Dart.ORDER_UNARY_PREFIX;
+  const argument0 = Blockly.Dart.valueToCode(block, 'BOOL', order) || 'true';
+  const code = '!' + argument0;
   return [code, order];
 };
 
 Blockly.Dart['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
+  const code = (block.getFieldValue('BOOL') === 'TRUE') ? 'true' : 'false';
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
 
@@ -116,12 +115,12 @@ Blockly.Dart['logic_null'] = function(block) {
 
 Blockly.Dart['logic_ternary'] = function(block) {
   // Ternary operator.
-  var value_if = Blockly.Dart.valueToCode(block, 'IF',
+  const value_if = Blockly.Dart.valueToCode(block, 'IF',
       Blockly.Dart.ORDER_CONDITIONAL) || 'false';
-  var value_then = Blockly.Dart.valueToCode(block, 'THEN',
+  const value_then = Blockly.Dart.valueToCode(block, 'THEN',
       Blockly.Dart.ORDER_CONDITIONAL) || 'null';
-  var value_else = Blockly.Dart.valueToCode(block, 'ELSE',
+  const value_else = Blockly.Dart.valueToCode(block, 'ELSE',
       Blockly.Dart.ORDER_CONDITIONAL) || 'null';
-  var code = value_if + ' ? ' + value_then + ' : ' + value_else;
+  const code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, Blockly.Dart.ORDER_CONDITIONAL];
 };

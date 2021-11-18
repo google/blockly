@@ -88,8 +88,8 @@ function getDemosVersion() {
   const minorVersion = packageJson.version.split('.')[1];
   const patchVersion = packageJson.version.split('.')[2];
   let demoVersion = minorVersion;
-  if (patchVersion != 0) {
-    demoVersion += '-' + patchVersion
+  if (patchVersion !== 0) {
+    demoVersion += '-' + patchVersion;
   }
   return demoVersion;
 }

@@ -5,17 +5,17 @@
  */
 
 /**
- * @fileoverview Defines the Blockly.utils.Svg class. Its constants enumerate
+ * @fileoverview Defines the Svg class. Its constants enumerate
  * all SVG tag names used by Blockly.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
 /**
- * @name Blockly.utils.Svg
- * @namespace
+ * Defines the Svg class. Its constants enumerate
+ * all SVG tag names used by Blockly.
+ * @class
  */
-goog.provide('Blockly.utils.Svg');
+goog.module('Blockly.utils.Svg');
 
 
 /**
@@ -24,8 +24,9 @@ goog.provide('Blockly.utils.Svg');
  * @constructor
  * @template T
  * @private
+ * @alias Blockly.utils.Svg
  */
-Blockly.utils.Svg = function(tagName) {
+const Svg = function(tagName) {
   /**
    * @type {string}
    * @private
@@ -38,144 +39,146 @@ Blockly.utils.Svg = function(tagName) {
  * @return {string} The name.
  * @override
  */
-Blockly.utils.Svg.prototype.toString = function() {
+Svg.prototype.toString = function() {
   return this.tagName_;
 };
 
-/** @type {!Blockly.utils.Svg<!SVGAnimateElement>}
+/**
+ * @type {!Svg<!SVGAnimateElement>}
  * @package
  */
-Blockly.utils.Svg.ANIMATE =
-    new Blockly.utils.Svg('animate');
+Svg.ANIMATE = new Svg('animate');
 
-/** @type {!Blockly.utils.Svg<!SVGCircleElement>}
-* @package
- */
-Blockly.utils.Svg.CIRCLE =
-    new Blockly.utils.Svg('circle');
-
-/** @type {!Blockly.utils.Svg<!SVGClipPathElement>}
+/**
+ * @type {!Svg<!SVGCircleElement>}
  * @package
  */
-Blockly.utils.Svg.CLIPPATH =
-    new Blockly.utils.Svg('clipPath');
+Svg.CIRCLE = new Svg('circle');
 
-/** @type {!Blockly.utils.Svg<!SVGDefsElement>}
+/**
+ * @type {!Svg<!SVGClipPathElement>}
  * @package
  */
-Blockly.utils.Svg.DEFS =
-    new Blockly.utils.Svg('defs');
+Svg.CLIPPATH = new Svg('clipPath');
 
-/** @type {!Blockly.utils.Svg<!SVGFECompositeElement>}
+/**
+ * @type {!Svg<!SVGDefsElement>}
  * @package
  */
-Blockly.utils.Svg.FECOMPOSITE =
-    new Blockly.utils.Svg('feComposite');
+Svg.DEFS = new Svg('defs');
 
-/** @type {!Blockly.utils.Svg<!SVGFEComponentTransferElement>}
+/**
+ * @type {!Svg<!SVGFECompositeElement>}
  * @package
  */
-Blockly.utils.Svg.FECOMPONENTTRANSFER =
-    new Blockly.utils.Svg('feComponentTransfer');
+Svg.FECOMPOSITE = new Svg('feComposite');
 
-/** @type {!Blockly.utils.Svg<!SVGFEFloodElement>}
+/**
+ * @type {!Svg<!SVGFEComponentTransferElement>}
  * @package
  */
-Blockly.utils.Svg.FEFLOOD =
-    new Blockly.utils.Svg('feFlood');
+Svg.FECOMPONENTTRANSFER = new Svg('feComponentTransfer');
 
-/** @type {!Blockly.utils.Svg<!SVGFEFuncAElement>}
+/**
+ * @type {!Svg<!SVGFEFloodElement>}
  * @package
  */
-Blockly.utils.Svg.FEFUNCA =
-    new Blockly.utils.Svg('feFuncA');
+Svg.FEFLOOD = new Svg('feFlood');
 
-/** @type {!Blockly.utils.Svg<!SVGFEGaussianBlurElement>}
+/**
+ * @type {!Svg<!SVGFEFuncAElement>}
  * @package
  */
-Blockly.utils.Svg.FEGAUSSIANBLUR =
-    new Blockly.utils.Svg('feGaussianBlur');
+Svg.FEFUNCA = new Svg('feFuncA');
 
-/** @type {!Blockly.utils.Svg<!SVGFEPointLightElement>}
+/**
+ * @type {!Svg<!SVGFEGaussianBlurElement>}
  * @package
  */
-Blockly.utils.Svg.FEPOINTLIGHT =
-    new Blockly.utils.Svg('fePointLight');
+Svg.FEGAUSSIANBLUR = new Svg('feGaussianBlur');
 
-/** @type {!Blockly.utils.Svg<!SVGFESpecularLightingElement>}
+/**
+ * @type {!Svg<!SVGFEPointLightElement>}
  * @package
  */
-Blockly.utils.Svg.FESPECULARLIGHTING =
-    new Blockly.utils.Svg('feSpecularLighting');
+Svg.FEPOINTLIGHT = new Svg('fePointLight');
 
-/** @type {!Blockly.utils.Svg<!SVGFilterElement>}
+/**
+ * @type {!Svg<!SVGFESpecularLightingElement>}
  * @package
  */
-Blockly.utils.Svg.FILTER =
-    new Blockly.utils.Svg('filter');
+Svg.FESPECULARLIGHTING = new Svg('feSpecularLighting');
 
-/** @type {!Blockly.utils.Svg<!SVGForeignObjectElement>}
+/**
+ * @type {!Svg<!SVGFilterElement>}
  * @package
  */
-Blockly.utils.Svg.FOREIGNOBJECT =
-    new Blockly.utils.Svg('foreignObject');
+Svg.FILTER = new Svg('filter');
 
-/** @type {!Blockly.utils.Svg<!SVGGElement>}
+/**
+ * @type {!Svg<!SVGForeignObjectElement>}
  * @package
  */
-Blockly.utils.Svg.G =
-    new Blockly.utils.Svg('g');
+Svg.FOREIGNOBJECT = new Svg('foreignObject');
 
-/** @type {!Blockly.utils.Svg<!SVGImageElement>}
+/**
+ * @type {!Svg<!SVGGElement>}
  * @package
  */
-Blockly.utils.Svg.IMAGE =
-    new Blockly.utils.Svg('image');
+Svg.G = new Svg('g');
 
-/** @type {!Blockly.utils.Svg<!SVGLineElement>}
+/**
+ * @type {!Svg<!SVGImageElement>}
  * @package
  */
-Blockly.utils.Svg.LINE =
-    new Blockly.utils.Svg('line');
+Svg.IMAGE = new Svg('image');
 
-/** @type {!Blockly.utils.Svg<!SVGPathElement>}
+/**
+ * @type {!Svg<!SVGLineElement>}
  * @package
  */
-Blockly.utils.Svg.PATH =
-    new Blockly.utils.Svg('path');
+Svg.LINE = new Svg('line');
 
-/** @type {!Blockly.utils.Svg<!SVGPatternElement>}
+/**
+ * @type {!Svg<!SVGPathElement>}
  * @package
  */
-Blockly.utils.Svg.PATTERN =
-    new Blockly.utils.Svg('pattern');
+Svg.PATH = new Svg('path');
 
-/** @type {!Blockly.utils.Svg<!SVGPolygonElement>}
+/**
+ * @type {!Svg<!SVGPatternElement>}
  * @package
  */
-Blockly.utils.Svg.POLYGON =
-    new Blockly.utils.Svg('polygon');
+Svg.PATTERN = new Svg('pattern');
 
-/** @type {!Blockly.utils.Svg<!SVGRectElement>}
+/**
+ * @type {!Svg<!SVGPolygonElement>}
  * @package
  */
-Blockly.utils.Svg.RECT =
-    new Blockly.utils.Svg('rect');
+Svg.POLYGON = new Svg('polygon');
 
-/** @type {!Blockly.utils.Svg<!SVGSVGElement>}
+/**
+ * @type {!Svg<!SVGRectElement>}
  * @package
  */
-Blockly.utils.Svg.SVG =
-    new Blockly.utils.Svg('svg');
+Svg.RECT = new Svg('rect');
 
-/** @type {!Blockly.utils.Svg<!SVGTextElement>}
+/**
+ * @type {!Svg<!SVGSVGElement>}
  * @package
  */
-Blockly.utils.Svg.TEXT =
-    new Blockly.utils.Svg('text');
+Svg.SVG = new Svg('svg');
 
-/** @type {!Blockly.utils.Svg<!SVGTSpanElement>}
+/**
+ * @type {!Svg<!SVGTextElement>}
  * @package
  */
-Blockly.utils.Svg.TSPAN =
-    new Blockly.utils.Svg('tspan');
+Svg.TEXT = new Svg('text');
+
+/**
+ * @type {!Svg<!SVGTSpanElement>}
+ * @package
+ */
+Svg.TSPAN = new Svg('tspan');
+
+exports.Svg = Svg;

@@ -8,16 +8,16 @@
  * @fileoverview Utility methods for coordinate manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 /**
- * @name Blockly.utils.Coordinate
- * @namespace
+ * Utility methods for coordinate manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @class
  */
-goog.provide('Blockly.utils.Coordinate');
-
+goog.module('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
@@ -25,8 +25,9 @@ goog.provide('Blockly.utils.Coordinate');
  * @param {number} y Top.
  * @struct
  * @constructor
+ * @alias Blockly.utils.Coordinate
  */
-Blockly.utils.Coordinate = function(x, y) {
+const Coordinate = function(x, y) {
   /**
    * X-value
    * @type {number}
@@ -42,78 +43,78 @@ Blockly.utils.Coordinate = function(x, y) {
 
 /**
  * Compares coordinates for equality.
- * @param {?Blockly.utils.Coordinate} a A Coordinate.
- * @param {?Blockly.utils.Coordinate} b A Coordinate.
+ * @param {?Coordinate} a A Coordinate.
+ * @param {?Coordinate} b A Coordinate.
  * @return {boolean} True iff the coordinates are equal, or if both are null.
  */
-Blockly.utils.Coordinate.equals = function(a, b) {
-  if (a == b) {
+Coordinate.equals = function(a, b) {
+  if (a === b) {
     return true;
   }
   if (!a || !b) {
     return false;
   }
-  return a.x == b.x && a.y == b.y;
+  return a.x === b.x && a.y === b.y;
 };
 
 /**
  * Returns the distance between two coordinates.
- * @param {!Blockly.utils.Coordinate} a A Coordinate.
- * @param {!Blockly.utils.Coordinate} b A Coordinate.
+ * @param {!Coordinate} a A Coordinate.
+ * @param {!Coordinate} b A Coordinate.
  * @return {number} The distance between `a` and `b`.
  */
-Blockly.utils.Coordinate.distance = function(a, b) {
-  var dx = a.x - b.x;
-  var dy = a.y - b.y;
+Coordinate.distance = function(a, b) {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
   return Math.sqrt(dx * dx + dy * dy);
 };
 
 /**
  * Returns the magnitude of a coordinate.
- * @param {!Blockly.utils.Coordinate} a A Coordinate.
+ * @param {!Coordinate} a A Coordinate.
  * @return {number} The distance between the origin and `a`.
  */
-Blockly.utils.Coordinate.magnitude = function(a) {
+Coordinate.magnitude = function(a) {
   return Math.sqrt(a.x * a.x + a.y * a.y);
 };
 
 /**
  * Returns the difference between two coordinates as a new
- * Blockly.utils.Coordinate.
- * @param {!Blockly.utils.Coordinate|!SVGPoint} a An x/y coordinate.
- * @param {!Blockly.utils.Coordinate|!SVGPoint} b An x/y coordinate.
- * @return {!Blockly.utils.Coordinate} A Coordinate representing the difference
+ * Coordinate.
+ * @param {!Coordinate|!SVGPoint} a An x/y coordinate.
+ * @param {!Coordinate|!SVGPoint} b An x/y coordinate.
+ * @return {!Coordinate} A Coordinate representing the difference
  *     between `a` and `b`.
  */
-Blockly.utils.Coordinate.difference = function(a, b) {
-  return new Blockly.utils.Coordinate(a.x - b.x, a.y - b.y);
+Coordinate.difference = function(a, b) {
+  return new Coordinate(a.x - b.x, a.y - b.y);
 };
 
 /**
- * Returns the sum of two coordinates as a new Blockly.utils.Coordinate.
- * @param {!Blockly.utils.Coordinate|!SVGPoint} a An x/y coordinate.
- * @param {!Blockly.utils.Coordinate|!SVGPoint} b An x/y coordinate.
- * @return {!Blockly.utils.Coordinate} A Coordinate representing the sum of
+ * Returns the sum of two coordinates as a new Coordinate.
+ * @param {!Coordinate|!SVGPoint} a An x/y coordinate.
+ * @param {!Coordinate|!SVGPoint} b An x/y coordinate.
+ * @return {!Coordinate} A Coordinate representing the sum of
  *     the two coordinates.
  */
-Blockly.utils.Coordinate.sum = function(a, b) {
-  return new Blockly.utils.Coordinate(a.x + b.x, a.y + b.y);
+Coordinate.sum = function(a, b) {
+  return new Coordinate(a.x + b.x, a.y + b.y);
 };
 
 /**
  * Creates a new copy of this coordinate.
- * @return {!Blockly.utils.Coordinate} A copy of this coordinate.
+ * @return {!Coordinate} A copy of this coordinate.
  */
-Blockly.utils.Coordinate.prototype.clone = function() {
-  return new Blockly.utils.Coordinate(this.x, this.y);
+Coordinate.prototype.clone = function() {
+  return new Coordinate(this.x, this.y);
 };
 
 /**
  * Scales this coordinate by the given scale factor.
  * @param {number} s The scale factor to use for both x and y dimensions.
- * @return {!Blockly.utils.Coordinate} This coordinate after scaling.
+ * @return {!Coordinate} This coordinate after scaling.
  */
-Blockly.utils.Coordinate.prototype.scale = function(s) {
+Coordinate.prototype.scale = function(s) {
   this.x *= s;
   this.y *= s;
   return this;
@@ -124,10 +125,12 @@ Blockly.utils.Coordinate.prototype.scale = function(s) {
  * respectively.
  * @param {number} tx The value to translate x by.
  * @param {number} ty The value to translate y by.
- * @return {!Blockly.utils.Coordinate} This coordinate after translating.
+ * @return {!Coordinate} This coordinate after translating.
  */
-Blockly.utils.Coordinate.prototype.translate = function(tx, ty) {
+Coordinate.prototype.translate = function(tx, ty) {
   this.x += tx;
   this.y += ty;
   return this;
 };
+
+exports.Coordinate = Coordinate;

@@ -1,10 +1,16 @@
 /**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+goog.module('Blockly.test.procedureHelpers');
+
+/**
  * Asserts that the procedure definition or call block has the expected var
  * models.
  * @param {!Blockly.Block} block The procedure definition or call block to
  *    check.
  * @param {!Array<string>} varIds An array of variable ids.
- * @private
  */
 function assertBlockVarModels(block, varIds) {
   const expectedVarModels = [];
@@ -18,9 +24,8 @@ function assertBlockVarModels(block, varIds) {
  * Asserts that the procedure call block has the expected arguments.
  * @param {!Blockly.Block} callBlock The procedure definition block.
  * @param {Array<string>=} args An array of argument names.
- * @private
  */
-function assertCallBlockArgsStructure_(callBlock, args) {
+function assertCallBlockArgsStructure(callBlock, args) {
   // inputList also contains "TOPROW"
   chai.assert.equal(callBlock.inputList.length - 1, args.length,
       'call block has the expected number of args');
@@ -74,6 +79,7 @@ function assertDefBlockStructure(defBlock, hasReturn = false,
   chai.assert.sameOrderedMembers(defBlock.getVars(), args);
   assertBlockVarModels(defBlock, varIds);
 }
+exports.assertDefBlockStructure = assertDefBlockStructure;
 
 /**
  * Asserts that the procedure definition block has the expected inputs and
@@ -89,9 +95,10 @@ function assertCallBlockStructure(callBlock, args = [], varIds = []) {
     chai.assert.notInclude(callBlock.toString(), 'with');
   }
 
-  assertCallBlockArgsStructure_(callBlock, args);
+  assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
 }
+exports.assertCallBlockStructure = assertCallBlockStructure;
 
 /**
  * Creates procedure definition block using domToBlock call.
@@ -115,6 +122,7 @@ function createProcDefBlock(
       '</block>';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
 }
+exports.createProcDefBlock = createProcDefBlock;
 
 /**
  * Creates procedure call block using domToBlock call.
@@ -133,3 +141,4 @@ function createProcCallBlock(
       '</block>'
   ), workspace);
 }
+exports.createProcCallBlock = createProcCallBlock;

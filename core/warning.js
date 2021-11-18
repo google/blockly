@@ -6,75 +6,81 @@
 
 /**
  * @fileoverview Object representing a warning.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Warning');
+/**
+ * Object representing a warning.
+ * @class
+ */
+goog.module('Blockly.Warning');
 
-goog.require('Blockly.Bubble');
-goog.require('Blockly.Events');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Bubble} = goog.require('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+const {Icon} = goog.require('Blockly.Icon');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
-goog.require('Blockly.Icon');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.utils.Coordinate');
 
 
 /**
  * Class for a warning.
- * @param {!Blockly.Block} block The block associated with this warning.
- * @extends {Blockly.Icon}
+ * @param {!Block} block The block associated with this warning.
+ * @extends {Icon}
  * @constructor
+ * @alias Blockly.Warning
  */
-Blockly.Warning = function(block) {
-  Blockly.Warning.superClass_.constructor.call(this, block);
+const Warning = function(block) {
+  Warning.superClass_.constructor.call(this, block);
   this.createIcon();
   // The text_ object can contain multiple warnings.
   this.text_ = Object.create(null);
 };
-Blockly.utils.object.inherits(Blockly.Warning, Blockly.Icon);
+object.inherits(Warning, Icon);
 
 /**
  * Does this icon get hidden when the block is collapsed.
  */
-Blockly.Warning.prototype.collapseHidden = false;
+Warning.prototype.collapseHidden = false;
 
 /**
  * Draw the warning icon.
  * @param {!Element} group The icon group.
  * @protected
  */
-Blockly.Warning.prototype.drawIcon_ = function(group) {
+Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
-      {
+  dom.createSvgElement(
+      Svg.PATH, {
         'class': 'blocklyIconShape',
-        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z'
+        'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
       },
       group);
   // Can't use a real '!' text character since different browsers and operating
   // systems render it differently.
   // Body of exclamation point.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.PATH,
-      {
+  dom.createSvgElement(
+      Svg.PATH, {
         'class': 'blocklyIconSymbol',
-        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z'
+        'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
       },
       group);
   // Dot of exclamation point.
-  Blockly.utils.dom.createSvgElement(
-      Blockly.utils.Svg.RECT,
-      {
+  dom.createSvgElement(
+      Svg.RECT, {
         'class': 'blocklyIconSymbol',
-        'x': '7', 'y': '11', 'height': '2', 'width': '2'
+        'x': '7',
+        'y': '11',
+        'height': '2',
+        'width': '2',
       },
       group);
 };
@@ -83,11 +89,11 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
  * Show or hide the warning bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
-Blockly.Warning.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
+Warning.prototype.setVisible = function(visible) {
+  if (visible === this.isVisible()) {
     return;
   }
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.BUBBLE_OPEN))(
+  eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
       this.block_, visible, 'warning'));
   if (visible) {
     this.createBubble_();
@@ -100,11 +106,11 @@ Blockly.Warning.prototype.setVisible = function(visible) {
  * Show the bubble.
  * @private
  */
-Blockly.Warning.prototype.createBubble_ = function() {
-  this.paragraphElement_ = Blockly.Bubble.textToDom(this.getText());
-  this.bubble_ = Blockly.Bubble.createNonEditableBubble(
-      this.paragraphElement_, /** @type {!Blockly.BlockSvg} */ (this.block_),
-      /** @type {!Blockly.utils.Coordinate} */ (this.iconXY_));
+Warning.prototype.createBubble_ = function() {
+  this.paragraphElement_ = Bubble.textToDom(this.getText());
+  this.bubble_ = Bubble.createNonEditableBubble(
+      this.paragraphElement_, /** @type {!BlockSvg} */ (this.block_),
+      /** @type {!Coordinate} */ (this.iconXY_));
   this.applyColour();
 };
 
@@ -112,7 +118,7 @@ Blockly.Warning.prototype.createBubble_ = function() {
  * Dispose of the bubble and references to it.
  * @private
  */
-Blockly.Warning.prototype.disposeBubble_ = function() {
+Warning.prototype.disposeBubble_ = function() {
   this.bubble_.dispose();
   this.bubble_ = null;
   this.paragraphElement_ = null;
@@ -125,8 +131,8 @@ Blockly.Warning.prototype.disposeBubble_ = function() {
  * @param {string} id An ID for this text entry to be able to maintain
  *     multiple warnings.
  */
-Blockly.Warning.prototype.setText = function(text, id) {
-  if (this.text_[id] == text) {
+Warning.prototype.setText = function(text, id) {
+  if (this.text_[id] === text) {
     return;
   }
   if (text) {
@@ -144,9 +150,9 @@ Blockly.Warning.prototype.setText = function(text, id) {
  * Get this warning's texts.
  * @return {string} All texts concatenated into one string.
  */
-Blockly.Warning.prototype.getText = function() {
-  var allWarnings = [];
-  for (var id in this.text_) {
+Warning.prototype.getText = function() {
+  const allWarnings = [];
+  for (const id in this.text_) {
     allWarnings.push(this.text_[id]);
   }
   return allWarnings.join('\n');
@@ -155,7 +161,9 @@ Blockly.Warning.prototype.getText = function() {
 /**
  * Dispose of this warning.
  */
-Blockly.Warning.prototype.dispose = function() {
+Warning.prototype.dispose = function() {
   this.block_.warning = null;
-  Blockly.Icon.prototype.dispose.call(this);
+  Icon.prototype.dispose.call(this);
 };
+
+exports.Warning = Warning;

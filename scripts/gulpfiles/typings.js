@@ -12,6 +12,7 @@
 var gulp = require('gulp');
 gulp.concat = require('gulp-concat');
 
+var argv = require('yargs').argv;
 var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
@@ -83,8 +84,12 @@ function typings() {
       return;
     }
     const cmd = `closure2ts ${file} ${typescriptFileName}`;
-    console.log(`Generating typings for ${file}`);
-    execSync(cmd, { stdio: 'inherit' });
+    let outputMode = 'ignore';
+    if (argv.verbose) {
+      console.log(`Generating typings for ${file}`);
+      outputMode = 'inherit';
+    }
+    execSync(cmd, { stdio: outputMode });
   });
 
   const srcs = [

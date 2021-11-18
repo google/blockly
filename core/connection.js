@@ -55,15 +55,15 @@ const Connection = function(source, type) {
 /**
  * Constants for checking whether two connections are compatible.
  */
-Blockly.Connection.CAN_CONNECT = 0;
-Blockly.Connection.REASON_SELF_CONNECTION = 1;
-Blockly.Connection.REASON_WRONG_TYPE = 2;
-Blockly.Connection.REASON_TARGET_NULL = 3;
-Blockly.Connection.REASON_CHECKS_FAILED = 4;
-Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
-Blockly.Connection.REASON_SHADOW_PARENT = 6;
-Blockly.Connection.REASON_DRAG_CHECKS_FAILED = 7;
-Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
+Connection.CAN_CONNECT = 0;
+Connection.REASON_SELF_CONNECTION = 1;
+Connection.REASON_WRONG_TYPE = 2;
+Connection.REASON_TARGET_NULL = 3;
+Connection.REASON_CHECKS_FAILED = 4;
+Connection.REASON_DIFFERENT_WORKSPACES = 5;
+Connection.REASON_SHADOW_PARENT = 6;
+Connection.REASON_DRAG_CHECKS_FAILED = 7;
+Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
 
 /**
  * Connection this connection connects to.  Null if not connected.

@@ -123,7 +123,7 @@ ConnectionChecker.prototype.getErrorMessage = function(errorCode, a, b) {
       return 'Connecting non-shadow to shadow block.';
     case Connection.REASON_DRAG_CHECKS_FAILED:
       return 'Drag checks failed.';
-    case Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT:
+    case Connection.REASON_PREVIOUS_AND_OUTPUT:
       return 'Block would have an output and a previous connection.';
     default:
       return 'Unknown connection failure: this should never happen!';
@@ -158,19 +158,19 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
     superiorConnection = b;
   }
   if (superiorBlock === inferiorBlock) {
-    return Blockly.Connection.REASON_SELF_CONNECTION;
-  } else if (inferiorConnection.type != Blockly.OPPOSITE_TYPE[superiorConnection.type]) {
-    return Blockly.Connection.REASON_WRONG_TYPE;
+    return Connection.REASON_SELF_CONNECTION;
+  } else if (inferiorConnection.type !== internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
+    return Connection.REASON_WRONG_TYPE;
   } else if (superiorBlock.workspace !== inferiorBlock.workspace) {
-    return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
+    return Connection.REASON_DIFFERENT_WORKSPACES;
   } else if (superiorBlock.isShadow() && !inferiorBlock.isShadow()) {
-    return Blockly.Connection.REASON_SHADOW_PARENT;
-  } else if (inferiorConnection.type === Blockly.connectionTypes.OUTPUT_VALUE &&
+    return Connection.REASON_SHADOW_PARENT;
+  } else if (inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
     inferiorBlock.previousConnection && inferiorBlock.previousConnection.isConnected()) {
-    return Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT;
-  } else if (inferiorConnection.type === Blockly.connectionTypes.PREVIOUS_STATEMENT &&
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
+  } else if (inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
     inferiorBlock.outputConnection && inferiorBlock.outputConnection.isConnected()) {
-    return Blockly.Connection.REASON_PREVIOUS_AND_OUTPUT;
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
   }
   return Connection.CAN_CONNECT;
 };

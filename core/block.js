@@ -1246,7 +1246,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
     }
     if (!this.outputConnection) {
       this.outputConnection =
-          this.makeConnection_(Blockly.connectionTypes.OUTPUT_VALUE);
+          this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {

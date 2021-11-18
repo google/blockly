@@ -19,6 +19,7 @@
   "scripts": {
     "build": "gulp build",
     "build:blocks": "gulp buildBlocks",
+    "build:compiled": "gulp buildCompiled",
     "build:compressed": "gulp buildCompressed",
     "build:core": "gulp buildCore",
     "build:debug": "gulp buildCompressed --verbose --debug",
@@ -74,6 +75,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",
+    "closure-calculate-chunks": "^3.0.2",
     "concurrently": "^6.0.0",
     "eslint": "^7.28.0",
     "eslint-config-google": "^0.14.0",

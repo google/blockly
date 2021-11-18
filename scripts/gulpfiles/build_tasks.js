@@ -231,7 +231,7 @@ function buildBlocks() {
     .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({
-      dependency_mode: 'NONE',
+      dependency_mode: 'SORT_ONLY',
       externs: ['./externs/goog-externs.js', './externs/block-externs.js'],
       js_output_file: 'blocks_compressed.js',
       output_wrapper: outputWrapperUMD('Blockly.Blocks', [{
@@ -257,7 +257,7 @@ function buildGenerator(language, namespace) {
     .pipe(stripApacheLicense())
     .pipe(gulp.sourcemaps.init())
     .pipe(compile({
-      dependency_mode: 'NONE',
+      dependency_mode: 'SORT_ONLY',
       externs: ['./externs/goog-externs.js', './externs/generator-externs.js'],
       js_output_file: `${language}_compressed.js`,
       output_wrapper: outputWrapperUMD(`Blockly.${namespace}`, [{

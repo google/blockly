@@ -238,6 +238,750 @@ const renamings = {
             {module: 'Blockly.Extensions', export: 'runAfterPageLoad'},
       },
     },
+    'Blockly.Events.Abstract': {
+      export: 'Abstract',
+      path: 'Blockly.Events.Abstract',
+    },
+    'Blockly.Events.BlockBase': {
+      export: 'BlockBase',
+      path: 'Blockly.Events.BlockBase',
+    },
+    'Blockly.Events.BlockChange': {
+      export: 'BlockChange',
+      path: 'Blockly.Events.BlockChange',
+    },
+    'Blockly.Events.BlockCreate': {
+      export: 'BlockCreate',
+      path: 'Blockly.Events.BlockCreate',
+    },
+    'Blockly.Events.BlockDelete': {
+      export: 'BlockDelete',
+      path: 'Blockly.Events.BlockDelete',
+    },
+    'Blockly.Events.BlockDrag': {
+      export: 'BlockDrag',
+      path: 'Blockly.Events.BlockDrag',
+    },
+    'Blockly.Events.BlockMove': {
+      export: 'BlockMove',
+      path: 'Blockly.Events.BlockMove',
+    },
+    'Blockly.Events.BubbleOpen': {
+      export: 'BubbleOpen',
+      path: 'Blockly.Events.BubbleOpen',
+    },
+    'Blockly.Events.Click': {
+      export: 'Click',
+      path: 'Blockly.Events.Click',
+    },
+    'Blockly.Events.CommentBase': {
+      export: 'CommentBase',
+      path: 'Blockly.Events.CommentBase',
+    },
+    'Blockly.Events.CommentChange': {
+      export: 'CommentChange',
+      path: 'Blockly.Events.CommentChange',
+    },
+    'Blockly.Events.CommentCreate': {
+      export: 'CommentCreate',
+      path: 'Blockly.Events.CommentCreate',
+    },
+    'Blockly.Events.CommentDelete': {
+      export: 'CommentDelete',
+      path: 'Blockly.Events.CommentDelete',
+    },
+    'Blockly.Events.CommentMove': {
+      export: 'CommentMove',
+      path: 'Blockly.Events.CommentMove',
+    },
+    'Blockly.Events.MarkerMove': {
+      export: 'MarkerMove',
+      path: 'Blockly.Events.MarkerMove',
+    },
+    'Blockly.Events.Selected': {
+      export: 'Selected',
+      path: 'Blockly.Events.Selected',
+    },
+    'Blockly.Events.ThemeChange': {
+      export: 'ThemeChange',
+      path: 'Blockly.Events.ThemeChange',
+    },
+    'Blockly.Events.ToolboxItemSelect': {
+      export: 'ToolboxItemSelect',
+      path: 'Blockly.Events.ToolboxItemSelect',
+    },
+    'Blockly.Events.TrashcanOpen': {
+      export: 'TrashcanOpen',
+      path: 'Blockly.Events.TrashcanOpen',
+    },
+    'Blockly.Events.Ui': {
+      export: 'Ui',
+      path: 'Blockly.Events.Ui',
+    },
+    'Blockly.Events.UiBase': {
+      export: 'UiBase',
+      path: 'Blockly.Events.UiBase',
+    },
+    'Blockly.Events.VarBase': {
+      export: 'VarBase',
+      path: 'Blockly.Events.VarBase',
+    },
+    'Blockly.Events.VarCreate': {
+      export: 'VarCreate',
+      path: 'Blockly.Events.VarCreate',
+    },
+    'Blockly.Events.VarDelete': {
+      export: 'VarDelete',
+      path: 'Blockly.Events.VarDelete',
+    },
+    'Blockly.Events.VarRename': {
+      export: 'VarRename',
+      path: 'Blockly.Events.VarRename',
+    },
+    'Blockly.Events.ViewportChange': {
+      export: 'ViewportChange',
+      path: 'Blockly.Events.ViewportChange',
+    },
+    'Blockly.Events.FinishedLoading': {
+      export: 'FinishedLoading',
+      path: 'Blockly.Events.FinishedLoading',
+    },
+    'Blockly.IASTNodeLocation': {
+      export: 'IASTNodeLocation',
+      path: 'Blockly.IASTNodeLocation',
+    },
+    'Blockly.IASTNodeLocationSvg': {
+      export: 'IASTNodeLocationSvg',
+      path: 'Blockly.IASTNodeLocationSvg',
+    },
+    'Blockly.IASTNodeLocationWithBlock': {
+      export: 'IASTNodeLocationWithBlock',
+      path: 'Blockly.IASTNodeLocationWithBlock',
+    },
+    'Blockly.IAutoHideable': {
+      export: 'IAutoHideable',
+      path: 'Blockly.IAutoHideable',
+    },
+    'Blockly.IBlockDragger': {
+      export: 'IBlockDragger',
+      path: 'Blockly.IBlockDragger',
+    },
+    'Blockly.IBoundedElement': {
+      export: 'IBoundedElement',
+      path: 'Blockly.IBoundedElement',
+    },
+    'Blockly.IBubble': {
+      export: 'IBubble',
+      path: 'Blockly.IBubble',
+    },
+    'Blockly.ICollapsibleToolboxItem': {
+      export: 'ICollapsibleToolboxItem',
+      path: 'Blockly.ICollapsibleToolboxItem',
+    },
+    'Blockly.IComponent': {
+      export: 'IComponent',
+      path: 'Blockly.IComponent',
+    },
+    'Blockly.IConnectionChecker': {
+      export: 'IConnectionChecker',
+      path: 'Blockly.IConnectionChecker',
+    },
+    'Blockly.IContextMenu': {
+      export: 'IContextMenu',
+      path: 'Blockly.IContextMenu',
+    },
+    'Blockly.ICopyable': {
+      export: 'ICopyable',
+      path: 'Blockly.ICopyable',
+    },
+    'Blockly.IDeletable': {
+      export: 'IDeletable',
+      path: 'Blockly.IDeletable',
+    },
+    'Blockly.IDeleteArea': {
+      export: 'IDeleteArea',
+      path: 'Blockly.IDeleteArea',
+    },
+    'Blockly.IDragTarget': {
+      export: 'IDragTarget',
+      path: 'Blockly.IDragTarget',
+    },
+    'Blockly.IDraggable': {
+      export: 'IDraggable',
+      path: 'Blockly.IDraggable',
+    },
+    'Blockly.IFlyout': {
+      export: 'IFlyout',
+      path: 'Blockly.IFlyout',
+    },
+    'Blockly.IKeyboardAccessible': {
+      export: 'IKeyboardAccessible',
+      path: 'Blockly.IKeyboardAccessible',
+    },
+    'Blockly.IMetricsManager': {
+      export: 'IMetricsManager',
+      path: 'Blockly.IMetricsManager',
+    },
+    'Blockly.IMovable': {
+      export: 'IMovable',
+      path: 'Blockly.IMovable',
+    },
+    'Blockly.IPositionable': {
+      export: 'IPositionable',
+      path: 'Blockly.IPositionable',
+    },
+    'Blockly.IRegistrable': {
+      export: 'IRegistrable',
+      path: 'Blockly.IRegistrable',
+    },
+    'Blockly.IRegistrableField': {
+      export: 'IRegistrableField',
+      path: 'Blockly.IRegistrableField',
+    },
+    'Blockly.ISelectable': {
+      export: 'ISelectable',
+      path: 'Blockly.ISelectable',
+    },
+    'Blockly.ISelectableToolboxItem': {
+      export: 'ISelectableToolboxItem',
+      path: 'Blockly.ISelectableToolboxItem',
+    },
+    'Blockly.IStyleable': {
+      export: 'IStyleable',
+      path: 'Blockly.IStyleable',
+    },
+    'Blockly.IToolbox': {
+      export: 'IToolbox',
+      path: 'Blockly.IToolbox',
+    },
+    'Blockly.IToolboxItem': {
+      export: 'IToolboxItem',
+      path: 'Blockly.IToolboxItem',
+    },
+    'Blockly.blockRendering.ConstantProvider': {
+      export: 'ConstantProvider',
+      path: 'Blockly.blockRendering.ConstantProvider',
+    },
+    'Blockly.blockRendering.Debug': {
+      export: 'Debug',
+      path: 'Blockly.blockRendering.Debug',
+    },
+    'Blockly.blockRendering.Drawer': {
+      export: 'Drawer',
+      path: 'Blockly.blockRendering.Drawer',
+    },
+    'Blockly.blockRendering.IPathObject': {
+      export: 'IPathObject',
+      path: 'Blockly.blockRendering.IPathObject',
+    },
+    'Blockly.blockRendering.RenderInfo': {
+      export: 'RenderInfo',
+      path: 'Blockly.blockRendering.RenderInfo',
+    },
+    'Blockly.blockRendering.MarkerSvg': {
+      export: 'MarkerSvg',
+      path: 'Blockly.blockRendering.MarkerSvg',
+    },
+    'Blockly.blockRendering.PathObject': {
+      export: 'PathObject',
+      path: 'Blockly.blockRendering.PathObject',
+    },
+    'Blockly.blockRendering.Renderer': {
+      export: 'Renderer',
+      path: 'Blockly.blockRendering.Renderer',
+    },
+    'Blockly.geras.InlineInput': {
+      export: 'InlineInput',
+      path: 'Blockly.geras.InlineInput',
+    },
+    'Blockly.geras.StatementInput': {
+      export: 'StatementInput',
+      path: 'Blockly.geras.StatementInput',
+    },
+    'Blockly.geras.ConstantProvider': {
+      export: 'ConstantProvider',
+      path: 'Blockly.geras.ConstantProvider',
+    },
+    'Blockly.geras.Drawer': {
+      export: 'Drawer',
+      path: 'Blockly.geras.Drawer',
+    },
+    'Blockly.geras.HighlightConstantProvider': {
+      export: 'HighlightConstantProvider',
+      path: 'Blockly.geras.HighlightConstantProvider',
+    },
+    'Blockly.geras.Highlighter': {
+      export: 'Highlighter',
+      path: 'Blockly.geras.Highlighter',
+    },
+    'Blockly.geras.RenderInfo': {
+      export: 'RenderInfo',
+      path: 'Blockly.geras.RenderInfo',
+    },
+    'Blockly.geras.PathObject': {
+      export: 'PathObject',
+      path: 'Blockly.geras.PathObject',
+    },
+    'Blockly.geras.Renderer': {
+      export: 'Renderer',
+      path: 'Blockly.geras.Renderer',
+    },
+    'Blockly.blockRendering.Measurable': {
+      export: 'Measurable',
+      path: 'Blockly.blockRendering.Measurable',
+    },
+    'Blockly.blockRendering.BottomRow': {
+      export: 'BottomRow',
+      path: 'Blockly.blockRendering.BottomRow',
+    },
+    'Blockly.blockRendering.Connection': {
+      export: 'Connection',
+      path: 'Blockly.blockRendering.Connection',
+    },
+    'Blockly.blockRendering.ExternalValueInput': {
+      export: 'ExternalValueInput',
+      path: 'Blockly.blockRendering.ExternalValueInput',
+    },
+    'Blockly.blockRendering.Field': {
+      export: 'Field',
+      path: 'Blockly.blockRendering.Field',
+    },
+    'Blockly.blockRendering.Hat': {
+      export: 'Hat',
+      path: 'Blockly.blockRendering.Hat',
+    },
+    'Blockly.blockRendering.Icon': {
+      export: 'Icon',
+      path: 'Blockly.blockRendering.Icon',
+    },
+    'Blockly.blockRendering.InRowSpacer': {
+      export: 'InRowSpacer',
+      path: 'Blockly.blockRendering.InRowSpacer',
+    },
+    'Blockly.blockRendering.InlineInput': {
+      export: 'InlineInput',
+      path: 'Blockly.blockRendering.InlineInput',
+    },
+    'Blockly.blockRendering.InputConnection': {
+      export: 'InputConnection',
+      path: 'Blockly.blockRendering.InputConnection',
+    },
+    'Blockly.blockRendering.InputRow': {
+      export: 'InputRow',
+      path: 'Blockly.blockRendering.InputRow',
+    },
+    'Blockly.blockRendering.JaggedEdge': {
+      export: 'JaggedEdge',
+      path: 'Blockly.blockRendering.JaggedEdge',
+    },
+    'Blockly.blockRendering.NextConnection': {
+      export: 'NextConnection',
+      path: 'Blockly.blockRendering.NextConnection',
+    },
+    'Blockly.blockRendering.OutputConnection': {
+      export: 'OutputConnection',
+      path: 'Blockly.blockRendering.OutputConnection',
+    },
+    'Blockly.blockRendering.PreviousConnection': {
+      export: 'PreviousConnection',
+      path: 'Blockly.blockRendering.PreviousConnection',
+    },
+    'Blockly.blockRendering.RoundCorner': {
+      export: 'RoundCorner',
+      path: 'Blockly.blockRendering.RoundCorner',
+    },
+    'Blockly.blockRendering.Row': {
+      export: 'Row',
+      path: 'Blockly.blockRendering.Row',
+    },
+    'Blockly.blockRendering.SpacerRow': {
+      export: 'SpacerRow',
+      path: 'Blockly.blockRendering.SpacerRow',
+    },
+    'Blockly.blockRendering.SquareCorner': {
+      export: 'SquareCorner',
+      path: 'Blockly.blockRendering.SquareCorner',
+    },
+    'Blockly.blockRendering.StatementInput': {
+      export: 'StatementInput',
+      path: 'Blockly.blockRendering.StatementInput',
+    },
+    'Blockly.blockRendering.TopRow': {
+      export: 'TopRow',
+      path: 'Blockly.blockRendering.TopRow',
+    },
+    'Blockly.blockRendering.Types': {
+      export: 'Types',
+      path: 'Blockly.blockRendering.Types',
+    },
+    'Blockly.minimalist.ConstantProvider': {
+      export: 'ConstantProvider',
+      path: 'Blockly.minimalist.ConstantProvider',
+    },
+    'Blockly.minimalist.Drawer': {
+      export: 'Drawer',
+      path: 'Blockly.minimalist.Drawer',
+    },
+    'Blockly.minimalist.RenderInfo': {
+      export: 'RenderInfo',
+      path: 'Blockly.minimalist.RenderInfo',
+    },
+    'Blockly.minimalist.Renderer': {
+      export: 'Renderer',
+      path: 'Blockly.minimalist.Renderer',
+    },
+    'Blockly.thrasos.RenderInfo': {
+      export: 'RenderInfo',
+      path: 'Blockly.thrasos.RenderInfo',
+    },
+    'Blockly.thrasos.Renderer': {
+      export: 'Renderer',
+      path: 'Blockly.thrasos.Renderer',
+    },
+    'Blockly.zelos.BottomRow': {
+      export: 'BottomRow',
+      path: 'Blockly.zelos.BottomRow',
+    },
+    'Blockly.zelos.StatementInput': {
+      export: 'StatementInput',
+      path: 'Blockly.zelos.StatementInput',
+    },
+    'Blockly.zelos.RightConnectionShape': {
+      export: 'RightConnectionShape',
+      path: 'Blockly.zelos.RightConnectionShape',
+    },
+    'Blockly.zelos.TopRow': {
+      export: 'TopRow',
+      path: 'Blockly.zelos.TopRow',
+    },
+    'Blockly.zelos.ConstantProvider': {
+      export: 'ConstantProvider',
+      path: 'Blockly.zelos.ConstantProvider',
+    },
+    'Blockly.zelos.Drawer': {
+      export: 'Drawer',
+      path: 'Blockly.zelos.Drawer',
+    },
+    'Blockly.zelos.RenderInfo': {
+      export: 'RenderInfo',
+      path: 'Blockly.zelos.RenderInfo',
+    },
+    'Blockly.zelos.MarkerSvg': {
+      export: 'MarkerSvg',
+      path: 'Blockly.zelos.MarkerSvg',
+    },
+    'Blockly.zelos.PathObject': {
+      export: 'PathObject',
+      path: 'Blockly.zelos.PathObject',
+    },
+    'Blockly.zelos.Renderer': {
+      export: 'Renderer',
+      path: 'Blockly.zelos.Renderer',
+    },
+    'Blockly.Themes.Classic': {
+      export: 'Classic',
+      path: 'Blockly.Themes.Classic',
+    },
+    'Blockly.Themes.Zelos': {
+      export: 'Zelos',
+      path: 'Blockly.Themes.Zelos',
+    },
+    'Blockly.ToolboxCategory': {
+      export: 'ToolboxCategory',
+      path: 'Blockly.ToolboxCategory',
+    },
+    'Blockly.CollapsibleToolboxCategory': {
+      export: 'CollapsibleToolboxCategory',
+      path: 'Blockly.CollapsibleToolboxCategory',
+    },
+    'Blockly.ToolboxSeparator': {
+      export: 'ToolboxSeparator',
+      path: 'Blockly.ToolboxSeparator',
+    },
+    'Blockly.Toolbox': {
+      export: 'Toolbox',
+      path: 'Blockly.Toolbox',
+    },
+    'Blockly.ToolboxItem': {
+      export: 'ToolboxItem',
+      path: 'Blockly.ToolboxItem',
+    },
+    'Blockly.utils.Coordinate': {
+      export: 'Coordinate',
+      path: 'Blockly.utils.Coordinate',
+    },
+    'Blockly.utils.KeyCodes': {
+      export: 'KeyCodes',
+      path: 'Blockly.utils.KeyCodes',
+    },
+    'Blockly.utils.Metrics': {
+      export: 'Metrics',
+      path: 'Blockly.utils.Metrics',
+    },
+    'Blockly.utils.Rect': {
+      export: 'Rect',
+      path: 'Blockly.utils.Rect',
+    },
+    'Blockly.utils.Size': {
+      export: 'Size',
+      path: 'Blockly.utils.Size',
+    },
+    'Blockly.utils.Svg': {
+      export: 'Svg',
+      path: 'Blockly.utils.Svg',
+    },
+    'Blockly.BlocklyOptions': {
+      export: 'BlocklyOptions',
+      path: 'Blockly.BlocklyOptions',
+    },
+    'Blockly.Bubble': {
+      export: 'Bubble',
+      path: 'Blockly.Bubble',
+    },
+    'Blockly.BubbleDragger': {
+      export: 'BubbleDragger',
+      path: 'Blockly.BubbleDragger',
+    },
+    'Blockly.Comment': {
+      export: 'Comment',
+      path: 'Blockly.Comment',
+    },
+    'Blockly.ComponentManager': {
+      export: 'ComponentManager',
+      path: 'Blockly.ComponentManager',
+    },
+    'Blockly.Connection': {
+      export: 'Connection',
+      path: 'Blockly.Connection',
+    },
+    'Blockly.ConnectionChecker': {
+      export: 'ConnectionChecker',
+      path: 'Blockly.ConnectionChecker',
+    },
+    'Blockly.ConnectionDB': {
+      export: 'ConnectionDB',
+      path: 'Blockly.ConnectionDB',
+    },
+    'Blockly.ContextMenuRegistry': {
+      export: 'ContextMenuRegistry',
+      path: 'Blockly.ContextMenuRegistry',
+    },
+    'Blockly.DeleteArea': {
+      export: 'DeleteArea',
+      path: 'Blockly.DeleteArea',
+    },
+    'Blockly.DragTarget': {
+      export: 'DragTarget',
+      path: 'Blockly.DragTarget',
+    },
+    'Blockly.DropDownDiv': {
+      export: 'DropDownDiv',
+      path: 'Blockly.DropDownDiv',
+    },
+    'Blockly.Field': {
+      export: 'Field',
+      path: 'Blockly.Field',
+    },
+    'Blockly.FieldAngle': {
+      export: 'FieldAngle',
+      path: 'Blockly.FieldAngle',
+    },
+    'Blockly.FieldCheckbox': {
+      export: 'FieldCheckbox',
+      path: 'Blockly.FieldCheckbox',
+    },
+    'Blockly.FieldColour': {
+      export: 'FieldColour',
+      path: 'Blockly.FieldColour',
+    },
+    'Blockly.FieldDropdown': {
+      export: 'FieldDropdown',
+      path: 'Blockly.FieldDropdown',
+    },
+    'Blockly.FieldImage': {
+      export: 'FieldImage',
+      path: 'Blockly.FieldImage',
+    },
+    'Blockly.FieldLabel': {
+      export: 'FieldLabel',
+      path: 'Blockly.FieldLabel',
+    },
+    'Blockly.FieldLabelSerializable': {
+      export: 'FieldLabelSerializable',
+      path: 'Blockly.FieldLabelSerializable',
+    },
+    'Blockly.FieldMultilineInput': {
+      export: 'FieldMultilineInput',
+      path: 'Blockly.FieldMultilineInput',
+    },
+    'Blockly.FieldNumber': {
+      export: 'FieldNumber',
+      path: 'Blockly.FieldNumber',
+    },
+    'Blockly.FieldTextInput': {
+      export: 'FieldTextInput',
+      path: 'Blockly.FieldTextInput',
+    },
+    'Blockly.FieldVariable': {
+      export: 'FieldVariable',
+      path: 'Blockly.FieldVariable',
+    },
+    'Blockly.Flyout': {
+      export: 'Flyout',
+      path: 'Blockly.Flyout',
+    },
+    'Blockly.FlyoutButton': {
+      export: 'FlyoutButton',
+      path: 'Blockly.FlyoutButton',
+    },
+    'Blockly.HorizontalFlyout': {
+      export: 'HorizontalFlyout',
+      path: 'Blockly.HorizontalFlyout',
+    },
+    'Blockly.FlyoutMetricsManager': {
+      export: 'FlyoutMetricsManager',
+      path: 'Blockly.FlyoutMetricsManager',
+    },
+    'Blockly.VerticalFlyout': {
+      export: 'VerticalFlyout',
+      path: 'Blockly.VerticalFlyout',
+    },
+    'Blockly.Generator': {
+      export: 'Generator',
+      path: 'Blockly.Generator',
+    },
+    'Blockly.Gesture': {
+      export: 'Gesture',
+      path: 'Blockly.Gesture',
+    },
+    'Blockly.Grid': {
+      export: 'Grid',
+      path: 'Blockly.Grid',
+    },
+    'Blockly.Icon': {
+      export: 'Icon',
+      path: 'Blockly.Icon',
+    },
+    'Blockly.inject': {
+      export: 'inject',
+      path: 'Blockly.inject',
+    },
+    'Blockly.Input': {
+      export: 'Input',
+      path: 'Blockly.Input',
+    },
+    'Blockly.inputTypes': {
+      export: 'inputTypes',
+      path: 'Blockly.inputTypes',
+    },
+    'Blockly.InsertionMarkerManager': {
+      export: 'InsertionMarkerManager',
+      path: 'Blockly.InsertionMarkerManager',
+    },
+    'Blockly.MarkerManager': {
+      export: 'MarkerManager',
+      path: 'Blockly.MarkerManager',
+    },
+    'Blockly.Menu': {
+      export: 'Menu',
+      path: 'Blockly.Menu',
+    },
+    'Blockly.MenuItem': {
+      export: 'MenuItem',
+      path: 'Blockly.MenuItem',
+    },
+    'Blockly.MetricsManager': {
+      export: 'MetricsManager',
+      path: 'Blockly.MetricsManager',
+    },
+    'Blockly.Mutator': {
+      export: 'Mutator',
+      path: 'Blockly.Mutator',
+    },
+    'Blockly.Names': {
+      export: 'Names',
+      path: 'Blockly.Names',
+    },
+    'Blockly.Options': {
+      export: 'Options',
+      path: 'Blockly.Options',
+    },
+    'Blockly.RenderedConnection': {
+      export: 'RenderedConnection',
+      path: 'Blockly.RenderedConnection',
+    },
+    'Blockly.Scrollbar': {
+      export: 'Scrollbar',
+      path: 'Blockly.Scrollbar',
+    },
+    'Blockly.ScrollbarPair': {
+      export: 'ScrollbarPair',
+      path: 'Blockly.ScrollbarPair',
+    },
+    'Blockly.ShortcutRegistry': {
+      export: 'ShortcutRegistry',
+      path: 'Blockly.ShortcutRegistry',
+    },
+    'Blockly.Theme': {
+      export: 'Theme',
+      path: 'Blockly.Theme',
+    },
+    'Blockly.ThemeManager': {
+      export: 'ThemeManager',
+      path: 'Blockly.ThemeManager',
+    },
+    'Blockly.TouchGesture': {
+      export: 'TouchGesture',
+      path: 'Blockly.TouchGesture',
+    },
+    'Blockly.Trashcan': {
+      export: 'Trashcan',
+      path: 'Blockly.Trashcan',
+    },
+    'Blockly.VariableMap': {
+      export: 'VariableMap',
+      path: 'Blockly.VariableMap',
+    },
+    'Blockly.VariableModel': {
+      export: 'VariableModel',
+      path: 'Blockly.VariableModel',
+    },
+    'Blockly.Warning': {
+      export: 'Warning',
+      path: 'Blockly.Warning',
+    },
+    'Blockly.Workspace': {
+      export: 'Workspace',
+      path: 'Blockly.Workspace',
+    },
+    'Blockly.WorkspaceAudio': {
+      export: 'WorkspaceAudio',
+      path: 'Blockly.WorkspaceAudio',
+    },
+    'Blockly.WorkspaceComment': {
+      export: 'WorkspaceComment',
+      path: 'Blockly.WorkspaceComment',
+    },
+    'Blockly.WorkspaceCommentSvg': {
+      export: 'WorkspaceCommentSvg',
+      path: 'Blockly.WorkspaceCommentSvg',
+    },
+    'Blockly.WorkspaceDragSurfaceSvg': {
+      export: 'WorkspaceDragSurfaceSvg',
+      path: 'Blockly.WorkspaceDragSurfaceSvg',
+    },
+    'Blockly.WorkspaceDragger': {
+      export: 'WorkspaceDragger',
+      path: 'Blockly.WorkspaceDragger',
+    },
+    'Blockly.WorkspaceSvg': {
+      export: 'WorkspaceSvg',
+      path: 'Blockly.WorkspaceSvg',
+    },
+    'Blockly.ZoomControls': {
+      export: 'ZoomControls',
+      path: 'Blockly.ZoomControls',
+    },
     'Blockly': {
       exports: {
         svgSize: {module: 'Blockly.utils.svgMath'},

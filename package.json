@@ -20,6 +20,7 @@
     "build": "gulp build",
     "build:blocks": "gulp buildBlocks",
     "build:compiled": "gulp buildCompiled",
+    "build:compiled:debug": "gulp buildCompiled --verbose --debug",
     "build:compressed": "gulp buildCompressed",
     "build:core": "gulp buildCore",
     "build:debug": "gulp buildCompressed --verbose --debug",

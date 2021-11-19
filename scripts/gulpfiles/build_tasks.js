@@ -32,6 +32,48 @@ var {getPackageJson} = require('./helper_tasks');
 //                        Build                           //
 ////////////////////////////////////////////////////////////
 
+/**
+ * A list of chunks.  Order matters: later chunks can depend on
+ * earlier ones, but not vice-versa.  All chunks are assumed to depend
+ * on the first chunk.
+ *
+ * Output files will be named <chunk_name>_compressed.js.
+ */
+const CHUNKS = [
+  {
+    name: 'blockly',
+    entry: 'core/requires.js'
+  }, {
+    name: 'blocks',
+    entry: 'blocks/all.js'
+  }, {
+    name: 'javascript',
+    entry: 'generators/javascript/all.js',
+    // dependsOn: ['blocks'],
+    namespace: 'JavaScript',
+  }, {
+    name: 'python',
+    entry: 'generators/python/all.js',
+    // dependsOn: ['blocks'],
+    namespace: 'Python',
+  }, {
+    name: 'php',
+    entry: 'generators/php/all.js',
+    // dependsOn: ['blocks'],
+    namespace: 'PHP',
+  }, {
+    name: 'lua',
+    entry: 'generators/lua/all.js',
+    // dependsOn: ['blocks'],
+    namespace: 'Lua',
+  }, {
+    name: 'dart',
+    entry: 'generators/dart/all.js',
+    // dependsOn: ['blocks'],
+    namespace: 'Dart',
+  }
+];
+
 const licenseRegex = `\\/\\*\\*
  \\* @license
  \\* (Copyright \\d+ (Google LLC|Massachusetts Institute of Technology))
@@ -419,6 +461,155 @@ function buildLangfiles(done) {
 };
 
 /**
+ * Get chunking options to pass to Closure Compiler by using
+ * closure-calculate-chunks (hereafter "ccc") to generate them based
+ * on the deps.js file (which must be up to date!).
+ *
+ * The generated options are modified to use the original chunk names
+ * given in CHUNKS instead of the entry-point based names used by ccc.
+ *
+ * @return {{chunk: !Array<string>, js: !Array<string>}} The chunking
+ *     information, in the same form as emitted by
+ *     closure-calculate-chunks.
+ *
+ * TODO(cpcallen): maybeAddClosureLibrary?  Or maybe remove base.js?
+ */
+function getChunkOptions() {
+  const cccArgs = [
+    '--closure-library-base-js-path ./closure/goog/base.js',
+    '--deps-file ./tests/deps.js',
+    ...(CHUNKS.map(chunk => `--entrypoint '${chunk.entry}'`)),
+  ];
+  const cccCommand = `closure-calculate-chunks ${cccArgs.join(' ')}`;
+  const rawOptions= JSON.parse(String(execSync(cccCommand)));
+
+  // rawOptions should now be of the form:
+  //
+  // {
+  //   chunk: [
+  //     'requires:258',
+  //     'all:10:requires',
+  //     'all1:11:requires',
+  //     'all2:11:requires',
+  //     /* ... remaining handful of chunks */
+  //   ],
+  //   js: [
+  //     '/Users/cpcallen/src/blockly/core/serialization/workspaces.js',
+  //     '/Users/cpcallen/src/blockly/core/serialization/variables.js',
+  //     /* ... remaining several hundred files */
+  //   ],
+  // }
+  //
+  // This is designed to be passed directly as-is as the options
+  // object to the Closure Compiler node API, but we want to replace
+  // the unhelpful entry-point based chunk names (let's call these
+  // "nicknames") with the ones from CHUNKS.  Luckily they will be in
+  // the same order that the entry points were supplied in - i.e.,
+  // they correspond 1:1 with the entries in CHUNKS.
+  const chunkByNickname = Object.create(null);
+  const chunkList = rawOptions.chunk.map((element, index) => {
+    const [nickname, numJsFiles, depNicks] = element.split(':');
+    const chunk = CHUNKS[index];
+    chunkByNickname[nickname] = chunk;
+    const depNames = depNicks ?
+        depNicks.split(',').map(nick => chunkByNickname[nick].name) .join(',')
+        : '';
+    return `${chunk.name}:${numJsFiles}:${depNames}`;
+  });
+
+  return {chunk: chunkList, js: rawOptions.js};
+}
+
+/** 
+ * RegExp that globally matches path.sep (i.e., "/" or "\").
+ */
+const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
+
+/** 
+ * Modify the supplied gulp.rename path object to relax @package
+ * restrictions in core/.
+ *
+ * Background: subdirectories of core/ are used to group similar files
+ * together but are not intended to limit access to names
+ * marked @package; instead, that annotation is intended to mean only
+ * that the annotated name not part of the public API.
+ *
+ * To make @package behave less strictly in core/, this function can
+ * be used to as a gulp.rename filter, modifying the path object to
+ * flatten all files in core/** so that they're in the same directory,
+ * while ensuring that files with the same base name don't conflict.
+ *
+ * @param {{dirname: string, basename: string, extname: string}}
+ *     pathObject The path argument supplied by gulp.rename to its
+ *     callback.  Modified in place.
+ */
+function flattenCorePaths(pathObject) {
+  const dirs = pathObject.dirname.split(path.sep);
+  if (dirs[0] === 'core') {
+    pathObject.dirname = dirs[0];
+    pathObject.basename =
+        dirs.slice(1).concat(pathObject.basename).join('-slash-');
+  }
+}
+
+/**
+ * Undo the effects of flattenCorePaths on a single path string.
+ * @param string pathString The flattened path.
+ * @return string  The path after unflattening.
+ */
+function unflattenCorePaths(pathString) {
+  return pathString.replace(/-slash-/g, path.sep);
+}
+
+/**
+ * This task compiles the core library, blocks and generators, creating 
+ * blockly_compressed.js, blocks_compressed.js, etc.
+ *
+ * The deps.js file must be up-to-date.
+ */
+function buildCompiled(done) {
+  // Get chunking.
+  const chunkOptions = getChunkOptions();
+  // Closure Compiler options.
+  const packageJson = getPackageJson();  // For version number.
+  const options = {
+    compilation_level: 'SIMPLE_OPTIMIZATIONS',
+    warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
+    language_in: 'ECMASCRIPT6_STRICT',
+    language_out: 'ECMASCRIPT5_STRICT',
+    rewrite_polyfills: true,
+    hide_warnings_for: 'node_modules',
+    // dependency_mode: 'PRUNE',
+    externs: ['./externs/svg-externs.js', /* './externs/goog-externs.js' */],
+    output_wrapper: outputWrapperUMD('Blockly', []),
+    define: 'Blockly.VERSION="' + packageJson.version + '"',
+    chunk: chunkOptions.chunk,
+    // Don't supply the list of source files in chunkOptions.js as an
+    // option to Closure Compiler; instead feed them to gulp.src.
+  };
+  if (argv.debug || argv.strict) {
+    options.jscomp_error = [...JSCOMP_ERROR];
+    if (argv.strict) {
+      options.jscomp_error.push('strictCheckTypes');
+    }
+  }
+  // Extra options for Closure Compiler gulp plugin.
+  const pluginOptions = ['native', 'java', 'javascript'];
+
+  // Fire up compilation pipline.
+  return gulp.src(chunkOptions.js, {base: './'})
+      .pipe(stripApacheLicense())
+      .pipe(gulp.sourcemaps.init())
+      .pipe(gulp.rename(flattenCorePaths))
+      .pipe(closureCompiler(options, pluginOptions))
+      .pipe(gulp.rename({suffix: '_compressed'}))
+      .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
+      .pipe(
+          gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
+      .pipe(gulp.dest(BUILD_DIR));
+};
+
+/**
  * This task builds Blockly core, blocks and generators together and uses
  * closure compiler's ADVANCED_COMPILATION mode.
  */
@@ -531,6 +722,7 @@ module.exports = {
   blocks: buildBlocks,
   generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
+  compiled: buildCompiled,
   compressed: buildCompressed,
   format: format,
   generators: buildGenerators,

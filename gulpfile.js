@@ -30,6 +30,7 @@ module.exports = {
   buildCore: buildTasks.core,
   buildBlocks: buildTasks.blocks,
   buildLangfiles: buildTasks.langfiles,
+  buildCompiled: buildTasks.compiled,
   buildCompressed: buildTasks.compressed,
   buildGenerators: buildTasks.generators,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,

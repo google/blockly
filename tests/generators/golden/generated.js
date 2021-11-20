@@ -449,7 +449,7 @@ function test_number_properties() {
   assertEquals(42 % 2 === 0, true, 'even');
   assertEquals(42.1 % 2 === 1, false, 'odd');
   assertEquals(mathIsPrime(5), true, 'prime 5');
-  assertEquals(mathIsPrime((5 + 2)), true, 'prime 5 + 2 (extra parentheses)');
+  assertEquals(mathIsPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   assertEquals(mathIsPrime(25), false, 'prime 25');
   assertEquals(mathIsPrime(-31.1), false, 'prime negative');
   assertEquals(Math.PI % 1 === 0, false, 'whole');

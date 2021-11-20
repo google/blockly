@@ -454,9 +454,9 @@ function test_number_properties() {
   assertEquals(mathIsPrime(-31.1), false, 'prime negative');
   assertEquals(Math.PI % 1 === 0, false, 'whole');
   assertEquals(Infinity > 0, true, 'positive');
-  assertEquals((5 + 2) > 0, true, '5 + 2 is positive (extra parentheses)');
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   assertEquals(-42 < 0, true, 'negative');
-  assertEquals((3 + 2) < 0, false, '3 + 2 is negative (extra parentheses)');
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
   assertEquals(42 % 2 === 0, true, 'divisible');
   assertEquals(!(42 % 0 === 0), true, 'divisible by 0');
 }

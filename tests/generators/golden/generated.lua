@@ -450,12 +450,16 @@ function test_number_properties()
   assertEquals(42 % 2 == 0, true, 'even')
   assertEquals(42.1 % 2 == 1, false, 'odd')
   assertEquals(math_isPrime(5), true, 'prime 5')
+  assertEquals(math_isPrime((5 + 2)), true, 'prime 5 + 2 (extra parentheses)')
   assertEquals(math_isPrime(25), false, 'prime 25')
   assertEquals(math_isPrime(-31.1), false, 'prime negative')
   assertEquals(math.pi % 1 == 0, false, 'whole')
   assertEquals(math.huge > 0, true, 'positive')
+  assertEquals((5 + 2) > 0, true, '5 + 2 is positive (extra parentheses)')
   assertEquals(-42 < 0, true, 'negative')
+  assertEquals((3 + 2) < 0, false, '3 + 2 is negative (extra parentheses)')
   assertEquals(42 % 2 == 0, true, 'divisible')
+  assertEquals(not nil, true, 'divisible by 0')
 end
 
 

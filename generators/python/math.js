@@ -175,10 +175,7 @@ Blockly.Python['math_number_property'] = function(block) {
         Blockly.Python.ORDER_FUNCTION_CALL]
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
-  const tuple = PROPERTIES[dropdownProperty];
-  const suffix = tuple[0];
-  const inputOrder = tuple[1];
-  const outputOrder = tuple[2];
+  const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck = Blockly.Python.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;

@@ -189,10 +189,7 @@ Blockly.Dart['math_number_property'] = function(block) {
         Blockly.Dart.ORDER_UNARY_POSTFIX]
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
-  const tuple = PROPERTIES[dropdownProperty];
-  const suffix = tuple[0];
-  const inputOrder = tuple[1];
-  const outputOrder = tuple[2];
+  const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
   const numberToCheck = Blockly.Dart.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;

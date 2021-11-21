@@ -772,10 +772,11 @@ Block.prototype.setParent = function(newParent) {
 
   // Check that block is connected to new parent if new parent is not null and
   //    that block is not connected to superior one if new parent is null.
-  const connection = this.previousConnection || this.outputConnection;
-  const isConnected = !!(connection && connection.targetBlock());
+  const targetBlock = (this.previousConnection && this.previousConnection.targetBlock()) ||
+      (this.outputConnection && this.outputConnection.targetBlock());
+  const isConnected = !!targetBlock;
 
-  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+  if (isConnected && newParent && targetBlock !== newParent) {
     throw Error('Block connected to superior one that is not new parent.');
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');

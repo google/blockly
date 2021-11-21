@@ -167,7 +167,11 @@ BlockMove.prototype.run = function(forward) {
     const xy = block.getRelativeToSurfaceXY();
     block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y);
   } else {
-    const blockConnection = block.outputConnection || block.previousConnection;
+    let blockConnection = block.outputConnection;
+    if (!blockConnection ||
+        (block.previousConnection && block.previousConnection.isConnected())) {
+      blockConnection = block.previousConnection;
+    }
     let parentConnection;
     const connectionType = blockConnection.type;
     if (inputName) {

@@ -76,9 +76,12 @@ const getSelected = function() {
 exports.getSelected = getSelected;
 
 /**
- * Sets the currently selected block.
+ * Sets the currently selected block. This function does not visually mark the
+ * block as selected or fire the required events. If you wish to
+ * programmatically select a block, use `BlockSvg#select`.
  * @param {?ICopyable} newSelection The newly selected block.
  * @alias Blockly.common.setSelected
+ * @package
  */
 const setSelected = function(newSelection) {
   selected = newSelection;

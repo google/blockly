@@ -447,7 +447,7 @@ function unflattenCorePaths(pathString) {
  *
  * The deps.js file must be up-to-date.
  */
-function buildCompiled(done) {
+function buildCompiled() {
   // Get chunking.
   const chunkOptions = getChunkOptions();
   // Closure Compiler options.
@@ -459,8 +459,7 @@ function buildCompiled(done) {
     language_out: 'ECMASCRIPT5_STRICT',
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
-    // dependency_mode: 'PRUNE',
-    externs: ['./externs/svg-externs.js', /* './externs/goog-externs.js' */],
+    externs: ['./externs/svg-externs.js'],
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,

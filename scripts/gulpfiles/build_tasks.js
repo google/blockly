@@ -48,6 +48,7 @@ const COMPILED_SUFFIX = '_compressed';
  * 
  * - .dependencies: a list of the chunks the chunk depends upon.
  * - .wrapper: the chunk wrapper.
+ * - .js: an array of filenames of the JS files for the chunk.
  *
  * Output files will be named <chunk.name><COMPILED_SUFFIX>.js.
  */
@@ -63,28 +64,23 @@ const chunks = [
   }, {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
-    // dependsOn: ['blocks'],
-    namespace: 'JavaScript',
+    namespace: 'Blockly.JavaScript',
   }, {
     name: 'python',
     entry: 'generators/python/all.js',
-    // dependsOn: ['blocks'],
-    namespace: 'Python',
+    namespace: 'Blockly.Python',
   }, {
     name: 'php',
     entry: 'generators/php/all.js',
-    // dependsOn: ['blocks'],
-    namespace: 'PHP',
+    namespace: 'Blockly.PHP',
   }, {
     name: 'lua',
     entry: 'generators/lua/all.js',
-    // dependsOn: ['blocks'],
-    namespace: 'Lua',
+    namespace: 'Blockly.Lua',
   }, {
     name: 'dart',
     entry: 'generators/dart/all.js',
-    // dependsOn: ['blocks'],
-    namespace: 'Dart',
+    namespace: 'Blockly.Dart',
   }
 ];
 
@@ -323,7 +319,7 @@ function chunkWrapper(chunk) {
     root.${chunk.namespace} = factory(${browserDeps});
   }
 }(this, function(${imports}) {
-  %output%
+%output%
 return ${chunk.namespace};
 }));
 `;
@@ -370,34 +366,48 @@ function getChunkOptions() {
   // }
   //
   // This is designed to be passed directly as-is as the options
-  // object to the Closure Compiler node API, but we want to replace
-  // the unhelpful entry-point based chunk names (let's call these
-  // "nicknames") with the ones from chunks.  Luckily they will be in
-  // the same order that the entry points were supplied in - i.e.,
-  // they correspond 1:1 with the entries in chunks.
+  // object to the Closure Compiler node API, but we want to make a
+  // number of changes:
+  //
+  // - Replace the unhelpful entry-point based chunk names (let's call these
+  //   "nicknames") with the ones from chunks.  Luckily they will be in
+  //   the same order that the entry points were supplied in - i.e.,
+  //   they correspond 1:1 with the entries in chunks.
+  // - Remove base.js from the list of JS files for the first chunk.
   const chunkByNickname = Object.create(null);
+  let jsFiles = rawOptions.js;
   const chunkList = rawOptions.chunk.map((element, index) => {
     const [nickname, numJsFiles, dependencyNicks] = element.split(':');
     const chunk = chunks[index];
+
+    // Record js files for chunk, filtering out base.js.
+    chunk.js =
+        jsFiles.slice(0, numJsFiles).filter(f => !f.endsWith('goog/base.js'));
+    jsFiles = jsFiles.slice(numJsFiles);
+
+    // Replace nicknames with our names.
     chunkByNickname[nickname] = chunk;
     if (!dependencyNicks) {  // Chunk has no dependencies.
       chunk.dependencies = [];
-      return `${chunk.name}:${numJsFiles}`;
+      return `${chunk.name}:${chunk.js.length}`;
     }
     chunk.dependencies =
         dependencyNicks.split(',').map(nick => chunkByNickname[nick]);
     const dependencyNames =
         chunk.dependencies.map(dependency => dependency.name).join(',');
-    return `${chunk.name}:${numJsFiles}:${dependencyNames}`;
+    return `${chunk.name}:${chunk.js.length}:${dependencyNames}`;
   });
 
   // Generate a chunk wrapper for each chunk.
   for (const chunk of chunks) {
     chunk.wrapper = chunkWrapper(chunk);
   }
-
   const chunkWrappers = chunks.map(chunk => `${chunk.name}:${chunk.wrapper}`);
-  return {chunk: chunkList, js: rawOptions.js, chunk_wrapper: chunkWrappers};
+
+  // Reconstitute js files list, after exclusions.
+  jsFiles = chunks.map(chunk => chunk.js).flat();
+
+  return {chunk: chunkList, js: jsFiles, chunk_wrapper: chunkWrappers};
 }
 
 /** 
@@ -459,7 +469,7 @@ function buildCompiled() {
     language_out: 'ECMASCRIPT5_STRICT',
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
-    externs: ['./externs/svg-externs.js'],
+    externs: ['./externs/goog-externs.js', './externs/svg-externs.js'],
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
@@ -467,6 +477,13 @@ function buildCompiled() {
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };
   if (argv.debug || argv.strict) {
+    // Tempororary hack: only compile first chunk, because there are
+    // too many errors in blocks and generators due to missing /
+    // extraneous requires.
+    options.chunk.length = 1;
+    options.chunk_wrapper.length = 1;
+    chunkOptions.js = chunks[0].js;
+
     options.jscomp_error = [...JSCOMP_ERROR];
     if (argv.strict) {
       options.jscomp_error.push('strictCheckTypes');

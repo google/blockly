@@ -23,5 +23,6 @@ goog.provide('Blockly.FieldTextInput');
 goog.provide('Blockly.FieldVariable');
 goog.provide('Blockly.Mutator');
 goog.provide('Blockly.Warning');
+goog.provide('Blockly.loopMixin');
 
 var Blockly;

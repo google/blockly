@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview The mixin that holds logic for setting a warning on a block if
- *     it is not inside a loop.
+ * it is not inside a loop.
  */
 'use strict';
 

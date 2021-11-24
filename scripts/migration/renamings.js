@@ -240,8 +240,8 @@ const renamings = {
     },
     'Blockly.Constants.Loops': {
       exports: {
-        CONTROL_FLOW_IN_LOOP_CHECK_MIXIN: {module: 'Blockly.loopMixin'}
-      }
+        CONTROL_FLOW_IN_LOOP_CHECK_MIXIN: {module: 'Blockly.loopMixin'},
+      },
     },
     'Blockly.Events.Abstract': {
       export: 'Abstract',

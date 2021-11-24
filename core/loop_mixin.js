@@ -33,6 +33,10 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
    * List of block types that are loops and thus do not need warnings.
    * To add a new loop type add this to your code:
    * Blockly.loopMixin.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
+   *
+   * Please leave a comment on this github issue
+   * https://github.com/mit-cml/appinventor-sources/issues/2032 if you end up
+   * needing to use this.
    */
   LOOP_TYPES: [
     'controls_repeat',

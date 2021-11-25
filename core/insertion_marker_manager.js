@@ -432,10 +432,10 @@ InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
   let candidateLocal = null;
 
   // It's possible that a block has added or removed connections during a drag,
-  // (e.g. in a drag/move event handler), so let's update the available connections.
-  // Note that this will be called en every move while dragging, so ir might
-  // cause slowness, especially if the block stack is large.  If so, maybe it
-  // could be made more efficient.
+  // (e.g. in a drag/move event handler), so let's update the available
+  // connections. Note that this will be called en every move while dragging, so
+  // ir might cause slowness, especially if the block stack is large.  If so,
+  // maybe it could be made more efficient.
   this.updateAvailableConnections();
 
   for (let i = 0; i < this.availableConnections_.length; i++) {
@@ -630,11 +630,11 @@ InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
     imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);
   } catch (e) {
     // It's possible that the number of connections on the local block has
-    // changed since the insertion marker was originally created.  Let's recreate
-    // the insertion marker and try again.
-    // In theory we could probably recreate the marker block (e.g. in getCandidate_),
-    // which is called more often during the drag, but creating a block that
-    // often might be too slow, so we only do it if necessary.
+    // changed since the insertion marker was originally created.  Let's
+    // recreate the insertion marker and try again. In theory we could probably
+    // recreate the marker block (e.g. in getCandidate_), which is called more
+    // often during the drag, but creating a block that often might be too slow,
+    // so we only do it if necessary.
     this.firstMarker_ = this.createMarkerBlock_(this.topBlock_);
     imBlock = isLastInStack ? this.lastMarker_ : this.firstMarker_;
     imConn = imBlock.getMatchingConnection(local.getSourceBlock(), local);

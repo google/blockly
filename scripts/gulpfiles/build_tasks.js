@@ -38,6 +38,13 @@ var {getPackageJson} = require('./helper_tasks');
 const COMPILED_SUFFIX = '_compressed';
 
 /**
+ * Checked-in file to cache output of closure-calculate-chunks, to
+ * allow for testing on node.js v12 (or earlier) which is not
+ * compatible with closure-calculate-chunks.
+ */
+const CHUNK_CACHE_FILE = 'scripts/gulpfiles/chunks.json'
+
+/**
  * A list of chunks.  Order matters: later chunks can depend on
  * earlier ones, but not vice-versa.  All chunks are assumed to depend
  * on the first chunk.
@@ -346,7 +353,30 @@ function getChunkOptions() {
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
   const cccCommand = `closure-calculate-chunks ${cccArgs.join(' ')}`;
-  const rawOptions= JSON.parse(String(execSync(cccCommand)));
+
+  // Because (as of 2021-11-25) closure-calculate-chunks v3.0.2
+  // requries node.js v14 or later, we save the output of cccCommand
+  // in a checked-in .json file, so we can use the contents of that
+  // file when building on older versions of node.
+  //
+  // When this is no longer necessary the following section can be
+  // replaced with:
+  //
+  // const rawOptions = JSON.parse(execSync(cccCommand));
+  const nodeMajorVersion = /v(\d+)\./.exec(process.version)[1];
+  let rawOptions;
+  if (nodeMajorVersion >= 14) {
+    rawOptions = JSON.parse(String(execSync(cccCommand)));
+    // Replace absolute paths with relative ones, so they will be
+    // valid on other machines.  Only needed because we're saving this
+    // output to use later on another machine.
+    rawOptions.js = rawOptions.js.map(p => p.replace(process.cwd(), '.'));
+    fs.writeFileSync(CHUNK_CACHE_FILE,
+                     JSON.stringify(rawOptions, null, 2) + '\n');
+  } else {
+    console.log(`Warning: using pre-computed chunks from ${CHUNK_CACHE_FILE}`);
+    rawOptions = JSON.parse(String(fs.readFileSync(CHUNK_CACHE_FILE)));
+  }
 
   // rawOptions should now be of the form:
   //
@@ -359,8 +389,8 @@ function getChunkOptions() {
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [
-  //     '/Users/cpcallen/src/blockly/core/serialization/workspaces.js',
-  //     '/Users/cpcallen/src/blockly/core/serialization/variables.js',
+  //     './core/serialization/workspaces.js',
+  //     './core/serialization/variables.js',
   //     /* ... remaining several hundred files */
   //   ],
   // }
@@ -477,17 +507,17 @@ function buildCompiled() {
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };
   if (argv.debug || argv.strict) {
+    options.jscomp_error = [...JSCOMP_ERROR];
+    if (argv.strict) {
+      options.jscomp_error.push('strictCheckTypes');
+    }
+
     // Tempororary hack: only compile first chunk, because there are
     // too many errors in blocks and generators due to missing /
     // extraneous requires.
     options.chunk.length = 1;
     options.chunk_wrapper.length = 1;
     chunkOptions.js = chunks[0].js;
-
-    options.jscomp_error = [...JSCOMP_ERROR];
-    if (argv.strict) {
-      options.jscomp_error.push('strictCheckTypes');
-    }
   }
   // Extra options for Closure Compiler gulp plugin.
   const pluginOptions = ['native', 'java', 'javascript'];

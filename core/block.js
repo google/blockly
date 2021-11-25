@@ -469,7 +469,8 @@ Block.prototype.initModel = function() {
 Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     this.unplugFromRow_(opt_healStack);
-  } else if (this.previousConnection) {
+  }
+  if (this.previousConnection) {
     this.unplugFromStack_(opt_healStack);
   }
 };
@@ -771,10 +772,12 @@ Block.prototype.setParent = function(newParent) {
 
   // Check that block is connected to new parent if new parent is not null and
   //    that block is not connected to superior one if new parent is null.
-  const connection = this.previousConnection || this.outputConnection;
-  const isConnected = !!(connection && connection.targetBlock());
+  const targetBlock =
+      (this.previousConnection && this.previousConnection.targetBlock()) ||
+      (this.outputConnection && this.outputConnection.targetBlock());
+  const isConnected = !!targetBlock;
 
-  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+  if (isConnected && newParent && targetBlock !== newParent) {
     throw Error('Block connected to superior one that is not new parent.');
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');
@@ -1186,11 +1189,6 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.previousConnection) {
-      if (this.outputConnection) {
-        throw Error(
-            'Remove output connection prior to adding previous ' +
-            'connection.');
-      }
       this.previousConnection =
           this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
     }
@@ -1249,11 +1247,6 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.outputConnection) {
-      if (this.previousConnection) {
-        throw Error(
-            'Remove previous connection prior to adding output ' +
-            'connection.');
-      }
       this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);

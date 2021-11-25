@@ -63,6 +63,7 @@ Connection.REASON_CHECKS_FAILED = 4;
 Connection.REASON_DIFFERENT_WORKSPACES = 5;
 Connection.REASON_SHADOW_PARENT = 6;
 Connection.REASON_DRAG_CHECKS_FAILED = 7;
+Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
 
 /**
  * Connection this connection connects to.  Null if not connected.

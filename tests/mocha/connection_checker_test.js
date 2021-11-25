@@ -249,11 +249,11 @@ suite('Connection checker', function() {
       test('Output connected, adding previous', function() {
         const outBlock = {
           isShadow: function() {
-          }
+          },
         };
         const inBlock = {
           isShadow: function() {
-          }
+          },
         };
         const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
         const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
@@ -263,7 +263,7 @@ suite('Connection checker', function() {
         const prevCon = new Blockly.Connection(outBlock, Blockly.PREVIOUS_STATEMENT);
         const nextBlock = {
           isShadow: function() {
-          }
+          },
         };
         const nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
 
@@ -276,11 +276,11 @@ suite('Connection checker', function() {
       test('Previous connected, adding output', function() {
         const prevBlock = {
           isShadow: function() {
-          }
+          },
         };
         const nextBlock = {
           isShadow: function() {
-          }
+          },
         };
         const prevCon = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
         const nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
@@ -290,7 +290,7 @@ suite('Connection checker', function() {
         const outCon = new Blockly.Connection(prevBlock, Blockly.OUTPUT_VALUE);
         const inBlock = {
           isShadow: function() {
-          }
+          },
         };
         const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
 

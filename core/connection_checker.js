@@ -159,17 +159,23 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   }
   if (superiorBlock === inferiorBlock) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (inferiorConnection.type !== internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
+  } else if (
+      inferiorConnection.type !==
+      internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
     return Connection.REASON_WRONG_TYPE;
   } else if (superiorBlock.workspace !== inferiorBlock.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;
   } else if (superiorBlock.isShadow() && !inferiorBlock.isShadow()) {
     return Connection.REASON_SHADOW_PARENT;
-  } else if (inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
-    inferiorBlock.previousConnection && inferiorBlock.previousConnection.isConnected()) {
+  } else if (
+      inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
+      inferiorBlock.previousConnection &&
+      inferiorBlock.previousConnection.isConnected()) {
     return Connection.REASON_PREVIOUS_AND_OUTPUT;
-  } else if (inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
-    inferiorBlock.outputConnection && inferiorBlock.outputConnection.isConnected()) {
+  } else if (
+      inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
+      inferiorBlock.outputConnection &&
+      inferiorBlock.outputConnection.isConnected()) {
     return Connection.REASON_PREVIOUS_AND_OUTPUT;
   }
   return Connection.CAN_CONNECT;

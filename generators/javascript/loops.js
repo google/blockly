@@ -12,6 +12,7 @@
 goog.provide('Blockly.JavaScript.loops');
 
 goog.require('Blockly.JavaScript');
+goog.require('Blockly.loopMixin');
 
 
 Blockly.JavaScript['controls_repeat_ext'] = function(block) {
@@ -164,7 +165,7 @@ Blockly.JavaScript['controls_flow_statements'] = function(block) {
         block);
   }
   if (Blockly.JavaScript.STATEMENT_PREFIX) {
-    const loop = Blockly.Constants.Loops
+    const loop = Blockly.loopMixin
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end

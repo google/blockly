@@ -123,6 +123,8 @@ ConnectionChecker.prototype.getErrorMessage = function(errorCode, a, b) {
       return 'Connecting non-shadow to shadow block.';
     case Connection.REASON_DRAG_CHECKS_FAILED:
       return 'Drag checks failed.';
+    case Connection.REASON_PREVIOUS_AND_OUTPUT:
+      return 'Block would have an output and a previous connection.';
     default:
       return 'Unknown connection failure: this should never happen!';
   }
@@ -140,23 +142,41 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   if (!a || !b) {
     return Connection.REASON_TARGET_NULL;
   }
-  let blockA;
-  let blockB;
+  let superiorBlock;
+  let inferiorBlock;
+  let superiorConnection;
+  let inferiorConnection;
   if (a.isSuperior()) {
-    blockA = a.getSourceBlock();
-    blockB = b.getSourceBlock();
+    superiorBlock = a.getSourceBlock();
+    inferiorBlock = b.getSourceBlock();
+    superiorConnection = a;
+    inferiorConnection = b;
   } else {
-    blockB = a.getSourceBlock();
-    blockA = b.getSourceBlock();
+    inferiorBlock = a.getSourceBlock();
+    superiorBlock = b.getSourceBlock();
+    inferiorConnection = a;
+    superiorConnection = b;
   }
-  if (blockA === blockB) {
+  if (superiorBlock === inferiorBlock) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (b.type !== internalConstants.OPPOSITE_TYPE[a.type]) {
+  } else if (
+      inferiorConnection.type !==
+      internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
     return Connection.REASON_WRONG_TYPE;
-  } else if (blockA.workspace !== blockB.workspace) {
+  } else if (superiorBlock.workspace !== inferiorBlock.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;
-  } else if (blockA.isShadow() && !blockB.isShadow()) {
+  } else if (superiorBlock.isShadow() && !inferiorBlock.isShadow()) {
     return Connection.REASON_SHADOW_PARENT;
+  } else if (
+      inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
+      inferiorBlock.previousConnection &&
+      inferiorBlock.previousConnection.isConnected()) {
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
+  } else if (
+      inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
+      inferiorBlock.outputConnection &&
+      inferiorBlock.outputConnection.isConnected()) {
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
   }
   return Connection.CAN_CONNECT;
 };

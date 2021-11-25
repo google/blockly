@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "requires:258",
+    "requires:259",
     "all:10:requires",
     "all1:11:requires",
     "all2:11:requires",
@@ -226,6 +226,7 @@
     "./core/renderers/geras/highlighter.js",
     "./core/renderers/geras/drawer.js",
     "./core/renderers/geras/geras.js",
+    "./core/loop_mixin.js",
     "./core/renderers/minimalist/constants.js",
     "./core/renderers/minimalist/renderer.js",
     "./core/renderers/minimalist/info.js",

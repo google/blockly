@@ -232,16 +232,16 @@ ASTNode.createWorkspaceNode = function(workspace, wsCoordinate) {
 };
 
 /**
- * Gets the top connection on a block.
+ * Gets the parent connection on a block.
  * This is either an output connection, previous connection or undefined.
  * If both connections exist return the one that is actually connected
  * to another block.
- * @param {!Block} block The block to find the top connection on.
- * @return {Connection} The connection holding the top most position on the
+ * @param {!Block} block The block to find the parent connection on.
+ * @return {Connection} The connection connecting to the parent of the
  *     block.
  * @private
  */
-ASTNode.getTopConnection_ = function(block) {
+const getParentConnection = function(block) {
   let topConnection = block.outputConnection;
   if (!topConnection ||
       (block.previousConnection && block.previousConnection.isConnected())) {
@@ -259,7 +259,7 @@ ASTNode.getTopConnection_ = function(block) {
  */
 ASTNode.createTopNode = function(block) {
   let astNode;
-  const topConnection = ASTNode.getTopConnection_(block);
+  const topConnection = getParentConnection(block);
   if (topConnection) {
     astNode = ASTNode.createConnectionNode(topConnection);
   } else {
@@ -485,7 +485,7 @@ ASTNode.prototype.navigateBetweenStacks_ = function(forward) {
  * @private
  */
 ASTNode.prototype.findTopASTNodeForBlock_ = function(block) {
-  const topConnection = ASTNode.getTopConnection_(block);
+  const topConnection = getParentConnection(block);
   if (topConnection) {
     return /** @type {!ASTNode} */ (
         ASTNode.createConnectionNode(topConnection));
@@ -509,7 +509,7 @@ ASTNode.prototype.getOutAstNodeForBlock_ = function(block) {
   // If the block doesn't have a previous connection then it is the top of the
   // substack.
   const topBlock = block.getTopStackBlock();
-  const topConnection = ASTNode.getTopConnection_(topBlock);
+  const topConnection = getParentConnection(topBlock);
   // If the top connection has a parentInput, create an AST node pointing to
   // that input.
   if (topConnection && topConnection.targetConnection &&
@@ -660,7 +660,7 @@ ASTNode.prototype.prev = function() {
 
     case ASTNode.types.BLOCK: {
       const block = /** @type {!Block} */ (this.location_);
-      const topConnection = ASTNode.getTopConnection_(block);
+      const topConnection = getParentConnection(block);
       return ASTNode.createConnectionNode(topConnection);
     }
     case ASTNode.types.PREVIOUS: {

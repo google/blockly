@@ -223,6 +223,19 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @package
  */
 Blockly.FieldDropdown.prototype.initView = function() {
+
+  if (this.menuGenerator_.length === 1) {
+    this.createTextElement_();
+
+    this.imageElement_ = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.IMAGE, {}, this.fieldGroup_);
+
+    this.fieldGroup_.style['pointer-events'] = 'none';
+    this.textElement_.style['fill'] = '#fff';
+
+    return;
+  }
+
   if (this.shouldAddBorderRect_()) {
     this.createBorderRect_();
   } else {

@@ -926,7 +926,8 @@ Blockly.Xml.applyNextTagNodes_ = function(xmlChildren, workspace, block) {
     var childBlockInfo = Blockly.Xml.findChildBlocks_(xmlChild);
     if (childBlockInfo.childBlockElement) {
       if (!block.nextConnection) {
-        console.error('Next statement does not exist.');
+        console.warn('Next statement does not exist.');
+        return;
         // throw TypeError('Next statement does not exist.');
       }
       // If there is more than one XML 'next' tag.

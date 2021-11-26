@@ -59,6 +59,12 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.menuGenerator_ = menuGenerator;
 
   /**
+   * A map of options used to configure the field.
+   * @private
+   */
+  this.opt_config_ = opt_config;
+
+  /**
    * A cache of the most recently generated options.
    * @type {Array<!Array<string>>}
    * @private
@@ -217,6 +223,19 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @package
  */
 Blockly.FieldDropdown.prototype.initView = function() {
+
+  if (this.menuGenerator_.length === 1) {
+    this.createTextElement_();
+
+    this.imageElement_ = Blockly.utils.dom.createSvgElement(
+        Blockly.utils.Svg.IMAGE, {}, this.fieldGroup_);
+
+    this.fieldGroup_.style['pointer-events'] = 'none';
+    this.textElement_.style['fill'] = '#fff';
+
+    return;
+  }
+
   if (this.shouldAddBorderRect_()) {
     this.createBorderRect_();
   } else {
@@ -450,25 +469,30 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   for (var i = 0; i < options.length; i++) {
     strings.push(options[i][0]);
   }
-  // var shortest = Blockly.utils.string.shortestStringLength(strings);
-  // var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
-  // var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
-  // if (!prefixLength && !suffixLength) {
-  //   return;
-  // }
-  // if (shortest <= prefixLength + suffixLength) {
-  //   // One or more strings will entirely vanish if we proceed.  Abort.
-  //   return;
-  // }
-  // if (prefixLength) {
-  //   this.prefixField = strings[0].substring(0, prefixLength - 1);
-  // }
-  // if (suffixLength) {
-  //   this.suffixField = strings[0].substr(1 - suffixLength);
-  // }
 
-  // this.menuGenerator_ = Blockly.FieldDropdown.applyTrim_(options, prefixLength,
-  //     suffixLength);
+  if (this.opt_config_['disableOutAffix']) {
+    return;
+  }
+
+  var shortest = Blockly.utils.string.shortestStringLength(strings);
+  var prefixLength = Blockly.utils.string.commonWordPrefix(strings, shortest);
+  var suffixLength = Blockly.utils.string.commonWordSuffix(strings, shortest);
+  if (!prefixLength && !suffixLength) {
+    return;
+  }
+  if (shortest <= prefixLength + suffixLength) {
+    // One or more strings will entirely vanish if we proceed.  Abort.
+    return;
+  }
+  if (prefixLength) {
+    this.prefixField = strings[0].substring(0, prefixLength - 1);
+  }
+  if (suffixLength) {
+    this.suffixField = strings[0].substr(1 - suffixLength);
+  }
+
+  this.menuGenerator_ = Blockly.FieldDropdown.applyTrim_(options, prefixLength,
+      suffixLength);
 };
 
 /**

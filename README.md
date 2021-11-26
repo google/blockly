@@ -3,45 +3,36 @@
 This is a fork of Google Blockly with modifications for [Varwin](https://varwin.com/).  
 The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 
-# Algorithm for updating the repository
+## Algorithm for updating the repository
 
 1. Pulling changes from `google/blockly` (Github will offer to do this itself if it finds new commits in master `google/blockly`)
 2. If there are conflicts, a PR will be created for the merge
 3. Go to the merge branch and resolve all conflicts
-4. Run 
-```bash
-npm run build
-```
-6. Run the local playground, which is located in `tests/playground.html`
-7. If errors are found, then go to step 3 and solve the problems that have arisen. Pay attention to the section with common problems below.
-8. Run
-```bash
-npm run prepare
-```
-10. Go to the `dist` directory
-11. In file `/dist/package.json` check package name and update version
-12. Execute `npm publish`
+4. Run ```bash
+  npm run build```
+5. Run the local playground, which is located in `tests/playground.html`
+6. If errors are found, then go to step 3 and solve the problems that have arisen. Pay attention to the section with common problems below.
+7. Run ```bash
+npm run prepare```
+8. Go to the `dist` directory
+9. In file `/dist/package.json` check package name and update version
+10. Execute `npm publish`
 
-
-# How convenient it is to test Varwin Blockly right away in RMS
+## How convenient it is to test Varwin Blockly right away in RMS
 
 You can call `gulp package` with the argument `--output "path"` where `path` is the path to the `blockly` folder in `node_modules` RMS.
 Note that the path must be relative to the root of the Varwin Blockly repository.
 
 Those.
+
 1. Making edits in Varwin Blockly
-2. Run
-```bash
-  npm run build
-```
-3. Run
-```bash
-  gulp package --output "~/node_modules/blockly/"
-```
-6. Run the RMS build (or hot reload will pull up node_modules by itself)
+2. Run ```bash
+  npm run build```
+3. Run ```bash
+  gulp package --output "~/node_modules/blockly/"```
+4. Run the RMS build (or hot reload will pull up node_modules by itself)
 
-
-# Frequent problems
+## Frequent problems
 
 ### Playground cannot find files
 
@@ -87,6 +78,7 @@ npm install blockly
 For more information on installing and using Blockly, see the [Getting Started article](https://developers.google.com/blockly/guides/get-started/web).
 
 ### Getting Help
+
 * [Report a bug](https://developers.google.com/blockly/guides/modify/contribute/write_a_good_issue) or file a feature request on GitHub
 * Ask a question, or search others' questions, on our [developer forum](https://groups.google.com/forum/#!forum/blockly). You can also drop by to say hello and show us your prototypes; collectively we have a lot of experience and can offer hints which will save you time. We actively monitor the forums and typically respond to questions within 2 working days.
 
@@ -111,6 +103,7 @@ We now have a [beta release on npm](https://www.npmjs.com/package/blockly?active
 ```bash
 npm install blockly@beta
 ```
+
 As it is a beta channel, it may be less stable, and the APIs there are subject to change.
 
 ### Branches

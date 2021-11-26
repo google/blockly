@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Colour blocks for Blockly.
+ * @suppress {extraRequire|missingRequire}
  */
 'use strict';
 

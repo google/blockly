@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Helper functions for generating JavaScript for blocks.
+ * @suppress {missingRequire|checkTypes|globalThis}
  */
 'use strict';
 

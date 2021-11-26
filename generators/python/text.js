@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Python for text blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

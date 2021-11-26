@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating PHP for list blocks.
+ * @suppress {missingRequire}
  */
 
 /**

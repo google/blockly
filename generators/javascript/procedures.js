@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating JavaScript for procedure blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

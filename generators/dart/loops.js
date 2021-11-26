@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Dart for loop blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

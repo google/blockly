@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Dart for list blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

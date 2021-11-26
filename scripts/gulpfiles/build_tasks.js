@@ -536,13 +536,6 @@ function buildCompiled() {
     if (argv.strict) {
       options.jscomp_error.push('strictCheckTypes');
     }
-
-    // Tempororary hack: only compile first chunk, because there are
-    // too many errors in blocks and generators due to missing /
-    // extraneous requires.
-    options.chunk.length = 1;
-    options.chunk_wrapper.length = 1;
-    chunkOptions.js = chunks[0].js;
   }
   // Extra options for Closure Compiler gulp plugin.
   const pluginOptions = ['native', 'java', 'javascript'];

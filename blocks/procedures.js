@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Procedure blocks for Blockly.
+ * @suppress {extraRequire|missingRequire|checkTypes|globalThis|visibility}
  */
 'use strict';
 

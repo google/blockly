@@ -74,7 +74,6 @@ const NAMESPACE_OBJECT = '$';
  * 
  * - .dependencies: a list of the chunks the chunk depends upon.
  * - .wrapper: the chunk wrapper.
- * - .js: an array of filenames of the JS files for the chunk.
  *
  * Output files will be named <chunk.name><COMPILED_SUFFIX>.js.
  */
@@ -372,7 +371,7 @@ return ${NAMESPACE_OBJECT}.${chunk.namespace};
  */
 function getChunkOptions() {
   const cccArgs = [
-    '--closure-library-base-js-path ./closure/goog/base.js',
+    '--closure-library-base-js-path ./closure/goog/base_minimal.js',
     '--deps-file ./tests/deps.js',
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
@@ -420,36 +419,28 @@ function getChunkOptions() {
   // }
   //
   // This is designed to be passed directly as-is as the options
-  // object to the Closure Compiler node API, but we want to make a
-  // number of changes:
-  //
-  // - Replace the unhelpful entry-point based chunk names (let's call these
-  //   "nicknames") with the ones from chunks.  Luckily they will be in
-  //   the same order that the entry points were supplied in - i.e.,
-  //   they correspond 1:1 with the entries in chunks.
-  // - Remove base.js from the list of JS files for the first chunk.
+  // object to the Closure Compiler node API, but we want to replace
+  // the unhelpful entry-point based chunk names (let's call these
+  // "nicknames") with the ones from chunks.  Luckily they will be in
+  // the same order that the entry points were supplied in - i.e.,
+  // they correspond 1:1 with the entries in chunks.
   const chunkByNickname = Object.create(null);
   let jsFiles = rawOptions.js;
   const chunkList = rawOptions.chunk.map((element, index) => {
     const [nickname, numJsFiles, dependencyNicks] = element.split(':');
     const chunk = chunks[index];
 
-    // Record js files for chunk, filtering out base.js.
-    chunk.js =
-        jsFiles.slice(0, numJsFiles).filter(f => !f.endsWith('goog/base.js'));
-    jsFiles = jsFiles.slice(numJsFiles);
-
     // Replace nicknames with our names.
     chunkByNickname[nickname] = chunk;
     if (!dependencyNicks) {  // Chunk has no dependencies.
       chunk.dependencies = [];
-      return `${chunk.name}:${chunk.js.length}`;
+      return `${chunk.name}:${numJsFiles}`;
     }
     chunk.dependencies =
         dependencyNicks.split(',').map(nick => chunkByNickname[nick]);
     const dependencyNames =
         chunk.dependencies.map(dependency => dependency.name).join(',');
-    return `${chunk.name}:${chunk.js.length}:${dependencyNames}`;
+    return `${chunk.name}:${numJsFiles}:${dependencyNames}`;
   });
 
   // Generate a chunk wrapper for each chunk.
@@ -458,10 +449,7 @@ function getChunkOptions() {
   }
   const chunkWrappers = chunks.map(chunk => `${chunk.name}:${chunk.wrapper}`);
 
-  // Reconstitute js files list, after exclusions.
-  jsFiles = chunks.map(chunk => chunk.js).flat();
-
-  return {chunk: chunkList, js: jsFiles, chunk_wrapper: chunkWrappers};
+  return {chunk: chunkList, js: rawOptions.js, chunk_wrapper: chunkWrappers};
 }
 
 /** 
@@ -523,7 +511,7 @@ function buildCompiled() {
     language_out: 'ECMASCRIPT5_STRICT',
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
-    externs: ['./externs/goog-externs.js', './externs/svg-externs.js'],
+    externs: ['./externs/svg-externs.js'],
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,

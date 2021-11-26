@@ -700,11 +700,7 @@ exports.zelos = zelos;
 //
 // This is only needed in uncompiled mode (see
 // google/blockly-samples#902); in compiled mode the exports object is
-// already the value of globalThis.Blockly.  Because
-// closure/goog/base.js is not included in the compiler input, we
-// can't use goog.global['COMPILED'] to check if we are running in
-// compiled mode.  Instead, use existence of globalThis.goog itself
-// for this purpose.
+// already the value of globalThis.Blockly.
 //
 // Note that this code will still attempt to redefine accessors on a
 // previously-imported copy of the Blockly library if both are
@@ -712,8 +708,8 @@ exports.zelos = zelos;
 // accessors are nonconfigurable (which is good, as otherwise one
 // accessors on one copy would call get/set functions on the other
 // copy!)
-if (globalThis.goog && globalThis.Blockly &&
-    typeof globalThis.Blockly === 'object' && globalThis.Blockly !== exports) {
+if (!goog.global['COMPILED'] && typeof goog.global['Blockly'] === 'object' &&
+    goog.global['Blockly'] !== exports) {
   const descriptors = Object.getOwnPropertyDescriptors(exports);
   const accessors = {};
   for (const key in descriptors) {

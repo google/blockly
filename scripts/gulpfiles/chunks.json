@@ -266,7 +266,7 @@
     "./core/flyout_vertical.js",
     "./core/inject.js",
     "./core/blockly.js",
-    "./closure/goog/base.js",
+    "./closure/goog/base_minimal.js",
     "./core/requires.js",
     "./blocks/variables_dynamic.js",
     "./blocks/variables.js",

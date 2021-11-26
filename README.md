@@ -8,12 +8,10 @@ The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 1. Pulling changes from `google/blockly` (Github will offer to do this itself if it finds new commits in master `google/blockly`)
 2. If there are conflicts, a PR will be created for the merge
 3. Go to the merge branch and resolve all conflicts
-4. Run ```bash
-  npm run build```
+4. Run ```npm run build```
 5. Run the local playground, which is located in `tests/playground.html`
 6. If errors are found, then go to step 3 and solve the problems that have arisen. Pay attention to the section with common problems below.
-7. Run ```bash
-npm run prepare```
+7. Run ```npm run prepare```
 8. Go to the `dist` directory
 9. In file `/dist/package.json` check package name and update version
 10. Execute `npm publish`
@@ -26,10 +24,8 @@ Note that the path must be relative to the root of the Varwin Blockly repository
 Those.
 
 1. Making edits in Varwin Blockly
-2. Run ```bash
-  npm run build```
-3. Run ```bash
-  gulp package --output "~/node_modules/blockly/"```
+2. Run ```npm run build```
+3. Run ```gulp package --output "~/node_modules/blockly/"```
 4. Run the RMS build (or hot reload will pull up node_modules by itself)
 
 ## Frequent problems

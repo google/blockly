@@ -184,56 +184,6 @@ var JSCOMP_ERROR = [
 ];
 
 /**
- * Helper method for calling the Closure compiler.
- * @param {*} compilerOptions
- * @param {boolean=} opt_verbose Optional option for verbose logging
- * @param {boolean=} opt_warnings_as_error Optional option for treating warnings
- *     as errors.
- * @param {boolean=} opt_strict_typechecker Optional option for enabling strict
- *     type checking.
- */
-function compile(compilerOptions, opt_verbose, opt_warnings_as_error,
-    opt_strict_typechecker) {
-  const options = {};
-  options.compilation_level = 'SIMPLE_OPTIMIZATIONS';
-  options.warning_level = opt_verbose ? 'VERBOSE' : 'DEFAULT';
-  options.language_in = 'ECMASCRIPT6_STRICT',
-  options.language_out = 'ECMASCRIPT5_STRICT';
-  options.rewrite_polyfills = true;
-  options.hide_warnings_for = 'node_modules';
-  if (opt_warnings_as_error || opt_strict_typechecker) {
-    options.jscomp_error = JSCOMP_ERROR;
-    if (opt_strict_typechecker) {
-      options.jscomp_error.push('strictCheckTypes');
-    }
-  }
-
-  const platform = ['native', 'java', 'javascript'];
-
-  return closureCompiler({...options, ...compilerOptions}, { platform });
-}
-
-/**
- * Helper method for possibly adding the Closure library into a sources array.
- * @param {Array<string>} srcs
- */
-function maybeAddClosureLibrary(srcs) {
-  if (argv.closureLibrary) {
-    // If you require Google's Closure library, you can include it in your
-    // build by adding the --closure-library flag.
-    // You will also need to include the "google-closure-library" in your list
-    // of devDependencies.
-    console.log('Including the google-closure-library in your build.');
-    if (!fs.existsSync('./node_modules/google-closure-library')) {
-      throw Error('You must add the google-closure-library to your ' +
-        'devDependencies in package.json, and run `npm install`.');
-    }
-    srcs.push('./node_modules/google-closure-library/closure/goog/**/**/*.js');
-  }
-  return srcs;
-}
-
-/**
  * This task updates tests/deps.js, used by blockly_uncompressed.js
  * when loading Blockly in uncompiled mode.
  *
@@ -494,6 +444,34 @@ function unflattenCorePaths(pathString) {
 }
 
 /**
+ * Helper method for calling the Closure compiler, establishing
+ * default options (that can be overridden by the caller).
+ * @param {*} options Caller-supplied options that will override the
+ *     defaultOptions.
+ */
+function compile(options) {
+  const defaultOptions = {
+    compilation_level: 'SIMPLE_OPTIMIZATIONS',
+    warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
+    language_in: 'ECMASCRIPT6_STRICT',
+    language_out: 'ECMASCRIPT5_STRICT',
+    rewrite_polyfills: true,
+    hide_warnings_for: 'node_modules',
+    externs: ['./externs/svg-externs.js'],
+  };
+  if (argv.debug || argv.strict) {
+    defaultOptions.jscomp_error = [...JSCOMP_ERROR];
+    if (argv.strict) {
+      defaultOptions.jscomp_error.push('strictCheckTypes');
+    }
+  }
+  // Extra options for Closure Compiler gulp plugin.
+  const platform = ['native', 'java', 'javascript'];
+
+  return closureCompiler({...defaultOptions, ...options}, {platform});
+}
+
+/**
  * This task compiles the core library, blocks and generators, creating 
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
@@ -505,13 +483,6 @@ function buildCompiled() {
   // Closure Compiler options.
   const packageJson = getPackageJson();  // For version number.
   const options = {
-    compilation_level: 'SIMPLE_OPTIMIZATIONS',
-    warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
-    language_in: 'ECMASCRIPT6_STRICT',
-    language_out: 'ECMASCRIPT5_STRICT',
-    rewrite_polyfills: true,
-    hide_warnings_for: 'node_modules',
-    externs: ['./externs/svg-externs.js'],
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
@@ -519,21 +490,13 @@ function buildCompiled() {
     // Don't supply the list of source files in chunkOptions.js as an
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };
-  if (argv.debug || argv.strict) {
-    options.jscomp_error = [...JSCOMP_ERROR];
-    if (argv.strict) {
-      options.jscomp_error.push('strictCheckTypes');
-    }
-  }
-  // Extra options for Closure Compiler gulp plugin.
-  const pluginOptions = ['native', 'java', 'javascript'];
 
   // Fire up compilation pipline.
   return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
       .pipe(gulp.rename(flattenCorePaths))
-      .pipe(closureCompiler(options, pluginOptions))
+      .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
       .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(
@@ -547,38 +510,24 @@ function buildCompiled() {
  */
 function buildAdvancedCompilationTest() {
   const srcs = [
-    'tests/compile/main.js', 'tests/compile/test_blocks.js', 'core/**/**/*.js',
-    'blocks/*.js', 'generators/**/*.js'
+    'closure/goog/base_minimal.js',
+    'core/**/*.js', 'blocks/**/*.js', 'generators/**/*.js',
+    'tests/compile/main.js', 'tests/compile/test_blocks.js',
   ];
-  return gulp.src(maybeAddClosureLibrary(srcs), {base: './'})
+
+  // Closure Compiler options.
+  const options = {
+    dependency_mode: 'PRUNE',
+    compilation_level: 'ADVANCED_OPTIMIZATIONS',
+    entry_point: './tests/compile/main.js',
+    js_output_file: 'main_compressed.js',
+  };
+  return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
-      // Directories in Blockly are used to group similar files together
-      // but are not used to limit access with @package, instead the
-      // method means something is internal to Blockly and not a public
-      // API.
-      // Flatten all files so they're in the same directory, but ensure that
-      // files with the same name don't conflict.
-      .pipe(gulp.rename(function(p) {
-        if (p.dirname.indexOf('core') === 0) {
-          var dirname = p.dirname.replace(
-              new RegExp(path.sep.replace(/\\/, '\\\\'), "g"), "-");
-          p.dirname = "";
-          p.basename = dirname + "-" + p.basename;
-        }
-      }))
-      .pipe(compile(
-          {
-            dependency_mode: 'PRUNE',
-            compilation_level: 'ADVANCED_OPTIMIZATIONS',
-            entry_point: './tests/compile/main.js',
-            js_output_file: 'main_compressed.js',
-            externs: ['./externs/svg-externs.js', './externs/goog-externs.js'],
-          },
-          argv.verbose, argv.strict))
-      .pipe(gulp.sourcemaps.mapSources(function(sourcePath, file) {
-        return sourcePath.replace(/-/g, '/');
-      }))
+      .pipe(gulp.rename(flattenCorePaths))
+      .pipe(compile(options))
+      .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(gulp.sourcemaps.write(
           '.', {includeContent: false, sourceRoot: '../../'}))
       .pipe(gulp.dest('./tests/compile/'));

@@ -36,7 +36,7 @@ exports.NAME_SPACE = NAME_SPACE;
  * jsdom package instead.
  * @type {!Document}
  */
-let xmlDocument = globalThis.document;
+let xmlDocument = globalThis['document'];
 
 /**
  * Get the document object to use for XML serialization.

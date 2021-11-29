@@ -402,6 +402,11 @@ Trashcan.prototype.openFlyout = function() {
   });
   this.flyout.show(contents);
   this.fireUiEvent_(true);
+  if (!this.listener_) {
+    this.listener_ = this.listen_.bind(this);
+    this.listenState_ = 0;
+    this.workspace_.addChangeListener(this.listener_);
+  }
 };
 
 /**
@@ -414,6 +419,27 @@ Trashcan.prototype.closeFlyout = function() {
   this.flyout.hide();
   this.fireUiEvent_(false);
   this.workspace_.recordDragTargets();
+};
+
+/**
+ * Closes the trashcan flyout.
+ */
+Trashcan.prototype.listen_ = function(e) {
+  if (e instanceof Blockly.Events.TrashcanOpen && !e.isOpen) {
+    // Trashcan has closed, the next event is the important one.
+    this.listenState_ = 1;
+    return;
+  }
+  if (this.listenState_ === 1) {
+    if (e instanceof Blockly.Events.BlockCreate) {
+      // Trashcan has closed, followed immediately by a create.
+      // TODO: delete e.json from this.contents_.
+      console.log(e.json);
+      console.log(this.contents_);
+    }
+    this.workspace_.removeChangeListener(this.listener_);
+    this.listener_ = null;
+  }
 };
 
 /**

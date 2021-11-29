@@ -10,20 +10,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.lists');
-goog.provide('Blockly.Constants.Lists');
+goog.module('Blockly.blocks.lists');
 
 goog.require('Blockly');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['LISTS_HUE']. (2018 April 5)
- */
-Blockly.Constants.Lists.HUE = 260;
 
 Blockly.defineBlocksWithJsonArray([
   // Block for creating an empty list

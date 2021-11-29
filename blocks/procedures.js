@@ -49,8 +49,7 @@ Blocks['procedures_defnoreturn'] = {
    */
   init: function() {
     const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName,
-        Procedures.rename);
+    const nameField = new FieldTextInput(initName, Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
         .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
@@ -81,8 +80,8 @@ Blocks['procedures_defnoreturn'] = {
       return;
     }
     if (hasStatements) {
-      this.appendStatementInput('STACK')
-          .appendField(Msg['PROCEDURES_DEFNORETURN_DO']);
+      this.appendStatementInput('STACK').appendField(
+          Msg['PROCEDURES_DEFNORETURN_DO']);
       if (this.getInput('RETURN')) {
         this.moveInputBefore('STACK', 'RETURN');
       }
@@ -100,8 +99,8 @@ Blocks['procedures_defnoreturn'] = {
     // Merge the arguments into a human-readable list.
     let paramString = '';
     if (this.arguments_.length) {
-      paramString = Msg['PROCEDURES_BEFORE_PARAMS'] +
-          ' ' + this.arguments_.join(', ');
+      paramString =
+          Msg['PROCEDURES_BEFORE_PARAMS'] + ' ' + this.arguments_.join(', ');
     }
     // The params field is deterministic based on the mutation,
     // no need to fire a change event.
@@ -154,14 +153,17 @@ Blocks['procedures_defnoreturn'] = {
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
         const varName = childNode.getAttribute('name');
-        const varId = childNode.getAttribute('varid') || childNode.getAttribute('varId');
+        const varId =
+            childNode.getAttribute('varid') || childNode.getAttribute('varId');
         this.arguments_.push(varName);
         const variable = Variables.getOrCreateVariablePackage(
             this.workspace, varId, varName, '');
         if (variable !== null) {
           this.argumentVarModels_.push(variable);
         } else {
-          console.log('Failed to create a variable with name ' + varName + ', ignoring.');
+          console.log(
+              'Failed to create a variable with name ' + varName +
+              ', ignoring.');
         }
       }
     }
@@ -290,8 +292,8 @@ Blocks['procedures_defnoreturn'] = {
       this.argumentVarModels_.push(variable);
 
       this.paramIds_.push(paramBlock.id);
-      paramBlock = paramBlock.nextConnection &&
-          paramBlock.nextConnection.targetBlock();
+      paramBlock =
+          paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
     }
     this.updateParams_();
     Procedures.mutateCallers(this);
@@ -454,15 +456,14 @@ Blocks['procedures_defnoreturn'] = {
       for (let i = 0; i < this.argumentVarModels_.length; i++) {
         const argOption = {enabled: true};
         const argVar = this.argumentVarModels_[i];
-        argOption.text = Msg['VARIABLES_SET_CREATE_GET']
-            .replace('%1', argVar.name);
+        argOption.text =
+            Msg['VARIABLES_SET_CREATE_GET'].replace('%1', argVar.name);
 
         const argXmlField = Variables.generateVariableFieldDom(argVar);
         const argXmlBlock = xmlUtils.createElement('block');
         argXmlBlock.setAttribute('type', 'variables_get');
         argXmlBlock.appendChild(argXmlField);
-        argOption.callback =
-            ContextMenu.callbackFactory(this, argXmlBlock);
+        argOption.callback = ContextMenu.callbackFactory(this, argXmlBlock);
         options.push(argOption);
       }
     }
@@ -477,8 +478,7 @@ Blocks['procedures_defreturn'] = {
    */
   init: function() {
     const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName,
-        Procedures.rename);
+    const nameField = new FieldTextInput(initName, Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
         .appendField(Msg['PROCEDURES_DEFRETURN_TITLE'])
@@ -536,8 +536,8 @@ Blocks['procedures_mutatorcontainer'] = {
    * @this {Block}
    */
   init: function() {
-    this.appendDummyInput()
-        .appendField(Msg['PROCEDURES_MUTATORCONTAINER_TITLE']);
+    this.appendDummyInput().appendField(
+        Msg['PROCEDURES_MUTATORCONTAINER_TITLE']);
     this.appendStatementInput('STACK');
     this.appendDummyInput('STATEMENT_INPUT')
         .appendField(Msg['PROCEDURES_ALLOW_STATEMENTS'])
@@ -554,8 +554,7 @@ Blocks['procedures_mutatorarg'] = {
    * @this {Block}
    */
   init: function() {
-    const field = new FieldTextInput(
-        Procedures.DEFAULT_ARG, this.validator_);
+    const field = new FieldTextInput(Procedures.DEFAULT_ARG, this.validator_);
     // Hack: override showEditor to do just a little bit more work.
     // We don't have a good place to hook into the start of a text edit.
     field.oldShowEditorFn_ = field.showEditor_;
@@ -605,8 +604,8 @@ Blocks['procedures_mutatorarg'] = {
     }
 
     // Prevents duplicate parameter names in functions
-    const workspace = sourceBlock.workspace.targetWorkspace ||
-        sourceBlock.workspace;
+    const workspace =
+        sourceBlock.workspace.targetWorkspace || sourceBlock.workspace;
     const blocks = workspace.getAllBlocks(false);
     const caselessName = varName.toLowerCase();
     for (let i = 0; i < blocks.length; i++) {
@@ -668,8 +667,7 @@ Blocks['procedures_callnoreturn'] = {
    * @this {Block}
    */
   init: function() {
-    this.appendDummyInput('TOPROW')
-        .appendField('', 'NAME');
+    this.appendDummyInput('TOPROW').appendField('', 'NAME');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setStyle('procedure_blocks');
@@ -726,10 +724,10 @@ Blocks['procedures_callnoreturn'] = {
     //     Existing param IDs.
     // Note that quarkConnections_ may include IDs that no longer exist, but
     // which might reappear if a param is reattached in the mutator.
-    const defBlock = Procedures.getDefinition(this.getProcedureCall(),
-        this.workspace);
-    const mutatorOpen = defBlock && defBlock.mutator &&
-        defBlock.mutator.isVisible();
+    const defBlock =
+        Procedures.getDefinition(this.getProcedureCall(), this.workspace);
+    const mutatorOpen =
+        defBlock && defBlock.mutator && defBlock.mutator.isVisible();
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
@@ -949,8 +947,9 @@ Blocks['procedures_callnoreturn'] = {
       // an empty definition block with the correct signature.
       const name = this.getProcedureCall();
       let def = Procedures.getDefinition(name, this.workspace);
-      if (def && (def.type !== this.defType_ ||
-          JSON.stringify(def.getVars()) !== JSON.stringify(this.arguments_))) {
+      if (def &&
+          (def.type !== this.defType_ ||
+           JSON.stringify(def.getVars()) !== JSON.stringify(this.arguments_))) {
         // The signatures don't match.
         def = null;
       }
@@ -1009,10 +1008,12 @@ Blocks['procedures_callnoreturn'] = {
         // in most cases the old group should be ''
         const oldGroup = Events.getGroup();
         if (oldGroup) {
-          // This should only be possible programmatically and may indicate a problem
-          // with event grouping. If you see this message please investigate. If the
-          // use ends up being valid we may need to reorder events in the undo stack.
-          console.log('Saw an existing group while responding to a definition change');
+          // This should only be possible programmatically and may indicate a
+          // problem with event grouping. If you see this message please
+          // investigate. If the use ends up being valid we may need to reorder
+          // events in the undo stack.
+          console.log(
+              'Saw an existing group while responding to a definition change');
         }
         Events.setGroup(event.group);
         if (event.newValue) {
@@ -1059,8 +1060,7 @@ Blocks['procedures_callreturn'] = {
    * @this {Block}
    */
   init: function() {
-    this.appendDummyInput('TOPROW')
-        .appendField('', 'NAME');
+    this.appendDummyInput('TOPROW').appendField('', 'NAME');
     this.setOutput(true);
     this.setStyle('procedure_blocks');
     // Tooltip is set in domToMutation.
@@ -1084,8 +1084,7 @@ Blocks['procedures_callreturn'] = {
   getVars: Blocks['procedures_callnoreturn'].getVars,
   getVarModels: Blocks['procedures_callnoreturn'].getVarModels,
   onchange: Blocks['procedures_callnoreturn'].onchange,
-  customContextMenu:
-      Blocks['procedures_callnoreturn'].customContextMenu,
+  customContextMenu: Blocks['procedures_callnoreturn'].customContextMenu,
   defType_: 'procedures_defreturn',
 };
 
@@ -1098,8 +1097,8 @@ Blocks['procedures_ifreturn'] = {
     this.appendValueInput('CONDITION')
         .setCheck('Boolean')
         .appendField(Msg['CONTROLS_IF_MSG_IF']);
-    this.appendValueInput('VALUE')
-        .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
+    this.appendValueInput('VALUE').appendField(
+        Msg['PROCEDURES_DEFRETURN_RETURN']);
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -1128,8 +1127,8 @@ Blocks['procedures_ifreturn'] = {
     this.hasReturnValue_ = (value === '1');
     if (!this.hasReturnValue_) {
       this.removeInput('VALUE');
-      this.appendDummyInput('VALUE')
-          .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
+      this.appendDummyInput('VALUE').appendField(
+          Msg['PROCEDURES_DEFRETURN_RETURN']);
     }
   },
 
@@ -1162,14 +1161,14 @@ Blocks['procedures_ifreturn'] = {
       // If needed, toggle whether this block has a return value.
       if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
         this.removeInput('VALUE');
-        this.appendDummyInput('VALUE')
-            .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
+        this.appendDummyInput('VALUE').appendField(
+            Msg['PROCEDURES_DEFRETURN_RETURN']);
         this.hasReturnValue_ = false;
-      } else if (block.type === 'procedures_defreturn' &&
-                 !this.hasReturnValue_) {
+      } else if (
+          block.type === 'procedures_defreturn' && !this.hasReturnValue_) {
         this.removeInput('VALUE');
-        this.appendValueInput('VALUE')
-            .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
+        this.appendValueInput('VALUE').appendField(
+            Msg['PROCEDURES_DEFRETURN_RETURN']);
         this.hasReturnValue_ = true;
       }
       this.setWarningText(null);

@@ -21,6 +21,7 @@ const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
 const {Names, NameType} = goog.require('Blockly.Names');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');

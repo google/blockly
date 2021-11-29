@@ -16,7 +16,7 @@
  */
 goog.module('Blockly.zelos.RenderInfo');
 
-const constants = goog.require('Blockly.constants');
+const {Align} = goog.require('Blockly.Input');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -266,8 +266,8 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
   if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
-      activeRow.align === constants.ALIGN.LEFT &&
-      input.align === constants.ALIGN.RIGHT) {
+      activeRow.align === Align.LEFT &&
+      input.align === Align.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   } else if (input.type === inputTypes.STATEMENT) {
     // Handle statements without next connections correctly.

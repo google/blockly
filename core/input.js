@@ -15,7 +15,18 @@
  */
 goog.module('Blockly.Input');
 
-const constants = goog.require('Blockly.constants');
+/**
+ * Enum for alignment of inputs.
+ * @enum {number}
+ * @alias Blockly.Input.Align
+ */
+const Align = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1,
+};
+exports.Align = Align;
+
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -64,7 +75,7 @@ const Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Input.prototype.align = constants.ALIGN.LEFT;
+Input.prototype.align = Align.LEFT;
 
 /**
  * Is the input visible?
@@ -249,8 +260,8 @@ Input.prototype.setCheck = function(check) {
 
 /**
  * Change the alignment of the connection's field(s).
- * @param {number} align One of the values of constants.ALIGN.
- *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
+ * @param {number} align One of the values of Align
+ *   In RTL mode directions are reversed, and Align.RIGHT aligns to the left.
  * @return {!Input} The input being modified (to allow chaining).
  */
 Input.prototype.setAlign = function(align) {

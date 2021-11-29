@@ -27,6 +27,7 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
+const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
@@ -40,7 +41,6 @@ const {Field} = goog.requireType('Blockly.Field');
 const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
 const {IDeletable} = goog.require('Blockly.IDeletable');
-const {Input} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
 const {Size} = goog.require('Blockly.utils.Size');
@@ -1824,10 +1824,10 @@ Block.prototype.fieldFromJson_ = function(element) {
  */
 Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   const alignmentLookup = {
-    'LEFT': constants.ALIGN.LEFT,
-    'RIGHT': constants.ALIGN.RIGHT,
-    'CENTRE': constants.ALIGN.CENTRE,
-    'CENTER': constants.ALIGN.CENTRE,
+    'LEFT': Align.LEFT,
+    'RIGHT': Align.RIGHT,
+    'CENTRE': Align.CENTRE,
+    'CENTER': Align.CENTRE,
   };
 
   let input = null;

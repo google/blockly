@@ -240,7 +240,7 @@ const WorkspaceSvg = function(
   const Procedures = goog.module.get('Blockly.Procedures');
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.PROCEDURE_CATEGORY_NAME, Procedures.flyoutCategory);
+        constants.PROCEDURE_CATEGORY_NAME, Procedures.flyoutCategory);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 

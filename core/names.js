@@ -18,7 +18,6 @@ goog.module('Blockly.Names');
 const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
 const constants = goog.require('Blockly.constants');
-const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */
@@ -116,8 +115,7 @@ Names.prototype.getNameForUserVariable_ = function(id) {
 Names.prototype.populateVariables = function(workspace) {
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    this.getName(
-        variables[i].getId(), constants.VARIABLE_CATEGORY_NAME);
+    this.getName(variables[i].getId(), constants.VARIABLE_CATEGORY_NAME);
   }
 };
 
@@ -131,7 +129,7 @@ Names.prototype.populateProcedures = function(workspace) {
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {
-    this.getName(procedures[i][0], internalConstants.PROCEDURE_CATEGORY_NAME);
+    this.getName(procedures[i][0], constants.PROCEDURE_CATEGORY_NAME);
   }
 };
 

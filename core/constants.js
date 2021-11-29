@@ -53,3 +53,13 @@ exports.COLLAPSED_FIELD_NAME = COLLAPSED_FIELD_NAME;
  */
 const VARIABLE_CATEGORY_NAME = 'VARIABLE';
 exports.VARIABLE_CATEGORY_NAME = VARIABLE_CATEGORY_NAME;
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * procedure blocks.
+ * @const {string}
+ * @alias Blockly.constants.PROCEDURE_CATEGORY_NAME
+ */
+const PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
+exports.PROCEDURE_CATEGORY_NAME = PROCEDURE_CATEGORY_NAME;

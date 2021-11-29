@@ -18,8 +18,8 @@
 goog.module('Blockly.Generator');
 
 const common = goog.require('Blockly.common');
+const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -468,7 +468,7 @@ Object.defineProperties(Generator.prototype, {
 Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
     const functionName = this.nameDB_.getDistinctName(
-        desiredName, internalConstants.PROCEDURE_CATEGORY_NAME);
+        desiredName, constants.PROCEDURE_CATEGORY_NAME);
     this.functionNames_[desiredName] = functionName;
     let codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);

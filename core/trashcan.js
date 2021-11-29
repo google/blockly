@@ -480,7 +480,7 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {?Rect} The UI elements’s bounding box. Null if
+ * @return {?Rect} The UI elements's bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
 Trashcan.prototype.getBoundingRectangle = function() {

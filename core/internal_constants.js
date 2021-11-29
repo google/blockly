@@ -201,16 +201,6 @@ exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
  * @const {string}
- * @alias Blockly.internalConstants.VARIABLE_CATEGORY_NAME
- */
-const VARIABLE_CATEGORY_NAME = 'VARIABLE';
-exports.VARIABLE_CATEGORY_NAME = VARIABLE_CATEGORY_NAME;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * variable blocks.
- * @const {string}
  * @alias Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
 const VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';

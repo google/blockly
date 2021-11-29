@@ -17,6 +17,7 @@ goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
+const constants = goog.require('Blockly.constants');
 const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
@@ -85,7 +86,7 @@ Names.prototype.setVariableMap = function(map) {
 /**
  * Get the name for a user-defined variable, based on its ID.
  * This should only be used for variables of realm
- * internalConstants.VARIABLE_CATEGORY_NAME.
+ * constants.VARIABLE_CATEGORY_NAME.
  * @param {string} id The ID to look up in the variable map.
  * @return {?string} The name of the referenced variable, or null if there was
  *     no variable map or the variable was not found in the map.
@@ -116,7 +117,7 @@ Names.prototype.populateVariables = function(workspace) {
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
     this.getName(
-        variables[i].getId(), internalConstants.VARIABLE_CATEGORY_NAME);
+        variables[i].getId(), constants.VARIABLE_CATEGORY_NAME);
   }
 };
 
@@ -144,7 +145,7 @@ Names.prototype.populateProcedures = function(workspace) {
  */
 Names.prototype.getName = function(nameOrId, realm) {
   let name = nameOrId;
-  if (realm === internalConstants.VARIABLE_CATEGORY_NAME) {
+  if (realm === constants.VARIABLE_CATEGORY_NAME) {
     const varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
@@ -153,7 +154,7 @@ Names.prototype.getName = function(nameOrId, realm) {
   }
   const normalizedName = name.toLowerCase();
 
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
+  const isVar = realm === constants.VARIABLE_CATEGORY_NAME ||
       realm === Names.DEVELOPER_VARIABLE_TYPE;
 
   const prefix = isVar ? this.variablePrefix_ : '';
@@ -200,7 +201,7 @@ Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
+  const isVar = realm === constants.VARIABLE_CATEGORY_NAME ||
       realm === Names.DEVELOPER_VARIABLE_TYPE;
   const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;

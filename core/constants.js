@@ -43,3 +43,13 @@ exports.COLLAPSED_INPUT_NAME = COLLAPSED_INPUT_NAME;
  */
 const COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
 exports.COLLAPSED_FIELD_NAME = COLLAPSED_FIELD_NAME;
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * @const {string}
+ * @alias Blockly.constants.VARIABLE_CATEGORY_NAME
+ */
+const VARIABLE_CATEGORY_NAME = 'VARIABLE';
+exports.VARIABLE_CATEGORY_NAME = VARIABLE_CATEGORY_NAME;

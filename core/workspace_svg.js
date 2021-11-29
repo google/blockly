@@ -30,6 +30,7 @@ const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
+const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -226,7 +227,7 @@ const WorkspaceSvg = function(
   const Variables = goog.module.get('Blockly.Variables');
   if (Variables && Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_CATEGORY_NAME, Variables.flyoutCategory);
+        constants.VARIABLE_CATEGORY_NAME, Variables.flyoutCategory);
   }
 
   const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');

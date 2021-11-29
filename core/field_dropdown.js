@@ -470,7 +470,7 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     strings.push(options[i][0]);
   }
 
-  if (this.opt_config_['disableOutAffix']) {
+  if (this.opt_config_ && this.opt_config_['disableOutAffix']) {
     return;
   }
 

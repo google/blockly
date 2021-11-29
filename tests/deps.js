@@ -1,5 +1,5 @@
 goog.addDependency('../../blocks/all.js', ['Blockly.blocks.all'], ['Blockly.blocks.colour', 'Blockly.blocks.lists', 'Blockly.blocks.logic', 'Blockly.blocks.loops', 'Blockly.blocks.math', 'Blockly.blocks.procedures', 'Blockly.blocks.texts', 'Blockly.blocks.variables', 'Blockly.blocks.variablesDynamic'], {'module': 'goog'});
-goog.addDependency('../../blocks/colour.js', ['Blockly.blocks.colour'], ['Blockly', 'Blockly.FieldColour', 'Blockly.FieldLabel'], {'lang': 'es5', 'module': 'goog'});
+goog.addDependency('../../blocks/colour.js', ['Blockly.blocks.colour'], ['Blockly.common'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/lists.js', ['Blockly.Constants.Lists', 'Blockly.blocks.lists'], ['Blockly', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.Mutator'], {'lang': 'es6'});
 goog.addDependency('../../blocks/logic.js', ['Blockly.Constants.Logic', 'Blockly.blocks.logic'], ['Blockly', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.Mutator'], {'lang': 'es6'});
 goog.addDependency('../../blocks/loops.js', ['Blockly.Constants.Loops', 'Blockly.blocks.loops'], ['Blockly', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Warning', 'Blockly.loopMixin'], {'lang': 'es6'});

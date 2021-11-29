@@ -6,18 +6,15 @@
 
 /**
  * @fileoverview Colour blocks for Blockly.
- * @suppress {extraRequire|missingRequire}
  */
 'use strict';
 
 goog.module('Blockly.blocks.colour');
 
-goog.require('Blockly');
-goog.require('Blockly.FieldColour');
-goog.require('Blockly.FieldLabel');
+const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
 
 
-Blockly.defineBlocksWithJsonArray([
+defineBlocksWithJsonArray([
   // Block for colour picker.
   {
     "type": "colour_picker",

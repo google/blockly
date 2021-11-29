@@ -52,6 +52,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
 const zelos = goog.require('Blockly.zelos');
+const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
@@ -122,7 +123,6 @@ const {IStyleable} = goog.require('Blockly.IStyleable');
 const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
 const {IToolbox} = goog.require('Blockly.IToolbox');
 const {Icon} = goog.require('Blockly.Icon');
-const {Input} = goog.require('Blockly.Input');
 const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
 const {Marker} = goog.require('Blockly.Marker');
 const {MarkerManager} = goog.require('Blockly.MarkerManager');
@@ -438,22 +438,22 @@ exports.unbindEvent_ = browserEvents.unbind;
 exports.bindEventWithChecks_ = browserEvents.conditionalBind;
 
 /**
- * @see constants.ALIGN.LEFT
+ * @see Blockly.Input.Align.LEFT
  * @alias Blockly.ALIGN_LEFT
  */
-exports.ALIGN_LEFT = constants.ALIGN.LEFT;
+exports.ALIGN_LEFT = Align.LEFT;
 
 /**
- * @see constants.ALIGN.CENTRE
+ * @see Blockly.Input.Align.CENTRE
  * @alias Blockly.ALIGN_CENTRE
  */
-exports.ALIGN_CENTRE = constants.ALIGN.CENTRE;
+exports.ALIGN_CENTRE = Align.CENTRE;
 
 /**
- * @see constants.ALIGN.RIGHT
+ * @see Blockly.Input.Align.RIGHT
  * @alias Blockly.ALIGN_RIGHT
  */
-exports.ALIGN_RIGHT = constants.ALIGN.RIGHT;
+exports.ALIGN_RIGHT = Align.RIGHT;
 
 /**
  * @see common.svgResize

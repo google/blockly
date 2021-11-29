@@ -15,7 +15,7 @@
  */
 goog.module('Blockly.blockRendering.RenderInfo');
 
-const constants = goog.require('Blockly.constants');
+const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
@@ -578,14 +578,14 @@ RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   }
 
   // Decide where the extra padding goes.
-  if (row.align === constants.ALIGN.LEFT) {
+  if (row.align === Align.LEFT) {
     // Add padding to the end of the row.
     lastSpacer.width += missingSpace;
-  } else if (row.align === constants.ALIGN.CENTRE) {
+  } else if (row.align === Align.CENTRE) {
     // Split the padding between the beginning and end of the row.
     firstSpacer.width += missingSpace / 2;
     lastSpacer.width += missingSpace / 2;
-  } else if (row.align === constants.ALIGN.RIGHT) {
+  } else if (row.align === Align.RIGHT) {
     // Add padding at the beginning of the row.
     firstSpacer.width += missingSpace;
   } else {

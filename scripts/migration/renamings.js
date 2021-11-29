@@ -97,6 +97,22 @@ const renamings = {
   '6.20210701.0': {
     'Blockly': {
       exports: {
+        // Align.
+        ALIGN_LEFT: {
+          module: 'Blockly.Input',
+          export: 'Align.LEFT',
+          path: 'Blockly.ALIGN_LEFT',
+        },
+        ALIGN_CENTRE: {
+          module: 'Blockly.Input',
+          export: 'Align.CENTRE',
+          path: 'Blockly.ALIGN_CENTRE',
+        },
+        ALIGN_RIGHT: {
+          module: 'Blockly.Input',
+          export: 'Align.RIGHT',
+          path: 'Blockly.ALIGN_RIGHT',
+        },
         // Clipboard.  See PR #5237.
         clipboardXml_: {module: 'Blockly.clipboard', export: 'xml'},
         clipboardSource_: {module: 'Blockly.clipboard', export: 'source'},

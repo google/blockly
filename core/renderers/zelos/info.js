@@ -266,8 +266,7 @@ RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
   if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
-      activeRow.align === Align.LEFT &&
-      input.align === Align.RIGHT) {
+      activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
   } else if (input.type === inputTypes.STATEMENT) {
     // Handle statements without next connections correctly.

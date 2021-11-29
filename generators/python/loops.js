@@ -197,7 +197,7 @@ Blockly.Python['controls_flow_statements'] = function(block) {
     xfix += Blockly.Python.injectId(Blockly.Python.STATEMENT_SUFFIX, block);
   }
   if (Blockly.Python.STATEMENT_PREFIX) {
-    const loop = Blockly.loopMixin
+    const loop = Blockly.Constants.Loops
         .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end

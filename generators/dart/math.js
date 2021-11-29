@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Dart for math blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

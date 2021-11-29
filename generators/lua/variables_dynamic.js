@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Lua for dynamic variable blocks.
+ * @suppress {extraRequire}
  */
 'use strict';
 

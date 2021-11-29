@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating JavaScript for math blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

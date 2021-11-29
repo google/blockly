@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating JavaScript for text blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Lua for procedure blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

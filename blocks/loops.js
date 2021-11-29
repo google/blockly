@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Loop blocks for Blockly.
+ * @suppress {extraRequire|missingRequire|checkTypes}
  */
 'use strict';
 

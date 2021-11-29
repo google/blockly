@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating JavaScript for dynamic variable blocks.
+ * @suppress {extraRequire}
  */
 'use strict';
 

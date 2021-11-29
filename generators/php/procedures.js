@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating PHP for procedure blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

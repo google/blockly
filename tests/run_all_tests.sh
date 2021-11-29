@@ -54,12 +54,9 @@ if [ -z $CI ]; then
   run_test_command "eslint" "eslint ."
 fi
 
-# Run the full usual build process.
-run_test_command "build" "npm run build"
-
-# Run the debug build, to ensure there are no closure compiler
-# warnings / errors.
-run_test_command "build:debug" "npm run build:debug"
+# Run the full usual build process, checking to ensure there are no
+# closure compiler warnings / errors.
+run_test_command "build-debug" "npm run build-debug"
 
 # Generate TypeScript typings and ensure there are no errors.
 run_test_command "typings" "npm run typings"

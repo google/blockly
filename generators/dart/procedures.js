@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Dart for procedure blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

@@ -7,6 +7,7 @@
 /**
  * @fileoverview Helper functions for generating Lua for blocks.
  * Based on Ellen Spertus's blocky-lua project.
+ * @suppress {missingRequire|checkTypes|globalThis}
  */
 'use strict';
 

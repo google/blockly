@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Python for procedure blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

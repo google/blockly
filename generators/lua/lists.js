@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating Lua for list blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

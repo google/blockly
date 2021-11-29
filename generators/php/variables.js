@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating PHP for variable blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

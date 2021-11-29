@@ -6,6 +6,7 @@
 
 /**
  * @fileoverview Generating PHP for loop blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 

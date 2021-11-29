@@ -10,19 +10,12 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.colour');
-goog.provide('Blockly.Constants.Colour');
+goog.module('Blockly.blocks.colour');
 
 goog.require('Blockly');
 goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldLabel');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['COLOUR_HUE']. (2018 April 5)
- */
-Blockly.Constants.Colour.HUE = 20;
 
 Blockly.defineBlocksWithJsonArray([
   // Block for colour picker.

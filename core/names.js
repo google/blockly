@@ -17,7 +17,6 @@ goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
-const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */
@@ -48,13 +47,25 @@ const Names = function(reservedWords, opt_variablePrefix) {
 };
 
 /**
+ * Enum for alignment of inputs.
+ * @enum {string}
+ * @alias Blockly.Names.NameType
+ */
+const NameType = {
+  DEVELOPER_VARIABLE: 'DEVELOPER_VARIABLE',
+  VARIABLE: 'VARIABLE',
+  PROCEDURE: 'PROCEDURE',
+};
+exports.NameType = NameType;
+
+/**
  * Constant to separate developer variable names from user-defined variable
  * names when running generators.
  * A developer variable will be declared as a global in the generated code, but
  * will never be shown to the user in the workspace or stored in the variable
  * map.
  */
-Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
+Names.DEVELOPER_VARIABLE_TYPE = NameType.DEVELOPER_VARIABLE;
 
 /**
  * When JavaScript (or most other languages) is generated, variable 'foo' and
@@ -84,8 +95,7 @@ Names.prototype.setVariableMap = function(map) {
 
 /**
  * Get the name for a user-defined variable, based on its ID.
- * This should only be used for variables of realm
- * internalConstants.VARIABLE_CATEGORY_NAME.
+ * This should only be used for variables of realm NameType.VARIABLE.
  * @param {string} id The ID to look up in the variable map.
  * @return {?string} The name of the referenced variable, or null if there was
  *     no variable map or the variable was not found in the map.
@@ -115,8 +125,7 @@ Names.prototype.getNameForUserVariable_ = function(id) {
 Names.prototype.populateVariables = function(workspace) {
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    this.getName(
-        variables[i].getId(), internalConstants.VARIABLE_CATEGORY_NAME);
+    this.getName(variables[i].getId(), NameType.VARIABLE);
   }
 };
 
@@ -130,7 +139,7 @@ Names.prototype.populateProcedures = function(workspace) {
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {
-    this.getName(procedures[i][0], internalConstants.PROCEDURE_CATEGORY_NAME);
+    this.getName(procedures[i][0], NameType.PROCEDURE);
   }
 };
 
@@ -144,7 +153,7 @@ Names.prototype.populateProcedures = function(workspace) {
  */
 Names.prototype.getName = function(nameOrId, realm) {
   let name = nameOrId;
-  if (realm === internalConstants.VARIABLE_CATEGORY_NAME) {
+  if (realm === NameType.VARIABLE) {
     const varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
@@ -153,8 +162,8 @@ Names.prototype.getName = function(nameOrId, realm) {
   }
   const normalizedName = name.toLowerCase();
 
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm === Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar =
+      realm === NameType.VARIABLE || realm === NameType.DEVELOPER_VARIABLE;
 
   const prefix = isVar ? this.variablePrefix_ : '';
   if (!(realm in this.db_)) {
@@ -200,8 +209,8 @@ Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm === Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar =
+      realm === NameType.VARIABLE || realm === NameType.DEVELOPER_VARIABLE;
   const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;
 };

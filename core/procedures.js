@@ -36,6 +36,16 @@ goog.require('Blockly.Events.BlockChange');
 
 
 /**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * procedure blocks.
+ * @const {string}
+ * @alias Blockly.Procedures.PROCEDURE_CATEGORY_NAME
+ */
+const CATEGORY_NAME = 'PROCEDURE';
+exports.CATEGORY_NAME = CATEGORY_NAME;
+
+/**
  * The default argument for a procedures_mutatorarg block.
  * @type {string}
  * @alias Blockly.Procedures.DEFAULT_ARG

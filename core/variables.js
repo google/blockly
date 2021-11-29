@@ -24,6 +24,15 @@ const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * @const {string}
+ * @alias Blockly.Variables.CATEGORY_NAME
+ */
+const CATEGORY_NAME = 'VARIABLE';
+exports.CATEGORY_NAME = CATEGORY_NAME;
 
 /**
  * Find all user-created variables that are in use in the workspace.

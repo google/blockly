@@ -6,16 +6,19 @@
 
 /**
  * @fileoverview Helper functions for generating PHP for blocks.
- * @suppress {missingRequire|checkTypes|globalThis}
+ * @suppress {checkTypes|globalThis}
  */
 'use strict';
 
 goog.provide('Blockly.PHP');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.Names');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -271,7 +274,7 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
-  if (Blockly.isNumber(at)) {
+  if (Blockly.utils.string.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = Number(at) + delta;
     if (opt_negate) {

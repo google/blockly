@@ -7,16 +7,19 @@
 /**
  * @fileoverview Helper functions for generating Lua for blocks.
  * Based on Ellen Spertus's blocky-lua project.
- * @suppress {missingRequire|checkTypes|globalThis}
+ * @suppress {checkTypes|globalThis}
  */
 'use strict';
 
 goog.provide('Blockly.Lua');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.Names');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
 
 
 /**

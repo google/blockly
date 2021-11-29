@@ -13,8 +13,12 @@
 goog.provide('Blockly.Python');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.Names');
+goog.require('Blockly.Variables');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.string');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -305,7 +309,7 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   const atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
   let at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
-  if (Blockly.isNumber(at)) {
+  if (Blockly.utils.string.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
     if (opt_negate) {

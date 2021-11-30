@@ -10,20 +10,13 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.logic');
-goog.provide('Blockly.Constants.Logic');
+goog.module('Blockly.blocks.logic');
 
 goog.require('Blockly');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['LOGIC_HUE']. (2018 April 5)
- */
-Blockly.Constants.Logic.HUE = 210;
 
 Blockly.defineBlocksWithJsonArray([
   // Block for boolean data type: true and false.
@@ -256,10 +249,9 @@ Blockly.defineBlocksWithJsonArray([
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
  * @see {Blockly.Extensions#buildTooltipForDropdown}
- * @package
  * @readonly
  */
-Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
+const TOOLTIPS_BY_OP = {
   // logic_compare
   'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
   'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
@@ -275,16 +267,15 @@ Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
 
 Blockly.Extensions.register('logic_op_tooltip',
     Blockly.Extensions.buildTooltipForDropdown(
-        'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
+        'OP', TOOLTIPS_BY_OP));
 
 /**
  * Mutator methods added to controls_if blocks.
  * @mixin
  * @augments Blockly.Block
- * @package
  * @readonly
  */
-Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
+const CONTROLS_IF_MUTATOR_MIXIN = {
   elseifCount_: 0,
   elseCount_: 0,
 
@@ -507,15 +498,14 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
 };
 
 Blockly.Extensions.registerMutator('controls_if_mutator',
-    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN, null,
+    CONTROLS_IF_MUTATOR_MIXIN, null,
     ['controls_if_elseif', 'controls_if_else']);
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
  * @this {Blockly.Block}
- * @package
  */
-Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
+const CONTROLS_IF_TOOLTIP_EXTENSION = function() {
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
       return Blockly.Msg['CONTROLS_IF_TOOLTIP_1'];
@@ -531,17 +521,16 @@ Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
 };
 
 Blockly.Extensions.register('controls_if_tooltip',
-    Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION);
+    CONTROLS_IF_TOOLTIP_EXTENSION);
 
 /**
  * Adds dynamic type validation for the left and right sides of a logic_compare
  * block.
  * @mixin
  * @augments Blockly.Block
- * @package
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
+const LOGIC_COMPARE_ONCHANGE_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
@@ -590,25 +579,23 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
  * "logic_compare" extension function. Adds type left and right side type
  * checking to "logic_compare" blocks.
  * @this {Blockly.Block}
- * @package
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
+const LOGIC_COMPARE_EXTENSION = function() {
   // Add onchange handler to ensure types are compatible.
-  this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
+  this.mixin(LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 
 Blockly.Extensions.register('logic_compare',
-    Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
+    LOGIC_COMPARE_EXTENSION);
 
 /**
  * Adds type coordination between inputs and output.
  * @mixin
  * @augments Blockly.Block
- * @package
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
+const LOGIC_TERNARY_ONCHANGE_MIXIN = {
   prevParentConnection_: null,
 
   /**
@@ -646,4 +633,4 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
 };
 
 Blockly.Extensions.registerMixin('logic_ternary',
-    Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);
+    LOGIC_TERNARY_ONCHANGE_MIXIN);

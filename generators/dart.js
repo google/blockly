@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart');
+goog.module('Blockly.Dart');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Generator');
 goog.require('Blockly.Names');
@@ -24,7 +25,7 @@ goog.requireType('Blockly.Workspace');
  * Dart code generator.
  * @type {!Blockly.Generator}
  */
-Blockly.Dart = new Blockly.Generator('Dart');
+const Dart = new Blockly.Generator('Dart');
 
 /**
  * List of illegal variable names.
@@ -33,7 +34,7 @@ Blockly.Dart = new Blockly.Generator('Dart');
  * accidentally clobbering a built-in object or function.
  * @private
  */
-Blockly.Dart.addReservedWords(
+Dart.addReservedWords(
     // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 16.1.1
     'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
@@ -56,36 +57,36 @@ Blockly.Dart.addReservedWords(
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
  */
-Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
-Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
-Blockly.Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
-Blockly.Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
-Blockly.Dart.ORDER_ADDITIVE = 4;       // + -
-Blockly.Dart.ORDER_SHIFT = 5;          // << >>
-Blockly.Dart.ORDER_BITWISE_AND = 6;    // &
-Blockly.Dart.ORDER_BITWISE_XOR = 7;    // ^
-Blockly.Dart.ORDER_BITWISE_OR = 8;     // |
-Blockly.Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
-Blockly.Dart.ORDER_EQUALITY = 10;      // == !=
-Blockly.Dart.ORDER_LOGICAL_AND = 11;   // &&
-Blockly.Dart.ORDER_LOGICAL_OR = 12;    // ||
-Blockly.Dart.ORDER_IF_NULL = 13;       // ??
-Blockly.Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
-Blockly.Dart.ORDER_CASCADE = 15;       // ..
-Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
-Blockly.Dart.ORDER_NONE = 99;          // (...)
+Dart.ORDER_ATOMIC = 0;         // 0 "" ...
+Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
+Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
+Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
+Dart.ORDER_ADDITIVE = 4;       // + -
+Dart.ORDER_SHIFT = 5;          // << >>
+Dart.ORDER_BITWISE_AND = 6;    // &
+Dart.ORDER_BITWISE_XOR = 7;    // ^
+Dart.ORDER_BITWISE_OR = 8;     // |
+Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
+Dart.ORDER_EQUALITY = 10;      // == !=
+Dart.ORDER_LOGICAL_AND = 11;   // &&
+Dart.ORDER_LOGICAL_OR = 12;    // ||
+Dart.ORDER_IF_NULL = 13;       // ??
+Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
+Dart.ORDER_CASCADE = 15;       // ..
+Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Dart.ORDER_NONE = 99;          // (...)
 
 /**
  * Whether the init method has been called.
  * @type {?boolean}
  */
-Blockly.Dart.isInitialized = false;
+Dart.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
-Blockly.Dart.init = function(workspace) {
+Dart.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
@@ -127,7 +128,7 @@ Blockly.Dart.init = function(workspace) {
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Dart.finish = function(code) {
+Dart.finish = function(code) {
   // Indent every line.
   if (code) {
     code = this.prefixLines(code, this.INDENT);
@@ -160,7 +161,7 @@ Blockly.Dart.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Dart.scrubNakedValue = function(line) {
+Dart.scrubNakedValue = function(line) {
   return line + ';\n';
 };
 
@@ -170,7 +171,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * @return {string} Dart string.
  * @protected
  */
-Blockly.Dart.quote_ = function(string) {
+Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
@@ -186,7 +187,7 @@ Blockly.Dart.quote_ = function(string) {
  * @return {string} Dart string.
  * @protected
  */
-Blockly.Dart.multiline_quote_ = function (string) {
+Dart.multiline_quote_ = function (string) {
   const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
@@ -203,7 +204,7 @@ Blockly.Dart.multiline_quote_ = function (string) {
  * @return {string} Dart code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
+Dart.scrub_ = function(block, code, opt_thisOnly) {
   let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -246,7 +247,7 @@ Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
+Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   let delta = opt_delta || 0;
   let order = opt_order || this.ORDER_NONE;
@@ -299,3 +300,5 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   return at;
 };
+
+exports = Dart;

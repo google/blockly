@@ -387,7 +387,7 @@ Trashcan.prototype.hasContents_ = function() {
  * @return {boolean} True if the trashcan contents-flyout is currently open.
  */
 Trashcan.prototype.contentsIsOpen = function() {
-  return this.flyout && this.flyout.isVisible();
+  return !!this.flyout && this.flyout.isVisible();
 };
 
 /**

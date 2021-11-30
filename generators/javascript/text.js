@@ -25,8 +25,7 @@ const strRegExp = /^\s*'([^']|\\')*'\s*$/;
  * Leave string literals alone.
  * @param {string} value Code evaluating to a value.
  * @return {Array<string|number>} Array containing code evaluating to a string
- *     and
- *    the order of the returned code.[string, number]
+ *     and the order of the returned code.[string, number]
  */
 const forceString = function(value) {
   if (strRegExp.test(value)) {

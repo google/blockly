@@ -16,7 +16,6 @@ goog.module('Blockly.blocks.logic');
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
-const common = goog.require('Blockly.common');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -26,13 +25,14 @@ const {Mutator} = goog.require('Blockly.Mutator');
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
+const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 
 
-common.defineBlocksWithJsonArray([
+defineBlocksWithJsonArray([
   // Block for boolean data type: true and false.
   {
     'type': 'logic_boolean',

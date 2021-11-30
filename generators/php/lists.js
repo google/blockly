@@ -24,6 +24,7 @@
 goog.provide('Blockly.PHP.lists');
 
 goog.require('Blockly.PHP');
+goog.require('Blockly.utils.string');
 
 
 Blockly.PHP['lists_create_empty'] = function(block) {
@@ -387,7 +388,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         at2 = Blockly.PHP.getAdjusted(block, 'AT2', 0, false,
             Blockly.PHP.ORDER_SUBTRACTION);
         length = at2 + ' - ';
-        if (Blockly.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
+        if (Blockly.utils.string.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
           length += at1;
         } else {
           length += '(' + at1 + ')';
@@ -398,7 +399,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         at2 = Blockly.PHP.getAdjusted(block, 'AT2', 0, false,
             Blockly.PHP.ORDER_SUBTRACTION);
         length = 'count(' + list + ') - ' + at2 + ' - ';
-        if (Blockly.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
+        if (Blockly.utils.string.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
           length += at1;
         } else {
           length += '(' + at1 + ')';
@@ -406,7 +407,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         break;
       case 'LAST':
         length = 'count(' + list + ') - ';
-        if (Blockly.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
+        if (Blockly.utils.string.isNumber(String(at1)) || String(at1).match(/^\(.+\)$/)) {
           length += at1;
         } else {
           length += '(' + at1 + ')';

@@ -13,9 +13,12 @@
 goog.provide('Blockly.Dart');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.Names');
+goog.require('Blockly.Variables');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.string');
-
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
 
 /**
  * Dart code generator.
@@ -268,7 +271,7 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   /** @type {string|number} */
   let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
-  if (Blockly.isNumber(at)) {
+  if (Blockly.utils.string.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
     if (opt_negate) {

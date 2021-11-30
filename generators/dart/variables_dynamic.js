@@ -6,7 +6,7 @@
 
 /**
  * @fileoverview Generating Dart for dynamic variable blocks.
- * @suppress {extraRequire|missingRequire}
+ * @suppress {extraRequire}
  */
 'use strict';
 

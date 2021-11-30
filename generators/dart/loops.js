@@ -13,6 +13,7 @@
 goog.provide('Blockly.Dart.loops');
 
 goog.require('Blockly.Dart');
+goog.require('Blockly.utils.string');
 
 
 Blockly.Dart['controls_repeat_ext'] = function(block) {
@@ -32,7 +33,7 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
   const loopVar = Blockly.Dart.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   let endVar = repeats;
-  if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
+  if (!repeats.match(/^\w+$/) && !Blockly.utils.string.isNumber(repeats)) {
     endVar = Blockly.Dart.nameDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
@@ -73,8 +74,8 @@ Blockly.Dart['controls_for'] = function(block) {
   let branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block);
   let code;
-  if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
-      Blockly.isNumber(increment)) {
+  if (Blockly.utils.string.isNumber(argument0) && Blockly.utils.string.isNumber(argument1) &&
+      Blockly.utils.string.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
@@ -91,13 +92,13 @@ Blockly.Dart['controls_for'] = function(block) {
     code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
-    if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
+    if (!argument0.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument0)) {
       startVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
-    if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
+    if (!argument1.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument1)) {
       endVar = Blockly.Dart.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
@@ -107,7 +108,7 @@ Blockly.Dart['controls_for'] = function(block) {
     const incVar = Blockly.Dart.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'num ' + incVar + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (Blockly.utils.string.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
       code += '(' + increment + ').abs();\n';

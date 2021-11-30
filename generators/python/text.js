@@ -13,6 +13,7 @@
 goog.provide('Blockly.Python.texts');
 
 goog.require('Blockly.Python');
+goog.require('Blockly.utils.string');
 
 
 Blockly.Python['text'] = function(block) {
@@ -200,7 +201,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
       at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 0, true);
       // Ensure that if the result calculated is 0 that sub-sequence will
       // include all elements as expected.
-      if (!Blockly.isNumber(String(at2))) {
+      if (!Blockly.utils.string.isNumber(String(at2))) {
         Blockly.Python.definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
       } else if (at2 === 0) {

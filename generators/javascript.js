@@ -13,10 +13,14 @@
 goog.provide('Blockly.JavaScript');
 
 goog.require('Blockly.Generator');
+goog.require('Blockly.Variables');
+goog.require('Blockly.Names');
 goog.require('Blockly.inputTypes');
 goog.require('Blockly.utils.global');
 goog.require('Blockly.utils.object');
 goog.require('Blockly.utils.string');
+goog.requireType('Blockly.Block');
+goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -289,7 +293,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
 
   let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
-  if (Blockly.isNumber(at)) {
+  if (Blockly.utils.string.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = Number(at) + delta;
     if (opt_negate) {

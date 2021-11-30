@@ -435,8 +435,11 @@ InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
   // (e.g. in a drag/move event handler), so let's update the available
   // connections. Note that this will be called on every move while dragging, so
   // it might cause slowness, especially if the block stack is large.  If so,
-  // maybe it could be made more efficient.
-  this.updateAvailableConnections();
+  // maybe it could be made more efficient. Also note that we won't update the
+  // connections if we've already connected the insertion marker to a block.
+  if (!this.markerConnection_ || !this.markerConnection_.isConnected()) {
+    this.updateAvailableConnections();
+  }
 
   for (let i = 0; i < this.availableConnections_.length; i++) {
     const myConnection = this.availableConnections_[i];

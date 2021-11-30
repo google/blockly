@@ -271,7 +271,7 @@ goog.addDependency('../../generators/dart/all.js', ['Blockly.Dart.all'], ['Block
 goog.addDependency('../../generators/dart/colour.js', ['Blockly.Dart.colour'], ['Blockly.Dart'], {'lang': 'es6'});
 goog.addDependency('../../generators/dart/lists.js', ['Blockly.Dart.lists'], ['Blockly.Dart'], {'lang': 'es6'});
 goog.addDependency('../../generators/dart/logic.js', ['Blockly.Dart.logic'], ['Blockly.Dart'], {'lang': 'es6'});
-goog.addDependency('../../generators/dart/loops.js', ['Blockly.Dart.loops'], ['Blockly.Dart'], {'lang': 'es6'});
+goog.addDependency('../../generators/dart/loops.js', ['Blockly.Dart.loops'], ['Blockly.Dart', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/dart/math.js', ['Blockly.Dart.math'], ['Blockly.Dart'], {'lang': 'es6'});
 goog.addDependency('../../generators/dart/procedures.js', ['Blockly.Dart.procedures'], ['Blockly.Dart'], {'lang': 'es6'});
 goog.addDependency('../../generators/dart/text.js', ['Blockly.Dart.texts'], ['Blockly.Dart'], {'lang': 'es6'});

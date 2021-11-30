@@ -33,81 +33,81 @@ defineBlocksWithJsonArray([
   //   <mutation items="0"></mutation>
   // </block>
   {
-    "type": "lists_create_empty",
-    "message0": "%{BKY_LISTS_CREATE_EMPTY_TITLE}",
-    "output": "Array",
-    "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}",
+    'type': 'lists_create_empty',
+    'message0': '%{BKY_LISTS_CREATE_EMPTY_TITLE}',
+    'output': 'Array',
+    'style': 'list_blocks',
+    'tooltip': '%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}',
+    'helpUrl': '%{BKY_LISTS_CREATE_EMPTY_HELPURL}',
   },
   // Block for creating a list with one element repeated.
   {
-    "type": "lists_repeat",
-    "message0": "%{BKY_LISTS_REPEAT_TITLE}",
-    "args0": [
+    'type': 'lists_repeat',
+    'message0': '%{BKY_LISTS_REPEAT_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "ITEM",
+        'type': 'input_value',
+        'name': 'ITEM',
       },
       {
-        "type": "input_value",
-        "name": "NUM",
-        "check": "Number",
+        'type': 'input_value',
+        'name': 'NUM',
+        'check': 'Number',
       },
     ],
-    "output": "Array",
-    "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}",
+    'output': 'Array',
+    'style': 'list_blocks',
+    'tooltip': '%{BKY_LISTS_REPEAT_TOOLTIP}',
+    'helpUrl': '%{BKY_LISTS_REPEAT_HELPURL}',
   },
   // Block for reversing a list.
   {
-    "type": "lists_reverse",
-    "message0": "%{BKY_LISTS_REVERSE_MESSAGE0}",
-    "args0": [
+    'type': 'lists_reverse',
+    'message0': '%{BKY_LISTS_REVERSE_MESSAGE0}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "LIST",
-        "check": "Array",
+        'type': 'input_value',
+        'name': 'LIST',
+        'check': 'Array',
       },
     ],
-    "output": "Array",
-    "inputsInline": true,
-    "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}",
+    'output': 'Array',
+    'inputsInline': true,
+    'style': 'list_blocks',
+    'tooltip': '%{BKY_LISTS_REVERSE_TOOLTIP}',
+    'helpUrl': '%{BKY_LISTS_REVERSE_HELPURL}',
   },
   // Block for checking if a list is empty
   {
-    "type": "lists_isEmpty",
-    "message0": "%{BKY_LISTS_ISEMPTY_TITLE}",
-    "args0": [
+    'type': 'lists_isEmpty',
+    'message0': '%{BKY_LISTS_ISEMPTY_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": ["String", "Array"],
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': ['String', 'Array'],
       },
     ],
-    "output": "Boolean",
-    "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}",
+    'output': 'Boolean',
+    'style': 'list_blocks',
+    'tooltip': '%{BKY_LISTS_ISEMPTY_TOOLTIP}',
+    'helpUrl': '%{BKY_LISTS_ISEMPTY_HELPURL}',
   },
   // Block for getting the list length
   {
-    "type": "lists_length",
-    "message0": "%{BKY_LISTS_LENGTH_TITLE}",
-    "args0": [
+    'type': 'lists_length',
+    'message0': '%{BKY_LISTS_LENGTH_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": ["String", "Array"],
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': ['String', 'Array'],
       },
     ],
-    "output": "Number",
-    "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}",
+    'output': 'Number',
+    'style': 'list_blocks',
+    'tooltip': '%{BKY_LISTS_LENGTH_TOOLTIP}',
+    'helpUrl': '%{BKY_LISTS_LENGTH_HELPURL}',
   },
 ]);
 
@@ -192,8 +192,8 @@ Blocks['lists_create_with'] = {
     const connections = [];
     while (itemBlock && !itemBlock.isInsertionMarker()) {
       connections.push(itemBlock.valueConnection_);
-      itemBlock = itemBlock.nextConnection &&
-          itemBlock.nextConnection.targetBlock();
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -234,14 +234,13 @@ Blocks['lists_create_with'] = {
     if (this.itemCount_ && this.getInput('EMPTY')) {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
-      this.appendDummyInput('EMPTY')
-          .appendField(Msg['LISTS_CREATE_EMPTY_TITLE']);
+      this.appendDummyInput('EMPTY').appendField(
+          Msg['LISTS_CREATE_EMPTY_TITLE']);
     }
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        const input = this.appendValueInput('ADD' + i)
-            .setAlign(Align.RIGHT);
+        const input = this.appendValueInput('ADD' + i).setAlign(Align.RIGHT);
         if (i === 0) {
           input.appendField(Msg['LISTS_CREATE_WITH_INPUT_WITH']);
         }
@@ -261,8 +260,8 @@ Blocks['lists_create_with_container'] = {
    */
   init: function() {
     this.setStyle('list_blocks');
-    this.appendDummyInput()
-        .appendField(Msg['LISTS_CREATE_WITH_CONTAINER_TITLE_ADD']);
+    this.appendDummyInput().appendField(
+        Msg['LISTS_CREATE_WITH_CONTAINER_TITLE_ADD']);
     this.appendStatementInput('STACK');
     this.setTooltip(Msg['LISTS_CREATE_WITH_CONTAINER_TOOLTIP']);
     this.contextMenu = false;
@@ -276,8 +275,7 @@ Blocks['lists_create_with_item'] = {
    */
   init: function() {
     this.setStyle('list_blocks');
-    this.appendDummyInput()
-        .appendField(Msg['LISTS_CREATE_WITH_ITEM_TITLE']);
+    this.appendDummyInput().appendField(Msg['LISTS_CREATE_WITH_ITEM_TITLE']);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Msg['LISTS_CREATE_WITH_ITEM_TOOLTIP']);
@@ -291,25 +289,23 @@ Blocks['lists_indexOf'] = {
    * @this {Block}
    */
   init: function() {
-    const OPERATORS =
-        [
-          [Msg['LISTS_INDEX_OF_FIRST'], 'FIRST'],
-          [Msg['LISTS_INDEX_OF_LAST'], 'LAST'],
-        ];
+    const OPERATORS = [
+      [Msg['LISTS_INDEX_OF_FIRST'], 'FIRST'],
+      [Msg['LISTS_INDEX_OF_LAST'], 'LAST'],
+    ];
     this.setHelpUrl(Msg['LISTS_INDEX_OF_HELPURL']);
     this.setStyle('list_blocks');
     this.setOutput(true, 'Number');
-    this.appendValueInput('VALUE')
-        .setCheck('Array')
-        .appendField(Msg['LISTS_INDEX_OF_INPUT_IN_LIST']);
-    this.appendValueInput('FIND')
-        .appendField(new FieldDropdown(OPERATORS), 'END');
+    this.appendValueInput('VALUE').setCheck('Array').appendField(
+        Msg['LISTS_INDEX_OF_INPUT_IN_LIST']);
+    this.appendValueInput('FIND').appendField(
+        new FieldDropdown(OPERATORS), 'END');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     const thisBlock = this;
     this.setTooltip(function() {
-      return Msg['LISTS_INDEX_OF_TOOLTIP'].replace('%1',
-          thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
+      return Msg['LISTS_INDEX_OF_TOOLTIP'].replace(
+          '%1', thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
     });
   },
 };
@@ -320,42 +316,38 @@ Blocks['lists_getIndex'] = {
    * @this {Block}
    */
   init: function() {
-    const MODE =
-        [
-          [Msg['LISTS_GET_INDEX_GET'], 'GET'],
-          [Msg['LISTS_GET_INDEX_GET_REMOVE'], 'GET_REMOVE'],
-          [Msg['LISTS_GET_INDEX_REMOVE'], 'REMOVE'],
-        ];
-    this.WHERE_OPTIONS =
-        [
-          [Msg['LISTS_GET_INDEX_FROM_START'], 'FROM_START'],
-          [Msg['LISTS_GET_INDEX_FROM_END'], 'FROM_END'],
-          [Msg['LISTS_GET_INDEX_FIRST'], 'FIRST'],
-          [Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
-          [Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM'],
-        ];
+    const MODE = [
+      [Msg['LISTS_GET_INDEX_GET'], 'GET'],
+      [Msg['LISTS_GET_INDEX_GET_REMOVE'], 'GET_REMOVE'],
+      [Msg['LISTS_GET_INDEX_REMOVE'], 'REMOVE'],
+    ];
+    this.WHERE_OPTIONS = [
+      [Msg['LISTS_GET_INDEX_FROM_START'], 'FROM_START'],
+      [Msg['LISTS_GET_INDEX_FROM_END'], 'FROM_END'],
+      [Msg['LISTS_GET_INDEX_FIRST'], 'FIRST'],
+      [Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
+      [Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM'],
+    ];
     this.setHelpUrl(Msg['LISTS_GET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
-    const modeMenu = new FieldDropdown(MODE,
-      /**
-       * @param {*} value The input value.
-       * @this {FieldDropdown}
-       */
-      function(value) {
-        const isStatement = (value === 'REMOVE');
-        this.getSourceBlock().updateStatement_(isStatement);
-      }
-    );
-    this.appendValueInput('VALUE')
-        .setCheck('Array')
-        .appendField(Msg['LISTS_GET_INDEX_INPUT_IN_LIST']);
+    const modeMenu = new FieldDropdown(
+        MODE,
+        /**
+         * @param {*} value The input value.
+         * @this {FieldDropdown}
+         */
+        function(value) {
+          const isStatement = (value === 'REMOVE');
+          this.getSourceBlock().updateStatement_(isStatement);
+        });
+    this.appendValueInput('VALUE').setCheck('Array').appendField(
+        Msg['LISTS_GET_INDEX_INPUT_IN_LIST']);
     this.appendDummyInput()
         .appendField(modeMenu, 'MODE')
         .appendField('', 'SPACE');
     this.appendDummyInput('AT');
     if (Msg['LISTS_GET_INDEX_TAIL']) {
-      this.appendDummyInput('TAIL')
-          .appendField(Msg['LISTS_GET_INDEX_TAIL']);
+      this.appendDummyInput('TAIL').appendField(Msg['LISTS_GET_INDEX_TAIL']);
     }
     this.setInputsInline(true);
     this.setOutput(true);
@@ -411,8 +403,9 @@ Blocks['lists_getIndex'] = {
         const msg = (where === 'FROM_START') ?
             Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
             Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
-        tooltip += '  ' + msg.replace('%1',
-                thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        tooltip += '  ' +
+            msg.replace(
+                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
       return tooltip;
     });
@@ -486,8 +479,8 @@ Blocks['lists_getIndex'] = {
     if (isAt) {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
-        this.appendDummyInput('ORDINAL')
-            .appendField(Msg['ORDINAL_NUMBER_SUFFIX']);
+        this.appendDummyInput('ORDINAL').appendField(
+            Msg['ORDINAL_NUMBER_SUFFIX']);
       }
     } else {
       this.appendDummyInput('AT');
@@ -527,30 +520,26 @@ Blocks['lists_setIndex'] = {
    * @this {Block}
    */
   init: function() {
-    const MODE =
-        [
-          [Msg['LISTS_SET_INDEX_SET'], 'SET'],
-          [Msg['LISTS_SET_INDEX_INSERT'], 'INSERT'],
-        ];
-    this.WHERE_OPTIONS =
-        [
-          [Msg['LISTS_GET_INDEX_FROM_START'], 'FROM_START'],
-          [Msg['LISTS_GET_INDEX_FROM_END'], 'FROM_END'],
-          [Msg['LISTS_GET_INDEX_FIRST'], 'FIRST'],
-          [Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
-          [Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM'],
-        ];
+    const MODE = [
+      [Msg['LISTS_SET_INDEX_SET'], 'SET'],
+      [Msg['LISTS_SET_INDEX_INSERT'], 'INSERT'],
+    ];
+    this.WHERE_OPTIONS = [
+      [Msg['LISTS_GET_INDEX_FROM_START'], 'FROM_START'],
+      [Msg['LISTS_GET_INDEX_FROM_END'], 'FROM_END'],
+      [Msg['LISTS_GET_INDEX_FIRST'], 'FIRST'],
+      [Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
+      [Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM'],
+    ];
     this.setHelpUrl(Msg['LISTS_SET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
-    this.appendValueInput('LIST')
-        .setCheck('Array')
-        .appendField(Msg['LISTS_SET_INDEX_INPUT_IN_LIST']);
+    this.appendValueInput('LIST').setCheck('Array').appendField(
+        Msg['LISTS_SET_INDEX_INPUT_IN_LIST']);
     this.appendDummyInput()
         .appendField(new FieldDropdown(MODE), 'MODE')
         .appendField('', 'SPACE');
     this.appendDummyInput('AT');
-    this.appendValueInput('TO')
-        .appendField(Msg['LISTS_SET_INDEX_INPUT_TO']);
+    this.appendValueInput('TO').appendField(Msg['LISTS_SET_INDEX_INPUT_TO']);
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -591,9 +580,9 @@ Blocks['lists_setIndex'] = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
-        tooltip += '  ' + Msg['LISTS_INDEX_FROM_START_TOOLTIP']
-            .replace('%1',
-                thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        tooltip += '  ' +
+            Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
+                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
       return tooltip;
     });
@@ -640,8 +629,8 @@ Blocks['lists_setIndex'] = {
     if (isAt) {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
-        this.appendDummyInput('ORDINAL')
-            .appendField(Msg['ORDINAL_NUMBER_SUFFIX']);
+        this.appendDummyInput('ORDINAL').appendField(
+            Msg['ORDINAL_NUMBER_SUFFIX']);
       }
     } else {
       this.appendDummyInput('AT');
@@ -683,28 +672,24 @@ Blocks['lists_getSublist'] = {
    * @this {Block}
    */
   init: function() {
-    this['WHERE_OPTIONS_1'] =
-        [
-          [Msg['LISTS_GET_SUBLIST_START_FROM_START'], 'FROM_START'],
-          [Msg['LISTS_GET_SUBLIST_START_FROM_END'], 'FROM_END'],
-          [Msg['LISTS_GET_SUBLIST_START_FIRST'], 'FIRST'],
-        ];
-    this['WHERE_OPTIONS_2'] =
-        [
-          [Msg['LISTS_GET_SUBLIST_END_FROM_START'], 'FROM_START'],
-          [Msg['LISTS_GET_SUBLIST_END_FROM_END'], 'FROM_END'],
-          [Msg['LISTS_GET_SUBLIST_END_LAST'], 'LAST'],
-        ];
+    this['WHERE_OPTIONS_1'] = [
+      [Msg['LISTS_GET_SUBLIST_START_FROM_START'], 'FROM_START'],
+      [Msg['LISTS_GET_SUBLIST_START_FROM_END'], 'FROM_END'],
+      [Msg['LISTS_GET_SUBLIST_START_FIRST'], 'FIRST'],
+    ];
+    this['WHERE_OPTIONS_2'] = [
+      [Msg['LISTS_GET_SUBLIST_END_FROM_START'], 'FROM_START'],
+      [Msg['LISTS_GET_SUBLIST_END_FROM_END'], 'FROM_END'],
+      [Msg['LISTS_GET_SUBLIST_END_LAST'], 'LAST'],
+    ];
     this.setHelpUrl(Msg['LISTS_GET_SUBLIST_HELPURL']);
     this.setStyle('list_blocks');
-    this.appendValueInput('LIST')
-        .setCheck('Array')
-        .appendField(Msg['LISTS_GET_SUBLIST_INPUT_IN_LIST']);
+    this.appendValueInput('LIST').setCheck('Array').appendField(
+        Msg['LISTS_GET_SUBLIST_INPUT_IN_LIST']);
     this.appendDummyInput('AT1');
     this.appendDummyInput('AT2');
     if (Msg['LISTS_GET_SUBLIST_TAIL']) {
-      this.appendDummyInput('TAIL')
-          .appendField(Msg['LISTS_GET_SUBLIST_TAIL']);
+      this.appendDummyInput('TAIL').appendField(Msg['LISTS_GET_SUBLIST_TAIL']);
     }
     this.setInputsInline(true);
     this.setOutput(true, 'Array');
@@ -786,8 +771,7 @@ Blocks['lists_getSublist'] = {
             return null;
           }
         });
-    this.getInput('AT' + n)
-        .appendField(menu, 'WHERE' + n);
+    this.getInput('AT' + n).appendField(menu, 'WHERE' + n);
     if (n === 1) {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
@@ -807,35 +791,35 @@ Blocks['lists_sort'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Msg['LISTS_SORT_TITLE'],
-      "args0": [
+      'message0': Msg['LISTS_SORT_TITLE'],
+      'args0': [
         {
-          "type": "field_dropdown",
-          "name": "TYPE",
-          "options": [
-            [Msg['LISTS_SORT_TYPE_NUMERIC'], "NUMERIC"],
-            [Msg['LISTS_SORT_TYPE_TEXT'], "TEXT"],
-            [Msg['LISTS_SORT_TYPE_IGNORECASE'], "IGNORE_CASE"],
+          'type': 'field_dropdown',
+          'name': 'TYPE',
+          'options': [
+            [Msg['LISTS_SORT_TYPE_NUMERIC'], 'NUMERIC'],
+            [Msg['LISTS_SORT_TYPE_TEXT'], 'TEXT'],
+            [Msg['LISTS_SORT_TYPE_IGNORECASE'], 'IGNORE_CASE'],
           ],
         },
         {
-          "type": "field_dropdown",
-          "name": "DIRECTION",
-          "options": [
-            [Msg['LISTS_SORT_ORDER_ASCENDING'], "1"],
-            [Msg['LISTS_SORT_ORDER_DESCENDING'], "-1"],
+          'type': 'field_dropdown',
+          'name': 'DIRECTION',
+          'options': [
+            [Msg['LISTS_SORT_ORDER_ASCENDING'], '1'],
+            [Msg['LISTS_SORT_ORDER_DESCENDING'], '-1'],
           ],
         },
         {
-          "type": "input_value",
-          "name": "LIST",
-          "check": "Array",
+          'type': 'input_value',
+          'name': 'LIST',
+          'check': 'Array',
         },
       ],
-      "output": "Array",
-      "style": "list_blocks",
-      "tooltip": Msg['LISTS_SORT_TOOLTIP'],
-      "helpUrl": Msg['LISTS_SORT_HELPURL'],
+      'output': 'Array',
+      'style': 'list_blocks',
+      'tooltip': Msg['LISTS_SORT_TOOLTIP'],
+      'helpUrl': Msg['LISTS_SORT_HELPURL'],
     });
   },
 };
@@ -858,12 +842,10 @@ Blocks['lists_split'] = {
         });
     this.setHelpUrl(Msg['LISTS_SPLIT_HELPURL']);
     this.setStyle('list_blocks');
-    this.appendValueInput('INPUT')
-        .setCheck('String')
-        .appendField(dropdown, 'MODE');
-    this.appendValueInput('DELIM')
-        .setCheck('String')
-        .appendField(Msg['LISTS_SPLIT_WITH_DELIMITER']);
+    this.appendValueInput('INPUT').setCheck('String').appendField(
+        dropdown, 'MODE');
+    this.appendValueInput('DELIM').setCheck('String').appendField(
+        Msg['LISTS_SPLIT_WITH_DELIMITER']);
     this.setInputsInline(true);
     this.setOutput(true, 'Array');
     this.setTooltip(function() {

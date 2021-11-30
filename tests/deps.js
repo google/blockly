@@ -306,7 +306,7 @@ goog.addDependency('../../generators/php/lists.js', ['Blockly.PHP.lists'], ['Blo
 goog.addDependency('../../generators/php/logic.js', ['Blockly.PHP.logic'], ['Blockly.PHP'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/loops.js', ['Blockly.PHP.loops'], ['Blockly.PHP', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/math.js', ['Blockly.PHP.math'], ['Blockly.PHP'], {'lang': 'es6'});
-goog.addDependency('../../generators/php/procedures.js', ['Blockly.PHP.procedures'], ['Blockly.PHP'], {'lang': 'es6'});
+goog.addDependency('../../generators/php/procedures.js', ['Blockly.PHP.procedures'], ['Blockly.Names', 'Blockly.PHP', 'Blockly.Variables'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/text.js', ['Blockly.PHP.texts'], ['Blockly.PHP'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/variables.js', ['Blockly.PHP.variables'], ['Blockly.PHP'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/variables_dynamic.js', ['Blockly.PHP.variablesDynamic'], ['Blockly.PHP', 'Blockly.PHP.variables']);
@@ -317,7 +317,7 @@ goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'],
 goog.addDependency('../../generators/python/logic.js', ['Blockly.Python.logic'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/math.js', ['Blockly.Python.math'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python', 'Blockly.Variables'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/variables_dynamic.js', ['Blockly.Python.variablesDynamic'], ['Blockly.Python', 'Blockly.Python.variables']);

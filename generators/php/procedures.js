@@ -13,6 +13,8 @@
 goog.provide('Blockly.PHP.procedures');
 
 goog.require('Blockly.PHP');
+goog.require('Blockly.Names');
+goog.require('Blockly.Variables');
 
 
 Blockly.PHP['procedures_defreturn'] = function(block) {

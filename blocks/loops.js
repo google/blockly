@@ -279,7 +279,7 @@ Blockly.Extensions.register('controls_forEach_tooltip',
  * is contained in a loop. Otherwise a warning is added to the block.
  * @mixin
  * @augments Blockly.Block
- * @package
+ * @public
  * @readonly
  */
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {

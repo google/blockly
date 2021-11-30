@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.lists');
+goog.module('Blockly.JavaScript.lists');
 
 goog.require('Blockly.JavaScript');
 
@@ -250,7 +250,7 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
  * @return {string|undefined} Index expression.
  * @private
  */
-Blockly.JavaScript.lists.getIndex_ = function(listName, where, opt_at) {
+const getIndex_ = function(listName, where, opt_at) {
   if (where === 'FIRST') {
     return '0';
   } else if (where === 'FROM_END') {
@@ -311,7 +311,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   } else {
     const at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
     const at2 = Blockly.JavaScript.getAdjusted(block, 'AT2');
-    const getIndex_ = Blockly.JavaScript.lists.getIndex_;
+    const getIndex_ = getIndex_;
     const wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
         'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
     const functionName = Blockly.JavaScript.provideFunction_(

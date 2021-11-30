@@ -26,6 +26,18 @@ const {VariableModel} = goog.require('Blockly.VariableModel');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * See also Blockly.Variables.CATEGORY_NAME and
+ * Blockly.Procedures.CATEGORY_NAME.
+ * @const {string}
+ * @alias Blockly.VariablesDynamic.CATEGORY_NAME
+ */
+const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
+exports.CATEGORY_NAME = CATEGORY_NAME;
+
 const stringButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');

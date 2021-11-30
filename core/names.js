@@ -17,7 +17,6 @@ goog.module('Blockly.Names');
 
 const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
-const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */
@@ -48,22 +47,32 @@ const Names = function(reservedWords, opt_variablePrefix) {
 };
 
 /**
+ * Enum for the type of a name. Different name types may have different rules
+ * about collisions.
+ * When JavaScript (or most other languages) is generated, variable 'foo' and
+ * procedure 'foo' would collide.  However, Blockly has no such problems since
+ * variable get 'foo' and procedure call 'foo' are unambiguous.
+ * Therefore, Blockly keeps a separate name type to disambiguate.
+ * getName('foo', 'VARIABLE') -> 'foo'
+ * getName('foo', 'PROCEDURE') -> 'foo2'
+ * @enum { string }
+ * @alias Blockly.Names.NameType
+ */
+const NameType = {
+  DEVELOPER_VARIABLE: 'DEVELOPER_VARIABLE',
+  VARIABLE: 'VARIABLE',
+  PROCEDURE: 'PROCEDURE',
+};
+exports.NameType = NameType;
+
+/**
  * Constant to separate developer variable names from user-defined variable
  * names when running generators.
  * A developer variable will be declared as a global in the generated code, but
  * will never be shown to the user in the workspace or stored in the variable
  * map.
  */
-Names.DEVELOPER_VARIABLE_TYPE = 'DEVELOPER_VARIABLE';
-
-/**
- * When JavaScript (or most other languages) is generated, variable 'foo' and
- * procedure 'foo' would collide.  However, Blockly has no such problems since
- * variable get 'foo' and procedure call 'foo' are unambiguous.
- * Therefore, Blockly keeps a separate realm name to disambiguate.
- * getName('foo', 'VARIABLE') -> 'foo'
- * getName('foo', 'PROCEDURE') -> 'foo2'
- */
+Names.DEVELOPER_VARIABLE_TYPE = NameType.DEVELOPER_VARIABLE;
 
 /**
  * Empty the database and start from scratch.  The reserved words are kept.
@@ -84,8 +93,7 @@ Names.prototype.setVariableMap = function(map) {
 
 /**
  * Get the name for a user-defined variable, based on its ID.
- * This should only be used for variables of realm
- * internalConstants.VARIABLE_CATEGORY_NAME.
+ * This should only be used for variables of NameType VARIABLE.
  * @param {string} id The ID to look up in the variable map.
  * @return {?string} The name of the referenced variable, or null if there was
  *     no variable map or the variable was not found in the map.
@@ -115,8 +123,7 @@ Names.prototype.getNameForUserVariable_ = function(id) {
 Names.prototype.populateVariables = function(workspace) {
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    this.getName(
-        variables[i].getId(), internalConstants.VARIABLE_CATEGORY_NAME);
+    this.getName(variables[i].getId(), NameType.VARIABLE);
   }
 };
 
@@ -130,7 +137,7 @@ Names.prototype.populateProcedures = function(workspace) {
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {
-    this.getName(procedures[i][0], internalConstants.PROCEDURE_CATEGORY_NAME);
+    this.getName(procedures[i][0], NameType.PROCEDURE);
   }
 };
 
@@ -138,13 +145,13 @@ Names.prototype.populateProcedures = function(workspace) {
  * Convert a Blockly entity name to a legal exportable entity name.
  * @param {string} nameOrId The Blockly entity name (no constraints) or
  *     variable ID.
- * @param {string} realm The realm of entity in Blockly
+ * @param {NameType|string} type The type of the name in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {string} An entity name that is legal in the exported language.
  */
-Names.prototype.getName = function(nameOrId, realm) {
+Names.prototype.getName = function(nameOrId, type) {
   let name = nameOrId;
-  if (realm === internalConstants.VARIABLE_CATEGORY_NAME) {
+  if (type === NameType.VARIABLE) {
     const varName = this.getNameForUserVariable_(nameOrId);
     if (varName) {
       // Successful ID lookup.
@@ -153,31 +160,31 @@ Names.prototype.getName = function(nameOrId, realm) {
   }
   const normalizedName = name.toLowerCase();
 
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm === Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar =
+      type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
 
   const prefix = isVar ? this.variablePrefix_ : '';
-  if (!(realm in this.db_)) {
-    this.db_[realm] = Object.create(null);
+  if (!(type in this.db_)) {
+    this.db_[type] = Object.create(null);
   }
-  const realmDb = this.db_[realm];
-  if (normalizedName in realmDb) {
-    return prefix + realmDb[normalizedName];
+  const typeDb = this.db_[type];
+  if (normalizedName in typeDb) {
+    return prefix + typeDb[normalizedName];
   }
-  const safeName = this.getDistinctName(name, realm);
-  realmDb[normalizedName] = safeName.substr(prefix.length);
+  const safeName = this.getDistinctName(name, type);
+  typeDb[normalizedName] = safeName.substr(prefix.length);
   return safeName;
 };
 
 /**
- * Return a list of all known user-created names in a specified realm.
- * @param {string} realm The realm of entity in Blockly
+ * Return a list of all known user-created names of a specified name type.
+ * @param {NameType|string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {!Array<string>} A list of Blockly entity names (no constraints).
  */
-Names.prototype.getUserNames = function(realm) {
-  const realmDb = this.db_[realm] || {};
-  return Object.keys(realmDb);
+Names.prototype.getUserNames = function(type) {
+  const typeDb = this.db_[type] || {};
+  return Object.keys(typeDb);
 };
 
 /**
@@ -186,11 +193,11 @@ Names.prototype.getUserNames = function(realm) {
  * Also check against list of reserved words for the current language and
  * ensure name doesn't collide.
  * @param {string} name The Blockly entity name (no constraints).
- * @param {string} realm The realm of entity in Blockly
+ * @param {NameType|string} type The type of entity in Blockly
  *     ('VARIABLE', 'PROCEDURE', 'DEVELOPER_VARIABLE', etc...).
  * @return {string} An entity name that is legal in the exported language.
  */
-Names.prototype.getDistinctName = function(name, realm) {
+Names.prototype.getDistinctName = function(name, type) {
   let safeName = this.safeName_(name);
   let i = '';
   while (this.dbReverse_[safeName + i] ||
@@ -200,8 +207,8 @@ Names.prototype.getDistinctName = function(name, realm) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  const isVar = realm === internalConstants.VARIABLE_CATEGORY_NAME ||
-      realm === Names.DEVELOPER_VARIABLE_TYPE;
+  const isVar =
+      type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
   const prefix = isVar ? this.variablePrefix_ : '';
   return prefix + safeName;
 };

@@ -545,14 +545,36 @@ exports.DRAG_STICKY = internalConstants.DRAG_STICKY;
 exports.DRAG_BEGIN = internalConstants.DRAG_BEGIN;
 exports.DRAG_FREE = internalConstants.DRAG_FREE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
-exports.VARIABLE_CATEGORY_NAME = internalConstants.VARIABLE_CATEGORY_NAME;
-exports.VARIABLE_DYNAMIC_CATEGORY_NAME =
-    internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME;
-exports.PROCEDURE_CATEGORY_NAME = internalConstants.PROCEDURE_CATEGORY_NAME;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
 exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * @const {string}
+ * @alias Blockly.VARIABLE_CATEGORY_NAME
+ */
+exports.VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
+
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * @const {string}
+ * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
+ */
+exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * procedure blocks.
+ * @const {string}
+ * @alias Blockly.PROCEDURE_CATEGORY_NAME
+ */
+exports.PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
 
 // Re-export submodules that no longer declareLegacyNamespace.
 exports.ASTNode = ASTNode;

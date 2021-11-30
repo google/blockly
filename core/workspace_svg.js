@@ -226,20 +226,19 @@ const WorkspaceSvg = function(
   const Variables = goog.module.get('Blockly.Variables');
   if (Variables && Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_CATEGORY_NAME, Variables.flyoutCategory);
+        Variables.CATEGORY_NAME, Variables.flyoutCategory);
   }
 
   const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
   if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory);
+        VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategory);
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.PROCEDURE_CATEGORY_NAME, Procedures.flyoutCategory);
+        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 

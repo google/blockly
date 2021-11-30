@@ -6,26 +6,27 @@
 
 /**
  * @fileoverview Helper functions for generating Dart for blocks.
- * @suppress {missingRequire|checkTypes|globalThis}
+ * @suppress {checkTypes|globalThis}
  */
 'use strict';
 
 goog.module('Blockly.Dart');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Generator');
-goog.require('Blockly.Names');
-goog.require('Blockly.Variables');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.utils.string');
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Workspace');
+const stringUtils = goog.require('Blockly.utils.string');
+const Variables = goog.require('Blockly.Variables');
+const {Block} = goog.requireType('Blockly.Block');
+const {Generator} = goog.require('Blockly.Generator');
+const {inputTypes} = goog.require('Blockly.inputTypes');
+const {Names, NameType} = goog.require('Blockly.Names');
+const {Workspace} = goog.requireType('Blockly.Workspace');
+
 
 /**
  * Dart code generator.
- * @type {!Blockly.Generator}
+ * @type {!Generator}
  */
-const Dart = new Blockly.Generator('Dart');
+const Dart = new Generator('Dart');
 
 /**
  * List of illegal variable names.
@@ -84,14 +85,14 @@ Dart.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
- * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {!Workspace} workspace Workspace to generate code from.
  */
 Dart.init = function(workspace) {
   // Call Blockly.Generator's init.
   Object.getPrototypeOf(this).init.call(this);
 
   if (!this.nameDB_) {
-    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
+    this.nameDB_ = new Names(this.RESERVED_WORDS_);
   } else {
     this.nameDB_.reset();
   }
@@ -102,17 +103,17 @@ Dart.init = function(workspace) {
 
   const defvars = [];
   // Add developer variables (not created or named by the user).
-  const devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
     defvars.push(this.nameDB_.getName(devVarList[i],
-        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+        NameType.DEVELOPER_VARIABLE));
   }
 
   // Add user variables, but only ones that are being used.
-  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
     defvars.push(this.nameDB_.getName(variables[i].getId(),
-        Blockly.VARIABLE_CATEGORY_NAME));
+        NameType.VARIABLE));
   }
 
   // Declare all of the variables.
@@ -198,7 +199,7 @@ Dart.multiline_quote_ = function (string) {
  * Common tasks for generating Dart from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
+ * @param {!Block} block The current block.
  * @param {string} code The Dart code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Dart code with comments and subsequent blocks added.
@@ -211,7 +212,7 @@ Dart.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     let comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
         commentCode += this.prefixLines(comment + '\n', '/// ');
@@ -222,7 +223,7 @@ Dart.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (let i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
+      if (block.inputList[i].type === inputTypes.VALUE) {
         const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
@@ -240,7 +241,7 @@ Dart.scrub_ = function(block, code, opt_thisOnly) {
 
 /**
  * Gets a property and adjusts the value while taking into account indexing.
- * @param {!Blockly.Block} block The block.
+ * @param {!Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.
  * @param {boolean=} opt_negate Whether to negate the value.
@@ -272,7 +273,7 @@ Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   /** @type {string|number} */
   let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
 
-  if (Blockly.utils.string.isNumber(at)) {
+  if (stringUtils.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
     if (opt_negate) {

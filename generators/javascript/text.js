@@ -10,10 +10,50 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.texts');
+goog.module('Blockly.JavaScript.texts');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.JavaScript');
 
+
+/**
+ * Regular expression to detect a single-quoted string literal.
+ */
+const strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
+/**
+ * Enclose the provided value in 'String(...)' function.
+ * Leave string literals alone.
+ * @param {string} value Code evaluating to a value.
+ * @return {Array<string|number>} Array containing code evaluating to a string
+ *     and
+ *    the order of the returned code.[string, number]
+ */
+const forceString = function(value) {
+  if (strRegExp.test(value)) {
+    return [value, Blockly.JavaScript.ORDER_ATOMIC];
+  }
+  return ['String(' + value + ')', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+/**
+ * Returns an expression calculating the index into a string.
+ * @param {string} stringName Name of the string, used to calculate length.
+ * @param {string} where The method of indexing, selected by dropdown in Blockly
+ * @param {string=} opt_at The optional offset when indexing from start/end.
+ * @return {string|undefined} Index expression.
+ */
+const getSubstringIndex = function(stringName, where, opt_at) {
+  if (where === 'FIRST') {
+    return '0';
+  } else if (where === 'FROM_END') {
+    return stringName + '.length - 1 - ' + opt_at;
+  } else if (where === 'LAST') {
+    return stringName + '.length - 1';
+  } else {
+    return opt_at;
+  }
+};
 
 Blockly.JavaScript['text'] = function(block) {
   // Text value.
@@ -29,26 +69,6 @@ Blockly.JavaScript['text_multiline'] = function(block) {
   return [code, order];
 };
 
-/**
- * Enclose the provided value in 'String(...)' function.
- * Leave string literals alone.
- * @param {string} value Code evaluating to a value.
- * @return {Array<string|number>} Array containing code evaluating to a string and
- *    the order of the returned code.[string, number]
- * @private
- */
-Blockly.JavaScript.text.forceString_ = function(value) {
-  if (Blockly.JavaScript.text.forceString_.strRegExp.test(value)) {
-    return [value, Blockly.JavaScript.ORDER_ATOMIC];
-  }
-  return ['String(' + value + ')', Blockly.JavaScript.ORDER_FUNCTION_CALL];
-};
-
-/**
- * Regular expression to detect a single-quoted string literal.
- */
-Blockly.JavaScript.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
-
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
@@ -57,7 +77,7 @@ Blockly.JavaScript['text_join'] = function(block) {
     case 1: {
       const element = Blockly.JavaScript.valueToCode(block, 'ADD0',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      const codeAndOrder = Blockly.JavaScript.text.forceString_(element);
+      const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
@@ -65,8 +85,8 @@ Blockly.JavaScript['text_join'] = function(block) {
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
       const element1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
           Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      const code = Blockly.JavaScript.text.forceString_(element0)[0] +
-          ' + ' + Blockly.JavaScript.text.forceString_(element1)[0];
+      const code = forceString(element0)[0] +
+          ' + ' + forceString(element1)[0];
       return [code, Blockly.JavaScript.ORDER_ADDITION];
     }
     default: {
@@ -88,7 +108,7 @@ Blockly.JavaScript['text_append'] = function(block) {
   const value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   const code = varName + ' += ' +
-      Blockly.JavaScript.text.forceString_(value)[0] + ';\n';
+      forceString(value)[0] + ';\n';
   return code;
 };
 
@@ -165,26 +185,6 @@ Blockly.JavaScript['text_charAt'] = function(block) {
   throw Error('Unhandled option (text_charAt).');
 };
 
-/**
- * Returns an expression calculating the index into a string.
- * @param {string} stringName Name of the string, used to calculate length.
- * @param {string} where The method of indexing, selected by dropdown in Blockly
- * @param {string=} opt_at The optional offset when indexing from start/end.
- * @return {string|undefined} Index expression.
- * @private
- */
-Blockly.JavaScript.text.getIndex_ = function(stringName, where, opt_at) {
-  if (where === 'FIRST') {
-    return '0';
-  } else if (where === 'FROM_END') {
-    return stringName + '.length - 1 - ' + opt_at;
-  } else if (where === 'LAST') {
-    return stringName + '.length - 1';
-  } else {
-    return opt_at;
-  }
-};
-
 Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   const where1 = block.getFieldValue('WHERE1');
@@ -238,22 +238,24 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   } else {
     const at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
     const at2 = Blockly.JavaScript.getAdjusted(block, 'AT2');
-    const getIndex_ = Blockly.JavaScript.text.getIndex_;
     const wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
       'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
     const functionName = Blockly.JavaScript.provideFunction_(
-        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2],
-        ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-        '(sequence' +
-        // The value for 'FROM_END' and'FROM_START' depends on `at` so
-        // we add it as a parameter.
-        ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '') +
-        ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '') +
-        ') {',
-          '  var start = ' + getIndex_('sequence', where1, 'at1') + ';',
-          '  var end = ' + getIndex_('sequence', where2, 'at2') + ' + 1;',
-          '  return sequence.slice(start, end);',
-          '}']);
+        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], [
+          'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+              '(sequence' +
+              // The value for 'FROM_END' and'FROM_START' depends on `at` so
+              // we add it as a parameter.
+              ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' :
+                                                                    '') +
+              ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' :
+                                                                    '') +
+              ') {',
+          '  var start = ' + getSubstringIndex('sequence', where1, 'at1') + ';',
+          '  var end = ' + getSubstringIndex('sequence', where2, 'at2') +
+              ' + 1;',
+          '  return sequence.slice(start, end);', '}'
+        ]);
     code = functionName + '(' + text +
         // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
         // pass it.

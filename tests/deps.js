@@ -282,7 +282,7 @@ goog.addDependency('../../generators/javascript/all.js', ['Blockly.JavaScript.al
 goog.addDependency('../../generators/javascript/colour.js', ['Blockly.JavaScript.colour'], ['Blockly.JavaScript'], {'lang': 'es6'});
 goog.addDependency('../../generators/javascript/lists.js', ['Blockly.JavaScript.lists'], ['Blockly.JavaScript'], {'lang': 'es6'});
 goog.addDependency('../../generators/javascript/logic.js', ['Blockly.JavaScript.logic'], ['Blockly.JavaScript'], {'lang': 'es6'});
-goog.addDependency('../../generators/javascript/loops.js', ['Blockly.JavaScript.loops'], ['Blockly.JavaScript', 'Blockly.loopMixin'], {'lang': 'es6'});
+goog.addDependency('../../generators/javascript/loops.js', ['Blockly.JavaScript.loops'], ['Blockly.JavaScript', 'Blockly.loopMixin', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/javascript/math.js', ['Blockly.JavaScript.math'], ['Blockly.JavaScript'], {'lang': 'es6'});
 goog.addDependency('../../generators/javascript/procedures.js', ['Blockly.JavaScript.procedures'], ['Blockly.JavaScript'], {'lang': 'es6'});
 goog.addDependency('../../generators/javascript/text.js', ['Blockly.JavaScript.texts'], ['Blockly.JavaScript'], {'lang': 'es6'});
@@ -293,7 +293,7 @@ goog.addDependency('../../generators/lua/all.js', ['Blockly.Lua.all'], ['Blockly
 goog.addDependency('../../generators/lua/colour.js', ['Blockly.Lua.colour'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/lists.js', ['Blockly.Lua.lists'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/logic.js', ['Blockly.Lua.logic'], ['Blockly.Lua'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/loops.js', ['Blockly.Lua.loops'], ['Blockly.Lua'], {'lang': 'es6'});
+goog.addDependency('../../generators/lua/loops.js', ['Blockly.Lua.loops'], ['Blockly.Lua', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/math.js', ['Blockly.Lua.math'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/procedures.js', ['Blockly.Lua.procedures'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/text.js', ['Blockly.Lua.texts'], ['Blockly.Lua'], {'lang': 'es6'});
@@ -302,9 +302,9 @@ goog.addDependency('../../generators/lua/variables_dynamic.js', ['Blockly.Lua.va
 goog.addDependency('../../generators/php.js', ['Blockly.PHP'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.inputTypes', 'Blockly.utils.object', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/all.js', ['Blockly.PHP.all'], ['Blockly.PHP.colour', 'Blockly.PHP.lists', 'Blockly.PHP.logic', 'Blockly.PHP.loops', 'Blockly.PHP.math', 'Blockly.PHP.procedures', 'Blockly.PHP.texts', 'Blockly.PHP.variables', 'Blockly.PHP.variablesDynamic'], {'module': 'goog'});
 goog.addDependency('../../generators/php/colour.js', ['Blockly.PHP.colour'], ['Blockly.PHP'], {'lang': 'es6'});
-goog.addDependency('../../generators/php/lists.js', ['Blockly.PHP.lists'], ['Blockly.PHP'], {'lang': 'es6'});
+goog.addDependency('../../generators/php/lists.js', ['Blockly.PHP.lists'], ['Blockly.PHP', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/logic.js', ['Blockly.PHP.logic'], ['Blockly.PHP'], {'lang': 'es6'});
-goog.addDependency('../../generators/php/loops.js', ['Blockly.PHP.loops'], ['Blockly.PHP'], {'lang': 'es6'});
+goog.addDependency('../../generators/php/loops.js', ['Blockly.PHP.loops'], ['Blockly.PHP', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/math.js', ['Blockly.PHP.math'], ['Blockly.PHP'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/procedures.js', ['Blockly.PHP.procedures'], ['Blockly.PHP'], {'lang': 'es6'});
 goog.addDependency('../../generators/php/text.js', ['Blockly.PHP.texts'], ['Blockly.PHP'], {'lang': 'es6'});
@@ -313,12 +313,12 @@ goog.addDependency('../../generators/php/variables_dynamic.js', ['Blockly.PHP.va
 goog.addDependency('../../generators/python.js', ['Blockly.Python'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.Variables', 'Blockly.inputTypes', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/all.js', ['Blockly.Python.all'], ['Blockly.Python.colour', 'Blockly.Python.lists', 'Blockly.Python.logic', 'Blockly.Python.loops', 'Blockly.Python.math', 'Blockly.Python.procedures', 'Blockly.Python.texts', 'Blockly.Python.variables', 'Blockly.Python.variablesDynamic'], {'module': 'goog'});
 goog.addDependency('../../generators/python/colour.js', ['Blockly.Python.colour'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/logic.js', ['Blockly.Python.logic'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/math.js', ['Blockly.Python.math'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python'], {'lang': 'es6'});
+goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Python'], {'lang': 'es6'});
 goog.addDependency('../../generators/python/variables_dynamic.js', ['Blockly.Python.variablesDynamic'], ['Blockly.Python', 'Blockly.Python.variables']);
 goog.addDependency('base.js', [], []);

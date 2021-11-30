@@ -14,6 +14,7 @@ goog.provide('Blockly.JavaScript.loops');
 
 goog.require('Blockly.JavaScript');
 goog.require('Blockly.loopMixin');
+goog.require('Blockly.utils.string');
 
 
 Blockly.JavaScript['controls_repeat_ext'] = function(block) {
@@ -33,7 +34,7 @@ Blockly.JavaScript['controls_repeat_ext'] = function(block) {
   const loopVar = Blockly.JavaScript.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   let endVar = repeats;
-  if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
+  if (!repeats.match(/^\w+$/) && !Blockly.utils.string.isNumber(repeats)) {
     endVar = Blockly.JavaScript.nameDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
@@ -75,8 +76,8 @@ Blockly.JavaScript['controls_for'] = function(block) {
   let branch = Blockly.JavaScript.statementToCode(block, 'DO');
   branch = Blockly.JavaScript.addLoopTrap(branch, block);
   let code;
-  if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
-      Blockly.isNumber(increment)) {
+  if (Blockly.utils.string.isNumber(argument0) && Blockly.utils.string.isNumber(argument1) &&
+      Blockly.utils.string.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
@@ -93,13 +94,13 @@ Blockly.JavaScript['controls_for'] = function(block) {
     code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
-    if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
+    if (!argument0.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument0)) {
       startVar = Blockly.JavaScript.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
-    if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
+    if (!argument1.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument1)) {
       endVar = Blockly.JavaScript.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
@@ -109,7 +110,7 @@ Blockly.JavaScript['controls_for'] = function(block) {
     const incVar = Blockly.JavaScript.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += 'var ' + incVar + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (Blockly.utils.string.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
       code += 'Math.abs(' + increment + ');\n';

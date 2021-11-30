@@ -13,6 +13,7 @@
 goog.provide('Blockly.Python.loops');
 
 goog.require('Blockly.Python');
+goog.require('Blockly.utils.string');
 
 
 Blockly.Python['controls_repeat_ext'] = function(block) {
@@ -26,7 +27,7 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
     repeats = Blockly.Python.valueToCode(block, 'TIMES',
         Blockly.Python.ORDER_NONE) || '0';
   }
-  if (Blockly.isNumber(repeats)) {
+  if (Blockly.utils.string.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
   } else {
     repeats = 'int(' + repeats + ')';
@@ -97,8 +98,8 @@ Blockly.Python['controls_for'] = function(block) {
         defineDownRange() + '(' + start + ', ' + end + ', ' + inc + ')';
   };
 
-  if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
-      Blockly.isNumber(increment)) {
+  if (Blockly.utils.string.isNumber(argument0) && Blockly.utils.string.isNumber(argument1) &&
+      Blockly.utils.string.isNumber(increment)) {
     // All parameters are simple numbers.
     argument0 = Number(argument0);
     argument1 = Number(argument1);
@@ -136,7 +137,7 @@ Blockly.Python['controls_for'] = function(block) {
   } else {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     const scrub = function(arg, suffix) {
-      if (Blockly.isNumber(arg)) {
+      if (Blockly.utils.string.isNumber(arg)) {
         // Simple number.
         arg = Number(arg);
       } else if (arg.match(/^\w+$/)) {

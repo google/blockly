@@ -13,6 +13,7 @@
 goog.provide('Blockly.PHP.loops');
 
 goog.require('Blockly.PHP');
+goog.require('Blockly.utils.string');
 
 
 Blockly.PHP['controls_repeat_ext'] = function(block) {
@@ -32,7 +33,7 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
   const loopVar = Blockly.PHP.nameDB_.getDistinctName(
       'count', Blockly.VARIABLE_CATEGORY_NAME);
   let endVar = repeats;
-  if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
+  if (!repeats.match(/^\w+$/) && !Blockly.utils.string.isNumber(repeats)) {
     endVar = Blockly.PHP.nameDB_.getDistinctName(
         'repeat_end', Blockly.VARIABLE_CATEGORY_NAME);
     code += endVar + ' = ' + repeats + ';\n';
@@ -73,8 +74,8 @@ Blockly.PHP['controls_for'] = function(block) {
   let branch = Blockly.PHP.statementToCode(block, 'DO');
   branch = Blockly.PHP.addLoopTrap(branch, block);
   let code;
-  if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
-      Blockly.isNumber(increment)) {
+  if (Blockly.utils.string.isNumber(argument0) && Blockly.utils.string.isNumber(argument1) &&
+      Blockly.utils.string.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
@@ -91,13 +92,13 @@ Blockly.PHP['controls_for'] = function(block) {
     code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
-    if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
+    if (!argument0.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument0)) {
       startVar = Blockly.PHP.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.VARIABLE_CATEGORY_NAME);
       code += startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
-    if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
+    if (!argument1.match(/^\w+$/) && !Blockly.utils.string.isNumber(argument1)) {
       endVar = Blockly.PHP.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.VARIABLE_CATEGORY_NAME);
       code += endVar + ' = ' + argument1 + ';\n';
@@ -107,7 +108,7 @@ Blockly.PHP['controls_for'] = function(block) {
     const incVar = Blockly.PHP.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += incVar + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (Blockly.utils.string.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
       code += 'abs(' + increment + ');\n';

@@ -13,6 +13,7 @@
 goog.provide('Blockly.Lua.loops');
 
 goog.require('Blockly.Lua');
+goog.require('Blockly.utils.string');
 
 
 /**
@@ -53,7 +54,7 @@ Blockly.Lua['controls_repeat_ext'] = function(block) {
     repeats = Blockly.Lua.valueToCode(block, 'TIMES',
         Blockly.Lua.ORDER_NONE) || '0';
   }
-  if (Blockly.isNumber(repeats)) {
+  if (Blockly.utils.string.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
   } else {
     repeats = 'math.floor(' + repeats + ')';
@@ -100,8 +101,8 @@ Blockly.Lua['controls_for'] = function(block) {
   branch = Blockly.Lua.addContinueLabel_(branch);
   let code = '';
   let incValue;
-  if (Blockly.isNumber(startVar) && Blockly.isNumber(endVar) &&
-      Blockly.isNumber(increment)) {
+  if (Blockly.utils.string.isNumber(startVar) && Blockly.utils.string.isNumber(endVar) &&
+      Blockly.utils.string.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(startVar) <= Number(endVar);
     const step = Math.abs(Number(increment));
@@ -113,7 +114,7 @@ Blockly.Lua['controls_for'] = function(block) {
     incValue = Blockly.Lua.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
     code += incValue + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (Blockly.utils.string.isNumber(increment)) {
       code += Math.abs(increment) + '\n';
     } else {
       code += 'math.abs(' + increment + ')\n';

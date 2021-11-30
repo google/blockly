@@ -808,7 +808,7 @@ const procedureCall = {
       }
     }
     // Remove deleted inputs.
-    for (let i = this.itemCount_; this.getInput('ARG' + i); i++) {
+    for (let i = this.arguments_.length; this.getInput('ARG' + i); i++) {
       this.removeInput('ARG' + i);
     }
     // Add 'with:' if there are parameters, remove otherwise.

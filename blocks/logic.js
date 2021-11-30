@@ -6,260 +6,266 @@
 
 /**
  * @fileoverview Logic blocks for Blockly.
- * @suppress {extraRequire|missingRequire|checkTypes}
+ * @suppress {checkTypes}
  */
 'use strict';
 
-goog.provide('Blockly.blocks.logic');
-goog.provide('Blockly.Constants.Logic');
+goog.module('Blockly.blocks.logic');
 
-goog.require('Blockly');
+/* eslint-disable-next-line no-unused-vars */
+const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
+const Events = goog.require('Blockly.Events');
+const Extensions = goog.require('Blockly.Extensions');
+const Msg = goog.require('Blockly.Msg');
+const common = goog.require('Blockly.common');
+const xmlUtils = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Mutator} = goog.require('Blockly.Mutator');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
-goog.require('Blockly.Mutator');
 
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['LOGIC_HUE']. (2018 April 5)
- */
-Blockly.Constants.Logic.HUE = 210;
-
-Blockly.defineBlocksWithJsonArray([
+common.defineBlocksWithJsonArray([
   // Block for boolean data type: true and false.
   {
-    "type": "logic_boolean",
-    "message0": "%1",
-    "args0": [
+    'type': 'logic_boolean',
+    'message0': '%1',
+    'args0': [
       {
-        "type": "field_dropdown",
-        "name": "BOOL",
-        "options": [
-          ["%{BKY_LOGIC_BOOLEAN_TRUE}", "TRUE"],
-          ["%{BKY_LOGIC_BOOLEAN_FALSE}", "FALSE"],
+        'type': 'field_dropdown',
+        'name': 'BOOL',
+        'options': [
+          ['%{BKY_LOGIC_BOOLEAN_TRUE}', 'TRUE'],
+          ['%{BKY_LOGIC_BOOLEAN_FALSE}', 'FALSE'],
         ],
       },
     ],
-    "output": "Boolean",
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_LOGIC_BOOLEAN_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_BOOLEAN_HELPURL}",
+    'output': 'Boolean',
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_LOGIC_BOOLEAN_TOOLTIP}',
+    'helpUrl': '%{BKY_LOGIC_BOOLEAN_HELPURL}',
   },
   // Block for if/elseif/else condition.
   {
-    "type": "controls_if",
-    "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
-    "args0": [
+    'type': 'controls_if',
+    'message0': '%{BKY_CONTROLS_IF_MSG_IF} %1',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "IF0",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'IF0',
+        'check': 'Boolean',
       },
     ],
-    "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
-    "args1": [
+    'message1': '%{BKY_CONTROLS_IF_MSG_THEN} %1',
+    'args1': [
       {
-        "type": "input_statement",
-        "name": "DO0",
+        'type': 'input_statement',
+        'name': 'DO0',
       },
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "logic_blocks",
-    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "suppressPrefixSuffix": true,
-    "mutator": "controls_if_mutator",
-    "extensions": ["controls_if_tooltip"],
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'logic_blocks',
+    'helpUrl': '%{BKY_CONTROLS_IF_HELPURL}',
+    'suppressPrefixSuffix': true,
+    'mutator': 'controls_if_mutator',
+    'extensions': ['controls_if_tooltip'],
   },
   // If/else block that does not use a mutator.
   {
-    "type": "controls_ifelse",
-    "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
-    "args0": [
+    'type': 'controls_ifelse',
+    'message0': '%{BKY_CONTROLS_IF_MSG_IF} %1',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "IF0",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'IF0',
+        'check': 'Boolean',
       },
     ],
-    "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
-    "args1": [
+    'message1': '%{BKY_CONTROLS_IF_MSG_THEN} %1',
+    'args1': [
       {
-        "type": "input_statement",
-        "name": "DO0",
+        'type': 'input_statement',
+        'name': 'DO0',
       },
     ],
-    "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
-    "args2": [
+    'message2': '%{BKY_CONTROLS_IF_MSG_ELSE} %1',
+    'args2': [
       {
-        "type": "input_statement",
-        "name": "ELSE",
+        'type': 'input_statement',
+        'name': 'ELSE',
       },
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "logic_blocks",
-    "tooltip": "%{BKYCONTROLS_IF_TOOLTIP_2}",
-    "helpUrl": "%{BKY_CONTROLS_IF_HELPURL}",
-    "suppressPrefixSuffix": true,
-    "extensions": ["controls_if_tooltip"],
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKYCONTROLS_IF_TOOLTIP_2}',
+    'helpUrl': '%{BKY_CONTROLS_IF_HELPURL}',
+    'suppressPrefixSuffix': true,
+    'extensions': ['controls_if_tooltip'],
   },
   // Block for comparison operator.
   {
-    "type": "logic_compare",
-    "message0": "%1 %2 %3",
-    "args0": [
+    'type': 'logic_compare',
+    'message0': '%1 %2 %3',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "A",
+        'type': 'input_value',
+        'name': 'A',
       },
       {
-        "type": "field_dropdown",
-        "name": "OP",
-        "options": [
-          ["=", "EQ"],
-          ["\u2260", "NEQ"],
-          ["\u200F<", "LT"],
-          ["\u200F\u2264", "LTE"],
-          ["\u200F>", "GT"],
-          ["\u200F\u2265", "GTE"],
+        'type': 'field_dropdown',
+        'name': 'OP',
+        'options': [
+          ['=', 'EQ'],
+          ['\u2260', 'NEQ'],
+          ['\u200F<', 'LT'],
+          ['\u200F\u2264', 'LTE'],
+          ['\u200F>', 'GT'],
+          ['\u200F\u2265', 'GTE'],
         ],
       },
       {
-        "type": "input_value",
-        "name": "B",
+        'type': 'input_value',
+        'name': 'B',
       },
     ],
-    "inputsInline": true,
-    "output": "Boolean",
-    "style": "logic_blocks",
-    "helpUrl": "%{BKY_LOGIC_COMPARE_HELPURL}",
-    "extensions": ["logic_compare", "logic_op_tooltip"],
+    'inputsInline': true,
+    'output': 'Boolean',
+    'style': 'logic_blocks',
+    'helpUrl': '%{BKY_LOGIC_COMPARE_HELPURL}',
+    'extensions': ['logic_compare', 'logic_op_tooltip'],
   },
   // Block for logical operations: 'and', 'or'.
   {
-    "type": "logic_operation",
-    "message0": "%1 %2 %3",
-    "args0": [
+    'type': 'logic_operation',
+    'message0': '%1 %2 %3',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "A",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'A',
+        'check': 'Boolean',
       },
       {
-        "type": "field_dropdown",
-        "name": "OP",
-        "options": [
-          ["%{BKY_LOGIC_OPERATION_AND}", "AND"],
-          ["%{BKY_LOGIC_OPERATION_OR}", "OR"],
+        'type': 'field_dropdown',
+        'name': 'OP',
+        'options': [
+          ['%{BKY_LOGIC_OPERATION_AND}', 'AND'],
+          ['%{BKY_LOGIC_OPERATION_OR}', 'OR'],
         ],
       },
       {
-        "type": "input_value",
-        "name": "B",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'B',
+        'check': 'Boolean',
       },
     ],
-    "inputsInline": true,
-    "output": "Boolean",
-    "style": "logic_blocks",
-    "helpUrl": "%{BKY_LOGIC_OPERATION_HELPURL}",
-    "extensions": ["logic_op_tooltip"],
+    'inputsInline': true,
+    'output': 'Boolean',
+    'style': 'logic_blocks',
+    'helpUrl': '%{BKY_LOGIC_OPERATION_HELPURL}',
+    'extensions': ['logic_op_tooltip'],
   },
   // Block for negation.
   {
-    "type": "logic_negate",
-    "message0": "%{BKY_LOGIC_NEGATE_TITLE}",
-    "args0": [
+    'type': 'logic_negate',
+    'message0': '%{BKY_LOGIC_NEGATE_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "BOOL",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'BOOL',
+        'check': 'Boolean',
       },
     ],
-    "output": "Boolean",
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_LOGIC_NEGATE_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_NEGATE_HELPURL}",
+    'output': 'Boolean',
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_LOGIC_NEGATE_TOOLTIP}',
+    'helpUrl': '%{BKY_LOGIC_NEGATE_HELPURL}',
   },
   // Block for null data type.
   {
-    "type": "logic_null",
-    "message0": "%{BKY_LOGIC_NULL}",
-    "output": null,
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_LOGIC_NULL_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_NULL_HELPURL}",
+    'type': 'logic_null',
+    'message0': '%{BKY_LOGIC_NULL}',
+    'output': null,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_LOGIC_NULL_TOOLTIP}',
+    'helpUrl': '%{BKY_LOGIC_NULL_HELPURL}',
   },
   // Block for ternary operator.
   {
-    "type": "logic_ternary",
-    "message0": "%{BKY_LOGIC_TERNARY_CONDITION} %1",
-    "args0": [
+    'type': 'logic_ternary',
+    'message0': '%{BKY_LOGIC_TERNARY_CONDITION} %1',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "IF",
-        "check": "Boolean",
+        'type': 'input_value',
+        'name': 'IF',
+        'check': 'Boolean',
       },
     ],
-    "message1": "%{BKY_LOGIC_TERNARY_IF_TRUE} %1",
-    "args1": [
+    'message1': '%{BKY_LOGIC_TERNARY_IF_TRUE} %1',
+    'args1': [
       {
-        "type": "input_value",
-        "name": "THEN",
+        'type': 'input_value',
+        'name': 'THEN',
       },
     ],
-    "message2": "%{BKY_LOGIC_TERNARY_IF_FALSE} %1",
-    "args2": [
+    'message2': '%{BKY_LOGIC_TERNARY_IF_FALSE} %1',
+    'args2': [
       {
-        "type": "input_value",
-        "name": "ELSE",
+        'type': 'input_value',
+        'name': 'ELSE',
       },
     ],
-    "output": null,
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_LOGIC_TERNARY_TOOLTIP}",
-    "helpUrl": "%{BKY_LOGIC_TERNARY_HELPURL}",
-    "extensions": ["logic_ternary"],
+    'output': null,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_LOGIC_TERNARY_TOOLTIP}',
+    'helpUrl': '%{BKY_LOGIC_TERNARY_HELPURL}',
+    'extensions': ['logic_ternary'],
   },
   // Block representing the if statement in the controls_if mutator.
   {
-    "type": "controls_if_if",
-    "message0": "%{BKY_CONTROLS_IF_IF_TITLE_IF}",
-    "nextStatement": null,
-    "enableContextMenu": false,
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_IF_TOOLTIP}",
+    'type': 'controls_if_if',
+    'message0': '%{BKY_CONTROLS_IF_IF_TITLE_IF}',
+    'nextStatement': null,
+    'enableContextMenu': false,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_CONTROLS_IF_IF_TOOLTIP}',
   },
   // Block representing the else-if statement in the controls_if mutator.
   {
-    "type": "controls_if_elseif",
-    "message0": "%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}",
-    "previousStatement": null,
-    "nextStatement": null,
-    "enableContextMenu": false,
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}",
+    'type': 'controls_if_elseif',
+    'message0': '%{BKY_CONTROLS_IF_ELSEIF_TITLE_ELSEIF}',
+    'previousStatement': null,
+    'nextStatement': null,
+    'enableContextMenu': false,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_CONTROLS_IF_ELSEIF_TOOLTIP}',
   },
   // Block representing the else statement in the controls_if mutator.
   {
-    "type": "controls_if_else",
-    "message0": "%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}",
-    "previousStatement": null,
-    "enableContextMenu": false,
-    "style": "logic_blocks",
-    "tooltip": "%{BKY_CONTROLS_IF_ELSE_TOOLTIP}",
+    'type': 'controls_if_else',
+    'message0': '%{BKY_CONTROLS_IF_ELSE_TITLE_ELSE}',
+    'previousStatement': null,
+    'enableContextMenu': false,
+    'style': 'logic_blocks',
+    'tooltip': '%{BKY_CONTROLS_IF_ELSE_TOOLTIP}',
   },
 ]);
 
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
  * logic_operation blocks.
- * @see {Blockly.Extensions#buildTooltipForDropdown}
- * @package
+ * @see {Extensions#buildTooltipForDropdown}
  * @readonly
  */
-Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
+const TOOLTIPS_BY_OP = {
   // logic_compare
   'EQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_EQ}',
   'NEQ': '%{BKY_LOGIC_COMPARE_TOOLTIP_NEQ}',
@@ -273,18 +279,17 @@ Blockly.Constants.Logic.TOOLTIPS_BY_OP = {
   'OR': '%{BKY_LOGIC_OPERATION_TOOLTIP_OR}',
 };
 
-Blockly.Extensions.register('logic_op_tooltip',
-    Blockly.Extensions.buildTooltipForDropdown(
-        'OP', Blockly.Constants.Logic.TOOLTIPS_BY_OP));
+Extensions.register(
+    'logic_op_tooltip',
+    Extensions.buildTooltipForDropdown('OP', TOOLTIPS_BY_OP));
 
 /**
  * Mutator methods added to controls_if blocks.
  * @mixin
- * @augments Blockly.Block
- * @package
+ * @augments Block
  * @readonly
  */
-Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
+const CONTROLS_IF_MUTATOR_MIXIN = {
   elseifCount_: 0,
   elseCount_: 0,
 
@@ -292,13 +297,13 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
    * Create XML to represent the number of else-if and else inputs.
    * Backwards compatible serialization implementation.
    * @return {Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   mutationToDom: function() {
     if (!this.elseifCount_ && !this.elseCount_) {
       return null;
     }
-    const container = Blockly.utils.xml.createElement('mutation');
+    const container = xmlUtils.createElement('mutation');
     if (this.elseifCount_) {
       container.setAttribute('elseif', this.elseifCount_);
     }
@@ -311,7 +316,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
    * Parse XML to restore the else-if and else inputs.
    * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
@@ -348,9 +353,9 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Workspace} workspace Mutator's workspace.
+   * @return {!Block} Root block in mutator.
+   * @this {Block}
    */
   decompose: function(workspace) {
     const containerBlock = workspace.newBlock('controls_if_if');
@@ -371,8 +376,8 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
    */
   compose: function(containerBlock) {
     let clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -401,13 +406,13 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     }
     this.updateShape_();
     // Reconnect any child blocks.
-    this.reconnectChildBlocks_(valueConnections, statementConnections,
-        elseStatementConnection);
+    this.reconnectChildBlocks_(
+        valueConnections, statementConnections, elseStatementConnection);
   },
   /**
    * Store pointers to any connected child blocks.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this {Blockly.Block}
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
    */
   saveConnections: function(containerBlock) {
     let clauseBlock = containerBlock.nextConnection.targetBlock();
@@ -439,7 +444,7 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
   },
   /**
    * Reconstructs the block with all child blocks attached.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   rebuildShape_: function() {
     const valueConnections = [null];
@@ -447,7 +452,8 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     let elseStatementConnection = null;
 
     if (this.getInput('ELSE')) {
-      elseStatementConnection = this.getInput('ELSE').connection.targetConnection;
+      elseStatementConnection =
+          this.getInput('ELSE').connection.targetConnection;
     }
     for (let i = 1; this.getInput('IF' + i); i++) {
       const inputIf = this.getInput('IF' + i);
@@ -456,12 +462,12 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
       statementConnections.push(inputDo.connection.targetConnection);
     }
     this.updateShape_();
-    this.reconnectChildBlocks_(valueConnections, statementConnections,
-        elseStatementConnection);
+    this.reconnectChildBlocks_(
+        valueConnections, statementConnections, elseStatementConnection);
   },
   /**
    * Modify this block to have the correct number of inputs.
-   * @this {Blockly.Block}
+   * @this {Block}
    * @private
    */
   updateShape_: function() {
@@ -475,78 +481,74 @@ Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN = {
     }
     // Rebuild block.
     for (let i = 1; i <= this.elseifCount_; i++) {
-      this.appendValueInput('IF' + i)
-          .setCheck('Boolean')
-          .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSEIF']);
-      this.appendStatementInput('DO' + i)
-          .appendField(Blockly.Msg['CONTROLS_IF_MSG_THEN']);
+      this.appendValueInput('IF' + i).setCheck('Boolean').appendField(
+          Msg['CONTROLS_IF_MSG_ELSEIF']);
+      this.appendStatementInput('DO' + i).appendField(
+          Msg['CONTROLS_IF_MSG_THEN']);
     }
     if (this.elseCount_) {
-      this.appendStatementInput('ELSE')
-          .appendField(Blockly.Msg['CONTROLS_IF_MSG_ELSE']);
+      this.appendStatementInput('ELSE').appendField(
+          Msg['CONTROLS_IF_MSG_ELSE']);
     }
   },
   /**
    * Reconnects child blocks.
-   * @param {!Array<?Blockly.RenderedConnection>} valueConnections List of
+   * @param {!Array<?RenderedConnection>} valueConnections List of
    * value connections for 'if' input.
-   * @param {!Array<?Blockly.RenderedConnection>} statementConnections List of
+   * @param {!Array<?RenderedConnection>} statementConnections List of
    * statement connections for 'do' input.
-   * @param {?Blockly.RenderedConnection} elseStatementConnection Statement
+   * @param {?RenderedConnection} elseStatementConnection Statement
    * connection for else input.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
-  reconnectChildBlocks_: function(valueConnections, statementConnections,
-      elseStatementConnection) {
+  reconnectChildBlocks_: function(
+      valueConnections, statementConnections, elseStatementConnection) {
     for (let i = 1; i <= this.elseifCount_; i++) {
-      Blockly.Mutator.reconnect(valueConnections[i], this, 'IF' + i);
-      Blockly.Mutator.reconnect(statementConnections[i], this, 'DO' + i);
+      Mutator.reconnect(valueConnections[i], this, 'IF' + i);
+      Mutator.reconnect(statementConnections[i], this, 'DO' + i);
     }
-    Blockly.Mutator.reconnect(elseStatementConnection, this, 'ELSE');
+    Mutator.reconnect(elseStatementConnection, this, 'ELSE');
   },
 };
 
-Blockly.Extensions.registerMutator('controls_if_mutator',
-    Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN, null,
+Extensions.registerMutator(
+    'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN, null,
     ['controls_if_elseif', 'controls_if_else']);
 /**
  * "controls_if" extension function. Adds mutator, shape updating methods, and
  * dynamic tooltip to "controls_if" blocks.
- * @this {Blockly.Block}
- * @package
+ * @this {Block}
  */
-Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION = function() {
+const CONTROLS_IF_TOOLTIP_EXTENSION = function() {
   this.setTooltip(function() {
     if (!this.elseifCount_ && !this.elseCount_) {
-      return Blockly.Msg['CONTROLS_IF_TOOLTIP_1'];
+      return Msg['CONTROLS_IF_TOOLTIP_1'];
     } else if (!this.elseifCount_ && this.elseCount_) {
-      return Blockly.Msg['CONTROLS_IF_TOOLTIP_2'];
+      return Msg['CONTROLS_IF_TOOLTIP_2'];
     } else if (this.elseifCount_ && !this.elseCount_) {
-      return Blockly.Msg['CONTROLS_IF_TOOLTIP_3'];
+      return Msg['CONTROLS_IF_TOOLTIP_3'];
     } else if (this.elseifCount_ && this.elseCount_) {
-      return Blockly.Msg['CONTROLS_IF_TOOLTIP_4'];
+      return Msg['CONTROLS_IF_TOOLTIP_4'];
     }
     return '';
   }.bind(this));
 };
 
-Blockly.Extensions.register('controls_if_tooltip',
-    Blockly.Constants.Logic.CONTROLS_IF_TOOLTIP_EXTENSION);
+Extensions.register('controls_if_tooltip', CONTROLS_IF_TOOLTIP_EXTENSION);
 
 /**
  * Adds dynamic type validation for the left and right sides of a logic_compare
  * block.
  * @mixin
- * @augments Blockly.Block
- * @package
+ * @augments Block
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
+const LOGIC_COMPARE_ONCHANGE_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
-   * @param {!Blockly.Events.Abstract} e Change event.
-   * @this {Blockly.Block}
+   * @param {!AbstractEvent} e Change event.
+   * @this {Block}
    */
   onchange: function(e) {
     if (!this.prevBlocks_) {
@@ -557,11 +559,11 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
     const blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
-      !this.workspace.connectionChecker.doTypeChecks(
-          blockA.outputConnection, blockB.outputConnection)) {
+        !this.workspace.connectionChecker.doTypeChecks(
+            blockA.outputConnection, blockB.outputConnection)) {
       // Mismatch between two inputs.  Revert the block connections,
       // bumping away the newly connected block(s).
-      Blockly.Events.setGroup(e.group);
+      Events.setGroup(e.group);
       const prevA = this.prevBlocks_[0];
       if (prevA !== blockA) {
         blockA.unplug();
@@ -579,7 +581,7 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
         }
       }
       this.bumpNeighbours();
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
     this.prevBlocks_[0] = this.getInputTargetBlock('A');
     this.prevBlocks_[1] = this.getInputTargetBlock('B');
@@ -589,33 +591,30 @@ Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN = {
 /**
  * "logic_compare" extension function. Adds type left and right side type
  * checking to "logic_compare" blocks.
- * @this {Blockly.Block}
- * @package
+ * @this {Block}
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION = function() {
+const LOGIC_COMPARE_EXTENSION = function() {
   // Add onchange handler to ensure types are compatible.
-  this.mixin(Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN);
+  this.mixin(LOGIC_COMPARE_ONCHANGE_MIXIN);
 };
 
-Blockly.Extensions.register('logic_compare',
-    Blockly.Constants.Logic.LOGIC_COMPARE_EXTENSION);
+Extensions.register('logic_compare', LOGIC_COMPARE_EXTENSION);
 
 /**
  * Adds type coordination between inputs and output.
  * @mixin
- * @augments Blockly.Block
- * @package
+ * @augments Block
  * @readonly
  */
-Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
+const LOGIC_TERNARY_ONCHANGE_MIXIN = {
   prevParentConnection_: null,
 
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types.
-   * @param {!Blockly.Events.Abstract} e Change event.
-   * @this {Blockly.Block}
+   * @param {!AbstractEvent} e Change event.
+   * @this {Block}
    */
   onchange: function(e) {
     const blockA = this.getInputTargetBlock('THEN');
@@ -629,7 +628,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
             !block.workspace.connectionChecker.doTypeChecks(
                 block.outputConnection, parentConnection)) {
           // Ensure that any disconnections are grouped with the causing event.
-          Blockly.Events.setGroup(e.group);
+          Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
             this.unplug();
             parentConnection.getSourceBlock().bumpNeighbours();
@@ -637,7 +636,7 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
             block.unplug();
             block.bumpNeighbours();
           }
-          Blockly.Events.setGroup(false);
+          Events.setGroup(false);
         }
       }
     }
@@ -645,5 +644,4 @@ Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN = {
   },
 };
 
-Blockly.Extensions.registerMixin('logic_ternary',
-    Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN);
+Extensions.registerMixin('logic_ternary', LOGIC_TERNARY_ONCHANGE_MIXIN);

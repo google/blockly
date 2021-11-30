@@ -42,34 +42,11 @@ goog.require('Blockly.Comment');
 goog.require('Blockly.Warning');
 
 
-Blocks['procedures_defnoreturn'] = {
-  /**
-   * Block for defining a procedure with no return value.
-   * @this {Block}
-   */
-  init: function() {
-    const initName = Procedures.findLegalName('', this);
-    const nameField = new FieldTextInput(initName, Procedures.rename);
-    nameField.setSpellcheck(false);
-    this.appendDummyInput()
-        .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
-        .appendField(nameField, 'NAME')
-        .appendField('', 'PARAMS');
-    this.setMutator(new Mutator(['procedures_mutatorarg']));
-    if ((this.workspace.options.comments ||
-         (this.workspace.options.parentWorkspace &&
-          this.workspace.options.parentWorkspace.options.comments)) &&
-        Msg['PROCEDURES_DEFNORETURN_COMMENT']) {
-      this.setCommentText(Msg['PROCEDURES_DEFNORETURN_COMMENT']);
-    }
-    this.setStyle('procedure_blocks');
-    this.setTooltip(Msg['PROCEDURES_DEFNORETURN_TOOLTIP']);
-    this.setHelpUrl(Msg['PROCEDURES_DEFNORETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.setStatements_(true);
-    this.statementConnection_ = null;
-  },
+/**
+ * Common properties for the procedure_defnoreturn and
+ * procedure_defreturn blocks.
+ */
+const procedureDef = {
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -323,17 +300,6 @@ Blocks['procedures_defnoreturn'] = {
     }
   },
   /**
-   * Return the signature of this procedure definition.
-   * @return {!Array} Tuple containing three elements:
-   *     - the name of the defined procedure,
-   *     - a list of all its arguments,
-   *     - that it DOES NOT have a return value.
-   * @this {Block}
-   */
-  getProcedureDef: function() {
-    return [this.getFieldValue('NAME'), this.arguments_, false];
-  },
-  /**
    * Return all variables referenced by this block.
    * @return {!Array<string>} List of variable names.
    * @this {Block}
@@ -471,7 +437,50 @@ Blocks['procedures_defnoreturn'] = {
   callType_: 'procedures_callnoreturn',
 };
 
+Blocks['procedures_defnoreturn'] = {
+  ...procedureDef,
+  /**
+   * Block for defining a procedure with no return value.
+   * @this {Block}
+   */
+  init: function() {
+    const initName = Procedures.findLegalName('', this);
+    const nameField = new FieldTextInput(initName, Procedures.rename);
+    nameField.setSpellcheck(false);
+    this.appendDummyInput()
+        .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
+        .appendField(nameField, 'NAME')
+        .appendField('', 'PARAMS');
+    this.setMutator(new Mutator(['procedures_mutatorarg']));
+    if ((this.workspace.options.comments ||
+         (this.workspace.options.parentWorkspace &&
+          this.workspace.options.parentWorkspace.options.comments)) &&
+        Msg['PROCEDURES_DEFNORETURN_COMMENT']) {
+      this.setCommentText(Msg['PROCEDURES_DEFNORETURN_COMMENT']);
+    }
+    this.setStyle('procedure_blocks');
+    this.setTooltip(Msg['PROCEDURES_DEFNORETURN_TOOLTIP']);
+    this.setHelpUrl(Msg['PROCEDURES_DEFNORETURN_HELPURL']);
+    this.arguments_ = [];
+    this.argumentVarModels_ = [];
+    this.setStatements_(true);
+    this.statementConnection_ = null;
+  },
+  /**
+   * Return the signature of this procedure definition.
+   * @return {!Array} Tuple containing three elements:
+   *     - the name of the defined procedure,
+   *     - a list of all its arguments,
+   *     - that it DOES NOT have a return value.
+   * @this {Block}
+   */
+  getProcedureDef: function() {
+    return [this.getFieldValue('NAME'), this.arguments_, false];
+  },
+};
+
 Blocks['procedures_defreturn'] = {
+  ...procedureDef,
   /**
    * Block for defining a procedure with a return value.
    * @this {Block}
@@ -502,14 +511,6 @@ Blocks['procedures_defreturn'] = {
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
-  setStatements_: Blocks['procedures_defnoreturn'].setStatements_,
-  updateParams_: Blocks['procedures_defnoreturn'].updateParams_,
-  mutationToDom: Blocks['procedures_defnoreturn'].mutationToDom,
-  domToMutation: Blocks['procedures_defnoreturn'].domToMutation,
-  saveExtraState: Blocks['procedures_defnoreturn'].saveExtraState,
-  loadExtraState: Blocks['procedures_defnoreturn'].loadExtraState,
-  decompose: Blocks['procedures_defnoreturn'].decompose,
-  compose: Blocks['procedures_defnoreturn'].compose,
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -521,13 +522,6 @@ Blocks['procedures_defreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
-  getVars: Blocks['procedures_defnoreturn'].getVars,
-  getVarModels: Blocks['procedures_defnoreturn'].getVarModels,
-  renameVarById: Blocks['procedures_defnoreturn'].renameVarById,
-  updateVarName: Blocks['procedures_defnoreturn'].updateVarName,
-  displayRenamedVar_: Blocks['procedures_defnoreturn'].displayRenamedVar_,
-  customContextMenu: Blocks['procedures_defnoreturn'].customContextMenu,
-  callType_: 'procedures_callreturn',
 };
 
 Blocks['procedures_mutatorcontainer'] = {
@@ -661,25 +655,11 @@ Blocks['procedures_mutatorarg'] = {
   },
 };
 
-Blocks['procedures_callnoreturn'] = {
-  /**
-   * Block for calling a procedure with no return value.
-   * @this {Block}
-   */
-  init: function() {
-    this.appendDummyInput('TOPROW').appendField('', 'NAME');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setStyle('procedure_blocks');
-    // Tooltip is set in renameProcedure.
-    this.setHelpUrl(Msg['PROCEDURES_CALLNORETURN_HELPURL']);
-    this.arguments_ = [];
-    this.argumentVarModels_ = [];
-    this.quarkConnections_ = {};
-    this.quarkIds_ = null;
-    this.previousEnabledState_ = true;
-  },
-
+/**
+ * Common properties for the procedure_callnoreturn and
+ * procedure_callreturn blocks.
+ */
+const procedureCall = {
   /**
    * Returns the name of the procedure this block calls.
    * @return {string} Procedure name.
@@ -1051,10 +1031,33 @@ Blocks['procedures_callnoreturn'] = {
     };
     options.push(option);
   },
+};
+
+Blocks['procedures_callnoreturn'] = {
+  ...procedureCall,
+  /**
+   * Block for calling a procedure with no return value.
+   * @this {Block}
+   */
+  init: function() {
+    this.appendDummyInput('TOPROW').appendField('', 'NAME');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setStyle('procedure_blocks');
+    // Tooltip is set in renameProcedure.
+    this.setHelpUrl(Msg['PROCEDURES_CALLNORETURN_HELPURL']);
+    this.arguments_ = [];
+    this.argumentVarModels_ = [];
+    this.quarkConnections_ = {};
+    this.quarkIds_ = null;
+    this.previousEnabledState_ = true;
+  },
+
   defType_: 'procedures_defnoreturn',
 };
 
 Blocks['procedures_callreturn'] = {
+  ...procedureCall,
   /**
    * Block for calling a procedure with a return value.
    * @this {Block}
@@ -1072,19 +1075,6 @@ Blocks['procedures_callreturn'] = {
     this.previousEnabledState_ = true;
   },
 
-  getProcedureCall: Blocks['procedures_callnoreturn'].getProcedureCall,
-  renameProcedure: Blocks['procedures_callnoreturn'].renameProcedure,
-  setProcedureParameters_:
-      Blocks['procedures_callnoreturn'].setProcedureParameters_,
-  updateShape_: Blocks['procedures_callnoreturn'].updateShape_,
-  mutationToDom: Blocks['procedures_callnoreturn'].mutationToDom,
-  domToMutation: Blocks['procedures_callnoreturn'].domToMutation,
-  saveExtraState: Blocks['procedures_callnoreturn'].saveExtraState,
-  loadExtraState: Blocks['procedures_callnoreturn'].loadExtraState,
-  getVars: Blocks['procedures_callnoreturn'].getVars,
-  getVarModels: Blocks['procedures_callnoreturn'].getVarModels,
-  onchange: Blocks['procedures_callnoreturn'].onchange,
-  customContextMenu: Blocks['procedures_callnoreturn'].customContextMenu,
   defType_: 'procedures_defreturn',
 };
 

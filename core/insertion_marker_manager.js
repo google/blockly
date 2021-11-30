@@ -433,8 +433,8 @@ InsertionMarkerManager.prototype.getCandidate_ = function(dxy) {
 
   // It's possible that a block has added or removed connections during a drag,
   // (e.g. in a drag/move event handler), so let's update the available
-  // connections. Note that this will be called en every move while dragging, so
-  // ir might cause slowness, especially if the block stack is large.  If so,
+  // connections. Note that this will be called on every move while dragging, so
+  // it might cause slowness, especially if the block stack is large.  If so,
   // maybe it could be made more efficient.
   this.updateAvailableConnections();
 

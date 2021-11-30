@@ -13,13 +13,13 @@
 goog.module('Blockly.Dart');
 goog.module.declareLegacyNamespace();
 
-const stringUtils = goog.require('Blockly.utils.string');
 const Variables = goog.require('Blockly.Variables');
+const stringUtils = goog.require('Blockly.utils.string');
 const {Block} = goog.requireType('Blockly.Block');
 const {Generator} = goog.require('Blockly.Generator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
 const {Names, NameType} = goog.require('Blockly.Names');
 const {Workspace} = goog.requireType('Blockly.Workspace');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**

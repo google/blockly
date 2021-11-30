@@ -153,8 +153,7 @@ Blockly.PHP['controls_flow_statements'] = function(block) {
     xfix += Blockly.PHP.injectId(Blockly.PHP.STATEMENT_SUFFIX, block);
   }
   if (Blockly.PHP.STATEMENT_PREFIX) {
-    const loop = Blockly.Constants.Loops
-        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+    const loop = block.getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.

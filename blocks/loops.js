@@ -297,12 +297,12 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   ],
 
   /**
-   * Is the given block enclosed (at any level) by a loop?
-   * @param {!Blockly.Block} block Current block.
+   * Is this block enclosed (at any level) by a loop?
    * @return {Blockly.Block} The nearest surrounding loop, or null if none.
+   * @this {Blockly.Block}
    */
-  getSurroundLoop: function(block) {
-    // Is the block nested in a loop?
+  getSurroundLoop: function() {
+    let block = this;
     do {
       if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES
           .indexOf(block.type) !== -1) {
@@ -327,8 +327,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
         e.type !== Blockly.Events.BLOCK_MOVE) {
       return;
     }
-    const enabled = Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN
-        .getSurroundLoop(this);
+    const enabled = this.getSurroundLoop(this);
     this.setWarningText(enabled ? null :
         Blockly.Msg['CONTROLS_FLOW_STATEMENTS_WARNING']);
     if (!this.isInFlyout) {

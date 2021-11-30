@@ -10,8 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.loops');
-goog.provide('Blockly.Constants.Loops');
+goog.module('Blockly.blocks.loops');
 
 goog.require('Blockly');
 goog.require('Blockly.FieldDropdown');
@@ -21,13 +20,7 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Warning');
 
 
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['LOOPS_HUE']. (2018 April 5)
- */
-Blockly.Constants.Loops.HUE = 120;
-
-Blockly.defineBlocksWithJsonArray([
+Blockly.common.defineBlocksWithJsonArray([
   // Block for repeat n times (external number).
   {
     "type": "controls_repeat_ext",
@@ -201,32 +194,30 @@ Blockly.defineBlocksWithJsonArray([
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
  * @see {Blockly.Extensions#buildTooltipForDropdown}
- * @package
  * @readonly
  */
-Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS = {
+const WHILE_UNTIL_TOOLTIPS = {
   'WHILE': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_WHILE}',
   'UNTIL': '%{BKY_CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL}',
 };
 
 Blockly.Extensions.register('controls_whileUntil_tooltip',
     Blockly.Extensions.buildTooltipForDropdown(
-        'MODE', Blockly.Constants.Loops.WHILE_UNTIL_TOOLTIPS));
+        'MODE', WHILE_UNTIL_TOOLTIPS));
 
 /**
  * Tooltips for the 'controls_flow_statements' block, keyed by FLOW value.
  * @see {Blockly.Extensions#buildTooltipForDropdown}
- * @package
  * @readonly
  */
-Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS = {
+const BREAK_CONTINUE_TOOLTIPS = {
   'BREAK': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK}',
   'CONTINUE': '%{BKY_CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE}',
 };
 
 Blockly.Extensions.register('controls_flow_tooltip',
     Blockly.Extensions.buildTooltipForDropdown(
-        'FLOW', Blockly.Constants.Loops.BREAK_CONTINUE_TOOLTIPS));
+        'FLOW', BREAK_CONTINUE_TOOLTIPS));
 
 /**
  * Mixin to add a context menu item to create a 'variables_get' block.
@@ -236,7 +227,7 @@ Blockly.Extensions.register('controls_flow_tooltip',
  * @package
  * @readonly
  */
-Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
+const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
   /**
    * Add context menu option to create getter block for the loop's variable.
    * (customContextMenu support limited to web BlockSvg.)
@@ -264,7 +255,7 @@ Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
 };
 
 Blockly.Extensions.registerMixin('contextMenu_newGetVariableBlock',
-    Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN);
+    CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN);
 
 Blockly.Extensions.register('controls_for_tooltip',
     Blockly.Extensions.buildTooltipWithFieldText(
@@ -275,6 +266,29 @@ Blockly.Extensions.register('controls_forEach_tooltip',
         '%{BKY_CONTROLS_FOREACH_TOOLTIP}', 'VAR'));
 
 /**
+ * List of block types that are loops and thus do not need warnings.
+ * To add a new loop type add this to your code:
+ *
+ * // If using the Blockly npm package and es6 import syntax:
+ * import {loopTypes} from 'blockly/blocks';
+ * loopTypes.push('custom_loop');
+ *
+ * // Else if using Closure Compiler and goog.modules:
+ * const {loopTypes} = goog.require('Blockly.blocks.loops');
+ * loopTypes.push('custom_loop');
+ *
+ * @type {!Array<string>}
+ */
+const loopTypes = [
+  'controls_repeat',
+  'controls_repeat_ext',
+  'controls_forEach',
+  'controls_for',
+  'controls_whileUntil',
+];
+exports.loopTypes = loopTypes;
+
+/**
  * This mixin adds a check to make sure the 'controls_flow_statements' block
  * is contained in a loop. Otherwise a warning is added to the block.
  * @mixin
@@ -282,20 +296,7 @@ Blockly.Extensions.register('controls_forEach_tooltip',
  * @public
  * @readonly
  */
-Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
-  /**
-   * List of block types that are loops and thus do not need warnings.
-   * To add a new loop type add this to your code:
-   * Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push('custom_loop');
-   */
-  LOOP_TYPES: [
-    'controls_repeat',
-    'controls_repeat_ext',
-    'controls_forEach',
-    'controls_for',
-    'controls_whileUntil',
-  ],
-
+const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * Is this block enclosed (at any level) by a loop?
    * @return {Blockly.Block} The nearest surrounding loop, or null if none.
@@ -304,8 +305,7 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   getSurroundLoop: function() {
     let block = this;
     do {
-      if (Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES
-          .indexOf(block.type) !== -1) {
+      if (loopTypes.includes(block.type)) {
         return block;
       }
       block = block.getSurroundParent();
@@ -341,4 +341,4 @@ Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
 };
 
 Blockly.Extensions.registerMixin('controls_flow_in_loop_check',
-    Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);
+    CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);

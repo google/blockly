@@ -453,7 +453,7 @@ function compile(options) {
   const defaultOptions = {
     compilation_level: 'SIMPLE_OPTIMIZATIONS',
     warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
-    language_in: 'ECMASCRIPT6_STRICT',
+    language_in: 'ECMASCRIPT_2020',
     language_out: 'ECMASCRIPT5_STRICT',
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',

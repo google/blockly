@@ -20,20 +20,21 @@ JavaScript['controls_if'] = function(block) {
   let code = '';
   if (JavaScript.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    code += JavaScript.injectId(JavaScript.STATEMENT_PREFIX,
-        block);
+    code += JavaScript.injectId(JavaScript.STATEMENT_PREFIX, block);
   }
   do {
-    const conditionCode = JavaScript.valueToCode(block, 'IF' + n,
-        JavaScript.ORDER_NONE) || 'false';
+    const conditionCode =
+        JavaScript.valueToCode(block, 'IF' + n, JavaScript.ORDER_NONE) ||
+        'false';
     let branchCode = JavaScript.statementToCode(block, 'DO' + n);
     if (JavaScript.STATEMENT_SUFFIX) {
       branchCode = JavaScript.prefixLines(
-          JavaScript.injectId(JavaScript.STATEMENT_SUFFIX,
-          block), JavaScript.INDENT) + branchCode;
+                       JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block),
+                       JavaScript.INDENT) +
+          branchCode;
     }
-    code += (n > 0 ? ' else ' : '') +
-        'if (' + conditionCode + ') {\n' + branchCode + '}';
+    code += (n > 0 ? ' else ' : '') + 'if (' + conditionCode + ') {\n' +
+        branchCode + '}';
     n++;
   } while (block.getInput('IF' + n));
 
@@ -41,8 +42,9 @@ JavaScript['controls_if'] = function(block) {
     let branchCode = JavaScript.statementToCode(block, 'ELSE');
     if (JavaScript.STATEMENT_SUFFIX) {
       branchCode = JavaScript.prefixLines(
-          JavaScript.injectId(JavaScript.STATEMENT_SUFFIX,
-          block), JavaScript.INDENT) + branchCode;
+                       JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block),
+                       JavaScript.INDENT) +
+          branchCode;
     }
     code += ' else {\n' + branchCode + '}';
   }
@@ -53,17 +55,12 @@ JavaScript['controls_ifelse'] = JavaScript['controls_if'];
 
 JavaScript['logic_compare'] = function(block) {
   // Comparison operator.
-  const OPERATORS = {
-    'EQ': '==',
-    'NEQ': '!=',
-    'LT': '<',
-    'LTE': '<=',
-    'GT': '>',
-    'GTE': '>='
-  };
+  const OPERATORS =
+      {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = (operator === '==' || operator === '!=') ?
-      JavaScript.ORDER_EQUALITY : JavaScript.ORDER_RELATIONAL;
+      JavaScript.ORDER_EQUALITY :
+      JavaScript.ORDER_RELATIONAL;
   const argument0 = JavaScript.valueToCode(block, 'A', order) || '0';
   const argument1 = JavaScript.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -74,7 +71,7 @@ JavaScript['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
   const order = (operator === '&&') ? JavaScript.ORDER_LOGICAL_AND :
-      JavaScript.ORDER_LOGICAL_OR;
+                                      JavaScript.ORDER_LOGICAL_OR;
   let argument0 = JavaScript.valueToCode(block, 'A', order);
   let argument1 = JavaScript.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -98,8 +95,7 @@ JavaScript['logic_operation'] = function(block) {
 JavaScript['logic_negate'] = function(block) {
   // Negation.
   const order = JavaScript.ORDER_LOGICAL_NOT;
-  const argument0 = JavaScript.valueToCode(block, 'BOOL', order) ||
-      'true';
+  const argument0 = JavaScript.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
 };
@@ -117,12 +113,15 @@ JavaScript['logic_null'] = function(block) {
 
 JavaScript['logic_ternary'] = function(block) {
   // Ternary operator.
-  const value_if = JavaScript.valueToCode(block, 'IF',
-      JavaScript.ORDER_CONDITIONAL) || 'false';
-  const value_then = JavaScript.valueToCode(block, 'THEN',
-      JavaScript.ORDER_CONDITIONAL) || 'null';
-  const value_else = JavaScript.valueToCode(block, 'ELSE',
-      JavaScript.ORDER_CONDITIONAL) || 'null';
+  const value_if =
+      JavaScript.valueToCode(block, 'IF', JavaScript.ORDER_CONDITIONAL) ||
+      'false';
+  const value_then =
+      JavaScript.valueToCode(block, 'THEN', JavaScript.ORDER_CONDITIONAL) ||
+      'null';
+  const value_else =
+      JavaScript.valueToCode(block, 'ELSE', JavaScript.ORDER_CONDITIONAL) ||
+      'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, JavaScript.ORDER_CONDITIONAL];
 };

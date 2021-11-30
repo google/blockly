@@ -387,7 +387,7 @@ Trashcan.prototype.hasContents_ = function() {
  * @return {boolean} True if the trashcan contents-flyout is currently open.
  */
 Trashcan.prototype.contentsIsOpen = function() {
-  return this.flyout.isVisible();
+  return !!this.flyout && this.flyout.isVisible();
 };
 
 /**
@@ -480,7 +480,7 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {?Rect} The UI elements’s bounding box. Null if
+ * @return {?Rect} The UI elements's bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
 Trashcan.prototype.getBoundingRectangle = function() {

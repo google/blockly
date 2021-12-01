@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.colour');
+goog.module('Blockly.Dart.colour');
 
 goog.require('Blockly.Dart');
 

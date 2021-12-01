@@ -289,12 +289,12 @@ goog.addDependency('../../generators/javascript/variables.js', ['Blockly.JavaScr
 goog.addDependency('../../generators/javascript/variables_dynamic.js', ['Blockly.JavaScript.variablesDynamic'], ['Blockly.JavaScript', 'Blockly.JavaScript.variables'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/lua.js', ['Blockly.Lua'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.inputTypes', 'Blockly.utils.object', 'Blockly.utils.string'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/all.js', ['Blockly.Lua.all'], ['Blockly.Lua.colour', 'Blockly.Lua.lists', 'Blockly.Lua.logic', 'Blockly.Lua.loops', 'Blockly.Lua.math', 'Blockly.Lua.procedures', 'Blockly.Lua.texts', 'Blockly.Lua.variables', 'Blockly.Lua.variablesDynamic'], {'module': 'goog'});
-goog.addDependency('../../generators/lua/colour.js', ['Blockly.Lua.colour'], ['Blockly.Lua'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/lists.js', ['Blockly.Lua.lists'], ['Blockly.Lua'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/logic.js', ['Blockly.Lua.logic'], ['Blockly.Lua'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/loops.js', ['Blockly.Lua.loops'], ['Blockly.Lua', 'Blockly.utils.string'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/math.js', ['Blockly.Lua.math'], ['Blockly.Lua'], {'lang': 'es6'});
-goog.addDependency('../../generators/lua/procedures.js', ['Blockly.Lua.procedures'], ['Blockly.Lua'], {'lang': 'es6'});
+goog.addDependency('../../generators/lua/colour.js', ['Blockly.Lua.colour'], ['Blockly.Lua'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/lua/lists.js', ['Blockly.Lua.lists'], ['Blockly.Lua', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/lua/logic.js', ['Blockly.Lua.logic'], ['Blockly.Lua'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/lua/loops.js', ['Blockly.Lua.loops'], ['Blockly.Lua', 'Blockly.Names', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/lua/math.js', ['Blockly.Lua.math'], ['Blockly.Lua', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/lua/procedures.js', ['Blockly.Lua.procedures'], ['Blockly.Lua', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/lua/text.js', ['Blockly.Lua.texts'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/variables.js', ['Blockly.Lua.variables'], ['Blockly.Lua'], {'lang': 'es6'});
 goog.addDependency('../../generators/lua/variables_dynamic.js', ['Blockly.Lua.variablesDynamic'], ['Blockly.Lua', 'Blockly.Lua.variables']);

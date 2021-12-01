@@ -51,8 +51,7 @@ Lua['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = Lua.valueToCode(block, 'TIMES',
-        Lua.ORDER_NONE) || '0';
+    repeats = Lua.valueToCode(block, 'TIMES', Lua.ORDER_NONE) || '0';
   }
   if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
@@ -62,10 +61,9 @@ Lua['controls_repeat_ext'] = function(block) {
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = Lua.addContinueLabel_(branch);
-  const loopVar = Lua.nameDB_.getDistinctName(
-      'count', NameType.VARIABLE);
-  const code = 'for ' + loopVar + ' = 1, ' + repeats + ' do\n' +
-      branch + 'end\n';
+  const loopVar = Lua.nameDB_.getDistinctName('count', NameType.VARIABLE);
+  const code =
+      'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
   return code;
 };
 
@@ -74,9 +72,10 @@ Lua['controls_repeat'] = Lua['controls_repeat_ext'];
 Lua['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
-  let argument0 = Lua.valueToCode(block, 'BOOL',
-      until ? Lua.ORDER_UNARY :
-      Lua.ORDER_NONE) || 'false';
+  let argument0 =
+      Lua.valueToCode(
+          block, 'BOOL', until ? Lua.ORDER_UNARY : Lua.ORDER_NONE) ||
+      'false';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = Lua.addContinueLabel_(branch);
@@ -88,14 +87,11 @@ Lua['controls_whileUntil'] = function(block) {
 
 Lua['controls_for'] = function(block) {
   // For loop.
-  const variable0 = Lua.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const startVar = Lua.valueToCode(block, 'FROM',
-      Lua.ORDER_NONE) || '0';
-  const endVar = Lua.valueToCode(block, 'TO',
-      Lua.ORDER_NONE) || '0';
-  const increment = Lua.valueToCode(block, 'BY',
-      Lua.ORDER_NONE) || '1';
+  const variable0 =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const startVar = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || '0';
+  const endVar = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || '0';
+  const increment = Lua.valueToCode(block, 'BY', Lua.ORDER_NONE) || '1';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = Lua.addContinueLabel_(branch);
@@ -111,8 +107,8 @@ Lua['controls_for'] = function(block) {
     code = '';
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    incValue = Lua.nameDB_.getDistinctName(
-        variable0 + '_inc', NameType.VARIABLE);
+    incValue =
+        Lua.nameDB_.getDistinctName(variable0 + '_inc', NameType.VARIABLE);
     code += incValue + ' = ';
     if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment) + '\n';
@@ -123,18 +119,17 @@ Lua['controls_for'] = function(block) {
     code += Lua.INDENT + incValue + ' = -' + incValue + '\n';
     code += 'end\n';
   }
-  code += 'for ' + variable0 + ' = ' + startVar + ', ' + endVar +
-      ', ' + incValue;
+  code +=
+      'for ' + variable0 + ' = ' + startVar + ', ' + endVar + ', ' + incValue;
   code += ' do\n' + branch + 'end\n';
   return code;
 };
 
 Lua['controls_forEach'] = function(block) {
   // For each loop.
-  const variable0 = Lua.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = Lua.valueToCode(block, 'LIST',
-      Lua.ORDER_NONE) || '{}';
+  const variable0 =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
   branch = Lua.addContinueLabel_(branch);

@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.texts');
+goog.module('Blockly.Dart.texts');
 
 goog.require('Blockly.Dart');
 

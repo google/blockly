@@ -23,25 +23,27 @@ Dart['controls_if'] = function(block) {
     code += Dart.injectId(Dart.STATEMENT_PREFIX, block);
   }
   do {
-    conditionCode = Dart.valueToCode(block, 'IF' + n,
-        Dart.ORDER_NONE) || 'false';
+    conditionCode =
+        Dart.valueToCode(block, 'IF' + n, Dart.ORDER_NONE) || 'false';
     branchCode = Dart.statementToCode(block, 'DO' + n);
     if (Dart.STATEMENT_SUFFIX) {
-      branchCode = Dart.prefixLines(
-          Dart.injectId(Dart.STATEMENT_SUFFIX, block),
-          Dart.INDENT) + branchCode;
+      branchCode =
+          Dart.prefixLines(
+              Dart.injectId(Dart.STATEMENT_SUFFIX, block), Dart.INDENT) +
+          branchCode;
     }
-    code += (n > 0 ? 'else ' : '') +
-        'if (' + conditionCode + ') {\n' + branchCode + '}';
+    code += (n > 0 ? 'else ' : '') + 'if (' + conditionCode + ') {\n' +
+        branchCode + '}';
     n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Dart.STATEMENT_SUFFIX) {
     branchCode = Dart.statementToCode(block, 'ELSE');
     if (Dart.STATEMENT_SUFFIX) {
-      branchCode = Dart.prefixLines(
-          Dart.injectId(Dart.STATEMENT_SUFFIX, block),
-          Dart.INDENT) + branchCode;
+      branchCode =
+          Dart.prefixLines(
+              Dart.injectId(Dart.STATEMENT_SUFFIX, block), Dart.INDENT) +
+          branchCode;
     }
     code += ' else {\n' + branchCode + '}';
   }
@@ -52,17 +54,12 @@ Dart['controls_ifelse'] = Dart['controls_if'];
 
 Dart['logic_compare'] = function(block) {
   // Comparison operator.
-  const OPERATORS = {
-    'EQ': '==',
-    'NEQ': '!=',
-    'LT': '<',
-    'LTE': '<=',
-    'GT': '>',
-    'GTE': '>='
-  };
+  const OPERATORS =
+      {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = (operator === '==' || operator === '!=') ?
-      Dart.ORDER_EQUALITY : Dart.ORDER_RELATIONAL;
+      Dart.ORDER_EQUALITY :
+      Dart.ORDER_RELATIONAL;
   const argument0 = Dart.valueToCode(block, 'A', order) || '0';
   const argument1 = Dart.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -72,8 +69,8 @@ Dart['logic_compare'] = function(block) {
 Dart['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
-  const order = (operator === '&&') ? Dart.ORDER_LOGICAL_AND :
-      Dart.ORDER_LOGICAL_OR;
+  const order =
+      (operator === '&&') ? Dart.ORDER_LOGICAL_AND : Dart.ORDER_LOGICAL_OR;
   let argument0 = Dart.valueToCode(block, 'A', order);
   let argument1 = Dart.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -115,12 +112,12 @@ Dart['logic_null'] = function(block) {
 
 Dart['logic_ternary'] = function(block) {
   // Ternary operator.
-  const value_if = Dart.valueToCode(block, 'IF',
-      Dart.ORDER_CONDITIONAL) || 'false';
-  const value_then = Dart.valueToCode(block, 'THEN',
-      Dart.ORDER_CONDITIONAL) || 'null';
-  const value_else = Dart.valueToCode(block, 'ELSE',
-      Dart.ORDER_CONDITIONAL) || 'null';
+  const value_if =
+      Dart.valueToCode(block, 'IF', Dart.ORDER_CONDITIONAL) || 'false';
+  const value_then =
+      Dart.valueToCode(block, 'THEN', Dart.ORDER_CONDITIONAL) || 'null';
+  const value_else =
+      Dart.valueToCode(block, 'ELSE', Dart.ORDER_CONDITIONAL) || 'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, Dart.ORDER_CONDITIONAL];
 };

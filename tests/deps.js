@@ -281,7 +281,7 @@ goog.addDependency('../../generators/javascript/all.js', ['Blockly.JavaScript.al
 goog.addDependency('../../generators/javascript/colour.js', ['Blockly.JavaScript.colour'], ['Blockly.JavaScript'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/javascript/lists.js', ['Blockly.JavaScript.lists'], ['Blockly.JavaScript', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/javascript/logic.js', ['Blockly.JavaScript.logic'], ['Blockly.JavaScript'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../generators/javascript/loops.js', ['Blockly.JavaScript.loops'], ['Blockly.JavaScript', 'Blockly.utils.string'], {'lang': 'es6'});
+goog.addDependency('../../generators/javascript/loops.js', ['Blockly.JavaScript.loops'], ['Blockly.JavaScript', 'Blockly.Names', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/javascript/math.js', ['Blockly.JavaScript.math'], ['Blockly.JavaScript', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/javascript/procedures.js', ['Blockly.JavaScript.procedures'], ['Blockly.JavaScript', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/javascript/text.js', ['Blockly.JavaScript.texts'], ['Blockly.JavaScript', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});

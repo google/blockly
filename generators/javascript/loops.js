@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for loop blocks.\
+ * @fileoverview Generating JavaScript for loop blocks.
  */
 'use strict';
 

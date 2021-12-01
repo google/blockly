@@ -53,41 +53,41 @@ JavaScript.addReservedWords(
  * Order of operation ENUMs.
  * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
  */
-JavaScript.ORDER_ATOMIC = 0;           // 0 "" ...
-JavaScript.ORDER_NEW = 1.1;            // new
-JavaScript.ORDER_MEMBER = 1.2;         // . []
-JavaScript.ORDER_FUNCTION_CALL = 2;    // ()
-JavaScript.ORDER_INCREMENT = 3;        // ++
-JavaScript.ORDER_DECREMENT = 3;        // --
-JavaScript.ORDER_BITWISE_NOT = 4.1;    // ~
-JavaScript.ORDER_UNARY_PLUS = 4.2;     // +
-JavaScript.ORDER_UNARY_NEGATION = 4.3; // -
-JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
-JavaScript.ORDER_TYPEOF = 4.5;         // typeof
-JavaScript.ORDER_VOID = 4.6;           // void
-JavaScript.ORDER_DELETE = 4.7;         // delete
-JavaScript.ORDER_AWAIT = 4.8;          // await
-JavaScript.ORDER_EXPONENTIATION = 5.0; // **
-JavaScript.ORDER_MULTIPLICATION = 5.1; // *
-JavaScript.ORDER_DIVISION = 5.2;       // /
-JavaScript.ORDER_MODULUS = 5.3;        // %
-JavaScript.ORDER_SUBTRACTION = 6.1;    // -
-JavaScript.ORDER_ADDITION = 6.2;       // +
-JavaScript.ORDER_BITWISE_SHIFT = 7;    // << >> >>>
-JavaScript.ORDER_RELATIONAL = 8;       // < <= > >=
-JavaScript.ORDER_IN = 8;               // in
-JavaScript.ORDER_INSTANCEOF = 8;       // instanceof
-JavaScript.ORDER_EQUALITY = 9;         // == != === !==
-JavaScript.ORDER_BITWISE_AND = 10;     // &
-JavaScript.ORDER_BITWISE_XOR = 11;     // ^
-JavaScript.ORDER_BITWISE_OR = 12;      // |
-JavaScript.ORDER_LOGICAL_AND = 13;     // &&
-JavaScript.ORDER_LOGICAL_OR = 14;      // ||
-JavaScript.ORDER_CONDITIONAL = 15;     // ?:
-JavaScript.ORDER_ASSIGNMENT = 16;      // = += -= **= *= /= %= <<= >>= ...
-JavaScript.ORDER_YIELD = 17;           // yield
-JavaScript.ORDER_COMMA = 18;           // ,
-JavaScript.ORDER_NONE = 99;            // (...)
+JavaScript.ORDER_ATOMIC = 0;            // 0 "" ...
+JavaScript.ORDER_NEW = 1.1;             // new
+JavaScript.ORDER_MEMBER = 1.2;          // . []
+JavaScript.ORDER_FUNCTION_CALL = 2;     // ()
+JavaScript.ORDER_INCREMENT = 3;         // ++
+JavaScript.ORDER_DECREMENT = 3;         // --
+JavaScript.ORDER_BITWISE_NOT = 4.1;     // ~
+JavaScript.ORDER_UNARY_PLUS = 4.2;      // +
+JavaScript.ORDER_UNARY_NEGATION = 4.3;  // -
+JavaScript.ORDER_LOGICAL_NOT = 4.4;     // !
+JavaScript.ORDER_TYPEOF = 4.5;          // typeof
+JavaScript.ORDER_VOID = 4.6;            // void
+JavaScript.ORDER_DELETE = 4.7;          // delete
+JavaScript.ORDER_AWAIT = 4.8;           // await
+JavaScript.ORDER_EXPONENTIATION = 5.0;  // **
+JavaScript.ORDER_MULTIPLICATION = 5.1;  // *
+JavaScript.ORDER_DIVISION = 5.2;        // /
+JavaScript.ORDER_MODULUS = 5.3;         // %
+JavaScript.ORDER_SUBTRACTION = 6.1;     // -
+JavaScript.ORDER_ADDITION = 6.2;        // +
+JavaScript.ORDER_BITWISE_SHIFT = 7;     // << >> >>>
+JavaScript.ORDER_RELATIONAL = 8;        // < <= > >=
+JavaScript.ORDER_IN = 8;                // in
+JavaScript.ORDER_INSTANCEOF = 8;        // instanceof
+JavaScript.ORDER_EQUALITY = 9;          // == != === !==
+JavaScript.ORDER_BITWISE_AND = 10;      // &
+JavaScript.ORDER_BITWISE_XOR = 11;      // ^
+JavaScript.ORDER_BITWISE_OR = 12;       // |
+JavaScript.ORDER_LOGICAL_AND = 13;      // &&
+JavaScript.ORDER_LOGICAL_OR = 14;       // ||
+JavaScript.ORDER_CONDITIONAL = 15;      // ?:
+JavaScript.ORDER_ASSIGNMENT = 16;       // = += -= **= *= /= %= <<= >>= ...
+JavaScript.ORDER_YIELD = 17;            // yield
+JavaScript.ORDER_COMMA = 18;            // ,
+JavaScript.ORDER_NONE = 99;             // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
@@ -148,15 +148,14 @@ JavaScript.init = function(workspace) {
   // Add developer variables (not created or named by the user).
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
-    defvars.push(this.nameDB_.getName(devVarList[i],
-       NameType.DEVELOPER_VARIABLE));
+    defvars.push(
+        this.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
 
   // Add user variables, but only ones that are being used.
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    defvars.push(this.nameDB_.getName(variables[i].getId(),
-        NameType.VARIABLE));
+    defvars.push(this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE));
   }
 
   // Declare all of the variables.
@@ -203,8 +202,8 @@ JavaScript.quote_ = function(string) {
   // Can't use goog.string.quote since Google's style guide recommends
   // JS string literals use single quotes.
   string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/'/g, '\\\'');
+               .replace(/\n/g, '\\\n')
+               .replace(/'/g, '\\\'');
   return '\'' + string + '\'';
 };
 
@@ -270,8 +269,8 @@ JavaScript.scrub_ = function(block, code, opt_thisOnly) {
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
-    opt_order) {
+JavaScript.getAdjusted = function(
+    block, atId, opt_delta, opt_negate, opt_order) {
   let delta = opt_delta || 0;
   let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {

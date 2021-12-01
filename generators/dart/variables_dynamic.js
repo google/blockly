@@ -6,13 +6,13 @@
 
 /**
  * @fileoverview Generating Dart for dynamic variable blocks.
- * @suppress {extraRequire}
  */
 'use strict';
 
-goog.provide('Blockly.Dart.variablesDynamic');
+goog.module('Blockly.Dart.variablesDynamic');
 
 goog.require('Blockly.Dart');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Dart.variables');
 
 

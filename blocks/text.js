@@ -37,198 +37,205 @@ goog.require('Blockly.FieldVariable');
 defineBlocksWithJsonArray([
   // Block for text value
   {
-    "type": "text",
-    "message0": "%1",
-    "args0": [{
-      "type": "field_input",
-      "name": "TEXT",
-      "text": "",
+    'type': 'text',
+    'message0': '%1',
+    'args0': [{
+      'type': 'field_input',
+      'name': 'TEXT',
+      'text': '',
     }],
-    "output": "String",
-    "style": "text_blocks",
-    "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
-    "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
-    "extensions": [
-      "text_quotes",
-      "parent_tooltip_when_inline",
+    'output': 'String',
+    'style': 'text_blocks',
+    'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
+    'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
+    'extensions': [
+      'text_quotes',
+      'parent_tooltip_when_inline',
     ],
   },
   {
-    "type": "text_multiline",
-    "message0": "%1 %2",
-    "args0": [{
-      "type": "field_image",
-      "src": 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpP' +
-             'U2iAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0' +
-             'U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjm' +
-             'RIja4ABtZ2dm5A3t3Ia6AUm7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z88' +
-             '73zpwzM4F3GWOCruvGIE4/rLaV+Nq1hVGMBqzhqlxgCys4wJA65xnogMHsQ5luj' +
-             'nYHTejBBCK2mE4abjCgMGhNxHgDFWjDSG07kdfVa2pZMf4ZyMAdWmpZMfYOsLiD' +
-             'MYMjlMB+K613QISRhTnITnsYg5yUd0DETmEoMlkFOeIT/A58iyK5E18BuTBfgYX' +
-             'fwNJv4P9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUvYUZYLfUNftIY4z' +
-             'wA5X2Z9AYnQrEAAAAASUVORK5CYII=',
-      "width": 12,
-      "height": 17,
-      "alt": '\u00B6',
-    },
-    {
-      "type": "field_multilinetext",
-      "name": "TEXT",
-      "text": "",
-    }],
-    "output": "String",
-    "style": "text_blocks",
-    "helpUrl": "%{BKY_TEXT_TEXT_HELPURL}",
-    "tooltip": "%{BKY_TEXT_TEXT_TOOLTIP}",
-    "extensions": [
-      "parent_tooltip_when_inline",
+    'type': 'text_multiline',
+    'message0': '%1 %2',
+    'args0': [
+      {
+        'type': 'field_image',
+        'src':
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpP' +
+            'U2iAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0' +
+            'U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjm' +
+            'RIja4ABtZ2dm5A3t3Ia6AUm7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z88' +
+            '73zpwzM4F3GWOCruvGIE4/rLaV+Nq1hVGMBqzhqlxgCys4wJA65xnogMHsQ5luj' +
+            'nYHTejBBCK2mE4abjCgMGhNxHgDFWjDSG07kdfVa2pZMf4ZyMAdWmpZMfYOsLiD' +
+            'MYMjlMB+K613QISRhTnITnsYg5yUd0DETmEoMlkFOeIT/A58iyK5E18BuTBfgYX' +
+            'fwNJv4P9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUvYUZYLfUNftIY4z' +
+            'wA5X2Z9AYnQrEAAAAASUVORK5CYII=',
+        'width': 12,
+        'height': 17,
+        'alt': '\u00B6',
+      },
+      {
+        'type': 'field_multilinetext',
+        'name': 'TEXT',
+        'text': '',
+      }
+    ],
+    'output': 'String',
+    'style': 'text_blocks',
+    'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
+    'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
+    'extensions': [
+      'parent_tooltip_when_inline',
     ],
   },
   {
-    "type": "text_join",
-    "message0": "",
-    "output": "String",
-    "style": "text_blocks",
-    "helpUrl": "%{BKY_TEXT_JOIN_HELPURL}",
-    "tooltip": "%{BKY_TEXT_JOIN_TOOLTIP}",
-    "mutator": "text_join_mutator",
+    'type': 'text_join',
+    'message0': '',
+    'output': 'String',
+    'style': 'text_blocks',
+    'helpUrl': '%{BKY_TEXT_JOIN_HELPURL}',
+    'tooltip': '%{BKY_TEXT_JOIN_TOOLTIP}',
+    'mutator': 'text_join_mutator',
 
   },
   {
-    "type": "text_create_join_container",
-    "message0": "%{BKY_TEXT_CREATE_JOIN_TITLE_JOIN} %1 %2",
-    "args0": [{
-      "type": "input_dummy",
-    },
-    {
-      "type": "input_statement",
-      "name": "STACK",
-    }],
-    "style": "text_blocks",
-    "tooltip": "%{BKY_TEXT_CREATE_JOIN_TOOLTIP}",
-    "enableContextMenu": false,
+    'type': 'text_create_join_container',
+    'message0': '%{BKY_TEXT_CREATE_JOIN_TITLE_JOIN} %1 %2',
+    'args0': [
+      {
+        'type': 'input_dummy',
+      },
+      {
+        'type': 'input_statement',
+        'name': 'STACK',
+      }
+    ],
+    'style': 'text_blocks',
+    'tooltip': '%{BKY_TEXT_CREATE_JOIN_TOOLTIP}',
+    'enableContextMenu': false,
   },
   {
-    "type": "text_create_join_item",
-    "message0": "%{BKY_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM}",
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "text_blocks",
-    "tooltip": "%{BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}",
-    "enableContextMenu": false,
+    'type': 'text_create_join_item',
+    'message0': '%{BKY_TEXT_CREATE_JOIN_ITEM_TITLE_ITEM}',
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'text_blocks',
+    'tooltip': '%{BKY_TEXT_CREATE_JOIN_ITEM_TOOLTIP}',
+    'enableContextMenu': false,
   },
   {
-    "type": "text_append",
-    "message0": "%{BKY_TEXT_APPEND_TITLE}",
-    "args0": [{
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_TEXT_APPEND_VARIABLE}",
-    },
-    {
-      "type": "input_value",
-      "name": "TEXT",
-    }],
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "text_blocks",
-    "extensions": [
-      "text_append_tooltip",
+    'type': 'text_append',
+    'message0': '%{BKY_TEXT_APPEND_TITLE}',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': '%{BKY_TEXT_APPEND_VARIABLE}',
+      },
+      {
+        'type': 'input_value',
+        'name': 'TEXT',
+      }
+    ],
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'text_blocks',
+    'extensions': [
+      'text_append_tooltip',
     ],
   },
   {
-    "type": "text_length",
-    "message0": "%{BKY_TEXT_LENGTH_TITLE}",
-    "args0": [
+    'type': 'text_length',
+    'message0': '%{BKY_TEXT_LENGTH_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": ['String', 'Array'],
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': ['String', 'Array'],
       },
     ],
-    "output": 'Number',
-    "style": "text_blocks",
-    "tooltip": "%{BKY_TEXT_LENGTH_TOOLTIP}",
-    "helpUrl": "%{BKY_TEXT_LENGTH_HELPURL}",
+    'output': 'Number',
+    'style': 'text_blocks',
+    'tooltip': '%{BKY_TEXT_LENGTH_TOOLTIP}',
+    'helpUrl': '%{BKY_TEXT_LENGTH_HELPURL}',
   },
   {
-    "type": "text_isEmpty",
-    "message0": "%{BKY_TEXT_ISEMPTY_TITLE}",
-    "args0": [
+    'type': 'text_isEmpty',
+    'message0': '%{BKY_TEXT_ISEMPTY_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": ['String', 'Array'],
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': ['String', 'Array'],
       },
     ],
-    "output": 'Boolean',
-    "style": "text_blocks",
-    "tooltip": "%{BKY_TEXT_ISEMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_TEXT_ISEMPTY_HELPURL}",
+    'output': 'Boolean',
+    'style': 'text_blocks',
+    'tooltip': '%{BKY_TEXT_ISEMPTY_TOOLTIP}',
+    'helpUrl': '%{BKY_TEXT_ISEMPTY_HELPURL}',
   },
   {
-    "type": "text_indexOf",
-    "message0": "%{BKY_TEXT_INDEXOF_TITLE}",
-    "args0": [
+    'type': 'text_indexOf',
+    'message0': '%{BKY_TEXT_INDEXOF_TITLE}',
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": "String",
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': 'String',
       },
       {
-        "type": "field_dropdown",
-        "name": "END",
-        "options": [
+        'type': 'field_dropdown',
+        'name': 'END',
+        'options': [
           [
-            "%{BKY_TEXT_INDEXOF_OPERATOR_FIRST}",
-            "FIRST",
+            '%{BKY_TEXT_INDEXOF_OPERATOR_FIRST}',
+            'FIRST',
           ],
           [
-            "%{BKY_TEXT_INDEXOF_OPERATOR_LAST}",
-            "LAST",
+            '%{BKY_TEXT_INDEXOF_OPERATOR_LAST}',
+            'LAST',
           ],
         ],
       },
       {
-        "type": "input_value",
-        "name": "FIND",
-        "check": "String",
+        'type': 'input_value',
+        'name': 'FIND',
+        'check': 'String',
       },
     ],
-    "output": "Number",
-    "style": "text_blocks",
-    "helpUrl": "%{BKY_TEXT_INDEXOF_HELPURL}",
-    "inputsInline": true,
-    "extensions": [
-      "text_indexOf_tooltip",
+    'output': 'Number',
+    'style': 'text_blocks',
+    'helpUrl': '%{BKY_TEXT_INDEXOF_HELPURL}',
+    'inputsInline': true,
+    'extensions': [
+      'text_indexOf_tooltip',
     ],
   },
   {
-    "type": "text_charAt",
-    "message0": "%{BKY_TEXT_CHARAT_TITLE}", // "in text %1 %2"
-    "args0": [
+    'type': 'text_charAt',
+    'message0': '%{BKY_TEXT_CHARAT_TITLE}',  // "in text %1 %2"
+    'args0': [
       {
-        "type": "input_value",
-        "name": "VALUE",
-        "check": "String",
+        'type': 'input_value',
+        'name': 'VALUE',
+        'check': 'String',
       },
       {
-        "type": "field_dropdown",
-        "name": "WHERE",
-        "options": [
-          ["%{BKY_TEXT_CHARAT_FROM_START}", "FROM_START"],
-          ["%{BKY_TEXT_CHARAT_FROM_END}", "FROM_END"],
-          ["%{BKY_TEXT_CHARAT_FIRST}", "FIRST"],
-          ["%{BKY_TEXT_CHARAT_LAST}", "LAST"],
-          ["%{BKY_TEXT_CHARAT_RANDOM}", "RANDOM"],
+        'type': 'field_dropdown',
+        'name': 'WHERE',
+        'options': [
+          ['%{BKY_TEXT_CHARAT_FROM_START}', 'FROM_START'],
+          ['%{BKY_TEXT_CHARAT_FROM_END}', 'FROM_END'],
+          ['%{BKY_TEXT_CHARAT_FIRST}', 'FIRST'],
+          ['%{BKY_TEXT_CHARAT_LAST}', 'LAST'],
+          ['%{BKY_TEXT_CHARAT_RANDOM}', 'RANDOM'],
         ],
       },
     ],
-    "output": "String",
-    "style": "text_blocks",
-    "helpUrl": "%{BKY_TEXT_CHARAT_HELPURL}",
-    "inputsInline": true,
-    "mutator": "text_charAt_mutator",
+    'output': 'String',
+    'style': 'text_blocks',
+    'helpUrl': '%{BKY_TEXT_CHARAT_HELPURL}',
+    'inputsInline': true,
+    'mutator': 'text_charAt_mutator',
   },
 ]);
 
@@ -250,14 +257,12 @@ Blocks['text_getSubstring'] = {
     ];
     this.setHelpUrl(Msg['TEXT_GET_SUBSTRING_HELPURL']);
     this.setStyle('text_blocks');
-    this.appendValueInput('STRING')
-        .setCheck('String')
-        .appendField(Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
+    this.appendValueInput('STRING').setCheck('String').appendField(
+        Msg['TEXT_GET_SUBSTRING_INPUT_IN_TEXT']);
     this.appendDummyInput('AT1');
     this.appendDummyInput('AT2');
     if (Msg['TEXT_GET_SUBSTRING_TAIL']) {
-      this.appendDummyInput('TAIL')
-          .appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
+      this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
     this.setInputsInline(true);
     this.setOutput(true, 'String');
@@ -323,8 +328,7 @@ Blocks['text_getSubstring'] = {
     // Move tail, if present, to end of block.
     if (n === 2 && Msg['TEXT_GET_SUBSTRING_TAIL']) {
       this.removeInput('TAIL', true);
-      this.appendDummyInput('TAIL')
-          .appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
+      this.appendDummyInput('TAIL').appendField(Msg['TEXT_GET_SUBSTRING_TAIL']);
     }
     const menu = new FieldDropdown(
         this['WHERE_OPTIONS_' + n],
@@ -349,8 +353,7 @@ Blocks['text_getSubstring'] = {
           return undefined;
         });
 
-    this.getInput('AT' + n)
-        .appendField(menu, 'WHERE' + n);
+    this.getInput('AT' + n).appendField(menu, 'WHERE' + n);
     if (n === 1) {
       this.moveInputBefore('AT1', 'AT2');
       if (this.getInput('ORDINAL1')) {
@@ -373,9 +376,8 @@ Blocks['text_changeCase'] = {
     ];
     this.setHelpUrl(Msg['TEXT_CHANGECASE_HELPURL']);
     this.setStyle('text_blocks');
-    this.appendValueInput('TEXT')
-        .setCheck('String')
-        .appendField(new FieldDropdown(OPERATORS), 'CASE');
+    this.appendValueInput('TEXT').setCheck('String').appendField(
+        new FieldDropdown(OPERATORS), 'CASE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_CHANGECASE_TOOLTIP']);
   },
@@ -394,9 +396,8 @@ Blocks['text_trim'] = {
     ];
     this.setHelpUrl(Msg['TEXT_TRIM_HELPURL']);
     this.setStyle('text_blocks');
-    this.appendValueInput('TEXT')
-        .setCheck('String')
-        .appendField(new FieldDropdown(OPERATORS), 'MODE');
+    this.appendValueInput('TEXT').setCheck('String').appendField(
+        new FieldDropdown(OPERATORS), 'MODE');
     this.setOutput(true, 'String');
     this.setTooltip(Msg['TEXT_TRIM_TOOLTIP']);
   },
@@ -409,18 +410,18 @@ Blocks['text_print'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Msg['TEXT_PRINT_TITLE'],
-      "args0": [
+      'message0': Msg['TEXT_PRINT_TITLE'],
+      'args0': [
         {
-          "type": "input_value",
-          "name": "TEXT",
+          'type': 'input_value',
+          'name': 'TEXT',
         },
       ],
-      "previousStatement": null,
-      "nextStatement": null,
-      "style": "text_blocks",
-      "tooltip": Msg['TEXT_PRINT_TOOLTIP'],
-      "helpUrl": Msg['TEXT_PRINT_HELPURL'],
+      'previousStatement': null,
+      'nextStatement': null,
+      'style': 'text_blocks',
+      'tooltip': Msg['TEXT_PRINT_TOOLTIP'],
+      'helpUrl': Msg['TEXT_PRINT_HELPURL'],
     });
   },
 };
@@ -480,8 +481,7 @@ Blocks['text_prompt_ext'] = {
     const dropdown = new FieldDropdown(TYPES, function(newOp) {
       thisBlock.updateType_(newOp);
     });
-    this.appendValueInput('TEXT')
-        .appendField(dropdown, 'TYPE');
+    this.appendValueInput('TEXT').appendField(dropdown, 'TYPE');
     this.setOutput(true, 'String');
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
@@ -538,24 +538,24 @@ Blocks['text_count'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Msg['TEXT_COUNT_MESSAGE0'],
-      "args0": [
+      'message0': Msg['TEXT_COUNT_MESSAGE0'],
+      'args0': [
         {
-          "type": "input_value",
-          "name": "SUB",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'SUB',
+          'check': 'String',
         },
         {
-          "type": "input_value",
-          "name": "TEXT",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'TEXT',
+          'check': 'String',
         },
       ],
-      "output": "Number",
-      "inputsInline": true,
-      "style": "text_blocks",
-      "tooltip": Msg['TEXT_COUNT_TOOLTIP'],
-      "helpUrl": Msg['TEXT_COUNT_HELPURL'],
+      'output': 'Number',
+      'inputsInline': true,
+      'style': 'text_blocks',
+      'tooltip': Msg['TEXT_COUNT_TOOLTIP'],
+      'helpUrl': Msg['TEXT_COUNT_HELPURL'],
     });
   },
 };
@@ -567,29 +567,29 @@ Blocks['text_replace'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Msg['TEXT_REPLACE_MESSAGE0'],
-      "args0": [
+      'message0': Msg['TEXT_REPLACE_MESSAGE0'],
+      'args0': [
         {
-          "type": "input_value",
-          "name": "FROM",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'FROM',
+          'check': 'String',
         },
         {
-          "type": "input_value",
-          "name": "TO",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'TO',
+          'check': 'String',
         },
         {
-          "type": "input_value",
-          "name": "TEXT",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'TEXT',
+          'check': 'String',
         },
       ],
-      "output": "String",
-      "inputsInline": true,
-      "style": "text_blocks",
-      "tooltip": Msg['TEXT_REPLACE_TOOLTIP'],
-      "helpUrl": Msg['TEXT_REPLACE_HELPURL'],
+      'output': 'String',
+      'inputsInline': true,
+      'style': 'text_blocks',
+      'tooltip': Msg['TEXT_REPLACE_TOOLTIP'],
+      'helpUrl': Msg['TEXT_REPLACE_HELPURL'],
     });
   },
 };
@@ -601,19 +601,19 @@ Blocks['text_reverse'] = {
    */
   init: function() {
     this.jsonInit({
-      "message0": Msg['TEXT_REVERSE_MESSAGE0'],
-      "args0": [
+      'message0': Msg['TEXT_REVERSE_MESSAGE0'],
+      'args0': [
         {
-          "type": "input_value",
-          "name": "TEXT",
-          "check": "String",
+          'type': 'input_value',
+          'name': 'TEXT',
+          'check': 'String',
         },
       ],
-      "output": "String",
-      "inputsInline": true,
-      "style": "text_blocks",
-      "tooltip": Msg['TEXT_REVERSE_TOOLTIP'],
-      "helpUrl": Msg['TEXT_REVERSE_HELPURL'],
+      'output': 'String',
+      'inputsInline': true,
+      'style': 'text_blocks',
+      'tooltip': Msg['TEXT_REVERSE_TOOLTIP'],
+      'helpUrl': Msg['TEXT_REVERSE_HELPURL'],
     });
   },
 };
@@ -625,25 +625,27 @@ Blocks['text_reverse'] = {
  */
 const QUOTE_IMAGE_MIXIN = {
   /**
-   * Image data URI of an LTR opening double quote (same as RTL closing double quote).
+   * Image data URI of an LTR opening double quote (same as RTL closing double
+   * quote).
    * @readonly
    */
   QUOTE_IMAGE_LEFT_DATAURI:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
-    'n0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY' +
-    '1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1' +
-    'HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMf' +
-    'z9AylsaRRgGzvZAAAAAElFTkSuQmCC',
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
+      'n0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY' +
+      '1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1' +
+      'HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMf' +
+      'z9AylsaRRgGzvZAAAAAElFTkSuQmCC',
   /**
-   * Image data URI of an LTR closing double quote (same as RTL opening double quote).
+   * Image data URI of an LTR closing double quote (same as RTL opening double
+   * quote).
    * @readonly
    */
   QUOTE_IMAGE_RIGHT_DATAURI:
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
-    'qUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhg' +
-    'gONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvB' +
-    'O3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5Aos' +
-    'lLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
+      'qUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhg' +
+      'gONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvB' +
+      'O3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5Aos' +
+      'lLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
   /**
    * Pixel width of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
    * @readonly
@@ -670,7 +672,8 @@ const QUOTE_IMAGE_MIXIN = {
         }
       }
     }
-    console.warn('field named "' + fieldName + '" not found in ' + this.toDevString());
+    console.warn(
+        'field named "' + fieldName + '" not found in ' + this.toDevString());
   },
 
   /**
@@ -683,13 +686,10 @@ const QUOTE_IMAGE_MIXIN = {
    */
   newQuote_: function(open) {
     const isLeft = this.RTL ? !open : open;
-    const dataUri = isLeft ?
-      this.QUOTE_IMAGE_LEFT_DATAURI :
-      this.QUOTE_IMAGE_RIGHT_DATAURI;
+    const dataUri =
+        isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
     return new FieldImage(
-        dataUri,
-        this.QUOTE_IMAGE_WIDTH,
-        this.QUOTE_IMAGE_HEIGHT,
+        dataUri, this.QUOTE_IMAGE_WIDTH, this.QUOTE_IMAGE_HEIGHT,
         isLeft ? '\u201C' : '\u201D');
   },
 };
@@ -777,8 +777,8 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     const connections = [];
     while (itemBlock && !itemBlock.isInsertionMarker()) {
       connections.push(itemBlock.valueConnection_);
-      itemBlock = itemBlock.nextConnection &&
-          itemBlock.nextConnection.targetBlock();
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -826,8 +826,7 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        const input = this.appendValueInput('ADD' + i)
-            .setAlign(Align.RIGHT);
+        const input = this.appendValueInput('ADD' + i).setAlign(Align.RIGHT);
         if (i === 0) {
           input.appendField(Msg['TEXT_JOIN_TITLE_CREATEWITH']);
         }
@@ -855,9 +854,9 @@ const TEXT_JOIN_EXTENSION = function() {
 };
 
 // Update the tooltip of 'text_append' block to reference the variable.
-Extensions.register('text_append_tooltip',
-    Extensions.buildTooltipWithFieldText(
-        '%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR'));
+Extensions.register(
+    'text_append_tooltip',
+    Extensions.buildTooltipWithFieldText('%{BKY_TEXT_APPEND_TOOLTIP}', 'VAR'));
 
 /**
  * Update the tooltip of 'text_append' block to reference the variable.
@@ -867,8 +866,8 @@ const TEXT_INDEXOF_TOOLTIP_EXTENSION = function() {
   // Assign 'this' to a variable for use in the tooltip closure below.
   const thisBlock = this;
   this.setTooltip(function() {
-    return Msg['TEXT_INDEXOF_TOOLTIP'].replace('%1',
-        thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
+    return Msg['TEXT_INDEXOF_TOOLTIP'].replace(
+        '%1', thisBlock.workspace.options.oneBasedIndex ? '0' : '-1');
   });
 };
 
@@ -922,14 +921,13 @@ const TEXT_CHARAT_MUTATOR_MIXIN = {
     if (isAt) {
       this.appendValueInput('AT').setCheck('Number');
       if (Msg['ORDINAL_NUMBER_SUFFIX']) {
-        this.appendDummyInput('ORDINAL')
-            .appendField(Msg['ORDINAL_NUMBER_SUFFIX']);
+        this.appendDummyInput('ORDINAL').appendField(
+            Msg['ORDINAL_NUMBER_SUFFIX']);
       }
     }
     if (Msg['TEXT_CHARAT_TAIL']) {
       this.removeInput('TAIL', true);
-      this.appendDummyInput('TAIL')
-          .appendField(Msg['TEXT_CHARAT_TAIL']);
+      this.appendDummyInput('TAIL').appendField(Msg['TEXT_CHARAT_TAIL']);
     }
 
     this.isAt_ = isAt;
@@ -943,17 +941,17 @@ const TEXT_CHARAT_MUTATOR_MIXIN = {
 const TEXT_CHARAT_EXTENSION = function() {
   const dropdown = this.getField('WHERE');
   dropdown.setValidator(
-    /**
-     * @param {*} value The input value.
-     * @this {FieldDropdown}
-     */
-    function(value) {
-      const newAt = (value === 'FROM_START') || (value === 'FROM_END');
-      if (newAt !== this.isAt_) {
-        const block = this.getSourceBlock();
-        block.updateAt_(newAt);
-      }
-    });
+      /**
+       * @param {*} value The input value.
+       * @this {FieldDropdown}
+       */
+      function(value) {
+        const newAt = (value === 'FROM_START') || (value === 'FROM_END');
+        if (newAt !== this.isAt_) {
+          const block = this.getSourceBlock();
+          block.updateAt_(newAt);
+        }
+      });
   this.updateAt_(true);
   // Assign 'this' to a variable for use in the tooltip closure below.
   const thisBlock = this;
@@ -965,24 +963,21 @@ const TEXT_CHARAT_EXTENSION = function() {
           Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
           Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
       if (msg) {
-        tooltip += '  ' + msg.replace('%1',
-            thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        tooltip += '  ' +
+            msg.replace(
+                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
       }
     }
     return tooltip;
   });
 };
 
-Extensions.register('text_indexOf_tooltip',
-    TEXT_INDEXOF_TOOLTIP_EXTENSION);
+Extensions.register('text_indexOf_tooltip', TEXT_INDEXOF_TOOLTIP_EXTENSION);
 
-Extensions.register('text_quotes',
-    TEXT_QUOTES_EXTENSION);
+Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION);
 
-Extensions.registerMutator('text_join_mutator',
-    TEXT_JOIN_MUTATOR_MIXIN,
-    TEXT_JOIN_EXTENSION);
+Extensions.registerMutator(
+    'text_join_mutator', TEXT_JOIN_MUTATOR_MIXIN, TEXT_JOIN_EXTENSION);
 
-Extensions.registerMutator('text_charAt_mutator',
-    TEXT_CHARAT_MUTATOR_MIXIN,
-    TEXT_CHARAT_EXTENSION);
+Extensions.registerMutator(
+    'text_charAt_mutator', TEXT_CHARAT_MUTATOR_MIXIN, TEXT_CHARAT_EXTENSION);

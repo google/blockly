@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Lua.math');
+goog.module('Blockly.Lua.math');
 
 goog.require('Blockly.Lua');
 

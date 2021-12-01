@@ -728,6 +728,7 @@ exports.zelos = zelos;
 // accessors are nonconfigurable (which is good, as otherwise one
 // accessors on one copy would call get/set functions on the other
 // copy!)
+/* eslint-disable no-undef */
 if (!COMPILED && typeof globalThis['Blockly'] === 'object' &&
     globalThis['Blockly'] !== exports) {
   const descriptors = Object.getOwnPropertyDescriptors(exports);

@@ -17,8 +17,8 @@ const {NameType} = goog.require('Blockly.Names');
 
 Dart['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  const funcName = Dart.nameDB_.getName(block.getFieldValue('NAME'),
-      NameType.PROCEDURE);
+  const funcName =
+      Dart.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
   if (Dart.STATEMENT_PREFIX) {
     xfix1 += Dart.injectId(Dart.STATEMENT_PREFIX, block);
@@ -32,12 +32,10 @@ Dart['procedures_defreturn'] = function(block) {
   let loopTrap = '';
   if (Dart.INFINITE_LOOP_TRAP) {
     loopTrap = Dart.prefixLines(
-        Dart.injectId(Dart.INFINITE_LOOP_TRAP, block),
-        Dart.INDENT);
+        Dart.injectId(Dart.INFINITE_LOOP_TRAP, block), Dart.INDENT);
   }
   const branch = Dart.statementToCode(block, 'STACK');
-  let returnValue = Dart.valueToCode(block, 'RETURN',
-      Dart.ORDER_NONE) || '';
+  let returnValue = Dart.valueToCode(block, 'RETURN', Dart.ORDER_NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -50,8 +48,7 @@ Dart['procedures_defreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Dart.nameDB_.getName(variables[i],
-        NameType.VARIABLE);
+    args[i] = Dart.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
@@ -67,13 +64,12 @@ Dart['procedures_defnoreturn'] = Dart['procedures_defreturn'];
 
 Dart['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  const funcName = Dart.nameDB_.getName(block.getFieldValue('NAME'),
-      NameType.PROCEDURE);
+  const funcName =
+      Dart.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Dart.valueToCode(block, 'ARG' + i,
-        Dart.ORDER_NONE) || 'null';
+    args[i] = Dart.valueToCode(block, 'ARG' + i, Dart.ORDER_NONE) || 'null';
   }
   let code = funcName + '(' + args.join(', ') + ')';
   return [code, Dart.ORDER_UNARY_POSTFIX];
@@ -89,19 +85,17 @@ Dart['procedures_callnoreturn'] = function(block) {
 
 Dart['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  const condition = Dart.valueToCode(block, 'CONDITION',
-      Dart.ORDER_NONE) || 'false';
+  const condition =
+      Dart.valueToCode(block, 'CONDITION', Dart.ORDER_NONE) || 'false';
   let code = 'if (' + condition + ') {\n';
   if (Dart.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
     code += Dart.prefixLines(
-        Dart.injectId(Dart.STATEMENT_SUFFIX, block),
-        Dart.INDENT);
+        Dart.injectId(Dart.STATEMENT_SUFFIX, block), Dart.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Dart.valueToCode(block, 'VALUE',
-        Dart.ORDER_NONE) || 'null';
+    const value = Dart.valueToCode(block, 'VALUE', Dart.ORDER_NONE) || 'null';
     code += Dart.INDENT + 'return ' + value + ';\n';
   } else {
     code += Dart.INDENT + 'return;\n';

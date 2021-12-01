@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Lua.logic');
+goog.module('Blockly.Lua.logic');
 
 goog.require('Blockly.Lua');
 

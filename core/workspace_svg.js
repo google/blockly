@@ -1347,6 +1347,16 @@ WorkspaceSvg.prototype.resetDragSurface = function() {
     return;
   }
 
+  // This can happen if the user starts a drag, mouses up outside of the
+  // document where the mouseup listener is registered (e.g. outside of an
+  // iframe) and then moves the mouse back in the workspace and
+  // hover directly over the scrollbar, click once on the scrollbar,
+  // and then click on the workspace.
+  if (!this.isDragSurfaceActive_) {
+    console.warn('Tried to reset workspace drag surface twice.');
+    return;
+  }
+
   this.isDragSurfaceActive_ = false;
 
   const trans = this.workspaceDragSurface_.getSurfaceTranslation();

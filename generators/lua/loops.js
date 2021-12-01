@@ -32,9 +32,8 @@ const CONTINUE_STATEMENT = 'goto continue\n';
  *
  * @param {string} branch Generated code of the loop body
  * @return {string} Generated label or '' if unnecessary
- * @private
  */
-Lua.addContinueLabel_ = function(branch) {
+const addContinueLabel = function(branch) {
   if (branch.indexOf(CONTINUE_STATEMENT) !== -1) {
     // False positives are possible (e.g. a string literal), but are harmless.
     return branch + Lua.INDENT + '::continue::\n';
@@ -60,7 +59,7 @@ Lua['controls_repeat_ext'] = function(block) {
   }
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
-  branch = Lua.addContinueLabel_(branch);
+  branch = addContinueLabel(branch);
   const loopVar = Lua.nameDB_.getDistinctName('count', NameType.VARIABLE);
   const code =
       'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
@@ -78,7 +77,7 @@ Lua['controls_whileUntil'] = function(block) {
       'false';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
-  branch = Lua.addContinueLabel_(branch);
+  branch = addContinueLabel(branch);
   if (until) {
     argument0 = 'not ' + argument0;
   }
@@ -94,7 +93,7 @@ Lua['controls_for'] = function(block) {
   const increment = Lua.valueToCode(block, 'BY', Lua.ORDER_NONE) || '1';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
-  branch = Lua.addContinueLabel_(branch);
+  branch = addContinueLabel(branch);
   let code = '';
   let incValue;
   if (stringUtils.isNumber(startVar) && stringUtils.isNumber(endVar) &&
@@ -132,7 +131,7 @@ Lua['controls_forEach'] = function(block) {
   const argument0 = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
   let branch = Lua.statementToCode(block, 'DO');
   branch = Lua.addLoopTrap(branch, block);
-  branch = Lua.addContinueLabel_(branch);
+  branch = addContinueLabel(branch);
   const code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
       branch + 'end\n';
   return code;

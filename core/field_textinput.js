@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.FieldTextInput');
 
-const Msg = goog.require('Blockly.Msg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -32,6 +31,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */

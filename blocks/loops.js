@@ -17,12 +17,12 @@ const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
-const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
 const common = goog.require('Blockly.common');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Msg} = goog.require('Blockly.Msg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */

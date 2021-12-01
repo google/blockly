@@ -14,10 +14,10 @@
  */
 goog.module('Blockly.utils.parsing');
 
-const Msg = goog.require('Blockly.Msg');
 const colourUtils = goog.require('Blockly.utils.colour');
 const internalConstants = goog.require('Blockly.internalConstants');
 const stringUtils = goog.require('Blockly.utils.string');
+const {Msg} = goog.require('Blockly.Msg');
 
 
 /**

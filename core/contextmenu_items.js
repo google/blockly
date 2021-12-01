@@ -16,7 +16,6 @@
 goog.module('Blockly.ContextMenuItems');
 
 const Events = goog.require('Blockly.Events');
-const Msg = goog.require('Blockly.Msg');
 const clipboard = goog.require('Blockly.clipboard');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -25,6 +24,7 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const {inputTypes} = goog.require('Blockly.inputTypes');
@@ -324,7 +324,8 @@ const registerDeleteAll = function() {
         deleteNext_(deletableBlocks, eventGroup);
       } else {
         dialog.confirm(
-            Msg['DELETE_ALL_BLOCKS'].replace('%1', deletableBlocks.length),
+            Msg['DELETE_ALL_BLOCKS'].replace(
+                '%1', String(deletableBlocks.length)),
             function(ok) {
               if (ok) {
                 deleteNext_(deletableBlocks, eventGroup);

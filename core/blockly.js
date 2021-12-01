@@ -124,6 +124,7 @@ const {IRegistrableField} = goog.require('Blockly.IRegistrableField');
 const {IRegistrable} = goog.require('Blockly.IRegistrable');
 const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
 const {ISelectable} = goog.require('Blockly.ISelectable');
+const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
 const {IStyleable} = goog.require('Blockly.IStyleable');
 const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
 const {IToolbox} = goog.require('Blockly.IToolbox');
@@ -721,6 +722,7 @@ exports.serialization = {
   registry: serializationRegistry,
   variables: serializationVariables,
   workspaces: serializationWorkspaces,
+  ISerializer: ISerializer,
 };
 exports.thrasos = thrasos;
 exports.uiPosition = uiPosition;

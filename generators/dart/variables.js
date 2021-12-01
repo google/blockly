@@ -10,7 +10,8 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.variables');
+goog.module('Blockly.Dart.variables');
+goog.module.declareLegacyNamespace();
 
 goog.require('Blockly.Dart');
 

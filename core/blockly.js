@@ -183,11 +183,6 @@ goog.require('Blockly.Events.VarCreate');
  */
 exports.VERSION = 'uncompiled';
 
-/**
- * @define {boolean} Overridden to true by the compiler.
- */
-const COMPILED = false;
-
 // Add a getter and setter pair for Blockly.alert, Blockly.confirm,
 // Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
 // compatibility.

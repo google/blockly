@@ -12,7 +12,6 @@
 
 goog.module('Blockly.blocks.texts');
 
-const ConnectionType = goog.require('Blockly.ConnectionType');
 const Extensions = goog.require('Blockly.Extensions');
 const Msg = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
@@ -21,6 +20,7 @@ const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Blocks} = goog.require('Blockly.blocks');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
@@ -425,32 +425,12 @@ Blocks['text_print'] = {
   },
 };
 
-Blocks['text_prompt_ext'] = {
-  /**
-   * Block for prompt function (external message).
-   * @this {Block}
-   */
-  init: function() {
-    const TYPES = [
-      [Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
-      [Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
-    ];
-    this.setHelpUrl(Msg['TEXT_PROMPT_HELPURL']);
-    this.setStyle('text_blocks');
-    // Assign 'this' to a variable for use in the closures below.
-    const thisBlock = this;
-    const dropdown = new FieldDropdown(TYPES, function(newOp) {
-      thisBlock.updateType_(newOp);
-    });
-    this.appendValueInput('TEXT')
-        .appendField(dropdown, 'TYPE');
-    this.setOutput(true, 'String');
-    this.setTooltip(function() {
-      return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
-          Msg['TEXT_PROMPT_TOOLTIP_TEXT'] :
-          Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
-    });
-  },
+
+/**
+ * Common properties for the text_prompt_ext and text_prompt blocks
+ * definitions.
+ */
+const TEXT_PROMPT_COMMON = {
   /**
    * Modify this block to have the correct output type.
    * @param {string} newOp Either 'TEXT' or 'NUMBER'.
@@ -480,6 +460,35 @@ Blocks['text_prompt_ext'] = {
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('type'));
   },
+};
+
+Blocks['text_prompt_ext'] = {
+  ...TEXT_PROMPT_COMMON,
+  /**
+   * Block for prompt function (external message).
+   * @this {Block}
+   */
+  init: function() {
+    const TYPES = [
+      [Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
+      [Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
+    ];
+    this.setHelpUrl(Msg['TEXT_PROMPT_HELPURL']);
+    this.setStyle('text_blocks');
+    // Assign 'this' to a variable for use in the closures below.
+    const thisBlock = this;
+    const dropdown = new FieldDropdown(TYPES, function(newOp) {
+      thisBlock.updateType_(newOp);
+    });
+    this.appendValueInput('TEXT')
+        .appendField(dropdown, 'TYPE');
+    this.setOutput(true, 'String');
+    this.setTooltip(function() {
+      return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
+          Msg['TEXT_PROMPT_TOOLTIP_TEXT'] :
+          Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
+    });
+  },
 
   // This block does not need JSO serialization hooks (saveExtraState and
   // loadExtraState) because the state of this object is already encoded in the
@@ -488,6 +497,7 @@ Blocks['text_prompt_ext'] = {
 };
 
 Blocks['text_prompt'] = {
+  ...TEXT_PROMPT_COMMON,
   /**
    * Block for prompt function (internal message).
    * The 'text_prompt_ext' block is preferred as it is more flexible.
@@ -519,9 +529,6 @@ Blocks['text_prompt'] = {
           Msg['TEXT_PROMPT_TOOLTIP_NUMBER'];
     });
   },
-  updateType_: Blocks['text_prompt_ext'].updateType_,
-  mutationToDom: Blocks['text_prompt_ext'].mutationToDom,
-  domToMutation: Blocks['text_prompt_ext'].domToMutation,
 };
 
 Blocks['text_count'] = {

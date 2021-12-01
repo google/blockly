@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Lua.variables');
+goog.module('Blockly.Lua.variables');
 
 goog.require('Blockly.Lua');
 

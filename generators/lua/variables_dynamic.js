@@ -6,13 +6,13 @@
 
 /**
  * @fileoverview Generating Lua for dynamic variable blocks.
- * @suppress {extraRequire}
  */
 'use strict';
 
-goog.provide('Blockly.Lua.variablesDynamic');
+goog.module('Blockly.Lua.variablesDynamic');
 
 goog.require('Blockly.Lua');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Lua.variables');
 
 

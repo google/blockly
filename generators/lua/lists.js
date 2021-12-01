@@ -105,7 +105,6 @@ Lua['lists_getIndex'] = function(block) {
   const mode = block.getFieldValue('MODE') || 'GET';
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const list = Lua.valueToCode(block, 'VALUE', Lua.ORDER_HIGH) || '({})';
-  const getIndex_ = getIndex_;
 
   // If `list` would be evaluated more than once (which is the case for LAST,
   // FROM_END, and RANDOM) and is non-trivial, make sure to access it only once.
@@ -119,7 +118,7 @@ Lua['lists_getIndex'] = function(block) {
       let at = Lua.valueToCode(block, 'AT', atOrder) || '1';
       const listVar =
           Lua.nameDB_.getDistinctName('tmp_list', NameType.VARIABLE);
-      at = getIndex_(listVar, where, at);
+      at = getListIndex(listVar, where, at);
       const code = listVar + ' = ' + list + '\n' +
           'table.remove(' + listVar + ', ' + at + ')\n';
       return code;
@@ -163,7 +162,7 @@ Lua['lists_getIndex'] = function(block) {
         Lua.ORDER_ADDITIVE :
         Lua.ORDER_NONE;
     let at = Lua.valueToCode(block, 'AT', atOrder) || '1';
-    at = getIndex_(list, where, at);
+    at = getListIndex(list, where, at);
     if (mode === 'GET') {
       const code = list + '[' + at + ']';
       return [code, Lua.ORDER_HIGH];
@@ -186,7 +185,6 @@ Lua['lists_setIndex'] = function(block) {
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const at = Lua.valueToCode(block, 'AT', Lua.ORDER_ADDITIVE) || '1';
   const value = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || 'None';
-  const getIndex_ = getIndex_;
 
   let code = '';
   // If `list` would be evaluated more than once (which is the case for LAST,
@@ -200,13 +198,13 @@ Lua['lists_setIndex'] = function(block) {
     list = listVar;
   }
   if (mode === 'SET') {
-    code += list + '[' + getIndex_(list, where, at) + '] = ' + value;
+    code += list + '[' + getListIndex(list, where, at) + '] = ' + value;
   } else {  // `mode` === 'INSERT'
     // LAST is a special case, because we want to insert
     // *after* not *before*, the existing last element.
     code += 'table.insert(' + list + ', ' +
-        (getIndex_(list, where, at) + (where === 'LAST' ? ' + 1' : '')) + ', ' +
-        value + ')';
+        (getListIndex(list, where, at) + (where === 'LAST' ? ' + 1' : '')) +
+        ', ' + value + ')';
   }
   return code + '\n';
 };
@@ -218,7 +216,6 @@ Lua['lists_getSublist'] = function(block) {
   const where2 = block.getFieldValue('WHERE2');
   const at1 = Lua.valueToCode(block, 'AT1', Lua.ORDER_NONE) || '1';
   const at2 = Lua.valueToCode(block, 'AT2', Lua.ORDER_NONE) || '1';
-  const getIndex_ = getIndex_;
 
   const functionName = Lua.provideFunction_(
       'list_sublist_' + where1.toLowerCase() + '_' + where2.toLowerCase(), [
@@ -231,8 +228,8 @@ Lua['lists_getSublist'] = function(block) {
                                                                   '') +
             ')',
         '  local t = {}',
-        '  local start = ' + getIndex_('source', where1, 'at1'),
-        '  local finish = ' + getIndex_('source', where2, 'at2'),
+        '  local start = ' + getListIndex('source', where1, 'at1'),
+        '  local finish = ' + getListIndex('source', where2, 'at2'),
         '  for i = start, finish do', '    table.insert(t, source[i])', '  end',
         '  return t', 'end'
       ]);

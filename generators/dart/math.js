@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.math');
+goog.module('Blockly.Dart.math');
 
 goog.require('Blockly.Dart');
 

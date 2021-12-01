@@ -24,24 +24,19 @@ Dart['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = Dart.valueToCode(block, 'TIMES',
-        Dart.ORDER_ASSIGNMENT) || '0';
+    repeats = Dart.valueToCode(block, 'TIMES', Dart.ORDER_ASSIGNMENT) || '0';
   }
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
   let code = '';
-  const loopVar = Dart.nameDB_.getDistinctName(
-      'count', NameType.VARIABLE);
+  const loopVar = Dart.nameDB_.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
-    endVar = Dart.nameDB_.getDistinctName(
-        'repeat_end', NameType.VARIABLE);
+    endVar = Dart.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
   }
-  code += 'for (int ' + loopVar + ' = 0; ' +
-      loopVar + ' < ' + endVar + '; ' +
-      loopVar + '++) {\n' +
-      branch + '}\n';
+  code += 'for (int ' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
+      loopVar + '++) {\n' + branch + '}\n';
   return code;
 };
 
@@ -50,9 +45,10 @@ Dart['controls_repeat'] = Dart['controls_repeat_ext'];
 Dart['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
-  let argument0 = Dart.valueToCode(block, 'BOOL',
-      until ? Dart.ORDER_UNARY_PREFIX :
-      Dart.ORDER_NONE) || 'false';
+  let argument0 =
+      Dart.valueToCode(
+          block, 'BOOL', until ? Dart.ORDER_UNARY_PREFIX : Dart.ORDER_NONE) ||
+      'false';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
   if (until) {
@@ -63,14 +59,12 @@ Dart['controls_whileUntil'] = function(block) {
 
 Dart['controls_for'] = function(block) {
   // For loop.
-  const variable0 = Dart.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = Dart.valueToCode(block, 'FROM',
-      Dart.ORDER_ASSIGNMENT) || '0';
-  const argument1 = Dart.valueToCode(block, 'TO',
-      Dart.ORDER_ASSIGNMENT) || '0';
-  const increment = Dart.valueToCode(block, 'BY',
-      Dart.ORDER_ASSIGNMENT) || '1';
+  const variable0 =
+      Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 =
+      Dart.valueToCode(block, 'FROM', Dart.ORDER_ASSIGNMENT) || '0';
+  const argument1 = Dart.valueToCode(block, 'TO', Dart.ORDER_ASSIGNMENT) || '0';
+  const increment = Dart.valueToCode(block, 'BY', Dart.ORDER_ASSIGNMENT) || '1';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
   let code;
@@ -78,9 +72,8 @@ Dart['controls_for'] = function(block) {
       stringUtils.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
-    code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
-        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
-        variable0;
+    code = 'for (' + variable0 + ' = ' + argument0 + '; ' + variable0 +
+        (up ? ' <= ' : ' >= ') + argument1 + '; ' + variable0;
     const step = Math.abs(Number(increment));
     if (step === 1) {
       code += up ? '++' : '--';
@@ -93,20 +86,20 @@ Dart['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
-      startVar = Dart.nameDB_.getDistinctName(
-          variable0 + '_start', NameType.VARIABLE);
+      startVar =
+          Dart.nameDB_.getDistinctName(variable0 + '_start', NameType.VARIABLE);
       code += 'var ' + startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
-      endVar = Dart.nameDB_.getDistinctName(
-          variable0 + '_end', NameType.VARIABLE);
+      endVar =
+          Dart.nameDB_.getDistinctName(variable0 + '_end', NameType.VARIABLE);
       code += 'var ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    const incVar = Dart.nameDB_.getDistinctName(
-        variable0 + '_inc', NameType.VARIABLE);
+    const incVar =
+        Dart.nameDB_.getDistinctName(variable0 + '_inc', NameType.VARIABLE);
     code += 'num ' + incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
@@ -116,11 +109,9 @@ Dart['controls_for'] = function(block) {
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
     code += Dart.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
-    code += 'for (' + variable0 + ' = ' + startVar + '; ' +
-        incVar + ' >= 0 ? ' +
-        variable0 + ' <= ' + endVar + ' : ' +
-        variable0 + ' >= ' + endVar + '; ' +
-        variable0 + ' += ' + incVar + ') {\n' +
+    code += 'for (' + variable0 + ' = ' + startVar + '; ' + incVar +
+        ' >= 0 ? ' + variable0 + ' <= ' + endVar + ' : ' + variable0 +
+        ' >= ' + endVar + '; ' + variable0 + ' += ' + incVar + ') {\n' +
         branch + '}\n';
   }
   return code;
@@ -128,14 +119,14 @@ Dart['controls_for'] = function(block) {
 
 Dart['controls_forEach'] = function(block) {
   // For each loop.
-  const variable0 = Dart.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = Dart.valueToCode(block, 'LIST',
-      Dart.ORDER_ASSIGNMENT) || '[]';
+  const variable0 =
+      Dart.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 =
+      Dart.valueToCode(block, 'LIST', Dart.ORDER_ASSIGNMENT) || '[]';
   let branch = Dart.statementToCode(block, 'DO');
   branch = Dart.addLoopTrap(branch, block);
-  const code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
-      branch + '}\n';
+  const code =
+      'for (var ' + variable0 + ' in ' + argument0 + ') {\n' + branch + '}\n';
   return code;
 };
 

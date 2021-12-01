@@ -17,8 +17,8 @@ const {NameType} = goog.require('Blockly.Names');
 
 Lua['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  const funcName = Lua.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName =
+      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
   if (Lua.STATEMENT_PREFIX) {
     xfix1 += Lua.injectId(Lua.STATEMENT_PREFIX, block);
@@ -32,12 +32,10 @@ Lua['procedures_defreturn'] = function(block) {
   let loopTrap = '';
   if (Lua.INFINITE_LOOP_TRAP) {
     loopTrap = Lua.prefixLines(
-        Lua.injectId(Lua.INFINITE_LOOP_TRAP, block),
-        Lua.INDENT);
+        Lua.injectId(Lua.INFINITE_LOOP_TRAP, block), Lua.INDENT);
   }
   let branch = Lua.statementToCode(block, 'STACK');
-  let returnValue = Lua.valueToCode(block, 'RETURN',
-      Lua.ORDER_NONE) || '';
+  let returnValue = Lua.valueToCode(block, 'RETURN', Lua.ORDER_NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -51,11 +49,10 @@ Lua['procedures_defreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Lua.nameDB_.getName(variables[i],
-        NameType.VARIABLE);
+    args[i] = Lua.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
-  let code = 'function ' + funcName + '(' + args.join(', ') + ')\n' +
-      xfix1 + loopTrap + branch + xfix2 + returnValue + 'end\n';
+  let code = 'function ' + funcName + '(' + args.join(', ') + ')\n' + xfix1 +
+      loopTrap + branch + xfix2 + returnValue + 'end\n';
   code = Lua.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Lua.definitions_['%' + funcName] = code;
@@ -64,18 +61,16 @@ Lua['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Lua['procedures_defnoreturn'] =
-    Lua['procedures_defreturn'];
+Lua['procedures_defnoreturn'] = Lua['procedures_defreturn'];
 
 Lua['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  const funcName = Lua.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName =
+      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Lua.valueToCode(block, 'ARG' + i,
-        Lua.ORDER_NONE) || 'nil';
+    args[i] = Lua.valueToCode(block, 'ARG' + i, Lua.ORDER_NONE) || 'nil';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Lua.ORDER_HIGH];
@@ -91,19 +86,17 @@ Lua['procedures_callnoreturn'] = function(block) {
 
 Lua['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  const condition = Lua.valueToCode(block, 'CONDITION',
-      Lua.ORDER_NONE) || 'false';
+  const condition =
+      Lua.valueToCode(block, 'CONDITION', Lua.ORDER_NONE) || 'false';
   let code = 'if ' + condition + ' then\n';
   if (Lua.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    code += Lua.prefixLines(
-        Lua.injectId(Lua.STATEMENT_SUFFIX, block),
-        Lua.INDENT);
+    code +=
+        Lua.prefixLines(Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Lua.valueToCode(block, 'VALUE',
-        Lua.ORDER_NONE) || 'nil';
+    const value = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || 'nil';
     code += Lua.INDENT + 'return ' + value + '\n';
   } else {
     code += Lua.INDENT + 'return\n';

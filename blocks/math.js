@@ -6,20 +6,30 @@
 
 /**
  * @fileoverview Math blocks for Blockly.
- * @suppress {extraRequire|missingRequire|checkTypes}
+ * @suppress {checkTypes}
  */
 'use strict';
 
 goog.module('Blockly.blocks.math');
 
-goog.require('Blockly');
-goog.require('Blockly.FieldDropdown');
+const Extensions = goog.require('Blockly.Extensions');
+/* eslint-disable-next-line no-unused-vars */
+const xmlUtils = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+// N.B.: Blockly.FieldDropdown needed for type AND side-effects.
+/* eslint-disable-next-line no-unused-vars */
+const FieldDropdown = goog.require('Blockly.FieldDropdown');
+const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldNumber');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldVariable');
 
 
-Blockly.defineBlocksWithJsonArray([
+defineBlocksWithJsonArray([
   // Block for numeric value.
   {
     "type": "math_number",
@@ -378,7 +388,7 @@ Blockly.defineBlocksWithJsonArray([
 /**
  * Mapping of math block OP value to tooltip message for blocks
  * math_arithmetic, math_simple, math_trig, and math_on_lists.
- * @see {Blockly.Extensions#buildTooltipForDropdown}
+ * @see {Extensions#buildTooltipForDropdown}
  * @package
  * @readonly
  */
@@ -418,8 +428,8 @@ const TOOLTIPS_BY_OP = {
   'RANDOM': '%{BKY_MATH_ONLIST_TOOLTIP_RANDOM}',
 };
 
-Blockly.Extensions.register('math_op_tooltip',
-    Blockly.Extensions.buildTooltipForDropdown(
+Extensions.register('math_op_tooltip',
+    Extensions.buildTooltipForDropdown(
         'OP', TOOLTIPS_BY_OP));
 
 
@@ -427,7 +437,7 @@ Blockly.Extensions.register('math_op_tooltip',
  * Mixin for mutator functions in the 'math_is_divisibleby_mutator'
  * extension.
  * @mixin
- * @augments Blockly.Block
+ * @augments Block
  * @package
  */
 const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
@@ -435,10 +445,10 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * Create XML to represent whether the 'divisorInput' should be present.
    * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   mutationToDom: function() {
-    const container = Blockly.utils.xml.createElement('mutation');
+    const container = xmlUtils.createElement('mutation');
     const divisorInput = (this.getFieldValue('PROPERTY') === 'DIVISIBLE_BY');
     container.setAttribute('divisor_input', divisorInput);
     return container;
@@ -447,7 +457,7 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * Parse XML to restore the 'divisorInput'.
    * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   domToMutation: function(xmlElement) {
     const divisorInput = (xmlElement.getAttribute('divisor_input') === 'true');
@@ -463,7 +473,7 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
    * Modify this block to have (or not have) an input for 'is divisible by'.
    * @param {boolean} divisorInput True if this block has a divisor input.
    * @private
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   updateShape_: function(divisorInput) {
     // Add or remove a Value Input.
@@ -483,13 +493,13 @@ const IS_DIVISIBLEBY_MUTATOR_MIXIN = {
  * 'math_is_divisibleby_mutator' extension to the 'math_property' block that
  * can update the block shape (add/remove divisor input) based on whether
  * property is "divisible by".
- * @this {Blockly.Block}
+ * @this {Block}
  * @package
  */
 const IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   this.getField('PROPERTY').setValidator(
     /**
-     * @this {Blockly.FieldDropdown}
+     * @this {FieldDropdown}
      * @param {*} option The selected dropdown option.
      */
     function(option) {
@@ -499,20 +509,20 @@ const IS_DIVISIBLE_MUTATOR_EXTENSION = function() {
   );
 };
 
-Blockly.Extensions.registerMutator('math_is_divisibleby_mutator',
+Extensions.registerMutator('math_is_divisibleby_mutator',
     IS_DIVISIBLEBY_MUTATOR_MIXIN,
     IS_DIVISIBLE_MUTATOR_EXTENSION);
 
 // Update the tooltip of 'math_change' block to reference the variable.
-Blockly.Extensions.register('math_change_tooltip',
-    Blockly.Extensions.buildTooltipWithFieldText(
+Extensions.register('math_change_tooltip',
+    Extensions.buildTooltipWithFieldText(
         '%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
 
 /**
  * Mixin with mutator methods to support alternate output based if the
  * 'math_on_list' block uses the 'MODE' operation.
  * @mixin
- * @augments Blockly.Block
+ * @augments Block
  * @package
  * @readonly
  */
@@ -521,7 +531,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
    * Modify this block to have the correct output type.
    * @param {string} newOp Either 'MODE' or some op than returns a number.
    * @private
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   updateType_: function(newOp) {
     if (newOp === 'MODE') {
@@ -534,10 +544,10 @@ const LIST_MODES_MUTATOR_MIXIN = {
    * Create XML to represent the output type.
    * Backwards compatible serialization implementation.
    * @return {!Element} XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   mutationToDom: function() {
-    const container = Blockly.utils.xml.createElement('mutation');
+    const container = xmlUtils.createElement('mutation');
     container.setAttribute('op', this.getFieldValue('OP'));
     return container;
   },
@@ -545,7 +555,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
    * Parse XML to restore the output type.
    * Backwards compatible serialization implementation.
    * @param {!Element} xmlElement XML storage element.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
@@ -560,7 +570,7 @@ const LIST_MODES_MUTATOR_MIXIN = {
 /**
  * Extension to 'math_on_list' blocks that allows support of
  * modes operation (outputs a list of numbers).
- * @this {Blockly.Block}
+ * @this {Block}
  * @package
  */
 const LIST_MODES_MUTATOR_EXTENSION = function() {
@@ -569,6 +579,6 @@ const LIST_MODES_MUTATOR_EXTENSION = function() {
   }.bind(this));
 };
 
-Blockly.Extensions.registerMutator('math_modes_of_list_mutator',
+Extensions.registerMutator('math_modes_of_list_mutator',
     LIST_MODES_MUTATOR_MIXIN,
     LIST_MODES_MUTATOR_EXTENSION);

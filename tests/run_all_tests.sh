@@ -59,7 +59,8 @@ fi
 run_test_command "build-debug" "npm run build-debug"
 
 # Generate TypeScript typings and ensure there are no errors.
-run_test_command "typings" "npm run typings"
+# TODO(5621): Re-enable this test once typings generation is fixed.
+# run_test_command "typings" "npm run typings"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"

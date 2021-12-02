@@ -74,35 +74,34 @@ Python.addReservedWords(
     'issubclass,iter,len,license,list,locals,long,map,max,memoryview,min,' +
     'next,object,oct,open,ord,pow,print,property,quit,range,raw_input,reduce,' +
     'reload,repr,reversed,round,set,setattr,slice,sorted,staticmethod,str,' +
-    'sum,super,tuple,type,unichr,unicode,vars,xrange,zip'
-);
+    'sum,super,tuple,type,unichr,unicode,vars,xrange,zip');
 
 /**
  * Order of operation ENUMs.
  * http://docs.python.org/reference/expressions.html#summary
  */
-Python.ORDER_ATOMIC = 0;            // 0 "" ...
-Python.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
-Python.ORDER_STRING_CONVERSION = 1; // `expression...`
-Python.ORDER_MEMBER = 2.1;          // . []
-Python.ORDER_FUNCTION_CALL = 2.2;   // ()
-Python.ORDER_EXPONENTIATION = 3;    // **
-Python.ORDER_UNARY_SIGN = 4;        // + -
-Python.ORDER_BITWISE_NOT = 4;       // ~
-Python.ORDER_MULTIPLICATIVE = 5;    // * / // %
-Python.ORDER_ADDITIVE = 6;          // + -
-Python.ORDER_BITWISE_SHIFT = 7;     // << >>
-Python.ORDER_BITWISE_AND = 8;       // &
-Python.ORDER_BITWISE_XOR = 9;       // ^
-Python.ORDER_BITWISE_OR = 10;       // |
-Python.ORDER_RELATIONAL = 11;       // in, not in, is, is not,
-                                            //     <, <=, >, >=, <>, !=, ==
-Python.ORDER_LOGICAL_NOT = 12;      // not
-Python.ORDER_LOGICAL_AND = 13;      // and
-Python.ORDER_LOGICAL_OR = 14;       // or
-Python.ORDER_CONDITIONAL = 15;      // if else
-Python.ORDER_LAMBDA = 16;           // lambda
-Python.ORDER_NONE = 99;             // (...)
+Python.ORDER_ATOMIC = 0;             // 0 "" ...
+Python.ORDER_COLLECTION = 1;         // tuples, lists, dictionaries
+Python.ORDER_STRING_CONVERSION = 1;  // `expression...`
+Python.ORDER_MEMBER = 2.1;           // . []
+Python.ORDER_FUNCTION_CALL = 2.2;    // ()
+Python.ORDER_EXPONENTIATION = 3;     // **
+Python.ORDER_UNARY_SIGN = 4;         // + -
+Python.ORDER_BITWISE_NOT = 4;        // ~
+Python.ORDER_MULTIPLICATIVE = 5;     // * / // %
+Python.ORDER_ADDITIVE = 6;           // + -
+Python.ORDER_BITWISE_SHIFT = 7;      // << >>
+Python.ORDER_BITWISE_AND = 8;        // &
+Python.ORDER_BITWISE_XOR = 9;        // ^
+Python.ORDER_BITWISE_OR = 10;        // |
+Python.ORDER_RELATIONAL = 11;        // in, not in, is, is not,
+                                     //     <, <=, >, >=, <>, !=, ==
+Python.ORDER_LOGICAL_NOT = 12;       // not
+Python.ORDER_LOGICAL_AND = 13;       // and
+Python.ORDER_LOGICAL_OR = 14;        // or
+Python.ORDER_CONDITIONAL = 15;       // if else
+Python.ORDER_LAMBDA = 16;            // lambda
+Python.ORDER_NONE = 99;              // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
@@ -165,15 +164,17 @@ Python.init = function(workspace) {
   // Add developer variables (not created or named by the user).
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
-    defvars.push(this.nameDB_.getName(devVarList[i],
-        Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
+    defvars.push(
+        this.nameDB_.getName(devVarList[i], Names.DEVELOPER_VARIABLE_TYPE) +
+        ' = None');
   }
 
   // Add user variables, but only ones that are being used.
   const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
-    defvars.push(this.nameDB_.getName(variables[i].getId(),
-        NameType.VARIABLE) + ' = None');
+    defvars.push(
+        this.nameDB_.getName(variables[i].getId(), NameType.VARIABLE) +
+        ' = None');
   }
 
   this.definitions_['variables'] = defvars.join('\n');
@@ -224,8 +225,7 @@ Python.scrubNakedValue = function(line) {
  */
 Python.quote_ = function(string) {
   // Can't use goog.string.quote since % must also be escaped.
-  string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n');
+  string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n');
 
   // Follow the CPython behaviour of repr() for a non-byte string.
   let quote = '\'';

@@ -24,8 +24,7 @@ Python['controls_repeat_ext'] = function(block) {
     repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
   } else {
     // External number.
-    repeats = Python.valueToCode(block, 'TIMES',
-        Python.ORDER_NONE) || '0';
+    repeats = Python.valueToCode(block, 'TIMES', Python.ORDER_NONE) || '0';
   }
   if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
@@ -34,8 +33,7 @@ Python['controls_repeat_ext'] = function(block) {
   }
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
-  const loopVar = Python.nameDB_.getDistinctName(
-      'count', NameType.VARIABLE);
+  const loopVar = Python.nameDB_.getDistinctName('count', NameType.VARIABLE);
   const code = 'for ' + loopVar + ' in range(' + repeats + '):\n' + branch;
   return code;
 };
@@ -45,9 +43,10 @@ Python['controls_repeat'] = Python['controls_repeat_ext'];
 Python['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
-  let argument0 = Python.valueToCode(block, 'BOOL',
-      until ? Python.ORDER_LOGICAL_NOT :
-      Python.ORDER_NONE) || 'False';
+  let argument0 = Python.valueToCode(
+                      block, 'BOOL',
+                      until ? Python.ORDER_LOGICAL_NOT : Python.ORDER_NONE) ||
+      'False';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
   if (until) {
@@ -58,14 +57,11 @@ Python['controls_whileUntil'] = function(block) {
 
 Python['controls_for'] = function(block) {
   // For loop.
-  const variable0 = Python.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  let argument0 = Python.valueToCode(block, 'FROM',
-      Python.ORDER_NONE) || '0';
-  let argument1 = Python.valueToCode(block, 'TO',
-      Python.ORDER_NONE) || '0';
-  let increment = Python.valueToCode(block, 'BY',
-      Python.ORDER_NONE) || '1';
+  const variable0 =
+      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  let argument0 = Python.valueToCode(block, 'FROM', Python.ORDER_NONE) || '0';
+  let argument1 = Python.valueToCode(block, 'TO', Python.ORDER_NONE) || '0';
+  let increment = Python.valueToCode(block, 'BY', Python.ORDER_NONE) || '1';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
 
@@ -74,28 +70,22 @@ Python['controls_for'] = function(block) {
 
   // Helper functions.
   const defineUpRange = function() {
-    return Python.provideFunction_(
-        'upRange',
-        ['def ' + Python.FUNCTION_NAME_PLACEHOLDER_ +
-            '(start, stop, step):',
-         '  while start <= stop:',
-         '    yield start',
-         '    start += abs(step)']);
+    return Python.provideFunction_('upRange', [
+      'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(start, stop, step):',
+      '  while start <= stop:', '    yield start', '    start += abs(step)'
+    ]);
   };
   const defineDownRange = function() {
-    return Python.provideFunction_(
-        'downRange',
-        ['def ' + Python.FUNCTION_NAME_PLACEHOLDER_ +
-            '(start, stop, step):',
-         '  while start >= stop:',
-         '    yield start',
-         '    start -= abs(step)']);
+    return Python.provideFunction_('downRange', [
+      'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(start, stop, step):',
+      '  while start >= stop:', '    yield start', '    start -= abs(step)'
+    ]);
   };
   // Arguments are legal Python code (numbers or strings returned by scrub()).
   const generateUpDownRange = function(start, end, inc) {
-    return '(' + start + ' <= ' + end + ') and ' +
-        defineUpRange() + '(' + start + ', ' + end + ', ' + inc + ') or ' +
-        defineDownRange() + '(' + start + ', ' + end + ', ' + inc + ')';
+    return '(' + start + ' <= ' + end + ') and ' + defineUpRange() + '(' +
+        start + ', ' + end + ', ' + inc + ') or ' + defineDownRange() + '(' +
+        start + ', ' + end + ', ' + inc + ')';
   };
 
   if (stringUtils.isNumber(argument0) && stringUtils.isNumber(argument1) &&
@@ -174,10 +164,10 @@ Python['controls_for'] = function(block) {
 
 Python['controls_forEach'] = function(block) {
   // For each loop.
-  const variable0 = Python.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = Python.valueToCode(block, 'LIST',
-      Python.ORDER_RELATIONAL) || '[]';
+  const variable0 =
+      Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 =
+      Python.valueToCode(block, 'LIST', Python.ORDER_RELATIONAL) || '[]';
   let branch = Python.statementToCode(block, 'DO');
   branch = Python.addLoopTrap(branch, block) || Python.PASS;
   const code = 'for ' + variable0 + ' in ' + argument0 + ':\n' + branch;

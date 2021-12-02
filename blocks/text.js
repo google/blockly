@@ -77,7 +77,7 @@ defineBlocksWithJsonArray([
         'type': 'field_multilinetext',
         'name': 'TEXT',
         'text': '',
-      }
+      },
     ],
     'output': 'String',
     'style': 'text_blocks',
@@ -107,7 +107,7 @@ defineBlocksWithJsonArray([
       {
         'type': 'input_statement',
         'name': 'STACK',
-      }
+      },
     ],
     'style': 'text_blocks',
     'tooltip': '%{BKY_TEXT_CREATE_JOIN_TOOLTIP}',
@@ -134,7 +134,7 @@ defineBlocksWithJsonArray([
       {
         'type': 'input_value',
         'name': 'TEXT',
-      }
+      },
     ],
     'previousStatement': null,
     'nextStatement': null,

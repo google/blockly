@@ -309,17 +309,17 @@ goog.addDependency('../../generators/php/procedures.js', ['Blockly.PHP.procedure
 goog.addDependency('../../generators/php/text.js', ['Blockly.PHP.texts'], ['Blockly.Names', 'Blockly.PHP'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/php/variables.js', ['Blockly.PHP.variables'], ['Blockly.Names', 'Blockly.PHP'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/php/variables_dynamic.js', ['Blockly.PHP.variablesDynamic'], ['Blockly.PHP', 'Blockly.PHP.variables'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../generators/python.js', ['Blockly.Python'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.Variables', 'Blockly.inputTypes', 'Blockly.utils.string'], {'lang': 'es6'});
+goog.addDependency('../../generators/python.js', ['Blockly.Python'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.Variables', 'Blockly.inputTypes', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/python/all.js', ['Blockly.Python.all'], ['Blockly.Python.colour', 'Blockly.Python.lists', 'Blockly.Python.logic', 'Blockly.Python.loops', 'Blockly.Python.math', 'Blockly.Python.procedures', 'Blockly.Python.texts', 'Blockly.Python.variables', 'Blockly.Python.variablesDynamic'], {'module': 'goog'});
-goog.addDependency('../../generators/python/colour.js', ['Blockly.Python.colour'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/logic.js', ['Blockly.Python.logic'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/math.js', ['Blockly.Python.math'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Python', 'Blockly.Variables'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Python'], {'lang': 'es6'});
-goog.addDependency('../../generators/python/variables_dynamic.js', ['Blockly.Python.variablesDynamic'], ['Blockly.Python', 'Blockly.Python.variables']);
+goog.addDependency('../../generators/python/colour.js', ['Blockly.Python.colour'], ['Blockly.Python'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/lists.js', ['Blockly.Python.lists'], ['Blockly.Names', 'Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/logic.js', ['Blockly.Python.logic'], ['Blockly.Python'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/loops.js', ['Blockly.Python.loops'], ['Blockly.Names', 'Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/math.js', ['Blockly.Python.math'], ['Blockly.Names', 'Blockly.Python'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/procedures.js', ['Blockly.Python.procedures'], ['Blockly.Names', 'Blockly.Python', 'Blockly.Variables'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/text.js', ['Blockly.Python.texts'], ['Blockly.Names', 'Blockly.Python', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/variables.js', ['Blockly.Python.variables'], ['Blockly.Names', 'Blockly.Python'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../generators/python/variables_dynamic.js', ['Blockly.Python.variablesDynamic'], ['Blockly.Python', 'Blockly.Python.variables'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('base.js', [], []);
 goog.addDependency('base_minimal.js', [], []);
 

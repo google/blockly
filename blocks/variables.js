@@ -130,7 +130,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 };
 
 /**
- * Factory for callbacks to rename variable dropdown menu option
+ * Factory for callbacks for rename variable dropdown menu option
  * associated with a variable getter block.
  * @param {!Block} block The block with the variable to rename.
  * @return {!function()} A function that renames the variable.
@@ -144,7 +144,7 @@ const renameOptionCallbackFactory = function(block) {
 };
 
 /**
- * Factory for callbacks to delete variable dropdown menu option
+ * Factory for callbacks for delete variable dropdown menu option
  * associated with a variable getter block.
  * @param {!Block} block The block with the variable to delete.
  * @return {!function()} A function that deletes the variable.

@@ -26,21 +26,21 @@ Python['procedures_defreturn'] = function(block) {
   for (let i = 0, variable; (variable = usedVariables[i]); i++) {
     const varName = variable.name;
     if (block.getVars().indexOf(varName) === -1) {
-      globals.push(Python.nameDB_.getName(varName,
-          NameType.VARIABLE));
+      globals.push(Python.nameDB_.getName(varName, NameType.VARIABLE));
     }
   }
   // Add developer variables.
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
-    globals.push(Python.nameDB_.getName(devVarList[i],
-        NameType.DEVELOPER_VARIABLE));
+    globals.push(
+        Python.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
 
   const globalString = globals.length ?
-      Python.INDENT + 'global ' + globals.join(', ') + '\n' : '';
-  const funcName = Python.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+      Python.INDENT + 'global ' + globals.join(', ') + '\n' :
+      '';
+  const funcName =
+      Python.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
   if (Python.STATEMENT_PREFIX) {
     xfix1 += Python.injectId(Python.STATEMENT_PREFIX, block);
@@ -54,12 +54,11 @@ Python['procedures_defreturn'] = function(block) {
   let loopTrap = '';
   if (Python.INFINITE_LOOP_TRAP) {
     loopTrap = Python.prefixLines(
-        Python.injectId(Python.INFINITE_LOOP_TRAP, block),
-        Python.INDENT);
+        Python.injectId(Python.INFINITE_LOOP_TRAP, block), Python.INDENT);
   }
   let branch = Python.statementToCode(block, 'STACK');
-  let returnValue = Python.valueToCode(block, 'RETURN',
-      Python.ORDER_NONE) || '';
+  let returnValue =
+      Python.valueToCode(block, 'RETURN', Python.ORDER_NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -73,8 +72,7 @@ Python['procedures_defreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Python.nameDB_.getName(variables[i],
-        NameType.VARIABLE);
+    args[i] = Python.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'def ' + funcName + '(' + args.join(', ') + '):\n' + globalString +
       xfix1 + loopTrap + branch + xfix2 + returnValue;
@@ -86,18 +84,16 @@ Python['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Python['procedures_defnoreturn'] =
-    Python['procedures_defreturn'];
+Python['procedures_defnoreturn'] = Python['procedures_defreturn'];
 
 Python['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  const funcName = Python.nameDB_.getName(block.getFieldValue('NAME'),
-      NameType.PROCEDURE);
+  const funcName =
+      Python.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Python.valueToCode(block, 'ARG' + i,
-        Python.ORDER_NONE) || 'None';
+    args[i] = Python.valueToCode(block, 'ARG' + i, Python.ORDER_NONE) || 'None';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Python.ORDER_FUNCTION_CALL];
@@ -113,19 +109,18 @@ Python['procedures_callnoreturn'] = function(block) {
 
 Python['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  const condition = Python.valueToCode(block, 'CONDITION',
-      Python.ORDER_NONE) || 'False';
+  const condition =
+      Python.valueToCode(block, 'CONDITION', Python.ORDER_NONE) || 'False';
   let code = 'if ' + condition + ':\n';
   if (Python.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
     code += Python.prefixLines(
-        Python.injectId(Python.STATEMENT_SUFFIX, block),
-        Python.INDENT);
+        Python.injectId(Python.STATEMENT_SUFFIX, block), Python.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = Python.valueToCode(block, 'VALUE',
-        Python.ORDER_NONE) || 'None';
+    const value =
+        Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || 'None';
     code += Python.INDENT + 'return ' + value + '\n';
   } else {
     code += Python.INDENT + 'return\n';

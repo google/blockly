@@ -21,7 +21,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.lists');
+goog.module('Blockly.PHP.lists');
 
 goog.require('Blockly.PHP');
 goog.require('Blockly.utils.string');

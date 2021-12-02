@@ -168,6 +168,50 @@ Blockly.FieldColour.prototype.configure_ = function(config) {
 };
 
 /**
+ * Create chessboard substrate for color rect.
+ * @package
+ */
+
+Blockly.FieldColour.prototype.createSubstrate_ = function() {
+  var width = 25;
+  var height = width * (this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH / this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
+
+  var defsBlock = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.DEFS, {}, this.fieldGroup_);
+
+  var patternBlock = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATTERN, {
+        'viewBox': '0,0,4,4',
+        'width': width + '%',
+        'height': height + '%',
+        'id': 'pattern'
+      }, defsBlock);
+
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.POLYGON, {
+        'points': '0,0 0,4 4,4 4,0',
+        'fill': 'white'
+      }, patternBlock);
+
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.POLYGON, {
+        'points': '2,2 0,2 0,0 2,0 2,4 4,4 4,2 2,2',
+        'fill': 'gray'
+      }, patternBlock);
+
+  Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.RECT, {
+        'rx': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'ry': this.getConstants().FIELD_BORDER_RECT_RADIUS,
+        'x': 0,
+        'y': 0,
+        'height': this.size_.height,
+        'width': this.size_.width,
+        'style': 'fill: url(#pattern)',
+      }, this.fieldGroup_);
+};
+
+/**
  * Create the block UI for this colour field.
  * @package
  */
@@ -176,6 +220,7 @@ Blockly.FieldColour.prototype.initView = function() {
       this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH,
       this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
   if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
+    this.createSubstrate_();
     this.createBorderRect_();
   } else {
     this.clickTarget_ = this.sourceBlock_.getSvgRoot();

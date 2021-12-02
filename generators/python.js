@@ -6,27 +6,27 @@
 
 /**
  * @fileoverview Helper functions for generating Python for blocks.
- * @suppress {missingRequire|checkTypes|globalThis}
+ * @suppress {checkTypes|globalThis}
  */
 'use strict';
 
 goog.module('Blockly.Python');
 goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Generator');
-goog.require('Blockly.Names');
-goog.require('Blockly.Variables');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.utils.string');
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.Workspace');
+const stringUtils = goog.require('Blockly.utils.string');
+const Variables = goog.require('Blockly.Variables');
+const {Block} = goog.requireType('Blockly.Block');
+const {Generator} = goog.require('Blockly.Generator');
+const {inputTypes} = goog.require('Blockly.inputTypes');
+const {Names, NameType} = goog.require('Blockly.Names');
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
  * Python code generator.
- * @type {!Blockly.Generator}
+ * @type {!Generator}
  */
-const Python = new Blockly.Generator('Python');
+const Python = new Generator('Python');
 
 /**
  * List of illegal variable names.
@@ -139,8 +139,8 @@ Python.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
- * @param {!Blockly.Workspace} workspace Workspace to generate code from.
- * @this {Blockly.Generator}
+ * @param {!Workspace} workspace Workspace to generate code from.
+ * @this {Generator}
  */
 Python.init = function(workspace) {
   // Call Blockly.Generator's init.
@@ -152,7 +152,7 @@ Python.init = function(workspace) {
   this.PASS = this.INDENT + 'pass\n';
 
   if (!this.nameDB_) {
-    this.nameDB_ = new Blockly.Names(this.RESERVED_WORDS_);
+    this.nameDB_ = new Names(this.RESERVED_WORDS_);
   } else {
     this.nameDB_.reset();
   }
@@ -163,17 +163,17 @@ Python.init = function(workspace) {
 
   const defvars = [];
   // Add developer variables (not created or named by the user).
-  const devVarList = Blockly.Variables.allDeveloperVariables(workspace);
+  const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
     defvars.push(this.nameDB_.getName(devVarList[i],
-        Blockly.Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
+        Names.DEVELOPER_VARIABLE_TYPE) + ' = None');
   }
 
   // Add user variables, but only ones that are being used.
-  const variables = Blockly.Variables.allUsedVarModels(workspace);
+  const variables = Variables.allUsedVarModels(workspace);
   for (let i = 0; i < variables.length; i++) {
     defvars.push(this.nameDB_.getName(variables[i].getId(),
-        Blockly.VARIABLE_CATEGORY_NAME) + ' = None');
+        NameType.VARIABLE) + ' = None');
   }
 
   this.definitions_['variables'] = defvars.join('\n');
@@ -257,7 +257,7 @@ Python.multiline_quote_ = function(string) {
  * Common tasks for generating Python from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
+ * @param {!Block} block The current block.
  * @param {string} code The Python code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Python code with comments and subsequent blocks added.
@@ -270,13 +270,13 @@ Python.scrub_ = function(block, code, opt_thisOnly) {
     // Collect comment for this block.
     let comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment, this.COMMENT_WRAP - 3);
+      comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
       commentCode += this.prefixLines(comment + '\n', '# ');
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (let i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type === Blockly.inputTypes.VALUE) {
+      if (block.inputList[i].type === inputTypes.VALUE) {
         const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = this.allNestedComments(childBlock);
@@ -295,7 +295,7 @@ Python.scrub_ = function(block, code, opt_thisOnly) {
 /**
  * Gets a property and adjusts the value, taking into account indexing.
  * If a static int, casts to an integer, otherwise returns a code string.
- * @param {!Blockly.Block} block The block.
+ * @param {!Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.
  * @param {boolean=} opt_negate Whether to negate the value.
@@ -310,7 +310,7 @@ Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   const atOrder = delta ? this.ORDER_ADDITIVE : this.ORDER_NONE;
   let at = this.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
-  if (Blockly.utils.string.isNumber(at)) {
+  if (stringUtils.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
     if (opt_negate) {

@@ -33,7 +33,6 @@ const PHP = new Generator('PHP');
  * This is not intended to be a security feature.  Blockly is 100% client-side,
  * so bypassing this list is trivial.  This is intended to prevent users from
  * accidentally clobbering a built-in object or function.
- * @private
  */
 PHP.addReservedWords(
     // http://php.net/manual/en/reserved.keywords.php

@@ -33,7 +33,6 @@ const Dart = new Generator('Dart');
  * This is not intended to be a security feature.  Blockly is 100% client-side,
  * so bypassing this list is trivial.  This is intended to prevent users from
  * accidentally clobbering a built-in object or function.
- * @private
  */
 Dart.addReservedWords(
     // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf

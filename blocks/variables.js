@@ -10,19 +10,12 @@
  */
 'use strict';
 
-goog.provide('Blockly.blocks.variables');
-goog.provide('Blockly.Constants.Variables');
+goog.module('Blockly.blocks.variables');
 
 goog.require('Blockly');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.FieldVariable');
 
-
-/**
- * Unused constant for the common HSV hue for all blocks in this category.
- * @deprecated Use Blockly.Msg['VARIABLES_HUE']. (2018 April 5)
- */
-Blockly.Constants.Variables.HUE = 330;
 
 Blockly.defineBlocksWithJsonArray([
   // Block for variable getter.
@@ -75,7 +68,7 @@ Blockly.defineBlocksWithJsonArray([
  * @package
  * @readonly
  */
-Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
+const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.
@@ -111,13 +104,13 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
         const renameOption = {
           text: Blockly.Msg['RENAME_VARIABLE'],
           enabled: true,
-          callback: Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY(this),
+          callback: renameOptionCallbackFactory(this),
         };
         const name = this.getField('VAR').getText();
         const deleteOption = {
           text: Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
-          callback: Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY(this),
+          callback: deleteOptionCallbackFactory(this),
         };
         options.unshift(renameOption);
         options.unshift(deleteOption);
@@ -127,12 +120,12 @@ Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 };
 
 /**
-  * Callback for rename variable dropdown menu option associated with a
-  * variable getter block.
+  * Factory for callbacks to rename variable dropdown menu option
+  * associated with a variable getter block.
   * @param {!Blockly.Block} block The block with the variable to rename.
   * @return {!function()} A function that renames the variable.
   */
-Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
+const renameOptionCallbackFactory = function(block) {
   return function() {
     const workspace = block.workspace;
     const variable = block.getField('VAR').getVariable();
@@ -141,12 +134,12 @@ Blockly.Constants.Variables.RENAME_OPTION_CALLBACK_FACTORY = function(block) {
 };
 
 /**
- * Callback for delete variable dropdown menu option associated with a
- * variable getter block.
+ * Factory for callbacks to delete variable dropdown menu option
+ * associated with a variable getter block.
  * @param {!Blockly.Block} block The block with the variable to delete.
  * @return {!function()} A function that deletes the variable.
  */
-Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
+const deleteOptionCallbackFactory = function(block) {
   return function() {
     const workspace = block.workspace;
     const variable = block.getField('VAR').getVariable();
@@ -156,4 +149,4 @@ Blockly.Constants.Variables.DELETE_OPTION_CALLBACK_FACTORY = function(block) {
 };
 
 Blockly.Extensions.registerMixin('contextMenu_variableSetterGetter',
-    Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
+    CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

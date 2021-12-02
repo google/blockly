@@ -23,16 +23,15 @@ PHP['controls_if'] = function(block) {
     code += PHP.injectId(PHP.STATEMENT_PREFIX, block);
   }
   do {
-    conditionCode = PHP.valueToCode(block, 'IF' + n,
-        PHP.ORDER_NONE) || 'false';
+    conditionCode = PHP.valueToCode(block, 'IF' + n, PHP.ORDER_NONE) || 'false';
     branchCode = PHP.statementToCode(block, 'DO' + n);
     if (PHP.STATEMENT_SUFFIX) {
       branchCode = PHP.prefixLines(
-          PHP.injectId(PHP.STATEMENT_SUFFIX, block),
-          PHP.INDENT) + branchCode;
+                       PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT) +
+          branchCode;
     }
-    code += (n > 0 ? ' else ' : '') +
-        'if (' + conditionCode + ') {\n' + branchCode + '}';
+    code += (n > 0 ? ' else ' : '') + 'if (' + conditionCode + ') {\n' +
+        branchCode + '}';
     n++;
   } while (block.getInput('IF' + n));
 
@@ -40,8 +39,8 @@ PHP['controls_if'] = function(block) {
     branchCode = PHP.statementToCode(block, 'ELSE');
     if (PHP.STATEMENT_SUFFIX) {
       branchCode = PHP.prefixLines(
-          PHP.injectId(PHP.STATEMENT_SUFFIX, block),
-          PHP.INDENT) + branchCode;
+                       PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT) +
+          branchCode;
     }
     code += ' else {\n' + branchCode + '}';
   }
@@ -52,17 +51,11 @@ PHP['controls_ifelse'] = PHP['controls_if'];
 
 PHP['logic_compare'] = function(block) {
   // Comparison operator.
-  const OPERATORS = {
-    'EQ': '==',
-    'NEQ': '!=',
-    'LT': '<',
-    'LTE': '<=',
-    'GT': '>',
-    'GTE': '>='
-  };
+  const OPERATORS =
+      {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
-  const order = (operator === '==' || operator === '!=') ?
-      PHP.ORDER_EQUALITY : PHP.ORDER_RELATIONAL;
+  const order = (operator === '==' || operator === '!=') ? PHP.ORDER_EQUALITY :
+                                                           PHP.ORDER_RELATIONAL;
   const argument0 = PHP.valueToCode(block, 'A', order) || '0';
   const argument1 = PHP.valueToCode(block, 'B', order) || '0';
   const code = argument0 + ' ' + operator + ' ' + argument1;
@@ -72,8 +65,8 @@ PHP['logic_compare'] = function(block) {
 PHP['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
-  const order = (operator === '&&') ? PHP.ORDER_LOGICAL_AND :
-      PHP.ORDER_LOGICAL_OR;
+  const order =
+      (operator === '&&') ? PHP.ORDER_LOGICAL_AND : PHP.ORDER_LOGICAL_OR;
   let argument0 = PHP.valueToCode(block, 'A', order);
   let argument1 = PHP.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -97,8 +90,7 @@ PHP['logic_operation'] = function(block) {
 PHP['logic_negate'] = function(block) {
   // Negation.
   const order = PHP.ORDER_LOGICAL_NOT;
-  const argument0 = PHP.valueToCode(block, 'BOOL', order) ||
-      'true';
+  const argument0 = PHP.valueToCode(block, 'BOOL', order) || 'true';
   const code = '!' + argument0;
   return [code, order];
 };
@@ -116,12 +108,12 @@ PHP['logic_null'] = function(block) {
 
 PHP['logic_ternary'] = function(block) {
   // Ternary operator.
-  const value_if = PHP.valueToCode(block, 'IF',
-      PHP.ORDER_CONDITIONAL) || 'false';
-  const value_then = PHP.valueToCode(block, 'THEN',
-      PHP.ORDER_CONDITIONAL) || 'null';
-  const value_else = PHP.valueToCode(block, 'ELSE',
-      PHP.ORDER_CONDITIONAL) || 'null';
+  const value_if =
+      PHP.valueToCode(block, 'IF', PHP.ORDER_CONDITIONAL) || 'false';
+  const value_then =
+      PHP.valueToCode(block, 'THEN', PHP.ORDER_CONDITIONAL) || 'null';
+  const value_else =
+      PHP.valueToCode(block, 'ELSE', PHP.ORDER_CONDITIONAL) || 'null';
   const code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, PHP.ORDER_CONDITIONAL];
 };

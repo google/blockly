@@ -5,8 +5,5 @@
  */
 
 /**
- * @fileoverview Blockly module.
+ * @fileoverview Blockly module; just a wrapper for blockly_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';

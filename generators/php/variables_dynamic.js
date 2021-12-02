@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.variablesDynamic');
+goog.module('Blockly.PHP.variablesDynamic');
 
 goog.require('Blockly.PHP');
 goog.require('Blockly.PHP.variables');

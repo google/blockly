@@ -6,18 +6,29 @@
 
 /**
  * @fileoverview Variable blocks for Blockly.
- * @suppress {extraRequire|missingRequire|checkTypes}
+ * @suppress {checkTypes}
  */
 'use strict';
 
 goog.module('Blockly.blocks.variablesDynamic');
 
-goog.require('Blockly');
+/* eslint-disable-next-line no-unused-vars */
+const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
+const ContextMenu = goog.require('Blockly.ContextMenu');
+const Extensions = goog.require('Blockly.Extensions');
+const Variables = goog.require('Blockly.Variables');
+const xml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Msg} = goog.require('Blockly.Msg');
+const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
+/** @suppress {extraRequire} */
 goog.require('Blockly.FieldVariable');
 
 
-Blockly.defineBlocksWithJsonArray([
+defineBlocksWithJsonArray([
   // Block for variable getter.
   {
     "type": "variables_get_dynamic",
@@ -61,14 +72,14 @@ Blockly.defineBlocksWithJsonArray([
  * setter/getter.
  * Used by blocks 'variables_set_dynamic' and 'variables_get_dynamic'.
  * @mixin
- * @augments Blockly.Block
+ * @augments Block
  * @readonly
  */
 const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Add menu option to create getter/setter block for this setter/getter.
    * @param {!Array} options List of menu options to add to.
-   * @this {Blockly.Block}
+   * @this {Block}
    */
   customContextMenu: function(options) {
     // Getter blocks have the option to create a setter block, and vice versa.
@@ -80,35 +91,35 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       const varType = variableModel.type;
       if (this.type === 'variables_get_dynamic') {
         oppositeType = 'variables_set_dynamic';
-        contextMenuMsg = Blockly.Msg['VARIABLES_GET_CREATE_SET'];
+        contextMenuMsg = Msg['VARIABLES_GET_CREATE_SET'];
       } else {
         oppositeType = 'variables_get_dynamic';
-        contextMenuMsg = Blockly.Msg['VARIABLES_SET_CREATE_GET'];
+        contextMenuMsg = Msg['VARIABLES_SET_CREATE_GET'];
       }
 
       const option = {enabled: this.workspace.remainingCapacity() > 0};
       const name = this.getField('VAR').getText();
       option.text = contextMenuMsg.replace('%1', name);
-      const xmlField = Blockly.utils.xml.createElement('field');
+      const xmlField = xml.createElement('field');
       xmlField.setAttribute('name', 'VAR');
       xmlField.setAttribute('variabletype', varType);
-      xmlField.appendChild(Blockly.utils.xml.createTextNode(name));
-      const xmlBlock = Blockly.utils.xml.createElement('block');
+      xmlField.appendChild(xml.createTextNode(name));
+      const xmlBlock = xml.createElement('block');
       xmlBlock.setAttribute('type', oppositeType);
       xmlBlock.appendChild(xmlField);
-      option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+      option.callback = ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     } else {
       if (this.type === 'variables_get_dynamic' ||
        this.type === 'variables_get_reporter_dynamic') {
         const renameOption = {
-          text: Blockly.Msg['RENAME_VARIABLE'],
+          text: Msg['RENAME_VARIABLE'],
           enabled: true,
           callback: renameOptionCallbackFactory(this),
         };
         const name = this.getField('VAR').getText();
         const deleteOption = {
-          text: Blockly.Msg['DELETE_VARIABLE'].replace('%1', name),
+          text: Msg['DELETE_VARIABLE'].replace('%1', name),
           enabled: true,
           callback: deleteOptionCallbackFactory(this),
         };
@@ -120,12 +131,12 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Set the connection type for this block.
-   * @param {!Blockly.Events.Abstract} _e Change event.
-   * @this {Blockly.Block}
+   * @param {AbstractEvent} _e Change event.
+   * @this {Block}
    */
   onchange: function(_e) {
     const id = this.getFieldValue('VAR');
-    const variableModel = Blockly.Variables.getVariable(this.workspace, id);
+    const variableModel = Variables.getVariable(this.workspace, id);
     if (this.type === 'variables_get_dynamic') {
       this.outputConnection.setCheck(variableModel.type);
     } else {
@@ -137,21 +148,21 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 /**
   * Factory for callbacks for rename variable dropdown menu option
   * associated with a variable getter block.
-  * @param {!Blockly.Block} block The block with the variable to rename.
+  * @param {!Block} block The block with the variable to rename.
   * @return {!function()} A function that renames the variable.
   */
 const renameOptionCallbackFactory = function(block) {
   return function() {
     const workspace = block.workspace;
     const variable = block.getField('VAR').getVariable();
-    Blockly.Variables.renameVariable(workspace, variable);
+    Variables.renameVariable(workspace, variable);
   };
 };
 
 /**
  * Factory for callbacks for delete variable dropdown menu option
  * associated with a variable getter block.
- * @param {!Blockly.Block} block The block with the variable to delete.
+ * @param {!Block} block The block with the variable to delete.
  * @return {!function()} A function that deletes the variable.
  */
 const deleteOptionCallbackFactory = function(block) {
@@ -163,5 +174,5 @@ const deleteOptionCallbackFactory = function(block) {
   };
 };
 
-Blockly.Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
+Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
     CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

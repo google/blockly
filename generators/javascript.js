@@ -35,7 +35,6 @@ const JavaScript = new Generator('JavaScript');
  * This is not intended to be a security feature.  Blockly is 100% client-side,
  * so bypassing this list is trivial.  This is intended to prevent users from
  * accidentally clobbering a built-in object or function.
- * @private
  */
 JavaScript.addReservedWords(
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords

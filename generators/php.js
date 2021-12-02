@@ -36,7 +36,7 @@ const PHP = new Generator('PHP');
  * @private
  */
 PHP.addReservedWords(
-        // http://php.net/manual/en/reserved.keywords.php
+    // http://php.net/manual/en/reserved.keywords.php
     '__halt_compiler,abstract,and,array,as,break,callable,case,catch,class,' +
     'clone,const,continue,declare,default,die,do,echo,else,elseif,empty,' +
     'enddeclare,endfor,endforeach,endif,endswitch,endwhile,eval,exit,extends,' +
@@ -44,7 +44,7 @@ PHP.addReservedWords(
     'include_once,instanceof,insteadof,interface,isset,list,namespace,new,or,' +
     'print,private,protected,public,require,require_once,return,static,' +
     'switch,throw,trait,try,unset,use,var,while,xor,' +
-        // http://php.net/manual/en/reserved.constants.php
+    // http://php.net/manual/en/reserved.constants.php
     'PHP_VERSION,PHP_MAJOR_VERSION,PHP_MINOR_VERSION,PHP_RELEASE_VERSION,' +
     'PHP_VERSION_ID,PHP_EXTRA_VERSION,PHP_ZTS,PHP_DEBUG,PHP_MAXPATHLEN,' +
     'PHP_OS,PHP_SAPI,PHP_EOL,PHP_INT_MAX,PHP_INT_SIZE,DEFAULT_INCLUDE_PATH,' +
@@ -55,8 +55,7 @@ PHP.addReservedWords(
     'E_CORE_WARNING,E_COMPILE_ERROR,E_COMPILE_WARNING,E_USER_ERROR,' +
     'E_USER_WARNING,E_USER_NOTICE,E_DEPRECATED,E_USER_DEPRECATED,E_ALL,' +
     'E_STRICT,__COMPILER_HALT_OFFSET__,TRUE,FALSE,NULL,__CLASS__,__DIR__,' +
-    '__FILE__,__FUNCTION__,__LINE__,__METHOD__,__NAMESPACE__,__TRAIT__'
-);
+    '__FILE__,__FUNCTION__,__LINE__,__METHOD__,__NAMESPACE__,__TRAIT__');
 
 /**
  * Order of operation ENUMs.
@@ -185,8 +184,8 @@ PHP.scrubNakedValue = function(line) {
  */
 PHP.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/'/g, '\\\'');
+               .replace(/\n/g, '\\\n')
+               .replace(/'/g, '\\\'');
   return '\'' + string + '\'';
 };
 
@@ -197,7 +196,7 @@ PHP.quote_ = function(string) {
  * @return {string} PHP string.
  * @protected
  */
-PHP.multiline_quote_ = function (string) {
+PHP.multiline_quote_ = function(string) {
   const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // . "\n" .
@@ -253,8 +252,7 @@ PHP.scrub_ = function(block, code, opt_thisOnly) {
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
-    opt_order) {
+PHP.getAdjusted = function(block, atId, opt_delta, opt_negate, opt_order) {
   let delta = opt_delta || 0;
   let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {

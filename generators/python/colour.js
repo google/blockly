@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Python.colour');
+goog.module('Blockly.Python.colour');
 
 goog.require('Blockly.Python');
 

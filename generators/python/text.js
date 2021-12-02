@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Python.texts');
+goog.module('Blockly.Python.texts');
 
 goog.require('Blockly.Python');
 goog.require('Blockly.utils.string');
@@ -31,24 +31,23 @@ Blockly.Python['text_multiline'] = function(block) {
 };
 
 /**
+ * Regular expression to detect a single-quoted string literal.
+ */
+const strRegExp = /^\s*'([^']|\\')*'\s*$/;
+
+/**
  * Enclose the provided value in 'str(...)' function.
  * Leave string literals alone.
  * @param {string} value Code evaluating to a value.
  * @return {Array<string|number>} Array containing code evaluating to a string and
  *    the order of the returned code.[string, number]
- * @private
  */
-Blockly.Python.text.forceString_ = function(value) {
-  if (Blockly.Python.text.forceString_.strRegExp.test(value)) {
+const forceString = function(value) {
+  if (strRegExp.test(value)) {
     return [value, Blockly.Python.ORDER_ATOMIC];
   }
   return ['str(' + value + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
-
-/**
- * Regular expression to detect a single-quoted string literal.
- */
-Blockly.Python.text.forceString_.strRegExp = /^\s*'([^']|\\')*'\s*$/;
 
 Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
@@ -59,7 +58,7 @@ Blockly.Python['text_join'] = function(block) {
     case 1: {
       const element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      const codeAndOrder = Blockly.Python.text.forceString_(element);
+      const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
@@ -69,8 +68,8 @@ Blockly.Python['text_join'] = function(block) {
       const element1 = Blockly.Python.valueToCode(
                            block, 'ADD1', Blockly.Python.ORDER_NONE) ||
           '\'\'';
-      const code = Blockly.Python.text.forceString_(element0)[0] + ' + ' +
-          Blockly.Python.text.forceString_(element1)[0];
+      const code = forceString(element0)[0] + ' + ' +
+          forceString(element1)[0];
       return [code, Blockly.Python.ORDER_ADDITIVE];
     }
     default: {
@@ -95,7 +94,7 @@ Blockly.Python['text_append'] = function(block) {
   const value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
   return varName + ' = str(' + varName + ') + ' +
-      Blockly.Python.text.forceString_(value)[0] + '\n';
+      forceString(value)[0] + '\n';
 };
 
 Blockly.Python['text_length'] = function(block) {

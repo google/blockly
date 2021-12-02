@@ -19,7 +19,6 @@
  * @namespace Blockly.serialization.priorities
  */
 goog.module('Blockly.serialization.priorities');
-goog.module.declareLegacyNamespace();
 
 
 /**

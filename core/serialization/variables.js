@@ -16,7 +16,6 @@
  * @namespace Blockly.serialization.variables
  */
 goog.module('Blockly.serialization.variables');
-goog.module.declareLegacyNamespace();
 
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');

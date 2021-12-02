@@ -45,6 +45,12 @@ const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
 const minimalist = goog.require('Blockly.minimalist');
 const registry = goog.require('Blockly.registry');
+const serializationBlocks = goog.require('Blockly.serialization.blocks');
+const serializationExceptions = goog.require('Blockly.serialization.exceptions');
+const serializationPriorities = goog.require('Blockly.serialization.priorities');
+const serializationRegistry = goog.require('Blockly.serialization.registry');
+const serializationVariables = goog.require('Blockly.serialization.variables');
+const serializationWorkspaces = goog.require('Blockly.serialization.workspaces');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const thrasos = goog.require('Blockly.thrasos');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -708,6 +714,14 @@ exports.inject = inject;
 exports.inputTypes = inputTypes;
 exports.minimalist = minimalist;
 exports.registry = registry;
+exports.serialization = {
+  blocks: serializationBlocks,
+  exceptions: serializationExceptions,
+  priorities: serializationPriorities,
+  registry: serializationRegistry,
+  variables: serializationVariables,
+  workspaces: serializationWorkspaces,
+};
 exports.thrasos = thrasos;
 exports.uiPosition = uiPosition;
 exports.utils = utils;

@@ -16,7 +16,6 @@
 goog.module('Blockly.BlockSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const Msg = goog.require('Blockly.Msg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -58,6 +57,7 @@ const {Icon} = goog.requireType('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
 const {MarkerManager} = goog.require('Blockly.MarkerManager');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
 const {Rect} = goog.require('Blockly.utils.Rect');

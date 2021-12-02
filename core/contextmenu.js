@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.ContextMenu');
 
-const Msg = goog.require('Blockly.Msg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
@@ -32,6 +31,7 @@ const {Block} = goog.requireType('Blockly.Block');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
+const {Msg} = goog.require('Blockly.Msg');
 const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');

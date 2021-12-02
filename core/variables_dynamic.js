@@ -17,10 +17,10 @@
  */
 goog.module('Blockly.VariablesDynamic');
 
-const Msg = goog.require('Blockly.Msg');
 const Variables = goog.require('Blockly.Variables');
 const xml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
+const {Msg} = goog.require('Blockly.Msg');
 const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');

@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.VariableMap');
 
-const Msg = goog.require('Blockly.Msg');
 const arrayUtils = goog.require('Blockly.utils.array');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -23,6 +22,7 @@ const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Msg} = goog.require('Blockly.Msg');
 const {Names} = goog.require('Blockly.Names');
 const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -235,7 +235,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
     for (let i = 0, block; (block = uses[i]); i++) {
       if (block.type === 'procedures_defnoreturn' ||
           block.type === 'procedures_defreturn') {
-        const procedureName = block.getFieldValue('NAME');
+        const procedureName = String(block.getFieldValue('NAME'));
         const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
                                .replace('%1', variableName)
                                .replace('%2', procedureName);

@@ -910,6 +910,10 @@ const renamings = {
       export: 'MetricsManager',
       path: 'Blockly.MetricsManager',
     },
+    'Blockly.Msg': {
+      export: 'Msg',
+      path: 'Blockly.Msg',
+    },
     'Blockly.Mutator': {
       export: 'Mutator',
       path: 'Blockly.Mutator',

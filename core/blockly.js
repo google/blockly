@@ -129,6 +129,7 @@ const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
 const {MetricsManager} = goog.require('Blockly.MetricsManager');
 const {Mutator} = goog.require('Blockly.Mutator');
+const {Msg} = goog.require('Blockly.Msg');
 const {Names} = goog.require('Blockly.Names');
 const {Options} = goog.require('Blockly.Options');
 const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
@@ -654,6 +655,7 @@ exports.Menu = Menu;
 exports.MenuItem = MenuItem;
 exports.MetricsManager = MetricsManager;
 exports.Mutator = Mutator;
+exports.Msg = Msg;
 exports.Names = Names;
 exports.Options = Options;
 exports.Procedures = Procedures;
@@ -710,6 +712,22 @@ exports.thrasos = thrasos;
 exports.uiPosition = uiPosition;
 exports.utils = utils;
 exports.zelos = zelos;
+
+// If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
+// CJS or ES module there will not be a Blockly global variable
+// created.  This can cause problems because a very common way of
+// loading translations is to use a <script> tag to load one of
+// msg/js/*.js, which consists of lines like:
+//
+// Blockly.Msg["ADD_COMMENT"] = "Add Comment";
+// Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";
+//
+// This obviously only works if Blockly.Msg is the Msg export from the
+// Blockly.Msg module - so make sure it is, but only if there is not
+// yet a Blockly global variable.
+if (!('Blockly' in globalThis)) {
+  globalThis['Blockly'] = {Msg};
+}
 
 // Temporary hack to copy accessor properties from exports to the
 // global Blockly object as the routine to copy exports in

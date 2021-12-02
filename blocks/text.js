@@ -13,7 +13,7 @@
 goog.module('Blockly.blocks.texts');
 
 const Extensions = goog.require('Blockly.Extensions');
-const Msg = goog.require('Blockly.Msg');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');

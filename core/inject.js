@@ -16,7 +16,6 @@
 goog.module('Blockly.inject');
 
 const Css = goog.require('Blockly.Css');
-const Msg = goog.require('Blockly.Msg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
@@ -31,6 +30,7 @@ const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Grid} = goog.require('Blockly.Grid');
+const {Msg} = goog.require('Blockly.Msg');
 const {Options} = goog.require('Blockly.Options');
 const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');

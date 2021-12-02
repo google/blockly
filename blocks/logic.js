@@ -16,11 +16,11 @@ goog.module('Blockly.blocks.logic');
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
-const Msg = goog.require('Blockly.Msg');
 const common = goog.require('Blockly.common');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');

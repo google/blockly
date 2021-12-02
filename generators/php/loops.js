@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.loops');
+goog.module('Blockly.PHP.loops');
 
 goog.require('Blockly.PHP');
 goog.require('Blockly.utils.string');

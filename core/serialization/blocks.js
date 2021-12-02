@@ -15,7 +15,6 @@
  * @namespace Blockly.serialization.blocks
  */
 goog.module('Blockly.serialization.blocks');
-goog.module.declareLegacyNamespace();
 
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');

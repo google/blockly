@@ -24,24 +24,19 @@ PHP['controls_repeat_ext'] = function(block) {
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    repeats = PHP.valueToCode(block, 'TIMES',
-        PHP.ORDER_ASSIGNMENT) || '0';
+    repeats = PHP.valueToCode(block, 'TIMES', PHP.ORDER_ASSIGNMENT) || '0';
   }
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   let code = '';
-  const loopVar = PHP.nameDB_.getDistinctName(
-      'count', NameType.VARIABLE);
+  const loopVar = PHP.nameDB_.getDistinctName('count', NameType.VARIABLE);
   let endVar = repeats;
   if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
-    endVar = PHP.nameDB_.getDistinctName(
-        'repeat_end', NameType.VARIABLE);
+    endVar = PHP.nameDB_.getDistinctName('repeat_end', NameType.VARIABLE);
     code += endVar + ' = ' + repeats + ';\n';
   }
-  code += 'for (' + loopVar + ' = 0; ' +
-      loopVar + ' < ' + endVar + '; ' +
-      loopVar + '++) {\n' +
-      branch + '}\n';
+  code += 'for (' + loopVar + ' = 0; ' + loopVar + ' < ' + endVar + '; ' +
+      loopVar + '++) {\n' + branch + '}\n';
   return code;
 };
 
@@ -50,9 +45,10 @@ PHP['controls_repeat'] = PHP['controls_repeat_ext'];
 PHP['controls_whileUntil'] = function(block) {
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
-  let argument0 = PHP.valueToCode(block, 'BOOL',
-      until ? PHP.ORDER_LOGICAL_NOT :
-      PHP.ORDER_NONE) || 'false';
+  let argument0 =
+      PHP.valueToCode(
+          block, 'BOOL', until ? PHP.ORDER_LOGICAL_NOT : PHP.ORDER_NONE) ||
+      'false';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   if (until) {
@@ -63,14 +59,11 @@ PHP['controls_whileUntil'] = function(block) {
 
 PHP['controls_for'] = function(block) {
   // For loop.
-  const variable0 = PHP.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = PHP.valueToCode(block, 'FROM',
-      PHP.ORDER_ASSIGNMENT) || '0';
-  const argument1 = PHP.valueToCode(block, 'TO',
-      PHP.ORDER_ASSIGNMENT) || '0';
-  const increment = PHP.valueToCode(block, 'BY',
-      PHP.ORDER_ASSIGNMENT) || '1';
+  const variable0 =
+      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 = PHP.valueToCode(block, 'FROM', PHP.ORDER_ASSIGNMENT) || '0';
+  const argument1 = PHP.valueToCode(block, 'TO', PHP.ORDER_ASSIGNMENT) || '0';
+  const increment = PHP.valueToCode(block, 'BY', PHP.ORDER_ASSIGNMENT) || '1';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   let code;
@@ -78,9 +71,8 @@ PHP['controls_for'] = function(block) {
       stringUtils.isNumber(increment)) {
     // All arguments are simple numbers.
     const up = Number(argument0) <= Number(argument1);
-    code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
-        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
-        variable0;
+    code = 'for (' + variable0 + ' = ' + argument0 + '; ' + variable0 +
+        (up ? ' <= ' : ' >= ') + argument1 + '; ' + variable0;
     const step = Math.abs(Number(increment));
     if (step === 1) {
       code += up ? '++' : '--';
@@ -93,20 +85,20 @@ PHP['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     let startVar = argument0;
     if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
-      startVar = PHP.nameDB_.getDistinctName(
-          variable0 + '_start', NameType.VARIABLE);
+      startVar =
+          PHP.nameDB_.getDistinctName(variable0 + '_start', NameType.VARIABLE);
       code += startVar + ' = ' + argument0 + ';\n';
     }
     let endVar = argument1;
     if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
-      endVar = PHP.nameDB_.getDistinctName(
-          variable0 + '_end', NameType.VARIABLE);
+      endVar =
+          PHP.nameDB_.getDistinctName(variable0 + '_end', NameType.VARIABLE);
       code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    const incVar = PHP.nameDB_.getDistinctName(
-        variable0 + '_inc', NameType.VARIABLE);
+    const incVar =
+        PHP.nameDB_.getDistinctName(variable0 + '_inc', NameType.VARIABLE);
     code += incVar + ' = ';
     if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
@@ -116,11 +108,9 @@ PHP['controls_for'] = function(block) {
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
     code += PHP.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
-    code += 'for (' + variable0 + ' = ' + startVar + '; ' +
-        incVar + ' >= 0 ? ' +
-        variable0 + ' <= ' + endVar + ' : ' +
-        variable0 + ' >= ' + endVar + '; ' +
-        variable0 + ' += ' + incVar + ') {\n' +
+    code += 'for (' + variable0 + ' = ' + startVar + '; ' + incVar +
+        ' >= 0 ? ' + variable0 + ' <= ' + endVar + ' : ' + variable0 +
+        ' >= ' + endVar + '; ' + variable0 + ' += ' + incVar + ') {\n' +
         branch + '}\n';
   }
   return code;
@@ -128,15 +118,15 @@ PHP['controls_for'] = function(block) {
 
 PHP['controls_forEach'] = function(block) {
   // For each loop.
-  const variable0 = PHP.nameDB_.getName(
-      block.getFieldValue('VAR'), NameType.VARIABLE);
-  const argument0 = PHP.valueToCode(block, 'LIST',
-      PHP.ORDER_ASSIGNMENT) || '[]';
+  const variable0 =
+      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 =
+      PHP.valueToCode(block, 'LIST', PHP.ORDER_ASSIGNMENT) || '[]';
   let branch = PHP.statementToCode(block, 'DO');
   branch = PHP.addLoopTrap(branch, block);
   let code = '';
-  code += 'foreach (' + argument0 + ' as ' + variable0 +
-      ') {\n' + branch + '}\n';
+  code +=
+      'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
   return code;
 };
 

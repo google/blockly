@@ -940,7 +940,6 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
  * as the full delete action. If you are disposing of a block from the workspace
  * and don't need to perform flyout checks, handle event grouping, or hide
  * chaff, then use `block.dispose()` directly.
- * @package
  */
 BlockSvg.prototype.checkAndDelete = function() {
   if (this.workspace.isFlyout) {

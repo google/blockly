@@ -29,42 +29,42 @@ goog.require('Blockly.FieldVariable');
 defineBlocksWithJsonArray([
   // Block for variable getter.
   {
-    "type": "variables_get",
-    "message0": "%1",
-    "args0": [
+    'type': 'variables_get',
+    'message0': '%1',
+    'args0': [
       {
-        "type": "field_variable",
-        "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': '%{BKY_VARIABLES_DEFAULT_NAME}',
       },
     ],
-    "output": null,
-    "style": "variable_blocks",
-    "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
-    "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableSetterGetter"],
+    'output': null,
+    'style': 'variable_blocks',
+    'helpUrl': '%{BKY_VARIABLES_GET_HELPURL}',
+    'tooltip': '%{BKY_VARIABLES_GET_TOOLTIP}',
+    'extensions': ['contextMenu_variableSetterGetter'],
   },
   // Block for variable setter.
   {
-    "type": "variables_set",
-    "message0": "%{BKY_VARIABLES_SET}",
-    "args0": [
+    'type': 'variables_set',
+    'message0': '%{BKY_VARIABLES_SET}',
+    'args0': [
       {
-        "type": "field_variable",
-        "name": "VAR",
-        "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': '%{BKY_VARIABLES_DEFAULT_NAME}',
       },
       {
-        "type": "input_value",
-        "name": "VALUE",
+        'type': 'input_value',
+        'name': 'VALUE',
       },
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "variable_blocks",
-    "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
-    "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableSetterGetter"],
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'variable_blocks',
+    'tooltip': '%{BKY_VARIABLES_SET_TOOLTIP}',
+    'helpUrl': '%{BKY_VARIABLES_SET_HELPURL}',
+    'extensions': ['contextMenu_variableSetterGetter'],
   },
 ]);
 
@@ -109,7 +109,8 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       options.push(option);
       // Getter blocks have the option to rename or delete that variable.
     } else {
-      if (this.type === 'variables_get' || this.type === 'variables_get_reporter') {
+      if (this.type === 'variables_get' ||
+          this.type === 'variables_get_reporter') {
         const renameOption = {
           text: Msg['RENAME_VARIABLE'],
           enabled: true,
@@ -129,11 +130,11 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 };
 
 /**
-  * Factory for callbacks to rename variable dropdown menu option
-  * associated with a variable getter block.
-  * @param {!Block} block The block with the variable to rename.
-  * @return {!function()} A function that renames the variable.
-  */
+ * Factory for callbacks to rename variable dropdown menu option
+ * associated with a variable getter block.
+ * @param {!Block} block The block with the variable to rename.
+ * @return {!function()} A function that renames the variable.
+ */
 const renameOptionCallbackFactory = function(block) {
   return function() {
     const workspace = block.workspace;
@@ -157,5 +158,6 @@ const deleteOptionCallbackFactory = function(block) {
   };
 };
 
-Extensions.registerMixin('contextMenu_variableSetterGetter',
+Extensions.registerMixin(
+    'contextMenu_variableSetterGetter',
     CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

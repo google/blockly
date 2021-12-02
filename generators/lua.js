@@ -59,14 +59,13 @@ Lua.addReservedWords(
     'loadfile,next,pairs,pcall,print,rawequal,rawget,rawlen,rawset,select,' +
     'setmetatable,tonumber,tostring,type,_VERSION,xpcall,' +
     // Modules (http://www.lua.org/manual/5.2/manual.html, section 6.3).
-    'require,package,string,table,math,bit32,io,file,os,debug'
-);
+    'require,package,string,table,math,bit32,io,file,os,debug');
 
 /**
  * Order of operation ENUMs.
  * http://www.lua.org/manual/5.3/manual.html#3.4.8
  */
-Lua.ORDER_ATOMIC = 0;          // literals
+Lua.ORDER_ATOMIC = 0;  // literals
 // The next level was not explicit in documentation and inferred by Ellen.
 Lua.ORDER_HIGH = 1;            // Function calls, tables[]
 Lua.ORDER_EXPONENTIATION = 2;  // ^
@@ -148,8 +147,8 @@ Lua.scrubNakedValue = function(line) {
  */
 Lua.quote_ = function(string) {
   string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/'/g, '\\\'');
+               .replace(/\n/g, '\\\n')
+               .replace(/'/g, '\\\'');
   return '\'' + string + '\'';
 };
 

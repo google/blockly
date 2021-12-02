@@ -11,38 +11,38 @@
 
 goog.module('Blockly.PHP.colour');
 
-goog.require('Blockly.PHP');
+const PHP = goog.require('Blockly.PHP');
 
 
-Blockly.PHP['colour_picker'] = function(block) {
+PHP['colour_picker'] = function(block) {
   // Colour picker.
-  const code = Blockly.PHP.quote_(block.getFieldValue('COLOUR'));
-  return [code, Blockly.PHP.ORDER_ATOMIC];
+  const code = PHP.quote_(block.getFieldValue('COLOUR'));
+  return [code, PHP.ORDER_ATOMIC];
 };
 
-Blockly.PHP['colour_random'] = function(block) {
+PHP['colour_random'] = function(block) {
   // Generate a random colour.
-  const functionName = Blockly.PHP.provideFunction_(
+  const functionName = PHP.provideFunction_(
       'colour_random',
-      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      ['function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
        '  return \'#\' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), ' +
           '6, \'0\', STR_PAD_LEFT);',
        '}']);
   const code = functionName + '()';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-Blockly.PHP['colour_rgb'] = function(block) {
+PHP['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  const red = Blockly.PHP.valueToCode(block, 'RED',
-      Blockly.PHP.ORDER_NONE) || 0;
-  const green = Blockly.PHP.valueToCode(block, 'GREEN',
-      Blockly.PHP.ORDER_NONE) || 0;
-  const blue = Blockly.PHP.valueToCode(block, 'BLUE',
-      Blockly.PHP.ORDER_NONE) || 0;
-  const functionName = Blockly.PHP.provideFunction_(
+  const red = PHP.valueToCode(block, 'RED',
+      PHP.ORDER_NONE) || 0;
+  const green = PHP.valueToCode(block, 'GREEN',
+      PHP.ORDER_NONE) || 0;
+  const blue = PHP.valueToCode(block, 'BLUE',
+      PHP.ORDER_NONE) || 0;
+  const functionName = PHP.provideFunction_(
       'colour_rgb',
-      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($r, $g, $b) {',
        '  $r = round(max(min($r, 100), 0) * 2.55);',
        '  $g = round(max(min($g, 100), 0) * 2.55);',
@@ -54,20 +54,20 @@ Blockly.PHP['colour_rgb'] = function(block) {
        '  return $hex;',
        '}']);
   const code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [code, PHP.ORDER_FUNCTION_CALL];
 };
 
-Blockly.PHP['colour_blend'] = function(block) {
+PHP['colour_blend'] = function(block) {
   // Blend two colours together.
-  const c1 = Blockly.PHP.valueToCode(block, 'COLOUR1',
-      Blockly.PHP.ORDER_NONE) || '\'#000000\'';
-  const c2 = Blockly.PHP.valueToCode(block, 'COLOUR2',
-      Blockly.PHP.ORDER_NONE) || '\'#000000\'';
-  const ratio = Blockly.PHP.valueToCode(block, 'RATIO',
-      Blockly.PHP.ORDER_NONE) || 0.5;
-  const functionName = Blockly.PHP.provideFunction_(
+  const c1 = PHP.valueToCode(block, 'COLOUR1',
+      PHP.ORDER_NONE) || '\'#000000\'';
+  const c2 = PHP.valueToCode(block, 'COLOUR2',
+      PHP.ORDER_NONE) || '\'#000000\'';
+  const ratio = PHP.valueToCode(block, 'RATIO',
+      PHP.ORDER_NONE) || 0.5;
+  const functionName = PHP.provideFunction_(
       'colour_blend',
-      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($c1, $c2, $ratio) {',
        '  $ratio = max(min($ratio, 1), 0);',
        '  $r1 = hexdec(substr($c1, 1, 2));',
@@ -86,5 +86,5 @@ Blockly.PHP['colour_blend'] = function(block) {
        '  return $hex;',
        '}']);
   const code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [code, PHP.ORDER_FUNCTION_CALL];
 };

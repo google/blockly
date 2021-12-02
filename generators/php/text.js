@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.texts');
+goog.module('Blockly.PHP.texts');
 
 goog.require('Blockly.PHP');
 

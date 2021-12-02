@@ -26,21 +26,20 @@ PHP['procedures_defreturn'] = function(block) {
   for (let i = 0, variable; variable = usedVariables[i]; i++) {
     const varName = variable.name;
     if (block.getVars().indexOf(varName) === -1) {
-      globals.push(PHP.nameDB_.getName(varName,
-          NameType.VARIABLE));
+      globals.push(PHP.nameDB_.getName(varName, NameType.VARIABLE));
     }
   }
   // Add developer variables.
   const devVarList = Variables.allDeveloperVariables(workspace);
   for (let i = 0; i < devVarList.length; i++) {
-    globals.push(PHP.nameDB_.getName(devVarList[i],
-        NameType.DEVELOPER_VARIABLE));
+    globals.push(
+        PHP.nameDB_.getName(devVarList[i], NameType.DEVELOPER_VARIABLE));
   }
-  const globalStr = globals.length ?
-      PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
+  const globalStr =
+      globals.length ? PHP.INDENT + 'global ' + globals.join(', ') + ';\n' : '';
 
-  const funcName = PHP.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName =
+      PHP.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   let xfix1 = '';
   if (PHP.STATEMENT_PREFIX) {
     xfix1 += PHP.injectId(PHP.STATEMENT_PREFIX, block);
@@ -54,12 +53,10 @@ PHP['procedures_defreturn'] = function(block) {
   let loopTrap = '';
   if (PHP.INFINITE_LOOP_TRAP) {
     loopTrap = PHP.prefixLines(
-        PHP.injectId(PHP.INFINITE_LOOP_TRAP, block),
-        PHP.INDENT);
+        PHP.injectId(PHP.INFINITE_LOOP_TRAP, block), PHP.INDENT);
   }
   const branch = PHP.statementToCode(block, 'STACK');
-  let returnValue = PHP.valueToCode(block, 'RETURN',
-      PHP.ORDER_NONE) || '';
+  let returnValue = PHP.valueToCode(block, 'RETURN', PHP.ORDER_NONE) || '';
   let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
@@ -71,8 +68,7 @@ PHP['procedures_defreturn'] = function(block) {
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = PHP.nameDB_.getName(variables[i],
-        NameType.VARIABLE);
+    args[i] = PHP.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
   let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       globalStr + xfix1 + loopTrap + branch + xfix2 + returnValue + '}';
@@ -84,18 +80,16 @@ PHP['procedures_defreturn'] = function(block) {
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-PHP['procedures_defnoreturn'] =
-    PHP['procedures_defreturn'];
+PHP['procedures_defnoreturn'] = PHP['procedures_defreturn'];
 
 PHP['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  const funcName = PHP.nameDB_.getName(
-      block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const funcName =
+      PHP.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = PHP.valueToCode(block, 'ARG' + i,
-        PHP.ORDER_NONE) || 'null';
+    args[i] = PHP.valueToCode(block, 'ARG' + i, PHP.ORDER_NONE) || 'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, PHP.ORDER_FUNCTION_CALL];
@@ -111,19 +105,17 @@ PHP['procedures_callnoreturn'] = function(block) {
 
 PHP['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  const condition = PHP.valueToCode(block, 'CONDITION',
-      PHP.ORDER_NONE) || 'false';
+  const condition =
+      PHP.valueToCode(block, 'CONDITION', PHP.ORDER_NONE) || 'false';
   let code = 'if (' + condition + ') {\n';
   if (PHP.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    code += PHP.prefixLines(
-        PHP.injectId(PHP.STATEMENT_SUFFIX, block),
-        PHP.INDENT);
+    code +=
+        PHP.prefixLines(PHP.injectId(PHP.STATEMENT_SUFFIX, block), PHP.INDENT);
   }
   if (block.hasReturnValue_) {
-    const value = PHP.valueToCode(block, 'VALUE',
-        PHP.ORDER_NONE) || 'null';
+    const value = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'null';
     code += PHP.INDENT + 'return ' + value + ';\n';
   } else {
     code += PHP.INDENT + 'return;\n';

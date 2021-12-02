@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.procedures');
+goog.module('Blockly.PHP.procedures');
 
 goog.require('Blockly.PHP');
 goog.require('Blockly.Names');

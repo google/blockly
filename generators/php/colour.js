@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.colour');
+goog.module('Blockly.PHP.colour');
 
 goog.require('Blockly.PHP');
 

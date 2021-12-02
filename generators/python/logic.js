@@ -23,26 +23,26 @@ Python['controls_if'] = function(block) {
     code += Python.injectId(Python.STATEMENT_PREFIX, block);
   }
   do {
-    conditionCode = Python.valueToCode(block, 'IF' + n,
-        Python.ORDER_NONE) || 'False';
-    branchCode = Python.statementToCode(block, 'DO' + n) ||
-        Python.PASS;
+    conditionCode =
+        Python.valueToCode(block, 'IF' + n, Python.ORDER_NONE) || 'False';
+    branchCode = Python.statementToCode(block, 'DO' + n) || Python.PASS;
     if (Python.STATEMENT_SUFFIX) {
-      branchCode = Python.prefixLines(
-          Python.injectId(Python.STATEMENT_SUFFIX, block),
-          Python.INDENT) + branchCode;
+      branchCode =
+          Python.prefixLines(
+              Python.injectId(Python.STATEMENT_SUFFIX, block), Python.INDENT) +
+          branchCode;
     }
     code += (n === 0 ? 'if ' : 'elif ') + conditionCode + ':\n' + branchCode;
     n++;
   } while (block.getInput('IF' + n));
 
   if (block.getInput('ELSE') || Python.STATEMENT_SUFFIX) {
-    branchCode = Python.statementToCode(block, 'ELSE') ||
-        Python.PASS;
+    branchCode = Python.statementToCode(block, 'ELSE') || Python.PASS;
     if (Python.STATEMENT_SUFFIX) {
-      branchCode = Python.prefixLines(
-          Python.injectId(Python.STATEMENT_SUFFIX, block),
-          Python.INDENT) + branchCode;
+      branchCode =
+          Python.prefixLines(
+              Python.injectId(Python.STATEMENT_SUFFIX, block), Python.INDENT) +
+          branchCode;
     }
     code += 'else:\n' + branchCode;
   }
@@ -53,14 +53,8 @@ Python['controls_ifelse'] = Python['controls_if'];
 
 Python['logic_compare'] = function(block) {
   // Comparison operator.
-  const OPERATORS = {
-    'EQ': '==',
-    'NEQ': '!=',
-    'LT': '<',
-    'LTE': '<=',
-    'GT': '>',
-    'GTE': '>='
-  };
+  const OPERATORS =
+      {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
   const operator = OPERATORS[block.getFieldValue('OP')];
   const order = Python.ORDER_RELATIONAL;
   const argument0 = Python.valueToCode(block, 'A', order) || '0';
@@ -72,8 +66,8 @@ Python['logic_compare'] = function(block) {
 Python['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
-  const order = (operator === 'and') ? Python.ORDER_LOGICAL_AND :
-      Python.ORDER_LOGICAL_OR;
+  const order =
+      (operator === 'and') ? Python.ORDER_LOGICAL_AND : Python.ORDER_LOGICAL_OR;
   let argument0 = Python.valueToCode(block, 'A', order);
   let argument1 = Python.valueToCode(block, 'B', order);
   if (!argument0 && !argument1) {
@@ -96,8 +90,8 @@ Python['logic_operation'] = function(block) {
 
 Python['logic_negate'] = function(block) {
   // Negation.
-  const argument0 = Python.valueToCode(block, 'BOOL',
-      Python.ORDER_LOGICAL_NOT) || 'True';
+  const argument0 =
+      Python.valueToCode(block, 'BOOL', Python.ORDER_LOGICAL_NOT) || 'True';
   const code = 'not ' + argument0;
   return [code, Python.ORDER_LOGICAL_NOT];
 };
@@ -115,12 +109,12 @@ Python['logic_null'] = function(block) {
 
 Python['logic_ternary'] = function(block) {
   // Ternary operator.
-  const value_if = Python.valueToCode(block, 'IF',
-      Python.ORDER_CONDITIONAL) || 'False';
-  const value_then = Python.valueToCode(block, 'THEN',
-      Python.ORDER_CONDITIONAL) || 'None';
-  const value_else = Python.valueToCode(block, 'ELSE',
-      Python.ORDER_CONDITIONAL) || 'None';
+  const value_if =
+      Python.valueToCode(block, 'IF', Python.ORDER_CONDITIONAL) || 'False';
+  const value_then =
+      Python.valueToCode(block, 'THEN', Python.ORDER_CONDITIONAL) || 'None';
+  const value_else =
+      Python.valueToCode(block, 'ELSE', Python.ORDER_CONDITIONAL) || 'None';
   const code = value_then + ' if ' + value_if + ' else ' + value_else;
   return [code, Python.ORDER_CONDITIONAL];
 };

@@ -183,11 +183,6 @@ goog.require('Blockly.Events.VarCreate');
  */
 exports.VERSION = 'uncompiled';
 
-/**
- * @define {boolean} Overridden to true by the compiler.
- */
-const COMPILED = false;
-
 // Add a getter and setter pair for Blockly.alert, Blockly.confirm,
 // Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
 // compatibility.
@@ -733,6 +728,7 @@ exports.zelos = zelos;
 // accessors are nonconfigurable (which is good, as otherwise one
 // accessors on one copy would call get/set functions on the other
 // copy!)
+/* eslint-disable-next-line no-undef */
 if (!COMPILED && typeof globalThis['Blockly'] === 'object' &&
     globalThis['Blockly'] !== exports) {
   const descriptors = Object.getOwnPropertyDescriptors(exports);

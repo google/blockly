@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.logic');
+goog.module('Blockly.PHP.logic');
 
 goog.require('Blockly.PHP');
 

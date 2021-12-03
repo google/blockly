@@ -31,39 +31,40 @@ goog.require('Blockly.FieldVariable');
 defineBlocksWithJsonArray([
   // Block for variable getter.
   {
-    "type": "variables_get_dynamic",
-    "message0": "%1",
-    "args0": [{
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+    'type': 'variables_get_dynamic',
+    'message0': '%1',
+    'args0': [{
+      'type': 'field_variable',
+      'name': 'VAR',
+      'variable': '%{BKY_VARIABLES_DEFAULT_NAME}',
     }],
-    "output": null,
-    "style": "variable_dynamic_blocks",
-    "helpUrl": "%{BKY_VARIABLES_GET_HELPURL}",
-    "tooltip": "%{BKY_VARIABLES_GET_TOOLTIP}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
+    'output': null,
+    'style': 'variable_dynamic_blocks',
+    'helpUrl': '%{BKY_VARIABLES_GET_HELPURL}',
+    'tooltip': '%{BKY_VARIABLES_GET_TOOLTIP}',
+    'extensions': ['contextMenu_variableDynamicSetterGetter'],
   },
   // Block for variable setter.
   {
-    "type": "variables_set_dynamic",
-    "message0": "%{BKY_VARIABLES_SET}",
-    "args0": [{
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
-    },
-    {
-      "type": "input_value",
-      "name": "VALUE",
-    },
+    'type': 'variables_set_dynamic',
+    'message0': '%{BKY_VARIABLES_SET}',
+    'args0': [
+      {
+        'type': 'field_variable',
+        'name': 'VAR',
+        'variable': '%{BKY_VARIABLES_DEFAULT_NAME}',
+      },
+      {
+        'type': 'input_value',
+        'name': 'VALUE',
+      },
     ],
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": "variable_dynamic_blocks",
-    "tooltip": "%{BKY_VARIABLES_SET_TOOLTIP}",
-    "helpUrl": "%{BKY_VARIABLES_SET_HELPURL}",
-    "extensions": ["contextMenu_variableDynamicSetterGetter"],
+    'previousStatement': null,
+    'nextStatement': null,
+    'style': 'variable_dynamic_blocks',
+    'tooltip': '%{BKY_VARIABLES_SET_TOOLTIP}',
+    'helpUrl': '%{BKY_VARIABLES_SET_HELPURL}',
+    'extensions': ['contextMenu_variableDynamicSetterGetter'],
   },
 ]);
 
@@ -111,7 +112,7 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
       options.push(option);
     } else {
       if (this.type === 'variables_get_dynamic' ||
-       this.type === 'variables_get_reporter_dynamic') {
+          this.type === 'variables_get_reporter_dynamic') {
         const renameOption = {
           text: Msg['RENAME_VARIABLE'],
           enabled: true,
@@ -146,11 +147,11 @@ const CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN = {
 };
 
 /**
-  * Factory for callbacks for rename variable dropdown menu option
-  * associated with a variable getter block.
-  * @param {!Block} block The block with the variable to rename.
-  * @return {!function()} A function that renames the variable.
-  */
+ * Factory for callbacks for rename variable dropdown menu option
+ * associated with a variable getter block.
+ * @param {!Block} block The block with the variable to rename.
+ * @return {!function()} A function that renames the variable.
+ */
 const renameOptionCallbackFactory = function(block) {
   return function() {
     const workspace = block.workspace;
@@ -174,5 +175,6 @@ const deleteOptionCallbackFactory = function(block) {
   };
 };
 
-Extensions.registerMixin('contextMenu_variableDynamicSetterGetter',
+Extensions.registerMixin(
+    'contextMenu_variableDynamicSetterGetter',
     CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);

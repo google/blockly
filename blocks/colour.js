@@ -12,6 +12,8 @@
 goog.module('Blockly.blocks.colour');
 
 const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+/** @suppress {extraRequire} */
+goog.require('Blockly.FieldColour');
 
 
 defineBlocksWithJsonArray([

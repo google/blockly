@@ -46,7 +46,7 @@ goog.require('Blockly.Warning');
  * Common properties for the procedure_defnoreturn and
  * procedure_defreturn blocks.
  */
-const procedureDef = {
+const PROCEDURE_DEF_COMMON = {
   /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
@@ -438,7 +438,7 @@ const procedureDef = {
 };
 
 Blocks['procedures_defnoreturn'] = {
-  ...procedureDef,
+  ...PROCEDURE_DEF_COMMON,
   /**
    * Block for defining a procedure with no return value.
    * @this {Block}
@@ -480,7 +480,7 @@ Blocks['procedures_defnoreturn'] = {
 };
 
 Blocks['procedures_defreturn'] = {
-  ...procedureDef,
+  ...PROCEDURE_DEF_COMMON,
   /**
    * Block for defining a procedure with a return value.
    * @this {Block}
@@ -659,7 +659,7 @@ Blocks['procedures_mutatorarg'] = {
  * Common properties for the procedure_callnoreturn and
  * procedure_callreturn blocks.
  */
-const procedureCall = {
+const PROCEDURE_CALL_COMMON = {
   /**
    * Returns the name of the procedure this block calls.
    * @return {string} Procedure name.
@@ -1034,7 +1034,7 @@ const procedureCall = {
 };
 
 Blocks['procedures_callnoreturn'] = {
-  ...procedureCall,
+  ...PROCEDURE_CALL_COMMON,
   /**
    * Block for calling a procedure with no return value.
    * @this {Block}
@@ -1057,7 +1057,7 @@ Blocks['procedures_callnoreturn'] = {
 };
 
 Blocks['procedures_callreturn'] = {
-  ...procedureCall,
+  ...PROCEDURE_CALL_COMMON,
   /**
    * Block for calling a procedure with a return value.
    * @this {Block}

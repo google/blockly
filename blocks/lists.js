@@ -24,6 +24,8 @@ const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+/** @suppress {extraRequire} */
+goog.require('Blockly.FieldDropdown');
 
 
 defineBlocksWithJsonArray([

@@ -169,7 +169,7 @@ const tokenizeInterpolationInternal = function(
  * @param {string} message Text which might contain string table references and
  *     interpolation tokens.
  * @return {!Array<string|number>} Array of strings and numbers.
- * @alias Blockly.parsing.tokenizeInterpolation
+ * @alias Blockly.utils.parsing.tokenizeInterpolation
  */
 const tokenizeInterpolation = function(message) {
   return tokenizeInterpolationInternal(message, true);
@@ -183,7 +183,7 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
  * @param {string|?} message Message, which may be a string that contains
  *     string table references.
  * @return {string} String with message references replaced.
- * @alias Blockly.parsing.replaceMessageReferences
+ * @alias Blockly.utils.parsing.replaceMessageReferences
  */
 const replaceMessageReferences = function(message) {
   if (typeof message !== 'string') {
@@ -202,7 +202,7 @@ exports.replaceMessageReferences = replaceMessageReferences;
  * @param {string} message Text which might contain string table references.
  * @return {boolean} True if all message references have matching values.
  *     Otherwise, false.
- * @alias Blockly.parsing.checkMessageReferences
+ * @alias Blockly.utils.parsing.checkMessageReferences
  */
 const checkMessageReferences = function(message) {
   let validSoFar = true;
@@ -232,7 +232,7 @@ exports.checkMessageReferences = checkMessageReferences;
  * @return {{hue: ?number, hex: string}} An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
- * @alias Blockly.parsing.parseBlockColour
+ * @alias Blockly.utils.parsing.parseBlockColour
  */
 const parseBlockColour = function(colour) {
   const dereferenced =

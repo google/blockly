@@ -13,13 +13,13 @@
 goog.module('Blockly.blocks.math');
 
 const Extensions = goog.require('Blockly.Extensions');
-/* eslint-disable-next-line no-unused-vars */
-const xmlUtils = goog.require('Blockly.utils.xml');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.
 /* eslint-disable-next-line no-unused-vars */
 const FieldDropdown = goog.require('Blockly.FieldDropdown');
+const xmlUtils = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
 const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');

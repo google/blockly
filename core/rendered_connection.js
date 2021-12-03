@@ -16,7 +16,6 @@
 goog.module('Blockly.RenderedConnection');
 
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -427,28 +426,6 @@ RenderedConnection.prototype.startTrackingAll = function() {
     }
   }
   return renderList;
-};
-
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Connection} candidate A nearby connection to check.
- * @param {number=} maxRadius The maximum radius allowed for connections, in
- *     workspace units.
- * @return {boolean} True if the connection is allowed, false otherwise.
- * @deprecated July 2020
- */
-RenderedConnection.prototype.isConnectionAllowed = function(
-    candidate, maxRadius) {
-  deprecation.warn(
-      'RenderedConnection.prototype.isConnectionAllowed', 'July 2020',
-      'July 2021',
-      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
-  if (this.distanceFrom(candidate) > maxRadius) {
-    return false;
-  }
-
-  return RenderedConnection.superClass_.isConnectionAllowed.call(
-      this, candidate);
 };
 
 /**

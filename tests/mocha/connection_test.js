@@ -28,48 +28,6 @@ suite('Connection', function() {
     sharedTestTeardown.call(this);
   });
 
-  test('Deprecated - canConnectWithReason passes', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.NEXT_NAME);
-    chai.assert.equal(conn1.canConnectWithReason(conn2),
-        Blockly.Connection.CAN_CONNECT);
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.canConnectWithReason');
-  });
-
-  test('Deprecated - canConnectWithReason fails', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
-    chai.assert.equal(conn1.canConnectWithReason(conn2),
-        Blockly.Connection.REASON_WRONG_TYPE);
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.canConnectWithReason');
-  });
-
-  test('Deprecated - checkConnection passes', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.NEXT_NAME);
-    chai.assert.doesNotThrow(function() {
-      conn1.checkConnection(conn2);
-    });
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.checkConnection');
-  });
-
-  test('Deprecated - checkConnection fails', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
-    chai.assert.throws(function() {
-      conn1.checkConnection(conn2);
-    });
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.checkConnection');
-  });
-
   suite('Set Shadow', function() {
     function assertBlockMatches(block, isShadow, opt_id) {
       chai.assert.equal(block.isShadow(), isShadow,

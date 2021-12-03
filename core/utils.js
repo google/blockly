@@ -197,7 +197,7 @@ exports.getScrollDeltaPixels = getScrollDeltaPixels;
 const tokenizeInterpolation = function(message) {
   deprecation.warn(
       'Blockly.utils.tokenizeInterpolation', 'December 2021', 'December 2022',
-      'Blockly.parsing.tokenizeInterpolation');
+      'Blockly.utils.parsing.tokenizeInterpolation');
   return parsing.tokenizeInterpolation(message);
 };
 exports.tokenizeInterpolation = tokenizeInterpolation;
@@ -215,7 +215,7 @@ exports.tokenizeInterpolation = tokenizeInterpolation;
 const replaceMessageReferences = function(message) {
   deprecation.warn(
       'Blockly.utils.replaceMessageReferences', 'December 2021',
-      'December 2022', 'Blockly.parsing.replaceMessageReferences');
+      'December 2022', 'Blockly.utils.parsing.replaceMessageReferences');
   return parsing.replaceMessageReferences(message);
 };
 exports.replaceMessageReferences = replaceMessageReferences;
@@ -232,7 +232,7 @@ exports.replaceMessageReferences = replaceMessageReferences;
 const checkMessageReferences = function(message) {
   deprecation.warn(
       'Blockly.utils.checkMessageReferences', 'December 2021', 'December 2022',
-      'Blockly.parsing.checkMessageReferences');
+      'Blockly.utils.parsing.checkMessageReferences');
   return parsing.checkMessageReferences(message);
 };
 exports.checkMessageReferences = checkMessageReferences;
@@ -363,7 +363,7 @@ exports.screenToWsCoordinates = screenToWsCoordinates;
 const parseBlockColour = function(colour) {
   deprecation.warn(
       'Blockly.utils.parseBlockColour', 'December 2021', 'December 2022',
-      'Blockly.parsing.parseBlockColour');
+      'Blockly.utils.parsing.parseBlockColour');
   return parsing.parseBlockColour(colour);
 };
 exports.parseBlockColour = parseBlockColour;

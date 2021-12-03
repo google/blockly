@@ -98,7 +98,7 @@ const NAMESPACE_OBJECT = '$';
 const chunks = [
   {
     name: 'blockly',
-    entry: 'core/requires.js',
+    entry: 'core/blockly.js',
     exports: 'Blockly',
     importAs: 'Blockly',
     factoryPreamble: `const ${NAMESPACE_OBJECT}={};`,
@@ -385,10 +385,10 @@ function getChunkOptions() {
   //
   // {
   //   chunk: [
-  //     'requires:258',
-  //     'all:10:requires',
-  //     'all1:11:requires',
-  //     'all2:11:requires',
+  //     'blockly:258',
+  //     'all:10:blockly',
+  //     'all1:11:blockly',
+  //     'all2:11:blockly',
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [

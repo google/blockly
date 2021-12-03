@@ -742,7 +742,7 @@ exports.zelos = zelos;
 // Blockly.Msg module - so make sure it is, but only if there is not
 // yet a Blockly global variable.
 if (!('Blockly' in globalThis)) {
-  globalThis['Blockly'] = {Msg};
+  globalThis['Blockly'] = {'Msg': Msg};
 }
 
 // Temporary hack to copy accessor properties from exports to the

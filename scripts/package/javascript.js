@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview JavaScript Generator module.
+ * @fileoverview JavaScript Generator module; just a wrapper for
+ *     javascript_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.JavaScript = BlocklyJavaScript;

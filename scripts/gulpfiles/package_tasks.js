@@ -126,8 +126,8 @@ function packageBlockly() {
  */
 function packageBlocks() {
   return gulp.src('scripts/package/blocks.js')
-    .pipe(packageUMD('Blockly.Blocks', [{
-        name: 'Blockly',
+    .pipe(packageUMD('BlocklyBlocks', [{
+        name: 'BlocklyBlocks',
         amd: './blocks_compressed',
         cjs: './blocks_compressed',
       }]))

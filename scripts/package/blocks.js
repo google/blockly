@@ -5,10 +5,5 @@
  */
 
 /**
- * @fileoverview Blockly Blocks module.
+ * @fileoverview Blockly blocks module; just a wrapper for blocks_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.Blocks = {};

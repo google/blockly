@@ -12,7 +12,6 @@ var execSync = require('child_process').execSync;
 var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
-var typings = require('./typings');
 
 var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
@@ -154,9 +153,10 @@ const rebuildAll = gulp.series(
   buildTasks.cleanBuildDir,
   buildTasks.build,
   buildTasks.checkinBuilt,
-  typings.typings,
-  typings.msgTypings,
-  typings.checkinTypings,
+  // TODO(5621): Re-enable once typings generation is fixed.
+  // typings.typings,
+  // typings.msgTypings,
+  // typings.checkinTypings,
   );
 
 // Package and publish to npm.

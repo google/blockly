@@ -1505,7 +1505,7 @@ WorkspaceSvg.prototype.render = function() {
  * @param {Blockly.Events.Abstract} e
  * @private
  */
-Blockly.WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
+WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
   if (e.type === Blockly.Events.BLOCK_DRAG) {
     this.blockDragRenderQueue_.forEach(blockBumpPair => {
       const block = blockBumpPair.block;
@@ -1534,7 +1534,7 @@ Blockly.WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
  * @param {boolean=} bumpNeighbours If true, calls bumpNeighbors on drag for
  *     this block (and descendants if allDescendants is true).
  */
-Blockly.WorkspaceSvg.prototype.addToDragRenderQueue = function(block, addDescendants, bumpNeighbours) {
+WorkspaceSvg.prototype.addToDragRenderQueue = function(block, addDescendants, bumpNeighbours) {
   if (!this.isDragging()) {
     return;
   }

@@ -1054,6 +1054,9 @@ BlockSvg.prototype.setCommentText = function(text) {
     this.render();
     // Adding or removing a comment icon will cause the block to change shape.
     this.bumpNeighbours();
+    // BUG(#4959): Adding or removing a comment icon while dragging without
+    //     rendering during/after drag can cause blocks to appear out of place.
+    this.workspace.addToDragRenderQueue(this, true, true);
   }
 };
 

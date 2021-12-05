@@ -1518,7 +1518,7 @@ WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
       }
     });
 
-    if (!e.isStart) {
+    if (e.type === Blockly.Events.BLOCK_DRAG && !e.isStart) {
       this.blockDragRenderQueue_ = [];
       this.removeChangeListener(this.renderOnDragListener_);
       this.renderOnDragListener_ = null;

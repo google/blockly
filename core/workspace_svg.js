@@ -1506,7 +1506,7 @@ WorkspaceSvg.prototype.render = function() {
  * @private
  */
 WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
-  if ([Blockly.Events.BLOCK_DRAG, Block.Events.BLOCK_DELETE]
+  if ([Blockly.Events.BLOCK_DRAG, Blockly.Events.BLOCK_DELETE]
       .includes(e.type)) {
     this.blockDragRenderQueue_.forEach(blockBumpPair => {
       const block = blockBumpPair.block;

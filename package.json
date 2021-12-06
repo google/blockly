@@ -74,7 +74,7 @@
     "clang-format": "^1.6.0",
     "closure-calculate-chunks": "^3.0.2",
     "concurrently": "^6.0.0",
-    "eslint": "^7.28.0",
+    "eslint": "^8.4.0",
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20211107.0.0",
     "google-closure-deps": "^20211107.0.0",

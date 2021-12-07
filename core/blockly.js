@@ -57,7 +57,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
 const zelos = goog.require('Blockly.zelos');
-const {Align, Input} = goog.require('Blockly.Input');
+const {Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
@@ -323,9 +323,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.Input.Align.CENTRE
- * @name Blockly.ALIGN_CENTRE
- */
+   * @see Blockly.Input.Align.CENTRE
+   * @name Blockly.ALIGN_CENTRE
+   */
   ALIGN_CENTRE: {
     get: function() {
       deprecation.warn(
@@ -335,9 +335,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.Input.Align.RIGHT
- * @name Blockly.ALIGN_RIGHT
- */
+   * @see Blockly.Input.Align.RIGHT
+   * @name Blockly.ALIGN_RIGHT
+   */
   ALIGN_RIGHT: {
     get: function() {
       deprecation.warn(
@@ -347,9 +347,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.ConnectionType.INPUT_VALUE
- * @name Blockly.INPUT_VALUE
- */
+   * @see Blockly.ConnectionType.INPUT_VALUE
+   * @name Blockly.INPUT_VALUE
+   */
   INPUT_VALUE: {
     get: function() {
       deprecation.warn(
@@ -359,9 +359,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.ConnectionType.OUTPUT_VALUE
- * @name Blockly.OUTPUT_VALUE
- */
+   * @see Blockly.ConnectionType.OUTPUT_VALUE
+   * @name Blockly.OUTPUT_VALUE
+   */
   OUTPUT_VALUE: {
     get: function() {
       deprecation.warn(
@@ -371,9 +371,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.ConnectionType.NEXT_STATEMENT
- * @name Blockly.NEXT_STATEMENT
- */
+   * @see Blockly.ConnectionType.NEXT_STATEMENT
+   * @name Blockly.NEXT_STATEMENT
+   */
   NEXT_STATEMENT: {
     get: function() {
       deprecation.warn(
@@ -383,9 +383,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
- * @name Blockly.PREVIOUS_STATEMENT
- */
+   * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
+   * @name Blockly.PREVIOUS_STATEMENT
+   */
   PREVIOUS_STATEMENT: {
     get: function() {
       deprecation.warn(
@@ -395,9 +395,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.inputTypes.DUMMY
- * @name Blockly.DUMMY_INPUT
- */
+   * @see Blockly.inputTypes.DUMMY
+   * @name Blockly.DUMMY_INPUT
+   */
   DUMMY_INPUT: {
     get: function() {
       deprecation.warn(
@@ -407,9 +407,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.utils.toolbox.Position.TOP
- * @name Blockly.TOOLBOX_AT_TOP
- */
+   * @see Blockly.utils.toolbox.Position.TOP
+   * @name Blockly.TOOLBOX_AT_TOP
+   */
   TOOLBOX_AT_TOP: {
     get: function() {
       deprecation.warn(
@@ -419,9 +419,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.utils.toolbox.Position.BOTTOM
- * @name Blockly.TOOLBOX_AT_BOTTOM
- */
+   * @see Blockly.utils.toolbox.Position.BOTTOM
+   * @name Blockly.TOOLBOX_AT_BOTTOM
+   */
   TOOLBOX_AT_BOTTOM: {
     get: function() {
       deprecation.warn(
@@ -431,9 +431,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.utils.toolbox.Position.LEFT
- * @name Blockly.TOOLBOX_AT_LEFT
- */
+   * @see Blockly.utils.toolbox.Position.LEFT
+   * @name Blockly.TOOLBOX_AT_LEFT
+   */
   TOOLBOX_AT_LEFT: {
     get: function() {
       deprecation.warn(
@@ -443,9 +443,9 @@ Object.defineProperties(exports, {
     },
   },
   /**
- * @see Blockly.utils.toolbox.Position.RIGHT
- * @name Blockly.TOOLBOX_AT_RIGHT
- */
+   * @see Blockly.utils.toolbox.Position.RIGHT
+   * @name Blockly.TOOLBOX_AT_RIGHT
+   */
   TOOLBOX_AT_RIGHT: {
     get: function() {
       deprecation.warn(
@@ -565,7 +565,8 @@ exports.getMainWorkspace = getMainWorkspace;
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @deprecated Use Blockly.common.defineBlocksWithJsonArray(jsonArray). (2021 December)
+ * @deprecated Use Blockly.common.defineBlocksWithJsonArray(jsonArray). (2021
+ *     December)
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */

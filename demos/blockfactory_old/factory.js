@@ -207,8 +207,8 @@ function formatJavaScript_(blockType, rootBlock) {
         code.push('        .setCheck(' + check + ')');
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
-        code.push('        .setAlign(Blockly.Input.ALIGN.' + align + ')');
+      if (align !== 'LEFT') {
+        code.push('        .setAlign(Blockly.Input.Align.' + align + ')');
       }
       var fields = getFieldsJs_(contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
@@ -582,11 +582,11 @@ function updateGenerator(block) {
     }
     var name = input.name;
     if (name) {
-      if (input.type == Blockly.ConnectionType.INPUT_VALUE) {
+      if (input.type === Blockly.ConnectionType.INPUT_VALUE) {
         code.push(makeVar('value', name) +
                   " = Blockly." + language + ".valueToCode(block, '" + name +
                   "', Blockly." + language + ".ORDER_ATOMIC);");
-      } else if (input.type == Blockly.ConnectionType.NEXT_STATEMENT) {
+      } else if (input.type === Blockly.ConnectionType.NEXT_STATEMENT) {
         code.push(makeVar('statements', name) +
                   " = Blockly." + language + ".statementToCode(block, '" +
                   name + "');");

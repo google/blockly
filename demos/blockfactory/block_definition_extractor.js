@@ -260,9 +260,9 @@ BlockDefinitionExtractor.parseInputs_ = function(block) {
   for (var i = 0; i < block.inputList.length; i++) {
     var input = block.inputList[i];
     var align = 'LEFT'; // Left alignment is the default.
-    if (input.align === Blockly.constants.ALIGN.CENTRE) {
+    if (input.align === Blockly.Input.Align.CENTRE) {
       align = 'CENTRE';
-    } else if (input.align === Blockly.constants.ALIGN.RIGHT) {
+    } else if (input.align === Blockly.Input.Align.RIGHT) {
       align = 'RIGHT';
     }
 

@@ -7,6 +7,7 @@ goog.module('Blockly.test.procedureHelpers');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
+
 /**
  * Asserts that the procedure definition or call block has the expected var
  * models.

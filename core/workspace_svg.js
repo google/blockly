@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a workspace rendered as SVG.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,69 +15,17 @@
  */
 goog.module('Blockly.WorkspaceSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const Classic = goog.require('Blockly.Themes.Classic');
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const ConnectionDB = goog.require('Blockly.ConnectionDB');
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const ContextMenuRegistry = goog.require('Blockly.ContextMenuRegistry');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-/* eslint-disable-next-line no-unused-vars */
-const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
-const Gesture = goog.require('Blockly.Gesture');
-const Grid = goog.require('Blockly.Grid');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationSvg = goog.requireType('Blockly.IASTNodeLocationSvg');
-/* eslint-disable-next-line no-unused-vars */
-const IBoundedElement = goog.requireType('Blockly.IBoundedElement');
-/* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IMetricsManager = goog.requireType('Blockly.IMetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const IToolbox = goog.requireType('Blockly.IToolbox');
-const MarkerManager = goog.require('Blockly.MarkerManager');
-/* eslint-disable-next-line no-unused-vars */
-const Metrics = goog.requireType('Blockly.utils.Metrics');
-const Options = goog.require('Blockly.Options');
 /* eslint-disable-next-line no-unused-vars */
 const Procedures = goog.requireType('Blockly.Procedures');
-const Rect = goog.require('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.blockRendering.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const ScrollbarPair = goog.requireType('Blockly.ScrollbarPair');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
-const ThemeManager = goog.require('Blockly.ThemeManager');
 const Tooltip = goog.require('Blockly.Tooltip');
-const TouchGesture = goog.require('Blockly.TouchGesture');
-/* eslint-disable-next-line no-unused-vars */
-const Trashcan = goog.requireType('Blockly.Trashcan');
-/* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const Variables = goog.requireType('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
 const VariablesDynamic = goog.requireType('Blockly.VariablesDynamic');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Workspace = goog.require('Blockly.Workspace');
-const WorkspaceAudio = goog.require('Blockly.WorkspaceAudio');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceCommentSvg = goog.requireType('Blockly.WorkspaceCommentSvg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceDragSurfaceSvg = goog.requireType('Blockly.WorkspaceDragSurfaceSvg');
 const Xml = goog.require('Blockly.Xml');
-/* eslint-disable-next-line no-unused-vars */
-const ZoomControls = goog.requireType('Blockly.ZoomControls');
+const arrayUtils = goog.require('Blockly.utils.array');
 const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -88,18 +35,72 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {Classic} = goog.require('Blockly.Themes.Classic');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
+const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+/* eslint-disable-next-line no-unused-vars */
+const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {Gesture} = goog.require('Blockly.Gesture');
+const {Grid} = goog.require('Blockly.Grid');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {IBoundedElement} = goog.requireType('Blockly.IBoundedElement');
+/* eslint-disable-next-line no-unused-vars */
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IMetricsManager} = goog.requireType('Blockly.IMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {MarkerManager} = goog.require('Blockly.MarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+/* eslint-disable-next-line no-unused-vars */
+const {Metrics} = goog.requireType('Blockly.utils.Metrics');
+const {Options} = goog.require('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const {ScrollbarPair} = goog.requireType('Blockly.ScrollbarPair');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {ThemeManager} = goog.require('Blockly.ThemeManager');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
+const {TouchGesture} = goog.require('Blockly.TouchGesture');
+/* eslint-disable-next-line no-unused-vars */
+const {Trashcan} = goog.requireType('Blockly.Trashcan');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
+const {WorkspaceAudio} = goog.require('Blockly.WorkspaceAudio');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceDragSurfaceSvg} = goog.requireType('Blockly.WorkspaceDragSurfaceSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -171,7 +172,7 @@ const WorkspaceSvg = function(
   }
 
   this.useWorkspaceDragSurface_ =
-      !!this.workspaceDragSurface_ && utils.is3dSupported();
+      !!this.workspaceDragSurface_ && svgMath.is3dSupported();
 
   /**
    * List of currently highlighted blocks.  Block highlighting is often used to
@@ -206,12 +207,12 @@ const WorkspaceSvg = function(
   this.markerManager_ = new MarkerManager(this);
 
   /**
-  * Map from function names to callbacks, for deciding what to do when a custom
-  * toolbox category is opened.
-  * @type {!Object<string, ?function(!Workspace):
-  *     !toolbox.FlyoutDefinition>}
-  * @private
-  */
+   * Map from function names to callbacks, for deciding what to do when a custom
+   * toolbox category is opened.
+   * @type {!Object<string, ?function(!Workspace):
+   *     !toolbox.FlyoutDefinition>}
+   * @private
+   */
   this.toolboxCategoryCallbacks_ = Object.create(null);
 
   /**
@@ -225,20 +226,19 @@ const WorkspaceSvg = function(
   const Variables = goog.module.get('Blockly.Variables');
   if (Variables && Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_CATEGORY_NAME, Variables.flyoutCategory);
+        Variables.CATEGORY_NAME, Variables.flyoutCategory);
   }
 
   const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
   if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory);
+        VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategory);
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.PROCEDURE_CATEGORY_NAME, Procedures.flyoutCategory);
+        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 
@@ -718,8 +718,8 @@ WorkspaceSvg.prototype.refreshTheme = function() {
     this.setVisible(true);
   }
 
-  const event =
-      new (eventUtils.get(eventUtils.THEME_CHANGE))(this.getTheme().name, this.id);
+  const event = new (eventUtils.get(eventUtils.THEME_CHANGE))(
+      this.getTheme().name, this.id);
   eventUtils.fire(event);
 };
 
@@ -794,15 +794,15 @@ WorkspaceSvg.prototype.getSvgXY = function(element) {
   }
   do {
     // Loop through this block and every parent.
-    const xy = utils.getRelativeXY(element);
-    if (element == this.getCanvas() || element == this.getBubbleCanvas()) {
+    const xy = svgMath.getRelativeXY(element);
+    if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
       // After the SVG canvas, don't scale the coordinates.
       scale = 1;
     }
     x += xy.x * scale;
     y += xy.y * scale;
     element = /** @type {!SVGElement} */ (element.parentNode);
-  } while (element && element != this.getParentSvg());
+  } while (element && element !== this.getParentSvg());
   return new Coordinate(x, y);
 };
 
@@ -826,7 +826,7 @@ WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
  * @package
  */
 WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
-  return utils.getInjectionDivXY_(this.getCanvas());
+  return svgMath.getInjectionDivXY(this.getCanvas());
 };
 
 /**
@@ -844,7 +844,7 @@ WorkspaceSvg.prototype.getInjectionDiv = function() {
     let element = this.svgGroup_;
     while (element) {
       const classes = element.getAttribute('class') || '';
-      if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+      if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
         this.injectionDiv_ = element;
         break;
       }
@@ -901,7 +901,7 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
         {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
         this.svgGroup_);
 
-    if (opt_backgroundClass == 'blocklyMainBackground' && this.grid_) {
+    if (opt_backgroundClass === 'blocklyMainBackground' && this.grid_) {
       this.svgBackground_.style.fill =
           'url(#' + this.grid_.getPatternId() + ')';
     } else {
@@ -1055,7 +1055,7 @@ WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
  * @package
  */
 WorkspaceSvg.prototype.addTrashcan = function() {
-  const Trashcan = goog.module.get('Blockly.Trashcan');
+  const {Trashcan} = goog.module.get('Blockly.Trashcan');
   if (!Trashcan) {
     throw Error('Missing require for Blockly.Trashcan');
   }
@@ -1070,7 +1070,7 @@ WorkspaceSvg.prototype.addTrashcan = function() {
  * @package
  */
 WorkspaceSvg.prototype.addZoomControls = function() {
-  const ZoomControls = goog.module.get('Blockly.ZoomControls');
+  const {ZoomControls} = goog.module.get('Blockly.ZoomControls');
   if (!ZoomControls) {
     throw Error('Missing require for Blockly.ZoomControls');
   }
@@ -1101,7 +1101,7 @@ WorkspaceSvg.prototype.addFlyout = function(tagName) {
         'rendererOverrides': this.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   workspaceOptions.toolboxPosition = this.options.toolboxPosition;
   if (this.horizontalLayout) {
@@ -1215,7 +1215,7 @@ WorkspaceSvg.prototype.resize = function() {
  */
 WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled = function() {
   /* eslint-disable indent */
-  const currScroll = utils.getDocumentScroll();
+  const currScroll = svgMath.getDocumentScroll();
   if (!Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
@@ -1271,7 +1271,7 @@ WorkspaceSvg.prototype.getParentSvg = function() {
   if (!this.cachedParentSvg_) {
     let element = this.svgGroup_;
     while (element) {
-      if (element.tagName == 'svg') {
+      if (element.tagName === 'svg') {
         this.cachedParentSvg_ = element;
         break;
       }
@@ -1293,7 +1293,7 @@ WorkspaceSvg.prototype.maybeFireViewportChangeEvent = function() {
   const scale = this.scale;
   const top = -this.scrollY;
   const left = -this.scrollX;
-  if (scale == this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
+  if (scale === this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
       Math.abs(left - this.oldLeft_) < 1) {
     // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
     // negligible changes in viewport top/left.
@@ -1386,7 +1386,7 @@ WorkspaceSvg.prototype.setupDragSurface = function() {
       /** @type {Element} */ (this.svgBlockCanvas_.previousSibling);
   const width = parseInt(this.getParentSvg().getAttribute('width'), 10);
   const height = parseInt(this.getParentSvg().getAttribute('height'), 10);
-  const coord = utils.getRelativeXY(this.getCanvas());
+  const coord = svgMath.getRelativeXY(this.getCanvas());
   this.workspaceDragSurface_.setContentsAndShow(
       this.getCanvas(), this.getBubbleCanvas(), previousElement, width, height,
       this.scale);
@@ -1501,8 +1501,8 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
     const state = (opt_state === undefined) || opt_state;
     // Using Set here would be great, but at the cost of IE10 support.
     if (!state) {
-      utils.arrayRemove(this.highlightedBlocks_, block);
-    } else if (this.highlightedBlocks_.indexOf(block) == -1) {
+      arrayUtils.removeElem(this.highlightedBlocks_, block);
+    } else if (this.highlightedBlocks_.indexOf(block) === -1) {
       this.highlightedBlocks_.push(block);
     }
     block.setHighlighted(state);
@@ -1529,7 +1529,7 @@ WorkspaceSvg.prototype.paste = function(state) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
   } else {
     const xmlBlock = /** @type {!Element} */ (state);
-    if (xmlBlock.tagName.toLowerCase() == 'comment') {
+    if (xmlBlock.tagName.toLowerCase() === 'comment') {
       this.pasteWorkspaceComment_(xmlBlock);
     } else {
       this.pasteBlock_(xmlBlock, null);
@@ -1548,23 +1548,26 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
   eventUtils.disable();
   let block;
   try {
-    let blockX;
-    let blockY;
+    let blockX = 0;
+    let blockY = 0;
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);
       blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      if (this.RTL) {
+        blockX = -blockX;
+      }
       blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     } else if (jsonBlock) {
       block = blocks.append(jsonBlock, this);
       blockX = jsonBlock['x'] || 10;
+      if (this.RTL) {
+        blockX = this.getWidth() - blockX;
+      }
       blockY = jsonBlock['y'] || 10;
     }
 
     // Move the duplicate to original position.
     if (!isNaN(blockX) && !isNaN(blockY)) {
-      if (this.RTL) {
-        blockX = -blockX;
-      }
       // Offset block until not clobbering another block and not in connection
       // distance with neighbouring blocks.
       let collide;
@@ -1790,7 +1793,7 @@ WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 WorkspaceSvg.prototype.isDragging = function() {
-  return this.currentGesture_ != null && this.currentGesture_.isDragging();
+  return this.currentGesture_ !== null && this.currentGesture_.isDragging();
 };
 
 /**
@@ -2078,7 +2081,7 @@ WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   const speed = this.options.zoomOptions.scaleSpeed;
   let scaleChange = Math.pow(speed, amount);
   const newScale = this.scale * scaleChange;
-  if (this.scale == newScale) {
+  if (this.scale === newScale) {
     return;  // No change in zoom.
   }
 
@@ -2406,12 +2409,12 @@ WorkspaceSvg.prototype.scroll = function(x, y) {
 WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   const metrics = this.getMetrics();
 
-  if (typeof xyRatio.x == 'number') {
+  if (typeof xyRatio.x === 'number') {
     this.scrollX =
         -(metrics.scrollLeft +
           (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
-  if (typeof xyRatio.y == 'number') {
+  if (typeof xyRatio.y === 'number') {
     this.scrollY =
         -(metrics.scrollTop +
           (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
@@ -2497,7 +2500,7 @@ WorkspaceSvg.prototype.addTopBoundedElement = function(element) {
  * @param {!IBoundedElement} element Bounded element to remove.
  */
 WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
-  utils.arrayRemove(this.topBoundedElements_, element);
+  arrayUtils.removeElem(this.topBoundedElements_, element);
 };
 
 /**
@@ -2546,7 +2549,7 @@ WorkspaceSvg.prototype.clear = function() {
  *     given button is clicked.
  */
 WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw TypeError('Button callbacks must be functions.');
   }
   this.flyoutButtonCallbacks_[key] = func;
@@ -2581,7 +2584,7 @@ WorkspaceSvg.prototype.removeButtonCallback = function(key) {
  *     call when the given toolbox category is opened.
  */
 WorkspaceSvg.prototype.registerToolboxCategoryCallback = function(key, func) {
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw TypeError('Toolbox category callbacks must be functions.');
   }
   this.toolboxCategoryCallbacks_[key] = func;
@@ -2617,8 +2620,8 @@ WorkspaceSvg.prototype.removeToolboxCategoryCallback = function(key) {
  */
 WorkspaceSvg.prototype.getGesture = function(e) {
   const isStart =
-      (e.type == 'mousedown' || e.type == 'touchstart' ||
-       e.type == 'pointerdown');
+      (e.type === 'mousedown' || e.type === 'touchstart' ||
+       e.type === 'pointerdown');
 
   const gesture = this.currentGesture_;
   if (gesture) {
@@ -2686,11 +2689,22 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
   WidgetDiv.hide();
   DropDownDiv.hideWithoutAnimation();
 
-  var onlyClosePopups = !!opt_onlyClosePopups;
-  var autoHideables = this.getComponentManager().getComponents(
+  const onlyClosePopups = !!opt_onlyClosePopups;
+  const autoHideables = this.getComponentManager().getComponents(
       ComponentManager.Capability.AUTOHIDEABLE, true);
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };
 
-exports = WorkspaceSvg;
+/**
+ * Size the workspace when the contents change.  This also updates
+ * scrollbars accordingly.
+ * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @alias Blockly.WorkspaceSvg.resizeSvgContents
+ */
+const resizeSvgContents = function(workspace) {
+  workspace.resizeContents();
+};
+exports.resizeSvgContents = resizeSvgContents;
+
+exports.WorkspaceSvg = WorkspaceSvg;

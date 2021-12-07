@@ -7,7 +7,6 @@
 /**
  * @fileoverview Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,14 +17,17 @@
  */
 goog.module('Blockly.common');
 
+const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
 /* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -74,9 +76,12 @@ const getSelected = function() {
 exports.getSelected = getSelected;
 
 /**
- * Sets the currently selected block.
+ * Sets the currently selected block. This function does not visually mark the
+ * block as selected or fire the required events. If you wish to
+ * programmatically select a block, use `BlockSvg#select`.
  * @param {?ICopyable} newSelection The newly selected block.
  * @alias Blockly.common.setSelected
+ * @package
  */
 const setSelected = function(newSelection) {
   selected = newSelection;
@@ -136,11 +141,11 @@ const svgResize = function(workspace) {
   }
   const width = div.offsetWidth;
   const height = div.offsetHeight;
-  if (cachedSize.width != width) {
+  if (cachedSize.width !== width) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);
   }
-  if (cachedSize.height != height) {
+  if (cachedSize.height !== height) {
     svg.setAttribute('height', height + 'px');
     mainWorkspace.setCachedParentSvgSize(null, height);
   }
@@ -153,3 +158,79 @@ exports.svgResize = svgResize;
  * @type {!Array<!Connection>}
  */
 exports.draggingConnections = [];
+
+/**
+ * Get a map of all the block's descendants mapping their type to the number of
+ *    children with that type.
+ * @param {!Block} block The block to map.
+ * @param {boolean=} opt_stripFollowing Optionally ignore all following
+ *    statements (blocks that are not inside a value or statement input
+ *    of the block).
+ * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @alias Blockly.common.getBlockTypeCounts
+ */
+const getBlockTypeCounts = function(block, opt_stripFollowing) {
+  const typeCountsMap = Object.create(null);
+  const descendants = block.getDescendants(true);
+  if (opt_stripFollowing) {
+    const nextBlock = block.getNextBlock();
+    if (nextBlock) {
+      const index = descendants.indexOf(nextBlock);
+      descendants.splice(index, descendants.length - index);
+    }
+  }
+  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
+    if (typeCountsMap[checkBlock.type]) {
+      typeCountsMap[checkBlock.type]++;
+    } else {
+      typeCountsMap[checkBlock.type] = 1;
+    }
+  }
+  return typeCountsMap;
+};
+exports.getBlockTypeCounts = getBlockTypeCounts;
+
+/**
+ * Helper function for defining a block from JSON.  The resulting function has
+ * the correct value of jsonDef at the point in code where jsonInit is called.
+ * @param {!Object} jsonDef The JSON definition of a block.
+ * @return {function()} A function that calls jsonInit with the correct value
+ *     of jsonDef.
+ */
+const jsonInitFactory = function(jsonDef) {
+  return /** @this {Block} */ function() {
+    this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @alias Blockly.common.defineBlocksWithJsonArray
+ */
+const defineBlocksWithJsonArray = function(jsonArray) {
+  for (let i = 0; i < jsonArray.length; i++) {
+    const elem = jsonArray[i];
+    if (!elem) {
+      console.warn(
+          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
+          'Skipping.');
+    } else {
+      const typename = elem.type;
+      if (!typename) {
+        console.warn(
+            'Block definition #' + i +
+            ' in JSON array is missing a type attribute. Skipping.');
+      } else {
+        if (Blocks[typename]) {
+          console.warn(
+              'Block definition #' + i + ' in JSON array' +
+              ' overwrites prior definition of "' + typename + '".');
+        }
+        Blocks[typename] = {init: jsonInitFactory(elem)};
+      }
+    }
+  }
+};
+exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;

@@ -15,12 +15,12 @@
  * @namespace Blockly.serialization.exceptions
  */
 goog.module('Blockly.serialization.exceptions');
-goog.module.declareLegacyNamespace();
 
-// eslint-disable-next-line no-unused-vars
-const {State} = goog.requireType('Blockly.serialization.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+// eslint-disable-next-line no-unused-vars
+const {State} = goog.requireType('Blockly.serialization.blocks');
+
 
 /**
  * @alias Blockly.serialization.exceptions.DeserializationError

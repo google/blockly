@@ -7,7 +7,6 @@
 /**
  * @fileoverview An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,15 +17,15 @@
  */
 goog.module('Blockly.ConnectionChecker');
 
-const Connection = goog.require('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
 const common = goog.require('Blockly.common');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Connection} = goog.require('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 
 
 /**
@@ -51,7 +50,7 @@ const ConnectionChecker = function() {};
  */
 ConnectionChecker.prototype.canConnect = function(
     a, b, isDragging, opt_distance) {
-  return this.canConnectWithReason(a, b, isDragging, opt_distance) ==
+  return this.canConnectWithReason(a, b, isDragging, opt_distance) ===
       Connection.CAN_CONNECT;
 };
 
@@ -71,7 +70,7 @@ ConnectionChecker.prototype.canConnect = function(
 ConnectionChecker.prototype.canConnectWithReason = function(
     a, b, isDragging, opt_distance) {
   const safety = this.doSafetyChecks(a, b);
-  if (safety != Connection.CAN_CONNECT) {
+  if (safety !== Connection.CAN_CONNECT) {
     return safety;
   }
 
@@ -124,6 +123,8 @@ ConnectionChecker.prototype.getErrorMessage = function(errorCode, a, b) {
       return 'Connecting non-shadow to shadow block.';
     case Connection.REASON_DRAG_CHECKS_FAILED:
       return 'Drag checks failed.';
+    case Connection.REASON_PREVIOUS_AND_OUTPUT:
+      return 'Block would have an output and a previous connection.';
     default:
       return 'Unknown connection failure: this should never happen!';
   }
@@ -141,22 +142,41 @@ ConnectionChecker.prototype.doSafetyChecks = function(a, b) {
   if (!a || !b) {
     return Connection.REASON_TARGET_NULL;
   }
-  let blockA, blockB;
+  let superiorBlock;
+  let inferiorBlock;
+  let superiorConnection;
+  let inferiorConnection;
   if (a.isSuperior()) {
-    blockA = a.getSourceBlock();
-    blockB = b.getSourceBlock();
+    superiorBlock = a.getSourceBlock();
+    inferiorBlock = b.getSourceBlock();
+    superiorConnection = a;
+    inferiorConnection = b;
   } else {
-    blockB = a.getSourceBlock();
-    blockA = b.getSourceBlock();
+    inferiorBlock = a.getSourceBlock();
+    superiorBlock = b.getSourceBlock();
+    inferiorConnection = a;
+    superiorConnection = b;
   }
-  if (blockA == blockB) {
+  if (superiorBlock === inferiorBlock) {
     return Connection.REASON_SELF_CONNECTION;
-  } else if (b.type != internalConstants.OPPOSITE_TYPE[a.type]) {
+  } else if (
+      inferiorConnection.type !==
+      internalConstants.OPPOSITE_TYPE[superiorConnection.type]) {
     return Connection.REASON_WRONG_TYPE;
-  } else if (blockA.workspace !== blockB.workspace) {
+  } else if (superiorBlock.workspace !== inferiorBlock.workspace) {
     return Connection.REASON_DIFFERENT_WORKSPACES;
-  } else if (blockA.isShadow() && !blockB.isShadow()) {
+  } else if (superiorBlock.isShadow() && !inferiorBlock.isShadow()) {
     return Connection.REASON_SHADOW_PARENT;
+  } else if (
+      inferiorConnection.type === ConnectionType.OUTPUT_VALUE &&
+      inferiorBlock.previousConnection &&
+      inferiorBlock.previousConnection.isConnected()) {
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
+  } else if (
+      inferiorConnection.type === ConnectionType.PREVIOUS_STATEMENT &&
+      inferiorBlock.outputConnection &&
+      inferiorBlock.outputConnection.isConnected()) {
+    return Connection.REASON_PREVIOUS_AND_OUTPUT;
   }
   return Connection.CAN_CONNECT;
 };
@@ -180,7 +200,7 @@ ConnectionChecker.prototype.doTypeChecks = function(a, b) {
   }
   // Find any intersection in the check lists.
   for (let i = 0; i < checkArrayOne.length; i++) {
-    if (checkArrayTwo.indexOf(checkArrayOne[i]) != -1) {
+    if (checkArrayTwo.indexOf(checkArrayOne[i]) !== -1) {
       return true;
     }
   }
@@ -245,7 +265,7 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) !== -1) {
     return false;
   }
 
@@ -269,7 +289,7 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  if (common.draggingConnections.indexOf(b) != -1) {
+  if (common.draggingConnections.indexOf(b) !== -1) {
     return false;
   }
 
@@ -291,4 +311,4 @@ ConnectionChecker.prototype.canConnectToPrevious_ = function(a, b) {
 registry.register(
     registry.Type.CONNECTION_CHECKER, registry.DEFAULT, ConnectionChecker);
 
-exports = ConnectionChecker;
+exports.ConnectionChecker = ConnectionChecker;

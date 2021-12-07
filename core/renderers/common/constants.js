@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview An object that provides constants for rendering blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,18 +15,18 @@
  */
 goog.module('Blockly.blockRendering.ConstantProvider');
 
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const Theme = goog.requireType('Blockly.Theme');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -614,7 +613,7 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
   this.setComponentConstants_(theme);
 
   this.ADD_START_HATS =
-      theme.startHats != null ? theme.startHats : this.ADD_START_HATS;
+      theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
 };
 
 /**
@@ -624,15 +623,15 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] != undefined ?
+      theme.fontStyle && theme.fontStyle['family'] !== undefined ?
       theme.fontStyle['family'] :
       this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
+      theme.fontStyle && theme.fontStyle['weight'] !== undefined ?
       theme.fontStyle['weight'] :
       this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] != undefined ?
+      theme.fontStyle && theme.fontStyle['size'] !== undefined ?
       theme.fontStyle['size'] :
       this.FIELD_TEXT_FONTSIZE;
 
@@ -686,7 +685,7 @@ ConstantProvider.prototype.getBlockStyleForColour = function(colour) {
  */
 ConstantProvider.prototype.getBlockStyle = function(blockStyleName) {
   return this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') == 0 ?
+      (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
            this.getBlockStyleForColour(blockStyleName.substring(5)).style :
            this.createBlockStyle_('#000000'));
 };
@@ -723,13 +722,14 @@ ConstantProvider.prototype.validatedBlockStyle_ = function(blockStyle) {
     object.mixin(valid, blockStyle);
   }
   // Validate required properties.
-  const parsedColour = utils.parseBlockColour(valid['colourPrimary'] || '#000');
+  const parsedColour =
+      parsing.parseBlockColour(valid['colourPrimary'] || '#000');
   valid.colourPrimary = parsedColour.hex;
   valid.colourSecondary = valid['colourSecondary'] ?
-      utils.parseBlockColour(valid['colourSecondary']).hex :
+      parsing.parseBlockColour(valid['colourSecondary']).hex :
       this.generateSecondaryColour_(valid.colourPrimary);
   valid.colourTertiary = valid['colourTertiary'] ?
-      utils.parseBlockColour(valid['colourTertiary']).hex :
+      parsing.parseBlockColour(valid['colourTertiary']).hex :
       this.generateTertiaryColour_(valid.colourPrimary);
 
   valid.hat = valid['hat'] || '';
@@ -785,8 +785,9 @@ ConstantProvider.prototype.makeJaggedTeeth = function() {
   const width = this.JAGGED_TEETH_WIDTH;
 
   const mainPath = svgPaths.line([
-    svgPaths.point(width, height / 4), svgPaths.point(-width * 2, height / 2),
-    svgPaths.point(width, height / 4)
+    svgPaths.point(width, height / 4),
+    svgPaths.point(-width * 2, height / 2),
+    svgPaths.point(width, height / 4),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -801,8 +802,9 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath = svgPaths.curve('c', [
-    svgPaths.point(30, -height), svgPaths.point(70, -height),
-    svgPaths.point(width, 0)
+    svgPaths.point(30, -height),
+    svgPaths.point(70, -height),
+    svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -816,11 +818,16 @@ ConstantProvider.prototype.makePuzzleTab = function() {
   const width = this.TAB_WIDTH;
   const height = this.TAB_HEIGHT;
 
-  // The main path for the puzzle tab is made out of a few curves (c and s).
-  // Those curves are defined with relative positions.  The 'up' and 'down'
-  // versions of the paths are the same, but the Y sign flips.  Forward and back
-  // are the signs to use to move the cursor in the direction that the path is
-  // being drawn.
+  /**
+   * Make the main path for the puzzle tab made out of a few curves (c and s).
+   * Those curves are defined with relative positions.  The 'up' and 'down'
+   * versions of the paths are the same, but the Y sign flips.  Forward and back
+   * are the signs to use to move the cursor in the direction that the path is
+   * being drawn.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @return {string} A path fragment describing a puzzle tab.
+   */
   function makeMainPath(up) {
     const forward = up ? -1 : 1;
     const back = -forward;
@@ -838,7 +845,8 @@ ConstantProvider.prototype.makePuzzleTab = function() {
                'c',
                [
                  svgPaths.point(0, forward * control1Y),
-                 svgPaths.point(-width, back * control2Y), endPoint1
+                 svgPaths.point(-width, back * control2Y),
+                 endPoint1,
                ]) +
         svgPaths.curve(
             's', [svgPaths.point(width, back * control3Y), endPoint2]);
@@ -854,7 +862,7 @@ ConstantProvider.prototype.makePuzzleTab = function() {
     width: width,
     height: height,
     pathDown: pathDown,
-    pathUp: pathUp
+    pathUp: pathUp,
   };
 };
 
@@ -868,11 +876,18 @@ ConstantProvider.prototype.makeNotch = function() {
   const height = this.NOTCH_HEIGHT;
   const innerWidth = 3;
   const outerWidth = (width - innerWidth) / 2;
+
+  /**
+   * Make the main path for the notch.
+   * @param {number} dir Direction multiplier to apply to horizontal offsets
+   *     along the path. Either 1 or -1.
+   * @return {string} A path fragment describing a notch.
+   */
   function makeMainPath(dir) {
     return svgPaths.line([
       svgPaths.point(dir * outerWidth, height),
       svgPaths.point(dir * innerWidth, 0),
-      svgPaths.point(dir * outerWidth, -height)
+      svgPaths.point(dir * outerWidth, -height),
     ]);
   }
   const pathLeft = makeMainPath(1);
@@ -883,7 +898,7 @@ ConstantProvider.prototype.makeNotch = function() {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -905,7 +920,7 @@ ConstantProvider.prototype.makeInsideCorners = function() {
     width: radius,
     height: radius,
     pathTop: innerTopLeftCorner,
-    pathBottom: innerBottomLeftCorner
+    pathBottom: innerBottomLeftCorner,
   };
 };
 
@@ -949,7 +964,7 @@ ConstantProvider.prototype.makeOutsideCorners = function() {
     topRight: topRight,
     bottomRight: bottomRight,
     bottomLeft: bottomLeft,
-    rightHeight: radius
+    rightHeight: radius,
   };
 };
 
@@ -1018,7 +1033,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'specularConstant': 0.5,
         'specularExponent': 10,
         'lighting-color': 'white',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1029,7 +1044,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'specOut',
         'in2': 'SourceAlpha',
         'operator': 'in',
-        'result': 'specOut'
+        'result': 'specOut',
       },
       embossFilter);
   dom.createSvgElement(
@@ -1040,7 +1055,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'k1': 0,
         'k2': 1,
         'k3': 1,
-        'k4': 0
+        'k4': 0,
       },
       embossFilter);
   this.embossFilterId = embossFilter.id;
@@ -1058,7 +1073,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklyDisabledPattern' + this.randomIdentifier,
         'patternUnits': 'userSpaceOnUse',
         'width': 10,
-        'height': 10
+        'height': 10,
       },
       this.defs_);
   dom.createSvgElement(
@@ -1085,8 +1100,8 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'id': 'blocklyDebugFilter' + this.randomIdentifier,
           'height': '160%',
           'width': '180%',
-          y: '-30%',
-          x: '-40%'
+          'y': '-30%',
+          'x': '-40%',
         },
         this.defs_);
     // Set all gaussian blur pixels to 1 opacity before applying flood
@@ -1106,7 +1121,7 @@ ConstantProvider.prototype.createDebugFilter = function() {
           'in': 'outColor',
           'in2': 'outBlur',
           'operator': 'in',
-          'result': 'outGlow'
+          'result': 'outGlow',
         },
         debugFilter);
     this.debugFilterId = debugFilter.id;
@@ -1225,4 +1240,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

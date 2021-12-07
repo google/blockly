@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing an icon on a block.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,16 +15,16 @@
  */
 goog.module('Blockly.Icon');
 
-/* eslint-disable-next-line no-unused-vars */
-const Bubble = goog.requireType('Blockly.Bubble');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Bubble} = goog.requireType('Blockly.Bubble');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -171,7 +170,7 @@ Icon.prototype.setIconLocation = function(xy) {
 Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   const blockXY = this.block_.getRelativeToSurfaceXY();
-  const iconXY = utils.getRelativeXY(
+  const iconXY = svgMath.getRelativeXY(
       /** @type {!SVGElement} */ (this.iconGroup_));
   const newXY = new Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,
@@ -214,4 +213,4 @@ Icon.prototype.drawIcon_;
  */
 Icon.prototype.setVisible;
 
-exports = Icon;
+exports.Icon = Icon;

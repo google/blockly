@@ -7,7 +7,6 @@
 /**
  * @fileoverview Methods for adding highlights on block, for rendering in
  * compatibility mode.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,16 +17,16 @@
  */
 goog.module('Blockly.geras.Highlighter');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const HighlightConstantProvider = goog.requireType('Blockly.geras.HighlightConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Renderer = goog.requireType('Blockly.geras.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.geras.RenderInfo');
-const Types = goog.require('Blockly.blockRendering.Types');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {HighlightConstantProvider} = goog.requireType('Blockly.geras.HighlightConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo} = goog.requireType('Blockly.geras.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.geras.Renderer');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -101,7 +100,7 @@ Highlighter.prototype.drawTopCorner = function(row) {
       this.steps_ += this.notchPaths_.pathLeft;
     } else if (Types.isHat(elem)) {
       this.steps_ += this.startPaths_.path(this.RTL_);
-    } else if (Types.isSpacer(elem) && elem.width != 0) {
+    } else if (Types.isSpacer(elem) && elem.width !== 0) {
       // The end point of the spacer needs to be offset by the highlight amount.
       // So instead of using the spacer's width for a relative horizontal, use
       // its width and position for an absolute horizontal move.
@@ -257,4 +256,4 @@ Highlighter.prototype.drawInlineInput = function(input) {
   }
 };
 
-exports = Highlighter;
+exports.Highlighter = Highlighter;

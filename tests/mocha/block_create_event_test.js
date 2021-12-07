@@ -30,17 +30,17 @@ suite('Block Create Event', function() {
                 "type": "text",
                 "id": "shadowId",
                 "fields": {
-                  "TEXT": "abc"
-                }
+                  "TEXT": "abc",
+                },
               },
               "block": {
                 "type": "text",
                 "fields": {
-                  "TEXT": ""
-                }
-              }
-            }
-          }
+                  "TEXT": "",
+                },
+              },
+            },
+          },
         },
         this.workspace);
     Blockly.Events.enable();

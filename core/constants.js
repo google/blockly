@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blockly constants.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,18 +15,6 @@
  */
 goog.module('Blockly.constants');
 
-
-/**
- * Enum for alignment of inputs.
- * @enum {number}
- * @alias Blockly.constants.ALIGN
- */
-const ALIGN = {
-  LEFT: -1,
-  CENTRE: 0,
-  RIGHT: 1
-};
-exports.ALIGN = ALIGN;
 
 /**
  * The language-neutral ID given to the collapsed input.

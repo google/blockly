@@ -7,7 +7,6 @@
 /**
  * @fileoverview The interface for an object that encapsulates logic for
  * checking whether a potential connection is safe and valid.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -19,9 +18,9 @@
 goog.module('Blockly.IConnectionChecker');
 
 /* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 
 
 /**
@@ -102,4 +101,4 @@ IConnectionChecker.prototype.doTypeChecks;
  */
 IConnectionChecker.prototype.doDragChecks;
 
-exports = IConnectionChecker;
+exports.IConnectionChecker = IConnectionChecker;

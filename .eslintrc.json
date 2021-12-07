@@ -48,10 +48,33 @@
                 "balanced": true
             },
             "exceptions": ["*"]
+        }],
+        // Blockly uses prefixes for optional arguments and test-only functions.
+        "camelcase": ["error", {
+            "properties": "never",
+            "allow": ["^opt_", "^_opt_", "^testOnly_"]
+        }],
+        // Use clang-format for indentation by running `npm run format`.
+        "indent": ["off"],
+        // Blockly uses capital letters for some non-constructor namespaces.
+        // Keep them for legacy reasons.
+        "new-cap": ["off"],
+        // Mostly use default rules for brace style, but allow single-line blocks.
+        "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+        // Blockly uses objects as maps, but uses Object.create(null) to
+        // instantiate them.
+        "guard-for-in": ["off"],
+        "prefer-spread": ["off"],
+        "comma-dangle": ["error", {
+            "arrays": "always-multiline",
+            "objects": "always-multiline",
+            "imports": "always-multiline",
+            "exports": "always-multiline",
+            "functions": "ignore"
         }]
     },
     "env": {
-        "es6": true,
+        "es2020": true,
         "browser": true
     },
     "globals": {
@@ -60,6 +83,6 @@
         "exports": true
     },
     "extends": [
-        "eslint:recommended"
+        "eslint:recommended", "google"
     ]
 }

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Text input field.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,14 +15,7 @@
  */
 goog.module('Blockly.FieldTextInput');
 
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DropDownDiv = goog.require('Blockly.DropDownDiv');
-const Field = goog.require('Blockly.Field');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Msg = goog.require('Blockly.Msg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dialog = goog.require('Blockly.dialog');
@@ -31,10 +23,17 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Msg} = goog.require('Blockly.Msg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -117,7 +116,7 @@ FieldTextInput.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldTextInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldTextInput if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);
@@ -146,7 +145,7 @@ FieldTextInput.prototype.CURSOR = 'text';
  */
 FieldTextInput.prototype.configure_ = function(config) {
   FieldTextInput.superClass_.configure_.call(this, config);
-  if (typeof config['spellcheck'] == 'boolean') {
+  if (typeof config['spellcheck'] === 'boolean') {
     this.spellcheck_ = config['spellcheck'];
   }
 };
@@ -282,7 +281,7 @@ FieldTextInput.prototype.render_ = function() {
  * @param {boolean} check True if checked.
  */
 FieldTextInput.prototype.setSpellcheck = function(check) {
-  if (check == this.spellcheck_) {
+  if (check === this.spellcheck_) {
     return;
   }
   this.spellcheck_ = check;
@@ -317,7 +316,10 @@ FieldTextInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
  */
 FieldTextInput.prototype.showPromptEditor_ = function() {
   dialog.prompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
-    this.setValue(this.getValueFromEditorText_(text));
+    // Text is null if user pressed cancel button.
+    if (text !== null) {
+      this.setValue(this.getValueFromEditorText_(text));
+    }
   }.bind(this));
 };
 
@@ -457,14 +459,14 @@ FieldTextInput.prototype.unbindInputEvents_ = function() {
  * @protected
  */
 FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
-  if (e.keyCode == KeyCodes.ENTER) {
+  if (e.keyCode === KeyCodes.ENTER) {
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == KeyCodes.ESC) {
+  } else if (e.keyCode === KeyCodes.ESC) {
     this.setValue(this.htmlInput_.untypedDefaultValue_);
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
-  } else if (e.keyCode == KeyCodes.TAB) {
+  } else if (e.keyCode === KeyCodes.TAB) {
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
     this.sourceBlock_.tab(this, !e.shiftKey);
@@ -582,4 +584,4 @@ FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
 
 fieldRegistry.register('field_input', FieldTextInput);
 
-exports = FieldTextInput;
+exports.FieldTextInput = FieldTextInput;

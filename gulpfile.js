@@ -11,7 +11,6 @@
 
 var gulp = require('gulp');
 
-var typings = require('./scripts/gulpfiles/typings');
 var buildTasks = require('./scripts/gulpfiles/build_tasks');
 var packageTasks = require('./scripts/gulpfiles/package_tasks');
 var gitTasks = require('./scripts/gulpfiles/git_tasks');
@@ -27,14 +26,14 @@ module.exports = {
   generateLangfiles: buildTasks.generateLangfiles,
   build: buildTasks.build,
   buildDeps: buildTasks.deps,
-  buildCore: buildTasks.core,
-  buildBlocks: buildTasks.blocks,
   buildLangfiles: buildTasks.langfiles,
-  buildCompressed: buildTasks.compressed,
-  buildGenerators: buildTasks.generators,
+  buildCompiled: buildTasks.compiled,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
-  checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
+  // TODO(5621): Re-enable once typings generation is fixed.
+  // checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
+  checkin: gulp.parallel(buildTasks.checkinBuilt),
   checkinBuilt: buildTasks.checkinBuilt,
+  clangFormat: buildTasks.format,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   cleanBuildDir: buildTasks.cleanBuildDir,
   cleanReleaseDir: packageTasks.cleanReleaseDir,
@@ -42,8 +41,9 @@ module.exports = {
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
-  typings: gulp.series(typings.typings, typings.msgTypings),
-  checkinTypings: typings.checkinTypings,
+  // TODO(5621): Re-enable once typings generation is fixed.
+  // typings: gulp.series(typings.typings, typings.msgTypings),
+  // checkinTypings: typings.checkinTypings,
   package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,

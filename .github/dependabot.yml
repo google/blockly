@@ -16,3 +16,7 @@ updates:
         # We should test that this does not cause issue 
         # google/blockly-samples#665 when version 17 is released.
         versions: "16.x"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "PR: dependencies"

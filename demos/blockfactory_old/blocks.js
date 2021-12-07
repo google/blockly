@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blocks for Blockly's Block Factory application.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -87,21 +86,21 @@ Blockly.Blocks['factory_base'] = {
     var outputExists = this.getInput('OUTPUTTYPE');
     var topExists = this.getInput('TOPTYPE');
     var bottomExists = this.getInput('BOTTOMTYPE');
-    if (option == 'LEFT') {
+    if (option === 'LEFT') {
       if (!outputExists) {
         this.addTypeInput_('OUTPUTTYPE', 'output type');
       }
     } else if (outputExists) {
       this.removeInput('OUTPUTTYPE');
     }
-    if (option == 'TOP' || option == 'BOTH') {
+    if (option === 'TOP' || option === 'BOTH') {
       if (!topExists) {
         this.addTypeInput_('TOPTYPE', 'top type');
       }
     } else if (topExists) {
       this.removeInput('TOPTYPE');
     }
-    if (option == 'BOTTOM' || option == 'BOTH') {
+    if (option === 'BOTTOM' || option === 'BOTH') {
       if (!bottomExists) {
         this.addTypeInput_('BOTTOMTYPE', 'bottom type');
       }
@@ -530,7 +529,7 @@ Blockly.Blocks['type_group'] = {
     for (var i = 0; i < this.typeCount_; i++) {
       var input = this.appendValueInput('TYPE' + i)
                       .setCheck('Type');
-      if (i == 0) {
+      if (i === 0) {
         input.appendField('any of');
       }
     }
@@ -561,7 +560,7 @@ Blockly.Blocks['type_group'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.typeCount_; i++) {
       var connection = this.getInput('TYPE' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
+      if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
     }
@@ -590,7 +589,7 @@ Blockly.Blocks['type_group'] = {
     for (var i = 0; i < this.typeCount_; i++) {
       if (!this.getInput('TYPE' + i)) {
         var input = this.appendValueInput('TYPE' + i);
-        if (i == 0) {
+        if (i === 0) {
           input.appendField('any of');
         }
       }
@@ -760,7 +759,7 @@ function fieldNameCheck(referenceBlock) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('FIELDNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
-        otherName && otherName.toLowerCase() == name) {
+        otherName && otherName.toLowerCase() === name) {
       count++;
     }
   }
@@ -785,7 +784,7 @@ function inputNameCheck(referenceBlock) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('INPUTNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
-        otherName && otherName.toLowerCase() == name) {
+        otherName && otherName.toLowerCase() === name) {
       count++;
     }
   }

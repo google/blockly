@@ -369,7 +369,7 @@
                     // Manual JavaScript works but requires use of eval().
                     // TODO(#1269): Replace eval() with JS-Interpreter before
                     //              re-enabling "Manual JavaScript" mode.
-                    if (document.location.href.indexOf('file://') == 0) {
+                    if (document.location.href.indexOf('file://') === 0) {
                       document.write(
                           '<option value="Manual-JS">Manual JavaScript&hellip;</option>');
                     }

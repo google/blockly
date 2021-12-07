@@ -17,29 +17,29 @@ function getCategoryJSON() {
     {
       "kind": "CATEGORY",
       "cssconfig": {
-        "container": "something"
+        "container": "something",
       },
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>'
+          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
         },
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">FirstCategory-SecondBlock</field></block>',
+        },
       ],
-      "name": "First"
+      "name": "First",
     },
     {
       "kind": "CATEGORY",
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+        },
       ],
-      "name": "Second"
+      "name": "Second",
     }]};
 }
 exports.getCategoryJSON = getCategoryJSON;
@@ -50,9 +50,9 @@ exports.getCategoryJSON = getCategoryJSON;
  *    for a simple toolbox.
  */
 function getSimpleJson() {
-  return {"contents":[
+  return {"contents": [
     {
-      "kind":"BLOCK",
+      "kind": "BLOCK",
       "blockxml":
         `<block type="logic_compare">
           <field name="OP">NEQ</field>
@@ -69,18 +69,18 @@ function getSimpleJson() {
         </block>`,
     },
     {
-      "kind":"SEP",
-      "gap":"20"
+      "kind": "SEP",
+      "gap": "20",
     },
     {
-      "kind":"BUTTON",
+      "kind": "BUTTON",
       "text": "insert",
-      "callbackkey": "insertConnectionRows"
+      "callbackkey": "insertConnectionRows",
     },
     {
-      "kind":"LABEL",
-      "text":"tooltips"
-    }
+      "kind": "LABEL",
+      "text": "tooltips",
+    },
   ]};
 }
 exports.getSimpleJson = getSimpleJson;
@@ -89,7 +89,7 @@ function getProperSimpleJson() {
   return {
     "contents": [
       {
-        "kind":"BLOCK",
+        "kind": "BLOCK",
         "type": "logic_compare",
         "fields": {
           "OP": "NEQ",
@@ -100,32 +100,32 @@ function getProperSimpleJson() {
               "type": "math_number",
               "fields": {
                 "NUM": 1,
-              }
-            }
+              },
+            },
           },
           "B": {
             "block": {
               "type": "math_number",
               "fields": {
                 "NUM": 2,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
       {
-        "kind":"SEP",
-        "gap":"20"
+        "kind": "SEP",
+        "gap": "20",
       },
       {
-        "kind":"BUTTON",
+        "kind": "BUTTON",
         "text": "insert",
-        "callbackkey": "insertConnectionRows"
+        "callbackkey": "insertConnectionRows",
       },
       {
-        "kind":"LABEL",
-        "text":"tooltips"
-      }
+        "kind": "LABEL",
+        "text": "tooltips",
+      },
     ]};
 }
 exports.getProperSimpleJson = getProperSimpleJson;
@@ -140,7 +140,7 @@ function getDeeplyNestedJSON() {
     {
       "kind": "CATEGORY",
       "cssconfig": {
-        "container": "something"
+        "container": "something",
       },
       "contents": [{
         "kind": "CATEGORY",
@@ -149,28 +149,28 @@ function getDeeplyNestedJSON() {
           "contents": [
             {
               "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>'
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-FirstBlock</field></block>',
             },
             {
               "kind": "BLOCK",
-              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>'
-            }
+              "blockxml": '<block type="basic_block"><field name="TEXT">NestedCategory-SecondBlock</field></block>',
+            },
           ],
-          "name": "NestedCategoryInner"
+          "name": "NestedCategoryInner",
         }],
         "name": "NestedCategoryMiddle",
       }],
-      "name": "NestedCategoryOuter"
+      "name": "NestedCategoryOuter",
     },
     {
       "kind": "CATEGORY",
       "contents": [
         {
           "kind": "BLOCK",
-          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>'
-        }
+          "blockxml": '<block type="basic_block"><field name="TEXT">SecondCategory-FirstBlock</field></block>',
+        },
       ],
-      "name": "Second"
+      "name": "Second",
     }]};
 }
 exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
@@ -180,7 +180,7 @@ exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
 function getXmlArray() {
-  var block = Blockly.Xml.textToDom(
+  const block = Blockly.Xml.textToDom(
       `<block type="logic_compare">
         <field name="OP">NEQ</field>
         <value name="A">
@@ -194,9 +194,9 @@ function getXmlArray() {
           </block>
         </value>
       </block>`);
-  var separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
-  var button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
-  var label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
+  const separator = Blockly.Xml.textToDom('<sep gap="20"></sep>');
+  const button = Blockly.Xml.textToDom('<button text="insert" callbackkey="insertConnectionRows"></button>');
+  const label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
 exports.getXmlArray = getXmlArray;
@@ -214,18 +214,18 @@ function getInjectedToolbox() {
    * Category: NestedCategory
    *   Category: NestedItemOne
    */
-  var toolboxXml = document.getElementById('toolbox-test');
-  var workspace = Blockly.inject('blocklyDiv',
+  const toolboxXml = document.getElementById('toolbox-test');
+  const workspace = Blockly.inject('blocklyDiv',
       {
-        toolbox: toolboxXml
+        toolbox: toolboxXml,
       });
   return workspace.getToolbox();
 }
 exports.getInjectedToolbox = getInjectedToolbox;
 
 function getBasicToolbox() {
-  var workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
-  var toolbox = new Blockly.Toolbox(workspace);
+  const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
+  const toolbox = new Blockly.Toolbox(workspace);
   toolbox.HtmlDiv = document.createElement('div');
   toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
@@ -233,9 +233,9 @@ function getBasicToolbox() {
 exports.getBasicToolbox = getBasicToolbox;
 
 function getCollapsibleItem(toolbox) {
-  var contents = toolbox.contents_;
-  for (var i = 0; i < contents.length; i++) {
-    var item = contents[i];
+  const contents = toolbox.contents_;
+  for (let i = 0; i < contents.length; i++) {
+    const item = contents[i];
     if (item.isCollapsible()) {
       return item;
     }
@@ -244,9 +244,9 @@ function getCollapsibleItem(toolbox) {
 exports.getCollapsibleItem = getCollapsibleItem;
 
 function getNonCollapsibleItem(toolbox) {
-  var contents = toolbox.contents_;
-  for (var i = 0; i < contents.length; i++) {
-    var item = contents[i];
+  const contents = toolbox.contents_;
+  for (let i = 0; i < contents.length; i++) {
+    const item = contents[i];
     if (!item.isCollapsible()) {
       return item;
     }

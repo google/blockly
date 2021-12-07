@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an object that is movable.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -31,4 +30,4 @@ const IMovable = function() {};
  */
 IMovable.prototype.isMovable;
 
-exports = IMovable;
+exports.IMovable = IMovable;

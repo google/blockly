@@ -6,27 +6,26 @@
 
 /**
  * @fileoverview Generating Lua for variable blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
-goog.provide('Blockly.Lua.variables');
+goog.module('Blockly.Lua.variables');
 
-goog.require('Blockly.Lua');
+const Lua = goog.require('Blockly.Lua');
+const {NameType} = goog.require('Blockly.Names');
 
 
-Blockly.Lua['variables_get'] = function(block) {
+Lua['variables_get'] = function(block) {
   // Variable getter.
-  var code = Blockly.Lua.nameDB_.getName(block.getFieldValue('VAR'),
-      Blockly.VARIABLE_CATEGORY_NAME);
-  return [code, Blockly.Lua.ORDER_ATOMIC];
+  const code =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, Lua.ORDER_ATOMIC];
 };
 
-Blockly.Lua['variables_set'] = function(block) {
+Lua['variables_set'] = function(block) {
   // Variable setter.
-  var argument0 = Blockly.Lua.valueToCode(block, 'VALUE',
-      Blockly.Lua.ORDER_NONE) || '0';
-  var varName = Blockly.Lua.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
+  const argument0 = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '0';
+  const varName =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + '\n';
 };

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Utility functions for handling typed variables.
  *
- * @author duzc2dtw@gmail.com (Du Tian Wei)
  */
 'use strict';
 
@@ -18,32 +17,44 @@
  */
 goog.module('Blockly.VariablesDynamic');
 
-const Msg = goog.require('Blockly.Msg');
-const VariableModel = goog.require('Blockly.VariableModel');
 const Variables = goog.require('Blockly.Variables');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const xml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
+const {Msg} = goog.require('Blockly.Msg');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
-const onCreateVariableButtonClick_String = function(button) {
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * See also Blockly.Variables.CATEGORY_NAME and
+ * Blockly.Procedures.CATEGORY_NAME.
+ * @const {string}
+ * @alias Blockly.VariablesDynamic.CATEGORY_NAME
+ */
+const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
+exports.CATEGORY_NAME = CATEGORY_NAME;
+
+const stringButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 };
-exports.onCreateVariableButtonClick_String = onCreateVariableButtonClick_String;
+exports.onCreateVariableButtonClick_String = stringButtonClickHandler;
 
-const onCreateVariableButtonClick_Number = function(button) {
+const numberButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 };
-exports.onCreateVariableButtonClick_Number = onCreateVariableButtonClick_Number;
+exports.onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
-const onCreateVariableButtonClick_Colour = function(button) {
+const colourButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 };
-exports.onCreateVariableButtonClick_Colour = onCreateVariableButtonClick_Colour;
+exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -68,11 +79,11 @@ const flyoutCategory = function(workspace) {
   xmlList.push(button);
 
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_STRING', onCreateVariableButtonClick_String);
+      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_NUMBER', onCreateVariableButtonClick_Number);
+      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_COLOUR', onCreateVariableButtonClick_Colour);
+      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
 
 
   const blockList = flyoutCategoryBlocks(workspace);

@@ -7,7 +7,6 @@
 /**
  * @fileoverview Module that provides constants for use inside Blockly. Do not
  * use these constants outside of the core library.
- * @author fenichel@google.com (Rachel Fenichel)
  * @package
  */
 'use strict';
@@ -145,7 +144,7 @@ exports.HSV_VALUE = HSV_VALUE;
 const SPRITE = {
   width: 96,
   height: 124,
-  url: 'sprites.png'
+  url: 'sprites.png',
 };
 exports.SPRITE = SPRITE;
 
@@ -196,36 +195,6 @@ OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
     ConnectionType.NEXT_STATEMENT;
 
 exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * variable blocks.
- * @const {string}
- * @alias Blockly.internalConstants.VARIABLE_CATEGORY_NAME
- */
-const VARIABLE_CATEGORY_NAME = 'VARIABLE';
-exports.VARIABLE_CATEGORY_NAME = VARIABLE_CATEGORY_NAME;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * variable blocks.
- * @const {string}
- * @alias Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME
- */
-const VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
-exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VARIABLE_DYNAMIC_CATEGORY_NAME;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * procedure blocks.
- * @const {string}
- * @alias Blockly.internalConstants.PROCEDURE_CATEGORY_NAME
- */
-const PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
-exports.PROCEDURE_CATEGORY_NAME = PROCEDURE_CATEGORY_NAME;
 
 /**
  * String for use in the dropdown created in field_variable.

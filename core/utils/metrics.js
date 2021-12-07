@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Workspace metrics definitions.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -152,4 +151,4 @@ Metrics.prototype.flyoutWidth;
  */
 Metrics.prototype.flyoutHeight;
 
-exports = Metrics;
+exports.Metrics = Metrics;

@@ -11,7 +11,7 @@ suite('Block JSON initialization', function() {
   suite('validateTokens_', function() {
     setup(function() {
       this.assertError = function(tokens, count, error) {
-        var block = {
+        const block = {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
@@ -21,7 +21,7 @@ suite('Block JSON initialization', function() {
       };
 
       this.assertNoError = function(tokens, count) {
-        var block = {
+        const block = {
           type: 'test',
           validateTokens_: Blockly.Block.prototype.validateTokens_,
         };
@@ -68,7 +68,7 @@ suite('Block JSON initialization', function() {
   suite('interpolateArguments_', function() {
     setup(function() {
       this.assertInterpolation = function(tokens, args, lastAlign, elements) {
-        var block = {
+        const block = {
           type: 'test',
           interpolateArguments_: Blockly.Block.prototype.interpolateArguments_,
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
@@ -82,7 +82,7 @@ suite('Block JSON initialization', function() {
 
     test('Strings to labels', function() {
       this.assertInterpolation(
-          ['test1', 'test2', 'test3', { 'type': 'input_dummy'}],
+          ['test1', 'test2', 'test3', {'type': 'input_dummy'}],
           [],
           undefined,
           [
@@ -100,13 +100,13 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
     test('Ignore empty strings', function() {
       this.assertInterpolation(
-          ['test1', '', '    ', { 'type': 'input_dummy'}],
+          ['test1', '', '    ', {'type': 'input_dummy'}],
           [],
           undefined,
           [
@@ -116,13 +116,13 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
     test('Insert args', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           [
             {
               'type': 'field_number',
@@ -153,13 +153,13 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
     test('String args to labels', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           ['test1', 'test2', 'test3'],
           undefined,
           [
@@ -177,13 +177,13 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
     test('Ignore empty string args', function() {
       this.assertInterpolation(
-          [1, 2, 3, { 'type': 'input_dummy'}],
+          [1, 2, 3, {'type': 'input_dummy'}],
           ['test1', '     ', '     '],
           undefined,
           [
@@ -193,7 +193,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -217,7 +217,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -226,7 +226,7 @@ suite('Block JSON initialization', function() {
           [
             {
               'type': 'no_field_prefix_field',
-            }
+            },
           ],
           [],
           undefined,
@@ -236,7 +236,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -245,7 +245,7 @@ suite('Block JSON initialization', function() {
           [
             {
               'type': 'input_prefix_field',
-            }
+            },
           ],
           [],
           undefined,
@@ -255,7 +255,7 @@ suite('Block JSON initialization', function() {
             },
             {
               'type': 'input_dummy',
-            }
+            },
           ]);
     });
 
@@ -280,7 +280,7 @@ suite('Block JSON initialization', function() {
             {
               'type': 'input_dummy',
               'align': 'CENTER',
-            }
+            },
           ]);
     });
   });
@@ -304,7 +304,7 @@ suite('Block JSON initialization', function() {
           });
 
       this.assertField = function(json, expectedType) {
-        var block = {
+        const block = {
           type: 'test',
           fieldFromJson_: Blockly.Block.prototype.fieldFromJson_,
           stringToFieldJson_: Blockly.Block.prototype.stringToFieldJson_,
@@ -361,7 +361,7 @@ suite('Block JSON initialization', function() {
         'type': 'field_undefined',
         'alt': {
           'type': 'field_number',
-          'name': 'FIELDNAME'
+          'name': 'FIELDNAME',
         },
       }, 'field_number');
     });
@@ -398,7 +398,7 @@ suite('Block JSON initialization', function() {
                 'type': 'field_undefined5',
                 'alt': {
                   'type': 'field_number',
-                  'name': 'FIELDNAME'
+                  'name': 'FIELDNAME',
                 },
               },
             },
@@ -409,7 +409,7 @@ suite('Block JSON initialization', function() {
 
     test('No alt', function() {
       this.assertField({
-        'type': 'field_undefined'
+        'type': 'field_undefined',
       }, null);
     });
 
@@ -418,7 +418,7 @@ suite('Block JSON initialization', function() {
         'type': 'field_undefined',
         'alt': {
           'type': 'field_undefined',
-        }
+        },
       }, null);
     });
 
@@ -432,12 +432,12 @@ suite('Block JSON initialization', function() {
 
   suite('inputFromJson_', function() {
     setup(function() {
-      var Input = function(type) {
+      const Input = function(type) {
         this.type = type;
         this.setCheck = sinon.fake();
         this.setAlign = sinon.fake();
       };
-      var Block = function() {
+      const Block = function() {
         this.type = 'test';
         this.appendDummyInput = sinon.fake.returns(new Input());
         this.appendValueInput = sinon.fake.returns(new Input());
@@ -446,8 +446,8 @@ suite('Block JSON initialization', function() {
       };
 
       this.assertInput = function(json, type, check, align) {
-        var block = new Block();
-        var input = block.inputFromJson_(json);
+        const block = new Block();
+        const input = block.inputFromJson_(json);
         switch (type) {
           case 'input_dummy':
             chai.assert.isTrue(block.appendDummyInput.calledOnce,
@@ -524,7 +524,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': 'Integer'
+            'check': 'Integer',
           },
           'input_dummy',
           'Integer');
@@ -534,7 +534,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': ['Integer', 'Number']
+            'check': ['Integer', 'Number'],
           },
           'input_dummy',
           ['Integer', 'Number']);
@@ -544,7 +544,7 @@ suite('Block JSON initialization', function() {
       this.assertInput(
           {
             'type': 'input_dummy',
-            'check': ''
+            'check': '',
           },
           'input_dummy');
     });
@@ -564,7 +564,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'LEFT',
           },
-          'input_dummy', undefined, Blockly.constants.ALIGN.LEFT);
+          'input_dummy', undefined, Blockly.ALIGN_LEFT);
     });
 
     test('"Right" align', function() {
@@ -573,7 +573,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'RIGHT',
           },
-          'input_dummy', undefined, Blockly.constants.ALIGN.RIGHT);
+          'input_dummy', undefined, Blockly.ALIGN_RIGHT);
     });
 
     test('"Center" align', function() {
@@ -582,7 +582,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTER',
           },
-          'input_dummy', undefined, Blockly.constants.ALIGN.CENTRE);
+          'input_dummy', undefined, Blockly.ALIGN_CENTRE);
     });
 
     test('"Centre" align', function() {
@@ -591,7 +591,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTRE',
           },
-          'input_dummy', undefined, Blockly.constants.ALIGN.CENTRE);
+          'input_dummy', undefined, Blockly.ALIGN_CENTRE);
     });
   });
 });

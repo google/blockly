@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Events fired as a result of a theme update.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.Events.ThemeChange');
 
-const UiBase = goog.require('Blockly.Events.UiBase');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -69,4 +68,4 @@ ThemeChange.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);
 
-exports = ThemeChange;
+exports.ThemeChange = ThemeChange;

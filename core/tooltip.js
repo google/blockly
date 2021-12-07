@@ -11,7 +11,6 @@
  * If the tooltip is a string, then that message will be displayed.
  * If the tooltip is an SVG element, then that object's tooltip will be used.
  * Third, call bindMouseEvents(e) passing the SVG element.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -46,7 +45,6 @@ exports.TipInfo = TipInfo;
 /**
  * Is a tooltip currently showing?
  * @type {boolean}
- * @alias Blockly.Tooltip.visible
  */
 let visible = false;
 
@@ -61,14 +59,22 @@ const isVisible = function() {
 exports.isVisible = isVisible;
 
 Object.defineProperties(exports, {
+  /**
+   * Is a tooltip currently showing?
+   * @name Blockly.Tooltip.visible
+   * @type {boolean}
+   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
+   *     2021)
+   * @suppress {checkTypes}
+   */
   visible: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.isVisible()');
+          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.isVisible()');
       return isVisible();
-    }
-  }
+    },
+  },
 });
 
 /**
@@ -155,7 +161,6 @@ exports.MARGINS = MARGINS;
 /**
  * The HTML container.  Set once by createDom.
  * @type {Element}
- * @alias Blockly.Tooltip.DIV
  */
 let DIV = null;
 
@@ -170,14 +175,22 @@ const getDiv = function() {
 exports.getDiv = getDiv;
 
 Object.defineProperties(exports, {
+  /**
+   * The HTML container.  Set once by createDom.
+   * @name Blockly.Tooltip.DIV
+   * @type {Element}
+   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   DIV: {
     get: function() {
       deprecation.warn(
-        'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-        'Blockly.Tooltip.getDiv()');
+          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.getDiv()');
       return getDiv();
-    }
-  }
+    },
+  },
 });
 
 /**
@@ -190,10 +203,10 @@ const getTooltipOfObject = function(object) {
   const obj = getTargetObject(object);
   if (obj) {
     let tooltip = obj.tooltip;
-    while (typeof tooltip == 'function') {
+    while (typeof tooltip === 'function') {
       tooltip = tooltip();
     }
-    if (typeof tooltip != 'string') {
+    if (typeof tooltip !== 'string') {
       throw Error('Tooltip function must return a string.');
     }
     return tooltip;
@@ -211,8 +224,8 @@ exports.getTooltipOfObject = getTooltipOfObject;
  */
 const getTargetObject = function(obj) {
   while (obj && obj.tooltip) {
-    if ((typeof obj.tooltip == 'string') ||
-        (typeof obj.tooltip == 'function')) {
+    if ((typeof obj.tooltip === 'string') ||
+        (typeof obj.tooltip === 'function')) {
       return obj;
     }
     obj = obj.tooltip;
@@ -282,7 +295,7 @@ const onMouseOver = function(e) {
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
   const newElement = /** @type {Element} */ (getTargetObject(e.currentTarget));
-  if (element != newElement) {
+  if (element !== newElement) {
     hide();
     poisonedElement = null;
     element = newElement;
@@ -334,7 +347,7 @@ const onMouseMove = function(e) {
     if (Math.sqrt(dx * dx + dy * dy) > RADIUS_OK) {
       hide();
     }
-  } else if (poisonedElement != element) {
+  } else if (poisonedElement !== element) {
     // The mouse moved, clear any previously scheduled tooltip.
     clearTimeout(showPid);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.

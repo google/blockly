@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for rendering debug graphics.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,25 +15,25 @@
  */
 goog.module('Blockly.blockRendering.Debug');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const FieldLabel = goog.require('Blockly.FieldLabel');
-/* eslint-disable-next-line no-unused-vars */
-const InRowSpacer = goog.requireType('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const Measurable = goog.requireType('Blockly.blockRendering.Measurable');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-/* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Row = goog.requireType('Blockly.blockRendering.Row');
-const Svg = goog.require('Blockly.utils.Svg');
-const Types = goog.require('Blockly.blockRendering.Types');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+/* eslint-disable-next-line no-unused-vars */
+const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
+/* eslint-disable-next-line no-unused-vars */
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
+const {Row} = goog.requireType('Blockly.blockRendering.Row');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -82,7 +81,7 @@ Debug.config = {
   connections: true,
   blockBounds: true,
   connectedBlockBounds: true,
-  render: true
+  render: true,
 };
 
 /**
@@ -126,7 +125,7 @@ Debug.prototype.drawSpacerRow = function(row, cursorY, isRtl) {
         'stroke': isNegativeSpacing ? 'black' : 'blue',
         'fill': 'blue',
         'fill-opacity': '0.5',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 };
@@ -160,7 +159,7 @@ Debug.prototype.drawSpacerElem = function(elem, rowHeight, isRtl) {
         'stroke': 'pink',
         'fill': isNegativeSpacing ? 'black' : 'pink',
         'fill-opacity': '0.5',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 };
@@ -187,7 +186,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
           'height': elem.height,
           'stroke': 'black',
           'fill': 'none',
-          'stroke-width': '1px'
+          'stroke-width': '1px',
         },
         this.svgRoot_));
 
@@ -202,7 +201,7 @@ Debug.prototype.drawRenderedElem = function(elem, isRtl) {
             'height': '0.1px',
             'stroke': 'red',
             'fill': 'none',
-            'stroke-width': '0.5px'
+            'stroke-width': '0.5px',
           },
           this.svgRoot_));
     }
@@ -231,19 +230,19 @@ Debug.prototype.drawConnection = function(conn) {
   let colour;
   let size;
   let fill;
-  if (conn.type == ConnectionType.INPUT_VALUE) {
+  if (conn.type === ConnectionType.INPUT_VALUE) {
     size = 4;
     colour = 'magenta';
     fill = 'none';
-  } else if (conn.type == ConnectionType.OUTPUT_VALUE) {
+  } else if (conn.type === ConnectionType.OUTPUT_VALUE) {
     size = 2;
     colour = 'magenta';
     fill = colour;
-  } else if (conn.type == ConnectionType.NEXT_STATEMENT) {
+  } else if (conn.type === ConnectionType.NEXT_STATEMENT) {
     size = 4;
     colour = 'goldenrod';
     fill = 'none';
-  } else if (conn.type == ConnectionType.PREVIOUS_STATEMENT) {
+  } else if (conn.type === ConnectionType.PREVIOUS_STATEMENT) {
     size = 2;
     colour = 'goldenrod';
     fill = colour;
@@ -280,7 +279,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
         'height': row.height,
         'stroke': 'red',
         'fill': 'none',
-        'stroke-width': '1px'
+        'stroke-width': '1px',
       },
       this.svgRoot_));
 
@@ -299,7 +298,7 @@ Debug.prototype.drawRenderedRow = function(row, cursorY, isRtl) {
           'stroke': this.randomColour_,
           'fill': 'none',
           'stroke-width': '1px',
-          'stroke-dasharray': '3,3'
+          'stroke-dasharray': '3,3',
         },
         this.svgRoot_));
   }
@@ -352,7 +351,7 @@ Debug.prototype.drawBoundingBox = function(info) {
         'stroke': 'black',
         'fill': 'none',
         'stroke-width': '1px',
-        'stroke-dasharray': '5,5'
+        'stroke-dasharray': '5,5',
       },
       this.svgRoot_));
 
@@ -369,7 +368,7 @@ Debug.prototype.drawBoundingBox = function(info) {
           'stroke': '#DF57BC',
           'fill': 'none',
           'stroke-width': '1px',
-          'stroke-dasharray': '3,3'
+          'stroke-dasharray': '3,3',
         },
         this.svgRoot_));
   }
@@ -433,4 +432,4 @@ Debug.prototype.drawRender = function(svgPath) {
   }, 100);
 };
 
-exports = Debug;
+exports.Debug = Debug;

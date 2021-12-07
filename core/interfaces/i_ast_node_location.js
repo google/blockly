@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for an AST node location.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -24,4 +23,4 @@ goog.module('Blockly.IASTNodeLocation');
  */
 const IASTNodeLocation = function() {};
 
-exports = IASTNodeLocation;
+exports.IASTNodeLocation = IASTNodeLocation;

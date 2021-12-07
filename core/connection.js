@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Components for creating connections between blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,23 +15,22 @@
  */
 goog.module('Blockly.Connection');
 
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocationWithBlock = goog.requireType('Blockly.IASTNodeLocationWithBlock');
-/* eslint-disable-next-line no-unused-vars */
-const IConnectionChecker = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const Input = goog.requireType('Blockly.Input');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+/* eslint-disable-next-line no-unused-vars */
+const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.constants');
 
 
 /**
@@ -64,6 +62,7 @@ Connection.REASON_CHECKS_FAILED = 4;
 Connection.REASON_DIFFERENT_WORKSPACES = 5;
 Connection.REASON_SHADOW_PARENT = 6;
 Connection.REASON_DRAG_CHECKS_FAILED = 7;
+Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -198,8 +197,8 @@ Connection.prototype.getSourceBlock = function() {
  * @return {boolean} True if connection faces down or right.
  */
 Connection.prototype.isSuperior = function() {
-  return this.type == ConnectionType.INPUT_VALUE ||
-      this.type == ConnectionType.NEXT_STATEMENT;
+  return this.type === ConnectionType.INPUT_VALUE ||
+      this.type === ConnectionType.NEXT_STATEMENT;
 };
 
 /**
@@ -211,42 +210,6 @@ Connection.prototype.isConnected = function() {
 };
 
 /**
- * Checks whether the current connection can connect with the target
- * connection.
- * @param {Connection} target Connection to check compatibility with.
- * @return {number} Connection.CAN_CONNECT if the connection is legal,
- *    an error code otherwise.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.canConnectWithReason = function(target) {
-  deprecation.warn(
-      'Connection.prototype.canConnectWithReason', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnectWithReason(this, target, false);
-};
-
-/**
- * Checks whether the current connection and target connection are compatible
- * and throws an exception if they are not.
- * @param {Connection} target The connection to check compatibility
- *    with.
- * @package
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.checkConnection = function(target) {
-  deprecation.warn(
-      'Connection.prototype.checkConnection', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  const checker = this.getConnectionChecker();
-  const reason = checker.canConnectWithReason(this, target, false);
-  if (reason != Connection.CAN_CONNECT) {
-    throw new Error(checker.getErrorMessage(reason, this, target));
-  }
-};
-
-/**
  * Get the workspace's connection type checker object.
  * @return {!IConnectionChecker} The connection type checker for the
  *     source block's workspace.
@@ -254,20 +217,6 @@ Connection.prototype.checkConnection = function(target) {
  */
 Connection.prototype.getConnectionChecker = function() {
   return this.sourceBlock_.workspace.connectionChecker;
-};
-
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Connection} candidate A nearby connection to check.
- * @return {boolean} True if the connection is allowed, false otherwise.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.isConnectionAllowed = function(candidate) {
-  deprecation.warn(
-      'Connection.prototype.isConnectionAllowed', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnect(this, candidate, true);
 };
 
 /**
@@ -287,7 +236,7 @@ Connection.prototype.onFailedConnect = function(_otherConnection) {
  * @return {boolean} Whether the the blocks are now connected or not.
  */
 Connection.prototype.connect = function(otherConnection) {
-  if (this.targetConnection == otherConnection) {
+  if (this.targetConnection === otherConnection) {
     // Already connected together.  NOP.
     return true;
   }
@@ -412,10 +361,12 @@ Connection.prototype.disconnect = function() {
   if (!otherConnection) {
     throw Error('Source connection not connected.');
   }
-  if (otherConnection.targetConnection != this) {
+  if (otherConnection.targetConnection !== this) {
     throw Error('Target connection not connected to source connection.');
   }
-  let parentBlock, childBlock, parentConnection;
+  let parentBlock;
+  let childBlock;
+  let parentConnection;
   if (this.isSuperior()) {
     // Superior block.
     parentBlock = this.sourceBlock_;
@@ -481,38 +432,6 @@ Connection.prototype.targetBlock = function() {
     return this.targetConnection.getSourceBlock();
   }
   return null;
-};
-
-/**
- * Is this connection compatible with another connection with respect to the
- * value type system.  E.g. square_root("Hello") is not compatible.
- * @param {!Connection} otherConnection Connection to compare against.
- * @return {boolean} True if the connections share a type.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.checkType = function(otherConnection) {
-  deprecation.warn(
-      'Connection.prototype.checkType', 'October 2019', 'January 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnect(this, otherConnection, false);
-};
-
-/**
- * Is this connection compatible with another connection with respect to the
- * value type system.  E.g. square_root("Hello") is not compatible.
- * @param {!Connection} otherConnection Connection to compare against.
- * @return {boolean} True if the connections share a type.
- * @private
- * @deprecated October 2019. Will be deleted January 2021. Use the workspace's
- *     connectionChecker instead.
- * @suppress {unusedPrivateMembers}
- */
-Connection.prototype.checkType_ = function(otherConnection) {
-  deprecation.warn(
-      'Connection.prototype.checkType_', 'October 2019', 'January 2021',
-      'the workspace\'s connection checker');
-  return this.checkType(otherConnection);
 };
 
 /**
@@ -655,16 +574,16 @@ Connection.prototype.toString = function() {
     return 'Orphan Connection';
   }
   let msg;
-  if (block.outputConnection == this) {
+  if (block.outputConnection === this) {
     msg = 'Output Connection of ';
-  } else if (block.previousConnection == this) {
+  } else if (block.previousConnection === this) {
     msg = 'Previous Connection of ';
-  } else if (block.nextConnection == this) {
+  } else if (block.nextConnection === this) {
     msg = 'Next Connection of ';
   } else {
     let parentInput = null;
     for (let i = 0, input; (input = block.inputList[i]); i++) {
-      if (input.connection == this) {
+      if (input.connection === this) {
         parentInput = input;
         break;
       }
@@ -701,11 +620,10 @@ Connection.prototype.stashShadowState_ = function() {
  *     to reapply to the shadowDom_ and shadowState_ properties.
  * @private
  */
-Connection.prototype.applyShadowState_ =
-    function({shadowDom, shadowState}) {
-      this.shadowDom_ = shadowDom;
-      this.shadowState_ = shadowState;
-    };
+Connection.prototype.applyShadowState_ = function({shadowDom, shadowState}) {
+  this.shadowDom_ = shadowDom;
+  this.shadowState_ = shadowState;
+};
 
 /**
  * Sets the state of the shadow of this connection.
@@ -714,33 +632,33 @@ Connection.prototype.applyShadowState_ =
  *     connection to.
  * @private
  */
-Connection.prototype.setShadowStateInternal_ =
-    function({shadowDom = null, shadowState = null} = {}) {
-      // One or both of these should always be null.
-      // If neither is null, the shadowState will get priority.
-      this.shadowDom_ = shadowDom;
-      this.shadowState_ = shadowState;
+Connection.prototype.setShadowStateInternal_ = function(
+    {shadowDom = null, shadowState = null} = {}) {
+  // One or both of these should always be null.
+  // If neither is null, the shadowState will get priority.
+  this.shadowDom_ = shadowDom;
+  this.shadowState_ = shadowState;
 
-      const target = this.targetBlock();
-      if (!target) {
-        this.respawnShadow_();
-        if (this.targetBlock() && this.targetBlock().isShadow()) {
-          this.serializeShadow_(this.targetBlock());
-        }
-      } else if (target.isShadow()) {
-        target.dispose(false);
-        this.respawnShadow_();
-        if (this.targetBlock() && this.targetBlock().isShadow()) {
-          this.serializeShadow_(this.targetBlock());
-        }
-      } else {
-        const shadow = this.createShadowBlock_(false);
-        this.serializeShadow_(shadow);
-        if (shadow) {
-          shadow.dispose(false);
-        }
-      }
-    };
+  const target = this.targetBlock();
+  if (!target) {
+    this.respawnShadow_();
+    if (this.targetBlock() && this.targetBlock().isShadow()) {
+      this.serializeShadow_(this.targetBlock());
+    }
+  } else if (target.isShadow()) {
+    target.dispose(false);
+    this.respawnShadow_();
+    if (this.targetBlock() && this.targetBlock().isShadow()) {
+      this.serializeShadow_(this.targetBlock());
+    }
+  } else {
+    const shadow = this.createShadowBlock_(false);
+    this.serializeShadow_(shadow);
+    if (shadow) {
+      shadow.dispose(false);
+    }
+  }
+};
 
 /**
  * Creates a shadow block based on the current shadowState_ or shadowDom_.
@@ -761,28 +679,25 @@ Connection.prototype.createShadowBlock_ = function(attemptToConnect) {
 
   let blockShadow;
   if (shadowState) {
-    blockShadow = blocks.appendInternal(
-        shadowState,
-        parentBlock.workspace,
-        {
-          parentConnection: attemptToConnect ? this : undefined,
-          isShadow: true,
-          recordUndo: false,
-        });
+    blockShadow = blocks.appendInternal(shadowState, parentBlock.workspace, {
+      parentConnection: attemptToConnect ? this : undefined,
+      isShadow: true,
+      recordUndo: false,
+    });
     return blockShadow;
   }
 
   if (shadowDom) {
     blockShadow = Xml.domToBlock(shadowDom, parentBlock.workspace);
     if (attemptToConnect) {
-      if (this.type == ConnectionType.INPUT_VALUE) {
+      if (this.type === ConnectionType.INPUT_VALUE) {
         if (!blockShadow.outputConnection) {
           throw new Error('Shadow block is missing an output connection');
         }
         if (!this.connect(blockShadow.outputConnection)) {
           throw new Error('Could not connect shadow block to connection');
         }
-      } else if (this.type == ConnectionType.NEXT_STATEMENT) {
+      } else if (this.type === ConnectionType.NEXT_STATEMENT) {
         if (!blockShadow.previousConnection) {
           throw new Error('Shadow block is missing previous connection');
         }
@@ -813,4 +728,4 @@ Connection.prototype.serializeShadow_ = function(shadow) {
   this.shadowState_ = blocks.save(shadow);
 };
 
-exports = Connection;
+exports.Connection = Connection;

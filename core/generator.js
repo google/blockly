@@ -7,7 +7,6 @@
 /**
  * @fileoverview Utility functions for generating executable code from
  * Blockly code.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -18,15 +17,14 @@
  */
 goog.module('Blockly.Generator');
 
-/* eslint-disable-next-line no-unused-vars */
-const Names = goog.requireType('Blockly.Names');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
-const internalConstants = goog.require('Blockly.internalConstants');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {Names, NameType} = goog.require('Blockly.Names');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -201,7 +199,7 @@ Generator.prototype.blockToCode = function(block, opt_thisOnly) {
   }
 
   const func = this[block.type];
-  if (typeof func != 'function') {
+  if (typeof func !== 'function') {
     throw Error(
         'Language "' + this.name_ + '" does not know how to generate ' +
         'code for block type "' + block.type + '".');
@@ -217,7 +215,7 @@ Generator.prototype.blockToCode = function(block, opt_thisOnly) {
       throw TypeError('Expecting string from statement block: ' + block.type);
     }
     return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
-  } else if (typeof code == 'string') {
+  } else if (typeof code === 'string') {
     if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
       code = this.injectId(this.STATEMENT_PREFIX, block) + code;
     }
@@ -274,8 +272,8 @@ Generator.prototype.valueToCode = function(block, name, outerOrder) {
   const outerOrderClass = Math.floor(outerOrder);
   const innerOrderClass = Math.floor(innerOrder);
   if (outerOrderClass <= innerOrderClass) {
-    if (outerOrderClass == innerOrderClass &&
-        (outerOrderClass == 0 || outerOrderClass == 99)) {
+    if (outerOrderClass === innerOrderClass &&
+        (outerOrderClass === 0 || outerOrderClass === 99)) {
       // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
       // 0 is the atomic order, 99 is the none order.  No parentheses needed.
       // In all known languages multiple such code blocks are not order
@@ -287,8 +285,8 @@ Generator.prototype.valueToCode = function(block, name, outerOrder) {
       parensNeeded = true;
       // Check for special exceptions.
       for (let i = 0; i < this.ORDER_OVERRIDES.length; i++) {
-        if (this.ORDER_OVERRIDES[i][0] == outerOrder &&
-            this.ORDER_OVERRIDES[i][1] == innerOrder) {
+        if (this.ORDER_OVERRIDES[i][0] === outerOrder &&
+            this.ORDER_OVERRIDES[i][1] === innerOrder) {
           parensNeeded = false;
           break;
         }
@@ -317,7 +315,7 @@ Generator.prototype.statementToCode = function(block, name) {
   let code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
-  if (typeof code != 'string') {
+  if (typeof code !== 'string') {
     throw TypeError(
         'Expecting code from statement block: ' +
         (targetBlock && targetBlock.type));
@@ -417,10 +415,16 @@ Generator.prototype.functionNames_;
 Generator.prototype.nameDB_;
 
 Object.defineProperties(Generator.prototype, {
+  /**
+   * A database of variable names.
+   * @name Blockly.Generator.prototype.variableDB_
+   * @type {!Names|undefined}
+   * @protected
+   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
+   * @suppress {checkTypes}
+   */
   variableDB_: {
     /**
-     * Getter.
-     * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
      * @this {Generator}
      * @return {!Names|undefined} Name database.
      */
@@ -429,8 +433,6 @@ Object.defineProperties(Generator.prototype, {
       return this.nameDB_;
     },
     /**
-     * Setter.
-     * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
      * @this {Generator}
      * @param {!Names|undefined} nameDb New name database.
      */
@@ -464,8 +466,8 @@ Object.defineProperties(Generator.prototype, {
  */
 Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    const functionName = this.nameDB_.getDistinctName(
-        desiredName, internalConstants.PROCEDURE_CATEGORY_NAME);
+    const functionName =
+        this.nameDB_.getDistinctName(desiredName, NameType.PROCEDURE);
     this.functionNames_[desiredName] = functionName;
     let codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
@@ -474,7 +476,7 @@ Generator.prototype.provideFunction_ = function(desiredName, code) {
     // character first, then replace them all with the indent.
     // We are assuming that no provided functions contain a literal null char.
     let oldCodeText;
-    while (oldCodeText != codeText) {
+    while (oldCodeText !== codeText) {
       oldCodeText = codeText;
       codeText = codeText.replace(/^(( {2})*) {2}/gm, '$1\0');
     }
@@ -546,4 +548,4 @@ Generator.prototype.scrubNakedValue = function(line) {
   return line;
 };
 
-exports = Generator;
+exports.Generator = Generator;

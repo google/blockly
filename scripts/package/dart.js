@@ -5,10 +5,5 @@
  */
 
 /**
- * @fileoverview Dart Generator module.
+ * @fileoverview Dart generator module; just a wrapper for dart_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.Dart = BlocklyDart;

@@ -19,10 +19,10 @@
  */
 goog.module('Blockly.FieldLabelSerializable');
 
-const FieldLabel = goog.require('Blockly.FieldLabel');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
 
 
 /**
@@ -54,7 +54,7 @@ object.inherits(FieldLabelSerializable, FieldLabel);
  * @nocollapse
  */
 FieldLabelSerializable.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldLabelSerializable if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);
@@ -76,4 +76,4 @@ FieldLabelSerializable.prototype.SERIALIZABLE = true;
 
 fieldRegistry.register('field_label_serializable', FieldLabelSerializable);
 
-exports = FieldLabelSerializable;
+exports.FieldLabelSerializable = FieldLabelSerializable;

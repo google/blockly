@@ -6,9 +6,6 @@
 
 /**
  * @fileoverview Text Area field.
- * @author fraser@google.com (Neil Fraser)
- * @author Andrew Mee
- * @author acbart@udel.edu (Austin Cory Bart)
  */
 'use strict';
 
@@ -19,17 +16,17 @@
 goog.module('Blockly.FieldMultilineInput');
 
 const Css = goog.require('Blockly.Css');
-const Field = goog.require('Blockly.Field');
-const FieldTextInput = goog.require('Blockly.FieldTextInput');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const Svg = goog.require('Blockly.utils.Svg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {Field} = goog.require('Blockly.Field');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -93,7 +90,7 @@ FieldMultilineInput.prototype.configure_ = function(config) {
  * @nocollapse
  */
 FieldMultilineInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);
@@ -239,9 +236,9 @@ FieldMultilineInput.prototype.render_ = function() {
     const span = dom.createSvgElement(
         Svg.TEXT, {
           'class': 'blocklyText blocklyMultilineText',
-          x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-          y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-          dy: this.getConstants().FIELD_TEXT_BASELINE
+          'x': this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+          'y': y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+          'dy': this.getConstants().FIELD_TEXT_BASELINE,
         },
         this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));
@@ -249,7 +246,7 @@ FieldMultilineInput.prototype.render_ = function() {
   }
 
   if (this.isBeingEdited_) {
-    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (this.isOverflowedY_) {
       dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
     } else {
@@ -268,7 +265,7 @@ FieldMultilineInput.prototype.render_ = function() {
     } else {
       this.resizeEditor_();
     }
-    var htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+    const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
     if (!this.isTextValid_) {
       dom.addClass(htmlInput, 'blocklyInvalidInput');
       aria.setState(htmlInput, aria.State.INVALID, true);
@@ -287,7 +284,7 @@ FieldMultilineInput.prototype.updateSize_ = function() {
   const nodes = this.textGroup_.childNodes;
   let totalWidth = 0;
   let totalHeight = 0;
-  for (var i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < nodes.length; i++) {
     const tspan = /** @type {!Element} */ (nodes[i]);
     const textWidth = dom.getTextWidth(tspan);
     if (textWidth > totalWidth) {
@@ -309,7 +306,7 @@ FieldMultilineInput.prototype.updateSize_ = function() {
     const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
     const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
 
-    for (var i = 0; i < actualEditorLines.length; i++) {
+    for (let i = 0; i < actualEditorLines.length; i++) {
       if (actualEditorLines[i].length > this.maxDisplayLength) {
         actualEditorLines[i] =
             actualEditorLines[i].substring(0, this.maxDisplayLength);
@@ -433,20 +430,20 @@ FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
 /**
  * CSS for multiline field.  See css.js for use.
  */
-Css.register([
-  `.blocklyHtmlTextAreaInput {
-  font-family: monospace;
-  resize: none;
-  overflow: hidden;
-  height: 100%;
-  text-align: left;
-}`,
-  `.blocklyHtmlTextAreaInputOverflowedY {
-  overflow-y: scroll;
-}`
-]);
+Css.register(`
+  .blocklyHtmlTextAreaInput {
+    font-family: monospace;
+    resize: none;
+    overflow: hidden;
+    height: 100%;
+    text-align: left;
+  }
 
+  .blocklyHtmlTextAreaInputOverflowedY {
+    overflow-y: scroll;
+  }
+`);
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
-exports = FieldMultilineInput;
+exports.FieldMultilineInput = FieldMultilineInput;

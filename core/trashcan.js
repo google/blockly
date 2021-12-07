@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing a trash can icon.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -19,26 +18,6 @@ goog.module('Blockly.Trashcan');
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const BlocklyOptions = goog.requireType('Blockly.BlocklyOptions');
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const DeleteArea = goog.require('Blockly.DeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
-/* eslint-disable-next-line no-unused-vars */
-const IDraggable = goog.requireType('Blockly.IDraggable');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
-/* eslint-disable-next-line no-unused-vars */
-const MetricsManager = goog.requireType('Blockly.MetricsManager');
-const Options = goog.require('Blockly.Options');
-const Rect = goog.require('Blockly.utils.Rect');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
 const blocks = goog.requireType('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -48,6 +27,26 @@ const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+/* eslint-disable-next-line no-unused-vars */
+const {IDraggable} = goog.requireType('Blockly.IDraggable');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {IPositionable} = goog.require('Blockly.IPositionable');
+/* eslint-disable-next-line no-unused-vars */
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+const {Options} = goog.require('Blockly.Options');
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.TrashcanOpen');
 
@@ -106,12 +105,12 @@ const Trashcan = function(workspace) {
         'rendererOverrides': this.workspace_.options.rendererOverrides,
         'move': {
           'scrollbars': true,
-        }
+        },
       }));
   // Create vertical or horizontal flyout.
   if (this.workspace_.horizontalLayout) {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == toolbox.Position.TOP ?
+        this.workspace_.toolboxPosition === toolbox.Position.TOP ?
         toolbox.Position.BOTTOM :
         toolbox.Position.TOP;
     const HorizontalFlyout = registry.getClassFromOptions(
@@ -120,7 +119,7 @@ const Trashcan = function(workspace) {
     this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
   } else {
     flyoutWorkspaceOptions.toolboxPosition =
-        this.workspace_.toolboxPosition == toolbox.Position.RIGHT ?
+        this.workspace_.toolboxPosition === toolbox.Position.RIGHT ?
         toolbox.Position.LEFT :
         toolbox.Position.RIGHT;
     const VerticalFlyout = registry.getClassFromOptions(
@@ -298,7 +297,7 @@ Trashcan.prototype.createDom = function() {
         'x': -SPRITE_LEFT,
         'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
       },
       this.svgGroup_);
   body.setAttributeNS(
@@ -314,7 +313,7 @@ Trashcan.prototype.createDom = function() {
         'x': -SPRITE_LEFT,
         'height': internalConstants.SPRITE.height,
         'y': -SPRITE_TOP,
-        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'
+        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
       },
       this.svgGroup_);
   this.svgLid_.setAttributeNS(
@@ -351,8 +350,8 @@ Trashcan.prototype.init = function() {
       ComponentManager.Capability.AUTOHIDEABLE,
       ComponentManager.Capability.DELETE_AREA,
       ComponentManager.Capability.DRAG_TARGET,
-      ComponentManager.Capability.POSITIONABLE
-    ]
+      ComponentManager.Capability.POSITIONABLE,
+    ],
   });
   this.initialized_ = true;
   this.setLidOpen(false);
@@ -388,7 +387,7 @@ Trashcan.prototype.hasContents_ = function() {
  * @return {boolean} True if the trashcan contents-flyout is currently open.
  */
 Trashcan.prototype.contentsIsOpen = function() {
-  return this.flyout.isVisible();
+  return !!this.flyout && this.flyout.isVisible();
 };
 
 /**
@@ -481,7 +480,7 @@ Trashcan.prototype.position = function(metrics, savedPositions) {
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {?Rect} The UI elements’s bounding box. Null if
+ * @return {?Rect} The UI elements's bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
 Trashcan.prototype.getBoundingRectangle = function() {
@@ -547,7 +546,7 @@ Trashcan.prototype.onDrop = function(_dragElement) {
  * @package
  */
 Trashcan.prototype.setLidOpen = function(state) {
-  if (this.isLidOpen == state) {
+  if (this.isLidOpen === state) {
     return;
   }
   clearTimeout(this.lidTask_);
@@ -585,7 +584,7 @@ Trashcan.prototype.animateLid_ = function() {
  */
 Trashcan.prototype.setLidAngle_ = function(lidAngle) {
   const openAtRight =
-      this.workspace_.toolboxPosition == toolbox.Position.RIGHT ||
+      this.workspace_.toolboxPosition === toolbox.Position.RIGHT ||
       (this.workspace_.horizontalLayout && this.workspace_.RTL);
   this.svgLid_.setAttribute(
       'transform',
@@ -631,8 +630,8 @@ Trashcan.prototype.click = function() {
  * @private
  */
 Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  const uiEvent =
-      new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(trashcanOpen, this.workspace_.id);
+  const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+      trashcanOpen, this.workspace_.id);
   eventUtils.fire(uiEvent);
 };
 
@@ -677,9 +676,9 @@ Trashcan.prototype.onDelete_ = function(event) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
-  if (event.type == eventUtils.BLOCK_DELETE && !event.wasShadow) {
+  if (event.type === eventUtils.BLOCK_DELETE && !event.wasShadow) {
     const cleanedJson = this.cleanBlockJson_(event.oldJson);
-    if (this.contents_.indexOf(cleanedJson) != -1) {
+    if (this.contents_.indexOf(cleanedJson) !== -1) {
       return;
     }
     this.contents_.unshift(cleanedJson);
@@ -703,8 +702,12 @@ Trashcan.prototype.onDelete_ = function(event) {
  */
 Trashcan.prototype.cleanBlockJson_ = function(json) {
   // Create a deep copy.
-  json = /** @type {!blocks.State} */(JSON.parse(JSON.stringify(json)));
+  json = /** @type {!blocks.State} */ (JSON.parse(JSON.stringify(json)));
 
+  /**
+   * Reshape JSON into a nicer format.
+   * @param {!blocks.State} json The JSON to clean.
+   */
   function cleanRec(json) {
     if (!json) {
       return;
@@ -723,7 +726,7 @@ Trashcan.prototype.cleanBlockJson_ = function(json) {
     }
 
     const inputs = json['inputs'];
-    for (var name in inputs) {
+    for (const name in inputs) {
       const input = inputs[name];
       cleanRec(input['block']);
       cleanRec(input['shadow']);
@@ -740,4 +743,4 @@ Trashcan.prototype.cleanBlockJson_ = function(json) {
   return JSON.stringify(json);
 };
 
-exports = Trashcan;
+exports.Trashcan = Trashcan;

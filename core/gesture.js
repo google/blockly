@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing an in-progress gesture, usually a drag
  * or a tap.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,22 +17,8 @@
  */
 goog.module('Blockly.Gesture');
 
-const BubbleDragger = goog.require('Blockly.BubbleDragger');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const IBlockDragger = goog.requireType('Blockly.IBlockDragger');
-/* eslint-disable-next-line no-unused-vars */
-const IBubble = goog.requireType('Blockly.IBubble');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
-const Workspace = goog.require('Blockly.Workspace');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const WorkspaceDragger = goog.require('Blockly.WorkspaceDragger');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
@@ -42,6 +27,20 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
+/* eslint-disable-next-line no-unused-vars */
+const {IBubble} = goog.requireType('Blockly.IBubble');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.requireType('Blockly.IFlyout');
+const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {Workspace} = goog.require('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */
@@ -511,9 +510,9 @@ Gesture.prototype.doStart = function(e) {
     return;
   }
 
-  if ((e.type.toLowerCase() == 'touchstart' ||
-       e.type.toLowerCase() == 'pointerdown') &&
-      e.pointerType != 'mouse') {
+  if ((e.type.toLowerCase() === 'touchstart' ||
+       e.type.toLowerCase() === 'pointerdown') &&
+      e.pointerType !== 'mouse') {
     Touch.longStart(e, this);
   }
 
@@ -669,7 +668,8 @@ Gesture.prototype.handleWsStart = function(e, ws) {
  * @private
  */
 Gesture.prototype.fireWorkspaceClick_ = function(ws) {
-  eventUtils.fire(new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
+  eventUtils.fire(
+      new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
 };
 
 /**
@@ -836,7 +836,7 @@ Gesture.prototype.setStartBlock = function(block) {
   // If the gesture already went through a bubble, don't set the start block.
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
-    if (block.isInFlyout && block != block.getRootBlock()) {
+    if (block.isInFlyout && block !== block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {
       this.setTargetBlock_(block);
@@ -1007,4 +1007,4 @@ Gesture.inProgress = function() {
   return false;
 };
 
-exports = Gesture;
+exports.Gesture = Gesture;

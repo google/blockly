@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The class representing one block.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -18,37 +17,38 @@ goog.module('Blockly.Block');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const Comment = goog.requireType('Blockly.Comment');
-const Connection = goog.require('Blockly.Connection');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
 const Extensions = goog.require('Blockly.Extensions');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const IASTNodeLocation = goog.requireType('Blockly.IASTNodeLocation');
-/* eslint-disable-next-line no-unused-vars */
-const IDeletable = goog.requireType('Blockly.IDeletable');
-const Input = goog.require('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const Mutator = goog.requireType('Blockly.Mutator');
-const Size = goog.require('Blockly.utils.Size');
 const Tooltip = goog.require('Blockly.Tooltip');
-/* eslint-disable-next-line no-unused-vars */
-const VariableModel = goog.requireType('Blockly.VariableModel');
-/* eslint-disable-next-line no-unused-vars */
-const Workspace = goog.requireType('Blockly.Workspace');
+const arrayUtils = goog.require('Blockly.utils.array');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const inputTypes = goog.require('Blockly.inputTypes');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
+const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');
+/* eslint-disable-next-line no-unused-vars */
+const {Comment} = goog.requireType('Blockly.Comment');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Connection} = goog.require('Blockly.Connection');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+/* eslint-disable-next-line no-unused-vars */
+const {IDeletable} = goog.require('Blockly.IDeletable');
+/* eslint-disable-next-line no-unused-vars */
+const {Mutator} = goog.requireType('Blockly.Mutator');
+const {Size} = goog.require('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {VariableModel} = goog.requireType('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -74,8 +74,8 @@ goog.require('Blockly.Events.BlockMove');
  * @alias Blockly.Block
  */
 const Block = function(workspace, prototypeName, opt_id) {
-  const Generator = goog.module.get('Blockly.Generator');
-  if (Generator && typeof Generator.prototype[prototypeName] != 'undefined') {
+  const {Generator} = goog.module.get('Blockly.Generator');
+  if (Generator && typeof Generator.prototype[prototypeName] !== 'undefined') {
     // Occluding Generator class members is not allowed.
     throw Error(
         'Block prototypeName "' + prototypeName +
@@ -214,7 +214,7 @@ const Block = function(workspace, prototypeName, opt_id) {
     /** @type {string} */
     this.type = prototypeName;
     const prototype = Blocks[prototypeName];
-    if (!prototype || typeof prototype != 'object') {
+    if (!prototype || typeof prototype !== 'object') {
       throw TypeError('Unknown block type: ' + prototypeName);
     }
     object.mixin(this, prototype);
@@ -234,7 +234,7 @@ const Block = function(workspace, prototypeName, opt_id) {
 
   try {
     // Call an initialization function, if it exists.
-    if (typeof this.init == 'function') {
+    if (typeof this.init === 'function') {
       eventUtils.setRecordUndo(false);
       this.init();
       eventUtils.setRecordUndo(initialUndoFlag);
@@ -244,7 +244,6 @@ const Block = function(workspace, prototypeName, opt_id) {
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
     }
-
   } finally {
     if (!existingGroup) {
       eventUtils.setGroup(false);
@@ -258,7 +257,7 @@ const Block = function(workspace, prototypeName, opt_id) {
   this.inputsInlineDefault = this.inputsInline;
 
   // Bind an onchange function, if it exists.
-  if (typeof this.onchange == 'function') {
+  if (typeof this.onchange === 'function') {
     this.setOnChange(this.onchange);
   }
 };
@@ -417,7 +416,7 @@ Block.prototype.dispose = function(healStack) {
     // well as corruption of the connection database.  Therefore we must
     // methodically step through the blocks and carefully disassemble them.
 
-    if (common.getSelected() == this) {
+    if (common.getSelected() === this) {
       common.setSelected(null);
     }
 
@@ -470,7 +469,8 @@ Block.prototype.initModel = function() {
 Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     this.unplugFromRow_(opt_healStack);
-  } else if (this.previousConnection) {
+  }
+  if (this.previousConnection) {
     this.unplugFromStack_(opt_healStack);
   }
 };
@@ -529,7 +529,7 @@ Block.prototype.getOnlyValueConnection_ = function() {
   let connection = null;
   for (let i = 0; i < this.inputList.length; i++) {
     const thisConnection = this.inputList[i].connection;
-    if (thisConnection && thisConnection.type == ConnectionType.INPUT_VALUE &&
+    if (thisConnection && thisConnection.type === ConnectionType.INPUT_VALUE &&
         thisConnection.targetConnection) {
       if (connection) {
         return null;  // More than one value input found.
@@ -641,7 +641,7 @@ Block.prototype.getParent = function() {
  */
 Block.prototype.getInputWithBlock = function(block) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.connection && input.connection.targetBlock() == block) {
+    if (input.connection && input.connection.targetBlock() === block) {
       return input;
     }
   }
@@ -664,7 +664,7 @@ Block.prototype.getSurroundParent = function() {
       // Ran off the top.
       return null;
     }
-  } while (block.getNextBlock() == prevBlock);
+  } while (block.getNextBlock() === prevBlock);
   // This block is an enclosing parent, not just a statement in a stack.
   return block;
 };
@@ -694,7 +694,7 @@ Block.prototype.getPreviousBlock = function() {
 Block.prototype.getFirstStatementConnection = function() {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     if (input.connection &&
-        input.connection.type == ConnectionType.NEXT_STATEMENT) {
+        input.connection.type === ConnectionType.NEXT_STATEMENT) {
       return input.connection;
     }
   }
@@ -728,7 +728,7 @@ Block.prototype.getTopStackBlock = function() {
   let previous;
   do {
     previous = block.getPreviousBlock();
-  } while (previous && previous.getNextBlock() == block && (block = previous));
+  } while (previous && previous.getNextBlock() === block && (block = previous));
   return block;
 };
 
@@ -772,10 +772,12 @@ Block.prototype.setParent = function(newParent) {
 
   // Check that block is connected to new parent if new parent is not null and
   //    that block is not connected to superior one if new parent is null.
-  const connection = this.previousConnection || this.outputConnection;
-  const isConnected = !!(connection && connection.targetBlock());
+  const targetBlock =
+      (this.previousConnection && this.previousConnection.targetBlock()) ||
+      (this.outputConnection && this.outputConnection.targetBlock());
+  const isConnected = !!targetBlock;
 
-  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+  if (isConnected && newParent && targetBlock !== newParent) {
     throw Error('Block connected to superior one that is not new parent.');
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');
@@ -787,7 +789,7 @@ Block.prototype.setParent = function(newParent) {
 
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    utils.arrayRemove(this.parentBlock_.childBlocks_, this);
+    arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.
@@ -870,7 +872,7 @@ Block.prototype.isDuplicatable = function() {
     return true;
   }
   return this.workspace.isCapacityAvailable(
-      utils.getBlockTypeCounts(this, true));
+      common.getBlockTypeCounts(this, true));
 };
 
 /**
@@ -949,11 +951,11 @@ Block.prototype.isDisposed = function() {
 Block.prototype.getMatchingConnection = function(otherBlock, conn) {
   const connections = this.getConnections_(true);
   const otherConnections = otherBlock.getConnections_(true);
-  if (connections.length != otherConnections.length) {
+  if (connections.length !== otherConnections.length) {
     throw Error('Connection lists did not match in length.');
   }
   for (let i = 0; i < otherConnections.length; i++) {
-    if (otherConnections[i] == conn) {
+    if (otherConnections[i] === conn) {
       return connections[i];
     }
   }
@@ -1017,7 +1019,7 @@ Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Block.prototype.setColour = function(colour) {
-  const parsed = utils.parseBlockColour(colour);
+  const parsed = parsing.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
 };
@@ -1040,7 +1042,7 @@ Block.prototype.setStyle = function(blockStyleName) {
  * @throws {Error} if onchangeFn is not falsey and not a function.
  */
 Block.prototype.setOnChange = function(onchangeFn) {
-  if (onchangeFn && typeof onchangeFn != 'function') {
+  if (onchangeFn && typeof onchangeFn !== 'function') {
     throw Error('onchange must be a function.');
   }
   if (this.onchangeWrapper_) {
@@ -1124,7 +1126,8 @@ Block.prototype.getVarModels = function() {
 Block.prototype.updateVarName = function(variable) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.referencesVariables() && variable.getId() == field.getValue()) {
+      if (field.referencesVariables() &&
+          variable.getId() === field.getValue()) {
         field.refreshVariableName();
       }
     }
@@ -1141,7 +1144,7 @@ Block.prototype.updateVarName = function(variable) {
 Block.prototype.renameVarById = function(oldId, newId) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
     for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-      if (field.referencesVariables() && oldId == field.getValue()) {
+      if (field.referencesVariables() && oldId === field.getValue()) {
         field.setValue(newId);
       }
     }
@@ -1186,11 +1189,6 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.previousConnection) {
-      if (this.outputConnection) {
-        throw Error(
-            'Remove output connection prior to adding previous ' +
-            'connection.');
-      }
       this.previousConnection =
           this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
     }
@@ -1220,8 +1218,7 @@ Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          this.makeConnection_(ConnectionType.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection_(ConnectionType.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -1250,13 +1247,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.outputConnection) {
-      if (this.previousConnection) {
-        throw Error(
-            'Remove previous connection prior to adding output ' +
-            'connection.');
-      }
-      this.outputConnection =
-          this.makeConnection_(ConnectionType.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1275,7 +1266,7 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
  * @param {boolean} newBoolean True if inputs are horizontal.
  */
 Block.prototype.setInputsInline = function(newBoolean) {
-  if (this.inputsInline != newBoolean) {
+  if (this.inputsInline !== newBoolean) {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
@@ -1287,21 +1278,21 @@ Block.prototype.setInputsInline = function(newBoolean) {
  * @return {boolean} True if inputs are horizontal.
  */
 Block.prototype.getInputsInline = function() {
-  if (this.inputsInline != undefined) {
+  if (this.inputsInline !== undefined) {
     // Set explicitly.
     return this.inputsInline;
   }
   // Not defined explicitly.  Figure out what would look best.
   for (let i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == inputTypes.DUMMY &&
-        this.inputList[i].type == inputTypes.DUMMY) {
+    if (this.inputList[i - 1].type === inputTypes.DUMMY &&
+        this.inputList[i].type === inputTypes.DUMMY) {
       // Two dummy inputs in a row.  Don't inline them.
       return false;
     }
   }
   for (let i = 1; i < this.inputList.length; i++) {
-    if (this.inputList[i - 1].type == inputTypes.VALUE &&
-        this.inputList[i].type == inputTypes.DUMMY) {
+    if (this.inputList[i - 1].type === inputTypes.VALUE &&
+        this.inputList[i].type === inputTypes.DUMMY) {
       // Dummy input after a value input.  Inline them.
       return true;
     }
@@ -1338,7 +1329,7 @@ Block.prototype.isEnabled = function() {
  * @param {boolean} enabled True if enabled.
  */
 Block.prototype.setEnabled = function(enabled) {
-  if (this.isEnabled() != enabled) {
+  if (this.isEnabled() !== enabled) {
     const oldValue = this.disabled;
     this.disabled = !enabled;
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
@@ -1376,7 +1367,7 @@ Block.prototype.isCollapsed = function() {
  * @param {boolean} collapsed True if collapsed.
  */
 Block.prototype.setCollapsed = function(collapsed) {
-  if (this.collapsed_ != collapsed) {
+  if (this.collapsed_ !== collapsed) {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
         this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
@@ -1412,15 +1403,15 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
       checks = connection.targetConnection.getCheck();
     }
     return !!checks &&
-        (checks.indexOf('Boolean') != -1 || checks.indexOf('Number') != -1);
+        (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
   }
 
   /**
    * Check that we haven't circled back to the original root node.
    */
   function checkRoot() {
-    if (node && node.getType() == rootNode.getType() &&
-        node.getLocation() == rootNode.getLocation()) {
+    if (node && node.getType() === rootNode.getType() &&
+        node.getLocation() === rootNode.getLocation()) {
       node = null;
     }
   }
@@ -1439,7 +1430,7 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
       }
       case ASTNode.types.FIELD: {
         const field = /** @type {Field} */ (node.getLocation());
-        if (field.name != constants.COLLAPSED_FIELD_NAME) {
+        if (field.name !== constants.COLLAPSED_FIELD_NAME) {
           text.push(field.getText());
         }
         break;
@@ -1456,7 +1447,7 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
         node = node.out();
         checkRoot();
         // If we hit an input on the way up, possibly close out parentheses.
-        if (node && node.getType() == ASTNode.types.INPUT &&
+        if (node && node.getType() === ASTNode.types.INPUT &&
             shouldAddParentheses(
                 /** @type {!Connection} */ (node.getLocation()))) {
           text.push(')');
@@ -1475,7 +1466,7 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   // around single field blocks.
   // E.g. ['repeat', '(', '10', ')', 'times', 'do', '?']
   for (let i = 2; i < text.length; i++) {
-    if (text[i - 2] == '(' && text[i] == ')') {
+    if (text[i - 2] === '(' && text[i] === ')') {
       text[i - 2] = text[i - 1];
       text.splice(i - 1, 2);
     }
@@ -1483,7 +1474,7 @@ Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
 
   // Join the text array, removing spaces around added parentheses.
   text = text.reduce(function(acc, value) {
-    return acc + ((acc.substr(-1) == '(' || value == ')') ? '' : ' ') + value;
+    return acc + ((acc.substr(-1) === '(' || value === ')') ? '' : ' ') + value;
   }, '');
   text = text.trim() || '???';
   if (opt_maxLength) {
@@ -1585,7 +1576,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['tooltip'] !== undefined) {
     const rawValue = json['tooltip'];
-    const localizedText = utils.replaceMessageReferences(rawValue);
+    const localizedText = parsing.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
@@ -1596,10 +1587,10 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
-    const localizedValue = utils.replaceMessageReferences(rawValue);
+    const localizedValue = parsing.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
-  if (typeof json['extensions'] == 'string') {
+  if (typeof json['extensions'] === 'string') {
     console.warn(
         warningPrefix + 'JSON attribute \'extensions\' should be an array of' +
         ' strings. Found raw string in JSON for \'' + json['type'] +
@@ -1614,7 +1605,7 @@ Block.prototype.jsonInit = function(json) {
 
   const extensionNames = json['extensions'];
   if (Array.isArray(extensionNames)) {
-    for (let j = 0; j < extensionNames.length; ++j) {
+    for (let j = 0; j < extensionNames.length; j++) {
       Extensions.apply(extensionNames[j], this, false);
     }
   }
@@ -1666,12 +1657,12 @@ Block.prototype.jsonInitStyle_ = function(json, warningPrefix) {
  * @param {boolean=} opt_disableCheck Option flag to disable overwrite checks.
  */
 Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
-  if (opt_disableCheck !== undefined && typeof opt_disableCheck != 'boolean') {
+  if (opt_disableCheck !== undefined && typeof opt_disableCheck !== 'boolean') {
     throw Error('opt_disableCheck must be a boolean if provided');
   }
   if (!opt_disableCheck) {
     const overwrites = [];
-    for (let key in mixinObj) {
+    for (const key in mixinObj) {
       if (this[key] !== undefined) {
         overwrites.push(key);
       }
@@ -1696,7 +1687,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  */
 Block.prototype.interpolate_ = function(
     message, args, lastDummyAlign, warningPrefix) {
-  const tokens = utils.tokenizeInterpolation(message);
+  const tokens = parsing.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 
@@ -1735,7 +1726,7 @@ Block.prototype.validateTokens_ = function(tokens, argsCount) {
   let visitedArgsCount = 0;
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
-    if (typeof token != 'number') {
+    if (typeof token !== 'number') {
       continue;
     }
     if (token < 1 || token > argsCount) {
@@ -1751,7 +1742,7 @@ Block.prototype.validateTokens_ = function(tokens, argsCount) {
     visitedArgsHash[token] = true;
     visitedArgsCount++;
   }
-  if (visitedArgsCount != argsCount) {
+  if (visitedArgsCount !== argsCount) {
     throw Error(
         'Block "' + this.type + '": ' +
         'Message does not reference all ' + argsCount + ' arg(s).');
@@ -1774,11 +1765,11 @@ Block.prototype.interpolateArguments_ = function(tokens, args, lastDummyAlign) {
   const elements = [];
   for (let i = 0; i < tokens.length; i++) {
     let element = tokens[i];
-    if (typeof element == 'number') {
+    if (typeof element === 'number') {
       element = args[element - 1];
     }
     // Args can be strings, which is why this isn't elseif.
-    if (typeof element == 'string') {
+    if (typeof element === 'string') {
       element = this.stringToFieldJson_(element);
       if (!element) {
         continue;
@@ -1812,7 +1803,7 @@ Block.prototype.interpolateArguments_ = function(tokens, args, lastDummyAlign) {
 Block.prototype.fieldFromJson_ = function(element) {
   const field = fieldRegistry.fromJson(element);
   if (!field && element['alt']) {
-    if (typeof element['alt'] == 'string') {
+    if (typeof element['alt'] === 'string') {
       const json = this.stringToFieldJson_(element['alt']);
       return json ? this.fieldFromJson_(json) : null;
     }
@@ -1833,10 +1824,10 @@ Block.prototype.fieldFromJson_ = function(element) {
  */
 Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   const alignmentLookup = {
-    'LEFT': constants.ALIGN.LEFT,
-    'RIGHT': constants.ALIGN.RIGHT,
-    'CENTRE': constants.ALIGN.CENTRE,
-    'CENTER': constants.ALIGN.CENTRE
+    'LEFT': Align.LEFT,
+    'RIGHT': Align.RIGHT,
+    'CENTRE': Align.CENTRE,
+    'CENTER': Align.CENTRE,
   };
 
   let input = null;
@@ -1878,8 +1869,8 @@ Block.prototype.inputFromJson_ = function(element, warningPrefix) {
  * @private
  */
 Block.prototype.isInputKeyword_ = function(str) {
-  return str == 'input_value' || str == 'input_statement' ||
-      str == 'input_dummy';
+  return str === 'input_value' || str === 'input_statement' ||
+      str === 'input_dummy';
 };
 
 /**
@@ -1910,10 +1901,10 @@ Block.prototype.stringToFieldJson_ = function(str) {
  */
 Block.prototype.appendInput_ = function(type, name) {
   let connection = null;
-  if (type == inputTypes.VALUE || type == inputTypes.STATEMENT) {
+  if (type === inputTypes.VALUE || type === inputTypes.STATEMENT) {
     connection = this.makeConnection_(type);
   }
-  if (type == inputTypes.STATEMENT) {
+  if (type === inputTypes.STATEMENT) {
     this.statementInputCount++;
   }
   const input = new Input(type, name, this, connection);
@@ -1929,29 +1920,29 @@ Block.prototype.appendInput_ = function(type, name) {
  *   or null to be the input at the end.
  */
 Block.prototype.moveInputBefore = function(name, refName) {
-  if (name == refName) {
+  if (name === refName) {
     return;
   }
   // Find both inputs.
   let inputIndex = -1;
   let refIndex = refName ? -1 : this.inputList.length;
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name == name) {
+    if (input.name === name) {
       inputIndex = i;
-      if (refIndex != -1) {
+      if (refIndex !== -1) {
         break;
       }
-    } else if (refName && input.name == refName) {
+    } else if (refName && input.name === refName) {
       refIndex = i;
-      if (inputIndex != -1) {
+      if (inputIndex !== -1) {
         break;
       }
     }
   }
-  if (inputIndex == -1) {
+  if (inputIndex === -1) {
     throw Error('Named input "' + name + '" not found.');
   }
-  if (refIndex == -1) {
+  if (refIndex === -1) {
     throw Error('Reference input "' + refName + '" not found.');
   }
   this.moveNumberedInputBefore(inputIndex, refIndex);
@@ -1964,7 +1955,7 @@ Block.prototype.moveInputBefore = function(name, refName) {
  */
 Block.prototype.moveNumberedInputBefore = function(inputIndex, refIndex) {
   // Validate arguments.
-  if (inputIndex == refIndex) {
+  if (inputIndex === refIndex) {
     throw Error('Can\'t move input to itself.');
   }
   if (inputIndex >= this.inputList.length) {
@@ -1993,8 +1984,8 @@ Block.prototype.moveNumberedInputBefore = function(inputIndex, refIndex) {
  */
 Block.prototype.removeInput = function(name, opt_quiet) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name == name) {
-      if (input.type == inputTypes.STATEMENT) {
+    if (input.name === name) {
+      if (input.type === inputTypes.STATEMENT) {
         this.statementInputCount--;
       }
       input.dispose();
@@ -2015,7 +2006,7 @@ Block.prototype.removeInput = function(name, opt_quiet) {
  */
 Block.prototype.getInput = function(name) {
   for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name == name) {
+    if (input.name === name) {
       return input;
     }
   }
@@ -2047,7 +2038,7 @@ Block.prototype.getCommentText = function() {
  * @param {?string} text The text, or null to delete.
  */
 Block.prototype.setCommentText = function(text) {
-  if (this.commentModel.text == text) {
+  if (this.commentModel.text === text) {
     return;
   }
   eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(

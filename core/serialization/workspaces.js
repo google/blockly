@@ -16,14 +16,13 @@
  * @namespace Blockly.serialization.workspaces
  */
 goog.module('Blockly.serialization.workspaces');
-goog.module.declareLegacyNamespace();
- 
-// eslint-disable-next-line no-unused-vars
-const Workspace = goog.require('Blockly.Workspace');
+
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
- 
+// eslint-disable-next-line no-unused-vars
+const {Workspace} = goog.require('Blockly.Workspace');
+
 
 /**
  * Returns the state of the workspace as a plain JavaScript object.
@@ -43,7 +42,7 @@ const save = function(workspace) {
   return state;
 };
 exports.save = save;
- 
+
 /**
  * Loads the variable represented by the given state into the given workspace.
  * @param {!Object<string, *>} state The state of the workspace to deserialize
@@ -61,8 +60,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   }
 
   const deserializers = Object.entries(serializerMap)
-      .sort(([, {priority: priorityA}], [, {priority: priorityB}]) =>
-        priorityB - priorityA);
+                            .sort((a, b) => b[1].priority - a[1].priority);
 
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
@@ -75,7 +73,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(false);
   }
-  
+
   // We want to trigger clearing in reverse priority order so plugins don't end
   // up missing dependencies.
   for (const [, deserializer] of deserializers.reverse()) {

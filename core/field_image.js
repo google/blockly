@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Image field.  Used for pictures, icons, etc.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,13 +15,13 @@
  */
 goog.module('Blockly.FieldImage');
 
-const Field = goog.require('Blockly.Field');
-const Size = goog.require('Blockly.utils.Size');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
+const {Field} = goog.require('Blockly.Field');
+const {Size} = goog.require('Blockly.utils.Size');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -49,9 +48,9 @@ const FieldImage = function(
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-  src = utils.replaceMessageReferences(src);
-  const imageHeight = Number(utils.replaceMessageReferences(height));
-  const imageWidth = Number(utils.replaceMessageReferences(width));
+  src = parsing.replaceMessageReferences(src);
+  const imageHeight = Number(parsing.replaceMessageReferences(height));
+  const imageWidth = Number(parsing.replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error(
         'Height and width values of an image field must cast to' +
@@ -82,7 +81,7 @@ const FieldImage = function(
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = utils.replaceMessageReferences(opt_alt) || '';
+    this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
   }
 
   // Initialize other properties.
@@ -108,7 +107,7 @@ const FieldImage = function(
    */
   this.clickHandler_ = null;
 
-  if (typeof opt_onClick == 'function') {
+  if (typeof opt_onClick === 'function') {
     this.clickHandler_ = opt_onClick;
   }
 
@@ -178,7 +177,7 @@ FieldImage.prototype.isDirty_ = false;
 FieldImage.prototype.configure_ = function(config) {
   FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
-  this.altText_ = utils.replaceMessageReferences(config['alt']) || '';
+  this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
 };
 
 /**
@@ -190,7 +189,7 @@ FieldImage.prototype.initView = function() {
       Svg.IMAGE, {
         'height': this.imageHeight_ + 'px',
         'width': this.size_.width + 'px',
-        'alt': this.altText_
+        'alt': this.altText_,
       },
       this.fieldGroup_);
   this.imageElement_.setAttributeNS(
@@ -215,7 +214,7 @@ FieldImage.prototype.updateSize_ = function() {
  * @protected
  */
 FieldImage.prototype.doClassValidation_ = function(opt_newValue) {
-  if (typeof opt_newValue != 'string') {
+  if (typeof opt_newValue !== 'string') {
     return null;
   }
   return opt_newValue;
@@ -250,7 +249,7 @@ FieldImage.prototype.getFlipRtl = function() {
  * @public
  */
 FieldImage.prototype.setAlt = function(alt) {
-  if (alt == this.altText_) {
+  if (alt === this.altText_) {
     return;
   }
   this.altText_ = alt || '';
@@ -293,4 +292,4 @@ FieldImage.prototype.getText_ = function() {
 
 fieldRegistry.register('field_image', FieldImage);
 
-exports = FieldImage;
+exports.FieldImage = FieldImage;

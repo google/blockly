@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for colour manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -42,8 +41,8 @@ const parse = function(str) {
     // e.g. 'red'
     return hex;
   }
-  hex = str.substring(0, 2) == '0x' ? '#' + str.substring(2) : str;
-  hex = hex[0] == '#' ? hex : '#' + hex;
+  hex = str.substring(0, 2) === '0x' ? '#' + str.substring(2) : str;
+  hex = hex[0] === '#' ? hex : '#' + hex;
   if (/^#[0-9a-f]{6}$/.test(hex)) {
     // e.g. '#00ff88'
     return hex;
@@ -117,7 +116,7 @@ const hsvToHex = function(h, s, v) {
   let red = 0;
   let green = 0;
   let blue = 0;
-  if (s == 0) {
+  if (s === 0) {
     red = v;
     green = v;
     blue = v;
@@ -218,7 +217,7 @@ const names = {
   'silver': '#c0c0c0',
   'teal': '#008080',
   'white': '#ffffff',
-  'yellow': '#ffff00'
+  'yellow': '#ffff00',
 };
 exports.names = names;
 

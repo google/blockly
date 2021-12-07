@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Class for a block move event.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,14 +15,14 @@
  */
 goog.module('Blockly.Events.BlockMove');
 
-const BlockBase = goog.require('Blockly.Events.BlockBase');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 
 
 /**
@@ -134,8 +133,8 @@ BlockMove.prototype.currentLocation_ = function() {
  * @return {boolean} False if something changed.
  */
 BlockMove.prototype.isNull = function() {
-  return this.oldParentId == this.newParentId &&
-      this.oldInputName == this.newInputName &&
+  return this.oldParentId === this.newParentId &&
+      this.oldInputName === this.newInputName &&
       Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
 
@@ -168,7 +167,11 @@ BlockMove.prototype.run = function(forward) {
     const xy = block.getRelativeToSurfaceXY();
     block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y);
   } else {
-    const blockConnection = block.outputConnection || block.previousConnection;
+    let blockConnection = block.outputConnection;
+    if (!blockConnection ||
+        (block.previousConnection && block.previousConnection.isConnected())) {
+      blockConnection = block.previousConnection;
+    }
     let parentConnection;
     const connectionType = blockConnection.type;
     if (inputName) {
@@ -176,7 +179,7 @@ BlockMove.prototype.run = function(forward) {
       if (input) {
         parentConnection = input.connection;
       }
-    } else if (connectionType == ConnectionType.PREVIOUS_STATEMENT) {
+    } else if (connectionType === ConnectionType.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {
@@ -189,4 +192,4 @@ BlockMove.prototype.run = function(forward) {
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
-exports = BlockMove;
+exports.BlockMove = BlockMove;

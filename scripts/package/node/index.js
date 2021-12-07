@@ -14,18 +14,3 @@
 
 // Include the EN Locale by default.
 Blockly.setLocale(En);
-
-Blockly.Blocks = Blockly.Blocks || {};
-Object.keys(BlocklyBlocks).forEach(function (k) {
-  Blockly.Blocks[k] = BlocklyBlocks[k];
-});
-
-Blockly.JavaScript = BlocklyJS;
-
-Blockly.Python = BlocklyPython;
-
-Blockly.Lua = BlocklyLua;
-
-Blockly.PHP = BlocklyPHP;
-
-Blockly.Dart = BlocklyDart;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Manager for all items registered with the workspace.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
@@ -17,17 +16,17 @@
  */
 goog.module('Blockly.ComponentManager');
 
+const arrayUtils = goog.require('Blockly.utils.array');
 /* eslint-disable-next-line no-unused-vars */
-const IAutoHideable = goog.requireType('Blockly.IAutoHideable');
+const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */
-const IComponent = goog.requireType('Blockly.IComponent');
+const {IComponent} = goog.requireType('Blockly.IComponent');
 /* eslint-disable-next-line no-unused-vars */
-const IDeleteArea = goog.requireType('Blockly.IDeleteArea');
+const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
-const IDragTarget = goog.requireType('Blockly.IDragTarget');
+const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const IPositionable = goog.requireType('Blockly.IPositionable');
-const utils = goog.require('Blockly.utils');
+const {IPositionable} = goog.requireType('Blockly.IPositionable');
 
 
 /**
@@ -104,7 +103,7 @@ ComponentManager.prototype.removeComponent = function(id) {
   }
   for (let i = 0; i < componentInfo.capabilities.length; i++) {
     const capability = String(componentInfo.capabilities[i]).toLowerCase();
-    utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
+    arrayUtils.removeElem(this.capabilityToComponentIds_[capability], id);
   }
   delete this.componentData_[id];
 };
@@ -152,8 +151,8 @@ ComponentManager.prototype.removeCapability = function(id, capability) {
     return;
   }
   capability = String(capability).toLowerCase();
-  utils.arrayRemove(this.componentData_[id].capabilities, capability);
-  utils.arrayRemove(this.capabilityToComponentIds_[capability], id);
+  arrayUtils.removeElem(this.componentData_[id].capabilities, capability);
+  arrayUtils.removeElem(this.capabilityToComponentIds_[capability], id);
 };
 
 /**
@@ -254,4 +253,4 @@ ComponentManager.Capability.DELETE_AREA =
 ComponentManager.Capability.AUTOHIDEABLE =
     new ComponentManager.Capability('autohideable');
 
-exports = ComponentManager;
+exports.ComponentManager = ComponentManager;

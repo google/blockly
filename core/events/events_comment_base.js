@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Base class for comment events.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -17,16 +16,16 @@
 goog.module('Blockly.Events.CommentBase');
 
 const AbstractEvents = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const CommentCreate = goog.requireType('Blockly.Events.CommentCreate');
-/* eslint-disable-next-line no-unused-vars */
-const CommentDelete = goog.requireType('Blockly.Events.CommentDelete');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceComment = goog.requireType('Blockly.WorkspaceComment');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
+/* eslint-disable-next-line no-unused-vars */
+const {CommentDelete} = goog.requireType('Blockly.Events.CommentDelete');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 
 /**
@@ -42,7 +41,7 @@ const CommentBase = function(opt_comment) {
    * Whether or not an event is blank.
    * @type {boolean}
    */
-  this.isBlank = typeof opt_comment == 'undefined';
+  this.isBlank = typeof opt_comment === 'undefined';
 
   /**
    * The ID of the comment this event pertains to.
@@ -116,4 +115,4 @@ CommentBase.CommentCreateDeleteHelper = function(event, create) {
   }
 };
 
-exports = CommentBase;
+exports.CommentBase = CommentBase;

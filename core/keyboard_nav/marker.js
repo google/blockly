@@ -7,7 +7,6 @@
 /**
  * @fileoverview The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -19,9 +18,9 @@
 goog.module('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
-const MarkerSvg = goog.requireType('Blockly.blockRendering.MarkerSvg');
-/* eslint-disable-next-line no-unused-vars */
 const {ASTNode} = goog.requireType('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const {MarkerSvg} = goog.requireType('Blockly.blockRendering.MarkerSvg');
 
 
 /**

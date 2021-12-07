@@ -7,7 +7,6 @@
 /**
  * @fileoverview Object in charge of loading, storing, and playing audio for a
  *     workspace.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,11 +17,11 @@
  */
 goog.module('Blockly.WorkspaceAudio');
 
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
-const {globalThis} = goog.require('Blockly.utils.global');
 const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
@@ -139,7 +138,7 @@ WorkspaceAudio.prototype.play = function(name, opt_volume) {
   if (sound) {
     // Don't play one sound on top of another.
     const now = new Date;
-    if (this.lastSound_ != null &&
+    if (this.lastSound_ !== null &&
         now - this.lastSound_ < internalConstants.SOUND_LIMIT) {
       return;
     }
@@ -161,4 +160,4 @@ WorkspaceAudio.prototype.play = function(name, opt_volume) {
   }
 };
 
-exports = WorkspaceAudio;
+exports.WorkspaceAudio = WorkspaceAudio;

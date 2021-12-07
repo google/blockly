@@ -7,7 +7,6 @@
 /**
  * @fileoverview An object that provides constants for rendering blocks in Zelos
  * mode.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -18,13 +17,13 @@
  */
 goog.module('Blockly.zelos.ConstantProvider');
 
-const BaseConstantProvider = goog.require('Blockly.blockRendering.ConstantProvider');
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utilsColour = goog.require('Blockly.utils.colour');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -217,22 +216,22 @@ const ConstantProvider = function() {
       0: 5 * this.GRID_UNIT,  // Field in hexagon.
       1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
       2: 5 * this.GRID_UNIT,  // Round in hexagon.
-      3: 5 * this.GRID_UNIT   // Square in hexagon.
+      3: 5 * this.GRID_UNIT,  // Square in hexagon.
     },
     2: {
       // Outer shape: round.
       0: 3 * this.GRID_UNIT,  // Field in round.
       1: 3 * this.GRID_UNIT,  // Hexagon in round.
       2: 1 * this.GRID_UNIT,  // Round in round.
-      3: 2 * this.GRID_UNIT   // Square in round.
+      3: 2 * this.GRID_UNIT,  // Square in round.
     },
     3: {
       // Outer shape: square.
       0: 2 * this.GRID_UNIT,  // Field in square.
       1: 2 * this.GRID_UNIT,  // Hexagon in square.
       2: 2 * this.GRID_UNIT,  // Round in square.
-      3: 2 * this.GRID_UNIT   // Square in square.
-    }
+      3: 2 * this.GRID_UNIT,  // Square in square.
+    },
   };
 
   /**
@@ -456,8 +455,9 @@ ConstantProvider.prototype.makeStartHat = function() {
   const width = this.START_HAT_WIDTH;
 
   const mainPath = svgPaths.curve('c', [
-    svgPaths.point(25, -height), svgPaths.point(71, -height),
-    svgPaths.point(width, 0)
+    svgPaths.point(25, -height),
+    svgPaths.point(71, -height),
+    svgPaths.point(width, 0),
   ]);
   return {height: height, width: width, path: mainPath};
 };
@@ -471,11 +471,19 @@ ConstantProvider.prototype.makeStartHat = function() {
 ConstantProvider.prototype.makeHexagonal = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
-  // The main path for the hexagonal connection shape is made out of two lines.
-  // The lines are defined with relative positions and require the block height.
-  // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  The 'left' and 'right' versions of the path are also the same, but
-  // the X sign flips.
+  /**
+   * Make the main path for the hexagonal connection shape out of two lines.
+   * The lines are defined with relative positions and require the block height.
+   * The 'up' and 'down' versions of the paths are the same, but the Y sign
+   * flips.  The 'left' and 'right' versions of the path are also the same, but
+   * the X sign flips.
+   * @param {number} height The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a rounded connection.
+   */
   function makeMainPath(height, up, right) {
     const halfHeight = height / 2;
     const width = halfHeight > maxWidth ? maxWidth : halfHeight;
@@ -527,14 +535,22 @@ ConstantProvider.prototype.makeRounded = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
   const maxHeight = maxWidth * 2;
 
-  // The main path for the rounded connection shape is made out of two arcs and
-  // a line that joins them.  The arcs are defined with relative positions.
-  // Usually, the height of the block is split between the two arcs. In the case
-  // where the height of the block exceeds the maximum height, a line is drawn
-  // in between the two arcs.
-  // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
-  // which moves the arc at negative angles.
+  /**
+   * Make the main path for the rounded connection shape out of two arcs and
+   * a line that joins them.  The arcs are defined with relative positions.
+   * Usually, the height of the block is split between the two arcs. In the case
+   * where the height of the block exceeds the maximum height, a line is drawn
+   * in between the two arcs.
+   * The 'up' and 'down' versions of the paths are the same, but the Y sign
+   * flips.  The 'up' and 'right' versions of the path flip the sweep-flag
+   * which moves the arc at negative angles.
+   * @param {number} blockHeight The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a rounded connection.
+   */
   function makeMainPath(blockHeight, up, right) {
     const remainingHeight =
         blockHeight > maxHeight ? blockHeight - maxHeight : 0;
@@ -589,12 +605,20 @@ ConstantProvider.prototype.makeRounded = function() {
 ConstantProvider.prototype.makeSquared = function() {
   const radius = this.CORNER_RADIUS;
 
-  // The main path for the squared connection shape is made out of two corners
-  // and a single line in-between (a and v). These are defined in relative
-  // positions and require the height of the block.
-  // The 'left' and 'right' versions of the paths are the same, but the Y sign
-  // flips.  The 'up' and 'down' versions of the path determine where the corner
-  // point is placed and in-turn the direction of the corners.
+  /**
+   * Make the main path for the squared connection shape out of two corners
+   * and a single line in-between (a and v). These are defined in relative
+   * positions and require the height of the block.
+   * The 'left' and 'right' versions of the paths are the same, but the Y sign
+   * flips.  The 'up' and 'down' versions of the path determine where the corner
+   * point is placed and in turn the direction of the corners.
+   * @param {number} height The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a squared connection.
+   */
   function makeMainPath(height, up, right) {
     const innerHeight = height - radius * 2;
     return svgPaths.arc(
@@ -650,7 +674,7 @@ ConstantProvider.prototype.shapeFor = function(connection) {
     case ConnectionType.OUTPUT_VALUE:
       outputShape = connection.getSourceBlock().getOutputShape();
       // If the block has an output shape set, use that instead.
-      if (outputShape != null) {
+      if (outputShape !== null) {
         switch (outputShape) {
           case this.SHAPES.HEXAGONAL:
             return this.HEXAGONAL;
@@ -661,13 +685,13 @@ ConstantProvider.prototype.shapeFor = function(connection) {
         }
       }
       // Includes doesn't work in IE.
-      if (checks && checks.indexOf('Boolean') != -1) {
+      if (checks && checks.indexOf('Boolean') !== -1) {
         return this.HEXAGONAL;
       }
-      if (checks && checks.indexOf('Number') != -1) {
+      if (checks && checks.indexOf('Number') !== -1) {
         return this.ROUNDED;
       }
-      if (checks && checks.indexOf('String') != -1) {
+      if (checks && checks.indexOf('String') !== -1) {
         return this.ROUNDED;
       }
       return this.ROUNDED;
@@ -692,6 +716,12 @@ ConstantProvider.prototype.makeNotch = function() {
   const halfHeight = height / 2;
   const quarterHeight = halfHeight / 2;
 
+  /**
+   * Make the main path for the notch.
+   * @param {number} dir Direction multiplier to apply to horizontal offsets
+   *     along the path. Either 1 or -1.
+   * @return {string} A path fragment describing a notch.
+   */
   function makeMainPath(dir) {
     return (
         svgPaths.curve(
@@ -699,7 +729,7 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 2, 0),
               svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
-              svgPaths.point(dir * curveWidth, quarterHeight)
+              svgPaths.point(dir * curveWidth, quarterHeight),
             ]) +
         svgPaths.line([svgPaths.point(dir * curveWidth, halfHeight)]) +
         svgPaths.curve(
@@ -707,7 +737,7 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
               svgPaths.point(dir * curveWidth / 2, quarterHeight),
-              svgPaths.point(dir * curveWidth, quarterHeight)
+              svgPaths.point(dir * curveWidth, quarterHeight),
             ]) +
         svgPaths.lineOnAxis('h', dir * innerWidth) +
         svgPaths.curve(
@@ -715,13 +745,13 @@ ConstantProvider.prototype.makeNotch = function() {
             [
               svgPaths.point(dir * curveWidth / 2, 0),
               svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
-              svgPaths.point(dir * curveWidth, -quarterHeight)
+              svgPaths.point(dir * curveWidth, -quarterHeight),
             ]) +
         svgPaths.line([svgPaths.point(dir * curveWidth, -halfHeight)]) +
         svgPaths.curve('c', [
           svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
           svgPaths.point(dir * curveWidth / 2, -quarterHeight),
-          svgPaths.point(dir * curveWidth, -quarterHeight)
+          svgPaths.point(dir * curveWidth, -quarterHeight),
         ]));
   }
 
@@ -733,7 +763,7 @@ ConstantProvider.prototype.makeNotch = function() {
     width: width,
     height: height,
     pathLeft: pathLeft,
-    pathRight: pathRight
+    pathRight: pathRight,
   };
 };
 
@@ -763,7 +793,7 @@ ConstantProvider.prototype.makeInsideCorners = function() {
     rightWidth: radius,
     rightHeight: radius,
     pathTopRight: innerTopRightCorner,
-    pathBottomRight: innerBottomRightCorner
+    pathBottomRight: innerBottomRightCorner,
   };
 };
 
@@ -799,8 +829,8 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
-        y: '-30%',
-        x: '-40%'
+        'y': '-30%',
+        'x': '-40%',
       },
       defs);
   dom.createSvgElement(
@@ -819,7 +849,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       Svg.FEFLOOD, {
         'flood-color': this.SELECTED_GLOW_COLOUR,
         'flood-opacity': 1,
-        'result': 'outColor'
+        'result': 'outColor',
       },
       selectedGlowFilter);
   dom.createSvgElement(
@@ -827,7 +857,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'outColor',
         'in2': 'outBlur',
         'operator': 'in',
-        'result': 'outGlow'
+        'result': 'outGlow',
       },
       selectedGlowFilter);
   this.selectedGlowFilterId = selectedGlowFilter.id;
@@ -840,8 +870,8 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
-        y: '-30%',
-        x: '-40%'
+        'y': '-30%',
+        'x': '-40%',
       },
       defs);
   dom.createSvgElement(
@@ -860,7 +890,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       Svg.FEFLOOD, {
         'flood-color': this.REPLACEMENT_GLOW_COLOUR,
         'flood-opacity': 1,
-        'result': 'outColor'
+        'result': 'outColor',
       },
       replacementGlowFilter);
   dom.createSvgElement(
@@ -868,7 +898,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'in': 'outColor',
         'in2': 'outBlur',
         'operator': 'in',
-        'result': 'outGlow'
+        'result': 'outGlow',
       },
       replacementGlowFilter);
   dom.createSvgElement(
@@ -947,4 +977,4 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
   ];
 };
 
-exports = ConstantProvider;
+exports.ConstantProvider = ConstantProvider;

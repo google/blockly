@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods animating a block on connection and disconnection.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,10 +15,10 @@
  */
 goog.module('Blockly.blockAnimations');
 
-const Svg = goog.require('Blockly.utils.Svg');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Svg} = goog.require('Blockly.utils.Svg');
 
 
 /**
@@ -115,7 +114,7 @@ const connectionUiEffect = function(block) {
         'r': 0,
         'fill': 'none',
         'stroke': '#888',
-        'stroke-width': 10
+        'stroke-width': 10,
       },
       workspace.getParentSvg());
   // Start the animation.

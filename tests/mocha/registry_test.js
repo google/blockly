@@ -10,7 +10,7 @@ const {assertWarnings, sharedTestSetup, sharedTestTeardown} = goog.require('Bloc
 
 
 suite('Registry', function() {
-  var TestClass = function() {};
+  const TestClass = function() {};
   TestClass.prototype.testMethod = function() {
     return 'something';
   };
@@ -144,7 +144,6 @@ suite('Registry', function() {
       });
 
       test('Name', function() {
-
         assertWarnings(() => {
           chai.assert.isNull(Blockly.registry.getObject('test', 'bad_name'));
         }, /Unable to find/);
@@ -203,7 +202,7 @@ suite('Registry', function() {
           Blockly.registry.getAllItems('test', true),
           {
             'test_name': {},
-            'casedNAME': {}
+            'casedNAME': {},
           });
     });
 
@@ -213,7 +212,7 @@ suite('Registry', function() {
           Blockly.registry.getAllItems('test', true),
           {
             'test_name': {},
-            'CASEDname': {}
+            'CASEDname': {},
           });
     });
   });
@@ -226,8 +225,8 @@ suite('Registry', function() {
       };
       this.options = {
         'plugins': {
-          'test' : 'test_name'
-        }
+          'test': 'test_name',
+        },
       };
       Blockly.registry.register('test', 'test_name', TestClass);
       Blockly.registry.register('test', 'default', this.defaultClass);
@@ -238,25 +237,25 @@ suite('Registry', function() {
     });
 
     test('Simple - Plugin name given', function() {
-      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('Simple - Plugin class given', function() {
       this.options.plugins['test'] = TestClass;
-      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), TestClass);
     });
 
     test('No Plugin Name Given', function() {
       delete this.options['plugins']['test'];
-      var testClass = Blockly.registry.getClassFromOptions('test', this.options);
+      const testClass = Blockly.registry.getClassFromOptions('test', this.options);
       chai.assert.instanceOf(new testClass(), this.defaultClass);
     });
 
     test('Incorrect Plugin Name', function() {
       this.options['plugins']['test'] = 'random';
-      var testClass;
+      let testClass;
       assertWarnings(() => {
         testClass = Blockly.registry.getClassFromOptions('test', this.options);
       }, /Unable to find/);

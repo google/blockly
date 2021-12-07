@@ -8,7 +8,6 @@
  * @fileoverview A div that floats on top of Blockly.  This singleton contains
  *     temporary HTML UI widgets that the user is currently interacting with.
  *     E.g. text input areas, colour pickers, context menus.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -20,15 +19,15 @@
  */
 goog.module('Blockly.WidgetDiv');
 
-/* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
-/* eslint-disable-next-line no-unused-vars */
-const Size = goog.requireType('Blockly.utils.Size');
-/* eslint-disable-next-line no-unused-vars */
-const WorkspaceSvg = goog.requireType('Blockly.WorkspaceSvg');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const {Rect} = goog.requireType('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {Size} = goog.requireType('Blockly.utils.Size');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -58,7 +57,6 @@ let themeClassName = '';
 /**
  * The HTML container for popup overlays (e.g. editor widgets).
  * @type {?Element}
- * @alias Blockly.WidgetDiv.DIV
  */
 let DIV;
 
@@ -84,14 +82,22 @@ const testOnly_setDiv = function(newDiv) {
 exports.testOnly_setDiv = testOnly_setDiv;
 
 Object.defineProperties(exports, {
+  /**
+   * The HTML container for popup overlays (e.g. editor widgets).
+   * @name Blockly.WidgetDiv.DIV
+   * @type {?Element}
+   * @deprecated Use Blockly.WidgetDiv.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
   DIV: {
     get: function() {
       deprecation.warn(
-        'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-        'Blockly.WidgetDiv.getDiv()');
+          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
+          'Blockly.WidgetDiv.getDiv()');
       return getDiv();
-    }
-  }
+    },
+  },
 });
 
 /**
@@ -181,7 +187,7 @@ exports.isVisible = isVisible;
  * @alias Blockly.WidgetDiv.hideIfOwner
  */
 const hideIfOwner = function(oldOwner) {
-  if (owner == oldOwner) {
+  if (owner === oldOwner) {
     hide();
   }
 };

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Flyout tray containing blocks which may be created.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,36 +15,36 @@
  */
 goog.module('Blockly.Flyout');
 
-const ComponentManager = goog.require('Blockly.ComponentManager');
-const Coordinate = goog.require('Blockly.utils.Coordinate');
-const DeleteArea = goog.require('Blockly.DeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const FlyoutButton = goog.requireType('Blockly.FlyoutButton');
-const FlyoutMetricsManager = goog.require('Blockly.FlyoutMetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const IFlyout = goog.requireType('Blockly.IFlyout');
-/* eslint-disable-next-line no-unused-vars */
-const Options = goog.requireType('Blockly.Options');
-const ScrollbarPair = goog.require('Blockly.ScrollbarPair');
-const Svg = goog.require('Blockly.utils.Svg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
-const WorkspaceSvg = goog.require('Blockly.WorkspaceSvg');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
-const utils = goog.require('Blockly.utils');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.blockRendering');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {DeleteArea} = goog.require('Blockly.DeleteArea');
+/* eslint-disable-next-line no-unused-vars */
+const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {IFlyout} = goog.require('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {Options} = goog.requireType('Blockly.Options');
+/* eslint-disable-next-line no-unused-vars */
+const {Rect} = goog.require('Blockly.utils.Rect');
+const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
+const {Svg} = goog.require('Blockly.utils.Svg');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -54,6 +53,8 @@ goog.require('Blockly.Events.VarCreate');
 goog.require('Blockly.Gesture');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Touch');
+/** @suppress {extraRequire} */
+goog.require('Blockly.blockRendering');
 
 
 /**
@@ -333,8 +334,8 @@ Flyout.prototype.init = function(targetWorkspace) {
     weight: 1,
     capabilities: [
       ComponentManager.Capability.DELETE_AREA,
-      ComponentManager.Capability.DRAG_TARGET
-    ]
+      ComponentManager.Capability.DRAG_TARGET,
+    ],
   });
 };
 
@@ -413,7 +414,7 @@ Flyout.prototype.isVisible = function() {
  * @param {boolean} visible True if visible.
  */
 Flyout.prototype.setVisible = function(visible) {
-  const visibilityChanged = (visible != this.isVisible());
+  const visibilityChanged = (visible !== this.isVisible());
 
   this.isVisible_ = visible;
   if (visibilityChanged) {
@@ -431,7 +432,7 @@ Flyout.prototype.setVisible = function(visible) {
  * @param {boolean} visible Whether the container is visible.
  */
 Flyout.prototype.setContainerVisible = function(visible) {
-  const visibilityChanged = (visible != this.containerVisible_);
+  const visibilityChanged = (visible !== this.containerVisible_);
   this.containerVisible_ = visible;
   if (visibilityChanged) {
     this.updateDisplay_();
@@ -469,7 +470,7 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
   this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
 
-  if (this.svgGroup_.tagName == 'svg') {
+  if (this.svgGroup_.tagName === 'svg') {
     const transform = 'translate(' + x + 'px,' + y + 'px)';
     dom.setCssTransform(this.svgGroup_, transform);
   } else {
@@ -531,7 +532,7 @@ Flyout.prototype.show = function(flyoutDef) {
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
-  if (typeof flyoutDef == 'string') {
+  if (typeof flyoutDef === 'string') {
     flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
@@ -546,12 +547,14 @@ Flyout.prototype.show = function(flyoutDef) {
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
-  const deselectAll = function() {
-    const topBlocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = topBlocks[i]); i++) {
-      block.removeSelect();
-    }
-  };
+  const deselectAll =
+      /** @this {Flyout} */
+      function() {
+        const topBlocks = this.workspace_.getTopBlocks(false);
+        for (let i = 0, block; (block = topBlocks[i]); i++) {
+          block.removeSelect();
+        }
+      };
 
   this.listeners_.push(browserEvents.conditionalBind(
       this.svgBackground_, 'mouseover', this, deselectAll));
@@ -596,6 +599,7 @@ Flyout.prototype.createFlyoutInfo_ = function(parsedContent) {
       const flyoutDef = this.getDynamicCategoryContents_(categoryName);
       const parsedDynamicContent = /** @type {!toolbox.FlyoutItemInfoArray} */
           (toolbox.convertFlyoutDefToJsonArray(flyoutDef));
+      // Replace the element at i with the dynamic content it represents.
       parsedContent.splice.apply(
           parsedContent, [i, 1].concat(parsedDynamicContent));
       contentInfo = parsedContent[i];
@@ -646,7 +650,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
   // valid XML list.
   const fnToApply =
       this.workspace_.targetWorkspace.getToolboxCategoryCallback(categoryName);
-  if (typeof fnToApply != 'function') {
+  if (typeof fnToApply !== 'function') {
     throw TypeError(
         'Couldn\'t find a callback function when opening' +
         ' a toolbox category.');
@@ -664,7 +668,7 @@ Flyout.prototype.getDynamicCategoryContents_ = function(categoryName) {
  * @private
  */
 Flyout.prototype.createButton_ = function(btnInfo, isLabel) {
-  const FlyoutButton = goog.module.get('Blockly.FlyoutButton');
+  const {FlyoutButton} = goog.module.get('Blockly.FlyoutButton');
   if (!FlyoutButton) {
     throw Error('Missing require for Blockly.FlyoutButton');
   }
@@ -699,7 +703,7 @@ Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
             blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
       }
       block = blocks.append(
-          /** @type {blocks.State} */ (blockInfo),this.workspace_);
+          /** @type {blocks.State} */ (blockInfo), this.workspace_);
     }
   }
 
@@ -722,12 +726,12 @@ Flyout.prototype.createFlyoutBlock_ = function(blockInfo) {
 Flyout.prototype.getRecycledBlock_ = function(blockType) {
   let index = -1;
   for (let i = 0; i < this.recycledBlocks_.length; i++) {
-    if (this.recycledBlocks_[i].type == blockType) {
+    if (this.recycledBlocks_[i].type === blockType) {
       index = i;
       break;
     }
   }
-  return index == -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
+  return index === -1 ? undefined : this.recycledBlocks_.splice(index, 1)[0];
 };
 
 /**
@@ -934,7 +938,8 @@ Flyout.prototype.createBlock = function(originalBlock) {
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
 
     // Block events come after var events, in case they refer to newly created
@@ -991,7 +996,7 @@ Flyout.prototype.createRect_ = function(block, x, y, blockHW, index) {
         'x': x,
         'y': y,
         'height': blockHW.height,
-        'width': blockHW.width
+        'width': blockHW.width,
       },
       null);
   rect.tooltip = block;
@@ -1030,9 +1035,9 @@ Flyout.prototype.moveRectToBlock_ = function(rect, block) {
 Flyout.prototype.filterForCapacity_ = function() {
   const blocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = blocks[i]); i++) {
-    if (this.permanentlyDisabled_.indexOf(block) == -1) {
+    if (this.permanentlyDisabled_.indexOf(block) === -1) {
       const enable = this.targetWorkspace.isCapacityAvailable(
-          utils.getBlockTypeCounts(block));
+          common.getBlockTypeCounts(block));
       while (block) {
         block.setEnabled(enable);
         block = block.getNextBlock();
@@ -1128,7 +1133,7 @@ Flyout.prototype.positionNewBlock_ = function(oldBlock, block) {
 /**
  * Returns the bounding rectangle of the drag target area in pixel units
  * relative to viewport.
- * @return {utils.Rect} The component's bounding box.
+ * @return {Rect} The component's bounding box.
  */
 Flyout.prototype.getClientRect;
 
@@ -1193,4 +1198,4 @@ Flyout.prototype.getX;
  */
 Flyout.prototype.getY;
 
-exports = Flyout;
+exports.Flyout = Flyout;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a bounded element.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,7 +17,7 @@
 goog.module('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */
-const Rect = goog.requireType('Blockly.utils.Rect');
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 
 
 /**
@@ -43,4 +42,4 @@ IBoundedElement.prototype.getBoundingRectangle;
  */
 IBoundedElement.prototype.moveBy;
 
-exports = IBoundedElement;
+exports.IBoundedElement = IBoundedElement;

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Registers default keyboard shortcuts.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
@@ -16,15 +15,15 @@
  */
 goog.module('Blockly.ShortcutItems');
 
-const Gesture = goog.require('Blockly.Gesture');
-/* eslint-disable-next-line no-unused-vars */
-const ICopyable = goog.requireType('Blockly.ICopyable');
-const KeyCodes = goog.require('Blockly.utils.KeyCodes');
-const ShortcutRegistry = goog.require('Blockly.ShortcutRegistry');
 const clipboard = goog.require('Blockly.clipboard');
 const common = goog.require('Blockly.common');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Gesture} = goog.require('Blockly.Gesture');
+/* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
 
 
 /**
@@ -39,7 +38,7 @@ const names = {
   CUT: 'cut',
   PASTE: 'paste',
   UNDO: 'undo',
-  REDO: 'redo'
+  REDO: 'redo',
 };
 exports.names = names;
 
@@ -57,7 +56,7 @@ const registerEscape = function() {
     callback: function(workspace) {
       workspace.hideChaff();
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(escapeAction);
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
@@ -88,7 +87,7 @@ const registerDelete = function() {
       }
       (/** @type {!BlockSvg} */ (common.getSelected())).checkAndDelete();
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(deleteShortcut);
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name);
@@ -107,8 +106,8 @@ const registerCopy = function() {
     name: names.COPY,
     preconditionFn: function(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && !Gesture.inProgress() &&
-          selected && selected.isDeletable() && selected.isMovable();
+      return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
+          selected.isDeletable() && selected.isMovable();
     },
     callback: function(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
@@ -117,7 +116,7 @@ const registerCopy = function() {
       workspace.hideChaff();
       clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(copyShortcut);
 
@@ -145,8 +144,8 @@ const registerCut = function() {
     name: names.CUT,
     preconditionFn: function(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && !Gesture.inProgress() &&
-          selected && selected.isDeletable() && selected.isMovable() &&
+      return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
+          selected.isDeletable() && selected.isMovable() &&
           !selected.workspace.isFlyout;
     },
     callback: function() {
@@ -158,7 +157,7 @@ const registerCut = function() {
       clipboard.copy(selected);
       (/** @type {!BlockSvg} */ (selected)).checkAndDelete();
       return true;
-    }
+    },
   };
 
   ShortcutRegistry.registry.register(cutShortcut);
@@ -190,7 +189,7 @@ const registerPaste = function() {
     },
     callback: function() {
       return clipboard.paste();
-    }
+    },
   };
 
   ShortcutRegistry.registry.register(pasteShortcut);
@@ -225,7 +224,7 @@ const registerUndo = function() {
       workspace.hideChaff();
       workspace.undo(false);
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(undoShortcut);
 
@@ -260,7 +259,7 @@ const registerRedo = function() {
       workspace.hideChaff();
       workspace.undo(true);
       return true;
-    }
+    },
   };
   ShortcutRegistry.registry.register(redoShortcut);
 

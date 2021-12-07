@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview The interface for a Blockly field that can be registered.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
@@ -18,7 +17,7 @@
 goog.module('Blockly.IRegistrableField');
 
 /* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
+const {Field} = goog.requireType('Blockly.Field');
 
 
 /**
@@ -30,11 +29,11 @@ const Field = goog.requireType('Blockly.Field');
  * }}
  * @alias Blockly.IRegistrableField
  */
-let IRegistrableField = {};
+const IRegistrableField = {};
 
 /**
  * @typedef {function(!Object): Field}
  */
 IRegistrableField.fromJson;
 
-exports = IRegistrableField;
+exports.IRegistrableField = IRegistrableField;

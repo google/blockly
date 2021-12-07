@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview A field used to customize a turtle.
- * @author bekawestberg@gmail.com (Beka Westberg)
  */
 'use strict';
 
@@ -129,7 +128,7 @@ CustomFields.FieldTurtle.prototype.updateEditable = function() {
 // Gets the text to display when the block is collapsed
 CustomFields.FieldTurtle.prototype.getText = function() {
   var text = this.value_.turtleName + ' wearing a ' + this.value_.hat;
-  if (this.value_.hat == 'Stovepipe' || this.value_.hat == 'Propeller') {
+  if (this.value_.hat === 'Stovepipe' || this.value_.hat === 'Propeller') {
     text += ' hat';
   }
   return text;
@@ -143,23 +142,23 @@ CustomFields.FieldTurtle.prototype.doClassValidation_ = function(newValue) {
   // Undefined signals that we want the value to remain unchanged. This is a
   // special feature of turtle fields, but could be useful for other
   // multi-part fields.
-  if (newValue.pattern == undefined) {
+  if (newValue.pattern === undefined) {
     newValue.pattern = this.displayValue_ && this.displayValue_.pattern;
   // We only want to allow patterns that are part of our pattern list.
   // Anything else is invalid, so we return null.
-  } else if (CustomFields.FieldTurtle.PATTERNS.indexOf(newValue.pattern) == -1) {
+  } else if (CustomFields.FieldTurtle.PATTERNS.indexOf(newValue.pattern) === -1) {
     newValue.pattern = null;
   }
 
-  if (newValue.hat == undefined) {
+  if (newValue.hat === undefined) {
     newValue.hat = this.displayValue_ && this.displayValue_.hat;
-  } else if (CustomFields.FieldTurtle.HATS.indexOf(newValue.hat) == -1) {
+  } else if (CustomFields.FieldTurtle.HATS.indexOf(newValue.hat) === -1) {
     newValue.hat = null;
   }
 
-  if (newValue.turtleName == undefined) {
+  if (newValue.turtleName === undefined) {
     newValue.turtleName = this.displayValue_ && this.displayValue_.turtleName;
-  } else if (CustomFields.FieldTurtle.NAMES.indexOf(newValue.turtleName) == -1) {
+  } else if (CustomFields.FieldTurtle.NAMES.indexOf(newValue.turtleName) === -1) {
     newValue.turtleName = null;
   }
 
@@ -483,13 +482,13 @@ CustomFields.FieldTurtle.prototype.applyColour = function() {
     var child = this.turtleGroup_.firstChild;
     while(child) {
       // If it is a text node, continue.
-      if (child.nodeType == 3) {
+      if (child.nodeType === 3) {
         child = child.nextSibling;
         continue;
       }
       // Or if it is a non-turtle node, continue.
       var className = child.getAttribute('class');
-      if (!className || className.indexOf('turtleBody') == -1) {
+      if (!className || className.indexOf('turtleBody') === -1) {
         child = child.nextSibling;
         continue;
       }

@@ -11,16 +11,8 @@ goog.require('Blockly');
 goog.require('Blockly.geras.Renderer');
 goog.require('Blockly.VerticalFlyout');
 // Blocks
-goog.require('Blockly.Constants.Logic');
-goog.require('Blockly.Constants.Loops');
-goog.require('Blockly.Constants.Math');
-goog.require('Blockly.Constants.TestBlocks');
-goog.require('Blockly.Constants.Text');
-goog.require('Blockly.Constants.Lists');
-goog.require('Blockly.Constants.Colour');
-goog.require('Blockly.Constants.Variables');
-goog.require('Blockly.Constants.VariablesDynamic');
-goog.require('Blockly.Blocks.procedures');
+goog.require('Blockly.blocks.all');
+goog.require('Blockly.blocks.testBlocks');
 
 Main.init = function() {
   Blockly.inject('blocklyDiv', {

@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Methods for graphically rendering a block as SVG.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -16,23 +15,23 @@
  */
 goog.module('Blockly.blockRendering.Drawer');
 
-/* eslint-disable-next-line no-unused-vars */
-const ConstantProvider = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.blockRendering.Field');
-/* eslint-disable-next-line no-unused-vars */
-const Icon = goog.requireType('Blockly.blockRendering.Icon');
-/* eslint-disable-next-line no-unused-vars */
-const InlineInput = goog.requireType('Blockly.blockRendering.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const RenderInfo = goog.requireType('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const Row = goog.requireType('Blockly.blockRendering.Row');
-const Types = goog.require('Blockly.blockRendering.Types');
 const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.blockRendering.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {Icon} = goog.requireType('Blockly.blockRendering.Icon');
+/* eslint-disable-next-line no-unused-vars */
+const {InlineInput} = goog.requireType('Blockly.blockRendering.InlineInput');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Row} = goog.requireType('Blockly.blockRendering.Row');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -179,7 +178,7 @@ Drawer.prototype.drawValueInput_ = function(row) {
   const input = row.getLastInput();
   this.positionExternalValueConnection_(row);
 
-  const pathDown = (typeof input.shape.pathDown == 'function') ?
+  const pathDown = (typeof input.shape.pathDown === 'function') ?
       input.shape.pathDown(input.height) :
       input.shape.pathDown;
 
@@ -268,7 +267,7 @@ Drawer.prototype.drawLeft_ = function() {
   if (outputConnection) {
     const tabBottom =
         outputConnection.connectionOffsetY + outputConnection.height;
-    const pathUp = (typeof outputConnection.shape.pathUp == 'function') ?
+    const pathUp = (typeof outputConnection.shape.pathUp === 'function') ?
         outputConnection.shape.pathUp(outputConnection.height) :
         outputConnection.shape.pathUp;
 
@@ -463,4 +462,4 @@ Drawer.prototype.positionOutputConnection_ = function() {
   }
 };
 
-exports = Drawer;
+exports.Drawer = Drawer;

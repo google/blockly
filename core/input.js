@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Object representing an input (value, statement, or dummy).
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -16,19 +15,30 @@
  */
 goog.module('Blockly.Input');
 
-/* eslint-disable-next-line no-unused-vars */
-const Connection = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const Field = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const RenderedConnection = goog.requireType('Blockly.RenderedConnection');
-const constants = goog.require('Blockly.constants');
+/**
+ * Enum for alignment of inputs.
+ * @enum {number}
+ * @alias Blockly.Input.Align
+ */
+const Align = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1,
+};
+exports.Align = Align;
+
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const inputTypes = goog.require('Blockly.inputTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 
@@ -43,7 +53,7 @@ goog.require('Blockly.FieldLabel');
  * @alias Blockly.Input
  */
 const Input = function(type, name, block, connection) {
-  if (type != inputTypes.DUMMY && !name) {
+  if (type !== inputTypes.DUMMY && !name) {
     throw Error('Value inputs and statement inputs must have non-empty name.');
   }
   /** @type {number} */
@@ -65,7 +75,7 @@ const Input = function(type, name, block, connection) {
  * Alignment of input's fields (left, right or centre).
  * @type {number}
  */
-Input.prototype.align = constants.ALIGN.LEFT;
+Input.prototype.align = Align.LEFT;
 
 /**
  * Is the input visible?
@@ -110,12 +120,12 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
   // Falsy field values don't generate a field, unless the field is an empty
   // string and named.
-  if (!field && !(field == '' && opt_name)) {
+  if (!field && !(field === '' && opt_name)) {
     return index;
   }
 
   // Generate a FieldLabel when given a plain text field.
-  if (typeof field == 'string') {
+  if (typeof field === 'string') {
     field = /** @type {!Field} **/ (fieldRegistry.fromJson({
       'type': 'field_label',
       'text': field,
@@ -136,7 +146,7 @@ Input.prototype.insertFieldAt = function(index, field, opt_name) {
   }
   // Add the field to the field row.
   this.fieldRow.splice(index, 0, field);
-  ++index;
+  index++;
   if (field.suffixField) {
     // Add any suffix.
     index = this.insertFieldAt(index, field.suffixField);
@@ -199,7 +209,7 @@ Input.prototype.setVisible = function(visible) {
   // because this function is package. If this function goes back to being a
   // public API tests (lots of tests) should be added.
   let renderList = [];
-  if (this.visible_ == visible) {
+  if (this.visible_ === visible) {
     return renderList;
   }
   this.visible_ = visible;
@@ -250,8 +260,8 @@ Input.prototype.setCheck = function(check) {
 
 /**
  * Change the alignment of the connection's field(s).
- * @param {number} align One of the values of constants.ALIGN.
- *   In RTL mode directions are reversed, and ALIGN.RIGHT aligns to the left.
+ * @param {number} align One of the values of Align
+ *   In RTL mode directions are reversed, and Align.RIGHT aligns to the left.
  * @return {!Input} The input being modified (to allow chaining).
  */
 Input.prototype.setAlign = function(align) {
@@ -313,4 +323,4 @@ Input.prototype.dispose = function() {
   this.sourceBlock_ = null;
 };
 
-exports = Input;
+exports.Input = Input;

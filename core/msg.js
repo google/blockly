@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Empty name space for the Message singleton.
- * @author scr@google.com (Sheridan Rawlins)
  */
 'use strict';
 
@@ -15,18 +14,11 @@
  * @namespace Blockly.Msg
  */
 goog.module('Blockly.Msg');
-goog.module.declareLegacyNamespace();
-
-const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
- * Exported so that if Blockly is compiled with ADVANCED_COMPILATION,
- * the Blockly.Msg object exists for message files included in script tags.
+ * A dictionary of localised messages.
+ * @type {!Object<string>}
  */
-if (!globalThis['Blockly']) {
-  globalThis['Blockly'] = {};
-}
-if (!globalThis['Blockly']['Msg']) {
-  globalThis['Blockly']['Msg'] = exports;
-}
+const Msg = Object.create(null);
+exports.Msg = Msg;

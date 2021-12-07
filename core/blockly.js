@@ -192,27 +192,6 @@ goog.require('Blockly.Events.VarCreate');
 exports.VERSION = 'uncompiled';
 
 /*
- * Top-level functions on the Blockly namespace.
- * These functions are used only in external code. Do not call these functions
- * from internal code as importing from this file can cause circular
- * dependencies. Do not add new functions here. There is probably a better
- * namespace to put new functions on.
- */
-
-/**
- * Helper function for defining a block from JSON.  The resulting function has
- * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function()} A function that calls jsonInit with the correct value
- *     of jsonDef.
- */
-const jsonInitFactory = function(jsonDef) {
-  return function() {
-    this.jsonInit(jsonDef);
-  };
-};
-
-/*
  * Aliased functions and properties that used to be on the Blockly namespace.
  * Everything in this section is deprecated. Both external and internal code
  * should avoid using these functions and use the designated replacements.
@@ -227,17 +206,17 @@ Object.defineProperties(exports, {
    * @name Blockly.alert
    * @type {!function(string, function()=)}
    * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
-   *     (September 2021)
+   *     (December 2021)
    * @suppress {checkTypes}
    */
   alert: {
     set: function(newAlert) {
-      deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.alert', 'December 2021', 'December 2022');
       dialog.setAlert(newAlert);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.alert', 'September 2021', 'September 2022',
+          'Blockly.alert', 'December 2021', 'December 2022',
           'Blockly.dialog.alert()');
       return dialog.alert;
     },
@@ -248,17 +227,17 @@ Object.defineProperties(exports, {
    * @name Blockly.confirm
    * @type {!function(string, function()=)}
    * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
-   *     (September 2021)
+   *     (December 2021)
    * @suppress {checkTypes}
    */
   confirm: {
     set: function(newConfirm) {
-      deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.confirm', 'December 2021', 'December 2022');
       dialog.setConfirm(newConfirm);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.confirm', 'September 2021', 'September 2022',
+          'Blockly.confirm', 'December 2021', 'December 2022',
           'Blockly.dialog.confirm()');
       return dialog.confirm;
     },
@@ -269,18 +248,18 @@ Object.defineProperties(exports, {
    * @name Blockly.mainWorkspace
    * @type {Workspace}
    * @deprecated Use Blockly.common.getMainWorkspace() /
-   *     .setMainWorkspace instead.  (September 2021)
+   *     .setMainWorkspace instead.  (December 2021)
    * @suppress {checkTypes}
    */
   mainWorkspace: {
     set: function(x) {
       deprecation.warn(
-          'Blockly.mainWorkspace', 'September 2021', 'September 2022');
+          'Blockly.mainWorkspace', 'December 2021', 'December 2022');
       common.setMainWorkspace(x);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.mainWorkspace', 'September 2021', 'September 2022',
+          'Blockly.mainWorkspace', 'December 2021', 'December 2022',
           'Blockly.getMainWorkspace()');
       return common.getMainWorkspace();
     },
@@ -294,17 +273,17 @@ Object.defineProperties(exports, {
    * @name Blockly.prompt
    * @type {!function(string, string, function()=)}
    * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
-   *     (September 2021)
+   *     (December 2021)
    * @suppress {checkTypes}
    */
   prompt: {
     set: function(newPrompt) {
-      deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
+      deprecation.warn('Blockly.prompt', 'December 2021', 'December 2022');
       dialog.setPrompt(newPrompt);
     },
     get: function() {
       deprecation.warn(
-          'Blockly.prompt', 'September 2021', 'September 2022',
+          'Blockly.prompt', 'December 2021', 'December 2022',
           'Blockly.dialog.prompt()');
       return dialog.prompt;
     },
@@ -314,163 +293,163 @@ Object.defineProperties(exports, {
    * @name Blockly.selected
    * @type {?ICopyable}
    * @deprecated Use Blockly.common.getSelected() / .setSelected
-   *     instead.  (September 2021)
+   *     instead.  (December 2021)
    * @suppress {checkTypes}
    */
   selected: {
     get: function() {
       deprecation.warn(
-          'Blockly.selected', 'September 2021', 'September 2022',
+          'Blockly.selected', 'December 2021', 'December 2022',
           'Blockly.common.getSelected()');
       return common.getSelected();
     },
     set: function(newSelection) {
       deprecation.warn(
-          'Blockly.selected', 'September 2021', 'September 2022',
+          'Blockly.selected', 'December 2021', 'December 2022',
           'Blockly.common.setSelected()');
       common.setSelected(newSelection);
     },
   },
   /**
    * @see Blockly.Input.Align.LEFT
-   * @alias Blockly.ALIGN_LEFT
+   * @name Blockly.ALIGN_LEFT
    */
   ALIGN_LEFT: {
     get: function() {
       deprecation.warn(
-          'Blockly.ALIGN_LEFT', 'September 2021', 'September 2022',
+          'Blockly.ALIGN_LEFT', 'December 2021', 'December 2022',
           'Blockly.constants.ALIGN.LEFT');
       return constants.ALIGN.LEFT;
     },
   },
   /**
  * @see Blockly.Input.Align.CENTRE
- * @alias Blockly.ALIGN_CENTRE
+ * @name Blockly.ALIGN_CENTRE
  */
   ALIGN_CENTRE: {
     get: function() {
       deprecation.warn(
-          'Blockly.ALIGN_CENTRE', 'September 2021', 'September 2022',
+          'Blockly.ALIGN_CENTRE', 'December 2021', 'December 2022',
           'Blockly.constants.ALIGN.CENTRE');
       return constants.ALIGN.CENTRE;
     },
   },
   /**
  * @see Blockly.Input.Align.RIGHT
- * @alias Blockly.ALIGN_RIGHT
+ * @name Blockly.ALIGN_RIGHT
  */
   ALIGN_RIGHT: {
     get: function() {
       deprecation.warn(
-          'Blockly.ALIGN_RIGHT', 'September 2021', 'September 2022',
+          'Blockly.ALIGN_RIGHT', 'December 2021', 'December 2022',
           'Blockly.constants.ALIGN.RIGHT');
       return constants.ALIGN.RIGHT;
     },
   },
   /**
  * @see Blockly.ConnectionType.INPUT_VALUE
- * @alias Blockly.INPUT_VALUE
+ * @name Blockly.INPUT_VALUE
  */
   INPUT_VALUE: {
     get: function() {
       deprecation.warn(
-          'Blockly.INPUT_VALUE', 'September 2021', 'September 2022',
+          'Blockly.INPUT_VALUE', 'December 2021', 'December 2022',
           'Blockly.ConnectionType.INPUT_VALUE');
       return ConnectionType.INPUT_VALUE;
     },
   },
   /**
  * @see Blockly.ConnectionType.OUTPUT_VALUE
- * @alias Blockly.OUTPUT_VALUE
+ * @name Blockly.OUTPUT_VALUE
  */
   OUTPUT_VALUE: {
     get: function() {
       deprecation.warn(
-          'Blockly.OUTPUT_VALUE', 'September 2021', 'September 2022',
+          'Blockly.OUTPUT_VALUE', 'December 2021', 'December 2022',
           'Blockly.ConnectionType.OUTPUT_VALUE');
       return ConnectionType.OUTPUT_VALUE;
     },
   },
   /**
  * @see Blockly.ConnectionType.NEXT_STATEMENT
- * @alias Blockly.NEXT_STATEMENT
+ * @name Blockly.NEXT_STATEMENT
  */
   NEXT_STATEMENT: {
     get: function() {
       deprecation.warn(
-          'Blockly.NEXT_STATEMENT', 'September 2021', 'September 2022',
+          'Blockly.NEXT_STATEMENT', 'December 2021', 'December 2022',
           'Blockly.ConnectionType.NEXT_STATEMENT');
       return ConnectionType.NEXT_STATEMENT;
     },
   },
   /**
  * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
- * @alias Blockly.PREVIOUS_STATEMENT
+ * @name Blockly.PREVIOUS_STATEMENT
  */
   PREVIOUS_STATEMENT: {
     get: function() {
       deprecation.warn(
-          'Blockly.PREVIOUS_STATEMENT', 'September 2021', 'September 2022',
+          'Blockly.PREVIOUS_STATEMENT', 'December 2021', 'December 2022',
           'Blockly.ConnectionType.PREVIOUS_STATEMENT');
       return ConnectionType.PREVIOUS_STATEMENT;
     },
   },
   /**
  * @see Blockly.inputTypes.DUMMY
- * @alias Blockly.DUMMY_INPUT
+ * @name Blockly.DUMMY_INPUT
  */
   DUMMY_INPUT: {
     get: function() {
       deprecation.warn(
-          'Blockly.DUMMY_INPUT', 'September 2021', 'September 2022',
+          'Blockly.DUMMY_INPUT', 'December 2021', 'December 2022',
           'Blockly.inputTypes.DUMMY');
       return inputTypes.DUMMY;
     },
   },
   /**
  * @see Blockly.utils.toolbox.Position.TOP
- * @alias Blockly.TOOLBOX_AT_TOP
+ * @name Blockly.TOOLBOX_AT_TOP
  */
   TOOLBOX_AT_TOP: {
     get: function() {
       deprecation.warn(
-          'Blockly.TOOLBOX_AT_TOP', 'September 2021', 'September 2022',
+          'Blockly.TOOLBOX_AT_TOP', 'December 2021', 'December 2022',
           'Blockly.utils.toolbox.Position.TOP');
       return toolbox.Position.TOP;
     },
   },
   /**
  * @see Blockly.utils.toolbox.Position.BOTTOM
- * @alias Blockly.TOOLBOX_AT_BOTTOM
+ * @name Blockly.TOOLBOX_AT_BOTTOM
  */
   TOOLBOX_AT_BOTTOM: {
     get: function() {
       deprecation.warn(
-          'Blockly.TOOLBOX_AT_BOTTOM', 'September 2021', 'September 2022',
+          'Blockly.TOOLBOX_AT_BOTTOM', 'December 2021', 'December 2022',
           'Blockly.utils.toolbox.Position.BOTTOM');
       return toolbox.Position.BOTTOM;
     },
   },
   /**
  * @see Blockly.utils.toolbox.Position.LEFT
- * @alias Blockly.TOOLBOX_AT_LEFT
+ * @name Blockly.TOOLBOX_AT_LEFT
  */
   TOOLBOX_AT_LEFT: {
     get: function() {
       deprecation.warn(
-          'Blockly.TOOLBOX_AT_LEFT', 'September 2021', 'September 2022',
+          'Blockly.TOOLBOX_AT_LEFT', 'December 2021', 'December 2022',
           'Blockly.utils.toolbox.Position.LEFT');
       return toolbox.Position.LEFT;
     },
   },
   /**
  * @see Blockly.utils.toolbox.Position.RIGHT
- * @alias Blockly.TOOLBOX_AT_RIGHT
+ * @name Blockly.TOOLBOX_AT_RIGHT
  */
   TOOLBOX_AT_RIGHT: {
     get: function() {
       deprecation.warn(
-          'Blockly.TOOLBOX_AT_RIGHT', 'September 2021', 'September 2022',
+          'Blockly.TOOLBOX_AT_RIGHT', 'December 2021', 'December 2022',
           'Blockly.utils.toolbox.Position.RIGHT');
       return toolbox.Position.RIGHT;
     },
@@ -506,13 +485,13 @@ exports.resizeSvgContents = resizeSvgContentsLocal;
 /**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
- * @deprecated Use Blockly.clipboard.copy(). (2021 September 30)
+ * @deprecated Use Blockly.clipboard.copy(). (2021 December)
  * @see Blockly.clipboard.copy
  * @alias Blockly.copy
  */
 const copy = function(toCopy) {
   deprecation.warn(
-      'Blockly.copy', 'September 2021', 'September 2022',
+      'Blockly.copy', 'December 2021', 'December 2022',
       'Blockly.clipboard.copy');
   clipboard.copy(toCopy);
 };
@@ -521,13 +500,13 @@ exports.copy = copy;
 /**
  * Paste a block or workspace comment on to the main workspace.
  * @return {boolean} True if the paste was successful, false otherwise.
- * @deprecated Use Blockly.clipboard.paste(). (2021 September 30)
+ * @deprecated Use Blockly.clipboard.paste(). (2021 December)
  * @see Blockly.clipboard.paste
  * @alias Blockly.paste
  */
 const paste = function() {
   deprecation.warn(
-      'Blockly.paste', 'September 2021', 'September 2022',
+      'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
   return clipboard.paste();
 };
@@ -537,13 +516,13 @@ exports.paste = paste;
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     copied.
- * @deprecated Use Blockly.clipboard.duplicate(). (2021 September 30)
+ * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
  * @see Blockly.clipboard.duplicate
  * @alias Blockly.duplicate
  */
 const duplicate = function(toDuplicate) {
   deprecation.warn(
-      'Blockly.duplicate', 'September 2021', 'September 2022',
+      'Blockly.duplicate', 'December 2021', 'December 2022',
       'Blockly.clipboard.duplicate');
   clipboard.duplicate(toDuplicate);
 };
@@ -553,13 +532,13 @@ exports.duplicate = duplicate;
  * Close tooltips, context menus, dropdown selections, etc.
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  * @deprecated Use Blockly.common.getMainWorkspace().hideChaff(). (2021
- *     September 30)
+ *     December)
  * @see Blockly.WorkspaceSvg.hideChaff
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
   deprecation.warn(
-      'Blockly.hideChaff', 'September 2021', 'September 2022',
+      'Blockly.hideChaff', 'December 2021', 'December 2022',
       'workspace.hideChaff');
   common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
 };
@@ -590,13 +569,7 @@ exports.getMainWorkspace = getMainWorkspace;
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */
-const defineBlocksWithJsonArray = function(jsonArray) {
-  deprecation.warn(
-    'Blockly.defineBlocksWithJsonArray', 'December 2021', 'December 2022',
-    'Blockly.common.defineBlocksWithJsonArray');
-  common.defineBlocksWithJsonArray(jsonArray);
-};
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Is the given string a number (includes negative and decimals).
@@ -620,13 +593,13 @@ exports.isNumber = isNumber;
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
- * @deprecated Use Blockly.common.setParentContainer(). (30 September 2021)
+ * @deprecated Use Blockly.common.setParentContainer(). (December 2021)
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
 const setParentContainer = function(container) {
   deprecation.warn(
-      'Blockly.setParentContainer', 'September 2021', 'September 2022',
+      'Blockly.setParentContainer', 'December 2021', 'December 2022',
       'Blockly.common.setParentContainer');
   common.setParentContainer(container);
 };
@@ -659,7 +632,7 @@ exports.hueToHex = hueToHex;
  * @param {!Function} func Function to call when event is triggered.
  * @return {!browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @deprecated Use Blockly.browserEvents.bind(). (30 September 2021)
+ * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
  * @see Blockly.browserEvents.bind
  * @alias Blockly.bindEvent_
  */
@@ -676,7 +649,7 @@ exports.bindEvent_ = bindEvent_;
  * @param {!browserEvents.Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
- * @deprecated Use Blockly.browserEvents.unbind(). (30 September 2021)
+ * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
  * @see browserEvents.unbind
  * @alias Blockly.unbindEvent_
  */
@@ -706,7 +679,7 @@ exports.unbindEvent_ = unbindEvent_;
  *     provided.
  * @return {!browserEvents.Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @deprecated Use Blockly.browserEvents.conditionalBind(). (30 September 2021)
+ * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */
@@ -729,13 +702,13 @@ exports.bindEventWithChecks_ = bindEventWithChecks_;
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
  * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
- * @deprecated Use Blockly.common.svgResize(). (30 September 2021)
+ * @deprecated Use Blockly.common.svgResize(). (December 2021)
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
  */
 const svgResize = function(workspace) {
   deprecation.warn(
-      'Blockly.svgResize', 'September 2021', 'September 2022',
+      'Blockly.svgResize', 'December 2021', 'December 2022',
       'Blockly.common.svgResize');
   common.svgResize(workspace);
 };

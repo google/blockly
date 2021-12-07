@@ -57,7 +57,7 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');
 const utils = goog.require('Blockly.utils');
 const zelos = goog.require('Blockly.zelos');
-const {Input} = goog.require('Blockly.Input');
+const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {BasicCursor} = goog.require('Blockly.BasicCursor');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
@@ -319,8 +319,8 @@ Object.defineProperties(exports, {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_LEFT', 'December 2021', 'December 2022',
-          'Blockly.constants.ALIGN.LEFT');
-      return constants.ALIGN.LEFT;
+          'Blockly.Input.Align.LEFT');
+      return Align.LEFT;
     },
   },
   /**
@@ -332,8 +332,8 @@ Object.defineProperties(exports, {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_CENTRE', 'December 2021', 'December 2022',
-          'Blockly.constants.ALIGN.CENTRE');
-      return constants.ALIGN.CENTRE;
+          'Blockly.Input.Align.CENTRE');
+      return Align.CENTRE;
     },
   },
   /**
@@ -345,8 +345,8 @@ Object.defineProperties(exports, {
     get: function() {
       deprecation.warn(
           'Blockly.ALIGN_RIGHT', 'December 2021', 'December 2022',
-          'Blockly.constants.ALIGN.RIGHT');
-      return constants.ALIGN.RIGHT;
+          'Blockly.Input.Align.RIGHT');
+      return Align.RIGHT;
     },
   },
   /**

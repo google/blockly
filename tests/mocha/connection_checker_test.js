@@ -256,17 +256,17 @@ suite('Connection checker', function() {
           isShadow: function() {
           },
         };
-        const outCon = new Blockly.Connection(outBlock, Blockly.OUTPUT_VALUE);
-        const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        const outCon = new Blockly.Connection(outBlock, ConnectionType.OUTPUT_VALUE);
+        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
         outBlock.outputConnection = outCon;
         inBlock.inputConnection = inCon;
         connectReciprocally(inCon, outCon);
-        const prevCon = new Blockly.Connection(outBlock, Blockly.PREVIOUS_STATEMENT);
+        const prevCon = new Blockly.Connection(outBlock, ConnectionType.PREVIOUS_STATEMENT);
         const nextBlock = {
           isShadow: function() {
           },
         };
-        const nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        const nextCon = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
 
         assertReasonHelper(
             this.checker,
@@ -283,17 +283,17 @@ suite('Connection checker', function() {
           isShadow: function() {
           },
         };
-        const prevCon = new Blockly.Connection(prevBlock, Blockly.PREVIOUS_STATEMENT);
-        const nextCon = new Blockly.Connection(nextBlock, Blockly.NEXT_STATEMENT);
+        const prevCon = new Blockly.Connection(prevBlock, ConnectionType.PREVIOUS_STATEMENT);
+        const nextCon = new Blockly.Connection(nextBlock, ConnectionType.NEXT_STATEMENT);
         prevBlock.previousConnection = prevCon;
         nextBlock.nextConnection = nextCon;
         connectReciprocally(prevCon, nextCon);
-        const outCon = new Blockly.Connection(prevBlock, Blockly.OUTPUT_VALUE);
+        const outCon = new Blockly.Connection(prevBlock, ConnectionType.OUTPUT_VALUE);
         const inBlock = {
           isShadow: function() {
           },
         };
-        const inCon = new Blockly.Connection(inBlock, Blockly.INPUT_VALUE);
+        const inCon = new Blockly.Connection(inBlock, ConnectionType.INPUT_VALUE);
 
         assertReasonHelper(
             this.checker,

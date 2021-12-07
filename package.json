@@ -69,7 +69,6 @@
     "@blockly/dev-tools": "^2.6.1",
     "@blockly/theme-modern": "^2.1.1",
     "@wdio/selenium-standalone-service": "^7.10.1",
-    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",
     "closure-calculate-chunks": "^3.0.2",

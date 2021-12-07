@@ -311,6 +311,7 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.Input.Align.LEFT instead. (December 2021)
    * @see Blockly.Input.Align.LEFT
    * @name Blockly.ALIGN_LEFT
    */
@@ -323,6 +324,7 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.Input.Align.CENTRE instead. (December 2021)
    * @see Blockly.Input.Align.CENTRE
    * @name Blockly.ALIGN_CENTRE
    */
@@ -335,6 +337,7 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.Input.Align.RIGHT instead. (December 2021)
    * @see Blockly.Input.Align.RIGHT
    * @name Blockly.ALIGN_RIGHT
    */
@@ -347,6 +350,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.ConnectionType.INPUT_VALUE instead. (December
+   * 2021)
    * @see Blockly.ConnectionType.INPUT_VALUE
    * @name Blockly.INPUT_VALUE
    */
@@ -359,6 +364,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.ConnectionType.OUTPUT_VALUE instead. (December
+   * 2021)
    * @see Blockly.ConnectionType.OUTPUT_VALUE
    * @name Blockly.OUTPUT_VALUE
    */
@@ -371,6 +378,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.ConnectionType.NEXT_STATEMENT instead. (December
+   * 2021)
    * @see Blockly.ConnectionType.NEXT_STATEMENT
    * @name Blockly.NEXT_STATEMENT
    */
@@ -383,6 +392,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.ConnectionType.PREVIOUS_STATEMENT instead.
+   * (December 2021)
    * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
    * @name Blockly.PREVIOUS_STATEMENT
    */
@@ -395,6 +406,7 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.inputTypes.DUMMY instead. (December 2021)
    * @see Blockly.inputTypes.DUMMY
    * @name Blockly.DUMMY_INPUT
    */
@@ -407,6 +419,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.utils.toolbox.Position.TOP instead. (December
+   * 2021)
    * @see Blockly.utils.toolbox.Position.TOP
    * @name Blockly.TOOLBOX_AT_TOP
    */
@@ -419,6 +433,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.utils.toolbox.Position.BOTTOM instead. (December
+   * 2021)
    * @see Blockly.utils.toolbox.Position.BOTTOM
    * @name Blockly.TOOLBOX_AT_BOTTOM
    */
@@ -431,6 +447,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.utils.toolbox.Position.LEFT instead. (December
+   * 2021)
    * @see Blockly.utils.toolbox.Position.LEFT
    * @name Blockly.TOOLBOX_AT_LEFT
    */
@@ -443,6 +461,8 @@ Object.defineProperties(exports, {
     },
   },
   /**
+   * @deprecated: Use Blockly.utils.toolbox.Position.RIGHT instead. (December
+   * 2021)
    * @see Blockly.utils.toolbox.Position.RIGHT
    * @name Blockly.TOOLBOX_AT_RIGHT
    */

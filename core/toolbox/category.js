@@ -424,7 +424,7 @@ ToolboxCategory.prototype.parseColour_ = function(colourValue) {
   // Decode the colour for any potential message references
   // (eg. `%{BKY_MATH_HUE}`).
   const colour = parsing.replaceMessageReferences(colourValue);
-  if (colour === null || colour === '') {
+  if (colour == null || colour === '') {
     // No attribute. No colour.
     return '';
   } else {

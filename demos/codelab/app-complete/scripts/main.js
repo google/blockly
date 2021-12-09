@@ -10,7 +10,7 @@
   function handlePlay(event) {
     loadWorkspace(event.target);
     Blockly.JavaScript.addReservedWords('code');
-    var code = Blockly.JavaScript.workspaceToCode(Blockly.common.getMainWorkspace());
+    var code = Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
     code += 'MusicMaker.play();';
     // Eval can be dangerous. For more controlled execution, check
     // https://github.com/NeilFraser/JS-Interpreter.
@@ -22,7 +22,7 @@
   }
 
   function loadWorkspace(button) {
-    let workspace = Blockly.common.getMainWorkspace();
+    let workspace = Blockly.getMainWorkspace();
     workspace.clear();
     if (button.blocklyXml) {
       Blockly.Xml.domToWorkspace(button.blocklyXml, workspace);
@@ -30,7 +30,7 @@
   }
 
   function save(button) {
-    let xml = Blockly.Xml.workspaceToDom(Blockly.common.getMainWorkspace());
+    let xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
     button.blocklyXml = xml;
   }
 

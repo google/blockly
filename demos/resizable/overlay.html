@@ -86,11 +86,11 @@
       blocklyDiv.style.top = y + 'px';
       blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
       blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-      Blockly.common.svgResize(demoWorkspace);
+      Blockly.svgResize(demoWorkspace);
     };
     window.addEventListener('resize', onresize, false);
     onresize();
-    Blockly.common.svgResize(demoWorkspace);
+    Blockly.svgResize(demoWorkspace);
   </script>
 </body>
 </html>

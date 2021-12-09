@@ -31,7 +31,7 @@ BlocklyStorage.backupBlocks_ = function(workspace) {
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.backupOnUnload = function(opt_workspace) {
-  var workspace = opt_workspace || Blockly.common.getMainWorkspace();
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
   window.addEventListener('unload',
       function() {BlocklyStorage.backupBlocks_(workspace);}, false);
 };
@@ -43,7 +43,7 @@ BlocklyStorage.backupOnUnload = function(opt_workspace) {
 BlocklyStorage.restoreBlocks = function(opt_workspace) {
   var url = window.location.href.split('#')[0];
   if ('localStorage' in window && window.localStorage[url]) {
-    var workspace = opt_workspace || Blockly.common.getMainWorkspace();
+    var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.textToDom(window.localStorage[url]);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
@@ -54,7 +54,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.link = function(opt_workspace) {
-  var workspace = opt_workspace || Blockly.common.getMainWorkspace();
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
   var xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
   // There's no reason to store this, removing it helps with anonymity.
@@ -75,7 +75,7 @@ BlocklyStorage.link = function(opt_workspace) {
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.retrieveXml = function(key, opt_workspace) {
-  var workspace = opt_workspace || Blockly.common.getMainWorkspace();
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
   BlocklyStorage.makeRequest_('/storage', 'key', key, workspace);
 };
 

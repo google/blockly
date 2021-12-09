@@ -335,7 +335,7 @@ Code.tabClick = function(clickedName) {
       break;
     }
   }
-  Blockly.common.svgResize(Code.workspace);
+  Blockly.svgResize(Code.workspace);
 };
 
 /**
@@ -518,7 +518,7 @@ Code.init = function() {
   });
 
   onresize();
-  Blockly.common.svgResize(Code.workspace);
+  Blockly.svgResize(Code.workspace);
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Code.importPrettify, 1);

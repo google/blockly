@@ -192,6 +192,155 @@ goog.require('Blockly.Events.VarCreate');
 exports.VERSION = 'uncompiled';
 
 /*
+ * Top-level functions and properties on the Blockly namespace.
+ * These are used only in external code. Do not reference these
+ * from internal code as importing from this file can cause circular
+ * dependencies. Do not add new functions here. There is probably a better
+ * namespace to put new functions on.
+ */
+
+/*
+ * Aliases for input alignments used in block defintions.
+ */
+
+/**
+ * @see Blockly.Input.Align.LEFT
+ * @alias Blockly.ALIGN_LEFT
+ */
+exports.ALIGN_LEFT = Align.LEFT;
+
+/**
+ * @see Blockly.Input.Align.CENTRE
+ * @alias Blockly.ALIGN_CENTRE
+ */
+exports.ALIGN_CENTRE = Align.CENTRE;
+
+/**
+ * @see Blockly.Input.Align.RIGHT
+ * @alias Blockly.ALIGN_RIGHT
+ */
+exports.ALIGN_RIGHT = Align.RIGHT;
+
+/*
+ * Aliases for constants used for connection and input types.
+ */
+
+/**
+ * @see ConnectionType.INPUT_VALUE
+ * @alias Blockly.INPUT_VALUE
+ */
+exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
+
+/**
+ * @see ConnectionType.OUTPUT_VALUE
+ * @alias Blockly.OUTPUT_VALUE
+ */
+exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
+
+/**
+ * @see ConnectionType.NEXT_STATEMENT
+ * @alias Blockly.NEXT_STATEMENT
+ */
+exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
+
+/**
+ * @see ConnectionType.PREVIOUS_STATEMENT
+ * @alias Blockly.PREVIOUS_STATEMENT
+ */
+exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
+
+/**
+ * @see inputTypes.DUMMY_INPUT
+ * @alias Blockly.DUMMY_INPUT
+ */
+exports.DUMMY_INPUT = inputTypes.DUMMY;
+
+/**
+ * Aliases for toolbox positions.
+ */
+
+/**
+ * @see toolbox.Position.TOP
+ * @alias Blockly.TOOLBOX_AT_TOP
+ */
+exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
+
+/**
+ * @see toolbox.Position.BOTTOM
+ * @alias Blockly.TOOLBOX_AT_BOTTOM
+ */
+exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
+
+/**
+ * @see toolbox.Position.LEFT
+ * @alias Blockly.TOOLBOX_AT_LEFT
+ */
+exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
+
+/**
+ * @see toolbox.Position.RIGHT
+ * @alias Blockly.TOOLBOX_AT_RIGHT
+ */
+exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+
+/*
+ * Other aliased functions.
+ */
+
+/**
+ * Size the SVG image to completely fill its container. Call this when the view
+ * actually changes sizes (e.g. on a window resize/device orientation change).
+ * See workspace.resizeContents to resize the workspace when the contents
+ * change (e.g. when a block is added or removed).
+ * Record the height/width of the SVG image.
+ * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @see Blockly.common.svgResize
+ * @alias Blockly.svgResize
+ */
+exports.svgResize = common.svgResize;
+
+/**
+ * Close tooltips, context menus, dropdown selections, etc.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ * @see Blockly.WorkspaceSvg.hideChaff
+ * @alias Blockly.hideChaff
+ */
+const hideChaff = function(opt_onlyClosePopups) {
+  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+};
+exports.hideChaff = hideChaff;
+
+/**
+ * Returns the main workspace.  Returns the last used main workspace (based on
+ * focus).  Try not to use this function, particularly if there are multiple
+ * Blockly instances on a page.
+ * @return {!Workspace} The main workspace.
+ * @see Blockly.common.getMainWorkspace
+ * @alias Blockly.getMainWorkspace
+ */
+exports.getMainWorkspace = common.getMainWorkspace;
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @see Blockly.common.defineBlocksWithJsonArray
+ * @alias Blockly.defineBlocksWithJsonArray
+ */
+exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
+
+/**
+ * Set the parent container.  This is the container element that the WidgetDiv,
+ * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
+ * @param {!Element} container The container element.
+ * @see Blockly.common.setParentContainer
+ * @alias Blockly.setParentContainer
+ */
+exports.setParentContainer = common.setParentContainer;
+
+/*
  * Aliased functions and properties that used to be on the Blockly namespace.
  * Everything in this section is deprecated. Both external and internal code
  * should avoid using these functions and use the designated replacements.
@@ -247,20 +396,13 @@ Object.defineProperties(exports, {
    * Set by Blockly.WorkspaceSvg.prototype.markFocused
    * @name Blockly.mainWorkspace
    * @type {Workspace}
-   * @deprecated Use Blockly.common.getMainWorkspace() /
-   *     .setMainWorkspace instead.  (December 2021)
    * @suppress {checkTypes}
    */
   mainWorkspace: {
     set: function(x) {
-      deprecation.warn(
-          'Blockly.mainWorkspace', 'December 2021', 'December 2022');
       common.setMainWorkspace(x);
     },
     get: function() {
-      deprecation.warn(
-          'Blockly.mainWorkspace', 'December 2021', 'December 2022',
-          'Blockly.getMainWorkspace()');
       return common.getMainWorkspace();
     },
   },
@@ -308,170 +450,6 @@ Object.defineProperties(exports, {
           'Blockly.selected', 'December 2021', 'December 2022',
           'Blockly.common.setSelected()');
       common.setSelected(newSelection);
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.Input.Align.LEFT instead. (December 2021)
-   * @see Blockly.Input.Align.LEFT
-   * @name Blockly.ALIGN_LEFT
-   */
-  ALIGN_LEFT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.ALIGN_LEFT', 'December 2021', 'December 2022',
-          'Blockly.Input.Align.LEFT');
-      return Align.LEFT;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.Input.Align.CENTRE instead. (December 2021)
-   * @see Blockly.Input.Align.CENTRE
-   * @name Blockly.ALIGN_CENTRE
-   */
-  ALIGN_CENTRE: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.ALIGN_CENTRE', 'December 2021', 'December 2022',
-          'Blockly.Input.Align.CENTRE');
-      return Align.CENTRE;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.Input.Align.RIGHT instead. (December 2021)
-   * @see Blockly.Input.Align.RIGHT
-   * @name Blockly.ALIGN_RIGHT
-   */
-  ALIGN_RIGHT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.ALIGN_RIGHT', 'December 2021', 'December 2022',
-          'Blockly.Input.Align.RIGHT');
-      return Align.RIGHT;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.ConnectionType.INPUT_VALUE instead. (December
-   * 2021)
-   * @see Blockly.ConnectionType.INPUT_VALUE
-   * @name Blockly.INPUT_VALUE
-   */
-  INPUT_VALUE: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.INPUT_VALUE', 'December 2021', 'December 2022',
-          'Blockly.ConnectionType.INPUT_VALUE');
-      return ConnectionType.INPUT_VALUE;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.ConnectionType.OUTPUT_VALUE instead. (December
-   * 2021)
-   * @see Blockly.ConnectionType.OUTPUT_VALUE
-   * @name Blockly.OUTPUT_VALUE
-   */
-  OUTPUT_VALUE: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.OUTPUT_VALUE', 'December 2021', 'December 2022',
-          'Blockly.ConnectionType.OUTPUT_VALUE');
-      return ConnectionType.OUTPUT_VALUE;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.ConnectionType.NEXT_STATEMENT instead. (December
-   * 2021)
-   * @see Blockly.ConnectionType.NEXT_STATEMENT
-   * @name Blockly.NEXT_STATEMENT
-   */
-  NEXT_STATEMENT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.NEXT_STATEMENT', 'December 2021', 'December 2022',
-          'Blockly.ConnectionType.NEXT_STATEMENT');
-      return ConnectionType.NEXT_STATEMENT;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.ConnectionType.PREVIOUS_STATEMENT instead.
-   * (December 2021)
-   * @see Blockly.ConnectionType.PREVIOUS_STATEMENT
-   * @name Blockly.PREVIOUS_STATEMENT
-   */
-  PREVIOUS_STATEMENT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.PREVIOUS_STATEMENT', 'December 2021', 'December 2022',
-          'Blockly.ConnectionType.PREVIOUS_STATEMENT');
-      return ConnectionType.PREVIOUS_STATEMENT;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.inputTypes.DUMMY instead. (December 2021)
-   * @see Blockly.inputTypes.DUMMY
-   * @name Blockly.DUMMY_INPUT
-   */
-  DUMMY_INPUT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.DUMMY_INPUT', 'December 2021', 'December 2022',
-          'Blockly.inputTypes.DUMMY');
-      return inputTypes.DUMMY;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.utils.toolbox.Position.TOP instead. (December
-   * 2021)
-   * @see Blockly.utils.toolbox.Position.TOP
-   * @name Blockly.TOOLBOX_AT_TOP
-   */
-  TOOLBOX_AT_TOP: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.TOOLBOX_AT_TOP', 'December 2021', 'December 2022',
-          'Blockly.utils.toolbox.Position.TOP');
-      return toolbox.Position.TOP;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.utils.toolbox.Position.BOTTOM instead. (December
-   * 2021)
-   * @see Blockly.utils.toolbox.Position.BOTTOM
-   * @name Blockly.TOOLBOX_AT_BOTTOM
-   */
-  TOOLBOX_AT_BOTTOM: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.TOOLBOX_AT_BOTTOM', 'December 2021', 'December 2022',
-          'Blockly.utils.toolbox.Position.BOTTOM');
-      return toolbox.Position.BOTTOM;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.utils.toolbox.Position.LEFT instead. (December
-   * 2021)
-   * @see Blockly.utils.toolbox.Position.LEFT
-   * @name Blockly.TOOLBOX_AT_LEFT
-   */
-  TOOLBOX_AT_LEFT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.TOOLBOX_AT_LEFT', 'December 2021', 'December 2022',
-          'Blockly.utils.toolbox.Position.LEFT');
-      return toolbox.Position.LEFT;
-    },
-  },
-  /**
-   * @deprecated: Use Blockly.utils.toolbox.Position.RIGHT instead. (December
-   * 2021)
-   * @see Blockly.utils.toolbox.Position.RIGHT
-   * @name Blockly.TOOLBOX_AT_RIGHT
-   */
-  TOOLBOX_AT_RIGHT: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.TOOLBOX_AT_RIGHT', 'December 2021', 'December 2022',
-          'Blockly.utils.toolbox.Position.RIGHT');
-      return toolbox.Position.RIGHT;
     },
   },
 });
@@ -549,50 +527,6 @@ const duplicate = function(toDuplicate) {
 exports.duplicate = duplicate;
 
 /**
- * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
- * @deprecated Use Blockly.common.getMainWorkspace().hideChaff(). (2021
- *     December)
- * @see Blockly.WorkspaceSvg.hideChaff
- * @alias Blockly.hideChaff
- */
-const hideChaff = function(opt_onlyClosePopups) {
-  deprecation.warn(
-      'Blockly.hideChaff', 'December 2021', 'December 2022',
-      'workspace.hideChaff');
-  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
-};
-exports.hideChaff = hideChaff;
-
-/**
- * Returns the main workspace.  Returns the last used main workspace (based on
- * focus).  Try not to use this function, particularly if there are multiple
- * Blockly instances on a page.
- * @return {!Workspace} The main workspace.
- * @deprecated Use Blockly.common.getMainWorkspace(). (2021 December)
- * @see Blockly.common.getMainWorkspace
- * @alias Blockly.getMainWorkspace
- */
-const getMainWorkspace = function() {
-  deprecation.warn(
-      'Blockly.getMainWorkspace', 'December 2021', 'December 2022',
-      'Blockly.common.getMainWorkspace');
-  return common.getMainWorkspace();
-};
-exports.getMainWorkspace = getMainWorkspace;
-
-/**
- * Define blocks from an array of JSON block definitions, as might be generated
- * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @deprecated Use Blockly.common.defineBlocksWithJsonArray(jsonArray). (2021
- *     December)
- * @see Blockly.common.defineBlocksWithJsonArray
- * @alias Blockly.defineBlocksWithJsonArray
- */
-exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
-
-/**
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.
@@ -607,24 +541,6 @@ const isNumber = function(str) {
   return utils.string.isNumber(str);
 };
 exports.isNumber = isNumber;
-
-/**
- * Set the parent container.  This is the container element that the WidgetDiv,
- * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
- * is called.
- * This method is a NOP if called after the first ``Blockly.inject``.
- * @param {!Element} container The container element.
- * @deprecated Use Blockly.common.setParentContainer(). (December 2021)
- * @see Blockly.common.setParentContainer
- * @alias Blockly.setParentContainer
- */
-const setParentContainer = function(container) {
-  deprecation.warn(
-      'Blockly.setParentContainer', 'December 2021', 'December 2022',
-      'Blockly.common.setParentContainer');
-  common.setParentContainer(container);
-};
-exports.setParentContainer = setParentContainer;
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
@@ -715,25 +631,6 @@ const bindEventWithChecks_ = function(
       opt_noPreventDefault);
 };
 exports.bindEventWithChecks_ = bindEventWithChecks_;
-
-/**
- * Size the SVG image to completely fill its container. Call this when the view
- * actually changes sizes (e.g. on a window resize/device orientation change).
- * See Blockly.resizeSvgContents to resize the workspace when the contents
- * change (e.g. when a block is added or removed).
- * Record the height/width of the SVG image.
- * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
- * @deprecated Use Blockly.common.svgResize(). (December 2021)
- * @see Blockly.common.svgResize
- * @alias Blockly.svgResize
- */
-const svgResize = function(workspace) {
-  deprecation.warn(
-      'Blockly.svgResize', 'December 2021', 'December 2022',
-      'Blockly.common.svgResize');
-  common.svgResize(workspace);
-};
-exports.svgResize = svgResize;
 
 // Aliases to allow external code to access these values for legacy reasons.
 exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Alirezaaa",
 			"Arash.pt",
 			"AzorAhai",
@@ -66,7 +67,7 @@
 	"COLOUR_BLEND_COLOUR2": "رنگ ۲",
 	"COLOUR_BLEND_RATIO": "نسبت",
 	"COLOUR_BLEND_TOOLTIP": "دو رنگ را با نسبت مشخص‌شده مخلوط می‌کند (۰٫۰ - ۱٫۰)",
-	"CONTROLS_REPEAT_HELPURL": "https://fa.wikipedia.org/wiki/%D8%AD%D9%84%D9%82%D9%87_%D9%81%D9%88%D8%B1",
+	"CONTROLS_REPEAT_HELPURL": "https://fa.wikipedia.org/wiki/حلقه_فور",
 	"CONTROLS_REPEAT_TITLE": "%1 بار تکرار",
 	"CONTROLS_REPEAT_INPUT_DO": "انجام",
 	"CONTROLS_REPEAT_TOOLTIP": "انجام چند عبارت چندین بار.",

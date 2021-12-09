@@ -11,5 +11,5 @@
 
 /// <reference path="blockly.d.ts" />
 
-import * as Blockly from './blockly';
+import * as Blockly from 'blockly';
 export = Blockly;

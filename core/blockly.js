@@ -191,253 +191,17 @@ goog.require('Blockly.Events.VarCreate');
  */
 exports.VERSION = 'uncompiled';
 
-// Add a getter and setter pair for Blockly.alert, Blockly.confirm,
-// Blockly.mainWorkspace, Blockly.prompt and Blockly.selected for backwards
-// compatibility.
-Object.defineProperties(exports, {
-  /**
-   * Wrapper to window.alert() that app developers may override to
-   * provide alternatives to the modal browser window.
-   * @name Blockly.alert
-   * @type {!function(string, function()=)}
-   * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  alert: {
-    set: function(newAlert) {
-      deprecation.warn('Blockly.alert', 'September 2021', 'September 2022');
-      dialog.setAlert(newAlert);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.alert', 'September 2021', 'September 2022',
-          'Blockly.dialog.alert()');
-      return dialog.alert;
-    },
-  },
-  /**
-   * Wrapper to window.confirm() that app developers may override to
-   * provide alternatives to the modal browser window.
-   * @name Blockly.confirm
-   * @type {!function(string, function()=)}
-   * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  confirm: {
-    set: function(newConfirm) {
-      deprecation.warn('Blockly.confirm', 'September 2021', 'September 2022');
-      dialog.setConfirm(newConfirm);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.confirm', 'September 2021', 'September 2022',
-          'Blockly.dialog.confirm()');
-      return dialog.confirm;
-    },
-  },
-  /**
-   * The main workspace most recently used.
-   * Set by Blockly.WorkspaceSvg.prototype.markFocused
-   * @name Blockly.mainWorkspace
-   * @type {Workspace}
-   * @deprecated Use Blockly.common.getMainWorkspace() /
-   *     .setMainWorkspace instead.  (September 2021)
-   * @suppress {checkTypes}
-   */
-  mainWorkspace: {
-    set: function(x) {
-      deprecation.warn(
-          'Blockly.mainWorkspace', 'September 2021', 'September 2022');
-      common.setMainWorkspace(x);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.mainWorkspace', 'September 2021', 'September 2022',
-          'Blockly.getMainWorkspace()');
-      return common.getMainWorkspace();
-    },
-  },
-  /**
-   * Wrapper to window.prompt() that app developers may override to
-   * provide alternatives to the modal browser window. Built-in
-   * browser prompts are often used for better text input experience
-   * on mobile device. We strongly recommend testing mobile when
-   * overriding this.
-   * @name Blockly.prompt
-   * @type {!function(string, string, function()=)}
-   * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  prompt: {
-    set: function(newPrompt) {
-      deprecation.warn('Blockly.prompt', 'September 2021', 'September 2022');
-      dialog.setPrompt(newPrompt);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.prompt', 'September 2021', 'September 2022',
-          'Blockly.dialog.prompt()');
-      return dialog.prompt;
-    },
-  },
-  /**
-   * Currently selected block.
-   * @name Blockly.selected
-   * @type {?ICopyable}
-   * @deprecated Use Blockly.common.getSelected() / .setSelected
-   *     instead.  (September 2021)
-   * @suppress {checkTypes}
-   */
-  selected: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.selected', 'September 2021', 'September 2022',
-          'Blockly.common.getSelected()');
-      return common.getSelected();
-    },
-    set: function(newSelection) {
-      deprecation.warn(
-          'Blockly.selected', 'September 2021', 'September 2022',
-          'Blockly.common.setSelected()');
-      common.setSelected(newSelection);
-    },
-  },
-});
-
-/**
- * Returns the dimensions of the specified SVG image.
- * @param {!SVGElement} svg SVG image.
- * @return {!Size} Contains width and height properties.
- * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
- * @alias Blockly.svgSize
+/*
+ * Top-level functions and properties on the Blockly namespace.
+ * These are used only in external code. Do not reference these
+ * from internal code as importing from this file can cause circular
+ * dependencies. Do not add new functions here. There is probably a better
+ * namespace to put new functions on.
  */
-exports.svgSize = svgMath.svgSize;
 
-/**
- * Size the workspace when the contents change.  This also updates
- * scrollbars accordingly.
- * @param {!WorkspaceSvg} workspace The workspace to resize.
- * @deprecated
- * @alias Blockly.resizeSvgContents
+/*
+ * Aliases for input alignments used in block defintions.
  */
-const resizeSvgContentsLocal = function(workspace) {
-  deprecation.warn(
-      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
-      'Blockly.WorkspaceSvg.resizeSvgContents');
-  resizeSvgContents(workspace);
-};
-exports.resizeSvgContents = resizeSvgContentsLocal;
-
-/**
- * Copy a block or workspace comment onto the local clipboard.
- * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
- * @package
- * @alias Blockly.copy
- */
-exports.copy = clipboard.copy;
-
-/**
- * Paste a block or workspace comment on to the main workspace.
- * @return {boolean} True if the paste was successful, false otherwise.
- * @package
- * @alias Blockly.paste
- */
-exports.paste = clipboard.paste;
-
-/**
- * Duplicate this block and its children, or a workspace comment.
- * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
- *     copied.
- * @package
- * @alias Blockly.duplicate
- */
-exports.duplicate = clipboard.duplicate;
-
-/**
- * Close tooltips, context menus, dropdown selections, etc.
- * @deprecated Use Blockly.common.getMainWorkspace().hideChaff()
- * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
- * @alias Blockly.hideChaff
- */
-const hideChaff = function(opt_onlyClosePopups) {
-  deprecation.warn(
-      'Blockly.hideChaff', 'September 2021', 'September 2022',
-      'workspace.hideChaff');
-  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
-};
-exports.hideChaff = hideChaff;
-
-/**
- * Returns the main workspace.  Returns the last used main workspace (based on
- * focus).  Try not to use this function, particularly if there are multiple
- * Blockly instances on a page.
- * @return {!Workspace} The main workspace.
- * @alias Blockly.getMainWorkspace
- */
-exports.getMainWorkspace = common.getMainWorkspace;
-
-/**
- * Define blocks from an array of JSON block definitions, as might be generated
- * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @alias Blockly.defineBlocksWithJsonArray
- */
-exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
-
-/**
- * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
- * @deprecated
- * @alias Blockly.isNumber
- */
-const isNumber = function(str) {
-  deprecation.warn(
-      'Blockly.isNumber', 'December 2021', 'December 2022',
-      'Blockly.utils.string.isNumber');
-  return utils.string.isNumber(str);
-};
-exports.isNumber = isNumber;
-
-/**
- * Set the parent container.  This is the container element that the WidgetDiv,
- * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
- * is called.
- * This method is a NOP if called after the first ``Blockly.inject``.
- * @param {!Element} container The container element.
- * @alias Blockly.setParentContainer
- */
-exports.setParentContainer = common.setParentContainer;
-
-/** Aliases. */
-
-/**
- * @see colour.hueToHex
- * @deprecated Use Blockly.utils.colour.hueToHex (September 2021).
- * @alias Blockly.hueToHex
- */
-exports.hueToHex = colour.hueToHex;
-
-/**
- * @see browserEvents.bind
- * @alias Blockly.bindEvent_
- */
-exports.bindEvent_ = browserEvents.bind;
-
-/**
- * @see browserEvents.unbind
- * @alias Blockly.unbindEvent_
- */
-exports.unbindEvent_ = browserEvents.unbind;
-
-/**
- * @see browserEvents.conditionalBind
- * @alias Blockly.bindEventWithChecks_
- */
-exports.bindEventWithChecks_ = browserEvents.conditionalBind;
 
 /**
  * @see Blockly.Input.Align.LEFT
@@ -457,12 +221,7 @@ exports.ALIGN_CENTRE = Align.CENTRE;
  */
 exports.ALIGN_RIGHT = Align.RIGHT;
 
-/**
- * @see common.svgResize
- */
-exports.svgResize = common.svgResize;
-
-/**
+/*
  * Aliases for constants used for connection and input types.
  */
 
@@ -523,6 +282,347 @@ exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
  * @alias Blockly.TOOLBOX_AT_RIGHT
  */
 exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+
+/*
+ * Other aliased functions.
+ */
+
+/**
+ * Size the SVG image to completely fill its container. Call this when the view
+ * actually changes sizes (e.g. on a window resize/device orientation change).
+ * See workspace.resizeContents to resize the workspace when the contents
+ * change (e.g. when a block is added or removed).
+ * Record the height/width of the SVG image.
+ * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @see Blockly.common.svgResize
+ * @alias Blockly.svgResize
+ */
+exports.svgResize = common.svgResize;
+
+/**
+ * Close tooltips, context menus, dropdown selections, etc.
+ * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ * @see Blockly.WorkspaceSvg.hideChaff
+ * @alias Blockly.hideChaff
+ */
+const hideChaff = function(opt_onlyClosePopups) {
+  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+};
+exports.hideChaff = hideChaff;
+
+/**
+ * Returns the main workspace.  Returns the last used main workspace (based on
+ * focus).  Try not to use this function, particularly if there are multiple
+ * Blockly instances on a page.
+ * @return {!Workspace} The main workspace.
+ * @see Blockly.common.getMainWorkspace
+ * @alias Blockly.getMainWorkspace
+ */
+exports.getMainWorkspace = common.getMainWorkspace;
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @see Blockly.common.defineBlocksWithJsonArray
+ * @alias Blockly.defineBlocksWithJsonArray
+ */
+exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
+
+/**
+ * Set the parent container.  This is the container element that the WidgetDiv,
+ * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * is called.
+ * This method is a NOP if called after the first ``Blockly.inject``.
+ * @param {!Element} container The container element.
+ * @see Blockly.common.setParentContainer
+ * @alias Blockly.setParentContainer
+ */
+exports.setParentContainer = common.setParentContainer;
+
+/*
+ * Aliased functions and properties that used to be on the Blockly namespace.
+ * Everything in this section is deprecated. Both external and internal code
+ * should avoid using these functions and use the designated replacements.
+ * Anything in this section may be removed in a future version of Blockly.
+ */
+
+// Add accessors for properties on Blockly that have now been deprecated.
+Object.defineProperties(exports, {
+  /**
+   * Wrapper to window.alert() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.alert
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
+   *     (December 2021)
+   * @suppress {checkTypes}
+   */
+  alert: {
+    set: function(newAlert) {
+      deprecation.warn('Blockly.alert', 'December 2021', 'December 2022');
+      dialog.setAlert(newAlert);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.alert', 'December 2021', 'December 2022',
+          'Blockly.dialog.alert()');
+      return dialog.alert;
+    },
+  },
+  /**
+   * Wrapper to window.confirm() that app developers may override to
+   * provide alternatives to the modal browser window.
+   * @name Blockly.confirm
+   * @type {!function(string, function()=)}
+   * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
+   *     (December 2021)
+   * @suppress {checkTypes}
+   */
+  confirm: {
+    set: function(newConfirm) {
+      deprecation.warn('Blockly.confirm', 'December 2021', 'December 2022');
+      dialog.setConfirm(newConfirm);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.confirm', 'December 2021', 'December 2022',
+          'Blockly.dialog.confirm()');
+      return dialog.confirm;
+    },
+  },
+  /**
+   * The main workspace most recently used.
+   * Set by Blockly.WorkspaceSvg.prototype.markFocused
+   * @name Blockly.mainWorkspace
+   * @type {Workspace}
+   * @suppress {checkTypes}
+   */
+  mainWorkspace: {
+    set: function(x) {
+      common.setMainWorkspace(x);
+    },
+    get: function() {
+      return common.getMainWorkspace();
+    },
+  },
+  /**
+   * Wrapper to window.prompt() that app developers may override to
+   * provide alternatives to the modal browser window. Built-in
+   * browser prompts are often used for better text input experience
+   * on mobile device. We strongly recommend testing mobile when
+   * overriding this.
+   * @name Blockly.prompt
+   * @type {!function(string, string, function()=)}
+   * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
+   *     (December 2021)
+   * @suppress {checkTypes}
+   */
+  prompt: {
+    set: function(newPrompt) {
+      deprecation.warn('Blockly.prompt', 'December 2021', 'December 2022');
+      dialog.setPrompt(newPrompt);
+    },
+    get: function() {
+      deprecation.warn(
+          'Blockly.prompt', 'December 2021', 'December 2022',
+          'Blockly.dialog.prompt()');
+      return dialog.prompt;
+    },
+  },
+  /**
+   * Currently selected block.
+   * @name Blockly.selected
+   * @type {?ICopyable}
+   * @suppress {checkTypes}
+   */
+  selected: {
+    get: function() {
+      return common.getSelected();
+    },
+    set: function(newSelection) {
+      common.setSelected(newSelection);
+    },
+  },
+});
+
+/**
+ * Returns the dimensions of the specified SVG image.
+ * @param {!SVGElement} svg SVG image.
+ * @return {!Size} Contains width and height properties.
+ * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
+ * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
+ * @alias Blockly.svgSize
+ */
+exports.svgSize = svgMath.svgSize;
+
+/**
+ * Size the workspace when the contents change.  This also updates
+ * scrollbars accordingly.
+ * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @deprecated Use workspace.resizeContents. (2021 December)
+ * @see Blockly.WorkspaceSvg.resizeContents
+ * @alias Blockly.resizeSvgContents
+ */
+const resizeSvgContentsLocal = function(workspace) {
+  deprecation.warn(
+      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
+      'Blockly.WorkspaceSvg.resizeSvgContents');
+  resizeSvgContents(workspace);
+};
+exports.resizeSvgContents = resizeSvgContentsLocal;
+
+/**
+ * Copy a block or workspace comment onto the local clipboard.
+ * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
+ * @deprecated Use Blockly.clipboard.copy(). (2021 December)
+ * @see Blockly.clipboard.copy
+ * @alias Blockly.copy
+ */
+const copy = function(toCopy) {
+  deprecation.warn(
+      'Blockly.copy', 'December 2021', 'December 2022',
+      'Blockly.clipboard.copy');
+  clipboard.copy(toCopy);
+};
+exports.copy = copy;
+
+/**
+ * Paste a block or workspace comment on to the main workspace.
+ * @return {boolean} True if the paste was successful, false otherwise.
+ * @deprecated Use Blockly.clipboard.paste(). (2021 December)
+ * @see Blockly.clipboard.paste
+ * @alias Blockly.paste
+ */
+const paste = function() {
+  deprecation.warn(
+      'Blockly.paste', 'December 2021', 'December 2022',
+      'Blockly.clipboard.paste');
+  return clipboard.paste();
+};
+exports.paste = paste;
+
+/**
+ * Duplicate this block and its children, or a workspace comment.
+ * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
+ *     copied.
+ * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
+ * @see Blockly.clipboard.duplicate
+ * @alias Blockly.duplicate
+ */
+const duplicate = function(toDuplicate) {
+  deprecation.warn(
+      'Blockly.duplicate', 'December 2021', 'December 2022',
+      'Blockly.clipboard.duplicate');
+  clipboard.duplicate(toDuplicate);
+};
+exports.duplicate = duplicate;
+
+/**
+ * Is the given string a number (includes negative and decimals).
+ * @param {string} str Input string.
+ * @return {boolean} True if number, false otherwise.
+ * @deprecated Use Blockly.utils.string.isNumber(str). (2021 December)
+ * @see Blockly.utils.string.isNumber
+ * @alias Blockly.isNumber
+ */
+const isNumber = function(str) {
+  deprecation.warn(
+      'Blockly.isNumber', 'December 2021', 'December 2022',
+      'Blockly.utils.string.isNumber');
+  return utils.string.isNumber(str);
+};
+exports.isNumber = isNumber;
+
+/**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ * @deprecated Use Blockly.utils.colour.hueToHex(). (2021 December)
+ * @see Blockly.utils.colour.hueToHex
+ * @alias Blockly.hueToHex
+ */
+const hueToHex = function(hue) {
+  deprecation.warn(
+      'Blockly.hueToHex', 'December 2021', 'December 2022',
+      'Blockly.utils.colour.hueToHex');
+  return colour.hueToHex(hue);
+};
+exports.hueToHex = hueToHex;
+
+/**
+ * Bind an event handler that should be called regardless of whether it is part
+ * of the active touch stream.
+ * Use this for events that are not part of a multi-part gesture (e.g.
+ * mouseover for tooltips).
+ * @param {!EventTarget} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {?Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @return {!browserEvents.Data} Opaque data that can be passed to
+ *     unbindEvent_.
+ * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
+ * @see Blockly.browserEvents.bind
+ * @alias Blockly.bindEvent_
+ */
+const bindEvent_ = function(node, name, thisObject, func) {
+  deprecation.warn(
+      'Blockly.bindEvent_', 'December 2021', 'December 2022',
+      'Blockly.browserEvents.bind');
+  return browserEvents.bind(node, name, thisObject, func);
+};
+exports.bindEvent_ = bindEvent_;
+
+/**
+ * Unbind one or more events event from a function call.
+ * @param {!browserEvents.Data} bindData Opaque data from bindEvent_.
+ *     This list is emptied during the course of calling this function.
+ * @return {!Function} The function call.
+ * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
+ * @see browserEvents.unbind
+ * @alias Blockly.unbindEvent_
+ */
+const unbindEvent_ = function(bindData) {
+  deprecation.warn(
+      'Blockly.unbindEvent_', 'December 2021', 'December 2022',
+      'Blockly.browserEvents.unbind');
+  return browserEvents.unbind(bindData);
+};
+exports.unbindEvent_ = unbindEvent_;
+
+/**
+ * Bind an event handler that can be ignored if it is not part of the active
+ * touch stream.
+ * Use this for events that either start or continue a multi-part gesture (e.g.
+ * mousedown or mousemove, which may be part of a drag or click).
+ * @param {!EventTarget} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {?Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
+ *     should not block execution of other event handlers on this touch or
+ *     other simultaneous touches.  False by default.
+ * @param {boolean=} opt_noPreventDefault True if triggering on this event
+ *     should prevent the default handler.  False by default.  If
+ *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
+ *     provided.
+ * @return {!browserEvents.Data} Opaque data that can be passed to
+ *     unbindEvent_.
+ * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
+ * @see browserEvents.conditionalBind
+ * @alias Blockly.bindEventWithChecks_
+ */
+const bindEventWithChecks_ = function(
+    node, name, thisObject, func, opt_noCaptureIdentifier,
+    opt_noPreventDefault) {
+  deprecation.warn(
+      'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
+      'Blockly.browserEvents.conditionalBind');
+  return browserEvents.conditionalBind(
+      node, name, thisObject, func, opt_noCaptureIdentifier,
+      opt_noPreventDefault);
+};
+exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.
 exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;

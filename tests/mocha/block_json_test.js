@@ -6,6 +6,8 @@
 
 goog.module('Blockly.test.blockJson');
 
+const {Align} = goog.require('Blockly.Input');
+
 
 suite('Block JSON initialization', function() {
   suite('validateTokens_', function() {
@@ -564,7 +566,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'LEFT',
           },
-          'input_dummy', undefined, Blockly.ALIGN_LEFT);
+          'input_dummy', undefined, Align.LEFT);
     });
 
     test('"Right" align', function() {
@@ -573,7 +575,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'RIGHT',
           },
-          'input_dummy', undefined, Blockly.ALIGN_RIGHT);
+          'input_dummy', undefined, Align.RIGHT);
     });
 
     test('"Center" align', function() {
@@ -582,7 +584,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTER',
           },
-          'input_dummy', undefined, Blockly.ALIGN_CENTRE);
+          'input_dummy', undefined, Align.CENTRE);
     });
 
     test('"Centre" align', function() {
@@ -591,7 +593,7 @@ suite('Block JSON initialization', function() {
             'type': 'input_dummy',
             'align': 'CENTRE',
           },
-          'input_dummy', undefined, Blockly.ALIGN_CENTRE);
+          'input_dummy', undefined, Align.CENTRE);
     });
   });
 });

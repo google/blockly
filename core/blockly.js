@@ -434,21 +434,13 @@ Object.defineProperties(exports, {
    * Currently selected block.
    * @name Blockly.selected
    * @type {?ICopyable}
-   * @deprecated Use Blockly.common.getSelected() / .setSelected
-   *     instead.  (December 2021)
    * @suppress {checkTypes}
    */
   selected: {
     get: function() {
-      deprecation.warn(
-          'Blockly.selected', 'December 2021', 'December 2022',
-          'Blockly.common.getSelected()');
       return common.getSelected();
     },
     set: function(newSelection) {
-      deprecation.warn(
-          'Blockly.selected', 'December 2021', 'December 2022',
-          'Blockly.common.setSelected()');
       common.setSelected(newSelection);
     },
   },

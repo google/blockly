@@ -51,7 +51,7 @@ const ShortcutRegistry = function() {
 
 /**
  * Enum of valid modifiers.
- * @enum {!KeyCodes<number>}
+ * @enum {!KeyCodes}
  */
 ShortcutRegistry.modifierKeys = {
   'Shift': KeyCodes.SHIFT,

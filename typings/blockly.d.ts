@@ -174,7 +174,7 @@ declare module "utils/svg" {
          * @return {string} The name.
          * @override
          */
-        override toString(): string;
+        toString(): string;
     }
     export namespace Svg {
         const ANIMATE: Svg<SVGAnimateElement>;
@@ -1096,24 +1096,6 @@ declare module "input_types" {
 }
 declare module "serialization/blocks" {
     /**
-     * -state: (*|undefined),
-     *     icons: (!Object<string, *>|undefined),
-     *     fields: (!Object<string, *>|undefined),
-     *     inputs: (!Object<string, !ConnectionState>|undefined),
-     *     next: (!ConnectionState|undefined)
-     * }}
-     */
-    export type extra = {
-        type: string;
-        id: (string | undefined);
-        x: (number | undefined);
-        y: (number | undefined);
-        collapsed: (boolean | undefined);
-        enabled: (boolean | undefined);
-        inline: (boolean | undefined);
-        data: (string | undefined);
-    };
-    /**
      * Represents the state of a connection.
      */
     export type ConnectionState = {
@@ -1773,7 +1755,8 @@ declare module "toolbox/toolbox_item" {
     import { WorkspaceSvg } from "workspace_svg";
 }
 declare module "toolbox/category" {
-    export class ToolboxCategory {
+    import { ToolboxItem } from "toolbox/toolbox_item";
+    export class ToolboxCategory extends ToolboxItem {
         /**
          * Class for a category in a toolbox.
          * @param {!toolbox.CategoryInfo} categoryDef The information needed
@@ -2081,6 +2064,7 @@ declare module "toolbox/category" {
     import { ICollapsibleToolboxItem } from "interfaces/i_collapsible_toolbox_item";
 }
 declare module "toolbox/separator" {
+    import { ToolboxItem } from "toolbox/toolbox_item";
     /**
      * Class for a toolbox separator. This is the thin visual line that appears on
      * the toolbox. This item is not interactable.
@@ -2091,7 +2075,7 @@ declare module "toolbox/separator" {
      * @extends {ToolboxItem}
      * @alias Blockly.ToolboxSeparator
      */
-    export class ToolboxSeparator {
+    export class ToolboxSeparator extends ToolboxItem {
         constructor(separatorDef: any, toolbox: any);
         /**
          * All the CSS class names that are used to create a separator.
@@ -2130,58 +2114,40 @@ declare module "toolbox/separator" {
     }
 }
 declare module "utils/toolbox" {
+/**
+ * The information needed to create a block in the toolbox.
+ * Note that disabled has a different type for backwards compatibility.
+ * @typedef {{
+ *            kind:string,
+ *            blockxml:(string|!Node|undefined),
+ *            type:(string|undefined),
+ *            gap:(string|number|undefined),
+ *            disabled: (string|boolean|undefined),
+ *            enabled: (boolean|undefined),
+ *            id: (string|undefined),
+ *            x: (number|undefined),
+ *            y: (number|undefined),
+ *            collapsed: (boolean|undefined),
+ *            inline: (boolean|undefined),
+ *            data: (string|undefined),
+ *            extra-state: (*|undefined),
+ *            icons: (!Object<string, *>|undefined),
+ *            fields: (!Object<string, *>|undefined),
+ *            inputs: (!Object<string, !ConnectionState>|undefined),
+ *            next: (!ConnectionState|undefined)
+ *          }}
+ * @alias Blockly.utils.toolbox.BlockInfo
+ */
+export type BlockInfo = any;
     /**
-     * -state: (*|undefined),
-     *            icons: (!Object<string, *>|undefined),
-     *            fields: (!Object<string, *>|undefined),
-     *            inputs: (!Object<string, !ConnectionState>|undefined),
-     *            next: (!ConnectionState|undefined)
-     *          }}
-     */
-    export type extra = {
-        kind: string;
-        blockxml: (string | Node | undefined);
-        type: (string | undefined);
-        gap: (string | number | undefined);
-        disabled: (string | boolean | undefined);
-        enabled: (boolean | undefined);
-        id: (string | undefined);
-        x: (number | undefined);
-        y: (number | undefined);
-        collapsed: (boolean | undefined);
-        inline: (boolean | undefined);
-        data: (string | undefined);
-    };
-    /**
-     * <!FlyoutItemInfo>
+ * An array holding flyout items.
+ * @typedef {
+ *            Array<!FlyoutItemInfo>
      *          }
+     * @alias Blockly.utils.toolbox.FlyoutItemInfoArray
      */
-    export type Array = any;
-    /**
-     * The information needed to create a block in the toolbox.
-     * Note that disabled has a different type for backwards compatibility.
-     * @typedef {{
-     *            kind:string,
-     *            blockxml:(string|!Node|undefined),
-     *            type:(string|undefined),
-     *            gap:(string|number|undefined),
-     *            disabled: (string|boolean|undefined),
-     *            enabled: (boolean|undefined),
-     *            id: (string|undefined),
-     *            x: (number|undefined),
-     *            y: (number|undefined),
-     *            collapsed: (boolean|undefined),
-     *            inline: (boolean|undefined),
-     *            data: (string|undefined),
-     *            extra-state: (*|undefined),
-     *            icons: (!Object<string, *>|undefined),
-     *            fields: (!Object<string, *>|undefined),
-     *            inputs: (!Object<string, !ConnectionState>|undefined),
-     *            next: (!ConnectionState|undefined)
-     *          }}
-     * @alias Blockly.utils.toolbox.BlockInfo
-     */
-    export let BlockInfo: any;
+    export type FlyoutItemInfoArray = any;
+
     /**
      * The information needed to create a separator in the toolbox.
      */
@@ -2840,7 +2806,7 @@ declare module "utils/svg_math" {
     export {};
 }
 declare module "rendered_connection" {
-    export class RenderedConnection {
+    export class RenderedConnection extends Connection {
         /**
          * Class for a connection between blocks that may be rendered on screen.
          * @param {!BlockSvg} source The block establishing this connection.
@@ -6161,11 +6127,12 @@ declare module "renderers/measurables/in_row_spacer" {
      * @extends {Measurable}
      * @alias Blockly.blockRendering.InRowSpacer
      */
-    export class InRowSpacer {
+    export class InRowSpacer extends Measurable {
         constructor(constants: any, width: any);
         width: any;
         height: any;
     }
+    import { Measurable } from "renderers/common/block_rendering";
 }
 declare module "interfaces/i_registrable_field" {
     /**
@@ -6230,7 +6197,7 @@ declare module "field_label" {
      * @constructor
      * @alias Blockly.FieldLabel
      */
-    export class FieldLabel {
+    export class FieldLabel extends Field {
         /**
          * Construct a FieldLabel from a JSON arg object,
          * dereferencing any string table references.
@@ -6281,6 +6248,7 @@ declare module "field_label" {
          */
         EDITABLE: boolean;
     }
+    import { Field } from "field";
 }
 declare module "input" {
     export class Input {
@@ -6863,7 +6831,7 @@ declare module "renderers/measurables/bottom_row" {
      * @extends {Row}
      * @alias Blockly.blockRendering.BottomRow
      */
-    export class BottomRow {
+    export class BottomRow extends Row {
         constructor(constants: any);
         /**
          * Whether this row has a next connection.
@@ -6920,6 +6888,7 @@ declare module "renderers/measurables/bottom_row" {
     }
     import { NextConnection } from "renderers/measurables/next_connection";
     import { BlockSvg } from "block_svg";
+    import { Row } from "renderers/measurables/row";
 }
 declare module "renderers/measurables/external_value_input" {
     /**
@@ -8094,7 +8063,7 @@ declare module "renderers/measurables/inline_input" {
     }
 }
 declare module "renderers/measurables/input_row" {
-    export class InputRow {
+    export class InputRow extends Row {
         /**
          * An object containing information about a row that holds one or more inputs.
          * @param {!ConstantProvider} constants The rendering
@@ -8125,6 +8094,7 @@ declare module "renderers/measurables/input_row" {
         override endsWithElemSpacer(): boolean;
     }
     import { ConstantProvider } from "renderers/common/constants";
+    import { Row } from "renderers/measurables/row";
 }
 declare module "renderers/measurables/jagged_edge" {
     /**
@@ -8417,14 +8387,16 @@ declare module "interfaces/i_component" {
     }
 }
 declare module "interfaces/i_autohideable" {
-    /**
-     * Interface for a component that can be automatically hidden.
-     * @extends {IComponent}
-     * @interface
-     * @alias Blockly.IAutoHideable
-     */
-    export class IAutoHideable {
+    export interface IAutoHideable extends IComponent {
+    
+        /**
+          * Hides the component. Called in Blockly.hideChaff.
+          * @param {boolean} onlyClosePopups Whether only popups should be closed.
+          *   Flyouts should not be closed if this is true.
+          */
+        autoHide(onlyClosePopups: boolean): void;
     }
+    import { IComponent } from "interfaces/i_component";
 }
 declare module "interfaces/i_drag_target" {
     /**
@@ -8534,14 +8506,13 @@ declare module "component_manager" {
          * @constructor
          * @template T
          */
-        function Capability<T_8>(name: string): void;
-        class Capability {
+        class Capability<T> {
             /**
              * Returns the name of the capability.
              * @return {string} The name.
              * @override
              */
-            override toString(): string;
+            toString(): string;
         }
         namespace Capability {
             const POSITIONABLE: any;
@@ -9657,7 +9628,7 @@ declare module "renderers/measurables/spacer_row" {
      * @extends {Row}
      * @alias Blockly.blockRendering.SpacerRow
      */
-    export class SpacerRow {
+    export class SpacerRow extends Row {
         constructor(constants: any, height: any, width: any);
         width: any;
         height: any;
@@ -9670,6 +9641,7 @@ declare module "renderers/measurables/spacer_row" {
         override measure(): void;
     }
     import { InRowSpacer } from "renderers/measurables/in_row_spacer";
+    import { Row } from "renderers/measurables/row";
 }
 declare module "renderers/measurables/square_corner" {
     /**
@@ -9724,7 +9696,7 @@ declare module "renderers/measurables/top_row" {
      * @extends {Row}
      * @alias Blockly.blockRendering.TopRow
      */
-    export class TopRow {
+    export class TopRow extends Row {
         constructor(constants: any);
         /**
          * The starting point for drawing the row, in the y direction.
@@ -9780,6 +9752,7 @@ declare module "renderers/measurables/top_row" {
     }
     import { PreviousConnection } from "renderers/measurables/previous_connection";
     import { BlockSvg } from "block_svg";
+    import { Row } from "renderers/measurables/row";
 }
 declare module "renderers/common/info" {
     export class RenderInfo {
@@ -10300,7 +10273,7 @@ declare module "events/events_bubble_open" {
     }
 }
 declare module "mutator" {
-    export class Mutator {
+    export class Mutator extends Icon {
         /**
          * Reconnect an block to a mutated input.
          * @param {Connection} connectionChild Connection on child block.
@@ -10414,6 +10387,7 @@ declare module "mutator" {
     import { Connection } from "connection";
     import { Block } from "block";
     import { Workspace } from "workspace";
+    import { Icon } from "icon";
 }
 declare module "extensions" {
     export namespace TEST_ONLY {
@@ -12004,7 +11978,7 @@ declare module "delete_area" {
      * @constructor
      * @alias Blockly.DeleteArea
      */
-    export class DeleteArea implements IDeleteArea {
+    export class DeleteArea extends DragTarget implements IDeleteArea {
         /**
          * Whether the last block or bubble dragged over this delete area would be
          * deleted if dropped on this component.
@@ -12035,6 +12009,7 @@ declare module "delete_area" {
     }
     import { IDeleteArea } from "interfaces/i_delete_area";
     import { IDraggable } from "interfaces/i_draggable";
+    import { DragTarget } from "drag_target";
 }
 declare module "events/events_trashcan_open" {
     /**
@@ -12072,7 +12047,7 @@ declare module "events/events_trashcan_open" {
     }
 }
 declare module "trashcan" {
-    export class Trashcan {
+    export class Trashcan extends DeleteArea implements IAutoHideable, IPositionable {
         /**
          * Class for a trash can.
          * @param {!WorkspaceSvg} workspace The workspace to sit in.
@@ -12286,6 +12261,9 @@ declare module "trashcan" {
     import { Rect } from "utils/rect";
     import { IDraggable } from "interfaces/i_draggable";
     import { WorkspaceSvg } from "workspace_svg";
+    import { DeleteArea } from "delete_area";
+    import { IAutoHideable } from "interfaces/i_autohideable";
+    import { IPositionable } from "interfaces/i_positionable";
 }
 declare module "workspace_audio" {
     export class WorkspaceAudio {
@@ -13191,7 +13169,7 @@ declare module "workspace_svg" {
      * @alias Blockly.WorkspaceSvg.resizeSvgContents
      */
     export function resizeSvgContents(workspace: WorkspaceSvg): void;
-    export class WorkspaceSvg {
+    export class WorkspaceSvg extends Workspace {
         /**
          * Sets the X/Y translations of a top level workspace.
          * @param {!Object} xyRatio Contains an x and/or y property which is a float
@@ -14799,7 +14777,7 @@ declare module "warning" {
     import { Block } from "block";
 }
 declare module "comment" {
-    export class Comment {
+    export class Comment extends Icon {
         /**
          * Class for a comment.
          * @param {!Block} block The block associated with this comment.
@@ -14941,9 +14919,10 @@ declare module "comment" {
     import { Bubble } from "bubble";
     import { Size } from "utils/size";
     import { Block } from "block";
+    import { Icon } from "icon";
 }
 declare module "keyboard_nav/basic_cursor" {
-    export class BasicCursor {
+    export class BasicCursor extends Cursor {
         /**
          * Find the next node in the pre order traversal.
          * @return {?ASTNode} The next node, or null if the current node is
@@ -15028,6 +15007,7 @@ declare module "keyboard_nav/basic_cursor" {
         const registrationName: string;
     }
     import { ASTNode } from "keyboard_nav/ast_node";
+    import { Cursor } from "keyboard_nav/cursor";
 }
 declare module "keyboard_nav/tab_navigate_cursor" {
     /**
@@ -15036,7 +15016,7 @@ declare module "keyboard_nav/tab_navigate_cursor" {
      * @extends {BasicCursor}
      * @alias Blockly.TabNavigateCursor
      */
-    export class TabNavigateCursor {
+    export class TabNavigateCursor extends BasicCursor {
         /**
          * Skip all nodes except for tab navigable fields.
          * @param {?ASTNode} node The AST node to check whether it is valid.
@@ -15046,6 +15026,7 @@ declare module "keyboard_nav/tab_navigate_cursor" {
         override validNode_(node: ASTNode | null): boolean;
     }
     import { ASTNode } from "keyboard_nav/ast_node";
+    import { BasicCursor } from "keyboard_nav/basic_cursor";
 }
 declare module "events/events_block_move" {
     export class BlockMove {
@@ -15105,7 +15086,7 @@ declare module "events/events_block_move" {
     import { Block } from "block";
 }
 declare module "block_svg" {
-    export class BlockSvg {
+    export class BlockSvg extends Block {
         /**
          * Class for a block's SVG representation.
          * Not normally called directly, workspace.newBlock() is preferred.
@@ -16901,7 +16882,7 @@ declare module "tooltip" {
      * eventually unwinds to a string.
      */
     export type TipInfo = string | {
-        tooltip;
+        tooltip: any;
     } | (() => (string | Function));
     /**
      * A type which can define a tooltip.
@@ -17161,15 +17142,11 @@ declare module "shortcut_registry" {
     }
     export namespace ShortcutRegistry {
         namespace modifierKeys {
-            const Shift: number;
-            const Control: number;
-            const Alt: number;
-            const Meta: number;
+            const Shift: KeyCodes;
+            const Control: KeyCodes;
+            const Alt: KeyCodes;
+            const Meta: KeyCodes;
         }
-        /**
-         * Enum of valid modifiers.
-         */
-        type modifierKeys = KeyCodes;
         /**
          * A keyboard shortcut.
          */
@@ -18423,7 +18400,7 @@ declare module "keyboard_nav/ast_node" {
     import { Workspace } from "workspace";
 }
 declare module "keyboard_nav/cursor" {
-    export class Cursor {
+    export class Cursor extends Marker {
         /**
          * @override
          */
@@ -18458,6 +18435,7 @@ declare module "keyboard_nav/cursor" {
         public out(): ASTNode;
     }
     import { ASTNode } from "keyboard_nav/ast_node";
+    import { Marker } from "keyboard_nav/marker";
 }
 declare module "registry" {
     export namespace TEST_ONLY {
@@ -18500,7 +18478,7 @@ declare module "registry" {
          * @return {string} The name.
          * @override
          */
-        override toString(): string;
+        toString(): string;
     }
     export namespace Type {
         const CONNECTION_CHECKER: any;
@@ -20145,7 +20123,7 @@ declare module "renderers/geras/constants" {
      * @extends {BaseConstantProvider}
      * @alias Blockly.geras.ConstantProvider
      */
-    export class ConstantProvider {
+    export class ConstantProvider extends BaseConstantProvider {
         /**
          * @override
          */
@@ -20166,6 +20144,7 @@ declare module "renderers/geras/constants" {
          */
         override getCSS_(selector: any): any;
     }
+    import { ConstantProvider as  BaseConstantProvider } from "renderers/common/constants";
 }
 declare module "renderers/geras/highlight_constants" {
     /**
@@ -20306,7 +20285,7 @@ declare module "renderers/geras/path_object" {
      * @package
      * @alias Blockly.geras.PathObject
      */
-    export class PathObject {
+    export class PathObject extends BasePathObject {
         constructor(root: any, style: any, constants: any);
         /**
          * The renderer's constant provider.
@@ -20381,6 +20360,7 @@ declare module "renderers/geras/path_object" {
     }
     import { ConstantProvider } from "renderers/geras/constants";
     import { Theme } from "theme";
+    import { PathObject as BasePathObject } from "renderers/common/block_rendering";
 }
 declare module "renderers/geras/renderer" {
     /**
@@ -20391,7 +20371,7 @@ declare module "renderers/geras/renderer" {
      * @extends {BaseRenderer}
      * @alias Blockly.geras.Renderer
      */
-    export class Renderer {
+    export class Renderer extends BaseRenderer {
         constructor(name: any);
         /**
          * The renderer's highlight constant provider.
@@ -20466,6 +20446,7 @@ declare module "renderers/geras/renderer" {
     import { Theme } from "theme";
     import { PathObject } from "renderers/geras/path_object";
     import { HighlightConstantProvider } from "renderers/geras/highlight_constants";
+    import { Renderer as BaseRenderer } from "renderers/common/block_rendering";
 }
 declare module "renderers/geras/measurables/statement_input" {
     /**
@@ -20485,7 +20466,7 @@ declare module "renderers/geras/measurables/statement_input" {
     }
 }
 declare module "renderers/geras/info" {
-    export class RenderInfo {
+    export class RenderInfo extends BaseRenderInfo {
         /**
          * An object containing all sizing information needed to draw this block.
          *
@@ -20549,6 +20530,7 @@ declare module "renderers/geras/info" {
     }
     import { Renderer } from "renderers/geras/renderer";
     import { BlockSvg } from "block_svg";
+    import { RenderInfo as BaseRenderInfo } from "renderers/common/block_rendering";
 }
 declare module "renderers/geras/highlighter" {
     export class Highlighter {
@@ -20615,7 +20597,7 @@ declare module "renderers/geras/highlighter" {
     import { HighlightConstantProvider } from "renderers/geras/highlight_constants";
 }
 declare module "renderers/geras/drawer" {
-    export class Drawer {
+    export class Drawer extends BaseDrawer {
         /**
          * An object that draws a block based on the given rendering information.
          * @param {!BlockSvg} block The block to render.
@@ -20687,6 +20669,7 @@ declare module "renderers/geras/drawer" {
     import { Highlighter } from "renderers/geras/highlighter";
     import { BlockSvg } from "block_svg";
     import { RenderInfo } from "renderers/geras/info";
+    import { Drawer as BaseDrawer } from "renderers/common/drawer";
 }
 declare module "renderers/geras/geras" {
     import { ConstantProvider } from "renderers/geras/constants";
@@ -20708,8 +20691,10 @@ declare module "renderers/minimalist/constants" {
      * @extends {BaseConstantProvider}
      * @alias Blockly.minimalist.ConstantProvider
      */
-    export class ConstantProvider {
+    export class ConstantProvider extends BaseConstantProvider {
     }
+
+    import { ConstantProvider as BaseConstantProvider } from "renderers/common/block_rendering";
 }
 declare module "renderers/minimalist/renderer" {
     /**
@@ -20720,7 +20705,7 @@ declare module "renderers/minimalist/renderer" {
      * @extends {BaseRenderer}
      * @alias Blockly.minimalist.Renderer
      */
-    export class Renderer {
+    export class Renderer extends BaseRenderer {
         constructor(name: any);
         /**
          * Create a new instance of the renderer's constant provider.
@@ -20753,6 +20738,7 @@ declare module "renderers/minimalist/renderer" {
     import { RenderInfo } from "renderers/minimalist/info";
     import { RenderInfo as BaseRenderInfo } from "renderers/common/info";
     import { Drawer } from "renderers/minimalist/drawer";
+    import { Renderer as BaseRenderer } from "renderers/common/block_rendering";
 }
 declare module "renderers/minimalist/info" {
     /**
@@ -20769,7 +20755,7 @@ declare module "renderers/minimalist/info" {
      * @extends {BaseRenderInfo}
      * @alias Blockly.minimalist.RenderInfo
      */
-    export class RenderInfo {
+    export class RenderInfo extends BaseRenderInfo {
         constructor(renderer: any, block: any);
         /**
          * Get the block renderer in use.
@@ -20779,6 +20765,7 @@ declare module "renderers/minimalist/info" {
         getRenderer(): Renderer;
     }
     import { Renderer } from "renderers/minimalist/renderer";
+    import { RenderInfo as BaseRenderInfo } from "renderers/common/block_rendering";
 }
 declare module "renderers/minimalist/drawer" {
     /**
@@ -20791,9 +20778,11 @@ declare module "renderers/minimalist/drawer" {
      * @extends {BaseDrawer}
      * @alias Blockly.minimalist.Drawer
      */
-    export class Drawer {
+    export class Drawer extends BaseDrawer {
         constructor(block: any, info: any);
     }
+
+    import { Drawer as BaseDrawer } from "renderers/common/drawer";
 }
 declare module "renderers/minimalist/minimalist" {
     import { ConstantProvider } from "renderers/minimalist/constants";
@@ -20811,7 +20800,7 @@ declare module "renderers/thrasos/renderer" {
      * @extends {BaseRenderer}
      * @alias Blockly.thrasos.Renderer
      */
-    export class Renderer {
+    export class Renderer extends BaseRenderer {
         constructor(name: any);
         /**
          * Create a new instance of the renderer's render info object.
@@ -20824,9 +20813,10 @@ declare module "renderers/thrasos/renderer" {
     }
     import { BlockSvg } from "block_svg";
     import { RenderInfo } from "renderers/thrasos/info";
+    import { Renderer as BaseRenderer } from "renderers/common/block_rendering";
 }
 declare module "renderers/thrasos/info" {
-    export class RenderInfo {
+    export class RenderInfo extends BaseRenderInfo {
         /**
          * An object containing all sizing information needed to draw this block.
          *
@@ -20874,6 +20864,7 @@ declare module "renderers/thrasos/info" {
     }
     import { Renderer } from "renderers/thrasos/renderer";
     import { BlockSvg } from "block_svg";
+    import { RenderInfo as BaseRenderInfo } from "renderers/common/block_rendering";
 }
 declare module "renderers/thrasos/thrasos" {
     import { RenderInfo } from "renderers/thrasos/info";
@@ -20893,7 +20884,7 @@ declare module "renderers/zelos/measurables/bottom_row" {
      * @extends {BaseBottomRow}
      * @alias Blockly.zelos.BottomRow
      */
-    export class BottomRow {
+    export class BottomRow extends BaseBottomRow {
         constructor(constants: any);
         /**
          * @override
@@ -20910,6 +20901,7 @@ declare module "renderers/zelos/measurables/bottom_row" {
          */
         override hasRightSquareCorner(block: any): boolean;
     }
+    import { BottomRow as BaseBottomRow } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/constants" {
     /**
@@ -20919,7 +20911,7 @@ declare module "renderers/zelos/constants" {
      * @extends {BaseConstantProvider}
      * @alias Blockly.zelos.ConstantProvider
      */
-    export class ConstantProvider {
+    export class ConstantProvider extends BaseConstantProvider {
         GRID_UNIT: number;
         /**
          * @override
@@ -21302,9 +21294,10 @@ declare module "renderers/zelos/constants" {
          */
         override getCSS_(selector: any): string[];
     }
+    import { ConstantProvider as BaseConstantProvider } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/path_object" {
-    export class PathObject {
+    export class PathObject extends BasePathObject {
         /**
          * An object that handles creating and setting each of the SVG elements
          * used by the renderer.
@@ -21408,6 +21401,7 @@ declare module "renderers/zelos/path_object" {
     }
     import { ConstantProvider } from "renderers/zelos/constants";
     import { Theme } from "theme";
+    import { PathObject as BasePathObject } from "renderers/common/block_rendering";
 }
 declare module "field_image" {
     /**
@@ -21428,7 +21422,7 @@ declare module "field_image" {
      * @constructor
      * @alias Blockly.FieldImage
      */
-    export class FieldImage {
+    export class FieldImage extends Field {
         /**
          * Construct a FieldImage from a JSON arg object,
          * dereferencing any string table references.
@@ -21540,7 +21534,7 @@ declare module "field_image" {
          * @protected
          * @override
          */
-        protected override getText_(): string | null;
+        protected getText_(): string | null;
         /**
          * The default value for this field.
          * @type {*}
@@ -21560,15 +21554,16 @@ declare module "field_image" {
          * @type {boolean}
          * @protected
          */
-        protected isDirty_: boolean;
+        public isDirty_: boolean;
     }
     export namespace FieldImage {
         const Y_PADDING: number;
     }
     import { Size } from "utils/size";
+    import { Field } from "field";
 }
 declare module "field_textinput" {
-    export class FieldTextInput {
+    export class FieldTextInput extends Field {
         /**
          * Construct a FieldTextInput from a JSON arg object,
          * dereferencing any string table references.
@@ -21770,7 +21765,7 @@ declare module "field_textinput" {
          * @protected
          * @override
          */
-        protected override getText_(): string | null;
+        protected getText_(): string | null;
         /**
          * Transform the provided value into a text to show in the HTML input.
          * Override this method if the field's HTML input representation is different
@@ -21813,9 +21808,10 @@ declare module "field_textinput" {
         const BORDERRADIUS: number;
     }
     import { WorkspaceSvg } from "workspace_svg";
+    import { Field } from "field";
 }
 declare module "renderers/zelos/marker_svg" {
-    export class MarkerSvg {
+    export class MarkerSvg extends BaseMarkerSvg {
         /**
          * Class to draw a marker.
          * @param {!WorkspaceSvg} workspace The workspace the marker belongs to.
@@ -21872,6 +21868,7 @@ declare module "renderers/zelos/marker_svg" {
     import { WorkspaceSvg } from "workspace_svg";
     import { ConstantProvider } from "renderers/common/constants";
     import { Marker } from "keyboard_nav/marker";
+    import { MarkerSvg as BaseMarkerSvg } from "renderers/common/marker_svg";
 }
 declare module "renderers/zelos/renderer" {
     /**
@@ -21882,7 +21879,7 @@ declare module "renderers/zelos/renderer" {
      * @extends {BaseRenderer}
      * @alias Blockly.zelos.Renderer
      */
-    export class Renderer {
+    export class Renderer extends BaseRenderer {
         constructor(name: any);
         /**
          * Create a new instance of the renderer's constant provider.
@@ -21948,6 +21945,7 @@ declare module "renderers/zelos/renderer" {
     import { MarkerSvg } from "renderers/zelos/marker_svg";
     import { Theme } from "theme";
     import { PathObject } from "renderers/zelos/path_object";
+    import { Renderer as BaseRenderer } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/measurables/row_elements" {
     /**
@@ -21960,11 +21958,13 @@ declare module "renderers/zelos/measurables/row_elements" {
      * @extends {Measurable}
      * @alias Blockly.zelos.RightConnectionShape
      */
-    export class RightConnectionShape {
+    export class RightConnectionShape extends Measurable{
         constructor(constants: any);
         height: number;
         width: number;
     }
+
+    import { Measurable } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/measurables/inputs" {
     /**
@@ -21999,7 +21999,7 @@ declare module "renderers/zelos/measurables/top_row" {
      * @extends {BaseTopRow}
      * @alias Blockly.zelos.TopRow
      */
-    export class TopRow {
+    export class TopRow extends BaseTopRow {
         constructor(constants: any);
         /**
          * @override
@@ -22016,9 +22016,10 @@ declare module "renderers/zelos/measurables/top_row" {
          */
         override hasRightSquareCorner(block: any): boolean;
     }
+    import { TopRow as BaseTopRow } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/info" {
-    export class RenderInfo {
+    export class RenderInfo extends BaseRenderInfo {
         /**
          * An object containing all sizing information needed to draw this block.
          *
@@ -22160,9 +22161,10 @@ declare module "renderers/zelos/info" {
     import { Renderer } from "renderers/zelos/renderer";
     import { Measurable } from "renderers/measurables/base";
     import { BlockSvg } from "block_svg";
+    import { RenderInfo as BaseRenderInfo } from "renderers/common/block_rendering";
 }
 declare module "renderers/zelos/drawer" {
-    export class Drawer {
+    export class Drawer extends BaseDrawer {
         /**
          * An object that draws a block based on the given rendering information.
          * @param {!BlockSvg} block The block to render.
@@ -22226,6 +22228,7 @@ declare module "renderers/zelos/drawer" {
     import { Row } from "renderers/measurables/row";
     import { BlockSvg } from "block_svg";
     import { RenderInfo } from "renderers/zelos/info";
+    import { Drawer as BaseDrawer } from "renderers/common/drawer";
 }
 declare module "renderers/zelos/zelos" {
     import { BottomRow } from "renderers/zelos/measurables/bottom_row";
@@ -22241,7 +22244,7 @@ declare module "renderers/zelos/zelos" {
     export { BottomRow, ConstantProvider, Drawer, MarkerSvg, PathObject, RenderInfo, Renderer, RightConnectionShape, StatementInput, TopRow };
 }
 declare module "toolbox/collapsible_category" {
-    export class CollapsibleToolboxCategory {
+    export class CollapsibleToolboxCategory extends ToolboxCategory {
         /**
          * Class for a category in a toolbox that can be collapsed.
          * @param {!toolbox.CategoryInfo} categoryDef The information needed
@@ -22371,9 +22374,10 @@ declare module "toolbox/collapsible_category" {
     import * as toolbox from "utils/toolbox";
     import { IToolbox } from "interfaces/i_toolbox";
     import { ICollapsibleToolboxItem } from "interfaces/i_collapsible_toolbox_item";
+    import { ToolboxCategory } from "toolbox/category";
 }
 declare module "field_angle" {
-    export class FieldAngle {
+    export class FieldAngle extends FieldTextInput {
         /**
          * Construct a FieldAngle from a JSON arg object.
          * @param {!Object} options A JSON object with options (angle).
@@ -22467,7 +22471,7 @@ declare module "field_angle" {
          * @protected
          * @override
          */
-        protected override configure_(config: any): void;
+        override configure_(config: any): void;
         /**
          * Create the block UI for this field.
          * @package
@@ -22564,6 +22568,8 @@ declare module "field_angle" {
         const WRAP: number;
         const RADIUS: number;
     }
+
+    import { FieldTextInput } from "field_textinput";
 }
 declare module "field_checkbox" {
     /**
@@ -22582,7 +22588,7 @@ declare module "field_checkbox" {
      * @constructor
      * @alias Blockly.FieldCheckbox
      */
-    export class FieldCheckbox {
+    export class FieldCheckbox extends Field {
         /**
          * Construct a FieldCheckbox from a JSON arg object.
          * @param {!Object} options A JSON object with options (checked).
@@ -22698,9 +22704,11 @@ declare module "field_checkbox" {
     export namespace FieldCheckbox {
         const CHECK_CHAR: string;
     }
+
+    import { Field } from "field";
 }
 declare module "field_colour" {
-    export class FieldColour {
+    export class FieldColour extends Field {
         /**
          * Construct a FieldColour from a JSON arg object.
          * @param {!Object} options A JSON object with options (colour).
@@ -22907,7 +22915,7 @@ declare module "field_colour" {
          * @type {boolean}
          * @protected
          */
-        protected isDirty_: boolean;
+        isDirty_: boolean;
         /**
          * The default value for this field.
          * @type {*}
@@ -22921,9 +22929,10 @@ declare module "field_colour" {
         const COLUMNS: number;
     }
     import { Size } from "utils/size";
+    import { Field } from "field";
 }
 declare module "field_dropdown" {
-    export class FieldDropdown {
+    export class FieldDropdown extends Field {
         /**
          * Construct a FieldDropdown from a JSON arg object.
          * @param {!Object} options A JSON object with options (options).
@@ -23162,7 +23171,7 @@ declare module "field_dropdown" {
          * @protected
          * @override
          */
-        protected override getText_(): string | null;
+        protected getText_(): string | null;
         /**
          * Serializable fields are saved by the XML renderer, non-serializable fields
          * are not. Editable fields should also be serializable.
@@ -23190,6 +23199,7 @@ declare module "field_dropdown" {
     }
     import { Menu } from "menu";
     import { MenuItem } from "menuitem";
+    import { Field } from "field";
 }
 declare module "field_label_serializable" {
     /**
@@ -23206,7 +23216,7 @@ declare module "field_label_serializable" {
      *
      * @alias Blockly.FieldLabelSerializable
      */
-    export class FieldLabelSerializable {
+    export class FieldLabelSerializable extends FieldLabel {
         /**
          * Construct a FieldLabelSerializable from a JSON arg object,
          * dereferencing any string table references.
@@ -23230,9 +23240,11 @@ declare module "field_label_serializable" {
          */
         SERIALIZABLE: boolean;
     }
+
+    import { FieldLabel } from "field_label";
 }
 declare module "field_multilineinput" {
-    export class FieldMultilineInput {
+    export class FieldMultilineInput extends FieldTextInput {
         /**
          * Construct a FieldMultilineInput from a JSON arg object,
          * dereferencing any string table references.
@@ -23380,9 +23392,10 @@ declare module "field_multilineinput" {
          */
         protected onHtmlInputKeyDown_(e: Event): void;
     }
+    import { FieldTextInput } from "field_textinput";
 }
 declare module "field_number" {
-    export class FieldNumber {
+    export class FieldNumber extends FieldTextInput {
         /**
          * Construct a FieldNumber from a JSON arg object.
          * @param {!Object} options A JSON object with options (value, min, max, and
@@ -23442,7 +23455,7 @@ declare module "field_number" {
          * @protected
          * @override
          */
-        protected override configure_(config: any): void;
+        override configure_(config: any): void;
         /**
          * Set the maximum, minimum and precision constraints on this field.
          * Any of these properties may be undefined or NaN to be disabled.
@@ -23542,9 +23555,11 @@ declare module "field_number" {
          */
         SERIALIZABLE: boolean;
     }
+
+    import { FieldTextInput } from "field_textinput";
 }
 declare module "field_variable" {
-    export class FieldVariable {
+    export class FieldVariable extends FieldDropdown {
         /**
          * Construct a FieldVariable from a JSON arg object,
          * dereferencing any string table references.
@@ -23775,7 +23790,7 @@ declare module "flyout_metrics_manager" {
      * @constructor
      * @alias Blockly.FlyoutMetricsManager
      */
-    export class FlyoutMetricsManager {
+    export class FlyoutMetricsManager extends MetricsManager {
         constructor(workspace: any, flyout: any);
         /**
          * The flyout that owns the workspace to calculate metrics for.
@@ -23811,6 +23826,7 @@ declare module "flyout_metrics_manager" {
         };
     }
     import { IFlyout } from "interfaces/i_flyout";
+    import { MetricsManager } from "metrics_manager";
 }
 declare module "flyout_base" {
     export class Flyout {
@@ -24584,7 +24600,7 @@ declare module "interfaces/i_styleable" {
     }
 }
 declare module "toolbox/toolbox" {
-    export class Toolbox {
+    export class Toolbox extends DeleteArea {
         /**
          * Class for a Toolbox.
          * Creates the toolbox's DOM.
@@ -25066,6 +25082,7 @@ declare module "toolbox/toolbox" {
     import { IFlyout } from "interfaces/i_flyout";
     import { Rect } from "utils/rect";
     import { IDraggable } from "interfaces/i_draggable";
+    import { DeleteArea } from "delete_area";
 }
 declare module "flyout_vertical" {
     export class VerticalFlyout {
@@ -25514,7 +25531,7 @@ declare module "blockly" {
     import * as bumpObjects from "bump_objects";
     import * as clipboard from "clipboard";
     import * as common from "common";
-    import * as constants from "node/constants";
+    import * as constants from "constants";
     import * as dialog from "dialog";
     import * as fieldRegistry from "field_registry";
     import * as geras from "renderers/geras/geras";

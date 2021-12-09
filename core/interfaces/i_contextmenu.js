@@ -6,21 +6,27 @@
 
 /**
  * @fileoverview The interface for an object that supports a right-click.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.IContextMenu');
+/**
+ * The interface for an object that supports a right-click.
+ * @namespace Blockly.IContextMenu
+ */
+goog.module('Blockly.IContextMenu');
 
 
 /**
  * @interface
+ * @alias Blockly.IContextMenu
  */
-Blockly.IContextMenu = function() {};
+const IContextMenu = function() {};
 
 /**
  * Show the context menu for this object.
  * @param {!Event} e Mouse event.
  */
-Blockly.IContextMenu.prototype.showContextMenu;
+IContextMenu.prototype.showContextMenu;
+
+exports.IContextMenu = IContextMenu;

@@ -6,22 +6,28 @@
 
 /**
  * @fileoverview The interface for an object that is movable.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.IMovable');
+/**
+ * The interface for an object that is movable.
+ * @namespace Blockly.IMovable
+ */
+goog.module('Blockly.IMovable');
 
 
 /**
  * The interface for an object that is movable.
  * @interface
+ * @alias Blockly.IMovable
  */
-Blockly.IMovable = function() {};
+const IMovable = function() {};
 
 /**
  * Get whether this is movable or not.
  * @return {boolean} True if movable.
  */
-Blockly.IMovable.prototype.isMovable;
+IMovable.prototype.isMovable;
+
+exports.IMovable = IMovable;

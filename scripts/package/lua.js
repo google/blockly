@@ -5,10 +5,5 @@
  */
 
 /**
- * @fileoverview Lua Generator module.
+ * @fileoverview Lua generator module; just a wrapper for lua_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.Lua = BlocklyLua;

@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldNumber');
+
+const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('Number Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -15,7 +20,7 @@ suite('Number Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
     {title: 'NaN', value: NaN},
@@ -25,7 +30,7 @@ suite('Number Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
+  const validValueTestCases = [
     {title: 'Integer', value: 1, expectedValue: 1},
     {title: 'Float', value: 1.5, expectedValue: 1.5},
     {title: 'Integer String', value: '1', expectedValue: 1},
@@ -36,7 +41,7 @@ suite('Number Fields', function() {
     {title: 'Negative Infinity String', value: '-Infinity',
       expectedValue: -Infinity},
   ];
-  var addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function(testCase) {
     testCase.args = Array(4).fill(testCase.value);
     testCase.json = {'value': testCase.value, 'min': testCase.value,
       'max': testCase.value, 'precision': testCase.value};
@@ -48,7 +53,7 @@ suite('Number Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = 0;
+  const defaultFieldValue = 0;
   /**
    * Asserts that the field property values are as expected.
    * @param {!Blockly.FieldNumber} field The field to check.
@@ -69,7 +74,7 @@ suite('Number Fields', function() {
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldNumber} field The field to check.
    */
-  var assertFieldDefault = function(field) {
+  const assertFieldDefault = function(field) {
     assertNumberField(field, -Infinity, Infinity, 0, defaultFieldValue);
   };
   /**
@@ -77,7 +82,7 @@ suite('Number Fields', function() {
    * @param {!Blockly.FieldNumber} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
+  const validTestCaseAssertField = function(field, testCase) {
     assertNumberField(
         field, testCase.expectedValue, testCase.expectedValue,
         testCase.expectedValue, testCase.expectedValue);
@@ -88,7 +93,7 @@ suite('Number Fields', function() {
       validTestCaseAssertField, assertFieldDefault);
 
   testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldNumber, validValueTestCases,invalidValueTestCases,
+      Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
@@ -100,7 +105,7 @@ suite('Number Fields', function() {
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
     });
     suite('Value -> New Value', function() {
-      var initialValue = 1;
+      const initialValue = 1;
       setup(function() {
         this.field = new Blockly.FieldNumber(initialValue);
       });
@@ -108,7 +113,7 @@ suite('Number Fields', function() {
           validValueTestCases, invalidValueTestCases, initialValue);
     });
     suite('Constraints', function() {
-      var testCases = [
+      const testCases = [
         {title: 'Float', json: {}, value: 123.456, expectedValue: 123.456},
         {title: '0.01', json: {precision: .01}, value: 123.456,
           expectedValue: 123.46},
@@ -124,19 +129,19 @@ suite('Number Fields', function() {
       suite('Precision', function() {
         testHelpers.runTestCases(testCases, function(testCase) {
           return function() {
-            var field = Blockly.FieldNumber.fromJson(testCase.json);
+            const field = Blockly.FieldNumber.fromJson(testCase.json);
             field.setValue(testCase.value);
             testHelpers.assertFieldValue(field, testCase.expectedValue);
           };
         });
         test('Null', function() {
-          var field = Blockly.FieldNumber.fromJson({precision: null});
+          const field = Blockly.FieldNumber.fromJson({precision: null});
           chai.assert.equal(field.getPrecision(), 0);
         });
       });
-      var setValueBoundsTestFn = function(testCase) {
+      const setValueBoundsTestFn = function(testCase) {
         return function() {
-          var field = Blockly.FieldNumber.fromJson(testCase.json);
+          const field = Blockly.FieldNumber.fromJson(testCase.json);
           testCase.values.forEach(function(value, i) {
             field.setValue(value);
             testHelpers.assertFieldValue(
@@ -145,7 +150,7 @@ suite('Number Fields', function() {
         };
       };
       suite('Min', function() {
-        var testCases = [
+        const testCases = [
           {title: '-10', json: {min: -10}, values: [-20, 0, 20],
             expectedValues: [-10, 0, 20]},
           {title: '0', json: {min: 0}, values: [-20, 0, 20],
@@ -155,12 +160,12 @@ suite('Number Fields', function() {
         ];
         testHelpers.runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
-          var field = Blockly.FieldNumber.fromJson({min: null});
+          const field = Blockly.FieldNumber.fromJson({min: null});
           chai.assert.equal(field.getMin(), -Infinity);
         });
       });
       suite('Max', function() {
-        var testCases = [
+        const testCases = [
           {title: '-10', json: {max: -10}, values: [-20, 0, 20],
             expectedValues: [-20, -10, -10]},
           {title: '0', json: {max: 0}, values: [-20, 0, 20],
@@ -170,7 +175,7 @@ suite('Number Fields', function() {
         ];
         testHelpers.runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
-          var field = Blockly.FieldNumber.fromJson({max: null});
+          const field = Blockly.FieldNumber.fromJson({max: null});
           chai.assert.equal(field.getMax(), Infinity);
         });
       });
@@ -187,7 +192,7 @@ suite('Number Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    var testSuites = [
+    const testSuites = [
       {title: 'Null Validator',
         validator:
             function() {
@@ -225,111 +230,150 @@ suite('Number Fields', function() {
   suite('Customizations', function() {
     suite('Min', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.FieldNumber(0, -10);
+        const field = new Blockly.FieldNumber(0, -10);
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldNumber.fromJson({
+        const field = Blockly.FieldNumber.fromJson({
           min: -10,
         });
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('Set Constraints', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setConstraints(-10);
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('Set Min', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setMin(-10);
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('JS Configuration - Simple', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              min: -10
+              min: -10,
             });
         assertNumberField(field, -10, Infinity, 0, 0);
       });
       test('JS Configuration - Ignore', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, -1, undefined, undefined, undefined, {
-              min: -10
+              min: -10,
             });
         assertNumberField(field, -10, Infinity, 0, 0);
       });
     });
     suite('Max', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.FieldNumber(0, undefined, 10);
+        const field = new Blockly.FieldNumber(0, undefined, 10);
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldNumber.fromJson({
+        const field = Blockly.FieldNumber.fromJson({
           max: 10,
         });
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('Set Constraints', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setConstraints(undefined, 10);
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('Set Max', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setMax(10);
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('JS Configuration - Simple', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              max: 10
+              max: 10,
             });
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
       test('JS Configuration - Ignore', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, undefined, 1, undefined, undefined, {
-              max: 10
+              max: 10,
             });
         assertNumberField(field, -Infinity, 10, 0, 0);
       });
     });
     suite('Precision', function() {
       test('JS Constructor', function() {
-        var field = new Blockly.FieldNumber(0, undefined, undefined, 1);
+        const field = new Blockly.FieldNumber(0, undefined, undefined, 1);
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldNumber.fromJson({
+        const field = Blockly.FieldNumber.fromJson({
           precision: 1,
         });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('Set Constraints', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setConstraints(undefined, undefined, 1);
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('Set Precision', function() {
-        var field = new Blockly.FieldNumber();
+        const field = new Blockly.FieldNumber();
         field.setPrecision(1);
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('JS Configuration - Simple', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, undefined, undefined, {
-              precision: 1
+              precision: 1,
             });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
       test('JS Configuration - Ignore', function() {
-        var field = new Blockly.FieldNumber(
+        const field = new Blockly.FieldNumber(
             undefined, undefined, undefined, .5, undefined, {
-              precision: 1
+              precision: 1,
             });
         assertNumberField(field, -Infinity, Infinity, 1, 0);
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldNumber(value);
+        block.getInput('INPUT').appendField(field, 'NUMBER');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'NUMBER': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue(10);
+    });
+
+    test('Max precision small', function() {
+      this.assertValue(1.000000000000001);
+    });
+
+    test('Max precision large', function() {
+      this.assertValue(1000000000000001);
+    });
+
+    test('Smallest', function() {
+      this.assertValue(5e-324);
+    });
+
+    test('Largest', function() {
+      this.assertValue(1.7976931348623157e+308);
     });
   });
 });

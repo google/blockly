@@ -5,38 +5,34 @@
  */
 
 /**
- * @fileoverview Constant declarations for common key codes.
+ * @fileoverview ARIA-related constants and utilities.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
 /**
- * @name Blockly.utils.aria
- * @namespace
+ * ARIA-related constants and utilities.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.aria
  */
-goog.provide('Blockly.utils.aria');
+goog.module('Blockly.utils.aria');
 
 
-/**
- * ARIA states/properties prefix.
- * @private
- */
-Blockly.utils.aria.ARIA_PREFIX_ = 'aria-';
+/** ARIA states/properties prefix. */
+const ARIA_PREFIX = 'aria-';
 
-/**
- * ARIA role attribute.
- * @private
- */
-Blockly.utils.aria.ROLE_ATTRIBUTE_ = 'role';
+/** ARIA role attribute. */
+const ROLE_ATTRIBUTE = 'role';
 
 /**
  * ARIA role values.
  * Copied from Closure's goog.a11y.aria.Role
  * @enum {string}
+ * @alias Blockly.utils.aria.Role
  */
-Blockly.utils.aria.Role = {
+const Role = {
   // ARIA role for an interactive control of tabular data.
   GRID: 'grid',
 
@@ -72,15 +68,17 @@ Blockly.utils.aria.Role = {
   TREE: 'tree',
 
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
-  TREEITEM: 'treeitem'
+  TREEITEM: 'treeitem',
 };
+exports.Role = Role;
 
 /**
  * ARIA states and properties.
  * Copied from Closure's goog.a11y.aria.State
  * @enum {string}
+ * @alias Blockly.utils.aria.State
  */
-Blockly.utils.aria.State = {
+const State = {
   // ARIA property for setting the currently active descendant of an element,
   // for example the selected item in a list box. Value: ID of an element.
   ACTIVEDESCENDANT: 'activedescendant',
@@ -137,8 +135,9 @@ Blockly.utils.aria.State = {
   VALUEMAX: 'valuemax',
 
   // ARIA property for slider minimum value. Value: number.
-  VALUEMIN: 'valuemin'
+  VALUEMIN: 'valuemin',
 };
+exports.State = State;
 
 /**
  * Sets the role of an element.
@@ -146,26 +145,30 @@ Blockly.utils.aria.State = {
  * Similar to Closure's goog.a11y.aria
  *
  * @param {!Element} element DOM node to set role of.
- * @param {!Blockly.utils.aria.Role} roleName Role name.
+ * @param {!Role} roleName Role name.
+ * @alias Blockly.utils.aria.setRole
  */
-Blockly.utils.aria.setRole = function(element, roleName) {
-  element.setAttribute(Blockly.utils.aria.ROLE_ATTRIBUTE_, roleName);
+const setRole = function(element, roleName) {
+  element.setAttribute(ROLE_ATTRIBUTE, roleName);
 };
+exports.setRole = setRole;
 
 /**
  * Sets the state or property of an element.
  * Copied from Closure's goog.a11y.aria
  * @param {!Element} element DOM node where we set state.
- * @param {!Blockly.utils.aria.State} stateName State attribute being set.
+ * @param {!State} stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is
  *     not an extra attribute.
  * @param {string|boolean|number|!Array<string>} value Value
  * for the state attribute.
+ * @alias Blockly.utils.aria.setState
  */
-Blockly.utils.aria.setState = function(element, stateName, value) {
+const setState = function(element, stateName, value) {
   if (Array.isArray(value)) {
     value = value.join(' ');
   }
-  var attrStateName = Blockly.utils.aria.ARIA_PREFIX_ + stateName;
+  const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, value);
 };
+exports.setState = setState;

@@ -7,31 +7,36 @@
 /**
  * @fileoverview Makecode/scratch-style renderer.
  * Zelos: spirit of eager rivalry, emulation, envy, jealousy, and zeal.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.zelos');
-goog.provide('Blockly.zelos.RenderInfo');
+/**
+ * Makecode/scratch-style renderer.
+ * @class
+ */
+goog.module('Blockly.zelos.RenderInfo');
 
-goog.require('Blockly.blockRendering.InRowSpacer');
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.RenderInfo');
-goog.require('Blockly.blockRendering.Types');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-goog.require('Blockly.FieldImage');
-goog.require('Blockly.FieldLabel');
-goog.require('Blockly.FieldTextInput');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.zelos.BottomRow');
-goog.require('Blockly.zelos.RightConnectionShape');
-goog.require('Blockly.zelos.TopRow');
-
-goog.requireType('Blockly.BlockSvg');
-goog.requireType('Blockly.zelos.ConstantProvider');
-goog.requireType('Blockly.zelos.Renderer');
+const {Align} = goog.require('Blockly.Input');
+const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {FieldImage} = goog.require('Blockly.FieldImage');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+/* eslint-disable-next-line no-unused-vars */
+const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
+const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
+const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
+const {TopRow} = goog.require('Blockly.zelos.TopRow');
+const {Types} = goog.require('Blockly.blockRendering.Types');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
@@ -41,28 +46,29 @@ goog.requireType('Blockly.zelos.Renderer');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  *
- * @param {!Blockly.zelos.Renderer} renderer The renderer in use.
- * @param {!Blockly.BlockSvg} block The block to measure.
+ * @param {!Renderer} renderer The renderer in use.
+ * @param {!BlockSvg} block The block to measure.
  * @constructor
  * @package
- * @extends {Blockly.blockRendering.RenderInfo}
+ * @extends {BaseRenderInfo}
+ * @alias Blockly.zelos.RenderInfo
  */
-Blockly.zelos.RenderInfo = function(renderer, block) {
-  Blockly.zelos.RenderInfo.superClass_.constructor.call(this, renderer, block);
+const RenderInfo = function(renderer, block) {
+  RenderInfo.superClass_.constructor.call(this, renderer, block);
 
   /**
    * An object with rendering information about the top row of the block.
-   * @type {!Blockly.zelos.TopRow}
+   * @type {!TopRow}
    * @override
    */
-  this.topRow = new Blockly.zelos.TopRow(this.constants_);
+  this.topRow = new TopRow(this.constants_);
 
   /**
    * An object with rendering information about the bottom row of the block.
-   * @type {!Blockly.zelos.BottomRow}
+   * @type {!BottomRow}
    * @override
    */
-  this.bottomRow = new Blockly.zelos.BottomRow(this.constants_);
+  this.bottomRow = new BottomRow(this.constants_);
 
   /**
    * @override
@@ -84,27 +90,26 @@ Blockly.zelos.RenderInfo = function(renderer, block) {
 
   /**
    * An object with rendering information about the right connection shape.
-   * @type {Blockly.zelos.RightConnectionShape}
+   * @type {RightConnectionShape}
    */
-  this.rightSide = this.outputConnection ?
-      new Blockly.zelos.RightConnectionShape(this.constants_) : null;
+  this.rightSide =
+      this.outputConnection ? new RightConnectionShape(this.constants_) : null;
 };
-Blockly.utils.object.inherits(Blockly.zelos.RenderInfo,
-    Blockly.blockRendering.RenderInfo);
+object.inherits(RenderInfo, BaseRenderInfo);
 
 /**
  * Get the block renderer in use.
- * @return {!Blockly.zelos.Renderer} The block renderer in use.
+ * @return {!Renderer} The block renderer in use.
  * @package
  */
-Blockly.zelos.RenderInfo.prototype.getRenderer = function() {
-  return /** @type {!Blockly.zelos.Renderer} */ (this.renderer_);
+RenderInfo.prototype.getRenderer = function() {
+  return /** @type {!Renderer} */ (this.renderer_);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.measure = function() {
+RenderInfo.prototype.measure = function() {
   // Modifying parent measure method to add `adjustXPosition_`.
   this.createRows_();
   this.addElemSpacing_();
@@ -118,21 +123,19 @@ Blockly.zelos.RenderInfo.prototype.measure = function() {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
-    lastInput) {
+RenderInfo.prototype.shouldStartNewRow_ = function(input, lastInput) {
   // If this is the first input, just add to the existing row.
   // That row is either empty or has some icons in it.
   if (!lastInput) {
     return false;
   }
   // A statement input or an input following one always gets a new row.
-  if (input.type == Blockly.inputTypes.STATEMENT ||
-      lastInput.type == Blockly.inputTypes.STATEMENT) {
+  if (input.type === inputTypes.STATEMENT ||
+      lastInput.type === inputTypes.STATEMENT) {
     return true;
   }
   // Value and dummy inputs get new row if inputs are not inlined.
-  if (input.type == Blockly.inputTypes.VALUE ||
-      input.type == Blockly.inputTypes.DUMMY) {
+  if (input.type === inputTypes.VALUE || input.type === inputTypes.DUMMY) {
     return !this.isInline || this.isMultiRow;
   }
   return false;
@@ -142,19 +145,18 @@ Blockly.zelos.RenderInfo.prototype.shouldStartNewRow_ = function(input,
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
+RenderInfo.prototype.getDesiredRowWidth_ = function(row) {
   if (row.hasStatement) {
-    var rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
+    const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
     return this.width - this.startX - rightCornerWidth;
   }
-  return Blockly.zelos.RenderInfo.superClass_.getDesiredRowWidth_.call(this,
-      row);
+  return RenderInfo.superClass_.getDesiredRowWidth_.call(this, row);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   if (!prev || !next) {
     // No need for padding at the beginning or end of the row if the
     // output shape is dynamic.
@@ -165,20 +167,18 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
   }
   if (!prev) {
     // Statement input padding.
-    if (next && Blockly.blockRendering.Types.isStatementInput(next)) {
+    if (next && Types.isStatementInput(next)) {
       return this.constants_.STATEMENT_INPUT_PADDING_LEFT;
     }
   }
   // Spacing between a rounded corner and a previous or next connection.
-  if (prev && Blockly.blockRendering.Types.isLeftRoundedCorner(prev) && next) {
-    if (Blockly.blockRendering.Types.isPreviousConnection(next) ||
-      Blockly.blockRendering.Types.isNextConnection(next)) {
+  if (prev && Types.isLeftRoundedCorner(prev) && next) {
+    if (Types.isPreviousConnection(next) || Types.isNextConnection(next)) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
     }
   }
   // Spacing between a square corner and a hat.
-  if (prev && Blockly.blockRendering.Types.isLeftSquareCorner(prev) && next &&
-      Blockly.blockRendering.Types.isHat(next)) {
+  if (prev && Types.isLeftSquareCorner(prev) && next && Types.isHat(next)) {
     return this.constants_.NO_PADDING;
   }
   return this.constants_.MEDIUM_PADDING;
@@ -187,41 +187,41 @@ Blockly.zelos.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
-    prev, next) {
+RenderInfo.prototype.getSpacerRowHeight_ = function(prev, next) {
   // If we have an empty block add a spacer to increase the height.
-  if (Blockly.blockRendering.Types.isTopRow(prev) &&
-      Blockly.blockRendering.Types.isBottomRow(next)) {
+  if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
     return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
   }
-  var followsStatement =
-      Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement;
-  var precedesStatement =
-      Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement;
+  const followsStatement = Types.isInputRow(prev) && prev.hasStatement;
+  const precedesStatement = Types.isInputRow(next) && next.hasStatement;
   if (precedesStatement || followsStatement) {
-    var cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
-    var height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
+    const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
+    const height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
     return precedesStatement && followsStatement ?
-        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) : height;
+        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) :
+        height;
   }
   // Top and bottom rows act as a spacer so we don't need any extra padding.
-  if ((Blockly.blockRendering.Types.isTopRow(prev))) {
+  if (Types.isTopRow(prev)) {
     if (!prev.hasPreviousConnection &&
         (!this.outputConnection || this.hasStatementInput)) {
-      return Math.abs(this.constants_.NOTCH_HEIGHT -
-          this.constants_.CORNER_RADIUS);
+      return Math.abs(
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
-  if ((Blockly.blockRendering.Types.isBottomRow(next))) {
+  if (Types.isBottomRow(next)) {
     if (!this.outputConnection) {
-      var topHeight = Math.max(this.topRow.minHeight,
-          Math.max(this.constants_.NOTCH_HEIGHT,
-              this.constants_.CORNER_RADIUS)) - this.constants_.CORNER_RADIUS;
+      const topHeight = Math.max(
+                            this.topRow.minHeight,
+                            Math.max(
+                                this.constants_.NOTCH_HEIGHT,
+                                this.constants_.CORNER_RADIUS)) -
+          this.constants_.CORNER_RADIUS;
       return topHeight;
     } else if (!next.hasNextConnection && this.hasStatementInput) {
-      return Math.abs(this.constants_.NOTCH_HEIGHT -
-          this.constants_.CORNER_RADIUS);
+      return Math.abs(
+          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
     }
     return this.constants_.NO_PADDING;
   }
@@ -231,10 +231,10 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowHeight_ = function(
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
-  var width = this.width - this.startX;
-  if ((Blockly.blockRendering.Types.isInputRow(prev) && prev.hasStatement) ||
-      (Blockly.blockRendering.Types.isInputRow(next) && next.hasStatement)) {
+RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
+  const width = this.width - this.startX;
+  if ((Types.isInputRow(prev) && prev.hasStatement) ||
+      (Types.isInputRow(next) && next.hasStatement)) {
     return Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH);
   }
   return width;
@@ -243,50 +243,57 @@ Blockly.zelos.RenderInfo.prototype.getSpacerRowWidth_ = function(prev, next) {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
-  if (row.hasStatement && !Blockly.blockRendering.Types.isSpacer(elem) &&
-      !Blockly.blockRendering.Types.isStatementInput(elem)) {
+RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
+  if (row.hasStatement && !Types.isSpacer(elem) &&
+      !Types.isStatementInput(elem)) {
     return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
   }
-  if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-    var connectedBlock = elem.connectedBlock;
+  if (Types.isInlineInput(elem)) {
+    const connectedBlock = elem.connectedBlock;
     if (connectedBlock && connectedBlock.outputConnection &&
         connectedBlock.nextConnection) {
       return row.yPos + connectedBlock.height / 2;
     }
   }
-  return Blockly.zelos.RenderInfo.superClass_.getElemCenterline_.call(this,
-      row, elem);
+  return RenderInfo.superClass_.getElemCenterline_.call(this, row, elem);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.addInput_ = function(input, activeRow) {
+RenderInfo.prototype.addInput_ = function(input, activeRow) {
   // If we have two dummy inputs on the same row, one aligned left and the other
   // right, keep track of the right aligned dummy input so we can add padding
   // later.
-  if (input.type == Blockly.inputTypes.DUMMY && activeRow.hasDummyInput &&
-      activeRow.align == Blockly.constants.ALIGN.LEFT &&
-      input.align == Blockly.constants.ALIGN.RIGHT) {
+  if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
+      activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
     activeRow.rightAlignedDummyInput = input;
+  } else if (input.type === inputTypes.STATEMENT) {
+    // Handle statements without next connections correctly.
+    activeRow.elements.push(new StatementInput(this.constants_, input));
+    activeRow.hasStatement = true;
+
+    if (activeRow.align === null) {
+      activeRow.align = input.align;
+    }
+    return;
   }
-  Blockly.zelos.RenderInfo.superClass_.addInput_.call(this, input, activeRow);
+  RenderInfo.superClass_.addInput_.call(this, input, activeRow);
 };
 
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
-    missingSpace) {
+RenderInfo.prototype.addAlignmentPadding_ = function(row, missingSpace) {
   if (row.rightAlignedDummyInput) {
-    var alignmentDivider;
-    for (var i = 0, elem; (elem = row.elements[i]); i++) {
-      if (Blockly.blockRendering.Types.isSpacer(elem)) {
+    let alignmentDivider;
+    for (let i = 0; i < row.elements.length; i++) {
+      const elem = row.elements[i];
+      if (Types.isSpacer(elem)) {
         alignmentDivider = elem;
       }
-      if (Blockly.blockRendering.Types.isField(elem) &&
-        elem.parentInput == row.rightAlignedDummyInput) {
+      if (Types.isField(elem) &&
+          elem.parentInput === row.rightAlignedDummyInput) {
         break;
       }
     }
@@ -296,8 +303,7 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
       return;
     }
   }
-  Blockly.zelos.RenderInfo.superClass_.addAlignmentPadding_.call(this, row,
-      missingSpace);
+  RenderInfo.superClass_.addAlignmentPadding_.call(this, row, missingSpace);
 };
 
 /**
@@ -306,41 +312,43 @@ Blockly.zelos.RenderInfo.prototype.addAlignmentPadding_ = function(row,
  * called.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
-  var notchTotalWidth = this.constants_.NOTCH_OFFSET_LEFT +
-      this.constants_.NOTCH_WIDTH;
-  var minXPos = notchTotalWidth;
+RenderInfo.prototype.adjustXPosition_ = function() {
+  const notchTotalWidth =
+      this.constants_.NOTCH_OFFSET_LEFT + this.constants_.NOTCH_WIDTH;
+  let minXPos = notchTotalWidth;
   // Run through every input row on the block and only apply bump logic to the
   // first input row (if the block has prev connection) and every input row that
   // has a prev and next notch.
-  for (var i = 2; i < this.rows.length - 1; i += 2) {
-    var prevSpacer = this.rows[i - 1];
-    var row = this.rows[i];
-    var nextSpacer = this.rows[i + 1];
+  for (let i = 2; i < this.rows.length - 1; i += 2) {
+    const prevSpacer = this.rows[i - 1];
+    const row = this.rows[i];
+    const nextSpacer = this.rows[i + 1];
 
-    var hasPrevNotch = i == 2 ?
-        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
-    var hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
+    const hasPrevNotch = i === 2 ? !!this.topRow.hasPreviousConnection :
+                                   !!prevSpacer.followsStatement;
+    const hasNextNotch = i + 2 >= this.rows.length - 1 ?
+        !!this.bottomRow.hasNextConnection :
+        !!nextSpacer.precedesStatement;
 
-    if (Blockly.blockRendering.Types.isInputRow(row) && row.hasStatement) {
+    if (Types.isInputRow(row) && row.hasStatement) {
       row.measure();
       minXPos = row.width - row.getLastInput().width + notchTotalWidth;
-    } else if (hasPrevNotch && (i == 2 || hasNextNotch) &&
-        Blockly.blockRendering.Types.isInputRow(row) && !row.hasStatement) {
-      var xCursor = row.xPos;
-      var prevInRowSpacer = null;
-      for (var j = 0, elem; (elem = row.elements[j]); j++) {
-        if (Blockly.blockRendering.Types.isSpacer(elem)) {
+    } else if (
+        hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
+        !row.hasStatement) {
+      let xCursor = row.xPos;
+      let prevInRowSpacer = null;
+      for (let j = 0; j < row.elements.length; j++) {
+        const elem = row.elements[j];
+        if (Types.isSpacer(elem)) {
           prevInRowSpacer = elem;
         }
-        if (prevInRowSpacer && (Blockly.blockRendering.Types.isField(elem) ||
-            Blockly.blockRendering.Types.isInput(elem))) {
+        if (prevInRowSpacer && (Types.isField(elem) || Types.isInput(elem))) {
           if (xCursor < minXPos &&
-              !(Blockly.blockRendering.Types.isField(elem) &&
-              (elem.field instanceof Blockly.FieldLabel ||
-              elem.field instanceof Blockly.FieldImage))) {
-            var difference = minXPos - xCursor;
+              !(Types.isField(elem) &&
+                (elem.field instanceof FieldLabel ||
+                 elem.field instanceof FieldImage))) {
+            const difference = minXPos - xCursor;
             prevInRowSpacer.width += difference;
           }
         }
@@ -357,24 +365,26 @@ Blockly.zelos.RenderInfo.prototype.adjustXPosition_ = function() {
  * output connection.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
+RenderInfo.prototype.finalizeOutputConnection_ = function() {
   // Dynamic output connections depend on the height of the block.
   if (!this.outputConnection || !this.outputConnection.isDynamicShape) {
     return;
   }
-  var yCursor = 0;
+  let yCursor = 0;
   // Determine the block height.
-  for (var i = 0, row; (row = this.rows[i]); i++) {
+  for (let i = 0; i < this.rows.length; i++) {
+    const row = this.rows[i];
     row.yPos = yCursor;
     yCursor += row.height;
   }
   this.height = yCursor;
 
   // Adjust the height of the output connection.
-  var blockHeight = this.bottomRow.hasNextConnection ?
-      this.height - this.bottomRow.descenderHeight : this.height;
-  var connectionHeight = this.outputConnection.shape.height(blockHeight);
-  var connectionWidth = this.outputConnection.shape.width(blockHeight);
+  const blockHeight = this.bottomRow.hasNextConnection ?
+      this.height - this.bottomRow.descenderHeight :
+      this.height;
+  const connectionHeight = this.outputConnection.shape.height(blockHeight);
+  const connectionWidth = this.outputConnection.shape.width(blockHeight);
 
   this.outputConnection.height = connectionHeight;
   this.outputConnection.width = connectionWidth;
@@ -386,7 +396,7 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
 
   // Add the right connection measurable.
   // Don't add it if we have a value-to-statement or a value-to-stack block.
-  var rightConnectionWidth = 0;
+  let rightConnectionWidth = 0;
   if (!this.hasStatementInput && !this.bottomRow.hasNextConnection) {
     rightConnectionWidth = connectionWidth;
     this.rightSide.height = connectionHeight;
@@ -406,23 +416,24 @@ Blockly.zelos.RenderInfo.prototype.finalizeOutputConnection_ = function() {
  * spacers.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
+RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
   if (!this.outputConnection || this.hasStatementInput ||
       this.bottomRow.hasNextConnection) {
     return;
   }
-  var totalNegativeSpacing = 0;
-  for (var i = 0, row; (row = this.rows[i]); i++) {
-    if (!Blockly.blockRendering.Types.isInputRow(row)) {
+  let totalNegativeSpacing = 0;
+  for (let i = 0; i < this.rows.length; i++) {
+    const row = this.rows[i];
+    if (!Types.isInputRow(row)) {
       continue;
     }
-    var firstElem = row.elements[1];
-    var lastElem = row.elements[row.elements.length - 2];
-    var leftNegPadding = this.getNegativeSpacing_(firstElem);
-    var rightNegPadding = this.getNegativeSpacing_(lastElem);
+    const firstElem = row.elements[1];
+    const lastElem = row.elements[row.elements.length - 2];
+    let leftNegPadding = this.getNegativeSpacing_(firstElem);
+    let rightNegPadding = this.getNegativeSpacing_(lastElem);
     totalNegativeSpacing = leftNegPadding + rightNegPadding;
-    var minBlockWidth = this.constants_.MIN_BLOCK_WIDTH +
-        this.outputConnection.width * 2;
+    const minBlockWidth =
+        this.constants_.MIN_BLOCK_WIDTH + this.outputConnection.width * 2;
     if (this.width - totalNegativeSpacing < minBlockWidth) {
       // Maintain a minimum block width, split negative spacing between left
       // and right edge.
@@ -431,17 +442,16 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
       rightNegPadding = totalNegativeSpacing / 2;
     }
     // Add a negative spacer on the start and end of the block.
-    row.elements.unshift(new Blockly.blockRendering.InRowSpacer(this.constants_,
-        -leftNegPadding));
-    row.elements.push(new Blockly.blockRendering.InRowSpacer(this.constants_,
-        -rightNegPadding));
+    row.elements.unshift(new InRowSpacer(this.constants_, -leftNegPadding));
+    row.elements.push(new InRowSpacer(this.constants_, -rightNegPadding));
   }
   if (totalNegativeSpacing) {
     this.width -= totalNegativeSpacing;
     this.widthWithChildren -= totalNegativeSpacing;
     this.rightSide.xPos -= totalNegativeSpacing;
-    for (var i = 0, row; (row = this.rows[i]); i++) {
-      if (Blockly.blockRendering.Types.isTopOrBottomRow(row)) {
+    for (let i = 0; i < this.rows.length; i++) {
+      const row = this.rows[i];
+      if (Types.isTopOrBottomRow(row)) {
         row.elements[1].width -= totalNegativeSpacing;
         row.elements[1].widthWithConnectedBlocks -= totalNegativeSpacing;
       }
@@ -454,36 +464,37 @@ Blockly.zelos.RenderInfo.prototype.finalizeHorizontalAlignment_ = function() {
 /**
  * Calculate the spacing to reduce the left and right edges by based on the
  * outer and inner connection shape.
- * @param {Blockly.blockRendering.Measurable} elem The first or last element on
+ * @param {Measurable} elem The first or last element on
  *     a block.
  * @return {number} The amount of spacing to reduce the first or last spacer.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
+RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
   if (!elem) {
     return 0;
   }
-  var connectionWidth = this.outputConnection.width;
-  var outerShape = this.outputConnection.shape.type;
-  var constants =
-    /** @type {!Blockly.zelos.ConstantProvider} */ (this.constants_);
+  const connectionWidth = this.outputConnection.width;
+  const outerShape = this.outputConnection.shape.type;
+  const constants =
+      /** @type {!ConstantProvider} */ (this.constants_);
   if (this.isMultiRow && this.inputRows.length > 1) {
     switch (outerShape) {
-      case constants.SHAPES.ROUND:
+      case constants.SHAPES.ROUND: {
         // Special case for multi-row round reporter blocks.
-        var maxWidth = this.constants_.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
-        var width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
-        var topPadding = this.constants_.SMALL_PADDING;
-        var roundPadding = width *
-          (1 - Math.sin(Math.acos((width - topPadding) / width)));
+        const maxWidth = this.constants_.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
+        const width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
+        const topPadding = this.constants_.SMALL_PADDING;
+        const roundPadding =
+            width * (1 - Math.sin(Math.acos((width - topPadding) / width)));
         return connectionWidth - roundPadding;
+      }
       default:
         return 0;
     }
   }
-  if (Blockly.blockRendering.Types.isInlineInput(elem)) {
-    var connectedBlock = elem.connectedBlock;
-    var innerShape = connectedBlock ?
+  if (Types.isInlineInput(elem)) {
+    const connectedBlock = elem.connectedBlock;
+    const innerShape = connectedBlock ?
         connectedBlock.pathObject.outputShapeType :
         elem.shape.type;
     // Special case for value to stack / value to statement blocks.
@@ -492,21 +503,21 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
       return 0;
     }
     // Special case for hexagonal output.
-    if (outerShape == constants.SHAPES.HEXAGONAL &&
-        outerShape != innerShape) {
+    if (outerShape === constants.SHAPES.HEXAGONAL &&
+        outerShape !== innerShape) {
       return 0;
     }
     return connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
-  } else if (Blockly.blockRendering.Types.isField(elem)) {
+  } else if (Types.isField(elem)) {
     // Special case for text inputs.
-    if (outerShape == constants.SHAPES.ROUND &&
-        elem.field instanceof Blockly.FieldTextInput) {
+    if (outerShape === constants.SHAPES.ROUND &&
+        elem.field instanceof FieldTextInput) {
       return connectionWidth - (2.75 * constants.GRID_UNIT);
     }
     return connectionWidth -
         this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][0];
-  } else if (Blockly.blockRendering.Types.isIcon(elem)) {
+  } else if (Types.isIcon(elem)) {
     return this.constants_.SMALL_PADDING;
   }
   return 0;
@@ -518,27 +529,28 @@ Blockly.zelos.RenderInfo.prototype.getNegativeSpacing_ = function(elem) {
  * row's inline inputs.
  * @protected
  */
-Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
+RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
   if (this.outputConnection) {
     return;
   }
   // Run through every input row on the block and only apply tight nesting logic
   // to input rows that have a prev and next notch.
-  for (var i = 2; i < this.rows.length - 1; i += 2) {
-    var prevSpacer = this.rows[i - 1];
-    var row = this.rows[i];
-    var nextSpacer = this.rows[i + 1];
+  for (let i = 2; i < this.rows.length - 1; i += 2) {
+    const prevSpacer = this.rows[i - 1];
+    const row = this.rows[i];
+    const nextSpacer = this.rows[i + 1];
 
-    var firstRow = i == 2;
-    var hasPrevNotch = firstRow ?
-        !!this.topRow.hasPreviousConnection : !!prevSpacer.followsStatement;
-    var hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection : !!nextSpacer.precedesStatement;
+    const firstRow = i === 2;
+    const hasPrevNotch = firstRow ? !!this.topRow.hasPreviousConnection :
+                                    !!prevSpacer.followsStatement;
+    const hasNextNotch = i + 2 >= this.rows.length - 1 ?
+        !!this.bottomRow.hasNextConnection :
+        !!nextSpacer.precedesStatement;
 
     if (hasPrevNotch) {
-      var hasSingleTextOrImageField = row.elements.length == 3 &&
-          (row.elements[1].field instanceof Blockly.FieldLabel ||
-              row.elements[1].field instanceof Blockly.FieldImage);
+      const hasSingleTextOrImageField = row.elements.length === 3 &&
+          (row.elements[1].field instanceof FieldLabel ||
+           row.elements[1].field instanceof FieldImage);
       if (!firstRow && hasSingleTextOrImageField) {
         // Remove some padding if we have a single image or text field.
         prevSpacer.height -= this.constants_.SMALL_PADDING;
@@ -549,13 +561,14 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
         prevSpacer.height += this.constants_.SMALL_PADDING;
       } else if (hasNextNotch) {
         // Determine if the input row has non-shadow connected blocks.
-        var hasNonShadowConnectedBlocks = false;
-        var MIN_VERTICAL_TIGHTNESTING_HEIGHT = 40;
-        for (var j = 0, elem; (elem = row.elements[j]); j++) {
-          if (Blockly.blockRendering.Types.isInlineInput(elem) &&
-              elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+        let hasNonShadowConnectedBlocks = false;
+        const minVerticalTightNestingHeight = 40;
+        for (let j = 0; j < row.elements.length; j++) {
+          const elem = row.elements[j];
+          if (Types.isInlineInput(elem) && elem.connectedBlock &&
+              !elem.connectedBlock.isShadow() &&
               elem.connectedBlock.getHeightWidth().height >=
-                  MIN_VERTICAL_TIGHTNESTING_HEIGHT) {
+                  minVerticalTightNestingHeight) {
             hasNonShadowConnectedBlocks = true;
             break;
           }
@@ -574,13 +587,15 @@ Blockly.zelos.RenderInfo.prototype.finalizeVerticalAlignment_ = function() {
 /**
  * @override
  */
-Blockly.zelos.RenderInfo.prototype.finalize_ = function() {
+RenderInfo.prototype.finalize_ = function() {
   this.finalizeOutputConnection_();
   this.finalizeHorizontalAlignment_();
   this.finalizeVerticalAlignment_();
-  Blockly.zelos.RenderInfo.superClass_.finalize_.call(this);
+  RenderInfo.superClass_.finalize_.call(this);
 
   if (this.rightSide) {
     this.widthWithChildren += this.rightSide.width;
   }
 };
+
+exports.RenderInfo = RenderInfo;

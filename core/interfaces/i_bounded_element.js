@@ -6,33 +6,40 @@
 
 /**
  * @fileoverview The interface for a bounded element.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.IBoundedElement');
+/**
+ * The interface for a bounded element.
+ * @namespace Blockly.IBoundedElement
+ */
+goog.module('Blockly.IBoundedElement');
 
-goog.requireType('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 
 
 /**
  * A bounded element interface.
  * @interface
+ * @alias Blockly.IBoundedElement
  */
-Blockly.IBoundedElement = function() {};
+const IBoundedElement = function() {};
 
 /**
  * Returns the coordinates of a bounded element describing the dimensions of the
  * element.
  * Coordinate system: workspace coordinates.
- * @return {!Blockly.utils.Rect} Object with coordinates of the bounded element.
+ * @return {!Rect} Object with coordinates of the bounded element.
  */
-Blockly.IBoundedElement.prototype.getBoundingRectangle;
+IBoundedElement.prototype.getBoundingRectangle;
 
 /**
  * Move the element by a relative offset.
  * @param {number} dx Horizontal offset in workspace units.
  * @param {number} dy Vertical offset in workspace units.
  */
-Blockly.IBoundedElement.prototype.moveBy;
+IBoundedElement.prototype.moveBy;
+
+exports.IBoundedElement = IBoundedElement;

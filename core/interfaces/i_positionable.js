@@ -6,38 +6,46 @@
 
 /**
  * @fileoverview The interface for a positionable UI element.
- * @author kozbial@google.com (Monica Kozbial)
  */
 
 'use strict';
 
-goog.provide('Blockly.IPositionable');
+/**
+ * The interface for a positionable UI element.
+ * @namespace Blockly.IPositionable
+ */
+goog.module('Blockly.IPositionable');
 
-goog.require('Blockly.IComponent');
-
-goog.requireType('Blockly.MetricsManager');
-goog.requireType('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {IComponent} = goog.require('Blockly.IComponent');
+/* eslint-disable-next-line no-unused-vars */
+const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
+/* eslint-disable-next-line no-unused-vars */
+const {Rect} = goog.requireType('Blockly.utils.Rect');
 
 
 /**
  * Interface for a component that is positioned on top of the workspace.
- * @extends {Blockly.IComponent}
+ * @extends {IComponent}
  * @interface
+ * @alias Blockly.IPositionable
  */
-Blockly.IPositionable = function() {};
+const IPositionable = function() {};
 
 /**
  * Positions the element. Called when the window is resized.
- * @param {!Blockly.MetricsManager.UiMetrics} metrics The workspace metrics.
- * @param {!Array<!Blockly.utils.Rect>} savedPositions List of rectangles that
+ * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
+ * @param {!Array<!Rect>} savedPositions List of rectangles that
  *     are already on the workspace.
  */
-Blockly.IPositionable.prototype.position;
+IPositionable.prototype.position;
 
 /**
  * Returns the bounding rectangle of the UI element in pixel units relative to
  * the Blockly injection div.
- * @return {?Blockly.utils.Rect} The UI elements’s bounding box. Null if
+ * @return {?Rect} The UI elements's bounding box. Null if
  *   bounding box should be ignored by other UI elements.
  */
-Blockly.IPositionable.prototype.getBoundingRectangle;
+IPositionable.prototype.getBoundingRectangle;
+
+exports.IPositionable = IPositionable;

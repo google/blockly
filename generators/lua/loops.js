@@ -6,13 +6,14 @@
 
 /**
  * @fileoverview Generating Lua for loop blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
-goog.provide('Blockly.Lua.loops');
+goog.module('Blockly.Lua.loops');
 
-goog.require('Blockly.Lua');
+const Lua = goog.require('Blockly.Lua');
+const stringUtils = goog.require('Blockly.utils.string');
+const {NameType} = goog.require('Blockly.Names');
 
 
 /**
@@ -21,7 +22,7 @@ goog.require('Blockly.Lua');
  * the appropriate label can be put at the end of the loop body.
  * @const {string}
  */
-Blockly.Lua.CONTINUE_STATEMENT = 'goto continue\n';
+const CONTINUE_STATEMENT = 'goto continue\n';
 
 /**
  * If the loop body contains a "goto continue" statement, add a continue label
@@ -31,143 +32,137 @@ Blockly.Lua.CONTINUE_STATEMENT = 'goto continue\n';
  *
  * @param {string} branch Generated code of the loop body
  * @return {string} Generated label or '' if unnecessary
- * @private
  */
-Blockly.Lua.addContinueLabel_ = function(branch) {
-  if (branch.indexOf(Blockly.Lua.CONTINUE_STATEMENT) != -1) {
+const addContinueLabel = function(branch) {
+  if (branch.indexOf(CONTINUE_STATEMENT) !== -1) {
     // False positives are possible (e.g. a string literal), but are harmless.
-    return branch + Blockly.Lua.INDENT + '::continue::\n';
+    return branch + Lua.INDENT + '::continue::\n';
   } else {
     return branch;
   }
 };
 
-Blockly.Lua['controls_repeat_ext'] = function(block) {
+Lua['controls_repeat_ext'] = function(block) {
   // Repeat n times.
+  let repeats;
   if (block.getField('TIMES')) {
     // Internal number.
-    var repeats = String(Number(block.getFieldValue('TIMES')));
+    repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
-    var repeats = Blockly.Lua.valueToCode(block, 'TIMES',
-        Blockly.Lua.ORDER_NONE) || '0';
+    repeats = Lua.valueToCode(block, 'TIMES', Lua.ORDER_NONE) || '0';
   }
-  if (Blockly.isNumber(repeats)) {
+  if (stringUtils.isNumber(repeats)) {
     repeats = parseInt(repeats, 10);
   } else {
     repeats = 'math.floor(' + repeats + ')';
   }
-  var branch = Blockly.Lua.statementToCode(block, 'DO');
-  branch = Blockly.Lua.addLoopTrap(branch, block);
-  branch = Blockly.Lua.addContinueLabel_(branch);
-  var loopVar = Blockly.Lua.nameDB_.getDistinctName(
-      'count', Blockly.VARIABLE_CATEGORY_NAME);
-  var code = 'for ' + loopVar + ' = 1, ' + repeats + ' do\n' +
-      branch + 'end\n';
+  let branch = Lua.statementToCode(block, 'DO');
+  branch = Lua.addLoopTrap(branch, block);
+  branch = addContinueLabel(branch);
+  const loopVar = Lua.nameDB_.getDistinctName('count', NameType.VARIABLE);
+  const code =
+      'for ' + loopVar + ' = 1, ' + repeats + ' do\n' + branch + 'end\n';
   return code;
 };
 
-Blockly.Lua['controls_repeat'] = Blockly.Lua['controls_repeat_ext'];
+Lua['controls_repeat'] = Lua['controls_repeat_ext'];
 
-Blockly.Lua['controls_whileUntil'] = function(block) {
+Lua['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getFieldValue('MODE') == 'UNTIL';
-  var argument0 = Blockly.Lua.valueToCode(block, 'BOOL',
-      until ? Blockly.Lua.ORDER_UNARY :
-      Blockly.Lua.ORDER_NONE) || 'false';
-  var branch = Blockly.Lua.statementToCode(block, 'DO');
-  branch = Blockly.Lua.addLoopTrap(branch, block);
-  branch = Blockly.Lua.addContinueLabel_(branch);
+  const until = block.getFieldValue('MODE') === 'UNTIL';
+  let argument0 =
+      Lua.valueToCode(
+          block, 'BOOL', until ? Lua.ORDER_UNARY : Lua.ORDER_NONE) ||
+      'false';
+  let branch = Lua.statementToCode(block, 'DO');
+  branch = Lua.addLoopTrap(branch, block);
+  branch = addContinueLabel(branch);
   if (until) {
     argument0 = 'not ' + argument0;
   }
   return 'while ' + argument0 + ' do\n' + branch + 'end\n';
 };
 
-Blockly.Lua['controls_for'] = function(block) {
+Lua['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Lua.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var startVar = Blockly.Lua.valueToCode(block, 'FROM',
-      Blockly.Lua.ORDER_NONE) || '0';
-  var endVar = Blockly.Lua.valueToCode(block, 'TO',
-      Blockly.Lua.ORDER_NONE) || '0';
-  var increment = Blockly.Lua.valueToCode(block, 'BY',
-      Blockly.Lua.ORDER_NONE) || '1';
-  var branch = Blockly.Lua.statementToCode(block, 'DO');
-  branch = Blockly.Lua.addLoopTrap(branch, block);
-  branch = Blockly.Lua.addContinueLabel_(branch);
-  var code = '';
-  var incValue;
-  if (Blockly.isNumber(startVar) && Blockly.isNumber(endVar) &&
-      Blockly.isNumber(increment)) {
+  const variable0 =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const startVar = Lua.valueToCode(block, 'FROM', Lua.ORDER_NONE) || '0';
+  const endVar = Lua.valueToCode(block, 'TO', Lua.ORDER_NONE) || '0';
+  const increment = Lua.valueToCode(block, 'BY', Lua.ORDER_NONE) || '1';
+  let branch = Lua.statementToCode(block, 'DO');
+  branch = Lua.addLoopTrap(branch, block);
+  branch = addContinueLabel(branch);
+  let code = '';
+  let incValue;
+  if (stringUtils.isNumber(startVar) && stringUtils.isNumber(endVar) &&
+      stringUtils.isNumber(increment)) {
     // All arguments are simple numbers.
-    var up = Number(startVar) <= Number(endVar);
-    var step = Math.abs(Number(increment));
+    const up = Number(startVar) <= Number(endVar);
+    const step = Math.abs(Number(increment));
     incValue = (up ? '' : '-') + step;
   } else {
     code = '';
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    incValue = Blockly.Lua.nameDB_.getDistinctName(
-        variable0 + '_inc', Blockly.VARIABLE_CATEGORY_NAME);
+    incValue =
+        Lua.nameDB_.getDistinctName(variable0 + '_inc', NameType.VARIABLE);
     code += incValue + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment) + '\n';
     } else {
       code += 'math.abs(' + increment + ')\n';
     }
     code += 'if (' + startVar + ') > (' + endVar + ') then\n';
-    code += Blockly.Lua.INDENT + incValue + ' = -' + incValue + '\n';
+    code += Lua.INDENT + incValue + ' = -' + incValue + '\n';
     code += 'end\n';
   }
-  code += 'for ' + variable0 + ' = ' + startVar + ', ' + endVar +
-      ', ' + incValue;
+  code +=
+      'for ' + variable0 + ' = ' + startVar + ', ' + endVar + ', ' + incValue;
   code += ' do\n' + branch + 'end\n';
   return code;
 };
 
-Blockly.Lua['controls_forEach'] = function(block) {
+Lua['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Lua.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-  var argument0 = Blockly.Lua.valueToCode(block, 'LIST',
-      Blockly.Lua.ORDER_NONE) || '{}';
-  var branch = Blockly.Lua.statementToCode(block, 'DO');
-  branch = Blockly.Lua.addLoopTrap(branch, block);
-  branch = Blockly.Lua.addContinueLabel_(branch);
-  var code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
+  const variable0 =
+      Lua.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  const argument0 = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
+  let branch = Lua.statementToCode(block, 'DO');
+  branch = Lua.addLoopTrap(branch, block);
+  branch = addContinueLabel(branch);
+  const code = 'for _, ' + variable0 + ' in ipairs(' + argument0 + ') do \n' +
       branch + 'end\n';
   return code;
 };
 
-Blockly.Lua['controls_flow_statements'] = function(block) {
+Lua['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  var xfix = '';
-  if (Blockly.Lua.STATEMENT_PREFIX) {
+  let xfix = '';
+  if (Lua.STATEMENT_PREFIX) {
     // Automatic prefix insertion is switched off for this block.  Add manually.
-    xfix += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block);
+    xfix += Lua.injectId(Lua.STATEMENT_PREFIX, block);
   }
-  if (Blockly.Lua.STATEMENT_SUFFIX) {
+  if (Lua.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the break/continue is triggered.
-    xfix += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
+    xfix += Lua.injectId(Lua.STATEMENT_SUFFIX, block);
   }
-  if (Blockly.Lua.STATEMENT_PREFIX) {
-    var loop = Blockly.Constants.Loops
-        .CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.getSurroundLoop(block);
+  if (Lua.STATEMENT_PREFIX) {
+    const loop = block.getSurroundLoop();
     if (loop && !loop.suppressPrefixSuffix) {
       // Inject loop's statement prefix here since the regular one at the end
       // of the loop will not get executed if 'continue' is triggered.
       // In the case of 'break', a prefix is needed due to the loop's suffix.
-      xfix += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, loop);
+      xfix += Lua.injectId(Lua.STATEMENT_PREFIX, loop);
     }
   }
   switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
       return xfix + 'break\n';
     case 'CONTINUE':
-      return xfix + Blockly.Lua.CONTINUE_STATEMENT;
+      return xfix + CONTINUE_STATEMENT;
   }
   throw Error('Unknown flow statement.');
 };

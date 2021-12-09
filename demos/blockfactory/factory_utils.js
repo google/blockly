@@ -10,7 +10,6 @@
  * Exporter applications within Blockly Factory. Holds functions to generate
  * block definitions and generator stubs and to create and download files.
  *
- * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach), JC-Orozco
  * (Juan Carlos Orozco)
  */
 'use strict';
@@ -108,7 +107,7 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
                   " = block.getFieldValue('" + name + "');");
       } else if (field instanceof Blockly.FieldCheckbox) {
         code.push(makeVar('checkbox', name) +
-                  " = block.getFieldValue('" + name + "') == 'TRUE';");
+                  " = block.getFieldValue('" + name + "') === 'TRUE';");
       } else if (field instanceof Blockly.FieldDropdown) {
         code.push(makeVar('dropdown', name) +
                   " = block.getFieldValue('" + name + "');");
@@ -122,11 +121,11 @@ FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
     }
     var name = input.name;
     if (name) {
-      if (input.type == Blockly.INPUT_VALUE) {
+      if (input.type === Blockly.INPUT_VALUE) {
         code.push(makeVar('value', name) +
                   " = Blockly." + language + ".valueToCode(block, '" + name +
                   "', Blockly." + language + ".ORDER_ATOMIC);");
-      } else if (input.type == Blockly.NEXT_STATEMENT) {
+      } else if (input.type === Blockly.NEXT_STATEMENT) {
         code.push(makeVar('statements', name) +
                   " = Blockly." + language + ".statementToCode(block, '" +
                   name + "');");
@@ -176,7 +175,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
       var fields = FactoryUtils.getFieldsJson_(
           contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
-        if (typeof fields[i] == 'string') {
+        if (typeof fields[i] === 'string') {
           message.push(fields[i].replace(/%/g, '%%'));
         } else {
           args.push(fields[i]);
@@ -186,7 +185,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
 
       var input = {type: contentsBlock.type};
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
       var check = JSON.parse(
@@ -195,7 +194,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
         input.check = check;
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         input.align = align;
       }
       args.push(input);
@@ -206,11 +205,11 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Remove last input if dummy and not empty.
-  if (lastInput && lastInput.type == 'input_dummy') {
+  if (lastInput && lastInput.type === 'input_dummy') {
     var fields = lastInput.getInputTargetBlock('FIELDS');
-    if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() != '') {
+    if (fields && FactoryUtils.getFieldsJson_(fields).join('').trim() !== '') {
       var align = lastInput.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         JS.lastDummyAlign0 = align;
       }
       args.pop();
@@ -222,9 +221,9 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     JS.args0 = args;
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     JS.inputsInline = false;
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     JS.inputsInline = true;
   }
   // Generate output, or next/previous connections.
@@ -287,7 +286,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
-      if (contentsBlock.type != 'input_dummy') {
+      if (contentsBlock.type !== 'input_dummy') {
         name =
             JSON.stringify(contentsBlock.getFieldValue('INPUTNAME'));
       }
@@ -297,7 +296,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
         code.push('        .setCheck(' + check + ')');
       }
       var align = contentsBlock.getFieldValue('ALIGN');
-      if (align != 'LEFT') {
+      if (align !== 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
       var fields = FactoryUtils.getFieldsJs_(
@@ -312,9 +311,9 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+  if (rootBlock.getFieldValue('INLINE') === 'EXT') {
     code.push('    this.setInputsInline(false);');
-  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  } else if (rootBlock.getFieldValue('INLINE') === 'INT') {
     code.push('    this.setInputsInline(true);');
   }
   // Generate output, or next/previous connections.
@@ -410,11 +409,11 @@ FactoryUtils.getFieldsJs_ = function(block) {
             Number(block.getFieldValue('PRECISION'))
           ];
           // Remove any trailing arguments that aren't needed.
-          if (args[3] == 0) {
+          if (args[3] === 0) {
             args.pop();
-            if (args[2] == Infinity) {
+            if (args[2] === Infinity) {
               args.pop();
-              if (args[1] == -Infinity) {
+              if (args[1] === -Infinity) {
                 args.pop();
               }
             }
@@ -541,7 +540,7 @@ FactoryUtils.getFieldsJson_ = function(block) {
           fields.push({
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            checked: block.getFieldValue('CHECKED') == 'TRUE'
+            checked: block.getFieldValue('CHECKED') === 'TRUE'
           });
           break;
         case 'field_colour':
@@ -579,7 +578,7 @@ FactoryUtils.getFieldsJson_ = function(block) {
             width: Number(block.getFieldValue('WIDTH')),
             height: Number(block.getFieldValue('HEIGHT')),
             alt: block.getFieldValue('ALT'),
-            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE'
+            flipRtl: block.getFieldValue('FLIP_RTL') === 'TRUE'
           });
           break;
       }
@@ -598,11 +597,11 @@ FactoryUtils.getFieldsJson_ = function(block) {
  */
 FactoryUtils.getOptTypesFrom = function(block, name) {
   var types = FactoryUtils.getTypesFrom_(block, name);
-  if (types.length == 0) {
+  if (types.length === 0) {
     return undefined;
-  } else if (types.indexOf('null') != -1) {
+  } else if (types.indexOf('null') !== -1) {
     return 'null';
-  } else if (types.length == 1) {
+  } else if (types.length === 1) {
     return types[0];
   } else {
     return '[' + types.join(', ') + ']';
@@ -622,9 +621,9 @@ FactoryUtils.getTypesFrom_ = function(block, name) {
   var types;
   if (!typeBlock || typeBlock.disabled) {
     types = [];
-  } else if (typeBlock.type == 'type_other') {
+  } else if (typeBlock.type === 'type_other') {
     types = [JSON.stringify(typeBlock.getFieldValue('TYPE'))];
-  } else if (typeBlock.type == 'type_group') {
+  } else if (typeBlock.type === 'type_group') {
     types = [];
     for (var n = 0; n < typeBlock.typeCount_; n++) {
       types = types.concat(FactoryUtils.getTypesFrom_(typeBlock, 'TYPE' + n));
@@ -652,7 +651,7 @@ FactoryUtils.getTypesFrom_ = function(block, name) {
 FactoryUtils.getRootBlock = function(workspace) {
   var blocks = workspace.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'factory_base') {
+    if (block.type === 'factory_base') {
       return block;
     }
   }
@@ -735,7 +734,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
 FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
   var indexOfStartBracket = blockDef.indexOf('[\'');
   var indexOfEndBracket = blockDef.indexOf('\']');
-  if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
+  if (indexOfStartBracket !== -1 && indexOfEndBracket !== -1) {
     return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
   } else {
     throw Error('Could not parse block type out of JavaScript block ' +
@@ -777,9 +776,9 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
-  while (blockDefsString.indexOf('Blockly.Blocks', defStart) != -1) {
+  while (blockDefsString.indexOf('Blockly.Blocks', defStart) !== -1) {
     var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
-    if (nextStart == -1) {
+    if (nextStart === -1) {
       // This is the last block definition.
       nextStart = blockDefsString.length;
     }
@@ -807,12 +806,12 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
   // are balanced.
   for (var i = 0; i < blockDefsString.length; i++) {
     var currentChar = blockDefsString[i];
-    if (currentChar == '{') {
+    if (currentChar === '{') {
       unbalancedBracketCount++;
     }
-    else if (currentChar == '}') {
+    else if (currentChar === '}') {
       unbalancedBracketCount--;
-      if (unbalancedBracketCount == 0 && i > 0) {
+      if (unbalancedBracketCount === 0 && i > 0) {
         // The brackets are balanced. We've got a complete block definition.
         var blockDef = blockDefsString.substring(defStart, i + 1);
         blockDefArray.push(blockDef);
@@ -833,7 +832,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
   var blockTypes = [];
 
   // Define blocks and get block types.
-  if (format == 'JSON') {
+  if (format === 'JSON') {
     var blockDefArray = FactoryUtils.parseJsonBlockDefinitions(blockDefsString);
 
     // Populate array of blocktypes and define each block.
@@ -848,7 +847,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
         }
       };
     }
-  } else if (format == 'JavaScript') {
+  } else if (format === 'JavaScript') {
     var blockDefArray = FactoryUtils.parseJsBlockDefinitions(blockDefsString);
 
     // Populate array of block types.
@@ -890,8 +889,8 @@ FactoryUtils.injectCode = function(code, id) {
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
-  if (blockXml1.tagName.toLowerCase() != 'xml' ||
-      blockXml2.tagName.toLowerCase() != 'xml') {
+  if (blockXml1.tagName.toLowerCase() !== 'xml' ||
+      blockXml2.tagName.toLowerCase() !== 'xml') {
     throw Error('Expected two XML elements, received elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }
@@ -916,7 +915,7 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
 
   // Return whether or not changes have been saved.
-  return blockXmlText1 == blockXmlText2;
+  return blockXmlText1 === blockXmlText2;
 };
 
 /**
@@ -982,11 +981,11 @@ FactoryUtils.hasVariableField = function(block) {
  */
 FactoryUtils.isProcedureBlock = function(block) {
   return block &&
-      (block.type == 'procedures_defnoreturn' ||
-      block.type == 'procedures_defreturn' ||
-      block.type == 'procedures_callnoreturn' ||
-      block.type == 'procedures_callreturn' ||
-      block.type == 'procedures_ifreturn');
+      (block.type === 'procedures_defnoreturn' ||
+      block.type === 'procedures_defreturn' ||
+      block.type === 'procedures_callnoreturn' ||
+      block.type === 'procedures_callreturn' ||
+      block.type === 'procedures_ifreturn');
 };
 
 /**

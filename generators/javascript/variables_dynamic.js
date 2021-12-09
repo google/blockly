@@ -6,18 +6,16 @@
 
 /**
  * @fileoverview Generating JavaScript for dynamic variable blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.variablesDynamic');
+goog.module('Blockly.JavaScript.variablesDynamic');
 
-goog.require('Blockly.JavaScript');
+const JavaScript = goog.require('Blockly.JavaScript');
+/** @suppress {extraRequire} */
 goog.require('Blockly.JavaScript.variables');
 
 
 // JavaScript is dynamically typed.
-Blockly.JavaScript['variables_get_dynamic'] =
-    Blockly.JavaScript['variables_get'];
-Blockly.JavaScript['variables_set_dynamic'] =
-    Blockly.JavaScript['variables_set'];
+JavaScript['variables_get_dynamic'] = JavaScript['variables_get'];
+JavaScript['variables_set_dynamic'] = JavaScript['variables_set'];

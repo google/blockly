@@ -4,73 +4,23 @@
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
 <script src="../../blockly_uncompressed.js"></script>
-
-<script src="../../generators/javascript.js"></script>
-<script src="unittest_javascript.js"></script>
-<script src="../../generators/javascript/logic.js"></script>
-<script src="../../generators/javascript/loops.js"></script>
-<script src="../../generators/javascript/math.js"></script>
-<script src="../../generators/javascript/text.js"></script>
-<script src="../../generators/javascript/lists.js"></script>
-<script src="../../generators/javascript/colour.js"></script>
-<script src="../../generators/javascript/variables.js"></script>
-<script src="../../generators/javascript/procedures.js"></script>
-
-<script src="../../generators/python.js"></script>
-<script src="unittest_python.js"></script>
-<script src="../../generators/python/logic.js"></script>
-<script src="../../generators/python/loops.js"></script>
-<script src="../../generators/python/math.js"></script>
-<script src="../../generators/python/text.js"></script>
-<script src="../../generators/python/lists.js"></script>
-<script src="../../generators/python/colour.js"></script>
-<script src="../../generators/python/variables.js"></script>
-<script src="../../generators/python/procedures.js"></script>
-
-<script src="../../generators/php.js"></script>
-<script src="unittest_php.js"></script>
-<script src="../../generators/php/logic.js"></script>
-<script src="../../generators/php/loops.js"></script>
-<script src="../../generators/php/math.js"></script>
-<script src="../../generators/php/text.js"></script>
-<script src="../../generators/php/lists.js"></script>
-<script src="../../generators/php/colour.js"></script>
-<script src="../../generators/php/variables.js"></script>
-<script src="../../generators/php/procedures.js"></script>
-
-<script src="../../generators/lua.js"></script>
-<script src="unittest_lua.js"></script>
-<script src="../../generators/lua/logic.js"></script>
-<script src="../../generators/lua/loops.js"></script>
-<script src="../../generators/lua/math.js"></script>
-<script src="../../generators/lua/text.js"></script>
-<script src="../../generators/lua/lists.js"></script>
-<script src="../../generators/lua/colour.js"></script>
-<script src="../../generators/lua/variables.js"></script>
-<script src="../../generators/lua/procedures.js"></script>
-
-<script src="../../generators/dart.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="../../generators/dart/logic.js"></script>
-<script src="../../generators/dart/loops.js"></script>
-<script src="../../generators/dart/math.js"></script>
-<script src="../../generators/dart/text.js"></script>
-<script src="../../generators/dart/lists.js"></script>
-<script src="../../generators/dart/colour.js"></script>
-<script src="../../generators/dart/variables.js"></script>
-<script src="../../generators/dart/procedures.js"></script>
-
-<script src="unittest.js"></script>
 <script src="../../msg/messages.js"></script>
-<script src="../../blocks/logic.js"></script>
-<script src="../../blocks/loops.js"></script>
-<script src="../../blocks/math.js"></script>
-<script src="../../blocks/text.js"></script>
-<script src="../../blocks/lists.js"></script>
-<script src="../../blocks/colour.js"></script>
-<script src="../../blocks/variables.js"></script>
-<script src="../../blocks/procedures.js"></script>
 
+<script>
+// Require optional modules needed by tests.
+goog.require('Blockly.Dart.all');
+goog.require('Blockly.JavaScript.all');
+goog.require('Blockly.Lua.all');
+goog.require('Blockly.PHP.all');
+goog.require('Blockly.Python.all');
+goog.require('Blockly.blocks.all');
+</script>
+<script src="unittest_javascript.js"></script>
+<script src="unittest_python.js"></script>
+<script src="unittest_php.js"></script>
+<script src="unittest_lua.js"></script>
+<script src="unittest_dart.js"></script>
+<script src="unittest.js"></script>
 <script>
 'use strict';
 
@@ -432,7 +382,7 @@ h1 {
       </div>
       <div style="display: inline-block;">
         <input type="button" value="Python" onclick="toPython()">
-        <br><a target="_blank" href="https://repl.it/languages/python">interpreter</a>
+        <br><a target="_blank" href="https://repl.it/languages/python3">interpreter</a>
       </div>
       <div style="display: inline-block;">
         <input type="button" value="PHP" onclick="toPhp()">
@@ -440,7 +390,7 @@ h1 {
       </div>
       <div style="display: inline-block;">
         <input type="button" value="Lua" onclick="toLua()">
-        <br><a target="_blank" href="http://rextester.com/l/lua_online_compiler">interpreter</a>
+        <br><a target="_blank" href="https://rextester.com/l/lua_online_compiler">interpreter</a>
       </div>
       <div style="display: inline-block;">
         <input type="button" value="Dart" onclick="toDart()">

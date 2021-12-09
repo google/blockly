@@ -6,35 +6,44 @@
 
 /**
  * @fileoverview The interface for an object that is copyable.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.ICopyable');
+/**
+ * The interface for an object that is copyable.
+ * @namespace Blockly.ICopyable
+ */
+goog.module('Blockly.ICopyable');
 
-goog.requireType('Blockly.ISelectable');
-goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {ISelectable} = goog.require('Blockly.ISelectable');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
- * @extends {Blockly.ISelectable}
+ * @extends {ISelectable}
  * @interface
+ * @alias Blockly.ICopyable
  */
-Blockly.ICopyable = function() {};
+const ICopyable = function() {};
 
 /**
  * Encode for copying.
- * @return {?Blockly.ICopyable.CopyData} Copy metadata.
+ * @return {?ICopyable.CopyData} Copy metadata.
+ * @package
  */
-Blockly.ICopyable.prototype.toCopyData;
+ICopyable.prototype.toCopyData;
 
 /**
  * Copy Metadata.
  * @typedef {{
- *            xml:!Element,
- *            source:Blockly.WorkspaceSvg,
+ *            saveInfo:(!Object|!Element),
+ *            source:WorkspaceSvg,
  *            typeCounts:?Object
  *          }}
  */
-Blockly.ICopyable.CopyData;
+ICopyable.CopyData;
+
+exports.ICopyable = ICopyable;

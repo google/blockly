@@ -7,24 +7,29 @@
 /**
  * @fileoverview An object that provides constants for rendering blocks in Geras
  * mode.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
-goog.provide('Blockly.geras.ConstantProvider');
+/**
+ * An object that provides constants for rendering blocks in Geras
+ * mode.
+ * @class
+ */
+goog.module('Blockly.geras.ConstantProvider');
 
-goog.require('Blockly.blockRendering.ConstantProvider');
-goog.require('Blockly.utils.object');
+const object = goog.require('Blockly.utils.object');
+const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
  * @constructor
  * @package
- * @extends {Blockly.blockRendering.ConstantProvider}
+ * @extends {BaseConstantProvider}
+ * @alias Blockly.geras.ConstantProvider
  */
-Blockly.geras.ConstantProvider = function() {
-  Blockly.geras.ConstantProvider.superClass_.constructor.call(this);
+const ConstantProvider = function() {
+  ConstantProvider.superClass_.constructor.call(this);
 
   /**
    * @override
@@ -47,23 +52,22 @@ Blockly.geras.ConstantProvider = function() {
    */
   this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 };
-Blockly.utils.object.inherits(Blockly.geras.ConstantProvider,
-    Blockly.blockRendering.ConstantProvider);
+object.inherits(ConstantProvider, BaseConstantProvider);
 
 
 /**
  * @override
  */
-Blockly.geras.ConstantProvider.prototype.getCSS_ = function(selector) {
-  return Blockly.geras.ConstantProvider.superClass_.getCSS_.call(this, selector)
-      .concat([
-        /* eslint-disable indent */
-        // Insertion marker.
-        selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-        selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-          'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-          'stroke: none;',
-        '}',
-        /* eslint-enable indent */
-      ]);
+ConstantProvider.prototype.getCSS_ = function(selector) {
+  return ConstantProvider.superClass_.getCSS_.call(this, selector).concat([
+    /* eslint-disable indent */
+    // Insertion marker.
+    selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+    selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+    'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
+    '}',
+    /* eslint-enable indent */
+  ]);
 };
+
+exports.ConstantProvider = ConstantProvider;

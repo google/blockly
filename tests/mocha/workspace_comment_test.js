@@ -4,7 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.workspaceComment');
+
 goog.require('Blockly.WorkspaceComment');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
 
 suite('Workspace comment', function() {
   setup(function() {
@@ -22,7 +26,7 @@ suite('Workspace comment', function() {
     });
 
     test('One comment', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       chai.assert.equal(this.workspace.getTopComments(true).length, 1);
       chai.assert.equal(this.workspace.commentDB_['comment id'], comment);
@@ -42,7 +46,7 @@ suite('Workspace comment', function() {
     });
 
     test('After dispose', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(true).length, 0);
@@ -56,7 +60,7 @@ suite('Workspace comment', function() {
     });
 
     test('One comment', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       chai.assert.equal(this.workspace.getTopComments(false).length, 1);
       chai.assert.equal(this.workspace.commentDB_['comment id'], comment);
@@ -76,7 +80,7 @@ suite('Workspace comment', function() {
     });
 
     test('After dispose', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(false).length, 0);
@@ -86,7 +90,7 @@ suite('Workspace comment', function() {
 
   suite('getCommentById', function() {
     test('Trivial', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       chai.assert.equal(this.workspace.getCommentById(comment.id), comment);
     });
@@ -100,7 +104,7 @@ suite('Workspace comment', function() {
     });
 
     test('After dispose', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       chai.assert.isNull(this.workspace.getCommentById(comment.id));
@@ -109,7 +113,7 @@ suite('Workspace comment', function() {
 
   suite('dispose', function() {
     test('Called twice', function() {
-      var comment = new Blockly.WorkspaceComment(
+      const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       // Nothing should go wrong the second time dispose is called.
@@ -148,23 +152,21 @@ suite('Workspace comment', function() {
     });
 
     test('Initial position', function() {
-      var xy = this.comment.getXY();
+      const xy = this.comment.getXY();
       chai.assert.equal(xy.x, 0, 'Initial X position');
-      chai.assert.equal(xy.y, 0,'Initial Y position');
+      chai.assert.equal(xy.y, 0, 'Initial Y position');
     });
 
     test('moveBy', function() {
       this.comment.moveBy(10, 100);
-      var xy = this.comment.getXY();
+      const xy = this.comment.getXY();
       chai.assert.equal(xy.x, 10, 'New X position');
       chai.assert.equal(xy.y, 100, 'New Y position');
     });
-
   });
 
   suite('Content', function() {
     setup(function() {
-
       this.comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
     });
@@ -177,7 +179,7 @@ suite('Workspace comment', function() {
       chai.assert.equal(
           this.comment.getContent(), 'comment text');
       chai.assert.equal(
-          this.workspace.undoStack_.length, 1,'Workspace undo stack');
+          this.workspace.undoStack_.length, 1, 'Workspace undo stack');
     });
 
     test('Set to same value', function() {

@@ -471,11 +471,19 @@ ConstantProvider.prototype.makeStartHat = function() {
 ConstantProvider.prototype.makeHexagonal = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
 
-  // The main path for the hexagonal connection shape is made out of two lines.
-  // The lines are defined with relative positions and require the block height.
-  // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  The 'left' and 'right' versions of the path are also the same, but
-  // the X sign flips.
+  /**
+   * Make the main path for the hexagonal connection shape out of two lines.
+   * The lines are defined with relative positions and require the block height.
+   * The 'up' and 'down' versions of the paths are the same, but the Y sign
+   * flips.  The 'left' and 'right' versions of the path are also the same, but
+   * the X sign flips.
+   * @param {number} height The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a rounded connection.
+   */
   function makeMainPath(height, up, right) {
     const halfHeight = height / 2;
     const width = halfHeight > maxWidth ? maxWidth : halfHeight;
@@ -527,14 +535,22 @@ ConstantProvider.prototype.makeRounded = function() {
   const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
   const maxHeight = maxWidth * 2;
 
-  // The main path for the rounded connection shape is made out of two arcs and
-  // a line that joins them.  The arcs are defined with relative positions.
-  // Usually, the height of the block is split between the two arcs. In the case
-  // where the height of the block exceeds the maximum height, a line is drawn
-  // in between the two arcs.
-  // The 'up' and 'down' versions of the paths are the same, but the Y sign
-  // flips.  The 'up' and 'right' versions of the path flip the sweep-flag
-  // which moves the arc at negative angles.
+  /**
+   * Make the main path for the rounded connection shape out of two arcs and
+   * a line that joins them.  The arcs are defined with relative positions.
+   * Usually, the height of the block is split between the two arcs. In the case
+   * where the height of the block exceeds the maximum height, a line is drawn
+   * in between the two arcs.
+   * The 'up' and 'down' versions of the paths are the same, but the Y sign
+   * flips.  The 'up' and 'right' versions of the path flip the sweep-flag
+   * which moves the arc at negative angles.
+   * @param {number} blockHeight The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a rounded connection.
+   */
   function makeMainPath(blockHeight, up, right) {
     const remainingHeight =
         blockHeight > maxHeight ? blockHeight - maxHeight : 0;
@@ -589,12 +605,20 @@ ConstantProvider.prototype.makeRounded = function() {
 ConstantProvider.prototype.makeSquared = function() {
   const radius = this.CORNER_RADIUS;
 
-  // The main path for the squared connection shape is made out of two corners
-  // and a single line in-between (a and v). These are defined in relative
-  // positions and require the height of the block.
-  // The 'left' and 'right' versions of the paths are the same, but the Y sign
-  // flips.  The 'up' and 'down' versions of the path determine where the corner
-  // point is placed and in-turn the direction of the corners.
+  /**
+   * Make the main path for the squared connection shape out of two corners
+   * and a single line in-between (a and v). These are defined in relative
+   * positions and require the height of the block.
+   * The 'left' and 'right' versions of the paths are the same, but the Y sign
+   * flips.  The 'up' and 'down' versions of the path determine where the corner
+   * point is placed and in turn the direction of the corners.
+   * @param {number} height The height of the block the connection is on.
+   * @param {boolean} up True if the path should be drawn from bottom to top,
+   *     false otherwise.
+   * @param {boolean} right True if the path is for the right side of the
+   *     block.
+   * @return {string} A path fragment describing a squared connection.
+   */
   function makeMainPath(height, up, right) {
     const innerHeight = height - radius * 2;
     return svgPaths.arc(
@@ -692,6 +716,12 @@ ConstantProvider.prototype.makeNotch = function() {
   const halfHeight = height / 2;
   const quarterHeight = halfHeight / 2;
 
+  /**
+   * Make the main path for the notch.
+   * @param {number} dir Direction multiplier to apply to horizontal offsets
+   *     along the path. Either 1 or -1.
+   * @return {string} A path fragment describing a notch.
+   */
   function makeMainPath(dir) {
     return (
         svgPaths.curve(
@@ -799,8 +829,8 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
-        y: '-30%',
-        x: '-40%',
+        'y': '-30%',
+        'x': '-40%',
       },
       defs);
   dom.createSvgElement(
@@ -840,8 +870,8 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
         'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
         'height': '160%',
         'width': '180%',
-        y: '-30%',
-        x: '-40%',
+        'y': '-30%',
+        'x': '-40%',
       },
       defs);
   dom.createSvgElement(

@@ -18,7 +18,7 @@ suite('WorkspaceSvg', function() {
     Blockly.defineBlocksWithJsonArray([{
       'type': 'simple_test_block',
       'message0': 'simple test block',
-      'output': null
+      'output': null,
     },
     {
       'type': 'test_val_in',
@@ -26,9 +26,9 @@ suite('WorkspaceSvg', function() {
       'args0': [
         {
           'type': 'input_value',
-          'name': 'NAME'
-        }
-      ]
+          'name': 'NAME',
+        },
+      ],
     }]);
   });
 
@@ -132,9 +132,9 @@ suite('WorkspaceSvg', function() {
           {
             "type": "field_variable",
             "name": "VAR",
-            "variableTypes": ["", "type1", "type2"]
-          }
-        ]
+            "variableTypes": ["", "type1", "type2"],
+          },
+        ],
       }]);
     });
 
@@ -181,7 +181,7 @@ suite('WorkspaceSvg', function() {
         scale: workspace.scale,
         oldScale: 1,
         viewTop: metrics.viewTop,
-        viewLeft: metrics.viewLeft
+        viewLeft: metrics.viewLeft,
       };
       assertSpyFiredViewportEvent(
           eventsFireStub, workspace, expectedProperties);
@@ -274,7 +274,7 @@ suite('WorkspaceSvg', function() {
         }, this.eventsFireStub, this.changeListenerSpy, this.workspace,
         this.clock, 2);
       });
-      test('domToWorkspace that doesn\'t trigger scroll' , function() {
+      test('domToWorkspace that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
             Blockly.Xml.textToDom(
@@ -298,7 +298,7 @@ suite('WorkspaceSvg', function() {
         assertEventNotFired(
             this.changeListenerSpy, Blockly.Events.ViewportChange, {});
       });
-      test('domToWorkspace at 0,0 that doesn\'t trigger scroll' , function() {
+      test('domToWorkspace at 0,0 that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
         Blockly.Xml.domToWorkspace(
             Blockly.Xml.textToDom(

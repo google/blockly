@@ -10,7 +10,7 @@ const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatc
 
 
 suite('Gesture', function() {
-  function testGestureIsFieldClick(block, isFieldClick, eventsFireStub){
+  function testGestureIsFieldClick(block, isFieldClick, eventsFireStub) {
     const field = block.getField('NAME');
     const eventTarget = field.getClickTarget_();
     chai.assert.exists(eventTarget,
@@ -54,7 +54,7 @@ suite('Gesture', function() {
   });
 
   test('Constructor', function() {
-    const e = { id: 'dummy_test_event'};
+    const e = {id: 'dummy_test_event'};
     const gesture = new Blockly.Gesture(e, this.workspace);
     chai.assert.equal(gesture.mostRecentEvent_, e);
     chai.assert.equal(gesture.creatorWorkspace_, this.workspace);

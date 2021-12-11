@@ -17,7 +17,6 @@
  * @namespace Blockly.serialization.ISerializer
  */
 goog.module('Blockly.serialization.ISerializer');
-goog.module.declareLegacyNamespace();
 
 // eslint-disable-next-line no-unused-vars
 const {Workspace} = goog.requireType('Blockly.Workspace');
@@ -29,6 +28,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.serialization.ISerializer.ISerializer
  */
 class ISerializer {
+  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /**
      * A priority value used to determine the order of deserializing state.

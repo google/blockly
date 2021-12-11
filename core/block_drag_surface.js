@@ -27,7 +27,7 @@
 goog.module('Blockly.BlockDragSurfaceSvg');
 
 const dom = goog.require('Blockly.utils.dom');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
@@ -200,7 +200,7 @@ BlockDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  * @return {!Coordinate} Current translation of the surface.
  */
 BlockDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
-  const xy = utils.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  const xy = svgMath.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
   return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
 };
 

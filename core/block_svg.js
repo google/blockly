@@ -16,7 +16,6 @@
 goog.module('Blockly.BlockSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const Msg = goog.require('Blockly.Msg');
 const Tooltip = goog.require('Blockly.Tooltip');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -27,8 +26,8 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -58,6 +57,7 @@ const {Icon} = goog.requireType('Blockly.Icon');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
 const {MarkerManager} = goog.require('Blockly.MarkerManager');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
 const {Rect} = goog.require('Blockly.utils.Rect');
@@ -145,7 +145,7 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.useDragSurface_ =
-      utils.is3dSupported() && !!workspace.getBlockDragSurface();
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
   const svgPath = this.pathObject.svgPath;
   svgPath.tooltip = this;
@@ -397,10 +397,9 @@ BlockSvg.prototype.setParent = function(newParent) {
     const newXY = this.getRelativeToSurfaceXY();
     // Move the connections to match the child's new position.
     this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
-  }
-  // If we are losing a parent, we want to move our DOM element to the
-  // root of the workspace.
-  else if (oldParent) {
+  } else if (oldParent) {
+    // If we are losing a parent, we want to move our DOM element to the
+    // root of the workspace.
     this.workspace.getCanvas().appendChild(svgRoot);
     this.translate(oldXY.x, oldXY.y);
   }
@@ -429,7 +428,7 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   if (element) {
     do {
       // Loop through this block and every parent.
-      const xy = utils.getRelativeXY(element);
+      const xy = svgMath.getRelativeXY(element);
       x += xy.x;
       y += xy.y;
       // If this element is the current element on the drag surface, include
@@ -941,7 +940,6 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
  * as the full delete action. If you are disposing of a block from the workspace
  * and don't need to perform flyout checks, handle event grouping, or hide
  * chaff, then use `block.dispose()` directly.
- * @package
  */
 BlockSvg.prototype.checkAndDelete = function() {
   if (this.workspace.isFlyout) {
@@ -973,7 +971,7 @@ BlockSvg.prototype.toCopyData = function() {
     saveInfo: /** @type {!blocks.State} */ (
         blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
     source: this.workspace,
-    typeCounts: utils.getBlockTypeCounts(this, true),
+    typeCounts: common.getBlockTypeCounts(this, true),
   };
 };
 

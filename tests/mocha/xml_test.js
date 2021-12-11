@@ -38,7 +38,7 @@ suite('XML', function() {
       {
         "type": "empty_block",
         "message0": "",
-        "args0": []
+        "args0": [],
       },
     ]);
     this.complexXmlText = [
@@ -95,8 +95,8 @@ suite('XML', function() {
             {
               "type": "field_angle",
               "name": "ANGLE",
-              "angle": 90
-            }
+              "angle": 90,
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -112,8 +112,8 @@ suite('XML', function() {
             {
               "type": "field_checkbox",
               "name": "CHECKBOX",
-              "checked": true
-            }
+              "checked": true,
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -129,8 +129,8 @@ suite('XML', function() {
             {
               "type": "field_colour",
               "name": "COLOUR",
-              "colour": '#000099'
-            }
+              "colour": '#000099',
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -149,18 +149,18 @@ suite('XML', function() {
               "options": [
                 [
                   "a",
-                  "A"
+                  "A",
                 ],
                 [
                   "b",
-                  "B"
+                  "B",
                 ],
                 [
                   "c",
-                  "C"
-                ]
-              ]
-            }
+                  "C",
+                ],
+              ],
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -179,8 +179,8 @@ suite('XML', function() {
               "src": "https://blockly-demo.appspot.com/static/tests/media/a.png",
               "width": 32,
               "height": 32,
-              "alt": "A"
-            }
+              "alt": "A",
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -196,8 +196,8 @@ suite('XML', function() {
             {
               "type": "field_label",
               "name": "LABEL",
-              "text": "default"
-            }
+              "text": "default",
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -213,8 +213,8 @@ suite('XML', function() {
             {
               "type": "field_label_serializable",
               "name": "LABEL",
-              "text": "default"
-            }
+              "text": "default",
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -230,8 +230,8 @@ suite('XML', function() {
             {
               "type": "field_number",
               "name": "NUMBER",
-              "value": 97
-            }
+              "value": 97,
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -247,8 +247,8 @@ suite('XML', function() {
             {
               "type": "field_input",
               "name": "TEXT",
-              "text": "default"
-            }
+              "text": "default",
+            },
           ],
         }]);
         const block = new Blockly.Block(this.workspace,
@@ -265,9 +265,9 @@ suite('XML', function() {
               {
                 'type': 'field_variable',
                 'name': 'VAR',
-                'variable': 'item'
-              }
-            ]
+                'variable': 'item',
+              },
+            ],
           }]);
         });
         test('Variable Trivial', function() {
@@ -390,9 +390,9 @@ suite('XML', function() {
           {
             'type': 'field_variable',
             'name': 'VAR',
-            'variable': 'item'
-          }
-        ]
+            'variable': 'item',
+          },
+        ],
       }]);
     });
     teardown(function() {
@@ -613,9 +613,9 @@ suite('XML', function() {
           {
             'type': 'field_variable',
             'name': 'VAR',
-            'variable': 'item'
-          }
-        ]
+            'variable': 'item',
+          },
+        ],
       }]);
     });
     teardown(function() {
@@ -700,7 +700,7 @@ suite('XML', function() {
           this.jsonInit({
             message0: 'test',
           });
-        }
+        },
       };
       this.workspace = new Blockly.Workspace();
     });
@@ -723,7 +723,7 @@ suite('XML', function() {
   suite('workspaceToDom -> domToWorkspace -> workspaceToDom', function() {
     setup(function() {
       const options = {
-        comments: true
+        comments: true,
       };
       this.renderedWorkspace = Blockly.inject('blocklyDiv', options);
       this.headlessWorkspace =
@@ -780,7 +780,7 @@ suite('XML', function() {
         name: name,
         getId: function() {
           return varId;
-        }
+        },
       };
 
       const generatedXml = Blockly.Xml.domToText(

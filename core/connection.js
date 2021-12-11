@@ -17,7 +17,6 @@ goog.module('Blockly.Connection');
 
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -63,6 +62,7 @@ Connection.REASON_CHECKS_FAILED = 4;
 Connection.REASON_DIFFERENT_WORKSPACES = 5;
 Connection.REASON_SHADOW_PARENT = 6;
 Connection.REASON_DRAG_CHECKS_FAILED = 7;
+Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -210,42 +210,6 @@ Connection.prototype.isConnected = function() {
 };
 
 /**
- * Checks whether the current connection can connect with the target
- * connection.
- * @param {Connection} target Connection to check compatibility with.
- * @return {number} Connection.CAN_CONNECT if the connection is legal,
- *    an error code otherwise.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.canConnectWithReason = function(target) {
-  deprecation.warn(
-      'Connection.prototype.canConnectWithReason', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnectWithReason(this, target, false);
-};
-
-/**
- * Checks whether the current connection and target connection are compatible
- * and throws an exception if they are not.
- * @param {Connection} target The connection to check compatibility
- *    with.
- * @package
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.checkConnection = function(target) {
-  deprecation.warn(
-      'Connection.prototype.checkConnection', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  const checker = this.getConnectionChecker();
-  const reason = checker.canConnectWithReason(this, target, false);
-  if (reason !== Connection.CAN_CONNECT) {
-    throw new Error(checker.getErrorMessage(reason, this, target));
-  }
-};
-
-/**
  * Get the workspace's connection type checker object.
  * @return {!IConnectionChecker} The connection type checker for the
  *     source block's workspace.
@@ -253,20 +217,6 @@ Connection.prototype.checkConnection = function(target) {
  */
 Connection.prototype.getConnectionChecker = function() {
   return this.sourceBlock_.workspace.connectionChecker;
-};
-
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Connection} candidate A nearby connection to check.
- * @return {boolean} True if the connection is allowed, false otherwise.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.isConnectionAllowed = function(candidate) {
-  deprecation.warn(
-      'Connection.prototype.isConnectionAllowed', 'July 2020', 'July 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnect(this, candidate, true);
 };
 
 /**
@@ -414,7 +364,9 @@ Connection.prototype.disconnect = function() {
   if (otherConnection.targetConnection !== this) {
     throw Error('Target connection not connected to source connection.');
   }
-  let parentBlock, childBlock, parentConnection;
+  let parentBlock;
+  let childBlock;
+  let parentConnection;
   if (this.isSuperior()) {
     // Superior block.
     parentBlock = this.sourceBlock_;
@@ -480,38 +432,6 @@ Connection.prototype.targetBlock = function() {
     return this.targetConnection.getSourceBlock();
   }
   return null;
-};
-
-/**
- * Is this connection compatible with another connection with respect to the
- * value type system.  E.g. square_root("Hello") is not compatible.
- * @param {!Connection} otherConnection Connection to compare against.
- * @return {boolean} True if the connections share a type.
- * @deprecated July 2020. Will be deleted July 2021. Use the workspace's
- *     connectionChecker instead.
- */
-Connection.prototype.checkType = function(otherConnection) {
-  deprecation.warn(
-      'Connection.prototype.checkType', 'October 2019', 'January 2021',
-      'the workspace\'s connection checker');
-  return this.getConnectionChecker().canConnect(this, otherConnection, false);
-};
-
-/**
- * Is this connection compatible with another connection with respect to the
- * value type system.  E.g. square_root("Hello") is not compatible.
- * @param {!Connection} otherConnection Connection to compare against.
- * @return {boolean} True if the connections share a type.
- * @private
- * @deprecated October 2019. Will be deleted January 2021. Use the workspace's
- *     connectionChecker instead.
- * @suppress {unusedPrivateMembers}
- */
-Connection.prototype.checkType_ = function(otherConnection) {
-  deprecation.warn(
-      'Connection.prototype.checkType_', 'October 2019', 'January 2021',
-      'the workspace\'s connection checker');
-  return this.checkType(otherConnection);
 };
 
 /**

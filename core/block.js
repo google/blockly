@@ -19,13 +19,15 @@ goog.module('Blockly.Block');
 const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
+const arrayUtils = goog.require('Blockly.utils.array');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
+const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
@@ -39,7 +41,6 @@ const {Field} = goog.requireType('Blockly.Field');
 const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
 /* eslint-disable-next-line no-unused-vars */
 const {IDeletable} = goog.require('Blockly.IDeletable');
-const {Input} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
 const {Size} = goog.require('Blockly.utils.Size');
@@ -243,7 +244,6 @@ const Block = function(workspace, prototypeName, opt_id) {
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
     }
-
   } finally {
     if (!existingGroup) {
       eventUtils.setGroup(false);
@@ -469,7 +469,8 @@ Block.prototype.initModel = function() {
 Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     this.unplugFromRow_(opt_healStack);
-  } else if (this.previousConnection) {
+  }
+  if (this.previousConnection) {
     this.unplugFromStack_(opt_healStack);
   }
 };
@@ -771,10 +772,12 @@ Block.prototype.setParent = function(newParent) {
 
   // Check that block is connected to new parent if new parent is not null and
   //    that block is not connected to superior one if new parent is null.
-  const connection = this.previousConnection || this.outputConnection;
-  const isConnected = !!(connection && connection.targetBlock());
+  const targetBlock =
+      (this.previousConnection && this.previousConnection.targetBlock()) ||
+      (this.outputConnection && this.outputConnection.targetBlock());
+  const isConnected = !!targetBlock;
 
-  if (isConnected && newParent && connection.targetBlock() !== newParent) {
+  if (isConnected && newParent && targetBlock !== newParent) {
     throw Error('Block connected to superior one that is not new parent.');
   } else if (!isConnected && newParent) {
     throw Error('Block not connected to new parent.');
@@ -786,7 +789,7 @@ Block.prototype.setParent = function(newParent) {
 
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
-    utils.arrayRemove(this.parentBlock_.childBlocks_, this);
+    arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
     // This block hasn't actually moved on-screen, so there's no need to update
     //     its connection locations.
@@ -869,7 +872,7 @@ Block.prototype.isDuplicatable = function() {
     return true;
   }
   return this.workspace.isCapacityAvailable(
-      utils.getBlockTypeCounts(this, true));
+      common.getBlockTypeCounts(this, true));
 };
 
 /**
@@ -1016,7 +1019,7 @@ Block.prototype.getHue = function() {
  *     or a message reference string pointing to one of those two values.
  */
 Block.prototype.setColour = function(colour) {
-  const parsed = utils.parseBlockColour(colour);
+  const parsed = parsing.parseBlockColour(colour);
   this.hue_ = parsed.hue;
   this.colour_ = parsed.hex;
 };
@@ -1186,11 +1189,6 @@ Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.previousConnection) {
-      if (this.outputConnection) {
-        throw Error(
-            'Remove output connection prior to adding previous ' +
-            'connection.');
-      }
       this.previousConnection =
           this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
     }
@@ -1249,11 +1247,6 @@ Block.prototype.setOutput = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.outputConnection) {
-      if (this.previousConnection) {
-        throw Error(
-            'Remove previous connection prior to adding output ' +
-            'connection.');
-      }
       this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
@@ -1583,7 +1576,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['tooltip'] !== undefined) {
     const rawValue = json['tooltip'];
-    const localizedText = utils.replaceMessageReferences(rawValue);
+    const localizedText = parsing.replaceMessageReferences(rawValue);
     this.setTooltip(localizedText);
   }
   if (json['enableContextMenu'] !== undefined) {
@@ -1594,7 +1587,7 @@ Block.prototype.jsonInit = function(json) {
   }
   if (json['helpUrl'] !== undefined) {
     const rawValue = json['helpUrl'];
-    const localizedValue = utils.replaceMessageReferences(rawValue);
+    const localizedValue = parsing.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
   if (typeof json['extensions'] === 'string') {
@@ -1669,7 +1662,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
   }
   if (!opt_disableCheck) {
     const overwrites = [];
-    for (let key in mixinObj) {
+    for (const key in mixinObj) {
       if (this[key] !== undefined) {
         overwrites.push(key);
       }
@@ -1694,7 +1687,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
  */
 Block.prototype.interpolate_ = function(
     message, args, lastDummyAlign, warningPrefix) {
-  const tokens = utils.tokenizeInterpolation(message);
+  const tokens = parsing.tokenizeInterpolation(message);
   this.validateTokens_(tokens, args.length);
   const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 
@@ -1831,10 +1824,10 @@ Block.prototype.fieldFromJson_ = function(element) {
  */
 Block.prototype.inputFromJson_ = function(element, warningPrefix) {
   const alignmentLookup = {
-    'LEFT': constants.ALIGN.LEFT,
-    'RIGHT': constants.ALIGN.RIGHT,
-    'CENTRE': constants.ALIGN.CENTRE,
-    'CENTER': constants.ALIGN.CENTRE,
+    'LEFT': Align.LEFT,
+    'RIGHT': Align.RIGHT,
+    'CENTRE': Align.CENTRE,
+    'CENTER': Align.CENTRE,
   };
 
   let input = null;

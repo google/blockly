@@ -50,6 +50,6 @@
     document.write(
         '<script src="' + BLOCKLY_DIR + '/tests/deps.js"></script>');
     // Load the rest of Blockly.
-    document.write('<script>goog.require(\'Blockly.requires\');</script>');
+    document.write('<script>goog.require(\'Blockly\');</script>');
   }
 })(this);

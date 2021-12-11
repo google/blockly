@@ -16,13 +16,12 @@
 goog.module('Blockly.RenderedConnection');
 
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -270,7 +269,7 @@ RenderedConnection.prototype.tighten = function() {
       throw Error('block is not rendered.');
     }
     // Workspace coordinates.
-    const xy = utils.getRelativeXY(svgRoot);
+    const xy = svgMath.getRelativeXY(svgRoot);
     block.getSvgRoot().setAttribute(
         'transform', 'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
     block.moveConnections(-dx, -dy);
@@ -319,7 +318,7 @@ RenderedConnection.prototype.highlight = function() {
       Svg.PATH, {
         'class': 'blocklyHighlightedConnectionPath',
         'd': steps,
-        transform: 'translate(' + x + ',' + y + ')' +
+        'transform': 'translate(' + x + ',' + y + ')' +
             (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
       },
       this.sourceBlock_.getSvgRoot());
@@ -399,7 +398,7 @@ RenderedConnection.prototype.startTrackingAll = function() {
   // rendering takes place, since rendering requires knowing the dimensions
   // of lower blocks. Also, since rendering a block renders all its parents,
   // we only need to render the leaf nodes.
-  const renderList = [];
+  let renderList = [];
   if (this.type !== ConnectionType.INPUT_VALUE &&
       this.type !== ConnectionType.NEXT_STATEMENT) {
     // Only spider down.
@@ -423,32 +422,10 @@ RenderedConnection.prototype.startTrackingAll = function() {
     }
     if (!renderList.length) {
       // Leaf block.
-      renderList[0] = block;
+      renderList = [block];
     }
   }
   return renderList;
-};
-
-/**
- * Check if the two connections can be dragged to connect to each other.
- * @param {!Connection} candidate A nearby connection to check.
- * @param {number=} maxRadius The maximum radius allowed for connections, in
- *     workspace units.
- * @return {boolean} True if the connection is allowed, false otherwise.
- * @deprecated July 2020
- */
-RenderedConnection.prototype.isConnectionAllowed = function(
-    candidate, maxRadius) {
-  deprecation.warn(
-      'RenderedConnection.prototype.isConnectionAllowed', 'July 2020',
-      'July 2021',
-      'Blockly.Workspace.prototype.getConnectionChecker().canConnect');
-  if (this.distanceFrom(candidate) > maxRadius) {
-    return false;
-  }
-
-  return RenderedConnection.superClass_.isConnectionAllowed.call(
-      this, candidate);
 };
 
 /**

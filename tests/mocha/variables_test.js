@@ -20,9 +20,9 @@ suite('Variables', function() {
         {
           "type": "field_variable",
           "name": "VAR",
-          "variableTypes": ["", "type1", "type2"]
-        }
-      ]
+          "variableTypes": ["", "type1", "type2"],
+        },
+      ],
     }]);
     this.workspace.createVariable('foo', 'type1', '1');
     this.workspace.createVariable('bar', 'type1', '2');
@@ -38,14 +38,14 @@ suite('Variables', function() {
    * Will fail if get_var_block isn't defined.
    * @param {!Blockly.Workspace} workspace The workspace on which to create the
    *     block.
-   * @param {!string} variable_id The id of the variable to reference.
+   * @param {!string} variableId The id of the variable to reference.
    * @return {!Blockly.Block} The created block.
    */
-  function createTestVarBlock(workspace, variable_id) {
+  function createTestVarBlock(workspace, variableId) {
     // Turn off events to avoid testing XML at the same time.
     Blockly.Events.disable();
     const block = new Blockly.Block(workspace, 'get_var_block');
-    block.inputList[0].fieldRow[0].setValue(variable_id);
+    block.inputList[0].fieldRow[0].setValue(variableId);
     Blockly.Events.enable();
     return block;
   }

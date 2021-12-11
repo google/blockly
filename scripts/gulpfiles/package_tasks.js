@@ -58,7 +58,7 @@ function checkBuildDir(done) {
   // Check that directory exists.
   if (!fs.existsSync(BUILD_DIR)) {
     done(new Error(`The ${BUILD_DIR} directory does not exist.  ` +
-        'Have both packageTasks.build and typingsTasks.typings been run?'));
+        'Has packageTasks.build been run?'));
     return;
   }
   // Check files built by buildTasks.build exist in BUILD_DIR.
@@ -72,15 +72,6 @@ function checkBuildDir(done) {
       done(new Error(
           `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
           'Has packageTasks.build been run?  Try "npm run build".'));
-      return;
-    }
-  }
-  // Check files built by typings.typings exist in BUILD_DIR.
-  for (const fileName of ['blockly.d.ts', 'msg/en.d.ts']) {
-    if (!fs.existsSync(`${TYPINGS_BUILD_DIR}/${fileName}`)) {
-      done(new Error(
-          `Your ${TYPINGS_BUILD_DIR} directory does not contain ${fileName}. ` +
-          'Has typings.typings been run?  Try "npm run typings".'));
       return;
     }
   }
@@ -126,8 +117,8 @@ function packageBlockly() {
  */
 function packageBlocks() {
   return gulp.src('scripts/package/blocks.js')
-    .pipe(packageUMD('Blockly.Blocks', [{
-        name: 'Blockly',
+    .pipe(packageUMD('BlocklyBlocks', [{
+        name: 'BlocklyBlocks',
         amd: './blocks_compressed',
         cjs: './blocks_compressed',
       }]))
@@ -395,19 +386,17 @@ function packageReadme() {
  * This task copies the typings/blockly.d.ts TypeScript definition
  * file into the release directory.  The bundled declaration file is
  * referenced in package.json in the types property.
+ * As of Q4 2021 this simply copies the existing ts definition files, since
+ * generation through typescript-closure-tools does not work with goog.module.
+ * TODO(5621): Regenerate definition files and copy them into the release dir as
+ * needed.
  */
 function packageDTS() {
   const handwrittenSrcs = [
     'typings/*.d.ts',
-    '!typings/blockly.d.ts',  // Exclude checked-in copy of blockly.d.ts.
     'typings/msg/msg.d.ts',
   ];
-  const builtSrcs = [
-    `${TYPINGS_BUILD_DIR}/blockly.d.ts`,  // Use freshly-built one instead.
-    `${TYPINGS_BUILD_DIR}/msg/*.d.ts`,
-  ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
-      .pipe(gulp.src(builtSrcs, {base: TYPINGS_BUILD_DIR}))
       .pipe(gulp.dest(RELEASE_DIR));
 };
 

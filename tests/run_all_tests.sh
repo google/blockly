@@ -54,15 +54,13 @@ if [ -z $CI ]; then
   run_test_command "eslint" "eslint ."
 fi
 
-# Run the full usual build process.
-run_test_command "build" "npm run build"
-
-# Run the debug build, to ensure there are no closure compiler
-# warnings / errors.
-run_test_command "build:debug" "npm run build:debug"
+# Run the full usual build process, checking to ensure there are no
+# closure compiler warnings / errors.
+run_test_command "build-debug" "npm run build-debug"
 
 # Generate TypeScript typings and ensure there are no errors.
-run_test_command "typings" "npm run typings"
+# TODO(5621): Re-enable this test once typings generation is fixed.
+# run_test_command "typings" "npm run typings"
 
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
@@ -79,8 +77,8 @@ run_test_command "package" "npm run package"
 # Run Node tests.
 run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
-# # Attempt advanced compilation of a Blockly app.
-# run_test_command "advanced_compile" "npm run test:compile:advanced"
+# Attempt advanced compilation of a Blockly app.
+run_test_command "advanced_compile" "npm run test:compile:advanced"
 
 
 # End of tests.

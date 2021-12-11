@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.FieldTextInput');
 
-const Msg = goog.require('Blockly.Msg');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -24,14 +23,15 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
@@ -116,7 +116,7 @@ FieldTextInput.prototype.DEFAULT_VALUE = '';
  * @nocollapse
  */
 FieldTextInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldTextInput if that class doesn't override
   // the static fromJson method.
   return new this(text, undefined, options);
@@ -316,7 +316,10 @@ FieldTextInput.prototype.showEditor_ = function(_opt_e, opt_quietInput) {
  */
 FieldTextInput.prototype.showPromptEditor_ = function() {
   dialog.prompt(Msg['CHANGE_VALUE_TITLE'], this.getText(), function(text) {
-    this.setValue(this.getValueFromEditorText_(text));
+    // Text is null if user pressed cancel button.
+    if (text !== null) {
+      this.setValue(this.getValueFromEditorText_(text));
+    }
   }.bind(this));
 };
 

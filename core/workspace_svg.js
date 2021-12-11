@@ -25,6 +25,7 @@ const Variables = goog.requireType('Blockly.Variables');
 const VariablesDynamic = goog.requireType('Blockly.VariablesDynamic');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
+const arrayUtils = goog.require('Blockly.utils.array');
 const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -34,6 +35,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
+const svgMath = goog.require('Blockly.utils.svgMath');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
@@ -170,7 +172,7 @@ const WorkspaceSvg = function(
   }
 
   this.useWorkspaceDragSurface_ =
-      !!this.workspaceDragSurface_ && utils.is3dSupported();
+      !!this.workspaceDragSurface_ && svgMath.is3dSupported();
 
   /**
    * List of currently highlighted blocks.  Block highlighting is often used to
@@ -224,20 +226,19 @@ const WorkspaceSvg = function(
   const Variables = goog.module.get('Blockly.Variables');
   if (Variables && Variables.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_CATEGORY_NAME, Variables.flyoutCategory);
+        Variables.CATEGORY_NAME, Variables.flyoutCategory);
   }
 
   const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
   if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME,
-        VariablesDynamic.flyoutCategory);
+        VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategory);
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        internalConstants.PROCEDURE_CATEGORY_NAME, Procedures.flyoutCategory);
+        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 
@@ -793,7 +794,7 @@ WorkspaceSvg.prototype.getSvgXY = function(element) {
   }
   do {
     // Loop through this block and every parent.
-    const xy = utils.getRelativeXY(element);
+    const xy = svgMath.getRelativeXY(element);
     if (element === this.getCanvas() || element === this.getBubbleCanvas()) {
       // After the SVG canvas, don't scale the coordinates.
       scale = 1;
@@ -825,7 +826,7 @@ WorkspaceSvg.prototype.getCachedParentSvgSize = function() {
  * @package
  */
 WorkspaceSvg.prototype.getOriginOffsetInPixels = function() {
-  return utils.getInjectionDivXY_(this.getCanvas());
+  return svgMath.getInjectionDivXY(this.getCanvas());
 };
 
 /**
@@ -1214,7 +1215,7 @@ WorkspaceSvg.prototype.resize = function() {
  */
 WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled = function() {
   /* eslint-disable indent */
-  const currScroll = utils.getDocumentScroll();
+  const currScroll = svgMath.getDocumentScroll();
   if (!Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
     this.lastRecordedPageScroll_ = currScroll;
     this.updateScreenCalculations_();
@@ -1385,7 +1386,7 @@ WorkspaceSvg.prototype.setupDragSurface = function() {
       /** @type {Element} */ (this.svgBlockCanvas_.previousSibling);
   const width = parseInt(this.getParentSvg().getAttribute('width'), 10);
   const height = parseInt(this.getParentSvg().getAttribute('height'), 10);
-  const coord = utils.getRelativeXY(this.getCanvas());
+  const coord = svgMath.getRelativeXY(this.getCanvas());
   this.workspaceDragSurface_.setContentsAndShow(
       this.getCanvas(), this.getBubbleCanvas(), previousElement, width, height,
       this.scale);
@@ -1500,7 +1501,7 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
     const state = (opt_state === undefined) || opt_state;
     // Using Set here would be great, but at the cost of IE10 support.
     if (!state) {
-      utils.arrayRemove(this.highlightedBlocks_, block);
+      arrayUtils.removeElem(this.highlightedBlocks_, block);
     } else if (this.highlightedBlocks_.indexOf(block) === -1) {
       this.highlightedBlocks_.push(block);
     }
@@ -2499,7 +2500,7 @@ WorkspaceSvg.prototype.addTopBoundedElement = function(element) {
  * @param {!IBoundedElement} element Bounded element to remove.
  */
 WorkspaceSvg.prototype.removeTopBoundedElement = function(element) {
-  utils.arrayRemove(this.topBoundedElements_, element);
+  arrayUtils.removeElem(this.topBoundedElements_, element);
 };
 
 /**
@@ -2694,5 +2695,16 @@ WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
   autoHideables.forEach(
       (autoHideable) => autoHideable.autoHide(onlyClosePopups));
 };
+
+/**
+ * Size the workspace when the contents change.  This also updates
+ * scrollbars accordingly.
+ * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @alias Blockly.WorkspaceSvg.resizeSvgContents
+ */
+const resizeSvgContents = function(workspace) {
+  workspace.resizeContents();
+};
+exports.resizeSvgContents = resizeSvgContents;
 
 exports.WorkspaceSvg = WorkspaceSvg;

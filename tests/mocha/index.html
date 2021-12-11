@@ -7,27 +7,7 @@
     <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
     <script src="../../blockly_uncompressed.js"></script>
     <script src="../deps.mocha.js"></script>
-    <script src="../../generators/dart.js"></script>
-    <script src="../../generators/javascript.js"></script>
-    <script src="../../generators/lua.js"></script>
-    <script src="../../generators/php.js"></script>
-    <script src="../../generators/python.js"></script>
-
-    <script src="../../generators/dart/text.js"></script>
-    <script src="../../generators/javascript/text.js"></script>
-    <script src="../../generators/lua/text.js"></script>
-    <script src="../../generators/php/text.js"></script>
-    <script src="../../generators/python/text.js"></script>
-
     <script src="../../msg/messages.js"></script>
-    <script src="../../blocks/loops.js"></script>
-    <script src="../../blocks/lists.js"></script>
-    <script src="../../blocks/logic.js"></script>
-    <script src="../../blocks/math.js"></script>
-    <script src="../../blocks/procedures.js"></script>
-    <script src="../../blocks/text.js"></script>
-    <script src="../../blocks/variables.js"></script>
-    <script src="../../blocks/variables_dynamic.js"></script>
   </head>
   <style>
     #blocklyDiv {
@@ -52,6 +32,28 @@
     </script>
 
     <script>
+      // Require optional modules needed by tests.
+      goog.require('Blockly.Dart');
+      goog.require('Blockly.Dart.texts');
+      goog.require('Blockly.JavaScript');
+      goog.require('Blockly.JavaScript.texts');
+      goog.require('Blockly.Lua');
+      goog.require('Blockly.Lua.texts');
+      goog.require('Blockly.PHP');
+      goog.require('Blockly.PHP.texts');
+      goog.require('Blockly.Python');
+      goog.require('Blockly.Python.texts');
+      goog.require('Blockly.blocks.colour');
+      goog.require('Blockly.blocks.logic');
+      goog.require('Blockly.blocks.lists');
+      goog.require('Blockly.blocks.loops');
+      goog.require('Blockly.blocks.math');
+      goog.require('Blockly.blocks.procedures');
+      goog.require('Blockly.blocks.texts');
+      goog.require('Blockly.blocks.variables');
+      goog.require('Blockly.blocks.variablesDynamic');
+
+      // Run tests.
       goog.require('Blockly.test.astNode');
       goog.require('Blockly.test.blockChangeEvent');
       goog.require('Blockly.test.blockCreateEvent');

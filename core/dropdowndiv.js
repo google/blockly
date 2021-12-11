@@ -576,14 +576,13 @@ const getPositionTopOfPageMetrics = function(sourceX, boundsInfo, divSize) {
  */
 DropDownDiv.getPositionX = function(
     sourceX, boundsLeft, boundsRight, divWidth) {
-  let arrowX, divX;
-  arrowX = divX = sourceX;
-
+  let divX = sourceX;
   // Offset the topLeft coord so that the dropdowndiv is centered.
   divX -= divWidth / 2;
   // Fit the dropdowndiv within the bounds of the workspace.
   divX = math.clamp(boundsLeft, divX, boundsRight - divWidth);
 
+  let arrowX = sourceX;
   // Offset the arrow coord so that the arrow is centered.
   arrowX -= DropDownDiv.ARROW_SIZE / 2;
   // Convert the arrow position to be relative to the top left of the div.

@@ -20,27 +20,27 @@ suite('Cursor', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "input_value",
-          "name": "NAME"
+          "name": "NAME",
         },
         {
           "type": "input_statement",
-          "name": "NAME"
-        }
+          "name": "NAME",
+        },
       ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
+      "helpUrl": "",
     },
     {
       "type": "field_input",
@@ -49,14 +49,14 @@ suite('Cursor', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
-        }
+          "text": "default",
+        },
       ],
       "output": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
-    }
+      "helpUrl": "",
+    },
     ]);
     this.workspace = Blockly.inject('blocklyDiv', {});
     this.cursor = this.workspace.getCursor();
@@ -75,7 +75,7 @@ suite('Cursor', function() {
       B: blockB,
       C: blockC,
       D: blockD,
-      E: blockE
+      E: blockE,
     };
   });
   teardown(function() {

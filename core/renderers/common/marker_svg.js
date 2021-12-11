@@ -252,10 +252,10 @@ MarkerSvg.prototype.showWithBlockPrevOutput_ = function(curNode) {
   const markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
   if (block.previousConnection) {
-    let connectionShape = this.constants_.shapeFor(block.previousConnection);
+    const connectionShape = this.constants_.shapeFor(block.previousConnection);
     this.positionPrevious_(width, markerOffset, markerHeight, connectionShape);
   } else if (block.outputConnection) {
-    let connectionShape = this.constants_.shapeFor(block.outputConnection);
+    const connectionShape = this.constants_.shapeFor(block.outputConnection);
     this.positionOutput_(width, height, connectionShape);
   } else {
     this.positionBlock_(width, markerOffset, markerHeight);

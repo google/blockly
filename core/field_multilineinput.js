@@ -21,8 +21,8 @@ const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -90,7 +90,7 @@ FieldMultilineInput.prototype.configure_ = function(config) {
  * @nocollapse
  */
 FieldMultilineInput.fromJson = function(options) {
-  const text = utils.replaceMessageReferences(options['text']);
+  const text = parsing.replaceMessageReferences(options['text']);
   // `this` might be a subclass of FieldMultilineInput if that class doesn't
   // override the static fromJson method.
   return new this(text, undefined, options);
@@ -236,9 +236,9 @@ FieldMultilineInput.prototype.render_ = function() {
     const span = dom.createSvgElement(
         Svg.TEXT, {
           'class': 'blocklyText blocklyMultilineText',
-          x: this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-          y: y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-          dy: this.getConstants().FIELD_TEXT_BASELINE,
+          'x': this.getConstants().FIELD_BORDER_RECT_X_PADDING,
+          'y': y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
+          'dy': this.getConstants().FIELD_TEXT_BASELINE,
         },
         this.textGroup_);
     span.appendChild(document.createTextNode(lines[i]));

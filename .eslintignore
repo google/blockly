@@ -1,4 +1,5 @@
 *_compressed*.js
+blockly_uncompressed.js
 gulpfile.js
 /msg/*
 /build/*

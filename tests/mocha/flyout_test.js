@@ -20,14 +20,14 @@ suite('Flyout', function() {
         {
           "type": "field_input",
           "name": "TEXT",
-          "text": "default"
-        }
-      ]
+          "text": "default",
+        },
+      ],
     }]);
     this.toolboxXml = document.getElementById('toolbox-simple');
     this.workspace = Blockly.inject('blocklyDiv',
         {
-          toolbox: this.toolboxXml
+          toolbox: this.toolboxXml,
         });
   });
 
@@ -66,7 +66,7 @@ suite('Flyout', function() {
           const toolbox = document.getElementById('toolbox-categories');
           this.workspace = Blockly.inject('blocklyDiv',
               {
-                toolbox: toolbox
+                toolbox: toolbox,
               });
           this.flyout = this.workspace.getToolbox().getFlyout();
           this.targetMetricsManager = this.flyout.targetWorkspace.getMetricsManager();
@@ -308,7 +308,7 @@ suite('Flyout', function() {
           sinon.stub(
               this.flyout.workspace_.targetWorkspace,
               'getToolboxCategoryCallback')
-              .returns(function() { return val; });
+              .returns(function() {return val;});
           this.flyout.show('someString');
           checkFlyoutInfo(this.createFlyoutSpy);
         };
@@ -406,7 +406,7 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-            }
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -418,7 +418,7 @@ suite('Flyout', function() {
               'kind': 'block',
               'type': 'text_print',
               'enabled': true,
-            }
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -430,7 +430,7 @@ suite('Flyout', function() {
               'kind': 'block',
               'type': 'text_print',
               'enabled': false,
-            }
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(true);
@@ -441,8 +441,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': 'true'
-            }
+              'disabled': 'true',
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(true);
@@ -453,8 +453,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': 'false'
-            }
+              'disabled': 'false',
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -465,8 +465,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': 'disabled'  // This is not respected by the JSON!
-            }
+              'disabled': 'disabled',  // This is not respected by the JSON!
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -477,8 +477,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': true
-            }
+              'disabled': true,
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(true);
@@ -489,8 +489,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': false
-            }
+              'disabled': false,
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -501,8 +501,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': 'random'
-            }
+              'disabled': 'random',
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -513,8 +513,8 @@ suite('Flyout', function() {
             {
               'kind': 'block',
               'type': 'text_print',
-              'disabled': ''
-            }
+              'disabled': '',
+            },
           ];
           this.flyout.show(json);
           this.assertDisabled(false);
@@ -535,10 +535,10 @@ suite('Flyout', function() {
             'kind': 'BLOCK',
             'type': 'math_number',
             'fields': {
-              'NUM': 123
-            }
-          }
-        ]
+              'NUM': 123,
+            },
+          },
+        ],
       });
       this.flyout.show({
         'contents': [
@@ -546,27 +546,27 @@ suite('Flyout', function() {
             'kind': 'BLOCK',
             'type': 'math_number',
             'fields': {
-              'NUM': 321
-            }
-          }
-        ]
+              'NUM': 321,
+            },
+          },
+        ],
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
       chai.assert.equal(block.getFieldValue('NUM'), 321);
     });
 
     test('Recycling enabled', function() {
-      this.flyout.blockIsRecyclable_ = function() { return true; };
+      this.flyout.blockIsRecyclable_ = function() {return true;};
       this.flyout.show({
         'contents': [
           {
             'kind': 'BLOCK',
             'type': 'math_number',
             'fields': {
-              'NUM': 123
-            }
-          }
-        ]
+              'NUM': 123,
+            },
+          },
+        ],
       });
       this.flyout.show({
         'contents': [
@@ -574,10 +574,10 @@ suite('Flyout', function() {
             'kind': 'BLOCK',
             'type': 'math_number',
             'fields': {
-              'NUM': 321
-            }
-          }
-        ]
+              'NUM': 321,
+            },
+          },
+        ],
       });
       const block = this.flyout.workspace_.getAllBlocks()[0];
       chai.assert.equal(block.getFieldValue('NUM'), 123);

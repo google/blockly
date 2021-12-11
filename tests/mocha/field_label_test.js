@@ -105,7 +105,7 @@ suite('Label Fields', function() {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
-        FIELD_TEXT_BASELINE_Y: 13
+        FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
       chai.assert.isTrue(Blockly.utils.dom.hasClass(
@@ -115,7 +115,7 @@ suite('Label Fields', function() {
       labelField.fieldGroup_ = Blockly.utils.dom.createSvgElement(
           Blockly.utils.Svg.G, {}, null);
       labelField.constants_ = {
-        FIELD_TEXT_BASELINE_Y: 13
+        FIELD_TEXT_BASELINE_Y: 13,
       };
       labelField.initView();
       chai.assert.isFalse(Blockly.utils.dom.hasClass(
@@ -128,32 +128,32 @@ suite('Label Fields', function() {
     });
     test('JSON Definition', function() {
       const field = Blockly.FieldLabel.fromJson({
-        class: 'testClass'
+        class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Simple', function() {
       const field = new Blockly.FieldLabel('text', null, {
-        class: 'testClass'
+        class: 'testClass',
       });
       assertHasClass(field, 'testClass');
     });
     test('JS Configuration - Ignore', function() {
       const field = new Blockly.FieldLabel('text', 'paramClass', {
-        class: 'configClass'
+        class: 'configClass',
       });
       assertDoesNotHaveClass(field, 'paramClass');
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - \'\'', function() {
       const field = new Blockly.FieldLabel('text', '', {
-        class: 'configClass'
+        class: 'configClass',
       });
       assertHasClass(field, 'configClass');
     });
     test('JS Configuration - Ignore - Config \'\'', function() {
       const field = new Blockly.FieldLabel('text', 'paramClass', {
-        class: ''
+        class: '',
       });
       assertDoesNotHaveClass(field, 'paramClass');
     });
@@ -163,7 +163,7 @@ suite('Label Fields', function() {
         field.fieldGroup_ = Blockly.utils.dom.createSvgElement(
             Blockly.utils.Svg.G, {}, null);
         field.constants_ = {
-          FIELD_TEXT_BASELINE_Y: 13
+          FIELD_TEXT_BASELINE_Y: 13,
         };
         field.initView();
         field.setClass('testClass');
@@ -178,7 +178,7 @@ suite('Label Fields', function() {
       });
       test('Remove Class', function() {
         const field = new Blockly.FieldLabel('text', null, {
-          class: 'testClass'
+          class: 'testClass',
         });
         assertHasClass(field, 'testClass');
         field.setClass(null);

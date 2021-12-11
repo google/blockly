@@ -17,7 +17,7 @@ suite('Connection', function() {
     this.createConnection = function(type) {
       const block = {
         workspace: this.workspace,
-        isShadow: function() { return false; }
+        isShadow: function() {return false;},
       };
       const connection = new Blockly.Connection(block, type);
       return connection;
@@ -28,50 +28,7 @@ suite('Connection', function() {
     sharedTestTeardown.call(this);
   });
 
-  test('Deprecated - canConnectWithReason passes', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.NEXT_NAME);
-    chai.assert.equal(conn1.canConnectWithReason(conn2),
-        Blockly.Connection.CAN_CONNECT);
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.canConnectWithReason');
-  });
-
-  test('Deprecated - canConnectWithReason fails', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
-    chai.assert.equal(conn1.canConnectWithReason(conn2),
-        Blockly.Connection.REASON_WRONG_TYPE);
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.canConnectWithReason');
-  });
-
-  test('Deprecated - checkConnection passes', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.NEXT_NAME);
-    chai.assert.doesNotThrow(function() {
-      conn1.checkConnection(conn2);
-    });
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.checkConnection');
-  });
-
-  test('Deprecated - checkConnection fails', function() {
-    const deprecateWarnSpy = createDeprecationWarningStub();
-    const conn1 = this.createConnection(Blockly.PREVIOUS_NAME);
-    const conn2 = this.createConnection(Blockly.OUTPUT_VALUE);
-    chai.assert.throws(function() {
-      conn1.checkConnection(conn2);
-    });
-    assertSingleDeprecationWarningCall(deprecateWarnSpy,
-        'Connection.prototype.checkConnection');
-  });
-
   suite('Set Shadow', function() {
-
     function assertBlockMatches(block, isShadow, opt_id) {
       chai.assert.equal(block.isShadow(), isShadow,
           `expected block ${block.id} to ${isShadow ? '' : 'not'} be a shadow`);
@@ -126,7 +83,7 @@ suite('Connection', function() {
         createWorkspace: () => {
           return new Blockly.Workspace();
         },
-      }
+      },
     ];
 
     testSuites.forEach((testSuite) => {
@@ -188,9 +145,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -229,12 +186,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -266,9 +223,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -307,12 +264,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -343,8 +300,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id1',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -380,10 +337,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'id2',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -453,9 +410,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -497,12 +454,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -536,9 +493,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -581,12 +538,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -619,8 +576,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id1',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -659,10 +616,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'id2',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -722,9 +679,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': '2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -772,12 +729,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'b',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -812,9 +769,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': '2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -862,12 +819,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'b',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -901,8 +858,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': '2',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -946,10 +903,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'b',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -1327,7 +1284,7 @@ suite('Connection', function() {
                 "type": "stack_checks_block",
                 "message0": "",
                 "previousStatement": "check 1",
-                "nextStatement": "check 2"
+                "nextStatement": "check 2",
               }]);
               const block = this.workspace.newBlock('stack_checks_block');
               chai.assert.throws(() =>
@@ -1370,9 +1327,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -1392,10 +1349,10 @@ suite('Connection', function() {
                   'INPUT': {
                     'shadow': {
                       'type': 'row_block',
-                      'id': 'id2'
-                    }
-                  }
-                }
+                      'id': 'id2',
+                    },
+                  },
+                },
               });
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
@@ -1415,12 +1372,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -1450,9 +1407,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -1473,9 +1430,9 @@ suite('Connection', function() {
                     'shadow': {
                       'type': 'statement_block',
                       'id': 'id2',
-                    }
-                  }
-                }
+                    },
+                  },
+                },
               });
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
@@ -1495,12 +1452,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -1529,8 +1486,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id1',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -1549,8 +1506,8 @@ suite('Connection', function() {
                   'shadow': {
                     'type': 'stack_block',
                     'id': 'id2',
-                  }
-                }
+                  },
+                },
               });
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
@@ -1567,10 +1524,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'id2',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -1597,10 +1554,10 @@ suite('Connection', function() {
                       'INPUT': {
                         'block': {
                           'type': 'row_block',
-                          'id': 'idA'
-                        }
-                      }
-                    }
+                          'id': 'idA',
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -1614,10 +1571,10 @@ suite('Connection', function() {
                       'NAME': {
                         'block': {
                           'type': 'statement_block',
-                          'id': 'idA'
-                        }
-                      }
-                    }
+                          'id': 'idA',
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -1630,9 +1587,9 @@ suite('Connection', function() {
                     'next': {
                       'block': {
                         'type': 'stack_block',
-                        'id': 'idA'
-                      }
-                    }
+                        'id': 'idA',
+                      },
+                    },
                   },
                   workspace);
             }
@@ -1654,9 +1611,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -1678,9 +1635,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'INPUT', false);
@@ -1704,12 +1661,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -1741,9 +1698,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -1765,9 +1722,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'NAME', false);
@@ -1792,12 +1749,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'id2',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -1828,8 +1785,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id1',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -1850,8 +1807,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id2',
-                      }
-                    }
+                      },
+                    },
                   }
               );
               assertNextHasBlock(parent, false);
@@ -1872,10 +1829,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'id2',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -1926,9 +1883,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': '2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -1950,9 +1907,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'a',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'INPUT', true, '1');
@@ -1967,9 +1924,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'b',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'INPUT', true, '2');
@@ -1990,12 +1947,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'row_block',
                                 'id': 'b',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="row_block" id="id0">' +
@@ -2028,9 +1985,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': '2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -2052,9 +2009,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'a',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'NAME', true, '1');
@@ -2069,9 +2026,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'b',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   }
               );
               assertInputHasBlock(parent, 'NAME', true, '2');
@@ -2092,12 +2049,12 @@ suite('Connection', function() {
                               'shadow': {
                                 'type': 'statement_block',
                                 'id': 'b',
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="statement_block" id="id0">' +
@@ -2129,8 +2086,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': '2',
-                      }
-                    }
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -2151,8 +2108,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'a',
-                      }
-                    }
+                      },
+                    },
                   }
               );
               assertNextHasBlock(parent, true, '1');
@@ -2165,8 +2122,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'b',
-                      }
-                    }
+                      },
+                    },
                   }
               );
               assertNextHasBlock(parent, true, '2');
@@ -2184,10 +2141,10 @@ suite('Connection', function() {
                           'shadow': {
                             'type': 'stack_block',
                             'id': 'b',
-                          }
-                        }
-                      }
-                    }
+                          },
+                        },
+                      },
+                    },
                   },
                   '<block xmlns="https://developers.google.com/blockly/xml" ' +
                   'type="stack_block" id="id0">' +
@@ -2215,9 +2172,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'row_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2232,9 +2189,9 @@ suite('Connection', function() {
                         'shadow': {
                           'type': 'statement_block',
                           'id': 'id1',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2248,8 +2205,8 @@ suite('Connection', function() {
                       'shadow': {
                         'type': 'stack_block',
                         'id': 'id1',
-                      }
-                    }
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2319,9 +2276,9 @@ suite('Connection', function() {
                         'block': {
                           'type': 'row_block',
                           'id': 'id2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2340,9 +2297,9 @@ suite('Connection', function() {
                         'block': {
                           'type': 'statement_block',
                           'id': 'id2',
-                        }
-                      }
-                    }
+                        },
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2360,8 +2317,8 @@ suite('Connection', function() {
                       'block': {
                         'type': 'stack_block',
                         'id': 'id2',
-                      }
-                    }
+                      },
+                    },
                   },
                   workspace);
             }
@@ -2460,9 +2417,9 @@ suite('Connection', function() {
                   'INPUT': {
                     'shadow': {
                       'type': 'row_block',
-                    }
-                  }
-                }
+                    },
+                  },
+                },
               });
               assertInputHasBlock(parent, 'INPUT', true);
               assertInputHasBlock(
@@ -2501,9 +2458,9 @@ suite('Connection', function() {
                   'NAME': {
                     'shadow': {
                       'type': 'statement_block',
-                    }
-                  }
-                }
+                    },
+                  },
+                },
               });
               assertInputHasBlock(parent, 'NAME', true);
               assertInputHasBlock(
@@ -2538,9 +2495,9 @@ suite('Connection', function() {
                 'type': 'stack_block',
                 'next': {
                   'shadow': {
-                    'type': 'stack_block'
-                  }
-                }
+                    'type': 'stack_block',
+                  },
+                },
               });
               assertNextHasBlock(parent, true);
               assertNextHasBlock(parent.getNextBlock(), true);
@@ -2593,7 +2550,7 @@ suite('Connection', function() {
                 "type": "stack_checks_block",
                 "message0": "",
                 "previousStatement": "check 1",
-                "nextStatement": "check 2"
+                "nextStatement": "check 2",
               }]);
               const block = this.workspace.newBlock('stack_checks_block');
               chai.assert.throws(() =>
@@ -2617,23 +2574,23 @@ suite('Connection', function() {
             {
               "type": "field_input",
               "name": "FIELD",
-              "text": "default"
-            }
+              "text": "default",
+            },
           ],
           "previousStatement": 'check1',
-          "nextStatement": 'check1'
+          "nextStatement": 'check1',
         },
         {
           "type": "stack_block_1to2",
           "message0": "",
           "previousStatement": 'check1',
-          "nextStatement": 'check2'
+          "nextStatement": 'check2',
         },
         {
           "type": "stack_block_2to1",
           "message0": "",
           "previousStatement": 'check2',
-          "nextStatement": 'check1'
+          "nextStatement": 'check1',
         },
         {
           "type": "stack_block_noend",
@@ -2647,15 +2604,15 @@ suite('Connection', function() {
             {
               "type": "field_input",
               "name": "FIELD",
-              "text": "default"
+              "text": "default",
             },
             {
               "type": "input_value",
               "name": "INPUT",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
-          "output": 'check1'
+          "output": 'check1',
         },
         {
           "type": "row_block_1to2",
@@ -2664,10 +2621,10 @@ suite('Connection', function() {
             {
               "type": "input_value",
               "name": "INPUT",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
-          "output": 'check2'
+          "output": 'check2',
         },
         {
           "type": "row_block_2to1",
@@ -2676,15 +2633,15 @@ suite('Connection', function() {
             {
               "type": "input_value",
               "name": "INPUT",
-              "check": 'check2'
-            }
+              "check": 'check2',
+            },
           ],
-          "output": 'check1'
+          "output": 'check1',
         },
         {
           "type": "row_block_noend",
           "message0": "",
-          "output": 'check1'
+          "output": 'check1',
         },
         {
           "type": "row_block_multiple_inputs",
@@ -2693,15 +2650,15 @@ suite('Connection', function() {
             {
               "type": "input_value",
               "name": "INPUT",
-              "check": 'check1'
+              "check": 'check1',
             },
             {
               "type": "input_value",
               "name": "INPUT2",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
-          "output": 'check1'
+          "output": 'check1',
         },
         {
           'type': 'output_to_statements',
@@ -2710,13 +2667,13 @@ suite('Connection', function() {
             {
               'type': 'input_statement',
               'name': 'INPUT',
-              'check': 'check1'
+              'check': 'check1',
             },
             {
               'type': 'input_statement',
               'name': 'INPUT2',
-              'check': 'check1'
-            }
+              'check': 'check1',
+            },
           ],
           'output': 'check1',
         },
@@ -2727,16 +2684,16 @@ suite('Connection', function() {
             {
               "type": "field_input",
               "name": "FIELD",
-              "text": "default"
+              "text": "default",
             },
             {
               "type": "input_statement",
               "name": "NAME",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
           "previousStatement": 'check1',
-          "nextStatement": 'check1'
+          "nextStatement": 'check1',
         },
         {
           "type": "statement_block_1to2",
@@ -2745,11 +2702,11 @@ suite('Connection', function() {
             {
               "type": "input_statement",
               "name": "NAME",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
           "previousStatement": 'check1',
-          "nextStatement": 'check2'
+          "nextStatement": 'check2',
         },
         {
           "type": "statement_block_2to1",
@@ -2758,11 +2715,11 @@ suite('Connection', function() {
             {
               "type": "input_statement",
               "name": "NAME",
-              "check": 'check2'
-            }
+              "check": 'check2',
+            },
           ],
           "previousStatement": 'check2',
-          "nextStatement": 'check1'
+          "nextStatement": 'check1',
         },
         {
           "type": "statement_block_noend",
@@ -2771,8 +2728,8 @@ suite('Connection', function() {
             {
               "type": "input_statement",
               "name": "NAME",
-              "check": 'check1'
-            }
+              "check": 'check1',
+            },
           ],
           "previousStatement": 'check1',
         },

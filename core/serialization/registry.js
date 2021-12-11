@@ -16,8 +16,6 @@
  * @namespace Blockly.serialization.registry
  */
 goog.module('Blockly.serialization.registry');
-goog.module.declareLegacyNamespace();
-
 
 const registry = goog.require('Blockly.registry');
 // eslint-disable-next-line no-unused-vars

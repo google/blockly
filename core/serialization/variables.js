@@ -16,7 +16,6 @@
  * @namespace Blockly.serialization.variables
  */
 goog.module('Blockly.serialization.variables');
-goog.module.declareLegacyNamespace();
 
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -44,6 +43,7 @@ exports.State = State;
  * @alias Blockly.serialization.variables.VariableSerializer
  */
 class VariableSerializer {
+  /* eslint-disable-next-line require-jsdoc */
   constructor() {
     /**
      * The priority for deserializing variables.

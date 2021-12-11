@@ -16,7 +16,6 @@
  * @namespace Blockly.serialization.workspaces
  */
 goog.module('Blockly.serialization.workspaces');
-goog.module.declareLegacyNamespace();
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -60,10 +59,8 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
     return;
   }
 
-  const deserializers =
-      Object.entries(serializerMap).sort(([, {priority: priorityA}], [
-                                           , {priority: priorityB}
-                                         ]) => priorityB - priorityA);
+  const deserializers = Object.entries(serializerMap)
+                            .sort((a, b) => b[1].priority - a[1].priority);
 
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);

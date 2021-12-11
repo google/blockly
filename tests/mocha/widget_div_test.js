@@ -25,7 +25,7 @@ suite('WidgetDiv', function() {
         top: top,
         bottom: top + height,
         width: width,
-        height: height
+        height: height,
       };
     }
 
@@ -34,11 +34,11 @@ suite('WidgetDiv', function() {
       this.viewportBBox = makeBBox(0, 0, 1000, 1003);
       this.widgetSize = {
         width: 100,
-        height: 102
+        height: 102,
       };
       this.anchorSize = {
         width: 90,
-        height: 91
+        height: 91,
       };
 
       this.testWidgetPosition = function(

@@ -163,12 +163,10 @@ suite('Workspace comment', function() {
       chai.assert.equal(xy.x, 10, 'New X position');
       chai.assert.equal(xy.y, 100, 'New Y position');
     });
-
   });
 
   suite('Content', function() {
     setup(function() {
-
       this.comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
     });

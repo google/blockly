@@ -16,7 +16,7 @@
 goog.module('Blockly.BubbleDragger');
 
 const eventUtils = goog.require('Blockly.Events.utils');
-const utils = goog.require('Blockly.utils');
+const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
@@ -92,7 +92,7 @@ const BubbleDragger = function(bubble, workspace) {
    * @private
    */
   this.dragSurface_ =
-      utils.is3dSupported() && !!workspace.getBlockDragSurface() ?
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
       workspace.getBlockDragSurface() :
       null;
 };

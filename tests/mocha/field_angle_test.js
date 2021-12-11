@@ -156,14 +156,14 @@ suite('Angle Fields', function() {
     suite('Clockwise', function() {
       test('JS Configuration', function() {
         const field = new Blockly.FieldAngle(0, null, {
-          clockwise: true
+          clockwise: true,
         });
         chai.assert.isTrue(field.clockwise_);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          clockwise: true
+          clockwise: true,
         });
         chai.assert.isTrue(field.clockwise_);
       });
@@ -179,14 +179,14 @@ suite('Angle Fields', function() {
     suite('Offset', function() {
       test('JS Configuration', function() {
         const field = new Blockly.FieldAngle(0, null, {
-          offset: 90
+          offset: 90,
         });
         chai.assert.equal(field.offset_, 90);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          offset: 90
+          offset: 90,
         });
         chai.assert.equal(field.offset_, 90);
       });
@@ -205,7 +205,7 @@ suite('Angle Fields', function() {
         Blockly.FieldAngle.OFFSET = 90;
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          offset: null
+          offset: null,
         });
         chai.assert.equal(field.offset_, 90);
       });
@@ -213,14 +213,14 @@ suite('Angle Fields', function() {
     suite('Wrap', function() {
       test('JS Configuration', function() {
         const field = new Blockly.FieldAngle(0, null, {
-          wrap: 180
+          wrap: 180,
         });
         chai.assert.equal(field.wrap_, 180);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          wrap: 180
+          wrap: 180,
         });
         chai.assert.equal(field.wrap_, 180);
       });
@@ -239,7 +239,7 @@ suite('Angle Fields', function() {
         Blockly.FieldAngle.WRAP = 180;
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          wrap: null
+          wrap: null,
         });
         chai.assert.equal(field.wrap_, 180);
       });
@@ -247,14 +247,14 @@ suite('Angle Fields', function() {
     suite('Round', function() {
       test('JS Configuration', function() {
         const field = new Blockly.FieldAngle(0, null, {
-          round: 30
+          round: 30,
         });
         chai.assert.equal(field.round_, 30);
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          round: 30
+          round: 30,
         });
         chai.assert.equal(field.round_, 30);
       });
@@ -273,7 +273,7 @@ suite('Angle Fields', function() {
         Blockly.FieldAngle.ROUND = 30;
         const field = Blockly.FieldAngle.fromJson({
           value: 0,
-          round: null
+          round: null,
         });
         chai.assert.equal(field.round_, 30);
       });
@@ -282,7 +282,7 @@ suite('Angle Fields', function() {
       suite('Compass', function() {
         test('JS Configuration', function() {
           const field = new Blockly.FieldAngle(0, null, {
-            mode: 'compass'
+            mode: 'compass',
           });
           chai.assert.equal(field.offset_, 90);
           chai.assert.isTrue(field.clockwise_);
@@ -290,7 +290,7 @@ suite('Angle Fields', function() {
         test('JS Configuration', function() {
           const field = Blockly.FieldAngle.fromJson({
             value: 0,
-            mode: 'compass'
+            mode: 'compass',
           });
           chai.assert.equal(field.offset_, 90);
           chai.assert.isTrue(field.clockwise_);
@@ -299,7 +299,7 @@ suite('Angle Fields', function() {
       suite('Protractor', function() {
         test('JS Configuration', function() {
           const field = new Blockly.FieldAngle(0, null, {
-            mode: 'protractor'
+            mode: 'protractor',
           });
           chai.assert.equal(field.offset_, 0);
           chai.assert.isFalse(field.clockwise_);
@@ -307,7 +307,7 @@ suite('Angle Fields', function() {
         test('JS Configuration', function() {
           const field = Blockly.FieldAngle.fromJson({
             value: 0,
-            mode: 'protractor'
+            mode: 'protractor',
           });
           chai.assert.equal(field.offset_, 0);
           chai.assert.isFalse(field.clockwise_);

@@ -324,7 +324,8 @@ Mutator.prototype.setVisible = function(visible) {
     // The root block should not be draggable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
-    let margin, x;
+    let margin;
+    let x;
     if (flyout) {
       margin = flyout.CORNER_RADIUS * 2;
       x = this.rootBlock_.RTL ? flyout.getWidth() + margin : margin;

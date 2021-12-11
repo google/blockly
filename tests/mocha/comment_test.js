@@ -16,12 +16,12 @@ suite('Comments', function() {
       {
         "type": "empty_block",
         "message0": "",
-        "args0": []
+        "args0": [],
       },
     ]);
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
-      scrollbars: true
+      scrollbars: true,
     });
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'

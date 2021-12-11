@@ -147,10 +147,10 @@ suite('Checkbox Fields', function() {
           RTL: false,
           rendered: true,
           workspace: {
-            keyboardAccessibilityMode: false
+            keyboardAccessibilityMode: false,
           },
-          render: function() { field.render_(); },
-          bumpNeighbours: function() {}
+          render: function() {field.render_();},
+          bumpNeighbours: function() {},
         };
         field.constants_ = {
           FIELD_CHECKBOX_X_OFFSET: 2,
@@ -176,13 +176,13 @@ suite('Checkbox Fields', function() {
       });
       test('JS Constructor', function() {
         const field = new Blockly.FieldCheckbox(true, null, {
-          checkCharacter: '\u2661'
+          checkCharacter: '\u2661',
         });
         assertCharacter(field, '\u2661');
       });
       test('JSON Definition', function() {
         const field = Blockly.FieldCheckbox.fromJson({
-          checkCharacter: '\u2661'
+          checkCharacter: '\u2661',
         });
         assertCharacter(field, '\u2661');
       });
@@ -200,7 +200,7 @@ suite('Checkbox Fields', function() {
       });
       test('Remove Custom Character', function() {
         const field = new Blockly.FieldCheckbox(true, null, {
-          'checkCharacter': '\u2661'
+          'checkCharacter': '\u2661',
         });
         assertCharacter(field, '\u2661');
         field.setCheckCharacter(null);

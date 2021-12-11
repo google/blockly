@@ -21,7 +21,7 @@
  */
 goog.module('Blockly.Extensions');
 
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 goog.requireType('Blockly.Mutator');
@@ -71,9 +71,12 @@ const registerMixin = function(name, mixinObj) {
   if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
   }
-  register(name, function() {
-    this.mixin(mixinObj);
-  });
+  register(
+      name,
+      /** @this {Block} */
+      function() {
+        this.mixin(mixinObj);
+      });
 };
 exports.registerMixin = registerMixin;
 
@@ -102,21 +105,24 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
   }
 
   // Sanity checks passed.
-  register(name, function() {
-    if (hasMutatorDialog) {
-      const {Mutator} = goog.module.get('Blockly.Mutator');
-      if (!Mutator) {
-        throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
-      }
-      this.setMutator(new Mutator(opt_blockList || []));
-    }
-    // Mixin the object.
-    this.mixin(mixinObj);
+  register(
+      name,
+      /** @this {Block} */
+      function() {
+        if (hasMutatorDialog) {
+          const {Mutator} = goog.module.get('Blockly.Mutator');
+          if (!Mutator) {
+            throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
+          }
+          this.setMutator(new Mutator(opt_blockList || []));
+        }
+        // Mixin the object.
+        this.mixin(mixinObj);
 
-    if (opt_helperFn) {
-      opt_helperFn.apply(this);
-    }
-  });
+        if (opt_helperFn) {
+          opt_helperFn.apply(this);
+        }
+      });
 };
 exports.registerMutator = registerMutator;
 
@@ -345,6 +351,30 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
 };
 
 /**
+ * Calls a function after the page has loaded, possibly immediately.
+ * @param {function()} fn Function to run.
+ * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @package
+ */
+const runAfterPageLoad = function(fn) {
+  if (typeof document !== 'object') {
+    throw Error('runAfterPageLoad() requires browser document.');
+  }
+  if (document.readyState === 'complete') {
+    fn();  // Page has already loaded. Call immediately.
+  } else {
+    // Poll readyState.
+    const readyStateCheckInterval = setInterval(function() {
+      if (document.readyState === 'complete') {
+        clearInterval(readyStateCheckInterval);
+        fn();
+      }
+    }, 10);
+  }
+};
+exports.runAfterPageLoad = runAfterPageLoad;
+
+/**
  * Builds an extension function that will map a dropdown value to a tooltip
  * string.
  *
@@ -370,13 +400,13 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
 
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
-  // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
+  // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
   if (typeof document === 'object') {  // Relies on document.readyState
-    utils.runAfterPageLoad(function() {
-      for (let key in lookupTable) {
+    runAfterPageLoad(function() {
+      for (const key in lookupTable) {
         // Will print warnings if reference is missing.
-        utils.checkMessageReferences(lookupTable[key]);
+        parsing.checkMessageReferences(lookupTable[key]);
       }
     });
   }
@@ -405,7 +435,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
           console.warn(warning + '.');
         }
       } else {
-        tooltip = utils.replaceMessageReferences(tooltip);
+        tooltip = parsing.replaceMessageReferences(tooltip);
       }
       return tooltip;
     }.bind(this));
@@ -450,12 +480,12 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
 const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
-  // utils.runAfterPageLoad() does not run in a Node.js environment due to lack
+  // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
   if (typeof document === 'object') {  // Relies on document.readyState
-    utils.runAfterPageLoad(function() {
+    runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
-      utils.checkMessageReferences(msgTemplate);
+      parsing.checkMessageReferences(msgTemplate);
     });
   }
 
@@ -466,7 +496,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   const extensionFn = function() {
     this.setTooltip(function() {
       const field = this.getField(fieldName);
-      return utils.replaceMessageReferences(msgTemplate)
+      return parsing.replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
     }.bind(this));
   };

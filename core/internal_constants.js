@@ -197,36 +197,6 @@ OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
 exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
 
 /**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * variable blocks.
- * @const {string}
- * @alias Blockly.internalConstants.VARIABLE_CATEGORY_NAME
- */
-const VARIABLE_CATEGORY_NAME = 'VARIABLE';
-exports.VARIABLE_CATEGORY_NAME = VARIABLE_CATEGORY_NAME;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * variable blocks.
- * @const {string}
- * @alias Blockly.internalConstants.VARIABLE_DYNAMIC_CATEGORY_NAME
- */
-const VARIABLE_DYNAMIC_CATEGORY_NAME = 'VARIABLE_DYNAMIC';
-exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VARIABLE_DYNAMIC_CATEGORY_NAME;
-
-/**
- * String for use in the "custom" attribute of a category in toolbox XML.
- * This string indicates that the category should be dynamically populated with
- * procedure blocks.
- * @const {string}
- * @alias Blockly.internalConstants.PROCEDURE_CATEGORY_NAME
- */
-const PROCEDURE_CATEGORY_NAME = 'PROCEDURE';
-exports.PROCEDURE_CATEGORY_NAME = PROCEDURE_CATEGORY_NAME;
-
-/**
  * String for use in the dropdown created in field_variable.
  * This string indicates that this option in the dropdown is 'Rename
  * variable...' and if selected, should trigger the prompt to rename a variable.

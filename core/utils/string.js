@@ -292,3 +292,14 @@ const wrapToText = function(words, wordBreaks) {
   }
   return text.join('');
 };
+
+/**
+ * Is the given string a number (includes negative and decimals).
+ * @param {string} str Input string.
+ * @return {boolean} True if number, false otherwise.
+ * @alias Blockly.utils.string.isNumber
+ */
+const isNumber = function(str) {
+  return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
+};
+exports.isNumber = isNumber;

@@ -379,7 +379,7 @@ suite('Procedures', function() {
         getProcedureDef: function() {
           return [this.name, [], false];
         },
-        name: 'test'
+        name: 'test',
       };
 
       Blockly.Blocks['nested_proc'] = {
@@ -737,7 +737,7 @@ suite('Procedures', function() {
           this.barDef = this.workspaceSvg.getBlockById('bar-def');
           this.barCalls = [
             this.workspaceSvg.getBlockById('bar-c1'),
-            this.workspaceSvg.getBlockById('bar-c2')
+            this.workspaceSvg.getBlockById('bar-c2'),
           ];
         });
 
@@ -832,7 +832,7 @@ suite('Procedures', function() {
             function setStatementValue(mainWorkspace, defBlock, value) {
               const mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: mainWorkspace
+                    parentWorkspace: mainWorkspace,
                   }));
               defBlock.decompose(mutatorWorkspace);
               const containerBlock = mutatorWorkspace.getTopBlocks()[0];
@@ -874,7 +874,7 @@ suite('Procedures', function() {
             function createMutator(argArray) {
               this.mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: this.workspace
+                    parentWorkspace: this.workspace,
                   }));
               this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
               this.connection = this.containerBlock.getInput('STACK').connection;
@@ -959,7 +959,7 @@ suite('Procedures', function() {
               test('Has Statement Input', function() {
                 const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
                 const statementInput = mutatorWorkspace.getTopBlocks()[0]
@@ -970,7 +970,7 @@ suite('Procedures', function() {
                 this.defBlock.hasStatements_ = true;
                 const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
                 const statementValue = mutatorWorkspace.getTopBlocks()[0]
@@ -981,7 +981,7 @@ suite('Procedures', function() {
                 this.defBlock.hasStatements_ = false;
                 const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
                 const statementValue = mutatorWorkspace.getTopBlocks()[0]
@@ -992,7 +992,7 @@ suite('Procedures', function() {
               test('Has no Statement Input', function() {
                 const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
                 const statementInput = mutatorWorkspace.getTopBlocks()[0]
@@ -1006,7 +1006,7 @@ suite('Procedures', function() {
               this.defBlock.arguments_ = argumentsArray;
               const mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: this.workspace
+                    parentWorkspace: this.workspace,
                   }));
               this.defBlock.decompose(mutatorWorkspace);
               const argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');

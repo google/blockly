@@ -9,23 +9,24 @@
  */
 'use strict';
 
-goog.provide('Blockly.PHP.variables');
+goog.module('Blockly.PHP.variables');
 
-goog.require('Blockly.PHP');
+const PHP = goog.require('Blockly.PHP');
+const {NameType} = goog.require('Blockly.Names');
 
 
-Blockly.PHP['variables_get'] = function(block) {
-    // Variable getter.
-    const code = Blockly.PHP.nameDB_.getName(block.getFieldValue('VAR'),
-        Blockly.VARIABLE_CATEGORY_NAME);
-    return [code, Blockly.PHP.ORDER_ATOMIC];
+PHP['variables_get'] = function(block) {
+  // Variable getter.
+  const code =
+      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  return [code, PHP.ORDER_ATOMIC];
 };
 
-Blockly.PHP['variables_set'] = function(block) {
-    // Variable setter.
-    const argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-            Blockly.PHP.ORDER_ASSIGNMENT) || '0';
-    const varName = Blockly.PHP.nameDB_.getName(
-        block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
-    return varName + ' = ' + argument0 + ';\n';
+PHP['variables_set'] = function(block) {
+  // Variable setter.
+  const argument0 =
+      PHP.valueToCode(block, 'VALUE', PHP.ORDER_ASSIGNMENT) || '0';
+  const varName =
+      PHP.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+  return varName + ' = ' + argument0 + ';\n';
 };

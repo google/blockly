@@ -18,7 +18,7 @@ goog.module('Blockly.FieldImage');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
+const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
 const {Size} = goog.require('Blockly.utils.Size');
 const {Svg} = goog.require('Blockly.utils.Svg');
@@ -48,9 +48,9 @@ const FieldImage = function(
   if (!src) {
     throw Error('Src value of an image field is required');
   }
-  src = utils.replaceMessageReferences(src);
-  const imageHeight = Number(utils.replaceMessageReferences(height));
-  const imageWidth = Number(utils.replaceMessageReferences(width));
+  src = parsing.replaceMessageReferences(src);
+  const imageHeight = Number(parsing.replaceMessageReferences(height));
+  const imageWidth = Number(parsing.replaceMessageReferences(width));
   if (isNaN(imageHeight) || isNaN(imageWidth)) {
     throw Error(
         'Height and width values of an image field must cast to' +
@@ -81,7 +81,7 @@ const FieldImage = function(
 
   if (!opt_config) {  // If the config wasn't passed, do old configuration.
     this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = utils.replaceMessageReferences(opt_alt) || '';
+    this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
   }
 
   // Initialize other properties.
@@ -177,7 +177,7 @@ FieldImage.prototype.isDirty_ = false;
 FieldImage.prototype.configure_ = function(config) {
   FieldImage.superClass_.configure_.call(this, config);
   this.flipRtl_ = !!config['flipRtl'];
-  this.altText_ = utils.replaceMessageReferences(config['alt']) || '';
+  this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
 };
 
 /**

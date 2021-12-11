@@ -15,14 +15,14 @@
  */
 goog.module('Blockly.VariableMap');
 
-const Msg = goog.require('Blockly.Msg');
+const arrayUtils = goog.require('Blockly.utils.array');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
-const utils = goog.require('Blockly.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Msg} = goog.require('Blockly.Msg');
 const {Names} = goog.require('Blockly.Names');
 const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
@@ -156,7 +156,7 @@ VariableMap.prototype.renameVariableWithConflict_ = function(
   // Finally delete the original variable, which is now unreferenced.
   eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
   // And remove it from the list.
-  utils.arrayRemove(this.variableMap_[type], variable);
+  arrayUtils.removeElem(this.variableMap_[type], variable);
 };
 
 /* End functions for renaming variables. */
@@ -235,7 +235,7 @@ VariableMap.prototype.deleteVariableById = function(id) {
     for (let i = 0, block; (block = uses[i]); i++) {
       if (block.type === 'procedures_defnoreturn' ||
           block.type === 'procedures_defreturn') {
-        const procedureName = block.getFieldValue('NAME');
+        const procedureName = String(block.getFieldValue('NAME'));
         const deleteText = Msg['CANNOT_DELETE_VARIABLE_PROCEDURE']
                                .replace('%1', variableName)
                                .replace('%2', procedureName);
@@ -339,9 +339,9 @@ VariableMap.prototype.getVariableById = function(id) {
  */
 VariableMap.prototype.getVariablesOfType = function(type) {
   type = type || '';
-  const variable_list = this.variableMap_[type];
-  if (variable_list) {
-    return variable_list.slice();
+  const variableList = this.variableMap_[type];
+  if (variableList) {
+    return variableList.slice();
   }
   return [];
 };
@@ -379,11 +379,11 @@ VariableMap.prototype.getVariableTypes = function(ws) {
  * @return {!Array<!VariableModel>} List of variable models.
  */
 VariableMap.prototype.getAllVariables = function() {
-  let all_variables = [];
+  let allVariables = [];
   for (const key in this.variableMap_) {
-    all_variables = all_variables.concat(this.variableMap_[key]);
+    allVariables = allVariables.concat(this.variableMap_[key]);
   }
-  return all_variables;
+  return allVariables;
 };
 
 /**

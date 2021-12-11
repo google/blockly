@@ -6,68 +6,70 @@
 
 /**
  * @fileoverview Generating JavaScript for math blocks.
+ * @suppress {missingRequire}
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.math');
+goog.module('Blockly.JavaScript.math');
 
-goog.require('Blockly.JavaScript');
+const JavaScript = goog.require('Blockly.JavaScript');
+const {NameType} = goog.require('Blockly.Names');
 
 
-Blockly.JavaScript['math_number'] = function(block) {
+JavaScript['math_number'] = function(block) {
   // Numeric value.
   const code = Number(block.getFieldValue('NUM'));
-  const order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC :
-              Blockly.JavaScript.ORDER_UNARY_NEGATION;
+  const order = code >= 0 ? JavaScript.ORDER_ATOMIC :
+              JavaScript.ORDER_UNARY_NEGATION;
   return [code, order];
 };
 
-Blockly.JavaScript['math_arithmetic'] = function(block) {
+JavaScript['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    'ADD': [' + ', Blockly.JavaScript.ORDER_ADDITION],
-    'MINUS': [' - ', Blockly.JavaScript.ORDER_SUBTRACTION],
-    'MULTIPLY': [' * ', Blockly.JavaScript.ORDER_MULTIPLICATION],
-    'DIVIDE': [' / ', Blockly.JavaScript.ORDER_DIVISION],
-    'POWER': [null, Blockly.JavaScript.ORDER_NONE]  // Handle power separately.
+    'ADD': [' + ', JavaScript.ORDER_ADDITION],
+    'MINUS': [' - ', JavaScript.ORDER_SUBTRACTION],
+    'MULTIPLY': [' * ', JavaScript.ORDER_MULTIPLICATION],
+    'DIVIDE': [' / ', JavaScript.ORDER_DIVISION],
+    'POWER': [null, JavaScript.ORDER_NONE]  // Handle power separately.
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
   const order = tuple[1];
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'A', order) || '0';
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'B', order) || '0';
+  const argument0 = JavaScript.valueToCode(block, 'A', order) || '0';
+  const argument1 = JavaScript.valueToCode(block, 'B', order) || '0';
   let code;
   // Power in JavaScript requires a special case since it has no operator.
   if (!operator) {
     code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    return [code, JavaScript.ORDER_FUNCTION_CALL];
   }
   code = argument0 + operator + argument1;
   return [code, order];
 };
 
-Blockly.JavaScript['math_single'] = function(block) {
+JavaScript['math_single'] = function(block) {
   // Math operators with single operand.
   const operator = block.getFieldValue('OP');
   let code;
   let arg;
   if (operator === 'NEG') {
     // Negation is a special case given its different operator precedence.
-    arg = Blockly.JavaScript.valueToCode(block, 'NUM',
-        Blockly.JavaScript.ORDER_UNARY_NEGATION) || '0';
+    arg = JavaScript.valueToCode(block, 'NUM',
+        JavaScript.ORDER_UNARY_NEGATION) || '0';
     if (arg[0] === '-') {
       // --3 is not legal in JS.
       arg = ' ' + arg;
     }
     code = '-' + arg;
-    return [code, Blockly.JavaScript.ORDER_UNARY_NEGATION];
+    return [code, JavaScript.ORDER_UNARY_NEGATION];
   }
   if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = Blockly.JavaScript.valueToCode(block, 'NUM',
-        Blockly.JavaScript.ORDER_DIVISION) || '0';
+    arg = JavaScript.valueToCode(block, 'NUM',
+        JavaScript.ORDER_DIVISION) || '0';
   } else {
-    arg = Blockly.JavaScript.valueToCode(block, 'NUM',
-        Blockly.JavaScript.ORDER_NONE) || '0';
+    arg = JavaScript.valueToCode(block, 'NUM',
+        JavaScript.ORDER_NONE) || '0';
   }
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
@@ -107,7 +109,7 @@ Blockly.JavaScript['math_single'] = function(block) {
       break;
   }
   if (code) {
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    return [code, JavaScript.ORDER_FUNCTION_CALL];
   }
   // Second, handle cases which generate values that may need parentheses
   // wrapping the code.
@@ -127,52 +129,52 @@ Blockly.JavaScript['math_single'] = function(block) {
     default:
       throw Error('Unknown math operator: ' + operator);
   }
-  return [code, Blockly.JavaScript.ORDER_DIVISION];
+  return [code, JavaScript.ORDER_DIVISION];
 };
 
-Blockly.JavaScript['math_constant'] = function(block) {
+JavaScript['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    'PI': ['Math.PI', Blockly.JavaScript.ORDER_MEMBER],
-    'E': ['Math.E', Blockly.JavaScript.ORDER_MEMBER],
+    'PI': ['Math.PI', JavaScript.ORDER_MEMBER],
+    'E': ['Math.E', JavaScript.ORDER_MEMBER],
     'GOLDEN_RATIO':
-        ['(1 + Math.sqrt(5)) / 2', Blockly.JavaScript.ORDER_DIVISION],
-    'SQRT2': ['Math.SQRT2', Blockly.JavaScript.ORDER_MEMBER],
-    'SQRT1_2': ['Math.SQRT1_2', Blockly.JavaScript.ORDER_MEMBER],
-    'INFINITY': ['Infinity', Blockly.JavaScript.ORDER_ATOMIC]
+        ['(1 + Math.sqrt(5)) / 2', JavaScript.ORDER_DIVISION],
+    'SQRT2': ['Math.SQRT2', JavaScript.ORDER_MEMBER],
+    'SQRT1_2': ['Math.SQRT1_2', JavaScript.ORDER_MEMBER],
+    'INFINITY': ['Infinity', JavaScript.ORDER_ATOMIC]
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
-Blockly.JavaScript['math_number_property'] = function(block) {
+JavaScript['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 === 0', Blockly.JavaScript.ORDER_MODULUS,
-        Blockly.JavaScript.ORDER_EQUALITY],
-    'ODD': [' % 2 === 1', Blockly.JavaScript.ORDER_MODULUS,
-        Blockly.JavaScript.ORDER_EQUALITY],
-    'WHOLE': [' % 1 === 0', Blockly.JavaScript.ORDER_MODULUS,
-        Blockly.JavaScript.ORDER_EQUALITY],
-    'POSITIVE': [' > 0', Blockly.JavaScript.ORDER_RELATIONAL,
-        Blockly.JavaScript.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Blockly.JavaScript.ORDER_RELATIONAL,
-        Blockly.JavaScript.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Blockly.JavaScript.ORDER_MODULUS,
-        Blockly.JavaScript.ORDER_EQUALITY],
-    'PRIME': [null, Blockly.JavaScript.ORDER_NONE,
-        Blockly.JavaScript.ORDER_FUNCTION_CALL]
+    'EVEN': [' % 2 === 0', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'ODD': [' % 2 === 1', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'WHOLE': [' % 1 === 0', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'POSITIVE': [' > 0', JavaScript.ORDER_RELATIONAL,
+        JavaScript.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', JavaScript.ORDER_RELATIONAL,
+        JavaScript.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'PRIME': [null, JavaScript.ORDER_NONE,
+        JavaScript.ORDER_FUNCTION_CALL]
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
-  const numberToCheck = Blockly.JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
+  const numberToCheck = JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
       inputOrder) || '0';
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = Blockly.JavaScript.provideFunction_(
+    const functionName = JavaScript.provideFunction_(
         'mathIsPrime',
-        ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
+        ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
          '  if (n == 2 || n == 3) {',
          '    return true;',
@@ -193,8 +195,8 @@ Blockly.JavaScript['math_number_property'] = function(block) {
          '}']);
     code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
-    const divisor = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
-        Blockly.JavaScript.ORDER_MODULUS) || '0';
+    const divisor = JavaScript.valueToCode(block, 'DIVISOR',
+        JavaScript.ORDER_MODULUS) || '0';
     code = numberToCheck + ' % ' + divisor + ' === 0';
   } else {
     code = numberToCheck + suffix;
@@ -202,61 +204,61 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   return [code, outputOrder];
 };
 
-Blockly.JavaScript['math_change'] = function(block) {
+JavaScript['math_change'] = function(block) {
   // Add to a variable in place.
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'DELTA',
-      Blockly.JavaScript.ORDER_ADDITION) || '0';
-  const varName = Blockly.JavaScript.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
+  const argument0 = JavaScript.valueToCode(block, 'DELTA',
+      JavaScript.ORDER_ADDITION) || '0';
+  const varName = JavaScript.nameDB_.getName(
+      block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = (typeof ' + varName + ' === \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };
 
 // Rounding functions have a single operand.
-Blockly.JavaScript['math_round'] = Blockly.JavaScript['math_single'];
+JavaScript['math_round'] = JavaScript['math_single'];
 // Trigonometry functions have a single operand.
-Blockly.JavaScript['math_trig'] = Blockly.JavaScript['math_single'];
+JavaScript['math_trig'] = JavaScript['math_single'];
 
-Blockly.JavaScript['math_on_list'] = function(block) {
+JavaScript['math_on_list'] = function(block) {
   // Math functions for lists.
   const func = block.getFieldValue('OP');
   let list;
   let code;
   switch (func) {
     case 'SUM':
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_MEMBER) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_MEMBER) || '[]';
       code = list + '.reduce(function(x, y) {return x + y;})';
       break;
     case 'MIN':
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = 'Math.min.apply(null, ' + list + ')';
       break;
     case 'MAX':
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE': {
       // mathMean([null,null,1,3]) === 2.0.
-      const functionName = Blockly.JavaScript.provideFunction_(
+      const functionName = JavaScript.provideFunction_(
           'mathMean',
-          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  return myList.reduce(function(x, y) {return x + y;}) / ' +
                   'myList.length;',
             '}']);
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
       // mathMedian([null,null,1,3]) === 2.0.
-      const functionName = Blockly.JavaScript.provideFunction_(
+      const functionName = JavaScript.provideFunction_(
           'mathMedian',
-          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  var localList = myList.filter(function (x) ' +
               '{return typeof x === \'number\';});',
@@ -269,8 +271,8 @@ Blockly.JavaScript['math_on_list'] = function(block) {
             '    return localList[(localList.length - 1) / 2];',
             '  }',
             '}']);
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
@@ -278,9 +280,9 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = Blockly.JavaScript.provideFunction_(
+      const functionName = JavaScript.provideFunction_(
           'mathModes',
-          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(values) {',
             '  var modes = [];',
             '  var counts = [];',
@@ -309,15 +311,15 @@ Blockly.JavaScript['math_on_list'] = function(block) {
             '  }',
             '  return modes;',
             '}']);
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      const functionName = Blockly.JavaScript.provideFunction_(
+      const functionName = JavaScript.provideFunction_(
           'mathStandardDeviation',
-          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(numbers) {',
             '  var n = numbers.length;',
             '  if (!n) return null;',
@@ -329,62 +331,62 @@ Blockly.JavaScript['math_on_list'] = function(block) {
             '  variance = variance / n;',
             '  return Math.sqrt(variance);',
             '}']);
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      const functionName = Blockly.JavaScript.provideFunction_(
+      const functionName = JavaScript.provideFunction_(
           'mathRandomList',
-          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(list) {',
             '  var x = Math.floor(Math.random() * list.length);',
             '  return list[x];',
             '}']);
-      list = Blockly.JavaScript.valueToCode(block, 'LIST',
-          Blockly.JavaScript.ORDER_NONE) || '[]';
+      list = JavaScript.valueToCode(block, 'LIST',
+          JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     default:
       throw Error('Unknown operator: ' + func);
   }
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['math_modulo'] = function(block) {
+JavaScript['math_modulo'] = function(block) {
   // Remainder computation.
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'DIVIDEND',
-      Blockly.JavaScript.ORDER_MODULUS) || '0';
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
-      Blockly.JavaScript.ORDER_MODULUS) || '0';
+  const argument0 = JavaScript.valueToCode(block, 'DIVIDEND',
+      JavaScript.ORDER_MODULUS) || '0';
+  const argument1 = JavaScript.valueToCode(block, 'DIVISOR',
+      JavaScript.ORDER_MODULUS) || '0';
   const code = argument0 + ' % ' + argument1;
-  return [code, Blockly.JavaScript.ORDER_MODULUS];
+  return [code, JavaScript.ORDER_MODULUS];
 };
 
-Blockly.JavaScript['math_constrain'] = function(block) {
+JavaScript['math_constrain'] = function(block) {
   // Constrain a number between two limits.
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_NONE) || '0';
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'LOW',
-      Blockly.JavaScript.ORDER_NONE) || '0';
-  const argument2 = Blockly.JavaScript.valueToCode(block, 'HIGH',
-      Blockly.JavaScript.ORDER_NONE) || 'Infinity';
+  const argument0 = JavaScript.valueToCode(block, 'VALUE',
+      JavaScript.ORDER_NONE) || '0';
+  const argument1 = JavaScript.valueToCode(block, 'LOW',
+      JavaScript.ORDER_NONE) || '0';
+  const argument2 = JavaScript.valueToCode(block, 'HIGH',
+      JavaScript.ORDER_NONE) || 'Infinity';
   const code = 'Math.min(Math.max(' + argument0 + ', ' + argument1 + '), ' +
       argument2 + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['math_random_int'] = function(block) {
+JavaScript['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'FROM',
-      Blockly.JavaScript.ORDER_NONE) || '0';
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
-      Blockly.JavaScript.ORDER_NONE) || '0';
-  const functionName = Blockly.JavaScript.provideFunction_(
+  const argument0 = JavaScript.valueToCode(block, 'FROM',
+      JavaScript.ORDER_NONE) || '0';
+  const argument1 = JavaScript.valueToCode(block, 'TO',
+      JavaScript.ORDER_NONE) || '0';
+  const functionName = JavaScript.provideFunction_(
       'mathRandomInt',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(a, b) {',
        '  if (a > b) {',
        '    // Swap a and b to ensure a is smaller.',
@@ -395,20 +397,20 @@ Blockly.JavaScript['math_random_int'] = function(block) {
        '  return Math.floor(Math.random() * (b - a + 1) + a);',
        '}']);
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['math_random_float'] = function(block) {
+JavaScript['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
-  return ['Math.random()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return ['Math.random()', JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['math_atan2'] = function(block) {
+JavaScript['math_atan2'] = function(block) {
   // Arctangent of point (X, Y) in degrees from -180 to 180.
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'X',
-      Blockly.JavaScript.ORDER_NONE) || '0';
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'Y',
-      Blockly.JavaScript.ORDER_NONE) || '0';
+  const argument0 = JavaScript.valueToCode(block, 'X',
+      JavaScript.ORDER_NONE) || '0';
+  const argument1 = JavaScript.valueToCode(block, 'Y',
+      JavaScript.ORDER_NONE) || '0';
   return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
-      Blockly.JavaScript.ORDER_DIVISION];
+      JavaScript.ORDER_DIVISION];
 };

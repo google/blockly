@@ -110,7 +110,7 @@ exports.isTargetInput = isTargetInput;
 const getRelativeXY = function(element) {
   deprecation.warn(
       'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
-      'Blockly.svgMath.getRelativeXY');
+      'Blockly.utils.svgMath.getRelativeXY');
   return svgMath.getRelativeXY(element);
 };
 exports.getRelativeXY = getRelativeXY;
@@ -128,7 +128,7 @@ exports.getRelativeXY = getRelativeXY;
 const getInjectionDivXY = function(element) {
   deprecation.warn(
       'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
-      'Blockly.svgMath.getInjectionDivXY');
+      'Blockly.utils.svgMath.getInjectionDivXY');
   return svgMath.getInjectionDivXY(element);
 };
 exports.getInjectionDivXY_ = getInjectionDivXY;
@@ -261,7 +261,7 @@ exports.genUid = genUid;
 const is3dSupported = function() {
   deprecation.warn(
       'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
-      'Blockly.svgMath.is3dSupported');
+      'Blockly.utils.svgMath.is3dSupported');
   return svgMath.is3dSupported();
 };
 exports.is3dSupported = is3dSupported;
@@ -278,7 +278,7 @@ exports.is3dSupported = is3dSupported;
 const getViewportBBox = function() {
   deprecation.warn(
       'Blockly.utils.getViewportBBox', 'December 2021', 'December 2022',
-      'Blockly.svgMath.getViewportBBox');
+      'Blockly.utils.svgMath.getViewportBBox');
   return svgMath.getViewportBBox();
 };
 exports.getViewportBBox = getViewportBBox;
@@ -309,7 +309,7 @@ exports.arrayRemove = arrayRemove;
 const getDocumentScroll = function() {
   deprecation.warn(
       'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
-      'Blockly.svgMath.getDocumentScroll');
+      'Blockly.utils.svgMath.getDocumentScroll');
   return svgMath.getDocumentScroll();
 };
 exports.getDocumentScroll = getDocumentScroll;
@@ -344,7 +344,7 @@ exports.getBlockTypeCounts = getBlockTypeCounts;
 const screenToWsCoordinates = function(ws, screenCoordinates) {
   deprecation.warn(
       'Blockly.utils.screenToWsCoordinates', 'December 2021', 'December 2022',
-      'Blockly.svgMath.screenToWsCoordinates');
+      'Blockly.utils.svgMath.screenToWsCoordinates');
   return svgMath.screenToWsCoordinates(ws, screenCoordinates);
 };
 exports.screenToWsCoordinates = screenToWsCoordinates;

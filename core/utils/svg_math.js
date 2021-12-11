@@ -51,7 +51,7 @@ const XY_STYLE_REGEX =
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Coordinate} Object with .x and .y properties.
- * @alias Blockly.svgMath.getRelativeXY
+ * @alias Blockly.utils.svgMath.getRelativeXY
  */
 const getRelativeXY = function(element) {
   const xy = new Coordinate(0, 0);
@@ -96,7 +96,7 @@ exports.getRelativeXY = getRelativeXY;
  *     not a child of the div Blockly was injected into, the behaviour is
  *     undefined.
  * @return {!Coordinate} Object with .x and .y properties.
- * @alias Blockly.svgMath.getInjectionDivXY
+ * @alias Blockly.utils.svgMath.getInjectionDivXY
  */
 const getInjectionDivXY = function(element) {
   let x = 0;
@@ -119,7 +119,7 @@ exports.getInjectionDivXY = getInjectionDivXY;
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
  * @return {boolean} True if 3D transforms are supported.
- * @alias Blockly.svgMath.is3dSupported
+ * @alias Blockly.utils.svgMath.is3dSupported
  */
 const is3dSupported = function() {
   if (is3dSupported.cached_ !== undefined) {
@@ -172,7 +172,7 @@ exports.is3dSupported = is3dSupported;
  * scroll into account.
  * @return {!Rect} An object containing window width, height, and
  *     scroll position in window coordinates.
- * @alias Blockly.svgMath.getViewportBBox
+ * @alias Blockly.utils.svgMath.getViewportBBox
  * @package
  */
 const getViewportBBox = function() {
@@ -188,7 +188,7 @@ exports.getViewportBBox = getViewportBBox;
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
  * @return {!Coordinate} Object with values 'x' and 'y'.
- * @alias Blockly.svgMath.getDocumentScroll
+ * @alias Blockly.utils.svgMath.getDocumentScroll
  */
 const getDocumentScroll = function() {
   const el = document.documentElement;
@@ -210,7 +210,7 @@ exports.getDocumentScroll = getDocumentScroll;
  * @param {!Coordinate} screenCoordinates The screen coordinates to
  * be converted to workspace coordinates
  * @return {!Coordinate} The workspace coordinates.
- * @alias Blockly.svgMath.screenToWsCoordinates
+ * @alias Blockly.utils.svgMath.screenToWsCoordinates
  */
 const screenToWsCoordinates = function(ws, screenCoordinates) {
   const screenX = screenCoordinates.x;

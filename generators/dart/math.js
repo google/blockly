@@ -164,59 +164,64 @@ Dart['math_constant'] = function(block) {
 Dart['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const number_to_check =
-      Dart.valueToCode(block, 'NUMBER_TO_CHECK', Dart.ORDER_MULTIPLICATIVE);
-  if (!number_to_check) {
-    return ['false', Dart.ORDER_ATOMIC];
-  }
-  const dropdown_property = block.getFieldValue('PROPERTY');
+  const PROPERTIES = {
+    'EVEN': [' % 2 == 0', Dart.ORDER_MULTIPLICATIVE,
+        Dart.ORDER_EQUALITY],
+    'ODD': [' % 2 == 1', Dart.ORDER_MULTIPLICATIVE,
+        Dart.ORDER_EQUALITY],
+    'WHOLE': [' % 1 == 0', Dart.ORDER_MULTIPLICATIVE,
+        Dart.ORDER_EQUALITY],
+    'POSITIVE': [' > 0', Dart.ORDER_RELATIONAL,
+        Dart.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Dart.ORDER_RELATIONAL,
+        Dart.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, Dart.ORDER_MULTIPLICATIVE,
+        Dart.ORDER_EQUALITY],
+    'PRIME': [null, Dart.ORDER_NONE,
+        Dart.ORDER_UNARY_POSTFIX]
+  };
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+  const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
+  const numberToCheck = Dart.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
-  if (dropdown_property === 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    Dart.definitions_['import_dart_math'] = 'import \'dart:math\' as Math;';
-    const functionName = Dart.provideFunction_('math_isPrime', [
-      'bool ' + Dart.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
-      '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-      '  if (n == 2 || n == 3) {', '    return true;', '  }',
-      '  // False if n is null, negative, is 1, or not whole.',
-      '  // And false if n is divisible by 2 or 3.',
-      '  if (n == null || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
-          ' n % 3 == 0) {',
-      '    return false;', '  }',
-      '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-      '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-      '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {', '      return false;',
-      '    }', '  }', '  return true;', '}'
-    ]);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, Dart.ORDER_UNARY_POSTFIX];
+    Dart.definitions_['import_dart_math'] =
+        'import \'dart:math\' as Math;';
+    const functionName = Dart.provideFunction_(
+        'math_isPrime',
+        ['bool ' + Dart.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
+         '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+         '  if (n == 2 || n == 3) {',
+         '    return true;',
+         '  }',
+         '  // False if n is null, negative, is 1, or not whole.',
+         '  // And false if n is divisible by 2 or 3.',
+         '  if (n == null || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
+            ' n % 3 == 0) {',
+         '    return false;',
+         '  }',
+         '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+         '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
+         '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+         '      return false;',
+         '    }',
+         '  }',
+         '  return true;',
+         '}']);
+    code = functionName + '(' + numberToCheck + ')';
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
+    const divisor = Dart.valueToCode(block, 'DIVISOR',
+        Dart.ORDER_MULTIPLICATIVE) || '0';
+    if (divisor === '0') {
+      return ['false', Dart.ORDER_ATOMIC];
+    }
+    code = numberToCheck + ' % ' + divisor + ' == 0';
+  } else {
+    code = numberToCheck + suffix;
   }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 == 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 == 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 == 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY':
-      const divisor =
-          Dart.valueToCode(block, 'DIVISOR', Dart.ORDER_MULTIPLICATIVE);
-      if (!divisor) {
-        return ['false', Dart.ORDER_ATOMIC];
-      }
-      code = number_to_check + ' % ' + divisor + ' == 0';
-      break;
-  }
-  return [code, Dart.ORDER_EQUALITY];
+  return [code, outputOrder];
 };
 
 Dart['math_change'] = function(block) {

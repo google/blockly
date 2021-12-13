@@ -198,6 +198,7 @@
 	"MATH_RANDOM_FLOAT_HELPURL": "https://he.wikipedia.org/wiki/מחולל_מספרים_אקראיים",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "שבר אקראי",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "מחזיר שבר אקראי בין 0.0 (כולל) עד 1.0 (כולל).",
+	"MATH_ATAN2_TITLE": "atan2 של X:%1 Y:%2",
 	"MATH_ATAN2_TOOLTIP": "מחזיר את הארכטנגנס של נקודה (X, Y) במעלות מ־‎-180 עד 180.",
 	"TEXT_TEXT_HELPURL": "https://he.wikipedia.org/wiki/מחרוזת_(מדעי_המחשב)",
 	"TEXT_TEXT_TOOLTIP": "אות, מילה, או שורת טקסט.",

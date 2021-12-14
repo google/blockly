@@ -6,21 +6,76 @@
 
 /**
  * @fileoverview Utility methods for colour manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
  */
 'use strict';
 
 /**
  * Utility methods for colour manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.colour
  */
 goog.module('Blockly.utils.colour');
 
-const internalConstants = goog.require('Blockly.internalConstants');
+/**
+ * The richness of block colours, regardless of the hue.
+ * Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * @alias Blockly.utils.colour.hsvSaturation
+ * @package
+ */
+let hsvSaturation = 0.45;
 
+/**
+ * Get the richness of block colours, regardless of the hue.
+ * @alias Blockly.utils.colour.getHsvSaturation
+ * @return {number} The current richness.
+ * @package
+ */
+const getHsvSaturation = function() {
+  return hsvSaturation;
+};
+exports.getHsvSaturation = getHsvSaturation;
+
+/**
+ * Set the richness of block colours, regardless of the hue.
+ * @param {number} newSaturation The new richness, in the range of  0
+ *     (inclusive) to 1 (exclusive)
+ * @alias Blockly.utils.colour.setHsvSaturation
+ * @package
+ */
+const setHsvSaturation = function(newSaturation) {
+  hsvSaturation = newSaturation;
+};
+exports.setHsvSaturation = setHsvSaturation;
+
+/**
+ * The intensity of block colours, regardless of the hue.
+ * Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * @alias Blockly.utils.colour.hsvValue
+ * @package
+ */
+let hsvValue = 0.65;
+
+/**
+ * Get the intensity of block colours, regardless of the hue.
+ * @alias Blockly.utils.colour.getHsvValue
+ * @return {number} The current intensity.
+ * @package
+ */
+const getHsvValue = function() {
+  return hsvValue;
+};
+exports.getHsvValue = getHsvValue;
+
+/**
+ * Set the intensity of block colours, regardless of the hue.
+ * @param {number} newValue The new intensity, in the range of  0
+ *     (inclusive) to 1 (exclusive)
+ * @alias Blockly.utils.colour.setHsvValue
+ * @package
+ */
+const setHsvValue = function(newValue) {
+  hsvValue = newValue;
+};
+exports.setHsvValue = setHsvValue;
 
 /**
  * Parses a colour from a string.
@@ -228,7 +283,6 @@ exports.names = names;
  * @alias Blockly.utils.colour.hueToHex
  */
 const hueToHex = function(hue) {
-  return hsvToHex(
-      hue, internalConstants.HSV_SATURATION, internalConstants.HSV_VALUE * 255);
+  return hsvToHex(hue, hsvSaturation, hsvValue * 255);
 };
 exports.hueToHex = hueToHex;

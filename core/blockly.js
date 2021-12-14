@@ -444,6 +444,36 @@ Object.defineProperties(exports, {
       common.setSelected(newSelection);
     },
   },
+  /**
+   * The richness of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_SATURATION
+   * @type {number}
+   * @suppress {checkTypes}
+   */
+  HSV_SATURATION: {
+    get: function() {
+      return utils.colour.getHsvSaturation();
+    },
+    set: function(newValue) {
+      utils.colour.setHsvSaturation(newValue);
+    },
+  },
+  /**
+   * The intensity of block colours, regardless of the hue.
+   * Must be in the range of 0 (inclusive) to 1 (exclusive).
+   * @name Blockly.HSV_VALUE
+   * @type {number}
+   * @suppress {checkTypes}
+   */
+  HSV_VALUE: {
+    get: function() {
+      return utils.colour.getHsvValue();
+    },
+    set: function(newValue) {
+      utils.colour.setHsvValue(newValue);
+    },
+  },
 });
 
 /**
@@ -639,8 +669,6 @@ exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
 exports.LONGPRESS = internalConstants.LONGPRESS;
 exports.SOUND_LIMIT = internalConstants.SOUND_LIMIT;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.HSV_SATURATION = internalConstants.HSV_SATURATION;
-exports.HSV_VALUE = internalConstants.HSV_VALUE;
 exports.SPRITE = internalConstants.SPRITE;
 exports.DRAG_NONE = internalConstants.DRAG_NONE;
 exports.DRAG_STICKY = internalConstants.DRAG_STICKY;

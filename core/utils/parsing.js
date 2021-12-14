@@ -15,7 +15,6 @@
 goog.module('Blockly.utils.parsing');
 
 const colourUtils = goog.require('Blockly.utils.colour');
-const internalConstants = goog.require('Blockly.internalConstants');
 const stringUtils = goog.require('Blockly.utils.string');
 const {Msg} = goog.require('Blockly.Msg');
 
@@ -243,8 +242,7 @@ const parseBlockColour = function(colour) {
     return {
       hue: hue,
       hex: colourUtils.hsvToHex(
-          hue, internalConstants.HSV_SATURATION,
-          internalConstants.HSV_VALUE * 255),
+          hue, colourUtils.getHsvSaturation(), colourUtils.getHsvValue() * 255),
     };
   } else {
     const hex = colourUtils.parse(dereferenced);

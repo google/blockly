@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "7.20211209.0",
+  "version": "7.20211209.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -66,7 +66,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@blockly/block-test": "^1.0.0",
-    "@blockly/dev-tools": "^2.6.1",
+    "@blockly/dev-tools": "^3.0.1",
     "@blockly/theme-modern": "^2.1.1",
     "@wdio/selenium-standalone-service": "^7.10.1",
     "babel-eslint": "^10.1.0",

@@ -38,23 +38,21 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  * @alias Blockly.WorkspaceDragSurfaceSvg
  */
 const WorkspaceDragSurfaceSvg = function(container) {
+  /**
+   * The SVG drag surface. Set once by WorkspaceDragSurfaceSvg.createDom.
+   * @type {SVGElement}
+   * @private
+   */
+  this.SVG_ = null;
+
+  /**
+   * Containing HTML element; parent of the workspace and the drag surface.
+   * @type {Element}
+   * @private
+   */
   this.container_ = container;
   this.createDom();
 };
-
-/**
- * The SVG drag surface. Set once by WorkspaceDragSurfaceSvg.createDom.
- * @type {SVGElement}
- * @private
- */
-WorkspaceDragSurfaceSvg.prototype.SVG_ = null;
-
-/**
- * Containing HTML element; parent of the workspace and the drag surface.
- * @type {Element}
- * @private
- */
-WorkspaceDragSurfaceSvg.prototype.container_ = null;
 
 /**
  * Create the drag surface and inject it into the container.

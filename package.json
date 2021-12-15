@@ -45,7 +45,6 @@
     "publish": "gulp publish",
     "publish:beta": "gulp publishBeta",
     "recompile": "gulp recompile",
-    "rebuild": "gulp rebuild",
     "release": "gulp gitCreateRC",
     "start": "http-server ./ -o /tests/playground.html -c-1",
     "test": "tests/run_all_tests.sh",

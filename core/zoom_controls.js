@@ -101,82 +101,82 @@ const ZoomControls = function(workspace) {
    * @private
    */
   this.zoomResetGroup_ = null;
+
+  /**
+   * Width of the zoom controls.
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.WIDTH_ = 32;
+
+  /**
+   * Height of each zoom control.
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.HEIGHT_ = 32;
+
+  /**
+   * Small spacing used between the zoom in and out control, in pixels.
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.SMALL_SPACING_ = 2;
+
+  /**
+   * Large spacing used between the zoom in and reset control, in pixels.
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.LARGE_SPACING_ = 11;
+
+  /**
+   * Distance between zoom controls and bottom or top edge of workspace.
+   * @type {number}
+   * @const
+   * @private
+   */
+  this.MARGIN_VERTICAL_ = 20;
+
+  /**
+   * Distance between zoom controls and right or left edge of workspace.
+   * @type {number}
+   * @private
+   */
+  this.MARGIN_HORIZONTAL_ = 20;
+
+  /**
+   * The SVG group containing the zoom controls.
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgGroup_ = null;
+
+  /**
+   * Left coordinate of the zoom controls.
+   * @type {number}
+   * @private
+   */
+  this.left_ = 0;
+
+  /**
+   * Top coordinate of the zoom controls.
+   * @type {number}
+   * @private
+   */
+  this.top_ = 0;
+
+  /**
+   * Whether this has been initialized.
+   * @type {boolean}
+   * @private
+   */
+  this.initialized_ = false;
 };
-
-/**
- * Width of the zoom controls.
- * @type {number}
- * @const
- * @private
- */
-ZoomControls.prototype.WIDTH_ = 32;
-
-/**
- * Height of each zoom control.
- * @type {number}
- * @const
- * @private
- */
-ZoomControls.prototype.HEIGHT_ = 32;
-
-/**
- * Small spacing used between the zoom in and out control, in pixels.
- * @type {number}
- * @const
- * @private
- */
-ZoomControls.prototype.SMALL_SPACING_ = 2;
-
-/**
- * Large spacing used between the zoom in and reset control, in pixels.
- * @type {number}
- * @const
- * @private
- */
-ZoomControls.prototype.LARGE_SPACING_ = 11;
-
-/**
- * Distance between zoom controls and bottom or top edge of workspace.
- * @type {number}
- * @const
- * @private
- */
-ZoomControls.prototype.MARGIN_VERTICAL_ = 20;
-
-/**
- * Distance between zoom controls and right or left edge of workspace.
- * @type {number}
- * @private
- */
-ZoomControls.prototype.MARGIN_HORIZONTAL_ = 20;
-
-/**
- * The SVG group containing the zoom controls.
- * @type {SVGElement}
- * @private
- */
-ZoomControls.prototype.svgGroup_ = null;
-
-/**
- * Left coordinate of the zoom controls.
- * @type {number}
- * @private
- */
-ZoomControls.prototype.left_ = 0;
-
-/**
- * Top coordinate of the zoom controls.
- * @type {number}
- * @private
- */
-ZoomControls.prototype.top_ = 0;
-
-/**
- * Whether this has been initialized.
- * @type {boolean}
- * @private
- */
-ZoomControls.prototype.initialized_ = false;
 
 /**
  * Create the zoom controls.

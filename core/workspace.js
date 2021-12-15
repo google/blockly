@@ -72,10 +72,37 @@ const Workspace = function(opt_options) {
   /** @type {toolbox.Position} */
   this.toolboxPosition = this.options.toolboxPosition;
 
+  /**
+   * Returns `true` if the workspace is visible and `false` if it's headless.
+   * @type {boolean}
+   */
+  this.rendered = false;
+
+  /**
+   * Returns `true` if the workspace is currently in the process of a bulk
+   * clear.
+   * @type {boolean}
+   * @package
+   */
+  this.isClearing = false;
+
+  /**
+   * Maximum number of undo events in stack. `0` turns off undo, `Infinity` sets
+   * it to unlimited.
+   * @type {number}
+   */
+  this.MAX_UNDO = 1024;
+
+  /**
+   * Set of databases for rapid lookup of connection locations.
+   * @type {Array<!ConnectionDB>}
+   */
+  this.connectionDBList = null;
+
   const connectionCheckerClass = registry.getClassFromOptions(
       registry.Type.CONNECTION_CHECKER, this.options, true);
   /**
-   * An object that encapsulates logic for safety, type, and dragging checks.
+   * An object that encapsulates logic for safety, type, and dragging checks.gi
    * @type {!IConnectionChecker}
    */
   this.connectionChecker = new connectionCheckerClass(this);
@@ -142,32 +169,6 @@ const Workspace = function(opt_options) {
    */
   this.potentialVariableMap_ = null;
 };
-
-/**
- * Returns `true` if the workspace is visible and `false` if it's headless.
- * @type {boolean}
- */
-Workspace.prototype.rendered = false;
-
-/**
- * Returns `true` if the workspace is currently in the process of a bulk clear.
- * @type {boolean}
- * @package
- */
-Workspace.prototype.isClearing = false;
-
-/**
- * Maximum number of undo events in stack. `0` turns off undo, `Infinity` sets
- * it to unlimited.
- * @type {number}
- */
-Workspace.prototype.MAX_UNDO = 1024;
-
-/**
- * Set of databases for rapid lookup of connection locations.
- * @type {Array<!ConnectionDB>}
- */
-Workspace.prototype.connectionDBList = null;
 
 /**
  * Dispose of this workspace.

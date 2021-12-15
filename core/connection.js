@@ -49,6 +49,47 @@ const Connection = function(source, type) {
   this.sourceBlock_ = source;
   /** @type {number} */
   this.type = type;
+
+  /**
+   * Connection this connection connects to.  Null if not connected.
+   * @type {Connection}
+   */
+  this.targetConnection = null;
+
+  /**
+   * Has this connection been disposed of?
+   * @type {boolean}
+   * @package
+   */
+  this.disposed = false;
+
+  /**
+   * List of compatible value types.  Null if all types are compatible.
+   * @type {Array}
+   * @private
+   */
+  this.check_ = null;
+
+  /**
+   * DOM representation of a shadow block, or null if none.
+   * @type {Element}
+   * @private
+   */
+  this.shadowDom_ = null;
+
+  /**
+   * Horizontal location of this connection.
+   * @type {number}
+   * @package
+   */
+  this.x = 0;
+
+  /**
+   * Vertical location of this connection.
+   * @type {number}
+   * @package
+   */
+  this.y = 0;
 };
 
 /**
@@ -63,47 +104,6 @@ Connection.REASON_DIFFERENT_WORKSPACES = 5;
 Connection.REASON_SHADOW_PARENT = 6;
 Connection.REASON_DRAG_CHECKS_FAILED = 7;
 Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
-
-/**
- * Connection this connection connects to.  Null if not connected.
- * @type {Connection}
- */
-Connection.prototype.targetConnection = null;
-
-/**
- * Has this connection been disposed of?
- * @type {boolean}
- * @package
- */
-Connection.prototype.disposed = false;
-
-/**
- * List of compatible value types.  Null if all types are compatible.
- * @type {Array}
- * @private
- */
-Connection.prototype.check_ = null;
-
-/**
- * DOM representation of a shadow block, or null if none.
- * @type {Element}
- * @private
- */
-Connection.prototype.shadowDom_ = null;
-
-/**
- * Horizontal location of this connection.
- * @type {number}
- * @package
- */
-Connection.prototype.x = 0;
-
-/**
- * Vertical location of this connection.
- * @type {number}
- * @package
- */
-Connection.prototype.y = 0;
 
 /**
  * Connect two connections together.  This is the connection on the superior
@@ -162,7 +162,6 @@ Connection.prototype.connect_ = function(childConnection) {
     }
   }
 };
-
 
 /**
  * Dispose of this connection and deal with connected blocks.

@@ -45,14 +45,14 @@ const WorkspaceAudio = function(parentWorkspace) {
    * @private
    */
   this.SOUNDS_ = Object.create(null);
-};
 
-/**
- * Time that the last sound was played.
- * @type {Date}
- * @private
- */
-WorkspaceAudio.prototype.lastSound_ = null;
+  /**
+   * Time that the last sound was played.
+   * @type {Date}
+   * @private
+   */
+  this.lastSound_ = null;
+};
 
 /**
  * Dispose of this audio manager.

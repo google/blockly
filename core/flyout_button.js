@@ -102,6 +102,18 @@ const FlyoutButton = function(workspace, targetWorkspace, json, isLabel) {
    * @type {!toolbox.ButtonOrLabelInfo}
    */
   this.info = json;
+
+  /**
+   * The width of the button's rect.
+   * @type {number}
+   */
+  this.width = 0;
+
+  /**
+   * The height of the button's rect.
+   * @type {number}
+   */
+  this.height = 0;
 };
 
 /**
@@ -113,18 +125,6 @@ FlyoutButton.MARGIN_X = 5;
  * The vertical margin around the text in the button.
  */
 FlyoutButton.MARGIN_Y = 2;
-
-/**
- * The width of the button's rect.
- * @type {number}
- */
-FlyoutButton.prototype.width = 0;
-
-/**
- * The height of the button's rect.
- * @type {number}
- */
-FlyoutButton.prototype.height = 0;
 
 /**
  * Create the button elements.

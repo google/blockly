@@ -622,15 +622,15 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  * @protected
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
-  if (theme.fontStyle && theme.fontStyle['family'] && theme.fontStyle['family'] !== undefined) {
+  if (theme.fontStyle && theme.fontStyle['family']) {
     this.FIELD_TEXT_FONTFAMILY = theme.fontStyle['family'];
   }
 
-  if (theme.fontStyle && theme.fontStyle['weight'] && theme.fontStyle['weight'] !== undefined) {
+  if (theme.fontStyle && theme.fontStyle['weight']) {
     this.FIELD_TEXT_FONTWEIGHT = theme.fontStyle['weight'];
   }
 
-  if (theme.fontStyle && theme.fontStyle['size'] && theme.fontStyle['size'] !== undefined) {
+  if (theme.fontStyle && theme.fontStyle['size']) {
     this.FIELD_TEXT_FONTSIZE = theme.fontStyle['size'];
   }
 

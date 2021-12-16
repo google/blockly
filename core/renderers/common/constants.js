@@ -622,18 +622,17 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  * @protected
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
-  this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] != undefined ?
-      theme.fontStyle['family'] :
-      this.FIELD_TEXT_FONTFAMILY;
-  this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
-      theme.fontStyle['weight'] :
-      this.FIELD_TEXT_FONTWEIGHT;
-  this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] != undefined ?
-      theme.fontStyle['size'] :
-      this.FIELD_TEXT_FONTSIZE;
+  if (theme.fontStyle && theme.fontStyle['family'] && theme.fontStyle['family'] !== undefined) {
+    this.FIELD_TEXT_FONTFAMILY = theme.fontStyle['family'];
+  }
+
+  if (theme.fontStyle && theme.fontStyle['weight'] && theme.fontStyle['weight'] !== undefined) {
+    this.FIELD_TEXT_FONTWEIGHT = theme.fontStyle['weight'];
+  }
+
+  if (theme.fontStyle && theme.fontStyle['size'] && theme.fontStyle['size'] !== undefined) {
+    this.FIELD_TEXT_FONTSIZE = theme.fontStyle['size'];
+  }
 
   const fontMetrics = dom.measureFontMetrics(
       'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,

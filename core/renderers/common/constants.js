@@ -623,15 +623,15 @@ ConstantProvider.prototype.setDynamicProperties_ = function(theme) {
  */
 ConstantProvider.prototype.setFontConstants_ = function(theme) {
   this.FIELD_TEXT_FONTFAMILY =
-      theme.fontStyle && theme.fontStyle['family'] !== undefined ?
+      theme.fontStyle && theme.fontStyle['family'] != undefined ?
       theme.fontStyle['family'] :
       this.FIELD_TEXT_FONTFAMILY;
   this.FIELD_TEXT_FONTWEIGHT =
-      theme.fontStyle && theme.fontStyle['weight'] !== undefined ?
+      theme.fontStyle && theme.fontStyle['weight'] != undefined ?
       theme.fontStyle['weight'] :
       this.FIELD_TEXT_FONTWEIGHT;
   this.FIELD_TEXT_FONTSIZE =
-      theme.fontStyle && theme.fontStyle['size'] !== undefined ?
+      theme.fontStyle && theme.fontStyle['size'] != undefined ?
       theme.fontStyle['size'] :
       this.FIELD_TEXT_FONTSIZE;
 

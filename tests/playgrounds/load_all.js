@@ -16,13 +16,14 @@
  * playground. This is necessary since the goog.module conversion. Please see
  * issue #5557 for more information.
  */
-
 (function() {
 
-const isIe = navigator.userAgent.indexOf('MSIE')!==-1 || navigator.appVersion.indexOf('Trident/') > -1;
+const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
+    navigator.appVersion.indexOf('Trident/') > -1;
 
 if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
-    location.hostname === '[::1]') && !isIe) {
+     location.hostname === '[::1]') &&
+    !isIe) {
   document.write(
       `<script src="../blockly_uncompressed.js" id="blockly-uncompressed-script"></script>`);
   document.write(`<script src="../msg/messages.js"></script>`);

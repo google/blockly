@@ -10,7 +10,7 @@
 - [ ] I branched from develop
 - [ ] My pull request is against develop
 - [ ] My code follows the [style guide](https://developers.google.com/blockly/guides/modify/web/style-guide)
-
+- [ ] I ran `npm run format`
 ## The details
 ### Resolves
 

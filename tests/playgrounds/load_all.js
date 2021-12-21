@@ -17,7 +17,6 @@
  * issue #5557 for more information.
  */
 (function() {
-
 const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
     navigator.appVersion.indexOf('Trident/') > -1;
 

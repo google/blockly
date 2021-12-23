@@ -28,8 +28,8 @@ function prepareDeployDir(done) {
   if (fs.existsSync(demoTmpDir)) {
     rimraf.sync(demoTmpDir);
   }
-  fs.mkdirSync(demoStaticTmpDir, { recursive: true });
-  done()
+  fs.mkdirSync(demoStaticTmpDir, {recursive: true});
+  done();
 }
 
 /**
@@ -47,8 +47,8 @@ function copyStaticSrc(done) {
  */
 function copyAppengineSrc() {
   const appengineSrc = [
-      path.join(demoStaticTmpDir, 'appengine/**/*'),
-      path.join(demoStaticTmpDir, 'appengine/.gcloudignore'),
+      `${demoStaticTmpDir}/appengine/**/*`,
+      `${demoStaticTmpDir}/appengine/.gcloudignore`,
   ];
   return gulp.src(appengineSrc).pipe(gulp.dest(demoTmpDir));
 }
@@ -67,15 +67,9 @@ function copyPlaygroundDeps() {
 
 /**
  * Deploys files from tmp directory to appengine to version based on the version
- * specified in package.json and then cleans the tmp directory.
+ * passed in and then cleans the tmp directory.
  */
-function deployAndClean(done) {
-  const minorVersion = packageJson.version.split('.')[1];
-  const patchVersion = packageJson.version.split('.')[2];
-  let demoVersion = minorVersion;
-  if (patchVersion != 0) {
-    demoVersion += '-' + patchVersion
-  }
+function deployToAndClean(demoVersion) {
   try {
     execSync(`gcloud app deploy --project blockly-demo --version ${demoVersion} --no-promote`, { stdio: 'inherit', cwd: demoTmpDir });
   } finally {
@@ -84,6 +78,50 @@ function deployAndClean(done) {
       rimraf.sync(demoTmpDir);
     }
   }
+}
+
+/**
+ * Constructs a demo version name based on the version specified in
+ * package.json.
+ */
+function getDemosVersion() {
+  const minorVersion = packageJson.version.split('.')[1];
+  const patchVersion = packageJson.version.split('.')[2];
+  let demoVersion = minorVersion;
+  if (patchVersion !== 0) {
+    demoVersion += '-' + patchVersion;
+  }
+  return demoVersion;
+}
+
+/**
+ * Deploys files from tmp directory to appengine to version based on the version
+ * specified in package.json and then cleans the tmp directory.
+ */
+function deployAndClean(done) {
+  const demoVersion = getDemosVersion();
+  deployToAndClean(demoVersion);
+  done();
+}
+
+/**
+ * Constructs a beta demo version name based on the current date.
+ */
+function getDemosBetaVersion() {
+  var date = new Date();
+  var mm = date.getMonth() + 1; // Month, 0-11
+  var dd = date.getDate(); // Day of the month, 1-31
+  var yyyy = date.getFullYear();
+  return `${yyyy}${mm < 10 ? '0' + mm : mm}${dd}-beta`;
+}
+
+/**
+ * Deploys files from tmp directory to appengine to a beta version based on the
+ * current date and then cleans the tmp directory.
+ */
+function deployBetaAndClean(done) {
+  const demoVersion = getDemosBetaVersion();
+  deployToAndClean(demoVersion);
   done();
 }
 
@@ -99,7 +137,13 @@ const prepareDemos = gulp.series(
  */
 const deployDemos = gulp.series(prepareDemos, deployAndClean);
 
+/**
+ * Deploys beta version of demos (version appended with -beta).
+ */
+const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);
+
 module.exports = {
   deployDemos: deployDemos,
+  deployDemosBeta: deployDemosBeta,
   prepareDemos: prepareDemos
 }

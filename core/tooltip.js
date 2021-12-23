@@ -6,23 +6,29 @@
 
 /**
  * @fileoverview Library to create tooltips for Blockly.
- * First, call Blockly.Tooltip.init() after onload.
+ * First, call init() after onload.
  * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
  * If the tooltip is a string, then that message will be displayed.
  * If the tooltip is an SVG element, then that object's tooltip will be used.
- * Third, call Blockly.Tooltip.bindMouseEvents(e) passing the SVG element.
- * @author fraser@google.com (Neil Fraser)
+ * Third, call bindMouseEvents(e) passing the SVG element.
  */
 'use strict';
 
 /**
- * @name Blockly.Tooltip
- * @namespace
+ * Library to create tooltips for Blockly.
+ * First, call init() after onload.
+ * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
+ * If the tooltip is a string, then that message will be displayed.
+ * If the tooltip is an SVG element, then that object's tooltip will be used.
+ * Third, call bindMouseEvents(e) passing the SVG element.
+ * @namespace Blockly.Tooltip
  */
-goog.provide('Blockly.Tooltip');
+goog.module('Blockly.Tooltip');
 
-goog.require('Blockly.browserEvents');
-goog.require('Blockly.utils.string');
+const blocklyString = goog.require('Blockly.utils.string');
+const browserEvents = goog.require('Blockly.browserEvents');
+const common = goog.require('Blockly.common');
+const deprecation = goog.require('Blockly.utils.deprecation');
 
 
 /**
@@ -31,115 +37,183 @@ goog.require('Blockly.utils.string');
  * returns either a string, or another arbitrarily nested function which
  * eventually unwinds to a string.
  * @typedef {string|{tooltip}|function(): (string|!Function)}
+ * @alias Blockly.Tooltip.TipInfo
  */
-Blockly.Tooltip.TipInfo;
+let TipInfo;
+exports.TipInfo = TipInfo;
 
 /**
  * Is a tooltip currently showing?
+ * @type {boolean}
  */
-Blockly.Tooltip.visible = false;
+let visible = false;
+
+/**
+ * Returns whether or not a tooltip is showing
+ * @returns {boolean} True if a tooltip is showing
+ * @alias Blockly.Tooltip.isVisible
+ */
+const isVisible = function() {
+  return visible;
+};
+exports.isVisible = isVisible;
+
+Object.defineProperties(exports, {
+  /**
+   * Is a tooltip currently showing?
+   * @name Blockly.Tooltip.visible
+   * @type {boolean}
+   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
+   *     2021)
+   * @suppress {checkTypes}
+   */
+  visible: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.isVisible()');
+      return isVisible();
+    },
+  },
+});
 
 /**
  * Is someone else blocking the tooltip from being shown?
  * @type {boolean}
- * @private
  */
-Blockly.Tooltip.blocked_ = false;
+let blocked = false;
 
 /**
  * Maximum width (in characters) of a tooltip.
+ * @alias Blockly.Tooltip.LIMIT
  */
-Blockly.Tooltip.LIMIT = 50;
+const LIMIT = 50;
+exports.LIMIT = LIMIT;
 
 /**
  * PID of suspended thread to clear tooltip on mouse out.
- * @private
  */
-Blockly.Tooltip.mouseOutPid_ = 0;
+let mouseOutPid = 0;
 
 /**
  * PID of suspended thread to show the tooltip.
- * @private
  */
-Blockly.Tooltip.showPid_ = 0;
+let showPid = 0;
 
 /**
  * Last observed X location of the mouse pointer (freezes when tooltip appears).
- * @private
  */
-Blockly.Tooltip.lastX_ = 0;
+let lastX = 0;
 
 /**
  * Last observed Y location of the mouse pointer (freezes when tooltip appears).
- * @private
  */
-Blockly.Tooltip.lastY_ = 0;
+let lastY = 0;
 
 /**
  * Current element being pointed at.
  * @type {Element}
- * @private
  */
-Blockly.Tooltip.element_ = null;
+let element = null;
 
 /**
  * Once a tooltip has opened for an element, that element is 'poisoned' and
  * cannot respawn a tooltip until the pointer moves over a different element.
  * @type {Element}
- * @private
  */
-Blockly.Tooltip.poisonedElement_ = null;
+let poisonedElement = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
+ * @alias Blockly.Tooltip.OFFSET_X
  */
-Blockly.Tooltip.OFFSET_X = 0;
+const OFFSET_X = 0;
+exports.OFFSET_X = OFFSET_X;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
+ * @alias Blockly.Tooltip.OFFSET_Y
  */
-Blockly.Tooltip.OFFSET_Y = 10;
+const OFFSET_Y = 10;
+exports.OFFSET_Y = OFFSET_Y;
 
 /**
  * Radius mouse can move before killing tooltip.
+ * @alias Blockly.Tooltip.RADIUS_OK
  */
-Blockly.Tooltip.RADIUS_OK = 10;
+const RADIUS_OK = 10;
+exports.RADIUS_OK = RADIUS_OK;
 
 /**
  * Delay before tooltip appears.
+ * @alias Blockly.Tooltip.HOVER_MS
  */
-Blockly.Tooltip.HOVER_MS = 750;
+const HOVER_MS = 750;
+exports.HOVER_MS = HOVER_MS;
 
 /**
  * Horizontal padding between tooltip and screen edge.
+ * @alias Blockly.Tooltip.MARGINS
  */
-Blockly.Tooltip.MARGINS = 5;
+const MARGINS = 5;
+exports.MARGINS = MARGINS;
 
 /**
- * The HTML container.  Set once by Blockly.Tooltip.createDom.
+ * The HTML container.  Set once by createDom.
  * @type {Element}
  */
-Blockly.Tooltip.DIV = null;
+let DIV = null;
+
+/**
+ * Returns the HTML tooltip container.
+ * @returns {Element} The HTML tooltip container.
+ * @alias Blockly.Tooltip.getDiv
+ */
+const getDiv = function() {
+  return DIV;
+};
+exports.getDiv = getDiv;
+
+Object.defineProperties(exports, {
+  /**
+   * The HTML container.  Set once by createDom.
+   * @name Blockly.Tooltip.DIV
+   * @type {Element}
+   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
+  DIV: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.getDiv()');
+      return getDiv();
+    },
+  },
+});
 
 /**
  * Returns the tooltip text for the given element.
  * @param {?Object} object The object to get the tooltip text of.
  * @return {string} The tooltip text of the element.
+ * @alias Blockly.Tooltip.getTooltipOfObject
  */
-Blockly.Tooltip.getTooltipOfObject = function(object) {
-  var obj = Blockly.Tooltip.getTargetObject_(object);
+const getTooltipOfObject = function(object) {
+  const obj = getTargetObject(object);
   if (obj) {
-    var tooltip = obj.tooltip;
-    while (typeof tooltip == 'function') {
+    let tooltip = obj.tooltip;
+    while (typeof tooltip === 'function') {
       tooltip = tooltip();
     }
-    if (typeof tooltip != 'string') {
+    if (typeof tooltip !== 'string') {
       throw Error('Tooltip function must return a string.');
     }
     return tooltip;
   }
   return '';
 };
+exports.getTooltipOfObject = getTooltipOfObject;
 
 /**
  * Returns the target object that the given object is targeting for its
@@ -147,12 +221,11 @@ Blockly.Tooltip.getTooltipOfObject = function(object) {
  * @param {?Object} obj The object are trying to find the target tooltip
  *     object of.
  * @return {?{tooltip}} The target tooltip object.
- * @private
  */
-Blockly.Tooltip.getTargetObject_ = function(obj) {
+const getTargetObject = function(obj) {
   while (obj && obj.tooltip) {
-    if ((typeof obj.tooltip == 'string') ||
-        (typeof obj.tooltip == 'function')) {
+    if ((typeof obj.tooltip === 'string') ||
+        (typeof obj.tooltip === 'function')) {
       return obj;
     }
     obj = obj.tooltip;
@@ -162,78 +235,81 @@ Blockly.Tooltip.getTargetObject_ = function(obj) {
 
 /**
  * Create the tooltip div and inject it onto the page.
+ * @alias Blockly.Tooltip.createDom
  */
-Blockly.Tooltip.createDom = function() {
-  if (Blockly.Tooltip.DIV) {
+const createDom = function() {
+  if (DIV) {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.Tooltip.DIV = document.createElement('div');
-  Blockly.Tooltip.DIV.className = 'blocklyTooltipDiv';
-  var container = Blockly.parentContainer || document.body;
-  container.appendChild(Blockly.Tooltip.DIV);
+  DIV = document.createElement('div');
+  DIV.className = 'blocklyTooltipDiv';
+  const container = common.getParentContainer() || document.body;
+  container.appendChild(DIV);
 };
+exports.createDom = createDom;
 
 /**
  * Binds the required mouse events onto an SVG element.
  * @param {!Element} element SVG element onto which tooltip is to be bound.
+ * @alias Blockly.Tooltip.bindMouseEvents
  */
-Blockly.Tooltip.bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ = Blockly.browserEvents.bind(
-      element, 'mouseover', null, Blockly.Tooltip.onMouseOver_);
-  element.mouseOutWrapper_ = Blockly.browserEvents.bind(
-      element, 'mouseout', null, Blockly.Tooltip.onMouseOut_);
+const bindMouseEvents = function(element) {
+  element.mouseOverWrapper_ =
+      browserEvents.bind(element, 'mouseover', null, onMouseOver);
+  element.mouseOutWrapper_ =
+      browserEvents.bind(element, 'mouseout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
   // context of a mouseover/mouseout.
-  element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+  element.addEventListener('mousemove', onMouseMove, false);
 };
+exports.bindMouseEvents = bindMouseEvents;
 
 /**
  * Unbinds tooltip mouse events from the SVG element.
  * @param {!Element} element SVG element onto which tooltip is bound.
+ * @alias Blockly.Tooltip.unbindMouseEvents
  */
-Blockly.Tooltip.unbindMouseEvents = function(element) {
+const unbindMouseEvents = function(element) {
   if (!element) {
     return;
   }
-  Blockly.browserEvents.unbind(element.mouseOverWrapper_);
-  Blockly.browserEvents.unbind(element.mouseOutWrapper_);
-  element.removeEventListener('mousemove', Blockly.Tooltip.onMouseMove_);
+  browserEvents.unbind(element.mouseOverWrapper_);
+  browserEvents.unbind(element.mouseOutWrapper_);
+  element.removeEventListener('mousemove', onMouseMove);
 };
+exports.unbindMouseEvents = unbindMouseEvents;
 
 /**
  * Hide the tooltip if the mouse is over a different object.
  * Initialize the tooltip to potentially appear for this object.
  * @param {!Event} e Mouse event.
- * @private
  */
-Blockly.Tooltip.onMouseOver_ = function(e) {
-  if (Blockly.Tooltip.blocked_) {
+const onMouseOver = function(e) {
+  if (blocked) {
     // Someone doesn't want us to show tooltips.
     return;
   }
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
-  var element = /** @type {Element} */ (Blockly.Tooltip.getTargetObject_(
-      e.currentTarget));
-  if (Blockly.Tooltip.element_ != element) {
-    Blockly.Tooltip.hide();
-    Blockly.Tooltip.poisonedElement_ = null;
-    Blockly.Tooltip.element_ = element;
+  const newElement = /** @type {Element} */ (getTargetObject(e.currentTarget));
+  if (element !== newElement) {
+    hide();
+    poisonedElement = null;
+    element = newElement;
   }
   // Forget about any immediately preceding mouseOut event.
-  clearTimeout(Blockly.Tooltip.mouseOutPid_);
+  clearTimeout(mouseOutPid);
 };
 
 /**
  * Hide the tooltip if the mouse leaves the object and enters the workspace.
  * @param {!Event} _e Mouse event.
- * @private
  */
-Blockly.Tooltip.onMouseOut_ = function(_e) {
-  if (Blockly.Tooltip.blocked_) {
+const onMouseOut = function(_e) {
+  if (blocked) {
     // Someone doesn't want us to show tooltips.
     return;
   }
@@ -241,149 +317,152 @@ Blockly.Tooltip.onMouseOut_ = function(_e) {
   // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
   // event and kill it if a mouseOver is received immediately.
   // This way the task only fully executes if mousing into the void.
-  Blockly.Tooltip.mouseOutPid_ = setTimeout(function() {
-    Blockly.Tooltip.element_ = null;
-    Blockly.Tooltip.poisonedElement_ = null;
-    Blockly.Tooltip.hide();
+  mouseOutPid = setTimeout(function() {
+    element = null;
+    poisonedElement = null;
+    hide();
   }, 1);
-  clearTimeout(Blockly.Tooltip.showPid_);
+  clearTimeout(showPid);
 };
 
 /**
  * When hovering over an element, schedule a tooltip to be shown.  If a tooltip
  * is already visible, hide it if the mouse strays out of a certain radius.
  * @param {!Event} e Mouse event.
- * @private
  */
-Blockly.Tooltip.onMouseMove_ = function(e) {
-  if (!Blockly.Tooltip.element_ || !Blockly.Tooltip.element_.tooltip) {
+const onMouseMove = function(e) {
+  if (!element || !element.tooltip) {
     // No tooltip here to show.
     return;
-  } else if (Blockly.Tooltip.blocked_) {
+  } else if (blocked) {
     // Someone doesn't want us to show tooltips.  We are probably handling a
     // user gesture, such as a click or drag.
     return;
   }
-  if (Blockly.Tooltip.visible) {
+  if (visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var dx = Blockly.Tooltip.lastX_ - e.pageX;
-    var dy = Blockly.Tooltip.lastY_ - e.pageY;
-    if (Math.sqrt(dx * dx + dy * dy) > Blockly.Tooltip.RADIUS_OK) {
-      Blockly.Tooltip.hide();
+    const dx = lastX - e.pageX;
+    const dy = lastY - e.pageY;
+    if (Math.sqrt(dx * dx + dy * dy) > RADIUS_OK) {
+      hide();
     }
-  } else if (Blockly.Tooltip.poisonedElement_ != Blockly.Tooltip.element_) {
+  } else if (poisonedElement !== element) {
     // The mouse moved, clear any previously scheduled tooltip.
-    clearTimeout(Blockly.Tooltip.showPid_);
+    clearTimeout(showPid);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
-    Blockly.Tooltip.lastX_ = e.pageX;
-    Blockly.Tooltip.lastY_ = e.pageY;
-    Blockly.Tooltip.showPid_ =
-        setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
+    lastX = e.pageX;
+    lastY = e.pageY;
+    showPid = setTimeout(show, HOVER_MS);
   }
 };
 
 /**
  * Dispose of the tooltip.
+ * @alias Blockly.Tooltip.dispose
  * @package
  */
-Blockly.Tooltip.dispose = function() {
-  Blockly.Tooltip.element_ = null;
-  Blockly.Tooltip.poisonedElement_ = null;
-  Blockly.Tooltip.hide();
+const dispose = function() {
+  element = null;
+  poisonedElement = null;
+  hide();
 };
+exports.dispose = dispose;
 
 /**
  * Hide the tooltip.
+ * @alias Blockly.Tooltip.hide
  */
-Blockly.Tooltip.hide = function() {
-  if (Blockly.Tooltip.visible) {
-    Blockly.Tooltip.visible = false;
-    if (Blockly.Tooltip.DIV) {
-      Blockly.Tooltip.DIV.style.display = 'none';
+const hide = function() {
+  if (visible) {
+    visible = false;
+    if (DIV) {
+      DIV.style.display = 'none';
     }
   }
-  if (Blockly.Tooltip.showPid_) {
-    clearTimeout(Blockly.Tooltip.showPid_);
+  if (showPid) {
+    clearTimeout(showPid);
   }
 };
+exports.hide = hide;
 
 /**
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
+ * @alias Blockly.Tooltip.block
  * @package
  */
-Blockly.Tooltip.block = function() {
-  Blockly.Tooltip.hide();
-  Blockly.Tooltip.blocked_ = true;
+const block = function() {
+  hide();
+  blocked = true;
 };
+exports.block = block;
 
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
+ * @alias Blockly.Tooltip.unblock
  * @package
  */
-Blockly.Tooltip.unblock = function() {
-  Blockly.Tooltip.blocked_ = false;
+const unblock = function() {
+  blocked = false;
 };
+exports.unblock = unblock;
 
 /**
  * Create the tooltip and show it.
- * @private
  */
-Blockly.Tooltip.show_ = function() {
-  if (Blockly.Tooltip.blocked_) {
+const show = function() {
+  if (blocked) {
     // Someone doesn't want us to show tooltips.
     return;
   }
-  Blockly.Tooltip.poisonedElement_ = Blockly.Tooltip.element_;
-  if (!Blockly.Tooltip.DIV) {
+  poisonedElement = element;
+  if (!DIV) {
     return;
   }
   // Erase all existing text.
-  Blockly.Tooltip.DIV.textContent = '';
-  var tip = Blockly.Tooltip.getTooltipOfObject(Blockly.Tooltip.element_);
-  tip = Blockly.utils.string.wrap(tip, Blockly.Tooltip.LIMIT);
+  DIV.textContent = '';
+  let tip = getTooltipOfObject(element);
+  tip = blocklyString.wrap(tip, LIMIT);
   // Create new text, line by line.
-  var lines = tip.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var div = document.createElement('div');
+  const lines = tip.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const div = document.createElement('div');
     div.appendChild(document.createTextNode(lines[i]));
-    Blockly.Tooltip.DIV.appendChild(div);
+    DIV.appendChild(div);
   }
-  var rtl = /** @type {{RTL: boolean}} */ (Blockly.Tooltip.element_).RTL;
-  var windowWidth = document.documentElement.clientWidth;
-  var windowHeight = document.documentElement.clientHeight;
+  const rtl = /** @type {{RTL: boolean}} */ (element).RTL;
+  const windowWidth = document.documentElement.clientWidth;
+  const windowHeight = document.documentElement.clientHeight;
   // Display the tooltip.
-  Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
-  Blockly.Tooltip.DIV.style.display = 'block';
-  Blockly.Tooltip.visible = true;
+  DIV.style.direction = rtl ? 'rtl' : 'ltr';
+  DIV.style.display = 'block';
+  visible = true;
   // Move the tooltip to just below the cursor.
-  var anchorX = Blockly.Tooltip.lastX_;
+  let anchorX = lastX;
   if (rtl) {
-    anchorX -= Blockly.Tooltip.OFFSET_X + Blockly.Tooltip.DIV.offsetWidth;
+    anchorX -= OFFSET_X + DIV.offsetWidth;
   } else {
-    anchorX += Blockly.Tooltip.OFFSET_X;
+    anchorX += OFFSET_X;
   }
-  var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
+  let anchorY = lastY + OFFSET_Y;
 
-  if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
-      windowHeight + window.scrollY) {
+  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
+    anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
   }
   if (rtl) {
     // Prevent falling off left edge in RTL mode.
-    anchorX = Math.max(Blockly.Tooltip.MARGINS - window.scrollX, anchorX);
+    anchorX = Math.max(MARGINS - window.scrollX, anchorX);
   } else {
-    if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
-        windowWidth + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
+    if (anchorX + DIV.offsetWidth >
+        windowWidth + window.scrollX - 2 * MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowWidth - Blockly.Tooltip.DIV.offsetWidth -
-          2 * Blockly.Tooltip.MARGINS;
+      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
     }
   }
-  Blockly.Tooltip.DIV.style.top = anchorY + 'px';
-  Blockly.Tooltip.DIV.style.left = anchorX + 'px';
+  DIV.style.top = anchorY + 'px';
+  DIV.style.left = anchorX + 'px';
 };

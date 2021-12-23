@@ -6,27 +6,27 @@
 
 /**
  * @fileoverview Generating JavaScript for variable blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.variables');
+goog.module('Blockly.JavaScript.variables');
 
-goog.require('Blockly.JavaScript');
+const JavaScript = goog.require('Blockly.JavaScript');
+const {NameType} = goog.require('Blockly.Names');
 
 
-Blockly.JavaScript['variables_get'] = function(block) {
+JavaScript['variables_get'] = function(block) {
   // Variable getter.
-  var code = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('VAR'),
-      Blockly.VARIABLE_CATEGORY_NAME);
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  const code = JavaScript.nameDB_.getName(block.getFieldValue('VAR'),
+      NameType.VARIABLE);
+  return [code, JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['variables_set'] = function(block) {
+JavaScript['variables_set'] = function(block) {
   // Variable setter.
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
-  var varName = Blockly.JavaScript.nameDB_.getName(
-      block.getFieldValue('VAR'), Blockly.VARIABLE_CATEGORY_NAME);
+  const argument0 = JavaScript.valueToCode(
+                        block, 'VALUE', JavaScript.ORDER_ASSIGNMENT) || '0';
+  const varName = JavaScript.nameDB_.getName(
+      block.getFieldValue('VAR'), NameType.VARIABLE);
   return varName + ' = ' + argument0 + ';\n';
 };

@@ -12,14 +12,13 @@ var execSync = require('child_process').execSync;
 var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
-var typings = require('./typings');
 
 var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
 var packageTasks = require('./package_tasks');
-var { getPackageJson } = require('./helper_tasks');
+var {getPackageJson} = require('./helper_tasks');
+var {RELEASE_DIR} = require('./config');
 
-const RELEASE_DIR = 'dist';
 
 // Gets the current major version.
 function getMajorVersion() {
@@ -80,20 +79,25 @@ function checkBranch(done) {
 }
 
 
-// Sanity check that the dist folder exists, and that certain files are in the dist folder.
-function checkDist(done) {
-  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'core', 'blocks', 'generators'];
-  // Check that dist exists.
+// Sanity check that the RELASE_DIR directory exists, and that certain
+// files are in it.
+function checkReleaseDir(done) {
+  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js',
+                       'core', 'blocks', 'generators'];
+  // Check that directory exists.
   if (fs.existsSync(RELEASE_DIR)) {
-    // Sanity check that certain files exist in dist.
+    // Sanity check that certain files exist in RELASE_DIR.
     sanityFiles.forEach((fileName) => {
       if (!fs.existsSync(`${RELEASE_DIR}/${fileName}`)) {
-        done(new Error(`Your dist folder does not contain:${fileName}`));
+        done(new Error(
+            `Your ${RELEASE_DIR} directory does not contain ${fileName}`));
+        return;
       }
     });
     done();
   } else {
-    done(new Error('The dist directory does not exist. Is packageTasks.package being run?'));
+    done(new Error(`The ${RELEASE_DIR} directory does not exist.  ` +
+        'Has packageTasks.package been run?'));
   }
 }
 
@@ -144,36 +148,48 @@ function updateBetaVersion(done) {
   done();
 }
 
+// Build Blockly and prepare to check in the resulting built files.
+const rebuildAll = gulp.series(
+  buildTasks.cleanBuildDir,
+  buildTasks.build,
+  buildTasks.checkinBuilt,
+  // TODO(5621): Re-enable once typings generation is fixed.
+  // typings.typings,
+  // typings.msgTypings,
+  // typings.checkinTypings,
+  );
+
 // Package and publish to npm.
 const publish = gulp.series(
+  rebuildAll,
   packageTasks.package,
   checkBranch,
-  checkDist,
+  checkReleaseDir,
   loginAndPublish
 );
 
 // Publish a beta version of Blockly.
 const publishBeta = gulp.series(
   updateBetaVersion,
-  buildTasks.build,
+  rebuildAll,
   packageTasks.package,
   checkBranch,
-  checkDist,
+  checkReleaseDir,
   loginAndPublishBeta
 );
 
-// Switch to a new branch, update the version number, and build Blockly.
-const recompile = gulp.series(
+// Switch to a new branch, update the version number, build Blockly
+// and check in the resulting built files.
+const recompileDevelop = gulp.series(
   gitTasks.syncDevelop(),
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
-  buildTasks.build,
-  typings.typings,
+  rebuildAll,
   gitTasks.pushRebuildBranch
   );
 
 module.exports = {
-  recompile: recompile,
+  recompile: recompileDevelop,
   publishBeta: publishBeta,
   publish: publish
 }

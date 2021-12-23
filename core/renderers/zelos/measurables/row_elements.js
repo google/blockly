@@ -7,33 +7,39 @@
 /**
  * @fileoverview Zelos specific objects representing elements in a row of a
  * rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
-goog.provide('Blockly.zelos.RightConnectionShape');
+/**
+ * Zelos specific objects representing elements in a row of a
+ * rendered block.
+ * @class
+ */
+goog.module('Blockly.zelos.RightConnectionShape');
 
-goog.require('Blockly.blockRendering.Measurable');
-goog.require('Blockly.blockRendering.Types');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
+const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
  * An object containing information about the space a right connection shape
  * takes up during rendering.
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
+ * @param {!ConstantProvider} constants The rendering
  *   constants provider.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.Measurable}
+ * @extends {Measurable}
+ * @alias Blockly.zelos.RightConnectionShape
  */
-Blockly.zelos.RightConnectionShape = function(constants) {
-  Blockly.zelos.RightConnectionShape.superClass_.constructor.call(this, constants);
-  this.type |= Blockly.blockRendering.Types.getType('RIGHT_CONNECTION');
+const RightConnectionShape = function(constants) {
+  RightConnectionShape.superClass_.constructor.call(this, constants);
+  this.type |= Types.getType('RIGHT_CONNECTION');
   // Size is dynamic
   this.height = 0;
   this.width = 0;
 };
-Blockly.utils.object.inherits(Blockly.zelos.RightConnectionShape,
-    Blockly.blockRendering.Measurable);
+object.inherits(RightConnectionShape, Measurable);
+
+exports.RightConnectionShape = RightConnectionShape;

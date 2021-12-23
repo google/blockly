@@ -4,8 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.require('Blockly.Blocks.procedures');
+goog.module('Blockly.test.procedures');
+
+goog.require('Blockly');
 goog.require('Blockly.Msg');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
+
 
 suite('Procedures', function() {
   setup(function() {
@@ -21,12 +26,12 @@ suite('Procedures', function() {
 
   suite('allProcedures', function() {
     test('Only Procedures', function() {
-      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      const noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
       noReturnBlock.setFieldValue('no return', 'NAME');
-      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      const returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
       returnBlock.setFieldValue('return', 'NAME');
 
-      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
       chai.assert.lengthOf(allProcedures, 2);
 
       chai.assert.lengthOf(allProcedures[0], 1);
@@ -36,15 +41,15 @@ suite('Procedures', function() {
       chai.assert.equal(allProcedures[1][0][0], 'return');
     });
     test('Multiple Blocks', function() {
-      var noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
+      const noReturnBlock = new Blockly.Block(this.workspace, 'procedures_defnoreturn');
       noReturnBlock.setFieldValue('no return', 'NAME');
-      var returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      const returnBlock = new Blockly.Block(this.workspace, 'procedures_defreturn');
       returnBlock.setFieldValue('return', 'NAME');
-      var returnBlock2 = new Blockly.Block(this.workspace, 'procedures_defreturn');
+      const returnBlock2 = new Blockly.Block(this.workspace, 'procedures_defreturn');
       returnBlock2.setFieldValue('return2', 'NAME');
-      var _ = new Blockly.Block(this.workspace, 'controls_if');
+      const _ = new Blockly.Block(this.workspace, 'controls_if');
 
-      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
       chai.assert.lengthOf(allProcedures, 2);
 
       chai.assert.lengthOf(allProcedures[0], 1);
@@ -55,8 +60,8 @@ suite('Procedures', function() {
       chai.assert.equal(allProcedures[1][1][0], 'return2');
     });
     test('No Procedures', function() {
-      var _ = new Blockly.Block(this.workspace, 'controls_if');
-      var allProcedures = Blockly.Procedures.allProcedures(this.workspace);
+      const _ = new Blockly.Block(this.workspace, 'controls_if');
+      const allProcedures = Blockly.Procedures.allProcedures(this.workspace);
       chai.assert.lengthOf(allProcedures, 2);
       chai.assert.lengthOf(allProcedures[0], 0, 'No procedures_defnoreturn blocks expected');
       chai.assert.lengthOf(allProcedures[1], 0, 'No procedures_defreturn blocks expected');
@@ -73,7 +78,7 @@ suite('Procedures', function() {
 
   suite('Enable/Disable', function() {
     setup(function() {
-      var toolbox = document.getElementById('toolbox-categories');
+      const toolbox = document.getElementById('toolbox-categories');
       this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
     });
     teardown(function() {
@@ -82,7 +87,7 @@ suite('Procedures', function() {
     });
     suite('Inherited disabled', function() {
       setup(function() {
-        var dom = Blockly.Xml.textToDom(
+        const dom = Blockly.Xml.textToDom(
             '<xml xmlns="https://developers.google.com/blockly/xml">' +
             '<block type="procedures_defreturn" id="bar-def">' +
             '<field name="NAME">bar</field>' +
@@ -134,7 +139,7 @@ suite('Procedures', function() {
       test('Nested caller', function() {
         this.barDef.setEnabled(false);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isFalse(this.barCalls[i].isEnabled(),
               'Callers are disabled when their definition is disabled ' +
               '(bar call ' + i + ')');
@@ -146,7 +151,7 @@ suite('Procedures', function() {
 
         this.fooDef.setEnabled(false);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isFalse(this.fooCalls[i].isEnabled(),
               'Callers are disabled when their definition is disabled ' +
               '(foo call ' + i + ')');
@@ -154,7 +159,7 @@ suite('Procedures', function() {
 
         this.barDef.setEnabled(true);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isTrue(this.barCalls[i].isEnabled(),
               'Callers are reenabled with their definition ' +
               '(bar call ' + i + ')');
@@ -177,7 +182,7 @@ suite('Procedures', function() {
 
         this.barDef.setEnabled(false);
 
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           chai.assert.isFalse(this.barCalls[i].isEnabled(),
               'Callers are disabled when their definition is disabled ' +
               '(bar call ' + i + ')');
@@ -229,7 +234,7 @@ suite('Procedures', function() {
     }
     suite('no name renamed to unnamed', function() {
       test('defnoreturn and defreturn', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_defnoreturn"/>
                 <block type="procedures_defreturn"/>
@@ -239,7 +244,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed'], ['unnamed2'], false);
       });
       test('defreturn and defnoreturn', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_defreturn"/>
                 <block type="procedures_defnoreturn"/>
@@ -249,7 +254,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed2'], ['unnamed'], false);
       });
       test('callnoreturn (no def in xml)', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callnoreturn"/>
               </xml>`);
@@ -258,7 +263,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed'], [], true);
       });
       test('callreturn (no def in xml)', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callreturn"/>
               </xml>`);
@@ -267,7 +272,7 @@ suite('Procedures', function() {
             this.workspace, [], ['unnamed'], true);
       });
       test('callnoreturn and callreturn (no def in xml)', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callnoreturn"/>
                 <block type="procedures_callreturn"/>
@@ -277,7 +282,7 @@ suite('Procedures', function() {
             this.workspace, ['unnamed'], ['unnamed2'], true);
       });
       test('callreturn and callnoreturn (no def in xml)', function() {
-        var xml = Blockly.Xml.textToDom(`
+        const xml = Blockly.Xml.textToDom(`
               <xml xmlns="https://developers.google.com/blockly/xml">
                 <block type="procedures_callreturn"/>
                 <block type="procedures_callnoreturn"/>
@@ -290,7 +295,7 @@ suite('Procedures', function() {
     suite('caller param mismatch', function() {
       test.skip('callreturn with missing args', function() {
         // TODO: How do we want it to behave in this situation?
-        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -298,7 +303,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="procedures_callreturn">' +
             '  <mutation name="do something"/>' +
             '</block>'
@@ -308,7 +313,7 @@ suite('Procedures', function() {
       });
       test.skip('callreturn with bad args', function() {
         // TODO: How do we want it to behave in this situation?
-        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -316,7 +321,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_callreturn">
               <mutation name="do something">
                 <arg name="y"></arg>
@@ -328,7 +333,7 @@ suite('Procedures', function() {
       });
       test.skip('callnoreturn with missing args', function() {
         // TODO: How do we want it to behave in this situation?
-        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -336,7 +341,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             '<block type="procedures_callnoreturn">' +
             '  <mutation name="do something"/>' +
             '</block>'
@@ -346,7 +351,7 @@ suite('Procedures', function() {
       });
       test.skip('callnoreturn with bad args', function() {
         // TODO: How do we want it to behave in this situation?
-        var defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>
               <mutation>
@@ -354,7 +359,7 @@ suite('Procedures', function() {
               </mutation>
             </block>
         `), this.workspace);
-        var callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
+        const callBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_callnoreturn">
               <mutation name="do something">
                 <arg name="y"></arg>
@@ -374,7 +379,7 @@ suite('Procedures', function() {
         getProcedureDef: function() {
           return [this.name, [], false];
         },
-        name: 'test'
+        name: 'test',
       };
 
       Blockly.Blocks['nested_proc'] = {
@@ -396,18 +401,18 @@ suite('Procedures', function() {
 
     test('Custom procedure block', function() {
       // Do not require procedures to be the built-in procedures.
-      var defBlock = new Blockly.Block(this.workspace, 'new_proc');
-      var def = Blockly.Procedures.getDefinition('test', this.workspace);
+      const defBlock = new Blockly.Block(this.workspace, 'new_proc');
+      const def = Blockly.Procedures.getDefinition('test', this.workspace);
       chai.assert.equal(def, defBlock);
     });
 
     test('Stacked procedures', function() {
-      var blockA = new Blockly.Block(this.workspace, 'nested_proc');
-      var blockB = new Blockly.Block(this.workspace, 'nested_proc');
+      const blockA = new Blockly.Block(this.workspace, 'nested_proc');
+      const blockB = new Blockly.Block(this.workspace, 'nested_proc');
       blockA.name = 'a';
       blockB.name = 'b';
       blockA.nextConnection.connect(blockB.previousConnection);
-      var def = Blockly.Procedures.getDefinition('b', this.workspace);
+      const def = Blockly.Procedures.getDefinition('b', this.workspace);
       chai.assert.equal(def, blockB);
     });
   });
@@ -474,7 +479,7 @@ suite('Procedures', function() {
               this.callBlock.getFieldValue('NAME'), 'proc name2');
         });
         test('Simple, Input', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
@@ -487,7 +492,7 @@ suite('Procedures', function() {
               this.callBlock.getFieldValue('NAME'), 'proc name2');
         });
         test('lower -> CAPS', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
@@ -502,7 +507,7 @@ suite('Procedures', function() {
         test('CAPS -> lower', function() {
           this.defBlock.setFieldValue('PROC NAME', 'NAME');
           this.callBlock.setFieldValue('PROC NAME', 'NAME');
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'PROC NAME';
           defInput.htmlInput_.untypedDefaultValue_ = 'PROC NAME';
@@ -515,7 +520,7 @@ suite('Procedures', function() {
               this.callBlock.getFieldValue('NAME'), 'proc name');
         });
         test('Whitespace', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
@@ -528,7 +533,7 @@ suite('Procedures', function() {
               this.callBlock.getFieldValue('NAME'), 'proc name');
         });
         test('Whitespace then Text', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
@@ -543,7 +548,7 @@ suite('Procedures', function() {
               this.callBlock.getFieldValue('NAME'), 'proc name 2');
         });
         test('Set Empty', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
@@ -558,14 +563,14 @@ suite('Procedures', function() {
               Blockly.Msg['UNNAMED_KEY']);
         });
         test('Set Empty, and Create New', function() {
-          var defInput = this.defBlock.getField('NAME');
+          const defInput = this.defBlock.getField('NAME');
           defInput.htmlInput_ = Object.create(null);
           defInput.htmlInput_.oldValue_ = 'proc name';
           defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
 
           defInput.htmlInput_.value = '';
           defInput.onHtmlInputChange_(null);
-          var newDefBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          const newDefBlock = new Blockly.Block(this.workspace, testSuite.defType);
           newDefBlock.setFieldValue('new name', 'NAME');
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'),
@@ -584,18 +589,18 @@ suite('Procedures', function() {
           this.callBlock.setFieldValue('proc name', 'NAME');
         });
         test('Simple', function() {
-          var callers =
+          const callers =
               Blockly.Procedures.getCallers('proc name', this.workspace);
           chai.assert.equal(callers.length, 1);
           chai.assert.equal(callers[0], this.callBlock);
         });
         test('Multiple Callers', function() {
-          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
+          const caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name', 'NAME');
-          var caller3 = new Blockly.Block(this.workspace, testSuite.callType);
+          const caller3 = new Blockly.Block(this.workspace, testSuite.callType);
           caller3.setFieldValue('proc name', 'NAME');
 
-          var callers =
+          const callers =
               Blockly.Procedures.getCallers('proc name', this.workspace);
           chai.assert.equal(callers.length, 3);
           chai.assert.equal(callers[0], this.callBlock);
@@ -603,12 +608,12 @@ suite('Procedures', function() {
           chai.assert.equal(callers[2], caller3);
         });
         test('Multiple Procedures', function() {
-          var def2 = new Blockly.Block(this.workspace, testSuite.defType);
+          const def2 = new Blockly.Block(this.workspace, testSuite.defType);
           def2.setFieldValue('proc name2', 'NAME');
-          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
+          const caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name2', 'NAME');
 
-          var callers =
+          const callers =
               Blockly.Procedures.getCallers('proc name', this.workspace);
           chai.assert.equal(callers.length, 1);
           chai.assert.equal(callers[0], this.callBlock);
@@ -623,20 +628,20 @@ suite('Procedures', function() {
         // caller should still be returned for a differently-cased procedure.
         test('Call Different Case', function() {
           this.callBlock.setFieldValue('PROC NAME', 'NAME');
-          var callers =
+          const callers =
               Blockly.Procedures.getCallers('proc name', this.workspace);
           chai.assert.equal(callers.length, 1);
           chai.assert.equal(callers[0], this.callBlock);
         });
         test('Multiple Workspaces', function() {
-          var workspace = new Blockly.Workspace();
+          const workspace = new Blockly.Workspace();
           try {
-            var def2 = new Blockly.Block(workspace, testSuite.defType);
+            const def2 = new Blockly.Block(workspace, testSuite.defType);
             def2.setFieldValue('proc name', 'NAME');
-            var caller2 = new Blockly.Block(workspace, testSuite.callType);
+            const caller2 = new Blockly.Block(workspace, testSuite.callType);
             caller2.setFieldValue('proc name', 'NAME');
 
-            var callers =
+            let callers =
                 Blockly.Procedures.getCallers('proc name', this.workspace);
             chai.assert.equal(callers.length, 1);
             chai.assert.equal(callers[0], this.callBlock);
@@ -658,29 +663,29 @@ suite('Procedures', function() {
           this.callBlock.setFieldValue('proc name', 'NAME');
         });
         test('Simple', function() {
-          var def =
+          const def =
               Blockly.Procedures.getDefinition('proc name', this.workspace);
           chai.assert.equal(def, this.defBlock);
         });
         test('Multiple Procedures', function() {
-          var def2 = new Blockly.Block(this.workspace, testSuite.defType);
+          const def2 = new Blockly.Block(this.workspace, testSuite.defType);
           def2.setFieldValue('proc name2', 'NAME');
-          var caller2 = new Blockly.Block(this.workspace, testSuite.callType);
+          const caller2 = new Blockly.Block(this.workspace, testSuite.callType);
           caller2.setFieldValue('proc name2', 'NAME');
 
-          var def =
+          const def =
               Blockly.Procedures.getDefinition('proc name', this.workspace);
           chai.assert.equal(def, this.defBlock);
         });
         test('Multiple Workspaces', function() {
-          var workspace = new Blockly.Workspace();
+          const workspace = new Blockly.Workspace();
           try {
-            var def2 = new Blockly.Block(workspace, testSuite.defType);
+            const def2 = new Blockly.Block(workspace, testSuite.defType);
             def2.setFieldValue('proc name', 'NAME');
-            var caller2 = new Blockly.Block(workspace, testSuite.callType);
+            const caller2 = new Blockly.Block(workspace, testSuite.callType);
             caller2.setFieldValue('proc name', 'NAME');
 
-            var def =
+            let def =
                 Blockly.Procedures.getDefinition('proc name', this.workspace);
             chai.assert.equal(def, this.defBlock);
 
@@ -694,7 +699,7 @@ suite('Procedures', function() {
 
       suite('Enable/Disable', function() {
         setup(function() {
-          var toolbox = document.getElementById('toolbox-categories');
+          const toolbox = document.getElementById('toolbox-categories');
           this.workspaceSvg = Blockly.inject('blocklyDiv', {toolbox: toolbox});
         });
         teardown(function() {
@@ -726,13 +731,13 @@ suite('Procedures', function() {
                 '</block>' +
                 '</xml>');
         setup(function() {
-          var dom = Blockly.Xml.textToDom(domText);
+          const dom = Blockly.Xml.textToDom(domText);
 
           Blockly.Xml.appendDomToWorkspace(dom, this.workspaceSvg);
           this.barDef = this.workspaceSvg.getBlockById('bar-def');
           this.barCalls = [
             this.workspaceSvg.getBlockById('bar-c1'),
-            this.workspaceSvg.getBlockById('bar-c2')
+            this.workspaceSvg.getBlockById('bar-c2'),
           ];
         });
 
@@ -742,15 +747,15 @@ suite('Procedures', function() {
           this.barDef.setEnabled(false);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isFalse(this.barCalls[i].isEnabled(),
                 'Callers are disabled when their definition is disabled (call ' +
                 i + ')');
           }
-          var firedEvents = this.workspaceSvg.undoStack_;
+          const firedEvents = this.workspaceSvg.undoStack_;
           chai.assert.equal(firedEvents.length, 3,
               'An event was fired for the definition and each caller');
-          for (var i = 0; i < 3; i++) {
+          for (let i = 0; i < 3; i++) {
             chai.assert.equal(firedEvents[i].group, 'g1',
                 'Disable events are in the same group (event ' + i + ')');
           }
@@ -760,14 +765,14 @@ suite('Procedures', function() {
           this.barDef.setEnabled(true);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isTrue(this.barCalls[i].isEnabled(),
                 'Callers are enabled when their definition is enabled (call ' +
                 i + ')');
           }
-          chai.assert.equal(firedEvents.length,3,
+          chai.assert.equal(firedEvents.length, 3,
               'An event was fired for the definition and each caller');
-          for (var i = 0; i < 3; i++) {
+          for (let i = 0; i < 3; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',
                 'Enable events are in the same group (event ' + i + ')');
           }
@@ -779,15 +784,15 @@ suite('Procedures', function() {
           this.barDef.setEnabled(false);
           Blockly.Events.setGroup(false);
 
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.isFalse(this.barCalls[i].isEnabled(),
                 'Callers are disabled when their definition is disabled (call ' +
                 i + ')');
           }
-          var firedEvents = this.workspaceSvg.undoStack_;
+          const firedEvents = this.workspaceSvg.undoStack_;
           chai.assert.equal(firedEvents.length, 2,
               'An event was fired for the definition and the enabled caller');
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.equal(firedEvents[i].group, 'g1',
                 'Disable events are in the same group (event ' + i + ')');
           }
@@ -801,9 +806,9 @@ suite('Procedures', function() {
               'Caller remains in disabled state when the definition is enabled');
           chai.assert.isTrue(this.barCalls[1].isEnabled(),
               'Caller returns to previous enabled state when the definition is enabled');
-          chai.assert.equal(firedEvents.length,2,
+          chai.assert.equal(firedEvents.length, 2,
               'An event was fired for the definition and the enabled caller');
-          for (var i = 0; i < 2; i++) {
+          for (let i = 0; i < 2; i++) {
             chai.assert.equal(firedEvents[i].group, 'g2',
                 'Enable events are in the same group (event ' + i + ')');
           }
@@ -825,13 +830,13 @@ suite('Procedures', function() {
         suite('Composition', function() {
           suite('Statements', function() {
             function setStatementValue(mainWorkspace, defBlock, value) {
-              var mutatorWorkspace = new Blockly.Workspace(
+              const mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: mainWorkspace
+                    parentWorkspace: mainWorkspace,
                   }));
               defBlock.decompose(mutatorWorkspace);
-              var containerBlock = mutatorWorkspace.getTopBlocks()[0];
-              var statementField = containerBlock.getField('STATEMENTS');
+              const containerBlock = mutatorWorkspace.getTopBlocks()[0];
+              const statementField = containerBlock.getField('STATEMENTS');
               statementField.setValue(value);
               defBlock.compose(containerBlock);
             }
@@ -845,21 +850,21 @@ suite('Procedures', function() {
                 chai.assert.isFalse(this.defBlock.hasStatements_);
               });
               test('Saving Statements', function() {
-                var blockXml = Blockly.Xml.textToDom(
+                const blockXml = Blockly.Xml.textToDom(
                     '<block type="procedures_defreturn">' +
                     '  <statement name="STACK">' +
                     '    <block type="procedures_ifreturn" id="test"></block>' +
                     '  </statement> ' +
                     '</block>'
                 );
-                var defBlock = Blockly.Xml.domToBlock(blockXml, this.workspace);
+                const defBlock = Blockly.Xml.domToBlock(blockXml, this.workspace);
                 setStatementValue(this.workspace, defBlock, false);
                 chai.assert.isNull(defBlock.getInput('STACK'));
                 setStatementValue(this.workspace, defBlock, true);
                 chai.assert.isNotNull(defBlock.getInput('STACK'));
-                var statementBlocks = defBlock.getChildren();
+                const statementBlocks = defBlock.getChildren();
                 chai.assert.equal(statementBlocks.length, 1);
-                var block = statementBlocks[0];
+                const block = statementBlocks[0];
                 chai.assert.equal(block.type, 'procedures_ifreturn');
                 chai.assert.equal(block.id, 'test');
               });
@@ -869,11 +874,11 @@ suite('Procedures', function() {
             function createMutator(argArray) {
               this.mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: this.workspace
+                    parentWorkspace: this.workspace,
                   }));
               this.containerBlock = this.defBlock.decompose(this.mutatorWorkspace);
               this.connection = this.containerBlock.getInput('STACK').connection;
-              for (var i = 0; i < argArray.length; i++) {
+              for (let i = 0; i < argArray.length; i++) {
                 this.argBlock = new Blockly.Block(
                     this.mutatorWorkspace, 'procedures_mutatorarg');
                 this.argBlock.setFieldValue(argArray[i], 'NAME');
@@ -884,21 +889,21 @@ suite('Procedures', function() {
             }
             function assertArgs(argArray) {
               chai.assert.equal(this.defBlock.arguments_.length, argArray.length);
-              for (var i = 0; i < argArray.length; i++) {
+              for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.defBlock.arguments_[i], argArray[i]);
               }
               chai.assert.equal(this.callBlock.arguments_.length, argArray.length);
-              for (var i = 0; i < argArray.length; i++) {
+              for (let i = 0; i < argArray.length; i++) {
                 chai.assert.equal(this.callBlock.arguments_[i], argArray[i]);
               }
             }
             test('Simple Add Arg', function() {
-              var args = ['arg1'];
+              const args = ['arg1'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
             });
             test('Multiple Args', function() {
-              var args = ['arg1', 'arg2', 'arg3'];
+              const args = ['arg1', 'arg2', 'arg3'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
             });
@@ -922,14 +927,14 @@ suite('Procedures', function() {
             });
             // Test case for #1958
             test('Set Arg Empty', function() {
-              var args = ['arg1'];
+              const args = ['arg1'];
               createMutator.call(this, args);
               this.argBlock.setFieldValue('', 'NAME');
               this.defBlock.compose(this.containerBlock);
               assertArgs.call(this, args);
             });
             test('Whitespace', function() {
-              var args = ['arg1'];
+              const args = ['arg1'];
               createMutator.call(this, args);
               this.argBlock.setFieldValue(' ', 'NAME');
               this.defBlock.compose(this.containerBlock);
@@ -942,7 +947,7 @@ suite('Procedures', function() {
               assertArgs.call(this, ['text']);
             });
             test('<>', function() {
-              var args = ['<>'];
+              const args = ['<>'];
               createMutator.call(this, args);
               assertArgs.call(this, args);
             });
@@ -952,45 +957,45 @@ suite('Procedures', function() {
           suite('Statements', function() {
             if (testSuite.defType === 'procedures_defreturn') {
               test('Has Statement Input', function() {
-                var mutatorWorkspace = new Blockly.Workspace(
+                const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
-                var statementInput = mutatorWorkspace.getTopBlocks()[0]
+                const statementInput = mutatorWorkspace.getTopBlocks()[0]
                     .getInput('STATEMENT_INPUT');
                 chai.assert.isNotNull(statementInput);
               });
               test('Has Statements', function() {
                 this.defBlock.hasStatements_ = true;
-                var mutatorWorkspace = new Blockly.Workspace(
+                const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
-                var statementValue = mutatorWorkspace.getTopBlocks()[0]
+                const statementValue = mutatorWorkspace.getTopBlocks()[0]
                     .getField('STATEMENTS').getValueBoolean();
                 chai.assert.isTrue(statementValue);
               });
               test('No Has Statements', function() {
                 this.defBlock.hasStatements_ = false;
-                var mutatorWorkspace = new Blockly.Workspace(
+                const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
-                var statementValue = mutatorWorkspace.getTopBlocks()[0]
+                const statementValue = mutatorWorkspace.getTopBlocks()[0]
                     .getField('STATEMENTS').getValueBoolean();
                 chai.assert.isFalse(statementValue);
               });
             } else {
               test('Has no Statement Input', function() {
-                var mutatorWorkspace = new Blockly.Workspace(
+                const mutatorWorkspace = new Blockly.Workspace(
                     new Blockly.Options({
-                      parentWorkspace: this.workspace
+                      parentWorkspace: this.workspace,
                     }));
                 this.defBlock.decompose(mutatorWorkspace);
-                var statementInput = mutatorWorkspace.getTopBlocks()[0]
+                const statementInput = mutatorWorkspace.getTopBlocks()[0]
                     .getInput('STATEMENT_INPUT');
                 chai.assert.isNull(statementInput);
               });
@@ -999,17 +1004,17 @@ suite('Procedures', function() {
           suite('Untyped Arguments', function() {
             function assertArguments(argumentsArray) {
               this.defBlock.arguments_ = argumentsArray;
-              var mutatorWorkspace = new Blockly.Workspace(
+              const mutatorWorkspace = new Blockly.Workspace(
                   new Blockly.Options({
-                    parentWorkspace: this.workspace
+                    parentWorkspace: this.workspace,
                   }));
               this.defBlock.decompose(mutatorWorkspace);
-              var argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');
+              const argBlocks = mutatorWorkspace.getBlocksByType('procedures_mutatorarg');
               chai.assert.equal(argBlocks.length, argumentsArray.length);
 
-              for (var i = 0; i < argumentsArray.length; i++) {
-                var argString = argumentsArray[i];
-                var argBlockValue = argBlocks[i].getFieldValue('NAME');
+              for (let i = 0; i < argumentsArray.length; i++) {
+                const argString = argumentsArray[i];
+                const argBlockValue = argBlocks[i].getFieldValue('NAME');
                 chai.assert.equal(argBlockValue, argString);
               }
             }

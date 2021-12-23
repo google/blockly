@@ -6,24 +6,27 @@
 
 /**
  * @fileoverview Components for the variable model.
- * @author marisaleung@google.com (Marisa Leung)
  */
 'use strict';
 
-goog.provide('Blockly.VariableModel');
+/**
+ * Components for the variable model.
+ * @class
+ */
+goog.module('Blockly.VariableModel');
 
-goog.require('Blockly.Events');
+const eventUtils = goog.require('Blockly.Events.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.VarCreate');
-goog.require('Blockly.utils');
-
-goog.requireType('Blockly.Workspace');
 
 
 /**
  * Class for a variable model.
  * Holds information for the variable including name, ID, and type.
- * @param {!Blockly.Workspace} workspace The variable's workspace.
+ * @param {!Workspace} workspace The variable's workspace.
  * @param {string} name The name of the variable.  This is the user-visible name
  *     (e.g. 'my var' or '私の変数'), not the generated name.
  * @param {string=} opt_type The type of the variable like 'int' or 'string'.
@@ -33,11 +36,12 @@ goog.requireType('Blockly.Workspace');
  *     a UUID.
  * @see {Blockly.FieldVariable}
  * @constructor
+ * @alias Blockly.VariableModel
  */
-Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
+const VariableModel = function(workspace, name, opt_type, opt_id) {
   /**
    * The workspace the variable is in.
-   * @type {!Blockly.Workspace}
+   * @type {!Workspace}
    */
   this.workspace = workspace;
 
@@ -64,27 +68,28 @@ Blockly.VariableModel = function(workspace, name, opt_type, opt_id) {
    * @type {string}
    * @private
    */
-  this.id_ = opt_id || Blockly.utils.genUid();
+  this.id_ = opt_id || idGenerator.genUid();
 
-  Blockly.Events.fire(new (Blockly.Events.get(Blockly.Events.VAR_CREATE))(
-      this));
+  eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(this));
 };
 
 /**
  * @return {string} The ID for the variable.
  */
-Blockly.VariableModel.prototype.getId = function() {
+VariableModel.prototype.getId = function() {
   return this.id_;
 };
 
 /**
  * A custom compare function for the VariableModel objects.
- * @param {Blockly.VariableModel} var1 First variable to compare.
- * @param {Blockly.VariableModel} var2 Second variable to compare.
+ * @param {VariableModel} var1 First variable to compare.
+ * @param {VariableModel} var2 Second variable to compare.
  * @return {number} -1 if name of var1 is less than name of var2, 0 if equal,
  *     and 1 if greater.
  * @package
  */
-Blockly.VariableModel.compareByName = function(var1, var2) {
+VariableModel.compareByName = function(var1, var2) {
   return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
 };
+
+exports.VariableModel = VariableModel;

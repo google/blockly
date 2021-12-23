@@ -6,40 +6,47 @@
 
 /**
  * @fileoverview The interface for a bubble.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.IBubble');
+/**
+ * The interface for a bubble.
+ * @namespace Blockly.IBubble
+ */
+goog.module('Blockly.IBubble');
 
-goog.require('Blockly.IContextMenu');
-goog.require('Blockly.IDraggable');
-
-goog.requireType('Blockly.BlockDragSurfaceSvg');
-goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+/* eslint-disable-next-line no-unused-vars */
+const {IContextMenu} = goog.require('Blockly.IContextMenu');
+/* eslint-disable-next-line no-unused-vars */
+const {IDraggable} = goog.require('Blockly.IDraggable');
 
 
 /**
  * A bubble interface.
  * @interface
- * @extends {Blockly.IDraggable}
- * @extends {Blockly.IContextMenu}
+ * @extends {IDraggable}
+ * @extends {IContextMenu}
+ * @alias Blockly.IBubble
  */
-Blockly.IBubble = function() {};
+const IBubble = function() {};
 
 /**
  * Return the coordinates of the top-left corner of this bubble's body relative
  * to the drawing surface's origin (0,0), in workspace units.
- * @return {!Blockly.utils.Coordinate} Object with .x and .y properties.
+ * @return {!Coordinate} Object with .x and .y properties.
  */
-Blockly.IBubble.prototype.getRelativeToSurfaceXY;
+IBubble.prototype.getRelativeToSurfaceXY;
 
 /**
  * Return the root node of the bubble's SVG group.
  * @return {!SVGElement} The root SVG node of the bubble's group.
  */
-Blockly.IBubble.prototype.getSvgRoot;
+IBubble.prototype.getSvgRoot;
 
 /**
  * Set whether auto-layout of this bubble is enabled.  The first time a bubble
@@ -48,39 +55,41 @@ Blockly.IBubble.prototype.getSvgRoot;
  * @param {boolean} enable True if auto-layout should be enabled, false
  *     otherwise.
  */
-Blockly.IBubble.prototype.setAutoLayout;
+IBubble.prototype.setAutoLayout;
 
 /**
  * Triggers a move callback if one exists at the end of a drag.
  * @param {boolean} adding True if adding, false if removing.
  */
-Blockly.IBubble.prototype.setDragging;
+IBubble.prototype.setDragging;
 
 /**
  * Move this bubble during a drag, taking into account whether or not there is
  * a drag surface.
- * @param {Blockly.BlockDragSurfaceSvg} dragSurface The surface that carries
+ * @param {?BlockDragSurfaceSvg} dragSurface The surface that carries
  *     rendered items during a drag, or null if no drag surface is in use.
- * @param {!Blockly.utils.Coordinate} newLoc The location to translate to, in
+ * @param {!Coordinate} newLoc The location to translate to, in
  *     workspace coordinates.
  */
-Blockly.IBubble.prototype.moveDuringDrag;
+IBubble.prototype.moveDuringDrag;
 
 /**
  * Move the bubble to the specified location in workspace coordinates.
  * @param {number} x The x position to move to.
  * @param {number} y The y position to move to.
  */
-Blockly.IBubble.prototype.moveTo;
+IBubble.prototype.moveTo;
 
 /**
  * Update the style of this bubble when it is dragged over a delete area.
  * @param {boolean} enable True if the bubble is about to be deleted, false
  *     otherwise.
  */
-Blockly.IBubble.prototype.setDeleteStyle;
+IBubble.prototype.setDeleteStyle;
 
 /**
  * Dispose of this bubble.
  */
-Blockly.IBubble.prototype.dispose;
+IBubble.prototype.dispose;
+
+exports.IBubble = IBubble;

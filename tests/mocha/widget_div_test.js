@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.widgetDiv');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('WidgetDiv', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -20,7 +25,7 @@ suite('WidgetDiv', function() {
         top: top,
         bottom: top + height,
         width: width,
-        height: height
+        height: height,
       };
     }
 
@@ -29,18 +34,18 @@ suite('WidgetDiv', function() {
       this.viewportBBox = makeBBox(0, 0, 1000, 1003);
       this.widgetSize = {
         width: 100,
-        height: 102
+        height: 102,
       };
       this.anchorSize = {
         width: 90,
-        height: 91
+        height: 91,
       };
 
       this.testWidgetPosition = function(
           anchorBBox, rtl, expectedX, expectedY, expectedHeight) {
         Blockly.WidgetDiv.positionWithAnchor(
             this.viewportBBox, anchorBBox, this.widgetSize, rtl);
-        var style = Blockly.WidgetDiv.DIV.style;
+        const style = Blockly.WidgetDiv.getDiv().style;
         chai.assert.equal(style.left, expectedX + 'px', 'Left');
         chai.assert.equal(style.top, expectedY + 'px', 'Top');
         chai.assert.equal(style.height, expectedHeight + 'px', 'Height');
@@ -50,57 +55,57 @@ suite('WidgetDiv', function() {
     suite('LTR', function() {
       test('noConflict', function() {
         // Anchor placed in the middle.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed just below at the left side of the
         // anchor.
-        var expectedX = anchorBBox.left;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = anchorBBox.left;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
   
       test('topConflict', function() {
         // Anchor close to the top.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 50, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed just below the anchor.
-        var expectedX = anchorBBox.left;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = anchorBBox.left;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
   
       test('bottomConflict', function() {
         // Anchor placed close to the bottom.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 900, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed just above the anchor.
-        var expectedX = anchorBBox.left;
-        var expectedY = anchorBBox.top - this.widgetSize.height;
+        const expectedX = anchorBBox.left;
+        const expectedY = anchorBBox.top - this.widgetSize.height;
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
   
       test('leftConflict', function() {
         // Anchor placed close to the left side.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(50, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed at the anchor.
-        var expectedX = anchorBBox.left;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = anchorBBox.left;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
   
       test('rightConflict', function() {
         // Anchor placed close to the right side.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(950, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
-        var expectedX = this.viewportBBox.width - this.widgetSize.width;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = this.viewportBBox.width - this.widgetSize.width;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, false, expectedX, expectedY, this.widgetSize.height);
       });
@@ -108,57 +113,57 @@ suite('WidgetDiv', function() {
     suite('RTL', function() {
       test('noConflict', function() {
         // Anchor placed in the middle
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed at the right side of the anchor.
-        var expectedX = anchorBBox.right - this.widgetSize.width;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = anchorBBox.right - this.widgetSize.width;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, true, expectedX, expectedY, this.widgetSize.height);
       });
 
       test('topConflict', function() {
         // Anchor close to the top.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 50, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed just below the anchor.
-        var expectedX = anchorBBox.right - this.widgetSize.width;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = anchorBBox.right - this.widgetSize.width;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, true, expectedX, expectedY, this.widgetSize.height);
       });
 
       test('bottomConflict', function() {
         // Anchor placed close to the bottom.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(500, 900, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed just above the anchor.
-        var expectedX = anchorBBox.right - this.widgetSize.width;
-        var expectedY = anchorBBox.top - this.widgetSize.height;
+        const expectedX = anchorBBox.right - this.widgetSize.width;
+        const expectedY = anchorBBox.top - this.widgetSize.height;
         this.testWidgetPosition(
             anchorBBox, true, expectedX, expectedY, this.widgetSize.height);
       });
 
       test('leftConflict', function() {
         // Anchor placed close to the left side.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(10, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed as far left as possible--at the edge of
         // the screen.
-        var expectedX = 0;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = 0;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, true, expectedX, expectedY, this.widgetSize.height);
       });
 
       test('rightConflict', function() {
         // Anchor placed close to the right side.
-        var anchorBBox =
+        const anchorBBox =
             makeBBox(950, 500, this.anchorSize.width, this.anchorSize.height);
         // The widget div should be placed as far right as possible--at the edge of
         // the screen.
-        var expectedX = this.viewportBBox.width - this.widgetSize.width;
-        var expectedY = anchorBBox.top + this.anchorSize.height;
+        const expectedX = this.viewportBBox.width - this.widgetSize.width;
+        const expectedY = anchorBBox.top + this.anchorSize.height;
         this.testWidgetPosition(
             anchorBBox, true, expectedX, expectedY, this.widgetSize.height);
       });

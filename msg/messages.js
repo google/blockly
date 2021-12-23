@@ -6,15 +6,16 @@
 
 /**
  * @fileoverview English strings.
- * @author fraser@google.com (Neil Fraser)
  *
- * After modifying this file, either run "npm run build:langfiles" from the
- * parent directory, or run (from this directory):
- * ../scripts/i18n/js_to_json.py
- * to regenerate json/{en,qqq,synonyms}.json.
+ * After modifying this file, run:
+ *
+ *     npm run generate:langfiles
+ *
+ * to regenerate json/{en,qqq,constants,synonyms}.json.
  *
  * To convert all of the json files to .js files, run:
- * ../scripts/i18n/create_messages.py json/*.json
+ *
+ *     npm run build:langfiles
  */
 'use strict';
 

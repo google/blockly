@@ -63,7 +63,7 @@
       <tr>
         <td>
           <textarea id="importExport"
-                    style="width: 200px; height: 480px;"></textarea>s
+                    style="width: 200px; height: 480px;"></textarea>
         </td>
         <td>
           <div id="blocklyDiv" style="width: 600px; height: 480px;"></div>
@@ -112,7 +112,7 @@
       }
 
       function toggleEditable() {
-        Blockly.hideChaff();
+        workspace.hideChaff();
         var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setEditable(!block.isEditable());
@@ -120,7 +120,7 @@
       }
 
       function toggleCollapsed() {
-        Blockly.hideChaff();
+        workspace.hideChaff();
         var blocks = workspace.getAllBlocks(false);
         for(var i = 0, block; block = blocks[i]; i++) {
           block.setCollapsed(!block.isCollapsed());

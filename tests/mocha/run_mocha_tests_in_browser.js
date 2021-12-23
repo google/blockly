@@ -15,7 +15,7 @@ module.exports = runMochaTestsInBrowser;
  * Runs the Mocha tests in this directory in Chrome. It uses webdriverio to
  * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console.
- * @return 0 on success, 1 on failure.
+ * @return {number} 0 on success, 1 on failure.
  */
 async function runMochaTestsInBrowser() {
   var options = {
@@ -24,12 +24,23 @@ async function runMochaTestsInBrowser() {
     },
     services: [
       ['selenium-standalone']
-    ]
+    ],
+    logLevel: 'warn'
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage']
+      args: [
+        '--headless', '--no-sandbox', '--disable-dev-shm-usage',
+        '--allow-file-access-from-files',
+      ]
+    };
+  } else {
+    // --disable-gpu is needed to prevent Chrome from hanging on Linux with
+    // NVIDIA drivers older than v295.20. See 
+    // https://github.com/google/blockly/issues/5345 for details.
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--allow-file-access-from-files', '--disable-gpu']
     };
   }
 
@@ -55,7 +66,6 @@ async function runMochaTestsInBrowser() {
   console.log(numOfFailure + ' tests failed');
   console.log('============Blockly Mocha Test Summary=================');
   if (parseInt(numOfFailure) !== 0) {
-    await browser.deleteSession();
     return 1;
   }
   await browser.deleteSession();

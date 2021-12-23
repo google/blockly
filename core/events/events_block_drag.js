@@ -6,34 +6,38 @@
 
 /**
  * @fileoverview Events fired as a block drag.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
-goog.provide('Blockly.Events.BlockDrag');
+/**
+ * Events fired as a block drag.
+ * @class
+ */
+goog.module('Blockly.Events.BlockDrag');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Block');
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
  * Class for a block drag event.
- * @param {!Blockly.Block=} opt_block The top block in the stack that is being
+ * @param {!Block=} opt_block The top block in the stack that is being
  *    dragged. Undefined for a blank event.
  * @param {boolean=} opt_isStart Whether this is the start of a block drag.
  *    Undefined for a blank event.
- * @param {!Array<!Blockly.Block>=} opt_blocks The blocks affected by this
+ * @param {!Array<!Block>=} opt_blocks The blocks affected by this
  *    drag. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.BlockDrag
  */
-Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.BlockDrag.superClass_.constructor.call(this, workspaceId);
+const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
+  const workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  BlockDrag.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
   /**
@@ -44,24 +48,24 @@ Blockly.Events.BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
 
   /**
    * The blocks affected by this drag event.
-   * @type {!Array<!Blockly.Block>|undefined}
+   * @type {!Array<!Block>|undefined}
    */
   this.blocks = opt_blocks;
 };
-Blockly.utils.object.inherits(Blockly.Events.BlockDrag, Blockly.Events.UiBase);
+object.inherits(BlockDrag, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BlockDrag.prototype.type = Blockly.Events.BLOCK_DRAG;
+BlockDrag.prototype.type = eventUtils.BLOCK_DRAG;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BlockDrag.prototype.toJson = function() {
-  var json = Blockly.Events.BlockDrag.superClass_.toJson.call(this);
+BlockDrag.prototype.toJson = function() {
+  const json = BlockDrag.superClass_.toJson.call(this);
   json['isStart'] = this.isStart;
   json['blockId'] = this.blockId;
   json['blocks'] = this.blocks;
@@ -72,12 +76,13 @@ Blockly.Events.BlockDrag.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BlockDrag.prototype.fromJson = function(json) {
-  Blockly.Events.BlockDrag.superClass_.fromJson.call(this, json);
+BlockDrag.prototype.fromJson = function(json) {
+  BlockDrag.superClass_.fromJson.call(this, json);
   this.isStart = json['isStart'];
   this.blockId = json['blockId'];
   this.blocks = json['blocks'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BLOCK_DRAG, Blockly.Events.BlockDrag);
+registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);
+
+exports.BlockDrag = BlockDrag;

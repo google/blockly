@@ -7,38 +7,43 @@
 /**
  * @fileoverview Zelos specific objects representing inputs with connections on
  * a rendered block.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
-goog.provide('Blockly.zelos.StatementInput');
+/**
+ * Zelos specific objects representing inputs with connections on
+ * a rendered block.
+ * @class
+ */
+goog.module('Blockly.zelos.StatementInput');
 
-goog.require('Blockly.blockRendering.StatementInput');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.blockRendering.ConstantProvider');
-goog.requireType('Blockly.Input');
+const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
+const {StatementInput: BaseStatementInput} = goog.require('Blockly.blockRendering.StatementInput');
 
 
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
- * @param {!Blockly.blockRendering.ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Blockly.Input} input The statement input to measure and store
- *     information for.
+ * @param {!ConstantProvider} constants The rendering constants provider.
+ * @param {!Input} input The statement input to measure and store information
+ *    for.
  * @package
  * @constructor
- * @extends {Blockly.blockRendering.StatementInput}
+ * @extends {BaseStatementInput}
+ * @alias Blockly.zelos.StatementInput
  */
-Blockly.zelos.StatementInput = function(constants, input) {
-  Blockly.zelos.StatementInput.superClass_.constructor.call(this,
-      constants, input);
+const StatementInput = function(constants, input) {
+  StatementInput.superClass_.constructor.call(this, constants, input);
 
   if (this.connectedBlock) {
     // Find the bottom-most connected block in the stack.
-    var block = this.connectedBlock;
-    while (block.getNextBlock()) {
-      block = block.getNextBlock();
+    let block = this.connectedBlock;
+    let nextBlock;
+    while ((nextBlock = block.getNextBlock())) {
+      block = nextBlock;
     }
     if (!block.nextConnection) {
       this.height = this.connectedBlockHeight;
@@ -46,5 +51,6 @@ Blockly.zelos.StatementInput = function(constants, input) {
     }
   }
 };
-Blockly.utils.object.inherits(Blockly.zelos.StatementInput,
-    Blockly.blockRendering.StatementInput);
+object.inherits(StatementInput, BaseStatementInput);
+
+exports.StatementInput = StatementInput;

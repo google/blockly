@@ -6,16 +6,19 @@
 
 /**
  * @fileoverview Events fired as a result of trashcan flyout open and close.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
-goog.provide('Blockly.Events.TrashcanOpen');
+/**
+ * Events fired as a result of trashcan flyout open and close.
+ * @class
+ */
+goog.module('Blockly.Events.TrashcanOpen');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
@@ -24,11 +27,12 @@ goog.require('Blockly.utils.object');
  *    opening). Undefined for a blank event.
  * @param {string=} opt_workspaceId The workspace identifier for this event.
  *    Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.TrashcanOpen
  */
-Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
-  Blockly.Events.TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
+const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
+  TrashcanOpen.superClass_.constructor.call(this, opt_workspaceId);
 
   /**
    * Whether the trashcan flyout is opening (false if closing).
@@ -36,20 +40,20 @@ Blockly.Events.TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
    */
   this.isOpen = opt_isOpen;
 };
-Blockly.utils.object.inherits(Blockly.Events.TrashcanOpen, Blockly.Events.UiBase);
+object.inherits(TrashcanOpen, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.TrashcanOpen.prototype.type = Blockly.Events.TRASHCAN_OPEN;
+TrashcanOpen.prototype.type = eventUtils.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.TrashcanOpen.prototype.toJson = function() {
-  var json = Blockly.Events.TrashcanOpen.superClass_.toJson.call(this);
+TrashcanOpen.prototype.toJson = function() {
+  const json = TrashcanOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   return json;
 };
@@ -58,10 +62,11 @@ Blockly.Events.TrashcanOpen.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.TrashcanOpen.prototype.fromJson = function(json) {
-  Blockly.Events.TrashcanOpen.superClass_.fromJson.call(this, json);
+TrashcanOpen.prototype.fromJson = function(json) {
+  TrashcanOpen.superClass_.fromJson.call(this, json);
   this.isOpen = json['isOpen'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TRASHCAN_OPEN, Blockly.Events.TrashcanOpen);
+registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);
+
+exports.TrashcanOpen = TrashcanOpen;

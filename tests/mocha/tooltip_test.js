@@ -4,8 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-suite('Tooltip', function() {
+goog.module('Blockly.test.tooltip');
 
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
+suite('Tooltip', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -24,10 +28,10 @@ suite('Tooltip', function() {
           "args0": [
             {
               "type": "field_input",
-              "name": "FIELD"
-            }
-          ]
-        }
+              "name": "FIELD",
+            },
+          ],
+        },
       ]);
     });
 
@@ -35,7 +39,7 @@ suite('Tooltip', function() {
       delete Blockly.Blocks["test_block"];
     });
 
-    var tooltipText = 'testTooltip';
+    const tooltipText = 'testTooltip';
 
     function assertTooltip(obj) {
       chai.assert.equal(obj.getTooltip(), tooltipText);
@@ -62,7 +66,7 @@ suite('Tooltip', function() {
     function setFunctionReturningObjectTooltip(obj) {
       obj.setTooltip(() => {
         return {
-          tooltip: tooltipText
+          tooltip: tooltipText,
         };
       });
     }

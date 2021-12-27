@@ -338,7 +338,7 @@ Menu.prototype.highlightLast_ = function() {
  * @param {String} searchKey that received from keyboard event.
  * @private
  */
-Blockly.Menu.prototype.highlightSuggestedItem_ = function(searchKey) {
+Menu.prototype.highlightSuggestedItem_ = function(searchKey) {
   if (this.searchTimeout_) {
     this.searchTimeout_ = clearTimeout(this.searchTimeout_);
   }

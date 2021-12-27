@@ -15,12 +15,19 @@ var path = require('path');
 //
 // TODO(#5007): If you modify these values, you must also modify the
 // corresponding values in the following files:
-// 
+//
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
+
+let buildDir = 'build'
+const outputArgIndex = process.argv.indexOf("--output");
+if (outputArgIndex > -1 && process.argv[outputArgIndex + 1]) {
+  buildDir = process.argv[outputArgIndex + 1];
+}
+
 module.exports = {
   // Directory to write compiled output to.
-  BUILD_DIR: 'build',
+  BUILD_DIR: buildDir,
 
   // Directory in which to assemble (and from which to publish) the
   // blockly npm package.

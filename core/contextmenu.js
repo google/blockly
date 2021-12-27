@@ -311,11 +311,11 @@ exports.commentDeleteOption = commentDeleteOption;
 
 /**
  * Make a context menu option for duplicating the current block.
- * @param {!Blockly.BlockSvg} block The block where the right-click originated.
- * @param {!Blockly.ModuleModel} module The module to move block.
+ * @param {!BlockSvg} block The block where the right-click originated.
+ * @param {!ModuleModel} module The module to move block.
  * @package
  */
-Blockly.ContextMenu.blockMoveToModuleOption = function(block, module) {
+const blockMoveToModuleOption = function(block, module) {
   return {
     text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', module.name),
     enabled: block.isMovable(),
@@ -324,6 +324,7 @@ Blockly.ContextMenu.blockMoveToModuleOption = function(block, module) {
     }
   };
 };
+exports.blockMoveToModuleOption = blockMoveToModuleOption
 
 /**
  * Make a context menu option for duplicating the current workspace comment.

@@ -289,7 +289,7 @@ WorkspaceComment.prototype.setContent = function(content) {
  * @return string
  * @package
  */
-Blockly.WorkspaceComment.prototype.getModuleId = function() {
+WorkspaceComment.prototype.getModuleId = function() {
   return this.moduleId_;
 };
 
@@ -298,7 +298,7 @@ Blockly.WorkspaceComment.prototype.getModuleId = function() {
  * @return int
  * @package
  */
-Blockly.WorkspaceComment.prototype.getModuleOrder = function() {
+WorkspaceComment.prototype.getModuleOrder = function() {
   return this.workspace.getModuleManager().getModuleOrder(this.moduleId_);
 };
 
@@ -307,7 +307,7 @@ Blockly.WorkspaceComment.prototype.getModuleOrder = function() {
  * @return string
  * @package
  */
-Blockly.WorkspaceComment.prototype.InActiveModule = function() {
+WorkspaceComment.prototype.InActiveModule = function() {
   return this.moduleId_ === this.workspace.getModuleManager().getActiveModule().getId();
 };
 
@@ -316,7 +316,7 @@ Blockly.WorkspaceComment.prototype.InActiveModule = function() {
  * @param {string} moduleId module id.
  * @package
  */
-Blockly.WorkspaceComment.prototype.setModuleId = function(moduleId) {
+WorkspaceComment.prototype.setModuleId = function(moduleId) {
   return this.moduleId_ = moduleId;
 };
 

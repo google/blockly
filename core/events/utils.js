@@ -281,6 +281,48 @@ const FINISHED_LOADING = 'finished_loading';
 exports.FINISHED_LOADING = FINISHED_LOADING;
 
 /**
+ * Name of event that create new module.
+ * @alias Blockly.Events.utils.MODULE_CREATE
+ */
+const MODULE_CREATE = 'module_create';
+exports.MODULE_CREATE = MODULE_CREATE;
+
+/**
+ * Name of event that delete module.
+ * @alias Blockly.Events.utils.MODULE_DELETE
+ */
+const MODULE_DELETE = 'module_delete';
+exports.MODULE_DELETE = MODULE_DELETE;
+
+/**
+ * Name of event that activate module.
+ * @alias Blockly.Events.utils.MODULE_ACTIVATE
+ */
+const MODULE_ACTIVATE = 'module_activate';
+exports.MODULE_ACTIVATE = MODULE_ACTIVATE;
+
+/**
+ * Name of event that module rename.
+ * @alias Blockly.Events.utils.MODULE_RENAME
+ */
+const MODULE_RENAME = 'module_rename';
+exports.MODULE_RENAME = MODULE_RENAME;
+
+/**
+ * Name of event that module rename.
+ * @alias Blockly.Events.utils.MODULE_RENAME
+ */
+const MODULE_MOVE = 'module_move';
+exports.MODULE_MOVE = MODULE_MOVE;
+
+/**
+ * Name of event that module rename.
+ * @alias Blockly.Events.utils.MODULE_RENAME
+ */
+const MOVE_BLOCK_TO_MODULE = 'move_block_to_module';
+exports.MOVE_BLOCK_TO_MODULE = MOVE_BLOCK_TO_MODULE;
+
+/**
  * Type of events that cause objects to be bumped back into the visible
  * portion of the workspace.
  *

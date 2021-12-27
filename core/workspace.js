@@ -40,9 +40,9 @@ const {VariableMap} = goog.require('Blockly.VariableMap');
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+const {ModuleManager} = goog.require('Blockly.ModuleManager')
 /** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
-goog.require('Blockly.ModuleManager');
 
 
 /**
@@ -135,10 +135,10 @@ const Workspace = function(opt_options) {
   /**
    * A map from module type to list of module names.  The lists contain all
    * of the named modules in the workspace.
-   * @type {!Blockly.ModuleManager}
+   * @type {!ModuleManager}
    * @private
    */
-  this.moduleManager_ = new Blockly.ModuleManager(this);
+  this.moduleManager_ = new ModuleManager(this);
 
   /**
    * Blocks in the flyout can refer to variables that don't exist in the main
@@ -549,7 +549,7 @@ Workspace.prototype.getAllVariableNames = function() {
  * Return module manager.
  * @return {Blockly.ModuleManager} The module manager.
  */
-Blockly.Workspace.prototype.getModuleManager = function() {
+Workspace.prototype.getModuleManager = function() {
   return this.moduleManager_;
 };
 

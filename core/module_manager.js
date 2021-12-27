@@ -21,11 +21,16 @@
  */
 'use strict';
 
-goog.provide('Blockly.ModuleManager');
+/**
+ * Class for a module management.
+ * @class
+ */
+goog.module('Blockly.ModuleManager');
+
+const {ModuleModel} = goog.require('Blockly.ModuleModel');
 
 goog.require('Blockly.ModuleBar');
 goog.require('Blockly.Events');
-goog.require('Blockly.ModuleModel');
 goog.require('Blockly.Events.ModuleDelete');
 goog.require('Blockly.Events.ModuleRename');
 goog.require('Blockly.Msg');
@@ -37,19 +42,20 @@ goog.require('Blockly.utils.object');
  * Class for a module management.
  * @param {!Blockly.Workspace} workspace The workspace this manager belongs to.
  * @constructor
+ * @alias Blockly.ModuleManager
  */
-Blockly.ModuleManager = function(workspace) {
+const ModuleManager = function(workspace) {
   /**
    * Default module
    * @private
-   * @type {Blockly.ModuleModel}
+   * @type {ModuleModel}
    */
-  this.defaultModule_ =  new Blockly.ModuleModel(workspace,Blockly.Msg['DEFAULT_MODULE_NAME'], 'general');
+  this.defaultModule_ =  new ModuleModel(workspace,Blockly.Msg['DEFAULT_MODULE_NAME'], 'general');
 
   /**
    * A map from module type to list of module names.  The lists contain all
    * of the named modules in the workspace.
-   * @type {Array.<Blockly.ModuleModel>}
+   * @type {Array.<ModuleModel>}
    * @private
    */
   this.moduleMap_ = [this.defaultModule_];
@@ -71,7 +77,7 @@ Blockly.ModuleManager = function(workspace) {
 /**
  * Clear the module map.
  */
-Blockly.ModuleManager.prototype.clear = function() {
+ModuleManager.prototype.clear = function() {
   var deletedModules = this.moduleMap_;
   this.moduleMap_ = [];
   this.activeModuleId_ = null;
@@ -100,7 +106,7 @@ Blockly.ModuleManager.prototype.clear = function() {
 /**
  * Create default module if empty modules.
  */
-Blockly.ModuleManager.prototype.createDefaultModuleIfNeed = function() {
+ModuleManager.prototype.createDefaultModuleIfNeed = function() {
   if (this.moduleMap_.length === 0) {
     this.moduleMap_ = [this.defaultModule_];
     this.activeModuleId_ = [this.defaultModule_.getId()];
@@ -110,10 +116,10 @@ Blockly.ModuleManager.prototype.createDefaultModuleIfNeed = function() {
 /**
  * Rename a module by updating its name in the module map. Identify the
  * module to rename with the given ID.
- * @param {Blockly.ModuleModel} module Module to rename.
+ * @param {ModuleModel} module Module to rename.
  * @param {string} newName New module name.
  */
-Blockly.ModuleManager.prototype.renameModule = function(module, newName) {
+ModuleManager.prototype.renameModule = function(module, newName) {
   var previousName = module.name;
   module.name = newName;
   if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
@@ -126,10 +132,10 @@ Blockly.ModuleManager.prototype.renameModule = function(module, newName) {
 
 /**
  * Move a module to position.
- * @param {Blockly.ModuleModel} module Module to move.
+ * @param {ModuleModel} module Module to move.
  * @param {int} newOrder New module order.
  */
-Blockly.ModuleManager.prototype.moveModule = function(module, newOrder) {
+ModuleManager.prototype.moveModule = function(module, newOrder) {
   var previousOrder = this.getModuleOrder(module.getId());
 
   this.moduleMap_.splice(newOrder,0,this.moduleMap_.splice(previousOrder, 1)[0]);
@@ -149,15 +155,15 @@ Blockly.ModuleManager.prototype.moveModule = function(module, newOrder) {
 *  @param {?number=} scrollX WS horizontal scrolling offset in pixel units.
 *  @param {?number=} scrollY WS vertical scrolling offset in pixel units.
 *  @param {?number=} scale WS scale.
- * @return {!Blockly.ModuleModel} The newly created module.
+ * @return {!ModuleModel} The newly created module.
  */
-Blockly.ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, scale) {
+ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, scale) {
   if (opt_id && this.getModuleById(opt_id)) {
     return this.getModuleById(opt_id);
   }
 
   var id = opt_id || Blockly.utils.genUid();
-  var module = new Blockly.ModuleModel(this.workspace, name, id);
+  var module = new ModuleModel(this.workspace, name, id);
   module.scrollX = scrollX || 0;
   module.scrollY = scrollY || 0;
   if (scale) {
@@ -177,10 +183,10 @@ Blockly.ModuleManager.prototype.createModule = function(name, opt_id, scrollX, s
 
 /**
  * Fire a create event for module.
- * @param {!Blockly.ModuleModel} module The module that was just created.
+ * @param {!ModuleModel} module The module that was just created.
  * @private
  */
-Blockly.ModuleManager.prototype.fireCreateEvent_ = function(module) {
+ModuleManager.prototype.fireCreateEvent_ = function(module) {
   if (Blockly.Events.isEnabled()) {
     var existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
@@ -200,9 +206,9 @@ Blockly.ModuleManager.prototype.fireCreateEvent_ = function(module) {
 /**
  * Move block to module.
  * @param {Blockly.BlockSvg} block
- * @param {Blockly.ModuleModel} module
+ * @param {ModuleModel} module
  */
-Blockly.ModuleManager.prototype.moveBlockToModule = function (block, module) {
+ModuleManager.prototype.moveBlockToModule = function (block, module) {
   var newModuleId = module.getId();
   var previousModuleId = block.getModuleId();
 
@@ -248,7 +254,7 @@ Blockly.ModuleManager.prototype.moveBlockToModule = function (block, module) {
  * @extends {Blockly.Events.ModuleBase}
  * @private
  */
-Blockly.ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, previousModuleId) {
+ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, previousModuleId) {
   if (Blockly.Events.isEnabled()) {
     var existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
@@ -266,10 +272,10 @@ Blockly.ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModu
 
 /**
  * Delete a module and all its top blocks.
- * @param {Blockly.ModuleModel} module Module to delete.
- * @return {Blockly.ModuleModel} previous sibling module
+ * @param {ModuleModel} module Module to delete.
+ * @return {ModuleModel} previous sibling module
  */
-Blockly.ModuleManager.prototype.deleteModule = function(module) {
+ModuleManager.prototype.deleteModule = function(module) {
   for (var i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === module.getId()) {
       this.moduleMap_.splice(i, 1);
@@ -298,10 +304,10 @@ Blockly.ModuleManager.prototype.deleteModule = function(module) {
 
 /**
  * Fire a delete event for module.
- * @param {!Blockly.ModuleModel} module The module that was just deleted.
+ * @param {!ModuleModel} module The module that was just deleted.
  * @private
  */
-Blockly.ModuleManager.prototype.fireDeleteEvent_ = function(module) {
+ModuleManager.prototype.fireDeleteEvent_ = function(module) {
   if (Blockly.Events.isEnabled()) {
     var existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
@@ -319,9 +325,9 @@ Blockly.ModuleManager.prototype.fireDeleteEvent_ = function(module) {
 
 /**
  * Activate a module, switch top blocks visibility.
- * @param {Blockly.ModuleModel} module Module to activate.
+ * @param {ModuleModel} module Module to activate.
  */
-Blockly.ModuleManager.prototype.activateModule = function(module) {
+ModuleManager.prototype.activateModule = function(module) {
   if (this.activeModuleId_ && this.activeModuleId_ === module.getId()) {
     return;
   }
@@ -429,24 +435,24 @@ Blockly.ModuleManager.prototype.activateModule = function(module) {
  * Set active module id.
  * @param {string} id Module.
  */
-Blockly.ModuleManager.prototype.setActiveModuleId = function(id) {
+ModuleManager.prototype.setActiveModuleId = function(id) {
   this.activeModuleId_ = id;
 };
 
 /**
  * Returns active module.
- * @return {!Blockly.ModuleModel} current active module.
+ * @return {!ModuleModel} current active module.
  */
-Blockly.ModuleManager.prototype.getActiveModule = function() {
+ModuleManager.prototype.getActiveModule = function() {
   return this.getModuleById(this.activeModuleId_) || this.getAllModules()[0];
 };
 
 /**
  * Find the module by the given ID and return it. Return null if it is not found.
  * @param {string} id The ID to check for.
- * @return {Blockly.ModuleModel} The module with the given ID.
+ * @return {ModuleModel} The module with the given ID.
  */
-Blockly.ModuleManager.prototype.getModuleById = function(id) {
+ModuleManager.prototype.getModuleById = function(id) {
   if (!id) {
     return null;
   }
@@ -463,7 +469,7 @@ Blockly.ModuleManager.prototype.getModuleById = function(id) {
  * @param {string} id The ID to check for.
  * @return {int} The module order.
  */
-Blockly.ModuleManager.prototype.getModuleOrder = function(id) {
+ModuleManager.prototype.getModuleOrder = function(id) {
   for (var i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === id) {
       return i;
@@ -474,8 +480,10 @@ Blockly.ModuleManager.prototype.getModuleOrder = function(id) {
 
 /**
  * Return all modules of all types.
- * @return {!Array.<!Blockly.ModuleModel>} List of module models.
+ * @return {!Array.<!ModuleModel>} List of module models.
  */
-Blockly.ModuleManager.prototype.getAllModules = function() {
+ModuleManager.prototype.getAllModules = function() {
   return this.moduleMap_;
 };
+
+exports.ModuleManager = ModuleManager

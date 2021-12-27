@@ -1023,7 +1023,8 @@ const PROCEDURE_CALL_COMMON = {
     const name = this.getProcedureCall();
     const workspace = this.workspace;
     option.callback = function() {
-      const def = Procedures.getDefinition(name, workspace);
+      let def = Procedures.getDefinition(name, workspace);
+      
       if (def) {
         if (!def.InActiveModule()) {
           workspace.getModuleManager().activateModule(workspace.getModuleManager().getModuleById(def.getModuleId()));

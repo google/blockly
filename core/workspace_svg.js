@@ -101,6 +101,8 @@ const {WorkspaceDragSurfaceSvg} = goog.requireType('Blockly.WorkspaceDragSurface
 const {Workspace} = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
+const {ModuleBar} = goog.require('Blockly.ModuleBar');
+
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -111,7 +113,6 @@ goog.require('Blockly.Events.ViewportChange');
 goog.require('Blockly.MetricsManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Msg');
-goog.require('Blockly.ModuleBar');
 
 
 /**
@@ -491,10 +492,10 @@ WorkspaceSvg.prototype.toolbox_ = null;
 
 /**
  * Module bar fot this workspace.
- * @type {Blockly.ModuleBar}
+ * @type {ModuleBar}
  * @private
  */
-Blockly.WorkspaceSvg.prototype.moduleBar_ = null;
+WorkspaceSvg.prototype.moduleBar_ = null;
 
 /**
  * The current gesture in progress on this workspace, if any.
@@ -947,7 +948,7 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
 
   if (this.options.showModuleBar) {
-    this.moduleBar_ = new Blockly.ModuleBar(this);
+    this.moduleBar_ = new ModuleBar(this);
   }
 
   if (this.grid_) {
@@ -1172,10 +1173,10 @@ WorkspaceSvg.prototype.getToolbox = function() {
 
 /**
  * Getter for the moduleBar associated with this workspace, if one exists.
- * @return {Blockly.ModuleBar} The moduleBar on this workspace.
+ * @return {ModuleBar} The moduleBar on this workspace.
  * @package
  */
-Blockly.WorkspaceSvg.prototype.getModuleBar = function() {
+WorkspaceSvg.prototype.getModuleBar = function() {
   return this.moduleBar_;
 };
 

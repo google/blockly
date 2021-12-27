@@ -128,17 +128,26 @@ exports.setParentContainer = setParentContainer;
  * @alias Blockly.common.svgResize
  */
 const svgResize = function(workspace) {
+  if (!workspace) {
+    // Workspace deleted, or something.
+    return;
+  }
+
   let mainWorkspace = workspace;
-  while (mainWorkspace.options.parentWorkspace) {
+
+  while (mainWorkspace && mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
+
   const svg = mainWorkspace.getParentSvg();
   const cachedSize = mainWorkspace.getCachedParentSvgSize();
   const div = svg.parentNode;
+
   if (!div) {
     // Workspace deleted, or something.
     return;
   }
+
   const width = div.offsetWidth;
   const height = div.offsetHeight;
   if (cachedSize.width !== width) {

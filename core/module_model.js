@@ -21,7 +21,11 @@
  */
 'use strict';
 
-goog.provide('Blockly.ModuleModel');
+/**
+ * Class for a module model.
+ * @class
+ */
+goog.module('Blockly.ModuleModel');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.ModuleCreate');
@@ -37,7 +41,7 @@ goog.require('Blockly.utils');
  *     a UUID.
  * @constructor
  */
-Blockly.ModuleModel = function(workspace, name, opt_id) {
+const ModuleModel = function(workspace, name, opt_id) {
   /**
    * The workspace the module is in.
    * @type {!Blockly.Workspace}
@@ -65,24 +69,26 @@ Blockly.ModuleModel = function(workspace, name, opt_id) {
  * Workspace horizontal scrolling offset in pixel units.
  * @type {number}
  */
-Blockly.ModuleModel.prototype.scrollX = 0;
+ModuleModel.prototype.scrollX = 0;
 
 /**
  * Workspace vertical scrolling offset in pixel units.
  * @type {number}
  */
-Blockly.ModuleModel.prototype.scrollY = 0;
+ModuleModel.prototype.scrollY = 0;
 
 /**
  * Workspace scale.
  * @type {number}
  */
-Blockly.ModuleModel.prototype.scale = 1;
+ModuleModel.prototype.scale = 1;
 
 /**
  * @return {string} The ID for the module.
  */
-Blockly.ModuleModel.prototype.getId = function() {
+ModuleModel.prototype.getId = function() {
   return this.id_;
 };
+
+exports.ModuleModel = ModuleModel
 

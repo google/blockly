@@ -591,7 +591,7 @@ Block.prototype.unplugFromStack_ = function(opt_healStack) {
  * @return string
  * @package
  */
-Blockly.Block.prototype.getModuleId = function() {
+Block.prototype.getModuleId = function() {
   return this.moduleId_;
 };
 
@@ -600,7 +600,7 @@ Blockly.Block.prototype.getModuleId = function() {
  * @return int
  * @package
  */
-Blockly.Block.prototype.getModuleOrder = function() {
+Block.prototype.getModuleOrder = function() {
   return this.workspace.getModuleManager().getModuleOrder(this.getModuleId());
 };
 
@@ -609,7 +609,7 @@ Blockly.Block.prototype.getModuleOrder = function() {
  * @return string
  * @package
  */
-Blockly.Block.prototype.InActiveModule = function() {
+Block.prototype.InActiveModule = function() {
   return this.moduleId_ === this.workspace.getModuleManager().getActiveModule().getId();
 };
 
@@ -618,7 +618,7 @@ Blockly.Block.prototype.InActiveModule = function() {
  * @param {string} moduleId module id.
  * @package
  */
-Blockly.Block.prototype.setModuleId = function(moduleId) {
+Block.prototype.setModuleId = function(moduleId) {
   return this.moduleId_ = moduleId;
 };
 
@@ -1394,7 +1394,7 @@ Block.prototype.setEnabled = function(enabled) {
  * Get whether this block is obsolete or not.
  * @return {boolean} True if obsolete.
  */
-Blockly.Block.prototype.isObsolete = function() {
+Block.prototype.isObsolete = function() {
   return this.obsolete;
 };
 
@@ -1402,7 +1402,7 @@ Blockly.Block.prototype.isObsolete = function() {
  * Set whether the block is obsolete or not.
  * @param {boolean} obsolete True if obsolete.
  */
-Blockly.Block.prototype.setObsolete = function(obsolete) {
+Block.prototype.setObsolete = function(obsolete) {
   this.obsolete = obsolete;
   if (obsolete) {
     this.setWarningText(Blockly.Msg["OBSOLETE_WARNING"]);
@@ -1415,7 +1415,7 @@ Blockly.Block.prototype.setObsolete = function(obsolete) {
  * Get whether this block is removed or not.
  * @return {boolean} True if removed.
  */
-Blockly.Block.prototype.isRemoved = function() {
+Block.prototype.isRemoved = function() {
   return this.removed;
 };
 
@@ -1423,7 +1423,7 @@ Blockly.Block.prototype.isRemoved = function() {
  * Set whether the block is removed or not.
  * @param {boolean} removed True if removed.
  */
-Blockly.Block.prototype.setRemoved = function(removed) {
+Block.prototype.setRemoved = function(removed) {
   this.removed = removed;
   if (removed) {
     this.setWarningText(Blockly.Msg["REMOVED_WARNING"]);
@@ -1761,6 +1761,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
   if (opt_disableCheck !== undefined && typeof opt_disableCheck !== 'boolean') {
     throw Error('opt_disableCheck must be a boolean if provided');
   }
+
   if (!opt_disableCheck) {
     const overwrites = [];
     for (const key in mixinObj) {
@@ -1773,6 +1774,7 @@ Block.prototype.mixin = function(mixinObj, opt_disableCheck) {
           'Mixin will overwrite block members: ' + JSON.stringify(overwrites));
     }
   }
+
   object.mixin(this, mixinObj);
 };
 

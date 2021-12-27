@@ -294,7 +294,7 @@ BlockSvg.prototype.select = function() {
   if (!this.InActiveModule()) {
     return;
   }
-  
+
   let oldId = null;
   if (common.getSelected()) {
     oldId = common.getSelected().id;
@@ -755,7 +755,7 @@ BlockSvg.prototype.generateContextMenu = function() {
 
     this.workspace.getModuleManager().getAllModules().forEach(function (module) {
       if (block.getModuleId() !== module.getId()) {
-        menuOptions.push(Blockly.ContextMenu.blockMoveToModuleOption(block, module));
+        menuOptions.push(ContextMenu.blockMoveToModuleOption(block, module));
       }
     });
   }
@@ -897,7 +897,7 @@ BlockSvg.prototype.getSvgRoot = function() {
  * Remove render of this block.
  * @suppress {checkTypes}
  */
-Blockly.BlockSvg.prototype.removeRender = function() {
+BlockSvg.prototype.removeRender = function() {
   if (!this.rendered) {
     return;
   }
@@ -912,8 +912,8 @@ Blockly.BlockSvg.prototype.removeRender = function() {
     this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
-  if (Blockly.ContextMenu.currentBlock === this) {
-    Blockly.ContextMenu.hide();
+  if (ContextMenu.currentBlock === this) {
+    ContextMenu.hide();
   }
 
   var icons = this.getIcons();
@@ -1037,7 +1037,7 @@ BlockSvg.prototype.toCopyData = function() {
   if (this.isInsertionMarker_) {
     return null;
   }
-  
+
   return {
     saveInfo: /** @type {!blocks.State} */ (
         blocks.save(this, {addCoordinates: true, addNextBlocks: false})),

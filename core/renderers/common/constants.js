@@ -1131,7 +1131,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       'patternUnits': 'userSpaceOnUse',
       'width': 10,
       'height': 10
-    }, defs);
+    }, this.defs_);
   Blockly.utils.dom.createSvgElement('rect',
     {'width': 10, 'height': 10, 'fill': '#aaaaaa', 'opacity': 0.5}, obsoletePattern);
   Blockly.utils.dom.createSvgElement('path',
@@ -1152,7 +1152,7 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
       'patternUnits': 'userSpaceOnUse',
       'width': 10,
       'height': 10
-    }, defs);
+    }, this.defs_);
   Blockly.utils.dom.createSvgElement('rect',
     {'width': 10, 'height': 10, 'fill': '#aaaaaa', 'opacity': 0.5}, removedPattern);
   Blockly.utils.dom.createSvgElement('path',

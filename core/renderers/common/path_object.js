@@ -224,7 +224,7 @@ PathObject.prototype.updateDisabled_ = function(disabled) {
  * @param {boolean} obsolete True if obsolete.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateObsolete_ = function(
+PathObject.prototype.updateObsolete_ = function(
     obsolete) {
   this.setClass_('blocklyObsolete', obsolete);
   if (obsolete) {
@@ -238,7 +238,7 @@ Blockly.blockRendering.PathObject.prototype.updateObsolete_ = function(
  * @param {boolean} removed True if removed.
  * @protected
  */
-Blockly.blockRendering.PathObject.prototype.updateRemoved_ = function(
+PathObject.prototype.updateRemoved_ = function(
     removed) {
   this.setClass_('blocklyRemoved', removed);
   if (removed) {

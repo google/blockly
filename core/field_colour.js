@@ -180,7 +180,7 @@ FieldColour.prototype.configure_ = function(config) {
  * @package
  */
 
-Blockly.FieldColour.prototype.createSubstrate_ = function() {
+FieldColour.prototype.createSubstrate_ = function() {
   var width = 25;
   var height = width * (this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH / this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
 

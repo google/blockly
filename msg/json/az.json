@@ -4,10 +4,12 @@
 			"AZISS",
 			"Adil",
 			"Cekli829",
-			"Masalli qasimli"
+			"Masalli qasimli",
+			"Şeyx Şamil"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"UNNAMED_KEY": "adsız",
 	"TODAY": "Bugün",
 	"DUPLICATE_BLOCK": "Dublikat",
 	"ADD_COMMENT": "Şərh əlavə et",
@@ -105,7 +107,7 @@
 	"LOGIC_NULL_TOOLTIP": "Boş cavab qaytarır.",
 	"LOGIC_TERNARY_CONDITION": "test",
 	"LOGIC_TERNARY_IF_TRUE": "əgər doğrudursa",
-	"LOGIC_TERNARY_IF_FALSE": "əgər səhfdirsə",
+	"LOGIC_TERNARY_IF_FALSE": "əgər səhvdirsə",
 	"LOGIC_TERNARY_TOOLTIP": "'Yoxla' əmrindəki şərtə nəzər yetirin. Əgər şərt \"doğru\"-dursa \"əgər doğru\", əks halda isə \"əgər yalan\" cavabını qaytarır.",
 	"MATH_NUMBER_HELPURL": "https://az.wikipedia.org/wiki/Ədəd",
 	"MATH_NUMBER_TOOLTIP": "Ədəd.",

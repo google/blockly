@@ -12,11 +12,11 @@
 /// <reference path="core.d.ts" />
 /// <reference path="blocks.d.ts" />
 /// <reference path="javascript.d.ts" />
-/// <reference path="msg/en.d.ts" />
+/// <reference path="msg/msg.d.ts" />
 
 import * as Blockly from './core';
 import './blocks';
 import './javascript';
-import './msg/en';
+import './msg/msg';
 
 export = Blockly;

@@ -20,7 +20,7 @@ goog.addDependency('../../core/browser_events.js', ['Blockly.browserEvents'], ['
 goog.addDependency('../../core/bubble.js', ['Blockly.Bubble'], ['Blockly.IBubble', 'Blockly.Scrollbar', 'Blockly.Touch', 'Blockly.Workspace', 'Blockly.browserEvents', 'Blockly.utils.Coordinate', 'Blockly.utils.Size', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.math', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/bubble_dragger.js', ['Blockly.BubbleDragger'], ['Blockly.Bubble', 'Blockly.ComponentManager', 'Blockly.Events.CommentMove', 'Blockly.Events.utils', 'Blockly.constants', 'Blockly.utils.Coordinate', 'Blockly.utils.svgMath'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/bump_objects.js', ['Blockly.bumpObjects'], ['Blockly.Events.utils', 'Blockly.utils.math'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/clipboard.js', ['Blockly.clipboard'], ['Blockly.Events.utils'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/clipboard.js', ['Blockly.clipboard'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/comment.js', ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.Css', 'Blockly.Events.BlockChange', 'Blockly.Events.BubbleOpen', 'Blockly.Events.utils', 'Blockly.Icon', 'Blockly.Warning', 'Blockly.browserEvents', 'Blockly.utils.Svg', 'Blockly.utils.dom', 'Blockly.utils.object', 'Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/common.js', ['Blockly.common'], ['Blockly.blocks'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/component_manager.js', ['Blockly.ComponentManager'], ['Blockly.utils.array'], {'lang': 'es6', 'module': 'goog'});
@@ -228,7 +228,7 @@ goog.addDependency('../../core/trashcan.js', ['Blockly.Trashcan'], ['Blockly.Com
 goog.addDependency('../../core/utils.js', ['Blockly.utils'], ['Blockly.Extensions', 'Blockly.browserEvents', 'Blockly.common', 'Blockly.utils.Coordinate', 'Blockly.utils.KeyCodes', 'Blockly.utils.Metrics', 'Blockly.utils.Rect', 'Blockly.utils.Size', 'Blockly.utils.Svg', 'Blockly.utils.aria', 'Blockly.utils.array', 'Blockly.utils.colour', 'Blockly.utils.deprecation', 'Blockly.utils.dom', 'Blockly.utils.global', 'Blockly.utils.idGenerator', 'Blockly.utils.math', 'Blockly.utils.object', 'Blockly.utils.parsing', 'Blockly.utils.string', 'Blockly.utils.style', 'Blockly.utils.svgMath', 'Blockly.utils.svgPaths', 'Blockly.utils.toolbox', 'Blockly.utils.userAgent', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/aria.js', ['Blockly.utils.aria'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/array.js', ['Blockly.utils.array'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], ['Blockly.internalConstants'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/utils/colour.js', ['Blockly.utils.colour'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/coordinate.js', ['Blockly.utils.Coordinate'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/deprecation.js', ['Blockly.utils.deprecation'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/dom.js', ['Blockly.utils.dom'], ['Blockly.utils.userAgent'], {'lang': 'es6', 'module': 'goog'});
@@ -238,7 +238,7 @@ goog.addDependency('../../core/utils/keycodes.js', ['Blockly.utils.KeyCodes'], [
 goog.addDependency('../../core/utils/math.js', ['Blockly.utils.math'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/metrics.js', ['Blockly.utils.Metrics'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/object.js', ['Blockly.utils.object'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/utils/parsing.js', ['Blockly.utils.parsing'], ['Blockly.Msg', 'Blockly.internalConstants', 'Blockly.utils.colour', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/utils/parsing.js', ['Blockly.utils.parsing'], ['Blockly.Msg', 'Blockly.utils.colour', 'Blockly.utils.string'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/rect.js', ['Blockly.utils.Rect'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/size.js', ['Blockly.utils.Size'], [], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/utils/string.js', ['Blockly.utils.string'], [], {'lang': 'es6', 'module': 'goog'});

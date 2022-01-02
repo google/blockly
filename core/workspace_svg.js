@@ -1524,6 +1524,11 @@ WorkspaceSvg.prototype.paste = function(state) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
 
+  const existingGroup = eventUtils.getGroup();
+  if (!existingGroup) {
+    eventUtils.setGroup(true);
+  }
+
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
     this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
@@ -1535,6 +1540,8 @@ WorkspaceSvg.prototype.paste = function(state) {
       this.pasteBlock_(xmlBlock, null);
     }
   }
+
+  eventUtils.setGroup(existingGroup);
 };
 
 /**

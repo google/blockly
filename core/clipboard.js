@@ -55,9 +55,7 @@ const paste = function() {
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
-    eventUtils.setGroup(true);
     workspace.paste(copyData.saveInfo);
-    eventUtils.setGroup(false);
     return true;
   }
   return false;

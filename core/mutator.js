@@ -419,7 +419,10 @@ Mutator.prototype.updateWorkspace_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace === this.workspace_) {
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
     const block = /** @type {!BlockSvg} */ (this.block_);
     const oldExtraState = BlockChange.getExtraBlockState_(block);
 
@@ -444,11 +447,12 @@ Mutator.prototype.updateWorkspace_ = function() {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
-      const group = eventUtils.getGroup();
+      const mutationGroup = eventUtils.getGroup();
       setTimeout(function() {
-        eventUtils.setGroup(group);
+        const oldGroup = eventUtils.getGroup();
+        eventUtils.setGroup(mutationGroup);
         block.bumpNeighbours();
-        eventUtils.setGroup(false);
+        eventUtils.setGroup(oldGroup);
       }, internalConstants.BUMP_DELAY);
     }
 
@@ -457,7 +461,7 @@ Mutator.prototype.updateWorkspace_ = function() {
     if (!this.workspace_.isDragging()) {
       this.resizeBubble_();
     }
-    eventUtils.setGroup(false);
+    eventUtils.setGroup(existingGroup);
   }
 };
 
